@@ -14,8 +14,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(_dirname, 'src/index.tsx'),
-      name: 'lib-with-vite',
-      fileName: 'lib-with-vite',
+      name: 'pixway-ui-sdk',
+      fileName: 'pixway-ui-sdk',
     },
     rollupOptions: {
       external: ['react', 'react-dom'],

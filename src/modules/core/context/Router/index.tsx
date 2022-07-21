@@ -1,7 +1,13 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
+export interface RouterUrlConfig {
+  path?: string;
+  query?: string;
+  replace?: string;
+}
 export interface RouterContext {
-    push: (path: string) => void;
+  push: (path: string | RouterUrlConfig) => void;
+  path: string;
 }
 
-export const routerContext = createContext({} as RouterContext);
+export const PixwayRouterContext = createContext({} as RouterContext);

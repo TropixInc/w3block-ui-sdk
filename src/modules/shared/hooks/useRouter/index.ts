@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 
-import { routerContext } from '../../../core/context/Router';
+import { PixwayRouterContext } from '../../../core/context/Router';
 
 const useRouter = () => {
-  return useContext(routerContext);
+  return useContext(PixwayRouterContext);
 };
 
 export default useRouter;
