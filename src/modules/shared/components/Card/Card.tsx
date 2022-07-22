@@ -3,7 +3,7 @@ import TranslatableComponent from '../TranslatableComponent';
 
 const _Card = () => {
   const [translate] = useTranslation();
-  return <div>{translate('helloWorld')}</div>;
+  return <div className="pw-text-lg">{translate('helloWorld')}</div>;
 };
 
 export const Card = () => {
