@@ -1,3 +1,12 @@
 {
-  "helloWorld": "Hello world from inside the library"
+  "helloWorld": "Hello world from inside the library",
+  "companyAuth>signIn>invalidPasswordFeedback": "Invalid password",
+  "companyAuth>signIn>formTitle": "Sign in",
+  "companyAuth>signIn>loginFailedError": "Invalid login or password.",
+  "home>contactModal>email": "E-mail",
+  "companyAuth>newPassword>passwordFieldLabel": "Password",
+  "auth>passwordChange>requestChangeFormTitle": "Forgot your password?",
+  "loginPage>formSubmitButton>signIn": "Sign in",
+  "components>form>requiredFieldValidation": "Required field",
+  "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern"
 }

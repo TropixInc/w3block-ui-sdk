@@ -3,6 +3,7 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import svgr from 'vite-plugin-svgr';
 
 const _dirname =
   typeof __dirname === 'undefined'
@@ -18,18 +19,20 @@ export default defineConfig({
       fileName: 'pixway-ui-sdk',
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'next-auth'],
       output: {
         sourcemap: true,
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'next-auth': 'NextAuth',
         },
       },
     },
   },
   plugins: [
     react(),
+    svgr(),
     dts({
       insertTypesEntry: true,
     }),

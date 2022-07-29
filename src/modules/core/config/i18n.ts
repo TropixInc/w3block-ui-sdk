@@ -6,7 +6,7 @@ import ENDictionary from '../../../../public/locales/en/common.json';
 import PTBRDictionary from '../../../../public/locales/pt-BR/common.json';
 
 const i18n = createInstance({
-  fallbackLng: 'en',
+  fallbackLng: 'pt-BR',
   resources: {
     en: {
       translation: ENDictionary,
