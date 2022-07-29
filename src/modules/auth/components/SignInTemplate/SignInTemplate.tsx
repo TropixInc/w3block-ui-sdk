@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn as __, useSession } from 'next-auth/react';
 import { object, string } from 'yup';
 
 import { Link } from '../../../shared';
@@ -15,8 +15,9 @@ import { AppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { CredentialProviderName } from '../../enums/CredentialProviderName';
+import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
@@ -42,6 +43,7 @@ const _SignInTemplate = ({
   logo,
 }: SignInTemplateProps) => {
   const [translate] = useTranslation();
+  const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
     pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
   });
@@ -91,9 +93,15 @@ const _SignInTemplate = ({
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async ({ email, password }: Form) => {
     try {
       setIsLoading(true);
+      const response = await signIn({
+        email,
+        password,
+        companyId,
+      });
+      /*
       const response = await signIn(
         CredentialProviderName.SIGNIN_WITH_COMPANY_ID,
         {
@@ -104,6 +112,7 @@ const _SignInTemplate = ({
           callbackUrl: undefined,
         }
       );
+      */
       if (!(response as any)?.ok) showErrorMessage();
     } catch {
       showErrorMessage();

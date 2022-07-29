@@ -25,6 +25,8 @@
     "@hookform/resolvers": "^2.9.6",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
+    "http-browserify": "^1.7.0",
+    "https-browserify": "^1.0.0",
     "i18next": "^21.8.14",
     "jwt-decode": "^3.1.2",
     "next-auth": "^4.10.2",

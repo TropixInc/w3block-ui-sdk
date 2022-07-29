@@ -2,7 +2,7 @@ import { getPublicAPI } from '../../../shared/config/api';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { Roles } from '../../../shared/enums/Roles';
 
-interface Payload {
+export interface SignInPayload {
   email: string;
   password: string;
   companyId: string;
@@ -23,7 +23,7 @@ export interface SignInResponse {
   data: UserDataSignIn;
 }
 
-export const signIn = (payload: Payload, baseURL: string) => {
+export const signIn = (payload: SignInPayload, baseURL: string) => {
   return getPublicAPI(baseURL).post<SignInResponse>(
     PixwayAPIRoutes.SIGN_IN,
     payload

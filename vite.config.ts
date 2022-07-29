@@ -30,6 +30,12 @@ export default defineConfig({
       },
     },
   },
+  resolve: {
+    alias: {
+      http: 'http-browserify',
+      https: 'https-browserify',
+    },
+  },
   plugins: [
     react(),
     svgr(),
