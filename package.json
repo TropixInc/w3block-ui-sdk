@@ -25,7 +25,11 @@
   },
   "dependencies": {
     "i18next": "^21.8.14",
-    "react-i18next": "^11.18.1"
+    "react-i18next": "^11.18.1",
+    "axios": "^0.27.2",
+    "classnames": "^2.3.1",
+    "jwt-decode": "^3.1.2",
+    "react-query": "3.39.2"
   },
   "devDependencies": {
     "@babel/core": "^7.18.9",
