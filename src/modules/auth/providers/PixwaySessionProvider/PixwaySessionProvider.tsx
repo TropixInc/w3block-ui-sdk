@@ -1,32 +1,36 @@
-import { createContext, ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import {
-  SessionContextValue,
-  SessionProvider,
-  SessionProviderProps,
-} from 'next-auth/react';
+  PixwaySessionContext,
+  PixwaySessionContextInterface,
+} from '../../auth/contexts/PixwaySessionContext';
 
 interface Props {
   children: ReactNode;
-  session: SessionContextValue;
+  userName?: string;
+  companyId: string;
+  token?: string;
 }
-
-const PixwaySessionContext = createContext<SessionContextValue>({
-  data: null,
-  status: 'unauthenticated',
-});
-
-export const PixwaySessionProvider2 = ({ children, session }: Props) => {
-  return (
-    <PixwaySessionContext.Provider value={session}>
-      {children}
-    </PixwaySessionContext.Provider>
-  );
-};
 
 export const PixwaySessionProvider = ({
   children,
-  ...rest
-}: SessionProviderProps) => {
-  return <SessionProvider {...rest}>{children}</SessionProvider>;
+  companyId,
+  token,
+  userName,
+}: Props) => {
+  const value = useMemo<PixwaySessionContextInterface>(() => {
+    return {
+      token,
+      companyId,
+      user: {
+        name: userName,
+      },
+    };
+  }, [token, companyId, userName]);
+
+  return (
+    <PixwaySessionContext.Provider value={value}>
+      {children}
+    </PixwaySessionContext.Provider>
+  );
 };
