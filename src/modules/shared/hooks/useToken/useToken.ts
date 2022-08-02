@@ -1,3 +1,3 @@
 export const useToken = () => {
-  return '';
+  return 'aaaaaaa'; // ONLY FOR TESTING USEPRIVATEQUERY
 };

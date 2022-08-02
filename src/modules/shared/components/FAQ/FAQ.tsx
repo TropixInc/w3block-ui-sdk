@@ -1,4 +1,6 @@
-import { PropsWithChildren, ReactChild, ReactNode, useState } from 'react';
+import { PropsWithChildren, ReactChild, useState } from 'react';
+
+import { useFAQ } from '../../hooks/useFAQ';
 
 interface Classes {
   container: string;
@@ -12,8 +14,6 @@ export interface FAQProps {
   classes?: Classes;
   title: string;
   subtitle: string;
-  questions: ReactNode;
-  answers: ReactNode;
 }
 
 interface AccordionProps {
@@ -43,13 +43,8 @@ const Accordion = ({
   );
 };
 
-export const FAQ = ({
-  classes,
-  title,
-  subtitle,
-  questions,
-  answers,
-}: FAQProps) => {
+export const FAQ = ({ classes, title, subtitle }: FAQProps) => {
+  const FAQ = useFAQ('');
   return (
     <div className={`pw-w-full pw-font-sans ${classes?.container}`}>
       <p className={`pw-text-3xl pw-font-bold pw-ml-7 ${classes?.title}`}>
@@ -60,13 +55,11 @@ export const FAQ = ({
       >
         {subtitle}
       </p>
-      {(Array.isArray(questions) ? questions : [questions]).map(
-        (question, index) => (
-          <Accordion question={question} key={index}>
-            {(Array.isArray(answers) ? answers : [answers])[index]}
-          </Accordion>
-        )
-      )}
+      {FAQ?.items.map((item, index) => (
+        <Accordion question={item.question} key={index}>
+          {item.answer}
+        </Accordion>
+      ))}
     </div>
   );
 };
