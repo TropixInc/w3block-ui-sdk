@@ -14,6 +14,7 @@ export interface FAQProps {
   classes?: Classes;
   title: string;
   subtitle: string;
+  identifier: string;
 }
 
 interface AccordionProps {
@@ -43,8 +44,8 @@ const Accordion = ({
   );
 };
 
-export const FAQ = ({ classes, title, subtitle }: FAQProps) => {
-  const FAQ = useFAQ('');
+export const FAQ = ({ classes, title, subtitle, identifier }: FAQProps) => {
+  const FAQ = useFAQ(identifier);
   return (
     <div className={`pw-w-full pw-font-sans ${classes?.container}`}>
       <p className={`pw-text-3xl pw-font-bold pw-ml-7 ${classes?.title}`}>

@@ -11,6 +11,7 @@ export default {
 const singleProps: FAQProps = {
   title: 'FAQ',
   subtitle: 'Perguntas Frequentes',
+  identifier: ''
 } 
 
 const queryClient = new QueryClient();
