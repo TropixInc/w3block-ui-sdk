@@ -17,7 +17,7 @@
   },
   "scripts": {
     "dev": "yarn build",
-    "dev:watch": "node ./devServer.js",
+    "dev:watch": "tsc && vite build --watch",
     "yalc:push": "yalc push --private",
     "build": "tsc && vite build",
     "storybook": "start-storybook -p 6006",
