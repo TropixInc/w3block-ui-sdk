@@ -15,6 +15,7 @@ export default defineConfig({
     lib: {
       entry: resolve(_dirname, 'src/index.tsx'),
       name: 'pixway-ui-sdk',
+      formats: ['es', 'umd'],
       fileName: 'pixway-ui-sdk',
     },
     rollupOptions: {
