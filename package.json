@@ -27,12 +27,8 @@
     "@hookform/resolvers": "^2.9.6",
     "@mertasan/tailwindcss-variables": "^2.3.0",
     "@tailwindcss/line-clamp": "^0.4.0",
-    "@unly/universal-language-detector": "^2.0.3",
-    "agent-base": "^6.0.2",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
-    "http-browserify": "^1.7.0",
-    "https-browserify": "^1.0.0",
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "jwt-decode": "^3.1.2",
@@ -85,10 +81,10 @@
     "watch": "^1.0.2"
   },
   "peerDependencies": {
+    "next": "^12.2.3",
     "next-auth": "^4.10.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.39.2",
-    "next": "^12.2.3"
+    "react-query": "^3.39.2"
   }
 }
