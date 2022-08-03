@@ -1,26 +1,26 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
+import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import { signIn as __, useSession } from 'next-auth/react';
+import classNames from 'classnames';
 import { object, string } from 'yup';
 
 import { Link } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
-import { AppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
+import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
 import { AuthTextController } from '../AuthTextController/AuthTextController';
 import { AuthValidationTip } from '../AuthValidationTip';
 
@@ -31,25 +31,30 @@ interface Form {
   companyId: string;
 }
 
+interface SignInTemplateClassses {
+  layoutBase?: AuthLayoutBaseClasses;
+  signInButton?: string;
+}
+
 export interface SignInTemplateProps {
   defaultRedirectRoute: string;
   companyId: string;
   logo: string;
+  classes?: SignInTemplateClassses;
 }
 
 const _SignInTemplate = ({
   defaultRedirectRoute,
   companyId,
   logo,
+  classes = {},
 }: SignInTemplateProps) => {
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
     pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
   });
-
-  const { data: session } = useSession();
-  console.log(session);
+  const { data: session } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
   const router = useRouter();
@@ -75,8 +80,9 @@ const _SignInTemplate = ({
   });
 
   useEffect(() => {
+    if (session) router.push(getRedirectUrl());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [false, router]);
+  }, [session, router]);
 
   const { fieldState } = useController({
     control: methods.control,
@@ -101,18 +107,6 @@ const _SignInTemplate = ({
         password,
         companyId,
       });
-      /*
-      const response = await signIn(
-        CredentialProviderName.SIGNIN_WITH_COMPANY_ID,
-        {
-          redirect: false,
-          email: data.email,
-          password: data.password,
-          companyId: data.companyId,
-          callbackUrl: undefined,
-        }
-      );
-      */
       if (!(response as any)?.ok) showErrorMessage();
     } catch {
       showErrorMessage();
@@ -122,23 +116,26 @@ const _SignInTemplate = ({
   };
 
   return (
-    <AuthLayoutBase logo={logo}>
+    <AuthLayoutBase
+      logo={logo}
+      classes={classes.layoutBase ?? {}}
+      title={translate('companyAuth>signIn>formTitle')}
+    >
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="pw-mt-6">
-          <div className="pw-mb-6">
-            <h1 className="pw-font-bold pw-text-2xl pw-leading-9 pw-text-[#35394C] pw-text-center">
-              {translate('companyAuth>signIn>formTitle')}
-            </h1>
-            {isShowingErrorMessage ? (
-              <Alert
-                variant="error"
-                className="pw-mt-4 pw-flex !p  console.log(session);w-justify-start"
-              >
-                <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
-                {translate('companyAuth>signIn>loginFailedError')}
-              </Alert>
-            ) : null}
-          </div>
+        <form
+          onSubmit={methods.handleSubmit(onSubmit)}
+          className="pw-font-montserrat"
+        >
+          {isShowingErrorMessage ? (
+            <Alert
+              variant="error"
+              className="pw-mb-6 pw-mt-4 pw-flex !p  console.log(session);w-justify-start"
+            >
+              <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
+              {translate('companyAuth>signIn>loginFailedError')}
+            </Alert>
+          ) : null}
+
           <AuthTextController
             name="email"
             label={translate('home>contactModal>email')}
@@ -158,8 +155,8 @@ const _SignInTemplate = ({
                   error={fieldState.error}
                 />
                 <Link
-                  href={AppRoutes.REQUEST_PASSWORD_CHANGE}
-                  className="pw-text-[#353945] pw-text-xs pw-leading-3 hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
+                  href={PixwayAppRoutes.REQUEST_PASSWORD_CHANGE}
+                  className="pw-text-[#383857] pw-text-xs pw-leading-3 hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
                 >
                   {translate('auth>passwordChange>requestChangeFormTitle')}
                 </Link>
@@ -169,12 +166,24 @@ const _SignInTemplate = ({
 
           <div className="pw-mb-6">
             <AuthButton
+              className={classNames(classes.signInButton ?? '', 'pw-mb-1')}
               type="submit"
               fullWidth
               disabled={!methods.formState.isValid || isLoading}
             >
               {translate('loginPage>formSubmitButton>signIn')}
             </AuthButton>
+            <p className="pw-text-[13px] pw-font-normal pw-leading-5 text-[#383857] text-center">
+              <Trans i18nKey={'auth>signIn>signUpCTA'}>
+                Não tem conta ainda?
+                <Link
+                  href={PixwayAppRoutes.SIGN_UP}
+                  className="pw-text-[#B09C60] pw-text-brand-primary pw-underline"
+                >
+                  Cadastre-se.
+                </Link>
+              </Trans>
+            </p>
           </div>
 
           <AuthFooter />

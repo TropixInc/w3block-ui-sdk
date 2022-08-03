@@ -17,23 +17,17 @@ export default defineConfig({
       entry: resolve(_dirname, 'src/index.tsx'),
       name: 'pixway-ui-sdk',
       fileName: 'pixway-ui-sdk',
+      formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'next-auth'],
+      external: ['react', 'react-dom', 'next-auth', 'react-query'],
       output: {
         sourcemap: true,
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
-          'next-auth': 'NextAuth',
         },
       },
-    },
-  },
-  resolve: {
-    alias: {
-      http: 'http-browserify',
-      https: 'https-browserify',
     },
   },
   plugins: [

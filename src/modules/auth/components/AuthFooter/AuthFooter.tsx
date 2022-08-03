@@ -22,9 +22,6 @@ export const AuthFooter = ({ className = '' }: Props) => {
         </p>
         <PixwayIconHorizontal className="pw-w-[90px] pw-h-[22px] pw-fill-[#35394C]" />
       </div>
-      <p className="pw-text-[11px] pw-font-medium pw-leading-[13px] pw-text-[#35394C]">
-        Copyright 2022 - Pixway
-      </p>
     </footer>
   );
 };

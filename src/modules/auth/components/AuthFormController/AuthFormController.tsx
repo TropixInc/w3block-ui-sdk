@@ -23,7 +23,7 @@ const AuthFormController = ({
   return (
     <HeadlessFormController name={name}>
       <div className={className}>
-        <HeadlessFormController.Label className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-mb-1">
+        <HeadlessFormController.Label className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
           {label}
         </HeadlessFormController.Label>
         {children}

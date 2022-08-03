@@ -4,10 +4,10 @@ import { NextAuthOptions, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { SessionUser } from '../../../shared/enums/SessionUser';
-import { refreshTokenRequest } from '../../api/refreshToken';
 import { resetPassword } from '../../api/resetPassword';
-import { signIn, SignInResponse } from '../../api/signIn';
+import { SignInResponse } from '../../api/signIn';
 import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 
 const tokenMaxAgeInSeconds = 3600;
@@ -18,22 +18,21 @@ async function refreshAccessToken(
   baseURL: string
 ): Promise<JWT & { accessToken?: string; refreshToken?: string }> {
   try {
-    const { data: refreshedTokens } = await refreshTokenRequest(
-      token.accessToken ?? '',
-      baseURL,
-      {
+    const response = await fetch(`${baseURL}${PixwayAPIRoutes.REFRESH_TOKEN}`, {
+      method: 'POST',
+      body: JSON.stringify({
         refreshToken: token.refreshToken ?? '',
-      }
-    );
-
+      }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const { token: tokenResponse, refreshToken } = await response.json();
     const result = {
       ...token,
-      accessToken: refreshedTokens.token,
-      refreshToken: refreshedTokens.refreshToken || token.refreshToken,
-      accessTokenExpires: getTokenExpires(
-        refreshedTokens.token,
-        -BEFORE_TOKEN_EXPIRES
-      ),
+      accessToken: tokenResponse,
+      refreshToken: refreshToken || token.refreshToken,
+      accessTokenExpires: getTokenExpires(tokenResponse, -BEFORE_TOKEN_EXPIRES),
     };
 
     return result;
@@ -84,20 +83,18 @@ export const getNextAuthConfig = ({
       },
       authorize: async (payload) => {
         try {
-          console.log('aaaaa');
-          console.log('payload');
-          const response = await signIn(
-            {
+          const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
+            method: 'POST',
+            body: JSON.stringify({
               companyId: payload?.companyId ?? '',
               email: payload?.email ?? '',
               password: payload?.password ?? '',
-            },
-            baseURL
-          );
-          console.log('bbb', response);
-          return mapSignInReponseToSessionUser(response.data);
+            }),
+            headers: { 'Content-type': 'application/json' },
+          });
+          const responseAsJSON = await response.json();
+          return mapSignInReponseToSessionUser(responseAsJSON);
         } catch (err) {
-          console.log(err);
           return null;
         }
       },

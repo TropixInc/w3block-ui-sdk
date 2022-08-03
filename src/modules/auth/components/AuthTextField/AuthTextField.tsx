@@ -21,7 +21,7 @@ export const AuthTextField = ({
 }: AuthTextFieldProps) => {
   const getOutlineClassName = () => {
     if (invalid) return '!pw-outline-[#C63535]';
-    return isDirty ? '!pw-outline-[#76DE8D]' : '!pw-outline-[#58401F]';
+    return isDirty ? '!pw-outline-[#76DE8D]' : 'pw-outline-brand-primary';
   };
   const { fieldState } = useController({ name });
   const { invalid, isDirty } = fieldState;

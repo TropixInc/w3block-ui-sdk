@@ -54,7 +54,7 @@ export const TextField = ({
       type="button"
     >
       {isShowingPassword ? (
-        <PasswordIconShow className={'pw-w-4 !pw-stroke-[#353945]}'} />
+        <PasswordIconShow className={'pw-w-4 !pw-stroke-[#353945]'} />
       ) : (
         <PasswordIconHide className={`pw-w-4 !pw-stroke-[#353945]`} />
       )}
@@ -79,11 +79,12 @@ export const TextField = ({
         type={!isShowingPassword ? type : 'text'}
         readOnly={readOnly}
         className={classNames(
-          'pw-text-base pw-leading-4 pw-font-normal pw-w-full pw-outline-none pw-bg-transparent pw-py-4 pw-px-[18px] autofill:pw-bg-transparent',
+          'pw-text-base pw-leading-4 pw-font-normal pw-w-full pw-outline-none pw-bg-transparent pw-py-4 pw-px-[18px] autofill:pw-bg-transparent,',
           type == 'password' ? '!pw-pr-12' : '',
           'placeholder:pw-text-[#c4c4c4]',
           disabled ? 'pw-opacity-40' : '',
-          classes.input ?? ''
+          classes.input ?? '',
+          'focus:pw-outline-none'
         )}
         placeholder={!disabled ? placeholder : undefined}
         {...rest}

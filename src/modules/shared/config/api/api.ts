@@ -1,7 +1,8 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosAdapter, AxiosRequestConfig } from 'axios';
 import http from 'http';
 import https from 'https';
 import jwtDecode from 'jwt-decode';
+//import agent from 'agent-base';
 
 import { Roles } from '../../enums/Roles';
 
@@ -23,8 +24,10 @@ export const validateJwtToken = (token: string) => {
 const createTropixAxiosInstance = (baseURL: string) =>
   axios.create({
     baseURL,
+    /*
     httpAgent: new http.Agent({ keepAlive: true }),
     httpsAgent: new https.Agent({ keepAlive: true }),
+    */
   });
 
 export const getPublicAPI = createTropixAxiosInstance;
