@@ -1,3 +1,6 @@
+import { usePixwaySession } from '../usePixwaySession';
+
 export const useToken = () => {
-  return '';
+  const { data } = usePixwaySession();
+  return (data?.accessToken as string) ?? '';
 };

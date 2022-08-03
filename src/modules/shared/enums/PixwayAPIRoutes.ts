@@ -4,4 +4,5 @@ export enum PixwayAPIRoutes {
   SIGN_IN = 'auth/signin',
   RESET_PASSWORD = '/auth/reset-password',
   REFRESH_TOKEN = '/auth/refresh-token',
+  GET_PROFILE = 'users/profile',
 }
