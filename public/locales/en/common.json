@@ -1,3 +1,8 @@
 {
-  "helloWorld": "Hello world from inside the library"
+  "helloWorld": "Hello world from inside the library",
+  "shared>back": "Back",
+  "shared>product": "Product",
+  "checkout>components>checkoutInfo>payment": "Payment",
+  "checkout>components>checkoutInfo>creditCard": "Credit card",
+  "shared>components>gasPriceinfo": "Gas fee"
 }

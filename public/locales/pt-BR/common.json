@@ -1,3 +1,8 @@
 {
-  "helloWorld": "Olá mundo de dentro da biblioteca"
+  "helloWorld": "Olá mundo de dentro da biblioteca",
+  "shared>back": "Voltar",
+  "shared>product": "Produto",
+  "checkout>components>checkoutInfo>payment": "Pagamento",
+  "checkout>components>checkoutInfo>creditCard": "Cartão de crédito",
+  "shared>components>gasPriceinfo": "Taxa de gás"
 }

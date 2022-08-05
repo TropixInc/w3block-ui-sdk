@@ -1,5 +1,8 @@
 module.exports = {
-  content: ['./src/**/*.{jsx,tsx}'],
+  content: [
+    './src/modules/**/*.{js,ts,tsx,jsx}',
+    './src/pages/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     screens: {
       sm: '768px',
@@ -17,6 +20,9 @@ module.exports = {
         29: '7.25rem',
         51: '12.75rem',
       },
+    },
+    colors: {
+      'pw-gray': '#EDEDED',
     },
   },
   prefix: 'pw-',
