@@ -20,6 +20,7 @@ export default defineConfig({
       fileName: 'pixway-ui-sdk',
     },
     rollupOptions: {
+      plugins: [],
       external: ['react', 'react-dom', 'next-auth', 'react-query'],
       output: {
         sourcemap: true,

@@ -4,6 +4,8 @@ import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { W3blockIdSDK } from '@tropixinc/sdk-id';
+import axios from 'axios';
 import classNames from 'classnames';
 import { object, string } from 'yup';
 
@@ -83,6 +85,42 @@ const _SignInTemplate = ({
     if (session) router.push(getRedirectUrl());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const pixwayIdService = new W3blockIdSDK({
+          credential: {
+            email: 'pixway@w3block.io',
+            password: 'ABC123def456',
+            tenantId: 'e8a9814e-18a1-4f52-b6ca-c15f0ae2294a',
+          },
+          autoRefresh: false,
+          baseURL: 'https://pixwayid.stg.pixway.io/',
+        });
+        const response2 = await pixwayIdService.api.auth.signIn({
+          email: 'pixway@w3block.io',
+          password: 'ABC123def456',
+          tenantId: 'e8a9814e-18a1-4f52-b6ca-c15f0ae2294a',
+        });
+
+        const response = await axios.post(
+          'https://pixwayid.stg.pixway.io/auth/signin',
+          {
+            email: 'pixway@w3block.io',
+            password: 'ABC123def456',
+            tenantId: 'e8a9814e-18a1-4f52-b6ca-c15f0ae2294a',
+          }
+        );
+        console.log(response.data);
+
+        console.log('funcionou ');
+      } catch {
+        console.log('deu ruim');
+      }
+    };
+    getUser();
+  }, []);
 
   const { fieldState } = useController({
     control: methods.control,

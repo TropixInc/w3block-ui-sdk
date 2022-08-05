@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { addDays } from 'date-fns';
 import jwtDecode from 'jwt-decode';
 import { NextAuthOptions, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
@@ -13,6 +14,7 @@ import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 const tokenMaxAgeInSeconds = 3600;
 const BEFORE_TOKEN_EXPIRES = tokenMaxAgeInSeconds / 2;
 
+addDays(new Date(), 1);
 async function refreshAccessToken(
   token: JWT & { accessToken?: string; refreshToken?: string },
   baseURL: string
@@ -83,6 +85,7 @@ export const getNextAuthConfig = ({
       },
       authorize: async (payload) => {
         try {
+          /*
           const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
             method: 'POST',
             body: JSON.stringify({
@@ -92,9 +95,45 @@ export const getNextAuthConfig = ({
             }),
             headers: { 'Content-type': 'application/json' },
           });
+          /*
           const responseAsJSON = await response.json();
-          return mapSignInReponseToSessionUser(responseAsJSON);
+          /*
+          const sdk = new W3blockIdSDK({
+            credential: {
+              email: '',
+              password: '',
+              tenantId: '',
+            },
+            autoRefresh: false,
+            baseURL,
+            tokens: {
+              authToken: '',
+              refreshToken: '',
+            },
+          });
+        
+          
+          const response = await sdk.api.auth.signIn({
+            email: payload?.email ?? '',
+            password: payload?.password ?? '',
+            tenantId: payload?.companyId ?? '',
+          });
+          */
+          const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
+            method: 'POST',
+            body: JSON.stringify({
+              companyId: payload?.companyId ?? '',
+              email: payload?.email ?? '',
+              password: payload?.password ?? '',
+            }),
+            headers: { 'Content-type': 'application/json' },
+          });
+          console.log('chamei a req');
+          console.log(response);
+          return null;
+          //return mapSignInReponseToSessionUser(response.data);
         } catch (err) {
+          console.log(err);
           return null;
         }
       },
