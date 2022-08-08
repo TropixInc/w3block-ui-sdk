@@ -1,5 +1,4 @@
 {
-  "helloWorld": "Hello world from inside the library",
   "companyAuth>signIn>invalidPasswordFeedback": "Invalid password",
   "companyAuth>signIn>formTitle": "Sign in",
   "companyAuth>signIn>loginFailedError": "Invalid login or password.",
