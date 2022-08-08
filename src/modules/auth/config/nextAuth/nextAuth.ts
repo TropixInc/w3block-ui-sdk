@@ -1,5 +1,4 @@
 import { AxiosError } from 'axios';
-import { addDays } from 'date-fns';
 import jwtDecode from 'jwt-decode';
 import { NextAuthOptions, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
@@ -14,7 +13,6 @@ import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 const tokenMaxAgeInSeconds = 3600;
 const BEFORE_TOKEN_EXPIRES = tokenMaxAgeInSeconds / 2;
 
-addDays(new Date(), 1);
 async function refreshAccessToken(
   token: JWT & { accessToken?: string; refreshToken?: string },
   baseURL: string
@@ -26,7 +24,8 @@ async function refreshAccessToken(
         refreshToken: token.refreshToken ?? '',
       }),
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token.accessToken ?? ''}`,
       },
     });
     const { token: tokenResponse, refreshToken } = await response.json();
@@ -85,55 +84,18 @@ export const getNextAuthConfig = ({
       },
       authorize: async (payload) => {
         try {
-          /*
           const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
             method: 'POST',
             body: JSON.stringify({
-              companyId: payload?.companyId ?? '',
+              tenantId: payload?.companyId ?? '',
               email: payload?.email ?? '',
               password: payload?.password ?? '',
             }),
             headers: { 'Content-type': 'application/json' },
           });
-          /*
           const responseAsJSON = await response.json();
-          /*
-          const sdk = new W3blockIdSDK({
-            credential: {
-              email: '',
-              password: '',
-              tenantId: '',
-            },
-            autoRefresh: false,
-            baseURL,
-            tokens: {
-              authToken: '',
-              refreshToken: '',
-            },
-          });
-        
-          
-          const response = await sdk.api.auth.signIn({
-            email: payload?.email ?? '',
-            password: payload?.password ?? '',
-            tenantId: payload?.companyId ?? '',
-          });
-          */
-          const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
-            method: 'POST',
-            body: JSON.stringify({
-              companyId: payload?.companyId ?? '',
-              email: payload?.email ?? '',
-              password: payload?.password ?? '',
-            }),
-            headers: { 'Content-type': 'application/json' },
-          });
-          console.log('chamei a req');
-          console.log(response);
-          return null;
-          //return mapSignInReponseToSessionUser(response.data);
+          return mapSignInReponseToSessionUser(responseAsJSON);
         } catch (err) {
-          console.log(err);
           return null;
         }
       },
@@ -233,7 +195,7 @@ const mapSignInReponseToSessionUser = (
     refreshToken,
     id: data.sub,
     email: data.email,
-    role: data.role,
+    roles: data.roles,
     name: data.name,
     companyId: data.companyId,
   };

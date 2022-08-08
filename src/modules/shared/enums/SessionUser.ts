@@ -5,6 +5,6 @@ import { Roles } from './Roles';
 export interface SessionUser extends User {
   accessToken: string;
   refreshToken: string;
-  role: Roles;
+  roles: Array<Roles>;
   companyId?: string;
 }

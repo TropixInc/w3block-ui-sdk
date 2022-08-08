@@ -9,7 +9,7 @@ export interface SignInPayload {
 interface UserDataSignIn {
   sub: string;
   email: string;
-  role: Roles;
+  roles: Array<Roles>;
   name: string;
   verified: boolean;
   companyId?: string;

@@ -27,7 +27,6 @@
     "@hookform/resolvers": "^2.9.6",
     "@mertasan/tailwindcss-variables": "^2.3.0",
     "@tailwindcss/line-clamp": "^0.4.0",
-    "@tropixinc/sdk-id": "^0.0.10",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
     "date-fns": "^2.29.1",
