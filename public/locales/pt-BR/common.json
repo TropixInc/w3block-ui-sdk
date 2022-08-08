@@ -1,5 +1,4 @@
 {
-  "helloWorld": "Olá mundo de dentro da biblioteca",
   "companyAuth>signIn>invalidPasswordFeedback": "Senha inválida",
   "companyAuth>signIn>formTitle": "Faça seu login",
   "companyAuth>signIn>loginFailedError": "Usuário ou senha inválidos.",

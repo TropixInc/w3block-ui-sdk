@@ -156,7 +156,7 @@ const _SignInTemplate = ({
                 />
                 <Link
                   href={PixwayAppRoutes.REQUEST_PASSWORD_CHANGE}
-                  className="pw-text-[#383857] pw-text-xs pw-leading-3 hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
+                  className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
                 >
                   {translate('auth>passwordChange>requestChangeFormTitle')}
                 </Link>

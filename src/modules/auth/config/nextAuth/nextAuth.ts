@@ -24,7 +24,8 @@ async function refreshAccessToken(
         refreshToken: token.refreshToken ?? '',
       }),
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token.accessToken ?? ''}`,
       },
     });
     const { token: tokenResponse, refreshToken } = await response.json();
@@ -86,7 +87,7 @@ export const getNextAuthConfig = ({
           const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
             method: 'POST',
             body: JSON.stringify({
-              companyId: payload?.companyId ?? '',
+              tenantId: payload?.companyId ?? '',
               email: payload?.email ?? '',
               password: payload?.password ?? '',
             }),
@@ -194,7 +195,7 @@ const mapSignInReponseToSessionUser = (
     refreshToken,
     id: data.sub,
     email: data.email,
-    role: data.role,
+    roles: data.roles,
     name: data.name,
     companyId: data.companyId,
   };

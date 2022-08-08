@@ -1,14 +1,17 @@
 import { ReactNode } from 'react';
 
-import { LocaleContext, localeContext } from '../../context/LocaleContext';
+import {
+  PixwayUISdkLocale,
+  LocaleContext,
+} from '../../context/LocaleContext/LocaleContext';
 
 interface Props {
-  locale?: LocaleContext;
+  locale?: PixwayUISdkLocale;
   children?: ReactNode;
 }
 
 export const LocaleProvider = ({ locale = 'en', children }: Props) => {
   return (
-    <localeContext.Provider value={locale}>{children}</localeContext.Provider>
+    <LocaleContext.Provider value={locale}>{children}</LocaleContext.Provider>
   );
 };
