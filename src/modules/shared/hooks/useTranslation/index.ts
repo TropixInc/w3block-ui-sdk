@@ -9,7 +9,7 @@ const useTranslation = () => {
   useEffect(() => {
     const i18n = translate[1];
     if (i18n.resolvedLanguage !== locale) {
-      translate.length >= 1 && translate[1].changeLanguage(locale);
+      translate.length >= 1 && i18n.changeLanguage(locale);
     }
   }, [locale, translate]);
 

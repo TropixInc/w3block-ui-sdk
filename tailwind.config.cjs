@@ -17,11 +17,33 @@ module.exports = {
         29: '7.25rem',
         51: '12.75rem',
       },
+      colors: {
+        'brand-primary': 'var(--colors-brand-primary)',
+      },
+      variables: {
+        DEFAULT: {
+          colors: {
+            'brand-primary': '#295BA6',
+          },
+        },
+      },
+    },
+    fontFamily: {
+      sans: ['Roboto', 'sans-serif'],
+      roboto: ['Roboto', 'sans-serif'],
+      poppins: ['Poppins', 'sans-serif'],
+      nunito: ['Nunito', 'sans-serif'],
+      montserrat: ['Montserrat', 'sans-serif'],
     },
   },
   prefix: 'pw-',
   corePlugins: {
     preflight: false,
   },
-  plugins: [],
+  plugins: [
+    require('@mertasan/tailwindcss-variables'),
+    require('tailwindcss-text-fill'),
+    require('tailwindcss-autofill'),
+    require('@tailwindcss/line-clamp'),
+  ],
 };

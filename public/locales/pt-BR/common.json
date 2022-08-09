@@ -1,3 +1,15 @@
 {
-  "helloWorld": "Olá mundo de dentro da biblioteca"
+  "companyAuth>signIn>invalidPasswordFeedback": "Senha inválida",
+  "companyAuth>signIn>formTitle": "Faça seu login",
+  "companyAuth>signIn>loginFailedError": "Usuário ou senha inválidos.",
+  "home>contactModal>email": "E-mail",
+  "companyAuth>newPassword>enterYourEmail": "Insira seu email",
+  "companyAuth>newPassword>passwordFieldLabel": "Senha",
+  "companyAuth>newPassword>enterYourPassword": "Insira sua senha",
+  "auth>passwordChange>requestChangeFormTitle": "Esqueceu sua senha?",
+  "loginPage>formSubmitButton>signIn": "Fazer login",
+  "connectTokens>connectSideNavMenu>poweredBy": "Powered by",
+  "components>form>requiredFieldValidation": "Campo obrigatório",
+  "auth>passwordErrorFeedback>genericInvalidMessage": "Senha não condiz com o padrão",
+  "auth>signIn>signUpCTA": "Não tem conta ainda? <1>Cadastre-se.</1>"
 }
