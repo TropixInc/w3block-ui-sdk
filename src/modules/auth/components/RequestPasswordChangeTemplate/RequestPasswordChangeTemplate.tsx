@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRouter } from 'next/router';
 import { object, string } from 'yup';
 
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthButton } from '../AuthButton';
@@ -17,15 +18,15 @@ interface Form {
   email: string;
 }
 
-interface CompanyAuthRequestPasswordChangeTemplateProps {
+export interface RequestPasswordChangeTemplateProps {
   logo: string;
   companyId: string;
 }
 
-export const CompanyAuthRequestPasswordChangeTemplate = ({
+const _RequestPasswordChangeTemplate = ({
   logo,
   companyId,
-}: CompanyAuthRequestPasswordChangeTemplateProps) => {
+}: RequestPasswordChangeTemplateProps) => {
   const [translate] = useTranslation();
   const router = useRouter();
   const { mutate, isLoading, isError, isSuccess } =
@@ -71,19 +72,19 @@ export const CompanyAuthRequestPasswordChangeTemplate = ({
 
   const hasSentEmail = router.query.step === '2';
 
-  return hasSentEmail ? (
+  return !hasSentEmail ? (
     <PasswordChangeMailSent
       email={email ?? ''}
       companyId={companyId}
       logo={logo}
     />
   ) : (
-    <AuthLayoutBase
-      logo={logo}
-      title={translate('companyAuth>requestPasswordChange>formTitle')}
-    >
+    <AuthLayoutBase logo={logo} title={'Esqueceu senha'}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="pw-my-6">
+          <h2 className="text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6">
+            {translate('companyAuth>requestPasswordChange>formTitle')}
+          </h2>
           <AuthTextController
             name="email"
             placeholder={translate('companyAuth>newPassword>enterYourEmail')}
@@ -106,3 +107,11 @@ export const CompanyAuthRequestPasswordChangeTemplate = ({
     </AuthLayoutBase>
   );
 };
+
+export const RequestPasswordChangeTemplate = (
+  props: RequestPasswordChangeTemplateProps
+) => (
+  <TranslatableComponent>
+    <_RequestPasswordChangeTemplate {...props} />
+  </TranslatableComponent>
+);

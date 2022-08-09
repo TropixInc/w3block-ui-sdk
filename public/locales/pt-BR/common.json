@@ -11,5 +11,15 @@
   "connectTokens>connectSideNavMenu>poweredBy": "Powered by",
   "components>form>requiredFieldValidation": "Campo obrigatório",
   "auth>passwordErrorFeedback>genericInvalidMessage": "Senha não condiz com o padrão",
-  "auth>signIn>signUpCTA": "Não tem conta ainda? <1>Cadastre-se.</1>"
+  "auth>signIn>signUpCTA": "Não tem conta ainda? <1>Cadastre-se.</1>",
+  "companyAuth>requestPasswordChange>invalidEmailError": "E-mail inválido",
+  "companyAuth>requestPasswordChange>emailDoesntExistError": "e-mail incorreto, tente novamente!",
+  "companyAuth>requestPasswordChange>formTitle": "Digite seu e-mail para enviarmos um link de alteração de senha",
+  "companyAuth>requestPasswordChange>emailFieldPlaceholder": "Insira seu e-mail",
+  "components>genericMessages>advance": "Avançar",
+  "auth>passwordChangeMailStep>formTitle": "Link de alteração de senha",
+  "companyAuth>requestPaswordChange>linkSentToMail": "Enviamos um link de alteração de senha para seu e-mail: <1>{{email}}</1>",
+  "auth>mailStep>resentCodeButton": "Reenviar código",
+  "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o código",
+  "auth>mailStep>linkExpirationMessage": "O link é valido por 15 minutos. Após isso, clique em <1>\"Reenviar código\"</1> para uma nova solicitação."
 }

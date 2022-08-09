@@ -3,12 +3,11 @@ import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { isAfter, addMinutes } from 'date-fns';
-import Image from 'next/image';
 
-import emailImage from '../../../../../shared/assets/images/companyAuthMailSent.png';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import emailImage from '../../assets/images/companyAuthMailSent.png';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
@@ -58,12 +57,12 @@ export const PasswordChangeMailSent = ({
       title={translate('auth>passwordChangeMailStep>formTitle')}
     >
       <div className="pw-my-6 pw-flex pw-flex-col pw-items-center">
-        <p className="pw-font-semibold pw-leading-4 pw-text-[#35394C] pw-mb-[21px]">
+        <p className="pw-font-semibold pw-leading-4 pw-text-[#35394C] pw-mb-[21px] pw-text-center">
           <Trans
             i18nKey="companyAuth>requestPaswordChange>linkSentToMail"
             values={{ email: formattedEmail }}
           >
-            {translate('auth>passwordChangeMailStep>linkSentMessage')}
+            Enviamos um email para:
             <span className="pw-block pw-text-center pw-mt-0.5">email</span>
           </Trans>
         </p>
@@ -90,18 +89,18 @@ export const PasswordChangeMailSent = ({
             </p>
           ) : null}
         </div>
-        <Image src={emailImage} width={186} height={178} alt="" />
+        <img src={emailImage} width={186} height={178} alt="" />
         <p className="pw-font-semibold pw-leading-4 pw-text-[#35394C] pw-text-center pw-mt-[21px]">
           <Trans i18nKey="auth>mailStep>linkExpirationMessage">
-            {translate('companyAuth>passwordChangeEmailSent>expirationMessage')}
+            lorem
             <button
               disabled={isActive || isLoading}
               className="pw-font-bold pw-text-base pw-leading-4 pw-text-[#76DE8D] disabled:pw-text-[#676767] disabled:hover:pw-no-underline hover:pw-underline"
               onClick={() => mutate({ email })}
             >
-              {translate('companyAuth>passwordChangeEmailSent>resendCode')}
+              ipsum
             </button>
-            {translate('companyAuth>passwordChangeEmailSent>newSolicitaion')}
+            lorem ipsum
           </Trans>
         </p>
       </div>
