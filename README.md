@@ -12,10 +12,11 @@ yarn install
 
 ## Linkando a lib
 
-Para fazer a linkagem da lib para um outro projeto é necessário a utilização `npm link`, porem o `npm link` nao consegue resolver o problema de dependecias duplicadas, no caso desse projeto o React. Para resolver esse problema é necessário fazer um link para a pasta do react no node_modules do projeto que voce vai aplicar essa lib.
+Para fazer a linkagem da lib para um outro projeto é necessário a utilização `npm link`, porem o `npm link` nao consegue resolver o problema de dependecias duplicadas, no caso desse projeto o React e o react-query. Para resolver esse problema é necessário fazer um link para a pasta do react no node_modules do projeto que voce vai aplicar essa lib.
 
 ```
 npm link <PATH_TO_YOUR_APP>/node_modules/react
+npm link <PATH_TO_YOUR_APP>/node_modules/react-query
 ```
 
 ## Linkando o projeto

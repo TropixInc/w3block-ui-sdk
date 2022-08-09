@@ -1,5 +1,3 @@
-export * from './Card';
-
 export * from './Link';
 
 export * from './HeaderBack';
