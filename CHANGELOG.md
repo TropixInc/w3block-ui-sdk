@@ -8,3 +8,10 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * **pe-35:** create sign in page ([#2](https://github.com/TropixInc/pixway-ui-sdk/issues/2)) ([f60e74d](https://github.com/TropixInc/pixway-ui-sdk/commit/f60e74d458174bbcd527d557d6560da73f415968))
+
+### 0.1.1-alpha.0 (2022-08-10)
+
+
+### Features
+
+* **pe-35:** create sign in page ([#2](https://github.com/TropixInc/pixway-ui-sdk/issues/2)) ([f60e74d](https://github.com/TropixInc/pixway-ui-sdk/commit/f60e74d458174bbcd527d557d6560da73f415968))
