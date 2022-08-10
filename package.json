@@ -16,6 +16,7 @@
     "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
+    "check:build": "yarn build",
     "dev": "yarn build",
     "dev:watch": "tsc && vite build --watch",
     "yalc:push": "yalc push --private",
