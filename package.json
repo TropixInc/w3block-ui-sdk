@@ -1,6 +1,6 @@
 {
   "name": "@tropixinc/pixway-ui-sdk",
-  "private": true,
+  "private": false,
   "version": "0.1.1-alpha.0",
   "type": "module",
   "files": [
@@ -19,7 +19,6 @@
     "check:build": "yarn build",
     "dev": "yarn build",
     "dev:watch": "tsc && vite build --watch",
-    "yalc:push": "yalc push --private",
     "build": "tsc && vite build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
