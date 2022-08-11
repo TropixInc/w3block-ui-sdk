@@ -7,7 +7,7 @@ import { isAfter, addMinutes } from 'date-fns';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import emailImage from '../../assets/images/companyAuthMailSent.png';
+import { ReactComponent as MailSentIcon } from '../../assets/icons/mailSent.svg';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
@@ -89,7 +89,7 @@ export const PasswordChangeMailSent = ({
             </p>
           ) : null}
         </div>
-        <img src={emailImage} width={186} height={178} alt="" />
+        <MailSentIcon className="pw-max-w-[186px] pw-max-h-[178px] " />
         <p className="pw-font-semibold pw-leading-4 pw-text-[#35394C] pw-text-center pw-mt-[21px]">
           <Trans i18nKey="auth>mailStep>linkExpirationMessage">
             lorem

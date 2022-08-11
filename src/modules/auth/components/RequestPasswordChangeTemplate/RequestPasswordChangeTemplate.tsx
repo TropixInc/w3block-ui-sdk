@@ -72,7 +72,7 @@ const _RequestPasswordChangeTemplate = ({
 
   const hasSentEmail = router.query.step === '2';
 
-  return !hasSentEmail ? (
+  return hasSentEmail ? (
     <PasswordChangeMailSent
       email={email ?? ''}
       companyId={companyId}
