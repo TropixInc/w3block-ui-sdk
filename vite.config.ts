@@ -26,6 +26,7 @@ export default defineConfig({
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'react-query': 'react-query',
         },
       },
     },
