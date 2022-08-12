@@ -38,9 +38,6 @@ module.exports = {
       nunito: ['Nunito', 'sans-serif'],
       montserrat: ['Montserrat', 'sans-serif'],
     },
-    colors: {
-      'pw-gray': '#EDEDED',
-    },
   },
   prefix: 'pw-',
   corePlugins: {
