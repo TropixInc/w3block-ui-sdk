@@ -82,7 +82,7 @@ const _RequestPasswordChangeTemplate = ({
     <AuthLayoutBase logo={logo} title={'Esqueceu senha'}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="pw-my-6">
-          <h2 className="text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6">
+          <h2 className="pw-text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6">
             {translate('companyAuth>requestPasswordChange>formTitle')}
           </h2>
           <AuthTextController
