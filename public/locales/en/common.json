@@ -14,5 +14,13 @@
   "components>genericMessages>advance": "Next",
   "auth>passwordChangeMailStep>formTitle": "Link to change password",
   "auth>mailStep>resentCodeButton": "Resend code",
-  "auth>mailStep>linkExpirationMessage": "The link expires after 15 minutes. After that period, click on \"Resend code\" to be sent a new one."
+  "auth>mailStep>linkExpirationMessage": "The link expires after 15 minutes. After that period, click on \"Resend code\" to be sent a new one.",
+  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Your passwords do not match." ,
+  "companyAuth>changingPassword>errorChangingPasswordMessage": "Unable to change password.",
+  "companyAuth>newPassword>passwordConfirmationFieldLabel": "Confirm password",
+  "companyAuth>newPasswordTips>passwordContainsUppercaseLetter": "Contains capital letters",
+  "companyAuth>newPasswordTips>passwordContainsLowercaseLetter": "Contains lowercase letters",
+  "companyAuth>newPasswordTips>passwordContainsNumbers": "Contains numbers",
+  "companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity": "Minimum 8 characters",
+  "components>advanceButton>continue": "Continue"
 }

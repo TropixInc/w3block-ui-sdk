@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
 import { useRequestPasswordChange } from '../../hooks';
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export const ExpiredToken = ({ email, onSendEmail, companyId }: Props) => {
+  const { logoUrl } = useCompanyConfig();
   const { mutate, isLoading, isSuccess } = useRequestPasswordChange(
     companyId ?? ''
   );
@@ -29,7 +31,10 @@ export const ExpiredToken = ({ email, onSendEmail, companyId }: Props) => {
   }, [isSuccess]);
 
   return (
-    <AuthLayoutBase logo="" title={translate('auth>expiredLink>stepTitle')}>
+    <AuthLayoutBase
+      logo={logoUrl}
+      title={translate('auth>expiredLink>stepTitle')}
+    >
       <div className="pw-flex pw-items-center pw-flex-col pw-mt-6">
         <h1 className="pw-font-bold pw-text-2xl pw-leading-[28px] pw-text-[#353945] pw-text-center pw-mb-6">
           {translate('auth>expiredLink>stepTitle')}

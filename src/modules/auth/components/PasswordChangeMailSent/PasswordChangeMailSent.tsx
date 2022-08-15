@@ -5,6 +5,7 @@ import { useLocalStorage } from 'react-use';
 import { isAfter, addMinutes } from 'date-fns';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
@@ -14,15 +15,12 @@ import { AuthLayoutBase } from '../AuthLayoutBase';
 
 interface PasswordChangeMailSentProps {
   email: string;
-  companyId: string;
-  logo: string;
 }
 
 export const PasswordChangeMailSent = ({
   email,
-  companyId,
-  logo,
 }: PasswordChangeMailSentProps) => {
+  const { logoUrl: logo, companyId } = useCompanyConfig();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading } = useRequestPasswordChange(companyId);
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
@@ -57,6 +55,7 @@ export const PasswordChangeMailSent = ({
       title={translate('auth>passwordChangeMailStep>formTitle')}
       classes={{
         contentContainer: 'sm:!pw-px-[35px]',
+        logo: 'w-[130px] h-[130px]',
       }}
     >
       <div className="pw-my-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">

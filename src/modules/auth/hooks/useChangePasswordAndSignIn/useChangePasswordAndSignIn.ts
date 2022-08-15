@@ -1,25 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { ResetPasswordPayload } from '../../api/resetPassword';
 import { usePixwayAuthentication } from '../usePixwayAuthentication';
 
-interface ResetPasswordPayload {
-  email: string;
-  token: string;
-  password: string;
-  confirmation: string;
-}
-
 export const useChangePasswordAndSignIn = () => {
-  const { signIn } = usePixwayAuthentication();
-  const companyId = useCompanyId();
+  const { changePasswordAndSignIn } = usePixwayAuthentication();
   const [isExpired, setIsExpired] = useState(false);
   const results = useMutation(async (payload: ResetPasswordPayload) => {
     setIsExpired(false);
-    const response = await signIn({
+    const response = await changePasswordAndSignIn({
       ...payload,
-      companyId,
     });
     if (response.error) {
       if ((response.error as string).includes('expired')) {

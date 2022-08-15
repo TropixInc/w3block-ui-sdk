@@ -21,5 +21,17 @@
   "companyAuth>requestPaswordChange>linkSentToMail": "Enviamos um link de alteração de senha para seu e-mail: <1>{{email}}</1>",
   "auth>mailStep>resentCodeButton": "Reenviar código",
   "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o código",
-  "auth>mailStep>linkExpirationMessage": "O link é valido por 15 minutos. Após isso, clique em \"Reenviar código\" para uma nova solicitação."
+  "auth>mailStep>linkExpirationMessage": "O link é valido por 15 minutos. Após isso, clique em \"Reenviar código\" para uma nova solicitação.",
+  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem." ,
+  "companyAuth>changePassword>title": "Digite sua nova senha",
+  "companyAuth>changingPassword>errorChangingPasswordMessage": "Não foi possível alterar a senha.",
+  "companyAuth>changePassword>passworldFieldPlaceholder": "Insira sua nova senha",
+  "companyAuth>newPassword>passwordConfirmationFieldLabel": "Confirmar senha",
+  "companyAuth>newPasswordTips>passwordContainsUppercaseLetter": "Contém letras maiúsculas",
+  "companyAuth>newPasswordTips>passwordContainsLowercaseLetter": "Contém letras minúsculas",
+  "companyAuth>newPasswordTips>passwordContainsNumbers": "Contém números",
+  "companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity": "Minimo 8 caracteres",
+  "companyAuth>resetPassword>passwordChangedSuccessfully": "Senha alterada com sucesso!",
+  "components>advanceButton>continue": "Continuar",
+  "changePasswordPage>emailDontExistErrorTip>signUpLink": "Cadastre-se aqui"
 }

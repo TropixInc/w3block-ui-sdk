@@ -4,7 +4,10 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
+import { Link } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useRequestPasswordChange } from '../../hooks';
@@ -12,21 +15,15 @@ import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 import { AuthTextController } from '../AuthTextController';
+import { AuthValidationTip } from '../AuthValidationTip';
 import { PasswordChangeMailSent } from '../PasswordChangeMailSent';
 
 interface Form {
   email: string;
 }
 
-export interface RequestPasswordChangeTemplateProps {
-  logo: string;
-  companyId: string;
-}
-
-const _RequestPasswordChangeTemplate = ({
-  logo,
-  companyId,
-}: RequestPasswordChangeTemplateProps) => {
+const _RequestPasswordChangeTemplate = () => {
+  const { companyId, logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
   const { mutate, isLoading, isError, isSuccess } =
@@ -73,24 +70,40 @@ const _RequestPasswordChangeTemplate = ({
   const hasSentEmail = router.query.step === '2';
 
   return hasSentEmail ? (
-    <PasswordChangeMailSent
-      email={email ?? ''}
-      companyId={companyId}
-      logo={logo}
-    />
+    <PasswordChangeMailSent email={email ?? ''} />
   ) : (
-    <AuthLayoutBase logo={logo} title={'Esqueceu senha'}>
+    <AuthLayoutBase logo={logoUrl} title={'Esqueceu senha'}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="pw-my-6">
-          <h2 className="pw-text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6">
+          <h2 className="pw-text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6 text-[#35394C]">
             {translate('companyAuth>requestPasswordChange>formTitle')}
           </h2>
+
           <AuthTextController
             name="email"
             placeholder={translate('companyAuth>newPassword>enterYourEmail')}
             label={translate('home>contactModal>email')}
             className="pw-mb-[21px]"
+            renderTips={({ error, isDirty }) => (
+              <div className="flex justify-between">
+                <AuthValidationTip error={error} isDirty={isDirty} />
+                {error?.message ===
+                translate(
+                  'companyAuth>requestPasswordChange>emailDoesntExistError'
+                ) ? (
+                  <Link
+                    href={PixwayAppRoutes.SIGN_UP}
+                    className="pw-font-poppins pw-text-xs pw-leading-[18px] pw-underline pw-text-[##353945]"
+                  >
+                    {translate(
+                      'changePasswordPage>emailDontExistErrorTip>signUpLink'
+                    )}
+                  </Link>
+                ) : null}
+              </div>
+            )}
           />
+
           <AuthButton
             fullWidth
             type="submit"
@@ -108,10 +121,8 @@ const _RequestPasswordChangeTemplate = ({
   );
 };
 
-export const RequestPasswordChangeTemplate = (
-  props: RequestPasswordChangeTemplateProps
-) => (
+export const RequestPasswordChangeTemplate = () => (
   <TranslatableComponent>
-    <_RequestPasswordChangeTemplate {...props} />
+    <_RequestPasswordChangeTemplate />
   </TranslatableComponent>
 );

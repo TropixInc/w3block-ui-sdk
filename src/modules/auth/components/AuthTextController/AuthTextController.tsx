@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-
-import AuthFormController from '../AuthFormController/AuthFormController';
+import AuthFormController, {
+  AuthFormControllerRenderTipsFunction,
+} from '../AuthFormController/AuthFormController';
 import { AuthTextField } from '../AuthTextField';
 
 interface AuthTextControllerProps {
@@ -9,7 +9,7 @@ interface AuthTextControllerProps {
   placeholder?: string;
   type?: 'text' | 'password';
   label: string;
-  renderTips?: () => ReactNode;
+  renderTips?: AuthFormControllerRenderTipsFunction;
 }
 
 export const AuthTextController = ({

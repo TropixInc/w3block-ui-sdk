@@ -8,6 +8,7 @@ import { object, string } from 'yup';
 import { Alert } from '../../../shared/components/Alert';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -16,7 +17,7 @@ import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSc
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
-import { CompanyAuthPasswordChanged } from '../AuthPasswordChanged';
+import { AuthPasswordChanged } from '../AuthPasswordChanged';
 import { AuthPasswordTips } from '../AuthPasswordTips';
 import { AuthTextController } from '../AuthTextController';
 import { ExpiredToken } from '../ExpiredToken';
@@ -34,6 +35,7 @@ enum Steps {
 }
 
 const _ResetPasswordTemplate = () => {
+  const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
   const [isShowingErrorAlert, showErrorAlert] = useTimedBoolean(6000);
@@ -93,7 +95,7 @@ const _ResetPasswordTemplate = () => {
   }, [token, router, step]);
 
   useEffect(() => {
-    if (!email || !token) {
+    if (router.isReady && (!email || !token)) {
       router.push(PixwayAppRoutes.HOME);
     }
   }, [email, token, router]);
@@ -111,17 +113,15 @@ const _ResetPasswordTemplate = () => {
       confirmation,
       password,
       email: email as string,
-      token: token as string,
+      token: decodeURIComponent((token as string) ?? ''),
     });
   };
 
   if (step === Steps.EMAIL_SENT.toString())
-    return (
-      <PasswordChangeMailSent companyId="" logo="" email={email as string} />
-    );
+    return <PasswordChangeMailSent email={email as string} />;
 
   if (step === Steps.PASSWORD_CHANGED.toString())
-    return <CompanyAuthPasswordChanged />;
+    return <AuthPasswordChanged />;
 
   return step === Steps.EXPIRED_PASSWORD.toString() ? (
     <ExpiredToken
@@ -133,15 +133,12 @@ const _ResetPasswordTemplate = () => {
   ) : (
     <AuthLayoutBase
       classes={{ root: '!pw-pt-[20px] lg:!pw-pt-[28px]' }}
-      logo=""
+      logo={logoUrl}
       title={translate('companyAuth>changePassword>title')}
     >
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="pw-my-6">
           <div className="pw-mb-[21px]">
-            <h1 className="pw-text-[#35394C] pw-font-bold pw-text-2xl pw-leading-7 pw-text-center">
-              {translate('companyAuth>changePassword>title')}
-            </h1>
             {isShowingErrorAlert ? (
               <Alert
                 variant="error"
