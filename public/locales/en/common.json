@@ -12,5 +12,6 @@
   "checkout>components>checkoutInfo>payment": "Payment",
   "checkout>components>checkoutInfo>creditCard": "Credit card",
   "shared>components>gasPriceinfo": "Gas fee",
-  "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern"
+  "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern",
+  "shared>components>servicePriceinfo": "Service fee"
 }

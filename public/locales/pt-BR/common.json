@@ -16,5 +16,6 @@
   "shared>product": "Produto",
   "checkout>components>checkoutInfo>payment": "Pagamento",
   "checkout>components>checkoutInfo>creditCard": "Cartão de crédito",
-  "shared>components>gasPriceinfo": "Taxa de gás"
+  "shared>components>gasPriceinfo": "Taxa de gás",
+  "shared>components>servicePriceinfo": "Taxa de serviço"
 }

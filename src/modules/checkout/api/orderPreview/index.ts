@@ -9,6 +9,7 @@ interface GetOrderPreviewPayload {
   currencyId: string;
   baseUrl: string;
   companyId: string;
+  token: string;
 }
 
 interface ProductToSendPayload {
@@ -26,6 +27,7 @@ export const getOrderPreview = ({
   currencyId,
   companyId,
   baseUrl,
+  token,
 }: GetOrderPreviewPayload): Promise<OrderPreviewResponse> => {
   const products: ProductToSendPayload[] = productIds.map(
     (pId: string): ProductToSendPayload => {
@@ -39,9 +41,17 @@ export const getOrderPreview = ({
       OrderPreviewResponse,
       AxiosResponse<OrderPreviewResponse, OrderPreviewPayload>,
       OrderPreviewPayload
-    >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
-      orderProducts: products,
-      currencyId,
-    })
+    >(
+      PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId),
+      {
+        orderProducts: products,
+        currencyId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     .then((res) => res.data);
 };

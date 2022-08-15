@@ -1,3 +1,9 @@
+import { CheckoutPayment } from '../../components';
+
 export const CheckoutPaymentTemplate = () => {
-  return <div></div>;
+  return (
+    <div>
+      <CheckoutPayment />
+    </div>
+  );
 };

@@ -7,11 +7,13 @@ import { PixwayButton } from '../../../shared/components/PixwayButton';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { useLocalStorage } from '../../../shared/hooks/useLocalStorage/useLocalStorage';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import useRouter from '../../../shared/hooks/useRouter';
 import { getOrderPreview } from '../../api/orderPreview';
 import { OrderPreviewResponse } from '../../api/orderPreview/interface';
+import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
@@ -33,6 +35,9 @@ const productMock = {
   price: '504.20',
 };
 
+const token =
+  'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiODkxOWI2Yy1mMTQ2LTRkODQtODg2ZS04OGZlY2E0YzM3ZTkiLCJpc3MiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJhdWQiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJlbWFpbCI6InBpeHdheUB3M2Jsb2NrLmlvIiwibmFtZSI6IlBpeHdheSIsInJvbGVzIjpbInVzZXIiXSwiY29tcGFueUlkIjoiZThhOTgxNGUtMThhMS00ZjUyLWI2Y2EtYzE1ZjBhZTIyOTRhIiwidGVuYW50SWQiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJ2ZXJpZmllZCI6dHJ1ZSwidHlwZSI6InVzZXIiLCJpYXQiOjE2NjAzMjgxMjAsImV4cCI6MTY2MDkzMjkyMH0.fbHIOVrgwRI_zS8W-bsaYGV5vpXS4orQJToXBZsBl1Gr6sm6i_FDI6DOq5TB_3sDjzyvwhB2JBvmW_32Qv9MmbYtFXukxPf8ZEKn3qAigOsmnc-icAe66Rb6eDns6C0tsNcbt_zWVz3ntAq1BUyaFSiqhdyPCrK4cjarQ6Q-I3k';
+
 const _CheckoutInfo = ({
   checkoutStatus = CheckoutStatus.FINISHED,
   returnAction,
@@ -42,6 +47,7 @@ const _CheckoutInfo = ({
 }: CheckoutInfoProps) => {
   const router = useRouter();
   const [translate] = useTranslation();
+  const { deleteKey, setStorage } = useLocalStorage();
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -52,6 +58,12 @@ const _CheckoutInfo = ({
   );
   const companyId = useCompanyId();
   const baseUrl = usePixwayAPIURL();
+
+  useEffect(() => {
+    deleteKey(PRODUCT_CART_INFO_KEY);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.localStorage]);
+
   useEffect(() => {
     if (!productIds && !currencyIdState) {
       const params = new URLSearchParams(query);
@@ -74,6 +86,7 @@ const _CheckoutInfo = ({
         currencyId: currencyIdState,
         companyId,
         baseUrl,
+        token,
       }).then((res) => setOrderPreview(res));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,12 +105,36 @@ const _CheckoutInfo = ({
     }
   }, [checkoutStatus]);
 
+  const beforeProcced = () => {
+    if (checkoutStatus == CheckoutStatus.CONFIRMATION && orderPreview) {
+      const orderProducts = orderPreview.products?.map((pID) => {
+        return {
+          productId: pID.id,
+          expectedPrice: pID.prices[0].amount,
+        };
+      });
+      setStorage(PRODUCT_CART_INFO_KEY, {
+        orderProducts,
+        currencyId: currencyIdState,
+        //destinationWalletAddress: '0xd3304183ec1fa687e380b67419875f97f1db05f5',
+        signedGasFee: orderPreview.gasFee.signature,
+      });
+    }
+    if (proccedAction) {
+      proccedAction(query);
+    } else {
+      router.push(PixwayAppRoutes.CHECKOUT_PAYMENT + query);
+    }
+  };
+
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
         return (
           <>
             <PriceAndGasInfo
+              totalPrice={orderPreview?.totalPrice || '0'}
+              service={orderPreview?.serviceFee || '0'}
               loading={isLoading}
               className="pw-mt-4"
               price={
@@ -121,13 +158,8 @@ const _CheckoutInfo = ({
                 Cancelar
               </PixwayButton>
               <PixwayButton
-                onClick={
-                  proccedAction
-                    ? () => proccedAction(query)
-                    : () => {
-                        router.push(PixwayAppRoutes.CHECKOUT_PAYMENT + query);
-                      }
-                }
+                disabled={!orderPreview}
+                onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
                 Continuar
@@ -163,7 +195,7 @@ const _CheckoutInfo = ({
   }, [checkoutStatus, orderPreview]);
 
   return (
-    <div className="pw-w-full pw-max-w-[80%] pw-px-[80px]">
+    <div className="pw-w-full lg:pw-max-w-[80%] lg:pw-px-[80px] pw-px-6">
       <p className="pw-text-[18px] pw-font-[700]">Checkout</p>
       <div className="pw-flex pw-mt-3 pw-items-center pw-gap-x-2">
         <CreditCardIcon />
@@ -182,6 +214,7 @@ const _CheckoutInfo = ({
       </p>
       <ProductInfo
         loading={isLoading}
+        status={checkoutStatus}
         className="pw-mt-3"
         image={productMock.image}
         id={orderPreview?.products[0].contractAddress || ''}

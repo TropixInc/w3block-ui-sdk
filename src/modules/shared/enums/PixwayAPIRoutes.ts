@@ -5,4 +5,5 @@ export enum PixwayAPIRoutes {
   REFRESH_TOKEN = 'auth/refresh-token',
   GET_PROFILE = 'users/profile',
   ORDER_PREVIEW = '/companies/{companyId}/orders/preview',
+  CREATE_ORDER = '/companies/{companyId}/orders',
 }

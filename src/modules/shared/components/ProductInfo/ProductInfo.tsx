@@ -1,6 +1,8 @@
-import { CheckoutStatus } from '../../../checkout';
-import { Shimmer } from '../Shimmer';
+import { useMemo } from 'react';
 
+import { CheckoutStatus } from '../../../checkout';
+import { ReactComponent as Loading } from '../../assets/icons/loading.svg';
+import { Shimmer } from '../Shimmer';
 interface ProductInfoProps {
   status?: CheckoutStatus;
   image: string;
@@ -15,10 +17,26 @@ export const ProductInfo = ({
   image,
   name,
   id,
+  status,
   price,
   className,
   loading = false,
 }: ProductInfoProps) => {
+  const statusToShow = useMemo(() => {
+    switch (status) {
+      case CheckoutStatus.FINISHED:
+        return (
+          <div className="pw-flex pw-items-center pw-justify-end pw-gap-x-2 -pw-mb-[2px]">
+            <p className="pw-text-sm pw-text-[#295BA6] pw-font-[600]">
+              Processando
+            </p>
+            <Loading className="pw-animate-spin" />
+          </div>
+        );
+      default:
+        return null;
+    }
+  }, [status]);
   return (
     <div
       className={`pw-w-full pw-px-2 pw-py-3 pw-flex pw-justify-between pw-items-center pw-border pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl ${className}`}
@@ -54,7 +72,12 @@ export const ProductInfo = ({
       {loading ? (
         <Shimmer className="pw-w-[80px] pw-h-6" />
       ) : (
-        <p className="pw-font-[700] pw-text-[#35394C] pw-text-lg">R${price}</p>
+        <div className="pw-fle pw-flex-col">
+          {statusToShow}
+          <p className="pw-font-[700] pw-text-[#35394C] pw-text-lg pw-text-right">
+            R${price}
+          </p>
+        </div>
       )}
     </div>
   );
