@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { PixwayAuthenticationContext } from '../../contexts';
+import { W3blockAuthenticationContext } from '../../contexts';
 
 export const usePixwayAuthentication = () => {
-  return useContext(PixwayAuthenticationContext);
+  return useContext(W3blockAuthenticationContext);
 };

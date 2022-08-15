@@ -7,7 +7,7 @@ import { isAfter, addMinutes } from 'date-fns';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as MailSentIcon } from '../../assets/icons/mailSent.svg';
+import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
@@ -55,22 +55,25 @@ export const PasswordChangeMailSent = ({
     <AuthLayoutBase
       logo={logo}
       title={translate('auth>passwordChangeMailStep>formTitle')}
+      classes={{
+        contentContainer: 'sm:!pw-px-[35px]',
+      }}
     >
-      <div className="pw-my-6 pw-flex pw-flex-col pw-items-center">
-        <p className="pw-font-semibold pw-leading-4 pw-text-[#35394C] pw-mb-[21px] pw-text-center">
+      <div className="pw-my-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">
+        <p className="pw-font-medium pw-text-[#35394C] pw-mb-6 pw-text-center">
           <Trans
             i18nKey="companyAuth>requestPaswordChange>linkSentToMail"
             values={{ email: formattedEmail }}
           >
             Enviamos um email para:
-            <span className="pw-block pw-text-center pw-mt-0.5">email</span>
+            <span className="">email</span>
           </Trans>
         </p>
-        <div className="pw-mb-7">
+        <div className="pw-mb-[29px]">
           <div className="pw-flex pw-justify-center">
             <button
               disabled={isActive || isLoading}
-              className="pw-font-bold pw-text-base pw-leading-4 pw-text-[#76DE8D] hover:pw-underline disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
+              className="pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-underline pw-text-brand-primary disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
               onClick={() => mutate({ email })}
             >
               {translate('auth>mailStep>resentCodeButton')}
@@ -89,19 +92,13 @@ export const PasswordChangeMailSent = ({
             </p>
           ) : null}
         </div>
-        <MailSentIcon className="pw-max-w-[186px] pw-max-h-[178px] " />
-        <p className="pw-font-semibold pw-leading-4 pw-text-[#35394C] pw-text-center pw-mt-[21px]">
-          <Trans i18nKey="auth>mailStep>linkExpirationMessage">
-            lorem
-            <button
-              disabled={isActive || isLoading}
-              className="pw-font-bold pw-text-base pw-leading-4 pw-text-[#76DE8D] disabled:pw-text-[#676767] disabled:hover:pw-no-underline hover:pw-underline"
-              onClick={() => mutate({ email })}
-            >
-              ipsum
-            </button>
-            lorem ipsum
-          </Trans>
+        <div className="pw-relative">
+          <span className="pw-absolute pw-rounded-full pw-w-[24.51px] pw-h-[24.51px] pw-bg-brand-primary pw-left-[20.48px] pw-top-[29.23px]" />
+          <KeyIconOutlined className="pw-max-w-[169.6px] pw-max-h-[83px] pw-stroke-brand-primary" />
+        </div>
+
+        <p className="pw-font-semibold pw-text-[#35394C] pw-text-center pw-mt-[29px]">
+          {translate('auth>mailStep>linkExpirationMessage')}
         </p>
       </div>
 

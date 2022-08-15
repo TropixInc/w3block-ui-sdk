@@ -21,5 +21,5 @@
   "companyAuth>requestPaswordChange>linkSentToMail": "Enviamos um link de alteração de senha para seu e-mail: <1>{{email}}</1>",
   "auth>mailStep>resentCodeButton": "Reenviar código",
   "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o código",
-  "auth>mailStep>linkExpirationMessage": "O link é valido por 15 minutos. Após isso, clique em <1>\"Reenviar código\"</1> para uma nova solicitação."
+  "auth>mailStep>linkExpirationMessage": "O link é valido por 15 minutos. Após isso, clique em \"Reenviar código\" para uma nova solicitação."
 }
