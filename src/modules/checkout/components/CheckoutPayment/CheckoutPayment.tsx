@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useCompanyId } from '../../../shared/hooks/useCompanyId';
 import { useLocalStorage } from '../../../shared/hooks/useLocalStorage/useLocalStorage';
@@ -12,11 +12,19 @@ const token =
 
 export const CheckoutPayment = () => {
   const [_, setOrderInfos] = useState<CreateOrder | null>(null);
+  const shouldLock = useRef(true);
   const [sending, setSending] = useState<boolean>(false);
   const baseUrl = usePixwayAPIURL();
   const companyId = useCompanyId();
   const [iframeLink, setIframeLink] = useState('');
   const { getItem } = useLocalStorage();
+
+  useEffect(() => {
+    if (shouldLock.current) {
+      shouldLock.current = false;
+      createOrder();
+    }
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createOrder = () => {
@@ -35,9 +43,9 @@ export const CheckoutPayment = () => {
 
   const IframeItem = useMemo(() => {
     return iframeLink ? (
-      <iframe className="pw-w-full pw-h-full" src={iframeLink} />
+      <iframe className="pw-w-full pw-min-h-screen" src={iframeLink} />
     ) : null;
   }, [iframeLink]);
 
-  return <div>{IframeItem}</div>;
+  return <div className="">{IframeItem}</div>;
 };
