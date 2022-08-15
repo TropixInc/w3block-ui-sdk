@@ -135,7 +135,6 @@ const _SignInTemplate = ({
               {translate('companyAuth>signIn>loginFailedError')}
             </Alert>
           ) : null}
-
           <AuthTextController
             name="email"
             label={translate('home>contactModal>email')}
@@ -163,7 +162,6 @@ const _SignInTemplate = ({
               </div>
             )}
           />
-
           <div className="pw-mb-6">
             <AuthButton
               className={classNames(classes.signInButton ?? '', 'pw-mb-1')}
@@ -185,7 +183,6 @@ const _SignInTemplate = ({
               </Trans>
             </p>
           </div>
-
           <AuthFooter />
         </form>
       </FormProvider>

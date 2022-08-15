@@ -35,9 +35,9 @@ export const ModalBase = ({
           ownClass
             ? ownClass
             : classNames(
-                'fixed bg-white rounded-2xl pl-8 pr-[101px] pt-10 pb-12 max-w-[656px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50',
-                classes.dialogCard ?? ''
-              )
+              'fixed bg-white rounded-2xl pl-8 pr-[101px] pt-10 pb-12 max-w-[656px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50',
+              classes.dialogCard ?? ''
+            )
         }
       >
         {!hideCloseButton && (

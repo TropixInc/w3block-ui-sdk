@@ -2,13 +2,20 @@ import { useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
-import { ReactComponent as MetamaskLogo } from '../../../../../shared/assets/images/metamaskLogo.svg';
+import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
 import { Alert } from '../../../shared/components/Alert';
 import DialogBase from '../../../shared/components/DialogBase/DialogBase';
+import Spinner from '../../../shared/components/Spinner/Spinner';
+import { ConnectRoutes } from '../../../shared/enums/ConnectRoutes';
+import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
+import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import useHostname from '../../../shared/hooks/useHostname/useHostname';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet/index';
+import { claimWalletVault } from '../../api/wallet/wallet';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
@@ -67,7 +74,7 @@ export const ConnectWalletTemplate = () => {
     try {
       await connect();
       setIsConnecting(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       onError(error.message);
     }
@@ -80,7 +87,7 @@ export const ConnectWalletTemplate = () => {
     try {
       await claim();
       onCreateWalletSuccessfully();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       onError(error.message);
     }
@@ -92,7 +99,7 @@ export const ConnectWalletTemplate = () => {
     try {
       await claimWalletVault(token, companyId ?? '');
       onCreateWalletSuccessfully();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       onError(error.message);
     }
@@ -101,7 +108,7 @@ export const ConnectWalletTemplate = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
-    queryClient.invalidateQueries(ApiRoutes.GET_PROFILE);
+    queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
     router.push(ConnectRoutes.TOKENS);
   };
 
@@ -233,7 +240,7 @@ const GenerateTokenDialog = ({
 
   const onConfirm = () => {
     // eslint-disable-next-line prettier/prettier
-    const target = `${hostname ?? ''}${AppRoutes.SIGN_IN}`;
+    const target = `${hostname ?? ''}${PixwayAPIRoutes.SIGN_IN}`;
     const url = `https://metamask.app.link/dapp/${target}`;
     openMetaMaskUrl(url);
     onClose();

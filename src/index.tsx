@@ -4,4 +4,4 @@ export * from './modules/shared';
 
 export * from './modules/core';
 
-export * from './modules/auth';
+export * from './modules/auth/';
