@@ -20,7 +20,7 @@ async function refreshAccessToken(
 ): Promise<JWT & { accessToken?: string; refreshToken?: string }> {
   try {
     const response = await fetch(
-      removeDuplicateSlahes(`${baseURL}${PixwayAPIRoutes.REFRESH_TOKEN}`),
+      removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.REFRESH_TOKEN}`),
       {
         method: 'POST',
         body: JSON.stringify({
