@@ -5,11 +5,14 @@ import { useLocalStorage } from 'react-use';
 import { isAfter, addMinutes } from 'date-fns';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
 import { useRequestPasswordChange } from '../../hooks';
+import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 
@@ -22,6 +25,7 @@ export const PasswordChangeMailSent = ({
 }: PasswordChangeMailSentProps) => {
   const { logoUrl: logo, companyId } = useCompanyConfig();
   const [translate] = useTranslation();
+  const router = useRouter();
   const { mutate, isSuccess, isLoading } = useRequestPasswordChange(companyId);
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
@@ -54,11 +58,13 @@ export const PasswordChangeMailSent = ({
       logo={logo}
       title={translate('auth>passwordChangeMailStep>formTitle')}
       classes={{
-        contentContainer: 'sm:!pw-px-[35px]',
+        root: '!pw-px-5 sm:!pw-px-5',
+        contentContainer:
+          '!pw-pt-0 sm:!pw-pt-[35px] sm:!pw-px-[35px] !pw-shadow-none sm:!pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] !pw-bg-transparent sm:!pw-bg-white !pw-px-0 sm:!pw-px-[35px] !pw-max-w-none sm:!pw-max-w-[514px]',
         logo: 'w-[130px] h-[130px]',
       }}
     >
-      <div className="pw-my-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">
+      <div className="pw-pt-0 pw-pb-6 sm:pw-my-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">
         <p className="pw-font-medium pw-text-[#35394C] pw-mb-6 pw-text-center">
           <Trans
             i18nKey="companyAuth>requestPaswordChange>linkSentToMail"
@@ -96,9 +102,15 @@ export const PasswordChangeMailSent = ({
           <KeyIconOutlined className="pw-max-w-[169.6px] pw-max-h-[83px] pw-stroke-brand-primary" />
         </div>
 
-        <p className="pw-font-semibold pw-text-[#35394C] pw-text-center pw-mt-[29px]">
+        <p className="pw-font-medium pw-text-[#35394C] pw-text-center pw-mt-[29px] mb-6">
           {translate('auth>mailStep>linkExpirationMessage')}
         </p>
+        <AuthButton
+          onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
+          fullWidth
+        >
+          Continuar
+        </AuthButton>
       </div>
 
       <AuthFooter />

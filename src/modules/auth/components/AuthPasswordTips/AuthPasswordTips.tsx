@@ -2,6 +2,8 @@ import { useController } from 'react-hook-form';
 
 import classNames from 'classnames';
 
+import { ReactComponent as CheckCircleOutlined } from '../../../shared/assets/icons/checkCircledOutlined.svg';
+import { ReactComponent as ErrorCircled } from '../../../shared/assets/icons/errorCircled.svg';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePasswordMeetsCriteria } from '../../hooks/usePasswordMeetsCriteria';
 
@@ -17,15 +19,22 @@ interface TipProps {
 }
 
 const Tip = ({ isValid, children, isPasswordDirty }: TipProps) => {
-  const getTextColor = () => {
-    if (!isPasswordDirty) return 'pw-text-[#353945]';
-    return isValid ? 'pw-text-[#76DE8D]' : 'pw-text-[#C63535]';
+  const renderIcon = () => {
+    if (!isPasswordDirty) return null;
+    return !isValid ? (
+      <ErrorCircled className="pw-stroke-[#C63535] pw-h-[14px] pw-w-[14px]" />
+    ) : (
+      <CheckCircleOutlined className="pw-stroke-[#76DE8D] pw-h-[14px] pw-w-[14px]" />
+    );
   };
 
   return (
     <li
-      className={classNames('pw-text-[13px] pw-leading-[18px]', getTextColor())}
+      className={classNames(
+        'pw-text-xs pw-leading-[14px] pw-flex pw-items-center pw-gap-x-[5px] pw-text-[#777E8F]'
+      )}
     >
+      {renderIcon()}
       {children}
     </li>
   );
@@ -70,7 +79,7 @@ export const AuthPasswordTips = ({
   ];
 
   return (
-    <ul className={classNames(className, 'pw-flex pw-flex-col pw-gap-y-1')}>
+    <ul className={classNames(className, 'pw-flex pw-flex-col pw-gap-y-1.5')}>
       {validations.map(({ label, isValid }) => (
         <Tip key={label} isValid={isValid} isPasswordDirty={fieldState.isDirty}>
           {label}

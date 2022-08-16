@@ -31,7 +31,7 @@ export const AuthLayoutBase = ({
       width={width}
       height={height}
       className={classNames(
-        'pw-mx-auto pw-object-contain w-[130px] h-[130px]',
+        'pw-mx-auto pw-object-contain pw-w-20 pw-h-20 sm:pw-w-[140px] sm:pw-h-[140px]',
         classes.logo ?? ''
       )}
       alt=""

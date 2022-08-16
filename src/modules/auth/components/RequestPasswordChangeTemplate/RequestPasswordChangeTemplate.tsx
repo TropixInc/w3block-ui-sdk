@@ -72,9 +72,21 @@ const _RequestPasswordChangeTemplate = () => {
   return hasSentEmail ? (
     <PasswordChangeMailSent email={email ?? ''} />
   ) : (
-    <AuthLayoutBase logo={logoUrl} title={'Esqueceu senha'}>
+    <AuthLayoutBase
+      logo={logoUrl}
+      title={translate('auth>requestPasswordChange>pageTitle')}
+      classes={{
+        root: '!pw-px-[26px] sm:!pw-px-5',
+        contentContainer:
+          '!pw-pt-0 sm:!pw-pt-[35px] sm:!pw-px-[35px] !pw-shadow-none sm:!pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] !pw-bg-transparent sm:!pw-bg-white !pw-px-0 sm:!pw-px-[35px] !pw-max-w-none sm:!pw-max-w-[514px]',
+        logo: 'w-[130px] h-[130px]',
+      }}
+    >
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="pw-my-6">
+        <form
+          onSubmit={methods.handleSubmit(onSubmit)}
+          className="pw-pt-0 pw-pb-6 sm:pw-my-6"
+        >
           <h2 className="pw-text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6 text-[#35394C]">
             {translate('companyAuth>requestPasswordChange>formTitle')}
           </h2>

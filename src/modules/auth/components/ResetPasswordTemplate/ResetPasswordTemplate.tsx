@@ -132,13 +132,24 @@ const _ResetPasswordTemplate = () => {
     />
   ) : (
     <AuthLayoutBase
-      classes={{ root: '!pw-pt-[20px] lg:!pw-pt-[28px]' }}
+      classes={{
+        root: '!pw-px-[26px] sm:!pw-px-5 !pw-pt-[63px] lg:!pw-pt-[28px]',
+        contentContainer:
+          '!pw-pt-0 sm:!pw-pt-[35px] sm:!pw-px-[35px] !pw-shadow-none sm:!pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] !pw-bg-transparent sm:!pw-bg-white !pw-px-0 sm:!pw-px-[69px] !pw-max-w-none sm:!pw-max-w-[514px]',
+        logo: 'w-[130px] h-[130px]',
+      }}
       logo={logoUrl}
       title={translate('companyAuth>changePassword>title')}
     >
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="pw-my-6">
-          <div className="pw-mb-[21px]">
+        <form
+          onSubmit={methods.handleSubmit(onSubmit)}
+          className="pw-mb-6 sm:pw-my-6"
+        >
+          <div className="px-3 sm:px-0 pw-mb-[21px]">
+            <h2 className="pw-font-medium pw-text-lg pw-leading-[23px] pw-text-[#35394C] pw-text-center">
+              {translate('auth>changePasswordForm>title')}
+            </h2>
             {isShowingErrorAlert ? (
               <Alert
                 variant="error"
@@ -170,7 +181,7 @@ const _ResetPasswordTemplate = () => {
               'companyAuth>newPassword>passwordConfirmationFieldLabel'
             )}
             type="password"
-            className="pw-mb-3"
+            className="pw-mb-[26px]"
           />
           <AuthPasswordTips passwordFieldName="password" className="pw-mb-3" />
           <AuthButton

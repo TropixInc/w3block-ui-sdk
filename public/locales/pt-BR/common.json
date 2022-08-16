@@ -14,16 +14,17 @@
   "auth>signIn>signUpCTA": "Não tem conta ainda? <1>Cadastre-se.</1>",
   "companyAuth>requestPasswordChange>invalidEmailError": "E-mail inválido",
   "companyAuth>requestPasswordChange>emailDoesntExistError": "e-mail incorreto, tente novamente!",
+  "auth>requestPasswordChange>pageTitle": "Esqueceu senha",
   "companyAuth>requestPasswordChange>formTitle": "Digite seu e-mail para enviarmos um link de alteração de senha",
   "companyAuth>requestPasswordChange>emailFieldPlaceholder": "Insira seu e-mail",
   "components>genericMessages>advance": "Avançar",
   "auth>passwordChangeMailStep>formTitle": "Link de alteração de senha",
-  "companyAuth>requestPaswordChange>linkSentToMail": "Enviamos um link de alteração de senha para seu e-mail: <1>{{email}}</1>",
+  "companyAuth>requestPaswordChange>linkSentToMail": "Enviamos um link de autenticação para seu e-mail: <1>{{email}}</1>",
   "auth>mailStep>resentCodeButton": "Reenviar código",
   "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o código",
-  "auth>mailStep>linkExpirationMessage": "O link é valido por 15 minutos. Após isso, clique em \"Reenviar código\" para uma nova solicitação.",
+  "auth>mailStep>linkExpirationMessage": "O link é válido por 15 minutos, após isso, clique em \"Reenviar código\" para uma nova solicitação.",
   "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem." ,
-  "companyAuth>changePassword>title": "Digite sua nova senha",
+  "companyAuth>changePassword>title": "Trocar senha",
   "companyAuth>changingPassword>errorChangingPasswordMessage": "Não foi possível alterar a senha.",
   "companyAuth>changePassword>passworldFieldPlaceholder": "Insira sua nova senha",
   "companyAuth>newPassword>passwordConfirmationFieldLabel": "Confirmar senha",
@@ -33,5 +34,6 @@
   "companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity": "Minimo 8 caracteres",
   "companyAuth>resetPassword>passwordChangedSuccessfully": "Senha alterada com sucesso!",
   "components>advanceButton>continue": "Continuar",
-  "changePasswordPage>emailDontExistErrorTip>signUpLink": "Cadastre-se aqui"
+  "changePasswordPage>emailDontExistErrorTip>signUpLink": "Cadastre-se aqui",
+  "auth>changePasswordForm>title": "Para prosseguir na alteração de senha, por favor preencha os campos abaixo."
 }
