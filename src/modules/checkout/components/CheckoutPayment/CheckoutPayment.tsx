@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { ErrorMessage } from '../../../shared';
+import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
 import { useCompanyId } from '../../../shared/hooks/useCompanyId';
 import { useLocalStorage } from '../../../shared/hooks/useLocalStorage/useLocalStorage';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
@@ -12,6 +14,7 @@ const token =
 
 export const CheckoutPayment = () => {
   const [_, setOrderInfos] = useState<CreateOrder | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const shouldLock = useRef(true);
   const [sending, setSending] = useState<boolean>(false);
   const baseUrl = usePixwayAPIURL();
@@ -29,11 +32,13 @@ export const CheckoutPayment = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createOrder = () => {
+    setLoading(true);
     const orderInfo = getItem<CreateOrder>(PRODUCT_CART_INFO_KEY);
     setOrderInfos(orderInfo);
     if (orderInfo && !iframeLink && !sending) {
       setSending(true);
       createOrderApi(baseUrl, token, companyId, orderInfo).then((res) => {
+        setLoading(false);
         if (res) {
           setIframeLink(res.paymentInfo.paymentUrl);
           setSending(false);
@@ -45,8 +50,19 @@ export const CheckoutPayment = () => {
   const IframeItem = useMemo(() => {
     return iframeLink ? (
       <iframe className="pw-w-full pw-min-h-screen" src={iframeLink} />
-    ) : null;
-  }, [iframeLink]);
+    ) : loading ? (
+      <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
+        <Loading className="pw-animate-spin -pw-mt-24 pw-h-15 pw-w-15" />
+      </div>
+    ) : (
+      <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
+        <ErrorMessage
+          className="-pw-mt-24"
+          message="Tivemos um problema na hora da compra."
+        />
+      </div>
+    );
+  }, [iframeLink, loading]);
 
   return <div className="">{IframeItem}</div>;
 };
