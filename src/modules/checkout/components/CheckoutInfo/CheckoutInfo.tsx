@@ -28,13 +28,6 @@ interface CheckoutInfoProps {
   currencyId?: string;
 }
 
-const productMock = {
-  image: 'https://picsum.photos/200/300',
-  id: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-  name: 'tenis de jogar bola',
-  price: '504.20',
-};
-
 const token =
   'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiODkxOWI2Yy1mMTQ2LTRkODQtODg2ZS04OGZlY2E0YzM3ZTkiLCJpc3MiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJhdWQiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJlbWFpbCI6InBpeHdheUB3M2Jsb2NrLmlvIiwibmFtZSI6IlBpeHdheSIsInJvbGVzIjpbInVzZXIiXSwiY29tcGFueUlkIjoiZThhOTgxNGUtMThhMS00ZjUyLWI2Y2EtYzE1ZjBhZTIyOTRhIiwidGVuYW50SWQiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJ2ZXJpZmllZCI6dHJ1ZSwidHlwZSI6InVzZXIiLCJpYXQiOjE2NjAzMjgxMjAsImV4cCI6MTY2MDkzMjkyMH0.fbHIOVrgwRI_zS8W-bsaYGV5vpXS4orQJToXBZsBl1Gr6sm6i_FDI6DOq5TB_3sDjzyvwhB2JBvmW_32Qv9MmbYtFXukxPf8ZEKn3qAigOsmnc-icAe66Rb6eDns6C0tsNcbt_zWVz3ntAq1BUyaFSiqhdyPCrK4cjarQ6Q-I3k';
 
@@ -216,13 +209,13 @@ const _CheckoutInfo = ({
         loading={isLoading}
         status={checkoutStatus}
         className="pw-mt-3"
-        image={productMock.image}
-        id={orderPreview?.products[0].contractAddress || ''}
-        name={orderPreview?.products[0].name || ''}
+        image={orderPreview?.products[0]?.images[0]?.thumb || ''}
+        id={orderPreview?.products[0]?.contractAddress || ''}
+        name={orderPreview?.products[0]?.name || ''}
         price={
-          parseFloat(orderPreview?.products[0].prices[0].amount || '0').toFixed(
-            2
-          ) || ''
+          parseFloat(
+            orderPreview?.products[0]?.prices[0].amount || '0'
+          ).toFixed(2) || ''
         }
       />
       {_ButtonsToShow}

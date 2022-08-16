@@ -8,7 +8,7 @@ export interface Product {
   communityId: string;
   name: string;
   description: string;
-  images: unknown[];
+  images: Images[];
   prices: Price[];
   distributionType: string;
   pricingType: string;
@@ -18,4 +18,9 @@ export interface Product {
   endSaleAt: string;
   stockAmount: number;
   tokensAmount: number;
+}
+
+export interface Images {
+  original: string;
+  thumb: string;
 }
