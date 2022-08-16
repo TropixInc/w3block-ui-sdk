@@ -195,7 +195,7 @@ const _CheckoutInfo = ({
   }, [checkoutStatus, orderPreview]);
 
   return (
-    <div className="pw-w-full lg:pw-max-w-[80%] lg:pw-px-[80px] pw-px-6">
+    <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[80px] pw-px-6">
       <p className="pw-text-[18px] pw-font-[700]">Checkout</p>
       <div className="pw-flex pw-mt-3 pw-items-center pw-gap-x-2">
         <CreditCardIcon />

@@ -53,7 +53,7 @@ export const ProductInfo = ({
           </div>
         )}
 
-        <div className="pw-ml-3">
+        <div className="pw-ml-3 pw-flex pw-w-full pw-flex-col pw-flex-1 pw-overflow-hidden">
           {loading ? (
             <>
               <Shimmer className="pw-mb-1 pw-w-[120px]" />{' '}
@@ -64,7 +64,9 @@ export const ProductInfo = ({
               <p className="pw-font-[600] pw-text-sm pw-text-[#353945]">
                 {name}
               </p>
-              <p className="pw-font-[600] pw-text-xs pw-text-[#353945]">{id}</p>
+              <p className="pw-font-[600] pw-max-w-[130px] sm:pw-max-w-full pw-text-xs pw-text-[#353945] pw-truncate">
+                {id}
+              </p>
             </>
           )}
         </div>
