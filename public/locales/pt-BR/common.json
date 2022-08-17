@@ -31,7 +31,7 @@
   "companyAuth>newPasswordTips>passwordContainsUppercaseLetter": "Contém letras maiúsculas",
   "companyAuth>newPasswordTips>passwordContainsLowercaseLetter": "Contém letras minúsculas",
   "companyAuth>newPasswordTips>passwordContainsNumbers": "Contém números",
-  "companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity": "Minimo 8 caracteres",
+  "companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity": "Ter pelo menos 8 caracteres",
   "companyAuth>resetPassword>passwordChangedSuccessfully": "Senha alterada com sucesso!",
   "components>advanceButton>continue": "Continuar",
   "changePasswordPage>emailDontExistErrorTip>signUpLink": "Cadastre-se aqui",
@@ -40,5 +40,8 @@
   "changePassword>error>errorChangingPassword": "Tivemos um problema na troca da senha.",
   "auth>expiredLink>stepTitle": "O link de autenticação expirou",
   "auth>expiredLink>linkNotValidatedMessage": "Infelizmente seu link não foi validado",
-  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código"
+  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código",
+  "auth>signUpForm>formTitle": "Crie sua conta",
+  "auth>signUpForm>alreadyHaveAccount": "Já possui uma conta? <1>Login</1>",
+  "auth>signUp>emailSent": "Enviamos um link para confirmar seu e-mail: <1>{{email}}</1>"
 }
