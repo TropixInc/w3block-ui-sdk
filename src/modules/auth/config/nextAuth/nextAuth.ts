@@ -95,9 +95,7 @@ export const getNextAuthConfig = ({
             },
           });
           const responseAsJSON = await response.json();
-          console.log(responseAsJSON);
           const user = mapSignInReponseToSessionUser(responseAsJSON);
-          console.log(user);
           return user;
         } catch (err) {
           return null;
