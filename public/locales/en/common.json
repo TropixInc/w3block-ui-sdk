@@ -1,11 +1,22 @@
 {
   "companyAuth>signIn>invalidPasswordFeedback": "Invalid password",
-  "companyAuth>signIn>formTitle": "Sign in",
+  "companyAuth>signIn>formTitle": "Danilo Schleu",
   "companyAuth>signIn>loginFailedError": "Invalid login or password.",
   "home>contactModal>email": "E-mail",
   "companyAuth>newPassword>passwordFieldLabel": "Password",
   "auth>passwordChange>requestChangeFormTitle": "Forgot your password?",
   "loginPage>formSubmitButton>signIn": "Sign in",
   "components>form>requiredFieldValidation": "Required field",
-  "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern"
+  "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern",
+  "connectTokens>tokensList>pageTitle": "My Tokens",
+  "components>advanceButton>continue": "Continue",
+  "companyAuth>externalWallet>connectExternalWallet": "Connect New Wallet",
+  "companyAuth>externalWallet>errorConnectingExternalWallet": "Unable to connect external wallet, please try again",
+  "companyAuth>signUp>connectToMetamask": "Connect with Metamask",
+  "companyAuth>signUp>connectExternalWallet": "Now that you have completed your registration, you can connect an external wallet.",
+  "companyAuth>setPasswordForm>title": "Create your password",
+  "companyAuth>signUp>accountCreated": "Your account has been successfully created",
+  "companyAuth>signUp>doYouAlreadyHaveAnExternalWallet": "Do you already have a wallet?",
+  "companyAuth>signUp>continueWithInternalWallet": "If you do not have an external wallet, by continuing to login an internal wallet will be automatically created for you",
+  "companyAuth>signUp>iDontHaveAExternalWallet": "I don't have a wallet"
 }
