@@ -35,5 +35,10 @@
   "companyAuth>resetPassword>passwordChangedSuccessfully": "Senha alterada com sucesso!",
   "components>advanceButton>continue": "Continuar",
   "changePasswordPage>emailDontExistErrorTip>signUpLink": "Cadastre-se aqui",
-  "auth>changePasswordForm>title": "Para prosseguir na alteração de senha, por favor preencha os campos abaixo."
+  "auth>changePasswordForm>title": "Para prosseguir na alteração de senha, por favor preencha os campos abaixo.",
+  "components>cancelMessage>cancel": "Cancelar",
+  "changePassword>error>errorChangingPassword": "Tivemos um problema na troca da senha.",
+  "auth>expiredLink>stepTitle": "O link de autenticação expirou",
+  "auth>expiredLink>linkNotValidatedMessage": "Infelizmente seu link não foi validado",
+  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código"
 }

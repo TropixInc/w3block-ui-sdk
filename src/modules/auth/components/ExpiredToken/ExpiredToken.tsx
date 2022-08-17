@@ -32,21 +32,24 @@ export const ExpiredToken = ({ email, onSendEmail, companyId }: Props) => {
 
   return (
     <AuthLayoutBase
+      classes={{
+        root: '!pw-px-5 sm:!pw-px-5',
+        contentContainer:
+          '!pw-pt-0 sm:!pw-pt-[35px] sm:!pw-px-[35px] !pw-shadow-none sm:!pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] !pw-bg-transparent sm:!pw-bg-white !pw-px-0 sm:!pw-px-[35px] !pw-max-w-none sm:!pw-max-w-[514px]',
+        logo: 'w-[130px] h-[130px]',
+        title: 'pw-px-2 sm:pw-px-0',
+      }}
       logo={logoUrl}
       title={translate('auth>expiredLink>stepTitle')}
     >
       <div className="pw-flex pw-items-center pw-flex-col pw-mt-6">
-        <h1 className="pw-font-bold pw-text-2xl pw-leading-[28px] pw-text-[#353945] pw-text-center pw-mb-6">
-          {translate('auth>expiredLink>stepTitle')}
-        </h1>
-
-        <p className="pw-text-[#353945] pw-text-sm pw-leading-4 pw-mb-[21px]">
+        <p className="pw-text-[#353945] pw-text-sm pw-leading-4 pw-mb-[21px] pw-font-poppins">
           {translate('auth>expiredLink>linkNotValidatedMessage')}
         </p>
         <button
           onClick={onClickResendEmail}
           disabled={isLoading}
-          className="pw-mb-[21px] pw-font-bold pw-text-[#76DE8D] pw-underline"
+          className="pw-mb-[21px] pw-font-bold pw-text-brand-primary pw-underline"
         >
           {translate('auth>expiredLink>resendCodeButton')}
         </button>

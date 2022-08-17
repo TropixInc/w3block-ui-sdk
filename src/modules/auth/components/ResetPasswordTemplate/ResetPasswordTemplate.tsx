@@ -5,16 +5,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { isAfter, isValid } from 'date-fns';
 import { object, string } from 'yup';
 
-import { Alert } from '../../../shared/components/Alert';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
-import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePasswordAndSignIn } from '../../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { AuthButton } from '../AuthButton';
+import { AuthErrorChagingPassword } from '../AuthErrorChangingPassword';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 import { AuthPasswordChanged } from '../AuthPasswordChanged';
@@ -32,13 +31,13 @@ enum Steps {
   PASSWORD_CHANGED = 2,
   EMAIL_SENT,
   EXPIRED_PASSWORD,
+  ERROR,
 }
 
 const _ResetPasswordTemplate = () => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
-  const [isShowingErrorAlert, showErrorAlert] = useTimedBoolean(6000);
   const passwordSchema = usePasswordValidationSchema();
   const { mutate, isLoading, isSuccess, isExpired, isError } =
     useChangePasswordAndSignIn();
@@ -66,10 +65,16 @@ const _ResetPasswordTemplate = () => {
   });
 
   useEffect(() => {
-    if (isError && !isExpired && !isShowingErrorAlert) {
-      showErrorAlert();
+    if (isError && !isExpired && step !== Steps.ERROR.toString()) {
+      router.push({
+        query: {
+          ...router.query,
+          step: Steps.ERROR,
+        },
+      });
     }
-  }, [isError, isExpired, isShowingErrorAlert, showErrorAlert]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError, isExpired, step]);
 
   useEffect(() => {
     if (isExpired && step !== Steps.EXPIRED_PASSWORD.toString()) {
@@ -123,6 +128,20 @@ const _ResetPasswordTemplate = () => {
   if (step === Steps.PASSWORD_CHANGED.toString())
     return <AuthPasswordChanged />;
 
+  if (step === Steps.ERROR.toString())
+    return (
+      <AuthErrorChagingPassword
+        onRetry={() => {
+          router.push({
+            query: {
+              ...router.query,
+              step: 1,
+            },
+          });
+        }}
+      />
+    );
+
   return step === Steps.EXPIRED_PASSWORD.toString() ? (
     <ExpiredToken
       email={email as string}
@@ -150,17 +169,6 @@ const _ResetPasswordTemplate = () => {
             <h2 className="pw-font-medium pw-text-lg pw-leading-[23px] pw-text-[#35394C] pw-text-center">
               {translate('auth>changePasswordForm>title')}
             </h2>
-            {isShowingErrorAlert ? (
-              <Alert
-                variant="error"
-                className="pw-flex !pw-justify-start pw-mt-3"
-              >
-                <Alert.Icon className="pw-mr-2" />
-                {translate(
-                  'companyAuth>changingPassword>errorChangingPasswordMessage'
-                )}
-              </Alert>
-            ) : null}
           </div>
 
           <AuthTextController
@@ -183,7 +191,7 @@ const _ResetPasswordTemplate = () => {
             type="password"
             className="pw-mb-[26px]"
           />
-          <AuthPasswordTips passwordFieldName="password" className="pw-mb-3" />
+          <AuthPasswordTips passwordFieldName="password" className="pw-mb-6" />
           <AuthButton
             fullWidth
             type="submit"

@@ -38,16 +38,17 @@ export const AuthLayoutBase = ({
     />
   );
 
-  const renderTitle = () => (
-    <h1
-      className={classNames(
-        classes?.title ?? '',
-        'pw-text-[#35394C] pw-font-bold pw-text-2xl pw-leading-[29px] pw-mt-6 pw-text-center'
-      )}
-    >
-      {title}
-    </h1>
-  );
+  const renderTitle = () =>
+    title ? (
+      <h1
+        className={classNames(
+          classes?.title ?? '',
+          'pw-text-[#35394C] pw-font-bold pw-text-2xl pw-leading-[29px] pw-mt-6 pw-text-center'
+        )}
+      >
+        {title}
+      </h1>
+    ) : null;
 
   return (
     <div
