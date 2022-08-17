@@ -10321,7 +10321,7 @@
   "resolved" "https://registry.npmjs.org/react-merge-refs/-/react-merge-refs-1.1.0.tgz"
   "version" "1.1.0"
 
-"react-query@file:../pixway-foodbusters-front/node_modules/react-query":
+"react-query@^3.39.2":
   "resolved" "file:../pixway-foodbusters-front/node_modules/react-query"
   "version" "3.39.2"
   dependencies:
