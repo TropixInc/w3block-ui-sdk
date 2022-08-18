@@ -1,2 +1,2 @@
-export * from './PixwayAuthenticationContext';
+export * from './W3blockAuthenticationContext';
 export * from './PixwaySessionContext';
