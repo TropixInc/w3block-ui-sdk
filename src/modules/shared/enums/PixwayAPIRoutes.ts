@@ -6,4 +6,5 @@ export enum PixwayAPIRoutes {
   REFRESH_TOKEN = 'auth/refresh-token',
   GET_PROFILE = 'users/profile',
   USERS = 'users/',
+  VERIFY_SIGN_UP = '/auth/verify-sign-up',
 }

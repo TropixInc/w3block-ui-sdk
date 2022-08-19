@@ -3,7 +3,6 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { I18NLocaleEnum, UserRoleEnum } from '@w3block/sdk-id';
 import { object, string } from 'yup';
 
 import { Link } from '../../../shared';
@@ -33,7 +32,7 @@ enum Steps {
 }
 
 const _SignUpTemplate = () => {
-  const { logoUrl, companyId } = useCompanyConfig();
+  const { logoUrl } = useCompanyConfig();
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
   const [step, setStep] = useQueryParamState<string>(
@@ -73,10 +72,6 @@ const _SignUpTemplate = () => {
       confirmation,
       email,
       password,
-      name: '',
-      i18nLocale: I18NLocaleEnum.PtBr,
-      role: UserRoleEnum.User,
-      tenantId: companyId,
     });
   };
 
@@ -102,6 +97,7 @@ const _SignUpTemplate = () => {
             label={translate('companyAuth>newPassword>passwordFieldLabel')}
             className="pw-mb-3"
             placeholder={translate('companyAuth>newPassword>enterYourPassword')}
+            type="password"
           />
           <AuthTextController
             name="confirmation"
@@ -112,9 +108,11 @@ const _SignUpTemplate = () => {
             placeholder={translate(
               'companyAuth>newPassword>passwordConfirmationFieldLabel'
             )}
+            type="password"
           />
           <AuthPasswordTips passwordFieldName="password" className="pw-mb-6" />
           <AuthButton
+            type="submit"
             fullWidth
             className="pw-mb-1"
             disabled={isLoading || !methods.formState.isValid}

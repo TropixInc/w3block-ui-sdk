@@ -7,7 +7,7 @@ export const useQueryParamState = <Data extends string | Array<string>>(
   initialValue: string | undefined
 ): [value: Data, setValue: (newValue: Data) => void] => {
   const router = useRouter();
-  const { name: value } = router.query;
+  const { [name]: value } = router.query;
 
   const setValue = useCallback(
     (newValue: string | Array<string>) => {
@@ -23,7 +23,7 @@ export const useQueryParamState = <Data extends string | Array<string>>(
   );
 
   useEffect(() => {
-    if (initialValue !== undefined) {
+    if (initialValue !== undefined && value === undefined && router.isReady) {
       router.replace({
         query: {
           ...router.query,
@@ -32,7 +32,7 @@ export const useQueryParamState = <Data extends string | Array<string>>(
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router.isReady]);
 
   return useMemo(() => [value as Data, setValue], [value, setValue]);
 };

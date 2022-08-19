@@ -2,25 +2,29 @@ import { useCallback } from 'react';
 
 import { W3blockIdSDK } from '@w3block/sdk-id';
 
+import { useCompanyId } from '../useCompanyId';
+import { usePixwayAPIURL } from '../usePixwayAPIURL/usePixwayAPIURL';
 import { useSessionUser } from '../useSessionUser';
 import { useToken } from '../useToken';
 
 export const useGetW3blockIdSDK = () => {
   const token = useToken();
+  const tenantId = useCompanyId();
   const user = useSessionUser();
-  return useCallback(() => {
-    return new W3blockIdSDK({
-      credential: {
-        email: '',
-        tenantId: '',
-        password: '',
-      },
+  const { w3blockIdAPIUrl } = usePixwayAPIURL();
+
+  return useCallback(async () => {
+    const sdk = new W3blockIdSDK({
       autoRefresh: false,
-      baseURL: process.env.NEXT_PUBLIC_API_ID_URL,
-      tokens: {
-        authToken: token,
-        refreshToken: user?.refreshToken ?? '',
-      },
+      baseURL: w3blockIdAPIUrl,
     });
-  }, [token, user]);
+    if (user && token) {
+      await sdk.authenticate({
+        refreshToken: user.refreshToken ?? '',
+        authToken: token,
+        tenantId,
+      });
+    }
+    return sdk;
+  }, [tenantId, token, user, w3blockIdAPIUrl]);
 };

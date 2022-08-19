@@ -11,6 +11,7 @@ interface Props {
     idUrl: string;
     keyUrl: string;
   };
+  hostName: string;
   locale: PixwayUISdkLocale;
   companyId: string;
   logoUrl: string;
