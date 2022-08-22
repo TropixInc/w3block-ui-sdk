@@ -102,6 +102,7 @@ const _CheckoutInfo = ({
           'checkout>components>checkoutInfo>proccessingBlockchain'
         );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkoutStatus]);
 
   const beforeProcced = () => {

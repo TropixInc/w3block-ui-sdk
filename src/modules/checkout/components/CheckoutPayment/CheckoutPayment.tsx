@@ -68,6 +68,7 @@ export const CheckoutPayment = () => {
         />
       </div>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iframeLink, loading]);
 
   return <div className="">{IframeItem}</div>;

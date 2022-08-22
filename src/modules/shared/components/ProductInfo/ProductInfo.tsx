@@ -38,6 +38,7 @@ export const ProductInfo = ({
       default:
         return null;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
   return (
     <div
