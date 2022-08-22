@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { CheckoutStatus } from '../../../checkout';
 import { ReactComponent as Loading } from '../../assets/icons/loading.svg';
+import useTranslation from '../../hooks/useTranslation';
 import { Shimmer } from '../Shimmer';
 interface ProductInfoProps {
   status?: CheckoutStatus;
@@ -22,13 +23,14 @@ export const ProductInfo = ({
   className,
   loading = false,
 }: ProductInfoProps) => {
+  const [translate] = useTranslation();
   const statusToShow = useMemo(() => {
     switch (status) {
       case CheckoutStatus.FINISHED:
         return (
           <div className="pw-flex pw-items-center pw-justify-end pw-gap-x-2 -pw-mb-[2px]">
             <p className="pw-text-sm pw-text-[#295BA6] pw-font-[600]">
-              Processando
+              {translate('shared>processing')}
             </p>
             <Loading className="pw-animate-spin" />
           </div>

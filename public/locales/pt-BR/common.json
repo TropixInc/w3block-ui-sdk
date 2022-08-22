@@ -14,8 +14,18 @@
   "auth>signIn>signUpCTA": "Não tem conta ainda? <1>Cadastre-se.</1>",
   "shared>back": "Voltar",
   "shared>product": "Produto",
+  "shared>cancel": "Cancelar",
+  "shared>continue": "Continuar",
+  "shared>exit": "Sair",
+  "shared>processing": "Processando",
   "checkout>components>checkoutInfo>payment": "Pagamento",
   "checkout>components>checkoutInfo>creditCard": "Cartão de crédito",
   "shared>components>gasPriceinfo": "Taxa de gás",
-  "shared>components>servicePriceinfo": "Taxa de serviço"
+  "shared>components>servicePriceinfo": "Taxa de serviço",
+  "checkout>components>checkoutInfo>redirectInfo": "Você será redirecionado para o nosso parceiro Pagar.me",
+  "checkout>components>checkoutInfo>proccessingBlockchain": "Estamos processando na blockchain, isso pode demorar alguns minutos!",
+  "checkout>components>checkoutInfo>infoAboutProcessing": "O token está em processamento na rede blockchain e logo ficarão disponíveis na sua carteira. O tempo de processamento pode variar de poucos minutos até 4 horas de acordo com o tráfego da rede blockchain. Nós te avisaremos assim que o processamento estiver finalizado.",
+  "checkout>components>warning>problemWithCheckout": "Tivemos um problema na hora da compra.",
+  "shared>tryAgain": "Tentar novamente",
+  "shared>components>price&gasInfo": "Valor a pagar"
 }

@@ -9,9 +9,19 @@
   "components>form>requiredFieldValidation": "Required field",
   "shared>back": "Back",
   "shared>product": "Product",
+  "shared>cancel": "Cancel",
+  "shared>continue": "Continue",
+  "shared>exit": "Exit",
+  "shared>processing": "Processing",
   "checkout>components>checkoutInfo>payment": "Payment",
   "checkout>components>checkoutInfo>creditCard": "Credit card",
   "shared>components>gasPriceinfo": "Gas fee",
   "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern",
-  "shared>components>servicePriceinfo": "Service fee"
+  "shared>components>servicePriceinfo": "Service fee",
+  "checkout>components>checkoutInfo>redirectInfo": "You will be redirected to our partner Pagar.me",
+  "checkout>components>checkoutInfo>proccessingBlockchain": "We are processing at blockchain, this could take a few minutes!",
+  "checkout>components>checkoutInfo>infoAboutProcessing": "The token is being processed on the blockchain network and will soon be available in your wallet. Processing time may vary from a few minutes to 4 hours depending on network traffic blockchain. We will let you know as soon as processing is completed.",
+  "checkout>components>warning>problemWithCheckout": "We had a problem with the purchase.",
+  "shared>tryAgain": "Try again",
+  "shared>components>price&gasInfo": "Price"
 }

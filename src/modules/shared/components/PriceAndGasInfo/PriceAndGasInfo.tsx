@@ -68,7 +68,7 @@ const _PriceAndGasInfo = ({
       <div className="pw-w-full pw-h-[1px] pw-bg-[#777E8F] pw-my-2"></div>
       <div className="pw-flex pw-justify-between">
         <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">
-          Valor a pagar
+          {translate('shared>components>price&gasInfo')}
         </p>
         {loading ? (
           <Shimmer className="pw-h-6 pw-w-17" />

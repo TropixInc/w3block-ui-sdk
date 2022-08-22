@@ -9,6 +9,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyId } from '../../../shared/hooks/useCompanyId';
 import { useLocalStorage } from '../../../shared/hooks/useLocalStorage/useLocalStorage';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import useRouter from '../../../shared/hooks/useRouter';
 import { getOrderPreview } from '../../api/orderPreview';
@@ -27,9 +28,6 @@ interface CheckoutInfoProps {
   productId?: string[];
   currencyId?: string;
 }
-
-const token =
-  'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiODkxOWI2Yy1mMTQ2LTRkODQtODg2ZS04OGZlY2E0YzM3ZTkiLCJpc3MiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJhdWQiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJlbWFpbCI6InBpeHdheUB3M2Jsb2NrLmlvIiwibmFtZSI6IlBpeHdheSIsInJvbGVzIjpbInVzZXIiXSwiY29tcGFueUlkIjoiZThhOTgxNGUtMThhMS00ZjUyLWI2Y2EtYzE1ZjBhZTIyOTRhIiwidGVuYW50SWQiOiJlOGE5ODE0ZS0xOGExLTRmNTItYjZjYS1jMTVmMGFlMjI5NGEiLCJ2ZXJpZmllZCI6dHJ1ZSwidHlwZSI6InVzZXIiLCJpYXQiOjE2NjAzMjgxMjAsImV4cCI6MTY2MDkzMjkyMH0.fbHIOVrgwRI_zS8W-bsaYGV5vpXS4orQJToXBZsBl1Gr6sm6i_FDI6DOq5TB_3sDjzyvwhB2JBvmW_32Qv9MmbYtFXukxPf8ZEKn3qAigOsmnc-icAe66Rb6eDns6C0tsNcbt_zWVz3ntAq1BUyaFSiqhdyPCrK4cjarQ6Q-I3k';
 
 const _CheckoutInfo = ({
   checkoutStatus = CheckoutStatus.FINISHED,
@@ -52,6 +50,12 @@ const _CheckoutInfo = ({
   const companyId = useCompanyId();
   const baseUrl = usePixwayAPIURL();
 
+  const { data: session } = usePixwaySession();
+
+  const token = useMemo(() => {
+    return session ? (session.accessToken as string) : null;
+  }, [session]);
+
   useEffect(() => {
     deleteKey(PRODUCT_CART_INFO_KEY);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +77,7 @@ const _CheckoutInfo = ({
   }, [query]);
 
   useEffect(() => {
-    if (productIds && currencyIdState) {
+    if (productIds && currencyIdState && token) {
       getOrderPreview({
         productIds,
         currencyId: currencyIdState,
@@ -83,7 +87,7 @@ const _CheckoutInfo = ({
       }).then((res) => setOrderPreview(res));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productIds, currencyIdState]);
+  }, [productIds, currencyIdState, token]);
 
   const isLoading = useMemo(() => {
     return orderPreview == null;
@@ -92,9 +96,11 @@ const _CheckoutInfo = ({
   const UnderCreditText = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
-        return 'Você será redirecionado para o nosso parceiro Pagar.me';
+        return translate('checkout>components>checkoutInfo>redirectInfo');
       case CheckoutStatus.FINISHED:
-        return 'Estamos processando na blockchain, isso pode demorar alguns minutos!';
+        return translate(
+          'checkout>components>checkoutInfo>proccessingBlockchain'
+        );
     }
   }, [checkoutStatus]);
 
@@ -148,14 +154,14 @@ const _CheckoutInfo = ({
                 }
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
-                Cancelar
+                {translate('shared>cancel')}
               </PixwayButton>
               <PixwayButton
                 disabled={!orderPreview}
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
-                Continuar
+                {translate('shared>continue')}
               </PixwayButton>
             </div>
           </>
@@ -164,10 +170,9 @@ const _CheckoutInfo = ({
         return (
           <div className="pw-mt-4">
             <p className="pw-text-xs pw-text-[#353945] ">
-              disponíveis na sua carteira. O tempo de processamento pode variar
-              de poucos minutos até 4 horas de acordo com o tráfego da rede
-              blockchain. Nós te avisaremos assim que o processamento estiver
-              finalizado.
+              {translate(
+                'checkout>components>checkoutInfo>infoAboutProcessing'
+              )}
             </p>
             <PixwayButton
               onClick={
@@ -179,7 +184,7 @@ const _CheckoutInfo = ({
               }
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
             >
-              Sair
+              {translate('shared>exit')}
             </PixwayButton>
           </div>
         );
