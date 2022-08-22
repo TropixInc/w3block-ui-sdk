@@ -1,2 +1,2 @@
-export * from './Link';
 export * from './HeaderPixwaySDK';
+export * from './components';
