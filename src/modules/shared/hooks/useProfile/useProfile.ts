@@ -1,7 +1,5 @@
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
-import { Roles } from '../../enums/Roles';
-import { W3blockAPI } from '../../enums/W3blockAPI';
-import { useAxios } from '../useAxios/useAxios';
+import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { usePrivateQuery } from '../usePrivateQuery';
 
 export interface Wallet {
@@ -15,40 +13,9 @@ export interface Wallet {
   status: string;
 }
 
-interface GetProfileAPIResponse {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  companyId: string;
-  role: Roles;
-  addressId: string;
-  name: string;
-  email: string;
-  verifiedEmailAt: string;
-  i18nLocale: 'en' | 'pt-br';
-  mainWalletId: string;
-  address?: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    street: string;
-    number: number;
-    district: string;
-    complement: string;
-    city: string;
-    state: string;
-    country: string;
-    postalCode: string;
-    coordinates: string;
-  };
-  mainWallet?: Wallet;
-  wallets: Array<Wallet>;
-}
-
 export const useProfile = () => {
-  const axios = useAxios(W3blockAPI.ID);
-
-  return usePrivateQuery([PixwayAPIRoutes.GET_PROFILE], () =>
-    axios.get<GetProfileAPIResponse>(PixwayAPIRoutes.GET_PROFILE)
-  );
+  const getW3blockIdSDK = useGetW3blockIdSDK();
+  return usePrivateQuery([PixwayAPIRoutes.GET_PROFILE], async () => {
+    return getW3blockIdSDK().api.users.getProfileByUserLogged();
+  });
 };

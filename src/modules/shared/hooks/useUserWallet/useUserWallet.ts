@@ -7,6 +7,7 @@ import {
   claimWalletMetamask,
   requestWalletMetamask,
 } from '../../../auth/api/wallet';
+import { usePixwayAPIURL } from '../usePixwayAPIURL/usePixwayAPIURL';
 import { Chain, chainConnectors } from './chainConnectors';
 
 export interface Wallet {
@@ -39,7 +40,7 @@ export function useUserWallet({
   companyId: string;
 }) {
   const metamask = useWallet();
-
+  const { w3blockIdAPIUrl } = usePixwayAPIURL();
   const provider = metamask.library?.provider;
   const [connected, setConnected] = useState(metamask.active);
 
@@ -52,12 +53,17 @@ export function useUserWallet({
       throw new Error('No company ID provided');
     }
 
-    const { data } = await requestWalletMetamask(apiToken, companyId, {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      address: metamask.address!,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      chainId: metamask.chainId!,
-    });
+    const { data } = await requestWalletMetamask(
+      apiToken,
+      companyId,
+      w3blockIdAPIUrl,
+      {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        address: metamask.address!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        chainId: metamask.chainId!,
+      }
+    );
 
     const from = data.address;
 
@@ -69,7 +75,7 @@ export function useUserWallet({
     });
 
     /* Requesting the wallet to be assigned to the authenticated user. */
-    await claimWalletMetamask(apiToken, companyId, {
+    await claimWalletMetamask(apiToken, companyId, w3blockIdAPIUrl, {
       signature,
     });
   }
@@ -121,7 +127,7 @@ export function useUserWallet({
 
       setConnected(true);
     } catch (error: any) {
-      console.error(error);
+      console.error('connect', error);
       setConnected(false);
       throw new Error(error.message || 'Failed to connect wallet');
     }

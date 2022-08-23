@@ -1,17 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
 import { Provider } from '@tropixinc/pixchain-react-metamask';
 
+import { useProfile } from '../../../shared';
 import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
 import { Alert } from '../../../shared/components/Alert';
 import Spinner from '../../../shared/components/Spinner/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { ConnectRoutes } from '../../../shared/enums/ConnectRoutes';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyId } from '../../../shared/hooks/useCompanyId';
 import { useModalController } from '../../../shared/hooks/useModalController';
+import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -54,15 +57,38 @@ const _ConnectWalletTemplate = () => {
   const [translate] = useTranslation();
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const companyId = useCompanyId();
   const token = useToken();
   const router = useRouter();
+  const profile = useProfile();
+  const sessionUser = usePixwaySession();
 
+  useEffect(() => {
+    const { data } = profile;
+
+    if (sessionUser.status === 'unauthenticated')
+      router.push(PixwayAppRoutes.SIGN_IN);
+
+    if (data) {
+      const { data: user } = data;
+      const { verified, wallets } = user;
+      if (!verified || wallets?.length) {
+        router.push(PixwayAppRoutes.HOME);
+      } else {
+        setIsLoading(false);
+      }
+    }
+  }, [profile, router, sessionUser]);
+
+  const { w3blockIdAPIUrl } = usePixwayAPIURL();
   const queryClient = useQueryClient();
 
+  const conn = !companyId && !token;
+
   const { connect, claim, connected } = useUserWallet({
-    companyId: companyId || '',
+    companyId: companyId,
     apiToken: token,
   });
 
@@ -101,7 +127,7 @@ const _ConnectWalletTemplate = () => {
     setIsConnecting(true);
 
     try {
-      await claimWalletVault(token, companyId ?? '');
+      await claimWalletVault(token, companyId, w3blockIdAPIUrl);
       onCreateWalletSuccessfully();
     } catch (error: any) {
       console.error(error);
@@ -113,7 +139,7 @@ const _ConnectWalletTemplate = () => {
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(ConnectRoutes.TOKENS);
+    router.push(PixwayAppRoutes.HOME);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -125,6 +151,10 @@ const _ConnectWalletTemplate = () => {
 
   if (!companyId) {
     return <h1>{translate('companyAuth>externalWallet>CompanyNotFound')}</h1>;
+  }
+
+  if (isLoading) {
+    return <></>;
   }
 
   return (
@@ -147,7 +177,7 @@ const _ConnectWalletTemplate = () => {
                 ? onClickConnectMetamaskWallet
                 : onClickConnectToMetamaskExtension
             }
-            disabled={isConnecting}
+            disabled={isConnecting || conn}
           />
           {isConnecting ? (
             <div className="pw-flex pw-justify-center pw-mt-9">
@@ -229,7 +259,6 @@ const _ConnectWalletTemplate = () => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MetamaskProvider = Provider as any;
-
 export const ConnectWalletTemplate = () => (
   <TranslatableComponent>
     <MetamaskProvider

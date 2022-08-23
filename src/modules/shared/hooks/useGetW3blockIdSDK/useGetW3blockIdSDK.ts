@@ -2,12 +2,14 @@ import { useCallback } from 'react';
 
 import { W3blockIdSDK } from '@w3block/sdk-id';
 
+import { usePixwayAPIURL } from '../usePixwayAPIURL/usePixwayAPIURL';
 import { useSessionUser } from '../useSessionUser';
 import { useToken } from '../useToken';
 
 export const useGetW3blockIdSDK = () => {
   const token = useToken();
   const user = useSessionUser();
+  const { w3blockIdAPIUrl } = usePixwayAPIURL();
   return useCallback(() => {
     return new W3blockIdSDK({
       credential: {
@@ -16,11 +18,11 @@ export const useGetW3blockIdSDK = () => {
         password: '',
       },
       autoRefresh: false,
-      baseURL: process.env.NEXT_PUBLIC_API_ID_URL,
+      baseURL: w3blockIdAPIUrl,
       tokens: {
         authToken: token,
         refreshToken: user?.refreshToken ?? '',
       },
     });
-  }, [token, user]);
+  }, [token, user, w3blockIdAPIUrl]);
 };

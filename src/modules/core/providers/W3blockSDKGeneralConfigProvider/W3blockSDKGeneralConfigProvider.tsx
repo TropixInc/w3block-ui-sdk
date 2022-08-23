@@ -28,8 +28,8 @@ export const W3blockUISDKGeneralConfigProvider = ({
   return (
     <W3blockUISDKGereralConfigContext.Provider value={value}>
       <W3blockApiProvider
-        w3blockIdAPIUrl={api.idUrl}
-        w3blockKeyAPIUrl={api.keyUrl}
+        w3blockIdAPIUrl={api.idUrl || ''}
+        w3blockKeyAPIUrl={api.keyUrl || ''}
       >
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
       </W3blockApiProvider>

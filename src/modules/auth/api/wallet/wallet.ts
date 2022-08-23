@@ -1,52 +1,138 @@
-import { getPublicAPI } from '../../../shared/config/api';
+import { W3blockIdSDK } from '@w3block/sdk-id';
+import { AxiosError } from 'axios';
 
 export interface RequestWalletBody {
   address: string;
   chainId: number;
 }
 
-interface RequestWalletResponse {
-  userId: string;
-  address: string;
-  chainId: number;
-  message: string;
-  nonce: number;
-}
-
 export interface ClaimWalletBody {
   signature: string;
-}
-
-interface ClaimWalletResponse {
-  companyId: string;
-  ownerId: string;
-  address: string;
 }
 
 export const requestWalletMetamask = async (
   token: string,
   companyId: string,
+  baseURL: string,
   body: RequestWalletBody
 ) => {
-  return await getPublicAPI(token).post<RequestWalletResponse>(
-    `/users/${companyId}/wallets/metamask/request`,
-    body
-  );
+  try {
+    const sdk = new W3blockIdSDK({
+      credential: {
+        email: '',
+        tenantId: '',
+        password: '',
+      },
+      autoRefresh: false,
+      baseURL,
+      tokens: {
+        authToken: token,
+        refreshToken: '',
+      },
+    });
+
+    return await sdk.api.users.requestMetamask(companyId, body);
+  } catch (error: any) {
+    if (error.isAxiosError) {
+      const axiosError = error as AxiosError;
+      return { data: axiosError.response?.data };
+    } else {
+      return error;
+    }
+  }
 };
 
 export const claimWalletMetamask = async (
   token: string,
   companyId: string,
+  baseURL: string,
   body: ClaimWalletBody
 ) => {
-  return await getPublicAPI(token).post<ClaimWalletResponse>(
-    `/users/${companyId}/wallets/metamask/claim`,
-    body
-  );
+  try {
+    const sdk = new W3blockIdSDK({
+      credential: {
+        email: '',
+        tenantId: '',
+        password: '',
+      },
+      autoRefresh: false,
+      baseURL,
+      tokens: {
+        authToken: token,
+        refreshToken: '',
+      },
+    });
+
+    return await sdk.api.users.claimMetamask(companyId, body);
+  } catch (error: any) {
+    if (error.isAxiosError) {
+      const axiosError = error as AxiosError;
+      return { data: axiosError.response?.data };
+    } else {
+      return error;
+    }
+  }
 };
 
-export const claimWalletVault = async (token: string, companyId: string) => {
-  return await getPublicAPI(token).post<ClaimWalletResponse>(
-    `/users/${companyId}/wallets/vault/claim`
-  );
+export const claimWalletVault = async (
+  token: string,
+  companyId: string,
+  baseURL: string
+) => {
+  try {
+    const sdk = new W3blockIdSDK({
+      credential: {
+        email: '',
+        tenantId: '',
+        password: '',
+      },
+      autoRefresh: false,
+      baseURL,
+      tokens: {
+        authToken: token,
+        refreshToken: '',
+      },
+    });
+
+    return await sdk.api.users.createVault(companyId);
+  } catch (error: any) {
+    if (error.isAxiosError) {
+      const axiosError = error as AxiosError;
+      return { data: axiosError.response?.data };
+    } else {
+      return error;
+    }
+  }
+};
+
+export const claimWallet = async (
+  token: string,
+  companyId: string,
+  baseURL: string,
+  userId: string
+) => {
+  try {
+    const sdk = new W3blockIdSDK({
+      credential: {
+        email: '',
+        tenantId: '',
+        password: '',
+      },
+      autoRefresh: false,
+      baseURL,
+      tokens: {
+        authToken: token,
+        refreshToken: '',
+      },
+    });
+
+    return await sdk.api.users.findAllWalletByUserId(userId, companyId);
+  } catch (error: any) {
+    if (error.isAxiosError) {
+      const axiosError = error as AxiosError;
+      return { data: axiosError.response?.data };
+    } else {
+      return error;
+    }
+  }
 };
