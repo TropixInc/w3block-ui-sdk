@@ -1,57 +1,35 @@
-import { useEffect } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { object, string } from 'yup';
+import { AxiosError } from 'axios';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { useQueryParamState } from '../../../shared/hooks/useQueryParamState';
-import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useSignUp } from '../../hooks/useSignUp';
 import { SignUpForm } from '../SignUpForm';
 import { SignUpFormData } from '../SignUpForm/interface';
-import { SignUpSuccess } from '../SignUpSuccess';
+import { VerifySignUpMailSent } from '../VerifySignUpMailSent';
 
 enum Steps {
   SIGN_UP = 1,
   SUCCESS,
 }
 
+const EMAIL_ALREADY_IN_USE_API_MESSAGE = 'email is already in use';
+
 const _SignUpTemplate = () => {
-  const passwordSchema = usePasswordValidationSchema();
-  const [step, setStep] = useQueryParamState<string>(
-    'step',
-    Steps.SIGN_UP.toString()
-  );
-
-  const { mutate, isLoading, isSuccess } = useSignUp();
-
-  const schema = object().shape({
-    email: string().email(),
-    password: passwordSchema,
-    confirmation: passwordSchema,
-  });
-
-  const methods = useForm<SignUpFormData>({
-    defaultValues: {
-      confirmation: '',
-      email: '',
-      password: '',
-    },
-    mode: 'onChange',
-    resolver: yupResolver(schema),
-  });
-
-  const { email } = useWatch({ control: methods.control });
+  const [translate] = useTranslation();
+  const [step, setStep] = useState(Steps.SIGN_UP);
+  const { mutate, isLoading, isSuccess, error } = useSignUp();
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     if (isSuccess) {
-      setStep(Steps.SUCCESS.toString());
+      setStep(Steps.SUCCESS);
     }
   }, [isSuccess, setStep]);
 
   const onSubmit = ({ confirmation, email, password }: SignUpFormData) => {
-    //
+    setEmail(email);
     mutate({
       confirmation,
       email,
@@ -59,10 +37,23 @@ const _SignUpTemplate = () => {
     });
   };
 
-  return step === Steps.SIGN_UP.toString() ? (
-    <SignUpForm isLoading={isLoading} onSubmit={onSubmit} />
+  const getErrorMessage = () => {
+    if (!error) return undefined;
+    const typedError = error as AxiosError;
+    return (typedError.response?.data as Record<string, string>)?.message ===
+      EMAIL_ALREADY_IN_USE_API_MESSAGE
+      ? translate('auth>signUpError>emailAlreadyInUse')
+      : translate('auth>signUpError>genericErrorMessage');
+  };
+
+  return step === Steps.SIGN_UP ? (
+    <SignUpForm
+      isLoading={isLoading}
+      onSubmit={onSubmit}
+      error={getErrorMessage()}
+    />
   ) : (
-    <SignUpSuccess email={email ?? ''} />
+    <VerifySignUpMailSent email={email ?? ''} />
   );
 };
 

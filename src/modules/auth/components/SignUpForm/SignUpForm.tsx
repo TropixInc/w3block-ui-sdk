@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { boolean, object, string } from 'yup';
 
 import { Link } from '../../../shared';
+import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -22,9 +23,10 @@ interface Props {
   onSubmit: (data: SignUpFormData) => void;
   isLoading: boolean;
   email?: string;
+  error?: string;
 }
 
-export const SignUpForm = ({ onSubmit, isLoading, email }: Props) => {
+export const SignUpForm = ({ onSubmit, isLoading, email, error }: Props) => {
   const { logoUrl } = useCompanyConfig();
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
@@ -63,8 +65,16 @@ export const SignUpForm = ({ onSubmit, isLoading, email }: Props) => {
           '!pw-px-[22px] sm:!pw-px-[35px] !pw-pb-14 sm:!pw-pb-[35px]',
       }}
     >
+      {error ? (
+        <Alert
+          variant="error"
+          className="pw-flex pw-items-center pw-gap-x-2 pw-my-3"
+        >
+          <Alert.Icon /> <span className="pw-text-xs">{error}</span>
+        </Alert>
+      ) : null}
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="sm:pw-mt-6">
           <AuthTextController
             disabled={Boolean(email)}
             name="email"

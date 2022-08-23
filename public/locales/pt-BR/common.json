@@ -50,5 +50,7 @@
   "auth>emailConfirmation>mailResentStepTitle": "Confirmação de e-mail.",
   "auth>emailConfirmation>mailSentToEmail": "Enviamos um link para confirmar seu e-mail:<1>joh******@teste.com.br</1>",
   "auth>emailConfirmation>linkExpiresMessage": "O link expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro.",
-  "auth>completeSignUp>mailAlreadyVerified": "Seu e-mail já foi verificado, com isso você já pode fazer qualquer ação em nosso ecosistema."
+  "auth>completeSignUp>mailAlreadyVerified": "Seu e-mail já foi verificado, com isso você já pode fazer qualquer ação em nosso ecosistema.",
+  "auth>signUpError>emailAlreadyInUse": "O email informado já está em uso.",
+  "auth>signUpError>genericErrorMessage": "Ocorreu um erro ao realizar o cadastro."
 }

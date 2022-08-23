@@ -5,6 +5,7 @@ import { isAfter } from 'date-fns';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { CompleteSignUpSuccess } from '../CompleteSignUpSuccess';
 import { SignUpForm } from '../SignUpForm';
@@ -29,6 +30,7 @@ const getIsTokenExpired = (token: string) => {
 
 const _CompleteSignUpTemplate = () => {
   const router = useRouter();
+  const [translate] = useTranslation();
   const { email, token } = router.query;
   const { mutate, isLoading, isSuccess, isError } = useChangePassword();
   const [step, setStep] = useState(() => {
@@ -82,6 +84,9 @@ const _CompleteSignUpTemplate = () => {
       email={email as string}
       isLoading={isLoading}
       onSubmit={onSubmit}
+      error={
+        isError ? translate('auth>signUpError>genericErrorMessage') : undefined
+      }
     />
   ) : (
     <CompleteSignUpSuccess />

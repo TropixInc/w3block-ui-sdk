@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
 import { isAfter } from 'date-fns';
@@ -6,7 +6,6 @@ import { isAfter } from 'date-fns';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useQueryParamState } from '../../../shared/hooks/useQueryParamState';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
@@ -31,14 +30,11 @@ const _MailConfirmationTemplate = () => {
   const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
   const router = useRouter();
   const { email, token } = router.query;
-  const [step, setStep] = useQueryParamState<string>(
-    'step',
-    Steps.LOADING.toString()
-  );
+  const [step, setStep] = useState(Steps.LOADING);
 
   const [_, cancel] = useDebounce(
     () => {
-      if (step === Steps.EMAIL_VERIFIED.toString()) {
+      if (step === Steps.EMAIL_VERIFIED) {
         router.push(PixwayAppRoutes.SIGN_IN);
       }
     },
@@ -49,29 +45,25 @@ const _MailConfirmationTemplate = () => {
   useEffect(() => cancel, []);
 
   useEffect(() => {
-    if (step) setStep(Steps.LOADING.toString());
+    if (step) setStep(Steps.LOADING);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (
-      (!token || !email) &&
-      router.isReady &&
-      step === Steps.LOADING.toString()
-    ) {
+    if ((!token || !email) && router.isReady && step === Steps.LOADING) {
       router.push(PixwayAppRoutes.HOME);
     }
   }, [token, email, router, step]);
 
   useEffect(() => {
-    if (isSuccess && step !== Steps.EMAIL_VERIFIED.toString()) {
-      setStep(Steps.EMAIL_VERIFIED.toString());
+    if (isSuccess && step !== Steps.EMAIL_VERIFIED) {
+      setStep(Steps.EMAIL_VERIFIED);
     }
   }, [isSuccess, step, setStep]);
 
   useEffect(() => {
-    if (isError && step !== Steps.TOKEN_EXPIRED.toString()) {
-      setStep(Steps.TOKEN_EXPIRED.toString());
+    if (isError && step !== Steps.TOKEN_EXPIRED) {
+      setStep(Steps.TOKEN_EXPIRED);
     }
   }, [isError, step, setStep]);
 
@@ -82,32 +74,32 @@ const _MailConfirmationTemplate = () => {
       token &&
       !Array.isArray(email) &&
       !Array.isArray(token) &&
-      step === Steps.LOADING.toString()
+      step === Steps.LOADING
     ) {
       const tokenSplitted = token.split(';');
       if (tokenSplitted.length !== 2) router.push(PixwayAppRoutes.HOME);
       else {
         const timeStamp = tokenSplitted[1];
         if (isAfter(new Date(), new Date(timeStamp)))
-          setStep(Steps.TOKEN_EXPIRED.toString());
+          setStep(Steps.TOKEN_EXPIRED);
         else mutate({ email: email as string, token: token as string });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mutate, email, token, router]);
 
-  if (step === Steps.TOKEN_EXPIRED.toString())
+  if (step === Steps.TOKEN_EXPIRED)
     return (
       <VerifySignUpTokenExpired
         email={email as string}
-        onSendEmail={() => setStep(Steps.EMAIL_SENT.toString())}
+        onSendEmail={() => setStep(Steps.EMAIL_SENT)}
       />
     );
 
-  if (step === Steps.EMAIL_SENT.toString())
+  if (step === Steps.EMAIL_SENT)
     return <VerifySignUpMailSent email={email as string} />;
 
-  return isLoading || !step || step === Steps.LOADING.toString() ? null : (
+  return isLoading || !step || step === Steps.LOADING ? null : (
     <AuthLayoutBase
       logo={logoUrl}
       title={translate('auth>verifySignUp>mailVerifiedStepTitle')}
