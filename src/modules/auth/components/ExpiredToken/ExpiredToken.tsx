@@ -8,17 +8,14 @@ import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 
 interface Props {
-  companyId?: string;
   email: string;
   onSendEmail?: () => void;
   isFirstAccess?: boolean;
 }
 
-export const ExpiredToken = ({ email, onSendEmail, companyId }: Props) => {
+export const ExpiredToken = ({ email, onSendEmail }: Props) => {
   const { logoUrl } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess } = useRequestPasswordChange(
-    companyId ?? ''
-  );
+  const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
   const [translate] = useTranslation();
 
   const onClickResendEmail = () => {

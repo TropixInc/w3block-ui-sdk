@@ -23,11 +23,10 @@ interface Form {
 }
 
 const _RequestPasswordChangeTemplate = () => {
-  const { companyId, logoUrl } = useCompanyConfig();
+  const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
-  const { mutate, isLoading, isError, isSuccess } =
-    useRequestPasswordChange(companyId);
+  const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
   const schema = object().shape({
     email: string()
       .required(translate('components>form>requiredFieldValidation'))
