@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.8](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.7...v0.1.1-alpha.8) (2022-08-23)
+
+
+### Features
+
+* **pe-36:** change password page ([#8](https://github.com/TropixInc/pixway-ui-sdk/issues/8)) ([d14b9c1](https://github.com/TropixInc/pixway-ui-sdk/commit/d14b9c1b590b2a1a37c6be2c4e1f6c411074462d))
+
+### [0.1.1-alpha.7](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.6...v0.1.1-alpha.7) (2022-08-18)
+
 ### [0.1.1-alpha.6](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.4...v0.1.1-alpha.6) (2022-08-12)
 
 ### [0.1.1-alpha.5](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.4...v0.1.1-alpha.5) (2022-08-12)
