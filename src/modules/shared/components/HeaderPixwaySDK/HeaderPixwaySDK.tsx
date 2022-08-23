@@ -1,17 +1,23 @@
 import { ReactNode, useMemo } from 'react';
 
-import { NavigationTabsPixwaySDK } from './components';
+import {
+  NavigationLoginPixwaySDK,
+  NavigationTabsPixwaySDK,
+  NavigationTabsPixwaySDKTabs,
+} from './components';
 
 interface HeaderPixwaySDKProps {
   headerClassName?: string;
   logo?: string | ReactNode;
   logoHeight?: number;
+  tabs?: NavigationTabsPixwaySDKTabs[];
 }
 
 export const HeaderPixwaySDK = ({
   headerClassName,
   logo,
   logoHeight = 50,
+  tabs,
 }: HeaderPixwaySDKProps) => {
   const LogoToShow = useMemo(() => {
     if (typeof logo === 'string') {
@@ -31,7 +37,10 @@ export const HeaderPixwaySDK = ({
     <div className={`pw-container pw-mx-auto pw-bg-white ${headerClassName}`}>
       <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
         {LogoToShow}
-        <NavigationTabsPixwaySDK />
+        <div className="pw-flex">
+          <NavigationTabsPixwaySDK tabs={tabs} />
+          <NavigationLoginPixwaySDK />
+        </div>
       </div>
     </div>
   );

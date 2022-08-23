@@ -7,5 +7,9 @@
   "auth>passwordChange>requestChangeFormTitle": "Forgot your password?",
   "loginPage>formSubmitButton>signIn": "Sign in",
   "components>form>requiredFieldValidation": "Required field",
-  "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern"
+  "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern",
+  "shared>components>header>tab>about": "About",
+  "shared>components>header>tab>teams": "Teams",
+  "shared>components>header>tab>marketplace": "Marketplace",
+  "shared>components>header>tab>faq": "FAQ"
 }
