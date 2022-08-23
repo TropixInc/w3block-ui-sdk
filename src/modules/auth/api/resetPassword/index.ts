@@ -1,1 +1,1 @@
-export * from './resetPassword';
+export * from './interface';
