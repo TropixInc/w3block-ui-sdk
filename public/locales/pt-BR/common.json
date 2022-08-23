@@ -43,5 +43,12 @@
   "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código",
   "auth>signUpForm>formTitle": "Crie sua conta",
   "auth>signUpForm>alreadyHaveAccount": "Já possui uma conta? <1>Login</1>",
-  "auth>signUp>emailSent": "Enviamos um link para confirmar seu e-mail: <1>{{email}}</1>"
+  "auth>signUp>emailSent": "Enviamos um link para confirmar seu e-mail: <1>{{email}}</1>",
+  "auth>verifySignUp>mailVerifiedStepTitle": "Email confirmado com sucesso",
+  "auth>verifySignUp>waitForRedirectionMessage": "Aguarde enquanto estamos te direcionado para o login ou se não quiser aguardar, clique no botão abaixo.",
+  "auth>emailConfirmation>resendEmailAction": "<0>Clique aqui</0> para reenviar seu código.",
+  "auth>emailConfirmation>mailResentStepTitle": "Confirmação de e-mail.",
+  "auth>emailConfirmation>mailSentToEmail": "Enviamos um link para confirmar seu e-mail:<1>joh******@teste.com.br</1>",
+  "auth>emailConfirmation>linkExpiresMessage": "O link expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro.",
+  "auth>completeSignUp>mailAlreadyVerified": "Seu e-mail já foi verificado, com isso você já pode fazer qualquer ação em nosso ecosistema."
 }

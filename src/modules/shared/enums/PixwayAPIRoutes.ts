@@ -7,4 +7,5 @@ export enum PixwayAPIRoutes {
   GET_PROFILE = 'users/profile',
   USERS = 'users/',
   VERIFY_SIGN_UP = '/auth/verify-sign-up',
+  REQUEST_CONFIRMATION_MAIL = '/auth/request-confirmation-email',
 }
