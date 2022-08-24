@@ -11,6 +11,8 @@ interface HeaderPixwaySDKProps {
   logo?: string | ReactNode;
   logoHeight?: number;
   tabs?: NavigationTabsPixwaySDKTabs[];
+  signInRouter?: string;
+  signUpRouter?: string;
 }
 
 export const HeaderPixwaySDK = ({
@@ -18,6 +20,8 @@ export const HeaderPixwaySDK = ({
   logo,
   logoHeight = 50,
   tabs,
+  signInRouter,
+  signUpRouter,
 }: HeaderPixwaySDKProps) => {
   const LogoToShow = useMemo(() => {
     if (typeof logo === 'string') {
@@ -37,9 +41,12 @@ export const HeaderPixwaySDK = ({
     <div className={`pw-container pw-mx-auto pw-bg-white ${headerClassName}`}>
       <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
         {LogoToShow}
-        <div className="pw-flex">
+        <div className="pw-flex pw-items-center">
           <NavigationTabsPixwaySDK tabs={tabs} />
-          <NavigationLoginPixwaySDK />
+          <NavigationLoginPixwaySDK
+            signInRouter={signInRouter}
+            signUpRouter={signUpRouter}
+          />
         </div>
       </div>
     </div>

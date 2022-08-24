@@ -42,6 +42,7 @@ export const NavigationTabsPixwaySDK = ({
       ];
     }
     return tabs;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs]);
 
   return (
