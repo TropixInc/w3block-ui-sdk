@@ -6,6 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { SessionUser } from '../../../shared/enums/SessionUser';
+import { removeDuplicateSlahes } from '../../../shared/utils/removeDuplicateSlahes';
 import { SignInResponse } from '../../api/signIn';
 import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 
@@ -17,16 +18,19 @@ async function refreshAccessToken(
   baseURL: string
 ): Promise<JWT & { accessToken?: string; refreshToken?: string }> {
   try {
-    const response = await fetch(`${baseURL}${PixwayAPIRoutes.REFRESH_TOKEN}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        refreshToken: token.refreshToken ?? '',
-      }),
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token.accessToken ?? ''}`,
-      },
-    });
+    const response = await fetch(
+      removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.REFRESH_TOKEN}`),
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          refreshToken: token.refreshToken ?? '',
+        }),
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token.accessToken ?? ''}`,
+        },
+      }
+    );
     const { token: tokenResponse, refreshToken } = await response.json();
     const result = {
       ...token,
@@ -83,21 +87,20 @@ export const getNextAuthConfig = ({
       },
       authorize: async (payload) => {
         try {
-          const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
-            method: 'POST',
-            body: JSON.stringify({
-              tenantId: payload?.companyId ?? '',
-              email: payload?.email ?? '',
-              password: payload?.password ?? '',
-            }),
-            headers: {
-              'Content-type': 'application/json',
-            },
-          });
+          const response = await fetch(
+            removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.SIGN_IN}`),
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                tenantId: payload?.companyId ?? '',
+                email: payload?.email ?? '',
+                password: payload?.password ?? '',
+              }),
+              headers: { 'Content-type': 'application/json' },
+            }
+          );
           const responseAsJSON = await response.json();
-          console.log(responseAsJSON);
           const user = mapSignInReponseToSessionUser(responseAsJSON);
-          console.log(user);
           return user;
         } catch (err) {
           return null;
@@ -123,7 +126,9 @@ export const getNextAuthConfig = ({
       authorize: async (payload) => {
         try {
           const response = await fetch(
-            `${baseURL}${PixwayAPIRoutes.RESET_PASSWORD}`,
+            removeDuplicateSlahes(
+              `${baseURL}${PixwayAPIRoutes.RESET_PASSWORD}`
+            ),
             {
               method: 'POST',
               body: JSON.stringify({

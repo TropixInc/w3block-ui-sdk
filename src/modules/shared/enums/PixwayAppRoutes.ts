@@ -4,4 +4,5 @@ export enum PixwayAppRoutes {
   SIGN_IN = '/auth/signIn',
   REQUEST_PASSWORD_CHANGE = '/auth/changePassword/request',
   SIGN_UP_MAIL_CONFIRMATION = '/auth/verify-sign-up',
+  RESET_PASSWORD = '/auth/changePassword/newPassword',
 }

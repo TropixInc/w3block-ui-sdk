@@ -14,11 +14,9 @@ interface Props {
   isFirstAccess?: boolean;
 }
 
-export const ExpiredToken = ({ email, onSendEmail, companyId }: Props) => {
+export const ExpiredToken = ({ email, onSendEmail }: Props) => {
   const { logoUrl } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess } = useRequestPasswordChange(
-    companyId ?? ''
-  );
+  const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
   const [translate] = useTranslation();
 
   const onClickResendEmail = () => {

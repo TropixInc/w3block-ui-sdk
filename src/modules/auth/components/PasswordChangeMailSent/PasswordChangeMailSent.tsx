@@ -24,10 +24,10 @@ interface PasswordChangeMailSentProps {
 export const PasswordChangeMailSent = ({
   email,
 }: PasswordChangeMailSentProps) => {
-  const { logoUrl: logo, companyId } = useCompanyConfig();
+  const { logoUrl: logo } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
-  const { mutate, isSuccess, isLoading } = useRequestPasswordChange(companyId);
+  const { mutate, isSuccess, isLoading } = useRequestPasswordChange();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.PASSWORD_LINK_CONFIRMATION_COUNTDOWN_DATE

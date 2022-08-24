@@ -13,6 +13,7 @@ export const useHostname = () => {
     if (!hostName && typeof window !== 'undefined') {
       setHostname(normalizeHostName(window.location.hostname));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return hostName;
