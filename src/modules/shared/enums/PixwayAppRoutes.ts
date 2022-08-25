@@ -6,4 +6,5 @@ export enum PixwayAppRoutes {
   CHECKOUT_CONFIRMATION = '/checkout/confirmation',
   CHECKOUT_PAYMENT = '/checkout/payment',
   CHECKOUT_PROCESSING = '/checkout/processing',
+  CHECKOUT_COMPLETED = '/checkout/completed',
 }

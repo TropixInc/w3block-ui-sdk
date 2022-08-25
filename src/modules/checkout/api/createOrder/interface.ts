@@ -6,6 +6,7 @@ export interface CreateOrder {
   destinationWalletAddress?: string;
   addressId?: string;
   signedGasFee: string;
+  successUrl: string;
 }
 
 export interface CreateOrderProduct {

@@ -57,7 +57,15 @@ const _CheckoutInfo = ({
   }, [session]);
 
   useEffect(() => {
-    deleteKey(PRODUCT_CART_INFO_KEY);
+    if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
+      deleteKey(PRODUCT_CART_INFO_KEY);
+    }
+
+    return () => {
+      if (checkoutStatus == CheckoutStatus.FINISHED) {
+        deleteKey(PRODUCT_CART_INFO_KEY);
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.localStorage]);
 
@@ -114,6 +122,7 @@ const _CheckoutInfo = ({
         };
       });
       setStorage(PRODUCT_CART_INFO_KEY, {
+        product: orderPreview.products[0],
         orderProducts,
         currencyId: currencyIdState,
         //destinationWalletAddress: '0xd3304183ec1fa687e380b67419875f97f1db05f5',
