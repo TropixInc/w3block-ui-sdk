@@ -19,7 +19,6 @@ const _CheckoutHeader = ({ onClick }: CheckoutHeaderProps) => {
           onClick={onClick ? () => onClick(query) : () => router.back()}
           className="pw-bg-[#F7F7F7] pw-w-[36px] pw-h-[36px] pw-rounded-full pw-border-[0.7px] pw-border-[#777E8F] pw-flex pw-justify-center pw-items-center pw-cursor-pointer"
         >
-          {/* TODO - Trocar isso pelo icone de > ... esperando apenas o percegaroli subir as mudanças dele para adicionar o icones */}
           <p>{'<'}</p>
         </div>
         <p
