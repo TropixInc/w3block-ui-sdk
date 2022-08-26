@@ -7,7 +7,6 @@ import { useCompanyId } from '../../../shared/hooks/useCompanyId';
 import { useLocalStorage } from '../../../shared/hooks/useLocalStorage/useLocalStorage';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import { useQuery } from '../../../shared/hooks/useQuery';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { createOrderApi } from '../../api/createOrder';
@@ -17,7 +16,6 @@ import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 export const CheckoutPayment = () => {
   const iframeRef = useRef(null);
   const router = useRouter();
-  const query = useQuery();
   const [_, setOrderInfos] = useState<CreateOrder | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
@@ -28,12 +26,15 @@ export const CheckoutPayment = () => {
   const [iframeLink, setIframeLink] = useState('');
   const { getItem } = useLocalStorage();
   const { data: session } = usePixwaySession();
-
+  const [query, setQuery] = useState('');
   useEffect(() => {
     if (shouldLock.current) {
       shouldLock.current = false;
       createOrder();
     }
+    setTimeout(() => {
+      setQuery(window.location.search);
+    }, 800);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,9 +49,9 @@ export const CheckoutPayment = () => {
         ...orderInfo,
         successUrl:
           'http://localhost:3000' +
-          PixwayAppRoutes.CHECKOUT_PAYMENT +
+          PixwayAppRoutes.CHECKOUT_COMPLETED +
           '?' +
-          query,
+          query.split('?')[0],
       }).then((res) => {
         setLoading(false);
         if (res) {
@@ -69,7 +70,7 @@ export const CheckoutPayment = () => {
             e.currentTarget.contentWindow?.location.hostname ===
             window?.location.hostname
           ) {
-            router.push(PixwayAppRoutes.CHECKOUT_PROCESSING + query);
+            router.push(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
           }
         }}
         ref={iframeRef}

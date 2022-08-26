@@ -13,7 +13,10 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import useRouter from '../../../shared/hooks/useRouter';
 import { getOrderPreview } from '../../api/orderPreview';
-import { OrderPreviewResponse } from '../../api/orderPreview/interface';
+import {
+  OrderPreviewCache,
+  OrderPreviewResponse,
+} from '../../api/orderPreview/interface';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 
 export enum CheckoutStatus {
@@ -38,7 +41,7 @@ const _CheckoutInfo = ({
 }: CheckoutInfoProps) => {
   const router = useRouter();
   const [translate] = useTranslation();
-  const { deleteKey, setStorage } = useLocalStorage();
+  const { deleteKey, setStorage, getItem } = useLocalStorage();
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -60,17 +63,15 @@ const _CheckoutInfo = ({
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
       deleteKey(PRODUCT_CART_INFO_KEY);
     }
-
-    return () => {
-      if (checkoutStatus == CheckoutStatus.FINISHED) {
-        deleteKey(PRODUCT_CART_INFO_KEY);
-      }
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.localStorage]);
 
   useEffect(() => {
-    if (!productIds && !currencyIdState) {
+    if (
+      !productIds &&
+      !currencyIdState &&
+      checkoutStatus === CheckoutStatus.CONFIRMATION
+    ) {
       const params = new URLSearchParams(query);
       const productIdsFromQueries = params.get('productIds');
       const currencyIdFromQueries = params.get('currencyId');
@@ -80,12 +81,22 @@ const _CheckoutInfo = ({
       if (currencyIdFromQueries) {
         setCurrencyIdState(currencyIdFromQueries);
       }
+    } else {
+      const preview = getItem<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
+      setOrderPreview({
+        products: [preview.product],
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   useEffect(() => {
-    if (productIds && currencyIdState && token) {
+    if (
+      productIds &&
+      currencyIdState &&
+      token &&
+      checkoutStatus === CheckoutStatus.CONFIRMATION
+    ) {
       getOrderPreview({
         productIds,
         currencyId: currencyIdState,
@@ -126,7 +137,7 @@ const _CheckoutInfo = ({
         orderProducts,
         currencyId: currencyIdState,
         //destinationWalletAddress: '0xd3304183ec1fa687e380b67419875f97f1db05f5',
-        signedGasFee: orderPreview.gasFee.signature,
+        signedGasFee: orderPreview?.gasFee?.signature,
       });
     }
     if (proccedAction) {
@@ -150,7 +161,8 @@ const _CheckoutInfo = ({
                 parseFloat(orderPreview?.cartPrice || '0').toFixed(2) || '0'
               }
               gasFee={
-                parseFloat(orderPreview?.gasFee.amount || '0').toFixed(2) || '0'
+                parseFloat(orderPreview?.gasFee?.amount || '0').toFixed(2) ||
+                '0'
               }
             />
             <div className="pw-flex pw-mt-4 pw-gap-x-4">
