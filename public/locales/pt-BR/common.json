@@ -40,5 +40,9 @@
   "changePassword>error>errorChangingPassword": "Tivemos um problema na troca da senha.",
   "auth>expiredLink>stepTitle": "O link de autenticação expirou",
   "auth>expiredLink>linkNotValidatedMessage": "Infelizmente seu link não foi validado",
-  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código"
+  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código",
+  "connectTokens>tokensList>pageTitle": "Meus Tokens",
+  "connectTokens>tokensList>welcomeToWallet": "Seja bem vindo a sua carteira",
+  "connectTokens>tokensList>tokensAlreadyProcessing": "Os seus tokens já estão em processamento na rede blockchain e logo ficarão disponíveis aqui pra você.",
+  "connectTokens>tokensList>tokensAlreadyProcessing2": "O tempo de processamento pode variar de poucos minutos até 4 horas de acordo com o tráfego da rede blockchain."
 }

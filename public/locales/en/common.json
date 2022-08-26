@@ -25,5 +25,9 @@
   "components>advanceButton>continue": "Continue",
   "auth>expiredLink>stepTitle": "The authentication link has expired.",
   "auth>expiredLink>linkNotValidatedMessage": "Unfortunately, the link is invalid.",
-  "auth>expiredLink>resendCodeButton": "Click here to resend your code."
+  "auth>expiredLink>resendCodeButton": "Click here to resend your code.",
+  "connectTokens>tokensList>pageTitle": "My Tokens",
+  "connectTokens>tokensList>welcomeToWallet": "Welcome to your wallet",
+  "connectTokens>tokensList>tokensAlreadyProcessing": "Your tokens are already being processed on the blockchain network and will soon be available here for you.",
+  "connectTokens>tokensList>tokensAlreadyProcessing2": "Processing time can vary from a few minutes to 4 hours, depending on the blockchain network traffic."
 }
