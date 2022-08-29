@@ -16,7 +16,7 @@ import { Link } from '../Link';
 
 interface MenuProps {
   tabs?: TabsProps[];
-  className: string;
+  className?: string;
 }
 
 interface TabsProps {
@@ -79,7 +79,7 @@ export const Menu = ({ tabs = Tabs, className }: MenuProps) => {
   return (
     <div
       className={classNames(
-        'pw-flex pw-flex-col pw-justify-between pw-bg-white pw-py-7 pw-px-[23px] pw-w-[295px] pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014]',
+        'pw-flex pw-flex-col pw-justify-between pw-bg-white pw-py-7 pw-px-[23px] pw-w-[295px] pw-max-h-[595px] pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014]',
         className
       )}
     >
