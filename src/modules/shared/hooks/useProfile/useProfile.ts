@@ -16,6 +16,6 @@ export interface Wallet {
 export const useProfile = () => {
   const getW3blockIdSDK = useGetW3blockIdSDK();
   return usePrivateQuery([PixwayAPIRoutes.GET_PROFILE], async () => {
-    return getW3blockIdSDK().api.users.getProfileByUserLogged();
+    return (await getW3blockIdSDK()).api.users.getProfileByUserLogged();
   });
 };

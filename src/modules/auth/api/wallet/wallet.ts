@@ -18,17 +18,8 @@ export const requestWalletMetamask = async (
 ) => {
   try {
     const sdk = new W3blockIdSDK({
-      credential: {
-        email: '',
-        tenantId: '',
-        password: '',
-      },
       autoRefresh: false,
       baseURL,
-      tokens: {
-        authToken: token,
-        refreshToken: '',
-      },
     });
 
     return await sdk.api.users.requestMetamask(companyId, body);
@@ -50,17 +41,8 @@ export const claimWalletMetamask = async (
 ) => {
   try {
     const sdk = new W3blockIdSDK({
-      credential: {
-        email: '',
-        tenantId: '',
-        password: '',
-      },
       autoRefresh: false,
       baseURL,
-      tokens: {
-        authToken: token,
-        refreshToken: '',
-      },
     });
 
     return await sdk.api.users.claimMetamask(companyId, body);
@@ -81,17 +63,8 @@ export const claimWalletVault = async (
 ) => {
   try {
     const sdk = new W3blockIdSDK({
-      credential: {
-        email: '',
-        tenantId: '',
-        password: '',
-      },
       autoRefresh: false,
       baseURL,
-      tokens: {
-        authToken: token,
-        refreshToken: '',
-      },
     });
 
     return await sdk.api.users.createVault(companyId);
@@ -113,17 +86,8 @@ export const claimWallet = async (
 ) => {
   try {
     const sdk = new W3blockIdSDK({
-      credential: {
-        email: '',
-        tenantId: '',
-        password: '',
-      },
       autoRefresh: false,
       baseURL,
-      tokens: {
-        authToken: token,
-        refreshToken: '',
-      },
     });
 
     return await sdk.api.users.findAllWalletByUserId(userId, companyId);

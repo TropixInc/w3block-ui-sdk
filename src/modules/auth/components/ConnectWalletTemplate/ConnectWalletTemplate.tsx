@@ -74,6 +74,7 @@ const _ConnectWalletTemplate = () => {
     if (data) {
       const { data: user } = data;
       const { verified, wallets } = user;
+
       if (!verified || wallets?.length) {
         router.push(PixwayAppRoutes.HOME);
       } else {
@@ -215,10 +216,6 @@ const _ConnectWalletTemplate = () => {
         </div>
       ) : (
         <div className="pw-flex pw-flex-col pw-gap-8 pw-mt-6">
-          {/* <h1 className="font-semibold text-3xl leading-[30px] text-center">
-            {translate('companyAuth>externalWallet>connectExternalWallet')}
-          </h1> */}
-
           <>
             <p className="pw-font-inter pw-leading-[19px]">
               {translate('companyAuth>signUp>connectExternalWallet')}

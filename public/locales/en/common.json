@@ -1,6 +1,6 @@
 {
   "companyAuth>signIn>invalidPasswordFeedback": "Invalid password",
-  "companyAuth>signIn>formTitle": "Danilo Schleu",
+  "companyAuth>signIn>formTitle": "Sign in",
   "companyAuth>signIn>loginFailedError": "Invalid login or password.",
   "home>contactModal>email": "E-mail",
   "companyAuth>newPassword>passwordFieldLabel": "Password",
