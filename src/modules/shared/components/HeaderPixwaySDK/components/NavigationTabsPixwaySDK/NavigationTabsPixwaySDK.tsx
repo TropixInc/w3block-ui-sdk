@@ -2,11 +2,15 @@ import { useMemo } from 'react';
 
 import { PixwayAppRoutes } from '../../../../enums/PixwayAppRoutes';
 import useTranslation from '../../../../hooks/useTranslation';
+import { NavigationTabsPixwaySDKDesktop } from './components/NavigationTabsPixwaySDKDesktop';
+import { NavigationTabsPixwaySDKMobile } from './components/NavigationTabsPixwaySDKMobile';
 
-interface NavigationTabsPixwaySDKProps {
+export interface NavigationTabsPixwaySDKProps {
   tabs?: NavigationTabsPixwaySDKTabs[];
   className?: string;
   tabClassName?: string;
+  signInRoute?: string;
+  signUpRoute?: string;
 }
 
 export interface NavigationTabsPixwaySDKTabs {
@@ -18,6 +22,8 @@ export const NavigationTabsPixwaySDK = ({
   tabs,
   className,
   tabClassName,
+  signInRoute,
+  signUpRoute,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const defaultTabs: NavigationTabsPixwaySDKTabs[] = useMemo(() => {
@@ -46,16 +52,23 @@ export const NavigationTabsPixwaySDK = ({
   }, [tabs]);
 
   return (
-    <div className={`pw-flex pw-gap-x-[24px] ${className}`}>
-      {defaultTabs.map((tab) => (
-        <a
-          className={`pw-font-poppins pw-text-[14px] pw-font-[600] ${tabClassName}`}
-          key={tab.name}
-          href={tab.router}
-        >
-          {tab.name}
-        </a>
-      ))}
-    </div>
+    <>
+      <div className="pw-hidden sm:pw-block">
+        <NavigationTabsPixwaySDKDesktop
+          tabs={defaultTabs}
+          className={className}
+          tabClassName={tabClassName}
+        />
+      </div>
+      <div className="pw-block sm:pw-hidden">
+        <NavigationTabsPixwaySDKMobile
+          signInRoute={signInRoute}
+          signUpRoute={signUpRoute}
+          tabs={defaultTabs}
+          className={className}
+          tabClassName={tabClassName}
+        />
+      </div>
+    </>
   );
 };
