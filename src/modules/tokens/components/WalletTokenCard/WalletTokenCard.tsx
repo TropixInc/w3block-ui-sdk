@@ -1,9 +1,14 @@
+import { MouseEventHandler, useRef } from 'react';
+import { useClickAway } from 'react-use';
+
 import classNames from 'classnames';
 
 import { Link } from '../../../shared';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useModalController } from '../../../shared/hooks/useModalController';
+import { WalletTokenCardActionsPanel } from './ActionsPanel';
 
 interface Props {
   name: string;
@@ -30,6 +35,20 @@ export const WalletTokenCard = ({
   chainId,
   contractAddress,
 }: Props) => {
+  const { isOpen, closeModal, openModal } = useModalController();
+  const actionsContainerRef = useRef<HTMLDivElement>(null);
+  useClickAway(actionsContainerRef, () => {
+    if (isOpen) closeModal();
+  });
+
+  const onClickOptionsButton: MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    event.stopPropagation();
+    event.preventDefault();
+    isOpen ? closeModal() : openModal();
+  };
+
   return (
     <Link
       className={classNames('pw-w-full', className)}
@@ -59,6 +78,23 @@ export const WalletTokenCard = ({
               {category}
             </p>
           ) : null}
+        </div>
+
+        <div className="pw-relative pw-inline" ref={actionsContainerRef}>
+          <WalletTokenCardActionsPanel
+            id={id}
+            isOpen={isOpen}
+            onClose={closeModal}
+          />
+          <button
+            onClick={onClickOptionsButton}
+            type="button"
+            className="pw-border pw-border-[#C1C1C1] pw-rounded-[10px] pw-bg-white pw-p-2 pw-mt-2.5 pw-flex pw-gap-x-1"
+          >
+            <span className="pw-w-1.5 pw-h-1.5 pw-bg-[#777E8F] pw-rounded-full" />
+            <span className="pw-w-1.5 pw-h-1.5 pw-bg-[#777E8F] pw-rounded-full" />
+            <span className="pw-w-1.5 pw-h-1.5 pw-bg-[#777E8F] pw-rounded-full" />
+          </button>
         </div>
       </div>
     </Link>

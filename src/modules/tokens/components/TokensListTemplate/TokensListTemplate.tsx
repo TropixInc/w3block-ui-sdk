@@ -1,39 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { useProfile } from '../../../shared';
+import { Alert } from '../../../shared/components/Alert';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import walletImage from '../../assets/wallet.png';
-import {
-  useGetNFTSByWallet,
-  NFTByWalletDTO,
-} from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
+import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
+import { Token } from '../../interfaces/Token';
+import { mapNFTToToken } from '../../utils/mapNFTToToken';
 import { WalletTokenCard } from '../WalletTokenCard';
-
-interface Token {
-  category: string;
-  image: string;
-  name: string;
-  id: string;
-  contractAddress: string;
-  chainId: number;
-}
+import { TokenListTemplateSkeleton } from './Skeleton';
 
 interface Props {
   tokens: Array<Token>;
   isLoading: boolean;
 }
-
-const mapNFTToToken = (nft: NFTByWalletDTO, chainId: number): Token => ({
-  category: nft.metadata.atributes?.length
-    ? nft.metadata.atributes[0].trait_tyoe
-    : '',
-  id: nft.id?.tokenId ?? '',
-  image: nft.media.length ? nft.media[0].thumbnail || nft.media[0].gateway : '',
-  name: nft.title,
-  contractAddress: nft.contract?.address ?? '',
-  chainId,
-});
 
 const HOCStaging = () => {
   const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
@@ -60,10 +43,15 @@ const HOCStaging = () => {
         polygonNFTsReponse2.data.items.map((nft) => mapNFTToToken(nft, 137))
       );
     }
-    return tokens;
+    return tokens
+      .concat(tokens)
+      .concat(tokens)
+      .concat(tokens)
+      .concat(tokens)
+      .concat(tokens)
+      .concat(tokens)
+      .concat(tokens);
   }, [ethNFTsResponse, polygonNFTsResponse, polygonNFTsReponse2]);
-
-  console.log(tokens);
 
   return (
     <_TokensListTemplate
@@ -119,18 +107,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
     }
   }, [tokens, isLoading]);
 
-  if (isLoading)
-    return (
-      <div className="pw-flex-1">
-        <ul className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
-          {new Array(6).fill(undefined).map((_, index) => (
-            <li className="pw-flex pw-items-stretch pw-w-full" key={index}>
-              <WalletTokenCard.Skeleton />
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
+  if (isLoading) return <TokenListTemplateSkeleton />;
 
   return tokensDisplaying.length ? (
     <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between">
@@ -165,7 +142,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
         {translate('connectTokens>tokensList>pageTitle')}
       </h1>
 
-      <div className="pw-mb-[29px] pw-block sm:pw-hidden">
+      <div className="pw-mb-[29px] pw-block">
         <img
           src={walletImage}
           alt=""
@@ -188,5 +165,17 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 
 export const TokensListTemplate = () => {
   const isProduction = useIsProduction();
-  return !isProduction ? <HOCProduction /> : <HOCStaging />;
+  const { data, isLoading } = useProfile();
+  const renderTemplate = () => {
+    if (isLoading) return <TokenListTemplateSkeleton />;
+    if (data && !data.data.mainWalletId)
+      return (
+        <Alert variant="error">
+          <Alert.Icon /> Você ainda não possuí uma carteira vinculada.
+        </Alert>
+      );
+    return isProduction ? <HOCProduction /> : <HOCStaging />;
+  };
+
+  return <TranslatableComponent>{renderTemplate()}</TranslatableComponent>;
 };

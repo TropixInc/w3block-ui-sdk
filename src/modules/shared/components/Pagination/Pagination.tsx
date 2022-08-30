@@ -135,18 +135,18 @@ export const Pagination = ({
       </p>
       <div className="pw-flex pw-gap-x-1 pw-items-center">
         <PixwayButton
-          className="!pw-px-[15px] !pw-py-2.5 disabled:!pw-bg-[#94B8ED]"
+          className="!pw-px-[15px] !pw-py-2.5 !pw-bg-[#5682C3] disabled:!pw-bg-[#94B8ED]"
           disabled={currentPage <= 1}
           onClick={onPreviousPage}
         >
-          <ChevronLeft className="pw-fill-white w-[10.5px] pw-h-[19.5px]" />
+          <ChevronLeft className="pw-fill-white pw-w-[10.5px] pw-h-[19.5px]" />
         </PixwayButton>
         <PixwayButton
-          className="!pw-px-[15px] !pw-py-2.5 disabled:!pw-bg-[#94B8ED]"
+          className="!pw-px-[15px] !pw-py-2.5 !pw-bg-[#5682C3] disabled:!pw-bg-[#94B8ED]"
           disabled={currentPage >= currentPagesQuantity}
           onClick={onNextPage}
         >
-          <ChevronRight className="pw-fill-white pw-w-[10.5px] pw-height-[19.5px]" />
+          <ChevronRight className="pw-fill-white pw-w-[10.5px] pw-h-[19.5px]" />
         </PixwayButton>
       </div>
     </div>
