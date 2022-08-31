@@ -33,6 +33,7 @@ export const NavigationLoginPixwaySDK = ({
 
   const InfoToShowMobile = useMemo(() => {
     return <NavigationLoginLoggedButtonMobile />;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, signInRouter, signUpRouter]);
 
   return (
