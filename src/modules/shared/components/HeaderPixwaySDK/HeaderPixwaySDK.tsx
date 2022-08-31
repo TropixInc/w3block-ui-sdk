@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
 import {
   NavigationLoginPixwaySDK,
@@ -13,6 +13,8 @@ interface HeaderPixwaySDKProps {
   tabs?: NavigationTabsPixwaySDKTabs[];
   signInRouter?: string;
   signUpRouter?: string;
+  openedMenu?: boolean;
+  toogleOpenedTabs?: () => void;
 }
 
 export const HeaderPixwaySDK = ({
@@ -22,7 +24,10 @@ export const HeaderPixwaySDK = ({
   tabs,
   signInRouter,
   signUpRouter,
+  openedMenu,
+  toogleOpenedTabs,
 }: HeaderPixwaySDKProps) => {
+  const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const LogoToShow = useMemo(() => {
     if (typeof logo === 'string') {
       return (
@@ -37,16 +42,34 @@ export const HeaderPixwaySDK = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logo]);
+
+  const toggleTabsMemo = () => {
+    if (toogleOpenedTabs) {
+      toogleOpenedTabs();
+    } else setOpenedTabs(!openedTabs);
+  };
+
   return (
-    <div className={`pw-container pw-mx-auto pw-bg-white ${headerClassName}`}>
+    <div
+      className={`pw-container pw-mx-auto pw-bg-white ${headerClassName} pw-px-4 sm:pw-px-0`}
+    >
       <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
         {LogoToShow}
         <div className="pw-flex pw-items-center">
-          <NavigationTabsPixwaySDK tabs={tabs} />
-          <NavigationLoginPixwaySDK
-            signInRouter={signInRouter}
-            signUpRouter={signUpRouter}
-          />
+          <div className="pw-order-2 sm:pw-order-1">
+            <NavigationTabsPixwaySDK
+              tabs={tabs}
+              toogleMenu={toggleTabsMemo}
+              opened={openedMenu ? openedMenu : openedTabs}
+            />
+          </div>
+
+          <div className="pw-order-1 sm:pw-order-2">
+            <NavigationLoginPixwaySDK
+              signInRouter={signInRouter}
+              signUpRouter={signUpRouter}
+            />
+          </div>
         </div>
       </div>
     </div>

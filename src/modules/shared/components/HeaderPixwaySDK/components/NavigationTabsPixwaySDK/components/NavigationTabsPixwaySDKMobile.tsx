@@ -10,19 +10,28 @@ import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
 export const NavigationTabsPixwaySDKMobile = ({
   className,
   tabs,
+  opened,
+  toogleMenu,
   tabClassName,
   signInRoute = PixwayAppRoutes.SIGN_IN,
   signUpRoute = PixwayAppRoutes.SIGN_UP,
 }: NavigationTabsPixwaySDKProps) => {
   const router = useRouter();
+  const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
-  const [opened, setOpened] = useState(true);
+
+  const toggleTabsMemo = () => {
+    if (toogleMenu) {
+      toogleMenu();
+    } else setOpenedTabs(!openedTabs);
+  };
+
   return (
     <div className={` ${className}`}>
       {opened ? (
-        <CloseIcon onClick={() => setOpened(!opened)} />
+        <CloseIcon onClick={toggleTabsMemo} />
       ) : (
-        <HamburguerIcon onClick={() => setOpened(!opened)} />
+        <HamburguerIcon onClick={toggleTabsMemo} />
       )}
       {opened && (
         <div className="pw-flex pw-flex-col pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-py-8 pw-items-center pw-gap-y-4">

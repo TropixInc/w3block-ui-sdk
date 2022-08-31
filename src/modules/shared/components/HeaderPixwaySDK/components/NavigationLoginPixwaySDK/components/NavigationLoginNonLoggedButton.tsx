@@ -17,7 +17,7 @@ export const NavigationLoginNonLoggedButton = ({
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   return (
-    <div>
+    <div className="pw-hidden sm:pw-block">
       <div
         onClick={() => setOpenMenu(!openMenu)}
         className="pw-ml-5 pw-cursor-pointer"

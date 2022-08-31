@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { PixwayAppRoutes } from '../../../../enums/PixwayAppRoutes';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -11,6 +11,8 @@ export interface NavigationTabsPixwaySDKProps {
   tabClassName?: string;
   signInRoute?: string;
   signUpRoute?: string;
+  opened?: boolean;
+  toogleMenu?: () => void;
 }
 
 export interface NavigationTabsPixwaySDKTabs {
@@ -24,8 +26,11 @@ export const NavigationTabsPixwaySDK = ({
   tabClassName,
   signInRoute,
   signUpRoute,
+  toogleMenu,
+  opened,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
+  const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const defaultTabs: NavigationTabsPixwaySDKTabs[] = useMemo(() => {
     if (!tabs) {
       return [
@@ -51,6 +56,12 @@ export const NavigationTabsPixwaySDK = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs]);
 
+  const toggleTabsMemo = () => {
+    if (toogleMenu) {
+      toogleMenu();
+    } else setOpenedTabs(!openedTabs);
+  };
+
   return (
     <>
       <div className="pw-hidden sm:pw-block">
@@ -62,6 +73,8 @@ export const NavigationTabsPixwaySDK = ({
       </div>
       <div className="pw-block sm:pw-hidden">
         <NavigationTabsPixwaySDKMobile
+          opened={opened ? opened : openedTabs}
+          toogleMenu={toggleTabsMemo}
           signInRoute={signInRoute}
           signUpRoute={signUpRoute}
           tabs={defaultTabs}

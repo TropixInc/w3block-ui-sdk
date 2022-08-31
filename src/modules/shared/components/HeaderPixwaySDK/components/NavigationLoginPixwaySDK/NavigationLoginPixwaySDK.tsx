@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { usePixwaySession } from '../../../../hooks/usePixwaySession';
 import { NavigationLoginLoggedButton } from './components/NavigationLoginLoggedButton';
+import { NavigationLoginLoggedButtonMobile } from './components/NavigationLoginLoggedButtonMobile';
 import { NavigationLoginNonLoggedButton } from './components/NavigationLoginNonLoggedButton';
 
 interface NavigationLoginPixwaySDKProps {
@@ -30,12 +31,19 @@ export const NavigationLoginPixwaySDK = ({
     }
   }, [session, signInRouter, signUpRouter]);
 
+  const InfoToShowMobile = useMemo(() => {
+    return <NavigationLoginLoggedButtonMobile />;
+  }, [session, signInRouter, signUpRouter]);
+
   return (
-    <div
-      style={{ marginLeft: marginLeft + 'px' }}
-      className="pw-flex pw-border-l pw-border-[#777E8F] pw-items-center"
-    >
-      {InfoToShow}
+    <div>
+      <div
+        style={{ marginLeft: marginLeft + 'px' }}
+        className="sm:pw-flex pw-border-l pw-border-[#777E8F] pw-items-center pw-hidden"
+      >
+        {InfoToShow}
+      </div>
+      <div className="sm:pw-hidden ">{InfoToShowMobile}</div>
     </div>
   );
 };
