@@ -30,10 +30,25 @@ export const AuthLayoutBase = ({
       src={logo}
       width={width}
       height={height}
-      className={classNames('pw-mx-auto pw-object-contain', classes.logo ?? '')}
+      className={classNames(
+        'pw-mx-auto pw-object-contain pw-w-20 pw-h-20 sm:pw-w-[140px] sm:pw-h-[140px]',
+        classes.logo ?? ''
+      )}
       alt=""
     />
   );
+
+  const renderTitle = () =>
+    title ? (
+      <h1
+        className={classNames(
+          classes?.title ?? '',
+          'pw-text-[#35394C] pw-font-bold pw-text-2xl pw-leading-[29px] pw-mt-6 pw-text-center'
+        )}
+      >
+        {title}
+      </h1>
+    ) : null;
 
   return (
     <div
@@ -44,14 +59,7 @@ export const AuthLayoutBase = ({
     >
       <div className="sm:pw-hidden pw-pb-6">
         {renderLogo(80, 80)}
-        <h1
-          className={classNames(
-            classes?.title ?? '',
-            'pw-text-[#090909] pw-font-bold pw-text-2xl pw-leading-[29px] pw-mt-6 pw-text-center'
-          )}
-        >
-          {title}
-        </h1>
+        {renderTitle()}
       </div>
       <div
         className={classNames(
@@ -72,14 +80,7 @@ export const AuthLayoutBase = ({
           ) : (
             <PixwayIconHorizontal className="pw-w-[259px] pw-h-16 pw-fill-black pw-mx-auto" />
           )}
-          <h1
-            className={classNames(
-              'pw-text-[#090909] pw-font-bold pw-text-2xl pw-leading-[29px] pw-mt-6 pw-text-center',
-              classes.title ?? ''
-            )}
-          >
-            {title}
-          </h1>
+          {renderTitle()}
         </div>
 
         {children}

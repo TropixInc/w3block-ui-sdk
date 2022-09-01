@@ -12,4 +12,5 @@ export enum PixwayAppRoutes {
   WALLET = '/profile/wallet',
   SETTINGS = '/profile/settings',
   HELP = '/help-center',
+  RESET_PASSWORD = '/auth/changePassword/newPassword',
 }
