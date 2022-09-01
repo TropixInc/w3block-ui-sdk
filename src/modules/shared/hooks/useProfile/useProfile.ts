@@ -1,6 +1,7 @@
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { Roles } from '../../enums/Roles';
-import useAxios from '../useAxios/useAxios';
+import { W3blockAPI } from '../../enums/W3blockAPI';
+import { useAxios } from '../useAxios/useAxios';
 import { usePrivateQuery } from '../usePrivateQuery';
 
 export interface Wallet {
@@ -45,7 +46,7 @@ interface GetProfileAPIResponse {
 }
 
 export const useProfile = () => {
-  const axios = useAxios();
+  const axios = useAxios(W3blockAPI.ID);
 
   return usePrivateQuery([PixwayAPIRoutes.GET_PROFILE], () =>
     axios.get<GetProfileAPIResponse>(PixwayAPIRoutes.GET_PROFILE)

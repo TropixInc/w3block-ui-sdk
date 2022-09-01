@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { PixwayAPIContext } from '../../providers/PixwayAPIProvider/PixwayAPIProvider';
+import { W3blockAPIContext } from '../../../core/providers/W3blockApiProvider/W3blockApiProvider';
 
 export const usePixwayAPIURL = () => {
-  return useContext(PixwayAPIContext);
+  return useContext(W3blockAPIContext);
 };

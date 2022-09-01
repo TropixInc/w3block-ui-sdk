@@ -1,15 +1,20 @@
 import { ReactNode } from 'react';
-import { useController } from 'react-hook-form';
+import { FieldError, useController } from 'react-hook-form';
 
 import { HeadlessFormController } from '../../../shared/components/HeadlessFormController';
 import { AuthValidationTip } from '../AuthValidationTip';
+
+export type AuthFormControllerRenderTipsFunction = (args: {
+  isDirty: boolean;
+  error?: FieldError;
+}) => ReactNode;
 
 interface Props {
   label: string;
   name: string;
   children: ReactNode;
   className?: string;
-  renderTips?: () => ReactNode;
+  renderTips?: AuthFormControllerRenderTipsFunction;
 }
 
 const AuthFormController = ({
@@ -19,7 +24,9 @@ const AuthFormController = ({
   className = '',
   renderTips,
 }: Props) => {
-  const { fieldState } = useController({ name });
+  const {
+    fieldState: { isDirty, error },
+  } = useController({ name });
   return (
     <HeadlessFormController name={name}>
       <div className={className}>
@@ -28,12 +35,9 @@ const AuthFormController = ({
         </HeadlessFormController.Label>
         {children}
         {renderTips ? (
-          renderTips()
+          renderTips({ isDirty, error })
         ) : (
-          <AuthValidationTip
-            isDirty={fieldState.isDirty}
-            error={fieldState.error}
-          />
+          <AuthValidationTip isDirty={isDirty} error={error} />
         )}
       </div>
     </HeadlessFormController>

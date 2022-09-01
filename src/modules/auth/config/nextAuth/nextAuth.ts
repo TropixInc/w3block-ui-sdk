@@ -7,7 +7,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { SessionUser } from '../../../shared/enums/SessionUser';
 import { removeDuplicateSlahes } from '../../../shared/utils/removeDuplicateSlahes';
-import { resetPassword } from '../../api/resetPassword';
 import { SignInResponse } from '../../api/signIn';
 import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 
@@ -101,7 +100,8 @@ export const getNextAuthConfig = ({
             }
           );
           const responseAsJSON = await response.json();
-          return mapSignInReponseToSessionUser(responseAsJSON);
+          const user = mapSignInReponseToSessionUser(responseAsJSON);
+          return user;
         } catch (err) {
           return null;
         }
@@ -125,16 +125,25 @@ export const getNextAuthConfig = ({
       },
       authorize: async (payload) => {
         try {
-          const response = await resetPassword(
+          const response = await fetch(
+            removeDuplicateSlahes(
+              `${baseURL}${PixwayAPIRoutes.RESET_PASSWORD}`
+            ),
             {
-              email: payload?.email ?? '',
-              token: payload?.token ?? '',
-              confirmation: payload?.confirmation ?? '',
-              password: payload?.password ?? '',
-            },
-            baseURL
+              method: 'POST',
+              body: JSON.stringify({
+                email: payload?.email ?? '',
+                token: payload?.token ?? '',
+                confirmation: payload?.confirmation ?? '',
+                password: payload?.password ?? '',
+              }),
+              headers: {
+                'Content-type': 'application/json',
+              },
+            }
           );
-          return mapSignInReponseToSessionUser(response.data);
+          const responseAsJson: SignInResponse = await response.json();
+          return mapSignInReponseToSessionUser(responseAsJson);
         } catch (error: any) {
           if (error.isAxiosError) {
             const typedError = error as AxiosError<any>;
