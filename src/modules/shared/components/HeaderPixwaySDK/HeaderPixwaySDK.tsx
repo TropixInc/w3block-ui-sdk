@@ -1,5 +1,6 @@
-import { ReactNode, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import {
   NavigationLoginPixwaySDK,
   NavigationTabsPixwaySDK,
@@ -8,7 +9,6 @@ import {
 
 interface HeaderPixwaySDKProps {
   headerClassName?: string;
-  logo?: string | ReactNode;
   logoHeight?: number;
   tabs?: NavigationTabsPixwaySDKTabs[];
   signInRouter?: string;
@@ -21,7 +21,6 @@ interface HeaderPixwaySDKProps {
 
 export const HeaderPixwaySDK = ({
   headerClassName,
-  logo,
   logoHeight = 50,
   tabs,
   signInRouter,
@@ -33,7 +32,7 @@ export const HeaderPixwaySDK = ({
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
-
+  const { logoUrl } = useCompanyConfig();
   const toggleMenuMemo = () => {
     if (openedMenu || openedTabs) {
       toggleTabsMemo();
@@ -47,21 +46,6 @@ export const HeaderPixwaySDK = ({
     return openedLogin ? openedLogin : openedloginState;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedLogin, openedloginState]);
-
-  const LogoToShow = useMemo(() => {
-    if (typeof logo === 'string') {
-      return (
-        <img
-          style={{ height: logoHeight + 'px' }}
-          src={logo}
-          className=" pw-object-contain"
-        />
-      );
-    } else {
-      <div style={{ height: logoHeight + 'px' }}>{logo}</div>;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [logo]);
 
   const toggleTabsMemo = () => {
     if (openedLogin || openedloginState) {
@@ -77,7 +61,11 @@ export const HeaderPixwaySDK = ({
       className={`pw-container pw-mx-auto pw-bg-white ${headerClassName} pw-px-4 sm:pw-px-0`}
     >
       <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
-        {LogoToShow}
+        <img
+          style={{ height: logoHeight + 'px' }}
+          src={logoUrl}
+          className=" pw-object-contain"
+        />
         <div className="pw-flex pw-items-center">
           <div className="pw-order-2 sm:pw-order-1">
             <NavigationTabsPixwaySDK
