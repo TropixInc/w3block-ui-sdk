@@ -29,8 +29,8 @@ export const NavigationLoginLoggedButton = ({
   const { data: profile } = useProfile();
 
   return (
-    <div onClick={() => setMenu(!menu)} className="pw-ml-5 ">
-      <div className="pw-cursor-pointer">
+    <div className="pw-ml-5 ">
+      <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
         <p className="pw-text-xs pw-font-montserrat pw-font-[400] ">
           Olá, {session?.user?.name || ''} - Carteira Pixway:
         </p>
@@ -55,7 +55,7 @@ const PixwayLogoDefault = () => {
   );
 };
 
-const defaultMenuTabs = () => {
+export const defaultMenuTabs = () => {
   const defaultTabs: NavigationMenuTabs[] = [
     {
       name: 'Meu perfil',

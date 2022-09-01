@@ -15,6 +15,8 @@ interface HeaderPixwaySDKProps {
   signUpRouter?: string;
   openedMenu?: boolean;
   toogleOpenedTabs?: () => void;
+  openedLogin?: boolean;
+  toggleOpenedLogin?: () => void;
 }
 
 export const HeaderPixwaySDK = ({
@@ -26,8 +28,26 @@ export const HeaderPixwaySDK = ({
   signUpRouter,
   openedMenu,
   toogleOpenedTabs,
+  openedLogin,
+  toggleOpenedLogin,
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
+  const [openedloginState, setopenedLoginState] = useState<boolean>(false);
+
+  const toggleMenuMemo = () => {
+    if (openedMenu || openedTabs) {
+      toggleTabsMemo();
+    }
+    if (toggleOpenedLogin) {
+      toggleOpenedLogin();
+    } else setopenedLoginState(!openedloginState);
+  };
+
+  const validatorMenuOpened = useMemo(() => {
+    return openedLogin ? openedLogin : openedloginState;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openedLogin, openedloginState]);
+
   const LogoToShow = useMemo(() => {
     if (typeof logo === 'string') {
       return (
@@ -44,6 +64,9 @@ export const HeaderPixwaySDK = ({
   }, [logo]);
 
   const toggleTabsMemo = () => {
+    if (openedLogin || openedloginState) {
+      toggleMenuMemo();
+    }
     if (toogleOpenedTabs) {
       toogleOpenedTabs();
     } else setOpenedTabs(!openedTabs);
@@ -66,6 +89,8 @@ export const HeaderPixwaySDK = ({
 
           <div className="pw-order-1 sm:pw-order-2">
             <NavigationLoginPixwaySDK
+              toggleLoginMenu={toggleMenuMemo}
+              loginMenu={validatorMenuOpened}
               signInRouter={signInRouter}
               signUpRouter={signUpRouter}
             />

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { usePixwaySession } from '../../../../hooks/usePixwaySession';
 import { NavigationLoginLoggedButton } from './components/NavigationLoginLoggedButton';
@@ -9,14 +9,32 @@ interface NavigationLoginPixwaySDKProps {
   marginLeft?: number;
   signInRouter?: string;
   signUpRouter?: string;
+  toggleLoginMenu?: () => void;
+  loginMenu?: boolean;
 }
 
 export const NavigationLoginPixwaySDK = ({
   marginLeft = 40,
   signInRouter,
   signUpRouter,
+  toggleLoginMenu,
+  loginMenu,
 }: NavigationLoginPixwaySDKProps) => {
   const { data: session } = usePixwaySession();
+  const [userMenu, setUserMenu] = useState<boolean>(false);
+
+  const toggleTabsMemo = () => {
+    if (toggleLoginMenu) {
+      toggleLoginMenu();
+    } else {
+      setUserMenu(!userMenu);
+    }
+  };
+
+  const validatorOpened = useMemo(() => {
+    return loginMenu ? loginMenu : userMenu;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginMenu, userMenu]);
 
   const InfoToShow = useMemo(() => {
     if (session) {
@@ -32,9 +50,14 @@ export const NavigationLoginPixwaySDK = ({
   }, [session, signInRouter, signUpRouter]);
 
   const InfoToShowMobile = useMemo(() => {
-    return <NavigationLoginLoggedButtonMobile />;
+    return (
+      <NavigationLoginLoggedButtonMobile
+        menuOpened={validatorOpened}
+        toggleMenu={toggleTabsMemo}
+      />
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, signInRouter, signUpRouter]);
+  }, [session, signInRouter, signUpRouter, validatorOpened]);
 
   return (
     <div>

@@ -6,17 +6,23 @@ import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.s
 import { ReactComponent as Pixwayicon } from '../../../../../assets/icons/pixwayLogoIcon.svg';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfile } from '../../../../../hooks/useProfile/useProfile';
+import useRouter from '../../../../../hooks/useRouter';
 import { UserTag } from '../../../../UserTag/UserTag';
+import { NavigationMenuTabs } from '../interfaces/menu';
+import { defaultMenuTabs } from './NavigationLoginLoggedButton';
 
 interface NavigationLoginLoggedButtonMobileProps {
   menuOpened?: boolean;
-  toggleMenu?: () => boolean;
+  toggleMenu?: () => void;
+  menuTabs?: NavigationMenuTabs[];
 }
 
 export const NavigationLoginLoggedButtonMobile = ({
   menuOpened,
   toggleMenu,
+  menuTabs = defaultMenuTabs(),
 }: NavigationLoginLoggedButtonMobileProps) => {
+  const router = useRouter();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
   const toggleTabsMemo = () => {
@@ -36,7 +42,7 @@ export const NavigationLoginLoggedButtonMobile = ({
 
   return session ? (
     <div className="">
-      <UserTag onClick={toggleTabsMemo} className="pw-mr-4" />
+      <UserTag onClick={toggleTabsMemo} className="pw-mr-4 pw-cursor-pointer" />
       {validatorOpened ? (
         <div className="pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center">
           <p className="pw-font-montserrat pw-text-xs pw-font-[400]">
@@ -44,7 +50,7 @@ export const NavigationLoginLoggedButtonMobile = ({
           </p>
           <div
             onClick={() => copy(profile?.data.mainWallet?.address || '')}
-            className="pw-flex pw-gap-x-1 pw-mt-1"
+            className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
             <p className="pw-font-montserrat pw-text-xs pw-font-[400] pw-cursor-pointer">
               {profile?.data.mainWallet?.address}
@@ -67,6 +73,21 @@ export const NavigationLoginLoggedButtonMobile = ({
             </div>
             <div className="pw-h-[30px] pw-mx-4 pw-w-px pw-bg-[#EFEFEF]"></div>
             <div className="pw-flex-1"></div>
+          </div>
+          <div className="pw-mt-3 pw-w-full">
+            {menuTabs.map((tab) => (
+              <div
+                onClick={() => {
+                  if (tab.action) tab.action();
+                  else if (tab.route) router.push(tab.route);
+                }}
+                className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-[#B09C60] pw-cursor-pointer pw-rounded pw-text-lg pw-font-montserrat pw-text-[#383857] hover:pw-text-black"
+                key={tab.name}
+              >
+                {tab.icon}
+                <p>{tab.name}</p>
+              </div>
+            ))}
           </div>
         </div>
       ) : null}

@@ -29,9 +29,12 @@ export const NavigationTabsPixwaySDKMobile = ({
   return (
     <div className={` ${className}`}>
       {opened ? (
-        <CloseIcon onClick={toggleTabsMemo} />
+        <CloseIcon className="pw-cursor-pointer" onClick={toggleTabsMemo} />
       ) : (
-        <HamburguerIcon onClick={toggleTabsMemo} />
+        <HamburguerIcon
+          onClick={toggleTabsMemo}
+          className="pw-cursor-pointer"
+        />
       )}
       {opened && (
         <div className="pw-flex pw-flex-col pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-py-8 pw-items-center pw-gap-y-4">
