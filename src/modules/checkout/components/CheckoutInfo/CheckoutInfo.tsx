@@ -1,23 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocalStorage } from 'react-use';
 
 import { PriceAndGasInfo, ProductInfo } from '../../../shared';
 import { ReactComponent as CreditCardIcon } from '../../../shared/assets/icons/creditCard.svg';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
-import { useLocalStorage } from '../../../shared/hooks/useLocalStorage/useLocalStorage';
-import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import useRouter from '../../../shared/hooks/useRouter';
-import { getOrderPreview } from '../../api/orderPreview';
+import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import { useCheckout } from '../../hooks/useCheckout';
 import {
   OrderPreviewCache,
   OrderPreviewResponse,
-} from '../../api/orderPreview/interface';
-import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+} from '../../interface/interface';
 
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
@@ -40,8 +39,10 @@ const _CheckoutInfo = ({
   currencyId,
 }: CheckoutInfoProps) => {
   const router = useRouter();
+  const { getOrderPreview } = useCheckout();
   const [translate] = useTranslation();
-  const { deleteKey, setStorage, getItem } = useLocalStorage();
+  const [productCache, setProductCache, deleteKey] =
+    useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -50,18 +51,15 @@ const _CheckoutInfo = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
-  const companyId = useCompanyId();
-  const baseUrl = usePixwayAPIURL();
+  const { companyId } = useCompanyConfig();
 
   const { data: session } = usePixwaySession();
 
-  const token = useMemo(() => {
-    return session ? (session.accessToken as string) : null;
-  }, [session]);
+  const token = session ? (session.accessToken as string) : null;
 
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
-      deleteKey(PRODUCT_CART_INFO_KEY);
+      deleteKey();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.localStorage]);
@@ -82,10 +80,12 @@ const _CheckoutInfo = ({
         setCurrencyIdState(currencyIdFromQueries);
       }
     } else {
-      const preview = getItem<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
-      setOrderPreview({
-        products: [preview.product],
-      });
+      const preview = productCache;
+      if (preview) {
+        setOrderPreview({
+          products: [preview.product],
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
@@ -101,16 +101,12 @@ const _CheckoutInfo = ({
         productIds,
         currencyId: currencyIdState,
         companyId,
-        baseUrl,
-        token,
-      }).then((res) => setOrderPreview(res));
+      }).then((res: OrderPreviewResponse) => setOrderPreview(res));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds, currencyIdState, token]);
 
-  const isLoading = useMemo(() => {
-    return orderPreview == null;
-  }, [orderPreview]);
+  const isLoading = orderPreview == null;
 
   const UnderCreditText = useMemo(() => {
     switch (checkoutStatus) {
@@ -132,12 +128,11 @@ const _CheckoutInfo = ({
           expectedPrice: pID.prices[0].amount,
         };
       });
-      setStorage(PRODUCT_CART_INFO_KEY, {
+      setProductCache({
         product: orderPreview.products[0],
         orderProducts,
-        currencyId: currencyIdState,
-        //destinationWalletAddress: '0xd3304183ec1fa687e380b67419875f97f1db05f5',
-        signedGasFee: orderPreview?.gasFee?.signature,
+        currencyId: currencyIdState || '',
+        signedGasFee: orderPreview?.gasFee?.signature || '',
       });
     }
     if (proccedAction) {
@@ -147,7 +142,7 @@ const _CheckoutInfo = ({
     }
   };
 
-  const _ButtonsToShow = useMemo(() => {
+  const _ButtonsToShow = () => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
         return (
@@ -211,8 +206,7 @@ const _CheckoutInfo = ({
           </div>
         );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkoutStatus, orderPreview]);
+  };
 
   return (
     <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[80px] pw-px-6">
@@ -245,7 +239,7 @@ const _CheckoutInfo = ({
           ).toFixed(2) || ''
         }
       />
-      {_ButtonsToShow}
+      <_ButtonsToShow />
     </div>
   );
 };

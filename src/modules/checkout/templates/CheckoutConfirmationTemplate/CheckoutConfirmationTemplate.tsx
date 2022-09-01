@@ -2,19 +2,19 @@ import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutHeader } from '../../components/CheckoutHeader';
 
-interface CheckoutConfirmationProps {
+interface CheckoutConfirmationTemplateProps {
   returnTo?: (query: string) => void;
   proccedAction?: (query: string) => void;
   productId?: string[];
   currencyId?: string;
 }
 
-export const CheckoutConfirmation = ({
+export const CheckoutConfirmationTemplate = ({
   returnTo,
   proccedAction,
   productId,
   currencyId,
-}: CheckoutConfirmationProps) => {
+}: CheckoutConfirmationTemplateProps) => {
   return (
     <>
       <CheckoutHeader onClick={returnTo} />

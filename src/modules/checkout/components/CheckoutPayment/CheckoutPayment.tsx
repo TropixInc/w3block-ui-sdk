@@ -1,30 +1,30 @@
-import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { useLocalStorage } from 'react-use';
 
 import { ErrorMessage } from '../../../shared';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
-import { useLocalStorage } from '../../../shared/hooks/useLocalStorage/useLocalStorage';
-import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { createOrderApi } from '../../api/createOrder';
-import { CreateOrder } from '../../api/createOrder/interface';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import { useCheckout } from '../../hooks/useCheckout';
+import { OrderPreviewCache } from '../../interface/interface';
 
 export const CheckoutPayment = () => {
+  const { createOrder: createOrderHook } = useCheckout();
   const iframeRef = useRef(null);
   const router = useRouter();
-  const [_, setOrderInfos] = useState<CreateOrder | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
   const shouldLock = useRef(true);
   const [sending, setSending] = useState<boolean>(false);
-  const baseUrl = usePixwayAPIURL();
-  const companyId = useCompanyId();
+  const { companyId } = useCompanyConfig();
   const [iframeLink, setIframeLink] = useState('');
-  const { getItem } = useLocalStorage();
+  const [productCache] = useLocalStorage<OrderPreviewCache>(
+    PRODUCT_CART_INFO_KEY
+  );
   const { data: session } = usePixwaySession();
   const [query, setQuery] = useState('');
   useEffect(() => {
@@ -41,17 +41,19 @@ export const CheckoutPayment = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createOrder = () => {
     setLoading(true);
-    const orderInfo = getItem<CreateOrder>(PRODUCT_CART_INFO_KEY);
-    setOrderInfos(orderInfo);
+    const orderInfo = productCache;
     if (orderInfo && !iframeLink && !sending && session) {
       setSending(true);
-      createOrderApi(baseUrl, session.accessToken as string, companyId, {
-        ...orderInfo,
-        successUrl:
-          'http://localhost:3000' +
-          PixwayAppRoutes.CHECKOUT_COMPLETED +
-          '?' +
-          query.split('?')[0],
+      createOrderHook({
+        companyId,
+        createOrder: {
+          ...orderInfo,
+          successUrl:
+            window.location.hostname +
+            PixwayAppRoutes.CHECKOUT_COMPLETED +
+            '?' +
+            query.split('?')[0],
+        },
       }).then((res) => {
         setLoading(false);
         if (res) {
@@ -62,35 +64,36 @@ export const CheckoutPayment = () => {
     }
   };
 
-  const IframeItem = useMemo(() => {
-    return iframeLink ? (
-      <iframe
-        onLoad={(e: SyntheticEvent<HTMLIFrameElement>) => {
-          if (
-            e.currentTarget.contentWindow?.location.hostname ===
-            window?.location.hostname
-          ) {
-            router.push(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
-          }
-        }}
-        ref={iframeRef}
-        className="pw-w-full pw-min-h-screen"
-        src={iframeLink}
-      />
-    ) : loading ? (
-      <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
-        <Loading className="pw-animate-spin -pw-mt-24 pw-h-15 pw-w-15" />
-      </div>
-    ) : (
-      <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
-        <ErrorMessage
-          className="-pw-mt-24"
-          message={translate('checkout>components>warning>problemWithCheckout')}
+  return (
+    <div className="">
+      {iframeLink ? (
+        <iframe
+          onLoad={(e: SyntheticEvent<HTMLIFrameElement>) => {
+            if (
+              e.currentTarget.contentWindow?.location.hostname ===
+              window?.location.hostname
+            ) {
+              router.push(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
+            }
+          }}
+          ref={iframeRef}
+          className="pw-w-full pw-min-h-screen"
+          src={iframeLink}
         />
-      </div>
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [iframeLink, loading]);
-
-  return <div className="">{IframeItem}</div>;
+      ) : loading ? (
+        <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
+          <Loading className="pw-animate-spin -pw-mt-24 pw-h-15 pw-w-15" />
+        </div>
+      ) : (
+        <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
+          <ErrorMessage
+            className="-pw-mt-24"
+            message={translate(
+              'checkout>components>warning>problemWithCheckout'
+            )}
+          />
+        </div>
+      )}
+    </div>
+  );
 };

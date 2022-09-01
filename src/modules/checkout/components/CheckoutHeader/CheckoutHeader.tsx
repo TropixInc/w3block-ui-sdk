@@ -32,10 +32,10 @@ const _CheckoutHeader = ({ onClick }: CheckoutHeaderProps) => {
   );
 };
 
-export const CheckoutHeader = ({ onClick }: CheckoutHeaderProps) => {
+export const CheckoutHeader = (props: CheckoutHeaderProps) => {
   return (
     <TranslatableComponent>
-      <_CheckoutHeader onClick={onClick} />
+      <_CheckoutHeader {...props} />
     </TranslatableComponent>
   );
 };

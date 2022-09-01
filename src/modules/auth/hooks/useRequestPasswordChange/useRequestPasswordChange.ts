@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query';
 
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
 import { useHostname } from '../../../shared/hooks/useHostname';
 
@@ -11,7 +11,7 @@ interface Payload {
 
 export const useRequestPasswordChange = () => {
   const getSDK = useGetW3blockIdSDK();
-  const tenantId = useCompanyId();
+  const { companyId: tenantId } = useCompanyConfig();
   const hostName = useHostname();
   return useMutation(async ({ email }: Payload) => {
     const sdk = await getSDK();

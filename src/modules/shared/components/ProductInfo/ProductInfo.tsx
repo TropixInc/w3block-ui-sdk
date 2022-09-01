@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { CheckoutStatus } from '../../../checkout';
 import { ReactComponent as Loading } from '../../assets/icons/loading.svg';
 import useTranslation from '../../hooks/useTranslation';
@@ -24,7 +22,7 @@ export const ProductInfo = ({
   loading = false,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
-  const statusToShow = useMemo(() => {
+  const StatusToShow = () => {
     switch (status) {
       case CheckoutStatus.FINISHED:
         return (
@@ -38,8 +36,7 @@ export const ProductInfo = ({
       default:
         return null;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  };
   return (
     <div
       className={`pw-w-full pw-px-2 pw-py-3 pw-flex pw-justify-between pw-items-center pw-border pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl ${className}`}
@@ -78,7 +75,7 @@ export const ProductInfo = ({
         <Shimmer className="pw-w-[80px] pw-h-6" />
       ) : (
         <div className="pw-fle pw-flex-col">
-          {statusToShow}
+          <StatusToShow />
           <p className="pw-font-[700] pw-text-[#35394C] pw-text-lg pw-text-right">
             R${price}
           </p>

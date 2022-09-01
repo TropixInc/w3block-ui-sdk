@@ -1,23 +1,26 @@
-import useRouter from '../../../shared/hooks/useRouter/';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import useRouter from '../../../shared/hooks/useRouter';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutHeader } from '../../components/CheckoutHeader';
 
-interface CheckoutDoneProps {
+interface CheckoutDoneTemplateProps {
   returnTo?: () => void;
   productId?: string[];
   currencyId?: string;
 }
 
-export const CheckoutDone = ({
+export const CheckoutDoneTemplate = ({
   returnTo,
   productId,
   currencyId,
-}: CheckoutDoneProps) => {
+}: CheckoutDoneTemplateProps) => {
   const router = useRouter();
   return (
     <>
-      <CheckoutHeader onClick={returnTo ? returnTo : () => router.push('/')} />
+      <CheckoutHeader
+        onClick={returnTo ? returnTo : () => router.push(PixwayAppRoutes.HOME)}
+      />
       <CheckoutContainer
         productId={productId}
         currencyId={currencyId}

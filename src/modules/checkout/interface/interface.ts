@@ -1,4 +1,25 @@
-import { OrderStatus, PaymentMethod } from '../../enum';
+import { Product } from '../../shared';
+import { GasFee } from '../../shared/interface/GasFee';
+import { OrderStatus, PaymentMethod } from '../enum';
+export interface OrderPreviewResponse {
+  products: Product[];
+  cartPrice?: string;
+  serviceFee?: string;
+  gasFee?: GasFee;
+  totalPrice?: string;
+}
+
+export interface OrderPreviewCache {
+  currencyId: string;
+  product: Product;
+  orderProducts: OrderProductsInterface[];
+  signedGasFee: string;
+}
+
+interface OrderProductsInterface {
+  expectedPrice: string;
+  productId: string;
+}
 
 export interface CreateOrder {
   orderProducts: CreateOrderProduct[];
@@ -39,4 +60,9 @@ export interface CreateOrderResponse {
 
 export interface PaymentInfoInterface {
   paymentUrl: string;
+}
+
+export interface CreateOrderPayload {
+  companyId: string;
+  createOrder: CreateOrder;
 }

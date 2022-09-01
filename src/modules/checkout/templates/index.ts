@@ -1,3 +1,3 @@
-export * from './CheckoutConfirmation';
-export * from './CheckoutDone';
-export * from './CheckoutPayment';
+export * from './CheckoutConfirmationTemplate';
+export * from './CheckoutDoneTemplate';
+export * from './CheckoutPaymentTemplate';
