@@ -40,5 +40,14 @@
   "changePassword>error>errorChangingPassword": "Tivemos um problema na troca da senha.",
   "auth>expiredLink>stepTitle": "O link de autenticação expirou",
   "auth>expiredLink>linkNotValidatedMessage": "Infelizmente seu link não foi validado",
-  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código"
+  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código",
+  "components>genericMessages>mintedBy": "Mintado por W3block",
+  "tokenization>publicTokenTemplate>moreInfoThisNFT": "Mais informações sobre esse NFT",
+  "wallet>tokenQRCodeModal>selectedEdition": "Edição {{selectedEdition}} de {{totalEditions}}",
+  "connect>tokenInternalPage>titleMobile": "Interna do token",
+  "connect>tokenDetailsCard>contract": "Contrato utilizado",
+  "connect>tokenDetailsCard>titleOrItemName": "Título ou nome do item",
+  "connect>tokenDetailsCard>description": "Descrição",
+  "connect>tokenDetailsCard>tokenPublicPage": "Página pública do token",
+  "connect>tokenDetailsCard>moreInformation": "Mais informações sobre esse NFT"
 }

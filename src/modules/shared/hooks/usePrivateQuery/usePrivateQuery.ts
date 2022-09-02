@@ -7,6 +7,15 @@ import {
 
 import { useToken } from '../useToken';
 
+export type QueryConfig<
+  TQueryFnData = unknown,
+  TError = unknown,
+  TData = TQueryFnData
+> = Omit<
+  UseQueryOptions<TQueryFnData, TError, TData, QueryKey>,
+  'queryKey' | 'queryFn'
+>;
+
 export const usePrivateQuery = <
   TQueryFnData = unknown,
   TError = unknown,
