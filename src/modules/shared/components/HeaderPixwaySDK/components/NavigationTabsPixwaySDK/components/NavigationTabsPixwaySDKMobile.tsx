@@ -5,6 +5,7 @@ import { ReactComponent as HamburguerIcon } from '../../../../../assets/icons/he
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import useRouter from '../../../../../hooks/useRouter';
+import useTranslation from '../../../../../hooks/useTranslation';
 import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
 export const NavigationTabsPixwaySDKMobile = ({
@@ -16,6 +17,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   signInRoute = PixwayAppRoutes.SIGN_IN,
   signUpRoute = PixwayAppRoutes.SIGN_UP,
 }: NavigationTabsPixwaySDKProps) => {
+  const [translate] = useTranslation();
   const router = useRouter();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
@@ -54,14 +56,14 @@ export const NavigationTabsPixwaySDKMobile = ({
                 fullWidth
                 className="!pw-bg-[#B09C60] !pw-px-[40px] !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
               >
-                Entrar
+                {translate('shared>login')}
               </PixwayButton>
               <PixwayButton
                 onClick={() => router.push(signUpRoute)}
                 fullWidth
                 className="!pw-bg-[#EFEFEF] !pw-px-[40px] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px]  !pw-border-[#DCDCDC] !pw-border-1"
               >
-                Cadastrar
+                {translate('shared>register')}
               </PixwayButton>
             </div>
           )}

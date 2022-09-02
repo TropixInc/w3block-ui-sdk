@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import {
@@ -42,10 +42,7 @@ export const HeaderPixwaySDK = ({
     } else setopenedLoginState(!openedloginState);
   };
 
-  const validatorMenuOpened = useMemo(() => {
-    return openedLogin ? openedLogin : openedloginState;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openedLogin, openedloginState]);
+  const validatorMenuOpened = openedLogin ? openedLogin : openedloginState;
 
   const toggleTabsMemo = () => {
     if (openedLogin || openedloginState) {

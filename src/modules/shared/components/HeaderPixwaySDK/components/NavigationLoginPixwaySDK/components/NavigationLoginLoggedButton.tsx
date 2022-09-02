@@ -1,4 +1,6 @@
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useState } from 'react';
+
+import { signOut } from 'next-auth/react';
 
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
@@ -13,6 +15,7 @@ import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import useRouter from '../../../../../hooks/useRouter';
+import useTranslation from '../../../../../hooks/useTranslation';
 import { NavigationMenuTabs } from '../interfaces/menu';
 
 interface NavigationLoginLoggedButtonProps {
@@ -24,6 +27,7 @@ export const NavigationLoginLoggedButton = ({
   logo,
   menuTabs,
 }: NavigationLoginLoggedButtonProps) => {
+  const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
   const { data: profile } = useProfile();
@@ -32,7 +36,7 @@ export const NavigationLoginLoggedButton = ({
     <div className="pw-ml-5 ">
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
         <p className="pw-text-xs pw-font-montserrat pw-font-[400] ">
-          Olá, {session?.user?.name || ''} - Carteira Pixway:
+          {translate('header>logged>hiWallet', { name: session?.user?.name })}
         </p>
         <div className="pw-flex pw-items-center">
           <p className="pw-text-sm pw-font-montserrat pw-font-[600]">
@@ -55,36 +59,38 @@ const PixwayLogoDefault = () => {
   );
 };
 
-export const defaultMenuTabs = () => {
+export const DefaultMenuTabs = () => {
+  const [translate] = useTranslation();
   const defaultTabs: NavigationMenuTabs[] = [
     {
-      name: 'Meu perfil',
+      name: translate('header>components>defaultTab>myAccount'),
       route: PixwayAppRoutes.MY_PROFILE,
       icon: <UserIcon />,
     },
     {
-      name: 'Meus tokens',
+      name: translate('header>components>defaultTab>myTokens'),
       route: PixwayAppRoutes.MY_TOKENS,
       icon: <MyTokenIcon />,
     },
     {
-      name: 'Carteira',
+      name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon />,
     },
     {
-      name: 'Configurações',
+      name: translate('header>components>defaultTab>settings'),
       route: PixwayAppRoutes.SETTINGS,
       icon: <SettingsIcon />,
     },
     {
-      name: 'Central de ajuda',
+      name: translate('header>components>defaultTab>helpCenter'),
       route: PixwayAppRoutes.HELP,
       icon: <HelpIcon />,
     },
     {
       name: 'Logout',
       icon: <LogoutIcon />,
+      action: () => signOut(),
     },
   ];
 
@@ -93,24 +99,26 @@ export const defaultMenuTabs = () => {
 
 const NavigationMenu = ({
   logo = <PixwayLogoDefault />,
-  menuTabs = defaultMenuTabs(),
+  menuTabs = DefaultMenuTabs(),
 }: NavigationLoginLoggedButtonProps) => {
   const [blocked, setBlocked] = useState(false);
   const router = useRouter();
-  const LogoToShow = useMemo(() => {
+  const LogoToShow = () => {
     if (typeof logo == 'string') {
       return <img className="pw-object-contain" src={logo} />;
     } else {
       return <>{logo}</>;
     }
-  }, [logo]);
+  };
 
   return (
     <div className="pw-relative">
       <div className="pw-absolute pw-mt-6 pw-ml-[210px] pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3">
         <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
           <div className="pw-flex">
-            <div className="pw-max-w-[14px] pw-max-h-[14px]">{LogoToShow}</div>
+            <div className="pw-max-w-[14px] pw-max-h-[14px]">
+              <LogoToShow />
+            </div>
             <p className="pw-text-[10px] pw-font-montserrat pw-font-[500] pw-ml-[6px]">
               Saldo Pixway
             </p>

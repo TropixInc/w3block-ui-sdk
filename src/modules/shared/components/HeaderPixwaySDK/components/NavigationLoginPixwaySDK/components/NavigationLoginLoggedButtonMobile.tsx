@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
@@ -7,9 +7,10 @@ import { ReactComponent as Pixwayicon } from '../../../../../assets/icons/pixway
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfile } from '../../../../../hooks/useProfile/useProfile';
 import useRouter from '../../../../../hooks/useRouter';
+import useTranslation from '../../../../../hooks/useTranslation';
 import { UserTag } from '../../../../UserTag/UserTag';
 import { NavigationMenuTabs } from '../interfaces/menu';
-import { defaultMenuTabs } from './NavigationLoginLoggedButton';
+import { DefaultMenuTabs } from './NavigationLoginLoggedButton';
 
 interface NavigationLoginLoggedButtonMobileProps {
   menuOpened?: boolean;
@@ -20,8 +21,9 @@ interface NavigationLoginLoggedButtonMobileProps {
 export const NavigationLoginLoggedButtonMobile = ({
   menuOpened,
   toggleMenu,
-  menuTabs = defaultMenuTabs(),
+  menuTabs = DefaultMenuTabs(),
 }: NavigationLoginLoggedButtonMobileProps) => {
+  const [translate] = useTranslation();
   const router = useRouter();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
@@ -33,10 +35,7 @@ export const NavigationLoginLoggedButtonMobile = ({
 
   const [_, copy] = useCopyToClipboard();
 
-  const validatorOpened = useMemo(() => {
-    return menuOpened ? menuOpened : userMenu;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuOpened, userMenu]);
+  const validatorOpened = menuOpened ? menuOpened : userMenu;
 
   const { data: profile } = useProfile();
 
@@ -46,7 +45,7 @@ export const NavigationLoginLoggedButtonMobile = ({
       {validatorOpened ? (
         <div className="pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center">
           <p className="pw-font-montserrat pw-text-xs pw-font-[400]">
-            Olá, {session.user?.name} | Sua carteira Pixway:
+            {translate('header>logged>hiWallet', { name: session.user?.name })}
           </p>
           <div
             onClick={() => copy(profile?.data.mainWallet?.address || '')}
@@ -63,7 +62,7 @@ export const NavigationLoginLoggedButtonMobile = ({
               <div className="pw-flex pw-items-center pw-justify-between">
                 <Pixwayicon />
                 <p className="pw-text-xs pw-font-[400] pw-font-montserrat">
-                  Saldo Pixway
+                  {translate('header>logged>pixwayBalance')}
                 </p>
                 <EyeIcon />
               </div>

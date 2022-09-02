@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { usePixwaySession } from '../../../../hooks/usePixwaySession';
 import { NavigationLoginLoggedButton } from './components/NavigationLoginLoggedButton';
@@ -31,12 +31,9 @@ export const NavigationLoginPixwaySDK = ({
     }
   };
 
-  const validatorOpened = useMemo(() => {
-    return loginMenu ? loginMenu : userMenu;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginMenu, userMenu]);
+  const validatorOpened = loginMenu ? loginMenu : userMenu;
 
-  const InfoToShow = useMemo(() => {
+  const InfoToShow = () => {
     if (session) {
       return <NavigationLoginLoggedButton />;
     } else {
@@ -47,9 +44,9 @@ export const NavigationLoginPixwaySDK = ({
         />
       );
     }
-  }, [session, signInRouter, signUpRouter]);
+  };
 
-  const InfoToShowMobile = useMemo(() => {
+  const InfoToShowMobile = () => {
     return (
       <NavigationLoginLoggedButtonMobile
         menuOpened={validatorOpened}
@@ -57,7 +54,7 @@ export const NavigationLoginPixwaySDK = ({
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, signInRouter, signUpRouter, validatorOpened]);
+  };
 
   return (
     <div>
@@ -65,9 +62,11 @@ export const NavigationLoginPixwaySDK = ({
         style={{ marginLeft: marginLeft + 'px' }}
         className="sm:pw-flex pw-border-l pw-border-[#777E8F] pw-items-center pw-hidden"
       >
-        {InfoToShow}
+        <InfoToShow />
       </div>
-      <div className="sm:pw-hidden ">{InfoToShowMobile}</div>
+      <div className="sm:pw-hidden ">
+        <InfoToShowMobile />
+      </div>
     </div>
   );
 };
