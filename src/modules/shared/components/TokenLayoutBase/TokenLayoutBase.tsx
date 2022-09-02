@@ -22,7 +22,9 @@ export const TokenLayoutBase = ({ classes = {}, children }: Props) => {
           classes.middleSectionContainer ?? ''
         )}
       >
-        <Menu />
+        <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
+          <Menu />
+        </div>
         <div className="pw-flex pw-flex-col pw-w-full">
           <div
             className={classNames(

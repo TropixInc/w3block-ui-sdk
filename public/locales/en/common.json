@@ -25,5 +25,7 @@
   "components>advanceButton>continue": "Continue",
   "auth>expiredLink>stepTitle": "The authentication link has expired.",
   "auth>expiredLink>linkNotValidatedMessage": "Unfortunately, the link is invalid.",
-  "auth>expiredLink>resendCodeButton": "Click here to resend your code."
+  "auth>expiredLink>resendCodeButton": "Click here to resend your code.",
+  "components>menu>memberSince": "Member since",
+  "components>menu>copied": "Copied!"
 }

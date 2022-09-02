@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
+import { signOut } from 'next-auth/react';
 
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
@@ -12,54 +13,25 @@ import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutli
 import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
+import useRouter from '../../hooks/useRouter';
+import useTranslation from '../../hooks/useTranslation';
 import { Link } from '../Link';
 
 interface MenuProps {
-  tabs?: TabsProps[];
+  tabs?: TabsConfig[];
   className?: string;
 }
 
-interface TabsProps {
+interface TabsConfig {
   title: string;
   icon: ReactNode;
   link: string;
 }
 
-const Tabs: TabsProps[] = [
-  {
-    title: 'Meu Perfil',
-    icon: <UserIcon width={17} height={17} />,
-    link: PixwayAppRoutes.PROFILE,
-  },
-  {
-    title: 'Meus Tokens',
-    icon: <ImageIcon width={17} height={17} />,
-    link: PixwayAppRoutes.MY_TOKENS,
-  },
-  {
-    title: 'Carteira',
-    icon: <CardIcon width={17} height={17} />,
-    link: PixwayAppRoutes.WALLET,
-  },
-  {
-    title: 'Configurações',
-    icon: <SettingsIcon width={17} height={17} />,
-    link: PixwayAppRoutes.SETTINGS,
-  },
-  {
-    title: 'Central de Ajuda',
-    icon: <HelpIcon width={17} height={17} />,
-    link: PixwayAppRoutes.HELP,
-  },
-  {
-    title: 'Logout',
-    icon: <LogoutIcon width={17} height={17} />,
-    link: '',
-  },
-];
-
-export const Menu = ({ tabs = Tabs, className }: MenuProps) => {
+export const Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
+  const router = useRouter();
+  const [translate] = useTranslation();
   const [state, copyToClipboard] = useCopyToClipboard();
   const [isCopied, setIsCopied] = useState(false);
   const createdAt = new Date(profile?.data.createdAt as string);
@@ -70,10 +42,45 @@ export const Menu = ({ tabs = Tabs, className }: MenuProps) => {
     month < 10 ? `0${month}` : month
   }/${year}`;
 
+  const tabsDefault: TabsConfig[] = [
+    {
+      title: translate('components>menu>myProfile'),
+      icon: <UserIcon width={17} height={17} />,
+      link: PixwayAppRoutes.PROFILE,
+    },
+    {
+      title: translate('components>menu>myTokens'),
+      icon: <ImageIcon width={17} height={17} />,
+      link: PixwayAppRoutes.MY_TOKENS,
+    },
+    {
+      title: translate('components>menu>wallet'),
+      icon: <CardIcon width={17} height={17} />,
+      link: PixwayAppRoutes.WALLET,
+    },
+    {
+      title: translate('components>menu>settings'),
+      icon: <SettingsIcon width={17} height={17} />,
+      link: PixwayAppRoutes.SETTINGS,
+    },
+    {
+      title: translate('components>menu>help'),
+      icon: <HelpIcon width={17} height={17} />,
+      link: PixwayAppRoutes.HELP,
+    },
+  ];
+
+  const tabsMap: TabsConfig[] = tabs ? tabs : tabsDefault;
+
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWalletId as string);
     if (!state.error) setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
+  };
+
+  const handleSignOut = () => {
+    router.push(PixwayAppRoutes.HOME);
+    signOut({ callbackUrl: undefined, redirect: false });
   };
 
   return (
@@ -101,12 +108,12 @@ export const Menu = ({ tabs = Tabs, className }: MenuProps) => {
           </button>
           {isCopied && (
             <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
-              Copied!
+              {translate('components>menu>copied')}
             </span>
           )}
         </div>
         <ul className="pw-mx-auto pw-w-[248px]">
-          {tabs.map((tabs) => (
+          {tabsMap.map((tabs) => (
             <Link href={tabs.link} key={tabs.title}>
               <li
                 key={tabs.title}
@@ -119,10 +126,19 @@ export const Menu = ({ tabs = Tabs, className }: MenuProps) => {
               </li>
             </Link>
           ))}
+          <button
+            onClick={handleSignOut}
+            className="pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-w-full pw-rounded-[4px] hover:pw-bg-[#EFEFEF] active:pw-bg-[#4194CD4D] active:pw-bg-opacity-[0.4] pw-text-[#35394C] active:!pw-text-[#295BA6] pw-pl-3 pw-stroke-[#383857] active:pw-stroke-[#295BA6]"
+          >
+            <LogoutIcon width={17} height={17} />
+            <p className="pw-font-poppins pw-text-lg pw-font-medium pw-ml-5">
+              Logout
+            </p>
+          </button>
         </ul>
       </div>
       <p className="pw-font-nunito pw-text-sm pw-font-normal pw-text-[#35394C] pw-opacity-[0.5] pw-mt-15 pw-mx-auto">
-        Membro desde {formatedDate}
+        {translate('components>menu>memberSince')} {formatedDate}
       </p>
     </div>
   );
