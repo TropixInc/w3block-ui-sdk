@@ -14,6 +14,7 @@ export const requestWalletMetamask = async (
   token: string,
   companyId: string,
   baseURL: string,
+  refreshToken: string,
   body: RequestWalletBody
 ) => {
   try {
@@ -21,6 +22,14 @@ export const requestWalletMetamask = async (
       autoRefresh: false,
       baseURL,
     });
+
+    if (refreshToken && token) {
+      await sdk.authenticate({
+        refreshToken: refreshToken,
+        authToken: token,
+        tenantId: companyId,
+      });
+    }
 
     return await sdk.api.users.requestMetamask(companyId, body);
   } catch (error: any) {
@@ -37,6 +46,7 @@ export const claimWalletMetamask = async (
   token: string,
   companyId: string,
   baseURL: string,
+  refreshToken: string,
   body: ClaimWalletBody
 ) => {
   try {
@@ -44,6 +54,14 @@ export const claimWalletMetamask = async (
       autoRefresh: false,
       baseURL,
     });
+
+    if (refreshToken && token) {
+      await sdk.authenticate({
+        refreshToken: refreshToken,
+        authToken: token,
+        tenantId: companyId,
+      });
+    }
 
     return await sdk.api.users.claimMetamask(companyId, body);
   } catch (error: any) {
@@ -59,13 +77,22 @@ export const claimWalletMetamask = async (
 export const claimWalletVault = async (
   token: string,
   companyId: string,
-  baseURL: string
+  baseURL: string,
+  refreshToken: string
 ) => {
   try {
     const sdk = new W3blockIdSDK({
       autoRefresh: false,
       baseURL,
     });
+
+    if (refreshToken && token) {
+      await sdk.authenticate({
+        refreshToken: refreshToken,
+        authToken: token,
+        tenantId: companyId,
+      });
+    }
 
     return await sdk.api.users.createVault(companyId);
   } catch (error: any) {
@@ -82,13 +109,22 @@ export const claimWallet = async (
   token: string,
   companyId: string,
   baseURL: string,
-  userId: string
+  userId: string,
+  refreshToken: string
 ) => {
   try {
     const sdk = new W3blockIdSDK({
       autoRefresh: false,
       baseURL,
     });
+
+    if (refreshToken && token) {
+      await sdk.authenticate({
+        refreshToken: refreshToken,
+        authToken: token,
+        tenantId: companyId,
+      });
+    }
 
     return await sdk.api.users.findAllWalletByUserId(userId, companyId);
   } catch (error: any) {

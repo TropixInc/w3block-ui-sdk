@@ -8,6 +8,7 @@ import {
   requestWalletMetamask,
 } from '../../../auth/api/wallet';
 import { usePixwayAPIURL } from '../usePixwayAPIURL/usePixwayAPIURL';
+import { useSessionUser } from '../useSessionUser';
 import { Chain, chainConnectors } from './chainConnectors';
 
 export interface Wallet {
@@ -40,6 +41,7 @@ export function useUserWallet({
   companyId: string;
 }) {
   const metamask = useWallet();
+  const user = useSessionUser();
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
   const provider = metamask.library?.provider;
   const [connected, setConnected] = useState(metamask.active);
@@ -57,6 +59,7 @@ export function useUserWallet({
       apiToken,
       companyId,
       w3blockIdAPIUrl,
+      user?.refreshToken ?? '',
       {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         address: metamask.address!,
@@ -75,9 +78,15 @@ export function useUserWallet({
     });
 
     /* Requesting the wallet to be assigned to the authenticated user. */
-    await claimWalletMetamask(apiToken, companyId, w3blockIdAPIUrl, {
-      signature,
-    });
+    await claimWalletMetamask(
+      apiToken,
+      companyId,
+      w3blockIdAPIUrl,
+      user?.refreshToken ?? '',
+      {
+        signature,
+      }
+    );
   }
 
   /**

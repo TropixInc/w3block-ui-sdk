@@ -16,6 +16,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
@@ -64,6 +65,7 @@ const _ConnectWalletTemplate = () => {
   const router = useRouter();
   const profile = useProfile();
   const sessionUser = usePixwaySession();
+  const user = useSessionUser();
 
   useEffect(() => {
     const { data } = profile;
@@ -128,7 +130,12 @@ const _ConnectWalletTemplate = () => {
     setIsConnecting(true);
 
     try {
-      await claimWalletVault(token, companyId, w3blockIdAPIUrl);
+      await claimWalletVault(
+        token,
+        companyId,
+        w3blockIdAPIUrl,
+        user?.refreshToken ?? ''
+      );
       onCreateWalletSuccessfully();
     } catch (error: any) {
       console.error(error);
@@ -169,9 +176,6 @@ const _ConnectWalletTemplate = () => {
     >
       {step === Step.CONNECT_TO_METAMASK ? (
         <div className="pw-mt-6">
-          {/* <h1 className="pw-font-semibold pw-text-3xl pw-leading-[30px] pw-text-center mb-9">
-            {translate('companyAuth>externalWallet>connectExternalWallet')}
-          </h1> */}
           <ConnectToMetamaskButton
             onClick={
               connected
