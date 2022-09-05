@@ -36,5 +36,7 @@
   "companyAuth>signUp>doYouAlreadyHaveAnExternalWallet": "Do you already have a wallet?",
   "companyAuth>signUp>continueWithInternalWallet": "If you do not have an external wallet, by continuing to login an internal wallet will be automatically created for you",
   "companyAuth>signUp>iDontHaveAExternalWallet": "I don't have a wallet",
-  "companyAuth>externalWallet>CompanyNotFound": "Company not found."
+  "companyAuth>externalWallet>CompanyNotFound": "Company not found.",
+  "components>menu>memberSince": "Member since",
+  "components>menu>copied": "Copied!"
 }
