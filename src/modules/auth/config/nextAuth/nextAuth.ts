@@ -143,8 +143,10 @@ export const getNextAuthConfig = ({
             }
           );
           const responseAsJson: SignInResponse = await response.json();
+          console.log(responseAsJson);
           return mapSignInReponseToSessionUser(responseAsJson);
         } catch (error: any) {
+          console.log(error);
           if (error.isAxiosError) {
             const typedError = error as AxiosError<any>;
             if (typedError.response?.data?.message === 'Invalid token') {
