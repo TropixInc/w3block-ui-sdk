@@ -6,7 +6,7 @@ import { NavigationLoginLoggedButtonMobile } from './components/NavigationLoginL
 import { NavigationLoginNonLoggedButton } from './components/NavigationLoginNonLoggedButton';
 
 interface NavigationLoginPixwaySDKProps {
-  marginLeft?: number;
+  className?: string;
   signInRouter?: string;
   signUpRouter?: string;
   toggleLoginMenu?: () => void;
@@ -14,7 +14,7 @@ interface NavigationLoginPixwaySDKProps {
 }
 
 export const NavigationLoginPixwaySDK = ({
-  marginLeft = 40,
+  className,
   signInRouter,
   signUpRouter,
   toggleLoginMenu,
@@ -53,14 +53,12 @@ export const NavigationLoginPixwaySDK = ({
         toggleMenu={toggleTabsMemo}
       />
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
   return (
     <div>
       <div
-        style={{ marginLeft: marginLeft + 'px' }}
-        className="sm:pw-flex pw-border-l pw-border-[#777E8F] pw-items-center pw-hidden"
+        className={`sm:pw-flex pw-border-l pw-border-[#777E8F] pw-items-center pw-hidden pw-ml-[40px] ${className}`}
       >
         <InfoToShow />
       </div>

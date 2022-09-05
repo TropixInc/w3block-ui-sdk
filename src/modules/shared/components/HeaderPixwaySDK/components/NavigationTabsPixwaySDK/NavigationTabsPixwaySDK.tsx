@@ -7,12 +7,16 @@ import { NavigationTabsPixwaySDKMobile } from './components/NavigationTabsPixway
 
 export interface NavigationTabsPixwaySDKProps {
   tabs?: NavigationTabsPixwaySDKTabs[];
-  className?: string;
-  tabClassName?: string;
+  classNames?: NavigationTabsClassNames;
   signInRoute?: string;
   signUpRoute?: string;
   opened?: boolean;
   toogleMenu?: () => void;
+}
+
+interface NavigationTabsClassNames {
+  className?: string;
+  tabClassName?: string;
 }
 
 export interface NavigationTabsPixwaySDKTabs {
@@ -22,8 +26,7 @@ export interface NavigationTabsPixwaySDKTabs {
 
 export const NavigationTabsPixwaySDK = ({
   tabs,
-  className,
-  tabClassName,
+  classNames,
   signInRoute,
   signUpRoute,
   toogleMenu,
@@ -67,8 +70,7 @@ export const NavigationTabsPixwaySDK = ({
       <div className="pw-hidden sm:pw-block">
         <NavigationTabsPixwaySDKDesktop
           tabs={defaultTabs}
-          className={className}
-          tabClassName={tabClassName}
+          classNames={classNames}
         />
       </div>
       <div className="pw-block sm:pw-hidden">
@@ -78,8 +80,7 @@ export const NavigationTabsPixwaySDK = ({
           signInRoute={signInRoute}
           signUpRoute={signUpRoute}
           tabs={defaultTabs}
-          className={className}
-          tabClassName={tabClassName}
+          classNames={classNames}
         />
       </div>
     </>

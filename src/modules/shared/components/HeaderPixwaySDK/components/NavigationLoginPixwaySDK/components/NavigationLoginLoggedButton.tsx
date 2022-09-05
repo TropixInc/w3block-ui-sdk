@@ -101,6 +101,7 @@ const NavigationMenu = ({
   logo = <PixwayLogoDefault />,
   menuTabs = DefaultMenuTabs(),
 }: NavigationLoginLoggedButtonProps) => {
+  const [translate] = useTranslation();
   const [blocked, setBlocked] = useState(false);
   const router = useRouter();
   const LogoToShow = () => {
@@ -120,7 +121,7 @@ const NavigationMenu = ({
               <LogoToShow />
             </div>
             <p className="pw-text-[10px] pw-font-montserrat pw-font-[500] pw-ml-[6px]">
-              Saldo Pixway
+              {translate('header>logged>pixwayBalance')}
             </p>
             <EyeIcon
               onClick={() => setBlocked(!blocked)}

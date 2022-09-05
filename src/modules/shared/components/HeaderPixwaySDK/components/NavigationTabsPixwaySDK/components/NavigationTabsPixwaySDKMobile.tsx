@@ -9,11 +9,10 @@ import useTranslation from '../../../../../hooks/useTranslation';
 import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
 export const NavigationTabsPixwaySDKMobile = ({
-  className,
+  classNames,
   tabs,
   opened,
   toogleMenu,
-  tabClassName,
   signInRoute = PixwayAppRoutes.SIGN_IN,
   signUpRoute = PixwayAppRoutes.SIGN_UP,
 }: NavigationTabsPixwaySDKProps) => {
@@ -29,7 +28,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   };
 
   return (
-    <div className={` ${className}`}>
+    <div className={` ${classNames?.className}`}>
       {opened ? (
         <CloseIcon className="pw-cursor-pointer" onClick={toggleTabsMemo} />
       ) : (
@@ -43,7 +42,7 @@ export const NavigationTabsPixwaySDKMobile = ({
           {tabs?.map((tab) => (
             <a
               href={tab.router}
-              className={`pw-font-montserrat pw-font-[600] pw-text-sm ${tabClassName}`}
+              className={`pw-font-montserrat pw-font-[600] pw-text-sm ${classNames?.tabClassName}`}
               key={tab.name}
             >
               {tab.name}
