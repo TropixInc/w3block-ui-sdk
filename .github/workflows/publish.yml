@@ -14,8 +14,6 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.NODE_GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -30,9 +28,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ^16.13.2
-          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
       - name: Install modules
         run: npm install
+        env:
+          GITHUB_TOKEN: ${{ secrets.NODE_GITHUB_TOKEN }}
       - name: Build
         run: npm run build
       - name: Publish to npm
