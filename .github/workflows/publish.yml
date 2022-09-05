@@ -21,7 +21,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup .npmrc file to publish to npm
+      - name: Setup .npmrc file to install package to GitHub Packages
         uses: actions/setup-node@v1
         with:
           node-version: ^16.13.2
@@ -44,6 +44,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_GITHUB_TOKEN }}
       - name: Build
         run: npm run build
+      - name: Setup .npmrc file to publish to npm
+        uses: actions/setup-node@v1
+        with:
+          node-version: ^16.13.2
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
       - name: Publish to npm
         run: npm publish --access public
         env:
