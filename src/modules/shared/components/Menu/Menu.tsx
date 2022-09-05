@@ -96,9 +96,9 @@ export const Menu = ({ tabs, className }: MenuProps) => {
         </p>
         <div className="pw-flex pw-items-center pw-justify-center pw-mb-10">
           <p className="pw-font-poppins pw-text-sm pw-font-semibold pw-text-[#777E8F] pw-mr-2 pw-mt-[1px]">
-            {profile?.data.mainWalletId.substring(0, 8)}
+            {profile?.data.mainWalletId?.substring(0, 8)}
             {'...'}
-            {profile?.data.mainWalletId.substring(
+            {profile?.data.mainWalletId?.substring(
               profile?.data.mainWalletId.length - 6,
               profile?.data.mainWalletId.length
             )}
