@@ -72,5 +72,12 @@
   "wallet>tokenTransferProcessModal>iAgreeCheckbox": "Estou de acordo.",
   "wallet>tokenTransferProcessModal>dontShowAgainCheckbox": "Não mostrar essa mensagem novamente.",
   "wallet>tokenTransferProcessModal>proceedButton": "Prosseguir",
-  "tokens>tokenCardActions>certificate": "Certificado"
+  "tokens>tokenCardActions>certificate": "Certificado",
+  "components>menu>memberSince": "Membro desde",
+  "components>menu>copied": "Copiado!",
+  "components>menu>myProfile": "Meu Perfil",
+  "components>menu>myTokens": "Meus Tokens",
+  "components>menu>wallet": "Carteira",
+  "components>menu>settings": "Configurações",
+  "components>menu>help": "Central de Ajuda"
 }

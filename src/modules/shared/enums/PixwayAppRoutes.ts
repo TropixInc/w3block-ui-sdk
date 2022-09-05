@@ -6,4 +6,8 @@ export enum PixwayAppRoutes {
   RESET_PASSWORD = '/auth/changePassword/newPassword',
   TOKEN_DETAILS = '/tokens/{contractAddress}/{chainId}/{tokenId}',
   TOKENS = '/tokens',
+  PROFILE = '/profile',
+  WALLET = '/wallet',
+  SETTINGS = '/settings',
+  HELP = '/help',
 }
