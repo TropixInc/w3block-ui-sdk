@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Target branch of push tags'
+        required: false
+        default: 'staging'
 
 jobs:
   release:
