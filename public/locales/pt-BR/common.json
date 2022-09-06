@@ -40,5 +40,6 @@
   "changePassword>error>errorChangingPassword": "Tivemos um problema na troca da senha.",
   "auth>expiredLink>stepTitle": "O link de autenticação expirou",
   "auth>expiredLink>linkNotValidatedMessage": "Infelizmente seu link não foi validado",
-  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código"
+  "auth>expiredLink>resendCodeButton": "Clique aqui para reenviar seu código",
+  "components>FAQ>askedQuestions": "Perguntas Frequentes"
 }
