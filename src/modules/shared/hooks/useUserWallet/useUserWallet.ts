@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
-import { useWallet, utils } from '@tropixinc/pixchain-react-metamask';
+import { useWallet, utils } from '@w3block/pixchain-react-metamask';
 
 import {
   claimWalletMetamask,
