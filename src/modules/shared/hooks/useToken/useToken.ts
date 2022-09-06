@@ -1,6 +1,6 @@
-import { usePixwaySession } from '../usePixwaySession';
+import { useSessionUser } from '../useSessionUser';
 
 export const useToken = () => {
-  const { data } = usePixwaySession();
-  return (data?.accessToken as string) ?? '';
+  const data = useSessionUser();
+  return data?.accessToken ?? '';
 };
