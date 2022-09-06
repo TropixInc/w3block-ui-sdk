@@ -91,5 +91,9 @@
   "companyAuth>externalWallet>CompanyNotFound": "Empresa não encontrada.",
   "companyAuth>externalWallet>connectExternalWallet": "Conecte sua carteira externa",
   "companyAuth>externalWallet>errorConnectingExternalWallet": "Não foi possível conectar a carteira externa, tente novamente",
-  "companyAuth>externalWallet>orContinueWithInternalWallet": "ou <1>Continuar com carteira interna</1>"
+  "companyAuth>externalWallet>orContinueWithInternalWallet": "ou <1>Continuar com carteira interna</1>",
+  "tokens>noWalletConnectected>alert": "Você ainda não possuí uma carteira vinculada.",
+  "tokens>noWalletConnected>connectWallet": "Vincular carteira.",
+  "tokens>unsignedUserAlert>title": "Usuário não autenticado.",
+  "tokens>unsignedUserAlert>signIn": "Fazer login."
 }

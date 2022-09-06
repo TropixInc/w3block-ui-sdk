@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useProfile } from '../../../shared';
+import { Link, TokenLayoutBase, useProfile } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
+import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import walletImage from '../../assets/wallet.png';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
@@ -18,7 +20,44 @@ interface Props {
   isLoading: boolean;
 }
 
+const UnsignedUserAlert = () => {
+  const [translate] = useTranslation();
+  return (
+    <Alert variant="error" className="pw-flex pw-flex-col pw-gap-y-2">
+      <div className="pw-flex pw-gap-x-2">
+        <Alert.Icon /> {translate('tokens>noWalletConnectected>alert')}
+      </div>
+      <Link
+        href={PixwayAppRoutes.CONNECT_EXTERNAL_WALLET}
+        className="pw-text-brand-primary pw-text-sm hover:pw-underline"
+      >
+        {translate('tokens>unsignedUserAlert>signIn')}
+      </Link>
+    </Alert>
+  );
+};
+
+const NoWalletAlert = () => {
+  const [translate] = useTranslation();
+  return (
+    <Alert variant="error" className="pw-flex pw-flex-col pw-gap-y-2">
+      <div className="pw-flex pw-gap-x-2">
+        <Alert.Icon /> {translate('tokens>noWalletConnectected>alert')}
+      </div>
+      <div className="pw-text-sm">
+        <Link
+          href={PixwayAppRoutes.CONNECT_EXTERNAL_WALLET}
+          className="pw-text-brand-primary hover:pw-underline"
+        >
+          {translate('tokens>noWalletConnected>connectWallet')}
+        </Link>
+      </div>
+    </Alert>
+  );
+};
+
 const HOCStaging = () => {
+  const { data: profileResponse, isLoading: isLoadingProfile } = useProfile();
   const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
     useGetNFTSByWallet(80001);
   const [{ data: polygonNFTsResponse, isLoading: isLoadingPolygon }] =
@@ -43,25 +82,24 @@ const HOCStaging = () => {
         polygonNFTsReponse2.data.items.map((nft) => mapNFTToToken(nft, 137))
       );
     }
-    return tokens
-      .concat(tokens)
-      .concat(tokens)
-      .concat(tokens)
-      .concat(tokens)
-      .concat(tokens)
-      .concat(tokens)
-      .concat(tokens);
+    return tokens;
   }, [ethNFTsResponse, polygonNFTsResponse, polygonNFTsReponse2]);
+
+  if (!profileResponse || !profileResponse.data.mainWalletId)
+    return <NoWalletAlert />;
 
   return (
     <_TokensListTemplate
       tokens={tokens}
-      isLoading={isLoadingLast || isLoadingPolygon || isLoadingETH}
+      isLoading={
+        isLoadingLast || isLoadingPolygon || isLoadingETH || isLoadingProfile
+      }
     />
   );
 };
 
 const HOCProduction = () => {
+  const { data: profileResponse, isLoading: isLoadingProfile } = useProfile();
   const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
     useGetNFTSByWallet(1);
   const [{ data: polygonNFTsResponse, isLoading: isLoadingPolygon }] =
@@ -82,9 +120,12 @@ const HOCProduction = () => {
     return tokens;
   }, [ethNFTsResponse, polygonNFTsResponse]);
 
+  if (profileResponse && !profileResponse.data.mainWalletId)
+    return <NoWalletAlert />;
+
   return (
     <_TokensListTemplate
-      isLoading={isLoadingETH || isLoadingPolygon}
+      isLoading={isLoadingETH || isLoadingPolygon || isLoadingProfile}
       tokens={tokens}
     />
   );
@@ -165,17 +206,16 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 
 export const TokensListTemplate = () => {
   const isProduction = useIsProduction();
-  const { data, isLoading } = useProfile();
+  const { status } = usePixwaySession();
+
   const renderTemplate = () => {
-    if (isLoading) return <TokenListTemplateSkeleton />;
-    if (data && !data.data.mainWalletId)
-      return (
-        <Alert variant="error">
-          <Alert.Icon /> Você ainda não possuí uma carteira vinculada.
-        </Alert>
-      );
+    if (status === 'unauthenticated') return <UnsignedUserAlert />;
     return isProduction ? <HOCProduction /> : <HOCStaging />;
   };
 
-  return <TranslatableComponent>{renderTemplate()}</TranslatableComponent>;
+  return (
+    <TranslatableComponent>
+      <TokenLayoutBase>{renderTemplate()}</TokenLayoutBase>
+    </TranslatableComponent>
+  );
 };
