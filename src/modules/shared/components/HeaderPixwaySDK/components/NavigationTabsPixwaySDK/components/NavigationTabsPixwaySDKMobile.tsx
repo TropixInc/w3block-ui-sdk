@@ -8,6 +8,7 @@ import useRouter from '../../../../../hooks/useRouter';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
+
 export const NavigationTabsPixwaySDKMobile = ({
   classNames,
   tabs,

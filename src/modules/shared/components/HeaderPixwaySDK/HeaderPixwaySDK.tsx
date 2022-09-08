@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import classNames from 'classnames';
+
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import {
   NavigationLoginPixwaySDK,
@@ -55,7 +57,10 @@ export const HeaderPixwaySDK = ({
 
   return (
     <div
-      className={`pw-container pw-mx-auto pw-bg-white ${headerClassName} pw-px-4 sm:pw-px-0`}
+      className={classNames(
+        'pw-container pw-mx-auto pw-bg-white pw-px-4 sm:pw-px-0',
+        headerClassName ?? ''
+      )}
     >
       <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
         <img
