@@ -12,6 +12,10 @@
   "components>form>requiredFieldValidation": "Campo obrigatório",
   "auth>passwordErrorFeedback>genericInvalidMessage": "Senha não condiz com o padrão",
   "auth>signIn>signUpCTA": "Não tem conta ainda? <1>Cadastre-se.</1>",
+  "shared>components>header>tab>about": "Sobre",
+  "shared>components>header>tab>teams": "Equipes",
+  "shared>components>header>tab>marketplace": "Marketplace",
+  "shared>components>header>tab>faq": "FAQ",
   "companyAuth>requestPasswordChange>invalidEmailError": "E-mail inválido",
   "companyAuth>requestPasswordChange>emailDoesntExistError": "e-mail incorreto, tente novamente!",
   "auth>requestPasswordChange>pageTitle": "Esqueceu senha",
@@ -59,5 +63,15 @@
   "companyAuth>externalWallet>CompanyNotFound": "Empresa não encontrada.",
   "companyAuth>externalWallet>connectExternalWallet": "Conecte sua carteira externa",
   "companyAuth>externalWallet>errorConnectingExternalWallet": "Não foi possível conectar a carteira externa, tente novamente",
-  "companyAuth>externalWallet>orContinueWithInternalWallet": "ou <1>Continuar com carteira interna</1>"
+  "companyAuth>externalWallet>orContinueWithInternalWallet": "ou <1>Continuar com carteira interna</1>",
+  "header>logged>pixwayBalance": "Saldo Pixway",
+  "header>logged>hiWallet": "Olá, {{name}} | Sua carteira Pixway:",
+  "shared>register": "Registrar",
+  "shared>login": "Entrar",
+  "shared>myAcount": "Minha conta",
+  "header>components>defaultTab>myAccount": "Meu perfil",
+  "header>components>defaultTab>myTokens": "Meus tokens",
+  "header>components>defaultTab>wallet": "Carteira",
+  "header>components>defaultTab>settings": "Configurações",
+  "header>components>defaultTab>helpCenter": "Central de ajuda"
 }
