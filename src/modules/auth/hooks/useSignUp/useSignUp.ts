@@ -6,14 +6,12 @@ import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
-import { useHostname } from '../../../shared/hooks/useHostname';
 
 type Payload = Pick<SignupUserDto, 'confirmation' | 'email' | 'password'>;
 
 export const useSignUp = () => {
   const getSDK = useGetW3blockIdSDK();
-  const { companyId } = useCompanyConfig();
-  const hostname = useHostname();
+  const { companyId, appBaseUrl } = useCompanyConfig();
   return useMutation([PixwayAPIRoutes.USERS], async (payload: Payload) => {
     const sdk = await getSDK();
     return sdk.api.auth.signUp({
@@ -21,7 +19,7 @@ export const useSignUp = () => {
       tenantId: companyId,
       callbackUrl: new URL(
         PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
-        `https://${hostname}/`
+        appBaseUrl
       ).toString(),
     });
   });
