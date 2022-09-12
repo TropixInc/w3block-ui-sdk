@@ -18,7 +18,6 @@ export interface FAQProps {
   classes?: Classes;
   page?: number;
   limit?: number;
-  context?: string;
   name?: string;
 }
 

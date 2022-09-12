@@ -48,21 +48,13 @@ export interface getFAQProps {
 
 export const useFAQ = (page: number, limit: number, name: string) => {
   const axios = useAxios(W3blockAPI.COMMERCE);
-  const tenantId = useCompanyId();
+  const companyId = useCompanyId();
 
   return usePrivateQuery(
-    [
-      PixwayAPIRoutes.GET_FAQ.replace('{companyId}', tenantId)
-        .replace('{name}', name)
-        .replace('{limit}', limit as unknown as string)
-        .replace('{page}', page as unknown as string),
-    ],
+    [PixwayAPIRoutes.GET_FAQ, companyId, name, limit, page],
     () =>
-      axios.get<GetFAQResponse>(
-        PixwayAPIRoutes.GET_FAQ.replace('{companyId}', tenantId)
-          .replace('{name}', name)
-          .replace('{limit}', limit as unknown as string)
-          .replace('{page}', page as unknown as string)
-      )
+      axios.get<GetFAQResponse>(PixwayAPIRoutes.GET_FAQ, {
+        params: { companyId, name, limit, page },
+      })
   );
 };
