@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import { format } from 'date-fns';
 
 import { ReactComponent as ZoomInIcon } from '../../../shared/assets/icons/zoomInFilled.svg';
-import DisplayCardBase from '../../../tokenization/components/DisplayCards/DisplayCardBase';
-import useModalController from '../../../tokenization/hooks/useDialogController';
-import { getPublicTokenPageURL } from '../../../tokenization/utils/getPublicTokenPageURL';
-import PublicPageQRCode from '../../../tokens/components/PublicPageQRCode';
+import { DisplayCardBase } from '../../../tokens/components/DisplayCards/DisplayCardBase';
+import { PublicPageQRCode } from '../../../tokens/components/PublicPageQRCode';
 import { QRCodeModal } from '../../../tokens/components/QRCodeModal';
-import TokenScanLink from '../../../tokens/components/TokenScanLink';
+import { TokenScanLink } from '../../../tokens/components/TokenScanLink';
+import useModalController from '../../../tokens/hooks/useDialogController';
+import { getPublicTokenPageURL } from '../../../tokens/utils/getPublicTokenPageURL';
 import useAdressBlockchainLink from '../../hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import useChainScanLink from '../../hooks/useChainScanLink/useChainScanLink';
 import useDateFnsLocale from '../../hooks/useDateFnsLocale/useDateFnsLocale';

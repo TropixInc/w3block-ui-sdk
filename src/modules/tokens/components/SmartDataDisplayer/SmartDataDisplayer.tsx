@@ -13,7 +13,8 @@ import {
   SelectConfig,
 } from '../../interfaces/DynamicFormConfiguration';
 import { DynamicFormFieldValue } from '../../interfaces/DynamicFormFieldState';
-import TextFieldDisplay, {
+import {
+  TextFieldDisplay,
   TextFieldDisplayClasses,
 } from '../SmartDisplay/TextFieldDisplay';
 

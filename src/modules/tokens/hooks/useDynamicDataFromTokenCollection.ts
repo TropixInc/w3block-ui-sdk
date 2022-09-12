@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { DynamicFormConfiguration } from '../../tokenization/interfaces/DynamicFormConfiguration';
-import { DynamicFormFieldValue } from '../../tokenization/interfaces/DynamicFormFieldState';
-import { orderTokenTemplateKeys } from '../../tokenization/utils/orderTokenTemplateKeys';
+import { DynamicFormConfiguration } from '../interfaces/DynamicFormConfiguration';
+import { DynamicFormFieldValue } from '../interfaces/DynamicFormFieldState';
+import { orderTokenTemplateKeys } from '../utils/orderTokenTemplateKeys';
 
 const useDynamicDataFromTokenCollection = (
   data?: Record<string, DynamicFormFieldValue>,

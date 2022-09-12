@@ -3,7 +3,7 @@ import { UseQueryResult } from 'react-query';
 
 import { AxiosResponse } from 'axios';
 
-import { OffpixPaginatedResponse } from '../../../tokenization/interfaces/OffpixPaginatedResponse';
+import { OffpixPaginatedResponse } from '../../../tokens/interfaces/OffpixPaginatedResponse';
 import { usePrivateQuery, QueryConfig } from '../usePrivateQuery';
 import useRouter from '../useRouter';
 

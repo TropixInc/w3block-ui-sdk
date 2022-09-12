@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import { ReactComponent as BoxWithUpRightArrow } from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg';
 import { ChainId } from '../../../shared/enums/ChainId';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Tooltip } from '../../../tokenization/components/Tooltip';
-import useModalController from '../../../tokenization/hooks/useDialogController';
+import useModalController from '../../hooks/useDialogController';
+import { Tooltip } from '../Tooltip';
 
 interface TokenLinkProps {
   href: string;
@@ -14,7 +14,7 @@ interface TokenLinkProps {
   chainId?: number;
 }
 
-const TokenScanLink = ({
+export const TokenScanLink = ({
   href,
   label,
   className = '',
@@ -70,5 +70,3 @@ const TokenScanLink = ({
     </div>
   );
 };
-
-export default TokenScanLink;

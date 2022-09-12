@@ -1,6 +1,7 @@
 import { QRCodeSVG } from 'qrcode.react';
 
-import { getPublicTokenPageURL } from '../../../tokenization/utils/getPublicTokenPageURL';
+import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { getPublicTokenPageURL } from '../../utils/getPublicTokenPageURL';
 
 interface Props {
   rfid?: string;
@@ -11,7 +12,7 @@ interface Props {
   containerRef?: React.RefObject<HTMLDivElement>;
 }
 
-const PublicPageQRCode = ({
+export const PublicPageQRCode = ({
   rfid,
   contractAddress,
   tokenId,
@@ -25,9 +26,8 @@ const PublicPageQRCode = ({
     rfid,
     tokenId,
   });
-  const link = `${
-    process.env.NEXT_PUBLIC_APP_BASE_PATH ?? ''
-  }${publicPagePath}`;
+  const apisUrl = usePixwayAPIURL();
+  const link = `${apisUrl.w3blockIdBaseUrl}${publicPagePath}`;
 
   return (
     <div ref={containerRef}>
@@ -35,5 +35,3 @@ const PublicPageQRCode = ({
     </div>
   );
 };
-
-export default PublicPageQRCode;

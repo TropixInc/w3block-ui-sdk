@@ -36,7 +36,7 @@ export const getButtonClassNames = ({
   );
 };
 
-const OffpixButtonBase = ({
+export const OffpixButtonBase = ({
   className = '',
   type = 'button',
   children,
@@ -52,5 +52,3 @@ const OffpixButtonBase = ({
     {children}
   </button>
 );
-
-export default OffpixButtonBase;

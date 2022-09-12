@@ -10,9 +10,9 @@ import { ReactComponent as ScanMePlate } from '../../../shared/assets/icons/scan
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import OffpixButtonBase from '../../../tokenization/components/DisplayCards/OffpixButtonBase/OffpixButtonBase';
-import useTruncate from '../../../tokenization/hooks/useTruncate';
-import PublicPageQRCode from '../PublicPageQRCode';
+import useTruncate from '../../hooks/useTruncate';
+import { OffpixButtonBase } from '../DisplayCards/OffpixButtonBase';
+import { PublicPageQRCode } from '../PublicPageQRCode';
 
 interface Props {
   isOpen: boolean;

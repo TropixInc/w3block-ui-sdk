@@ -9,7 +9,7 @@ interface DisplayContainerProps {
   style?: CSSProperties;
 }
 
-const DisplayCardBase = ({
+export const DisplayCardBase = ({
   children,
   className = '',
   onEdit,
@@ -33,5 +33,3 @@ const DisplayCardBase = ({
     {children}
   </ul>
 );
-
-export default DisplayCardBase;

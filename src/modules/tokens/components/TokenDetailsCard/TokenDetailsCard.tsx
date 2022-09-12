@@ -1,15 +1,15 @@
 import classNames from 'classnames';
 
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { SmartDataDisplayer } from '../../../tokenization/components/SmartDataDisplayer';
-import TextFieldDisplay from '../../../tokenization/components/SmartDisplay/TextFieldDisplay';
-import { FormConfigurationContext } from '../../../tokenization/contexts/FormConfigurationContext';
+import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
+import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';
 import {
   Dimensions2DValue,
   Dimensions3DValue,
-} from '../../../tokenization/interfaces/DimensionsValue';
-import { DynamicFormConfiguration } from '../../../tokenization/interfaces/DynamicFormConfiguration';
-import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';
+} from '../../interfaces/DimensionsValue';
+import { DynamicFormConfiguration } from '../../interfaces/DynamicFormConfiguration';
+import { SmartDataDisplayer } from '../SmartDataDisplayer';
+import { TextFieldDisplay } from '../SmartDisplay/TextFieldDisplay';
 
 interface Props {
   contract: string;
@@ -21,7 +21,7 @@ interface Props {
   className?: string;
 }
 
-const TokenDetailsCard = ({
+export const TokenDetailsCard = ({
   contract,
   description,
   mainImage,
@@ -83,7 +83,7 @@ const TokenDetailsCard = ({
       {dynamicData ? (
         <FormConfigurationContext.Provider value={tokenTemplate ?? {}}>
           <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-x-[21px] pw-gap-y-8 sm:pw-gap-y-8 sm:pw-pt-6">
-            {dynamicData.map(({ id, value }) => (
+            {dynamicData.map(({ id, value }: { id: any; value: any }) => (
               <SmartDataDisplayer
                 fieldName={id}
                 key={id}
@@ -100,5 +100,3 @@ const TokenDetailsCard = ({
     </div>
   );
 };
-
-export default TokenDetailsCard;

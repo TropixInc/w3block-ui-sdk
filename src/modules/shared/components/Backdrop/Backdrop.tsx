@@ -5,7 +5,7 @@ interface Props {
 export const Backdrop = ({ onClick }: Props) => {
   return (
     <div
-      className="fixed left-0 top-0 h-screen w-full bg-black opacity-50 z-40"
+      className="pw-fixed pw-left-0 pw-top-0 pw-h-screen pw-w-full pw-bg-black pw-opacity-50 pw-z-40"
       onClick={onClick}
     />
   );

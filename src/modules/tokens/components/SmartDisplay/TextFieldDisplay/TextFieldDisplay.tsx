@@ -14,7 +14,7 @@ interface Props {
   classes?: TextFieldDisplayClasses;
 }
 
-const TextFieldDisplay = ({
+export const TextFieldDisplay = ({
   label,
   value,
   className = '',
@@ -50,5 +50,3 @@ const TextFieldDisplay = ({
     </div>
   );
 };
-
-export default TextFieldDisplay;

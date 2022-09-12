@@ -3,12 +3,12 @@ import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
-import usePublicTokenData from '../../../tokenization/hooks/usePublicTokenData';
+import usePublicTokenData from '../../hooks/usePublicTokenData';
 import {
   Dimensions2DValue,
   Dimensions3DValue,
-} from '../../../tokenization/interfaces/DimensionsValue';
-import TokenDetailsCard from '../TokenDetailsCard';
+} from '../../interfaces/DimensionsValue';
+import { TokenDetailsCard } from '../TokenDetailsCard';
 
 const _TokenDetailsTemplate = () => {
   const router = useRouter();
