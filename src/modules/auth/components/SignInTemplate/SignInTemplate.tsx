@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
 import { object, string } from 'yup';
 
-import { Link } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
+import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';

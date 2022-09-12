@@ -73,5 +73,11 @@
   "header>components>defaultTab>myTokens": "Meus tokens",
   "header>components>defaultTab>wallet": "Carteira",
   "header>components>defaultTab>settings": "Configurações",
-  "header>components>defaultTab>helpCenter": "Central de ajuda"
+  "header>components>defaultTab>helpCenter": "Central de ajuda",
+  "home>footer>privacyPolicy": "Política de Privacidade",
+  "home>footer>termsConditions": "Termos e Condições",
+  "home>footer>faq": "FAQ",
+  "home>footer>contactUs": "Fale Conosco",
+  "home>footer>text": "O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de   investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.",
+  "home>footer>copyright": "2022 - Todos os direitos reservados - W3block . Commerce."
 }
