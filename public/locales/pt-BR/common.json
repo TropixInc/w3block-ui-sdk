@@ -73,5 +73,16 @@
   "header>components>defaultTab>myTokens": "Meus tokens",
   "header>components>defaultTab>wallet": "Carteira",
   "header>components>defaultTab>settings": "Configurações",
-  "header>components>defaultTab>helpCenter": "Central de ajuda"
+  "header>components>defaultTab>helpCenter": "Central de ajuda",
+  "wallet>certificateModal>title": "Certifique a autenticidade do seu produto com a ajuda da tecnologia blockchain",
+  "wallet>certificateModal>downloadButton": "Fazer o download do certificado",
+  "wallet>certificateModal>loading": "Carregando certificado...",
+  "wallet>confirmationCertificateIssuedModal>message": "Certificado emitido com sucesso!",
+  "wallet>tokenCertificate>scanQRCodeMessage": "Aponte a câmera do seu celular e visualize digitalmente.",
+  "wallet>tokenCertificate>collectionTitleLabel": "Título",
+  "wallet>tokenCertificate>collectionDescriptionLabel": "Descrição",
+  "wallet>tokenCertificate>headerLine1": "Certificado de registro",
+  "wallet>tokenCertificate>headerLine2": "na blockchain",
+  "wallet>tokenCertificate>contractAddressLabel": "Endereço do contrato",
+  "wallet>tokenCertificate>hashTransactionLabel": "Hash de transação"
 }
