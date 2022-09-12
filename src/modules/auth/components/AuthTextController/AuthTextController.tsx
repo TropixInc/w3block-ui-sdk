@@ -10,6 +10,7 @@ interface AuthTextControllerProps {
   type?: 'text' | 'password';
   label: string;
   renderTips?: AuthFormControllerRenderTipsFunction;
+  disabled?: boolean;
 }
 
 export const AuthTextController = ({
@@ -19,6 +20,7 @@ export const AuthTextController = ({
   type = 'text',
   placeholder = '',
   renderTips,
+  disabled,
 }: AuthTextControllerProps) => {
   return (
     <AuthFormController
@@ -32,6 +34,7 @@ export const AuthTextController = ({
         type={type}
         className="pw-mb-[5.5px]"
         placeholder={placeholder}
+        disabled={disabled}
       />
     </AuthFormController>
   );

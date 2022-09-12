@@ -56,6 +56,12 @@ export const AuthPasswordTips = ({
   const validations = [
     {
       label: translate(
+        'companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity'
+      ),
+      isValid: passwordHasMinEightNumbers,
+    },
+    {
+      label: translate(
         'companyAuth>newPasswordTips>passwordContainsUppercaseLetter'
       ),
       isValid: passwordHasCapitalizedLetter,
@@ -69,12 +75,6 @@ export const AuthPasswordTips = ({
     {
       label: translate('companyAuth>newPasswordTips>passwordContainsNumbers'),
       isValid: passwordHasNumber,
-    },
-    {
-      label: translate(
-        'companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity'
-      ),
-      isValid: passwordHasMinEightNumbers,
     },
   ];
 

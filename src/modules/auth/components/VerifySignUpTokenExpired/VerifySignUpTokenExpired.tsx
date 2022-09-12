@@ -1,27 +1,22 @@
 import { useEffect } from 'react';
+import { Trans } from 'react-i18next';
 
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
-import { useRequestPasswordChange } from '../../hooks';
+import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 
 interface Props {
-  companyId?: string;
   email: string;
   onSendEmail?: () => void;
-  isFirstAccess?: boolean;
 }
 
-export const ExpiredToken = ({ email, onSendEmail }: Props) => {
+export const VerifySignUpTokenExpired = ({ email, onSendEmail }: Props) => {
   const { logoUrl } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
+  const { mutate, isLoading, isSuccess } = useRequestConfirmationMail();
   const [translate] = useTranslation();
-
-  const onClickResendEmail = () => {
-    mutate({ email });
-  };
 
   useEffect(() => {
     if (isSuccess && onSendEmail) onSendEmail();
@@ -41,16 +36,22 @@ export const ExpiredToken = ({ email, onSendEmail }: Props) => {
       title={translate('auth>expiredLink>stepTitle')}
     >
       <div className="pw-flex pw-items-center pw-flex-col pw-mt-6">
-        <p className="pw-text-[#353945] pw-text-sm pw-leading-4 pw-mb-[21px] pw-font-poppins">
+        <p className="pw-text-[#353945] pw-text-[13px] pw-leading-[15.85px] pw-mb-6">
           {translate('auth>expiredLink>linkNotValidatedMessage')}
         </p>
-        <button
-          onClick={onClickResendEmail}
-          disabled={isLoading}
-          className="pw-mb-[21px] pw-font-bold pw-text-brand-primary pw-underline"
-        >
-          {translate('auth>expiredLink>resendCodeButton')}
-        </button>
+
+        <span className="pw-text-brand-primary pw-text-sm pw-leading-[21px]">
+          <Trans i18nKey="auth>emailConfirmation>resendEmailAction">
+            <button
+              onClick={() => mutate({ email })}
+              disabled={isLoading}
+              className="pw-mb-[29px] pw-font-semibold pw-text-sm pw-leading-[17px] pw-text-brand-primary pw-underline"
+            >
+              Clique aqui
+            </button>
+            para reenviar seu código.
+          </Trans>
+        </span>
 
         <div className="pw-mb-6">
           <MailError className="pw-w-[187px] pw-h-[187px]" />

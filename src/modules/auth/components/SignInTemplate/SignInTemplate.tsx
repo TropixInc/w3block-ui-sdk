@@ -127,7 +127,7 @@ const _SignInTemplate = ({
           {isShowingErrorMessage ? (
             <Alert
               variant="error"
-              className="pw-mb-6 pw-mt-4 pw-flex !p  console.log(session);w-justify-start"
+              className="pw-mb-6 pw-mt-4 pw-flex !pw-justify-start"
             >
               <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
               {translate('companyAuth>signIn>loginFailedError')}
