@@ -15,10 +15,10 @@ import InterBold from '../../../../../public/fonts/Inter/Inter-Bold.ttf';
 import InterMedium from '../../../../../public/fonts/Inter/Inter-Medium.ttf';
 import InterRegular from '../../../../../public/fonts/Inter/Inter-Regular.ttf';
 import InterSemibold from '../../../../../public/fonts/Inter/Inter-SemiBold.ttf';
-import contractAddressIcon from '../assets/images/contractAddressIcon.png';
-import fromIcon from '../assets/images/fromIcon.png';
-import transactionIcon from '../assets/images/transactionIcon.png';
-import w3blockLogo from '../assets/images/w3blockHorizontal.png';
+import contractAddressIcon from '../../assets/images/contractAddressIcon.png';
+import fromIcon from '../../assets/images/fromIcon.png';
+import transactionIcon from '../../assets/images/transactionIcon.png';
+import w3blockLogo from '../../assets/images/w3blockHorizontal.png';
 
 interface TokenCertificateTranslations {
   header: {
