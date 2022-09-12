@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.17](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.16...v0.1.1-alpha.17) (2022-09-08)
+
+### [0.1.1-alpha.16](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.15...v0.1.1-alpha.16) (2022-09-08)
+
+### [0.1.1-alpha.15](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.14...v0.1.1-alpha.15) (2022-09-06)
+
 ### [0.1.1-alpha.14](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.13...v0.1.1-alpha.14) (2022-09-05)
 
 ### [0.1.1-alpha.13](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.12...v0.1.1-alpha.13) (2022-09-05)
