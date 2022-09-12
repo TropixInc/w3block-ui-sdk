@@ -11,7 +11,6 @@ interface Payload {
 export const useRequestPasswordChange = () => {
   const getSDK = useGetW3blockIdSDK();
   const { appBaseUrl, companyId: tenantId } = useCompanyConfig();
-  const tenantId = useCompanyId();
   return useMutation(async ({ email }: Payload) => {
     const sdk = await getSDK();
     return sdk.api.auth.requestPasswordReset({
