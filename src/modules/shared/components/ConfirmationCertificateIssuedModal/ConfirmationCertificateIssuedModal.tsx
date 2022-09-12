@@ -24,7 +24,7 @@ export const ConfirmationCertificateIssuedModal = ({
         <CheckCircledFilled className="!pw-w-6 !pw-h-6 pw-shrink-0" />
 
         <p className="pw-text-2xl pw-leading-7 pw-font-semibold pw-text-[#000000] pw-pl-4">
-          {translate('wallet>confirmationCertificateIssuedModal>message')}
+          {translate('components>confirmationCertificateIssuedModal>message')}
         </p>
       </div>
     </ModalBase>

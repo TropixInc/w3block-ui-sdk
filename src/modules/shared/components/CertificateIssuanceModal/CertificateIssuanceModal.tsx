@@ -34,23 +34,27 @@ export const CertificateIssuanceModal = ({
   const [translate] = useTranslation();
   const translations = useMemo(
     () => ({
-      QRCodeScanMessage: translate('wallet>tokenCertificate>scanQRCodeMessage'),
+      QRCodeScanMessage: translate(
+        'components>tokenCertificate>scanQRCodeMessage'
+      ),
       collectionData: {
-        titleLabel: translate('wallet>tokenCertificate>collectionTitleLabel'),
+        titleLabel: translate(
+          'components>tokenCertificate>collectionTitleLabel'
+        ),
         descriptionLabel: translate(
-          'wallet>tokenCertificate>collectionDescriptionLabel'
+          'components>tokenCertificate>collectionDescriptionLabel'
         ),
       },
       header: {
-        line1: translate('wallet>tokenCertificate>headerLine1'),
-        line2: translate('wallet>tokenCertificate>headerLine2'),
+        line1: translate('components>tokenCertificate>headerLine1'),
+        line2: translate('components>tokenCertificate>headerLine2'),
       },
       metaData: {
         contractAddressLabel: translate(
-          'wallet>tokenCertificate>contractAddressLabel'
+          'components>tokenCertificate>contractAddressLabel'
         ),
         transcationHashLabel: translate(
-          'wallet>tokenCertificate>hashTransactionLabel'
+          'components>tokenCertificate>hashTransactionLabel'
         ),
       },
     }),
@@ -67,7 +71,7 @@ export const CertificateIssuanceModal = ({
     >
       <div className="pw-max-h-screen pw-flex pw-flex-col pw-items-center pw-justify-center !pw-p-[40px_32px_38px] sm:!pw-p-[64px_64px_56px]">
         <h2 className="pw-text-center pw-text-[#000000] pw-font-semibold pw-text-xl pw-leading-[30px] pw-mb-[33px]">
-          {translate('wallet>certificateModal>title')}
+          {translate('components>certificateModal>title')}
         </h2>
         <PDFViewer
           width="100%"
@@ -107,14 +111,14 @@ export const CertificateIssuanceModal = ({
           {({ loading }) =>
             loading ? (
               <span className="pw-py-[9.5px] pw-px-[15px] pw-inline-block">
-                {translate('wallet>certificateModal>loading')}
+                {translate('components>certificateModal>loading')}
               </span>
             ) : (
               <span
                 onClick={onConfirm}
                 className="pw-py-[9.5px] pw-px-[15px] pw-inline-block"
               >
-                {translate('wallet>certificateModal>downloadButton')}
+                {translate('components>certificateModal>downloadButton')}
               </span>
             )
           }
