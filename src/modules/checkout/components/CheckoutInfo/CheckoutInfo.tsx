@@ -94,17 +94,23 @@ const _CheckoutInfo = ({
     if (
       productIds &&
       currencyIdState &&
-      token &&
       checkoutStatus === CheckoutStatus.CONFIRMATION
     ) {
-      getOrderPreview({
+      getOrderPreview.mutate({
         productIds,
         currencyId: currencyIdState,
         companyId,
-      }).then((res: OrderPreviewResponse) => setOrderPreview(res));
+      });
+      // .then((res: OrderPreviewResponse) => setOrderPreview(res));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds, currencyIdState, token]);
+
+  useEffect(() => {
+    if (getOrderPreview.isSuccess) {
+      setOrderPreview(getOrderPreview.data);
+    }
+  }, [getOrderPreview.isSuccess, getOrderPreview.data]);
 
   const isLoading = orderPreview == null;
 

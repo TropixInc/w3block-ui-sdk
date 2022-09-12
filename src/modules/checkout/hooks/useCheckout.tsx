@@ -1,3 +1,6 @@
+import { useMemo } from 'react';
+import { useMutation } from 'react-query';
+
 import { AxiosResponse } from 'axios';
 
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
@@ -26,57 +29,92 @@ interface OrderPreviewPayload {
   currencyId: string;
 }
 
-interface UseOrderPreviewReturnInterface {
-  getOrderPreview: (
-    payload: GetOrderPreviewPayload
-  ) => Promise<OrderPreviewResponse>;
-  createOrder: (payload: CreateOrderPayload) => Promise<CreateOrderResponse>;
-}
-
-export const useCheckout = (): UseOrderPreviewReturnInterface => {
+export const useCheckout = () => {
   const axios = useAxios(W3blockAPI.COMMERCE);
 
-  const getOrderPreview = ({
-    productIds,
-    currencyId,
-    companyId,
-  }: GetOrderPreviewPayload) => {
-    const products: ProductToSendPayload[] = productIds.map(
-      (pId: string): ProductToSendPayload => {
-        return {
-          productId: pId,
-        };
-      }
-    );
-    return axios
-      .post<
-        OrderPreviewResponse,
-        AxiosResponse<OrderPreviewResponse, OrderPreviewPayload>,
-        OrderPreviewPayload
-      >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
-        orderProducts: products,
-        currencyId,
-      })
-      .then((res) => res.data);
-  };
+  const getOrderPreview = useMutation(
+    ({ productIds, currencyId, companyId }: GetOrderPreviewPayload) => {
+      const products: ProductToSendPayload[] = productIds.map(
+        (pId: string): ProductToSendPayload => {
+          return {
+            productId: pId,
+          };
+        }
+      );
+      return axios
+        .post<
+          OrderPreviewResponse,
+          AxiosResponse<OrderPreviewResponse, OrderPreviewPayload>,
+          OrderPreviewPayload
+        >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
+          orderProducts: products,
+          currencyId,
+        })
+        .then((res) => res.data);
+    }
+  );
 
-  const createOrder = ({
-    companyId,
-    createOrder,
-  }: CreateOrderPayload): Promise<CreateOrderResponse> => {
-    return axios
-      .post<
-        CreateOrderResponse,
-        AxiosResponse<CreateOrderResponse>,
-        CreateOrder
-      >(
-        PixwayAPIRoutes.CREATE_ORDER.replace('{companyId}', companyId),
-        createOrder
-      )
-      .then((res) => {
-        return res.data;
-      });
-  };
+  // const getOrderPreview = ({
+  //   productIds,
+  //   currencyId,
+  //   companyId,
+  // }: GetOrderPreviewPayload) => {
+  //   const products: ProductToSendPayload[] = productIds.map(
+  //     (pId: string): ProductToSendPayload => {
+  //       return {
+  //         productId: pId,
+  //       };
+  //     }
+  //   );
+  //   return axios
+  //     .post<
+  //       OrderPreviewResponse,
+  //       AxiosResponse<OrderPreviewResponse, OrderPreviewPayload>,
+  //       OrderPreviewPayload
+  //     >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
+  //       orderProducts: products,
+  //       currencyId,
+  //     })
+  //     .then((res) => res.data);
+  // };
 
-  return { getOrderPreview, createOrder };
+  const createOrder = useMutation(
+    ({ companyId, createOrder }: CreateOrderPayload) => {
+      return axios
+        .post<
+          CreateOrderResponse,
+          AxiosResponse<CreateOrderResponse>,
+          CreateOrder
+        >(
+          PixwayAPIRoutes.CREATE_ORDER.replace('{companyId}', companyId),
+          createOrder
+        )
+        .then((res) => {
+          return res.data;
+        });
+    }
+  );
+
+  // const createOrder = ({
+  //   companyId,
+  //   createOrder,
+  // }: CreateOrderPayload): Promise<CreateOrderResponse> => {
+  //   return axios
+  //     .post<
+  //       CreateOrderResponse,
+  //       AxiosResponse<CreateOrderResponse>,
+  //       CreateOrder
+  //     >(
+  //       PixwayAPIRoutes.CREATE_ORDER.replace('{companyId}', companyId),
+  //       createOrder
+  //     )
+  //     .then((res) => {
+  //       return res.data;
+  //     });
+  // };
+
+  return useMemo(() => {
+    return { getOrderPreview, createOrder };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };

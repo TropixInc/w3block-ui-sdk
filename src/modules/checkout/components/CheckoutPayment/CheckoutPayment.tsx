@@ -44,7 +44,7 @@ export const CheckoutPayment = () => {
     const orderInfo = productCache;
     if (orderInfo && !iframeLink && !sending && session) {
       setSending(true);
-      createOrderHook({
+      createOrderHook.mutate({
         companyId,
         createOrder: {
           ...orderInfo,
@@ -54,15 +54,34 @@ export const CheckoutPayment = () => {
             '?' +
             query.split('?')[0],
         },
-      }).then((res) => {
-        setLoading(false);
-        if (res) {
-          setIframeLink(res.paymentInfo.paymentUrl);
-          setSending(false);
-        }
       });
+      // createOrderHook({
+      //   companyId,
+      //   createOrder: {
+      //     ...orderInfo,
+      //     successUrl:
+      //       window.location.hostname +
+      //       PixwayAppRoutes.CHECKOUT_COMPLETED +
+      //       '?' +
+      //       query.split('?')[0],
+      //   },
+      // }).then((res) => {
+      //   setLoading(false);
+      //   if (res) {
+      //     setIframeLink(res.paymentInfo.paymentUrl);
+      //     setSending(false);
+      //   }
+      // });
     }
   };
+
+  useEffect(() => {
+    setLoading(false);
+    if (createOrderHook.isSuccess) {
+      setIframeLink(createOrderHook.data.paymentInfo.paymentUrl);
+      setSending(false);
+    }
+  }, [createOrderHook.isSuccess, createOrderHook.data]);
 
   return (
     <div className="">

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import classNames from 'classnames';
 
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import TranslatableComponent from '../TranslatableComponent';
 import {
   NavigationLoginPixwaySDK,
   NavigationTabsPixwaySDK,
@@ -21,7 +22,7 @@ interface HeaderPixwaySDKProps {
   toggleOpenedLogin?: () => void;
 }
 
-export const HeaderPixwaySDK = ({
+const _HeaderPixwaySDK = ({
   headerClassName,
   logoHeight = 50,
   tabs,
@@ -88,5 +89,13 @@ export const HeaderPixwaySDK = ({
         </div>
       </div>
     </div>
+  );
+};
+
+export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => {
+  return (
+    <TranslatableComponent>
+      <_HeaderPixwaySDK {...props} />
+    </TranslatableComponent>
   );
 };
