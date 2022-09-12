@@ -8,6 +8,7 @@ export enum PixwayAppRoutes {
   SIGN_IN = '/auth/signIn',
   CONNECT_EXTERNAL_WALLET = '/auth/completeSignup/connectExternalWallet',
   REQUEST_PASSWORD_CHANGE = '/auth/changePassword/request',
+  SIGN_UP_MAIL_CONFIRMATION = '/auth/verify-sign-up',
   MY_PROFILE = '/profile',
   RESET_PASSWORD = '/auth/changePassword/newPassword',
   CHECKOUT_CONFIRMATION = '/checkout/confirmation',

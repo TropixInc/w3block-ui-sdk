@@ -143,10 +143,6 @@ export const getNextAuthConfig = ({
             }
           );
           const responseAsJson: SignInResponse = await response.json();
-          console.log(payload);
-          console.log(response);
-          console.log('\n');
-          console.log(responseAsJson);
           return mapSignInReponseToSessionUser(responseAsJson);
         } catch (error: any) {
           if (error.isAxiosError) {

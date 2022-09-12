@@ -5,15 +5,12 @@ import { useLocalStorage } from 'react-use';
 import { isAfter, addMinutes } from 'date-fns';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
-import { useRequestPasswordChange } from '../../hooks';
+import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
-import { AuthButton } from '../AuthButton';
+import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 
@@ -21,16 +18,15 @@ interface PasswordChangeMailSentProps {
   email: string;
 }
 
-export const PasswordChangeMailSent = ({
+export const VerifySignUpMailSent = ({
   email,
 }: PasswordChangeMailSentProps) => {
   const { logoUrl: logo } = useCompanyConfig();
   const [translate] = useTranslation();
-  const router = useRouter();
-  const { mutate, isSuccess, isLoading } = useRequestPasswordChange();
+  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
-    LocalStorageFields.PASSWORD_LINK_CONFIRMATION_COUNTDOWN_DATE
+    LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
   );
   const formattedEmail = useEmailProtectedLabel(email);
 
@@ -43,35 +39,36 @@ export const PasswordChangeMailSent = ({
   useEffect(() => {
     if (isSuccess) {
       setCountdownDate(addMinutes(new Date(), 3));
+      reset();
     }
-  }, [isSuccess, setCountdownDate]);
+  }, [isSuccess, setCountdownDate, reset]);
 
   return (
     <AuthLayoutBase
       logo={logo}
-      title={translate('auth>passwordChangeMailStep>formTitle')}
+      title={translate('auth>emailConfirmation>mailResentStepTitle')}
       classes={{
         root: '!pw-px-5 sm:!pw-px-5',
         contentContainer:
-          '!pw-pt-0 sm:!pw-pt-[35px] sm:!pw-px-[35px] !pw-shadow-none sm:!pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] !pw-bg-transparent sm:!pw-bg-white !pw-px-0 sm:!pw-px-[35px] !pw-max-w-none sm:!pw-max-w-[514px]',
+          '!pw-pt-0 sm:!pw-pt-[35px] sm:!pw-px-[87.5px] !pw-shadow-none sm:!pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] !pw-bg-transparent sm:!pw-bg-white !pw-px-0 sm:!pw-px-[35px] !pw-max-w-none sm:!pw-max-w-[514px]',
         logo: 'w-[130px] h-[130px]',
       }}
     >
-      <div className="pw-pt-0 pw-pb-6 sm:pw-my-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">
-        <p className="pw-font-medium pw-text-[#35394C] pw-mb-6 pw-text-center">
+      <div className="pw-pt-0 pw-pb-6 sm:pw-mt-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">
+        <p className="pw-text-[#353945] pw-mb-6 pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-font-normal">
           <Trans
-            i18nKey="companyAuth>requestPaswordChange>linkSentToMail"
+            i18nKey="auth>emailConfirmation>mailSentToEmail"
             values={{ email: formattedEmail }}
           >
             Enviamos um email para:
-            <span className="">email</span>
+            <span className="pw-block">email</span>
           </Trans>
         </p>
-        <div className="pw-mb-[29px]">
+        <div className="pw-mb-[23px]">
           <div className="pw-flex pw-justify-center">
             <button
               disabled={isActive || isLoading}
-              className="pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-underline pw-text-brand-primary disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
+              className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
               onClick={() => mutate({ email })}
             >
               {translate('auth>mailStep>resentCodeButton')}
@@ -79,31 +76,33 @@ export const PasswordChangeMailSent = ({
           </div>
 
           {isActive ? (
-            <p className="pw-text-[#35394C] pw-text-base pw-leading-4 pw-text-center pw-mt-[21px] pw-font-bold">
+            <p className="pw-text-[#353945] pw-text-[13px] pw-leading-[15.85px] pw-text-center pw-mt-[18px]">
               {translate(
                 'companyAuth>sendMailToChangePassword>cooldownTimeMessage',
                 {
-                  minutes: minutes,
+                  minutes,
                   seconds: seconds.toString().padStart(2, '0'),
                 }
               )}
             </p>
           ) : null}
         </div>
-        <div className="pw-relative">
-          <span className="pw-absolute pw-rounded-full pw-w-[24.51px] pw-h-[24.51px] pw-bg-brand-primary pw-left-[20.48px] pw-top-[29.23px]" />
-          <KeyIconOutlined className="pw-max-w-[169.6px] pw-max-h-[83px] pw-stroke-brand-primary" />
-        </div>
 
-        <p className="pw-font-medium pw-text-[#35394C] pw-text-center pw-mt-[29px] mb-6">
-          {translate('auth>mailStep>linkExpirationMessage')}
+        <MailSent className="pw-max-w-[186px] pw-max-h-[178px] pw-stroke-brand-primary" />
+
+        <p className="pw-text-[#353945] pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-mt-[23px] mb-[18px]">
+          <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
+            O link expira em 15 minutos
+            <button
+              disabled={isActive || isLoading}
+              className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
+              onClick={() => mutate({ email })}
+            >
+              Reenviar código
+            </button>
+            para enviar outro
+          </Trans>
         </p>
-        <AuthButton
-          onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
-          fullWidth
-        >
-          Continuar
-        </AuthButton>
       </div>
 
       <AuthFooter />
