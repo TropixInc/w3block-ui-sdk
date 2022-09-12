@@ -1,9 +1,20 @@
-import { useContext } from 'react';
+import { useEffect, useState } from 'react';
 
-import { HostnameContext } from '../../../core/styles/providers/HostnameProvider';
+const normalizeHostName = (hostName: string) => hostName.split(':')[0] ?? '';
 
-const useHostname = () => {
-  return useContext(HostnameContext);
+export const useHostname = () => {
+  const [hostName, setHostname] = useState(() =>
+    typeof window !== 'undefined'
+      ? normalizeHostName(window.location.hostname)
+      : ''
+  );
+
+  useEffect(() => {
+    if (!hostName && typeof window !== 'undefined') {
+      setHostname(normalizeHostName(window.location.hostname));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return hostName;
 };
-
-export default useHostname;

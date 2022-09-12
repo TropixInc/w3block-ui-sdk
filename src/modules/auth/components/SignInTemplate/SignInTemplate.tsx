@@ -12,6 +12,7 @@ import { Alert } from '../../../shared/components/Alert';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
@@ -38,17 +39,14 @@ interface SignInTemplateClassses {
 
 export interface SignInTemplateProps {
   defaultRedirectRoute: string;
-  companyId: string;
-  logo: string;
   classes?: SignInTemplateClassses;
 }
 
 const _SignInTemplate = ({
   defaultRedirectRoute,
-  companyId,
-  logo,
   classes = {},
 }: SignInTemplateProps) => {
+  const { companyId, logoUrl: logo } = useCompanyConfig();
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({

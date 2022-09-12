@@ -3,8 +3,8 @@ import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
 
-import { PixwayButton } from '../../../shared/components/PixwayButton/index';
 import { ModalBase } from '../ModalBase';
+import { PixwayButton } from '../PixwayButton/index';
 
 interface Props {
   isOpen: boolean;

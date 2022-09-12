@@ -9,7 +9,7 @@ const Spinner = ({ className = '' }: Props) => {
     <div
       className={classNames(
         className,
-        'w-10 h-10 rounded-full bg-transparent border-[5px] border-[#5682C3] border-t-[#E9F0FB] animate-spin'
+        'pw-w-10 pw-h-10 pw-rounded-full pw-bg-transparent pw-border-[5px] pw-border-[#5682C3] pw-border-t-[#E9F0FB] pw-animate-spin'
       )}
     />
   );

@@ -15,9 +15,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(_dirname, 'src/index.tsx'),
-      name: 'pixway-ui-sdk',
+      name: 'w3block-ui-sdk',
       formats: ['es', 'umd'],
-      fileName: 'pixway-ui-sdk',
+      fileName: 'w3block-ui-sdk',
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'next-auth', 'react-query'],

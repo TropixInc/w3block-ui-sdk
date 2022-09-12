@@ -1,24 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import { Provider } from '@w3block/pixchain-react-metamask';
+
+import { useProfile } from '../../../shared';
 import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
 import { Alert } from '../../../shared/components/Alert';
-import DialogBase from '../../../shared/components/DialogBase/DialogBase';
 import Spinner from '../../../shared/components/Spinner/Spinner';
-import { ConnectRoutes } from '../../../shared/enums/ConnectRoutes';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyId } from '../../../shared/hooks/useCompanyId';
-import useHostname from '../../../shared/hooks/useHostname/useHostname';
 import { useModalController } from '../../../shared/hooks/useModalController';
+import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet/index';
-import { claimWalletVault } from '../../api/wallet/wallet';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
+import { claimWalletVault } from '../../api/wallet';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
+import { GenerateTokenDialog } from './GenerateTokenDialog';
 
 interface MetamaskButtonProps {
   onClick: () => void;
@@ -39,7 +45,7 @@ const ConnectToMetamaskButton = ({
     <AuthButton
       disabled={disabled}
       onClick={onClick}
-      className="!font-roboto w-full flex justify-center items-center gap-x-2.5 !font-normal !text-[15px] !text-black !leading-[18px] !rounded-[7px] !bg-white shadow-[0px_0px_10px_rgba(255,255,255,0.3)] !p-4"
+      className="!pw-font-roboto pw-w-full pw-flex pw-justify-center pw-items-center pw-gap-x-2.5 !pw-font-normal !pw-text-[15px] !pw-text-black !pw-leading-[18px] !pw-rounded-[7px] !pw-bg-white pw-shadow-[0px_0px_10px_rgba(255,255,255,0.3)] !pw-p-4"
     >
       <MetamaskLogo width={18.35} height={17} className="bg-transparent" />
       {translate('companyAuth>signUp>connectToMetamask')}
@@ -47,20 +53,47 @@ const ConnectToMetamaskButton = ({
   );
 };
 
-export const ConnectWalletTemplate = () => {
+const _ConnectWalletTemplate = () => {
   const { closeModal, isOpen, openModal } = useModalController();
-  const router = useRouter();
   const [translate] = useTranslation();
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const companyId = useCompanyId();
   const token = useToken();
+  const router = useRouter();
+  const profile = useProfile();
+  const sessionUser = usePixwaySession();
+  const user = useSessionUser();
+
+  useEffect(() => {
+    const { data } = profile;
+
+    if (sessionUser.status === 'unauthenticated')
+      router.push(PixwayAppRoutes.SIGN_IN);
+
+    if (data) {
+      const { data: user } = data;
+      const { verified, wallets } = user;
+
+      if (!verified || wallets?.length) {
+        router.push(PixwayAppRoutes.HOME);
+      } else {
+        setIsLoading(false);
+      }
+    }
+  }, [profile, router, sessionUser]);
+
+  const { w3blockIdAPIUrl } = usePixwayAPIURL();
+  const queryClient = useQueryClient();
+
+  const conn = !companyId && !token;
+
   const { connect, claim, connected } = useUserWallet({
-    companyId: companyId || '',
+    companyId: companyId,
     apiToken: token,
   });
-  const queryClient = useQueryClient();
 
   const onClickConnectToMetamaskExtension = async () => {
     if (!(globalThis.window as any)?.ethereum) {
@@ -97,7 +130,12 @@ export const ConnectWalletTemplate = () => {
     setIsConnecting(true);
 
     try {
-      await claimWalletVault(token, companyId ?? '');
+      await claimWalletVault(
+        token,
+        companyId,
+        w3blockIdAPIUrl,
+        user?.refreshToken ?? ''
+      );
       onCreateWalletSuccessfully();
     } catch (error: any) {
       console.error(error);
@@ -109,7 +147,7 @@ export const ConnectWalletTemplate = () => {
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(ConnectRoutes.TOKENS);
+    router.push(PixwayAppRoutes.HOME);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -120,29 +158,34 @@ export const ConnectWalletTemplate = () => {
   };
 
   if (!companyId) {
-    return <h1>Company not found</h1>;
+    return <h1>{translate('companyAuth>externalWallet>CompanyNotFound')}</h1>;
+  }
+
+  if (isLoading) {
+    return <></>;
   }
 
   return (
     <AuthLayoutBase
-      title={translate('companyAuth>externalWallet>connectExternalWallet')}
+      title={translate(
+        step === Step.CONNECT_TO_METAMASK
+          ? 'companyAuth>externalWallet>connectExternalWallet'
+          : 'companyAuth>signUp>accountCreated'
+      )}
       logo=""
     >
       {step === Step.CONNECT_TO_METAMASK ? (
-        <div className="mt-6">
-          <h1 className="font-semibold text-3xl leading-[30px] text-center mb-9">
-            {translate('companyAuth>externalWallet>connectExternalWallet')}
-          </h1>
+        <div className="pw-mt-6">
           <ConnectToMetamaskButton
             onClick={
               connected
                 ? onClickConnectMetamaskWallet
                 : onClickConnectToMetamaskExtension
             }
-            disabled={isConnecting}
+            disabled={isConnecting || conn}
           />
           {isConnecting ? (
-            <div className="flex justify-center mt-9">
+            <div className="pw-flex pw-justify-center pw-mt-9">
               <Spinner />
             </div>
           ) : null}
@@ -151,19 +194,19 @@ export const ConnectWalletTemplate = () => {
               <Alert
                 variant="error"
                 scrollToOnMount
-                className="flex justify-start gap-x-2 items-center mt-9 !py-2.5 !pl-[19px] !pr-[34px]"
+                className="pw-flex pw-justify-start pw-gap-x-2 pw-items-center pw-mt-9 !pw-py-2.5 !pw-pl-[19px] !pw-pr-[34px]"
               >
                 <Alert.Icon />
                 {translate(
                   'companyAuth>externalWallet>errorConnectingExternalWallet'
                 )}
               </Alert>
-              <p className="font-semibold leading-[18px] text-center mt-1">
+              <p className="pw-font-semibold pw-leading-[18px] pw-text-center pw-mt-1">
                 <Trans i18nKey="companyAuth>externalWallet>orContinueWithInternalWallet">
                   ou
                   <button
                     onClick={onClickContinue}
-                    className="underline hover:text-[#5682C3] block mt-1 mx-auto"
+                    className="pw-underline hover:pw-text-[#5682C3] pw-block pw-mt-1 pw-mx-auto"
                   >
                     {translate(
                       'companyAuth>accountCreatedTemplate>continueInternalWallet'
@@ -173,18 +216,15 @@ export const ConnectWalletTemplate = () => {
               </p>
             </>
           ) : null}
-          <AuthFooter className="mt-9" />
+          <AuthFooter className="pw-mt-9" />
         </div>
       ) : (
-        <div className="flex flex-col gap-y-8 mt-6">
-          <h1 className="font-semibold text-3xl leading-[30px] text-center">
-            {translate('companyAuth>signUp>accountCreated')}
-          </h1>
+        <div className="pw-flex pw-flex-col pw-gap-8 pw-mt-6">
           <>
-            <p className="font-inter leading-[19px]">
+            <p className="pw-font-inter pw-leading-[19px]">
               {translate('companyAuth>signUp>connectExternalWallet')}
             </p>
-            <h2 className="font-semibold text-xl leading-5 text-center">
+            <h2 className="pw-font-semibold pw-text-xl pw-leading-5 pw-text-center">
               {translate('companyAuth>signUp>doYouAlreadyHaveAnExternalWallet')}
             </h2>
             <ConnectToMetamaskButton
@@ -195,10 +235,10 @@ export const ConnectWalletTemplate = () => {
               }
               disabled={isConnecting}
             />
-            <p className="font-inter leading-[19px]">
+            <p className="pw-font-inter pw-leading-[19px]">
               {translate('companyAuth>signUp>continueWithInternalWallet')}
             </p>
-            <h2 className="font-semibold text-xl leading-5 text-center">
+            <h2 className="pw-font-semibold pw-text-xl pw-leading-5 pw-text-center">
               {translate('companyAuth>signUp>iDontHaveAExternalWallet')}
             </h2>
           </>
@@ -218,52 +258,16 @@ export const ConnectWalletTemplate = () => {
   );
 };
 
-// TODO move this component to a separate file
-const GenerateTokenDialog = ({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const [translate] = useTranslation();
-  const hostname = useHostname();
-
-  function openMetaMaskUrl(url: string) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.target = '_self';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }
-
-  const onConfirm = () => {
-    // eslint-disable-next-line prettier/prettier
-    const target = `${hostname ?? ''}${PixwayAPIRoutes.SIGN_IN}`;
-    const url = `https://metamask.app.link/dapp/${target}`;
-    openMetaMaskUrl(url);
-    onClose();
-  };
-
-  return (
-    <DialogBase
-      onClose={onClose}
-      cancelButtonText={translate('components>cancelButton>cancel')}
-      confirmButtonText={translate('components>advanceButton>continue')}
-      onCancel={onClose}
-      isOpen={isOpen}
-      onConfirm={onConfirm}
-      classes={{
-        dialogCard: '!px-[98px] !max-w-[653px]',
-        actionContainer: '!gap-x-15',
-        confirmButton: '!py-3 !w-full !max-w-[200px]',
-        cancelButton: '!py-3 !w-full !max-w-[200px]',
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MetamaskProvider = Provider as any;
+export const ConnectWalletTemplate = () => (
+  <TranslatableComponent>
+    <MetamaskProvider
+      dappConfig={{
+        autoConnect: true,
       }}
     >
-      <p className="font-semibold text-xl leading-[23px] text-black mb-[53px]">
-        ##METAMASK_NOT_FOUND## ##USE_METAMASK_APP_OR_EXTENSION_TO_CONTINUE_##
-      </p>
-    </DialogBase>
-  );
-};
+      <_ConnectWalletTemplate />
+    </MetamaskProvider>
+  </TranslatableComponent>
+);

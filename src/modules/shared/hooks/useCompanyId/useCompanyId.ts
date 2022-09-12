@@ -1,3 +1,6 @@
+import { useCompanyConfig } from '../useCompanyConfig';
+
 export const useCompanyId = () => {
-  return '';
+  const { companyId } = useCompanyConfig();
+  return companyId;
 };

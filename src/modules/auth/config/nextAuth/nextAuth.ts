@@ -6,7 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { SessionUser } from '../../../shared/enums/SessionUser';
-import { resetPassword } from '../../api/resetPassword';
+import { removeDuplicateSlahes } from '../../../shared/utils/removeDuplicateSlahes';
 import { SignInResponse } from '../../api/signIn';
 import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 
@@ -18,16 +18,19 @@ async function refreshAccessToken(
   baseURL: string
 ): Promise<JWT & { accessToken?: string; refreshToken?: string }> {
   try {
-    const response = await fetch(`${baseURL}${PixwayAPIRoutes.REFRESH_TOKEN}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        refreshToken: token.refreshToken ?? '',
-      }),
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token.accessToken ?? ''}`,
-      },
-    });
+    const response = await fetch(
+      removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.REFRESH_TOKEN}`),
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          refreshToken: token.refreshToken ?? '',
+        }),
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token.accessToken ?? ''}`,
+        },
+      }
+    );
     const { token: tokenResponse, refreshToken } = await response.json();
     const result = {
       ...token,
@@ -84,17 +87,21 @@ export const getNextAuthConfig = ({
       },
       authorize: async (payload) => {
         try {
-          const response = await fetch(`${baseURL}${PixwayAPIRoutes.SIGN_IN}`, {
-            method: 'POST',
-            body: JSON.stringify({
-              tenantId: payload?.companyId ?? '',
-              email: payload?.email ?? '',
-              password: payload?.password ?? '',
-            }),
-            headers: { 'Content-type': 'application/json' },
-          });
+          const response = await fetch(
+            removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.SIGN_IN}`),
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                tenantId: payload?.companyId ?? '',
+                email: payload?.email ?? '',
+                password: payload?.password ?? '',
+              }),
+              headers: { 'Content-type': 'application/json' },
+            }
+          );
           const responseAsJSON = await response.json();
-          return mapSignInReponseToSessionUser(responseAsJSON);
+          const user = mapSignInReponseToSessionUser(responseAsJSON);
+          return user;
         } catch (err) {
           return null;
         }
@@ -118,16 +125,29 @@ export const getNextAuthConfig = ({
       },
       authorize: async (payload) => {
         try {
-          const response = await resetPassword(
+          const response = await fetch(
+            removeDuplicateSlahes(
+              `${baseURL}/${PixwayAPIRoutes.RESET_PASSWORD}`
+            ),
             {
-              email: payload?.email ?? '',
-              token: payload?.token ?? '',
-              confirmation: payload?.confirmation ?? '',
-              password: payload?.password ?? '',
-            },
-            baseURL
+              method: 'POST',
+              body: JSON.stringify({
+                email: payload?.email ?? '',
+                token: payload?.token ?? '',
+                confirmation: payload?.confirmation ?? '',
+                password: payload?.password ?? '',
+              }),
+              headers: {
+                'Content-type': 'application/json',
+              },
+            }
           );
-          return mapSignInReponseToSessionUser(response.data);
+          const responseAsJson: SignInResponse = await response.json();
+          console.log(payload);
+          console.log(response);
+          console.log('\n');
+          console.log(responseAsJson);
+          return mapSignInReponseToSessionUser(responseAsJson);
         } catch (error: any) {
           if (error.isAxiosError) {
             const typedError = error as AxiosError<any>;
