@@ -119,6 +119,7 @@ const _ConnectWalletTemplate = () => {
 
     try {
       await claim();
+
       onCreateWalletSuccessfully();
     } catch (error: any) {
       console.error(error);
@@ -147,7 +148,7 @@ const _ConnectWalletTemplate = () => {
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(PixwayAppRoutes.HOME);
+    // router.push(PixwayAppRoutes.HOME);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
