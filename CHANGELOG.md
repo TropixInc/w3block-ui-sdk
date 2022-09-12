@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.18](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.17...v0.1.1-alpha.18) (2022-09-12)
+
+
+### Features
+
+* **pe-34:** Create sign up pages ([#11](https://github.com/TropixInc/pixway-ui-sdk/issues/11)) ([d1f9b0f](https://github.com/TropixInc/pixway-ui-sdk/commit/d1f9b0f96c052fb1a46104a41c0dc8b807de7de5))
+
 ### [0.1.1-alpha.17](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.16...v0.1.1-alpha.17) (2022-09-08)
 
 ### [0.1.1-alpha.16](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.15...v0.1.1-alpha.16) (2022-09-08)
