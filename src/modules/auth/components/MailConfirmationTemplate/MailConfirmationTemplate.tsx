@@ -41,11 +41,10 @@ const _MailConfirmationTemplate = () => {
     TIME_TO_REDIRECT_TO_HOME,
     [step]
   );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => cancel, []);
 
   useEffect(() => {
     if (step) setStep(Steps.LOADING);
+    return cancel;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

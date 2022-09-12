@@ -26,7 +26,7 @@ const _SignUpTemplate = () => {
     if (isSuccess) {
       setStep(Steps.SUCCESS);
     }
-  }, [isSuccess, setStep]);
+  }, [isSuccess]);
 
   const onSubmit = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
