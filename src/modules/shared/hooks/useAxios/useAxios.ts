@@ -14,7 +14,6 @@ export const useAxios = (type: W3blockAPI) => {
     [W3blockAPI.KEY, apisUrl.w3blockKeyAPIUrl],
   ]);
   const baseUrl = apiBaseURLMap.get(type) ?? '';
-  console.log(baseUrl);
 
   return useMemo(() => {
     return token ? getSecureApi(token, baseUrl) : getPublicAPI(baseUrl);
