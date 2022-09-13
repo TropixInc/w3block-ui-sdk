@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useCountdown } from '../useCountdown';
 
 interface GetLastTransferAPIResponse {
@@ -34,7 +34,7 @@ export const useGetStatusOfTokenTransfers = (
   startProcess: boolean
 ) => {
   const axios = useAxios(W3blockAPI.KEY);
-  const companyId = useCompanyId();
+  const { companyId } = useCompanyConfig();
 
   const [tokenList, setTokenList] = useState<TokenList>();
   const [successfulTransfers, setSuccessfulTransfers] = useState(false);

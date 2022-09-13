@@ -11,7 +11,7 @@ import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -60,7 +60,7 @@ const _ConnectWalletTemplate = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const companyId = useCompanyId();
+  const { companyId } = useCompanyConfig();
   const token = useToken();
   const router = useRouter();
   const profile = useProfile();

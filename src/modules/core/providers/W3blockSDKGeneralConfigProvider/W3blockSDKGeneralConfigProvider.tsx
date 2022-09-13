@@ -11,6 +11,7 @@ interface Props {
   api: {
     idUrl: string;
     keyUrl: string;
+    commerceUrl: string;
   };
   locale: PixwayUISdkLocale;
   companyId: string;
@@ -46,6 +47,7 @@ export const W3blockUISDKGeneralConfigProvider = ({
         <W3blockApiProvider
           w3blockIdAPIUrl={api.idUrl}
           w3blockKeyAPIUrl={api.keyUrl}
+          w3blockCommerceAPIUrl={api.commerceUrl}
         >
           <LocaleProvider locale={locale}>{children}</LocaleProvider>
         </W3blockApiProvider>

@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import {
   QueryConfig,
   usePrivateQuery,
@@ -24,7 +24,7 @@ export const useEstimateTransferGas = (
   options: QueryConfig<AxiosResponse<EstimateTransferGasAPIResponse>> = {}
 ) => {
   const axios = useAxios(W3blockAPI.KEY);
-  const companyId = useCompanyId();
+  const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
     [PixwayAPIRoutes.ESTIMATE_TRANSFER_GAS, companyId, editionId],

@@ -55,6 +55,7 @@
     "@tailwindcss/line-clamp": "^0.4.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "@types/react-query": "^1.2.9",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "@vitejs/plugin-react": "^2.0.0",
