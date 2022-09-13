@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
-import { Provider } from '@tropixinc/pixchain-react-metamask';
+import { Provider } from '@w3block/pixchain-react-metamask';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';

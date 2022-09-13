@@ -8,6 +8,10 @@
   "loginPage>formSubmitButton>signIn": "Sign in",
   "components>form>requiredFieldValidation": "Required field",
   "auth>passwordErrorFeedback>genericInvalidMessage": "Password does not follow required pattern",
+  "shared>components>header>tab>about": "About",
+  "shared>components>header>tab>teams": "Teams",
+  "shared>components>header>tab>marketplace": "Marketplace",
+  "shared>components>header>tab>faq": "FAQ",
   "companyAuth>requestPasswordChange>invalidEmailError": "Invalid e-mail",
   "companyAuth>requestPasswordChange>emailDoesntExistError": "Incorrect e-mail, please try again!",
   "companyAuth>requestPasswordChange>formTitle": "Enter your e-mail address, we will send you a link to change your password",
@@ -41,5 +45,15 @@
   "companyAuth>signUp>iDontHaveAExternalWallet": "I don't have a wallet",
   "companyAuth>externalWallet>CompanyNotFound": "Company not found.",
   "components>menu>memberSince": "Member since",
-  "components>menu>copied": "Copied!"
+  "components>menu>copied": "Copied!",
+  "shared>register": "Register",
+  "shared>login": "Login",
+  "shared>myAcount": "My account",
+  "header>logged>pixwayBalance": "Pixway balance",
+  "header>logged>hiWallet": "Hi, {{name}} | Your Pixway wallet:",
+  "header>components>defaultTab>myAccount": "My account",
+  "header>components>defaultTab>myTokens": "My tokens",
+  "header>components>defaultTab>wallet": "Wallet",
+  "header>components>defaultTab>settings": "Settings",
+  "header>components>defaultTab>helpCenter": "Help center"
 }

@@ -127,7 +127,7 @@ export const getNextAuthConfig = ({
         try {
           const response = await fetch(
             removeDuplicateSlahes(
-              `${baseURL}${PixwayAPIRoutes.RESET_PASSWORD}`
+              `${baseURL}/${PixwayAPIRoutes.RESET_PASSWORD}`
             ),
             {
               method: 'POST',

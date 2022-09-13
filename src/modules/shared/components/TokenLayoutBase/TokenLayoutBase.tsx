@@ -2,7 +2,9 @@ import { ReactNode } from 'react';
 
 import classNames from 'classnames';
 
+import { HeaderPixwaySDK } from '../HeaderPixwaySDK';
 import { Menu } from '../Menu';
+import { W3blockFooter } from '../W3blockFooter';
 
 interface Props {
   classes?: {
@@ -15,7 +17,7 @@ interface Props {
 export const TokenLayoutBase = ({ classes = {}, children }: Props) => {
   return (
     <div className="pw-flex pw-flex-col pw-w-screen pw-min-h-screen pw-font-poppins">
-      <div className="pw-bg-slate-500 pw-h-[60px]" />
+      <HeaderPixwaySDK />
       <div
         className={classNames(
           'pw-flex pw-max-w-[1332px] pw-w-full pw-mx-auto pw-flex-1 pw-pt-[59px] pw-px-8',
@@ -36,7 +38,7 @@ export const TokenLayoutBase = ({ classes = {}, children }: Props) => {
           </div>
         </div>
       </div>
-      <div className="pw-bg-slate-500 pw-h-[200px]" />
+      <W3blockFooter />
     </div>
   );
 };

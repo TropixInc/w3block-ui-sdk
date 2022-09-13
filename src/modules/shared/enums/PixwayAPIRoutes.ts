@@ -14,4 +14,7 @@ export enum PixwayAPIRoutes {
   TOKEN_COLLECTION_BY_ID = '{companyId}/token-collections/{id}',
   COMPANIES = 'companies/{id}',
   BALANCE = 'blockchain/balance/{address}/{chainId}',
+  USERS = 'users/',
+  VERIFY_SIGN_UP = '/auth/verify-sign-up',
+  REQUEST_CONFIRMATION_MAIL = '/auth/request-confirmation-email',
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
@@ -12,6 +12,7 @@ import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
 import { useRequestPasswordChange } from '../../hooks';
+import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
@@ -31,15 +32,7 @@ export const PasswordChangeMailSent = ({
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.PASSWORD_LINK_CONFIRMATION_COUNTDOWN_DATE
   );
-
-  const formattedEmail = useMemo(() => {
-    const emailSplitted = email.split('@');
-    if (emailSplitted.length === 1) return emailSplitted;
-    return emailSplitted[0]
-      .substring(0, 2)
-      .concat('****@')
-      .concat(emailSplitted[1]);
-  }, [email]);
+  const formattedEmail = useEmailProtectedLabel(email);
 
   useEffect(() => {
     if (countdownDate && isAfter(new Date(countdownDate), new Date())) {

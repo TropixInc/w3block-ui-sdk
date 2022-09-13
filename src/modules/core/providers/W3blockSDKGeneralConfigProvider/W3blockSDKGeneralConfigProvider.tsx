@@ -16,6 +16,7 @@ interface Props {
   companyId: string;
   logoUrl: string;
   isProduction: boolean;
+  appBaseUrl: string;
 }
 
 export const W3blockUISDKGeneralConfigProvider = ({
@@ -25,11 +26,13 @@ export const W3blockUISDKGeneralConfigProvider = ({
   companyId,
   logoUrl,
   isProduction,
+  appBaseUrl,
 }: Props) => {
   const companyValue = useMemo(
-    () => ({ companyId, logoUrl }),
-    [logoUrl, companyId]
+    () => ({ companyId, logoUrl, appBaseUrl }),
+    [logoUrl, companyId, appBaseUrl]
   );
+
   const environmentValue = useMemo(
     () => ({
       isProduction,
