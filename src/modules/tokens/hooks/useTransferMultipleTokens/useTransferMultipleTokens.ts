@@ -3,7 +3,7 @@ import { useMutation } from 'react-query';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 
 interface Payload {
   toAddress: string;
@@ -12,7 +12,7 @@ interface Payload {
 
 const useTransferMultipleTokens = () => {
   const axios = useAxios(W3blockAPI.KEY);
-  const companyId = useCompanyId();
+  const { companyId } = useCompanyConfig();
 
   return useMutation(
     [PixwayAPIRoutes.TRANSFER_MULTIPLE_TOKENS],

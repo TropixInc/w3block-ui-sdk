@@ -9,7 +9,7 @@ import { ReactComponent as Matic } from '../../assets/icons/maticFilled.svg';
 import { ChainScan } from '../../enums/ChainId';
 import { useBalance } from '../../hooks/useBalance';
 import { useCompanyById } from '../../hooks/useCompanyById';
-import { useCompanyId } from '../../hooks/useCompanyId';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig/useCompanyConfig';
 import { useCryptoCurrencyExchangeRate } from '../../hooks/useCryptoCurrencyExchangeRate';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import { useModalController } from '../../hooks/useModalController';
@@ -118,7 +118,7 @@ export const BlockchainGasTaxStepModal = ({
   const isProduction = useIsProduction();
   const isDevelopment = !isProduction;
   const [translate] = useTranslation();
-  const companyId = useCompanyId();
+  const { companyId } = useCompanyConfig();
   const { data: companyResponse } = useCompanyById(companyId ?? '');
   const mainWalletAddress = companyResponse?.data.operatorAddress ?? '';
   const { data: balance, isSuccess: isBalanceSuccess } = useBalance({
