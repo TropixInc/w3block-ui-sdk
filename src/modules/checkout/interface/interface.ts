@@ -24,7 +24,7 @@ interface OrderProductsInterface {
 export interface CreateOrder {
   orderProducts: CreateOrderProduct[];
   currencyId: string;
-  destinationWalletAddress?: string;
+  destinationWalletAddress: string;
   addressId?: string;
   signedGasFee: string;
   successUrl: string;

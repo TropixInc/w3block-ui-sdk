@@ -1,7 +1,7 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 
-import { ErrorMessage } from '../../../shared';
+import { ErrorMessage, useProfile } from '../../../shared';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -19,6 +19,7 @@ export const CheckoutPayment = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
   const shouldLock = useRef(true);
+  const profile = useProfile();
   const [sending, setSending] = useState<boolean>(false);
   const { companyId } = useCompanyConfig();
   const [iframeLink, setIframeLink] = useState('');
@@ -38,50 +39,35 @@ export const CheckoutPayment = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createOrder = () => {
     setLoading(true);
     const orderInfo = productCache;
-    if (orderInfo && !iframeLink && !sending && session) {
+    if (orderInfo && !iframeLink && !sending && session && profile) {
       setSending(true);
-      createOrderHook.mutate({
-        companyId,
-        createOrder: {
-          ...orderInfo,
-          successUrl:
-            window.location.hostname +
-            PixwayAppRoutes.CHECKOUT_COMPLETED +
-            '?' +
-            query.split('?')[0],
+      createOrderHook.mutate(
+        {
+          companyId,
+          createOrder: {
+            ...orderInfo,
+            destinationWalletAddress:
+              profile.data?.data.mainWallet?.address ?? '',
+            successUrl:
+              window.location.hostname +
+              PixwayAppRoutes.CHECKOUT_COMPLETED +
+              '?' +
+              query.split('?')[0],
+          },
         },
-      });
-      // createOrderHook({
-      //   companyId,
-      //   createOrder: {
-      //     ...orderInfo,
-      //     successUrl:
-      //       window.location.hostname +
-      //       PixwayAppRoutes.CHECKOUT_COMPLETED +
-      //       '?' +
-      //       query.split('?')[0],
-      //   },
-      // }).then((res) => {
-      //   setLoading(false);
-      //   if (res) {
-      //     setIframeLink(res.paymentInfo.paymentUrl);
-      //     setSending(false);
-      //   }
-      // });
+        {
+          onSuccess: (data) => {
+            setLoading(false);
+            setIframeLink(data.paymentInfo.paymentUrl);
+            setSending(false);
+          },
+        }
+      );
     }
   };
-
-  useEffect(() => {
-    setLoading(false);
-    if (createOrderHook.isSuccess) {
-      setIframeLink(createOrderHook.data.paymentInfo.paymentUrl);
-      setSending(false);
-    }
-  }, [createOrderHook.isSuccess, createOrderHook.data]);
 
   return (
     <div className="">

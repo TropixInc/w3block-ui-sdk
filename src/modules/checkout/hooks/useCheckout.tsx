@@ -33,7 +33,7 @@ export const useCheckout = () => {
   const axios = useAxios(W3blockAPI.COMMERCE);
 
   const getOrderPreview = useMutation(
-    ({ productIds, currencyId, companyId }: GetOrderPreviewPayload) => {
+    async ({ productIds, currencyId, companyId }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
         (pId: string): ProductToSendPayload => {
           return {
@@ -41,42 +41,17 @@ export const useCheckout = () => {
           };
         }
       );
-      return axios
-        .post<
-          OrderPreviewResponse,
-          AxiosResponse<OrderPreviewResponse, OrderPreviewPayload>,
-          OrderPreviewPayload
-        >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
-          orderProducts: products,
-          currencyId,
-        })
-        .then((res) => res.data);
+      const preview = await axios.post<
+        OrderPreviewResponse,
+        AxiosResponse<OrderPreviewResponse, OrderPreviewPayload>,
+        OrderPreviewPayload
+      >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
+        orderProducts: products,
+        currencyId,
+      });
+      return preview.data;
     }
   );
-
-  // const getOrderPreview = ({
-  //   productIds,
-  //   currencyId,
-  //   companyId,
-  // }: GetOrderPreviewPayload) => {
-  //   const products: ProductToSendPayload[] = productIds.map(
-  //     (pId: string): ProductToSendPayload => {
-  //       return {
-  //         productId: pId,
-  //       };
-  //     }
-  //   );
-  //   return axios
-  //     .post<
-  //       OrderPreviewResponse,
-  //       AxiosResponse<OrderPreviewResponse, OrderPreviewPayload>,
-  //       OrderPreviewPayload
-  //     >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
-  //       orderProducts: products,
-  //       currencyId,
-  //     })
-  //     .then((res) => res.data);
-  // };
 
   const createOrder = useMutation(
     ({ companyId, createOrder }: CreateOrderPayload) => {

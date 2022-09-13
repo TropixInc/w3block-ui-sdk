@@ -94,23 +94,22 @@ const _CheckoutInfo = ({
     if (
       productIds &&
       currencyIdState &&
+      token &&
       checkoutStatus === CheckoutStatus.CONFIRMATION
     ) {
-      getOrderPreview.mutate({
-        productIds,
-        currencyId: currencyIdState,
-        companyId,
-      });
-      // .then((res: OrderPreviewResponse) => setOrderPreview(res));
+      getOrderPreview.mutate(
+        {
+          productIds,
+          currencyId: currencyIdState,
+          companyId,
+        },
+        {
+          onSuccess: (data) => setOrderPreview(data),
+        }
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds, currencyIdState, token]);
-
-  useEffect(() => {
-    if (getOrderPreview.isSuccess) {
-      setOrderPreview(getOrderPreview.data);
-    }
-  }, [getOrderPreview.isSuccess, getOrderPreview.data]);
 
   const isLoading = orderPreview == null;
 
@@ -144,7 +143,7 @@ const _CheckoutInfo = ({
     if (proccedAction) {
       proccedAction(query);
     } else {
-      router.push(PixwayAppRoutes.CHECKOUT_PAYMENT + query);
+      router.push(PixwayAppRoutes.CHECKOUT_PAYMENT + '?' + query);
     }
   };
 
