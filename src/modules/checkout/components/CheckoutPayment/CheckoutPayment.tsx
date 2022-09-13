@@ -48,7 +48,9 @@ export const CheckoutPayment = () => {
         {
           companyId,
           createOrder: {
-            ...orderInfo,
+            orderProducts: orderInfo.orderProducts,
+            signedGasFee: orderInfo.signedGasFee,
+            currencyId: orderInfo.currencyId,
             destinationWalletAddress:
               profile.data?.data.mainWallet?.address ?? '',
             successUrl:
