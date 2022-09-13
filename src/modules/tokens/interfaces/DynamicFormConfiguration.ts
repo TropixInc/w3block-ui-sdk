@@ -1,5 +1,6 @@
 import { TokenizationFieldTypes } from '../enums/tokenizationFieldTypes';
-import { TokenizationRequiredField } from './TokenizationRequiredField';
+
+export type TokenizationRequiredField = boolean | 'NEED_CONFIRMATION';
 
 export interface GenericConfig {
   required: TokenizationRequiredField;
@@ -15,6 +16,7 @@ export interface SelectOption<ValueType> {
 }
 
 export interface SelectConfig extends GenericConfig {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: Array<SelectOption<any>>;
   showLearnMore?: boolean;
 }

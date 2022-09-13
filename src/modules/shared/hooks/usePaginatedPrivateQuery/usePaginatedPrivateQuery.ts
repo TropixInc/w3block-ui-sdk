@@ -3,8 +3,8 @@ import { UseQueryResult } from 'react-query';
 
 import { AxiosResponse } from 'axios';
 
-import { OffpixPaginatedResponse } from '../../../tokens/interfaces/OffpixPaginatedResponse';
-import { usePrivateQuery, QueryConfig } from '../usePrivateQuery';
+import { PixwayPaginatedResponse } from '../../interfaces/PixwayPaginatedResponse';
+import { QueryConfig, usePrivateQuery } from '../usePrivateQuery';
 import useRouter from '../useRouter';
 
 export interface PaginatedQueryConfig {
@@ -17,7 +17,7 @@ export interface PaginatedQueryConfig {
 }
 
 type QueryFunctionResponse<QueryData> = AxiosResponse<
-  OffpixPaginatedResponse<QueryData>
+  PixwayPaginatedResponse<QueryData>
 >;
 
 type PaginatedQueryFunctionReturnValue<QueryData> = Promise<
@@ -54,6 +54,7 @@ export const usePaginatedPrivateQuery = <QueryData>(
     sortBy,
     orderBy,
     disableUrl = false,
+    ...rest
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PaginatedQueryConfig & QueryConfig<any, any, any> = {}
 ): usePaginatedPrivateQueryReturnValue<QueryData> => {
@@ -116,6 +117,7 @@ export const usePaginatedPrivateQuery = <QueryData>(
       : [queryKey, ...configQueryKey],
     () => queryFn({ page, limit: itemsPerPage, orderBy, sortBy }),
     {
+      ...rest,
       onSuccess: ({ data }) => {
         if (data.meta.totalPages !== totalPages) {
           setTotalPages(data.meta.totalPages);

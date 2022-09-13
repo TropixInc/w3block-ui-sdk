@@ -46,11 +46,11 @@ export const ModalBase = ({
           <button
             onClick={onClose}
             className={classNames(
-              'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center',
+              'pw-pw-bg-white pw-pw-rounded-full pw-pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-pw-w-8 pw-pw-h-8 pw-pw-absolute pw-pw-right-4 pw-pw-top-4 pw-pw-flex pw-pw-items-center pw-pw-justify-center',
               classes.closeButton ?? ''
             )}
           >
-            <XIcon className="pw-fill-[#5682C3]" />
+            <XIcon className="pw-pw-fill-[#5682C3]" />
           </button>
         )}
         {children}

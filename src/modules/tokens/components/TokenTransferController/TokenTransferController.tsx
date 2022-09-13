@@ -14,11 +14,11 @@ import { BlockchainGasTaxStepModal } from '../../../shared/components/Blockchain
 import { TextField } from '../../../shared/components/Form/TextField';
 import { GasModalHeader } from '../../../shared/components/GasModalHeader';
 import { PoliciesAgreementStepModal } from '../../../shared/components/PoliciesAgreementStepModal';
-import { Spinner } from '../../../shared/components/Spinner/Spinner';
+import { Spinner } from '../../../shared/components/Spinner';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useChainScanLink from '../../../shared/hooks/useChainScanLink/useChainScanLink';
+import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEstimateTransferGas } from '../../hooks/useEstimateTransferGas';
@@ -350,12 +350,15 @@ const TokenTransferController = ({
   };
 
   const subTitle =
-    tokenCollectionResponse?.data?.quantity || 0 > 1
+    tokenCollectionResponse?.data?.quantity &&
+    tokenCollectionResponse?.data?.quantity > 1
       ? tokens.length > 1
-        ? `${translate('tokens>tokenTransferController>editions')}: 
-        ${tokens.map((token) => token.number).join(', ')}`
-        : `${translate('tokens>tokenTransferController>edition')} 
-        ${tokens[0].number}`
+        ? `${translate('tokens>tokenTransferController>editions')}: ${tokens
+            .map((token) => token.number)
+            .join(', ')}`
+        : `${translate('tokens>tokenTransferController>edition')} ${
+            tokens[0].number
+          }`
       : translate('tokens>tokenTransferController>singleEdition');
 
   return (
