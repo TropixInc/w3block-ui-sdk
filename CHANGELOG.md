@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.21](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.20...v0.1.1-alpha.21) (2022-09-13)
+
+
+### Features
+
+* **pe-52:** create tokens list page ([#21](https://github.com/TropixInc/pixway-ui-sdk/issues/21)) ([7ed26ff](https://github.com/TropixInc/pixway-ui-sdk/commit/7ed26ffa782739a5aac048a9849ef3a4eaf49043))
+
+### [0.1.1-alpha.20](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.19...v0.1.1-alpha.20) (2022-09-13)
+
+### [0.1.1-alpha.19](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.18...v0.1.1-alpha.19) (2022-09-13)
+
+
+### Features
+
+* **pe-83:** create footer component ([#27](https://github.com/TropixInc/pixway-ui-sdk/issues/27)) ([0c2abbe](https://github.com/TropixInc/pixway-ui-sdk/commit/0c2abbe439b79310517dd90007f7c5262adb204f))
+
 ### [0.1.1-alpha.18](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.17...v0.1.1-alpha.18) (2022-09-12)
 
 

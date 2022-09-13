@@ -92,10 +92,8 @@ const _HeaderPixwaySDK = ({
   );
 };
 
-export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => {
-  return (
-    <TranslatableComponent>
-      <_HeaderPixwaySDK {...props} />
-    </TranslatableComponent>
-  );
-};
+export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
+  <TranslatableComponent>
+    <_HeaderPixwaySDK {...props} />
+  </TranslatableComponent>
+);
