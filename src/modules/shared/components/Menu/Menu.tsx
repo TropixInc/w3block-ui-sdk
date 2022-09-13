@@ -16,6 +16,7 @@ import { useProfile } from '../../hooks';
 import useRouter from '../../hooks/useRouter';
 import useTranslation from '../../hooks/useTranslation';
 import { Link } from '../Link';
+import TranslatableComponent from '../TranslatableComponent';
 
 interface MenuProps {
   tabs?: TabsConfig[];
@@ -28,7 +29,7 @@ interface TabsConfig {
   link: string;
 }
 
-export const Menu = ({ tabs, className }: MenuProps) => {
+const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
   const router = useRouter();
   const [translate] = useTranslation();
@@ -143,3 +144,9 @@ export const Menu = ({ tabs, className }: MenuProps) => {
     </div>
   );
 };
+
+export const Menu = (props: MenuProps) => (
+  <TranslatableComponent>
+    <_Menu {...props} />
+  </TranslatableComponent>
+);
