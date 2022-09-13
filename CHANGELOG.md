@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.22](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.21...v0.1.1-alpha.22) (2022-09-13)
+
+### [0.1.1-alpha.21](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.20...v0.1.1-alpha.21) (2022-09-13)
+
+
+### Features
+
+* **pe-52:** create tokens list page ([#21](https://github.com/TropixInc/pixway-ui-sdk/issues/21)) ([7ed26ff](https://github.com/TropixInc/pixway-ui-sdk/commit/7ed26ffa782739a5aac048a9849ef3a4eaf49043))
+
+### [0.1.1-alpha.20](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.19...v0.1.1-alpha.20) (2022-09-13)
+
+### [0.1.1-alpha.19](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.18...v0.1.1-alpha.19) (2022-09-13)
+
+
+### Features
+
+* **pe-83:** create footer component ([#27](https://github.com/TropixInc/pixway-ui-sdk/issues/27)) ([0c2abbe](https://github.com/TropixInc/pixway-ui-sdk/commit/0c2abbe439b79310517dd90007f7c5262adb204f))
+
+### [0.1.1-alpha.18](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.17...v0.1.1-alpha.18) (2022-09-12)
+
+
+### Features
+
+* **pe-34:** Create sign up pages ([#11](https://github.com/TropixInc/pixway-ui-sdk/issues/11)) ([d1f9b0f](https://github.com/TropixInc/pixway-ui-sdk/commit/d1f9b0f96c052fb1a46104a41c0dc8b807de7de5))
+
 ### [0.1.1-alpha.17](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.16...v0.1.1-alpha.17) (2022-09-08)
 
 ### [0.1.1-alpha.16](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.15...v0.1.1-alpha.16) (2022-09-08)

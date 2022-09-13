@@ -1,4 +1,4 @@
-import DialogBase from '../../../shared/components/DialogBase/DialogBase';
+import { DialogBase } from '../../../shared/components/DialogBase';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { useHostname } from '../../../shared/hooks/useHostname/useHostname';
 import useTranslation from '../../../shared/hooks/useTranslation';
