@@ -3,8 +3,8 @@ import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 
-import { Link } from '../../../shared';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
+import { Link } from '../../../shared/components/Link';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useModalController } from '../../../shared/hooks/useModalController';

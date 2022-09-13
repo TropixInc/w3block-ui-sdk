@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { Link, TokenLayoutBase, useProfile } from '../../../shared';
+import { TokenLayoutBase, useProfile } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
+import { Link } from '../../../shared/components/Link';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
