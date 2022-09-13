@@ -15,6 +15,7 @@ interface Props {
   locale: PixwayUISdkLocale;
   companyId: string;
   logoUrl: string;
+  appBaseUrl: string;
 }
 
 export const W3blockUISDKGeneralConfigProvider = ({
@@ -23,8 +24,12 @@ export const W3blockUISDKGeneralConfigProvider = ({
   locale,
   companyId,
   logoUrl,
+  appBaseUrl,
 }: Props) => {
-  const value = useMemo(() => ({ companyId, logoUrl }), [logoUrl, companyId]);
+  const value = useMemo(
+    () => ({ companyId, logoUrl, appBaseUrl }),
+    [logoUrl, companyId, appBaseUrl]
+  );
 
   return (
     <W3blockUISDKGereralConfigContext.Provider value={value}>

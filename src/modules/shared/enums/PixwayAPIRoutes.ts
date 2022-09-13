@@ -13,4 +13,7 @@ export enum PixwayAPIRoutes {
   METADATA_BY_CHAINADDRESS_AND_TOKENID = 'metadata/address/{contractAddress}/{chainId}/{tokenId}',
   TOKEN_COLLECTIONS = '{companyId}/token-collections',
   CATEGORIES = 'categories',
+  USERS = 'users/',
+  VERIFY_SIGN_UP = '/auth/verify-sign-up',
+  REQUEST_CONFIRMATION_MAIL = '/auth/request-confirmation-email',
 }
