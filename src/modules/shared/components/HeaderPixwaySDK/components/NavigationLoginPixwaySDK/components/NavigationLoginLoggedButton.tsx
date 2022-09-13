@@ -69,7 +69,7 @@ export const DefaultMenuTabs = () => {
     },
     {
       name: translate('header>components>defaultTab>myTokens'),
-      route: PixwayAppRoutes.MY_TOKENS,
+      route: PixwayAppRoutes.TOKENS,
       icon: <MyTokenIcon />,
     },
     {

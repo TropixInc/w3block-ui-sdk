@@ -19,15 +19,11 @@ export type QueryConfig<
 export const usePrivateQuery = <
   TQueryFnData = unknown,
   TError = unknown,
-  TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
+  TData = TQueryFnData
 >(
-  queryKey: TQueryKey,
-  queryFn: QueryFunction<TQueryFnData, TQueryKey>,
-  options?: Omit<
-    UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
-    'queryKey' | 'queryFn'
-  >
+  queryKey: QueryKey,
+  queryFn: QueryFunction<TQueryFnData, QueryKey>,
+  options?: QueryConfig<TQueryFnData, TError, TData>
 ) => {
   const token = useToken();
   const enabled = Object.keys(options ?? {}).includes('enabled')

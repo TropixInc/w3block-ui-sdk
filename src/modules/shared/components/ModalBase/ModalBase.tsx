@@ -37,7 +37,7 @@ export const ModalBase = ({
           ownClass
             ? ownClass
             : classNames(
-              'fixed bg-white rounded-2xl pl-8 pr-[101px] pt-10 pb-12 max-w-[656px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50',
+              'pw-fixed pw-bg-white pw-rounded-2xl pw-pl-8 pw-pr-[101px] pw-pt-10 pw-pb-12 pw-max-w-[656px] pw-left-1/2 pw-top-1/2 -pw-translate-x-1/2 -pw-translate-y-1/2 pw-z-50',
               classes.dialogCard ?? ''
             )
         }
@@ -46,11 +46,11 @@ export const ModalBase = ({
           <button
             onClick={onClose}
             className={classNames(
-              'bg-white rounded-full shadow-[0px_0px_5px_rgba(0,0,0,0.25)] w-8 h-8 absolute right-4 top-4 flex items-center justify-center',
+              'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center',
               classes.closeButton ?? ''
             )}
           >
-            <XIcon className="fill-[#5682C3]" />
+            <XIcon className="pw-fill-[#5682C3]" />
           </button>
         )}
         {children}

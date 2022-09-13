@@ -1,1 +1,1 @@
-export * from './components/TokenDetailsTemplate';
+export * from './components';

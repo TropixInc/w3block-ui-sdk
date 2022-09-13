@@ -1,5 +1,5 @@
-import { TokenCategory } from '../hooks/useTokenCategories';
 import { DynamicFormConfiguration } from './DynamicFormConfiguration';
+import { TokenCategory } from './TokenCategory';
 
 export interface TokenSubcategory {
   categoryId: string;

@@ -42,7 +42,7 @@ interface QueryParams {
   orderBy?: string;
 }
 
-const usePaginatedPrivateQuery = <QueryData>(
+export const usePaginatedPrivateQuery = <QueryData>(
   queryKey: string | Array<string | number>,
   queryFn: (
     params: QueryParams
@@ -145,5 +145,3 @@ const usePaginatedPrivateQuery = <QueryData>(
     ];
   }, [page, queryResult, totalPages]);
 };
-
-export default usePaginatedPrivateQuery;

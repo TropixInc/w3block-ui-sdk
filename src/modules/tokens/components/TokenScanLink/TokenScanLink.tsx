@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 import { ReactComponent as BoxWithUpRightArrow } from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg';
-import { ChainId } from '../../../shared/enums/ChainId';
+import { ChainScan } from '../../../shared/enums/ChainId';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import useModalController from '../../hooks/useDialogController';
 import { Tooltip } from '../Tooltip';
@@ -29,7 +29,7 @@ export const TokenScanLink = ({
   } = useModalController();
 
   const tooltipText = () => {
-    if (chainId === ChainId.POLYGON || chainId === ChainId.MUMBAI) {
+    if (chainId === ChainScan.POLYGON || chainId === ChainScan.MUMBAI) {
       return translate('tokens>tokenScanLink>viewIn', {
         blockchain: 'Polygonscan',
       });
