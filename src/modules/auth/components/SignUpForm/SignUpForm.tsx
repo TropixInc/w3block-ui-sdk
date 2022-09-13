@@ -5,8 +5,8 @@ import { Trans } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { boolean, object, string } from 'yup';
 
-import { Link } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
+import { Link } from '../../../shared/components/Link';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
