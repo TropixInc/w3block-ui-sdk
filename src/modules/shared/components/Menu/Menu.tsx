@@ -52,7 +52,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     {
       title: translate('components>menu>myTokens'),
       icon: <ImageIcon width={17} height={17} />,
-      link: PixwayAppRoutes.MY_TOKENS,
+      link: PixwayAppRoutes.TOKENS,
     },
     {
       title: translate('components>menu>wallet'),

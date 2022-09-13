@@ -4,7 +4,7 @@ import { useLockBodyScroll } from 'react-use';
 import classNames from 'classnames';
 
 import { ModalBase } from '../ModalBase';
-import { PixwayButton } from '../PixwayButton/index';
+import { PixwayButton } from '../PixwayButton';
 
 interface Props {
   isOpen: boolean;
@@ -27,7 +27,7 @@ interface Props {
   isCancelButtonDIsabled?: boolean;
 }
 
-const DialogBase = ({
+export const DialogBase = ({
   isOpen,
   onCancel,
   onConfirm,
@@ -46,7 +46,7 @@ const DialogBase = ({
       onClose={onClose}
       classes={{
         dialogCard: classNames(
-          'bg-white rounded-2xl pl-8 pr-[101px] pt-10 pb-12 max-w-[656px] w-full',
+          'pw-bg-white pw-rounded-2xl pw-pl-8 pw-pr-[101px] pw-pt-10 pw-pb-12 pw-max-w-[656px] pw-w-full',
           classes.dialogCard ?? ''
         ),
         closeButton: classes.closeButton ?? '',
@@ -55,7 +55,7 @@ const DialogBase = ({
       {children}
       <div
         className={classNames(
-          'flex justify-end gap-x-15',
+          'pw-flex pw-justify-end pw-gap-x-15',
           classes.actionContainer ?? ''
         )}
       >
@@ -63,7 +63,7 @@ const DialogBase = ({
           type="button"
           variant="outlined"
           className={classNames(
-            '!text-[14px] leading-4 max-w-[200px]',
+            '!pw-text-[14px] pw-leading-4 pw-max-w-[200px]',
             classes.cancelButton ?? ''
           )}
           onClick={onCancel}
@@ -75,7 +75,7 @@ const DialogBase = ({
         <PixwayButton
           type="button"
           className={classNames(
-            '!text-[14px] leading-4 max-w-[200px]',
+            '!pw-text-[14px] pw-leading-4 pw-max-w-[200px] !pw-bg-[#5682C3]',
             classes.confirmButton ?? ''
           )}
           onClick={onConfirm}
@@ -88,5 +88,3 @@ const DialogBase = ({
     </ModalBase>
   ) : null;
 };
-
-export default DialogBase;

@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 
 import { PixwayUISdkLocale } from '../../context';
+import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
 import { LocaleProvider } from '../LocaleProvider';
 import { W3blockApiProvider } from '../W3blockApiProvider';
@@ -14,6 +15,7 @@ interface Props {
   locale: PixwayUISdkLocale;
   companyId: string;
   logoUrl: string;
+  isProduction: boolean;
   appBaseUrl: string;
 }
 
@@ -23,21 +25,31 @@ export const W3blockUISDKGeneralConfigProvider = ({
   locale,
   companyId,
   logoUrl,
+  isProduction,
   appBaseUrl,
 }: Props) => {
-  const value = useMemo(
+  const companyValue = useMemo(
     () => ({ companyId, logoUrl, appBaseUrl }),
     [logoUrl, companyId, appBaseUrl]
   );
 
+  const environmentValue = useMemo(
+    () => ({
+      isProduction,
+    }),
+    [isProduction]
+  );
+
   return (
-    <W3blockUISDKGereralConfigContext.Provider value={value}>
-      <W3blockApiProvider
-        w3blockIdAPIUrl={api.idUrl}
-        w3blockKeyAPIUrl={api.keyUrl}
-      >
-        <LocaleProvider locale={locale}>{children}</LocaleProvider>
-      </W3blockApiProvider>
+    <W3blockUISDKGereralConfigContext.Provider value={companyValue}>
+      <EnvironmentContext.Provider value={environmentValue}>
+        <W3blockApiProvider
+          w3blockIdAPIUrl={api.idUrl}
+          w3blockKeyAPIUrl={api.keyUrl}
+        >
+          <LocaleProvider locale={locale}>{children}</LocaleProvider>
+        </W3blockApiProvider>
+      </EnvironmentContext.Provider>
     </W3blockUISDKGereralConfigContext.Provider>
   );
 };
