@@ -14,6 +14,8 @@ export enum PixwayAPIRoutes {
   TOKEN_COLLECTION_BY_ID = '{companyId}/token-collections/{id}',
   COMPANIES = 'companies/{id}',
   BALANCE = 'blockchain/balance/{address}/{chainId}',
+  ORDER_PREVIEW = '/companies/{companyId}/orders/preview',
+  CREATE_ORDER = '/companies/{companyId}/orders',
   METADATA_BY_RFID = 'metadata/rfid/{rfid}',
   METADATA_BY_CHAINADDRESS_AND_TOKENID = 'metadata/address/{contractAddress}/{chainId}/{tokenId}',
   TOKEN_COLLECTIONS = '{companyId}/token-collections',
