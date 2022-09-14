@@ -3,7 +3,7 @@ import { useLockBodyScroll, useToggle } from 'react-use';
 
 import { useProfile } from '../../../shared';
 import { ModalBlockedAction } from '../../../shared/components/ModalBlockedAction';
-import { useCompanyId } from '../../../shared/hooks/useCompanyId';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { W3blockUISdkResendConfirmEmail } from '../../context/ResendConfirmEmailContext';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 export const MailVerifiedInterceptorProvider = ({ children }: Props) => {
   const [openModal, setOpenModal] = useToggle(false);
-  const tenant = useCompanyId();
+  const { companyId: tenant } = useCompanyConfig();
   const { data: profileResponse } = useProfile();
   useLockBodyScroll(openModal);
 
@@ -32,7 +32,7 @@ export const MailVerifiedInterceptorProvider = ({ children }: Props) => {
       value={needsMailConfirmationInterceptor}
     >
       <ModalBlockedAction
-        minutesResendEmail={1}
+        minutesResendEmail={3}
         email={profileResponse?.data.email || ''}
         tenant={tenant || ''}
         isOpen={openModal}

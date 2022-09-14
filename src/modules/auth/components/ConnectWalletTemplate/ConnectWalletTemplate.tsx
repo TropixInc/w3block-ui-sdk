@@ -8,7 +8,7 @@ import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVer
 import { useProfile } from '../../../shared';
 import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
 import { Alert } from '../../../shared/components/Alert';
-import { Spinner } from '../../../shared/components/Spinner';
+import { Spinner } from '../../../shared/components/Spinner/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
