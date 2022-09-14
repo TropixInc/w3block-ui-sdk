@@ -2,14 +2,14 @@ import { useCallback } from 'react';
 
 import { W3blockIdSDK } from '@w3block/sdk-id';
 
-import { useCompanyId } from '../useCompanyId';
+import { useCompanyConfig } from '../useCompanyConfig';
 import { usePixwayAPIURL } from '../usePixwayAPIURL/usePixwayAPIURL';
 import { useSessionUser } from '../useSessionUser';
 import { useToken } from '../useToken';
 
 export const useGetW3blockIdSDK = () => {
   const token = useToken();
-  const tenantId = useCompanyId();
+  const { companyId: tenantId } = useCompanyConfig();
   const user = useSessionUser();
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
 

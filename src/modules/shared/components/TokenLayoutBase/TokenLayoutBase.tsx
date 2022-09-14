@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { HeaderPixwaySDK } from '../HeaderPixwaySDK';
 import { Menu } from '../Menu';
+import { W3blockFooter } from '../W3blockFooter';
 
 interface Props {
   classes?: {
@@ -37,7 +38,7 @@ export const TokenLayoutBase = ({ classes = {}, children }: Props) => {
           </div>
         </div>
       </div>
-      <div className="pw-bg-slate-500 pw-h-[200px]" />
+      <W3blockFooter />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 
 interface Props {
+  companyId?: string;
   email: string;
   onSendEmail?: () => void;
   isFirstAccess?: boolean;
