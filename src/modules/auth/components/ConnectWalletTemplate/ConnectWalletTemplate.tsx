@@ -78,9 +78,9 @@ const _ConnectWalletTemplate = () => {
 
     if (data) {
       const { data: user } = data;
-      const { verified, wallets } = user;
+      const { wallets } = user;
 
-      if (!verified || wallets?.length) {
+      if (wallets?.length) {
         router.push(PixwayAppRoutes.HOME);
       } else {
         setIsLoading(false);
