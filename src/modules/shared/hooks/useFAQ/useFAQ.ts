@@ -1,7 +1,7 @@
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
-import { useCompanyId } from '../useCompanyId';
+import { useCompanyConfig } from '../useCompanyConfig';
 import { usePrivateQuery } from '../usePrivateQuery';
 
 interface Locales {
@@ -48,7 +48,7 @@ export interface getFAQProps {
 
 export const useFAQ = (page: number, limit: number, name: string) => {
   const axios = useAxios(W3blockAPI.COMMERCE);
-  const companyId = useCompanyId();
+  const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
     [PixwayAPIRoutes.GET_FAQ, companyId, name, limit, page],
