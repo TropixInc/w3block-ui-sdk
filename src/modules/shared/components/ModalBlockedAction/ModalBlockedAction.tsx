@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
@@ -9,7 +9,6 @@ import {
   RequestConfirmationEmailBody,
 } from '../../../auth/api/requestConfirmationEmail';
 import { AuthButton } from '../../../auth/components/AuthButton';
-import { W3blockUISdkResendConfirmEmail } from '../../../core/context/ResendConfirmEmailContext';
 import { ReactComponent as CloseIcon } from '../../assets/icons/closeCircledOutlined.svg';
 import { LocalStorageFields } from '../../enums/LocalStorageFields';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
@@ -23,8 +22,8 @@ interface ModalBlockedActionProps {
   tenant: string;
   isOpen?: boolean;
   hideCloseButton?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  toggleOpen: (nextValue?: any) => void;
+  toggleOpen: (nextValue?: boolean) => void;
+  minutesResendEmail: number;
 }
 
 export const ModalBlockedAction = ({
@@ -33,6 +32,7 @@ export const ModalBlockedAction = ({
   isOpen = false,
   hideCloseButton = false,
   toggleOpen,
+  minutesResendEmail,
 }: ModalBlockedActionProps) => {
   const [translate] = useTranslation();
   const user = useSessionUser();
@@ -40,7 +40,7 @@ export const ModalBlockedAction = ({
     LocalStorageFields.EMAIL_LINK_CONFIRMATION_COUNTDOWN_DATE
   );
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
-  const { minutesResendEmail } = useContext(W3blockUISdkResendConfirmEmail);
+  //const { minutesResendEmail } = useContext(W3blockUISdkResendConfirmEmail);
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export const ModalBlockedAction = ({
     <>
       <div
         className="hidden sm:block fixed left-0 top-0 h-screen w-full bg-[#00000080] z-40"
-        onClick={toggleOpen}
+        onClick={() => toggleOpen()}
       />
       <div className="pw-fixed pw-bg-white pw-px-4 pw-py-6 pw-h-screen sm:pw-h-auto pw-w-full sm:pw-max-w-[656px] sm:pw-rounded-[20px] sm:pw-left-1/2 pw-top-[82px] sm:pw-top-1/2 sm:-pw-translate-x-1/2 sm:-pw-translate-y-1/2 pw-z-10 sm:pw-z-50 pw-flex pw-flex-col pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)]">
         <div className="pw-w-full pw-flex pw-items-center pw-justify-center pw-relative pw-mb-[24px]">
@@ -99,7 +99,7 @@ export const ModalBlockedAction = ({
           {!hideCloseButton && (
             <button
               className="pw-bg-[#F7F7F7] pw-rounded-full pw-w-9 pw-h-9 pw-absolute pw-right-0 pw-top-0 pw-flex pw-items-center pw-justify-center pw-border-[0.71px] pw-border-[#777E8F]"
-              onClick={toggleOpen}
+              onClick={() => toggleOpen()}
             >
               <CloseIcon className="pw-stroke-[#353945]" />
             </button>

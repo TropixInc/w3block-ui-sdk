@@ -1,11 +1,6 @@
 import { createContext } from 'react';
 
-export type W3blockUISdkResendConfirmEmailProps = {
-  openModal: boolean;
-  minutesResendEmail: number;
-  setOpenModal: () => void;
-};
+export type W3blockUISdkResendConfirmEmailProps = (cb: () => void) => void;
 
-export const W3blockUISdkResendConfirmEmail = createContext(
-  {} as W3blockUISdkResendConfirmEmailProps
-);
+export const W3blockUISdkResendConfirmEmail =
+  createContext<W3blockUISdkResendConfirmEmailProps | null>(null);
