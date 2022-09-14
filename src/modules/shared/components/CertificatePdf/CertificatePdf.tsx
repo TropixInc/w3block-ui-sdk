@@ -347,14 +347,16 @@ export const CertificatePdf = ({
                 title={translations.metaData.transcationHashLabel}
                 description={transactionHash}
               />
-              <ListItem
-                imageSrc={fromIcon}
-                imageWidth={12}
-                imageHeight={11}
-                title={'From'}
-                description={ownerAddress}
-                isLast
-              />
+              {ownerAddress && (
+                <ListItem
+                  imageSrc={fromIcon}
+                  imageWidth={12}
+                  imageHeight={11}
+                  title={'From'}
+                  description={ownerAddress}
+                  isLast
+                />
+              )}
             </View>
           </Container>
         </View>
