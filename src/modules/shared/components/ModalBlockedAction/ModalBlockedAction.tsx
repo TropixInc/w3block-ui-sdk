@@ -37,7 +37,7 @@ export const ModalBlockedAction = ({
   const [translate] = useTranslation();
   const user = useSessionUser();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
-    LocalStorageFields.EMAIL_LINK_CONFIRMATION_COUNTDOWN_DATE
+    LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
   );
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   //const { minutesResendEmail } = useContext(W3blockUISdkResendConfirmEmail);

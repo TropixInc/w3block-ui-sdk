@@ -1,5 +1,8 @@
 module.exports = {
-  content: ['./src/**/*.{jsx,tsx}'],
+  content: [
+    './src/modules/**/*.{js,ts,tsx,jsx}',
+    './src/pages/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     screens: {
       sm: '768px',
