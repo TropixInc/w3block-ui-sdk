@@ -18,7 +18,7 @@ import { Spinner } from '../../../shared/components/Spinner';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
+import useChainScanLink from '../../../shared/hooks/useChainScanLink/useChainScanLink';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEstimateTransferGas } from '../../hooks/useEstimateTransferGas';

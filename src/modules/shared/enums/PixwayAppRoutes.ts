@@ -13,8 +13,6 @@ export enum PixwayAppRoutes {
   RESET_PASSWORD = '/auth/changePassword/newPassword',
   TOKEN_DETAILS = '/tokens/{contractAddress}/{chainId}/{tokenId}',
   TOKENS = '/tokens',
-  TOKEN_DETAILS = '/tokens/{contractAddress}/{chainId}/{tokenId}',
-  TOKENS = '/tokens',
   PROFILE = '/profile',
   MY_TOKENS = '/tokens',
   WALLET = '/wallet',
@@ -25,4 +23,5 @@ export enum PixwayAppRoutes {
   PRIVACY_POLICY = '/privacy-policy',
   TOKEN_PUBLIC_RFID = '/token/rfid/{rfid}',
   TOKEN_PUBLIC = '/token/{contractAddress}/{chainId}/{tokenId}',
+  CONFIG = '/configurations',
 }
