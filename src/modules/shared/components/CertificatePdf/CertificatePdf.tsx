@@ -346,6 +346,7 @@ export const CertificatePdf = ({
                 imageHeight={11}
                 title={translations.metaData.transcationHashLabel}
                 description={transactionHash}
+                isLast={ownerAddress ? false : true}
               />
               {ownerAddress && (
                 <ListItem
