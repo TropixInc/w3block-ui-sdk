@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.24](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.23...v0.1.1-alpha.24) (2022-09-15)
+
+
+### Features
+
+* **pe-31:** Add FAQ Component ([#20](https://github.com/TropixInc/w3block-ui-sdk/issues/20)) ([9882172](https://github.com/TropixInc/w3block-ui-sdk/commit/9882172738e31704a61cc51bde4eed743423092a))
+
 ### [0.1.1-alpha.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.22...v0.1.1-alpha.23) (2022-09-15)
 
 
