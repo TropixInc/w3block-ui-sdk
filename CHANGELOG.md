@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.22...v0.1.1-alpha.23) (2022-09-15)
+
+
+### Features
+
+* **pe-70:** added certificate modal ([#25](https://github.com/TropixInc/w3block-ui-sdk/issues/25)) ([3cf2ecf](https://github.com/TropixInc/w3block-ui-sdk/commit/3cf2ecf838ea286e952cc2971731e2b5f6598a19))
+
 ### [0.1.1-alpha.22](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.21...v0.1.1-alpha.22) (2022-09-13)
 
 ### [0.1.1-alpha.21](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.20...v0.1.1-alpha.21) (2022-09-13)
