@@ -22,6 +22,8 @@ export enum PixwayAppRoutes {
   WALLET = '/wallet',
   SETTINGS = '/settings',
   HELP = '/help',
+  TOKEN_PUBLIC = '/token/{contractAddress}/{chainId}/{tokenId}',
+  TOKEN_PUBLIC_RFID = '/token/rfid/{rfid}',
   CONTACT_US = '/contact-us',
   TERMS_CONDITIONS = '/terms-and-conditions',
   PRIVACY_POLICY = '/privacy-policy',
