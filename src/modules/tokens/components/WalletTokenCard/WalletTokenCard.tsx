@@ -51,7 +51,15 @@ export const WalletTokenCard = ({
   };
 
   return (
-    <TokenActionsProvider collectionId={id} collectionName={name}>
+    <TokenActionsProvider
+      collectionId={id}
+      collectionName={name}
+      contractAddress={contractAddress}
+      name={name}
+      image={image}
+      chainId={chainId}
+      tokenId={id}
+    >
       <Link
         className={classNames('pw-w-full', className)}
         href={

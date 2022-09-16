@@ -176,7 +176,7 @@ const _SignInTemplate = ({
                 Não tem conta ainda?
                 <Link
                   href={PixwayAppRoutes.SIGN_UP}
-                  className="pw-text-[#B09C60] pw-text-brand-primary pw-underline"
+                  className="pw-text-brand-primary pw-underline"
                 >
                   Cadastre-se.
                 </Link>

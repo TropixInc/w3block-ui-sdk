@@ -54,7 +54,7 @@ export const NavigationTabsPixwaySDKMobile = ({
               <PixwayButton
                 onClick={() => router.push(signInRoute)}
                 fullWidth
-                className="!pw-bg-[#B09C60] !pw-px-[40px] !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
+                className="!pw-bg-brand-primary !pw-px-[40px] !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
               >
                 {translate('shared>login')}
               </PixwayButton>
