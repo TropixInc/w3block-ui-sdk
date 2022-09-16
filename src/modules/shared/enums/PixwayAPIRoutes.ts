@@ -5,7 +5,6 @@ export enum PixwayAPIRoutes {
   RESET_PASSWORD = 'auth/reset-password',
   REFRESH_TOKEN = 'auth/refresh-token',
   GET_PROFILE = 'users/profile',
-  CALLBACK = 'https://foodbusters.stg.pixway.io/pt-br',
   NFTS_BY_WALLET = 'metadata/nfts/{address}/{chainId}',
   TOKEN_EDITIONS = '{companyId}/token-editions',
   ESTIMATE_TRANSFER_GAS = '{companyId}/token-editions/{id}/estimate-gas/transfer',

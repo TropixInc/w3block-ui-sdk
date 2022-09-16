@@ -4,22 +4,16 @@ import { useLocalStorage } from 'react-use';
 
 import { addMinutes, isAfter } from 'date-fns';
 
-import {
-  requestConfirmationEmail,
-  RequestConfirmationEmailBody,
-} from '../../../auth/api/requestConfirmationEmail';
 import { AuthButton } from '../../../auth/components/AuthButton';
+import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { ReactComponent as CloseIcon } from '../../assets/icons/closeCircledOutlined.svg';
 import { LocalStorageFields } from '../../enums/LocalStorageFields';
-import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import useCountdown from '../../hooks/useCountdown/useCountdown';
-import { usePixwayAPIURL } from '../../hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { useSessionUser } from '../../hooks/useSessionUser';
 import useTranslation from '../../hooks/useTranslation';
 
 interface ModalBlockedActionProps {
   email: string;
-  tenant: string;
   isOpen?: boolean;
   hideCloseButton?: boolean;
   toggleOpen: (nextValue?: boolean) => void;
@@ -28,7 +22,6 @@ interface ModalBlockedActionProps {
 
 export const ModalBlockedAction = ({
   email,
-  tenant,
   isOpen = false,
   hideCloseButton = false,
   toggleOpen,
@@ -40,8 +33,7 @@ export const ModalBlockedAction = ({
     LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
   );
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
-  //const { minutesResendEmail } = useContext(W3blockUISdkResendConfirmEmail);
-  const { w3blockIdAPIUrl } = usePixwayAPIURL();
+  const { mutate } = useRequestConfirmationMail();
 
   useEffect(() => {
     if (countdownDate && isAfter(new Date(countdownDate), new Date())) {
@@ -66,20 +58,7 @@ export const ModalBlockedAction = ({
   const resendEmail = () => {
     if (user?.email) {
       setCountdownDate(addMinutes(new Date(), minutesResendEmail));
-
-      const body: RequestConfirmationEmailBody = {
-        callbackUrl: PixwayAPIRoutes.CALLBACK,
-        email: user.email,
-        tenantId: tenant,
-      };
-
-      requestConfirmationEmail(
-        user.accessToken || '',
-        tenant,
-        w3blockIdAPIUrl,
-        user.refreshToken || '',
-        body
-      );
+      mutate({ email: user.email });
     }
   };
 
@@ -91,7 +70,7 @@ export const ModalBlockedAction = ({
         className="hidden sm:block fixed left-0 top-0 h-screen w-full bg-[#00000080] z-40"
         onClick={() => toggleOpen()}
       />
-      <div className="pw-fixed pw-bg-white pw-px-4 pw-py-6 pw-h-screen sm:pw-h-auto pw-w-full sm:pw-max-w-[656px] sm:pw-rounded-[20px] sm:pw-left-1/2 pw-top-[82px] sm:pw-top-1/2 sm:-pw-translate-x-1/2 sm:-pw-translate-y-1/2 pw-z-10 sm:pw-z-50 pw-flex pw-flex-col pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)]">
+      <div className="pw-fixed pw-bg-white pw-px-4 pw-py-6 pw-h-screen sm:pw-h-auto pw-w-full sm:pw-max-w-[440px] sm:pw-rounded-[20px] sm:pw-left-1/2 pw-top-[82px] sm:pw-top-1/2 sm:-pw-translate-x-1/2 sm:-pw-translate-y-1/2 pw-z-10 sm:pw-z-50 pw-flex pw-flex-col pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)]">
         <div className="pw-w-full pw-flex pw-items-center pw-justify-center pw-relative pw-mb-[24px]">
           <h1 className="pw-text-[#353945] pw-font-bold pw-text-[24px] pw-leading-[29.26px]">
             {translate('auth>modalActionBlocked>verifyEmail>title')}
