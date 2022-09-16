@@ -74,7 +74,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const tabsMap: TabsConfig[] = tabs ? tabs : tabsDefault;
 
   const handleCopy = () => {
-    copyToClipboard(profile?.data.mainWalletId as string);
+    copyToClipboard(profile?.data.mainWallet?.address as string);
     if (!state.error) setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
   };
