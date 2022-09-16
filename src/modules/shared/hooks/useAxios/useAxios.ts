@@ -12,7 +12,6 @@ export const useAxios = (type: W3blockAPI) => {
   const apiBaseURLMap = new Map([
     [W3blockAPI.ID, apisUrl.w3blockIdAPIUrl],
     [W3blockAPI.KEY, apisUrl.w3blockKeyAPIUrl],
-    [W3blockAPI.BASE, apisUrl.w3blockIdBaseUrl],
     [W3blockAPI.COMMERCE, apisUrl.w3blockCommerceAPIUrl],
   ]);
   const baseUrl = apiBaseURLMap.get(type) ?? '';

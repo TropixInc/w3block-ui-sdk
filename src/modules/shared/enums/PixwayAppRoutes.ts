@@ -27,7 +27,5 @@ export enum PixwayAppRoutes {
   CONTACT_US = '/contact-us',
   TERMS_CONDITIONS = '/terms-and-conditions',
   PRIVACY_POLICY = '/privacy-policy',
-  TOKEN_PUBLIC_RFID = '/token/rfid/{rfid}',
-  TOKEN_PUBLIC = '/token/{contractAddress}/{chainId}/{tokenId}',
   CONFIG = '/configurations',
 }

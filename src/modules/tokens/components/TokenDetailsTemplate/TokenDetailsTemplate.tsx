@@ -1,9 +1,10 @@
+import { TokenLayoutBase } from '../../../shared';
 import { ReactComponent as ChevronLeft } from '../../../shared/assets/icons/chevronLeftFilled.svg';
 import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
-import usePublicTokenData from '../../hooks/usePublicTokenData';
+import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import {
   Dimensions2DValue,
   Dimensions3DValue,
@@ -12,10 +13,16 @@ import { TokenDetailsCard } from '../TokenDetailsCard';
 
 const _TokenDetailsTemplate = () => {
   const router = useRouter();
-  const { data } = usePublicTokenData();
-
   const contractAddress = (router.query.contractAddress as string) ?? '';
-  return data ? (
+  const chainId = (router.query.chainId as string) ?? '';
+  const tokenId = (router.query.tokenId as string) ?? '';
+  const { data: publicTokenResponse } = usePublicTokenData({
+    contractAddress,
+    chainId,
+    tokenId,
+  });
+
+  return publicTokenResponse ? (
     <div className="pw-w-full sm:pw-max-w-[968px] pw-font-roboto">
       <div className="sm:pw-hidden pw-mb-4">
         <div className="pw-flex pw-items-center pw-gap-x-4 pw-mb-[16.5px]">
@@ -31,29 +38,34 @@ const _TokenDetailsTemplate = () => {
       </div>
       <TokenDetailsCard
         tokenData={
-          (data?.dynamicInformation.tokenData as Record<
+          (publicTokenResponse?.data?.dynamicInformation.tokenData as Record<
             string,
             string | Dimensions2DValue | Dimensions3DValue
           >) ?? {}
         }
-        tokenTemplate={data?.dynamicInformation.publishedTokenTemplate ?? {}}
-        contract={data?.information.contractName}
-        description={data?.information.description}
-        title={data?.information.title}
-        mainImage={data?.information.mainImage ?? ''}
+        tokenTemplate={
+          publicTokenResponse?.data?.dynamicInformation
+            .publishedTokenTemplate ?? {}
+        }
+        contract={publicTokenResponse?.data?.information.contractName}
+        description={publicTokenResponse?.data?.information.description}
+        title={publicTokenResponse?.data?.information.title}
+        mainImage={publicTokenResponse?.data?.information.mainImage ?? ''}
         className="pw-mb-6"
       />
 
       <MintedInfoCard
-        collectionName={data.information.title}
-        chainId={data.token?.chainId ?? 137}
-        mintedAt={data.edition.mintedAt ?? ''}
-        tokenId={data.token?.tokenId ?? ''}
+        collectionName={publicTokenResponse?.data?.information.title}
+        chainId={publicTokenResponse?.data?.token?.chainId ?? 137}
+        mintedAt={publicTokenResponse?.data?.edition.mintedAt ?? ''}
+        tokenId={publicTokenResponse?.data?.token?.tokenId ?? ''}
         contractAddress={contractAddress}
-        rfid={data.edition.rfid}
-        editionNumber={Number(data.edition.currentNumber) ?? 0}
-        mintedHash={data.edition.mintedHash ?? ''}
-        totalEditions={data.edition.total}
+        rfid={publicTokenResponse?.data?.edition.rfid}
+        editionNumber={
+          Number(publicTokenResponse?.data?.edition.currentNumber) ?? 0
+        }
+        mintedHash={publicTokenResponse?.data?.edition.mintedHash ?? ''}
+        totalEditions={publicTokenResponse?.data?.edition.total}
         editionId=""
         className="pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-bg-[#FFFFFF] pw-rounded-[20px] pw-p-6 pw-px-[34.5px] sm:pw-px-6"
       />
@@ -63,6 +75,8 @@ const _TokenDetailsTemplate = () => {
 
 export const TokenDetailsTemplate = () => (
   <TranslatableComponent>
-    <_TokenDetailsTemplate />
+    <TokenLayoutBase>
+      <_TokenDetailsTemplate />
+    </TokenLayoutBase>
   </TranslatableComponent>
 );

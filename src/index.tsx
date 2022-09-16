@@ -7,3 +7,5 @@ export * from './modules/core';
 export * from './modules/auth';
 
 export * from './modules/tokens';
+
+export * from './modules/checkout';

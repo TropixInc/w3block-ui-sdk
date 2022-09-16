@@ -24,6 +24,4 @@ export enum PixwayAPIRoutes {
   USERS = 'users/',
   VERIFY_SIGN_UP = '/auth/verify-sign-up',
   REQUEST_CONFIRMATION_MAIL = '/auth/request-confirmation-email',
-  METADATA_BY_RFID = 'metadata/rfid/{rfid}',
-  METADATA_BY_CHAINADDRESS_AND_TOKENID = 'metadata/address/{contractAddress}/{chainId}/{tokenId}',
 }

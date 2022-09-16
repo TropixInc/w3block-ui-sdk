@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { DynamicFormConfiguration } from '../../interfaces/DynamicFormConfiguration';
-import { DynamicFormFieldValue } from '../../interfaces/DynamicFormFieldState';
+import { DynamicFormFieldValue } from '../../interfaces/DynamicFormFieldValue';
 
 interface Config {
   chainId?: string;

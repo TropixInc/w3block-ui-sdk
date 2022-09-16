@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { DynamicFormConfiguration } from '../interfaces/DynamicFormConfiguration';
-import { DynamicFormFieldValue } from '../interfaces/DynamicFormFieldState';
+import { DynamicFormFieldValue } from '../interfaces/DynamicFormFieldValue';
 import { orderTokenTemplateKeys } from '../utils/orderTokenTemplateKeys';
 
 const useDynamicDataFromTokenCollection = (
