@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.27](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.26...v0.1.1-alpha.27) (2022-09-16)
+
 ### [0.1.1-alpha.26](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.25...v0.1.1-alpha.26) (2022-09-16)
 
 ### [0.1.1-alpha.25](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.24...v0.1.1-alpha.25) (2022-09-15)
