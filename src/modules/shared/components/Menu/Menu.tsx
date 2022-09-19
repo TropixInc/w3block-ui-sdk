@@ -74,7 +74,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const tabsMap: TabsConfig[] = tabs ? tabs : tabsDefault;
 
   const handleCopy = () => {
-    copyToClipboard(profile?.data.mainWalletId as string);
+    copyToClipboard(profile?.data.mainWallet?.address as string);
     if (!state.error) setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
   };
@@ -125,21 +125,27 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           {profile?.data.name}
         </p>
         <div className="pw-flex pw-items-center pw-justify-center pw-mb-10">
-          <p className="pw-font-poppins pw-text-sm pw-font-semibold pw-text-[#777E8F] pw-mr-2 pw-mt-[1px]">
-            {profile?.data.mainWalletId?.substring(0, 8)}
-            {'...'}
-            {profile?.data.mainWalletId?.substring(
-              profile?.data.mainWalletId.length - 6,
-              profile?.data.mainWalletId.length
-            )}
-          </p>
-          <button onClick={handleCopy}>
-            <CopyIcon width={17} height={17} />
-          </button>
-          {isCopied && (
-            <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
-              {translate('components>menu>copied')}
-            </span>
+          {profile?.data.mainWallet?.address ? (
+            <>
+              <p className="pw-font-poppins pw-text-sm pw-font-semibold pw-text-[#777E8F] pw-mr-2 pw-mt-[1px]">
+                {profile?.data.mainWallet?.address?.substring(0, 8)}
+                {'...'}
+                {profile?.data.mainWallet?.address?.substring(
+                  profile?.data.mainWallet.address.length - 6,
+                  profile?.data.mainWallet.address.length
+                )}
+              </p>
+              <button onClick={handleCopy}>
+                <CopyIcon width={17} height={17} />
+              </button>
+              {isCopied && (
+                <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
+                  {translate('components>menu>copied')}
+                </span>
+              )}
+            </>
+          ) : (
+            '-'
           )}
         </div>
         <ul className="pw-mx-auto pw-w-[248px]">

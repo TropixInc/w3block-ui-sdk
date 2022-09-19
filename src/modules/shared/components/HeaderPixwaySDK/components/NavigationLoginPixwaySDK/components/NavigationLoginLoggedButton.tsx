@@ -40,7 +40,7 @@ export const NavigationLoginLoggedButton = ({
         </p>
         <div className="pw-flex pw-items-center">
           <p className="pw-text-sm pw-font-montserrat pw-font-[600]">
-            {profile?.data?.mainWallet?.address || ''}
+            {profile?.data?.mainWallet?.address || '-'}
           </p>
           <ArrowDown className="pw-ml-1" />
         </div>

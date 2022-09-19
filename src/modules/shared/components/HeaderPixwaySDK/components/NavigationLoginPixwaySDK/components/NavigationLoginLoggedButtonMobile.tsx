@@ -52,7 +52,7 @@ export const NavigationLoginLoggedButtonMobile = ({
             className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
             <p className="pw-font-montserrat pw-text-xs pw-font-[400] pw-cursor-pointer">
-              {profile?.data.mainWallet?.address}
+              {profile?.data.mainWallet?.address || '-'}
             </p>
             <CopyIcon />
           </div>
@@ -80,7 +80,7 @@ export const NavigationLoginLoggedButtonMobile = ({
                   if (tab.action) tab.action();
                   else if (tab.route) router.push(tab.route);
                 }}
-                className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-[#B09C60] pw-cursor-pointer pw-rounded pw-text-lg pw-font-montserrat pw-text-[#383857] hover:pw-text-black"
+                className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-font-montserrat pw-text-[#383857] hover:pw-text-black"
                 key={tab.name}
               >
                 {tab.icon}
