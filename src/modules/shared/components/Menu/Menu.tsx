@@ -84,6 +84,35 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     signOut({ callbackUrl: undefined, redirect: false });
   };
 
+  const renderTab = (tab: TabsConfig) => {
+    const isActive = router.pathname === tab.link;
+    return (
+      <Link href={tab.link} key={tab.title}>
+        <li
+          key={tab.title}
+          className={classNames(
+            'group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 hover:pw-stroke-brand-primary',
+            isActive
+              ? 'pw-bg-brand-primary pw-bg-opacity-[0.4] pw-stroke-brand-primary'
+              : 'pw-stroke-[#383857]'
+          )}
+        >
+          <span
+            className={classNames(
+              isActive ? 'pw-opacity-40' : 'group-hover:pw-opacity-40'
+            )}
+          >
+            {tab.icon}
+          </span>
+
+          <p className="pw-font-poppins pw-text-lg pw-font-medium pw-ml-5">
+            {tab.title}
+          </p>
+        </li>
+      </Link>
+    );
+  };
+
   return (
     <div
       className={classNames(
@@ -120,24 +149,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           )}
         </div>
         <ul className="pw-mx-auto pw-w-[248px]">
-          {tabsMap.map((tabs) => (
-            <Link href={tabs.link} key={tabs.title}>
-              <li
-                key={tabs.title}
-                className="pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-rounded-[4px] hover:pw-bg-[#EFEFEF] active:pw-bg-[#4194CD4D] active:pw-bg-opacity-[0.4] pw-text-[#35394C] active:!pw-text-[#295BA6] pw-pl-3 pw-stroke-[#383857] active:pw-stroke-[#295BA6]"
-              >
-                {tabs.icon}
-                <p className="pw-font-poppins pw-text-lg pw-font-medium pw-ml-5">
-                  {tabs.title}
-                </p>
-              </li>
-            </Link>
-          ))}
+          {tabsMap.map(renderTab)}
           <button
             onClick={handleSignOut}
-            className="pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-w-full pw-rounded-[4px] hover:pw-bg-[#EFEFEF] active:pw-bg-[#4194CD4D] active:pw-bg-opacity-[0.4] pw-text-[#35394C] active:!pw-text-[#295BA6] pw-pl-3 pw-stroke-[#383857] active:pw-stroke-[#295BA6]"
+            className="group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-w-full pw-rounded-[4px] hover:pw-bg-brand-primary pw-text-[#35394C] pw-pl-3 pw-stroke-[#383857] hover:pw-stroke-brand-primary"
           >
-            <LogoutIcon width={17} height={17} />
+            <LogoutIcon
+              width={17}
+              height={17}
+              className="group-hover:pw-opacity-40"
+            />
             <p className="pw-font-poppins pw-text-lg pw-font-medium pw-ml-5">
               Logout
             </p>

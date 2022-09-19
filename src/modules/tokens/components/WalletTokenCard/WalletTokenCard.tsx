@@ -54,9 +54,9 @@ export const WalletTokenCard = ({
     <TokenActionsProvider
       collectionId={id}
       collectionName={name}
+      imageSrc={image}
       contractAddress={contractAddress}
       name={name}
-      image={image}
       chainId={chainId}
       tokenId={id}
     >
