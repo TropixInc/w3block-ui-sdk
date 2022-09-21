@@ -9,7 +9,7 @@ import { TokenScanLink } from '../../../tokens/components/TokenScanLink';
 import useModalController from '../../../tokens/hooks/useDialogController';
 import { getPublicTokenPageURL } from '../../../tokens/utils/getPublicTokenPageURL';
 import useAdressBlockchainLink from '../../hooks/useAdressBlockchainLink/useAdressBlockchainLink';
-import useChainScanLink from '../../hooks/useChainScanLink/useChainScanLink';
+import { useChainScanLink } from '../../hooks/useChainScanLink/useChainScanLink';
 import useDateFnsLocale from '../../hooks/useDateFnsLocale/useDateFnsLocale';
 import useTranslation from '../../hooks/useTranslation';
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CertificateIssuanceController } from '../../../shared/components/CertificateIssuanceController';
 import { useModalController } from '../../../shared/hooks/useModalController';
-import TokenTransferController from '../../components/TokenTransferController/TokenTransferController';
+import { TokenTransferController } from '../../components/TokenTransferController';
 import {
   ITokenActionContext,
   TokenActionsContext,
@@ -14,9 +14,9 @@ interface Props {
   children?: ReactNode;
   collectionId: string;
   collectionName: string;
+  imageSrc: string;
   contractAddress: string;
   name: string;
-  image: string;
   chainId: number;
   tokenId: string;
 }
@@ -25,9 +25,9 @@ export const TokenActionsProvider = ({
   children,
   collectionId,
   collectionName,
+  imageSrc,
   contractAddress,
   name,
-  image,
   chainId,
   tokenId,
 }: Props) => {
@@ -54,7 +54,7 @@ export const TokenActionsProvider = ({
       {
         id: 'Transferir',
         label: translate('tokens>tokenTransferController>transfer'),
-        disabled: false,
+        disabled: true,
         onClick: () => {
           openTransferModal();
         },
@@ -76,8 +76,8 @@ export const TokenActionsProvider = ({
       <TokenTransferController
         isOpen={isOpenTransferModal}
         onClose={closeTransferModal}
-        collectionId={collectionId}
         collectionName={collectionName}
+        imageSrc={imageSrc}
         tokens={[
           {
             id: collectionId,
@@ -91,7 +91,7 @@ export const TokenActionsProvider = ({
         transactionHash={publicTokenResponse?.data.edition.mintedHash ?? ''}
         contractAddress={contractAddress}
         name={name}
-        image={image}
+        image={imageSrc}
         description={publicTokenResponse?.data.information.description ?? ''}
         originalOwnerWalletAddress={
           publicTokenResponse?.data.token?.firstOwnerAddress ?? ''

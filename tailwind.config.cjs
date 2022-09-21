@@ -21,7 +21,7 @@ module.exports = {
         51: '12.75rem',
       },
       colors: {
-        'brand-primary': 'var(--colors-brand-primary)',
+        'brand-primary': 'rgb(var(--colors-brand-primary) / <alpha-value>)',
       },
       variables: {
         DEFAULT: {

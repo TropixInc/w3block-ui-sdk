@@ -18,12 +18,11 @@ import { Spinner } from '../../../shared/components/Spinner';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useChainScanLink from '../../../shared/hooks/useChainScanLink/useChainScanLink';
+import { useChainScanLink } from '../../../shared/hooks/useChainScanLink/useChainScanLink';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEstimateTransferGas } from '../../hooks/useEstimateTransferGas';
 import { useGetStatusOfTokenTransfers } from '../../hooks/useGetStatusOfTokenTransfers';
-import { useTokenCollectionById } from '../../hooks/useTokenCollectionById';
 import useTransferMultipleTokens from '../../hooks/useTransferMultipleTokens/useTransferMultipleTokens';
 import useTransferToken from '../../hooks/useTransferTokens/useTransferToken';
 import { ProcessingStepModal } from '../ProcessingStepModal';
@@ -35,8 +34,8 @@ interface Tokens {
 }
 interface Props {
   tokens: Array<Tokens>;
+  imageSrc: string;
   collectionName: string;
-  collectionId: string;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -219,16 +218,14 @@ const stepOrder = [
   Steps.PROCESSING_STEP_MODAL,
 ];
 
-const TokenTransferController = ({
+export const TokenTransferController = ({
   tokens,
   collectionName,
-  collectionId,
+  imageSrc,
   isOpen,
   onClose,
 }: Props) => {
   const [translate] = useTranslation();
-  const { data: tokenCollectionResponse } =
-    useTokenCollectionById(collectionId);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
   const [
     dontShowTokenTransferProcessModal,
@@ -349,17 +346,9 @@ const TokenTransferController = ({
     nextStep();
   };
 
-  const subTitle =
-    tokenCollectionResponse?.data?.quantity &&
-    tokenCollectionResponse?.data?.quantity > 1
-      ? tokens.length > 1
-        ? `${translate('tokens>tokenTransferController>editions')}: ${tokens
-            .map((token) => token.number)
-            .join(', ')}`
-        : `${translate('tokens>tokenTransferController>edition')} ${
-            tokens[0].number
-          }`
-      : translate('tokens>tokenTransferController>singleEdition');
+  const subTitle = `${translate('tokens>tokenTransferController>edition')} ${
+    tokens[0].number
+  }`;
 
   return (
     <>
@@ -442,7 +431,7 @@ const TokenTransferController = ({
               <GasModalHeader
                 imageBox={
                   <Image
-                    src={tokenCollectionResponse?.data?.mainImage || ''}
+                    src={imageSrc}
                     height={50}
                     width={50}
                     alt={collectionName}
@@ -470,7 +459,7 @@ const TokenTransferController = ({
               <GasModalHeader
                 imageBox={
                   <Image
-                    src={tokenCollectionResponse?.data?.mainImage || ''}
+                    src={imageSrc}
                     height={50}
                     width={50}
                     alt={collectionName}
@@ -508,5 +497,3 @@ const TokenTransferController = ({
     </>
   );
 };
-
-export default TokenTransferController;

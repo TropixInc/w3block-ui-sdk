@@ -9,7 +9,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import walletImage from '../../assets/wallet.png';
+import { ReactComponent as WalletImage } from '../../assets/wallet.svg';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
 import { Token } from '../../interfaces/Token';
 import { mapNFTToToken } from '../../utils/mapNFTToToken';
@@ -185,11 +185,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
       </h1>
 
       <div className="pw-mb-[29px] pw-block">
-        <img
-          src={walletImage}
-          alt=""
-          className="pw-max-w-[82px] sm:pw-max-w-[113px]  pw-max-h-[76px] sm:pw-max-h-[106px]"
-        />
+        <WalletImage className="pw-fill-brand-primary pw-max-w-[82px] sm:pw-max-w-[113px]  pw-max-h-[76px] sm:pw-max-h-[106px]" />
       </div>
 
       <h1 className="pw-font-bold sm:pw-font-semibold pw-text-lg sm:pw-text-4xl pw-leading-[23px] sm:pw-leading-[64px] pw-text-black pw-mb-[31px] sm:pw-mb-7 pw-text-center">
