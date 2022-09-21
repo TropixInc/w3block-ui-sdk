@@ -155,6 +155,14 @@
   "checkout>components>checkoutInfo>infoAboutProcessing": "O token está em processamento na rede blockchain e logo ficarão disponíveis na sua carteira. O tempo de processamento pode variar de poucos minutos até 4 horas de acordo com o tráfego da rede blockchain. Nós te avisaremos assim que o processamento estiver finalizado.",
   "checkout>components>warning>problemWithCheckout": "Tivemos um problema na hora da compra.",
   "shared>tryAgain": "Tentar novamente",
-  "shared>components>price&gasInfo": "Valor a pagar"
+  "shared>components>price&gasInfo": "Valor a pagar",
+  "wallet>page>balance": "Saldo",
+  "wallet>page>addFunds": "Adicionar fundos",
+  "wallet>page>disconnect": "Desconectar",
+  "wallet>page>metamask": "Metamask",
+  "wallet>page>principal": "Principal",
+  "wallet>page>extract": "Extrato",
+  "wallet>page>from": "De",
+  "wallet>page>for": "Para"
 
 }
