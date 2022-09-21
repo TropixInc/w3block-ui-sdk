@@ -14,7 +14,7 @@ interface Props {
   children?: ReactNode;
 }
 
-export const TokenLayoutBase = ({ classes = {}, children }: Props) => {
+export const InternalPagesLayoutBase = ({ classes = {}, children }: Props) => {
   return (
     <div className="pw-flex pw-flex-col pw-w-screen pw-min-h-screen pw-font-poppins">
       <HeaderPixwaySDK />
