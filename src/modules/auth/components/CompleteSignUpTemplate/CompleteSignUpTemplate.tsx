@@ -25,7 +25,7 @@ const getIsTokenExpired = (token: string) => {
   if (tokenSplitted.length !== 2) {
     return true;
   }
-  return isAfter(new Date(), new Date(tokenSplitted[1]));
+  return isAfter(new Date(), new Date(Number(tokenSplitted[1])));
 };
 
 const _CompleteSignUpTemplate = () => {
