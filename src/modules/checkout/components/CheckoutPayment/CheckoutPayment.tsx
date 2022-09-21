@@ -21,7 +21,7 @@ export const CheckoutPayment = () => {
   const shouldLock = useRef(true);
   const profile = useProfile();
   const [sending, setSending] = useState<boolean>(false);
-  const { companyId } = useCompanyConfig();
+  const { companyId, appBaseUrl } = useCompanyConfig();
   const [iframeLink, setIframeLink] = useState('');
   const [productCache] = useLocalStorage<OrderPreviewCache>(
     PRODUCT_CART_INFO_KEY
@@ -54,8 +54,7 @@ export const CheckoutPayment = () => {
             destinationWalletAddress:
               profile.data?.data.mainWallet?.address ?? '',
             successUrl:
-              'https://' +
-              window.location.hostname +
+              appBaseUrl +
               PixwayAppRoutes.CHECKOUT_COMPLETED +
               '?' +
               query.split('?')[0],
