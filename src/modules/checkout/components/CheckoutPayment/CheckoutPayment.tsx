@@ -54,6 +54,7 @@ export const CheckoutPayment = () => {
             destinationWalletAddress:
               profile.data?.data.mainWallet?.address ?? '',
             successUrl:
+              'https://' +
               window.location.hostname +
               PixwayAppRoutes.CHECKOUT_COMPLETED +
               '?' +
