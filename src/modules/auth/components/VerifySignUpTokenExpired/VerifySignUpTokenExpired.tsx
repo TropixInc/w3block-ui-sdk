@@ -1,27 +1,19 @@
-import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
-import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';
 
 interface Props {
-  email: string;
   onSendEmail?: () => void;
+  isLoading: boolean;
 }
 
-export const VerifySignUpTokenExpired = ({ email, onSendEmail }: Props) => {
+export const VerifySignUpTokenExpired = ({ onSendEmail, isLoading }: Props) => {
   const { logoUrl } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess } = useRequestConfirmationMail();
   const [translate] = useTranslation();
-
-  useEffect(() => {
-    if (isSuccess && onSendEmail) onSendEmail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
 
   return (
     <AuthLayoutBase
@@ -43,7 +35,7 @@ export const VerifySignUpTokenExpired = ({ email, onSendEmail }: Props) => {
         <span className="pw-text-brand-primary pw-text-sm pw-leading-[21px]">
           <Trans i18nKey="auth>emailConfirmation>resendEmailAction">
             <button
-              onClick={() => mutate({ email })}
+              onClick={onSendEmail}
               disabled={isLoading}
               className="pw-mb-[29px] pw-font-semibold pw-text-sm pw-leading-[17px] pw-text-brand-primary pw-underline"
             >

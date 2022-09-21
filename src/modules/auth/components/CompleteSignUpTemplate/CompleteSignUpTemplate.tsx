@@ -7,6 +7,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
+import { useRequestCompleteSignUpEmail } from '../../hooks/useRequestCompleteSignUpEmail';
 import { CompleteSignUpSuccess } from '../CompleteSignUpSuccess';
 import { SignUpForm } from '../SignUpForm';
 import { SignUpFormData } from '../SignUpForm/interface';
@@ -25,19 +26,30 @@ const getIsTokenExpired = (token: string) => {
   if (tokenSplitted.length !== 2) {
     return true;
   }
-  return isAfter(new Date(), new Date(tokenSplitted[1]));
+  return isAfter(new Date(), new Date(Number(tokenSplitted[1])));
 };
 
 const _CompleteSignUpTemplate = () => {
   const router = useRouter();
   const [translate] = useTranslation();
-  const { email, token } = router.query;
-  const { mutate, isLoading, isSuccess, isError } = useChangePassword();
+  const { email, token, tenantId } = router.query;
   const [step, setStep] = useState(() => {
     return token && getIsTokenExpired(token as string)
       ? Steps.TOKEN_EXPIRED
       : Steps.FORM;
   });
+  const { mutate, isLoading, isSuccess, isError } = useChangePassword();
+  const {
+    mutate: requestEmail,
+    isLoading: isRequestingEmail,
+    isSuccess: isSuccessRequestEmail,
+  } = useRequestCompleteSignUpEmail();
+
+  useEffect(() => {
+    if (isSuccessRequestEmail) {
+      setStep(Steps.CONFIRMATION_MAIL_SENT);
+    }
+  }, [isSuccessRequestEmail]);
 
   useEffect(() => {
     if (isSuccess) setStep(Steps.MAIL_CONFIRMED);
@@ -71,8 +83,10 @@ const _CompleteSignUpTemplate = () => {
   if (step === Steps.TOKEN_EXPIRED)
     return (
       <VerifySignUpTokenExpired
-        email={email as string}
-        onSendEmail={() => setStep(Steps.CONFIRMATION_MAIL_SENT)}
+        onSendEmail={() =>
+          requestEmail({ email: email as string, tenantId: tenantId as string })
+        }
+        isLoading={isRequestingEmail}
       />
     );
 

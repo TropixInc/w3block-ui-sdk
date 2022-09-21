@@ -8,6 +8,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
@@ -31,6 +32,11 @@ const _MailConfirmationTemplate = () => {
   const router = useRouter();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
+  const {
+    mutate: requestConfirmationEmail,
+    isLoading: isRequestingConfirmationEmail,
+    isSuccess: isSuccessRequestingConfirmationEmail,
+  } = useRequestConfirmationMail();
 
   const [_, cancel] = useDebounce(
     () => {
@@ -41,6 +47,12 @@ const _MailConfirmationTemplate = () => {
     TIME_TO_REDIRECT_TO_HOME,
     [step]
   );
+
+  useEffect(() => {
+    if (isSuccessRequestingConfirmationEmail) {
+      setStep(Steps.EMAIL_SENT);
+    }
+  }, [isSuccessRequestingConfirmationEmail]);
 
   useEffect(() => {
     if (step) setStep(Steps.LOADING);
@@ -90,8 +102,8 @@ const _MailConfirmationTemplate = () => {
   if (step === Steps.TOKEN_EXPIRED)
     return (
       <VerifySignUpTokenExpired
-        email={email as string}
-        onSendEmail={() => setStep(Steps.EMAIL_SENT)}
+        onSendEmail={() => requestConfirmationEmail({ email: email as string })}
+        isLoading={isRequestingConfirmationEmail}
       />
     );
 
