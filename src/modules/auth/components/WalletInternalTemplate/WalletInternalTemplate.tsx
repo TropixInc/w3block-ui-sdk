@@ -4,13 +4,14 @@ import { useToggle } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
 
-import { TokenLayoutBase, useProfile } from '../../../shared';
+import { useProfile } from '../../../shared';
 import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFilled.svg';
 import { ReactComponent as EyeIcon } from '../../../shared/assets/icons/eyeIcon.svg';
 import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/eyeIconCrossed.svg';
 // import { ReactComponent as FilterIcon } from '../../../shared/assets/icons/filterOutlined.svg';
 import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
+import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
 import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
@@ -145,9 +146,11 @@ const _WalletInternalTemplate = () => {
 export const WalletInternalTemplate = () => {
   return (
     <TranslatableComponent>
-      <TokenLayoutBase classes={{ middleSectionContainer: 'pw-mb-[85px]' }}>
+      <InternalPagesLayoutBase
+        classes={{ middleSectionContainer: 'pw-mb-[85px]' }}
+      >
         <_WalletInternalTemplate />
-      </TokenLayoutBase>
+      </InternalPagesLayoutBase>
     </TranslatableComponent>
   );
 };
