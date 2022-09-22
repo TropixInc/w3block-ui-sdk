@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import classNames from 'classnames';
 import { boolean, object, string } from 'yup';
 
 import { Alert } from '../../../shared/components/Alert';
@@ -14,7 +15,7 @@ import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSc
 import { AuthButton } from '../AuthButton';
 import { AuthCheckbox } from '../AuthCheckbox/AuthCheckbox';
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
+import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
 import { AuthPasswordTips } from '../AuthPasswordTips';
 import { AuthTextController } from '../AuthTextController';
 import { SignUpFormData } from './interface';
@@ -24,9 +25,16 @@ interface Props {
   isLoading: boolean;
   email?: string;
   error?: string;
+  classes?: AuthLayoutBaseClasses;
 }
 
-export const SignUpForm = ({ onSubmit, isLoading, email, error }: Props) => {
+export const SignUpForm = ({
+  onSubmit,
+  isLoading,
+  email,
+  error,
+  classes = {},
+}: Props) => {
   const { logoUrl } = useCompanyConfig();
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
@@ -61,8 +69,11 @@ export const SignUpForm = ({ onSubmit, isLoading, email, error }: Props) => {
       logo={logoUrl}
       title={translate('auth>signUpForm>formTitle')}
       classes={{
-        contentContainer:
+        contentContainer: classNames(
           '!pw-px-[22px] sm:!pw-px-[35px] !pw-pb-14 sm:!pw-pb-[35px]',
+          classes.contentContainer ?? ''
+        ),
+        logo: classes.logo ?? '',
       }}
     >
       {error ? (
