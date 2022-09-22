@@ -7,11 +7,11 @@ import { useLocale } from '../../hooks/useLocale';
 import useTranslation from '../../hooks/useTranslation';
 
 interface Classes {
-  container: string;
-  title: string;
-  subtitle: string;
-  question: string;
-  answer: string;
+  container?: string;
+  title?: string;
+  subtitle?: string;
+  question?: string;
+  answer?: string;
 }
 
 export interface FAQProps {
@@ -22,7 +22,7 @@ export interface FAQProps {
 }
 
 interface AccordionProps {
-  question: string;
+  question?: string;
   classes?: Pick<Classes, 'question' | 'answer'>;
 }
 
@@ -67,7 +67,7 @@ const Accordion = ({
 export const FAQ = ({
   classes,
   page = 1,
-  limit = 200,
+  limit = 50,
   name = 'home',
 }: FAQProps) => {
   const { data: FAQ } = useFAQ(page, limit, name);

@@ -52,7 +52,7 @@ export const NavigationLoginLoggedButtonMobile = ({
             className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
             <p className="pw-font-montserrat pw-text-xs pw-font-[400] pw-cursor-pointer">
-              {profile?.data.mainWallet?.address}
+              {profile?.data.mainWallet?.address || '-'}
             </p>
             <CopyIcon />
           </div>

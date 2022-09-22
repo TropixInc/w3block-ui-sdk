@@ -34,45 +34,38 @@ interface W3blockFooterProps {
   links?: Array<Url>;
 }
 
+const socialNetWorkLinkSharedClassnames =
+  'pw-fill-[#090909] hover:pw-fill-brand-primary pw-w-8 pw-h-8';
+
 const defaultSocialNetworks: Array<SocialNetwork> = [
   {
     id: 'facebook',
     url: ExternalRoutes.FACEBOOK,
-    icon: (
-      <FacebookIcon className="pw-fill-[#090909] hover:pw-fill-[#B09C60] pw-w-8 pw-h-8" />
-    ),
+    icon: <FacebookIcon className={socialNetWorkLinkSharedClassnames} />,
     className: 'footer-link-facebook',
   },
   {
     id: 'twitter',
     url: ExternalRoutes.TWITTER,
-    icon: (
-      <TwitterIcon className="pw-fill-[#090909] hover:pw-fill-[#B09C60] pw-w-8 pw-h-8" />
-    ),
+    icon: <TwitterIcon className={socialNetWorkLinkSharedClassnames} />,
     className: 'footer-link-twitter',
   },
   {
     id: 'whatsapp',
     url: ExternalRoutes.WHATSAPP,
-    icon: (
-      <WhatsappIcon className="pw-fill-[#090909] hover:pw-fill-[#B09C60] pw-w-8 pw-h-8" />
-    ),
+    icon: <WhatsappIcon className={socialNetWorkLinkSharedClassnames} />,
     className: 'footer-link-whatsapp',
   },
   {
     id: 'linkedin',
     url: ExternalRoutes.LINKEDIN,
-    icon: (
-      <LinkedinIcon className="pw-fill-[#090909] hover:pw-fill-[#B09C60] pw-w-8 pw-h-8" />
-    ),
+    icon: <LinkedinIcon className={socialNetWorkLinkSharedClassnames} />,
     className: 'footer-link-linkedin',
   },
   {
     id: 'link',
     url: ExternalRoutes.LINK,
-    icon: (
-      <LinkIcon className="pw-fill-[#090909] hover:pw-fill-[#B09C60] pw-w-8 pw-h-8" />
-    ),
+    icon: <LinkIcon className={socialNetWorkLinkSharedClassnames} />,
     className: 'footer-link',
   },
 ];

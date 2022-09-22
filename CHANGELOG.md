@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.33](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.32...v0.1.1-alpha.33) (2022-09-21)
+
+### [0.1.1-alpha.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.31...v0.1.1-alpha.32) (2022-09-21)
+
+### [0.1.1-alpha.31](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.30...v0.1.1-alpha.31) (2022-09-21)
+
+### [0.1.1-alpha.30](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.29...v0.1.1-alpha.30) (2022-09-19)
+
+### [0.1.1-alpha.29](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.28...v0.1.1-alpha.29) (2022-09-16)
+
+### [0.1.1-alpha.28](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.27...v0.1.1-alpha.28) (2022-09-16)
+
+
+### Features
+
+* **pe-82:** integrated wallet informations on header and menu ([#30](https://github.com/TropixInc/w3block-ui-sdk/issues/30)) ([6d5ed53](https://github.com/TropixInc/w3block-ui-sdk/commit/6d5ed53aaf67a12b363cd9dec2cb58dedce33e1b))
+
+### [0.1.1-alpha.27](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.26...v0.1.1-alpha.27) (2022-09-16)
+
 ### [0.1.1-alpha.26](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.25...v0.1.1-alpha.26) (2022-09-16)
 
 ### [0.1.1-alpha.25](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.24...v0.1.1-alpha.25) (2022-09-15)
