@@ -1,13 +1,12 @@
+import { UserRoleEnum } from '@w3block/sdk-id';
 import axios, { AxiosRequestConfig } from 'axios';
 import jwtDecode from 'jwt-decode';
-
-import { Roles } from '../../enums/Roles';
 
 export interface JwtInterface {
   sub: string;
   email: string;
   name: string;
-  roles: Array<Roles>;
+  roles: Array<UserRoleEnum>;
   verified: boolean;
   iat: number;
   exp: number;

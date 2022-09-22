@@ -1,6 +1,6 @@
 export * from './HeaderPixwaySDK';
 export * from './Menu';
-export * from './TokenLayoutBase';
+export * from './InternalPagesLayoutBase';
 export * from './W3blockFooter';
 export * from './HeaderBack';
 export * from './ProductInfo';

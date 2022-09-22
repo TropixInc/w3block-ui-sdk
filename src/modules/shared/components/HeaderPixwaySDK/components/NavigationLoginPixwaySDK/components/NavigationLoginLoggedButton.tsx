@@ -1,7 +1,6 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
-import { signOut } from 'next-auth/react';
-
+import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 import { ReactComponent as HelpIcon } from '../../../../../assets/icons/helpIconGray.svg';
@@ -59,51 +58,60 @@ const PixwayLogoDefault = () => {
   );
 };
 
-export const DefaultMenuTabs = () => {
+export const useDefaultMenuTabs = () => {
   const [translate] = useTranslation();
-  const defaultTabs: NavigationMenuTabs[] = [
-    {
-      name: translate('header>components>defaultTab>myAccount'),
-      route: PixwayAppRoutes.MY_PROFILE,
-      icon: <UserIcon />,
-    },
-    {
-      name: translate('header>components>defaultTab>myTokens'),
-      route: PixwayAppRoutes.TOKENS,
-      icon: <MyTokenIcon />,
-    },
-    {
-      name: translate('header>components>defaultTab>wallet'),
-      route: PixwayAppRoutes.WALLET,
-      icon: <WalletIcon />,
-    },
-    {
-      name: translate('header>components>defaultTab>settings'),
-      route: PixwayAppRoutes.SETTINGS,
-      icon: <SettingsIcon />,
-    },
-    {
-      name: translate('header>components>defaultTab>helpCenter'),
-      route: PixwayAppRoutes.HELP,
-      icon: <HelpIcon />,
-    },
-    {
-      name: 'Logout',
-      icon: <LogoutIcon />,
-      action: () => signOut(),
-    },
-  ];
-
-  return defaultTabs;
+  const router = useRouter();
+  const { signOut } = usePixwayAuthentication();
+  return useMemo<NavigationMenuTabs[]>(
+    () => [
+      {
+        name: translate('header>components>defaultTab>myAccount'),
+        route: PixwayAppRoutes.MY_PROFILE,
+        icon: <UserIcon />,
+      },
+      {
+        name: translate('header>components>defaultTab>myTokens'),
+        route: PixwayAppRoutes.TOKENS,
+        icon: <MyTokenIcon />,
+      },
+      {
+        name: translate('header>components>defaultTab>wallet'),
+        route: PixwayAppRoutes.WALLET,
+        icon: <WalletIcon />,
+      },
+      {
+        name: translate('header>components>defaultTab>settings'),
+        route: PixwayAppRoutes.SETTINGS,
+        icon: <SettingsIcon />,
+      },
+      {
+        name: translate('header>components>defaultTab>helpCenter'),
+        route: PixwayAppRoutes.HELP,
+        icon: <HelpIcon />,
+      },
+      {
+        name: 'Logout',
+        icon: <LogoutIcon />,
+        action: () => {
+          signOut();
+          router.push(PixwayAppRoutes.HOME);
+        },
+      },
+    ],
+    [translate, router, signOut]
+  );
 };
 
 const NavigationMenu = ({
   logo = <PixwayLogoDefault />,
-  menuTabs = DefaultMenuTabs(),
+  menuTabs: _menuTabs,
 }: NavigationLoginLoggedButtonProps) => {
+  const defaultTabs = useDefaultMenuTabs();
   const [translate] = useTranslation();
   const [blocked, setBlocked] = useState(false);
   const router = useRouter();
+  const menuTabs = _menuTabs ?? defaultTabs;
+
   const LogoToShow = () => {
     if (typeof logo == 'string') {
       return <img className="pw-object-contain" src={logo} />;

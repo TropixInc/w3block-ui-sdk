@@ -33,37 +33,25 @@ export const NavigationLoginPixwaySDK = ({
 
   const validatorOpened = loginMenu ? loginMenu : userMenu;
 
-  const InfoToShow = () => {
-    if (session) {
-      return <NavigationLoginLoggedButton />;
-    } else {
-      return (
-        <NavigationLoginNonLoggedButton
-          signInRoute={signInRouter}
-          signUpRoute={signUpRouter}
-        />
-      );
-    }
-  };
-
-  const InfoToShowMobile = () => {
-    return (
-      <NavigationLoginLoggedButtonMobile
-        menuOpened={validatorOpened}
-        toggleMenu={toggleTabsMemo}
-      />
-    );
-  };
-
   return (
     <div>
       <div
         className={`sm:pw-flex pw-border-l pw-border-[#777E8F] pw-items-center pw-hidden pw-ml-[40px] ${className}`}
       >
-        <InfoToShow />
+        {session ? (
+          <NavigationLoginLoggedButton />
+        ) : (
+          <NavigationLoginNonLoggedButton
+            signInRoute={signInRouter}
+            signUpRoute={signUpRouter}
+          />
+        )}
       </div>
       <div className="sm:pw-hidden ">
-        <InfoToShowMobile />
+        <NavigationLoginLoggedButtonMobile
+          menuOpened={validatorOpened}
+          toggleMenu={toggleTabsMemo}
+        />
       </div>
     </div>
   );
