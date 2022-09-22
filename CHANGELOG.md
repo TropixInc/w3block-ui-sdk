@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.35](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.34...v0.1.1-alpha.35) (2022-09-22)
+
+
+### Bug Fixes
+
+* **pe-92:** fix redirections when users signs out ([#39](https://github.com/TropixInc/pixway-ui-sdk/issues/39)) ([0065257](https://github.com/TropixInc/pixway-ui-sdk/commit/00652574d33f04014355925ad22a41a76bfb3317))
+
 ### [0.1.1-alpha.34](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.33...v0.1.1-alpha.34) (2022-09-22)
 
 
