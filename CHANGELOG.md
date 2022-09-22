@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.34](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.33...v0.1.1-alpha.34) (2022-09-22)
+
+
+### Features
+
+* **pe-54:** wallet page ([#36](https://github.com/TropixInc/w3block-ui-sdk/issues/36)) ([daf4788](https://github.com/TropixInc/w3block-ui-sdk/commit/daf47883a1273ae751bc53c3d38376aea807895a))
+
 ### [0.1.1-alpha.33](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.32...v0.1.1-alpha.33) (2022-09-21)
 
 ### [0.1.1-alpha.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.31...v0.1.1-alpha.32) (2022-09-21)
