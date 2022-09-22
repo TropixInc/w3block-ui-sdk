@@ -7,3 +7,4 @@ export * from './CompleteSignUpTemplate';
 export * from './RequestPasswordChangeTemplate';
 export * from './ResetPasswordTemplate';
 export * from './ConnectWalletTemplate';
+export * from './WalletInternalTemplate';
