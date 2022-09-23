@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.37](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.36...v0.1.1-alpha.37) (2022-09-23)
+
+
+### Features
+
+* **Tk 603:** adapt sdk to use in post sign up flow in key ([#40](https://github.com/TropixInc/pixway-ui-sdk/issues/40)) ([f7a6acc](https://github.com/TropixInc/pixway-ui-sdk/commit/f7a6acc68a527a660cbdf3813616e9d4ae2ba5b3))
+
 ### [0.1.1-alpha.36](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.35...v0.1.1-alpha.36) (2022-09-22)
 
 ### [0.1.1-alpha.35](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.34...v0.1.1-alpha.35) (2022-09-22)
