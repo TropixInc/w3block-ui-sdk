@@ -110,7 +110,7 @@ const _WalletInternalTemplate = () => {
                   showValue={showValue}
                   title={translate('wallet>page>principal')}
                   value={walletBalance}
-                  walletId={profile?.data.mainWalletId ?? ''}
+                  walletId={profile?.data.mainWallet?.address ?? ''}
                   onClick={() => router.push('/addFunds')}
                   textButton={translate('wallet>page>addFunds')}
                 />
@@ -120,7 +120,7 @@ const _WalletInternalTemplate = () => {
                   showValue={showValue}
                   title={translate('wallet>page>metamask')}
                   value={walletBalance}
-                  walletId={profile?.data.mainWalletId ?? ''}
+                  walletId={profile?.data.mainWallet?.address ?? ''}
                 />
               );
             })
