@@ -111,7 +111,7 @@ const NavigationMenu = ({
   const [blocked, setBlocked] = useState(false);
   const router = useRouter();
   const menuTabs = _menuTabs ?? defaultTabs;
-
+  const { data: profile } = useProfile();
   const LogoToShow = () => {
     if (typeof logo == 'string') {
       return <img className="pw-object-contain" src={logo} />;
@@ -120,9 +120,15 @@ const NavigationMenu = ({
     }
   };
 
+  const hasMainWallet = profile?.data.mainWallet?.address;
+
   return (
     <div className="pw-relative">
-      <div className="pw-absolute pw-mt-6 pw-ml-[210px] pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3">
+      <div
+        className={`pw-absolute pw-mt-6 ${
+          hasMainWallet ? 'pw-ml-[210px]' : ''
+        } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3`}
+      >
         <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
           <div className="pw-flex">
             <div className="pw-max-w-[14px] pw-max-h-[14px]">
