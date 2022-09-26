@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
+import classNames from 'classnames';
 import { isAfter, addMinutes } from 'date-fns';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -12,14 +14,20 @@ import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
+import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
 
 interface PasswordChangeMailSentProps {
   email: string;
+  tenantId?: string;
+  classes?: AuthLayoutBaseClasses;
+  isPostSignUp?: boolean;
 }
 
 export const VerifySignUpMailSent = ({
   email,
+  tenantId,
+  classes = {},
+  isPostSignUp = false,
 }: PasswordChangeMailSentProps) => {
   const { logoUrl: logo } = useCompanyConfig();
   const [translate] = useTranslation();
@@ -43,15 +51,21 @@ export const VerifySignUpMailSent = ({
     }
   }, [isSuccess, setCountdownDate, reset]);
 
+  const callbackPath = isPostSignUp
+    ? PixwayAppRoutes.COMPLETE_SIGNUP
+    : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
+
   return (
     <AuthLayoutBase
       logo={logo}
       title={translate('auth>emailConfirmation>mailResentStepTitle')}
       classes={{
-        root: '!pw-px-5 sm:!pw-px-5',
-        contentContainer:
+        root: classNames('!pw-px-5 sm:!pw-px-5', classes.root ?? ''),
+        contentContainer: classNames(
           '!pw-pt-0 sm:!pw-pt-[35px] sm:!pw-px-[87.5px] !pw-shadow-none sm:!pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] !pw-bg-transparent sm:!pw-bg-white !pw-px-0 sm:!pw-px-[35px] !pw-max-w-none sm:!pw-max-w-[514px]',
-        logo: 'w-[130px] h-[130px]',
+          classes.contentContainer ?? ''
+        ),
+        logo: classNames('w-[130px] h-[130px]', classes.logo ?? ''),
       }}
     >
       <div className="pw-pt-0 pw-pb-6 sm:pw-mt-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">
@@ -69,7 +83,7 @@ export const VerifySignUpMailSent = ({
             <button
               disabled={isActive || isLoading}
               className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
-              onClick={() => mutate({ email })}
+              onClick={() => mutate({ email, tenantId, callbackPath })}
             >
               {translate('auth>mailStep>resentCodeButton')}
             </button>
@@ -96,7 +110,13 @@ export const VerifySignUpMailSent = ({
             <button
               disabled={isActive || isLoading}
               className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
-              onClick={() => mutate({ email })}
+              onClick={() =>
+                mutate({
+                  email,
+                  tenantId,
+                  callbackPath,
+                })
+              }
             >
               Reenviar código
             </button>
