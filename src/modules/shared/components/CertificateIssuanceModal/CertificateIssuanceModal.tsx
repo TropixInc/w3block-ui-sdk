@@ -1,22 +1,15 @@
-import { useMemo } from 'react';
+import Link from 'next/link';
 
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
-
+import { ModalBase } from '../../../shared/components/ModalBase';
 import useTranslation from '../../hooks/useTranslation';
-import { CertificatePdf } from '../CertificatePdf';
-import { ModalBase } from '../ModalBase';
-
+import PDFViewer from './PDF';
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  image: string;
-  name: string;
-  description: string;
-  originalOwnerWalletAddress: string;
-  transactionHash: string;
   contractAddress: string;
-  QRCodeSrc: string;
+  chainId: number;
+  tokenId: string;
 }
 
 export const CertificateIssuanceModal = ({
@@ -24,42 +17,10 @@ export const CertificateIssuanceModal = ({
   onClose,
   onConfirm,
   contractAddress,
-  description,
-  image,
-  name,
-  transactionHash,
-  originalOwnerWalletAddress,
-  QRCodeSrc,
+  chainId,
+  tokenId,
 }: Props) => {
   const [translate] = useTranslation();
-  const translations = useMemo(
-    () => ({
-      QRCodeScanMessage: translate(
-        'components>tokenCertificate>scanQRCodeMessage'
-      ),
-      collectionData: {
-        titleLabel: translate(
-          'components>tokenCertificate>collectionTitleLabel'
-        ),
-        descriptionLabel: translate(
-          'components>tokenCertificate>collectionDescriptionLabel'
-        ),
-      },
-      header: {
-        line1: translate('components>tokenCertificate>headerLine1'),
-        line2: translate('components>tokenCertificate>headerLine2'),
-      },
-      metaData: {
-        contractAddressLabel: translate(
-          'components>tokenCertificate>contractAddressLabel'
-        ),
-        transcationHashLabel: translate(
-          'components>tokenCertificate>hashTransactionLabel'
-        ),
-      },
-    }),
-    [translate]
-  );
 
   return (
     <ModalBase
@@ -74,55 +35,21 @@ export const CertificateIssuanceModal = ({
           {translate('components>certificateModal>title')}
         </h2>
         <PDFViewer
-          width="100%"
-          showToolbar={false}
-          className="pw-drop-shadow-xl pw-h-[200px] lg:pw-h-[500px]"
-        >
-          <CertificatePdf
-            translations={translations}
-            imageSrc={image}
-            QRCodeImageSrc={QRCodeSrc}
-            contractAddress={contractAddress}
-            ownerAddress={originalOwnerWalletAddress}
-            transactionHash={transactionHash}
-            name={name}
-            description={description}
-          />
-        </PDFViewer>
+          src={`${process.env.NEXT_PUBLIC_PDF_API_URL}certification/${contractAddress}/${chainId}/${tokenId}`}
+        />
         <p className="pw-mt-4 pw-mb-10 pw-text-[13px] pw-leading-[15px]">
           Preview
         </p>
-        <PDFDownloadLink
-          document={
-            <CertificatePdf
-              translations={translations}
-              imageSrc={image}
-              QRCodeImageSrc={QRCodeSrc}
-              contractAddress={contractAddress}
-              ownerAddress={originalOwnerWalletAddress}
-              transactionHash={transactionHash}
-              name={name}
-              description={description}
-            />
-          }
-          fileName="certificate.pdf"
-          className="pw-bg-[#5682C3] pw-rounded-lg pw-inline-block pw-text-white pw-text-base pw-leading-[19px] pw-text-center pw-font-semibold hover:pw-shadow-xl active:pw-bg-[#3663A6] pw-min-w-[260px]"
+        <Link
+          href={`${process.env.NEXT_PUBLIC_PDF_API_URL}certification/${contractAddress}/${chainId}/${tokenId}`}
         >
-          {({ loading }) =>
-            loading ? (
-              <span className="pw-py-[9.5px] pw-px-[15px] pw-inline-block">
-                {translate('components>certificateModal>loading')}
-              </span>
-            ) : (
-              <span
-                onClick={onConfirm}
-                className="pw-py-[9.5px] pw-px-[15px] pw-inline-block"
-              >
-                {translate('components>certificateModal>downloadButton')}
-              </span>
-            )
-          }
-        </PDFDownloadLink>
+          <a
+            onClick={onConfirm}
+            className="pw-bg-[#5682C3] pw-rounded-lg pw-inline-block pw-text-white pw-text-base pw-leading-[19px] pw-text-center pw-font-semibold hover:pw-shadow-xl active:pw-bg-[#3663A6] pw-min-w-[260px] pw-p-3"
+          >
+            {translate('components>certificateModal>downloadButton')}
+          </a>
+        </Link>
       </div>
     </ModalBase>
   );

@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.6",
-    "@react-pdf/renderer": "^3.0.0",
+    "@types/react-pdf": "^5.7.2",
     "@w3block/pixchain-react-metamask": "^2.8.1",
     "@w3block/sdk-id": "^0.1.4",
     "axios": "^0.27.2",
@@ -37,9 +37,9 @@
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "jwt-decode": "^3.1.2",
-    "qrcode.react": "^3.1.0",
     "react-hook-form": "^7.33.1",
     "react-i18next": "^11.18.1",
+    "react-pdf": "^5.7.2",
     "react-use": "^17.4.0",
     "yup": "^0.32.11"
   },
