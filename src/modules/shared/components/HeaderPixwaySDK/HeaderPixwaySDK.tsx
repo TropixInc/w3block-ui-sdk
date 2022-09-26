@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import classNames from 'classnames';
 
+import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import TranslatableComponent from '../TranslatableComponent';
 import {
@@ -57,34 +58,39 @@ const _HeaderPixwaySDK = ({
   };
 
   return (
-    <div
-      className={classNames(
-        'pw-container pw-mx-auto pw-bg-white pw-px-4 sm:pw-px-0',
-        headerClassName ?? ''
-      )}
-    >
-      <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
-        <img
-          style={{ height: logoHeight + 'px' }}
-          src={logoUrl}
-          className=" pw-object-contain"
-        />
-        <div className="pw-flex pw-items-center">
-          <div className="pw-order-2 sm:pw-order-1">
-            <NavigationTabsPixwaySDK
-              tabs={tabs}
-              toogleMenu={toggleTabsMemo}
-              opened={openedMenu ? openedMenu : openedTabs}
+    <div className="w-full bg-white">
+      <div
+        className={classNames(
+          'pw-container pw-mx-auto pw-bg-white pw-px-4 sm:pw-px-0',
+          headerClassName ?? ''
+        )}
+      >
+        <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
+          <a href={PixwayAppRoutes.HOME}>
+            <img
+              style={{ height: logoHeight + 'px' }}
+              src={logoUrl}
+              className=" pw-object-contain pw-max-w-[150px]"
             />
-          </div>
+          </a>
 
-          <div className="pw-order-1 sm:pw-order-2">
-            <NavigationLoginPixwaySDK
-              toggleLoginMenu={toggleMenuMemo}
-              loginMenu={validatorMenuOpened}
-              signInRouter={signInRouter}
-              signUpRouter={signUpRouter}
-            />
+          <div className="pw-flex pw-items-center">
+            <div className="pw-order-2 sm:pw-order-1">
+              <NavigationTabsPixwaySDK
+                tabs={tabs}
+                toogleMenu={toggleTabsMemo}
+                opened={openedMenu ? openedMenu : openedTabs}
+              />
+            </div>
+
+            <div className="pw-order-1 sm:pw-order-2">
+              <NavigationLoginPixwaySDK
+                toggleLoginMenu={toggleMenuMemo}
+                loginMenu={validatorMenuOpened}
+                signInRouter={signInRouter}
+                signUpRouter={signUpRouter}
+              />
+            </div>
           </div>
         </div>
       </div>
