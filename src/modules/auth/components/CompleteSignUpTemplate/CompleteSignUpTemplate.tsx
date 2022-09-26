@@ -7,6 +7,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
+import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 import { CompleteSignUpSuccess } from '../CompleteSignUpSuccess';
 import { SignUpForm } from '../SignUpForm';
 import { SignUpFormData } from '../SignUpForm/interface';
@@ -20,6 +21,10 @@ enum Steps {
   MAIL_CONFIRMED,
 }
 
+interface Props {
+  classes?: AuthLayoutBaseClasses;
+}
+
 const getIsTokenExpired = (token: string) => {
   const tokenSplitted = token.split(';');
   if (tokenSplitted.length !== 2) {
@@ -28,10 +33,10 @@ const getIsTokenExpired = (token: string) => {
   return isAfter(new Date(), new Date(Number(tokenSplitted[1])));
 };
 
-const _CompleteSignUpTemplate = () => {
+const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
   const router = useRouter();
   const [translate] = useTranslation();
-  const { email, token } = router.query;
+  const { email, token, tenantId } = router.query;
   const { mutate, isLoading, isSuccess, isError } = useChangePassword();
   const [step, setStep] = useState(() => {
     return token && getIsTokenExpired(token as string)
@@ -72,12 +77,22 @@ const _CompleteSignUpTemplate = () => {
     return (
       <VerifySignUpTokenExpired
         email={email as string}
+        tenantId={tenantId as string | undefined}
         onSendEmail={() => setStep(Steps.CONFIRMATION_MAIL_SENT)}
+        classes={classes}
+        isPostSignUp
       />
     );
 
   if (step === Steps.CONFIRMATION_MAIL_SENT)
-    return <VerifySignUpMailSent email={email as string} />;
+    return (
+      <VerifySignUpMailSent
+        email={email as string}
+        tenantId={tenantId as string | undefined}
+        classes={classes}
+        isPostSignUp
+      />
+    );
 
   return step === Steps.FORM ? (
     <SignUpForm
@@ -87,14 +102,15 @@ const _CompleteSignUpTemplate = () => {
       error={
         isError ? translate('auth>signUpError>genericErrorMessage') : undefined
       }
+      classes={classes}
     />
   ) : (
-    <CompleteSignUpSuccess />
+    <CompleteSignUpSuccess classes={classes} />
   );
 };
 
-export const CompleteSignUpTemplate = () => (
+export const CompleteSignUpTemplate = (props: Props) => (
   <TranslatableComponent>
-    <_CompleteSignUpTemplate />
+    <_CompleteSignUpTemplate {...props} />
   </TranslatableComponent>
 );

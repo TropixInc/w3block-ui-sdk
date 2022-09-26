@@ -26,4 +26,5 @@ export enum PixwayAppRoutes {
   CONTACT_US = '/contact-us',
   TERMS_CONDITIONS = '/terms-and-conditions',
   PRIVACY_POLICY = '/privacy-policy',
+  COMPLETE_SIGNUP = '/auth/complete-profile',
 }

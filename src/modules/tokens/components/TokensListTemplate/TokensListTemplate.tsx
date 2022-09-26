@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { TokenLayoutBase, useProfile } from '../../../shared';
+import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { Link } from '../../../shared/components/Link';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
@@ -8,6 +8,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as WalletImage } from '../../assets/wallet.svg';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
@@ -204,15 +205,16 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 export const TokensListTemplate = () => {
   const isProduction = useIsProduction();
   const { status } = usePixwaySession();
+  const { isLoading, isAuthorized } = usePrivateRoute();
 
   const renderTemplate = () => {
     if (status === 'unauthenticated') return <UnsignedUserAlert />;
     return isProduction ? <HOCProduction /> : <HOCStaging />;
   };
 
-  return (
+  return isLoading || !isAuthorized ? null : (
     <TranslatableComponent>
-      <TokenLayoutBase>{renderTemplate()}</TokenLayoutBase>
+      <InternalPagesLayoutBase>{renderTemplate()}</InternalPagesLayoutBase>
     </TranslatableComponent>
   );
 };

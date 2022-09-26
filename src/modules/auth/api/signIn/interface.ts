@@ -1,4 +1,4 @@
-import { Roles } from '../../../shared/enums/Roles';
+import { UserRoleEnum } from '@w3block/sdk-id';
 
 export interface SignInPayload {
   email: string;
@@ -9,7 +9,7 @@ export interface SignInPayload {
 interface UserDataSignIn {
   sub: string;
   email: string;
-  roles: Array<Roles>;
+  roles: Array<UserRoleEnum>;
   name: string;
   verified: boolean;
   companyId?: string;

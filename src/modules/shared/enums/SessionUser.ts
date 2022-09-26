@@ -1,10 +1,9 @@
+import { UserRoleEnum } from '@w3block/sdk-id';
 import { User } from 'next-auth';
-
-import { Roles } from './Roles';
 
 export interface SessionUser extends User {
   accessToken: string;
   refreshToken: string;
-  roles: Array<Roles>;
+  roles: Array<UserRoleEnum>;
   companyId?: string;
 }
