@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.40](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.39...v0.1.1-alpha.40) (2022-09-27)
+
+
+### Features
+
+* **pe-64:** modal resend email ([#24](https://github.com/TropixInc/w3block-ui-sdk/issues/24)) ([7cc56d7](https://github.com/TropixInc/w3block-ui-sdk/commit/7cc56d732d7553babcfddc76a7966abf036208d5))
+
 ### [0.1.1-alpha.39](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.38...v0.1.1-alpha.39) (2022-09-26)
 
 ### [0.1.1-alpha.38](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.37...v0.1.1-alpha.38) (2022-09-26)
