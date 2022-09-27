@@ -79,12 +79,11 @@
   "tokens>tokenCardActions>certificate": "Certificado",
   "auth>signUpForm>formTitle": "Crie sua conta",
   "auth>signUpForm>alreadyHaveAccount": "Já possui uma conta? <1>Login</1>",
-  "auth>signUp>emailSent": "Enviamos um link para confirmar seu e-mail: <1>{{email}}</1>",
   "auth>verifySignUp>mailVerifiedStepTitle": "Email confirmado com sucesso",
   "auth>verifySignUp>waitForRedirectionMessage": "Aguarde enquanto estamos te direcionado para o login ou se não quiser aguardar, clique no botão abaixo.",
   "auth>emailConfirmation>resendEmailAction": "<0>Clique aqui</0> para reenviar seu código.",
   "auth>emailConfirmation>mailResentStepTitle": "Confirmação de e-mail.",
-  "auth>emailConfirmation>mailSentToEmail": "Enviamos um link para confirmar seu e-mail:<1>joh******@teste.com.br</1>",
+  "auth>emailConfirmation>mailSentToEmail": "Enviamos um link para confirmar seu e-mail:<1>{{email}}</1>",
   "auth>emailConfirmation>linkExpiresMessage": "O link expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro.",
   "auth>completeSignUp>mailAlreadyVerified": "Seu e-mail já foi verificado, com isso você já pode fazer qualquer ação em nosso ecosistema.",
   "auth>signUpError>emailAlreadyInUse": "O email informado já está em uso.",
@@ -159,5 +158,14 @@
   "checkout>components>checkoutInfo>infoAboutProcessing": "O token está em processamento na rede blockchain e logo ficarão disponíveis na sua carteira. O tempo de processamento pode variar de poucos minutos até 4 horas de acordo com o tráfego da rede blockchain. Nós te avisaremos assim que o processamento estiver finalizado.",
   "checkout>components>warning>problemWithCheckout": "Tivemos um problema na hora da compra.",
   "shared>tryAgain": "Tentar novamente",
-  "shared>components>price&gasInfo": "Valor a pagar"
+  "shared>components>price&gasInfo": "Valor a pagar",
+  "wallet>page>balance": "Saldo",
+  "wallet>page>addFunds": "Adicionar fundos",
+  "wallet>page>disconnect": "Desconectar",
+  "wallet>page>metamask": "Metamask",
+  "wallet>page>principal": "Principal",
+  "wallet>page>extract": "Extrato",
+  "wallet>page>from": "De",
+  "wallet>page>for": "Para"
+
 }

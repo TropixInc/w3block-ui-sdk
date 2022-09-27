@@ -39,7 +39,7 @@ export const ModalBlockedAction = ({
     if (countdownDate && isAfter(new Date(countdownDate), new Date())) {
       setNewCountdown(new Date(countdownDate));
     }
-  }, [countdownDate, setNewCountdown]);
+  }, [countdownDate]);
 
   useEffect(() => {
     isOpen && !isActive && resendEmail();

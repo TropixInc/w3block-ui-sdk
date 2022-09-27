@@ -7,6 +7,8 @@ import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
 
 interface Payload {
   email: string;
+  tenantId?: string;
+  callbackPath?: PixwayAppRoutes;
 }
 
 export const useRequestConfirmationMail = () => {
@@ -14,13 +16,13 @@ export const useRequestConfirmationMail = () => {
   const { companyId, appBaseUrl } = useCompanyConfig();
   return useMutation(
     [PixwayAPIRoutes.REQUEST_CONFIRMATION_MAIL],
-    async ({ email }: Payload) => {
+    async ({ email, tenantId, callbackPath }: Payload) => {
       const sdk = await getSDK();
       return sdk.api.auth.requestConfirmationEmail({
         email,
-        tenantId: companyId,
+        tenantId: tenantId ?? companyId,
         callbackUrl: new URL(
-          PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+          callbackPath ?? PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
           appBaseUrl
         ).toString(),
       });

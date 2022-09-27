@@ -10,7 +10,7 @@ import useRouter from '../../../../../hooks/useRouter';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { UserTag } from '../../../../UserTag/UserTag';
 import { NavigationMenuTabs } from '../interfaces/menu';
-import { DefaultMenuTabs } from './NavigationLoginLoggedButton';
+import { useDefaultMenuTabs } from './NavigationLoginLoggedButton';
 
 interface NavigationLoginLoggedButtonMobileProps {
   menuOpened?: boolean;
@@ -21,8 +21,9 @@ interface NavigationLoginLoggedButtonMobileProps {
 export const NavigationLoginLoggedButtonMobile = ({
   menuOpened,
   toggleMenu,
-  menuTabs = DefaultMenuTabs(),
+  menuTabs: _menuTabs,
 }: NavigationLoginLoggedButtonMobileProps) => {
+  const defaultTabs = useDefaultMenuTabs();
   const [translate] = useTranslation();
   const router = useRouter();
   const [userMenu, setUserMenu] = useState<boolean>(false);
@@ -32,8 +33,8 @@ export const NavigationLoginLoggedButtonMobile = ({
       toggleMenu();
     } else setUserMenu(!userMenu);
   };
-
   const [_, copy] = useCopyToClipboard();
+  const menuTabs = _menuTabs ?? defaultTabs;
 
   const validatorOpened = menuOpened ? menuOpened : userMenu;
 
@@ -52,7 +53,7 @@ export const NavigationLoginLoggedButtonMobile = ({
             className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
             <p className="pw-font-montserrat pw-text-xs pw-font-[400] pw-cursor-pointer">
-              {profile?.data.mainWallet?.address}
+              {profile?.data.mainWallet?.address || '-'}
             </p>
             <CopyIcon />
           </div>

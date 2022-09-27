@@ -78,7 +78,7 @@ const _MailConfirmationTemplate = () => {
       const tokenSplitted = token.split(';');
       if (tokenSplitted.length !== 2) router.push(PixwayAppRoutes.HOME);
       else {
-        const timeStamp = tokenSplitted[1];
+        const timeStamp = Number(tokenSplitted[1]);
         if (isAfter(new Date(), new Date(timeStamp)))
           setStep(Steps.TOKEN_EXPIRED);
         else mutate({ email: email as string, token: token as string });
