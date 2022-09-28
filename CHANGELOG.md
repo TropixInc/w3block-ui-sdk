@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.42](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.41...v0.1.1-alpha.42) (2022-09-28)
+
+
+### Features
+
+* **pe-98:** adjusted certificate to new method ([#43](https://github.com/TropixInc/w3block-ui-sdk/issues/43)) ([7538389](https://github.com/TropixInc/w3block-ui-sdk/commit/7538389c0041c25688dd42e6bd5eb6e8f90bc397))
+
 ### [0.1.1-alpha.41](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.40...v0.1.1-alpha.41) (2022-09-28)
 
 
