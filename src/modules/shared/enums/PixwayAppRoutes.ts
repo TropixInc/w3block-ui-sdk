@@ -18,6 +18,7 @@ export enum PixwayAppRoutes {
   CHECKOUT_PROCESSING = '/checkout/processing',
   CHECKOUT_COMPLETED = '/checkout/completed',
   PROFILE = '/profile',
+  MY_TOKENS = '/tokens',
   WALLET = '/wallet',
   SETTINGS = '/settings',
   HELP = '/help',
@@ -26,5 +27,6 @@ export enum PixwayAppRoutes {
   CONTACT_US = '/contact-us',
   TERMS_CONDITIONS = '/terms-and-conditions',
   PRIVACY_POLICY = '/privacy-policy',
+  CONFIG = '/configurations',
   COMPLETE_SIGNUP = '/auth/complete-profile',
 }
