@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.41](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.40...v0.1.1-alpha.41) (2022-09-28)
+
+
+### Features
+
+* **pe-71:** token details page ([#15](https://github.com/TropixInc/w3block-ui-sdk/issues/15)) ([03876f6](https://github.com/TropixInc/w3block-ui-sdk/commit/03876f6792250b154a85088af6c4b508c0156ef9))
+
 ### [0.1.1-alpha.40](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.39...v0.1.1-alpha.40) (2022-09-27)
 
 
