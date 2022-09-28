@@ -10,6 +10,8 @@ const _dirname =
     ? dirname(fileURLToPath(import.meta.url))
     : __dirname;
 
+const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
@@ -32,7 +34,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    react(),
+    isDev && react(),
     svgr(),
     dts({
       insertTypesEntry: true,
