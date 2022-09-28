@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import classNames from 'classnames';
 
 import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copy.svg';
 import { ReactComponent as DownloadIcon } from '../../../shared/assets/icons/download.svg';
@@ -47,6 +46,8 @@ export const QRCodeModal = ({
   const truncate = useTruncate();
   const [copied, setCopied] = useTimedBoolean(1000);
   const QRCodeContainerRef = useRef<HTMLDivElement>(null);
+
+
   const [windowDimensions, setWindowDimensions] = useState<Dimensions>({
     width: 0,
     height: 0,
@@ -129,20 +130,14 @@ export const QRCodeModal = ({
       isOpen={isOpen}
       onClose={onClose}
       classes={{
-        dialogCard: `pw-w-full pw-max-w-[460px] ${windowDimensions.height < 768
-          ? 'pw-p-[30px_28px]'
-          : 'pw-p-[30px_28px] lg:pw-p-[42px_40px_53px]'
-          }`,
+        dialogCard: "pw-w-full pw-max-w-[460px] pw-p-[30px_28px] lg:pw-p-[42px_40px_53px]",
       }}
     >
 
       <h2 className="pw-font-semibold pw-text-2xl pw-leading-7 pw-mb-2">
         {truncate(collectionTitle ?? '', { maxCharacters: 26 })}
       </h2>
-      <p
-        className={`pw-font-semibold pw-leading-[19px] pw-text-[#333333] ${windowDimensions.height < 768 ? 'pw-mb-[30px]' : 'pw-mb-[30px] lg:pw-mb-10'
-          }`}
-      >
+      <p className="pw-font-semibold pw-leading-[19px] pw-text-[#333333] pw-mb-[30px] lg:pw-mb-10" >
         {translate('wallet>tokenQRCodeModal>selectedEdition', {
           selectedEdition,
           totalEditions,
@@ -150,22 +145,11 @@ export const QRCodeModal = ({
       </p>
 
       <div className="pw-flex pw-justify-center">
-        <div
-          className={`pw-flex pw-items-center pw-flex-col 
-          ${windowDimensions.height < 768 ? 'pw-gap-y-[16px]' : 'pw-gap-y-[22px]'}`}
-        >
+        <div className="pw-flex pw-items-center pw-flex-col pw-gap-y-[16px] sm:pw-gap-y-[22px]" >
           <div className="pw-relative">
-            <ScanMePlate
-              className={`pw-fill-[#5682C3] ${windowDimensions.height < 768
-                ? 'pw-w-[120px] pw-h-[49px]'
-                : 'pw-w-[171.9px] pw-h-[70.14px]'
-                }`}
-            />
+            <ScanMePlate className="pw-fill-[#5682C3] pw-w-[120px] pw-h-[49px] sm:pw-w-[171.9px] sm:pw-h-[70.14px]" />
             <span
-              className={`pw-absolute pw-bg-[#FFFF] ${windowDimensions.height < 768
-                ? 'pw-left-[44.91px] pw-top-[11.28px] pw-w-[7px] pw-h-[9.95px]'
-                : 'pw-left-[63.91px] pw-top-[17.28px] pw-w-[9.11px] pw-h-[12.95px]'
-                }`}
+              className="pw-absolute pw-bg-[#FFFF] pw-left-[44.91px] pw-top-[11.28px] pw-w-[7px] pw-h-[9.95px] sm:pw-left-[63.91px] sm:pw-top-[17.28px] sm:pw-w-[9.11px] sm:pw-h-[12.95px]"
               style={{
                 clipPath: 'polygon(50% 0, 100% 100%, 0 100%)',
               }}
@@ -189,27 +173,19 @@ export const QRCodeModal = ({
       </div>
 
       {editionId ? (
-        <div
-          className={`pw-text-[#333333] pw-text-[13px] pw-leading-[15px] pw-text-center pw-flex pw-flex-col 
-          ${windowDimensions.height < 768 ? 'pw-mt-[16px]' : 'pw-mt-[24px]'}`}
-        >
+        <div className="pw-text-[#333333] pw-text-[13px] pw-leading-[15px] pw-text-center pw-flex pw-flex-col pw-mt-[16px] sm:pw-mt-[24px]">
           <span className="pw-font-semibold">Identificador</span>
           <span className="pw-text-sm">{editionId}</span>
         </div>
       ) : null}
 
-      <div
-        className={classNames(
-          'pw-flex pw-justify-between',
-          windowDimensions.height < 768 ? 'pw-mt-[30px]' : 'pw-mt-[30px] lg:pw-mt-[42px]'
-        )}
-      >
+      <div className={'pw-flex pw-justify-between pw-mt-[30px] sm:pw-mt-[30px] lg:pw-mt-[42px]'} >
         <OffpixButtonBase
           className="pw-text-sm pw-leading-4 pw-py-0 pw-h-[40px] pw-px-[16px] pw-flex pw-items-center pw-justify-center"
           onClick={handleDownload}
           variant="outlined"
         >
-          Salvar código QR
+          {translate("wallet>tokenQRCodeModal>saveCode")}
           <DownloadIcon className="pw-ml-[8px] pw-w-[23px] pw-fill-current pw-shrink-0" />
         </OffpixButtonBase>
 
@@ -219,10 +195,10 @@ export const QRCodeModal = ({
           variant="outlined"
         >
           {copied ? (
-            'Copiado!'
+            translate('components>menu>copied')
           ) : (
             <>
-              Copiar código QR
+              {translate("wallet>tokenQRCodeModal>copyCode")}
               <CopyIcon className="pw-ml-[8px] pw-w-[19px] pw-fill-current pw-shrink-0" />
             </>
           )}

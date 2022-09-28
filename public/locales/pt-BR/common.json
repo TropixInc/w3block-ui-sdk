@@ -158,6 +158,8 @@
   "components>genericMessages>mintedBy": "Mintado por W3block",
   "tokenization>publicTokenTemplate>moreInfoThisNFT": "Mais informações sobre esse NFT",
   "wallet>tokenQRCodeModal>selectedEdition": "Edição {{selectedEdition}} de {{totalEditions}}",
+  "wallet>tokenQRCodeModal>saveCode": "Salvar código QR",
+  "wallet>tokenQRCodeModal>copyCode": "Copiar código QR",
   "connect>tokenInternalPage>titleMobile": "Interna do token",
   "connect>tokenDetailsCard>contract": "Contrato utilizado",
   "connect>tokenDetailsCard>titleOrItemName": "Título ou nome do item",
