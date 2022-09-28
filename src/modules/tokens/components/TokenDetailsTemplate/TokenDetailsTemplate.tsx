@@ -1,4 +1,4 @@
-import { TokenLayoutBase } from '../../../shared';
+import { InternalPagesLayoutBase } from '../../../shared';
 import { ReactComponent as ChevronLeft } from '../../../shared/assets/icons/chevronLeftFilled.svg';
 import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -75,8 +75,8 @@ const _TokenDetailsTemplate = () => {
 
 export const TokenDetailsTemplate = () => (
   <TranslatableComponent>
-    <TokenLayoutBase>
+    <InternalPagesLayoutBase>
       <_TokenDetailsTemplate />
-    </TokenLayoutBase>
+    </InternalPagesLayoutBase>
   </TranslatableComponent>
 );
