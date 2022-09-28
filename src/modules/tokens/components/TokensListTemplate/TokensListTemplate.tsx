@@ -180,7 +180,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
       </div>
     </div>
   ) : (
-    <div className="pw-flex pw-flex-1 pw-px-10 pw-flex-col pw-relative pw-font-poppins pw-items-center pw-justify-start sm:pw-justify-center">
+    <div className="pw-flex pw-flex-1 pw-px-10 pw-flex-col pw-relative pw-font-poppins pw-items-center pw-justify-start sm:pw-justify-center pw-mb-13">
       <h1 className="pw-font-semibold pw-ctext-[15px] pw-leading-[22px] pw-block sm:pw-hidden pw-mb-[61px]">
         {translate('connectTokens>tokensList>pageTitle')}
       </h1>
