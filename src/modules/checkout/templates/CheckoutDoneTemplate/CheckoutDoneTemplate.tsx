@@ -1,4 +1,5 @@
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import useRouter from '../../../shared/hooks/useRouter';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
@@ -16,7 +17,8 @@ export const CheckoutDoneTemplate = ({
   currencyId,
 }: CheckoutDoneTemplateProps) => {
   const router = useRouter();
-  return (
+  const { isAuthorized, isLoading } = usePrivateRoute();
+  return !isAuthorized || isLoading ? null : (
     <>
       <CheckoutHeader
         onClick={returnTo ? returnTo : () => router.push(PixwayAppRoutes.HOME)}

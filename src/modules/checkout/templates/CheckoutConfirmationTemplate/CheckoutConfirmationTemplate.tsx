@@ -1,3 +1,4 @@
+import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutHeader } from '../../components/CheckoutHeader';
@@ -15,7 +16,8 @@ export const CheckoutConfirmationTemplate = ({
   productId,
   currencyId,
 }: CheckoutConfirmationTemplateProps) => {
-  return (
+  const { isAuthorized, isLoading } = usePrivateRoute();
+  return !isAuthorized || isLoading ? null : (
     <>
       <CheckoutHeader onClick={returnTo} />
       <CheckoutContainer

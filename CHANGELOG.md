@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.40](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.39...v0.1.1-alpha.40) (2022-09-27)
+
+
+### Features
+
+* **pe-64:** modal resend email ([#24](https://github.com/TropixInc/w3block-ui-sdk/issues/24)) ([7cc56d7](https://github.com/TropixInc/w3block-ui-sdk/commit/7cc56d732d7553babcfddc76a7966abf036208d5))
+
+### [0.1.1-alpha.39](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.38...v0.1.1-alpha.39) (2022-09-26)
+
+### [0.1.1-alpha.38](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.37...v0.1.1-alpha.38) (2022-09-26)
+
+### [0.1.1-alpha.37](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.36...v0.1.1-alpha.37) (2022-09-23)
+
+
+### Features
+
+* **Tk 603:** adapt sdk to use in post sign up flow in key ([#40](https://github.com/TropixInc/pixway-ui-sdk/issues/40)) ([f7a6acc](https://github.com/TropixInc/pixway-ui-sdk/commit/f7a6acc68a527a660cbdf3813616e9d4ae2ba5b3))
+
+### [0.1.1-alpha.36](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.35...v0.1.1-alpha.36) (2022-09-22)
+
+### [0.1.1-alpha.35](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.34...v0.1.1-alpha.35) (2022-09-22)
+
+
+### Bug Fixes
+
+* **pe-92:** fix redirections when users signs out ([#39](https://github.com/TropixInc/pixway-ui-sdk/issues/39)) ([0065257](https://github.com/TropixInc/pixway-ui-sdk/commit/00652574d33f04014355925ad22a41a76bfb3317))
+
+### [0.1.1-alpha.34](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.33...v0.1.1-alpha.34) (2022-09-22)
+
+
+### Features
+
+* **pe-54:** wallet page ([#36](https://github.com/TropixInc/w3block-ui-sdk/issues/36)) ([daf4788](https://github.com/TropixInc/w3block-ui-sdk/commit/daf47883a1273ae751bc53c3d38376aea807895a))
+
+### [0.1.1-alpha.33](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.32...v0.1.1-alpha.33) (2022-09-21)
+
+### [0.1.1-alpha.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.31...v0.1.1-alpha.32) (2022-09-21)
+
+### [0.1.1-alpha.31](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.30...v0.1.1-alpha.31) (2022-09-21)
+
 ### [0.1.1-alpha.30](https://github.com/TropixInc/pixway-ui-sdk/compare/v0.1.1-alpha.29...v0.1.1-alpha.30) (2022-09-19)
 
 ### [0.1.1-alpha.29](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.28...v0.1.1-alpha.29) (2022-09-16)

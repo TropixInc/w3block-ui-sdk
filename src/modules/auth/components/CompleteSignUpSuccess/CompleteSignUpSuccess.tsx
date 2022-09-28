@@ -1,12 +1,18 @@
+import classNames from 'classnames';
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
+import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
 
-export const CompleteSignUpSuccess = () => {
+interface Props {
+  classes?: AuthLayoutBaseClasses;
+}
+
+export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
@@ -16,9 +22,11 @@ export const CompleteSignUpSuccess = () => {
       logo={logoUrl}
       title={translate('auth>signUpForm>formTitle')}
       classes={{
-        contentContainer:
+        contentContainer: classNames(
           'pw-px-[15px] pw-pt-[35px] pw-pb-[39px] sm:!pw-p-[35px]',
-        title: 'sm:!pw-hidden',
+          classes?.contentContainer ?? ''
+        ),
+        title: classNames('sm:!pw-hidden', classes.title ?? ''),
       }}
     >
       <div className="pw-text-[#35394C] sm:!pw-mt-6">

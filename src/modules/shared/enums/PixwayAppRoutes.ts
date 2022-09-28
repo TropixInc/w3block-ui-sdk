@@ -28,4 +28,5 @@ export enum PixwayAppRoutes {
   TERMS_CONDITIONS = '/terms-and-conditions',
   PRIVACY_POLICY = '/privacy-policy',
   CONFIG = '/configurations',
+  COMPLETE_SIGNUP = '/auth/complete-profile',
 }
