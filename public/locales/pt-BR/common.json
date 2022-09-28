@@ -169,7 +169,7 @@
   "connect>tokenDetailsCard>titleOrItemName": "Título ou nome do item",
   "connect>tokenDetailsCard>description": "Descrição",
   "connect>tokenDetailsCard>tokenPublicPage": "Página pública do token",
-  "connect>tokenDetailsCard>moreInformation": "Mais informações sobre esse NFT"
+  "connect>tokenDetailsCard>moreInformation": "Mais informações sobre esse NFT",
   "wallet>page>balance": "Saldo",
   "wallet>page>addFunds": "Adicionar fundos",
   "wallet>page>disconnect": "Desconectar",
