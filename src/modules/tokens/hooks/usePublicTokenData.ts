@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query';
 
-import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
-import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
-import { useAxios } from '../../../shared/hooks/useAxios';
-import { DynamicFormConfiguration } from '../../interfaces/DynamicFormConfiguration';
-import { DynamicFormFieldValue } from '../../interfaces/DynamicFormFieldValue';
-import { getPublicTokenDataQueryKey } from '../../utils/getPublicTokenDataQueryKey';
+import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useAxios } from '../../shared/hooks/useAxios';
+import { DynamicFormConfiguration } from '../interfaces/DynamicFormConfiguration';
+import { DynamicFormFieldValue } from '../interfaces/DynamicFormFieldValue';
+import { getPublicTokenDataQueryKey } from '../utils/getPublicTokenDataQueryKey';
 
 interface TokenData {
   rfid?: string;

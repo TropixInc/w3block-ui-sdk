@@ -72,5 +72,13 @@
   "checkout>components>warning>problemWithCheckout": "We had a problem with the purchase.",
   "shared>tryAgain": "Try again",
   "shared>components>price&gasInfo": "Price",
-  "shared>header>connectWallet": "Connect wallet"
+  "shared>header>connectWallet": "Connect wallet",
+  "components>genericMessages>mintedBy": "Minted by W3block",
+  "tokenization>publicTokenTemplate>moreInfoThisNFT": "Mais informações sobre esse NFT",
+  "wallet>tokenQRCodeModal>selectedEdition": "Edição {{selectedEdition}} de {{totalEditions}}",
+  "connect>tokenDetailsCard>contract": "Contract",
+  "connect>tokenDetailsCard>titleOrItemName": "Title or item name",
+  "connect>tokenDetailsCard>description": "Description",
+  "connect>tokenDetailsCard>tokenPublicPage": "Token public page",
+  "connect>tokenDetailsCard>moreInformation": "More information about this NFT"
 }
