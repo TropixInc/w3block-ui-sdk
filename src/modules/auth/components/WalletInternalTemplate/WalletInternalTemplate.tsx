@@ -14,29 +14,22 @@ import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walle
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
 import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { ChainScan } from '../../../shared/enums/ChainId';
-import { useBalance } from '../../../shared/hooks/useBalance';
-import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { WalletExtract } from '../WalletExtract';
 import { CardWallet } from './CardWallet';
 import { ChipWallet } from './ChipWallet';
 
 const _WalletInternalTemplate = () => {
   const [showValue, toggleShowValue] = useToggle(false);
-  const { data: profile, isLoading: isLoadingProfile } = useProfile();
+  const { data: profile } = useProfile();
   const [translate] = useTranslation();
-  const isProduction = useIsProduction();
-  const isDevelopment = !isProduction;
-  const { data: balance, isLoading: isLoadingBalance } = useBalance({
-    address: profile?.data.mainWallet?.address || '',
-    chainId: !isDevelopment ? ChainScan.POLYGON : ChainScan.MUMBAI,
-  });
+  const { wallet } = useUserWallet();
   const router = useRouter();
-  const walletBalance = balance?.data.balance || '0';
+  const walletBalance = wallet?.balance ?? '0';
 
-  const isLoading = (isLoadingProfile && isLoadingBalance) ?? true;
+  const isLoading = wallet == undefined;
 
   return (
     <div className="pw-flex pw-flex-col">

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import TranslatableComponent from '../TranslatableComponent';
 import {
   NavigationLoginPixwaySDK,
@@ -58,7 +59,7 @@ const _HeaderPixwaySDK = ({
   };
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-white pw-shadow-md">
       <div
         className={classNames(
           'pw-container pw-mx-auto pw-bg-white pw-px-4 sm:pw-px-0',
@@ -100,6 +101,8 @@ const _HeaderPixwaySDK = ({
 
 export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
   <TranslatableComponent>
-    <_HeaderPixwaySDK {...props} />
+    <AttachWalletProvider>
+      <_HeaderPixwaySDK {...props} />
+    </AttachWalletProvider>
   </TranslatableComponent>
 );

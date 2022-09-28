@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import classNames from 'classnames';
 
-import { ReactComponent as PixwayIconHorizontal } from '../../../shared/assets/icons/pixwayIconHorizontal.svg';
+import { ReactComponent as PixwayIconHorizontal } from '../../../shared/assets/icons/weblock_logo.svg';
 
 interface AuthLayoutBaseProps {
   children?: ReactNode;
