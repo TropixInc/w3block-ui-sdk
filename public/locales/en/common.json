@@ -71,5 +71,13 @@
   "checkout>components>checkoutInfo>infoAboutProcessing": "The token is being processed on the blockchain network and will soon be available in your wallet. Processing time may vary from a few minutes to 4 hours depending on network traffic blockchain. We will let you know as soon as processing is completed.",
   "checkout>components>warning>problemWithCheckout": "We had a problem with the purchase.",
   "shared>tryAgain": "Try again",
-  "shared>components>price&gasInfo": "Price"
+  "shared>components>price&gasInfo": "Price",
+  "components>genericMessages>mintedBy": "Minted by W3block",
+  "tokenization>publicTokenTemplate>moreInfoThisNFT": "Mais informações sobre esse NFT",
+  "wallet>tokenQRCodeModal>selectedEdition": "Edição {{selectedEdition}} de {{totalEditions}}",
+  "connect>tokenDetailsCard>contract": "Contract",
+  "connect>tokenDetailsCard>titleOrItemName": "Title or item name",
+  "connect>tokenDetailsCard>description": "Description",
+  "connect>tokenDetailsCard>tokenPublicPage": "Token public page",
+  "connect>tokenDetailsCard>moreInformation": "More information about this NFT"
 }

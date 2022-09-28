@@ -10,14 +10,14 @@ export const CardWallet = ({
   showValue,
   value,
   title,
-  walletId,
+  walletAddress,
   textButton,
   onClick,
 }: {
   showValue: boolean;
   value: string;
   title: string;
-  walletId: string;
+  walletAddress: string;
   textButton?: string;
   onClick?: () => void;
 }) => {
@@ -25,7 +25,7 @@ export const CardWallet = ({
   const [isCopied, setIsCopied] = useState(false);
   const [translate] = useTranslation();
   const handleCopy = () => {
-    copyToClipboard(walletId);
+    copyToClipboard(walletAddress);
     if (!state.error) setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
   };
@@ -39,9 +39,12 @@ export const CardWallet = ({
           {translate('components>menu>wallet')}
         </span>
         <p className="pw-text-[14px] pw-leading-[17px] pw-text-[#777E8F] pw-mx-1">
-          {walletId.substring(0, 8)}
+          {walletAddress.substring(0, 8)}
           {'...'}
-          {walletId.substring(walletId.length - 6, walletId.length)}
+          {walletAddress.substring(
+            walletAddress.length - 6,
+            walletAddress.length
+          )}
         </p>
         <button onClick={handleCopy}>
           <CopyIcon width={17} height={17} className="pw-stroke-[#B09C60]" />

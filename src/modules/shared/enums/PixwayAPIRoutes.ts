@@ -17,9 +17,11 @@ export enum PixwayAPIRoutes {
   BALANCE = 'blockchain/balance/{address}/{chainId}',
   ORDER_PREVIEW = '/companies/{companyId}/orders/preview',
   CREATE_ORDER = '/companies/{companyId}/orders',
+  METADATA_BY_RFID = 'metadata/rfid/{rfid}',
+  METADATA_BY_CHAINADDRESS_AND_TOKENID = 'metadata/address/{contractAddress}/{chainId}/{tokenId}',
+  TOKEN_COLLECTIONS = '{companyId}/token-collections',
+  CATEGORIES = 'categories',
   USERS = 'users/',
   VERIFY_SIGN_UP = '/auth/verify-sign-up',
   REQUEST_CONFIRMATION_MAIL = '/auth/request-confirmation-email',
-  METADATA_BY_RFID = 'metadata/rfid/{rfid}',
-  METADATA_BY_CHAINADDRESS_AND_TOKENID = 'metadata/address/{contractAddress}/{chainId}/{tokenId}',
 }

@@ -4,15 +4,17 @@ import { useQueryClient } from 'react-query';
 
 import { Provider } from '@w3block/pixchain-react-metamask';
 
+import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
 import { useProfile } from '../../../shared';
 import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
 import { Alert } from '../../../shared/components/Alert';
-import { Spinner } from '../../../shared/components/Spinner';
+import { Spinner } from '../../../shared/components/Spinner/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useModalController } from '../../../shared/hooks/useModalController';
+import { useNeedsMailConfirmationInterceptor } from '../../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
@@ -66,6 +68,7 @@ const _ConnectWalletTemplate = () => {
   const profile = useProfile();
   const sessionUser = usePixwaySession();
   const user = useSessionUser();
+  const mailInterceptor = useNeedsMailConfirmationInterceptor();
 
   useEffect(() => {
     const { data } = profile;
@@ -75,9 +78,9 @@ const _ConnectWalletTemplate = () => {
 
     if (data) {
       const { data: user } = data;
-      const { verified, wallets } = user;
+      const { wallets } = user;
 
-      if (!verified || wallets?.length) {
+      if (wallets?.length) {
         router.push(PixwayAppRoutes.HOME);
       } else {
         setIsLoading(false);
@@ -230,8 +233,8 @@ const _ConnectWalletTemplate = () => {
             <ConnectToMetamaskButton
               onClick={
                 connected
-                  ? onClickConnectMetamaskWallet
-                  : onClickConnectToMetamaskExtension
+                  ? () => mailInterceptor(onClickConnectMetamaskWallet)
+                  : () => mailInterceptor(onClickConnectToMetamaskExtension)
               }
               disabled={isConnecting}
             />
@@ -244,7 +247,7 @@ const _ConnectWalletTemplate = () => {
           </>
 
           <AuthButton
-            onClick={onClickContinue}
+            onClick={() => mailInterceptor(onClickContinue)}
             fullWidth
             disabled={isConnecting}
           >
@@ -267,7 +270,9 @@ export const ConnectWalletTemplate = () => (
         autoConnect: true,
       }}
     >
-      <_ConnectWalletTemplate />
+      <MailVerifiedInterceptorProvider>
+        <_ConnectWalletTemplate />
+      </MailVerifiedInterceptorProvider>
     </MetamaskProvider>
   </TranslatableComponent>
 );
