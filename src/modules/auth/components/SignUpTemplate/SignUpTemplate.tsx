@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useSignUp } from '../../hooks/useSignUp';
 import { SignUpForm } from '../SignUpForm';
@@ -14,9 +15,17 @@ enum Steps {
   SUCCESS,
 }
 
+interface Config {
+  privacyRedirect?: string;
+  termsRedirect?: string;
+}
+
 const EMAIL_ALREADY_IN_USE_API_MESSAGE = 'email is already in use';
 
-const _SignUpTemplate = () => {
+const _SignUpTemplate = ({
+  privacyRedirect = PixwayAppRoutes.PRIVACY_POLICY,
+  termsRedirect = PixwayAppRoutes.TERMS_CONDITIONS,
+}: Config) => {
   const [translate] = useTranslation();
   const [step, setStep] = useState(Steps.SIGN_UP);
   const { mutate, isLoading, isSuccess, error } = useSignUp();
@@ -51,6 +60,8 @@ const _SignUpTemplate = () => {
       isLoading={isLoading}
       onSubmit={onSubmit}
       error={getErrorMessage()}
+      termsRedirect={termsRedirect}
+      privacyRedirect={privacyRedirect}
     />
   ) : (
     <VerifySignUpMailSent email={email ?? ''} />

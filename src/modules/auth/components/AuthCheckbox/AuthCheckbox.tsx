@@ -8,13 +8,14 @@ import { ReactComponent as CheckboxOutlined } from '../../assets/icons/checkboxO
 interface Props {
   name: string;
   label: string;
+  redirectLink?: string;
 }
 
-export const AuthCheckbox = ({ name, label }: Props) => {
+export const AuthCheckbox = ({ name, label, redirectLink }: Props) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
   const { field } = useController({ name });
   return (
-    <div className="pw-flex pw-items-center pw-gap-x-2">
+    <div className="pw-flex pw-items-center pw-gap-x-2 pw-cursor-pointer">
       <input
         type="checkbox"
         {...field}
@@ -37,12 +38,23 @@ export const AuthCheckbox = ({ name, label }: Props) => {
             : 'pw-w-[12.75px] pw-h-[12.75px] pw-stroke-[#76DE8D]'
         )}
       />
-      <label
-        className="pw-text-[13px] pw-leading-[15.85px]"
-        onClick={() => checkboxRef.current?.click()}
-      >
-        {label}
-      </label>
+      {redirectLink ? (
+        <a
+          className="pw-text-[13px] pw-leading-[15.85px] pw-underline"
+          href={redirectLink}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {label}
+        </a>
+      ) : (
+        <label
+          className="pw-text-[13px] pw-leading-[15.85px]"
+          onClick={() => checkboxRef.current?.click()}
+        >
+          {label}
+        </label>
+      )}
     </div>
   );
 };
