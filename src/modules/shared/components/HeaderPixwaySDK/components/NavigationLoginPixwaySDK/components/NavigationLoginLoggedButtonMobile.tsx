@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
-import { ReactComponent as Pixwayicon } from '../../../../../assets/icons/pixwayLogoIcon.svg';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfile } from '../../../../../hooks/useProfile/useProfile';
 import useRouter from '../../../../../hooks/useRouter';
 import useTranslation from '../../../../../hooks/useTranslation';
+import { useUserWallet } from '../../../../../hooks/useUserWallet';
+import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
+import { PixwayButton } from '../../../../PixwayButton';
 import { UserTag } from '../../../../UserTag/UserTag';
 import { NavigationMenuTabs } from '../interfaces/menu';
 import { useDefaultMenuTabs } from './NavigationLoginLoggedButton';
@@ -23,9 +25,12 @@ export const NavigationLoginLoggedButtonMobile = ({
   toggleMenu,
   menuTabs: _menuTabs,
 }: NavigationLoginLoggedButtonMobileProps) => {
+  const { setAttachModal } = useContext(AttachWalletContext);
   const defaultTabs = useDefaultMenuTabs();
+  const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
   const router = useRouter();
+  const { wallet } = useUserWallet();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
   const toggleTabsMemo = () => {
@@ -35,10 +40,42 @@ export const NavigationLoginLoggedButtonMobile = ({
   };
   const [_, copy] = useCopyToClipboard();
   const menuTabs = _menuTabs ?? defaultTabs;
-
   const validatorOpened = menuOpened ? menuOpened : userMenu;
 
   const { data: profile } = useProfile();
+
+  const WithWallet = () => {
+    return (
+      <div className="pw-mt-3 pw-px-[20px] pw-py-4 pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] pw-rounded-2xl pw-w-full pw-flex">
+        <div className="pw-flex-1">
+          <div className="pw-flex pw-items-center pw-gap-2">
+            <p
+              onClick={() => setHideBalance(!hideBalance)}
+              className="pw-text-xs pw-font-[400] pw-font-montserrat"
+            >
+              {translate('header>logged>pixwayBalance')}
+            </p>
+            <EyeIcon />
+          </div>
+          <p className="pw-font-montserrat pw-text-xs pw-font-[700] pw-mt-[2px]">
+            R$ {hideBalance ? '******' : wallet?.balance ?? '0'}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  const WithoutWallet = () => {
+    return (
+      <PixwayButton
+        onClick={() => setAttachModal(true)}
+        fullWidth
+        className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
+      >
+        {translate('shared>header>connectWallet')}
+      </PixwayButton>
+    );
+  };
 
   return session ? (
     <div className="">
@@ -58,22 +95,7 @@ export const NavigationLoginLoggedButtonMobile = ({
             <CopyIcon />
           </div>
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
-          <div className="pw-mt-3 pw-px-[20px] pw-py-4 pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] pw-rounded-2xl pw-w-full pw-flex">
-            <div className="pw-flex-1">
-              <div className="pw-flex pw-items-center pw-justify-between">
-                <Pixwayicon />
-                <p className="pw-text-xs pw-font-[400] pw-font-montserrat">
-                  {translate('header>logged>pixwayBalance')}
-                </p>
-                <EyeIcon />
-              </div>
-              <p className="pw-font-montserrat pw-text-xs pw-font-[700] pw-mt-[2px]">
-                R$10.000,36
-              </p>
-            </div>
-            <div className="pw-h-[30px] pw-mx-4 pw-w-px pw-bg-[#EFEFEF]"></div>
-            <div className="pw-flex-1"></div>
-          </div>
+          {wallet ? <WithWallet /> : <WithoutWallet />}
           <div className="pw-mt-3 pw-w-full">
             {menuTabs.map((tab) => (
               <div

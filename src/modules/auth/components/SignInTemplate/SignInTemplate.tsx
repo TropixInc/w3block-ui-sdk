@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
 import { object, string } from 'yup';
 
+import { useProfile } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -39,14 +40,16 @@ interface SignInTemplateClassses {
 
 export interface SignInTemplateProps {
   defaultRedirectRoute: string;
+  routeToAttachWallet?: string;
   classes?: SignInTemplateClassses;
 }
 
 const _SignInTemplate = ({
   defaultRedirectRoute,
+  routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   classes = {},
 }: SignInTemplateProps) => {
-  const { companyId, logoUrl: logo } = useCompanyConfig();
+  const { companyId, logoUrl: logo, appBaseUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
@@ -56,6 +59,7 @@ const _SignInTemplate = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
   const router = useRouter();
+  const { data: profile } = useProfile();
   const [callbackUrl, setCallbackUrl] = useLocalStorage<string>(
     LocalStorageFields.AUTHENTICATION_CALLBACK,
     ''
@@ -88,7 +92,9 @@ const _SignInTemplate = ({
   });
 
   const checkForCallbackUrl = () => {
-    if (callbackUrl) {
+    if (!profile?.data.mainWallet) {
+      return appBaseUrl + routeToAttachWallet;
+    } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');
       return url;
@@ -105,6 +111,7 @@ const _SignInTemplate = ({
         password,
         companyId,
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!(response as any)?.ok) showErrorMessage();
     } catch {
       showErrorMessage();

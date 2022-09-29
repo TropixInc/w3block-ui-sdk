@@ -1,20 +1,22 @@
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useContext, useMemo, useState } from 'react';
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
-import { ReactComponent as HelpIcon } from '../../../../../assets/icons/helpIconGray.svg';
+// import { ReactComponent as HelpIcon } from '../../../../../assets/icons/helpIconGray.svg';
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
 import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
-import { ReactComponent as LogoIcon } from '../../../../../assets/icons/pixwayLogoIcon.svg';
-import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
-import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
+// import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
+// import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import useRouter from '../../../../../hooks/useRouter';
 import useTranslation from '../../../../../hooks/useTranslation';
+import { useUserWallet } from '../../../../../hooks/useUserWallet';
+import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
+import { PixwayButton } from '../../../../PixwayButton';
 import { NavigationMenuTabs } from '../interfaces/menu';
 
 interface NavigationLoginLoggedButtonProps {
@@ -50,25 +52,17 @@ export const NavigationLoginLoggedButton = ({
   );
 };
 
-const PixwayLogoDefault = () => {
-  return (
-    <>
-      <LogoIcon />
-    </>
-  );
-};
-
 export const useDefaultMenuTabs = () => {
   const [translate] = useTranslation();
   const router = useRouter();
   const { signOut } = usePixwayAuthentication();
   return useMemo<NavigationMenuTabs[]>(
     () => [
-      {
-        name: translate('header>components>defaultTab>myAccount'),
-        route: PixwayAppRoutes.MY_PROFILE,
-        icon: <UserIcon />,
-      },
+      // {
+      //   name: translate('header>components>defaultTab>myAccount'),
+      //   route: PixwayAppRoutes.MY_PROFILE,
+      //   icon: <UserIcon />,
+      // },
       {
         name: translate('header>components>defaultTab>myTokens'),
         route: PixwayAppRoutes.TOKENS,
@@ -79,16 +73,16 @@ export const useDefaultMenuTabs = () => {
         route: PixwayAppRoutes.WALLET,
         icon: <WalletIcon />,
       },
-      {
-        name: translate('header>components>defaultTab>settings'),
-        route: PixwayAppRoutes.SETTINGS,
-        icon: <SettingsIcon />,
-      },
-      {
-        name: translate('header>components>defaultTab>helpCenter'),
-        route: PixwayAppRoutes.HELP,
-        icon: <HelpIcon />,
-      },
+      // {
+      //   name: translate('header>components>defaultTab>settings'),
+      //   route: PixwayAppRoutes.SETTINGS,
+      //   icon: <SettingsIcon />,
+      // },
+      // {
+      //   name: translate('header>components>defaultTab>helpCenter'),
+      //   route: PixwayAppRoutes.HELP,
+      //   icon: <HelpIcon />,
+      // },
       {
         name: 'Logout',
         icon: <LogoutIcon />,
@@ -103,49 +97,59 @@ export const useDefaultMenuTabs = () => {
 };
 
 const NavigationMenu = ({
-  logo = <PixwayLogoDefault />,
   menuTabs: _menuTabs,
 }: NavigationLoginLoggedButtonProps) => {
   const defaultTabs = useDefaultMenuTabs();
+  const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
+  const { wallet } = useUserWallet();
   const [blocked, setBlocked] = useState(false);
   const router = useRouter();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
-  const LogoToShow = () => {
-    if (typeof logo == 'string') {
-      return <img className="pw-object-contain" src={logo} />;
-    } else {
-      return <>{logo}</>;
-    }
-  };
 
   const hasMainWallet = profile?.data.mainWallet?.address;
+
+  const WithWallet = () => {
+    return (
+      <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
+        <div className="pw-flex">
+          <p className="pw-text-[10px] pw-font-montserrat pw-font-[500] pw-ml-[6px]">
+            {translate('header>logged>pixwayBalance')}
+          </p>
+          <EyeIcon
+            onClick={() => setBlocked(!blocked)}
+            className="pw-ml-[6px] pw-cursor-pointer"
+          />
+        </div>
+        <p className="pw-font-montserrat pw-font-[700] pw-text-xs pw-mt-1">
+          R$ {blocked ? '******' : wallet?.balance ?? '0'}
+        </p>
+      </div>
+    );
+  };
+
+  const WithoutWallet = () => {
+    return (
+      <PixwayButton
+        onClick={() => setAttachModal(true)}
+        fullWidth
+        className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
+      >
+        {translate('shared>header>connectWallet')}
+      </PixwayButton>
+    );
+  };
 
   return (
     <div className="pw-relative">
       <div
         className={`pw-absolute pw-mt-6 ${
           hasMainWallet ? 'pw-ml-[210px]' : ''
-        } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3`}
+        } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
       >
-        <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
-          <div className="pw-flex">
-            <div className="pw-max-w-[14px] pw-max-h-[14px]">
-              <LogoToShow />
-            </div>
-            <p className="pw-text-[10px] pw-font-montserrat pw-font-[500] pw-ml-[6px]">
-              {translate('header>logged>pixwayBalance')}
-            </p>
-            <EyeIcon
-              onClick={() => setBlocked(!blocked)}
-              className="pw-ml-[6px] pw-cursor-pointer"
-            />
-          </div>
-          <p className="pw-font-montserrat pw-font-[700] pw-text-xs pw-mt-1">
-            R$ {blocked ? '******' : '243,50'}
-          </p>
-        </div>
+        {hasMainWallet ? <WithWallet /> : <WithoutWallet />}
+
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
             <div

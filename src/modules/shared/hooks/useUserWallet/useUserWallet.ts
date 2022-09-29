@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useWallet, utils } from '@w3block/pixchain-react-metamask';
 
@@ -7,7 +7,12 @@ import {
   claimWalletMetamask,
   requestWalletMetamask,
 } from '../../../auth/api/wallet';
+import { ChainScan } from '../../enums/ChainId';
+import { useBalance } from '../useBalance';
+import { useCompanyConfig } from '../useCompanyConfig';
+import { useIsProduction } from '../useIsProduction';
 import { usePixwayAPIURL } from '../usePixwayAPIURL/usePixwayAPIURL';
+import { useProfile } from '../useProfile';
 import { useSessionUser } from '../useSessionUser';
 import { Chain, chainConnectors } from './chainConnectors';
 
@@ -24,7 +29,7 @@ export interface Wallet {
 }
 
 export interface WalletSimple {
-  id: string;
+  id?: string;
   address: string;
   chainId: number;
   balance: string;
@@ -33,21 +38,42 @@ export interface WalletSimple {
   status: string;
 }
 
-export function useUserWallet({
-  apiToken,
-  companyId,
-}: {
-  apiToken: string;
-  companyId: string;
-}) {
+export function useUserWallet() {
+  const [wallet, setWallet] = useState<WalletSimple>();
+  const { data: profile } = useProfile();
+  const isProduction = useIsProduction();
+  const { data: balance } = useBalance({
+    address: profile?.data.mainWallet?.address || '',
+    chainId: isProduction ? ChainScan.POLYGON : ChainScan.MUMBAI,
+  });
   const metamask = useWallet();
   const user = useSessionUser();
+  const { companyId } = useCompanyConfig();
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
   const provider = metamask.library?.provider;
   const [connected, setConnected] = useState(metamask.active);
 
+  useEffect(() => {
+    if (profile?.data.mainWallet) {
+      const walletHere = profile.data.mainWallet;
+      setWallet({
+        id: walletHere.id ?? '',
+        address: walletHere.address,
+        chainId: isProduction ? ChainScan.POLYGON : ChainScan.MUMBAI,
+        balance: '0',
+        ownerId: walletHere.ownerId,
+        type: walletHere.type,
+        status: walletHere.status,
+      });
+      if (balance?.data && wallet) {
+        setWallet({ ...wallet, balance: balance?.data?.balance ?? '0' });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [balance, profile]);
+
   async function claim() {
-    if (!apiToken) {
+    if (!user?.accessToken) {
       throw new Error('No API token provided');
     }
 
@@ -56,7 +82,7 @@ export function useUserWallet({
     }
 
     const { data } = await requestWalletMetamask(
-      apiToken,
+      user?.accessToken ?? '',
       companyId,
       w3blockIdAPIUrl,
       user?.refreshToken ?? '',
@@ -79,7 +105,7 @@ export function useUserWallet({
 
     /* Requesting the wallet to be assigned to the authenticated user. */
     await claimWalletMetamask(
-      apiToken,
+      user.accessToken ?? '',
       companyId,
       w3blockIdAPIUrl,
       user?.refreshToken ?? '',
@@ -149,6 +175,8 @@ export function useUserWallet({
   return {
     connect,
     ...metamask,
+    hasWallet: profile?.data.mainWallet?.address != undefined,
+    wallet,
     active: metamask.active,
     connected,
     claim,

@@ -177,5 +177,6 @@
   "wallet>page>principal": "Principal",
   "wallet>page>extract": "Extrato",
   "wallet>page>from": "De",
-  "wallet>page>for": "Para"
+  "wallet>page>for": "Para",
+  "shared>header>connectWallet": "Conectar carteira"
 }
