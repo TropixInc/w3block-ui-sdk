@@ -8,12 +8,12 @@ import { ReactComponent as LinkedinIcon } from '../../assets/icons/linkedinFille
 import { ReactComponent as LinkIcon } from '../../assets/icons/linkFilled.svg';
 import { ReactComponent as TwitterIcon } from '../../assets/icons/twitterFilled.svg';
 import { ReactComponent as WhatsappIcon } from '../../assets/icons/whatsappFilled.svg';
-import LogoW3block from '../../assets/images/logo_w3block.png';
 import { ExternalRoutes } from '../../enums/ExternalRoutes';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useTranslation from '../../hooks/useTranslation';
 import { Link } from '../Link';
+import { PoweredBy } from '../PoweredBy';
 import TranslatableComponent from '../TranslatableComponent';
 
 interface SocialNetwork {
@@ -136,15 +136,7 @@ const _W3blockFooter = ({
           <ComercialIcon className="pw-h-4 pw-w-4" />
           {translate('home>footer>copyright')}
         </div>
-        <div className="pw-flex pw-items-center">
-          <img
-            src={LogoW3block}
-            width={'181.07px'}
-            height={'49.77px'}
-            alt="Logo"
-            className="footer-logo-w3block"
-          />
-        </div>
+        <PoweredBy />
       </div>
     </div>
   );

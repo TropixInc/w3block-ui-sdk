@@ -7,3 +7,4 @@ export * from './ProductInfo';
 export * from './PriceAndGasInfo';
 export * from './ErrorMessage';
 export * from './FAQ';
+export * from './PoweredBy';
