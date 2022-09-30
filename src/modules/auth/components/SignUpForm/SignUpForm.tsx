@@ -26,6 +26,8 @@ interface Props {
   email?: string;
   error?: string;
   classes?: AuthLayoutBaseClasses;
+  privacyRedirect?: string;
+  termsRedirect?: string;
 }
 
 export const SignUpForm = ({
@@ -34,6 +36,8 @@ export const SignUpForm = ({
   email,
   error,
   classes = {},
+  privacyRedirect,
+  termsRedirect,
 }: Props) => {
   const { logoUrl } = useCompanyConfig();
   const passwordSchema = usePasswordValidationSchema();
@@ -116,10 +120,12 @@ export const SignUpForm = ({
             <AuthCheckbox
               name="acceptsTermsOfUse"
               label="Aceito os Termos de Uso"
+              redirectLink={termsRedirect}
             />
             <AuthCheckbox
               name="acceptsPolicyTerms"
               label="Aceito a Política de Privacidade"
+              redirectLink={privacyRedirect}
             />
           </div>
 
