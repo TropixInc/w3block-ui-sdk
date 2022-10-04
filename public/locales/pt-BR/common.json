@@ -116,8 +116,8 @@
   "tokens>noWalletConnected>connectWallet": "Vincular carteira.",
   "tokens>unsignedUserAlert>title": "Usuário não autenticado.",
   "tokens>unsignedUserAlert>signIn": "Fazer login.",
-  "header>logged>pixwayBalance": "Saldo Pixway",
-  "header>logged>hiWallet": "Olá, {{name}} | Sua carteira Pixway:",
+  "header>logged>pixwayBalance": "Saldo Weblock",
+  "header>logged>hiWallet": "Olá, {{name}} | Sua carteira Weblock:",
   "shared>register": "Registrar",
   "shared>login": "Entrar",
   "shared>myAcount": "Minha conta",
@@ -178,5 +178,9 @@
   "wallet>page>extract": "Extrato",
   "wallet>page>from": "De",
   "wallet>page>for": "Para",
-  "shared>header>connectWallet": "Conectar carteira"
+  "shared>header>connectWallet": "Conectar carteira",
+  "addFunds>type>manualType": "Manual",
+  "addFunds>type>choosePaymentType": "Escolha a forma de pagamento",
+  "addFunds>type>totalBalance": "Saldo total",
+  "addFunds>type>weblockWallet": "Carteira Weblock"
 }

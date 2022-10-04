@@ -29,4 +29,6 @@ export enum PixwayAppRoutes {
   PRIVACY_POLICY = '/privacy-policy',
   CONFIG = '/configurations',
   COMPLETE_SIGNUP = '/auth/complete-profile',
+  ADD_FUNDS_TYPE = '/addFunds/type',
+  ADD_FUNDS_MANUAL = '/addFunds/manual',
 }

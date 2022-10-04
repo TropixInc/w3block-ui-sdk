@@ -80,5 +80,9 @@
   "connect>tokenDetailsCard>titleOrItemName": "Title or item name",
   "connect>tokenDetailsCard>description": "Description",
   "connect>tokenDetailsCard>tokenPublicPage": "Token public page",
-  "connect>tokenDetailsCard>moreInformation": "More information about this NFT"
+  "connect>tokenDetailsCard>moreInformation": "More information about this NFT",
+  "addFunds>type>manualType": "Manual",
+  "addFunds>type>choosePaymentType": "Choose your payment method",
+  "addFunds>type>totalBalance": "Total balance",
+  "addFunds>type>weblockWallet": "Weblock wallet"
 }
