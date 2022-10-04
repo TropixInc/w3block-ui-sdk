@@ -83,7 +83,7 @@ export const NavigationLoginLoggedButtonMobile = ({
       {validatorOpened ? (
         <div className="pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center">
           <p className="pw-font-montserrat pw-text-xs pw-font-[400]">
-            {translate('header>logged>hiWallet', { name: session.user?.name })}
+            {translate('header>logged>hiWallet', { name: profile?.data?.name })}
           </p>
           <div
             onClick={() => copy(profile?.data.mainWallet?.address || '')}
