@@ -34,7 +34,7 @@ export const NavigationLoginNonLoggedButton = ({
       </div>
       {openMenu ? (
         <div className="pw-relative">
-          <div className="pw-absolute pw-mt-6 pw-bg-white pw-w-[140px] pw-z-30 pw-px-[10px] pw-py-3 pw-rounded-b-[20px]">
+          <div className="pw-absolute pw-mt-6 pw-bg-white pw-w-[140px] pw-z-30 pw-px-[10px] pw-py-3 pw-rounded-b-[20px] pw-shadow-md">
             <PixwayButton
               onClick={() => router.push(signInRoute)}
               fullWidth

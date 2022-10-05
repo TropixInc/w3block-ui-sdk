@@ -214,5 +214,6 @@
   "token>pass>notPossibleGenerateQrCode": "Não foi possível gerar esse QR Code. Favor gerar novo QR code",
   "token>pass>usedAllTokens": "Você já utilizou todos os token pass disponíveis para esse evento.",
   "token>pass>expiredTime": "Tempo Expirado",
-  "token>pass>outsideAllowedTime": "Você está está fora do horário permitido para utilização do Token Pass."
+  "token>pass>outsideAllowedTime": "Você está está fora do horário permitido para utilização do Token Pass.",
+  "shared>header>connectWallet": "Conectar carteira"
 }

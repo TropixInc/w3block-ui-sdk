@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.45](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.44...v0.1.1-alpha.45) (2022-09-30)
+
+
+### Features
+
+* **pc-104:** created PoweredBy component ([#51](https://github.com/TropixInc/w3block-ui-sdk/issues/51)) ([d537895](https://github.com/TropixInc/w3block-ui-sdk/commit/d537895a80caefe36591ac93318759770f758bdd))
+
+### [0.1.1-alpha.44](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.43...v0.1.1-alpha.44) (2022-09-29)
+
+### [0.1.1-alpha.43](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.42...v0.1.1-alpha.43) (2022-09-29)
+
+
+### Bug Fixes
+
+* **pe-97:** adjusted margin ([#46](https://github.com/TropixInc/w3block-ui-sdk/issues/46)) ([459e5dd](https://github.com/TropixInc/w3block-ui-sdk/commit/459e5dd20c5f307c1b64e2090853dc77208dd49e))
+
+### [0.1.1-alpha.42](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.41...v0.1.1-alpha.42) (2022-09-28)
+
+
+### Features
+
+* **pe-98:** adjusted certificate to new method ([#43](https://github.com/TropixInc/w3block-ui-sdk/issues/43)) ([7538389](https://github.com/TropixInc/w3block-ui-sdk/commit/7538389c0041c25688dd42e6bd5eb6e8f90bc397))
+
 ### [0.1.1-alpha.41](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.40...v0.1.1-alpha.41) (2022-09-28)
 
 
