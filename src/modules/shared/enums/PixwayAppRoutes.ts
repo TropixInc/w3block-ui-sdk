@@ -30,5 +30,5 @@ export enum PixwayAppRoutes {
   CONFIG = '/configurations',
   COMPLETE_SIGNUP = '/auth/complete-profile',
   ADD_FUNDS_TYPE = '/addFunds/type',
-  ADD_FUNDS_MANUAL = '/addFunds/manual',
+  ADD_FUNDS_MANUAL = '/addFunds/type/manual',
 }

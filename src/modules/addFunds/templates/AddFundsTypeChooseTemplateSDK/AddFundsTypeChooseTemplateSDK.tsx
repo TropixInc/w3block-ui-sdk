@@ -1,22 +1,14 @@
 import { CheckoutHeader } from '../../../checkout';
-import { FAQ } from '../../../shared';
+import { ContainerWithFAQ } from '../../../shared/components/ContainerWithFAQ';
 import { AddFundsChoosePaymentContainer } from '../../components/AddFundsChoosePaymentContainer';
 
 export const AddFundsTypeChooseTemplateSDK = () => {
   return (
     <>
       <CheckoutHeader />
-      <div className="pw-flex pw-flex-col pw-h-full pw-px-4 lg:pw-px-0">
-        <div className="pw-container pw-mx-auto pw-h-full lg:pw-flex pw-w-full pw-pt-[60px] pw-pb-[140px]">
-          <div className="pw-w-[100%] lg:pw-w-[60%]">
-            <AddFundsChoosePaymentContainer />
-          </div>
-          <div className="lg:pw-h-[370px] lg:pw-w-[2px] pw-w-full pw-h-[2px] pw-bg-[#DCDCDC] pw-mt-[24px] lg:pw-mt-0" />
-          <div className="flex-1">
-            <FAQ name={'post_sale'} />
-          </div>
-        </div>
-      </div>
+      <ContainerWithFAQ faqType="post-sale">
+        <AddFundsChoosePaymentContainer />
+      </ContainerWithFAQ>
     </>
   );
 };

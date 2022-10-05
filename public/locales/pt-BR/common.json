@@ -182,5 +182,11 @@
   "addFunds>type>manualType": "Manual",
   "addFunds>type>choosePaymentType": "Escolha a forma de pagamento",
   "addFunds>type>totalBalance": "Saldo total",
-  "addFunds>type>weblockWallet": "Carteira Weblock"
+  "addFunds>type>weblockWallet": "Carteira Weblock",
+  "addFunds>type>manual>instruction": "Você deve copiar o endereço da carteira e adicionar o valor desejado manualmente através de uma carteira de sua preferência.",
+  "addFunds>type>manual>walletAddress": "Endereço da carteira",
+  "addFunds>type>manual>successCopy": "Sua carteira foi copiada com sucesso!",
+  "addFunds>type>manual>atention": "Atenção!",
+  "addFunds>type>manual>onlyETHOrMatic": "Enviar apenas Ethereum ou Matic para a wallet Weblock",
+  "addFunds>type>manual>loseFunds": "O envio de outra moeda resultará na perda dos fundos."
 }
