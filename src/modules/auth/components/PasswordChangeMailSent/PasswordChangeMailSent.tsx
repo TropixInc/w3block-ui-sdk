@@ -80,13 +80,17 @@ export const PasswordChangeMailSent = ({
 
           {isActive ? (
             <p className="pw-text-[#35394C] pw-text-base pw-leading-4 pw-text-center pw-mt-[21px] pw-font-bold">
-              {translate(
-                'companyAuth>sendMailToChangePassword>cooldownTimeMessage',
-                {
+              <Trans
+                i18nKey="companyAuth>sendMailToChangePassword>cooldownTimeMessage"
+                values={{
                   minutes: minutes,
                   seconds: seconds.toString().padStart(2, '0'),
-                }
-              )}
+                }}
+              >
+                Espere até
+                <span className="pw-font-bold">minuto:segundo</span>
+                minutos para reenviar o código
+              </Trans>
             </p>
           ) : null}
         </div>
