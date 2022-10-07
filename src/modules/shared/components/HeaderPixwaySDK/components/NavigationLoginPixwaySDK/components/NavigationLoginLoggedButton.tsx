@@ -7,11 +7,10 @@ import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.s
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
 import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
 // import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
-// import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
+import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
-import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import useRouter from '../../../../../hooks/useRouter';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
@@ -30,14 +29,13 @@ export const NavigationLoginLoggedButton = ({
 }: NavigationLoginLoggedButtonProps) => {
   const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
-  const { data: session } = usePixwaySession();
   const { data: profile } = useProfile();
 
   return (
     <div className="pw-ml-5 ">
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
         <p className="pw-text-xs pw-font-montserrat pw-font-[400] ">
-          {translate('header>logged>hiWallet', { name: session?.user?.name })}
+          {translate('header>logged>hiWallet', { name: profile?.data?.name })}
         </p>
         <div className="pw-flex pw-items-center">
           <p className="pw-text-sm pw-font-montserrat pw-font-[600]">
@@ -58,11 +56,11 @@ export const useDefaultMenuTabs = () => {
   const { signOut } = usePixwayAuthentication();
   return useMemo<NavigationMenuTabs[]>(
     () => [
-      // {
-      //   name: translate('header>components>defaultTab>myAccount'),
-      //   route: PixwayAppRoutes.MY_PROFILE,
-      //   icon: <UserIcon />,
-      // },
+      {
+        name: translate('header>components>defaultTab>myAccount'),
+        route: PixwayAppRoutes.MY_PROFILE,
+        icon: <UserIcon />,
+      },
       {
         name: translate('header>components>defaultTab>myTokens'),
         route: PixwayAppRoutes.TOKENS,

@@ -215,5 +215,12 @@
   "token>pass>usedAllTokens": "Você já utilizou todos os token pass disponíveis para esse evento.",
   "token>pass>expiredTime": "Tempo Expirado",
   "token>pass>outsideAllowedTime": "Você está está fora do horário permitido para utilização do Token Pass.",
-  "shared>header>connectWallet": "Conectar carteira"
+  "shared>header>connectWallet": "Conectar carteira",
+  "shared>myProfile>confirmEmail": "Confirmação de e-mail",
+  "shared>myProfile>confirmText": "Para que você possa utilizar a ferramenta e receber seus NFTs, você precisa confirmar o seu e-mail.",
+  "shared>myProfile>verifyEmail": "Verificar e-mail",
+  "shared>myProfile>emailSentTo": "Enviamos um link para confirmar seu e-mail:",
+  "shared>myProfile>name": "Nome",
+  "shared>myProfile>confirm": "Confirmar",
+  "shared>myProfile>myProfile": "Meu Perfil"
 }
