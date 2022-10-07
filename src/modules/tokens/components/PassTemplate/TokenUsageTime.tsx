@@ -14,7 +14,6 @@ export const TokenUsageTime = ({ date }: { date: Date }) => {
   const tokenId = (router.query.tokenId as string) || '1';
 
   const differenceByHours = differenceInHours(date, new Date());
-
   return (
     <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
       {tokenId.includes('actived') ? (

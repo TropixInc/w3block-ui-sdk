@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import { ReactComponent as ChevronDown } from '../../../shared/assets/icons/chevronDownOutlined.svg';
 
-export const Details = ({
+export const DetailsTemplate = ({
   children,
   title,
 }: {

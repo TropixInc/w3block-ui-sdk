@@ -209,6 +209,7 @@
   "token>pass>passUnavailable": "Pass indisponível",
   "token>pass>passUnavailableMessage": "Esse token está indisponível no momento, você ja fez a utilizacao permitida ou a data ja foi expirada.",
   "token>pass>tokenExpiredIn": "Token expirado em",
+  "token>pass>tokenExpiredAt": "Token expirado às ",
   "token>pass>generateNewQrCode": "Gerar novo QR Code",
   "token>pass>invalidQrCode": "QR Code Inválido",
   "token>pass>notPossibleGenerateQrCode": "Não foi possível gerar esse QR Code. Favor gerar novo QR code",
