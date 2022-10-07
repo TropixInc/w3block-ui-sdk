@@ -43,6 +43,32 @@ export const PassTemplate = () => {
   const event = {
     date: '10/20/2022 14:30',
   };
+  const detailsTokenMoked = [
+    {
+      title: 'token>pass>tokenName',
+      description: token.detail.name,
+      copyDescription: false,
+      titleLink: '',
+    },
+    {
+      title: 'token>pass>linkBlockchain',
+      description: '',
+      copyDescription: false,
+      titleLink: 'd',
+    },
+    {
+      title: 'token>pass>mintedBy',
+      description: '0xf4207af...fe51c408f',
+      copyDescription: true,
+      titleLink: 'd',
+    },
+    {
+      title: 'token>pass>network',
+      description: 'MATIC Polygon',
+      copyDescription: false,
+      titleLink: '',
+    },
+  ];
 
   const eventDate =
     tokenId === 'actived2'
@@ -224,25 +250,15 @@ export const PassTemplate = () => {
 
       <DetailsTemplate title={translate('token>pass>detailsToken')}>
         <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 xl:pw-grid-cols-4 pw-gap-[30px]">
-          <DetailToken
-            title={translate('token>pass>tokenName')}
-            description={token.detail.name}
-          />
-          <DetailToken
-            title={translate('token>pass>linkBlockchain')}
-            description=""
-            titleLink="d"
-          />
-          <DetailToken
-            title={translate('token>pass>mintedBy')}
-            description="0xf4207af...fe51c408f"
-            copyDescription={true}
-            titleLink="d"
-          />
-          <DetailToken
-            title={translate('token>pass>network')}
-            description="MATIC Polygon"
-          />
+          {detailsTokenMoked.map((item) => (
+            <DetailToken
+              key={item.title}
+              title={translate(item.title)}
+              description={item.description}
+              copyDescription={item.copyDescription}
+              titleLink={item.titleLink}
+            />
+          ))}
         </div>
       </DetailsTemplate>
 
