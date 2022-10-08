@@ -1,0 +1,40 @@
+name: PR Compliance
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+
+# Action should have write permission to make updates to PR
+permissions:
+  pull-requests: write
+
+jobs:
+  pr-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mtfoley/pr-compliance-action@main
+        with:
+          title-check-enable: false
+          body-auto-close: false
+          body-comment: false
+          # all inputs are optional
+          watch-files: |
+            package.json
+            .env.example
+            Dockerfile
+            .nvmrc
+            tsconfig.json
+      - name: Interpolate PR Message
+        id: pr_message
+        run: |
+          echo "::set-output name=pr_message::[{\"color\":39423,\"title\":\"${{ github.event.pull_request.title }}\",\"url\":\"${{ github.event.pull_request.html_url }}\",\"author\":{\"name\":\"${{ github.event.pull_request.user.login}}\",\"icon_url\":\"${{ github.event.pull_request.user.avatar_url}}\",\"url\":\"${{ github.event.pull_request.user.html_url}}\"},\"description\":\"Branch: ${{ github.event.pull_request.base.ref }}\",\"timestamp\":\"${{ github.event.pull_request.updated_at }}\",\"footer\":{\"text\":\"${{ github.event.repository.full_name }}\",\"icon_url\":\"${{ github.event.repository.owner.avatar_url }}\"}}]"
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CH_FRONTEND }}
+          DISCORD_USERNAME: 'W3bLocker'
+          DISCORD_AVATAR: 'https://i.imgur.com/BPnQGGY.jpeg'
+          DISCORD_EMBEDS: ${{ steps.pr_message.outputs.pr_message }}  
+         
+        uses: Ilshidur/action-discord@master
+        with:
+          args: ''
