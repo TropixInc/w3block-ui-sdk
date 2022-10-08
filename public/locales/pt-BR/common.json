@@ -27,7 +27,7 @@
   "auth>mailStep>resentCodeButton": "Reenviar código",
   "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até <1>{{minutes}}:{{seconds}}</1> minutos para reenviar o código",
   "auth>mailStep>linkExpirationMessage": "O link é válido por 15 minutos, após isso, clique em \"Reenviar código\" para uma nova solicitação.",
-  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem." ,
+  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem.",
   "companyAuth>changePassword>title": "Trocar senha",
   "companyAuth>changingPassword>errorChangingPasswordMessage": "Não foi possível alterar a senha.",
   "companyAuth>changePassword>passworldFieldPlaceholder": "Insira sua nova senha",
@@ -178,5 +178,9 @@
   "wallet>page>extract": "Extrato",
   "wallet>page>from": "De",
   "wallet>page>for": "Para",
-  "shared>header>connectWallet": "Conectar carteira"
+  "shared>header>connectWallet": "Conectar carteira",
+  "dashboard>dashboardInternalTemplate>welcomeText": "Bem vindo(a) {{name}}",
+  "dashboard>dashboardInternalTemplate>twoFactorAuth": "Autenticação de dois fatores",
+  "dashboard>dashboardInternalTemplate>twoFactorDescription": "A autenticação com dois fatores ainda não foi feita. Essa configuração é importante para manter a segurança dos seus tokens. Você pode realizar essa configuração pela área da sua conta ou ",
+  "dashboard>dashboardInternalTemplate>twoFactorLink": "clicando aqui."
 }

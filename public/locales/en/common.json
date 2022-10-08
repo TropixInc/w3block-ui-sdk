@@ -28,7 +28,7 @@
   "auth>passwordChangeMailStep>formTitle": "Link to change password",
   "auth>mailStep>resentCodeButton": "Resend code",
   "auth>mailStep>linkExpirationMessage": "The link expires after 15 minutes. After that period, click on \"Resend code\" to be sent a new one.",
-  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Your passwords do not match." ,
+  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Your passwords do not match.",
   "companyAuth>changingPassword>errorChangingPasswordMessage": "Unable to change password.",
   "companyAuth>newPassword>passwordConfirmationFieldLabel": "Confirm password",
   "companyAuth>newPasswordTips>passwordContainsUppercaseLetter": "Contains capital letters",
@@ -43,7 +43,7 @@
   "connectTokens>tokensList>welcomeToWallet": "Welcome to your wallet",
   "connectTokens>tokensList>tokensAlreadyProcessing": "Your tokens are already being processed on the blockchain network and will soon be available here for you.",
   "connectTokens>tokensList>tokensAlreadyProcessing2": "Processing time can vary from a few minutes to 4 hours, depending on the blockchain network traffic.",
-   "companyAuth>externalWallet>connectExternalWallet": "Connect New Wallet",
+  "companyAuth>externalWallet>connectExternalWallet": "Connect New Wallet",
   "companyAuth>externalWallet>errorConnectingExternalWallet": "Unable to connect external wallet, please try again",
   "companyAuth>signUp>connectToMetamask": "Connect with Metamask",
   "companyAuth>signUp>connectExternalWallet": "Now that you have completed your registration, you can connect an external wallet.",
@@ -80,5 +80,9 @@
   "connect>tokenDetailsCard>titleOrItemName": "Title or item name",
   "connect>tokenDetailsCard>description": "Description",
   "connect>tokenDetailsCard>tokenPublicPage": "Token public page",
-  "connect>tokenDetailsCard>moreInformation": "More information about this NFT"
+  "connect>tokenDetailsCard>moreInformation": "More information about this NFT",
+  "dashboard>dashboardInternalTemplate>welcomeText": "Welcome {{name}}",
+  "dashboard>dashboardInternalTemplate>twoFactorAuth": "Two factor authentication",
+  "dashboard>dashboardInternalTemplate>twoFactorDescription": "Two-factor authentication has not yet been done. This setting is important to keep your tokens secure. You can perform this configuration through your account area or  ",
+  "dashboard>dashboardInternalTemplate>twoFactorLink": "clicking here."
 }
