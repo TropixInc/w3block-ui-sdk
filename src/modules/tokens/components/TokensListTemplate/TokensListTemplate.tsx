@@ -154,12 +154,9 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 
   return tokensDisplaying.length ? (
     <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between">
-      <ul className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
-        {tokensDisplaying.map((token) => (
-          <li
-            className="pw-flex pw-items-stretch pw-w-full pw-max-w-[296px] pw-mx-auto sm:pw-max-w-none sm:pw-mx-0"
-            key={token.id}
-          >
+      <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
+        {tokensDisplaying.map((token, index) => (
+          <li className="pw-flex pw-items-stretch" key={token.id}>
             <WalletTokenCard
               category={token.category}
               image={token.image}
@@ -167,6 +164,8 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               id={token.id}
               chainId={token.chainId}
               contractAddress={token.contractAddress}
+              hasPass={true}
+              hasActived={index % 2 === 0}
             />
           </li>
         ))}
