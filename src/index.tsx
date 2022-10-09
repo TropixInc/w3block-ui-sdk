@@ -8,4 +8,6 @@ export * from './modules/auth';
 
 export * from './modules/tokens';
 
+export * from './modules/pass';
+
 export * from './modules/checkout';

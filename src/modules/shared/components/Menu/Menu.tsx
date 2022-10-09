@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-key */
 import { ReactNode, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
+import { format } from 'date-fns/esm';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
@@ -9,6 +11,7 @@ import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutline
 // import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
+import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.svg';
 // import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
 // import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
@@ -35,14 +38,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const [translate] = useTranslation();
   const [state, copyToClipboard] = useCopyToClipboard();
   const [isCopied, setIsCopied] = useState(false);
-  const createdAt = new Date(profile?.data.createdAt as string);
-  const day = createdAt.getDate();
-  const month = createdAt.getMonth() + 1;
-  const year = createdAt.getFullYear();
+  const createdAt = new Date((profile?.data.createdAt as string) || 0);
   const { signOut } = usePixwayAuthentication();
-  const formatedDate = `${day < 10 ? `0${day}` : day}/${
-    month < 10 ? `0${month}` : month
-  }/${year}`;
+  const formatedDate = format(createdAt, 'dd/MM/yyyy');
 
   const tabsDefault: TabsConfig[] = [
     // {
@@ -54,6 +52,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       title: translate('components>menu>myTokens'),
       icon: <ImageIcon width={17} height={17} />,
       link: PixwayAppRoutes.TOKENS,
+    },
+    {
+      title: translate('components>menu>tokenPass'),
+      icon: <TicketIcon width={17} height={17} />,
+      link: PixwayAppRoutes.TOKENPASS,
     },
     {
       title: translate('components>menu>wallet'),
@@ -85,8 +88,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     router.push(PixwayAppRoutes.HOME);
   };
 
-  const renderTab = (tab: TabsConfig) => {
-    const isActive = router.pathname === tab.link;
+  const RenderTab = (tab: TabsConfig) => {
+    const isActive: boolean = router.pathname === tab.link;
+
     return (
       <Link href={tab.link} key={tab.title}>
         <li
@@ -150,7 +154,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           )}
         </div>
         <ul className="pw-mx-auto pw-w-[248px]">
-          {tabsMap.map(renderTab)}
+          {tabsMap.map(RenderTab)}
           <button
             onClick={handleSignOut}
             className="group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-w-full pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 pw-stroke-[#383857] hover:pw-stroke-brand-primary"
