@@ -10,7 +10,7 @@ import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutline
 import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
 // import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
-// import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
+import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import useRouter from '../../hooks/useRouter';
@@ -45,11 +45,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   }/${year}`;
 
   const tabsDefault: TabsConfig[] = [
-    // {
-    //   title: translate('components>menu>myProfile'),
-    //   icon: <UserIcon width={17} height={17} />,
-    //   link: PixwayAppRoutes.PROFILE,
-    // },
+    {
+      title: translate('components>menu>myProfile'),
+      icon: <UserIcon width={17} height={17} />,
+      link: PixwayAppRoutes.PROFILE,
+    },
     {
       title: translate('components>menu>myTokens'),
       icon: <ImageIcon width={17} height={17} />,
