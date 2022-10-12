@@ -4,19 +4,28 @@ import { Trans } from 'react-i18next';
 import { useToggle } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
+import classNames from 'classnames';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFilled.svg';
 import { ReactComponent as EyeIcon } from '../../../shared/assets/icons/eyeIcon.svg';
 import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/eyeIconCrossed.svg';
-// import { ReactComponent as FilterIcon } from '../../../shared/assets/icons/filterOutlined.svg';
 import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { Chip } from './Chip';
 
-export const BaseTemplate = ({ children }: { children: ReactNode }) => {
+export const BaseTemplate = ({
+  children,
+  classes,
+}: {
+  children: ReactNode;
+  classes?: {
+    modal?: string;
+    title?: string;
+  };
+}) => {
   const [translate] = useTranslation();
   const [showValue, toggleShowValue] = useToggle(false);
   const { data: profile } = useProfile();
@@ -25,9 +34,21 @@ export const BaseTemplate = ({ children }: { children: ReactNode }) => {
   const isLoading = wallet == undefined;
 
   return (
-    <div className="pw-flex pw-flex-col pw-gap-[32px] pw-rounded-[20px] pw-p-[24px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-mb-[100px]">
+    <div
+      className={classNames(
+        classes?.modal
+          ? classes.modal
+          : 'pw-flex pw-flex-col pw-gap-[20px] sm:pw-gap-[32px] sm:pw-rounded-[20px] pw-p-0 sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-mb-[100px]'
+      )}
+    >
       <div className="pw-flex">
-        <div className="pw-w-full pw-text-center pw-font-bold pw-text-[18px] pw-leading-[23px] sm:pw-hidden pw-mb-[30px]">
+        <div
+          className={classNames(
+            classes?.title
+              ? classes.title
+              : 'pw-w-full pw-text-center pw-font-bold pw-text-[18px] pw-leading-[23px] sm:pw-hidden pw-mb-[30px]'
+          )}
+        >
           {translate('components>menu>tokenPass>clients')}
         </div>
         <div className="pw-w-full pw-items-center pw-justify-between pw-hidden sm:pw-flex">
