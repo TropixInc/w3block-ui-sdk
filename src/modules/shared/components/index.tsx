@@ -8,3 +8,4 @@ export * from './PriceAndGasInfo';
 export * from './ErrorMessage';
 export * from './FAQ';
 export * from './PoweredBy';
+export * from './MyProfileTemplate';
