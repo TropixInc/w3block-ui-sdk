@@ -1,3 +1,5 @@
+import { useMutation } from 'react-query';
+
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
@@ -27,12 +29,14 @@ export const usePatchProfile = () => {
   const axios = useAxios(W3blockAPI.ID);
   const { companyId } = useCompanyConfig();
 
-  const patchProfile = (name: string) => {
+  const _patchProfile = (name: string) => {
     return axios.patch(
       PixwayAPIRoutes.PATCH_PROFILE.replace('{companyId}', companyId),
       { name }
     );
   };
+
+  const patchProfile = useMutation(_patchProfile);
 
   return patchProfile;
 };
