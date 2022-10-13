@@ -45,7 +45,7 @@ const _MyProfileTemplate = () => {
             {translate('shared>myProfile>verifyEmail')}
           </p>
           <p className="pw-font-montserrat pw-text-sm pw-font-normal pw-text-center">
-            {translate('shared>myProfile>emailSentTo')}
+            {translate('auth>modalActionBlocked>verifyEmail>sendEmail')}
             <p>{formattedEmail}</p>
           </p>
         </ModalBase>
@@ -53,7 +53,7 @@ const _MyProfileTemplate = () => {
           <div>
             <div>
               <p className="pw-font-montserrat pw-text-sm pw-font-semibold pw-text-[#ED4971]">
-                {translate('shared>myProfile>confirmEmail')}
+                {translate('auth>emailConfirmation>mailResentStepTitle')}
               </p>
               <p className="pw-font-montserrat pw-text-sm pw-font-normal pw-hidden sm:pw-block ">
                 {translate('shared>myProfile>confirmText')}

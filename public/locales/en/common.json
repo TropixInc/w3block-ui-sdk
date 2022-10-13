@@ -80,5 +80,15 @@
   "connect>tokenDetailsCard>titleOrItemName": "Title or item name",
   "connect>tokenDetailsCard>description": "Description",
   "connect>tokenDetailsCard>tokenPublicPage": "Token public page",
-  "connect>tokenDetailsCard>moreInformation": "More information about this NFT"
+  "connect>tokenDetailsCard>moreInformation": "More information about this NFT",
+  "addFunds>type>manualType": "Manual",
+  "addFunds>type>choosePaymentType": "Choose your payment method",
+  "addFunds>type>totalBalance": "Total balance",
+  "addFunds>type>weblockWallet": "Weblock wallet",
+  "addFunds>type>manual>instruction": "You need to copy your wallet address and add manually the desired value using another wallet that you prefer.",
+  "addFunds>type>manual>walletAddress": "Wallet address",
+  "addFunds>type>manual>successCopy": "Your wallet was successfully copied!",
+  "addFunds>type>manual>atention": "Atention!",
+  "addFunds>type>manual>onlyETHOrMatic": "Send only Ethereum or Matic for your Weblock wallet",
+  "addFunds>type>manual>loseFunds": "Sending from another currency will result in losing funds."
 }

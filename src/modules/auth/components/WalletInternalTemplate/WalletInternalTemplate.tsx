@@ -3,6 +3,7 @@ import { Trans } from 'react-i18next';
 import { useToggle } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
+import Link from 'next/link';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFilled.svg';
@@ -13,6 +14,7 @@ import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/met
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
@@ -82,10 +84,12 @@ const _WalletInternalTemplate = () => {
               </div>
               <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
               <div className="pw-flex pw-flex-col pw-items-start pw-text-white pw-font-semibold pw-text-[13px] pw-leading-[13px] pw-cursor-pointer">
-                <Trans i18nKey={'wallet>page>addFunds'}>
-                  <span>Adicionar</span>
-                  Fundos
-                </Trans>
+                <Link href={PixwayAppRoutes.ADD_FUNDS_TYPE}>
+                  <Trans i18nKey={'wallet>page>addFunds'}>
+                    <span>Adicionar</span>
+                    Fundos
+                  </Trans>
+                </Link>
               </div>
             </div>
           </div>

@@ -32,7 +32,7 @@ export const MyProfile = () => {
     <div className="pw-max-w-[968px] pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
       <div className="pw-flex sm:pw-justify-between pw-justify-center pw-items-center pw-w-full">
         <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
-          {translate('shared>myProfile>myProfile')}
+          {translate('components>menu>myProfile')}
         </p>
         <div className="sm:pw-flex pw-items-center pw-gap-4 pw-shrink-0 pw-hidden">
           <div

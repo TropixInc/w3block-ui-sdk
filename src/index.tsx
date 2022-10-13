@@ -9,3 +9,5 @@ export * from './modules/auth';
 export * from './modules/tokens';
 
 export * from './modules/checkout';
+
+export * from './modules/addFunds';
