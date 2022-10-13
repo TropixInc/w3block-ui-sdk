@@ -39,9 +39,9 @@ export const ProductInfo = ({
   };
   return (
     <div
-      className={`pw-w-full pw-px-2 pw-py-3 pw-flex pw-justify-between pw-items-center pw-border pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl ${className}`}
+      className={`pw-w-full pw-px-2 pw-py-3 pw-flex pw-justify-between pw-items-center pw-border pw-border-[rgba(0,0,0,0.2)] pw-gap-x-3 pw-overflow-auto pw-rounded-2xl ${className}`}
     >
-      <div className="pw-flex pw-items-center">
+      <div className="pw-flex pw-items-center pw-min-w-0 pw-gap-x-3">
         {loading ? (
           <Shimmer className="!pw-w-[48px] !pw-h-[48px] pw-rounded-lg " />
         ) : (
@@ -53,7 +53,7 @@ export const ProductInfo = ({
           </div>
         )}
 
-        <div className="pw-ml-3 pw-flex pw-w-full pw-flex-col pw-flex-1 pw-overflow-hidden">
+        <div className="pw-flex pw-flex-col pw-flex-1 pw-overflow-ellipsis pw-overflow-hidden ">
           {loading ? (
             <>
               <Shimmer className="pw-mb-1 pw-w-[120px]" />{' '}
@@ -61,10 +61,10 @@ export const ProductInfo = ({
             </>
           ) : (
             <>
-              <p className="pw-font-[600] pw-text-sm pw-text-[#353945]">
+              <p className="pw-font-[600] pw-text-sm pw-text-[#353945] pw-min-w-0 pw-truncate">
                 {name}
               </p>
-              <p className="pw-font-[600] pw-max-w-[130px] sm:pw-max-w-full pw-text-xs pw-text-[#353945] pw-truncate">
+              <p className="pw-font-[600] pw-max-w-[130px] sm:pw-max-w-full pw-text-xs pw-min-w-0 pw-text-[#353945] pw-truncate">
                 {id}
               </p>
             </>

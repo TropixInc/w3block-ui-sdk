@@ -169,6 +169,7 @@ export const getNextAuthConfig = ({
           name: token?.name,
           email: token?.email,
           accessToken: apiToken,
+          error: undefined,
           accessTokenExpires: getTokenExpires(apiToken, -BEFORE_TOKEN_EXPIRES),
           refreshToken: user?.refreshToken,
           user,

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { ReactComponent as InfoIcon } from '../../assets/icons/informationCircled.svg';
+// import { ReactComponent as InfoIcon } from '../../assets/icons/informationCircled.svg';
 import { Shimmer } from '../Shimmer';
 import TranslatableComponent from '../TranslatableComponent';
 
@@ -40,7 +40,7 @@ const _PriceAndGasInfo = ({
           <p className="pw-text-sm text-[#35394C] pw-font-[400]">
             {translate('shared>components>servicePriceinfo')}
           </p>
-          <InfoIcon className="pw-mt-[2px]" />
+          {/* <InfoIcon className="pw-mt-[2px]" /> */}
         </div>
         {loading ? (
           <Shimmer />
@@ -55,7 +55,7 @@ const _PriceAndGasInfo = ({
           <p className="pw-text-sm text-[#35394C] pw-font-[400]">
             {translate('shared>components>gasPriceinfo')}
           </p>
-          <InfoIcon className="pw-mt-[2px]" />
+          {/* <InfoIcon className="pw-mt-[2px]" /> */}
         </div>
         {loading ? (
           <Shimmer />
