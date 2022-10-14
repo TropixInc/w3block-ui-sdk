@@ -21,7 +21,6 @@ export const MyProfile = () => {
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
-  const walletBalance = wallet?.balance ?? '0';
   const isLoading = wallet == undefined;
 
   const patchProfile = usePatchProfile();
@@ -54,7 +53,6 @@ export const MyProfile = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    value={walletBalance}
                     Icon={() => <WalletIcon className="pw-stroke-[#B09C60]" />}
                     title={translate('wallet>page>balance')}
                   />
@@ -62,7 +60,6 @@ export const MyProfile = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    value={walletBalance}
                     Icon={() => (
                       <MetamaskIcon className="pw-stroke-[#B09C60]" />
                     )}

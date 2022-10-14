@@ -231,5 +231,7 @@
   "shared>myProfile>verifyEmail": "Verificar e-mail",
   "shared>myProfile>name": "Nome",
   "shared>myProfile>confirm": "Confirmar",
-  "shared>myProfile>myProfile": "Meu Perfil"
+  "shared>myProfile>myProfile": "Meu Perfil",
+  "header>logged>metamaskBalance": "Saldo Metamask",
+  "header>logged>metamaskHiWallet": "Olá, {{name}} | Sua carteira Metamask:"
 }
