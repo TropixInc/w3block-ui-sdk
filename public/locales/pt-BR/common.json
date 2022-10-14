@@ -182,5 +182,6 @@
   "dashboard>dashboardInternalTemplate>welcomeText": "Bem vindo(a) {{name}}",
   "dashboard>dashboardInternalTemplate>twoFactorAuth": "Autenticação de dois fatores",
   "dashboard>dashboardInternalTemplate>twoFactorDescription": "A autenticação com dois fatores ainda não foi feita. Essa configuração é importante para manter a segurança dos seus tokens. Você pode realizar essa configuração pela área da sua conta ou ",
-  "dashboard>dashboardInternalTemplate>twoFactorLink": "clicando aqui."
+  "dashboard>dashboardInternalTemplate>twoFactorLink": "clicando aqui.",
+  "components>menu>dashboard": "Início"
 }

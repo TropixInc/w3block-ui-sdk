@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
+import { ReactComponent as DashboardIcon } from '../../assets/icons/dashboard.svg';
 import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
@@ -45,6 +46,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   }/${year}`;
 
   const tabsDefault: TabsConfig[] = [
+    {
+      title: translate('components>menu>dashboard'),
+      icon: <DashboardIcon width={17} height={17} />,
+      link: PixwayAppRoutes.DASHBOARD,
+    },
     {
       title: translate('components>menu>myProfile'),
       icon: <UserIcon width={17} height={17} />,

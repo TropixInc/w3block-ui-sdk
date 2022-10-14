@@ -1,6 +1,10 @@
+import { UserRoleEnum } from '@w3block/sdk-id';
+
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PrivateRouteStrategy } from '../../../shared/enums/PrivateRouteStrategy';
+import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { EventCard } from '../EventCard';
 
@@ -85,7 +89,11 @@ const _DashboardInternalTemplate = () => {
 };
 
 export const DashboardInternalTemplate = () => {
-  return (
+  const { isLoading, isAuthorized } = usePrivateRoute({
+    roles: [UserRoleEnum.Partner],
+    strategy: PrivateRouteStrategy.ALLOW_SPECIFIED_ROLES,
+  });
+  return isLoading || !isAuthorized ? null : (
     <TranslatableComponent>
       <InternalPagesLayoutBase
         classes={{ middleSectionContainer: 'pw-mb-[85px]' }}
