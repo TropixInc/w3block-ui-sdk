@@ -3,13 +3,13 @@ import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 
+import { Button } from '../../../shared/components/Buttons';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
 import { Link } from '../../../shared/components/Link';
-import { PrimaryButton } from '../../../shared/components/PrimaryButton';
-import { SecondaryButton } from '../../../shared/components/SecondaryButton';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useModalController } from '../../../shared/hooks/useModalController';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenActionsProvider } from '../../providers/TokenActionsProvider';
 import { WalletTokenCardActionsPanel } from './ActionsPanel';
 
@@ -22,7 +22,7 @@ interface Props {
   chainId: number;
   contractAddress: string;
   hasPass?: boolean;
-  hasActived?: boolean;
+  hasActivated?: boolean;
 }
 
 const cardClassName =
@@ -40,13 +40,14 @@ export const WalletTokenCard = ({
   hasPass = false,
   chainId,
   contractAddress,
-  hasActived,
+  hasActivated,
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
   const actionsContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(actionsContainerRef, () => {
     if (isOpen) closeModal();
   });
+  const [translate] = useTranslation();
 
   const onClickOptionsButton: MouseEventHandler<HTMLButtonElement> = (
     event
@@ -84,7 +85,7 @@ export const WalletTokenCard = ({
             <div className="pw-relative pw-overflow-hidden pw-w-[260px] pw-h-[260px]">
               {hasPass ? (
                 <div className="pw-text-[#295BA6] pw-text-[12px] pw-leading-[18px] pw-font-bold pw-bg-[#E5EDF9] pw-border pw-border-[#295ba67f] pw-rounded-full pw-absolute pw-left-[13px] pw-top-[14px] pw-py-1 pw-px-2">
-                  Token Pass
+                  {translate('connectTokens>tokensList>tokenPass')}
                 </div>
               ) : null}
               {image ? (
@@ -120,16 +121,22 @@ export const WalletTokenCard = ({
             type="button"
             className="pw-border pw-border-[#C1C1C1] pw-rounded-[10px] pw-bg-white pw-p-2 pw-flex pw-gap-x-1"
           >
-            <Pointer />
-            <Pointer />
-            <Pointer />
+            {Array(3)
+              .fill('')
+              .map((index) => (
+                <Pointer key={index} />
+              ))}
           </button>
 
           {hasPass ? (
-            hasActived ? (
-              <PrimaryButton width="small">Utilizar Pass</PrimaryButton>
+            hasActivated ? (
+              <Button model="primary" width="small">
+                {translate('connectTokens>tokensList>usePass')}
+              </Button>
             ) : (
-              <SecondaryButton width="small">Visualizar Pass</SecondaryButton>
+              <Button model="secondary" width="small">
+                {translate('connectTokens>tokensList>viewPass')}
+              </Button>
             )
           ) : null}
         </div>

@@ -165,7 +165,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               chainId={token.chainId}
               contractAddress={token.contractAddress}
               hasPass={true}
-              hasActived={index % 2 === 0}
+              hasActivated={index % 2 === 0}
             />
           </li>
         ))}
