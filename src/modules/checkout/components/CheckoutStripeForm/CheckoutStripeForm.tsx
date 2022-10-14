@@ -31,6 +31,7 @@ export const CheckoutStripeForm = () => {
     });
     if (result.error) {
       // Show error to your customer (for example, payment details incomplete)
+      // eslint-disable-next-line no-console
       console.log(result.error.message);
     } else {
       router.push(PixwayAppRoutes.CHECKOUT_COMPLETED);
