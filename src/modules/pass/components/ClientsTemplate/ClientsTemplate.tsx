@@ -5,10 +5,9 @@ import { useDebounce, useToggle } from 'react-use';
 import classNames from 'classnames';
 import { format, getDay } from 'date-fns';
 
-import { ReactComponent as CheckboxIcon } from '../../../shared/assets/icons/checkboxOutlined.svg';
-import { ReactComponent as CheckedboxIcon } from '../../../shared/assets/icons/checkedBoxOutlined.svg';
 import { ReactComponent as FilterIcon } from '../../../shared/assets/icons/filterOutlined.svg';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
+import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { BaseTemplate } from '../BaseTemplate';
 import { TableBase } from '../TableBase';
@@ -46,6 +45,8 @@ export const ClientTemplate = () => {
     ? ['Nome', 'ID', 'Local', '']
     : ['Nome', 'Documento', 'Token ID', 'Carteira', 'Data', 'Local', 'Status'];
 
+  const isProduction = useIsProduction();
+  const isDevelopment = !isProduction;
   const [filteredData, setFilteredData] = useState(dataMoked);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState(Object.keys(Status));
@@ -86,7 +87,7 @@ export const ClientTemplate = () => {
     }
   };
 
-  return (
+  return isDevelopment ? (
     <BaseTemplate>
       <div className="pw-flex pw-flex-col sm:pw-flex-row pw-p-[16px] pw-gap-[24px] sm:pw-gap-[16px] pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[16px]">
         <img
@@ -145,6 +146,8 @@ export const ClientTemplate = () => {
         <TableBase columns={title} data={filteredData} />
       </div>
     </BaseTemplate>
+  ) : (
+    <></>
   );
 };
 
@@ -205,9 +208,11 @@ const Filters = ({
                     onClick={() => setStatus(item.toLowerCase())}
                   >
                     {isChecked ? (
-                      <CheckedboxIcon className="pw-stroke-[#295BA6]" />
+                      <div className="pw-relative pw-h-[12.75px] pw-w-[12.75px] pw-border-[1.4px] pw-border-[#295BA6] pw-rounded-sm">
+                        <div className="pw-absolute pw-w-[5px] pw-h-[10px] pw-border-t-[1.4px] pw-border-l-[1.4px] pw-border-[#295BA6] pw-rotate-[220deg] -pw-top-[40%] pw-left-[50%] pw-bg-white pw-shadow-[0px_1px_1px_rgb(255, 255, 255,1)]" />
+                      </div>
                     ) : (
-                      <CheckboxIcon className="pw-stroke-[#295BA6]" />
+                      <div className="pw-h-[12.75px] pw-w-[12.75px] pw-border pw-border-[#295BA6] pw-rounded-sm" />
                     )}
                     <div
                       className={classNames(
