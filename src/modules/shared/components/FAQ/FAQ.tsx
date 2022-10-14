@@ -95,11 +95,31 @@ export const FAQ = ({
       {FAQ?.data.items.map((item) => (
         <Accordion
           question={
-            locale === 'pt-BR' ? item.question['pt-br'] : item.question['en-us']
+            locale === 'pt-BR'
+              ? 'pt-br' in item.question
+                ? item.question['pt-br']
+                : item.question['en-us']
+              : 'en-us' in item.question
+              ? item.question['en-us']
+              : item.question['pt-br']
           }
-          key={locale === 'pt-BR' ? item.answer['pt-br'] : item.answer['en-us']}
+          key={
+            locale === 'pt-BR'
+              ? 'pt-br' in item.question
+                ? item.question['pt-br']
+                : item.question['en-us']
+              : 'en-us' in item.question
+              ? item.question['en-us']
+              : item.question['pt-br']
+          }
         >
-          {locale === 'pt-BR' ? item.answer['pt-br'] : item.answer['en-us']}
+          {locale === 'pt-BR'
+            ? 'pt-br' in item.answer
+              ? item.answer['pt-br']
+              : item.answer['en-us']
+            : 'en-us' in item.answer
+            ? item.answer['en-us']
+            : item.answer['pt-br']}
         </Accordion>
       ))}
     </div>

@@ -12,7 +12,7 @@ interface Media {
 
 interface MetadataAtribute {
   value: string;
-  trait_tyoe: string;
+  trait_type: string;
 }
 
 export interface NFTByWalletDTO {

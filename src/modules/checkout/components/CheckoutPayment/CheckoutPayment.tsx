@@ -1,5 +1,8 @@
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalStorage } from 'react-use';
+
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 import { ErrorMessage, useProfile } from '../../../shared';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
@@ -9,11 +12,14 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import { PaymentMethod } from '../../enum';
 import { useCheckout } from '../../hooks/useCheckout';
 import { OrderPreviewCache } from '../../interface/interface';
+import { CheckoutStripeForm } from '../CheckoutStripeForm/CheckoutStripeForm';
 
 export const CheckoutPayment = () => {
   const { createOrder: createOrderHook } = useCheckout();
+  const [isStripe, setIsStripe] = useState('');
   const iframeRef = useRef(null);
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
@@ -63,7 +69,11 @@ export const CheckoutPayment = () => {
         {
           onSuccess: (data) => {
             setLoading(false);
-            setIframeLink(data.paymentInfo.paymentUrl);
+            if (data.paymentProvider == PaymentMethod.STRIPE) {
+              setIsStripe(data.paymentInfo.clientSecret ?? '');
+            } else {
+              setIframeLink(data.paymentInfo.paymentUrl);
+            }
             setSending(false);
           },
         }
@@ -71,9 +81,17 @@ export const CheckoutPayment = () => {
     }
   };
 
-  return (
-    <div className="">
-      {iframeLink ? (
+  const stripePromise = useMemo(() => {
+    if (isStripe != '') {
+      return loadStripe(
+        'pk_test_51LXlkcLjgooBZGqLtsJOxvWAUODRl8PDeg8hFtousHL1pA0iqW73fmXweqYO67XzG0pn50YmnFT0cBTTKzCEYSWa00XRYaEiyf'
+      );
+    } else return null;
+  }, [isStripe]);
+
+  const WichPaymentMethod = () => {
+    if (iframeLink) {
+      return (
         <iframe
           onLoad={(e: SyntheticEvent<HTMLIFrameElement>) => {
             if (
@@ -87,11 +105,23 @@ export const CheckoutPayment = () => {
           className="pw-w-full pw-min-h-screen"
           src={iframeLink}
         />
-      ) : loading ? (
+      );
+    } else if (isStripe && stripePromise) {
+      return (
+        <div>
+          <Elements stripe={stripePromise} options={{ clientSecret: isStripe }}>
+            <CheckoutStripeForm />
+          </Elements>
+        </div>
+      );
+    } else if (loading) {
+      return (
         <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
           <Loading className="pw-animate-spin -pw-mt-24 pw-h-15 pw-w-15" />
         </div>
-      ) : (
+      );
+    } else {
+      return (
         <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
           <ErrorMessage
             className="-pw-mt-24"
@@ -100,7 +130,9 @@ export const CheckoutPayment = () => {
             )}
           />
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+  };
+
+  return <div className="">{WichPaymentMethod()}</div>;
 };

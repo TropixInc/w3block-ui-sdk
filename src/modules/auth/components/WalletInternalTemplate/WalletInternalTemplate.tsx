@@ -3,6 +3,7 @@ import { Trans } from 'react-i18next';
 import { useToggle } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
+import Link from 'next/link';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFilled.svg';
@@ -12,8 +13,8 @@ import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/e
 import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
-import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
@@ -27,7 +28,6 @@ const _WalletInternalTemplate = () => {
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
   const router = useRouter();
-  const walletBalance = wallet?.balance ?? '0';
 
   const isLoading = wallet == undefined;
 
@@ -60,7 +60,6 @@ const _WalletInternalTemplate = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    value={walletBalance}
                     Icon={() => <WalletIcon className="pw-stroke-[#B09C60]" />}
                     title={translate('wallet>page>balance')}
                   />
@@ -68,7 +67,6 @@ const _WalletInternalTemplate = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    value={walletBalance}
                     Icon={() => (
                       <MetamaskIcon className="pw-stroke-[#B09C60]" />
                     )}
@@ -77,20 +75,20 @@ const _WalletInternalTemplate = () => {
                 );
               })
             )}
-            <div className="pw-w-[165px] pw-bg-[#B09C60] pw-px-[8px] pw-py-[10px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-items-center pw-gap-[10px]">
-              <div className="pw-rounded-full pw-border pw-border-[#EFEFEF] pw-w-[30px] pw-h-[30px] pw-flex pw-justify-center pw-items-center">
-                <CashIcon className="pw-fill-white" />
-              </div>
-              <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
-              <div className="pw-flex pw-flex-col pw-items-start pw-text-white pw-font-semibold pw-text-[13px] pw-leading-[13px] pw-cursor-pointer">
-                <Link href="">
+            <Link href={PixwayAppRoutes.ADD_FUNDS_TYPE}>
+              <div className="pw-w-[165px] pw-bg-[#B09C60] pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
+                <div className="pw-rounded-full pw-border pw-bg-[#B09C60] pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
+                  <CashIcon className="pw-fill-white" />
+                </div>
+                <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
+                <div className="pw-flex pw-flex-col pw-items-start pw-text-white pw-font-semibold pw-text-[13px] pw-leading-[13px] pw-cursor-pointer">
                   <Trans i18nKey={'wallet>page>addFunds'}>
                     <span>Adicionar</span>
                     Fundos
                   </Trans>
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
         <div className="pw-w-full pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-[23px]">
@@ -103,7 +101,6 @@ const _WalletInternalTemplate = () => {
                   key={wallet.id}
                   showValue={showValue}
                   title={translate('wallet>page>principal')}
-                  value={walletBalance}
                   walletAddress={profile?.data.mainWallet?.address ?? ''}
                   onClick={() => router.push('/addFunds')}
                   textButton={translate('wallet>page>addFunds')}
@@ -113,7 +110,6 @@ const _WalletInternalTemplate = () => {
                   key={wallet.id}
                   showValue={showValue}
                   title={translate('wallet>page>metamask')}
-                  value={walletBalance}
                   walletAddress={profile?.data.mainWallet?.address ?? ''}
                 />
               );

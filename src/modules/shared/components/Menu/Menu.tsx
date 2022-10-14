@@ -7,10 +7,10 @@ import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentica
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
 import { ReactComponent as DashboardIcon } from '../../assets/icons/dashboard.svg';
-import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
+// import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
-import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
+// import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
 import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
@@ -66,16 +66,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       icon: <CardIcon width={17} height={17} />,
       link: PixwayAppRoutes.WALLET,
     },
-    {
-      title: translate('components>menu>settings'),
-      icon: <SettingsIcon width={17} height={17} />,
-      link: PixwayAppRoutes.SETTINGS,
-    },
-    {
-      title: translate('components>menu>help'),
-      icon: <HelpIcon width={17} height={17} />,
-      link: PixwayAppRoutes.HELP,
-    },
+    // {
+    //   title: translate('components>menu>settings'),
+    //   icon: <SettingsIcon width={17} height={17} />,
+    //   link: PixwayAppRoutes.SETTINGS,
+    // },
+    // {
+    //   title: translate('components>menu>help'),
+    //   icon: <HelpIcon width={17} height={17} />,
+    //   link: PixwayAppRoutes.HELP,
+    // },
   ];
 
   const tabsMap: TabsConfig[] = tabs ? tabs : tabsDefault;

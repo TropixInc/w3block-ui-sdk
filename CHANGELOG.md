@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.51](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.50...v0.1.1-alpha.51) (2022-10-14)
+
+### [0.1.1-alpha.50](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.48...v0.1.1-alpha.50) (2022-10-14)
+
+
+### Bug Fixes
+
+* **PC-139, PC-144:** adjusted balance ([#64](https://github.com/TropixInc/w3block-ui-sdk/issues/64)) ([dc55569](https://github.com/TropixInc/w3block-ui-sdk/commit/dc555699eb5037dac4f0ca8bb07aecbb22e385ba))
+* **pc-143:** adjusts on elements ([#66](https://github.com/TropixInc/w3block-ui-sdk/issues/66)) ([b62a1b2](https://github.com/TropixInc/w3block-ui-sdk/commit/b62a1b2cbf847e42e803f4ff9bb3769d286eefc9))
+
+### [0.1.1-alpha.49](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.48...v0.1.1-alpha.49) (2022-10-14)
+
+
+### Bug Fixes
+
+* **PC-139, PC-144:** adjusted balance ([#64](https://github.com/TropixInc/w3block-ui-sdk/issues/64)) ([dc55569](https://github.com/TropixInc/w3block-ui-sdk/commit/dc555699eb5037dac4f0ca8bb07aecbb22e385ba))
+* **pc-143:** adjusts on elements ([#66](https://github.com/TropixInc/w3block-ui-sdk/issues/66)) ([b62a1b2](https://github.com/TropixInc/w3block-ui-sdk/commit/b62a1b2cbf847e42e803f4ff9bb3769d286eefc9))
+
+### [0.1.1-alpha.48](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.47...v0.1.1-alpha.48) (2022-10-13)
+
+### [0.1.1-alpha.47](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.46...v0.1.1-alpha.47) (2022-10-13)
+
+
+### Features
+
+* **np-7:** pass token page ([#54](https://github.com/TropixInc/w3block-ui-sdk/issues/54)) ([598ed5e](https://github.com/TropixInc/w3block-ui-sdk/commit/598ed5e01e403f08511ef8e5b0c9e21131e82d55))
+
+### [0.1.1-alpha.46](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.45...v0.1.1-alpha.46) (2022-10-06)
+
 ### [0.1.1-alpha.45](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.44...v0.1.1-alpha.45) (2022-09-30)
 
 

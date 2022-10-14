@@ -4,3 +4,4 @@ export * from './auth';
 export * from './tokens';
 export * from './checkout';
 export * from './dashboard';
+export * from './addFunds';
