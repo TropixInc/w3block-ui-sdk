@@ -24,7 +24,7 @@ export const MyProfile = () => {
   const walletBalance = wallet?.balance ?? '0';
   const isLoading = wallet == undefined;
 
-  const patchProfile = usePatchProfile();
+  const { mutate } = usePatchProfile();
   const inputRef = useRef<HTMLInputElement>(null);
   const value = inputRef?.current?.value;
 
@@ -107,7 +107,7 @@ export const MyProfile = () => {
           />
         </div>
         <PixwayButton
-          onClick={() => patchProfile(value ?? '')}
+          onClick={() => mutate(value ?? '')}
           type="button"
           fullWidth
           className={classNames(
