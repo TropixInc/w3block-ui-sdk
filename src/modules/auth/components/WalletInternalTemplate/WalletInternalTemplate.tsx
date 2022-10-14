@@ -78,20 +78,20 @@ const _WalletInternalTemplate = () => {
                 );
               })
             )}
-            <div className="pw-w-[165px] pw-bg-[#B09C60] pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
-              <div className="pw-rounded-full pw-border pw-bg-[#B09C60] pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
-                <CashIcon className="pw-fill-white" />
-              </div>
-              <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
-              <div className="pw-flex pw-flex-col pw-items-start pw-text-white pw-font-semibold pw-text-[13px] pw-leading-[13px] pw-cursor-pointer">
-                <Link href={PixwayAppRoutes.ADD_FUNDS_TYPE}>
+            <Link href={PixwayAppRoutes.ADD_FUNDS_TYPE}>
+              <div className="pw-w-[165px] pw-bg-[#B09C60] pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
+                <div className="pw-rounded-full pw-border pw-bg-[#B09C60] pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
+                  <CashIcon className="pw-fill-white" />
+                </div>
+                <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
+                <div className="pw-flex pw-flex-col pw-items-start pw-text-white pw-font-semibold pw-text-[13px] pw-leading-[13px] pw-cursor-pointer">
                   <Trans i18nKey={'wallet>page>addFunds'}>
                     <span>Adicionar</span>
                     Fundos
                   </Trans>
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
         <div className="pw-w-full pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-[23px]">
