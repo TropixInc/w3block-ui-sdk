@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.6",
+    "@stripe/react-stripe-js": "^1.13.0",
+    "@stripe/stripe-js": "^1.41.0",
     "@types/react-pdf": "^5.7.2",
     "@w3block/pixchain-react-metamask": "^2.8.1",
     "@w3block/sdk-id": "^0.1.4",
