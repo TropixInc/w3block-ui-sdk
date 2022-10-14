@@ -6,4 +6,5 @@ export interface SessionUser extends User {
   refreshToken: string;
   roles: Array<UserRoleEnum>;
   companyId?: string;
+  email?: string;
 }

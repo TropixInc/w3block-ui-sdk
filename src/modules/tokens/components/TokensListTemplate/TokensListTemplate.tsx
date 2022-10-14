@@ -161,7 +161,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
             key={token.id}
           >
             <WalletTokenCard
-              category={token.category}
+              category={token.category || ''}
               image={token.image}
               name={token.name}
               id={token.id}

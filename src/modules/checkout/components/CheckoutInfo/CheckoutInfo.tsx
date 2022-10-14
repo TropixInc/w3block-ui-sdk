@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocalStorage } from 'react-use';
+import { useLocalStorage, useTimeoutFn } from 'react-use';
 
 import { PriceAndGasInfo, ProductInfo } from '../../../shared';
 import { ReactComponent as CreditCardIcon } from '../../../shared/assets/icons/creditCard.svg';
@@ -90,7 +90,7 @@ const _CheckoutInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  useEffect(() => {
+  const getOrderPreviewFn = () => {
     if (
       productIds &&
       currencyIdState &&
@@ -108,8 +108,16 @@ const _CheckoutInfo = ({
         }
       );
     }
+  };
+
+  useEffect(() => {
+    getOrderPreviewFn();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds, currencyIdState, token]);
+
+  useTimeoutFn(() => {
+    getOrderPreviewFn();
+  }, 30000);
 
   const isLoading = orderPreview == null;
 
@@ -174,7 +182,7 @@ const _CheckoutInfo = ({
                         router.push(PixwayAppRoutes.HOME);
                       }
                 }
-                className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+                className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
                 {translate('shared>cancel')}
               </PixwayButton>

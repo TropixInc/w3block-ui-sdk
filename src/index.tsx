@@ -11,3 +11,5 @@ export * from './modules/tokens';
 export * from './modules/pass';
 
 export * from './modules/checkout';
+
+export * from './modules/addFunds';

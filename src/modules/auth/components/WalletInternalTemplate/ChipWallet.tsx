@@ -1,13 +1,12 @@
+import { Balance } from '../../../shared/components/Balance';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 
 export const ChipWallet = ({
   showValue,
-  value,
   title,
   Icon,
 }: {
   showValue: boolean;
-  value: string;
   title: string;
   Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }) => (
@@ -17,10 +16,10 @@ export const ChipWallet = ({
     </div>
     <div className="pw-w-[1px] pw-bg-[#35394C] pw-h-[32px]" />
     <div className="flex flex-col pw-items-start pw-justify-center">
-      <span className="font-semibold text-[13px] leading-[13px]">{title}</span>
-      <span className="font-medium text-[11px] leading-[11px]">
-        {showValue ? `R$${parseFloat(value).toFixed(2)}` : '****'}
+      <span className="pw-font-semibold pw-text-[13px] pw-leading-[13px]">
+        {title}
       </span>
+      <Balance showValue={showValue} />
     </div>
   </div>
 );

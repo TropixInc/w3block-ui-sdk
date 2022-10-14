@@ -3,19 +3,18 @@ import { useCopyToClipboard } from 'react-use';
 
 import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copyIconOutlined.svg';
 import { ReactComponent as DollarIcon } from '../../../shared/assets/icons/dollarOutlined.svg';
+import { Balance } from '../../../shared/components/Balance';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const CardWallet = ({
   showValue,
-  value,
   title,
   walletAddress,
   textButton,
   onClick,
 }: {
   showValue: boolean;
-  value: string;
   title: string;
   walletAddress: string;
   textButton?: string;
@@ -62,9 +61,13 @@ export const CardWallet = ({
           </div>
           {translate('wallet>page>balance')}
         </div>
-        <div className="pw-font-bold pw-text-[24px] pw-leading-[29px] pw-text-[#B09C60]">
-          {showValue ? `R$ ${parseFloat(value).toFixed(2)}` : '*****'}
-        </div>
+        <Balance
+          showValue={showValue}
+          classes={{
+            balance:
+              '!pw-font-bold !pw-text-[24px] !pw-leading-[29px] !pw-text-[#B09C60]',
+          }}
+        />
       </div>
       {textButton ? (
         <button

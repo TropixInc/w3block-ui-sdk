@@ -9,12 +9,18 @@ import {
 
 import classNames from 'classnames';
 
+import { ReactComponent as AlertTriangle } from '../../assets/icons/alertTriangle.svg';
 import { ReactComponent as CheckCircledFilled } from '../../assets/icons/checkCircledFilled.svg';
 import { ReactComponent as ErrorCircledFilled } from '../../assets/icons/errorCircledFilled.svg';
 import { ReactComponent as ExclamationCircledFilled } from '../../assets/icons/exclamationCircledFilled.svg';
 import { ReactComponent as InformationCircledFilled } from '../../assets/icons/informationCircledFilled.svg';
 
-type AlertVariant = 'error' | 'warning' | 'success' | 'information';
+type AlertVariant =
+  | 'error'
+  | 'warning'
+  | 'success'
+  | 'information'
+  | 'atention';
 
 export interface AlertProps {
   variant?: AlertVariant;
@@ -35,6 +41,7 @@ const AlertContext = createContext<AlertContext>({} as AlertContext);
 
 const iconConfigMap = new Map([
   ['error', { Element: ErrorCircledFilled, className: 'pw-fill-[#D02428]' }],
+  ['atention', { Element: AlertTriangle }],
   [
     'warning',
     { Element: ExclamationCircledFilled, className: 'pw-fill-[#EEA109]' },
@@ -45,6 +52,7 @@ const iconConfigMap = new Map([
 
 const variantClassNamesMap = new Map<AlertVariant, string>([
   ['error', 'pw-text-[#D02428] pw-bg-[#F3D9DC]'],
+  ['atention', 'pw-text-[#D02428] pw-bg-[#F3D9DC]'],
   ['warning', 'pw-bg-[#FFF9E3] pw-text-[#EEA109]'],
   ['success', 'pw-bg-[#DFF5EB] pw-text-[#17C490]'],
   ['information', 'pw-bg-[#D7E3F3] pw-text-[#5682C3]'],
