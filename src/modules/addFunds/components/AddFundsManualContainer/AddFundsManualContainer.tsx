@@ -25,7 +25,7 @@ export const AddFundsManualContainer = () => {
   };
 
   return (
-    <div className="pw-flex pw-justify-center">
+    <div className="lg:pw-flex lg:pw-justify-center">
       <div className="lg:pw-max-w-[550px]">
         <p className="pw-font-montserrat pw-font-[700] pw-text-[18px]">
           {translate('wallet>page>addFunds')}
@@ -49,7 +49,7 @@ export const AddFundsManualContainer = () => {
           <HelpCircleOutlinedSVG />
         </div>
         <div className="pw-border pw-border-brand-primary pw-flex pw-items-center pw-justify-between pw-rounded-xl pw-px-3 pw-py-4 pw-mt-2">
-          <p className="pw-font-montserrat pw-text-[13px] pw-text-[#353945]">
+          <p className="pw-font-montserrat pw-text-[13px] pw-text-[#353945] pw-overflow-hidden">
             {wallet?.address || ''}
           </p>
           <CopyIcon className="cursor-pointer" onClick={copyAddress} />
