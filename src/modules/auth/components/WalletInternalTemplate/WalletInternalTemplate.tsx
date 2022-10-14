@@ -12,12 +12,12 @@ import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/e
 import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
+import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { Link } from '../Link';
 import { WalletExtract } from '../WalletExtract';
 import { CardWallet } from './CardWallet';
 import { ChipWallet } from './ChipWallet';
