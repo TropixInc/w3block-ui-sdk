@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.50](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.48...v0.1.1-alpha.50) (2022-10-14)
+
+
+### Bug Fixes
+
+* **PC-139, PC-144:** adjusted balance ([#64](https://github.com/TropixInc/w3block-ui-sdk/issues/64)) ([dc55569](https://github.com/TropixInc/w3block-ui-sdk/commit/dc555699eb5037dac4f0ca8bb07aecbb22e385ba))
+* **pc-143:** adjusts on elements ([#66](https://github.com/TropixInc/w3block-ui-sdk/issues/66)) ([b62a1b2](https://github.com/TropixInc/w3block-ui-sdk/commit/b62a1b2cbf847e42e803f4ff9bb3769d286eefc9))
+
 ### [0.1.1-alpha.49](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.48...v0.1.1-alpha.49) (2022-10-14)
 
 
