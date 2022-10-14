@@ -28,7 +28,6 @@ const _WalletInternalTemplate = () => {
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
   const router = useRouter();
-  const walletBalance = wallet?.balance ?? '0';
 
   const isLoading = wallet == undefined;
 
@@ -61,7 +60,6 @@ const _WalletInternalTemplate = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    value={walletBalance}
                     Icon={() => <WalletIcon className="pw-stroke-[#B09C60]" />}
                     title={translate('wallet>page>balance')}
                   />
@@ -69,7 +67,6 @@ const _WalletInternalTemplate = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    value={walletBalance}
                     Icon={() => (
                       <MetamaskIcon className="pw-stroke-[#B09C60]" />
                     )}
@@ -104,7 +101,6 @@ const _WalletInternalTemplate = () => {
                   key={wallet.id}
                   showValue={showValue}
                   title={translate('wallet>page>principal')}
-                  value={walletBalance}
                   walletAddress={profile?.data.mainWallet?.address ?? ''}
                   onClick={() => router.push('/addFunds')}
                   textButton={translate('wallet>page>addFunds')}
@@ -114,7 +110,6 @@ const _WalletInternalTemplate = () => {
                   key={wallet.id}
                   showValue={showValue}
                   title={translate('wallet>page>metamask')}
-                  value={walletBalance}
                   walletAddress={profile?.data.mainWallet?.address ?? ''}
                 />
               );

@@ -58,8 +58,8 @@
   "shared>register": "Register",
   "shared>login": "Login",
   "shared>myAcount": "My account",
-  "header>logged>pixwayBalance": "Pixway balance",
-  "header>logged>hiWallet": "Hi, {{name}} | Your Pixway wallet:",
+  "header>logged>pixwayBalance": "Weblock balance",
+  "header>logged>hiWallet": "Hi, {{name}} | Your Weblock wallet:",
   "header>components>defaultTab>myAccount": "My account",
   "header>components>defaultTab>myTokens": "My tokens",
   "header>components>defaultTab>wallet": "Wallet",
@@ -90,5 +90,7 @@
   "addFunds>type>manual>successCopy": "Your wallet was successfully copied!",
   "addFunds>type>manual>atention": "Atention!",
   "addFunds>type>manual>onlyETHOrMatic": "Send only Ethereum or Matic for your Weblock wallet",
-  "addFunds>type>manual>loseFunds": "Sending from another currency will result in losing funds."
+  "addFunds>type>manual>loseFunds": "Sending from another currency will result in losing funds.",
+  "header>logged>metamaskBalance": "Metamask Balance",
+  "header>logged>metamaskHiWallet": "Hi, {{name}} | Your Metamask wallet:"
 }
