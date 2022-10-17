@@ -66,7 +66,7 @@
   "header>components>defaultTab>settings": "Settings",
   "header>components>defaultTab>helpCenter": "Help center",
   "shared>components>servicePriceinfo": "Service fee",
-  "checkout>components>checkoutInfo>redirectInfo": "You will be redirected to our partner Pagar.me",
+  "checkout>components>checkoutInfo>redirectInfo": "You will be redirected to our partner",
   "checkout>components>checkoutInfo>proccessingBlockchain": "We are processing at blockchain, this could take a few minutes!",
   "checkout>components>checkoutInfo>infoAboutProcessing": "The token is being processed on the blockchain network and will soon be available in your wallet. Processing time may vary from a few minutes to 4 hours depending on network traffic blockchain. We will let you know as soon as processing is completed.",
   "checkout>components>warning>problemWithCheckout": "We had a problem with the purchase.",
@@ -92,5 +92,7 @@
   "addFunds>type>manual>onlyETHOrMatic": "Send only Ethereum or Matic for your Weblock wallet",
   "addFunds>type>manual>loseFunds": "Sending from another currency will result in losing funds.",
   "header>logged>metamaskBalance": "Metamask Balance",
-  "header>logged>metamaskHiWallet": "Hi, {{name}} | Your Metamask wallet:"
+  "header>logged>metamaskHiWallet": "Hi, {{name}} | Your Metamask wallet:",
+  "checkout>payment>subimtPayment": "Complete Payment",
+  "checkout>payment>PaymentInfo": "Payment info"
 }

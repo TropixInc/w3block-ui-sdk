@@ -59,8 +59,9 @@ export interface CreateOrderResponse {
 }
 
 export interface PaymentInfoInterface {
-  paymentUrl: string;
+  paymentUrl?: string;
   clientSecret?: string;
+  publicKey?: string;
 }
 
 export interface CreateOrderPayload {
