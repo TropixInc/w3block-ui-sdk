@@ -6,6 +6,7 @@ import { add, format, getDay, isToday } from 'date-fns';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { DetailPass } from './DetailPass';
@@ -18,7 +19,7 @@ import { UsedPass } from './UsedSection';
 
 const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`;
 
-export const PassTemplate = () => {
+const _PassTemplate = () => {
   const [translate] = useTranslation();
   const router = useRouter();
   const tokenId = (router.query.tokenId as string) || 'inactive';
@@ -281,6 +282,12 @@ export const PassTemplate = () => {
     </div>
   );
 };
+
+export const PassTemplate = () => (
+  <TranslatableComponent>
+    <_PassTemplate />
+  </TranslatableComponent>
+);
 
 const Button = ({
   children,

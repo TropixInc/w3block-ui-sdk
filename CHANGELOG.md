@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.52](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.51...v0.1.1-alpha.52) (2022-10-17)
+
+
+### Features
+
+* **np-14:** pass client page ([#60](https://github.com/TropixInc/w3block-ui-sdk/issues/60)) ([129b4f7](https://github.com/TropixInc/w3block-ui-sdk/commit/129b4f7e60316c297bcc7dc00378f8860ba68b37))
+
 ### [0.1.1-alpha.51](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.50...v0.1.1-alpha.51) (2022-10-14)
 
 ### [0.1.1-alpha.50](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.48...v0.1.1-alpha.50) (2022-10-14)

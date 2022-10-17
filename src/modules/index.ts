@@ -5,3 +5,4 @@ export * from './tokens';
 export * from './checkout';
 export * from './dashboard';
 export * from './addFunds';
+export * from './pass';
