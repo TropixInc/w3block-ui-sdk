@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { UserRoleEnum } from '@w3block/sdk-id/dist/types/enums';
+import { UserRoleEnum } from '@w3block/sdk-id';
 
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { ReactComponent as CloseIcon } from '../../../shared/assets/icons/x-circle.svg';
