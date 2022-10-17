@@ -92,6 +92,9 @@
   "components>menu>copied": "Copiado!",
   "components>menu>myProfile": "Meu Perfil",
   "components>menu>myTokens": "Meus Tokens",
+  "components>menu>tokenPass": "Token Pass",
+  "components>menu>tokenPass>clients": "Evento Específico",
+  "components>menu>tokenPass>report": "Relatórios",
   "components>menu>wallet": "Carteira",
   "components>menu>settings": "Configurações",
   "components>menu>help": "Central de Ajuda",
@@ -235,5 +238,9 @@
   "header>logged>metamaskBalance": "Saldo Metamask",
   "header>logged>metamaskHiWallet": "Olá, {{name}} | Sua carteira Metamask:",
   "checkout>payment>subimtPayment": "Efetuar pagamento",
-  "checkout>payment>PaymentInfo": "Informações de pagamento"
+  "checkout>payment>PaymentInfo": "Informações de pagamento",
+  "token>pass>totalValidedTokens": "Total tokens validados: <2>{{total}}</2>",
+  "token>pass>status": "Status",
+  "token>pass>notResult": "Nenhum resultado encontrado.",
+  "token>pass>total": "Total: {{total}}"
 }
