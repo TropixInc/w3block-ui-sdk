@@ -10,6 +10,7 @@ import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { ReactComponent as WalletImage } from '../../assets/wallet.svg';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
 import { Token } from '../../interfaces/Token';
@@ -58,85 +59,12 @@ const NoWalletAlert = () => {
   );
 };
 
-const HOCStaging = () => {
-  const { data: profileResponse, isLoading: isLoadingProfile } = useProfile();
-  const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
-    useGetNFTSByWallet(80001);
-  const [{ data: polygonNFTsResponse, isLoading: isLoadingPolygon }] =
-    useGetNFTSByWallet(4);
-  const [{ data: polygonNFTsReponse2, isLoading: isLoadingLast }] =
-    useGetNFTSByWallet(137);
-
-  const tokens = useMemo(() => {
-    let tokens: Array<Token> = [];
-    if (ethNFTsResponse) {
-      tokens = tokens.concat(
-        ethNFTsResponse.data.items.map((nft) => mapNFTToToken(nft, 80001))
-      );
-    }
-    if (polygonNFTsResponse) {
-      tokens = tokens.concat(
-        polygonNFTsResponse.data.items.map((nft) => mapNFTToToken(nft, 4))
-      );
-    }
-    if (polygonNFTsReponse2) {
-      tokens = tokens.concat(
-        polygonNFTsReponse2.data.items.map((nft) => mapNFTToToken(nft, 137))
-      );
-    }
-    return tokens;
-  }, [ethNFTsResponse, polygonNFTsResponse, polygonNFTsReponse2]);
-
-  if (!profileResponse || !profileResponse.data.mainWalletId)
-    return <NoWalletAlert />;
-
-  return (
-    <_TokensListTemplate
-      tokens={tokens}
-      isLoading={
-        isLoadingLast || isLoadingPolygon || isLoadingETH || isLoadingProfile
-      }
-    />
-  );
-};
-
-const HOCProduction = () => {
-  const { data: profileResponse, isLoading: isLoadingProfile } = useProfile();
-  const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
-    useGetNFTSByWallet(1);
-  const [{ data: polygonNFTsResponse, isLoading: isLoadingPolygon }] =
-    useGetNFTSByWallet(137);
-
-  const tokens = useMemo(() => {
-    let tokens: Array<Token> = [];
-    if (ethNFTsResponse) {
-      tokens = tokens.concat(
-        ethNFTsResponse.data.items.map((nft) => mapNFTToToken(nft, 1))
-      );
-    }
-    if (polygonNFTsResponse) {
-      tokens = tokens.concat(
-        polygonNFTsResponse.data.items.map((nft) => mapNFTToToken(nft, 137))
-      );
-    }
-    return tokens;
-  }, [ethNFTsResponse, polygonNFTsResponse]);
-
-  if (profileResponse && !profileResponse.data.mainWalletId)
-    return <NoWalletAlert />;
-
-  return (
-    <_TokensListTemplate
-      isLoading={isLoadingETH || isLoadingPolygon || isLoadingProfile}
-      tokens={tokens}
-    />
-  );
-};
-
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const isProduction = useIsProduction();
+  const isDevelopment = !isProduction;
 
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 6;
@@ -164,7 +92,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               id={token.id}
               chainId={token.chainId}
               contractAddress={token.contractAddress}
-              hasPass={true}
+              hasPass={isDevelopment}
               hasActivated={index % 2 === 0}
             />
           </li>
@@ -202,13 +130,37 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 };
 
 export const TokensListTemplate = () => {
-  const isProduction = useIsProduction();
   const { status } = usePixwaySession();
   const { isLoading, isAuthorized } = usePrivateRoute();
 
+  const { data: profileResponse, isLoading: isLoadingProfile } = useProfile();
+
+  const { wallet } = useUserWallet();
+
+  const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
+    useGetNFTSByWallet(wallet?.chainId || 0);
+
+  const tokens = useMemo(() => {
+    let tokens: Array<Token> = [];
+    if (ethNFTsResponse) {
+      tokens = tokens.concat(
+        ethNFTsResponse.data.items.map((nft) => mapNFTToToken(nft, 80001))
+      );
+    }
+    return tokens;
+  }, [ethNFTsResponse]);
+
+  if (!profileResponse || !profileResponse.data.mainWalletId)
+    return <NoWalletAlert />;
+
   const renderTemplate = () => {
     if (status === 'unauthenticated') return <UnsignedUserAlert />;
-    return isProduction ? <HOCProduction /> : <HOCStaging />;
+    return (
+      <_TokensListTemplate
+        tokens={tokens}
+        isLoading={isLoadingETH || isLoadingProfile}
+      />
+    );
   };
 
   return isLoading || !isAuthorized ? null : (

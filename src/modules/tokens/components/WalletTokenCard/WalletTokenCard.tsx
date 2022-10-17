@@ -84,8 +84,10 @@ export const WalletTokenCard = ({
           <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[10px]">
             <div className="pw-relative pw-overflow-hidden pw-w-[260px] pw-h-[260px]">
               {hasPass ? (
-                <div className="pw-text-[#295BA6] pw-text-[12px] pw-leading-[18px] pw-font-bold pw-bg-[#E5EDF9] pw-border pw-border-[#295ba67f] pw-rounded-full pw-absolute pw-left-[13px] pw-top-[14px] pw-py-1 pw-px-2">
-                  {translate('connectTokens>tokensList>tokenPass')}
+                <div className="pw-bg-white pw-absolute pw-left-[13px] pw-top-[14px] pw-rounded-full">
+                  <div className="pw-bg-brand-primary/30 pw-text-brand-primary pw-text-[12px] pw-leading-[18px] pw-font-bold pw-border pw-border-brand-primary pw-rounded-full pw-py-1 pw-px-2">
+                    {translate('connectTokens>tokensList>tokenPass')}
+                  </div>
                 </div>
               ) : null}
               {image ? (
