@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { UserRoleEnum } from '@w3block/sdk-id/dist/types/enums';
+
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { ReactComponent as CloseIcon } from '../../../shared/assets/icons/x-circle.svg';
 import { Alert } from '../../../shared/components/Alert';
@@ -127,7 +129,7 @@ const _DashboardInternalTemplate = () => {
 
 export const DashboardInternalTemplate = () => {
   const { isLoading, isAuthorized } = usePrivateRoute({
-    roles: ['partner'],
+    roles: [UserRoleEnum.user],
     strategy: PrivateRouteStrategy.ALLOW_SPECIFIED_ROLES,
   });
   return isLoading || !isAuthorized ? null : (
