@@ -3,7 +3,6 @@ import { Trans } from 'react-i18next';
 import { useToggle } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
-import Link from 'next/link';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFilled.svg';
@@ -13,6 +12,7 @@ import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/e
 import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
+import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
@@ -102,7 +102,7 @@ const _WalletInternalTemplate = () => {
                   showValue={showValue}
                   title={translate('wallet>page>principal')}
                   walletAddress={profile?.data.mainWallet?.address ?? ''}
-                  onClick={() => router.push('/addFunds')}
+                  onClick={() => router.push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
                   textButton={translate('wallet>page>addFunds')}
                 />
               ) : (
