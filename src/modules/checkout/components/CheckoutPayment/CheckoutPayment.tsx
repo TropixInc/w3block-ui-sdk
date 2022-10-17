@@ -20,6 +20,7 @@ import { CheckoutStripeForm } from '../CheckoutStripeForm/CheckoutStripeForm';
 export const CheckoutPayment = () => {
   const { createOrder: createOrderHook } = useCheckout();
   const [isStripe, setIsStripe] = useState('');
+  const [stripeKey, setStripeKey] = useState('');
   const iframeRef = useRef(null);
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
@@ -71,8 +72,9 @@ export const CheckoutPayment = () => {
             setLoading(false);
             if (data.paymentProvider == PaymentMethod.STRIPE) {
               setIsStripe(data.paymentInfo.clientSecret ?? '');
+              setStripeKey(data.paymentInfo.publicKey ?? '');
             } else {
-              setIframeLink(data.paymentInfo.paymentUrl);
+              setIframeLink(data.paymentInfo.paymentUrl ?? '');
             }
             setSending(false);
           },
@@ -82,12 +84,10 @@ export const CheckoutPayment = () => {
   };
 
   const stripePromise = useMemo(() => {
-    if (isStripe != '') {
-      return loadStripe(
-        'pk_test_51LXlkcLjgooBZGqLtsJOxvWAUODRl8PDeg8hFtousHL1pA0iqW73fmXweqYO67XzG0pn50YmnFT0cBTTKzCEYSWa00XRYaEiyf'
-      );
+    if (isStripe != '' && stripeKey != '') {
+      return loadStripe(stripeKey);
     } else return null;
-  }, [isStripe]);
+  }, [isStripe, stripeKey]);
 
   const WichPaymentMethod = () => {
     if (iframeLink) {

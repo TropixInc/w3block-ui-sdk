@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, SyntheticEvent } from 'react';
 
 interface WeblocButtonProps {
   children: ReactNode;
@@ -6,7 +6,7 @@ interface WeblocButtonProps {
   tailwindBgColor?: string;
   className?: string;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (event: SyntheticEvent) => void;
 }
 
 export const WeblockButton = ({
