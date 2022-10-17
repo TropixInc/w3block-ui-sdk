@@ -129,7 +129,7 @@ const _DashboardInternalTemplate = () => {
 
 export const DashboardInternalTemplate = () => {
   const { isLoading, isAuthorized } = usePrivateRoute({
-    roles: [UserRoleEnum.user],
+    roles: [UserRoleEnum.User],
     strategy: PrivateRouteStrategy.ALLOW_SPECIFIED_ROLES,
   });
   return isLoading || !isAuthorized ? null : (
