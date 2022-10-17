@@ -238,5 +238,6 @@
   "shared>myProfile>confirm": "Confirmar",
   "shared>myProfile>myProfile": "Meu Perfil",
   "header>logged>metamaskBalance": "Saldo Metamask",
-  "header>logged>metamaskHiWallet": "Olá, {{name}} | Sua carteira Metamask:"
+  "header>logged>metamaskHiWallet": "Olá, {{name}} | Sua carteira Metamask:",
+  "dashboard>EventCard>seeMore": "Veja mais"
 }

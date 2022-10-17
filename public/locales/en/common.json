@@ -97,5 +97,6 @@
   "addFunds>type>manual>onlyETHOrMatic": "Send only Ethereum or Matic for your Weblock wallet",
   "addFunds>type>manual>loseFunds": "Sending from another currency will result in losing funds.",
   "header>logged>metamaskBalance": "Metamask Balance",
-  "header>logged>metamaskHiWallet": "Hi, {{name}} | Your Metamask wallet:"
+  "header>logged>metamaskHiWallet": "Hi, {{name}} | Your Metamask wallet:",
+  "dashboard>EventCard>seeMore": "See more"
 }

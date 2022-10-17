@@ -1,3 +1,4 @@
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../Button';
 
 interface EventCardProps {
@@ -5,15 +6,16 @@ interface EventCardProps {
   eventTitle: string;
   profileTitle: string;
   eventDescription: string;
-  url: string;
+  onClick?: () => void;
 }
 
 export const EventCard = ({
   eventTitle,
   profileTitle,
   eventDescription,
-  url,
+  onClick,
 }: EventCardProps) => {
+  const [translate] = useTranslation();
   return (
     <div className="pw-w-[270px] pw-h-[240px] pw-shadow-md pw-rounded-b-2xl">
       <div className="pw-bg-brand-primary pw-max-h-10 pw-rounded-t-2xl pw-py-2 pw-px-4 pw-text-white pw-truncate">
@@ -26,8 +28,8 @@ export const EventCard = ({
         <p className="pw-font-normal pw-text-sm pw-leading-[21px]">
           {eventDescription}
         </p>
-        <Button style="pw-max-w-[110px]" onClick={() => console.log(url)}>
-          Veja mais
+        <Button style="pw-max-w-[110px]" onClick={onClick}>
+          {translate('dashboard>EventCard>seeMore')}
         </Button>
       </div>
     </div>
