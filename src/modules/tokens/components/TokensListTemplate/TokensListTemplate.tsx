@@ -64,7 +64,6 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const isProduction = useIsProduction();
-  const isDevelopment = !isProduction;
 
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 6;
@@ -92,7 +91,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               id={token.id}
               chainId={token.chainId}
               contractAddress={token.contractAddress}
-              hasPass={isDevelopment}
+              hasPass={!isProduction}
               hasActivated={index % 2 === 0}
             />
           </li>
@@ -138,17 +137,12 @@ export const TokensListTemplate = () => {
   const { wallet } = useUserWallet();
 
   const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
-    useGetNFTSByWallet(wallet?.chainId || 0);
+    useGetNFTSByWallet(wallet?.chainId || 80001);
 
-  const tokens = useMemo(() => {
-    let tokens: Array<Token> = [];
-    if (ethNFTsResponse) {
-      tokens = tokens.concat(
-        ethNFTsResponse.data.items.map((nft) => mapNFTToToken(nft, 80001))
-      );
-    }
-    return tokens;
-  }, [ethNFTsResponse]);
+  const tokens =
+    ethNFTsResponse?.data.items.map((nft) =>
+      mapNFTToToken(nft, wallet?.chainId || 80001)
+    ) || [];
 
   if (!profileResponse || !profileResponse.data.mainWalletId)
     return <NoWalletAlert />;
