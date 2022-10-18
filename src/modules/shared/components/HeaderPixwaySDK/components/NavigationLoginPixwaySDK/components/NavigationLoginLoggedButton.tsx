@@ -1,4 +1,5 @@
-import { ReactNode, useContext, useMemo, useState } from 'react';
+import { ReactNode, useContext, useMemo, useRef, useState } from 'react';
+import { useClickAway } from 'react-use';
 
 import { ChainId, WalletTypes } from '@w3block/sdk-id';
 
@@ -33,11 +34,15 @@ export const NavigationLoginLoggedButton = ({
 }: NavigationLoginLoggedButtonProps) => {
   const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
+  const ref = useRef(null);
+  useClickAway(ref, () => {
+    if (menu) setMenu(false);
+  });
   const { data: profile } = useProfile();
   const { wallet } = useUserWallet();
 
   return (
-    <div className="pw-ml-5 ">
+    <div className="pw-ml-5" ref={ref}>
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
         <p className="pw-text-xs pw-font-montserrat pw-font-[400] ">
           {wallet?.type === WalletTypes.Vault
