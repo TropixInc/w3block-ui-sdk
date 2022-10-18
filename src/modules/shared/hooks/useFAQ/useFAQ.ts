@@ -51,10 +51,19 @@ export const useFAQ = (page: number, limit: number, name: string) => {
   const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.GET_FAQ, companyId, name, limit, page],
+    [
+      PixwayAPIRoutes.GET_FAQ.replace('{companyId}', companyId),
+      companyId,
+      name,
+      limit,
+      page,
+    ],
     () =>
-      axios.get<GetFAQResponse>(PixwayAPIRoutes.GET_FAQ, {
-        params: { companyId, name, limit, page },
-      })
+      axios.get<GetFAQResponse>(
+        PixwayAPIRoutes.GET_FAQ.replace('{companyId}', companyId),
+        {
+          params: { companyId, name, limit, page },
+        }
+      )
   );
 };

@@ -1,5 +1,3 @@
-import classNames from 'classnames';
-
 interface Props {
   className?: string;
 }
@@ -7,10 +5,8 @@ interface Props {
 export const Spinner = ({ className = '' }: Props) => {
   return (
     <div
-      className={classNames(
-        className,
-        'pw-w-10 pw-h-10 pw-rounded-full pw-bg-transparent pw-border-[5px] pw-border-[#5682C3] pw-border-t-[#E9F0FB] pw-animate-spin'
-      )}
+      className={`pw-w-10 pw-h-10 pw-rounded-full pw-bg-transparent pw-border-[5px] pw-border-[#5682C3] pw-border-t-[#E9F0FB] pw-animate-spin
+        ${className}`}
     />
   );
 };

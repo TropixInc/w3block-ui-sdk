@@ -76,14 +76,14 @@ const _MyProfileTemplate = () => {
 
   return (
     <>
-      <div className="pw-flex pw-flex-col pw-w-screen pw-min-h-screen pw-font-poppins">
+      <div className="pw-flex pw-flex-col pw-w-screen pw-font-poppins">
         <div
           className={classNames(
-            'pw-flex pw-flex-col pw-max-w-[1332px] pw-w-full pw-mx-auto pw-flex-1 pw-pt-[59px] pw-px-8'
+            'pw-flex pw-flex-col pw-max-w-[1332px] pw-w-full pw-mx-auto pw-flex-1 pw-py-[59px] pw-px-8'
           )}
         >
           {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
-          <div className="pw-flex pw-mt-[25px]">
+          <div className="pw-flex pw-my-[25px]">
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
