@@ -101,7 +101,7 @@ export const MyProfile = () => {
         <div>
           <p>E-mail</p>
           <input
-            className="pw-p-[10px] pw-border pw-border-[#B09C60] pw-w-full pw-rounded-[8px]"
+            className="pw-p-[10px] pw-border pw-border-[#B09C60] pw-w-full pw-rounded-[8px] disabled:!pw-bg-[#CCCCCC] disabled:!pw-text-[#131313]"
             type="text"
             disabled
             value={profile?.data.email ?? ''}
