@@ -42,13 +42,15 @@ const _PriceAndGasInfo = ({
           </p>
           {/* <InfoIcon className="pw-mt-[2px]" /> */}
         </div>
-        {loading ? (
-          <Shimmer />
-        ) : (
-          <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
-            R${parseFloat(service).toFixed(2)}
-          </p>
-        )}
+        {service && parseFloat(service) > 0 ? (
+          loading ? (
+            <Shimmer />
+          ) : (
+            <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
+              R${parseFloat(service).toFixed(2)}
+            </p>
+          )
+        ) : null}
       </div>
       <div className="pw-flex pw-justify-between pw-mt-2">
         <div className="pw-flex pw-gap-x-1">
