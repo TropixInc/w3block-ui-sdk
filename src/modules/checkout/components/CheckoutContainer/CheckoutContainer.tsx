@@ -29,7 +29,7 @@ export const CheckoutContainer = ({
           />
         </div>
         <div className="lg:pw-h-[370px] lg:pw-w-[2px] pw-w-full pw-h-[2px] pw-bg-[#DCDCDC] pw-mt-[24px] lg:pw-mt-0" />
-        <div className="flex-1">
+        <div className="flex-  pw-mt-[24px] lg:pw-mt-0">
           <FAQ
             name={
               checkoutStatus === CheckoutStatus.FINISHED

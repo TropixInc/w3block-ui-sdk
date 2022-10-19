@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.53](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.52...v0.1.1-alpha.53) (2022-10-19)
+
+
+### Features
+
+* **np-11:** pass tags and bottons ([#58](https://github.com/TropixInc/w3block-ui-sdk/issues/58)) ([0321fff](https://github.com/TropixInc/w3block-ui-sdk/commit/0321fffa6ae79a4f21b5e1256cbf0cb3f6202645))
+
+
+### Bug Fixes
+
+* **pc-142:** removed mock on extract ([#73](https://github.com/TropixInc/w3block-ui-sdk/issues/73)) ([39d5cda](https://github.com/TropixInc/w3block-ui-sdk/commit/39d5cda425ca31702843fd29abfd628fa3c5d400))
+* **pc-145, pc-147:** adjusted input on profile and header menu ([#72](https://github.com/TropixInc/w3block-ui-sdk/issues/72)) ([62acdd2](https://github.com/TropixInc/w3block-ui-sdk/commit/62acdd219620a8a17e7a2c4a733abce9cdc8ae7b))
+
 ### [0.1.1-alpha.52](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.51...v0.1.1-alpha.52) (2022-10-17)
 
 
