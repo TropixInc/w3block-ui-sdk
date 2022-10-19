@@ -1,5 +1,73 @@
+import { format } from 'date-fns';
+
 import { InternalPagesLayoutBase } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { Button } from '../Button/Button';
+import GenericTable, { ColumnType } from '../GenericTable/GenericTable';
+import StatusTag from '../StatusTag/StatusTag';
+
+interface TableRow {
+  pass: string;
+  type: string;
+  local: string;
+  date: string;
+  status: JSX.Element;
+  actionComponent?: JSX.Element;
+}
+
+const tableData = [
+  {
+    pass: 'Nome do pass',
+    type: 'Físico',
+    local: 'Aplicativo',
+    date: format(new Date(), 'dd/MM/yyyy'),
+    status: <StatusTag status="inactive" />,
+    actionComponent: <Button variant="secondary">Visualizar</Button>,
+  },
+  {
+    pass: 'Nome do pass',
+    type: 'Físico',
+    local: 'Aplicativo',
+    date: format(new Date(), 'dd/MM/yyyy'),
+    status: <StatusTag status="active" />,
+    actionComponent: <Button variant="secondary">Visualizar</Button>,
+  },
+  {
+    pass: 'Nome do pass',
+    type: 'Físico',
+    local: 'Aplicativo',
+    date: format(new Date(), 'dd/MM/yyyy'),
+    status: <StatusTag status="unavailable" />,
+    actionComponent: <Button variant="secondary">Visualizar</Button>,
+  },
+];
+
+const headers: ColumnType<TableRow, keyof TableRow>[] = [
+  {
+    key: 'pass',
+    header: 'Pass',
+  },
+  {
+    key: 'type',
+    header: 'Tipo',
+  },
+  {
+    key: 'local',
+    header: 'Local',
+  },
+  {
+    key: 'date',
+    header: 'Data',
+  },
+  {
+    key: 'status',
+    header: 'Status',
+  },
+  {
+    key: 'actionComponent',
+    header: '',
+  },
+];
 
 const _InternalMultiplePassTemplate = ({
   passName,
@@ -9,7 +77,7 @@ const _InternalMultiplePassTemplate = ({
   contract: string;
 }) => {
   return (
-    <div className="pw-bg-white pw-font-poppins pw-rounded-[8px] pw-w-full pw-p-[16px_16px_24px] pw-flex pw-gap-[8px]">
+    <div className="pw-bg-white pw-flex pw-flex-col pw-font-poppins pw-rounded-[8px] pw-w-full pw-p-[16px_16px_24px] pw-gap-[8px]">
       <div>
         <p className=" pw-font-normal pw-text-sm pw-text-[#777E8F]">
           Token Pass
@@ -25,7 +93,9 @@ const _InternalMultiplePassTemplate = ({
             {contract}
           </p>
         </div>
+        <div className="pw-w-full pw-border pw-border-[#E4E4E4] pw-my-6"></div>
       </div>
+      <GenericTable columns={headers} data={tableData} />
     </div>
   );
 };

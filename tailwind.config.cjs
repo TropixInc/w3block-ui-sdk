@@ -39,6 +39,11 @@ module.exports = {
       montserrat: ['Montserrat', 'sans-serif'],
     },
   },
+  variants: {
+    extend: {
+      text: ['odd', 'even'],
+    },
+  },
   prefix: 'pw-',
   corePlugins: {
     preflight: false,

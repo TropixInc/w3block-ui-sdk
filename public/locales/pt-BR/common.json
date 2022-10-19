@@ -27,7 +27,7 @@
   "auth>mailStep>resentCodeButton": "Reenviar código",
   "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até <1>{{minutes}}:{{seconds}}</1> minutos para reenviar o código",
   "auth>mailStep>linkExpirationMessage": "O link é válido por 15 minutos, após isso, clique em \"Reenviar código\" para uma nova solicitação.",
-  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem." ,
+  "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem.",
   "companyAuth>changePassword>title": "Trocar senha",
   "companyAuth>changingPassword>errorChangingPasswordMessage": "Não foi possível alterar a senha.",
   "companyAuth>changePassword>passworldFieldPlaceholder": "Insira sua nova senha",
@@ -242,5 +242,8 @@
   "token>pass>totalValidedTokens": "Total tokens validados: <2>{{total}}</2>",
   "token>pass>status": "Status",
   "token>pass>notResult": "Nenhum resultado encontrado.",
-  "token>pass>total": "Total: {{total}}"
+  "token>pass>total": "Total: {{total}}",
+  "tokens>StatusTag>active": "Ativo",
+  "tokens>StatusTag>inactive": "Inativo",
+  "tokens>StatusTag>unavailable": "Indiponível"
 }
