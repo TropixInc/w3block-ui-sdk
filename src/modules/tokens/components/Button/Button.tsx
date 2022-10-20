@@ -7,9 +7,13 @@ interface ButtonProps {
 const primaryVariant = 'pw-bg-brand-primary pw-text-white pw-shadow-md';
 
 const secondaryVariant =
-  'pw-border-2 pw-border-brand-primary pw-text-[#383857]';
+  'pw-border-2 pw-border-brand-primary pw-bg-[#EFEFEF] pw-text-[#383857]';
 
-export const Button = ({ children, variant, onClick }: ButtonProps) => {
+export const Button = ({
+  children,
+  variant = 'primary',
+  onClick,
+}: ButtonProps) => {
   return (
     <button
       onClick={onClick}

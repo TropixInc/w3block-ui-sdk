@@ -8,7 +8,7 @@ const StatusTag = ({ status }: StatusTagProps) => {
   const [translate] = useTranslation();
 
   const defaultStyle =
-    'pw-font-poppins pw-font-semibold pw-text-sm pw-text-[#777E8F]';
+    'pw-hidden pw-w-[20px] pw-overflow-hidden sm:pw-w-full sm:pw-block pw-font-poppins pw-font-semibold pw-text-sm pw-text-[#777E8F]';
 
   switch (status) {
     case 'active':

@@ -248,5 +248,7 @@
   "token>pass>total": "Total: {{total}}",
   "tokens>StatusTag>active": "Ativo",
   "tokens>StatusTag>inactive": "Inativo",
-  "tokens>StatusTag>unavailable": "Indiponível"
+  "tokens>StatusTag>unavailable": "Indiponível",
+  "connect>TokenDetailCard>passAssociated": "Pass associados a este token:",
+  "connect>GenericTable>seeMore": "Visualizar mais"
 }
