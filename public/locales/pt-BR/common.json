@@ -171,7 +171,7 @@
   "wallet>tokenQRCodeModal>saveCode": "Salvar código QR",
   "wallet>tokenQRCodeModal>copyCode": "Copiar código QR",
   "connect>tokenInternalPage>titleMobile": "Interna do token",
-  "connect>tokenDetailsCard>contract": "Contrato utilizado",
+  "connect>tokenDetailsCard>contract": "Contrato utilizado:",
   "connect>tokenDetailsCard>titleOrItemName": "Título ou nome do item",
   "connect>tokenDetailsCard>description": "Descrição",
   "connect>tokenDetailsCard>tokenPublicPage": "Página pública do token",
@@ -250,5 +250,6 @@
   "tokens>StatusTag>inactive": "Inativo",
   "tokens>StatusTag>unavailable": "Indiponível",
   "connect>TokenDetailCard>passAssociated": "Pass associados a este token:",
-  "connect>GenericTable>seeMore": "Visualizar mais"
+  "connect>GenericTable>seeMore": "Visualizar mais",
+  "connect>ListAllPass>listBenefits": "Listagem benefícios"
 }

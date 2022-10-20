@@ -1,4 +1,5 @@
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
+import { Link } from '../../../shared/components/Link';
 import useRouter from '../../../shared/hooks/useRouter';
 
 interface BreadcrumbProps {
@@ -29,11 +30,11 @@ const BreadcrumbItem = ({
         itemType="https://schema.org/ListItem"
         key={index}
       >
-        <a itemProp="item" href={url} className="">
+        <Link itemProp="item" href={url} className="">
           <span itemProp="name" className="">
             {name}
           </span>
-        </a>
+        </Link>
         <meta itemProp="position" content={index.toString()} />
       </li>
 

@@ -6,9 +6,15 @@ export interface LinkProps {
   children: ReactNode;
   href: string;
   className?: string;
+  itemProp?: string;
 }
 
-export const Link = ({ children, href, className = '' }: LinkProps) => {
+export const Link = ({
+  children,
+  href,
+  className = '',
+  itemProp = '',
+}: LinkProps) => {
   const router = useRouter();
   const onClickLink: MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
@@ -16,7 +22,12 @@ export const Link = ({ children, href, className = '' }: LinkProps) => {
   };
 
   return (
-    <a href={href} onClick={onClickLink} className={className}>
+    <a
+      href={href}
+      onClick={onClickLink}
+      itemProp={itemProp}
+      className={className}
+    >
       {children}
     </a>
   );
