@@ -99,7 +99,7 @@ const _PassTemplate = () => {
       <></>
     )
   ) : (
-    <div className="pw-flex pw-flex-col pw-max-w-[968px] pw-w-full sm:pw-rounded-[20px] pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px]">
+    <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px]">
       <div
         className="pw-hidden sm:pw-flex pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
         onClick={() => router.back()}
