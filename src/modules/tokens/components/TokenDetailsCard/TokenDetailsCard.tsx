@@ -35,64 +35,88 @@ interface TableRowMobile {
   actionComponent?: JSX.Element;
 }
 
-const mobileTableData = [
+export const mobileTableData = [
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="inactive" />,
+    status: <StatusTag status="inativo" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="active" />,
+    status: <StatusTag status="ativo" />,
     actionComponent: <Button>Visualizar</Button>,
   },
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="unavailable" />,
+    status: <StatusTag status="indisponível" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="unavailable" />,
+    status: <StatusTag status="indisponível" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="inactive" />,
+    status: <StatusTag status="inativo" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="unavailable" />,
+    status: <StatusTag status="indisponível" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="active" />,
+    status: <StatusTag status="ativo" />,
     actionComponent: <Button>Utilizar</Button>,
   },
   {
     pass: 'Nome do pass',
     type: 'Físico',
-    status: <StatusTag status="unavailable" />,
+    status: <StatusTag status="indisponível" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
 ];
 
-const tableData = [
+export const tableData = [
   {
-    pass: 'Nome do pass',
+    pass: 'Desconto',
     type: 'Físico',
     local: 'Aplicativo',
     date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="inactive" />,
+    status: <StatusTag status="inativo" />,
+    actionComponent: <Button variant="secondary">Visualizar</Button>,
+  },
+  {
+    pass: 'bebida',
+    type: 'Fisico',
+    local: 'Aplicativo',
+    date: format(new Date(), 'dd/MM/yyyy'),
+    status: <StatusTag status="ativo" />,
+    actionComponent: <Button>Utilizar</Button>,
+  },
+  {
+    pass: 'jantar',
+    type: 'Fisico',
+    local: 'Aplicativo',
+    date: format(new Date(), 'dd/MM/yyyy'),
+    status: <StatusTag status="indisponível" />,
+    actionComponent: <Button variant="secondary">Visualizar</Button>,
+  },
+  {
+    pass: 'Nome do pass',
+    type: 'online',
+    local: 'Aplicativo',
+    date: format(new Date(), 'dd/MM/yyyy'),
+    status: <StatusTag status="indisponível" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
@@ -100,15 +124,15 @@ const tableData = [
     type: 'Físico',
     local: 'Aplicativo',
     date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="active" />,
-    actionComponent: <Button>Visualizar</Button>,
+    status: <StatusTag status="inativo" />,
+    actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
     pass: 'Nome do pass',
-    type: 'Físico',
+    type: 'online',
     local: 'Aplicativo',
     date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="unavailable" />,
+    status: <StatusTag status="indisponível" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
   {
@@ -116,31 +140,7 @@ const tableData = [
     type: 'Físico',
     local: 'Aplicativo',
     date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="unavailable" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="inactive" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="unavailable" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="active" />,
+    status: <StatusTag status="ativo" />,
     actionComponent: <Button>Utilizar</Button>,
   },
   {
@@ -148,31 +148,32 @@ const tableData = [
     type: 'Físico',
     local: 'Aplicativo',
     date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="unavailable" />,
+    status: <StatusTag status="indisponível" />,
     actionComponent: <Button variant="secondary">Visualizar</Button>,
   },
 ];
 
-const mobileHeaders: ColumnType<TableRowMobile, keyof TableRowMobile>[] = [
-  {
-    key: 'pass',
-    header: 'Pass',
-  },
-  {
-    key: 'type',
-    header: 'Tipo',
-  },
-  {
-    key: 'status',
-    header: '',
-  },
-  {
-    key: 'actionComponent',
-    header: '',
-  },
-];
+export const mobileHeaders: ColumnType<TableRowMobile, keyof TableRowMobile>[] =
+  [
+    {
+      key: 'pass',
+      header: 'Pass',
+    },
+    {
+      key: 'type',
+      header: 'Tipo',
+    },
+    {
+      key: 'status',
+      header: '',
+    },
+    {
+      key: 'actionComponent',
+      header: '',
+    },
+  ];
 
-const headers: ColumnType<TableRow, keyof TableRow>[] = [
+export const headers: ColumnType<TableRow, keyof TableRow>[] = [
   {
     key: 'pass',
     header: 'Pass',

@@ -251,5 +251,6 @@
   "tokens>StatusTag>unavailable": "Indiponível",
   "connect>TokenDetailCard>passAssociated": "Pass associados a este token:",
   "connect>GenericTable>seeMore": "Visualizar mais",
-  "connect>ListAllPass>listBenefits": "Listagem benefícios"
+  "connect>ListAllPass>listBenefits": "Listagem benefícios",
+  "connect>ListAllPass>tableTitle": "Listagem benefícios associados a este token:"
 }

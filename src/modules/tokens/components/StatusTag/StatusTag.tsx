@@ -1,7 +1,7 @@
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface StatusTagProps {
-  status: 'active' | 'inactive' | 'unavailable';
+  status: 'ativo' | 'inativo' | 'indisponível';
 }
 
 const StatusTag = ({ status }: StatusTagProps) => {
@@ -11,7 +11,7 @@ const StatusTag = ({ status }: StatusTagProps) => {
     'pw-hidden pw-w-[20px] pw-overflow-hidden sm:pw-w-full sm:pw-block pw-font-poppins pw-font-semibold pw-text-sm pw-text-[#777E8F]';
 
   switch (status) {
-    case 'active':
+    case 'ativo':
       return (
         <div className="pw-flex pw-items-center pw-gap-2">
           <div className="pw-bg-[#009A6C] pw-w-[6px] pw-h-[6px] pw-rounded-full"></div>
@@ -19,7 +19,7 @@ const StatusTag = ({ status }: StatusTagProps) => {
         </div>
       );
 
-    case 'inactive':
+    case 'inativo':
       return (
         <div className="pw-flex pw-items-center pw-gap-2">
           <div className="pw-bg-[#C63535] pw-w-[6px] pw-h-[6px] pw-rounded-full"></div>
@@ -28,7 +28,7 @@ const StatusTag = ({ status }: StatusTagProps) => {
           </p>
         </div>
       );
-    case 'unavailable':
+    case 'indisponível':
       return (
         <div className="pw-flex pw-items-center pw-gap-2">
           <div className="pw-bg-[#777E8F] pw-w-[6px] pw-h-[6px] pw-rounded-full"></div>

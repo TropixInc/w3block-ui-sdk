@@ -19,7 +19,7 @@ export const Button = ({
       onClick={onClick}
       className={`${
         variant == 'primary' ? primaryVariant : secondaryVariant
-      } pw-py-[10px] active:pw-scale-90 pw-px-[24px] pw-font-poppins pw-font-medium pw-text-xs pw-rounded-[48px]`}
+      } pw-py-[10px] active:pw-scale-90 pw-px-[24px] sm:pw-min-w-[118px] pw-font-poppins pw-font-medium pw-text-xs pw-rounded-[48px]`}
     >
       {children}
     </button>
