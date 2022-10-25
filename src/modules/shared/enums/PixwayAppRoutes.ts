@@ -1,5 +1,6 @@
 export enum PixwayAppRoutes {
   HOME = '/',
+  DASHBOARD = '/dashboard',
   ABOUT = '/about',
   TEAMS = '/teams',
   MARKETPLACE = '/marketplace',

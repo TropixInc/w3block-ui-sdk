@@ -12,4 +12,5 @@ export * from './modules/pass';
 
 export * from './modules/checkout';
 
+export * from './modules/dashboard';
 export * from './modules/addFunds';
