@@ -11,6 +11,7 @@ interface NavigationLoginPixwaySDKProps {
   signUpRouter?: string;
   toggleLoginMenu?: () => void;
   loginMenu?: boolean;
+  hasSignUp?: boolean;
 }
 
 export const NavigationLoginPixwaySDK = ({
@@ -19,6 +20,7 @@ export const NavigationLoginPixwaySDK = ({
   signUpRouter,
   toggleLoginMenu,
   loginMenu,
+  hasSignUp,
 }: NavigationLoginPixwaySDKProps) => {
   const { data: session } = usePixwaySession();
   const [userMenu, setUserMenu] = useState<boolean>(false);
@@ -44,6 +46,7 @@ export const NavigationLoginPixwaySDK = ({
           <NavigationLoginNonLoggedButton
             signInRoute={signInRouter}
             signUpRoute={signUpRouter}
+            hasSignUp={hasSignUp}
           />
         )}
       </div>

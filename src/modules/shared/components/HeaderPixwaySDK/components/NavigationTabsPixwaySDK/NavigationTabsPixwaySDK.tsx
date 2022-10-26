@@ -13,6 +13,7 @@ export interface NavigationTabsPixwaySDKProps {
   signUpRoute?: string;
   opened?: boolean;
   toogleMenu?: () => void;
+  hasSignUp?: boolean;
 }
 
 interface NavigationTabsClassNames {
@@ -32,6 +33,7 @@ export const NavigationTabsPixwaySDK = ({
   signUpRoute,
   toogleMenu,
   opened,
+  hasSignUp,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -84,6 +86,7 @@ export const NavigationTabsPixwaySDK = ({
             signUpRoute={signUpRoute}
             tabs={defaultTabs}
             classNames={classNames}
+            hasSignUp={hasSignUp}
           />
         </div>
       )}

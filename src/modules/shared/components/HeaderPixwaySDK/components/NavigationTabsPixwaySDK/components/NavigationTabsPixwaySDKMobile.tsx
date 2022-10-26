@@ -16,6 +16,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   toogleMenu,
   signInRoute = PixwayAppRoutes.SIGN_IN,
   signUpRoute = PixwayAppRoutes.SIGN_UP,
+  hasSignUp,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const router = useRouter();
@@ -58,13 +59,15 @@ export const NavigationTabsPixwaySDKMobile = ({
               >
                 {translate('shared>login')}
               </PixwayButton>
-              <PixwayButton
-                onClick={() => router.push(signUpRoute)}
-                fullWidth
-                className="!pw-bg-[#EFEFEF] !pw-px-[40px] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px]  !pw-border-[#DCDCDC] !pw-border-1"
-              >
-                {translate('shared>register')}
-              </PixwayButton>
+              {hasSignUp && (
+                <PixwayButton
+                  onClick={() => router.push(signUpRoute)}
+                  fullWidth
+                  className="!pw-bg-[#EFEFEF] !pw-px-[40px] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px]  !pw-border-[#DCDCDC] !pw-border-1"
+                >
+                  {translate('shared>register')}
+                </PixwayButton>
+              )}
             </div>
           )}
         </div>

@@ -22,6 +22,7 @@ interface HeaderPixwaySDKProps {
   toogleOpenedTabs?: () => void;
   openedLogin?: boolean;
   toggleOpenedLogin?: () => void;
+  hasSignUp?: boolean;
 }
 
 const _HeaderPixwaySDK = ({
@@ -34,6 +35,7 @@ const _HeaderPixwaySDK = ({
   toogleOpenedTabs,
   openedLogin,
   toggleOpenedLogin,
+  hasSignUp = true,
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
@@ -81,6 +83,7 @@ const _HeaderPixwaySDK = ({
                 tabs={tabs}
                 toogleMenu={toggleTabsMemo}
                 opened={openedMenu ? openedMenu : openedTabs}
+                hasSignUp={hasSignUp}
               />
             </div>
 
@@ -90,6 +93,7 @@ const _HeaderPixwaySDK = ({
                 loginMenu={validatorMenuOpened}
                 signInRouter={signInRouter}
                 signUpRouter={signUpRouter}
+                hasSignUp={hasSignUp}
               />
             </div>
           </div>
