@@ -9,11 +9,13 @@ import { PixwayButton } from '../../../../PixwayButton';
 interface NavigationLoginNonLoggedButtonProps {
   signInRoute?: string;
   signUpRoute?: string;
+  hasSignUp?: boolean;
 }
 
 export const NavigationLoginNonLoggedButton = ({
   signInRoute = PixwayAppRoutes.SIGN_IN,
   signUpRoute = PixwayAppRoutes.SIGN_UP,
+  hasSignUp,
 }: NavigationLoginNonLoggedButtonProps) => {
   const [translate] = useTranslation();
   const router = useRouter();
@@ -42,13 +44,15 @@ export const NavigationLoginNonLoggedButton = ({
             >
               {translate('shared>login')}
             </PixwayButton>
-            <PixwayButton
-              onClick={() => router.push(signUpRoute)}
-              fullWidth
-              className="!pw-bg-[#EFEFEF] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px] !pw-outline-1 !pw-border-[#DCDCDC] !pw-border-1 pw-mt-[6px]"
-            >
-              {translate('shared>register')}
-            </PixwayButton>
+            {hasSignUp && (
+              <PixwayButton
+                onClick={() => router.push(signUpRoute)}
+                fullWidth
+                className="!pw-bg-[#EFEFEF] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px] !pw-outline-1 !pw-border-[#DCDCDC] !pw-border-1 pw-mt-[6px]"
+              >
+                {translate('shared>register')}
+              </PixwayButton>
+            )}
           </div>
         </div>
       ) : null}
