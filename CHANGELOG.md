@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.54](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.53...v0.1.1-alpha.54) (2022-10-26)
+
+
+### Bug Fixes
+
+* **PC-153:** adjust on lateral menu ([#77](https://github.com/TropixInc/w3block-ui-sdk/issues/77)) ([dae6284](https://github.com/TropixInc/w3block-ui-sdk/commit/dae6284665cb8b532e5fccb86eaf5356c83d8caa))
+
 ### [0.1.1-alpha.53](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.52...v0.1.1-alpha.53) (2022-10-19)
 
 
