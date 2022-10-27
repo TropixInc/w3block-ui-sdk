@@ -14,10 +14,10 @@ interface Props {
 
 export const InternalPagesLayoutBase = ({ classes = {}, children }: Props) => {
   return (
-    <div className="pw-flex pw-flex-col pw-w-screen pw-min-h-screen pw-font-poppins">
+    <div className="pw-flex pw-flex-col sm:pw-w-screen pw-min-h-screen pw-font-poppins">
       <div
         className={classNames(
-          'pw-flex pw-max-w-[1332px] pw-w-full pw-mx-auto pw-flex-1 pw-pt-[59px] pw-px-8',
+          'pw-flex pw-max-w-[1332px] pw-w-full pw-mx-auto pw-flex-1 pw-pt-[59px] pw-px-4 sm:pw-px-8',
           classes.middleSectionContainer ?? ''
         )}
       >
