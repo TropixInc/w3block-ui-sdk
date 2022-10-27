@@ -9,6 +9,7 @@ interface PDFProps {
 
 const PDF = ({ src }: PDFProps) => {
   const [numPages, setNumPages] = useState<number | null>(null);
+  const [pageNumber, setPageNumber] = useState(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onLoadSuccess = (numPages: number) => {
@@ -17,24 +18,40 @@ const PDF = ({ src }: PDFProps) => {
   };
 
   return (
-    <Document
-      file={src}
-      onLoadSuccess={({ numPages }) => onLoadSuccess(numPages)}
-      className={
-        isLoading ? 'pw-h-[500px] pw-w-[631px] pw-overflow-scroll' : ''
-      }
-    >
-      {Array(numPages ?? 0)
-        .fill(undefined)
-        .map((_, index) => (
-          <Page
-            key={`page_${index + 1}`}
-            pageNumber={index + 1}
-            renderAnnotationLayer={false}
-            renderTextLayer={false}
-          />
-        ))}
-    </Document>
+    <>
+      <Document
+        file={src}
+        onLoadSuccess={({ numPages }) => onLoadSuccess(numPages)}
+        className={
+          isLoading ? 'pw-h-[500px] pw-w-[631px] pw-overflow-scroll' : ''
+        }
+      >
+        <Page
+          pageNumber={pageNumber}
+          renderAnnotationLayer={false}
+          renderTextLayer={false}
+        />
+      </Document>
+      {numPages && numPages > 1 && (
+        <div className="pw-flex">
+          <button
+            className="pw-mr-2 disabled:pw-text-gray-400"
+            onClick={() => setPageNumber(pageNumber - 1)}
+            disabled={pageNumber == 1}
+          >
+            {'<'}
+          </button>
+          Page {pageNumber} of {numPages}
+          <button
+            className="pw-ml-2 disabled:pw-text-gray-400"
+            onClick={() => setPageNumber(pageNumber + 1)}
+            disabled={pageNumber == numPages}
+          >
+            {'>'}
+          </button>
+        </div>
+      )}
+    </>
   );
 };
 
