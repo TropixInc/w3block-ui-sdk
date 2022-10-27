@@ -251,5 +251,6 @@
   "token>pass>totalValidedTokens": "Total tokens validados: <2>{{total}}</2>",
   "token>pass>status": "Status",
   "token>pass>notResult": "Nenhum resultado encontrado.",
+  "token>pass>validateBenefits": "Validar benefício",
   "token>pass>total": "Total: {{total}}"
 }
