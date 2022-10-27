@@ -25,11 +25,13 @@ import { NavigationMenuTabs } from '../interfaces/menu';
 interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
   menuTabs?: NavigationMenuTabs[];
+  textColor?: string;
 }
 
 export const NavigationLoginLoggedButton = ({
   logo,
   menuTabs,
+  textColor = 'black',
 }: NavigationLoginLoggedButtonProps) => {
   const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
@@ -39,7 +41,10 @@ export const NavigationLoginLoggedButton = ({
   return (
     <div className="pw-ml-5 ">
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
-        <p className="pw-text-xs pw-font-montserrat pw-font-[400] ">
+        <p
+          style={{ color: textColor }}
+          className="pw-text-xs pw-font-montserrat pw-font-[400] "
+        >
           {wallet?.type === WalletTypes.Vault
             ? translate('header>logged>hiWallet', { name: profile?.data?.name })
             : translate('header>logged>metamaskHiWallet', {
@@ -47,10 +52,13 @@ export const NavigationLoginLoggedButton = ({
               })}
         </p>
         <div className="pw-flex pw-items-center">
-          <p className="pw-text-sm pw-font-montserrat pw-font-[600]">
+          <p
+            style={{ color: textColor }}
+            className="pw-text-sm pw-font-montserrat pw-font-[600]"
+          >
             {profile?.data?.mainWallet?.address || '-'}
           </p>
-          <ArrowDown className="pw-ml-1" />
+          <ArrowDown style={{ stroke: textColor }} className="pw-ml-1" />
         </div>
       </div>
 
@@ -170,7 +178,7 @@ const NavigationMenu = ({
   return (
     <div className="pw-relative">
       <div
-        className={`pw-absolute pw-mt-6 ${
+        className={`pw-absolute pw-mt-[1.68rem] ${
           hasMainWallet ? 'pw-ml-[210px]' : ''
         } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
       >

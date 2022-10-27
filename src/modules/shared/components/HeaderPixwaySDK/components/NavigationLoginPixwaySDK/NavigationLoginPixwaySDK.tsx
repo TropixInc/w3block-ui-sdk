@@ -11,6 +11,8 @@ interface NavigationLoginPixwaySDKProps {
   signUpRouter?: string;
   toggleLoginMenu?: () => void;
   loginMenu?: boolean;
+  hasSignUp?: boolean;
+  textColor?: string;
 }
 
 export const NavigationLoginPixwaySDK = ({
@@ -19,6 +21,8 @@ export const NavigationLoginPixwaySDK = ({
   signUpRouter,
   toggleLoginMenu,
   loginMenu,
+  hasSignUp,
+  textColor = 'black',
 }: NavigationLoginPixwaySDKProps) => {
   const { data: session } = usePixwaySession();
   const [userMenu, setUserMenu] = useState<boolean>(false);
@@ -39,11 +43,13 @@ export const NavigationLoginPixwaySDK = ({
         className={`sm:pw-flex pw-border-l pw-border-[#777E8F] pw-items-center pw-hidden pw-ml-[40px] ${className}`}
       >
         {session ? (
-          <NavigationLoginLoggedButton />
+          <NavigationLoginLoggedButton textColor={textColor} />
         ) : (
           <NavigationLoginNonLoggedButton
             signInRoute={signInRouter}
             signUpRoute={signUpRouter}
+            hasSignUp={hasSignUp}
+            textColor={textColor}
           />
         )}
       </div>

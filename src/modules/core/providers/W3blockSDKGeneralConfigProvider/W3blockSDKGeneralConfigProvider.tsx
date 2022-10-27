@@ -13,6 +13,7 @@ interface Props {
     keyUrl: string;
     commerceUrl: string;
     pdfUrl: string;
+    pollUrl?: string;
   };
   locale: PixwayUISdkLocale;
   companyId: string;
@@ -46,6 +47,7 @@ export const W3blockUISDKGeneralConfigProvider = ({
     <W3blockUISDKGereralConfigContext.Provider value={companyValue}>
       <EnvironmentContext.Provider value={environmentValue}>
         <W3blockApiProvider
+          w3BlockPollApiUrl={api.pollUrl ?? ''}
           w3blockIdAPIUrl={api.idUrl}
           w3blockKeyAPIUrl={api.keyUrl}
           w3blockCommerceAPIUrl={api.commerceUrl}

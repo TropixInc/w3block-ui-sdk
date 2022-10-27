@@ -9,3 +9,4 @@ export * from './ErrorMessage';
 export * from './FAQ';
 export * from './PoweredBy';
 export * from './MyProfileTemplate';
+export * from './ContainerControllerSDK';

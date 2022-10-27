@@ -22,6 +22,9 @@ interface HeaderPixwaySDKProps {
   toogleOpenedTabs?: () => void;
   openedLogin?: boolean;
   toggleOpenedLogin?: () => void;
+  bgColor?: string;
+  textColor?: string;
+  hasSignUp?: boolean;
 }
 
 const _HeaderPixwaySDK = ({
@@ -34,6 +37,9 @@ const _HeaderPixwaySDK = ({
   toogleOpenedTabs,
   openedLogin,
   toggleOpenedLogin,
+  bgColor = 'white',
+  textColor = 'black',
+  hasSignUp = true,
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
@@ -59,10 +65,11 @@ const _HeaderPixwaySDK = ({
   };
 
   return (
-    <div className="w-full bg-white pw-shadow-md">
+    <div style={{ backgroundColor: bgColor }} className="w-full pw-shadow-md">
       <div
+        style={{ backgroundColor: bgColor }}
         className={classNames(
-          'pw-container pw-mx-auto pw-bg-white pw-px-4 sm:pw-px-0',
+          'pw-container pw-mx-auto  pw-px-4 sm:pw-px-0',
           headerClassName ?? ''
         )}
       >
@@ -81,11 +88,15 @@ const _HeaderPixwaySDK = ({
                 tabs={tabs}
                 toogleMenu={toggleTabsMemo}
                 opened={openedMenu ? openedMenu : openedTabs}
+                hasSignUp={hasSignUp}
+                textColor={textColor}
               />
             </div>
 
             <div className="pw-order-1 sm:pw-order-2">
               <NavigationLoginPixwaySDK
+                hasSignUp={hasSignUp}
+                textColor={textColor}
                 toggleLoginMenu={toggleMenuMemo}
                 loginMenu={validatorMenuOpened}
                 signInRouter={signInRouter}
