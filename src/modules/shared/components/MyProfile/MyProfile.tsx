@@ -15,8 +15,10 @@ import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { usePatchProfile, useProfile } from '../../hooks/useProfile';
 import useTranslation from '../../hooks/useTranslation';
 import { useUserWallet } from '../../hooks/useUserWallet';
+import { Alert } from '../Alert';
 import { Link } from '../Link';
 import { PixwayButton } from '../PixwayButton';
+import { Spinner } from '../Spinner';
 
 export const MyProfile = () => {
   const [showValue, toggleShowValue] = useToggle(false);
@@ -25,12 +27,12 @@ export const MyProfile = () => {
   const { wallet } = useUserWallet();
   const isLoading = wallet == undefined;
 
-  const { mutate } = usePatchProfile();
+  const { mutate, isSuccess, isLoading: isLoadingPatch } = usePatchProfile();
   const inputRef = useRef<HTMLInputElement>(null);
   const value = inputRef?.current?.value;
 
   return (
-    <div className="pw-max-w-[968px] pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
+    <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
       <div className="pw-flex sm:pw-justify-between pw-justify-center pw-items-center pw-w-full">
         <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
           {translate('components>menu>myProfile')}
@@ -111,15 +113,23 @@ export const MyProfile = () => {
           onClick={() => mutate(value ?? '')}
           type="button"
           fullWidth
+          disabled={isLoadingPatch}
           className={classNames(
-            '!pw-font-medium !pw-py-[11px] !pw-text-xs !pw-leading-[18px] !pw-rounded-full !pw-shadow-[0_2px_4px_#00000042] pw-border-b pw-border-b-[#FFFFFF] pw-cursor-pointer !pw-bg-brand-primary',
+            '!pw-font-medium !pw-py-[11px] !pw-text-xs !pw-leading-[18px] !pw-rounded-full !pw-shadow-[0_2px_4px_#00000042] pw-border-b pw-border-b-[#FFFFFF] pw-cursor-pointer !pw-bg-brand-primary !pw-flex !pw-justify-center',
             'hover:!pw-shadow-[0_2px_4px_#00000042]',
             'disabled:!pw-bg-[#CCCCCC] disabled:!pw-text-[#959595] disabled:hover:!pw-shadow-[0_2px_4px_#00000042] disabled:pw-cursor-not-allowed'
           )}
         >
-          Salvar alterações
+          {isLoadingPatch ? (
+            <Spinner className="!pw-h-5 !pw-w-5" />
+          ) : (
+            'Salvar alterações'
+          )}
         </PixwayButton>
       </div>
+      {!isLoadingPatch && isSuccess && (
+        <Alert variant="success">Seu nome foi alterado com sucesso!</Alert>
+      )}
     </div>
   );
 };

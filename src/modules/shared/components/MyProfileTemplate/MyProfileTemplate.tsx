@@ -76,21 +76,19 @@ const _MyProfileTemplate = () => {
 
   return (
     <>
-      <div className="pw-flex pw-flex-col pw-w-screen pw-font-poppins">
+      <div className="pw-flex pw-flex-col pw-w-screen pw-font-poppins pw-container pw-mx-auto">
         <div
           className={classNames(
-            'pw-flex pw-flex-col pw-max-w-[1332px] pw-w-full pw-mx-auto pw-flex-1 pw-py-[59px] pw-px-8'
+            'pw-flex pw-flex-col pw-w-full pw-flex-1 pw-py-[59px]'
           )}
         >
           {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
-          <div className="pw-flex pw-my-[25px]">
+          <div className="pw-flex pw-w-full pw-justify-between pw-my-[25px]">
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
-            <div className="pw-flex pw-flex-col pw-w-full">
-              <div className={classNames('pw-flex-1 sm:pw-pl-8')}>
-                <MyProfile />
-              </div>
+            <div className="sm:pw-pl-8 pw-w-full">
+              <MyProfile />
             </div>
           </div>
         </div>
