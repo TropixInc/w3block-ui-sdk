@@ -121,12 +121,13 @@ export const BlockchainGasTaxStepModal = ({
   const { companyId } = useCompanyConfig();
   const { data: companyResponse } = useCompanyById(companyId ?? '');
   const mainWalletAddress = companyResponse?.data.operatorAddress ?? '';
-  const { data: balance, isSuccess: isBalanceSuccess } = useBalance({
+  const balance = useBalance({
     chainId: !isDevelopment ? ChainScan.POLYGON : ChainScan.MUMBAI,
     address: mainWalletAddress,
   });
 
-  const insufficientFunds = Number(balance?.data.balance) <= gasPrice;
+  const insufficientFunds =
+    Number(balance?.data?.data.balance ?? '0') <= gasPrice;
 
   const { data: cryptoCurrencyExchangeRate } =
     useCryptoCurrencyExchangeRate('MATIC');
@@ -162,7 +163,7 @@ export const BlockchainGasTaxStepModal = ({
     onConfirm(gasPrice);
   };
 
-  const showData = gasPriceFound && isBalanceSuccess && !isNaN(gasPrice);
+  const showData = gasPriceFound && balance?.isSuccess && !isNaN(gasPrice);
   const showGasError = gasPriceError || isNaN(gasPrice);
 
   return (

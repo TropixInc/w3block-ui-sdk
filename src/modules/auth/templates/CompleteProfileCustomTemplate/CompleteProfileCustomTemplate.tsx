@@ -66,7 +66,7 @@ const _CompleteProfileCustomTemplate = ({
   });
 
   useEffect(() => {
-    if (isSuccess) setStep(Steps.MAIL_CONFIRMED);
+    if (isSuccess) router.push(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET);
   }, [isSuccess]);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
@@ -7,6 +7,7 @@ import { addMinutes, isAfter } from 'date-fns';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
@@ -19,17 +20,26 @@ interface PasswordChangeMailSentProps {
 }
 
 export const VerifySignUpMailSentWithoutLayout = ({
-  email = 'teste',
+  email = '',
   tenantId,
   isPostSignUp = false,
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
+  const { query, isReady } = useRouter();
+  const [emailToUse, setEmailToUse] = useState(email);
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
   );
-  const formattedEmail = useEmailProtectedLabel(email);
+
+  useEffect(() => {
+    if (isReady && (!email || email === '') && query.email) {
+      setEmailToUse(query.email as string);
+    }
+  }, [query, isReady]);
+
+  const formattedEmail = useEmailProtectedLabel(emailToUse);
 
   useEffect(() => {
     if (countdownDate && isAfter(new Date(countdownDate), new Date())) {
@@ -48,6 +58,8 @@ export const VerifySignUpMailSentWithoutLayout = ({
     ? PixwayAppRoutes.COMPLETE_SIGNUP
     : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
 
+  console.log(emailToUse);
+
   return (
     <div className="pw-pt-0 pw-pb-6 sm:pw-mt-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">
       <p className="pw-text-[#353945] pw-mb-6 pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-font-normal">
@@ -64,7 +76,9 @@ export const VerifySignUpMailSentWithoutLayout = ({
           <button
             disabled={isActive || isLoading}
             className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
-            onClick={() => mutate({ email, tenantId, callbackPath })}
+            onClick={() =>
+              mutate({ email: emailToUse, tenantId, callbackPath })
+            }
           >
             {translate('auth>mailStep>resentCodeButton')}
           </button>
@@ -93,7 +107,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({
-                email,
+                email: emailToUse,
                 tenantId,
                 callbackPath,
               })

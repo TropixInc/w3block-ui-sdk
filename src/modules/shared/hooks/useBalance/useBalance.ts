@@ -19,7 +19,7 @@ interface useBalanceParams {
 export const useBalance = ({ chainId, address }: useBalanceParams) => {
   const axios = useAxios(W3blockAPI.KEY);
 
-  return usePrivateQuery([chainId, address], () =>
+  const balance = usePrivateQuery([chainId, address], () =>
     axios.get<GetBalanceAPIResponse>(
       PixwayAPIRoutes.BALANCE.replace('{address}', address).replace(
         '{chainId}',
@@ -27,4 +27,5 @@ export const useBalance = ({ chainId, address }: useBalanceParams) => {
       )
     )
   );
+  return chainId && address && address != '' ? balance : null;
 };

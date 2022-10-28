@@ -14,6 +14,7 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePoll } from '../../hooks/usePoll';
+import { usePollInviteTransfer } from '../../hooks/usePollInviteTransfer';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
 import { IPollInterface } from './IPollInterface';
 
@@ -26,6 +27,7 @@ export const PollBox = ({
   pollId,
   redirectWithoutPoll = PixwayAppRoutes.SIGN_IN,
 }: PollBoxProps) => {
+  const router = useRouter();
   const [translate] = useTranslation();
   const { query, push, isReady } = useRouter();
   const { pollId: pollQuery } = query;
@@ -35,6 +37,7 @@ export const PollBox = ({
 
   const { data, isError } = usePoll(pollId);
   const { mutate } = usePostAnswer();
+  const { mutate: inviteUser } = usePollInviteTransfer();
 
   const schema = object().shape({
     email: string().email(),
@@ -90,12 +93,36 @@ export const PollBox = ({
       setError('Voto é obrigatório');
     } else {
       if (data && pollId) {
-        mutate({
-          email: methods.getValues('email'),
-          pollId,
-          description: beforeHover.filter((val) => val).length.toString(),
-          questionId: data?.questions[0].id,
-        });
+        mutate(
+          {
+            email: methods.getValues('email'),
+            pollId,
+            description: beforeHover.filter((val) => val).length.toString(),
+            questionId: data?.questions[0].id,
+          },
+          {
+            onError() {
+              setError('Esse email já respondeu a pergunta');
+            },
+            onSuccess() {
+              inviteUser(
+                {
+                  pollId: pollId ?? '',
+                  email: methods.getValues('email'),
+                },
+                {
+                  onSuccess() {
+                    router.push(
+                      PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION +
+                        '?email=' +
+                        methods.getValues('email')
+                    );
+                  },
+                }
+              );
+            },
+          }
+        );
       }
     }
   };
@@ -139,9 +166,10 @@ export const PollBox = ({
                   'companyAuth>newPassword>enterYourEmail'
                 )}
               />
-              {error != '' ? (
+              {error != '' || isError ? (
                 <p className="pw-text-xs pw-text-red-500 pw-font-poppins ">
                   {error}
+                  {isError ? 'Esse email já respondeu a pergunta' : null}
                 </p>
               ) : null}
               <WeblockButton

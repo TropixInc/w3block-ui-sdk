@@ -27,4 +27,5 @@ export enum PixwayAPIRoutes {
   PATCH_PROFILE = '/users/{companyId}/profile',
   GET_POLL_BY_ID = '/polls/{companyId}/{pollId}',
   POST_POLL_ANSWER = '/answers/{companyId}/post-answer-with-user',
+  INVITE_USER_AFTER_POLL = '/users/{companyId}/invite-transfer',
 }

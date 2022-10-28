@@ -5,20 +5,19 @@ import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 
-interface PostAnswerApi {
+interface PollInviteUserApi {
   pollId: string;
-  questionId: string;
+  name?: string;
   email: string;
-  description: string;
 }
 
-export const usePostAnswer = () => {
+export const usePollInviteTransfer = () => {
   const axios = useAxios(W3blockAPI.POLL);
   const { companyId } = useCompanyConfig();
-  return useMutation((answer: PostAnswerApi) => {
-    return axios.post(
-      PixwayAPIRoutes.POST_POLL_ANSWER.replace('{companyId}', companyId),
-      answer
-    );
-  });
+  return useMutation((pollInviteUser: PollInviteUserApi) =>
+    axios.post(
+      PixwayAPIRoutes.INVITE_USER_AFTER_POLL.replace('{companyId}', companyId),
+      pollInviteUser
+    )
+  );
 };
