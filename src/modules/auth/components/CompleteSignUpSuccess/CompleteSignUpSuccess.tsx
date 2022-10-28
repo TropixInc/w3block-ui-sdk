@@ -40,7 +40,7 @@ export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
         <AuthButton
           fullWidth
           className="pw-mb-6"
-          onClick={() => router.push(PixwayAppRoutes.HOME)}
+          onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
         >
           {translate('loginPage>formSubmitButton>signIn')}
         </AuthButton>
