@@ -4,7 +4,9 @@ import { AxiosError } from 'axios';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { useSignUp } from '../../hooks/useSignUp';
 import { SignUpForm } from '../SignUpForm';
 import { SignUpFormData } from '../SignUpForm/interface';
@@ -30,12 +32,18 @@ const _SignUpTemplate = ({
   const [step, setStep] = useState(Steps.SIGN_UP);
   const { mutate, isLoading, isSuccess, error } = useSignUp();
   const [email, setEmail] = useState('');
+  const { data: session } = usePixwaySession();
+  const { signOut } = usePixwayAuthentication();
 
   useEffect(() => {
     if (isSuccess) {
       setStep(Steps.SUCCESS);
     }
-  }, [isSuccess]);
+    if (session) {
+      signOut();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, session]);
 
   const onSubmit = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
