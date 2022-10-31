@@ -1,5 +1,6 @@
 import { CheckoutStatus } from '../../../checkout';
 import { ReactComponent as Loading } from '../../assets/icons/loading.svg';
+import { CurrencyEnum, currencyMap } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
 import { Shimmer } from '../Shimmer';
 interface ProductInfoProps {
@@ -10,6 +11,7 @@ interface ProductInfoProps {
   price: string;
   className?: string;
   loading?: boolean;
+  currency?: CurrencyEnum;
 }
 
 export const ProductInfo = ({
@@ -20,6 +22,7 @@ export const ProductInfo = ({
   price,
   className,
   loading = false,
+  currency = CurrencyEnum.BRL,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const StatusToShow = () => {
@@ -77,7 +80,8 @@ export const ProductInfo = ({
         <div className="pw-fle pw-flex-col">
           <StatusToShow />
           <p className="pw-font-[700] pw-text-[#35394C] pw-text-lg pw-text-right">
-            R${price}
+            {currencyMap.get(currency)}
+            {price}
           </p>
         </div>
       )}
