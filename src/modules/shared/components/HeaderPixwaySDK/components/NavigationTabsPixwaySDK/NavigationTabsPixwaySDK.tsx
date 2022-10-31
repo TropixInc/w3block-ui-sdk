@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import { PixwayAppRoutes } from '../../../../enums/PixwayAppRoutes';
+import { usePixwaySession } from '../../../../hooks/usePixwaySession';
 import useTranslation from '../../../../hooks/useTranslation';
 import { NavigationTabsPixwaySDKDesktop } from './components/NavigationTabsPixwaySDKDesktop';
 import { NavigationTabsPixwaySDKMobile } from './components/NavigationTabsPixwaySDKMobile';
@@ -38,6 +39,7 @@ export const NavigationTabsPixwaySDK = ({
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
+  const { data: session } = usePixwaySession();
   const defaultTabs: NavigationTabsPixwaySDKTabs[] = useMemo(() => {
     if (!tabs) {
       return [
@@ -79,18 +81,20 @@ export const NavigationTabsPixwaySDK = ({
           hasSignUp={hasSignUp}
         />
       </div>
-      <div className="pw-block sm:pw-hidden">
-        <NavigationTabsPixwaySDKMobile
-          hasSignUp={hasSignUp}
-          opened={opened ? opened : openedTabs}
-          toogleMenu={toggleTabsMemo}
-          signInRoute={signInRoute}
-          signUpRoute={signUpRoute}
-          tabs={defaultTabs}
-          textColor={textColor}
-          classNames={classNames}
-        />
-      </div>
+      {session && tabs?.length === 0 ? null : (
+        <div className="pw-block sm:pw-hidden">
+          <NavigationTabsPixwaySDKMobile
+            opened={opened ? opened : openedTabs}
+            toogleMenu={toggleTabsMemo}
+            signInRoute={signInRoute}
+            signUpRoute={signUpRoute}
+            tabs={defaultTabs}
+            classNames={classNames}
+            textColor={textColor}
+            hasSignUp={hasSignUp}
+          />
+        </div>
+      )}
     </>
   );
 };

@@ -4,6 +4,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
@@ -16,6 +17,12 @@ export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
+  const { signOut } = usePixwayAuthentication();
+
+  const handleContinue = () => {
+    signOut();
+    router.push(PixwayAppRoutes.SIGN_IN);
+  };
 
   return (
     <AuthLayoutBase
@@ -37,11 +44,7 @@ export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
           {translate('auth>completeSignUp>mailAlreadyVerified')}
         </p>
 
-        <AuthButton
-          fullWidth
-          className="pw-mb-6"
-          onClick={() => router.push(PixwayAppRoutes.HOME)}
-        >
+        <AuthButton fullWidth className="pw-mb-6" onClick={handleContinue}>
           {translate('loginPage>formSubmitButton>signIn')}
         </AuthButton>
         <AuthFooter />

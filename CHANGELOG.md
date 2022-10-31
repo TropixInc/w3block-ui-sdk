@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.58](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.57...v0.1.1-alpha.58) (2022-10-28)
+
+
+### Bug Fixes
+
+* **signUp:** adjusted signUp ([#82](https://github.com/TropixInc/w3block-ui-sdk/issues/82)) ([71e9ccd](https://github.com/TropixInc/w3block-ui-sdk/commit/71e9ccd19630eca9c2bf6342923eb76ee1a68d00))
+
+### [0.1.1-alpha.57](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.56...v0.1.1-alpha.57) (2022-10-28)
+
+### [0.1.1-alpha.56](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.55...v0.1.1-alpha.56) (2022-10-27)
+
+### [0.1.1-alpha.55](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.54...v0.1.1-alpha.55) (2022-10-26)
+
+### [0.1.1-alpha.54](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.53...v0.1.1-alpha.54) (2022-10-26)
+
+
+### Bug Fixes
+
+* **PC-153:** adjust on lateral menu ([#77](https://github.com/TropixInc/w3block-ui-sdk/issues/77)) ([dae6284](https://github.com/TropixInc/w3block-ui-sdk/commit/dae6284665cb8b532e5fccb86eaf5356c83d8caa))
+
+### [0.1.1-alpha.53](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.52...v0.1.1-alpha.53) (2022-10-19)
+
+
+### Features
+
+* **np-11:** pass tags and bottons ([#58](https://github.com/TropixInc/w3block-ui-sdk/issues/58)) ([0321fff](https://github.com/TropixInc/w3block-ui-sdk/commit/0321fffa6ae79a4f21b5e1256cbf0cb3f6202645))
+
+
+### Bug Fixes
+
+* **pc-142:** removed mock on extract ([#73](https://github.com/TropixInc/w3block-ui-sdk/issues/73)) ([39d5cda](https://github.com/TropixInc/w3block-ui-sdk/commit/39d5cda425ca31702843fd29abfd628fa3c5d400))
+* **pc-145, pc-147:** adjusted input on profile and header menu ([#72](https://github.com/TropixInc/w3block-ui-sdk/issues/72)) ([62acdd2](https://github.com/TropixInc/w3block-ui-sdk/commit/62acdd219620a8a17e7a2c4a733abce9cdc8ae7b))
+
 ### [0.1.1-alpha.52](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.51...v0.1.1-alpha.52) (2022-10-17)
 
 

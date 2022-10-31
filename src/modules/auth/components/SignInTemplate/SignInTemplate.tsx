@@ -42,12 +42,14 @@ export interface SignInTemplateProps {
   defaultRedirectRoute: string;
   routeToAttachWallet?: string;
   classes?: SignInTemplateClassses;
+  hasSignUp?: boolean;
 }
 
 const _SignInTemplate = ({
   defaultRedirectRoute,
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   classes = {},
+  hasSignUp = true,
 }: SignInTemplateProps) => {
   const { companyId, logoUrl: logo, appBaseUrl } = useCompanyConfig();
   const [translate] = useTranslation();
@@ -178,17 +180,19 @@ const _SignInTemplate = ({
             >
               {translate('loginPage>formSubmitButton>signIn')}
             </AuthButton>
-            <p className="pw-text-[13px] pw-font-normal pw-leading-5 text-[#383857] text-center">
-              <Trans i18nKey={'auth>signIn>signUpCTA'}>
-                Não tem conta ainda?
-                <Link
-                  href={PixwayAppRoutes.SIGN_UP}
-                  className="pw-text-brand-primary pw-underline"
-                >
-                  Cadastre-se.
-                </Link>
-              </Trans>
-            </p>
+            {hasSignUp && (
+              <p className="pw-text-[13px] pw-font-normal pw-leading-5 text-[#383857] text-center">
+                <Trans i18nKey={'auth>signIn>signUpCTA'}>
+                  Não tem conta ainda?
+                  <Link
+                    href={PixwayAppRoutes.SIGN_UP}
+                    className="pw-text-brand-primary pw-underline"
+                  >
+                    Cadastre-se.
+                  </Link>
+                </Trans>
+              </p>
+            )}
           </div>
           <AuthFooter />
         </form>

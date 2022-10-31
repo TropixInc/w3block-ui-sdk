@@ -124,7 +124,7 @@ const _CheckoutInfo = ({
   const UnderCreditText = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
-        return translate('checkout>components>checkoutInfo>redirectInfo');
+        return ''; //translate('checkout>components>checkoutInfo>redirectInfo');
       case CheckoutStatus.FINISHED:
         return translate(
           'checkout>components>checkoutInfo>proccessingBlockchain'
@@ -209,7 +209,7 @@ const _CheckoutInfo = ({
                 returnAction
                   ? () => returnAction(query)
                   : () => {
-                      router.push(PixwayAppRoutes.HOME);
+                      router.push(PixwayAppRoutes.MY_TOKENS);
                     }
               }
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
@@ -240,6 +240,7 @@ const _CheckoutInfo = ({
         {translate('shared>product')}
       </p>
       <ProductInfo
+        currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
         loading={isLoading}
         status={checkoutStatus}
         className="pw-mt-3"

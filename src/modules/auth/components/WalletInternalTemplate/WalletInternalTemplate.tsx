@@ -6,6 +6,7 @@ import { WalletTypes } from '@w3block/sdk-id';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFilled.svg';
+import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
 import { ReactComponent as EyeIcon } from '../../../shared/assets/icons/eyeIcon.svg';
 import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/eyeIconCrossed.svg';
 // import { ReactComponent as FilterIcon } from '../../../shared/assets/icons/filterOutlined.svg';
@@ -14,11 +15,12 @@ import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walle
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
 import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { WalletExtract } from '../WalletExtract';
+// import { WalletExtract } from '../WalletExtract';
 import { CardWallet } from './CardWallet';
 import { ChipWallet } from './ChipWallet';
 
@@ -31,12 +33,20 @@ const _WalletInternalTemplate = () => {
 
   const isLoading = wallet == undefined;
 
+  const extractLink = () => {
+    if (wallet?.chainId === ChainScan.POLYGON)
+      return `https://polygonscan.com/address/${wallet.address}`;
+    if (wallet?.chainId === ChainScan.MUMBAI)
+      return `https://mumbai.polygonscan.com/address/${wallet.address}`;
+    return '';
+  };
+
   return (
     <div className="pw-flex pw-flex-col">
       <div className="pw-w-full pw-text-center pw-font-bold pw-text-[18px] pw-leading-[23px] sm:pw-hidden pw-mb-[30px]">
         {translate('components>menu>wallet')}
       </div>
-      <div className="pw-max-w-[968px] pw-bg-[#F7F7F7] pw-border pw-border-[#E4E4E4] pw-rounded-[14px] pw-p-6 pw-shadow-[0px_4px_20px_rgba(0,0,0,0.12)] pw-flex pw-flex-col pw-gap-[24px]">
+      <div className="pw-bg-[#F7F7F7] pw-border pw-border-[#E4E4E4] pw-rounded-[14px] pw-p-6 pw-shadow-[0px_4px_20px_rgba(0,0,0,0.12)] pw-flex pw-flex-col pw-gap-[24px]">
         <div className="pw-w-full pw-items-center pw-justify-between pw-hidden sm:pw-flex">
           <span className="pw-font-semibold pw-text-[23px] pw-leading-[32px]">
             {translate('components>menu>wallet')}
@@ -117,7 +127,16 @@ const _WalletInternalTemplate = () => {
           )}
         </div>
       </div>
-      <WalletExtract />
+      <div className="pw-flex pw-items-center pw-text-[#777E8F] pw-font-bold pw-text-2xl pw-my-[30px]">
+        {translate('wallet>page>extract')}
+        <a href={extractLink()} target="_blank" rel="noreferrer">
+          <ExternalLinkIcon className="pw-ml-3 pw-stroke-[#777E8F] hover:pw-stroke-[#B09C60]" />
+        </a>
+      </div>
+
+      {/* Componente comentado enquando não possuimos rota para mostrar os dados do extrato
+       <WalletExtract /> 
+      */}
 
       {/* 
         Comentado para poder fazer função futuramente
