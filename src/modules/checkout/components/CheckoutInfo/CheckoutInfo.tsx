@@ -240,6 +240,7 @@ const _CheckoutInfo = ({
         {translate('shared>product')}
       </p>
       <ProductInfo
+        currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
         loading={isLoading}
         status={checkoutStatus}
         className="pw-mt-3"
