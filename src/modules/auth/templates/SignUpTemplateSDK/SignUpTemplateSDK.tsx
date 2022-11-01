@@ -8,6 +8,7 @@ import {
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
 import { SignUpFormWithoutLayout } from '../../components/SignUpFormWithoutLayout';
 
@@ -42,6 +43,7 @@ export const SignUpTemplateSDK = ({
   email,
   error,
 }: SignUpTemplateSDKProps) => {
+  const [translate] = useTranslation();
   return (
     <div style={{ backgroundColor: bgColor }}>
       <ContainerControllerSDK
@@ -57,7 +59,7 @@ export const SignUpTemplateSDK = ({
         infoComponent={
           <Box>
             <SignUpFormWithoutLayout
-              title="Faça o seu cadastro"
+              title={translate('singUp>register>phrase')}
               email={email}
               onSubmit={onSubmit}
               isLoading={isLoading}

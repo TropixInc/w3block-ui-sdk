@@ -26,7 +26,7 @@ export const WeblockButton = ({
       disabled={disabled}
       className={`${
         fullWidth ? 'pw-w-full' : ''
-      } !${tailwindBgColor} font-montserrat pw-cursor-pointer pw-text-xs pw-rounded-full pw-border-b pw-border-white pw-flex pw-justify-center pw-items-center pw-py-3 pw-px-[30px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] ${className}`}
+      } !${tailwindBgColor} pw-font-montserrat pw-cursor-pointer pw-text-xs pw-rounded-full pw-border-b pw-border-white pw-flex pw-justify-center pw-items-center pw-py-3 pw-px-[30px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] ${className}`}
     >
       {children}
     </button>

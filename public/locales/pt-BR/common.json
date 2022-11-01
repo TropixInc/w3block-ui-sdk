@@ -253,5 +253,6 @@
   "token>pass>notResult": "Nenhum resultado encontrado.",
   "token>pass>total": "Total: {{total}}",
   "shared>invalidEmail": "Email inválido",
-  "auth>signIn>title": "Digite suas Informações"
+  "auth>signIn>title": "Digite suas Informações",
+  "singUp>register>phrase": "Faça o seu cadastro"
 }

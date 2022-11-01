@@ -98,7 +98,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
 
       <MailSent className="pw-max-w-[186px] pw-max-h-[178px] pw-stroke-brand-primary" />
 
-      <p className="pw-text-[#353945] pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-mt-[23px] mb-[18px]">
+      <p className="pw-text-[#353945] pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-mt-[23px] pw-mb-[18px]">
         <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
           O link expira em 15 minutos
           <button

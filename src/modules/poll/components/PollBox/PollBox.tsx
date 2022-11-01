@@ -183,7 +183,6 @@ export const PollBox = ({
               {error != '' || isError ? (
                 <p className="pw-text-xs pw-text-red-500 pw-font-poppins ">
                   {error}
-                  {isError ? 'Esse email já respondeu a pergunta' : null}
                 </p>
               ) : null}
               <WeblockButton
@@ -192,7 +191,7 @@ export const PollBox = ({
                 className="pw-text-white pw-font-[500] pw-mt-[22px] "
                 fullWidth={true}
               >
-                Continuar
+                {translate('components>advanceButton>continue')}
               </WeblockButton>
             </form>
           </FormProvider>
