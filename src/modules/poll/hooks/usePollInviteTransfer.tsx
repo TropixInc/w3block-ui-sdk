@@ -9,6 +9,7 @@ interface PollInviteUserApi {
   pollId: string;
   name?: string;
   email: string;
+  slug: string;
 }
 
 export const usePollInviteTransfer = () => {

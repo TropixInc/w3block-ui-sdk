@@ -3,3 +3,4 @@ export * from './SignUpTemplateSDK';
 export * from './CompleteSignUpSuccessTemplateSDK';
 export * from './VerifySignUpMailSentTemplateSDK';
 export * from './SignInTemplateSDK';
+export * from './ConnectWalletTemplateSDK';

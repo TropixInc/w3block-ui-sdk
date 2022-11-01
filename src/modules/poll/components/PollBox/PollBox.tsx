@@ -97,6 +97,7 @@ export const PollBox = ({
           {
             email: methods.getValues('email'),
             pollId,
+            slug: data.slug,
             description: beforeHover.filter((val) => val).length.toString(),
             questionId: data?.questions[0].id,
           },
@@ -118,6 +119,7 @@ export const PollBox = ({
                 {
                   pollId: pollId ?? '',
                   email: methods.getValues('email'),
+                  slug: data.slug,
                 },
                 {
                   onSuccess() {

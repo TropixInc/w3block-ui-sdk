@@ -10,6 +10,7 @@ interface PostAnswerApi {
   questionId: string;
   email: string;
   description: string;
+  slug?: string;
 }
 
 export const usePostAnswer = () => {

@@ -1,6 +1,7 @@
 export interface PollResponseInterface {
   id: string;
   description: string;
+  slug: string;
   questions: PollQuestionsInterface[];
 }
 
