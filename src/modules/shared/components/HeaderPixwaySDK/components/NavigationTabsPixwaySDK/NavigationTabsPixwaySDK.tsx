@@ -13,6 +13,7 @@ export interface NavigationTabsPixwaySDKProps {
   signUpRoute?: string;
   opened?: boolean;
   toogleMenu?: () => void;
+  textColor?: string;
   hasSignUp?: boolean;
 }
 
@@ -33,6 +34,7 @@ export const NavigationTabsPixwaySDK = ({
   signUpRoute,
   toogleMenu,
   opened,
+  textColor = 'black',
   hasSignUp,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
@@ -75,6 +77,8 @@ export const NavigationTabsPixwaySDK = ({
         <NavigationTabsPixwaySDKDesktop
           tabs={defaultTabs}
           classNames={classNames}
+          textColor={textColor}
+          hasSignUp={hasSignUp}
         />
       </div>
       {session && tabs?.length === 0 ? null : (
@@ -86,6 +90,7 @@ export const NavigationTabsPixwaySDK = ({
             signUpRoute={signUpRoute}
             tabs={defaultTabs}
             classNames={classNames}
+            textColor={textColor}
             hasSignUp={hasSignUp}
           />
         </div>

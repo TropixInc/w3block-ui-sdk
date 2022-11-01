@@ -16,6 +16,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   toogleMenu,
   signInRoute = PixwayAppRoutes.SIGN_IN,
   signUpRoute = PixwayAppRoutes.SIGN_UP,
+  textColor = 'black',
   hasSignUp,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
@@ -29,20 +30,26 @@ export const NavigationTabsPixwaySDKMobile = ({
     } else setOpenedTabs(!openedTabs);
   };
 
-  return (
+  return !session || (tabs && tabs.length > 0) ? (
     <div className={` ${classNames?.className}`}>
       {opened ? (
-        <CloseIcon className="pw-cursor-pointer" onClick={toggleTabsMemo} />
+        <CloseIcon
+          style={{ stroke: textColor }}
+          className="pw-cursor-pointer"
+          onClick={toggleTabsMemo}
+        />
       ) : (
         <HamburguerIcon
+          style={{ stroke: textColor }}
           onClick={toggleTabsMemo}
           className="pw-cursor-pointer"
         />
       )}
-      {opened && (
+      {opened ? (
         <div className="pw-flex pw-flex-col pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-py-8 pw-items-center pw-gap-y-4">
           {tabs?.map((tab) => (
             <a
+              style={{ color: textColor }}
               href={tab.router}
               className={`pw-font-montserrat pw-font-[600] pw-text-sm ${classNames?.tabClassName}`}
               key={tab.name}
@@ -71,7 +78,7 @@ export const NavigationTabsPixwaySDKMobile = ({
             </div>
           )}
         </div>
-      )}
+      ) : null}
     </div>
-  );
+  ) : null;
 };

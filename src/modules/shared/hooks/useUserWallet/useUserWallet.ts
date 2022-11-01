@@ -42,7 +42,7 @@ export function useUserWallet() {
   const [wallet, setWallet] = useState<WalletSimple>();
   const { data: profile } = useProfile();
   const isProduction = useIsProduction();
-  const { data: balance } = useBalance({
+  const balance = useBalance({
     address: profile?.data.mainWallet?.address || '',
     chainId: isProduction ? ChainScan.POLYGON : ChainScan.MUMBAI,
   });
@@ -66,7 +66,7 @@ export function useUserWallet() {
         status: walletHere.status,
       });
       if (balance?.data && wallet) {
-        setWallet({ ...wallet, balance: balance?.data?.balance ?? '0' });
+        setWallet({ ...wallet, balance: balance?.data?.data.balance ?? '0' });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
