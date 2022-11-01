@@ -60,7 +60,7 @@ export const TokenScanLink = ({
         href={href}
         className={classNames(
           className,
-          'pw-flex pw-items-center pw-relative pw-z-20 pw-w-max pw-gap-x-4 pw-mb-[11px] pw-font-medium pw-leading-[19px] pw-text-[#B09C60] hover:pw-underline'
+          'pw-flex pw-items-center pw-relative pw-z-20 pw-w-max pw-gap-x-4 pw-mb-[11px] pw-font-medium pw-leading-[19px] pw-text-brand-primary hover:pw-underline'
         )}
         rel="noreferrer"
       >

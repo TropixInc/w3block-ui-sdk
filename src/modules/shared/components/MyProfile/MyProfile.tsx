@@ -43,9 +43,9 @@ export const MyProfile = () => {
             onClick={() => toggleShowValue()}
           >
             {showValue ? (
-              <EyeIcon className="pw-stroke-[#B09C60]" />
+              <EyeIcon className="pw-stroke-brand-primary" />
             ) : (
-              <EyeCrossedIcon className="pw-stroke-[#B09C60]" />
+              <EyeCrossedIcon className="pw-stroke-brand-primary" />
             )}
           </div>
           {isLoading ? (
@@ -57,7 +57,9 @@ export const MyProfile = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    Icon={() => <WalletIcon className="pw-stroke-[#B09C60]" />}
+                    Icon={() => (
+                      <WalletIcon className="pw-stroke-brand-primary" />
+                    )}
                     title={translate('wallet>page>balance')}
                   />
                 ) : (
@@ -65,7 +67,7 @@ export const MyProfile = () => {
                     key={wallet.id}
                     showValue={showValue}
                     Icon={() => (
-                      <MetamaskIcon className="pw-stroke-[#B09C60]" />
+                      <MetamaskIcon className="pw-stroke-brand-primary" />
                     )}
                     title={translate('wallet>page>metamask')}
                   />
@@ -74,8 +76,8 @@ export const MyProfile = () => {
             )
           )}
           <Link href={PixwayAppRoutes.ADD_FUNDS_TYPE}>
-            <div className="pw-w-[165px] pw-bg-[#B09C60] pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
-              <div className="pw-rounded-full pw-border pw-bg-[#B09C60] pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
+            <div className="pw-w-[165px] pw-bg-brand-primary pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
+              <div className="pw-rounded-full pw-border pw-bg-brand-primary pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
                 <CashIcon className="pw-fill-white" />
               </div>
               <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
@@ -93,7 +95,7 @@ export const MyProfile = () => {
         <div>
           <p>{translate('shared>myProfile>name')}</p>
           <input
-            className="pw-p-[10px] pw-border pw-border-[#B09C60] pw-w-full pw-rounded-[8px]"
+            className="pw-p-[10px] pw-border pw-border-brand-primary pw-w-full pw-rounded-[8px]"
             type="text"
             name="name"
             defaultValue={profile?.data?.name ?? ''}
@@ -103,7 +105,7 @@ export const MyProfile = () => {
         <div>
           <p>E-mail</p>
           <input
-            className="pw-p-[10px] pw-border pw-border-[#B09C60] pw-w-full pw-rounded-[8px] disabled:!pw-bg-[#CCCCCC] disabled:!pw-text-[#131313]"
+            className="pw-p-[10px] pw-border pw-border-brand-primary pw-w-full pw-rounded-[8px] disabled:!pw-bg-[#CCCCCC] disabled:!pw-text-[#131313]"
             type="text"
             disabled
             value={profile?.data.email ?? ''}

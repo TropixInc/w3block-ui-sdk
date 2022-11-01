@@ -49,7 +49,7 @@ export const WalletExtract = () => {
               type ? 'pw-justify-start' : 'pw-justify-end'
             )}
           >
-            <div className="pw-rounded-full pw-w-[19px] pw-h-[19px] pw-bg-[#B09C60]"></div>
+            <div className="pw-rounded-full pw-w-[19px] pw-h-[19px] pw-bg-brand-primary"></div>
           </div>
           <MaticIcon className="pw-fill-[#8247E5]" />
         </div>

@@ -13,29 +13,29 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { usePoll } from '../../hooks/usePoll';
+import { usePollBySlug } from '../../hooks/usePollBySlug';
 import { usePollInviteTransfer } from '../../hooks/usePollInviteTransfer';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
 import { IPollInterface } from './IPollInterface';
 
 interface PollBoxProps {
-  pollId?: string;
+  slug?: string;
   redirectWithoutPoll?: string;
 }
 
 export const PollBox = ({
-  pollId,
+  slug,
   redirectWithoutPoll = PixwayAppRoutes.SIGN_IN,
 }: PollBoxProps) => {
   const router = useRouter();
   const [translate] = useTranslation();
   const { query, push, isReady } = useRouter();
-  const { pollId: pollQuery } = query;
+  const { slug: slugQuery } = query;
   const { data: session } = usePixwaySession();
   const [error, setError] = useState('');
-  pollId = pollId ?? (pollQuery as string);
+  slug = slug ?? (slugQuery as string);
 
-  const { data, isError } = usePoll(pollId ?? (pollQuery as string));
+  const { data, isError } = usePollBySlug(slug);
   const { mutate } = usePostAnswer();
   const { mutate: inviteUser } = usePollInviteTransfer();
 
@@ -44,11 +44,11 @@ export const PollBox = ({
   });
 
   useEffect(() => {
-    if ((!pollId && isReady) || isError) {
+    if ((!slug && isReady) || isError) {
       push(redirectWithoutPoll);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pollId, isReady]);
+  }, [slug, isReady]);
 
   const methods = useForm<IPollInterface>({
     defaultValues: {
@@ -92,11 +92,11 @@ export const PollBox = ({
     if (numberOfStars === 0) {
       setError('Voto é obrigatório');
     } else {
-      if (data && pollId) {
+      if (data && data.id && slug) {
         mutate(
           {
             email: methods.getValues('email'),
-            pollId,
+            pollId: data.id,
             slug: data.slug,
             description: beforeHover.filter((val) => val).length.toString(),
             questionId: data?.questions[0].id,
@@ -117,9 +117,9 @@ export const PollBox = ({
             onSuccess() {
               inviteUser(
                 {
-                  pollId: pollId ?? '',
+                  pollId: data.id ?? '',
                   email: methods.getValues('email'),
-                  slug: data.slug,
+                  slug: slug ?? '',
                 },
                 {
                   onSuccess() {

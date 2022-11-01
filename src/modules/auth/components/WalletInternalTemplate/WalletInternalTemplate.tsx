@@ -57,9 +57,9 @@ const _WalletInternalTemplate = () => {
               onClick={() => toggleShowValue()}
             >
               {showValue ? (
-                <EyeIcon className="pw-stroke-[#B09C60]" />
+                <EyeIcon className="pw-stroke-brand-primary" />
               ) : (
-                <EyeCrossedIcon className="pw-stroke-[#B09C60]" />
+                <EyeCrossedIcon className="pw-stroke-brand-primary" />
               )}
             </div>
             {isLoading ? (
@@ -70,7 +70,9 @@ const _WalletInternalTemplate = () => {
                   <ChipWallet
                     key={wallet.id}
                     showValue={showValue}
-                    Icon={() => <WalletIcon className="pw-stroke-[#B09C60]" />}
+                    Icon={() => (
+                      <WalletIcon className="pw-stroke-brand-primary" />
+                    )}
                     title={translate('wallet>page>balance')}
                   />
                 ) : (
@@ -78,7 +80,7 @@ const _WalletInternalTemplate = () => {
                     key={wallet.id}
                     showValue={showValue}
                     Icon={() => (
-                      <MetamaskIcon className="pw-stroke-[#B09C60]" />
+                      <MetamaskIcon className="pw-stroke-brand-primary" />
                     )}
                     title={translate('wallet>page>metamask')}
                   />
@@ -86,8 +88,8 @@ const _WalletInternalTemplate = () => {
               })
             )}
             <Link href={PixwayAppRoutes.ADD_FUNDS_TYPE}>
-              <div className="pw-w-[165px] pw-bg-[#B09C60] pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
-                <div className="pw-rounded-full pw-border pw-bg-[#B09C60] pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
+              <div className="pw-w-[165px] pw-bg-brand-primary pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
+                <div className="pw-rounded-full pw-border pw-bg-brand-primary pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
                   <CashIcon className="pw-fill-white" />
                 </div>
                 <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
@@ -130,7 +132,7 @@ const _WalletInternalTemplate = () => {
       <div className="pw-flex pw-items-center pw-text-[#777E8F] pw-font-bold pw-text-2xl pw-my-[30px]">
         {translate('wallet>page>extract')}
         <a href={extractLink()} target="_blank" rel="noreferrer">
-          <ExternalLinkIcon className="pw-ml-3 pw-stroke-[#777E8F] hover:pw-stroke-[#B09C60]" />
+          <ExternalLinkIcon className="pw-ml-3 pw-stroke-[#777E8F] hover:pw-stroke-brand-primary" />
         </a>
       </div>
 
@@ -144,7 +146,7 @@ const _WalletInternalTemplate = () => {
         className="pw-w-full pw-py-[13.75px] pw-px-[48px] pw-rounded-[48px] pw-bg-[#EFEFEF] pw-border pw-border-[#DCDCDC] pw-flex pw-justify-center pw-items-center pw-mt-[26px] pw-text-[#090909] pw-text-[12px] pw-font-medium pw-leading-[15px] pw-cursor-pointer"
         onClick={() => console.log('Desconectar')}
       >
-        <FilterIcon className="pw-stroke-[#B09C60]" />
+        <FilterIcon className="pw-stroke-brand-primary" />
         {translate('wallet>page>disconnect')}
       </div> */}
     </div>
