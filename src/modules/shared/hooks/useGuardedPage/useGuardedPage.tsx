@@ -11,7 +11,10 @@ export const useGuardedPage = (routeToReturn = PixwayAppRoutes.SIGN_IN) => {
   const { signOut } = usePixwayAuthentication();
   const { push, isReady } = useRouter();
   useEffect(() => {
-    if (isReady && (!session || !validateJwtToken(session.accessToken))) {
+    if (
+      isReady &&
+      (!session || !validateJwtToken(session.accessToken as string))
+    ) {
       signOut();
       push(routeToReturn);
     }

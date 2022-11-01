@@ -50,7 +50,7 @@ export const PollTemplateSDK = ({
         separation={separation}
         textContainer={textContainer}
         infoComponent={
-          <PollBox redirectWithoutPoll={redirectWithoutPoll} pollId={pollId} />
+          <PollBox redirectWithoutPoll={redirectWithoutPoll} slug={pollId} />
         }
       />
       <PoweredBy
