@@ -4,7 +4,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
 import { Provider } from '@w3block/pixchain-react-metamask';
-import { useRouter } from 'next/router';
 
 import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
 import { useProfile } from '../../../shared';
@@ -18,6 +17,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import useRouter from '../../../shared/hooks/useRouter';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
