@@ -35,7 +35,7 @@ export const PollBox = ({
   const [error, setError] = useState('');
   pollId = pollId ?? (pollQuery as string);
 
-  const { data, isError } = usePoll(pollId);
+  const { data, isError } = usePoll(pollId ?? (pollQuery as string));
   const { mutate } = usePostAnswer();
   const { mutate: inviteUser } = usePollInviteTransfer();
 
@@ -101,8 +101,17 @@ export const PollBox = ({
             questionId: data?.questions[0].id,
           },
           {
-            onError() {
-              setError('Esse email já respondeu a pergunta');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onError(e: any) {
+              if (
+                e.response.data.message == 'user already answered this question'
+              ) {
+                setError('Esse email já respondeu a pergunta');
+              } else {
+                setError(
+                  'Houve algum problema inesperado ao enviar sua resposta'
+                );
+              }
             },
             onSuccess() {
               inviteUser(
@@ -116,6 +125,11 @@ export const PollBox = ({
                       PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION +
                         '?email=' +
                         methods.getValues('email')
+                    );
+                  },
+                  onError() {
+                    setError(
+                      'Houve algum problema inesperado ao enviar sua resposta'
                     );
                   },
                 }

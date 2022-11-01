@@ -20,7 +20,6 @@ import { useProfile } from '../../hooks';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import useRouter from '../../hooks/useRouter';
 import useTranslation from '../../hooks/useTranslation';
-import { Link } from '../Link';
 import TranslatableComponent from '../TranslatableComponent';
 
 interface MenuProps {
@@ -113,7 +112,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     const isActive: boolean = router.pathname === tab.link;
 
     return (
-      <Link href={tab.link} key={tab.title}>
+      <a href={tab.link} key={tab.title}>
         <li
           key={tab.title}
           className={classNames(
@@ -135,7 +134,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
             {tab.title}
           </p>
         </li>
-      </Link>
+      </a>
     );
   };
 

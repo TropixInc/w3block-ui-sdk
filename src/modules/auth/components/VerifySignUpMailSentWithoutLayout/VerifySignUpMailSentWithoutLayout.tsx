@@ -37,6 +37,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
     if (isReady && (!email || email === '') && query.email) {
       setEmailToUse(query.email as string);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, isReady]);
 
   const formattedEmail = useEmailProtectedLabel(emailToUse);
@@ -57,8 +58,6 @@ export const VerifySignUpMailSentWithoutLayout = ({
   const callbackPath = isPostSignUp
     ? PixwayAppRoutes.COMPLETE_SIGNUP
     : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
-
-  console.log(emailToUse);
 
   return (
     <div className="pw-pt-0 pw-pb-6 sm:pw-mt-6 pw-flex pw-flex-col pw-items-center pw-leading-[23px] pw-text-lg">

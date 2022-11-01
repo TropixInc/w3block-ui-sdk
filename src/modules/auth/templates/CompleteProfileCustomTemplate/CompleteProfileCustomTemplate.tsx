@@ -67,6 +67,7 @@ const _CompleteProfileCustomTemplate = ({
 
   useEffect(() => {
     if (isSuccess) router.push(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
   useEffect(() => {

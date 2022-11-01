@@ -22,6 +22,7 @@ interface SignInSignupTemplateSDKProps {
   textContainer?: ContainerTextBesideProps;
   className?: string;
   defaultRedirectRoute?: string;
+  hasSignUp?: boolean;
 }
 
 export const SignInTemplateSDK = ({
@@ -34,6 +35,7 @@ export const SignInTemplateSDK = ({
   logoUrl,
   textContainer,
   className,
+  hasSignUp = true,
   defaultRedirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
 }: SignInSignupTemplateSDKProps) => {
   return (
@@ -52,6 +54,7 @@ export const SignInTemplateSDK = ({
         infoComponent={
           <Box>
             <SigInWithoutLayout
+              hasSignUp={hasSignUp}
               defaultRedirectRoute={defaultRedirectRoute}
             ></SigInWithoutLayout>
           </Box>

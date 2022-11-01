@@ -10,10 +10,7 @@ export const usePoll = (pollId: string) => {
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.POLL);
   return useQuery(
-    PixwayAPIRoutes.GET_POLL_BY_ID.replace('{companyId}', companyId).replace(
-      '{pollId}',
-      pollId
-    ),
+    [pollId, companyId],
     async (): Promise<PollResponseInterface> => {
       const poll = await axios.get(
         PixwayAPIRoutes.GET_POLL_BY_ID.replace(

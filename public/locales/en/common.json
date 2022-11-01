@@ -100,5 +100,7 @@
   "header>logged>metamaskHiWallet": "Hi, {{name}} | Your Metamask wallet:",
   "dashboard>EventCard>seeMore": "See more",
   "checkout>payment>subimtPayment": "Complete Payment",
-  "checkout>payment>PaymentInfo": "Payment info"
+  "checkout>payment>PaymentInfo": "Payment info",
+  "shared>invalidEmail": "Invalid email",
+  "auth>signIn>title": "Type your info"
 }

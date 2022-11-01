@@ -32,11 +32,13 @@ interface Form {
 interface SignInWithoutLayoutProps {
   defaultRedirectRoute: string;
   routeToAttachWallet?: string;
+  hasSignUp?: boolean;
 }
 
 export const SigInWithoutLayout = ({
   defaultRedirectRoute,
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+  hasSignUp = true,
 }: SignInWithoutLayoutProps) => {
   const { companyId, appBaseUrl } = useCompanyConfig();
   const [translate] = useTranslation();
@@ -55,7 +57,9 @@ export const SigInWithoutLayout = ({
   );
 
   const schema = object().shape({
-    email: string().required('Campo obrigatório').email('Email inválido'),
+    email: string()
+      .required(translate('components>form>requiredFieldValidation'))
+      .email(translate('shared>invalidEmail')),
     password: passwordSchema,
   });
 
@@ -125,7 +129,7 @@ export const SigInWithoutLayout = ({
           </Alert>
         ) : null}
         <p className="pw-font-[700] pw-text-[24px] pw-mb-6 pw-font-poppins pw-text-[#35394C] pw-text-center">
-          Digita suas Informações
+          {translate('auth>signIn>title')}
         </p>
 
         <AuthTextController
@@ -165,17 +169,19 @@ export const SigInWithoutLayout = ({
           >
             {translate('loginPage>formSubmitButton>signIn')}
           </AuthButton>
-          <p className="pw-text-[13px] pw-font-normal pw-leading-5 text-[#383857] text-center">
-            <Trans i18nKey={'auth>signIn>signUpCTA'}>
-              Não tem conta ainda?
-              <a
-                href={PixwayAppRoutes.SIGN_UP}
-                className="pw-text-brand-primary pw-underline"
-              >
-                Cadastre-se.
-              </a>
-            </Trans>
-          </p>
+          {hasSignUp ? (
+            <p className="pw-text-[13px] pw-font-normal pw-leading-5 pw-text-[#383857] pw-text-center">
+              <Trans i18nKey={'auth>signIn>signUpCTA'}>
+                Não tem conta ainda?
+                <a
+                  href={PixwayAppRoutes.SIGN_UP}
+                  className="pw-text-brand-primary pw-underline"
+                >
+                  Cadastre-se.
+                </a>
+              </Trans>
+            </p>
+          ) : null}
         </div>
         <AuthFooter />
       </form>

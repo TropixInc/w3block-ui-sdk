@@ -38,7 +38,7 @@ export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
     >
       <div className="pw-text-[#35394C] sm:!pw-mt-6">
         <h1 className="pw-mb-6 pw-text-center pw-text-2xl pw-leading-[29px] pw-font-bold px- sm:pw-px-0">
-          Conta criada com sucesso!
+          {translate('companyAuth>signUp>accountCreated')}
         </h1>
         <p className="pw-text-center pw-mb-6 pw-text-sm sm:pw-text-[13px] pw-leading-[15px] sm:pw-leading-[17px] pw-px-[70px] sm:pw-px-0">
           {translate('auth>completeSignUp>mailAlreadyVerified')}
