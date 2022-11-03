@@ -1,13 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
-import { Alert } from '../../../shared/components/Alert';
-import { Link } from '../../../shared/components/Link';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
-import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
@@ -22,42 +18,6 @@ interface Props {
   tokens: Array<Token>;
   isLoading: boolean;
 }
-
-const UnsignedUserAlert = () => {
-  const [translate] = useTranslation();
-  return (
-    <Alert variant="error" className="pw-flex pw-flex-col pw-gap-y-2">
-      <div className="pw-flex pw-gap-x-2">
-        <Alert.Icon /> {translate('tokens>noWalletConnectected>alert')}
-      </div>
-      <Link
-        href={PixwayAppRoutes.CONNECT_EXTERNAL_WALLET}
-        className="pw-text-brand-primary pw-text-sm hover:pw-underline"
-      >
-        {translate('tokens>unsignedUserAlert>signIn')}
-      </Link>
-    </Alert>
-  );
-};
-
-const NoWalletAlert = () => {
-  const [translate] = useTranslation();
-  return (
-    <Alert variant="error" className="pw-flex pw-flex-col pw-gap-y-2">
-      <div className="pw-flex pw-gap-x-2">
-        <Alert.Icon /> {translate('tokens>noWalletConnectected>alert')}
-      </div>
-      <div className="pw-text-sm">
-        <Link
-          href={PixwayAppRoutes.CONNECT_EXTERNAL_WALLET}
-          className="pw-text-brand-primary hover:pw-underline"
-        >
-          {translate('tokens>noWalletConnected>connectWallet')}
-        </Link>
-      </div>
-    </Alert>
-  );
-};
 
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
@@ -78,12 +38,11 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   }, [tokens, isLoading]);
 
   if (isLoading) return <TokenListTemplateSkeleton />;
-
   return tokensDisplaying.length ? (
     <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between">
       <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
         {tokensDisplaying.map((token, index) => (
-          <li className="pw-flex pw-items-stretch" key={token.id}>
+          <li className="w-full" key={token.id}>
             <WalletTokenCard
               category={token.category || ''}
               image={token.image}
@@ -129,10 +88,9 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 };
 
 export const TokensListTemplate = () => {
-  const { status } = usePixwaySession();
   const { isLoading, isAuthorized } = usePrivateRoute();
 
-  const { data: profileResponse, isLoading: isLoadingProfile } = useProfile();
+  const { isLoading: isLoadingProfile } = useProfile();
 
   const { wallet } = useUserWallet();
 
@@ -144,22 +102,14 @@ export const TokensListTemplate = () => {
       mapNFTToToken(nft, wallet?.chainId || 80001)
     ) || [];
 
-  if (!profileResponse || !profileResponse.data.mainWalletId)
-    return <NoWalletAlert />;
-
-  const renderTemplate = () => {
-    if (status === 'unauthenticated') return <UnsignedUserAlert />;
-    return (
-      <_TokensListTemplate
-        tokens={tokens}
-        isLoading={isLoadingETH || isLoadingProfile}
-      />
-    );
-  };
-
   return isLoading || !isAuthorized ? null : (
     <TranslatableComponent>
-      <InternalPagesLayoutBase>{renderTemplate()}</InternalPagesLayoutBase>
+      <InternalPagesLayoutBase>
+        <_TokensListTemplate
+          tokens={tokens}
+          isLoading={isLoadingETH || isLoadingProfile}
+        />
+      </InternalPagesLayoutBase>
     </TranslatableComponent>
   );
 };

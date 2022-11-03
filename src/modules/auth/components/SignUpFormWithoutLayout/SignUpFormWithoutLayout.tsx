@@ -32,8 +32,8 @@ export const SignUpFormWithoutLayout = ({
   isLoading,
   email,
   error,
-  privacyRedirect,
-  termsRedirect,
+  privacyRedirect = PixwayAppRoutes.PRIVACY_POLICY,
+  termsRedirect = PixwayAppRoutes.TERMS_CONDITIONS,
   title,
 }: Props) => {
   const passwordSchema = usePasswordValidationSchema();
@@ -111,12 +111,12 @@ export const SignUpFormWithoutLayout = ({
           <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
             <AuthCheckbox
               name="acceptsTermsOfUse"
-              label={translate('companyAuth>signUp>acceptTermsOfUse')}
+              label={translate('companyAuth>signUp>acceptTermsOfUseNoLink')}
               redirectLink={termsRedirect}
             />
             <AuthCheckbox
               name="acceptsPolicyTerms"
-              label={translate('companyAuth>signUp>acceptPrivacyPolicy')}
+              label={translate('companyAuth>signUp>acceptPrivacyPolicyNoLink')}
               redirectLink={privacyRedirect}
             />
           </div>

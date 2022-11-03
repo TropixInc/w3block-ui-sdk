@@ -191,7 +191,8 @@ const NavigationMenu = ({
 
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
-            <div
+            <a
+              href={menu.route}
               onClick={() => {
                 if (menu.route) {
                   router.push(menu.route);
@@ -206,7 +207,7 @@ const NavigationMenu = ({
               <p className="pw-font-poppins pw-font-[400] pw-text-xs">
                 {menu.name}
               </p>
-            </div>
+            </a>
           ))}
         </div>
       </div>

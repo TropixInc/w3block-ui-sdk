@@ -103,5 +103,7 @@
   "checkout>payment>PaymentInfo": "Payment info",
   "shared>invalidEmail": "Invalid email",
   "auth>signIn>title": "Type your info",
-  "singUp>register>phrase": "Sign up"
+  "singUp>register>phrase": "Sign up",
+  "companyAuth>signUp>acceptTermsOfUseNoLink": "I accept the Terms of Use",
+  "companyAuth>signUp>acceptPrivacyPolicyNoLink": "I accept the Privacy Policy"
 }

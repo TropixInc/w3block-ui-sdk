@@ -18,7 +18,7 @@ export const usePrivateRoute = (
     roles: [],
     strategy: PrivateRouteStrategy.BLOCK_SPECIFIED_ROLES,
   },
-  redirectRoute: PixwayAppRoutes = PixwayAppRoutes.HOME
+  redirectRoute: PixwayAppRoutes = PixwayAppRoutes.SIGN_IN
 ) => {
   const { status } = usePixwaySession();
   const user = useSessionUser();

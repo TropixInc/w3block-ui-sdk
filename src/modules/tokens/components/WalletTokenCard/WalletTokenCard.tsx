@@ -82,7 +82,7 @@ export const WalletTokenCard = ({
           }
         >
           <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[10px]">
-            <div className="pw-relative pw-overflow-hidden pw-w-[260px] pw-h-[260px]">
+            <div className="pw-relative pw-overflow-hidden pw-w-full">
               {hasPass ? (
                 <div className="pw-bg-white pw-absolute pw-left-[13px] pw-top-[14px] pw-rounded-full">
                   <div className="pw-bg-brand-primary/30 pw-text-brand-primary pw-text-[12px] pw-leading-[18px] pw-font-bold pw-border pw-border-brand-primary pw-rounded-full pw-py-1 pw-px-2">
@@ -93,16 +93,16 @@ export const WalletTokenCard = ({
               {image ? (
                 <img
                   src={image}
-                  className="pw-w-[260px] pw-h-[260px] pw-object-cover"
-                  alt=""
+                  className="pw-w-full pw-h-[300px] pw-object-cover pw-rounded-[20px]"
+                  alt={name}
                 />
               ) : (
-                <FallbackImage className="pw-h-full pw-max-h-[274px] pw-min-h-[220px]" />
+                <FallbackImage className="pw-h-full pw-max-h-[300px] pw-w-full pw-min-h-[300px] pw-rounded-[20px]" />
               )}
             </div>
 
             <div className={descriptionContainerClassName}>
-              <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px]">
+              <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate">
                 {name}
               </p>
               {category ? (

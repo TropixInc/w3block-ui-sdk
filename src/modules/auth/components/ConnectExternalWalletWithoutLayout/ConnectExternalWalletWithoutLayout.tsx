@@ -146,7 +146,11 @@ const _ConnectExternalWalletWithoutLayout = ({
   }
 
   if (isLoading) {
-    return <></>;
+    return (
+      <div className="pw-flex pw-justify-center pw-items-center pw-py-10">
+        <Spinner />
+      </div>
+    );
   }
   return (
     <div>
