@@ -47,11 +47,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const tabsDefault: TabsConfig[] = [
     {
-      title: translate('components>menu>dashboard'),
-      icon: <DashboardIcon width={17} height={17} />,
-      link: PixwayAppRoutes.DASHBOARD,
-    },
-    {
       title: translate('components>menu>myProfile'),
       icon: <UserIcon width={17} height={17} />,
       link: PixwayAppRoutes.PROFILE,
@@ -88,6 +83,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
             title: translate('components>menu>tokenPass'),
             icon: <TicketIcon width={17} height={17} />,
             link: PixwayAppRoutes.TOKENPASS,
+          },
+          {
+            title: translate('components>menu>dashboard'),
+            icon: <DashboardIcon width={17} height={17} />,
+            link: PixwayAppRoutes.DASHBOARD,
           },
         ]);
       } else {
