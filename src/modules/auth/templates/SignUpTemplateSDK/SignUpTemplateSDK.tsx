@@ -1,7 +1,6 @@
 import { contentTypeEnum } from '../../../poll';
 import {
   ContainerControllerSDK,
-  PoweredBy,
   position,
   ContainerControllerClasses,
 } from '../../../shared';
@@ -26,6 +25,8 @@ interface SignUpTemplateSDKProps {
   isLoading: boolean;
   email?: string;
   error?: string;
+  privacyRedirect?: string;
+  termsRedirect?: string;
 }
 
 export const SignUpTemplateSDK = ({
@@ -42,6 +43,8 @@ export const SignUpTemplateSDK = ({
   isLoading = false,
   email,
   error,
+  privacyRedirect,
+  termsRedirect,
 }: SignUpTemplateSDKProps) => {
   const [translate] = useTranslation();
   return (
@@ -64,14 +67,11 @@ export const SignUpTemplateSDK = ({
               onSubmit={onSubmit}
               isLoading={isLoading}
               error={error}
+              privacyRedirect={privacyRedirect}
+              termsRedirect={termsRedirect}
             />
           </Box>
         }
-      />
-      <PoweredBy
-        PwPosition={position.RIGHT}
-        logoColor="white"
-        classes={{ title: 'pw-text-white' }}
       />
     </div>
   );

@@ -256,5 +256,10 @@
   "token>pass>total": "Total: {{total}}",
   "shared>invalidEmail": "Email inválido",
   "auth>signIn>title": "Digite suas Informações",
-  "singUp>register>phrase": "Faça o seu cadastro"
+  "singUp>register>phrase": "Faça o seu cadastro",
+  "signUp>connectWallet>connectOrCreate": "Conectar ou Criar Carteira",
+  "signUp>connectWallet>createWallet": "Quer criar sua carteira {{name}} agora?",
+  "signUp>connectWallet>createText": "Agora que você terminou o cadastro, já pode criar sua carteira digital do {{name}}. É só clicar no botão abaixo.",
+  "signUp>connectWallet>connectExternal": "Já possui uma carteira externa?",
+  "signUp>connectWallet>connectButton": "Criar uma carteira"
 }

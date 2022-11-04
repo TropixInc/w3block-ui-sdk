@@ -3,7 +3,6 @@ import {
   ContainerControllerClasses,
   ContainerControllerSDK,
   position,
-  PoweredBy,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
@@ -59,11 +58,6 @@ export const SignInTemplateSDK = ({
             ></SigInWithoutLayout>
           </Box>
         }
-      />
-      <PoweredBy
-        logoColor="white"
-        PwPosition={position.RIGHT}
-        classes={{ title: 'pw-text-white' }}
       />
     </div>
   );

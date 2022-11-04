@@ -2,7 +2,6 @@ import {
   ContainerControllerClasses,
   ContainerControllerSDK,
   position,
-  PoweredBy,
 } from '../../../shared';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
@@ -52,11 +51,6 @@ export const PollTemplateSDK = ({
         infoComponent={
           <PollBox redirectWithoutPoll={redirectWithoutPoll} slug={pollId} />
         }
-      />
-      <PoweredBy
-        PwPosition={position.RIGHT}
-        logoColor="white"
-        classes={{ title: 'pw-text-white' }}
       />
     </div>
   );
