@@ -1497,9 +1497,9 @@
     swr "1.1.2"
 
 "@w3block/sdk-id@^0.1.4":
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.29.tgz#a971161e5cd674ef1d1b1bdefbb8b6d94daa1d73"
-  integrity sha512-WFCnAZHtvjCrqc+s3swviS8vyU9/Hy15z/sjpaLh2Ibft56yB2UQUWuMpCrbOaGbmXb5oQxKAZU9p6yRC+vxhA==
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.30.tgz#3f687377dd4619a1445e5b315946fa3367be91f5"
+  integrity sha512-xz6zKCUEpRl65lBkSvGuD3zqfVESuqBecDUKn8sCDvKz2U1ZfjW2WcVEuxJCKGUdlf2wnxNOE9QkPzwlqFSGFA==
   dependencies:
     axios "^0.24.0"
     date-fns "2.28.0"

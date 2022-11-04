@@ -4,6 +4,7 @@ import { contentTypeEnum } from '../../../poll';
 import { position } from '../../enums';
 import { FAQContextEnum } from '../../enums/FAQContext';
 import { ContainerTextBesideProps } from '../ContainerTextBeside/ContainerTextBeside';
+import { PoweredBy } from '../PoweredBy';
 import { ContainerBeside } from './ContainerBeside';
 import { ContainerCenter } from './ContainerCenter';
 
@@ -50,11 +51,11 @@ export const ContainerControllerSDK = ({
     <div
       style={{ backgroundColor: bgColor }}
       className={` ${
-        fullScreen ? 'pw-w-screen pw-h-screen' : ''
+        fullScreen ? 'pw-w-screen pw-min-h-screen pw-mt-10' : ''
       } pw-flex pw-px-4 pw-flex-col pw-justify-center pw-items-center ${className}`}
     >
       <div
-        className={`pw-container pw-mx-auto pw-w-full pw-flex pw-items-center ${positionClass}`}
+        className={`pw-container pw-mx-auto pw-w-full pw-flex pw-items-center pw-flex-1 ${positionClass}`}
       >
         {infoPosition === position.CENTER ? (
           <ContainerCenter
@@ -74,6 +75,11 @@ export const ContainerControllerSDK = ({
           />
         )}
       </div>
+      <PoweredBy
+        classes={{ title: 'pw-text-white' }}
+        logoColor="white"
+        PwPosition={position.RIGHT}
+      />
     </div>
   );
 };

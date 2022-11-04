@@ -7,6 +7,7 @@ import { Provider } from '@w3block/pixchain-react-metamask';
 
 import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
 import { useProfile } from '../../../shared';
+import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
 import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -34,10 +35,12 @@ enum Step {
 
 interface ConnectExternalWalletWithoutLayoutProps {
   redirectRoute?: string;
+  tenantName?: string;
 }
 
 const _ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
+  tenantName,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
@@ -198,35 +201,50 @@ const _ConnectExternalWalletWithoutLayout = ({
       ) : (
         <div className="pw-flex pw-flex-col pw-gap-8 pw-mt-6">
           <>
-            <p className="pw-font-inter pw-leading-[19px]">
-              {translate('companyAuth>signUp>connectExternalWallet')}
-            </p>
             <h2 className="pw-font-semibold pw-text-xl pw-leading-5 pw-text-center">
-              {translate('companyAuth>signUp>doYouAlreadyHaveAnExternalWallet')}
+              {translate('signUp>connectWallet>connectOrCreate')}
             </h2>
-            <ConnectToMetamaskButton
+            <p className="pw-font-inter pw-leading-[19px] pw-text-center">
+              {translate('signUp>connectWallet>createWallet', {
+                name: tenantName,
+              })}
+            </p>
+            <p className="pw-font-inter pw-leading-[19px] pw-text-center">
+              {translate('signUp>connectWallet>createText', {
+                name: tenantName,
+              })}
+            </p>
+          </>
+          <div className="pw-mx-auto">
+            <AuthButton
+              onClick={() => mailInterceptor(onClickContinue)}
+              disabled={isConnecting}
+              className="!pw-w-[211px]"
+            >
+              {translate('signUp>connectWallet>connectButton')}
+            </AuthButton>
+          </div>
+          <h2 className="pw-font-semibold pw-text-xl pw-leading-5 pw-text-center">
+            {translate('signUp>connectWallet>connectExternal')}
+          </h2>
+          <div className="pw-mx-auto">
+            <AuthButton
+              disabled={isConnecting}
               onClick={
                 connected
                   ? () => mailInterceptor(onClickConnectMetamaskWallet)
                   : () => mailInterceptor(onClickConnectToMetamaskExtension)
               }
-              disabled={isConnecting}
-            />
-            <p className="pw-font-inter pw-leading-[19px]">
-              {translate('companyAuth>signUp>continueWithInternalWallet')}
-            </p>
-            <h2 className="pw-font-semibold pw-text-xl pw-leading-5 pw-text-center">
-              {translate('companyAuth>signUp>iDontHaveAExternalWallet')}
-            </h2>
-          </>
-
-          <AuthButton
-            onClick={() => mailInterceptor(onClickContinue)}
-            fullWidth
-            disabled={isConnecting}
-          >
-            {translate('components>advanceButton>continue')}
-          </AuthButton>
+              className="!pw-w-[211px] !pw-bg-white pw-flex pw-justify-center pw-items-center pw-gap-x-2.5 !pw-text-black"
+            >
+              <MetamaskLogo
+                width={18.35}
+                height={17}
+                className="bg-transparent"
+              />
+              {translate('companyAuth>signUp>connectToMetamask')}
+            </AuthButton>
+          </div>
           <AuthFooter />
           <GenerateTokenDialog isOpen={isOpen} onClose={closeModal} />
         </div>
@@ -238,6 +256,7 @@ const _ConnectExternalWalletWithoutLayout = ({
 const MetamaskProvider = Provider as any;
 export const ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
+  tenantName,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   return (
     <TranslatableComponent>
@@ -247,7 +266,10 @@ export const ConnectExternalWalletWithoutLayout = ({
         }}
       >
         <MailVerifiedInterceptorProvider>
-          <_ConnectExternalWalletWithoutLayout redirectRoute={redirectRoute} />
+          <_ConnectExternalWalletWithoutLayout
+            redirectRoute={redirectRoute}
+            tenantName={tenantName}
+          />
         </MailVerifiedInterceptorProvider>
       </MetamaskProvider>
     </TranslatableComponent>
