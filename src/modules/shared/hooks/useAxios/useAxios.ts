@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { getPublicAPI, getSecureApi } from '../../config/api';
+import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
+import { getPublicAPI, getSecureApi, validateJwtToken } from '../../config/api';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { usePixwayAPIURL } from '../usePixwayAPIURL/usePixwayAPIURL';
 import { useToken } from '../useToken';
@@ -8,7 +9,7 @@ import { useToken } from '../useToken';
 export const useAxios = (type: W3blockAPI) => {
   const apisUrl = usePixwayAPIURL();
   const token = useToken();
-
+  const { signOut } = usePixwayAuthentication();
   const apiBaseURLMap = new Map([
     [W3blockAPI.ID, apisUrl.w3blockIdAPIUrl],
     [W3blockAPI.KEY, apisUrl.w3blockKeyAPIUrl],
@@ -18,6 +19,9 @@ export const useAxios = (type: W3blockAPI) => {
   const baseUrl = apiBaseURLMap.get(type) ?? '';
 
   return useMemo(() => {
+    if (token && !validateJwtToken(token)) {
+      signOut();
+    }
     return token ? getSecureApi(token, baseUrl) : getPublicAPI(baseUrl);
   }, [token, baseUrl]);
 };

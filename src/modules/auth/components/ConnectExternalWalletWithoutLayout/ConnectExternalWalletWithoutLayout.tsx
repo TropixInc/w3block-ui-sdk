@@ -48,19 +48,16 @@ const _ConnectExternalWalletWithoutLayout = ({
   const { companyId } = useCompanyConfig();
   const token = useToken();
   const router = useRouter();
-  const profile = useProfile();
-  const sessionUser = usePixwaySession();
+  const { data: profile } = useProfile();
+  const { status } = usePixwaySession();
   const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
 
   useEffect(() => {
-    const { data } = profile;
+    if (status === 'unauthenticated') router.push(PixwayAppRoutes.SIGN_IN);
 
-    if (sessionUser.status === 'unauthenticated')
-      router.push(PixwayAppRoutes.SIGN_IN);
-
-    if (data) {
-      const { data: user } = data;
+    if (profile) {
+      const { data: user } = profile;
       const { wallets } = user;
 
       if (wallets?.length) {
@@ -70,7 +67,7 @@ const _ConnectExternalWalletWithoutLayout = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, router, sessionUser]);
+  }, [profile, status]);
 
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
   const queryClient = useQueryClient();
@@ -241,16 +238,18 @@ const _ConnectExternalWalletWithoutLayout = ({
 const MetamaskProvider = Provider as any;
 export const ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
-}: ConnectExternalWalletWithoutLayoutProps) => (
-  <TranslatableComponent>
-    <MetamaskProvider
-      dappConfig={{
-        autoConnect: true,
-      }}
-    >
-      <MailVerifiedInterceptorProvider>
-        <_ConnectExternalWalletWithoutLayout redirectRoute={redirectRoute} />
-      </MailVerifiedInterceptorProvider>
-    </MetamaskProvider>
-  </TranslatableComponent>
-);
+}: ConnectExternalWalletWithoutLayoutProps) => {
+  return (
+    <TranslatableComponent>
+      <MetamaskProvider
+        dappConfig={{
+          autoConnect: true,
+        }}
+      >
+        <MailVerifiedInterceptorProvider>
+          <_ConnectExternalWalletWithoutLayout redirectRoute={redirectRoute} />
+        </MailVerifiedInterceptorProvider>
+      </MetamaskProvider>
+    </TranslatableComponent>
+  );
+};

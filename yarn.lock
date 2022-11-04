@@ -1290,9 +1290,9 @@
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
 "@types/lodash@^4.14.175":
-  version "4.14.187"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.187.tgz#122ff0a7192115b4c1a19444ab4482caa77e2c9d"
-  integrity sha512-MrO/xLXCaUgZy3y96C/iOsaIqZSeupyTImKClHunL5GrmaiII2VwvWmLBu2hwa0Kp0sV19CsyjtrTc/Fx8rg/A==
+  version "4.14.188"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.188.tgz#e4990c4c81f7c9b00c5ff8eae389c10f27980da5"
+  integrity sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==
 
 "@types/minimist@^1.2.0":
   version "1.2.2"
@@ -1342,9 +1342,9 @@
     react-query "*"
 
 "@types/react@*", "@types/react@^18.0.15":
-  version "18.0.24"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.24.tgz#2f79ed5b27f08d05107aab45c17919754cc44c20"
-  integrity sha512-wRJWT6ouziGUy+9uX0aW4YOJxAY0bG6/AOk5AW5QSvZqI7dk6VBIbXvcVgIw/W5Jrl24f77df98GEKTJGOLx7Q==
+  version "18.0.25"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.25.tgz#8b1dcd7e56fe7315535a4af25435e0bb55c8ae44"
+  integrity sha512-xD6c0KDT4m7n9uD4ZHi02lzskaiqcBxf4zi+tXZY98a04wvc0hi/TcCPC2FOESZi51Nd7tlUeOJY8RofL799/g==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1497,9 +1497,9 @@
     swr "1.1.2"
 
 "@w3block/sdk-id@^0.1.4":
-  version "0.1.28"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.28.tgz#2e20ffb42fc88429ba53b9f879ea1dd565a6eeaa"
-  integrity sha512-RJtVx05x8LuJGD+5Akja5sHdzDURpj4HQFrpasAbq6B/8j1NP0zhakfSxmEClZFAp7GnrF3NLGodaVcGnZySqA==
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.29.tgz#a971161e5cd674ef1d1b1bdefbb8b6d94daa1d73"
+  integrity sha512-WFCnAZHtvjCrqc+s3swviS8vyU9/Hy15z/sjpaLh2Ibft56yB2UQUWuMpCrbOaGbmXb5oQxKAZU9p6yRC+vxhA==
   dependencies:
     axios "^0.24.0"
     date-fns "2.28.0"
@@ -2009,9 +2009,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001400, caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001426:
-  version "1.0.30001429"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001429.tgz#70cdae959096756a85713b36dd9cb82e62325639"
-  integrity sha512-511ThLu1hF+5RRRt0zYCf2U2yRr9GPF6m5y90SBCWsvSoYoW7yAGlv/elyPaNfvGCkp6kj/KFZWU0BMA69Prsg==
+  version "1.0.30001430"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001430.tgz#638a8ae00b5a8a97e66ff43733b2701f81b101fa"
+  integrity sha512-IB1BXTZKPDVPM7cnV4iaKaHxckvdr/3xtctB3f7Hmenx3qYBhGtTZ//7EllK66aKXW98Lx0+7Yr0kxBtIt3tzg==
 
 chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
@@ -4492,9 +4492,9 @@ neo-async@^2.6.0:
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
 next-auth@^4.10.2:
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.15.0.tgz#1e350258b240cff7e09e81f066e26ad8fe540c85"
-  integrity sha512-IasNzGLM2VlmyioDdZaRwBBBm8b5xo+zbbqVWHFh0bY6iQUZ3vuudrsdHNdxkXV3LSHdKNaoWEpYr4BydB7mCw==
+  version "4.15.1"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.15.1.tgz#d427468a99fdd488fee6c67cc8fdb7f16ffe1df6"
+  integrity sha512-yB/cSEqslaXAsLZ3lvkJbB7bRR5JeZvfUXSw0CmWeP+TaMZWB85fG9PWdfBeFrDCLBsoyATw9FF6fzApE0SxSw==
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@panva/hkdf" "^1.0.1"

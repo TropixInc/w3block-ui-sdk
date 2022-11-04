@@ -126,7 +126,7 @@ export const PollBox = ({
                     router.push(
                       PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION +
                         '?email=' +
-                        methods.getValues('email')
+                        encodeURIComponent(methods.getValues('email'))
                     );
                   },
                   onError() {
