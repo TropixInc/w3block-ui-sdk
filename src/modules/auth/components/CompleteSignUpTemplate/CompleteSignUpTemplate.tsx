@@ -23,6 +23,8 @@ enum Steps {
 
 interface Props {
   classes?: AuthLayoutBaseClasses;
+  termsRedirectLink?: string;
+  privacyRedirectLink?: string;
 }
 
 const getIsTokenExpired = (token: string) => {
@@ -33,7 +35,11 @@ const getIsTokenExpired = (token: string) => {
   return isAfter(new Date(), new Date(Number(tokenSplitted[1])));
 };
 
-const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
+const _CompleteSignUpTemplate = ({
+  classes = {},
+  termsRedirectLink,
+  privacyRedirectLink,
+}: Props) => {
   const router = useRouter();
   const [translate] = useTranslation();
   const { email, token, tenantId } = router.query;
@@ -103,6 +109,8 @@ const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
         isError ? translate('auth>signUpError>genericErrorMessage') : undefined
       }
       classes={classes}
+      privacyRedirect={privacyRedirectLink}
+      termsRedirect={termsRedirectLink}
     />
   ) : (
     <CompleteSignUpSuccess classes={classes} />

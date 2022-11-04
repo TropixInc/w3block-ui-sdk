@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useController } from 'react-hook-form';
+import { Trans } from 'react-i18next';
 
 import classNames from 'classnames';
 
@@ -9,9 +10,17 @@ interface Props {
   name: string;
   label: string;
   redirectLink?: string;
+  keyTrans: string;
+  linkText: string;
 }
 
-export const AuthCheckbox = ({ name, label, redirectLink }: Props) => {
+export const AuthCheckbox = ({
+  name,
+  label,
+  redirectLink,
+  keyTrans,
+  linkText,
+}: Props) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
   const { field } = useController({ name });
   return (
@@ -39,14 +48,17 @@ export const AuthCheckbox = ({ name, label, redirectLink }: Props) => {
         )}
       />
       {redirectLink ? (
-        <a
-          className="pw-text-[13px] pw-leading-[15.85px] pw-underline"
-          href={redirectLink}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {label}
-        </a>
+        <Trans key={keyTrans}>
+          <p className="text-[13px] leading-[15.85px]">{label}</p>
+          <a
+            className="pw-text-[13px] pw-leading-[15.85px] pw-underline"
+            href={redirectLink}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {linkText}
+          </a>
+        </Trans>
       ) : (
         <label
           className="pw-text-[13px] pw-leading-[15.85px]"

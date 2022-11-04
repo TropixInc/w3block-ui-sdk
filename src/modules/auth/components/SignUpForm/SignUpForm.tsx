@@ -119,12 +119,16 @@ export const SignUpForm = ({
           <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
             <AuthCheckbox
               name="acceptsTermsOfUse"
-              label={translate('companyAuth>signUp>acceptTermsOfUse')}
+              label="Aceito os"
+              keyTrans="companyAuth>signUp>acceptTermsOfUse"
+              linkText="Termos de uso"
               redirectLink={termsRedirect}
             />
             <AuthCheckbox
               name="acceptsPolicyTerms"
-              label={translate('companyAuth>signUp>acceptPrivacyPolicy')}
+              keyTrans="companyAuth>signUp>acceptPrivacyPolicy"
+              linkText="Política de Privacidade"
+              label="Aceito os"
               redirectLink={privacyRedirect}
             />
           </div>
