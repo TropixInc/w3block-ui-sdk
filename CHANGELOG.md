@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.66](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.65...v0.1.1-alpha.66) (2022-11-04)
+
+
+### Features
+
+* **PC-171:** add links in terms of privacy in signup flow ([5a325ed](https://github.com/TropixInc/w3block-ui-sdk/commit/5a325ed0025cc5bcd55fd7363045a0097864d10b))
+
 ### [0.1.1-alpha.65](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.64...v0.1.1-alpha.65) (2022-11-03)
 
 ### [0.1.1-alpha.64](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.63...v0.1.1-alpha.64) (2022-11-03)
