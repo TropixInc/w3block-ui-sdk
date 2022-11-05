@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.67](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.66...v0.1.1-alpha.67) (2022-11-04)
+
+
+### Bug Fixes
+
+* **adjusts-RIW:** adjusts for RIW ([1c49ff0](https://github.com/TropixInc/w3block-ui-sdk/commit/1c49ff0499f37b066bddc0d242df45976ab6ed24))
+
 ### [0.1.1-alpha.66](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.65...v0.1.1-alpha.66) (2022-11-04)
 
 

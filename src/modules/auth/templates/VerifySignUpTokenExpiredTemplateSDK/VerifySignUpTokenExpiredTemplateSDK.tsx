@@ -3,7 +3,6 @@ import {
   ContainerControllerClasses,
   ContainerControllerSDK,
   position,
-  PoweredBy,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
@@ -60,11 +59,6 @@ export const VerifySignUpTokenExpiredTemplateSDK = ({
             />
           </Box>
         }
-      />
-      <PoweredBy
-        PwPosition={position.RIGHT}
-        logoColor="white"
-        classes={{ title: 'pw-text-white' }}
       />
     </div>
   );

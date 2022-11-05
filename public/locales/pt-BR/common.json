@@ -259,5 +259,10 @@
   "singUp>register>phrase": "Faça o seu cadastro",
   "poll>alreadyAnswered>phrase": "Você já respondeu a nossa pesquisa! Por favor fique atento as próximas palestras para participar.",
   "auth>poll>goTo": "Ir para",
-  "auth>poll>redirectLogin>alreadyAccount": "Já tenho conta,"
+  "auth>poll>redirectLogin>alreadyAccount": "Já tenho conta,",
+  "signUp>connectWallet>connectOrCreate": "Conectar ou Criar Carteira",
+  "signUp>connectWallet>createWallet": "Quer criar sua carteira {{name}} agora?",
+  "signUp>connectWallet>createText": "Agora que você terminou o cadastro, já pode criar sua carteira digital do {{name}}. É só clicar no botão abaixo.",
+  "signUp>connectWallet>connectExternal": "Já possui uma carteira externa?",
+  "signUp>connectWallet>connectButton": "Criar uma carteira"
 }

@@ -3,7 +3,6 @@ import {
   ContainerControllerClasses,
   ContainerControllerSDK,
   position,
-  PoweredBy,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
@@ -22,6 +21,7 @@ interface ConnectWalletTemplateSDKProps {
   textContainer?: ContainerTextBesideProps;
   className?: string;
   defaultRedirectRoute?: string;
+  tenantName?: string;
 }
 
 export const ConnectWalletTemplateSDK = ({
@@ -35,6 +35,7 @@ export const ConnectWalletTemplateSDK = ({
   textContainer,
   className,
   defaultRedirectRoute = PixwayAppRoutes.HOME,
+  tenantName,
 }: ConnectWalletTemplateSDKProps) => {
   return (
     <div style={{ backgroundColor: bgColor }}>
@@ -52,14 +53,10 @@ export const ConnectWalletTemplateSDK = ({
           <Box>
             <ConnectExternalWalletWithoutLayout
               redirectRoute={defaultRedirectRoute}
+              tenantName={tenantName}
             />
           </Box>
         }
-      />
-      <PoweredBy
-        logoColor="white"
-        PwPosition={position.RIGHT}
-        classes={{ title: 'pw-text-white' }}
       />
     </div>
   );
