@@ -16,6 +16,8 @@ interface SetCodeVerifyProps {
   isPostSignUp?: boolean;
 }
 
+const HOUR_IN_MS = 3600000;
+
 export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
   const { query, push } = useRouter();
@@ -66,12 +68,12 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6) {
-      push(PixwayAppRoutes.COMPLETE_SIGNUP, {
-        query: {
-          email: email,
-          token: code,
-        },
-      });
+      push(
+        PixwayAppRoutes.COMPLETE_SIGNUP +
+          `?email=${encodeURIComponent(query.email as string)}&token=${code};${
+            Date.now() + HOUR_IN_MS
+          }&code=${code}`
+      );
     } else {
       setError('código inválido');
     }

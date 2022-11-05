@@ -44,7 +44,7 @@ interface CompleteProfileCustomTemplateProps {
 }
 
 const getIsTokenExpired = (token: string) => {
-  const tokenSplitted = token.split(';');
+  const tokenSplitted = decodeURIComponent(token).split(';');
   if (tokenSplitted.length !== 2) {
     return true;
   }
@@ -88,17 +88,17 @@ const _CompleteProfileCustomTemplate = ({
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
     mutate({
-      email: email as string,
+      email: (email as string).replaceAll(' ', '+'),
       password,
       confirmation,
-      token: token as string,
+      token: (token as string).split(';')[0],
     });
   };
 
   if (step === Steps.TOKEN_EXPIRED)
     return (
       <VerifySignUpTokenExpiredTemplateSDK
-        email={email as string}
+        email={(email as string).replaceAll(' ', '+')}
         onSendEmail={() => setStep(Steps.CONFIRMATION_MAIL_SENT)}
         isPostSignUp
         {...verifyEmailProps}
@@ -109,7 +109,7 @@ const _CompleteProfileCustomTemplate = ({
     return (
       <VerifySignUpMailSentTemplateSDK
         {...verifyEmailProps}
-        email={email as string}
+        email={(email as string).replaceAll(' ', '+')}
         isPostSignUp
       />
     );
@@ -117,7 +117,7 @@ const _CompleteProfileCustomTemplate = ({
   return step === Steps.FORM ? (
     <SignUpTemplateSDK
       {...signUpProps}
-      email={email as string}
+      email={(email as string).replaceAll(' ', '+')}
       isLoading={isLoading}
       onSubmit={onSubmit}
       error={

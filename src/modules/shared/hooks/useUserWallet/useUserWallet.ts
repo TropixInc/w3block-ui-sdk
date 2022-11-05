@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useWallet, utils } from '@w3block/pixchain-react-metamask';
 
@@ -171,17 +171,15 @@ export function useUserWallet() {
     }
   };
 
-  return useMemo(() => {
-    return {
-      connect,
-      ...metamask,
-      hasWallet: profile?.data.mainWallet?.address != undefined,
-      wallet,
-      active: metamask.active,
-      connected,
-      claim,
-    };
-  }, [metamask, wallet, connected]);
+  return {
+    connect,
+    ...metamask,
+    hasWallet: profile?.data.mainWallet?.address != undefined,
+    wallet,
+    active: metamask.active,
+    connected,
+    claim,
+  };
 }
 
 export class WalletTransformer {

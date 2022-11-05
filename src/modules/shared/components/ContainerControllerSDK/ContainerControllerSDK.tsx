@@ -51,7 +51,7 @@ export const ContainerControllerSDK = ({
     <div
       style={{ backgroundColor: bgColor }}
       className={` ${
-        fullScreen ? 'pw-w-screen pw-min-h-screen pw-mt-10' : ''
+        fullScreen ? 'pw-w-screen pw-min-h-screen pw-pt-10' : ''
       } pw-flex pw-px-4 pw-flex-col pw-justify-center pw-items-center ${className}`}
     >
       <div
