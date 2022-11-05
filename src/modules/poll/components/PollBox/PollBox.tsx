@@ -8,14 +8,15 @@ import { AuthTextController } from '../../../auth/components/AuthTextController'
 import StarFilled from '../../../shared/assets/icons/starFilled.png';
 import StarOutlined from '../../../shared/assets/icons/starOutlined.png';
 import { Box } from '../../../shared/components/Box/Box';
+import { FallbackImage } from '../../../shared/components/FallbackImage';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePollBySlug } from '../../hooks/usePollBySlug';
-import { usePollInviteTransfer } from '../../hooks/usePollInviteTransfer';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
+import { AlreadyAnswerBox } from '../AlreadyAnswerBox';
 import { IPollInterface } from './IPollInterface';
 
 interface PollBoxProps {
@@ -30,6 +31,7 @@ export const PollBox = ({
   const router = useRouter();
   const [translate] = useTranslation();
   const { query, push, isReady } = useRouter();
+  const [alreadyAnswered, setAlreadyAnswered] = useState(false);
   const { slug: slugQuery } = query;
   const { data: session } = usePixwaySession();
   const [error, setError] = useState('');
@@ -37,7 +39,6 @@ export const PollBox = ({
 
   const { data, isError } = usePollBySlug(slug);
   const { mutate } = usePostAnswer();
-  const { mutate: inviteUser } = usePollInviteTransfer();
 
   const schema = object().shape({
     email: string().email(),
@@ -48,7 +49,7 @@ export const PollBox = ({
       push(redirectWithoutPoll);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, isReady]);
+  }, [slug, isReady, isError]);
 
   const methods = useForm<IPollInterface>({
     defaultValues: {
@@ -107,6 +108,7 @@ export const PollBox = ({
               if (
                 e.response.data.message == 'user already answered this question'
               ) {
+                setAlreadyAnswered(true);
                 setError('Esse email já respondeu a pergunta');
               } else {
                 setError(
@@ -114,28 +116,18 @@ export const PollBox = ({
                 );
               }
             },
-            onSuccess() {
-              inviteUser(
-                {
-                  pollId: data.id ?? '',
-                  email: methods.getValues('email'),
-                  slug: slug ?? '',
-                },
-                {
-                  onSuccess() {
-                    router.push(
-                      PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION +
-                        '?email=' +
-                        encodeURIComponent(methods.getValues('email'))
-                    );
+            onSuccess(data) {
+              if (!session && data.data.newUser) {
+                router.push(PixwayAppRoutes.VERIfY_WITH_CODE, {
+                  query: {
+                    email: encodeURIComponent(methods.getValues('email')),
                   },
-                  onError() {
-                    setError(
-                      'Houve algum problema inesperado ao enviar sua resposta'
-                    );
-                  },
-                }
-              );
+                });
+              } else if (!session && !data.data.newUser) {
+                router.push(PixwayAppRoutes.SIGN_IN);
+              } else if (session) {
+                router.push(PixwayAppRoutes.MY_TOKENS);
+              }
             },
           }
         );
@@ -143,13 +135,25 @@ export const PollBox = ({
     }
   };
 
-  return (
+  return alreadyAnswered ? (
+    <AlreadyAnswerBox />
+  ) : (
     <Box>
       <div className="pw-flex pw-flex-col pw-items-center">
         <p className="pw-text-[24px] pw-font-poppins pw-text-[#35394C] pw-text-center pw-leading-[24px] pw-font-[700]">
           O que achou da experiência?
         </p>
-        <p className="pw-text-[18px] pw-font-poppins pw-text-[#35394C] pw-text-center pw-font-[500]">
+        {data?.imageUrl && data.imageUrl != '' ? (
+          <img
+            className="pw-max-w-[260px] pw-w-full pw-h-full pw-object-cover pw-max-h-[260px] pw-my-6 pw-rounded-md"
+            src={data?.imageUrl}
+            alt={data?.description}
+          />
+        ) : (
+          <FallbackImage className="pw-max-w-[260px] pw-min-w-[260px] pw-min-h-[260px] pw-object-cover pw-max-h-[260px] pw-my-6 pw-rounded-md" />
+        )}
+
+        <p className="pw-text-[20px] pw-leading-8  pw-font-poppins pw-text-[#295BA6] pw-text-center pw-font-[700]">
           {data?.description}
         </p>
         <p className="pw-text-[18px] pw-font-poppins pw-text-[#35394C] pw-text-center pw-font-[500] pw-mt-6">
@@ -173,20 +177,24 @@ export const PollBox = ({
         <div className="pw-flex pw-w-full pw-flex-col pw-mt-[30px]">
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(successSubmit)}>
-              <AuthTextController
-                disabled={Boolean(session?.user.email)}
-                name="email"
-                label={'Por favor digite seu e-mail'}
-                className="pw-mb-3"
-                placeholder={translate(
-                  'companyAuth>newPassword>enterYourEmail'
-                )}
-              />
-              {error != '' || isError ? (
-                <p className="pw-text-xs pw-text-red-500 pw-font-poppins ">
-                  {error}
-                </p>
+              {!session ? (
+                <>
+                  <AuthTextController
+                    name="email"
+                    label={'Por favor digite seu e-mail'}
+                    className="pw-mb-3"
+                    placeholder={translate(
+                      'companyAuth>newPassword>enterYourEmail'
+                    )}
+                  />
+                  {error != '' || isError ? (
+                    <p className="pw-text-xs pw-text-red-500 pw-font-poppins ">
+                      {error}
+                    </p>
+                  ) : null}
+                </>
               ) : null}
+
               <WeblockButton
                 type="submit"
                 tailwindBgColor="pw-bg-brand-primary"

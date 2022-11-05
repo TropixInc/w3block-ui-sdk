@@ -12,14 +12,25 @@ export const usePollBySlug = (slug: string) => {
   return useQuery(
     [slug],
     async (): Promise<PollResponseInterface> => {
-      const poll = await axios.get(
-        PixwayAPIRoutes.GET_POLL_BY_SLUG.replace(
-          '{companyId}',
-          companyId
-        ).replace('{slug}', slug)
-      );
-      return poll.data;
+      try {
+        const poll = await axios.get(
+          PixwayAPIRoutes.GET_POLL_BY_SLUG.replace(
+            '{companyId}',
+            companyId
+          ).replace('{slug}', slug)
+        );
+        return poll.data;
+      } catch (e: any) {
+        throw new Error(e?.response.data.message);
+      }
     },
-    { refetchOnWindowFocus: false }
+    {
+      refetchOnWindowFocus: false,
+      enabled: slug != undefined,
+      retry: 1,
+      onError(err) {
+        return err;
+      },
+    }
   );
 };

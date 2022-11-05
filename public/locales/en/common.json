@@ -105,5 +105,8 @@
   "auth>signIn>title": "Type your info",
   "singUp>register>phrase": "Sign up",
   "companyAuth>signUp>acceptTermsOfUseNoLink": "I accept the Terms of Use",
-  "companyAuth>signUp>acceptPrivacyPolicyNoLink": "I accept the Privacy Policy"
+  "companyAuth>signUp>acceptPrivacyPolicyNoLink": "I accept the Privacy Policy",
+  "poll>alreadyAnswered>phrase": "You have already answered our survey! Please stay tuned for upcoming lectures to attend.",
+  "auth>poll>goTo": "Go to",
+  "auth>poll>redirectLogin>alreadyAccount": "I already have an account,"
 }

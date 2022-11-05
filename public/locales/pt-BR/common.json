@@ -25,7 +25,7 @@
   "auth>passwordChangeMailStep>formTitle": "Link de alteração de senha",
   "companyAuth>requestPaswordChange>linkSentToMail": "Enviamos um link de autenticação para seu e-mail: <1>{{email}}</1>",
   "auth>mailStep>resentCodeButton": "Reenviar código",
-  "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até <1>{{minutes}}:{{seconds}}</1> minutos para reenviar o código",
+  "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o código",
   "auth>mailStep>linkExpirationMessage": "O link é válido por 15 minutos, após isso, clique em \"Reenviar código\" para uma nova solicitação.",
   "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem.",
   "companyAuth>changePassword>title": "Trocar senha",
@@ -256,5 +256,8 @@
   "token>pass>total": "Total: {{total}}",
   "shared>invalidEmail": "Email inválido",
   "auth>signIn>title": "Digite suas Informações",
-  "singUp>register>phrase": "Faça o seu cadastro"
+  "singUp>register>phrase": "Faça o seu cadastro",
+  "poll>alreadyAnswered>phrase": "Você já respondeu a nossa pesquisa! Por favor fique atento as próximas palestras para participar.",
+  "auth>poll>goTo": "Ir para",
+  "auth>poll>redirectLogin>alreadyAccount": "Já tenho conta,"
 }
