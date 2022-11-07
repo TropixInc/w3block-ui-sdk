@@ -9,12 +9,18 @@ interface Classes {
   image?: string;
 }
 
+export interface ExtraBy {
+  title: string;
+  logoSrc: string;
+}
+
 interface Props {
   redirectLink?: string;
   imageSrc?: string;
   classes?: Classes;
   logoColor?: 'black' | 'white';
   PwPosition?: position;
+  extraBy?: ExtraBy[];
 }
 
 export const PoweredBy = ({
@@ -23,6 +29,7 @@ export const PoweredBy = ({
   classes,
   logoColor = 'black',
   PwPosition = position.CENTER,
+  extraBy,
 }: Props) => {
   const positionPowered =
     PwPosition == position.CENTER
@@ -39,24 +46,51 @@ export const PoweredBy = ({
         positionPowered
       )}
     >
-      <p
-        className={classNames(
-          classes?.title,
-          'pw-text-center pw-font-roboto pw-text-xs pw-mr-1'
-        )}
-      >
-        Powered by
-      </p>
-      <a href={redirectLink} target="_blank" rel="noreferrer">
-        <img
+      {extraBy
+        ? extraBy?.map(({ title, logoSrc }) => (
+            <div
+              key={title}
+              className="pw-flex pw-justify-center pw-items-center pw-mr-6"
+            >
+              <p
+                className={classNames(
+                  classes?.title,
+                  'pw-text-center pw-text-xs pw-font-poppins pw-whitespace-nowrap pw-mr-2'
+                )}
+              >
+                {title}
+              </p>
+              <img
+                className={classNames(
+                  classes?.image,
+                  'pw-max-w-[100px] pw-w-full pw-h-full pw-object-contain'
+                )}
+                src={logoSrc}
+                alt="logo"
+              />
+            </div>
+          ))
+        : null}
+      <div className="pw-flex pw-justify-center pw-items-center">
+        <p
           className={classNames(
-            classes?.image,
-            'pw-max-w-[100px] pw-w-full pw-object-contain pw-max-h-[20px]'
+            classes?.title,
+            'pw-text-center pw-text-xs pw-mr-2 pw-font-poppins'
           )}
-          src={logoColor === 'black' ? imageSrc : W3blockLogoWhite}
-          alt="logo"
-        />
-      </a>
+        >
+          powered by
+        </p>
+        <a href={redirectLink} target="_blank" rel="noreferrer">
+          <img
+            className={classNames(
+              classes?.image,
+              'pw-max-w-[100px] pw-w-full pw-object-contain pw-max-h-[20px]'
+            )}
+            src={logoColor === 'black' ? imageSrc : W3blockLogoWhite}
+            alt="logo"
+          />
+        </a>
+      </div>
     </div>
   );
 };

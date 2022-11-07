@@ -2,6 +2,7 @@ import { contentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
+  ExtraBy,
   position,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
@@ -23,6 +24,7 @@ interface ConnectWalletTemplateSDKProps {
   className?: string;
   defaultRedirectRoute?: string;
   tenantName?: string;
+  extraBy?: ExtraBy[];
 }
 
 export const ConnectWalletTemplateSDK = ({
@@ -37,6 +39,7 @@ export const ConnectWalletTemplateSDK = ({
   className,
   defaultRedirectRoute = PixwayAppRoutes.HOME,
   tenantName,
+  extraBy,
 }: ConnectWalletTemplateSDKProps) => {
   return (
     <TranslatableComponent>
@@ -51,6 +54,7 @@ export const ConnectWalletTemplateSDK = ({
           textContainer={textContainer}
           className={className}
           bgColor={bgColor}
+          extraBy={extraBy}
           infoComponent={
             <Box>
               <ConnectExternalWalletWithoutLayout

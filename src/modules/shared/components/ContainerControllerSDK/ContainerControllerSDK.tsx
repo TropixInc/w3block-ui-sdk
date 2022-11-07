@@ -4,7 +4,7 @@ import { contentTypeEnum } from '../../../poll';
 import { position } from '../../enums';
 import { FAQContextEnum } from '../../enums/FAQContext';
 import { ContainerTextBesideProps } from '../ContainerTextBeside/ContainerTextBeside';
-import { PoweredBy } from '../PoweredBy';
+import { ExtraBy, PoweredBy } from '../PoweredBy';
 import { ContainerBeside } from './ContainerBeside';
 import { ContainerCenter } from './ContainerCenter';
 
@@ -20,6 +20,7 @@ interface ContainerControllerProps {
   separation?: boolean;
   textContainer?: ContainerTextBesideProps;
   fullScreen?: boolean;
+  extraBy?: ExtraBy[];
 }
 
 export interface ContainerControllerClasses {
@@ -39,6 +40,7 @@ export const ContainerControllerSDK = ({
   separation,
   textContainer,
   fullScreen = true,
+  extraBy,
 }: ContainerControllerProps) => {
   const positionClass =
     infoPosition === position.CENTER
@@ -79,6 +81,7 @@ export const ContainerControllerSDK = ({
         classes={{ title: 'pw-text-white' }}
         logoColor="white"
         PwPosition={position.RIGHT}
+        extraBy={extraBy}
       />
     </div>
   );

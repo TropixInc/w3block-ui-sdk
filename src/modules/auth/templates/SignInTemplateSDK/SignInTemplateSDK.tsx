@@ -2,6 +2,7 @@ import { contentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
+  ExtraBy,
   position,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
@@ -23,6 +24,7 @@ interface SignInSignupTemplateSDKProps {
   className?: string;
   defaultRedirectRoute?: string;
   hasSignUp?: boolean;
+  extraBy?: ExtraBy[];
 }
 
 export const SignInTemplateSDK = ({
@@ -37,6 +39,7 @@ export const SignInTemplateSDK = ({
   className,
   hasSignUp = true,
   defaultRedirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+  extraBy,
 }: SignInSignupTemplateSDKProps) => {
   return (
     <TranslatableComponent>
@@ -52,6 +55,7 @@ export const SignInTemplateSDK = ({
           logoUrl={logoUrl}
           textContainer={textContainer}
           className={className}
+          extraBy={extraBy}
           infoComponent={
             <Box>
               <SigInWithoutLayout

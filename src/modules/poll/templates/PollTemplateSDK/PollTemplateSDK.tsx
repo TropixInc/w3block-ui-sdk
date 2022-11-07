@@ -1,6 +1,7 @@
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
+  ExtraBy,
   position,
 } from '../../../shared';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
@@ -22,6 +23,7 @@ interface PolltemplateSDKProps {
   className?: string;
   pollId?: string;
   redirectWithoutPoll?: string;
+  extraBy?: ExtraBy[];
 }
 
 export const PollTemplateSDK = ({
@@ -36,6 +38,7 @@ export const PollTemplateSDK = ({
   className = '',
   pollId,
   redirectWithoutPoll = PixwayAppRoutes.SIGN_IN,
+  extraBy,
 }: PolltemplateSDKProps) => {
   return (
     <TranslatableComponent>
@@ -50,6 +53,7 @@ export const PollTemplateSDK = ({
           infoPosition={infoPosition}
           separation={separation}
           textContainer={textContainer}
+          extraBy={extraBy}
           infoComponent={
             <PollBox redirectWithoutPoll={redirectWithoutPoll} slug={pollId} />
           }

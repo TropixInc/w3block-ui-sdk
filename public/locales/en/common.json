@@ -113,5 +113,10 @@
   "poll>achievedLimit>textNoTokens": "The number of available tokens has already been reached! Please stay tuned for upcoming lectures to redeem yours.",
   "components>cancelButton>cancel": "Cancel",
   "components>connectMetamaks>noExtension": "Metamask not found, use extension or app.",
-  "components>shared>pleaseTypeEmail": "Please, type your e-mail"
+  "components>shared>pleaseTypeEmail": "Please, type your e-mail",
+  "auth>poll>voteRequired": "Vote is required",
+  "auth>poll>alreadyAnswered": "This user already answered this question",
+  "auth>poll>unexpectedError": "There was an unexpected problem submitting your reply",
+  "auth>poll>thinkExperience": "What did you think of the experience?",
+  "auth>poll>question": "On a scale of 1 to 5, what's your rating?"
 }
