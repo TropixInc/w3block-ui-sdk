@@ -17,6 +17,7 @@ import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
@@ -26,6 +27,7 @@ import { ChipWallet } from './ChipWallet';
 
 const _WalletInternalTemplate = () => {
   const [showValue, toggleShowValue] = useToggle(false);
+  useHasWallet();
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();

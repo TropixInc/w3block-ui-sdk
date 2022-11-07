@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
+import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { Menu } from '../Menu';
@@ -16,6 +17,7 @@ import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {
   const { mutate } = useRequestConfirmationMail();
+  useHasWallet();
   const { data: profile } = useProfile();
   const { status } = usePixwaySession();
   const email = profile?.data?.email ?? '';

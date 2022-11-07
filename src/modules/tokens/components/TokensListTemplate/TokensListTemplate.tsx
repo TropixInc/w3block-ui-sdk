@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 //import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
@@ -22,6 +23,7 @@ interface Props {
 
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
+  useHasWallet();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const isProduction = useIsProduction();
