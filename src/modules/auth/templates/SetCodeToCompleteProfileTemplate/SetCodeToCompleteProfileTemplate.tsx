@@ -2,6 +2,7 @@ import { contentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
+  ExtraBy,
   position,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
@@ -21,6 +22,7 @@ interface SetCodeToCompleteProfileTemplateProps {
   logoUrl?: string;
   textContainer?: ContainerTextBesideProps;
   className?: string;
+  extraBy?: ExtraBy[];
 }
 
 export const SetCodeToCompleteProfileTemplate = ({
@@ -34,6 +36,7 @@ export const SetCodeToCompleteProfileTemplate = ({
   logoUrl,
   textContainer,
   className,
+  extraBy,
 }: SetCodeToCompleteProfileTemplateProps) => {
   return (
     <TranslatableComponent>
@@ -48,6 +51,7 @@ export const SetCodeToCompleteProfileTemplate = ({
           logoUrl={logoUrl}
           textContainer={textContainer}
           className={className}
+          extraBy={extraBy}
           infoComponent={
             <Box>
               <SetCodeVerify isPostSignUp={isPostSignUp} />
