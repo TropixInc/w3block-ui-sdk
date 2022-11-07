@@ -1327,9 +1327,9 @@
     "@types/react" "*"
 
 "@types/react-pdf@^5.7.2":
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/@types/react-pdf/-/react-pdf-5.7.3.tgz#6515eff29c91fc8d7249b56db81c493ebc926b0a"
-  integrity sha512-TWZ4IjFu2+rTZN1I+TNM/t2QUfvb9BH+ZD7onGWqeu+Vb+UhOoU9e39Qvtp6PukZDRc1Kn7dz6MGN5aLOAwCrA==
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/@types/react-pdf/-/react-pdf-5.7.4.tgz#031a46a13f82390f84f490e66b0d263c8b7b3728"
+  integrity sha512-Im/HY4QhkhYcG+FJoGCy0WoGvdgYcpm+89W1lK5K9KBEQCy1YqTxhmWey5UkdnIPymmEDyeVJXdK0lPjtcvMyA==
   dependencies:
     "@types/react" "*"
     pdfjs-dist "^2.10.377"
@@ -4492,9 +4492,9 @@ neo-async@^2.6.0:
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
 next-auth@^4.10.2:
-  version "4.16.3"
-  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.16.3.tgz#896ddeebb16c42899f916722be11acb99ec969fa"
-  integrity sha512-xDQHQJRpB/pjBDj53r4Br03jvhM1TI73J9OCX0afBTOHZEfpQ6ZrjsBFdSrdx6NeQSEMq6R/ZRny2Y6Nt/XqrA==
+  version "4.16.4"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.16.4.tgz#3ab796a0979ac05a6ebc1fbf343983ef5bc965c9"
+  integrity sha512-KXW578+ER1u5RcWLwCHMdb/RIBIO6JM8r6xlf9RIPSKzkvDcX9FHiZfJS2vOq/SurHXPJZc4J3OS4IDJpF74Dw==
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@panva/hkdf" "^1.0.1"
