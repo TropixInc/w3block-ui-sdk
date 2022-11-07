@@ -2,10 +2,9 @@ import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
-import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
+import { useRequestPasswordChange } from '../../hooks';
 import { AuthFooter } from '../AuthFooter';
 
 interface Props {
@@ -20,9 +19,8 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
   onSendEmail,
   isPostSignUp = false,
 }: Props) => {
-  const { mutate, isLoading, isSuccess } = useRequestConfirmationMail();
+  const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
   const [translate] = useTranslation();
-  const { companyId } = useCompanyConfig();
 
   useEffect(() => {
     if (isSuccess && onSendEmail) onSendEmail();
@@ -41,7 +39,13 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
       <span className="pw-text-brand-primary pw-text-sm pw-leading-[21px]">
         <Trans i18nKey="auth>emailConfirmation>resendEmailAction">
           <button
-            onClick={() => mutate({ email, tenantId: companyId, callbackPath })}
+            onClick={() =>
+              mutate({
+                email,
+                callbackPath,
+                verificationType: 'numeric',
+              })
+            }
             disabled={isLoading}
             className="pw-mb-[29px] pw-font-semibold pw-text-sm pw-leading-[17px] pw-text-brand-primary pw-underline"
           >

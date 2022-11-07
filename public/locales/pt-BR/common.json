@@ -264,5 +264,9 @@
   "signUp>connectWallet>createWallet": "Quer criar sua carteira {{name}} agora?",
   "signUp>connectWallet>createText": "Agora que você terminou o cadastro, já pode criar sua carteira digital do {{name}}. É só clicar no botão abaixo.",
   "signUp>connectWallet>connectExternal": "Já possui uma carteira externa?",
-  "signUp>connectWallet>connectButton": "Criar uma carteira"
+  "signUp>connectWallet>connectButton": "Criar uma carteira",
+  "poll>achievedLimit>noTokens": "Tokens esgotado!",
+  "poll>achievedLimit>textNoTokens": "O número de tokens disponiveis já foi atingido! Por favor fique atento as próximas palestras para resgatar o seu.",
+  "components>cancelButton>cancel": "Cancelar",
+  "components>connectMetamaks>noExtension": "Metamask não encontrada, utilize a extensão ou app."
 }

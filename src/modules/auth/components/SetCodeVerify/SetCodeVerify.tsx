@@ -5,12 +5,11 @@ import { addMinutes } from 'date-fns';
 
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
-import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 
 interface SetCodeVerifyProps {
   isPostSignUp?: boolean;
@@ -23,8 +22,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const { query, push } = useRouter();
   const email = (query.email as string) ?? '';
   const [translate] = useTranslation();
-  const { companyId } = useCompanyConfig();
-  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
+  const { mutate, isSuccess, isLoading, reset } = useRequestPasswordChange();
   const [error, setError] = useState('');
   useEffect(() => {
     setNewCountdown(new Date(Date.now() + 900000));
@@ -70,7 +68,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
     if (code.length == 6) {
       push(
         PixwayAppRoutes.COMPLETE_SIGNUP +
-          `?email=${encodeURIComponent(query.email as string)}&token=${code};${
+          `?email=${encodeURIComponent(email)}&token=${code};${
             Date.now() + HOUR_IN_MS
           }&code=${code}`
       );
@@ -101,7 +99,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             id={`input-${index}`}
             onKeyUp={(e) => keyUp(e, index)}
             value={val}
-            className="pw-w-[50px] pw-h-[50px] pw-rounded-lg pw-text-lg pw-px-2 pw-text-center pw-text-[#35394C] pw-font-[700] pw-border pw-border-[#295BA6]"
+            className="sm:pw-w-[50px] sm:pw-h-[50px] pw-w-[40px] pw-h-[40px] pw-rounded-lg pw-text-lg pw-px-2 pw-text-center pw-text-[#35394C] pw-font-[700] pw-border pw-border-[#295BA6]"
             key={index}
             type="tel"
           />
@@ -124,7 +122,11 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         disabled={isActive || isLoading}
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
-          mutate({ email: email, tenantId: companyId, callbackPath })
+          mutate({
+            email: email,
+            callbackPath,
+            verificationType: 'numeric',
+          })
         }
       >
         {translate('auth>mailStep>resentCodeButton')}
@@ -149,8 +151,8 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             onClick={() =>
               mutate({
                 email: email,
-                tenantId: companyId,
                 callbackPath,
+                verificationType: 'numeric',
               })
             }
           >

@@ -1,25 +1,36 @@
 import { useMutation } from 'react-query';
 
+import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
+import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
 
 interface Payload {
   email: string;
+  verificationType?: 'invisible' | 'numeric';
+  callbackPath?: string;
 }
 
 export const useRequestPasswordChange = () => {
-  const getSDK = useGetW3blockIdSDK();
-  const { appBaseUrl, companyId: tenantId } = useCompanyConfig();
-  return useMutation(async ({ email }: Payload) => {
-    const sdk = await getSDK();
-    return sdk.api.auth.requestPasswordReset({
+  const { companyId, appBaseUrl } = useCompanyConfig();
+  const axios = useAxios(W3blockAPI.ID);
+  return useMutation(
+    [PixwayAPIRoutes.REQUEST_PASSWORD_CHANGE],
+    async ({
       email,
-      tenantId,
-      callbackUrl: new URL(
-        PixwayAppRoutes.RESET_PASSWORD,
-        appBaseUrl
-      ).toString(),
-    });
-  });
+      verificationType = 'invisible',
+      callbackPath,
+    }: Payload) => {
+      return axios.post(PixwayAPIRoutes.REQUEST_PASSWORD_CHANGE, {
+        email,
+        tenantId: companyId,
+        verificationType: verificationType ?? '',
+        callbackUrl: new URL(
+          callbackPath ?? PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+          appBaseUrl
+        ).toString(),
+      });
+    }
+  );
 };

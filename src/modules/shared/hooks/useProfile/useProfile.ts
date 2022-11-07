@@ -1,11 +1,13 @@
 import { useMutation } from 'react-query';
 
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
+import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { usePrivateQuery } from '../usePrivateQuery';
+import useRouter from '../useRouter';
 
 export interface Wallet {
   id: string;
@@ -20,9 +22,19 @@ export interface Wallet {
 
 export const useProfile = () => {
   const getW3blockIdSDK = useGetW3blockIdSDK();
-  return usePrivateQuery([PixwayAPIRoutes.GET_PROFILE], async () => {
-    return (await getW3blockIdSDK()).api.users.getProfileByUserLogged();
-  });
+  const router = useRouter();
+  return usePrivateQuery(
+    [PixwayAPIRoutes.GET_PROFILE],
+    async () => {
+      return (await getW3blockIdSDK()).api.users.getProfileByUserLogged();
+    },
+    {
+      retry: 1,
+      onError() {
+        router.push(PixwayAppRoutes.SIGN_IN);
+      },
+    }
+  );
 };
 
 export const usePatchProfile = () => {

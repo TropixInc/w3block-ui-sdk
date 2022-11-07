@@ -8,11 +8,13 @@ import { ContainerTextBesideProps } from '../../../shared/components/ContainerTe
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
 import { useChangePassword } from '../../hooks/useChangePassword';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { CompleteSigUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
 import { SignUpTemplateSDK } from '../SignUpTemplateSDK/SignUpTemplateSDK';
 import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
@@ -57,18 +59,17 @@ const _CompleteProfileCustomTemplate = ({
 }: CompleteProfileCustomTemplateProps) => {
   const router = useRouter();
   const [translate] = useTranslation();
+  const { companyId } = useCompanyConfig();
   const { email, token } = router.query;
-  const { mutate, isLoading, isSuccess, isError } = useChangePassword();
+  const { mutate, isLoading, isError } = useChangePassword();
+  const { signIn } = usePixwayAuthentication();
   const [step, setStep] = useState(() => {
     return token && getIsTokenExpired(token as string)
       ? Steps.TOKEN_EXPIRED
       : Steps.FORM;
   });
 
-  useEffect(() => {
-    if (isSuccess) router.push(PixwayAppRoutes.SIGN_IN);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  const emailToUse = email ? decodeURIComponent(email as string) : '';
 
   useEffect(() => {
     if (isError) setStep(Steps.TOKEN_EXPIRED);
@@ -87,18 +88,34 @@ const _CompleteProfileCustomTemplate = ({
   }, [token]);
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
-    mutate({
-      email: (email as string).replaceAll(' ', '+'),
-      password,
-      confirmation,
-      token: (token as string).split(';')[0],
-    });
+    mutate(
+      {
+        email: emailToUse.replaceAll(' ', '+'),
+        password,
+        confirmation,
+        token: (token as string).split(';')[0],
+      },
+      {
+        onSuccess() {
+          signIn({
+            email: emailToUse.replaceAll(' ', '+'),
+            password,
+            companyId,
+          })
+            .then(() => router.push(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET))
+            .catch((e) => {
+              // eslint-disable-next-line no-console
+              console.log(e);
+            });
+        },
+      }
+    );
   };
 
   if (step === Steps.TOKEN_EXPIRED)
     return (
       <VerifySignUpTokenExpiredTemplateSDK
-        email={(email as string).replaceAll(' ', '+')}
+        email={emailToUse.replaceAll(' ', '+') ?? ''}
         onSendEmail={() => setStep(Steps.CONFIRMATION_MAIL_SENT)}
         isPostSignUp
         {...verifyEmailProps}
@@ -109,7 +126,7 @@ const _CompleteProfileCustomTemplate = ({
     return (
       <VerifySignUpMailSentTemplateSDK
         {...verifyEmailProps}
-        email={(email as string).replaceAll(' ', '+')}
+        email={emailToUse.replaceAll(' ', '+') ?? ''}
         isPostSignUp
       />
     );
@@ -117,7 +134,7 @@ const _CompleteProfileCustomTemplate = ({
   return step === Steps.FORM ? (
     <SignUpTemplateSDK
       {...signUpProps}
-      email={(email as string).replaceAll(' ', '+')}
+      email={emailToUse.replaceAll(' ', '+') ?? ''}
       isLoading={isLoading}
       onSubmit={onSubmit}
       error={

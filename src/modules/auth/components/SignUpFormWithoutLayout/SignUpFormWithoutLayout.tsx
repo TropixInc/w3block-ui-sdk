@@ -50,7 +50,7 @@ export const SignUpFormWithoutLayout = ({
   const methods = useForm<SignUpFormData>({
     defaultValues: {
       confirmation: '',
-      email: email ?? '',
+      email: email ? decodeURIComponent(email) : '',
       password: '',
       acceptsPolicyTerms: false,
       acceptsTermsOfUse: false,
@@ -60,7 +60,8 @@ export const SignUpFormWithoutLayout = ({
   });
 
   useEffect(() => {
-    if (email) methods.setValue('email', email);
+    if (email)
+      methods.setValue('email', email ? decodeURIComponent(email) : '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email]);
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosResponse } from 'axios';
 import { object, string } from 'yup';
 
 import { AuthTextController } from '../../../auth/components/AuthTextController';
@@ -16,6 +17,8 @@ import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePollBySlug } from '../../hooks/usePollBySlug';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
+import { PostAnswerResponseInterface } from '../../interfaces/PollResponseInterface';
+import { AchievedLimit } from '../AchievedLimit';
 import { AlreadyAnswerBox } from '../AlreadyAnswerBox';
 import { IPollInterface } from './IPollInterface';
 
@@ -32,6 +35,7 @@ export const PollBox = ({
   const [translate] = useTranslation();
   const { query, push, isReady } = useRouter();
   const [alreadyAnswered, setAlreadyAnswered] = useState(false);
+  const [achievedLimit, setAchievedLimit] = useState(false);
   const { slug: slugQuery } = query;
   const { data: session } = usePixwaySession();
   const [error, setError] = useState('');
@@ -116,13 +120,14 @@ export const PollBox = ({
                 );
               }
             },
-            onSuccess(data) {
-              if (!session && data.data.newUser) {
-                router.push(PixwayAppRoutes.VERIfY_WITH_CODE, {
-                  query: {
-                    email: encodeURIComponent(methods.getValues('email')),
-                  },
-                });
+            onSuccess(data: AxiosResponse<PostAnswerResponseInterface>) {
+              if (data.data.achievedLimit) {
+                setAchievedLimit(true);
+              } else if (!session && data.data.newUser) {
+                router.push(
+                  PixwayAppRoutes.VERIfY_WITH_CODE +
+                    `?email=${encodeURIComponent(methods.getValues('email'))}`
+                );
               } else if (!session && !data.data.newUser) {
                 router.push(PixwayAppRoutes.SIGN_IN);
               } else if (session) {
@@ -137,6 +142,8 @@ export const PollBox = ({
 
   return alreadyAnswered ? (
     <AlreadyAnswerBox />
+  ) : achievedLimit ? (
+    <AchievedLimit />
   ) : (
     <Box>
       <div className="pw-flex pw-flex-col pw-items-center">

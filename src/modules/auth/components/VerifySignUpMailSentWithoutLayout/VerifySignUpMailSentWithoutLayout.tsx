@@ -10,8 +10,8 @@ import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
+import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
-import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 
 interface PasswordChangeMailSentProps {
   email: string;
@@ -21,13 +21,12 @@ interface PasswordChangeMailSentProps {
 
 export const VerifySignUpMailSentWithoutLayout = ({
   email = '',
-  tenantId,
   isPostSignUp = false,
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
   const { query, isReady } = useRouter();
   const [emailToUse, setEmailToUse] = useState(email);
-  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
+  const { mutate, isSuccess, isLoading, reset } = useRequestPasswordChange();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
@@ -76,7 +75,11 @@ export const VerifySignUpMailSentWithoutLayout = ({
             disabled={isActive || isLoading}
             className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
             onClick={() =>
-              mutate({ email: emailToUse, tenantId, callbackPath })
+              mutate({
+                email: emailToUse,
+                callbackPath,
+                verificationType: 'numeric',
+              })
             }
           >
             {translate('auth>mailStep>resentCodeButton')}
@@ -107,8 +110,8 @@ export const VerifySignUpMailSentWithoutLayout = ({
             onClick={() =>
               mutate({
                 email: emailToUse,
-                tenantId,
                 callbackPath,
+                verificationType: 'numeric',
               })
             }
           >

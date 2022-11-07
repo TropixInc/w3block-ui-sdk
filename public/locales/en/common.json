@@ -108,5 +108,9 @@
   "companyAuth>signUp>acceptPrivacyPolicyNoLink": "I accept the Privacy Policy",
   "poll>alreadyAnswered>phrase": "You have already answered our survey! Please stay tuned for upcoming lectures to attend.",
   "auth>poll>goTo": "Go to",
-  "auth>poll>redirectLogin>alreadyAccount": "I already have an account,"
+  "auth>poll>redirectLogin>alreadyAccount": "I already have an account,",
+  "poll>achievedLimit>noTokens": "Tokens sold out!",
+  "poll>achievedLimit>textNoTokens": "The number of available tokens has already been reached! Please stay tuned for upcoming lectures to redeem yours.",
+  "components>cancelButton>cancel": "Cancel",
+  "components>connectMetamaks>noExtension": "Metamask not found, use extension or app."
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Provider } from '@w3block/pixchain-react-metamask';
 import classNames from 'classnames';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
@@ -110,10 +111,19 @@ const _HeaderPixwaySDK = ({
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MetamaskProvider = Provider as any;
+
 export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
   <TranslatableComponent>
-    <AttachWalletProvider>
-      <_HeaderPixwaySDK {...props} />
-    </AttachWalletProvider>
+    <MetamaskProvider
+      dappConfig={{
+        autoConnect: true,
+      }}
+    >
+      <AttachWalletProvider>
+        <_HeaderPixwaySDK {...props} />
+      </AttachWalletProvider>
+    </MetamaskProvider>
   </TranslatableComponent>
 );

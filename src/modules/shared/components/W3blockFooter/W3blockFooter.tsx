@@ -23,9 +23,8 @@ interface SocialNetwork {
 }
 
 interface Url {
-  path: string;
-  label: string;
-  className?: string;
+  router: string;
+  name: string;
 }
 
 interface W3blockFooterProps {
@@ -81,24 +80,20 @@ const _W3blockFooter = ({
 
   const defaultLinks: Array<Url> = [
     {
-      label: translate('home>footer>privacyPolicy'),
-      path: PixwayAppRoutes.PRIVACY_POLICY,
-      className: 'footer-link-privacypolicy',
+      name: translate('home>footer>privacyPolicy'),
+      router: PixwayAppRoutes.PRIVACY_POLICY,
     },
     {
-      path: PixwayAppRoutes.TERMS_CONDITIONS,
-      label: translate('home>footer>termsConditions'),
-      className: 'footer-link-termsconditions',
+      router: PixwayAppRoutes.TERMS_CONDITIONS,
+      name: translate('home>footer>termsConditions'),
     },
     {
-      path: PixwayAppRoutes.FAQ,
-      label: translate('home>footer>faq'),
-      className: 'footer-link-faq',
+      router: PixwayAppRoutes.FAQ,
+      name: translate('home>footer>faq'),
     },
     {
-      path: PixwayAppRoutes.CONTACT_US,
-      label: translate('home>footer>contactUs'),
-      className: 'footer-link-contactus',
+      router: PixwayAppRoutes.CONTACT_US,
+      name: translate('home>footer>contactUs'),
     },
   ];
 
@@ -154,14 +149,9 @@ const _W3blockFooter = ({
           <a href={PixwayAppRoutes.HOME} className="footer-link-logo">
             <img src={logoUrl} alt="logo" className="footer-logo-image" />
           </a>
-          {(links ?? defaultLinks).map(({ label, path, className }) => (
-            <a
-              style={{ color: textColor }}
-              href={path}
-              className={className}
-              key={path}
-            >
-              {label}
+          {(links ?? defaultLinks).map(({ name, router }) => (
+            <a style={{ color: textColor }} href={router} key={router}>
+              {name}
             </a>
           ))}
         </div>
