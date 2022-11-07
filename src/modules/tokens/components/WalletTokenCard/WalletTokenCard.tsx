@@ -125,7 +125,7 @@ export const WalletTokenCard = ({
           >
             {Array(3)
               .fill('')
-              .map((index) => (
+              .map((_, index) => (
                 <Pointer key={index} />
               ))}
           </button>

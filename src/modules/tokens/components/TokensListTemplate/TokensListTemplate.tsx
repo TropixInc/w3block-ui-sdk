@@ -5,6 +5,7 @@ import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
+//import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { ReactComponent as WalletImage } from '../../assets/wallet.svg';
@@ -24,7 +25,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const isProduction = useIsProduction();
-
+  //const { data } = useProcessingTokens();
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 6;
     const lastIndex = page * 6;
@@ -98,7 +99,8 @@ export const TokensListTemplate = () => {
     useGetNFTSByWallet(wallet?.chainId || 80001);
 
   const tokens =
-    ethNFTsResponse?.data.items.map((nft) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ethNFTsResponse?.data.items.map((nft: any) =>
       mapNFTToToken(nft, wallet?.chainId || 80001)
     ) || [];
 

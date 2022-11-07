@@ -29,4 +29,5 @@ export enum PixwayAPIRoutes {
   GET_POLL_BY_SLUG = '/polls/{companyId}/slug-details/{slug}',
   POST_POLL_ANSWER = '/answers/{companyId}/post-answer-with-user',
   INVITE_USER_AFTER_POLL = '/users/{companyId}/invite-transfer',
+  METADATA_PROCESSING = '/metadata/processing/address/{address}/{chainId}',
 }

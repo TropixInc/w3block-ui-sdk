@@ -5,3 +5,5 @@ export * from './VerifySignUpMailSentTemplateSDK';
 export * from './SignInTemplateSDK';
 export * from './ConnectWalletTemplateSDK';
 export * from './SetCodeToCompleteProfileTemplate';
+export * from './RequestChangePasswordTemplateSDK';
+export * from './ResetPasswordTemplateSDK';

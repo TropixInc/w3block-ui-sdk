@@ -27,7 +27,7 @@ export const useRequestPasswordChange = () => {
         tenantId: companyId,
         verificationType: verificationType ?? '',
         callbackUrl: new URL(
-          callbackPath ?? PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+          callbackPath ?? PixwayAppRoutes.RESET_PASSWORD,
           appBaseUrl
         ).toString(),
       });
