@@ -13,7 +13,7 @@ import { ExternalRoutes } from '../../enums/ExternalRoutes';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useTranslation from '../../hooks/useTranslation';
-import { PoweredBy } from '../PoweredBy';
+import { ExtraBy, PoweredBy } from '../PoweredBy';
 import TranslatableComponent from '../TranslatableComponent';
 
 interface SocialNetwork {
@@ -34,6 +34,7 @@ interface W3blockFooterProps {
   textColor?: string;
   infoAboutSite?: string;
   poweredByLogoColor?: 'black' | 'white';
+  extraBy?: ExtraBy[];
 }
 
 const socialNetWorkLinkSharedClassnames =
@@ -74,6 +75,7 @@ const _W3blockFooter = ({
   textColor = 'black',
   poweredByLogoColor = 'black',
   infoAboutSite,
+  extraBy,
 }: W3blockFooterProps) => {
   const [translate] = useTranslation();
   const { logoUrl } = useCompanyConfig();
@@ -200,6 +202,7 @@ const _W3blockFooter = ({
           }}
           PwPosition={position.CENTER}
           logoColor={poweredByLogoColor}
+          extraBy={extraBy}
         />
       </div>
     </div>
