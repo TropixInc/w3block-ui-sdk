@@ -257,16 +257,16 @@
   "shared>invalidEmail": "Email inválido",
   "auth>signIn>title": "Digite suas Informações",
   "singUp>register>phrase": "Faça o seu cadastro",
-  "poll>alreadyAnswered>phrase": "Você já respondeu a nossa pesquisa! Por favor fique atento as próximas palestras para participar.",
+  "poll>alreadyAnswered>phrase": "Você já respondeu essa pesquisa. Por favor, fiquei atento às próximas palestras para participar",
   "auth>poll>goTo": "Ir para",
-  "auth>poll>redirectLogin>alreadyAccount": "Já tenho conta,",
+  "auth>poll>redirectLogin>alreadyAccount": "Já possui uma conta?",
   "signUp>connectWallet>connectOrCreate": "Conectar ou Criar Carteira",
   "signUp>connectWallet>createWallet": "Quer criar sua carteira {{name}} agora?",
   "signUp>connectWallet>createText": "Agora que você terminou o cadastro, já pode criar sua carteira digital do {{name}}. É só clicar no botão abaixo.",
   "signUp>connectWallet>connectExternal": "Já possui uma carteira externa?",
   "signUp>connectWallet>connectButton": "Criar uma carteira",
-  "poll>achievedLimit>noTokens": "Tokens esgotado!",
-  "poll>achievedLimit>textNoTokens": "O número de tokens disponiveis já foi atingido! Por favor fique atento as próximas palestras para resgatar o seu.",
+  "poll>achievedLimit>noTokens": "Tokens esgotados!",
+  "poll>achievedLimit>textNoTokens": "O limite de tokens disponíveis para essa palestra já foi atingido. Por favor, fique atento às próximas palestras e tente novamente.",
   "components>cancelButton>cancel": "Cancelar",
   "components>connectMetamaks>noExtension": "Metamask não encontrada, utilize a extensão ou app.",
   "components>shared>pleaseTypeEmail": "Por favor digite seu e-mail",
@@ -274,5 +274,8 @@
   "auth>poll>alreadyAnswered": "Esse email já respondeu a pergunta",
   "auth>poll>unexpectedError": "Houve algum problema inesperado ao enviar sua resposta",
   "auth>poll>thinkExperience": "O que achou da experiência?",
-  "auth>poll>question": "Em uma escala de 1 a 5, qual a sua nota?"
+  "auth>poll>question": "Em uma escala de 1 a 5, qual a sua nota?",
+  "auth>poll>pollAnswered": "Pesquisa respondida!",
+  "auth>codeVerify>necessaryVerification": "Verificação necessária"
+
 }

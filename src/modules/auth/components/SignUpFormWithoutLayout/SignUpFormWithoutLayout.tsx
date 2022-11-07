@@ -32,8 +32,8 @@ export const SignUpFormWithoutLayout = ({
   isLoading,
   email,
   error,
-  privacyRedirect = PixwayAppRoutes.PRIVACY_POLICY,
-  termsRedirect = PixwayAppRoutes.TERMS_CONDITIONS,
+  privacyRedirect = 'https://w3block.io/en/privacy-policy',
+  termsRedirect = 'https://w3block.io/en/terms',
   title,
 }: Props) => {
   const passwordSchema = usePasswordValidationSchema();

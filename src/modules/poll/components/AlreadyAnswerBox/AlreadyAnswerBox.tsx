@@ -11,7 +11,7 @@ export const AlreadyAnswerBox = () => {
       <div className="flex pw-flex-col pw-items-center">
         <InfoIcon className="pw-w-[48px] pw-h-[48px]" />
         <p className="pw-text-center pw-text-[24px] pw-font-roboto pw-font-[700] pw-text-[#272727] pw-mt-3">
-          Info
+          {translate('auth>poll>pollAnswered')}
         </p>
         <p className="pw-text-center pw-text-[20px] pw-font-roboto pw-font-[700] pw-text-[#272727] pw-mt-6">
           {translate('poll>alreadyAnswered>phrase')}

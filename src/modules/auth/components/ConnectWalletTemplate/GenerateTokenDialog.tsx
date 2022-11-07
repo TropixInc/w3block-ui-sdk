@@ -24,7 +24,7 @@ export const GenerateTokenDialog = ({
 
   const onConfirm = () => {
     // eslint-disable-next-line prettier/prettier
-    const target = `${hostname ?? ''}${PixwayAPIRoutes.SIGN_IN}`;
+    const target = `${hostname ?? ''}/${PixwayAPIRoutes.SIGN_IN}`;
     const url = `https://metamask.app.link/dapp/${target}`;
     openMetaMaskUrl(url);
     onClose();

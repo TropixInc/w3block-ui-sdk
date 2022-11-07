@@ -108,9 +108,9 @@
   "companyAuth>signUp>acceptPrivacyPolicyNoLink": "I accept the Privacy Policy",
   "poll>alreadyAnswered>phrase": "You have already answered our survey! Please stay tuned for upcoming lectures to attend.",
   "auth>poll>goTo": "Go to",
-  "auth>poll>redirectLogin>alreadyAccount": "I already have an account,",
+  "auth>poll>redirectLogin>alreadyAccount": "Already have an account?",
   "poll>achievedLimit>noTokens": "Tokens sold out!",
-  "poll>achievedLimit>textNoTokens": "The number of available tokens has already been reached! Please stay tuned for upcoming lectures to redeem yours.",
+  "poll>achievedLimit>textNoTokens": "The limit of tokens available for this talk has already been reached. Please stay tuned for upcoming talks and try again.",
   "components>cancelButton>cancel": "Cancel",
   "components>connectMetamaks>noExtension": "Metamask not found, use extension or app.",
   "components>shared>pleaseTypeEmail": "Please, type your e-mail",
@@ -118,5 +118,7 @@
   "auth>poll>alreadyAnswered": "This user already answered this question",
   "auth>poll>unexpectedError": "There was an unexpected problem submitting your reply",
   "auth>poll>thinkExperience": "What did you think of the experience?",
-  "auth>poll>question": "On a scale of 1 to 5, what's your rating?"
+  "auth>poll>question": "On a scale of 1 to 5, what's your rating?",
+  "auth>poll>pollAnswered": "Poll answered!",
+  "auth>codeVerify>necessaryVerification": "Necessary verification"
 }

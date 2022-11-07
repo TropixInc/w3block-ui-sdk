@@ -79,8 +79,8 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
 
   return (
     <div className="pw-flex pw-flex-col pw-items-center">
-      <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-font-[700]">
-        Verificação necessária
+      <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-font-[700] pw-text-center">
+        {translate('auth>codeVerify>necessaryVerification')}
       </p>
       <p className="pw-text-[#353945] pw-mt-4 pw-mb-6 pw-text-center pw-text-[13px] pw-leading-[20px] pw-font-normal">
         <Trans
@@ -115,7 +115,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         className="pw-mt-4 pw-text-white"
         fullWidth={true}
       >
-        Continuar
+        {translate('components>advanceButton>continue')}
       </WeblockButton>
 
       <button

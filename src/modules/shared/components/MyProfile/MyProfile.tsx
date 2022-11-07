@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useToggle } from 'react-use';
 
@@ -21,16 +21,19 @@ import { PixwayButton } from '../PixwayButton';
 import { Spinner } from '../Spinner';
 
 export const MyProfile = () => {
-  const [showValue, toggleShowValue] = useToggle(false);
   const { data: profile } = useProfile();
+  const [showValue, toggleShowValue] = useToggle(false);
+  const [nameVal, setNameVal] = useState('');
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
   const isLoading = wallet == undefined;
 
+  useEffect(() => {
+    setNameVal(profile?.data.name ?? '');
+  }, [profile]);
+
   const { mutate, isSuccess, isLoading: isLoadingPatch } = usePatchProfile();
   const inputRef = useRef<HTMLInputElement>(null);
-  const value = inputRef?.current?.value;
-
   return (
     <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
       <div className="pw-flex sm:pw-justify-between pw-justify-center pw-items-center pw-w-full">
@@ -98,7 +101,8 @@ export const MyProfile = () => {
             className="pw-p-[10px] pw-border pw-border-brand-primary pw-w-full pw-rounded-[8px]"
             type="text"
             name="name"
-            defaultValue={profile?.data?.name ?? ''}
+            onChange={(e) => setNameVal(e.target.value)}
+            value={nameVal}
             ref={inputRef}
           />
         </div>
@@ -112,7 +116,7 @@ export const MyProfile = () => {
           />
         </div>
         <PixwayButton
-          onClick={() => mutate(value ?? '')}
+          onClick={() => mutate(nameVal ?? '')}
           type="button"
           fullWidth
           disabled={isLoadingPatch}

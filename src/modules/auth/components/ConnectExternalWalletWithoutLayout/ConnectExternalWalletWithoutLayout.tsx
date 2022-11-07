@@ -14,7 +14,6 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useIsPhoneOrTablet } from '../../../shared/hooks/useIsPhoneOrTablet';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
@@ -45,7 +44,6 @@ const _ConnectExternalWalletWithoutLayout = ({
 }: ConnectExternalWalletWithoutLayoutProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
-  const isPhone = useIsPhoneOrTablet();
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,13 +82,6 @@ const _ConnectExternalWalletWithoutLayout = ({
   const onClickConnectToMetamaskExtension = async () => {
     if (!(globalThis.window as any)?.ethereum) {
       openModal();
-      return;
-    }
-
-    if (isPhone) {
-      router.push(
-        'https://metamask.app.link/dapp/rioinnovationweek.stg.w3block.io/auth/signIn'
-      );
       return;
     }
 
