@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.72](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.71...v0.1.1-alpha.72) (2022-11-07)
+
+
+### Bug Fixes
+
+* **tk-880:** adjusts on footer ([#88](https://github.com/TropixInc/w3block-ui-sdk/issues/88)) ([bb5fd83](https://github.com/TropixInc/w3block-ui-sdk/commit/bb5fd833df0d493c37beb94d9588ef215ab482d2))
+
 ### [0.1.1-alpha.71](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.70...v0.1.1-alpha.71) (2022-11-07)
 
 
