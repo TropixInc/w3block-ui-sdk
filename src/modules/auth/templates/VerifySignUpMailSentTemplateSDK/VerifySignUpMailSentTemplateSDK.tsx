@@ -2,6 +2,7 @@ import { contentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
+  ExtraBy,
   position,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
@@ -22,6 +23,7 @@ interface VerifySignUpMailSentTemplateSDKProps {
   logoUrl?: string;
   textContainer?: ContainerTextBesideProps;
   className?: string;
+  extraBy?: ExtraBy[];
 }
 
 export const VerifySignUpMailSentTemplateSDK = ({
@@ -36,6 +38,7 @@ export const VerifySignUpMailSentTemplateSDK = ({
   logoUrl,
   textContainer,
   className,
+  extraBy,
 }: VerifySignUpMailSentTemplateSDKProps) => {
   return (
     <TranslatableComponent>
@@ -50,6 +53,7 @@ export const VerifySignUpMailSentTemplateSDK = ({
           logoUrl={logoUrl}
           textContainer={textContainer}
           className={className}
+          extraBy={extraBy}
           infoComponent={
             <Box>
               <VerifySignUpMailSentWithoutLayout

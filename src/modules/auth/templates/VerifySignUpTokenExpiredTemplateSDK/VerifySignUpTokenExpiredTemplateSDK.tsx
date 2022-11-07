@@ -2,6 +2,7 @@ import { contentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
+  ExtraBy,
   position,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
@@ -23,6 +24,7 @@ interface VerifySignUpTokenExpired {
   logoUrl?: string;
   textContainer?: ContainerTextBesideProps;
   className?: string;
+  extraBy?: ExtraBy[];
 }
 
 export const VerifySignUpTokenExpiredTemplateSDK = ({
@@ -38,6 +40,7 @@ export const VerifySignUpTokenExpiredTemplateSDK = ({
   logoUrl,
   textContainer,
   className,
+  extraBy,
 }: VerifySignUpTokenExpired) => {
   return (
     <TranslatableComponent>
@@ -52,6 +55,7 @@ export const VerifySignUpTokenExpiredTemplateSDK = ({
           separation={separation}
           logoUrl={logoUrl}
           textContainer={textContainer}
+          extraBy={extraBy}
           infoComponent={
             <Box>
               <VerifySignUpTokenExpiredWithoutLayout

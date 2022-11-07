@@ -269,5 +269,10 @@
   "poll>achievedLimit>textNoTokens": "O número de tokens disponiveis já foi atingido! Por favor fique atento as próximas palestras para resgatar o seu.",
   "components>cancelButton>cancel": "Cancelar",
   "components>connectMetamaks>noExtension": "Metamask não encontrada, utilize a extensão ou app.",
-  "components>shared>pleaseTypeEmail": "Por favor digite seu e-mail"
+  "components>shared>pleaseTypeEmail": "Por favor digite seu e-mail",
+  "auth>poll>voteRequired": "Voto é obrigatório",
+  "auth>poll>alreadyAnswered": "Esse email já respondeu a pergunta",
+  "auth>poll>unexpectedError": "Houve algum problema inesperado ao enviar sua resposta",
+  "auth>poll>thinkExperience": "O que achou da experiência?",
+  "auth>poll>question": "Em uma escala de 1 a 5, qual a sua nota?"
 }

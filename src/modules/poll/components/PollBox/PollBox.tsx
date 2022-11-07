@@ -95,7 +95,7 @@ export const PollBox = ({
   const successSubmit = () => {
     const numberOfStars = beforeHover.filter((val) => val).length;
     if (numberOfStars === 0) {
-      setError('Voto é obrigatório');
+      setError(translate('auth>poll>voteRequired'));
     } else {
       if (data && data.id && slug) {
         mutate(
@@ -113,11 +113,9 @@ export const PollBox = ({
                 e.response.data.message == 'user already answered this question'
               ) {
                 setAlreadyAnswered(true);
-                setError('Esse email já respondeu a pergunta');
+                setError(translate('auth>poll>alreadyAnswered'));
               } else {
-                setError(
-                  'Houve algum problema inesperado ao enviar sua resposta'
-                );
+                setError(translate('auth>poll>unexpectedError'));
               }
             },
             onSuccess(data: AxiosResponse<PostAnswerResponseInterface>) {
@@ -148,7 +146,7 @@ export const PollBox = ({
     <Box>
       <div className="pw-flex pw-flex-col pw-items-center">
         <p className="pw-text-[24px] pw-font-poppins pw-text-[#35394C] pw-text-center pw-leading-[24px] pw-font-[700]">
-          O que achou da experiência?
+          {translate('auth>poll>thinkExperience')}
         </p>
         {data?.imageUrl && data.imageUrl != '' ? (
           <img
@@ -164,7 +162,7 @@ export const PollBox = ({
           {data?.description}
         </p>
         <p className="pw-text-[18px] pw-font-poppins pw-text-[#35394C] pw-text-center pw-font-[500] pw-mt-6">
-          {data?.questions[0].description}
+          {translate('auth>poll>question')}
         </p>
         <div className="pw-flex pw-gap-x-1 pw-justify-center pw-mt-[30px]">
           {stars.map((star, index) => {

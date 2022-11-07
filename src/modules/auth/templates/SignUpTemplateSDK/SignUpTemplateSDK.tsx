@@ -3,6 +3,7 @@ import {
   ContainerControllerSDK,
   position,
   ContainerControllerClasses,
+  ExtraBy,
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
@@ -28,6 +29,7 @@ interface SignUpTemplateSDKProps {
   error?: string;
   privacyRedirect?: string;
   termsRedirect?: string;
+  extraBy?: ExtraBy[];
 }
 
 export const SignUpTemplateSDK = ({
@@ -46,6 +48,7 @@ export const SignUpTemplateSDK = ({
   error,
   privacyRedirect,
   termsRedirect,
+  extraBy,
 }: SignUpTemplateSDKProps) => {
   const [translate] = useTranslation();
   return (
@@ -61,6 +64,7 @@ export const SignUpTemplateSDK = ({
           infoPosition={infoPosition}
           separation={separation}
           textContainer={textContainer}
+          extraBy={extraBy}
           infoComponent={
             <Box>
               <SignUpFormWithoutLayout
