@@ -188,7 +188,7 @@ export const PollBox = ({
                 <>
                   <AuthTextController
                     name="email"
-                    label={'Por favor digite seu e-mail'}
+                    label={translate('components>shared>pleaseTypeEmail')}
                     className="pw-mb-3"
                     placeholder={translate(
                       'companyAuth>newPassword>enterYourEmail'

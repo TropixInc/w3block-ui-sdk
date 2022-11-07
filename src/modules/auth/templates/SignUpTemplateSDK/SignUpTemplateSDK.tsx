@@ -6,6 +6,7 @@ import {
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
@@ -48,31 +49,33 @@ export const SignUpTemplateSDK = ({
 }: SignUpTemplateSDKProps) => {
   const [translate] = useTranslation();
   return (
-    <div style={{ backgroundColor: bgColor }}>
-      <ContainerControllerSDK
-        className={className}
-        logoUrl={logoUrl}
-        FAQContext={FAQContext}
-        classes={classes}
-        contentType={contentType}
-        bgColor={bgColor}
-        infoPosition={infoPosition}
-        separation={separation}
-        textContainer={textContainer}
-        infoComponent={
-          <Box>
-            <SignUpFormWithoutLayout
-              title={translate('singUp>register>phrase')}
-              email={email}
-              onSubmit={onSubmit}
-              isLoading={isLoading}
-              error={error}
-              privacyRedirect={privacyRedirect}
-              termsRedirect={termsRedirect}
-            />
-          </Box>
-        }
-      />
-    </div>
+    <TranslatableComponent>
+      <div style={{ backgroundColor: bgColor }}>
+        <ContainerControllerSDK
+          className={className}
+          logoUrl={logoUrl}
+          FAQContext={FAQContext}
+          classes={classes}
+          contentType={contentType}
+          bgColor={bgColor}
+          infoPosition={infoPosition}
+          separation={separation}
+          textContainer={textContainer}
+          infoComponent={
+            <Box>
+              <SignUpFormWithoutLayout
+                title={translate('singUp>register>phrase')}
+                email={email}
+                onSubmit={onSubmit}
+                isLoading={isLoading}
+                error={error}
+                privacyRedirect={privacyRedirect}
+                termsRedirect={termsRedirect}
+              />
+            </Box>
+          }
+        />
+      </div>
+    </TranslatableComponent>
   );
 };

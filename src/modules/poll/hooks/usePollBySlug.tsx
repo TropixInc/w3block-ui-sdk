@@ -26,7 +26,7 @@ export const usePollBySlug = (slug: string) => {
     },
     {
       refetchOnWindowFocus: false,
-      enabled: slug != undefined,
+      enabled: slug != undefined && companyId != undefined && companyId != '',
       retry: 1,
       onError(err) {
         return err;

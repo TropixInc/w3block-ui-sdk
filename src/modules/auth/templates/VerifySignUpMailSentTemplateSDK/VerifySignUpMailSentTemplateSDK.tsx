@@ -6,6 +6,7 @@ import {
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { VerifySignUpMailSentWithoutLayout } from '../../components/VerifySignUpMailSentWithoutLayout';
 
@@ -37,26 +38,28 @@ export const VerifySignUpMailSentTemplateSDK = ({
   className,
 }: VerifySignUpMailSentTemplateSDKProps) => {
   return (
-    <div style={{ backgroundColor: bgColor }}>
-      <ContainerControllerSDK
-        bgColor={bgColor}
-        infoPosition={infoPosition}
-        contentType={contentType}
-        FAQContext={FAQContext}
-        classes={classes}
-        separation={separation}
-        logoUrl={logoUrl}
-        textContainer={textContainer}
-        className={className}
-        infoComponent={
-          <Box>
-            <VerifySignUpMailSentWithoutLayout
-              email={email as string}
-              isPostSignUp={isPostSignUp}
-            />
-          </Box>
-        }
-      />
-    </div>
+    <TranslatableComponent>
+      <div style={{ backgroundColor: bgColor }}>
+        <ContainerControllerSDK
+          bgColor={bgColor}
+          infoPosition={infoPosition}
+          contentType={contentType}
+          FAQContext={FAQContext}
+          classes={classes}
+          separation={separation}
+          logoUrl={logoUrl}
+          textContainer={textContainer}
+          className={className}
+          infoComponent={
+            <Box>
+              <VerifySignUpMailSentWithoutLayout
+                email={email as string}
+                isPostSignUp={isPostSignUp}
+              />
+            </Box>
+          }
+        />
+      </div>
+    </TranslatableComponent>
   );
 };

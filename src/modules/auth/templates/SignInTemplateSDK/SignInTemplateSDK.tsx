@@ -6,6 +6,7 @@ import {
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { SigInWithoutLayout } from '../../components/SignInWithoutLayout/SignInWithoutLayout';
@@ -38,27 +39,29 @@ export const SignInTemplateSDK = ({
   defaultRedirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
 }: SignInSignupTemplateSDKProps) => {
   return (
-    <div style={{ backgroundColor: bgColor }}>
-      <ContainerControllerSDK
-        fullScreen
-        infoPosition={infoPosition}
-        bgColor={bgColor}
-        contentType={contentType}
-        FAQContext={FAQContext}
-        classes={classes}
-        separation={separation}
-        logoUrl={logoUrl}
-        textContainer={textContainer}
-        className={className}
-        infoComponent={
-          <Box>
-            <SigInWithoutLayout
-              hasSignUp={hasSignUp}
-              defaultRedirectRoute={defaultRedirectRoute}
-            ></SigInWithoutLayout>
-          </Box>
-        }
-      />
-    </div>
+    <TranslatableComponent>
+      <div style={{ backgroundColor: bgColor }}>
+        <ContainerControllerSDK
+          fullScreen
+          infoPosition={infoPosition}
+          bgColor={bgColor}
+          contentType={contentType}
+          FAQContext={FAQContext}
+          classes={classes}
+          separation={separation}
+          logoUrl={logoUrl}
+          textContainer={textContainer}
+          className={className}
+          infoComponent={
+            <Box>
+              <SigInWithoutLayout
+                hasSignUp={hasSignUp}
+                defaultRedirectRoute={defaultRedirectRoute}
+              ></SigInWithoutLayout>
+            </Box>
+          }
+        />
+      </div>
+    </TranslatableComponent>
   );
 };

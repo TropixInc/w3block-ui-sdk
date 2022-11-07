@@ -268,5 +268,6 @@
   "poll>achievedLimit>noTokens": "Tokens esgotado!",
   "poll>achievedLimit>textNoTokens": "O número de tokens disponiveis já foi atingido! Por favor fique atento as próximas palestras para resgatar o seu.",
   "components>cancelButton>cancel": "Cancelar",
-  "components>connectMetamaks>noExtension": "Metamask não encontrada, utilize a extensão ou app."
+  "components>connectMetamaks>noExtension": "Metamask não encontrada, utilize a extensão ou app.",
+  "components>shared>pleaseTypeEmail": "Por favor digite seu e-mail"
 }

@@ -6,6 +6,7 @@ import {
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { VerifySignUpTokenExpiredWithoutLayout } from '../../components/VerifySignUpTokenExpiredWithoutLayout/VerifySignUpTokenExpiredWithoutLayout';
 
@@ -39,27 +40,29 @@ export const VerifySignUpTokenExpiredTemplateSDK = ({
   className,
 }: VerifySignUpTokenExpired) => {
   return (
-    <div>
-      <ContainerControllerSDK
-        bgColor={bgColor}
-        infoPosition={infoPosition}
-        contentType={contentType}
-        FAQContext={FAQContext}
-        className={className}
-        classes={classes}
-        separation={separation}
-        logoUrl={logoUrl}
-        textContainer={textContainer}
-        infoComponent={
-          <Box>
-            <VerifySignUpTokenExpiredWithoutLayout
-              onSendEmail={onSendEmail}
-              email={email as string}
-              isPostSignUp={isPostSignUp}
-            />
-          </Box>
-        }
-      />
-    </div>
+    <TranslatableComponent>
+      <div>
+        <ContainerControllerSDK
+          bgColor={bgColor}
+          infoPosition={infoPosition}
+          contentType={contentType}
+          FAQContext={FAQContext}
+          className={className}
+          classes={classes}
+          separation={separation}
+          logoUrl={logoUrl}
+          textContainer={textContainer}
+          infoComponent={
+            <Box>
+              <VerifySignUpTokenExpiredWithoutLayout
+                onSendEmail={onSendEmail}
+                email={email as string}
+                isPostSignUp={isPostSignUp}
+              />
+            </Box>
+          }
+        />
+      </div>
+    </TranslatableComponent>
   );
 };

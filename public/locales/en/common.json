@@ -112,5 +112,6 @@
   "poll>achievedLimit>noTokens": "Tokens sold out!",
   "poll>achievedLimit>textNoTokens": "The number of available tokens has already been reached! Please stay tuned for upcoming lectures to redeem yours.",
   "components>cancelButton>cancel": "Cancel",
-  "components>connectMetamaks>noExtension": "Metamask not found, use extension or app."
+  "components>connectMetamaks>noExtension": "Metamask not found, use extension or app.",
+  "components>shared>pleaseTypeEmail": "Please, type your e-mail"
 }

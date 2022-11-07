@@ -6,6 +6,7 @@ import {
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { ConnectExternalWalletWithoutLayout } from '../../components/ConnectExternalWalletWithoutLayout';
@@ -38,26 +39,28 @@ export const ConnectWalletTemplateSDK = ({
   tenantName,
 }: ConnectWalletTemplateSDKProps) => {
   return (
-    <div style={{ backgroundColor: bgColor }}>
-      <ContainerControllerSDK
-        infoPosition={infoPosition}
-        contentType={contentType}
-        FAQContext={FAQContext}
-        classes={classes}
-        separation={separation}
-        logoUrl={logoUrl}
-        textContainer={textContainer}
-        className={className}
-        bgColor={bgColor}
-        infoComponent={
-          <Box>
-            <ConnectExternalWalletWithoutLayout
-              redirectRoute={defaultRedirectRoute}
-              tenantName={tenantName}
-            />
-          </Box>
-        }
-      />
-    </div>
+    <TranslatableComponent>
+      <div style={{ backgroundColor: bgColor }}>
+        <ContainerControllerSDK
+          infoPosition={infoPosition}
+          contentType={contentType}
+          FAQContext={FAQContext}
+          classes={classes}
+          separation={separation}
+          logoUrl={logoUrl}
+          textContainer={textContainer}
+          className={className}
+          bgColor={bgColor}
+          infoComponent={
+            <Box>
+              <ConnectExternalWalletWithoutLayout
+                redirectRoute={defaultRedirectRoute}
+                tenantName={tenantName}
+              />
+            </Box>
+          }
+        />
+      </div>
+    </TranslatableComponent>
   );
 };
