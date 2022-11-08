@@ -2,10 +2,15 @@ import { ContainerControllerSDK, ExtraBy } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { AllAuthPageProps } from '../CompleteProfileCustomTemplate';
 
-export const CompleteSigUpSuccessTemplateSDK = (
-  props: AllAuthPageProps,
-  extraBy?: ExtraBy[]
-) => {
+interface CompleteSigUpSuccessTemplateSDKProps {
+  props: AllAuthPageProps;
+  extraBy?: ExtraBy[];
+}
+
+export const CompleteSigUpSuccessTemplateSDK = ({
+  props,
+  extraBy,
+}: CompleteSigUpSuccessTemplateSDKProps) => {
   return (
     <TranslatableComponent>
       <div style={{ backgroundColor: props.bgColor }}>

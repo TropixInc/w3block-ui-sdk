@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { isAfter } from 'date-fns';
 
 import { contentTypeEnum } from '../../../poll';
-import { ContainerControllerClasses, position } from '../../../shared';
+import { ContainerControllerClasses, ExtraBy, position } from '../../../shared';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
@@ -43,6 +43,7 @@ interface CompleteProfileCustomTemplateProps {
   classes?: AuthLayoutBaseClasses;
   signUpProps?: AllAuthPageProps;
   verifyEmailProps?: AllAuthPageProps;
+  extraBy?: ExtraBy[];
 }
 
 const getIsTokenExpired = (token: string) => {
@@ -56,6 +57,7 @@ const getIsTokenExpired = (token: string) => {
 const _CompleteProfileCustomTemplate = ({
   signUpProps,
   verifyEmailProps,
+  extraBy,
 }: CompleteProfileCustomTemplateProps) => {
   const router = useRouter();
   const [translate] = useTranslation();
@@ -118,6 +120,7 @@ const _CompleteProfileCustomTemplate = ({
         email={emailToUse.replaceAll(' ', '+') ?? ''}
         onSendEmail={() => setStep(Steps.CONFIRMATION_MAIL_SENT)}
         isPostSignUp
+        extraBy={extraBy}
         {...verifyEmailProps}
       />
     );
@@ -126,6 +129,7 @@ const _CompleteProfileCustomTemplate = ({
     return (
       <VerifySignUpMailSentTemplateSDK
         {...verifyEmailProps}
+        extraBy={extraBy}
         email={emailToUse.replaceAll(' ', '+') ?? ''}
         isPostSignUp
       />
@@ -137,12 +141,17 @@ const _CompleteProfileCustomTemplate = ({
       email={emailToUse.replaceAll(' ', '+') ?? ''}
       isLoading={isLoading}
       onSubmit={onSubmit}
+      extraBy={extraBy}
       error={
         isError ? translate('auth>signUpError>genericErrorMessage') : undefined
       }
     />
   ) : (
-    <CompleteSigUpSuccessTemplateSDK {...verifyEmailProps} />
+    <CompleteSigUpSuccessTemplateSDK
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      props={verifyEmailProps!}
+      extraBy={extraBy}
+    />
   );
 };
 
