@@ -44,7 +44,7 @@ export const Tooltip = ({
 
   return (
     <div
-      className={`${className} ${visible ? 'block' : 'hidden'} 
+      className={`${className} ${visible ? 'pw-block' : 'pw-hidden'} 
       after:pw-absolute after:pw-block after:pw-w-[50px] after:pw-h-10 after:pw-top-[55px] -pw-z-1`}
     >
       <div

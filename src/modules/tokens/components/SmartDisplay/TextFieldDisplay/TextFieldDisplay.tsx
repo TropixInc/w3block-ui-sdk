@@ -26,7 +26,7 @@ export const TextFieldDisplay = ({
       className={classNames(
         className,
         classes.root ?? '',
-        inline ? 'pw-block' : 'pw-flex pw-flex-col pw-gap-y-2'
+        inline ? 'pw-block' : 'pw-flex pw-flex-col pw-gap-y-2 pw-break-words'
       )}
     >
       <h2
