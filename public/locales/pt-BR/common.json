@@ -257,7 +257,7 @@
   "shared>invalidEmail": "Email inválido",
   "auth>signIn>title": "Digite suas Informações",
   "singUp>register>phrase": "Faça o seu cadastro",
-  "poll>alreadyAnswered>phrase": "Você já respondeu essa pesquisa. Por favor, fiquei atento às próximas palestras para participar",
+  "poll>alreadyAnswered>phrase": "Você já respondeu essa pesquisa. Por favor, fique atento às próximas palestras para participar",
   "auth>poll>goTo": "Ir para",
   "auth>poll>redirectLogin>alreadyAccount": "Já possui uma conta?",
   "signUp>connectWallet>connectOrCreate": "Conectar ou Criar Carteira",
