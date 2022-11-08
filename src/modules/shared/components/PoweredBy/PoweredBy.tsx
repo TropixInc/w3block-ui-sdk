@@ -42,7 +42,7 @@ export const PoweredBy = ({
     <div
       className={classNames(
         classes?.container,
-        'pw-flex pw-items-center pw-justify-center pw-py-6 pw-container pw-mx-auto',
+        'pw-flex sm:pw-flex-row pw-flex-col  pw-items-center pw-justify-center pw-gap-x-6 pw-py-6 pw-container pw-mx-auto',
         positionPowered
       )}
     >
@@ -50,7 +50,7 @@ export const PoweredBy = ({
         ? extraBy?.map(({ title, logoSrc }) => (
             <div
               key={title}
-              className="pw-flex pw-justify-center pw-items-center pw-mr-6"
+              className="pw-flex pw-justify-center pw-items-center"
             >
               <p
                 className={classNames(

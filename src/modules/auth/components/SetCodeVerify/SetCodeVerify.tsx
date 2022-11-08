@@ -8,8 +8,8 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
+import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 
 interface SetCodeVerifyProps {
   isPostSignUp?: boolean;
@@ -22,7 +22,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const { query, push } = useRouter();
   const email = (query.email as string) ?? '';
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isLoading, reset } = useRequestPasswordChange();
+  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
   useEffect(() => {
     setNewCountdown(new Date(Date.now() + 900000));
@@ -94,6 +94,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       <div className="pw-flex pw-gap-x-2">
         {inputs.map((val: string, index: number) => (
           <input
+            autoFocus={index == 0}
             onChange={(e) => changeInput(index, e)}
             maxLength={1}
             id={`input-${index}`}
@@ -119,7 +120,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       </WeblockButton>
 
       <button
-        disabled={isActive || isLoading}
+        disabled={isLoading}
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
           mutate({
@@ -146,7 +147,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
           O link expira em 15 minutos
           <button
-            disabled={isActive || isLoading}
+            disabled={isLoading}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({

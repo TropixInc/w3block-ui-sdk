@@ -17,6 +17,7 @@ import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePollBySlug } from '../../hooks/usePollBySlug';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
+import { useSendToPipeForm } from '../../hooks/useSendToPipeForm';
 import { PostAnswerResponseInterface } from '../../interfaces/PollResponseInterface';
 import { AchievedLimit } from '../AchievedLimit';
 import { AlreadyAnswerBox } from '../AlreadyAnswerBox';
@@ -34,6 +35,7 @@ export const PollBox = ({
   const router = useRouter();
   const [translate] = useTranslation();
   const { query, push, isReady } = useRouter();
+  const { mutate: sendPipe } = useSendToPipeForm();
   const [alreadyAnswered, setAlreadyAnswered] = useState(false);
   const [achievedLimit, setAchievedLimit] = useState(false);
   const { slug: slugQuery } = query;
@@ -45,7 +47,7 @@ export const PollBox = ({
   const { mutate } = usePostAnswer();
 
   const schema = object().shape({
-    email: string().email(),
+    email: string().email().required(),
   });
 
   useEffect(() => {
@@ -98,6 +100,13 @@ export const PollBox = ({
       setError(translate('auth>poll>voteRequired'));
     } else {
       if (data && data.id && slug) {
+        sendPipe({
+          email: methods.getValues('email'),
+          pollId: data.id,
+          slug: data.slug,
+          description: beforeHover.filter((val) => val).length.toString(),
+          questionId: data?.questions[0].id,
+        });
         mutate(
           {
             email: methods.getValues('email'),

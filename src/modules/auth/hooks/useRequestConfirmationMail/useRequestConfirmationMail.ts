@@ -9,6 +9,7 @@ interface Payload {
   email: string;
   tenantId?: string;
   callbackPath?: PixwayAppRoutes;
+  verificationType?: 'numeric' | 'invisible';
 }
 
 export const useRequestConfirmationMail = () => {
@@ -22,7 +23,7 @@ export const useRequestConfirmationMail = () => {
         email,
         tenantId: tenantId ?? companyId,
         callbackUrl: new URL(
-          callbackPath ?? PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+          callbackPath ?? PixwayAppRoutes.COMPLETE_SIGNUP,
           appBaseUrl
         ).toString(),
       });
