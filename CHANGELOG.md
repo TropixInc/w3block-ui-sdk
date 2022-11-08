@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.79](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.78...v0.1.1-alpha.79) (2022-11-08)
+
+
+### Bug Fixes
+
+* **tk-917:** adjusts on poll box and text  ([#90](https://github.com/TropixInc/w3block-ui-sdk/issues/90)) ([8601627](https://github.com/TropixInc/w3block-ui-sdk/commit/86016276cf2d85fb30fdc1e7cc5443e8af28a0db))
+
 ### [0.1.1-alpha.78](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.77...v0.1.1-alpha.78) (2022-11-08)
 
 
