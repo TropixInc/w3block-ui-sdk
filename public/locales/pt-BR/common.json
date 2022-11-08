@@ -276,6 +276,8 @@
   "auth>poll>thinkExperience": "O que achou da experiência?",
   "auth>poll>question": "Em uma escala de 1 a 5, qual a sua nota?",
   "auth>poll>pollAnswered": "Pesquisa respondida!",
-  "auth>codeVerify>necessaryVerification": "Verificação necessária"
-
+  "auth>codeVerify>necessaryVerification": "Verificação necessária",
+  "tokens>tokenScanLink>viewIn": "Ver na {{blockchain}}",
+  "auth>setCode>mailSentToEmail": "Enviamos um código para confirmar seu e-mail:<1>{{email}}</1>",
+  "auth>setCode>linkExpiresMessage": "O código expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro."
 }
