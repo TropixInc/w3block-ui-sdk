@@ -6,17 +6,30 @@ export interface LinkProps {
   children: ReactNode;
   href: string;
   className?: string;
+  disabled?: boolean;
 }
 
-export const Link = ({ children, href, className = '' }: LinkProps) => {
+export const Link = ({
+  children,
+  href,
+  className = '',
+  disabled = false,
+}: LinkProps) => {
   const router = useRouter();
   const onClickLink: MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
     router.push(href);
   };
 
-  return (
-    <a href={href} onClick={onClickLink} className={className}>
+  return disabled ? (
+    <div className={className}>{children}</div>
+  ) : (
+    <a
+      aria-disabled={disabled}
+      href={href}
+      onClick={onClickLink}
+      className={className}
+    >
       {children}
     </a>
   );

@@ -44,8 +44,8 @@ const _WalletInternalTemplate = () => {
   };
 
   return (
-    <div className="pw-flex pw-flex-col">
-      <div className="pw-w-full pw-text-center pw-font-bold pw-text-[18px] pw-leading-[23px] sm:pw-hidden pw-mb-[30px]">
+    <div className="pw-flex pw-flex-col pw-px-4 sm:pw-px-0">
+      <div className="pw-w-full pw-font-bold pw-text-[18px] pw-leading-[23px] sm:pw-hidden pw-mb-[30px]">
         {translate('components>menu>wallet')}
       </div>
       <div className="pw-bg-[#F7F7F7] pw-border pw-border-[#E4E4E4] pw-rounded-[14px] pw-p-6 pw-shadow-[0px_4px_20px_rgba(0,0,0,0.12)] pw-flex pw-flex-col pw-gap-[24px]">

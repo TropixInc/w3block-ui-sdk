@@ -89,7 +89,7 @@ const _MyProfileTemplate = () => {
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
-            <div className="sm:pw-pl-8 pw-w-full">
+            <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
               <MyProfile />
             </div>
           </div>

@@ -20,8 +20,9 @@ export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
   const { signOut } = usePixwayAuthentication();
 
   const handleContinue = () => {
-    signOut();
-    router.push(PixwayAppRoutes.SIGN_IN);
+    signOut().then(() => {
+      router.push(PixwayAppRoutes.SIGN_IN);
+    });
   };
 
   return (

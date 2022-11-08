@@ -120,5 +120,6 @@
   "auth>poll>thinkExperience": "What did you think of the experience?",
   "auth>poll>question": "On a scale of 1 to 5, what's your rating?",
   "auth>poll>pollAnswered": "Poll answered!",
-  "auth>codeVerify>necessaryVerification": "Necessary verification"
+  "auth>codeVerify>necessaryVerification": "Necessary verification",
+  "auth>modalActionBlocked>verifyEmail>sendEmail": "We've sent you a link to confirm your email:"
 }

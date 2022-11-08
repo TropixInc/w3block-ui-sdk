@@ -107,8 +107,9 @@ export const useDefaultMenuTabs = () => {
         name: 'Logout',
         icon: <LogoutIcon />,
         action: () => {
-          signOut();
-          router.push(PixwayAppRoutes.HOME);
+          signOut().then(() => {
+            router.push(PixwayAppRoutes.SIGN_IN);
+          });
         },
       },
     ],

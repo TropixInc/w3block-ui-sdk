@@ -12,6 +12,7 @@ import { Box } from '../../../shared/components/Box/Box';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -36,6 +37,7 @@ export const PollBox = ({
   const [translate] = useTranslation();
   const { query, push, isReady } = useRouter();
   const { mutate: sendPipe } = useSendToPipeForm();
+  const isProduction = useIsProduction();
   const [alreadyAnswered, setAlreadyAnswered] = useState(false);
   const [achievedLimit, setAchievedLimit] = useState(false);
   const { slug: slugQuery } = query;
@@ -100,13 +102,15 @@ export const PollBox = ({
       setError(translate('auth>poll>voteRequired'));
     } else {
       if (data && data.id && slug) {
-        sendPipe({
-          email: methods.getValues('email'),
-          pollId: data.id,
-          slug: data.slug,
-          description: beforeHover.filter((val) => val).length.toString(),
-          questionId: data?.questions[0].id,
-        });
+        isProduction &&
+          sendPipe({
+            email: methods.getValues('email'),
+            pollId: data.id,
+            slug: data.slug,
+            description: beforeHover.filter((val) => val).length.toString(),
+            questionId: data?.questions[0].id,
+          });
+
         mutate(
           {
             email: methods.getValues('email'),

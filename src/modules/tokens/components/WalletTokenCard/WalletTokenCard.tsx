@@ -23,6 +23,7 @@ interface Props {
   contractAddress: string;
   hasPass?: boolean;
   hasActivated?: boolean;
+  proccessing?: boolean;
 }
 
 const cardClassName =
@@ -41,6 +42,7 @@ export const WalletTokenCard = ({
   chainId,
   contractAddress,
   hasActivated,
+  proccessing = false,
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
   const actionsContainerRef = useRef<HTMLDivElement>(null);
@@ -74,6 +76,7 @@ export const WalletTokenCard = ({
         )}
       >
         <Link
+          disabled={proccessing}
           className={className}
           href={
             PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
@@ -119,6 +122,7 @@ export const WalletTokenCard = ({
         >
           <WalletTokenCardActionsPanel isOpen={isOpen} onClose={closeModal} />
           <button
+            disabled={proccessing}
             onClick={onClickOptionsButton}
             type="button"
             className="pw-border pw-border-[#C1C1C1] pw-rounded-[10px] pw-bg-white pw-p-2 pw-flex pw-gap-x-1"
@@ -132,11 +136,11 @@ export const WalletTokenCard = ({
 
           {hasPass ? (
             hasActivated ? (
-              <Button model="primary" width="small">
+              <Button disabled={proccessing} model="primary" width="small">
                 {translate('connectTokens>tokensList>usePass')}
               </Button>
             ) : (
-              <Button model="secondary" width="small">
+              <Button disabled={proccessing} model="secondary" width="small">
                 {translate('connectTokens>tokensList>viewPass')}
               </Button>
             )

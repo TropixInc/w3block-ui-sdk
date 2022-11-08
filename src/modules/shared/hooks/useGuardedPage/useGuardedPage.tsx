@@ -15,8 +15,9 @@ export const useGuardedPage = (routeToReturn = PixwayAppRoutes.SIGN_IN) => {
       isReady &&
       (!session || !validateJwtToken(session.accessToken as string))
     ) {
-      signOut();
-      push(routeToReturn);
+      signOut().then(() => {
+        push(routeToReturn);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);

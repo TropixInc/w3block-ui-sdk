@@ -6,7 +6,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-//import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
+import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { ReactComponent as WalletImage } from '../../assets/wallet.svg';
@@ -24,10 +24,11 @@ interface Props {
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
   useHasWallet();
+  const { wallet } = useUserWallet();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const isProduction = useIsProduction();
-  //const { data } = useProcessingTokens();
+  const { data } = useProcessingTokens();
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 6;
     const lastIndex = page * 6;
@@ -41,9 +42,24 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   }, [tokens, isLoading]);
 
   if (isLoading) return <TokenListTemplateSkeleton />;
-  return tokensDisplaying.length ? (
-    <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between">
+  return tokensDisplaying.length || data?.length ? (
+    <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between pw-px-4 sm:pw-px-0">
       <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
+        {data?.map((token) => (
+          <li className="w-full pw-opacity-60" key={token.id}>
+            <WalletTokenCard
+              category={''}
+              image={token.tokenCollection.mainImage}
+              name={token.tokenCollection.name}
+              id={token.id}
+              chainId={wallet?.chainId ?? 80001}
+              contractAddress={token.id}
+              hasPass={!isProduction}
+              hasActivated={false}
+              proccessing={true}
+            />
+          </li>
+        ))}
         {tokensDisplaying.map((token, index) => (
           <li className="w-full" key={token.id}>
             <WalletTokenCard

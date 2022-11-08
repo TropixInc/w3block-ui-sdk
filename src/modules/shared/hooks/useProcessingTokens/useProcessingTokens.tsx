@@ -5,6 +5,18 @@ import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
 import { useUserWallet } from '../useUserWallet';
 
+interface TokensProccessingInterface {
+  id: string;
+  editionNumber: string;
+  tokenCollection: TokenCollectionInterface;
+}
+
+interface TokenCollectionInterface {
+  name: string;
+  description: string;
+  mainImage: string;
+}
+
 export const useProcessingTokens = () => {
   const { wallet } = useUserWallet();
   const axios = useAxios(W3blockAPI.KEY);
@@ -16,7 +28,7 @@ export const useProcessingTokens = () => {
     ],
     () =>
       axios
-        .get(
+        .get<TokensProccessingInterface[]>(
           PixwayAPIRoutes.METADATA_PROCESSING.replace(
             '{address}',
             wallet?.address ?? ''

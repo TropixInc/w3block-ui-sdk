@@ -6,7 +6,7 @@ import { SignInPayload } from '../../api/signIn';
 export interface IW3blockAuthenticationContext {
   signIn: (payload: SignInPayload) => Promise<any>;
   changePasswordAndSignIn: (payload: ResetPasswordPayload) => Promise<any>;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 }
 
 export const W3blockAuthenticationContext = createContext(

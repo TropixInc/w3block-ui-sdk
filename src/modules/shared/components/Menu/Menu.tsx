@@ -104,8 +104,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   };
 
   const handleSignOut = () => {
-    signOut();
-    router.push(PixwayAppRoutes.HOME);
+    signOut().then(() => {
+      router.push(PixwayAppRoutes.SIGN_IN);
+    });
   };
 
   const RenderTab = (tab: TabsConfig) => {

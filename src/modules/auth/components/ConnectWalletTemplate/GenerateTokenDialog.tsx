@@ -1,5 +1,5 @@
 import { DialogBase } from '../../../shared/components/DialogBase';
-import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useHostname } from '../../../shared/hooks/useHostname/useHostname';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
@@ -24,7 +24,7 @@ export const GenerateTokenDialog = ({
 
   const onConfirm = () => {
     // eslint-disable-next-line prettier/prettier
-    const target = `${hostname ?? ''}/${PixwayAPIRoutes.SIGN_IN}`;
+    const target = `${hostname ?? ''}/${PixwayAppRoutes.SIGN_IN}`;
     const url = `https://metamask.app.link/dapp/${target}`;
     openMetaMaskUrl(url);
     onClose();

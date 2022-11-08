@@ -101,7 +101,10 @@ export const NavigationLoginLoggedButtonMobile = ({
               <div
                 onClick={() => {
                   if (tab.action) tab.action();
-                  else if (tab.route) router.push(tab.route);
+                  else if (tab.route) {
+                    toggleTabsMemo();
+                    router.push(tab.route);
+                  }
                 }}
                 className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-font-montserrat pw-text-[#383857] hover:pw-text-black"
                 key={tab.name}
