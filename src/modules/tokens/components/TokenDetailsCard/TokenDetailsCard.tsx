@@ -62,7 +62,7 @@ export const TokenDetailsCard = ({
         </div>
       ) : null}
       {mainImage || description ? (
-        <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-x-[21px] pw-gap-y-4 sm:pw-py-6 sm:pw-gap-y-8 pw-w-full">
+        <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-x-[21px] pw-gap-y-4 sm:pw-py-6 sm:pw-gap-y-8 pw-w-full pw-break-words">
           {description ? (
             renderTextValue(
               translate('connect>tokenDetailsCard>description'),
@@ -82,7 +82,7 @@ export const TokenDetailsCard = ({
       ) : null}
       {dynamicData ? (
         <FormConfigurationContext.Provider value={tokenTemplate ?? {}}>
-          <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-x-[21px] pw-gap-y-8 sm:pw-gap-y-8 sm:pw-pt-6">
+          <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-x-[21px] pw-gap-y-8 sm:pw-gap-y-8 sm:pw-pt-6 pw-break-words">
             {dynamicData.map(({ id, value }: { id: any; value: any }) => (
               <SmartDataDisplayer
                 fieldName={id}

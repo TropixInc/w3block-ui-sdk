@@ -120,5 +120,17 @@
   "auth>poll>thinkExperience": "What did you think of the experience?",
   "auth>poll>question": "On a scale of 1 to 5, what's your rating?",
   "auth>poll>pollAnswered": "Poll answered!",
-  "auth>codeVerify>necessaryVerification": "Necessary verification"
+  "auth>codeVerify>necessaryVerification": "Necessary verification",
+  "tokens>tokenScanLink>viewIn": "See on {{blockchain}}",
+  "companyAuth>newPassword>enterYourEmail": "Enter your e-mail",
+  "auth>emailConfirmation>mailSentToEmail": "We sent a link to confirm your e-mail:<1>{{email}}</1>",
+  "auth>emailConfirmation>linkExpiresMessage": "The link expires in 15 minutes. After this period, click on <1>“Resend code”</1> to send another.",
+  "auth>setCode>mailSentToEmail": "We sent a code to confirm your e-mail:<1>{{email}}</1>",
+  "auth>setCode>linkExpiresMessage": "The code expires in 15 minutes. After this period, click on <1>“Resend code”</1> to send another.",
+  "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Wait until {{minutes}}:{{seconds}} minutes to resend the code",
+  "companyAuth>newPassword>enterYourPassword": "Enter your password",
+  "auth>signUpForm>alreadyHaveAccount": "Already have an account? <1>Login</1>",
+  "companyAuth>signUp>acceptTermsOfUse": "I accept the <1>Terms of use</1>",
+  "companyAuth>signUp>acceptPrivacyPolicy": "I accept the <1>Privacy Policy</1>",
+  "auth>emailConfirmation>resendEmailAction": "<0>Click here</0> to resend your code."
 }

@@ -48,7 +48,7 @@ export const AuthCheckbox = ({
         )}
       />
       {redirectLink ? (
-        <Trans key={keyTrans}>
+        <Trans i18nKey={keyTrans}>
           <p className="text-[13px] leading-[15.85px]">{label}</p>
           <a
             className="pw-text-[13px] pw-leading-[15.85px] pw-underline"
