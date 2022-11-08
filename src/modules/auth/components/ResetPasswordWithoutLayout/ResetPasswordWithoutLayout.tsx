@@ -84,7 +84,7 @@ const _ResetPasswordWithoutLayout = () => {
     if (token && !step) {
       const tokenSplitted = (token as string).split(';');
       if (tokenSplitted.length < 2) {
-        router.push(PixwayAppRoutes.HOME);
+        router.push(PixwayAppRoutes.SIGN_IN);
       }
       const expirationDate = new Date(Number(tokenSplitted[1]));
       if (!isValid(expirationDate) || isAfter(new Date(), expirationDate)) {
@@ -97,7 +97,7 @@ const _ResetPasswordWithoutLayout = () => {
 
   useEffect(() => {
     if (router.isReady && (!email || !token)) {
-      router.push(PixwayAppRoutes.HOME);
+      router.push(PixwayAppRoutes.SIGN_IN);
     }
   }, [email, token, router]);
 

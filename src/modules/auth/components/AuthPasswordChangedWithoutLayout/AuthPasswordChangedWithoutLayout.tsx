@@ -14,10 +14,7 @@ export const AuthPasswordChangedWithoutLayout = () => {
       <h1 className="pw-font-bold pw-text-2xl pw-leading-[29px] pw-text-[#35394C] pw-text-center pw-mb-6 pw-px-11 sm:pw-px-0">
         {translate('companyAuth>resetPassword>passwordChangedSuccessfully')}
       </h1>
-      <AuthButton
-        onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
-        fullWidth
-      >
+      <AuthButton onClick={() => router.push(PixwayAppRoutes.TOKENS)} fullWidth>
         {translate('components>advanceButton>continue')}
       </AuthButton>
     </div>
