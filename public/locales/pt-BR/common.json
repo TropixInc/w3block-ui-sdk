@@ -279,5 +279,6 @@
   "auth>codeVerify>necessaryVerification": "Verificação necessária",
   "tokens>tokenScanLink>viewIn": "Ver na {{blockchain}}",
   "auth>setCode>mailSentToEmail": "Enviamos um código para confirmar seu e-mail:<1>{{email}}</1>",
-  "auth>setCode>linkExpiresMessage": "O código expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro."
+  "auth>setCode>linkExpiresMessage": "O código expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro.",
+  "connectWallet>error>AlreadyExistUserWithWallet": "Já existe um usuário utilizando essa carteira metamask"
 }

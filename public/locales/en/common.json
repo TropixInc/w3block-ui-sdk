@@ -133,5 +133,6 @@
   "auth>signUpForm>alreadyHaveAccount": "Already have an account? <1>Login</1>",
   "companyAuth>signUp>acceptTermsOfUse": "I accept the <1>Terms of use</1>",
   "companyAuth>signUp>acceptPrivacyPolicy": "I accept the <1>Privacy Policy</1>",
-  "auth>emailConfirmation>resendEmailAction": "<0>Click here</0> to resend your code."
+  "auth>emailConfirmation>resendEmailAction": "<0>Click here</0> to resend your code.",
+  "connectWallet>error>AlreadyExistUserWithWallet": "There is already a user using this metamask wallet"
 }

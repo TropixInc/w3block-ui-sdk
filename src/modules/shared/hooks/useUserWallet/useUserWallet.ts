@@ -101,8 +101,6 @@ export function useUserWallet() {
       method: 'eth_signTypedData_v4',
       params: [from, data?.message],
     });
-
-    /* Requesting the wallet to be assigned to the authenticated user. */
     await claimWalletMetamask(
       user.accessToken ?? '',
       companyId,
@@ -116,6 +114,8 @@ export function useUserWallet() {
         throw new Error(resp.data.message);
       }
     });
+
+    /* Requesting the wallet to be assigned to the authenticated user. */
   }
 
   /**

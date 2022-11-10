@@ -84,6 +84,6 @@ export const usePublicTokenData = ({
               .replace('{tokenId}', tokenId)
               .replace('{chainId}', chainId)
       ),
-    { staleTime: Infinity }
+    { staleTime: Infinity, enabled: contractAddress != '' }
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
@@ -48,6 +48,7 @@ const _ConnectExternalWalletWithoutLayout = ({
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const { companyId } = useCompanyConfig();
   const token = useToken();
   const router = useRouter();
@@ -137,9 +138,26 @@ const _ConnectExternalWalletWithoutLayout = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onError = (errorMessage: string) => {
     console.error(errorMessage);
+    setErrorMsg(errorMessage);
     setIsConnecting(false);
     setIsError(true);
   };
+
+  const errorThreat = useMemo(() => {
+    if (errorMsg != '') {
+      if (errorMsg.includes('already exists')) {
+        return translate('connectWallet>error>AlreadyExistUserWithWallet');
+      } else {
+        return (
+          translate(
+            'companyAuth>externalWallet>errorConnectingExternalWallet'
+          ) +
+          ' ' +
+          errorMsg
+        );
+      }
+    }
+  }, [errorMsg]);
 
   if (!companyId) {
     return <h1>{translate('companyAuth>externalWallet>CompanyNotFound')}</h1>;
@@ -177,9 +195,7 @@ const _ConnectExternalWalletWithoutLayout = ({
                 className="pw-flex pw-justify-start pw-gap-x-2 pw-items-center pw-mt-9 !pw-py-2.5 !pw-pl-[19px] !pw-pr-[34px]"
               >
                 <Alert.Icon />
-                {translate(
-                  'companyAuth>externalWallet>errorConnectingExternalWallet'
-                )}
+                {errorThreat}
               </Alert>
               <p className="pw-font-semibold pw-leading-[18px] pw-text-center pw-mt-1">
                 <Trans i18nKey="companyAuth>externalWallet>orContinueWithInternalWallet">

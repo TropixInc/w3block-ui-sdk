@@ -53,7 +53,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               name={token.tokenCollection.name}
               id={token.id}
               chainId={wallet?.chainId ?? 80001}
-              contractAddress={token.id}
+              contractAddress={''}
               hasPass={!isProduction}
               hasActivated={false}
               proccessing={true}
