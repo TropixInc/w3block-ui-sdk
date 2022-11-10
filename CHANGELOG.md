@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.81](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.80...v0.1.1-alpha.81) (2022-11-10)
+
+
+### Bug Fixes
+
+* **tk-931:** adjusts on translate ([#91](https://github.com/TropixInc/w3block-ui-sdk/issues/91)) ([5cb1f49](https://github.com/TropixInc/w3block-ui-sdk/commit/5cb1f49aa622659670c490e759262de26bd0747a))
+
 ### [0.1.1-alpha.80](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.79...v0.1.1-alpha.80) (2022-11-08)
 
 ### [0.1.1-alpha.79](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.78...v0.1.1-alpha.79) (2022-11-08)
