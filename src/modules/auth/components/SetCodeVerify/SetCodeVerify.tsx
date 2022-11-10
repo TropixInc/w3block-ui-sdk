@@ -134,13 +134,10 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       </button>
       {isActive ? (
         <p className="pw-text-[#353945] pw-text-[13px] pw-leading-[15.85px] pw-text-center pw-mt-[18px]">
-          {translate(
-            'companyAuth>sendMailToChangePassword>cooldownTimeMessage',
-            {
-              minutes,
-              seconds: seconds.toString().padStart(2, '0'),
-            }
-          )}
+          {translate('auth>setCode>cooldownTimeMessage', {
+            minutes,
+            seconds: seconds.toString().padStart(2, '0'),
+          })}
         </p>
       ) : null}
       <p className="pw-text-[#353945] pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-mt-[23px] pw-mb-[18px]">

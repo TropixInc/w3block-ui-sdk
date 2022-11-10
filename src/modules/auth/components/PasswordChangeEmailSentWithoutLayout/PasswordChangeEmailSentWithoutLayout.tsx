@@ -90,7 +90,7 @@ export const PasswordChangeEmailSentWithoutLayout = ({
         onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
         fullWidth
       >
-        Continuar
+        {translate('components>advanceButton>continue')}
       </AuthButton>
     </div>
   );
