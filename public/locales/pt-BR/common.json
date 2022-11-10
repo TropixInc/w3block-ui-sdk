@@ -24,9 +24,9 @@
   "components>genericMessages>advance": "Avançar",
   "auth>passwordChangeMailStep>formTitle": "Link de alteração de senha",
   "companyAuth>requestPaswordChange>linkSentToMail": "Enviamos um link de autenticação para seu e-mail: <1>{{email}}</1>",
-  "auth>mailStep>resentCodeButton": "Reenviar código",
-  "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o código",
-  "auth>mailStep>linkExpirationMessage": "O link é válido por 15 minutos, após isso, clique em \"Reenviar código\" para uma nova solicitação.",
+  "auth>mailStep>resentCodeButton": "Reenviar link",
+  "companyAuth>sendMailToChangePassword>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o link",
+  "auth>mailStep>linkExpirationMessage": "O link é válido por 15 minutos, após isso, clique em \"Reenviar link\" para uma nova solicitação.",
   "signUpForm>passwordConfirmationValidation>passwordDoesntMatch": "Suas senhas não conferem.",
   "companyAuth>changePassword>title": "Trocar senha",
   "companyAuth>changingPassword>errorChangingPasswordMessage": "Não foi possível alterar a senha.",
@@ -279,5 +279,6 @@
   "auth>codeVerify>necessaryVerification": "Verificação necessária",
   "tokens>tokenScanLink>viewIn": "Ver na {{blockchain}}",
   "auth>setCode>mailSentToEmail": "Enviamos um código para confirmar seu e-mail:<1>{{email}}</1>",
-  "auth>setCode>linkExpiresMessage": "O código expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro."
+  "auth>setCode>linkExpiresMessage": "O código expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro.",
+  "auth>setCode>cooldownTimeMessage": "Espere até {{minutes}}:{{seconds}} minutos para reenviar o código"
 }
