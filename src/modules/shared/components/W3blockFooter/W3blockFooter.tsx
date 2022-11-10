@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { ReactComponent as ComercialIcon } from '../../assets/icons/comercial.svg';
 import { ReactComponent as FacebookIcon } from '../../assets/icons/facebookFilled.svg';
+import { ReactComponent as InstagramIcon } from '../../assets/icons/instagramFilled.svg';
 import { ReactComponent as LinkedinIcon } from '../../assets/icons/linkedinFilled.svg';
 import { ReactComponent as LinkIcon } from '../../assets/icons/linkFilled.svg';
 import { ReactComponent as TwitterIcon } from '../../assets/icons/twitterFilled.svg';
@@ -107,7 +108,6 @@ const _W3blockFooter = ({
         style={{ fill: textColor }}
       />,
     ],
-
     [
       'twitter',
       <TwitterIcon
@@ -115,7 +115,13 @@ const _W3blockFooter = ({
         style={{ fill: textColor }}
       />,
     ],
-
+    [
+      'instagram',
+      <InstagramIcon
+        className={socialNetWorkLinkSharedClassnames}
+        style={{ fill: textColor }}
+      />,
+    ],
     [
       'whatsapp',
       <WhatsappIcon
@@ -123,7 +129,6 @@ const _W3blockFooter = ({
         style={{ fill: textColor }}
       />,
     ],
-
     [
       'linkedin',
       <LinkedinIcon
