@@ -115,13 +115,7 @@ const _W3blockFooter = ({
         style={{ fill: textColor }}
       />,
     ],
-    [
-      'instagram',
-      <InstagramIcon
-        className={socialNetWorkLinkSharedClassnames}
-        style={{ fill: textColor }}
-      />,
-    ],
+    ['instagram', <InstagramIcon />],
     [
       'whatsapp',
       <WhatsappIcon
