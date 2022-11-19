@@ -10,6 +10,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
 import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
@@ -51,6 +52,7 @@ const _VerifySignUpTemplateSDK = ({
 }: VerifySignUpTemplateSDKProps) => {
   const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
   const router = useRouter();
+  const { push } = useRouterPushConnect();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
   const emailToUse = email ? decodeURIComponent(email as string) : '';
@@ -58,7 +60,7 @@ const _VerifySignUpTemplateSDK = ({
   const [_, cancel] = useDebounce(
     () => {
       if (step === Steps.EMAIL_VERIFIED) {
-        router.push(PixwayAppRoutes.SIGN_IN);
+        push(PixwayAppRoutes.SIGN_IN);
       }
     },
     TIME_TO_REDIRECT_TO_HOME,
