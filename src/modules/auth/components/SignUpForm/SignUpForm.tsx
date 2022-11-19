@@ -39,7 +39,7 @@ export const SignUpForm = ({
   privacyRedirect,
   termsRedirect,
 }: Props) => {
-  const { logoUrl } = useCompanyConfig();
+  const { logoUrl, connectProxyPass } = useCompanyConfig();
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
 
@@ -146,7 +146,7 @@ export const SignUpForm = ({
               Já possui uma conta?
               <Link
                 className="pw-text-brand-primary pw-underline"
-                href={PixwayAppRoutes.SIGN_IN}
+                href={connectProxyPass + PixwayAppRoutes.SIGN_IN}
               >
                 Login
               </Link>

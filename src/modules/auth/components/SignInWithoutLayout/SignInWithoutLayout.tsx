@@ -40,7 +40,7 @@ export const SigInWithoutLayout = ({
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   hasSignUp = true,
 }: SignInWithoutLayoutProps) => {
-  const { companyId, appBaseUrl } = useCompanyConfig();
+  const { companyId, appBaseUrl, connectProxyPass } = useCompanyConfig();
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
@@ -151,7 +151,9 @@ export const SigInWithoutLayout = ({
                 error={fieldState.error}
               />
               <a
-                href={PixwayAppRoutes.REQUEST_PASSWORD_CHANGE}
+                href={
+                  connectProxyPass + PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
+                }
                 className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
               >
                 {translate('auth>passwordChange>requestChangeFormTitle')}
@@ -174,7 +176,7 @@ export const SigInWithoutLayout = ({
               <Trans i18nKey={'auth>signIn>signUpCTA'}>
                 Não tem conta ainda?
                 <a
-                  href={PixwayAppRoutes.SIGN_UP}
+                  href={connectProxyPass + PixwayAppRoutes.SIGN_UP}
                   className="pw-text-brand-primary pw-underline"
                 >
                   Cadastre-se.

@@ -7,6 +7,7 @@ import { object, string, boolean } from 'yup';
 
 import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { AuthButton } from '../AuthButton';
 import { AuthCheckbox } from '../AuthCheckbox';
@@ -38,7 +39,7 @@ export const SignUpFormWithoutLayout = ({
 }: Props) => {
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
-
+  const { connectProxyPass } = useCompanyConfig();
   const schema = object().shape({
     email: string().email(),
     password: passwordSchema,
@@ -139,7 +140,7 @@ export const SignUpFormWithoutLayout = ({
               Já possui uma conta?
               <a
                 className="pw-text-brand-primary pw-underline"
-                href={PixwayAppRoutes.SIGN_IN}
+                href={connectProxyPass + PixwayAppRoutes.SIGN_IN}
               >
                 Login
               </a>

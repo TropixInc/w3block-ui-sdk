@@ -1,9 +1,11 @@
 import { ReactComponent as InfoIcon } from '../../../shared/assets/icons/informationCircledFilled.svg';
 import { Box } from '../../../shared/components/Box/Box';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useTranslation from '../../../shared/hooks/useTranslation';
 export const AlreadyAnswerBox = () => {
+  const { connectProxyPass } = useCompanyConfig();
   const [translate] = useTranslation();
   const { data: session } = usePixwaySession();
   return (
@@ -21,7 +23,7 @@ export const AlreadyAnswerBox = () => {
             {translate('auth>poll>goTo')}{' '}
             <a
               className="pw-text-underline pw-text-[#295BA6] pw-cursor-pointer"
-              href={PixwayAppRoutes.MY_TOKENS}
+              href={connectProxyPass + PixwayAppRoutes.MY_TOKENS}
             >
               {translate('connectTokens>tokensList>pageTitle')}
             </a>
@@ -31,7 +33,7 @@ export const AlreadyAnswerBox = () => {
             {translate('auth>poll>redirectLogin>alreadyAccount')}{' '}
             <a
               className="pw-text-underline pw-text-[#295BA6] pw-cursor-pointer"
-              href={PixwayAppRoutes.SIGN_IN}
+              href={connectProxyPass + PixwayAppRoutes.SIGN_IN}
             >
               {translate('tokens>unsignedUserAlert>signIn')}
             </a>

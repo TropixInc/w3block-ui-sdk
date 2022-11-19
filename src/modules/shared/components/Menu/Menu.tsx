@@ -17,6 +17,7 @@ import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.sv
 import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import useRouter from '../../hooks/useRouter';
 import { useRouterPushConnect } from '../../hooks/useRouterPushConnect';
@@ -40,6 +41,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { push } = useRouterPushConnect();
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
+  const { connectProxyPass } = useCompanyConfig();
   const [state, copyToClipboard] = useCopyToClipboard();
   const [isCopied, setIsCopied] = useState(false);
   const createdAt = new Date((profile?.data.createdAt as string) || 0);
@@ -115,7 +117,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     const isActive: boolean = router.pathname === tab.link;
 
     return (
-      <a href={tab.link} key={tab.title}>
+      <a href={connectProxyPass + tab.link} key={tab.title}>
         <li
           key={tab.title}
           className={classNames(
