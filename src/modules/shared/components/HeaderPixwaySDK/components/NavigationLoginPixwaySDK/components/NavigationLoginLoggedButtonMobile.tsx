@@ -5,7 +5,7 @@ import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfile } from '../../../../../hooks/useProfile/useProfile';
-import useRouter from '../../../../../hooks/useRouter';
+import { useRouterPushConnect } from '../../../../../hooks/useRouterPushConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -29,7 +29,7 @@ export const NavigationLoginLoggedButtonMobile = ({
   const defaultTabs = useDefaultMenuTabs();
   const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const { wallet } = useUserWallet();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();

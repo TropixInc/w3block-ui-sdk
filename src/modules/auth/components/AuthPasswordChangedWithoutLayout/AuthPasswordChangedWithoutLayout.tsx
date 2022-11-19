@@ -1,11 +1,11 @@
 import { ReactComponent as CheckCircleOutlined } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { AuthButton } from '../AuthButton';
 
 export const AuthPasswordChangedWithoutLayout = () => {
-  const router = useRouter();
+  const router = useRouterPushConnect();
 
   const [translate] = useTranslation();
   return (

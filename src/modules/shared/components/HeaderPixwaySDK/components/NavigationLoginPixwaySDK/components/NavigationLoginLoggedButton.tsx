@@ -16,7 +16,8 @@ import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIcon
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
-import useRouter from '../../../../../hooks/useRouter';
+import { useCompanyConfig } from '../../../../../hooks/useCompanyConfig';
+import { useRouterPushConnect } from '../../../../../hooks/useRouterPushConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -74,7 +75,7 @@ export const NavigationLoginLoggedButton = ({
 
 export const useDefaultMenuTabs = () => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const { signOut } = usePixwayAuthentication();
   return useMemo<NavigationMenuTabs[]>(
     () => [
@@ -121,10 +122,11 @@ const NavigationMenu = ({
   menuTabs: _menuTabs,
 }: NavigationLoginLoggedButtonProps) => {
   const defaultTabs = useDefaultMenuTabs();
+  const { connectProxyPass } = useCompanyConfig();
   const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
   const { wallet } = useUserWallet();
@@ -193,10 +195,10 @@ const NavigationMenu = ({
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
             <a
-              href={menu.route}
+              href={connectProxyPass + menu.route}
               onClick={() => {
                 if (menu.route) {
-                  router.push(menu.route);
+                  router.push(connectProxyPass + menu.route);
                 } else if (menu.action) {
                   menu.action();
                 }

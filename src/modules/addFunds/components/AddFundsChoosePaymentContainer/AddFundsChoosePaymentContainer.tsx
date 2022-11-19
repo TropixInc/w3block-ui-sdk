@@ -1,7 +1,7 @@
 import { ReactComponent as UploadIcon } from '../../../shared/assets/icons/uploadIcon.svg';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { BalanceWalletArea } from '../BalanceWalletArea/BalanceWalletArea';
@@ -9,7 +9,7 @@ import { BalanceWalletArea } from '../BalanceWalletArea/BalanceWalletArea';
 export const AddFundsChoosePaymentContainer = () => {
   const { wallet } = useUserWallet();
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   return (
     <div className="">
       <p className="pw-font-montserrat pw-font-[700] pw-text-[18px]">

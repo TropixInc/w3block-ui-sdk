@@ -9,6 +9,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePasswordAndSignIn } from '../../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
@@ -38,6 +39,7 @@ const _ResetPasswordTemplate = () => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouter();
+  const { push } = useRouterPushConnect();
   const passwordSchema = usePasswordValidationSchema();
   const { mutate, isLoading, isSuccess, isExpired, isError } =
     useChangePasswordAndSignIn();
@@ -88,7 +90,7 @@ const _ResetPasswordTemplate = () => {
     if (token && !step) {
       const tokenSplitted = (token as string).split(';');
       if (tokenSplitted.length < 2) {
-        router.push(PixwayAppRoutes.HOME);
+        push(PixwayAppRoutes.HOME);
       }
       const expirationDate = new Date(Number(tokenSplitted[1]));
       if (!isValid(expirationDate) || isAfter(new Date(), expirationDate)) {
@@ -101,7 +103,7 @@ const _ResetPasswordTemplate = () => {
 
   useEffect(() => {
     if (router.isReady && (!email || !token)) {
-      router.push(PixwayAppRoutes.HOME);
+      push(PixwayAppRoutes.HOME);
     }
   }, [email, token, router]);
 

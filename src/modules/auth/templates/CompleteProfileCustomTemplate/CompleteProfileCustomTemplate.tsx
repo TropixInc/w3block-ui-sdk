@@ -10,6 +10,7 @@ import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
@@ -60,6 +61,7 @@ const _CompleteProfileCustomTemplate = ({
   extraBy,
 }: CompleteProfileCustomTemplateProps) => {
   const router = useRouter();
+  const { push } = useRouterPushConnect();
   const [translate] = useTranslation();
   const { companyId } = useCompanyConfig();
   const { email, token } = router.query;
@@ -79,7 +81,7 @@ const _CompleteProfileCustomTemplate = ({
 
   useEffect(() => {
     if ((!token || !email) && router.isReady) {
-      router.push(PixwayAppRoutes.HOME);
+      push(PixwayAppRoutes.HOME);
     }
   }, [token, email, router]);
 
@@ -107,7 +109,7 @@ const _CompleteProfileCustomTemplate = ({
             password,
             companyId,
           })
-            .then(() => router.push(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET))
+            .then(() => push(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET))
             .catch((e) => {
               // eslint-disable-next-line no-console
               console.log(e);

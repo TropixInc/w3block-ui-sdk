@@ -9,7 +9,7 @@ interface Props {
   fullWidth?: boolean;
   disabled?: boolean;
   className?: string;
-  href: PixwayAppRoutes;
+  href: PixwayAppRoutes | string;
   variant?: OffpixButtonVariant;
 }
 

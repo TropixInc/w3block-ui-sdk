@@ -9,7 +9,7 @@ import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 import { PaymentMethod } from '../../enum';
@@ -22,7 +22,7 @@ export const CheckoutPayment = () => {
   const [isStripe, setIsStripe] = useState('');
   const [stripeKey, setStripeKey] = useState('');
   const iframeRef = useRef(null);
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
   const shouldLock = useRef(true);

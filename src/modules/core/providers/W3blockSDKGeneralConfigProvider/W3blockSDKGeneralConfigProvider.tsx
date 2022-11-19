@@ -20,6 +20,7 @@ interface Props {
   logoUrl: string;
   isProduction: boolean;
   appBaseUrl: string;
+  connectProxyPass?: string;
 }
 
 export const W3blockUISDKGeneralConfigProvider = ({
@@ -30,10 +31,11 @@ export const W3blockUISDKGeneralConfigProvider = ({
   logoUrl,
   isProduction,
   appBaseUrl,
+  connectProxyPass = '',
 }: Props) => {
   const companyValue = useMemo(
-    () => ({ companyId, logoUrl, appBaseUrl }),
-    [logoUrl, companyId, appBaseUrl]
+    () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass }),
+    [logoUrl, companyId, appBaseUrl, connectProxyPass]
   );
 
   const environmentValue = useMemo(

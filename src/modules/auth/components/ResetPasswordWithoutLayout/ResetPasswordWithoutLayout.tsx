@@ -8,6 +8,7 @@ import { object, string } from 'yup';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePasswordAndSignIn } from '../../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
@@ -34,6 +35,7 @@ enum Steps {
 const _ResetPasswordWithoutLayout = () => {
   const [translate] = useTranslation();
   const router = useRouter();
+  const { push } = useRouterPushConnect();
   const passwordSchema = usePasswordValidationSchema();
   const { mutate, isLoading, isSuccess, isExpired, isError } =
     useChangePasswordAndSignIn();
@@ -84,7 +86,7 @@ const _ResetPasswordWithoutLayout = () => {
     if (token && !step) {
       const tokenSplitted = (token as string).split(';');
       if (tokenSplitted.length < 2) {
-        router.push(PixwayAppRoutes.SIGN_IN);
+        push(PixwayAppRoutes.SIGN_IN);
       }
       const expirationDate = new Date(Number(tokenSplitted[1]));
       if (!isValid(expirationDate) || isAfter(new Date(), expirationDate)) {
@@ -97,7 +99,7 @@ const _ResetPasswordWithoutLayout = () => {
 
   useEffect(() => {
     if (router.isReady && (!email || !token)) {
-      router.push(PixwayAppRoutes.SIGN_IN);
+      push(PixwayAppRoutes.SIGN_IN);
     }
   }, [email, token, router]);
 

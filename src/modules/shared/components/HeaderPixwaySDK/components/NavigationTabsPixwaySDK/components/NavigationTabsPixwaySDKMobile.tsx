@@ -4,7 +4,7 @@ import { ReactComponent as CloseIcon } from '../../../../../assets/icons/closeIc
 import { ReactComponent as HamburguerIcon } from '../../../../../assets/icons/headerHamburger.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
-import useRouter from '../../../../../hooks/useRouter';
+import { useRouterPushConnect } from '../../../../../hooks/useRouterPushConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
@@ -20,7 +20,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   hasSignUp,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
 

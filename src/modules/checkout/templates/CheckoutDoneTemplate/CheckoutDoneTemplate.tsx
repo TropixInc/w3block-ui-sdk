@@ -1,6 +1,6 @@
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutHeader } from '../../components/CheckoutHeader';
@@ -16,7 +16,7 @@ export const CheckoutDoneTemplate = ({
   productId,
   currencyId,
 }: CheckoutDoneTemplateProps) => {
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const { isAuthorized, isLoading } = usePrivateRoute();
   return !isAuthorized || isLoading ? null : (
     <>

@@ -19,6 +19,7 @@ import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useChainScanLink } from '../../../shared/hooks/useChainScanLink/useChainScanLink';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEstimateTransferGas } from '../../hooks/useEstimateTransferGas';
@@ -317,7 +318,7 @@ export const TokenTransferController = ({
   });
 
   const gasPrice = Number(estimateTransferGas?.data.totalGasPrice?.proposed);
-
+  const { connectProxyPass } = useCompanyConfig();
   const handleConfirmTokenTransferProcessModal = (dontShowAgain: boolean) => {
     setDontShowTokenTransferProcessModal(dontShowAgain);
     nextStep();
@@ -449,7 +450,7 @@ export const TokenTransferController = ({
             <ProcessingStepModal
               isOpen={currentStep === Steps.PROCESSING_STEP_MODAL}
               subTitle={translate('tokens>processingStepModal>notLongToGo')}
-              linkHref={PixwayAppRoutes.TOKENS}
+              linkHref={connectProxyPass + PixwayAppRoutes.TOKENS}
               linkText={translate(
                 'tokens>tokenTransferController>goToMyTokens'
               )}
