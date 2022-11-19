@@ -8,7 +8,7 @@ import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
 import { useRequestPasswordChange } from '../../hooks';
@@ -26,7 +26,7 @@ export const PasswordChangeMailSent = ({
 }: PasswordChangeMailSentProps) => {
   const { logoUrl: logo } = useCompanyConfig();
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const { mutate, isSuccess, isLoading } = useRequestPasswordChange();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(

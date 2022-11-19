@@ -7,7 +7,7 @@ import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { usePrivateQuery } from '../usePrivateQuery';
-import useRouter from '../useRouter';
+import { useRouterPushConnect } from '../useRouterPushConnect';
 
 export interface Wallet {
   id: string;
@@ -22,7 +22,7 @@ export interface Wallet {
 
 export const useProfile = () => {
   const getW3blockIdSDK = useGetW3blockIdSDK();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   return usePrivateQuery(
     [PixwayAPIRoutes.GET_PROFILE],
     async () => {

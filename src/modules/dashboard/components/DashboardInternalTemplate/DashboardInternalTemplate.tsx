@@ -9,7 +9,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { PrivateRouteStrategy } from '../../../shared/enums/PrivateRouteStrategy';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { EventCard } from '../EventCard';
 
@@ -18,7 +18,7 @@ const _DashboardInternalTemplate = () => {
 
   const [translate] = useTranslation();
   const { data: profile } = useProfile();
-  const router = useRouter();
+  const router = useRouterPushConnect();
 
   const toggleTwoFactorModal = () => {
     setShowTwoFactorModal(!showTwoFactorModal);

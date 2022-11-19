@@ -19,6 +19,7 @@ import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import useRouter from '../../hooks/useRouter';
+import { useRouterPushConnect } from '../../hooks/useRouterPushConnect';
 import useTranslation from '../../hooks/useTranslation';
 import TranslatableComponent from '../TranslatableComponent';
 
@@ -36,6 +37,7 @@ interface TabsConfig {
 const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
   const router = useRouter();
+  const { push } = useRouterPushConnect();
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
   const [state, copyToClipboard] = useCopyToClipboard();
@@ -105,7 +107,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const handleSignOut = () => {
     signOut().then(() => {
-      router.push(PixwayAppRoutes.SIGN_IN);
+      push(PixwayAppRoutes.SIGN_IN);
     });
   };
 

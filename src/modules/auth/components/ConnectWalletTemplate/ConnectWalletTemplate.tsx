@@ -18,7 +18,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -65,7 +65,7 @@ const _ConnectWalletTemplate = () => {
   const [isError, setIsError] = useState(false);
   const { companyId } = useCompanyConfig();
   const token = useToken();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const profile = useProfile();
   const sessionUser = usePixwaySession();
   const user = useSessionUser();

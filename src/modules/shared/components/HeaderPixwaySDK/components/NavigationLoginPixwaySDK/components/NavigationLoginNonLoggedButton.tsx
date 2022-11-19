@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
-import useRouter from '../../../../../hooks/useRouter';
+import { useRouterPushConnect } from '../../../../../hooks/useRouterPushConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { PixwayButton } from '../../../../PixwayButton';
 
@@ -20,7 +20,7 @@ export const NavigationLoginNonLoggedButton = ({
   textColor = 'black',
 }: NavigationLoginNonLoggedButtonProps) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   return (
     <div className="pw-hidden sm:pw-block">

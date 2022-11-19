@@ -18,7 +18,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 // import { WalletExtract } from '../WalletExtract';
@@ -31,7 +31,7 @@ const _WalletInternalTemplate = () => {
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
-  const router = useRouter();
+  const router = useRouterPushConnect();
 
   const isLoading = wallet == undefined;
 

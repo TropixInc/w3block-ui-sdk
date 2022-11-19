@@ -15,6 +15,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePollBySlug } from '../../hooks/usePollBySlug';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
@@ -33,7 +34,7 @@ export const PollBox = ({
   slug,
   redirectWithoutPoll = PixwayAppRoutes.SIGN_IN,
 }: PollBoxProps) => {
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const [translate] = useTranslation();
   const { query, push, isReady } = useRouter();
   const { mutate: sendPipe } = useSendToPipeForm();

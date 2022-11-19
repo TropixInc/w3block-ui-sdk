@@ -7,6 +7,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { AuthButton } from '../AuthButton';
@@ -29,13 +30,14 @@ const _MailConfirmationTemplate = () => {
   const { logoUrl } = useCompanyConfig();
   const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
   const router = useRouter();
+  const { push } = useRouterPushConnect();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
 
   const [_, cancel] = useDebounce(
     () => {
       if (step === Steps.EMAIL_VERIFIED) {
-        router.push(PixwayAppRoutes.SIGN_IN);
+        push(PixwayAppRoutes.SIGN_IN);
       }
     },
     TIME_TO_REDIRECT_TO_HOME,
@@ -50,7 +52,7 @@ const _MailConfirmationTemplate = () => {
 
   useEffect(() => {
     if ((!token || !email) && router.isReady && step === Steps.LOADING) {
-      router.push(PixwayAppRoutes.HOME);
+      push(PixwayAppRoutes.HOME);
     }
   }, [token, email, router, step]);
 
@@ -76,7 +78,7 @@ const _MailConfirmationTemplate = () => {
       step === Steps.LOADING
     ) {
       const tokenSplitted = token.split(';');
-      if (tokenSplitted.length !== 2) router.push(PixwayAppRoutes.HOME);
+      if (tokenSplitted.length !== 2) push(PixwayAppRoutes.HOME);
       else {
         const timeStamp = Number(tokenSplitted[1]);
         if (isAfter(new Date(), new Date(timeStamp)))
@@ -108,7 +110,7 @@ const _MailConfirmationTemplate = () => {
       </p>
       <AuthButton
         fullWidth
-        onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
+        onClick={() => push(PixwayAppRoutes.SIGN_IN)}
         className="pw-mb-[18px]"
       >
         {translate('loginPage>formSubmitButton>signIn')}

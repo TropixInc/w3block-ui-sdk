@@ -7,7 +7,7 @@ import { addMinutes, isAfter } from 'date-fns';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
@@ -21,7 +21,7 @@ export const PasswordChangeEmailSentWithoutLayout = ({
   email,
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const { mutate, isSuccess, isLoading } = useRequestPasswordChange();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(

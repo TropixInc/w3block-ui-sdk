@@ -5,7 +5,7 @@ import { UserRoleEnum } from '@w3block/sdk-id';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { PrivateRouteStrategy } from '../../enums/PrivateRouteStrategy';
 import { usePixwaySession } from '../usePixwaySession';
-import useRouter from '../useRouter';
+import { useRouterPushConnect } from '../useRouterPushConnect';
 import { useSessionUser } from '../useSessionUser';
 
 interface Config {
@@ -22,7 +22,7 @@ export const usePrivateRoute = (
 ) => {
   const { status } = usePixwaySession();
   const user = useSessionUser();
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const { roles, strategy } = config ?? {};
   const isLoading = status !== 'authenticated';
 

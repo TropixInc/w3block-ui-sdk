@@ -5,6 +5,7 @@ import { isAfter } from 'date-fns';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
@@ -41,6 +42,7 @@ const _CompleteSignUpTemplate = ({
   privacyRedirectLink,
 }: Props) => {
   const router = useRouter();
+  const { push } = useRouterPushConnect();
   const [translate] = useTranslation();
   const { email, token, tenantId } = router.query;
   const { mutate, isLoading, isSuccess, isError } = useChangePassword();
@@ -60,7 +62,7 @@ const _CompleteSignUpTemplate = ({
 
   useEffect(() => {
     if ((!token || !email) && router.isReady) {
-      router.push(PixwayAppRoutes.HOME);
+      push(PixwayAppRoutes.HOME);
     }
   }, [token, email, router]);
 

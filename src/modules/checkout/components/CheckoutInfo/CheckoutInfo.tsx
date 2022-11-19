@@ -10,7 +10,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
@@ -38,7 +38,7 @@ const _CheckoutInfo = ({
   productId,
   currencyId,
 }: CheckoutInfoProps) => {
-  const router = useRouter();
+  const router = useRouterPushConnect();
   const { getOrderPreview } = useCheckout();
   const [translate] = useTranslation();
   const [productCache, setProductCache, deleteKey] =
