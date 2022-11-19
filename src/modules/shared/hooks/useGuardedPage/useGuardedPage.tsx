@@ -5,11 +5,13 @@ import { validateJwtToken } from '../../config/api';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../usePixwaySession';
 import useRouter from '../useRouter';
+import { useRouterPushConnect } from '../useRouterPushConnect';
 
 export const useGuardedPage = (routeToReturn = PixwayAppRoutes.SIGN_IN) => {
   const { data: session } = usePixwaySession();
   const { signOut } = usePixwayAuthentication();
-  const { push, isReady } = useRouter();
+  const { push } = useRouterPushConnect();
+  const { isReady } = useRouter();
   useEffect(() => {
     if (
       isReady &&

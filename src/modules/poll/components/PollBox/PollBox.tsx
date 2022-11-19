@@ -36,7 +36,7 @@ export const PollBox = ({
 }: PollBoxProps) => {
   const router = useRouterPushConnect();
   const [translate] = useTranslation();
-  const { query, push, isReady } = useRouter();
+  const { query, isReady } = useRouter();
   const { mutate: sendPipe } = useSendToPipeForm();
   const isProduction = useIsProduction();
   const [alreadyAnswered, setAlreadyAnswered] = useState(false);
@@ -55,7 +55,7 @@ export const PollBox = ({
 
   useEffect(() => {
     if ((!slug && isReady) || isError) {
-      push(redirectWithoutPoll);
+      router.push(redirectWithoutPoll);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, isReady, isError]);

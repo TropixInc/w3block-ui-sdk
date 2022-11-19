@@ -5,6 +5,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
 import { useRequestPasswordChange } from '../../hooks';
+import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
 
 interface Props {
@@ -20,6 +21,11 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
   isPostSignUp = false,
 }: Props) => {
   const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
+  const {
+    mutate: emailMutate,
+    isSuccess: emailSuccess,
+    isLoading: emailLoading,
+  } = useRequestConfirmationMail();
   const [translate] = useTranslation();
 
   useEffect(() => {
@@ -27,9 +33,30 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (emailSuccess && onSendEmail) onSendEmail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailSuccess]);
+
   const callbackPath = isPostSignUp
     ? PixwayAppRoutes.COMPLETE_SIGNUP
     : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
+
+  const handleClick = () => {
+    if (isPostSignUp) {
+      mutate({
+        email,
+        callbackPath,
+        verificationType: 'numeric',
+      });
+    } else {
+      emailMutate({
+        email,
+        callbackPath,
+      });
+    }
+  };
+
   return (
     <div className="pw-flex pw-items-center pw-flex-col pw-mt-6">
       <p className="pw-text-[#353945] pw-text-[13px] pw-leading-[15.85px] pw-mb-6">
@@ -39,14 +66,8 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
       <span className="pw-text-brand-primary pw-text-sm pw-leading-[21px]">
         <Trans i18nKey="auth>emailConfirmation>resendEmailAction">
           <button
-            onClick={() =>
-              mutate({
-                email,
-                callbackPath,
-                verificationType: 'numeric',
-              })
-            }
-            disabled={isLoading}
+            onClick={handleClick}
+            disabled={isLoading || emailLoading}
             className="pw-mb-[29px] pw-font-semibold pw-text-sm pw-leading-[17px] pw-text-brand-primary pw-underline"
           >
             Clique aqui

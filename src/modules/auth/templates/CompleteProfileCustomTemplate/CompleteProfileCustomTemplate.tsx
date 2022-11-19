@@ -16,7 +16,7 @@ import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
-import { CompleteSigUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
+import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
 import { SignUpTemplateSDK } from '../SignUpTemplateSDK/SignUpTemplateSDK';
 import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
 import { VerifySignUpTokenExpiredTemplateSDK } from '../VerifySignUpTokenExpiredTemplateSDK';
@@ -89,6 +89,9 @@ const _CompleteProfileCustomTemplate = ({
     if (token && getIsTokenExpired(token as string)) {
       setStep(Steps.TOKEN_EXPIRED);
     }
+    if (token && !getIsTokenExpired(token as string)) {
+      setStep(Steps.MAIL_CONFIRMED);
+    }
   }, [token]);
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
@@ -149,11 +152,7 @@ const _CompleteProfileCustomTemplate = ({
       }
     />
   ) : (
-    <CompleteSigUpSuccessTemplateSDK
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      props={verifyEmailProps!}
-      extraBy={extraBy}
-    />
+    <CompleteSignUpSuccessTemplateSDK {...verifyEmailProps} extraBy={extraBy} />
   );
 };
 

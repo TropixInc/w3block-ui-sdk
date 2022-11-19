@@ -7,6 +7,7 @@ import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockB
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
@@ -19,7 +20,8 @@ const HOUR_IN_MS = 3600000;
 
 export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
-  const { query, push } = useRouter();
+  const { query } = useRouter();
+  const { push } = useRouterPushConnect();
   const email = (query.email as string) ?? '';
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
