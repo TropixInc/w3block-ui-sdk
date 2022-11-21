@@ -6,8 +6,7 @@ import { isAfter } from 'date-fns';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { AuthButton } from '../AuthButton';
@@ -29,15 +28,14 @@ const _MailConfirmationTemplate = () => {
   const [translate] = useTranslation();
   const { logoUrl } = useCompanyConfig();
   const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
-  const router = useRouter();
-  const { push } = useRouterPushConnect();
+  const router = useRouterConnect();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
 
   const [_, cancel] = useDebounce(
     () => {
       if (step === Steps.EMAIL_VERIFIED) {
-        push(PixwayAppRoutes.SIGN_IN);
+        router.pushConnect(PixwayAppRoutes.SIGN_IN);
       }
     },
     TIME_TO_REDIRECT_TO_HOME,
@@ -52,7 +50,7 @@ const _MailConfirmationTemplate = () => {
 
   useEffect(() => {
     if ((!token || !email) && router.isReady && step === Steps.LOADING) {
-      push(PixwayAppRoutes.HOME);
+      router.push(PixwayAppRoutes.HOME);
     }
   }, [token, email, router, step]);
 
@@ -78,7 +76,7 @@ const _MailConfirmationTemplate = () => {
       step === Steps.LOADING
     ) {
       const tokenSplitted = token.split(';');
-      if (tokenSplitted.length !== 2) push(PixwayAppRoutes.HOME);
+      if (tokenSplitted.length !== 2) router.push(PixwayAppRoutes.HOME);
       else {
         const timeStamp = Number(tokenSplitted[1]);
         if (isAfter(new Date(), new Date(timeStamp)))
@@ -110,7 +108,7 @@ const _MailConfirmationTemplate = () => {
       </p>
       <AuthButton
         fullWidth
-        onClick={() => push(PixwayAppRoutes.SIGN_IN)}
+        onClick={() => router.pushConnect(PixwayAppRoutes.SIGN_IN)}
         className="pw-mb-[18px]"
       >
         {translate('loginPage>formSubmitButton>signIn')}

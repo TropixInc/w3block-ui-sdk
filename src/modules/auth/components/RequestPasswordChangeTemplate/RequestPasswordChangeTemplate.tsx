@@ -8,7 +8,7 @@ import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthButton } from '../AuthButton';
@@ -25,7 +25,7 @@ interface Form {
 const _RequestPasswordChangeTemplate = () => {
   const { logoUrl, connectProxyPass } = useCompanyConfig();
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
   const schema = object().shape({
     email: string()

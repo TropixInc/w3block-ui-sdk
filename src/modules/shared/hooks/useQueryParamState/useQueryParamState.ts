@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import useRouter from '../useRouter';
+import { useRouterConnect } from '../useRouterPushConnect';
 
 export const useQueryParamState = <Data extends string | Array<string>>(
   name: string,
   initialValue: string | undefined
 ): [value: Data, setValue: (newValue: Data) => void] => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const queryRef = useRef(router.query);
   queryRef.current = router.query;
   const { [name]: value } = router.query;

@@ -3,16 +3,14 @@ import { useEffect } from 'react';
 import { useProfile } from '..';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import useRouter from '../useRouter';
-import { useRouterPushConnect } from '../useRouterPushConnect';
+import { useRouterConnect } from '../useRouterPushConnect';
 
 export const useHasWallet = (
   redirectRoute: PixwayAppRoutes = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET
 ) => {
   const { data: profile, isLoading, isSuccess } = useProfile();
 
-  const router = useRouter();
-  const { push } = useRouterPushConnect();
+  const router = useRouterConnect();
 
   useEffect(() => {
     if (
@@ -21,7 +19,7 @@ export const useHasWallet = (
       router.isReady &&
       isSuccess
     ) {
-      push(redirectRoute);
+      router.pushConnect(redirectRoute);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, redirectRoute, isLoading, isSuccess]);

@@ -9,8 +9,7 @@ import { ContainerTextBesideProps } from '../../../shared/components/ContainerTe
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useRouter from '../../../shared/hooks/useRouter';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
 import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
@@ -51,8 +50,7 @@ const _VerifySignUpTemplateSDK = ({
   className,
 }: VerifySignUpTemplateSDKProps) => {
   const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
-  const router = useRouter();
-  const { push } = useRouterPushConnect();
+  const router = useRouterConnect();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
   const emailToUse = email ? decodeURIComponent(email as string) : '';
@@ -60,7 +58,7 @@ const _VerifySignUpTemplateSDK = ({
   const [_, cancel] = useDebounce(
     () => {
       if (step === Steps.EMAIL_VERIFIED) {
-        push(PixwayAppRoutes.SIGN_IN);
+        router.pushConnect(PixwayAppRoutes.SIGN_IN);
       }
     },
     TIME_TO_REDIRECT_TO_HOME,

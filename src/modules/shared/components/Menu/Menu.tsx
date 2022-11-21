@@ -19,8 +19,7 @@ import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useIsProduction } from '../../hooks/useIsProduction';
-import useRouter from '../../hooks/useRouter';
-import { useRouterPushConnect } from '../../hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../hooks/useRouterPushConnect';
 import useTranslation from '../../hooks/useTranslation';
 import TranslatableComponent from '../TranslatableComponent';
 
@@ -37,8 +36,7 @@ interface TabsConfig {
 
 const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
-  const router = useRouter();
-  const { push } = useRouterPushConnect();
+  const router = useRouterConnect();
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
   const { connectProxyPass } = useCompanyConfig();
@@ -109,7 +107,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const handleSignOut = () => {
     signOut().then(() => {
-      push(PixwayAppRoutes.SIGN_IN);
+      router.pushConnect(PixwayAppRoutes.SIGN_IN);
     });
   };
 

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useQuery } from '../../../shared/hooks/useQuery';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
 
 interface CheckoutHeaderProps {
   onClick?: (query: string) => void;
@@ -11,7 +11,7 @@ interface CheckoutHeaderProps {
 const _CheckoutHeader = ({ onClick }: CheckoutHeaderProps) => {
   const [translate] = useTranslation();
   const query = useQuery();
-  const router = useRouter();
+  const router = useRouterConnect();
   return (
     <div className="pw-w-full pw-bg-[#EDEDED]">
       <div className="pw-container pw-px-4 lg:pw-px-0 pw-mx-auto pw-flex pw-items-center pw-py-6">

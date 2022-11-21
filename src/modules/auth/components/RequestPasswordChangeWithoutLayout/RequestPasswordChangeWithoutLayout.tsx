@@ -6,7 +6,7 @@ import { object, string } from 'yup';
 
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthButton } from '../AuthButton';
@@ -20,7 +20,7 @@ interface Form {
 
 export const RequestPasswordChangeWithoutLayout = () => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { connectProxyPass } = useCompanyConfig();
   const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
   const schema = object().shape({

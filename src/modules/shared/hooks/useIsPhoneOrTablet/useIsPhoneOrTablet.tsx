@@ -1,10 +1,10 @@
 /* eslint-disable no-useless-escape */
 import { useMemo } from 'react';
 
-import useRouter from '../useRouter';
+import { useRouterConnect } from '../useRouterPushConnect';
 
 export const useIsPhoneOrTablet = () => {
-  const router = useRouter();
+  const router = useRouterConnect();
   return useMemo(() => {
     if (router.isReady && window) {
       let check = false;

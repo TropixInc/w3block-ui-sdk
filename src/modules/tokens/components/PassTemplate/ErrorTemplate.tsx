@@ -1,6 +1,6 @@
 import { ReactComponent as CloseCircledIcon } from '../../../shared/assets/icons/closeCircledOutlined.svg';
 import { ReactComponent as ErrorIcon } from '../../../shared/assets/icons/errorIconRed.svg';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const ErrorTemplate = ({
@@ -13,7 +13,7 @@ export const ErrorTemplate = ({
   showButton?: boolean;
 }) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   return (
     <div className="pw-relative pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-py-[32px] pw-px-[23px] pw-gap-[36px]">
       <div className="pw-absolute pw-right-[18px] pw-top-[18px] pw-w-[36px] pw-h-[36px] pw-rounded-full pw-border pw-border-[#777E8F] pw-flex pw-justify-center pw-items-center pw-cursor-pointer">

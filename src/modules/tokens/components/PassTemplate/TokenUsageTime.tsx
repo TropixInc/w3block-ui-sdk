@@ -5,12 +5,12 @@ import { differenceInHours, format } from 'date-fns';
 
 import { ReactComponent as ClockIcon } from '../../../shared/assets/icons/clockOutlined.svg';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const TokenUsageTime = ({ date }: { date: Date }) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const tokenId = (router.query.tokenId as string) || '1';
 
   const differenceByHours = differenceInHours(date, new Date());

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import useRouter from '../useRouter';
+import { useRouterConnect } from '../useRouterPushConnect';
 
 export const useQuery = () => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [query, setQuery] = useState('');
   useEffect(() => {
     setQuery(router.asPath.split('?')[1]);

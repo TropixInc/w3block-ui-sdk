@@ -5,7 +5,7 @@ import { AxiosResponse } from 'axios';
 
 import { PixwayPaginatedResponse } from '../../interfaces/PixwayPaginatedResponse';
 import { QueryConfig, usePrivateQuery } from '../usePrivateQuery';
-import useRouter from '../useRouter';
+import { useRouterConnect } from '../useRouterPushConnect';
 
 export interface PaginatedQueryConfig {
   itemsPerPage?: number;
@@ -58,7 +58,7 @@ export const usePaginatedPrivateQuery = <QueryData>(
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PaginatedQueryConfig & QueryConfig<any, any, any> = {}
 ): usePaginatedPrivateQueryReturnValue<QueryData> => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [totalPages, setTotalPages] = useState(0);
 
   const defineInitialPage = () => {

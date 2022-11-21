@@ -3,15 +3,15 @@ import { useLocation } from 'react-use';
 import { useCompanyConfig } from '../useCompanyConfig';
 import useRouter from '../useRouter';
 
-export const useRouterPushConnect = () => {
+export const useRouterConnect = () => {
   const router = useRouter();
   const { connectProxyPass } = useCompanyConfig();
   const location = useLocation();
-  const push = (path: string) => {
+  const pushConnect = (path: string) => {
     router.push(
       (location.hostname?.includes('localhost') ? '' : connectProxyPass ?? '') +
         path
     );
   };
-  return { push };
+  return { ...router, pushConnect };
 };
