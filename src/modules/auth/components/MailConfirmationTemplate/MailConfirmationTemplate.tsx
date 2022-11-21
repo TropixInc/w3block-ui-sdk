@@ -6,7 +6,7 @@ import { isAfter } from 'date-fns';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { AuthButton } from '../AuthButton';

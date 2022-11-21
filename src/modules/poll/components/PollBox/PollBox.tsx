@@ -14,7 +14,7 @@ import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockB
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePollBySlug } from '../../hooks/usePollBySlug';
 import { usePostAnswer } from '../../hooks/usePostAnswer';

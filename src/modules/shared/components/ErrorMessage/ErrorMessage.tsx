@@ -1,6 +1,6 @@
 import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
 import { PixwayButton } from '../PixwayButton';
 

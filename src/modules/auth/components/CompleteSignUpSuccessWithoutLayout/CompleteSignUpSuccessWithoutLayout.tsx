@@ -1,10 +1,10 @@
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { AuthButton } from '../AuthButton';
 
 export const CompleteSignUpSuccessWithoutLayout = () => {
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const [translate] = useTranslation();
   return (
     <div className="pw-text-[#35394C] sm:!pw-mt-6">

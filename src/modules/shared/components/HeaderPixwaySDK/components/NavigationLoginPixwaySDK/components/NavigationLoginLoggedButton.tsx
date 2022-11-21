@@ -17,7 +17,7 @@ import { ReactComponent as WalletIcon } from '../../../../../assets/icons/wallet
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
 import { useCompanyConfig } from '../../../../../hooks/useCompanyConfig';
-import { useRouterPushConnect } from '../../../../../hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -75,7 +75,7 @@ export const NavigationLoginLoggedButton = ({
 
 export const useDefaultMenuTabs = () => {
   const [translate] = useTranslation();
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   return useMemo<NavigationMenuTabs[]>(
     () => [
@@ -109,7 +109,7 @@ export const useDefaultMenuTabs = () => {
         icon: <LogoutIcon />,
         action: () => {
           signOut().then(() => {
-            router.push(PixwayAppRoutes.SIGN_IN);
+            router.pushConnect(PixwayAppRoutes.SIGN_IN);
           });
         },
       },
@@ -126,7 +126,7 @@ const NavigationMenu = ({
   const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
   const { wallet } = useUserWallet();

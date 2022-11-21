@@ -10,7 +10,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
@@ -38,7 +38,7 @@ const _CheckoutInfo = ({
   productId,
   currencyId,
 }: CheckoutInfoProps) => {
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const { getOrderPreview } = useCheckout();
   const [translate] = useTranslation();
   const [productCache, setProductCache, deleteKey] =
@@ -151,7 +151,7 @@ const _CheckoutInfo = ({
     if (proccedAction) {
       proccedAction(query);
     } else {
-      router.push(PixwayAppRoutes.CHECKOUT_PAYMENT + '?' + query);
+      router.pushConnect(PixwayAppRoutes.CHECKOUT_PAYMENT + '?' + query);
     }
   };
 
@@ -209,7 +209,7 @@ const _CheckoutInfo = ({
                 returnAction
                   ? () => returnAction(query)
                   : () => {
-                      router.push(PixwayAppRoutes.MY_TOKENS);
+                      router.pushConnect(PixwayAppRoutes.MY_TOKENS);
                     }
               }
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"

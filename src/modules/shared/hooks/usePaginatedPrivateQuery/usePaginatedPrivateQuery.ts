@@ -5,7 +5,7 @@ import { AxiosResponse } from 'axios';
 
 import { PixwayPaginatedResponse } from '../../interfaces/PixwayPaginatedResponse';
 import { QueryConfig, usePrivateQuery } from '../usePrivateQuery';
-import { useRouterConnect } from '../useRouterPushConnect';
+import { useRouterConnect } from '../useRouterConnect';
 
 export interface PaginatedQueryConfig {
   itemsPerPage?: number;

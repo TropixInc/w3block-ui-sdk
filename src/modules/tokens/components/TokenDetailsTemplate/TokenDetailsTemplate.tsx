@@ -3,7 +3,7 @@ import { ReactComponent as ChevronLeft } from '../../../shared/assets/icons/chev
 import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import {
   Dimensions2DValue,

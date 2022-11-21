@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import { useMemo } from 'react';
 
-import { useRouterConnect } from '../useRouterPushConnect';
+import { useRouterConnect } from '../useRouterConnect';
 
 export const useIsPhoneOrTablet = () => {
   const router = useRouterConnect();

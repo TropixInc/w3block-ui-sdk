@@ -8,14 +8,14 @@ import { UploadIconSVG } from '../../../shared/assets/icons/UploadIcon';
 import { Alert } from '../../../shared/components/Alert';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 export const AddFundsManualContainer = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const [_, setCopy] = useCopyToClipboard();
 
   const copyAddress = () => {
@@ -79,7 +79,7 @@ export const AddFundsManualContainer = () => {
           </div>
         </Alert>
         <WeblockButton
-          onClick={() => router.push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
+          onClick={() => router.pushConnect(PixwayAppRoutes.ADD_FUNDS_TYPE)}
           className="pw-text-white pw-mt-4"
         >
           {translate('shared>back')}

@@ -7,7 +7,7 @@ import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/ar
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';

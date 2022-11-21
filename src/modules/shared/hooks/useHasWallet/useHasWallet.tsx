@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useProfile } from '..';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useRouterConnect } from '../useRouterPushConnect';
+import { useRouterConnect } from '../useRouterConnect';
 
 export const useHasWallet = (
   redirectRoute: PixwayAppRoutes = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET

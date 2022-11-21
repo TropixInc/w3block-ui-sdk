@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useRouterConnect } from '../useRouterPushConnect';
+import { useRouterConnect } from '../useRouterConnect';
 
 export const useQuery = () => {
   const router = useRouterConnect();

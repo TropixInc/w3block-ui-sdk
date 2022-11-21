@@ -4,7 +4,7 @@ import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentica
 import { validateJwtToken } from '../../config/api';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../usePixwaySession';
-import { useRouterConnect } from '../useRouterPushConnect';
+import { useRouterConnect } from '../useRouterConnect';
 
 export const useGuardedPage = (routeToReturn = PixwayAppRoutes.SIGN_IN) => {
   const { data: session } = usePixwaySession();

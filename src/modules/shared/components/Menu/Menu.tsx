@@ -19,7 +19,7 @@ import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useIsProduction } from '../../hooks/useIsProduction';
-import { useRouterConnect } from '../../hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
 import TranslatableComponent from '../TranslatableComponent';
 

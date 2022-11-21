@@ -5,7 +5,7 @@ import { differenceInHours, format } from 'date-fns';
 
 import { ReactComponent as ClockIcon } from '../../../shared/assets/icons/clockOutlined.svg';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const TokenUsageTime = ({ date }: { date: Date }) => {

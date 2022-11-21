@@ -2,7 +2,7 @@ import classNames from 'classnames';
 
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthButton } from '../AuthButton';
@@ -16,12 +16,12 @@ interface Props {
 export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
 
   const handleContinue = () => {
     signOut().then(() => {
-      router.push(PixwayAppRoutes.SIGN_IN);
+      router.pushConnect(PixwayAppRoutes.SIGN_IN);
     });
   };
 

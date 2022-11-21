@@ -5,7 +5,7 @@ import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfile } from '../../../../../hooks/useProfile/useProfile';
-import { useRouterPushConnect } from '../../../../../hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -29,7 +29,7 @@ export const NavigationLoginLoggedButtonMobile = ({
   const defaultTabs = useDefaultMenuTabs();
   const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const { wallet } = useUserWallet();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
@@ -103,7 +103,7 @@ export const NavigationLoginLoggedButtonMobile = ({
                   if (tab.action) tab.action();
                   else if (tab.route) {
                     toggleTabsMemo();
-                    router.push(tab.route);
+                    router.pushConnect(tab.route);
                   }
                 }}
                 className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-font-montserrat pw-text-[#383857] hover:pw-text-black"

@@ -7,7 +7,7 @@ import { addMinutes, isAfter } from 'date-fns';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
@@ -21,7 +21,7 @@ export const PasswordChangeEmailSentWithoutLayout = ({
   email,
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const { mutate, isSuccess, isLoading } = useRequestPasswordChange();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
@@ -87,7 +87,7 @@ export const PasswordChangeEmailSentWithoutLayout = ({
         {translate('auth>mailStep>linkExpirationMessage')}
       </p>
       <AuthButton
-        onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
+        onClick={() => router.pushConnect(PixwayAppRoutes.SIGN_IN)}
         fullWidth
       >
         {translate('components>advanceButton>continue')}

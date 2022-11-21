@@ -13,7 +13,7 @@ import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
@@ -49,7 +49,7 @@ export const SigInWithoutLayout = ({
   const { data: session } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const { data: profile } = useProfile();
   const [callbackUrl, setCallbackUrl] = useLocalStorage<string>(
     LocalStorageFields.AUTHENTICATION_CALLBACK,
@@ -75,7 +75,7 @@ export const SigInWithoutLayout = ({
   });
 
   useEffect(() => {
-    if (session) router.push(getRedirectUrl());
+    if (session) router.pushConnect(getRedirectUrl());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
 

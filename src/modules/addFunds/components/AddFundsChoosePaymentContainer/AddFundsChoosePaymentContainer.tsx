@@ -1,7 +1,7 @@
 import { ReactComponent as UploadIcon } from '../../../shared/assets/icons/uploadIcon.svg';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { BalanceWalletArea } from '../BalanceWalletArea/BalanceWalletArea';
@@ -9,7 +9,7 @@ import { BalanceWalletArea } from '../BalanceWalletArea/BalanceWalletArea';
 export const AddFundsChoosePaymentContainer = () => {
   const { wallet } = useUserWallet();
   const [translate] = useTranslation();
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   return (
     <div className="">
       <p className="pw-font-montserrat pw-font-[700] pw-text-[18px]">
@@ -36,7 +36,7 @@ export const AddFundsChoosePaymentContainer = () => {
       </p>
       <div className="pw-flex sm:pw-flex-row pw-flex-col pw-mt-4">
         <WeblockButton
-          onClick={() => router.push(PixwayAppRoutes.ADD_FUNDS_MANUAL)}
+          onClick={() => router.pushConnect(PixwayAppRoutes.ADD_FUNDS_MANUAL)}
         >
           <div className="flex pw-justify-center items-center pw-gap-x-2">
             <UploadIcon />

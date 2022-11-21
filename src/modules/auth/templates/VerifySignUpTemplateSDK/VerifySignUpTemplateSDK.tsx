@@ -9,7 +9,7 @@ import { ContainerTextBesideProps } from '../../../shared/components/ContainerTe
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
 import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';

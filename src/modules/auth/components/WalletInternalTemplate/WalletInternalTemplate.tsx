@@ -19,7 +19,7 @@ import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
-import { useRouterPushConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 // import { WalletExtract } from '../WalletExtract';
@@ -32,7 +32,7 @@ const _WalletInternalTemplate = () => {
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
-  const router = useRouterPushConnect();
+  const router = useRouterConnect();
   const { connectProxyPass } = useCompanyConfig();
 
   const isLoading = wallet == undefined;
@@ -118,7 +118,9 @@ const _WalletInternalTemplate = () => {
                   showValue={showValue}
                   title={translate('wallet>page>principal')}
                   walletAddress={profile?.data.mainWallet?.address ?? ''}
-                  onClick={() => router.push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
+                  onClick={() =>
+                    router.pushConnect(PixwayAppRoutes.ADD_FUNDS_TYPE)
+                  }
                   textButton={translate('wallet>page>addFunds')}
                 />
               ) : (

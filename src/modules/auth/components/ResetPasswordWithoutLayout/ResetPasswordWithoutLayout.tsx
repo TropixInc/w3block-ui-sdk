@@ -7,7 +7,7 @@ import { object, string } from 'yup';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../../shared/hooks/useRouterPushConnect';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePasswordAndSignIn } from '../../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
