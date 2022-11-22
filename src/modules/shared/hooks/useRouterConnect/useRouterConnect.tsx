@@ -9,15 +9,16 @@ export const useRouterConnect = () => {
   const location = useLocation();
 
   const pushConnect = (path: string) => {
-    router.push(routerToHref(path));
-  };
-  const routerToHref = (path: string) => {
-    return (
+    router.push(
       (location.hostname?.includes('localhost') ||
-      location.href?.includes('/connect/')
+      location.href?.includes('/connect/') ||
+      !connectProxyPass
         ? ''
         : connectProxyPass) + path
     );
+  };
+  const routerToHref = (path: string) => {
+    return (connectProxyPass ?? '') + path;
   };
   return { ...router, pushConnect, routerToHref };
 };
