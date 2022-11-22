@@ -17,7 +17,6 @@ import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -33,7 +32,6 @@ const _WalletInternalTemplate = () => {
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
   const router = useRouterConnect();
-  const { connectProxyPass } = useCompanyConfig();
 
   const isLoading = wallet == undefined;
 
@@ -91,7 +89,7 @@ const _WalletInternalTemplate = () => {
                 );
               })
             )}
-            <Link href={connectProxyPass + PixwayAppRoutes.ADD_FUNDS_TYPE}>
+            <Link href={router.routerToHref(PixwayAppRoutes.ADD_FUNDS_TYPE)}>
               <div className="pw-w-[165px] pw-bg-brand-primary pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
                 <div className="pw-rounded-full pw-border pw-bg-brand-primary pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
                   <CashIcon className="pw-fill-white" />

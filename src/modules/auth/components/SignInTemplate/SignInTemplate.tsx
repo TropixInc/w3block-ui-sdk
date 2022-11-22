@@ -51,12 +51,7 @@ const _SignInTemplate = ({
   classes = {},
   hasSignUp = true,
 }: SignInTemplateProps) => {
-  const {
-    companyId,
-    logoUrl: logo,
-    appBaseUrl,
-    connectProxyPass,
-  } = useCompanyConfig();
+  const { companyId, logoUrl: logo, appBaseUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
@@ -167,9 +162,9 @@ const _SignInTemplate = ({
                   error={fieldState.error}
                 />
                 <Link
-                  href={
-                    connectProxyPass + PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
-                  }
+                  href={router.routerToHref(
+                    PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
+                  )}
                   className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
                 >
                   {translate('auth>passwordChange>requestChangeFormTitle')}
@@ -192,7 +187,7 @@ const _SignInTemplate = ({
                 <Trans i18nKey={'auth>signIn>signUpCTA'}>
                   Não tem conta ainda?
                   <Link
-                    href={connectProxyPass + PixwayAppRoutes.SIGN_UP}
+                    href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
                     className="pw-text-brand-primary pw-underline"
                   >
                     Cadastre-se.

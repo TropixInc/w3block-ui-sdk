@@ -23,7 +23,7 @@ interface Form {
 }
 
 const _RequestPasswordChangeTemplate = () => {
-  const { logoUrl, connectProxyPass } = useCompanyConfig();
+  const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
@@ -103,7 +103,7 @@ const _RequestPasswordChangeTemplate = () => {
                   'companyAuth>requestPasswordChange>emailDoesntExistError'
                 ) ? (
                   <Link
-                    href={connectProxyPass + PixwayAppRoutes.SIGN_UP}
+                    href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
                     className="pw-font-poppins pw-text-xs pw-leading-[18px] pw-underline pw-text-[##353945]"
                   >
                     {translate(

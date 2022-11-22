@@ -3,6 +3,7 @@ import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 
+import { useRouterConnect } from '../../../shared';
 import { Button } from '../../../shared/components/Buttons';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
 import { Link } from '../../../shared/components/Link';
@@ -45,6 +46,7 @@ export const WalletTokenCard = ({
   proccessing = false,
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
+  const router = useRouterConnect();
   const actionsContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(actionsContainerRef, () => {
     if (isOpen) closeModal();
@@ -78,11 +80,11 @@ export const WalletTokenCard = ({
         <Link
           disabled={proccessing}
           className={className}
-          href={
+          href={router.routerToHref(
             PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
               .replace('{contractAddress}', contractAddress)
               .replace('{chainId}', chainId.toString()) as PixwayAppRoutes
-          }
+          )}
         >
           <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[10px]">
             <div className="pw-relative pw-overflow-hidden pw-w-full">

@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useRequestPasswordChange } from '../../hooks';
@@ -21,7 +20,6 @@ interface Form {
 export const RequestPasswordChangeWithoutLayout = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const { connectProxyPass } = useCompanyConfig();
   const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
   const schema = object().shape({
     email: string()
@@ -89,7 +87,7 @@ export const RequestPasswordChangeWithoutLayout = () => {
                 'companyAuth>requestPasswordChange>emailDoesntExistError'
               ) ? (
                 <a
-                  href={connectProxyPass + PixwayAppRoutes.SIGN_UP}
+                  href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
                   className="pw-font-poppins pw-text-xs pw-leading-[18px] pw-underline pw-text-[##353945]"
                 >
                   {translate(

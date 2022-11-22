@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import { object, string, boolean } from 'yup';
 
+import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -48,7 +49,7 @@ export const SignUpFormWithoutLayout = ({
 }: Props) => {
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
-
+  const router = useRouterConnect();
   const [step, setStep] = useState(Steps.SIGN_UP);
   const [emailLocal, setEmail] = useState('');
   const { connectProxyPass } = useCompanyConfig();
@@ -194,7 +195,7 @@ export const SignUpFormWithoutLayout = ({
               Já possui uma conta?
               <a
                 className="pw-text-brand-primary pw-underline"
-                href={connectProxyPass + PixwayAppRoutes.SIGN_IN}
+                href={router.routerToHref(PixwayAppRoutes.SIGN_IN)}
               >
                 Login
               </a>
