@@ -1,5 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 
+import { withLDProvider } from 'launchdarkly-react-client-sdk';
+
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
@@ -22,7 +24,7 @@ interface Props {
   appBaseUrl: string;
 }
 
-export const W3blockUISDKGeneralConfigProvider = ({
+export const W3blockUISDKGeneralConfig = ({
   children,
   api,
   locale,
@@ -58,4 +60,14 @@ export const W3blockUISDKGeneralConfigProvider = ({
       </EnvironmentContext.Provider>
     </W3blockUISDKGereralConfigContext.Provider>
   );
+};
+
+export const W3blockUISDKGeneralConfigProvider = (
+  props: Props & { launchDarklyKey: string }
+) => {
+  const { launchDarklyKey, ...configProps } = props;
+
+  return withLDProvider({ clientSideID: launchDarklyKey })(() => (
+    <W3blockUISDKGeneralConfig {...configProps} />
+  ));
 };

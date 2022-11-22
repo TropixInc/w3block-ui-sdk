@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { useToggle } from 'react-use';
 
 import { add, format, getDay, isToday } from 'date-fns';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
@@ -24,6 +25,7 @@ const _PassTemplate = () => {
   const router = useRouter();
   const tokenId = (router.query.tokenId as string) || 'inactive';
   const [hasExpired, setHasExpired] = useToggle(false);
+  const { pass } = useFlags();
 
   const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
   const token = {
@@ -98,7 +100,7 @@ const _PassTemplate = () => {
     ) : (
       <></>
     )
-  ) : (
+  ) : pass ? (
     <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px]">
       <div
         className="pw-hidden sm:pw-flex pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
@@ -280,6 +282,8 @@ const _PassTemplate = () => {
         </div>
       ) : null}
     </div>
+  ) : (
+    <></>
   );
 };
 
