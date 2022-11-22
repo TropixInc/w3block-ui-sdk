@@ -193,7 +193,7 @@ const NavigationMenu = ({
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
             <a
-              href={router.routerToHref(menu.route)}
+              href={router.routerToHref(menu.route ?? '')}
               onClick={() => {
                 if (menu.route) {
                   router.push(router.routerToHref(menu.route));
