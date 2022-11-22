@@ -40,7 +40,7 @@ export const SigInWithoutLayout = ({
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   hasSignUp = true,
 }: SignInWithoutLayoutProps) => {
-  const { companyId, appBaseUrl } = useCompanyConfig();
+  const { companyId } = useCompanyConfig();
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
@@ -86,7 +86,7 @@ export const SigInWithoutLayout = ({
 
   const checkForCallbackUrl = () => {
     if (!profile?.data.mainWallet) {
-      return appBaseUrl + routeToAttachWallet;
+      return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');
