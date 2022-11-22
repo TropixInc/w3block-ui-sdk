@@ -10,7 +10,10 @@ export const useRouterConnect = () => {
 
   const pushConnect = (path: string) => {
     router.push(
-      (location.hostname?.includes('localhost') ? '' : connectProxyPass) + path
+      (location.hostname?.includes('localhost') ||
+      location.href?.includes('/connect/')
+        ? ''
+        : connectProxyPass) + path
     );
   };
   return { ...router, pushConnect };
