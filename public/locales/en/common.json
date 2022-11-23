@@ -135,5 +135,9 @@
   "companyAuth>signUp>acceptPrivacyPolicy": "I accept the <1>Privacy Policy</1>",
   "auth>emailConfirmation>resendEmailAction": "<0>Click here</0> to resend your code.",
   "connectWallet>error>AlreadyExistUserWithWallet": "There is already a user using this metamask wallet",
-  "auth>setCode>cooldownTimeMessage": "Wait until {{minutes}}:{{seconds}} minutes to resend the code"
+  "auth>setCode>cooldownTimeMessage": "Wait until {{minutes}}:{{seconds}} minutes to resend the code",
+  "token>commerceTemplate>productDescription": "Product Description",
+  "token>commerceTemplate>back": "Back",
+  "token>commerceTemplate>title": "Title or token name:",
+  "token>commerceTemplate>categories": "Category/Subcategory:"
 }
