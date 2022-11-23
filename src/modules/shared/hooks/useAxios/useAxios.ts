@@ -15,6 +15,7 @@ export const useAxios = (type: W3blockAPI) => {
     [W3blockAPI.KEY, apisUrl.w3blockKeyAPIUrl],
     [W3blockAPI.COMMERCE, apisUrl.w3blockCommerceAPIUrl],
     [W3blockAPI.POLL, apisUrl.w3BlockPollApiUrl],
+    [W3blockAPI.PASS, apisUrl.w3BlockPassApiUrl],
   ]);
   const baseUrl = apiBaseURLMap.get(type) ?? '';
 
