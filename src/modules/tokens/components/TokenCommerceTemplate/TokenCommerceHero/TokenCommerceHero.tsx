@@ -85,9 +85,11 @@ export const TokenCommerceHero = ({
                   {tokenSubtitle}
                 </p>
               )}
-              <p className="pw-text-2xl pw-font-semibold pw-mt-4">
-                {tokenPrice}
-              </p>
+              {tokenPrice && (
+                <p className="pw-text-2xl pw-font-semibold pw-mt-4">
+                  {tokenPrice}
+                </p>
+              )}
               {tokenCategories && (
                 <>
                   <p className="pw-text-sm pw-font-normal pw-mt-4">
