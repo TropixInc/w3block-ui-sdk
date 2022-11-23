@@ -37,6 +37,7 @@ export interface AllAuthPageProps {
   logoUrl?: string;
   textContainer?: ContainerTextBesideProps;
   className?: string;
+  extraBy?: ExtraBy[];
 }
 
 interface CompleteProfileCustomTemplateProps {
