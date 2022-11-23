@@ -158,6 +158,7 @@ const _ConnectExternalWalletWithoutLayout = ({
         );
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMsg]);
 
   if (!companyId) {

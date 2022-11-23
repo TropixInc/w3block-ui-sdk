@@ -88,9 +88,6 @@ const _CompleteProfileCustomTemplate = ({
     if (token && getIsTokenExpired(token as string)) {
       setStep(Steps.TOKEN_EXPIRED);
     }
-    if (token && !getIsTokenExpired(token as string)) {
-      setStep(Steps.MAIL_CONFIRMED);
-    }
   }, [token]);
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
