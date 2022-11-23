@@ -69,9 +69,6 @@ export const W3blockUISDKGeneralConfigProvider = (
 ) => {
   const { launchDarklyKey, ...configProps } = props;
 
-  console.log('W3blockUISDKGeneralConfigProvider');
-  console.log(launchDarklyKey);
-
   if (launchDarklyKey && launchDarklyKey !== '') {
     return withLDProvider({ clientSideID: launchDarklyKey })(() => (
       <W3blockUISDKGeneralConfig {...configProps} />
