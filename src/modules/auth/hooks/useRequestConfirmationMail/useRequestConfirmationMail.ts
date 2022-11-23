@@ -8,7 +8,7 @@ import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
 interface Payload {
   email: string;
   tenantId?: string;
-  callbackPath?: PixwayAppRoutes;
+  callbackPath?: string;
   verificationType?: 'numeric' | 'invisible';
 }
 
