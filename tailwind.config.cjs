@@ -20,6 +20,9 @@ module.exports = {
         29: '7.25rem',
         51: '12.75rem',
       },
+      boxShadow: {
+        'brand-shadow': '1px 1px 10px rgba(0, 0, 0, 0.2)',
+      },
       colors: {
         'brand-primary': 'rgb(var(--colors-brand-primary) / <alpha-value>)',
       },

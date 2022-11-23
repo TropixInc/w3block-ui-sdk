@@ -4,7 +4,7 @@ import { isAfter } from 'date-fns';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
@@ -23,6 +23,8 @@ enum Steps {
 
 interface Props {
   classes?: AuthLayoutBaseClasses;
+  termsRedirectLink?: string;
+  privacyRedirectLink?: string;
 }
 
 const getIsTokenExpired = (token: string) => {
@@ -33,8 +35,12 @@ const getIsTokenExpired = (token: string) => {
   return isAfter(new Date(), new Date(Number(tokenSplitted[1])));
 };
 
-const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
-  const router = useRouter();
+const _CompleteSignUpTemplate = ({
+  classes = {},
+  termsRedirectLink,
+  privacyRedirectLink,
+}: Props) => {
+  const router = useRouterConnect();
   const [translate] = useTranslation();
   const { email, token, tenantId } = router.query;
   const { mutate, isLoading, isSuccess, isError } = useChangePassword();
@@ -103,6 +109,8 @@ const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
         isError ? translate('auth>signUpError>genericErrorMessage') : undefined
       }
       classes={classes}
+      privacyRedirect={privacyRedirectLink}
+      termsRedirect={termsRedirectLink}
     />
   ) : (
     <CompleteSignUpSuccess classes={classes} />

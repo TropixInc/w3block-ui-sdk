@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
+import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { Menu } from '../Menu';
@@ -16,6 +17,7 @@ import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {
   const { mutate } = useRequestConfirmationMail();
+  useHasWallet();
   const { data: profile } = useProfile();
   const { status } = usePixwaySession();
   const email = profile?.data?.email ?? '';
@@ -76,21 +78,19 @@ const _MyProfileTemplate = () => {
 
   return (
     <>
-      <div className="pw-flex pw-flex-col pw-w-screen pw-font-poppins">
+      <div className="pw-flex pw-flex-col pw-w-screen pw-font-poppins pw-container pw-mx-auto">
         <div
           className={classNames(
-            'pw-flex pw-flex-col pw-max-w-[1332px] pw-w-full pw-mx-auto pw-flex-1 pw-py-[59px] pw-px-8'
+            'pw-flex pw-flex-col pw-w-full pw-flex-1 pw-py-[59px]'
           )}
         >
           {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
-          <div className="pw-flex pw-my-[25px]">
+          <div className="pw-flex pw-w-full pw-justify-between pw-my-[25px]">
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
-            <div className="pw-flex pw-flex-col pw-w-full">
-              <div className={classNames('pw-flex-1 sm:pw-pl-8')}>
-                <MyProfile />
-              </div>
+            <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
+              <MyProfile />
             </div>
           </div>
         </div>

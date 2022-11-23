@@ -2,6 +2,159 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.98](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.97...v0.1.1-alpha.98) (2022-11-23)
+
+### [0.1.1-alpha.97](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.96...v0.1.1-alpha.97) (2022-11-23)
+
+### [0.1.1-alpha.96](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.95...v0.1.1-alpha.96) (2022-11-23)
+
+### [0.1.1-alpha.95](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.94...v0.1.1-alpha.95) (2022-11-23)
+
+### [0.1.1-alpha.94](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.93...v0.1.1-alpha.94) (2022-11-23)
+
+### [0.1.1-alpha.93](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.92...v0.1.1-alpha.93) (2022-11-22)
+
+### [0.1.1-alpha.92](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.91...v0.1.1-alpha.92) (2022-11-22)
+
+### [0.1.1-alpha.91](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.90...v0.1.1-alpha.91) (2022-11-22)
+
+### [0.1.1-alpha.90](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.89...v0.1.1-alpha.90) (2022-11-22)
+
+### [0.1.1-alpha.89](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.88...v0.1.1-alpha.89) (2022-11-22)
+
+### [0.1.1-alpha.88](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.87...v0.1.1-alpha.88) (2022-11-21)
+
+### [0.1.1-alpha.87](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.86...v0.1.1-alpha.87) (2022-11-19)
+
+
+### Bug Fixes
+
+* **tk-889:** email adjusts ([c8f820d](https://github.com/TropixInc/w3block-ui-sdk/commit/c8f820db7b2633dcec1d0189820ed3cb59e88eb2))
+* **tk-901:** various adjusts to contemplate singUp on connect ([#96](https://github.com/TropixInc/w3block-ui-sdk/issues/96)) ([ed0a63e](https://github.com/TropixInc/w3block-ui-sdk/commit/ed0a63eecf024904bad44d15d71d70bb8752e42f))
+
+### [0.1.1-alpha.86](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.85...v0.1.1-alpha.86) (2022-11-19)
+
+### [0.1.1-alpha.85](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.84...v0.1.1-alpha.85) (2022-11-19)
+
+### [0.1.1-alpha.84](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.83...v0.1.1-alpha.84) (2022-11-11)
+
+
+### Bug Fixes
+
+* **tk-918:** adjusts on footer ([#93](https://github.com/TropixInc/w3block-ui-sdk/issues/93)) ([252f599](https://github.com/TropixInc/w3block-ui-sdk/commit/252f59935cf513463a92d9379b11229e166434d0))
+
+### [0.1.1-alpha.83](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.82...v0.1.1-alpha.83) (2022-11-11)
+
+
+### Bug Fixes
+
+* **tk918:** adjusts for footer ([1463880](https://github.com/TropixInc/w3block-ui-sdk/commit/14638803e43ea60f9d887e8a927fdbb324d0ef1a))
+
+### [0.1.1-alpha.82](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.81...v0.1.1-alpha.82) (2022-11-11)
+
+### [0.1.1-alpha.81](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.80...v0.1.1-alpha.81) (2022-11-10)
+
+
+### Bug Fixes
+
+* **tk-931:** adjusts on translate ([#91](https://github.com/TropixInc/w3block-ui-sdk/issues/91)) ([5cb1f49](https://github.com/TropixInc/w3block-ui-sdk/commit/5cb1f49aa622659670c490e759262de26bd0747a))
+
+### [0.1.1-alpha.80](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.79...v0.1.1-alpha.80) (2022-11-08)
+
+### [0.1.1-alpha.79](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.78...v0.1.1-alpha.79) (2022-11-08)
+
+
+### Bug Fixes
+
+* **tk-917:** adjusts on poll box and text  ([#90](https://github.com/TropixInc/w3block-ui-sdk/issues/90)) ([8601627](https://github.com/TropixInc/w3block-ui-sdk/commit/86016276cf2d85fb30fdc1e7cc5443e8af28a0db))
+
+### [0.1.1-alpha.78](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.77...v0.1.1-alpha.78) (2022-11-08)
+
+
+### Bug Fixes
+
+* **adjusts-RIW:** corrections on translates and word-break ([ac8be28](https://github.com/TropixInc/w3block-ui-sdk/commit/ac8be287295a73ceb12f37f1007456028926d2c9))
+
+### [0.1.1-alpha.77](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.76...v0.1.1-alpha.77) (2022-11-08)
+
+### [0.1.1-alpha.76](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.75...v0.1.1-alpha.76) (2022-11-08)
+
+### [0.1.1-alpha.75](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.74...v0.1.1-alpha.75) (2022-11-07)
+
+### [0.1.1-alpha.74](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.73...v0.1.1-alpha.74) (2022-11-07)
+
+### [0.1.1-alpha.73](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.72...v0.1.1-alpha.73) (2022-11-07)
+
+### [0.1.1-alpha.72](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.71...v0.1.1-alpha.72) (2022-11-07)
+
+
+### Bug Fixes
+
+* **tk-880:** adjusts on footer ([#88](https://github.com/TropixInc/w3block-ui-sdk/issues/88)) ([bb5fd83](https://github.com/TropixInc/w3block-ui-sdk/commit/bb5fd833df0d493c37beb94d9588ef215ab482d2))
+
+### [0.1.1-alpha.71](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.70...v0.1.1-alpha.71) (2022-11-07)
+
+
+### Bug Fixes
+
+* **adjusts-RIW:** adjusted powered By and some translates ([#87](https://github.com/TropixInc/w3block-ui-sdk/issues/87)) ([b7ae9e9](https://github.com/TropixInc/w3block-ui-sdk/commit/b7ae9e90ac9efd4d875d5ed0329d517baa4a73c2))
+
+### [0.1.1-alpha.70](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.69...v0.1.1-alpha.70) (2022-11-07)
+
+### [0.1.1-alpha.69](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.68...v0.1.1-alpha.69) (2022-11-07)
+
+### [0.1.1-alpha.68](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.67...v0.1.1-alpha.68) (2022-11-05)
+
+### [0.1.1-alpha.67](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.66...v0.1.1-alpha.67) (2022-11-04)
+
+
+### Bug Fixes
+
+* **adjusts-RIW:** adjusts for RIW ([1c49ff0](https://github.com/TropixInc/w3block-ui-sdk/commit/1c49ff0499f37b066bddc0d242df45976ab6ed24))
+
+### [0.1.1-alpha.66](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.65...v0.1.1-alpha.66) (2022-11-04)
+
+
+### Features
+
+* **PC-171:** add links in terms of privacy in signup flow ([5a325ed](https://github.com/TropixInc/w3block-ui-sdk/commit/5a325ed0025cc5bcd55fd7363045a0097864d10b))
+
+### [0.1.1-alpha.65](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.64...v0.1.1-alpha.65) (2022-11-03)
+
+### [0.1.1-alpha.64](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.63...v0.1.1-alpha.64) (2022-11-03)
+
+### [0.1.1-alpha.63](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.62...v0.1.1-alpha.63) (2022-11-01)
+
+### [0.1.1-alpha.62](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.60...v0.1.1-alpha.62) (2022-11-01)
+
+### [0.1.1-alpha.61](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.60...v0.1.1-alpha.61) (2022-11-01)
+
+### [0.1.1-alpha.60](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.59...v0.1.1-alpha.60) (2022-11-01)
+
+### [0.1.1-alpha.59](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.58...v0.1.1-alpha.59) (2022-10-31)
+
+### [0.1.1-alpha.57](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.56...v0.1.1-alpha.57) (2022-10-28)
+
+### [0.1.1-alpha.58](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.57...v0.1.1-alpha.58) (2022-10-28)
+
+
+### Bug Fixes
+
+* **signUp:** adjusted signUp ([#82](https://github.com/TropixInc/w3block-ui-sdk/issues/82)) ([71e9ccd](https://github.com/TropixInc/w3block-ui-sdk/commit/71e9ccd19630eca9c2bf6342923eb76ee1a68d00))
+
+### [0.1.1-alpha.57](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.56...v0.1.1-alpha.57) (2022-10-28)
+
+### [0.1.1-alpha.56](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.55...v0.1.1-alpha.56) (2022-10-27)
+
+### [0.1.1-alpha.55](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.54...v0.1.1-alpha.55) (2022-10-26)
+
+### [0.1.1-alpha.54](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.53...v0.1.1-alpha.54) (2022-10-26)
+
+
+### Bug Fixes
+
+* **PC-153:** adjust on lateral menu ([#77](https://github.com/TropixInc/w3block-ui-sdk/issues/77)) ([dae6284](https://github.com/TropixInc/w3block-ui-sdk/commit/dae6284665cb8b532e5fccb86eaf5356c83d8caa))
+
 ### [0.1.1-alpha.53](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.52...v0.1.1-alpha.53) (2022-10-19)
 
 

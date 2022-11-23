@@ -39,7 +39,7 @@ jobs:
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install modules
-        run: npm install
+        run: npm install --force
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_GITHUB_TOKEN }}
       - name: Build

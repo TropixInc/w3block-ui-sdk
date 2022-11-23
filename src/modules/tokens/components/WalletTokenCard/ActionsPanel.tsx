@@ -18,7 +18,7 @@ export const WalletTokenCardActionsPanel = ({
   return (
     <div
       className={classNames(
-        'pw-absolute pw-bg-white pw-py-4 pw-px-4 pw-rounded-[14px] pw-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] -pw-left-2 pw-bottom-[1px] pw-z-10 pw-transition-opacity pw-duration-200',
+        'pw-absolute pw-bg-white pw-py-2 pw-px-2 pw-rounded-[14px] pw-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] pw-left-2 pw-bottom-[30px] pw-z-10 pw-transition-opacity pw-duration-200',
         isOpen ? 'pw-opacity-100' : 'pw-opacity-0'
       )}
     >

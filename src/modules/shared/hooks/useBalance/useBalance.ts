@@ -19,12 +19,16 @@ interface useBalanceParams {
 export const useBalance = ({ chainId, address }: useBalanceParams) => {
   const axios = useAxios(W3blockAPI.KEY);
 
-  return usePrivateQuery([chainId, address], () =>
-    axios.get<GetBalanceAPIResponse>(
-      PixwayAPIRoutes.BALANCE.replace('{address}', address).replace(
-        '{chainId}',
-        String(chainId)
-      )
-    )
+  const balance = usePrivateQuery(
+    [chainId, address],
+    () =>
+      axios.get<GetBalanceAPIResponse>(
+        PixwayAPIRoutes.BALANCE.replace('{address}', address).replace(
+          '{chainId}',
+          String(chainId)
+        )
+      ),
+    { enabled: address != undefined && address != '' }
   );
+  return chainId && address && address != '' ? balance : null;
 };
