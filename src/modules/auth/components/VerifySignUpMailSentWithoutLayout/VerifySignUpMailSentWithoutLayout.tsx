@@ -6,6 +6,7 @@ import { addMinutes, isAfter } from 'date-fns';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
@@ -24,6 +25,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
   isPostSignUp = false,
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
+  const { connectProxyPass } = useCompanyConfig();
   const { mutate, isSuccess, isLoading, reset } = useRequestPasswordChange();
   const {
     mutate: emailMutate,
@@ -58,9 +60,11 @@ export const VerifySignUpMailSentWithoutLayout = ({
     }
   }, [emailSuccess, setCountdownDate, emailReset]);
 
-  const callbackPath = isPostSignUp
-    ? PixwayAppRoutes.COMPLETE_SIGNUP
-    : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
+  const callbackPath =
+    connectProxyPass +
+    (isPostSignUp
+      ? PixwayAppRoutes.COMPLETE_SIGNUP
+      : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
 
   const handleClick = () => {
     if (isPostSignUp) {
