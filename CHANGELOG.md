@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.93](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.92...v0.1.1-alpha.93) (2022-11-22)
+
+### [0.1.1-alpha.92](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.91...v0.1.1-alpha.92) (2022-11-22)
+
+### [0.1.1-alpha.91](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.90...v0.1.1-alpha.91) (2022-11-22)
+
+### [0.1.1-alpha.90](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.89...v0.1.1-alpha.90) (2022-11-22)
+
+### [0.1.1-alpha.89](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.88...v0.1.1-alpha.89) (2022-11-22)
+
+### [0.1.1-alpha.88](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.87...v0.1.1-alpha.88) (2022-11-21)
+
+### [0.1.1-alpha.87](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.86...v0.1.1-alpha.87) (2022-11-19)
+
+
+### Bug Fixes
+
+* **tk-889:** email adjusts ([c8f820d](https://github.com/TropixInc/w3block-ui-sdk/commit/c8f820db7b2633dcec1d0189820ed3cb59e88eb2))
+* **tk-901:** various adjusts to contemplate singUp on connect ([#96](https://github.com/TropixInc/w3block-ui-sdk/issues/96)) ([ed0a63e](https://github.com/TropixInc/w3block-ui-sdk/commit/ed0a63eecf024904bad44d15d71d70bb8752e42f))
+
+### [0.1.1-alpha.86](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.85...v0.1.1-alpha.86) (2022-11-19)
+
+### [0.1.1-alpha.85](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.84...v0.1.1-alpha.85) (2022-11-19)
+
 ### [0.1.1-alpha.84](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.83...v0.1.1-alpha.84) (2022-11-11)
 
 

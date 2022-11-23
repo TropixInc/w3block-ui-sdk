@@ -18,7 +18,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
@@ -51,21 +51,22 @@ const _ConnectExternalWalletWithoutLayout = ({
   const [errorMsg, setErrorMsg] = useState('');
   const { companyId } = useCompanyConfig();
   const token = useToken();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { data: profile } = useProfile();
   const { status } = usePixwaySession();
   const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
 
   useEffect(() => {
-    if (status === 'unauthenticated') router.push(PixwayAppRoutes.SIGN_IN);
+    if (status === 'unauthenticated')
+      router.pushConnect(PixwayAppRoutes.SIGN_IN);
 
     if (profile) {
       const { data: user } = profile;
       const { wallets } = user;
 
       if (wallets?.length) {
-        router.push(redirectRoute);
+        router.pushConnect(redirectRoute);
       } else {
         setIsLoading(false);
       }
@@ -132,7 +133,7 @@ const _ConnectExternalWalletWithoutLayout = ({
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(redirectRoute);
+    router.pushConnect(redirectRoute);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

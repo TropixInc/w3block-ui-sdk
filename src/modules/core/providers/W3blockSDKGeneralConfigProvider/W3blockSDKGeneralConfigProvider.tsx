@@ -22,6 +22,7 @@ interface Props {
   logoUrl: string;
   isProduction: boolean;
   appBaseUrl: string;
+  connectProxyPass?: string;
 }
 
 export const W3blockUISDKGeneralConfig = ({
@@ -32,10 +33,11 @@ export const W3blockUISDKGeneralConfig = ({
   logoUrl,
   isProduction,
   appBaseUrl,
+  connectProxyPass = '',
 }: Props) => {
   const companyValue = useMemo(
-    () => ({ companyId, logoUrl, appBaseUrl }),
-    [logoUrl, companyId, appBaseUrl]
+    () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass }),
+    [logoUrl, companyId, appBaseUrl, connectProxyPass]
   );
 
   const environmentValue = useMemo(
@@ -67,7 +69,14 @@ export const W3blockUISDKGeneralConfigProvider = (
 ) => {
   const { launchDarklyKey, ...configProps } = props;
 
-  return withLDProvider({ clientSideID: launchDarklyKey })(() => (
-    <W3blockUISDKGeneralConfig {...configProps} />
-  ));
+  console.log('W3blockUISDKGeneralConfigProvider');
+  console.log(launchDarklyKey);
+
+  if (launchDarklyKey && launchDarklyKey !== '') {
+    return withLDProvider({ clientSideID: launchDarklyKey })(() => (
+      <W3blockUISDKGeneralConfig {...configProps} />
+    ));
+  } else {
+    return <W3blockUISDKGeneralConfig {...configProps} />;
+  }
 };

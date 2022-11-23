@@ -1,6 +1,6 @@
 import { MouseEventHandler, ReactNode } from 'react';
 
-import useRouter from '../../hooks/useRouter';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 
 export interface LinkProps {
   children: ReactNode;
@@ -15,7 +15,7 @@ export const Link = ({
   className = '',
   disabled = false,
 }: LinkProps) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const onClickLink: MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
     router.push(href);

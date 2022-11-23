@@ -3,17 +3,17 @@ import { useDebounce } from 'react-use';
 
 import { isAfter } from 'date-fns';
 
+import { contentTypeEnum } from '../../../poll';
+import { ContainerControllerClasses, ExtraBy, position } from '../../../shared';
+import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-import useTranslation from '../../../shared/hooks/useTranslation';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
-import { AuthButton } from '../AuthButton';
-import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
-import { VerifySignUpMailSent } from '../VerifySignUpMailSent';
-import { VerifySignUpTokenExpired } from '../VerifySignUpTokenExpired';
+import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
+import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
+import { VerifySignUpTokenExpiredTemplateSDK } from '../VerifySignUpTokenExpiredTemplateSDK';
 
 enum Steps {
   LOADING = 1,
@@ -22,15 +22,38 @@ enum Steps {
   EMAIL_SENT,
 }
 
+interface VerifySignUpTemplateSDKProps {
+  classes?: ContainerControllerClasses;
+  extraBy?: ExtraBy[];
+  bgColor?: string;
+  infoPosition?: position;
+  contentType?: contentTypeEnum;
+  FAQContext?: FAQContextEnum;
+  separation?: boolean;
+  logoUrl?: string;
+  textContainer?: ContainerTextBesideProps;
+  className?: string;
+}
+
 const TIME_TO_REDIRECT_TO_HOME = 6000;
 
-const _MailConfirmationTemplate = () => {
-  const [translate] = useTranslation();
-  const { logoUrl } = useCompanyConfig();
+const _VerifySignUpTemplateSDK = ({
+  extraBy,
+  classes,
+  bgColor,
+  infoPosition,
+  contentType,
+  FAQContext,
+  separation,
+  logoUrl,
+  textContainer,
+  className,
+}: VerifySignUpTemplateSDKProps) => {
   const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
   const router = useRouterConnect();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
+  const emailToUse = email ? decodeURIComponent(email as string) : '';
 
   const [_, cancel] = useDebounce(
     () => {
@@ -89,37 +112,58 @@ const _MailConfirmationTemplate = () => {
 
   if (step === Steps.TOKEN_EXPIRED)
     return (
-      <VerifySignUpTokenExpired
-        email={email as string}
+      <VerifySignUpTokenExpiredTemplateSDK
+        email={emailToUse.replaceAll(' ', '+') ?? ''}
         onSendEmail={() => setStep(Steps.EMAIL_SENT)}
+        extraBy={extraBy}
+        FAQContext={FAQContext}
+        bgColor={bgColor}
+        className={className}
+        classes={classes}
+        contentType={contentType}
+        infoPosition={infoPosition}
+        logoUrl={logoUrl}
+        separation={separation}
+        textContainer={textContainer}
       />
     );
 
   if (step === Steps.EMAIL_SENT)
-    return <VerifySignUpMailSent email={email as string} />;
+    return (
+      <VerifySignUpMailSentTemplateSDK
+        FAQContext={FAQContext}
+        bgColor={bgColor}
+        className={className}
+        classes={classes}
+        contentType={contentType}
+        infoPosition={infoPosition}
+        logoUrl={logoUrl}
+        separation={separation}
+        textContainer={textContainer}
+        extraBy={extraBy}
+        email={emailToUse.replaceAll(' ', '+') ?? ''}
+      />
+    );
 
   return isLoading || !step || step === Steps.LOADING ? null : (
-    <AuthLayoutBase
-      logo={logoUrl}
-      title={translate('auth>verifySignUp>mailVerifiedStepTitle')}
-    >
-      <p className="pw-text-[13px] pw-leading-4 pw-text-[#353945] pw-my-[18px]">
-        {translate('auth>verifySignUp>waitForRedirectionMessage')}
-      </p>
-      <AuthButton
-        fullWidth
-        onClick={() => router.pushConnect(PixwayAppRoutes.SIGN_IN)}
-        className="pw-mb-[18px]"
-      >
-        {translate('loginPage>formSubmitButton>signIn')}
-      </AuthButton>
-      <AuthFooter />
-    </AuthLayoutBase>
+    <CompleteSignUpSuccessTemplateSDK
+      FAQContext={FAQContext}
+      bgColor={bgColor}
+      className={className}
+      classes={classes}
+      contentType={contentType}
+      infoPosition={infoPosition}
+      logoUrl={logoUrl}
+      textContainer={textContainer}
+      extraBy={extraBy}
+    />
   );
 };
 
-export const MailConfirmationTemplate = () => (
+export const VerifySignUpTemplateSDK = (
+  props: VerifySignUpTemplateSDKProps
+) => (
   <TranslatableComponent>
-    <_MailConfirmationTemplate />
+    <_VerifySignUpTemplateSDK {...props} />
   </TranslatableComponent>
 );

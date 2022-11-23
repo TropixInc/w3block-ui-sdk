@@ -148,7 +148,11 @@ const _W3blockFooter = ({
       <div className="pw-flex pw-py-[22px] sm:pw-py-4 pw-flex-col pw-gap-[15px] sm:pw-gap-4 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-text-[#090909]">
         <div className="pw-w-full pw-font-semibold pw-text-sm pw-leading-[17px] pw-gap-[7px] sm:pw-gap-[54px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
           <a href={PixwayAppRoutes.HOME} className="footer-link-logo">
-            <img src={logoUrl} alt="logo" className="footer-logo-image" />
+            <img
+              src={logoUrl}
+              alt="logo"
+              className="footer-logo-image pw-max-w-[140px] pw-max-h-[60px]"
+            />
           </a>
           {(links ?? defaultLinks).map(({ name, router }) => (
             <a style={{ color: textColor }} href={router} key={router}>

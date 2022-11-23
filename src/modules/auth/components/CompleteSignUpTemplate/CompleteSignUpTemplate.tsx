@@ -4,7 +4,7 @@ import { isAfter } from 'date-fns';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
@@ -40,7 +40,7 @@ const _CompleteSignUpTemplate = ({
   termsRedirectLink,
   privacyRedirectLink,
 }: Props) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [translate] = useTranslation();
   const { email, token, tenantId } = router.query;
   const { mutate, isLoading, isSuccess, isError } = useChangePassword();

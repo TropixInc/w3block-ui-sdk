@@ -18,7 +18,7 @@ import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg'
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useIsProduction } from '../../hooks/useIsProduction';
-import useRouter from '../../hooks/useRouter';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
 import TranslatableComponent from '../TranslatableComponent';
 
@@ -35,7 +35,7 @@ interface TabsConfig {
 
 const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
-  const router = useRouter();
+  const router = useRouterConnect();
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
   const [state, copyToClipboard] = useCopyToClipboard();
@@ -105,7 +105,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const handleSignOut = () => {
     signOut().then(() => {
-      router.push(PixwayAppRoutes.SIGN_IN);
+      router.pushConnect(PixwayAppRoutes.SIGN_IN);
     });
   };
 
@@ -113,7 +113,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     const isActive: boolean = router.pathname === tab.link;
 
     return (
-      <a href={tab.link} key={tab.title}>
+      <a href={router.routerToHref(tab.link)} key={tab.title}>
         <li
           key={tab.title}
           className={classNames(

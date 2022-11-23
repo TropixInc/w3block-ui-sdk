@@ -20,7 +20,7 @@ interface Config {
   termsRedirect?: string;
 }
 
-const EMAIL_ALREADY_IN_USE_API_MESSAGE = 'email is already in use';
+export const EMAIL_ALREADY_IN_USE_API_MESSAGE = 'email is already in use';
 
 const _SignUpTemplate = ({
   privacyRedirect = PixwayAppRoutes.PRIVACY_POLICY,

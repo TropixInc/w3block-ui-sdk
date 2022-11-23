@@ -6,7 +6,7 @@ import { addMinutes } from 'date-fns';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
@@ -19,7 +19,7 @@ const HOUR_IN_MS = 3600000;
 
 export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
-  const { query, push } = useRouter();
+  const { query, pushConnect } = useRouterConnect();
   const email = (query.email as string) ?? '';
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
@@ -66,7 +66,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6) {
-      push(
+      pushConnect(
         PixwayAppRoutes.COMPLETE_SIGNUP +
           `?email=${encodeURIComponent(email)}&token=${code};${
             Date.now() + HOUR_IN_MS

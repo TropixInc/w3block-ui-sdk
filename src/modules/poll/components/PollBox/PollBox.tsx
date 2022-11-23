@@ -14,7 +14,7 @@ import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockB
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePollBySlug } from '../../hooks/usePollBySlug';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
@@ -33,14 +33,13 @@ export const PollBox = ({
   slug,
   redirectWithoutPoll = PixwayAppRoutes.SIGN_IN,
 }: PollBoxProps) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [translate] = useTranslation();
-  const { query, push, isReady } = useRouter();
   const { mutate: sendPipe } = useSendToPipeForm();
   const isProduction = useIsProduction();
   const [alreadyAnswered, setAlreadyAnswered] = useState(false);
   const [achievedLimit, setAchievedLimit] = useState(false);
-  const { slug: slugQuery } = query;
+  const { slug: slugQuery } = router.query;
   const { data: session } = usePixwaySession();
   const [error, setError] = useState('');
   slug = slug ?? (slugQuery as string);
@@ -53,11 +52,11 @@ export const PollBox = ({
   });
 
   useEffect(() => {
-    if ((!slug && isReady) || isError) {
-      push(redirectWithoutPoll);
+    if ((!slug && router.isReady) || isError) {
+      router.pushConnect(redirectWithoutPoll);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, isReady, isError]);
+  }, [slug, router.isReady, isError]);
 
   const methods = useForm<IPollInterface>({
     defaultValues: {
@@ -135,14 +134,14 @@ export const PollBox = ({
               if (data.data.achievedLimit) {
                 setAchievedLimit(true);
               } else if (!session && data.data.newUser) {
-                router.push(
+                router.pushConnect(
                   PixwayAppRoutes.VERIfY_WITH_CODE +
                     `?email=${encodeURIComponent(methods.getValues('email'))}`
                 );
               } else if (!session && !data.data.newUser) {
-                router.push(PixwayAppRoutes.SIGN_IN);
+                router.pushConnect(PixwayAppRoutes.SIGN_IN);
               } else if (session) {
-                router.push(PixwayAppRoutes.MY_TOKENS);
+                router.pushConnect(PixwayAppRoutes.MY_TOKENS);
               }
             },
           }
