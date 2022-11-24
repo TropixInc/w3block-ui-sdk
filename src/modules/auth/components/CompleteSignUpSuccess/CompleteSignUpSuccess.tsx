@@ -11,18 +11,26 @@ import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
 
 interface Props {
   classes?: AuthLayoutBaseClasses;
+  handleContinue?: () => void;
 }
 
-export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
+export const CompleteSignUpSuccess = ({
+  classes = {},
+  handleContinue,
+}: Props) => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
 
-  const handleContinue = () => {
-    signOut().then(() => {
-      router.pushConnect(PixwayAppRoutes.SIGN_IN);
-    });
+  const handleContinueInside = () => {
+    if (handleContinue) {
+      handleContinue();
+    } else {
+      signOut().then(() => {
+        router.pushConnect(PixwayAppRoutes.SIGN_IN);
+      });
+    }
   };
 
   return (
@@ -45,7 +53,11 @@ export const CompleteSignUpSuccess = ({ classes = {} }: Props) => {
           {translate('auth>completeSignUp>mailAlreadyVerified')}
         </p>
 
-        <AuthButton fullWidth className="pw-mb-6" onClick={handleContinue}>
+        <AuthButton
+          fullWidth
+          className="pw-mb-6"
+          onClick={handleContinueInside}
+        >
           {translate('loginPage>formSubmitButton>signIn')}
         </AuthButton>
         <AuthFooter />
