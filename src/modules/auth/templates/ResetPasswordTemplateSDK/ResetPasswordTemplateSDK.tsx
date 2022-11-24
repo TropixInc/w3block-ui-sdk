@@ -7,7 +7,15 @@ export const ResetPasswordTemplateSDK = (props: AllAuthPageProps) => {
   return (
     <div style={{ backgroundColor: props.bgColor }}>
       <ContainerControllerSDK
-        {...props}
+        infoPosition={props.infoPosition}
+        textContainer={props.textContainer}
+        FAQContext={props.FAQContext}
+        bgColor={props.bgColor}
+        separation={props.separation}
+        extraBy={props.extraBy}
+        className={props.className}
+        classes={props.classes}
+        logoUrl={props.logoUrl}
         infoComponent={
           <Box>
             <ResetPasswordWithoutLayout />
