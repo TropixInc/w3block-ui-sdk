@@ -74,7 +74,6 @@ const _ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => {
   const sessionUser = usePixwaySession();
   const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
-  const { whitelist } = router.query;
 
   useEffect(() => {
     const { data } = profile;
@@ -153,9 +152,7 @@ const _ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => {
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(
-      redirectLink && whitelist ? redirectLink : PixwayAppRoutes.HOME
-    );
+    router.push(redirectLink ? redirectLink : PixwayAppRoutes.HOME);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
