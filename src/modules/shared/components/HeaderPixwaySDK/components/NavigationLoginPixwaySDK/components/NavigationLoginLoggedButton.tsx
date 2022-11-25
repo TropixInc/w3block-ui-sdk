@@ -113,7 +113,8 @@ export const useDefaultMenuTabs = () => {
         },
       },
     ],
-    [translate, router, signOut]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [translate, router]
   );
 };
 

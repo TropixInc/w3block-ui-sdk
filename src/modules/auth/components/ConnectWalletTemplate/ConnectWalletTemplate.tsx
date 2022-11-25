@@ -60,7 +60,9 @@ export const ConnectToMetamaskButton = ({
   );
 };
 
-const _ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => {
+const _ConnectWalletTemplate = ({
+  redirectLink = PixwayAppRoutes.HOME,
+}: ConnectWalletProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
@@ -152,7 +154,7 @@ const _ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => {
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(redirectLink ? redirectLink : PixwayAppRoutes.HOME);
+    router.push(redirectLink, redirectLink);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
