@@ -35,6 +35,7 @@ export enum PixwayAPIRoutes {
   PASS_BENEFIT_BY_ID = '/token-pass-benefits/tenants/{tenantId}/{benefitId}',
   PASS_BENEFIT = '/token-pass-benefits/tenants/{tenantId}',
   PASS_BY_ID = '/token-passes/tenants/{tenantId}/{id}',
+  PASS_BY_USER = '/token-passes/tenants/{tenantId}/users/{userId}?userId={userId}',
   PASS_BENEFIT_OPERATORS_BY_BENEFITID = '/token-pass-benefit-operators/tenants/{tenantId}/benefits/{benefitId}',
   PASS_BENEFIT_BY_CHAIN_CONTRACT_TOKEN = '/token-pass-benefits/tenants/{tenantId}/{chainId}/{contractAddress}/{tokenId}',
   PASS_BENEFIT_REGISTER_USE = '/token-pass-benefits/tenant/{tenantId}/{id}/register-use',

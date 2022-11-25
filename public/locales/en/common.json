@@ -62,6 +62,7 @@
   "header>logged>hiWallet": "Hi, {{name}} | Your Weblock wallet:",
   "header>components>defaultTab>myAccount": "My account",
   "header>components>defaultTab>myTokens": "My tokens",
+  "header>components>defaultTab>tokenPass": "Token Pass",
   "header>components>defaultTab>wallet": "Wallet",
   "header>components>defaultTab>settings": "Settings",
   "header>components>defaultTab>helpCenter": "Help center",

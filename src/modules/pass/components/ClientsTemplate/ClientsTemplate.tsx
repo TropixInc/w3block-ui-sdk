@@ -44,7 +44,7 @@ export const ClientTemplate = () => {
   const title = isMobile
     ? ['Nome', 'ID', 'Local', '']
     : ['Nome', 'Documento', 'Token ID', 'Carteira', 'Data', 'Local', 'Status'];
-
+  const [translate] = useTranslation();
   const isProduction = useIsProduction();
   const isDevelopment = !isProduction;
   const [filteredData, setFilteredData] = useState(dataMoked);
@@ -88,7 +88,7 @@ export const ClientTemplate = () => {
   };
 
   return isDevelopment ? (
-    <BaseTemplate>
+    <BaseTemplate title={translate('components>menu>tokenPass>clients')}>
       <div className="pw-flex pw-flex-col sm:pw-flex-row pw-p-[16px] pw-gap-[24px] sm:pw-gap-[16px] pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[16px]">
         <img
           src={token.image}

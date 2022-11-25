@@ -15,6 +15,7 @@ export enum PixwayAppRoutes {
   TOKEN_DETAILS = '/tokens/{contractAddress}/{chainId}/{tokenId}',
   TOKENS = '/tokens',
   TOKENPASS = '/tokens/pass',
+  TOKENPASS_DETAIL = '/tokens/pass/{benefitId}',
   TOKENPASS_CLIENTS = '/tokens/pass/client',
   TOKENPASS_REPORT = '/tokens/pass/repor',
   CHECKOUT_CONFIRMATION = '/checkout/confirmation',

@@ -1,4 +1,12 @@
-import { ReactNode, useContext, useMemo, useRef, useState } from 'react';
+/* eslint-disable prettier/prettier */
+import {
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useClickAway } from 'react-use';
 
 import { ChainId, WalletTypes } from '@w3block/sdk-id';
@@ -12,17 +20,18 @@ import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logout
 import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
 import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
 // import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
+import { ReactComponent as TicketIcon } from '../../../../../assets/icons/ticketFilled.svg';
 import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
+import { useIsProduction } from '../../../../../hooks/useIsProduction';
 import useRouter from '../../../../../hooks/useRouter';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
 import { PixwayButton } from '../../../../PixwayButton';
 import { NavigationMenuTabs } from '../interfaces/menu';
-
 interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
   menuTabs?: NavigationMenuTabs[];
@@ -53,8 +62,8 @@ export const NavigationLoginLoggedButton = ({
           {wallet?.type === WalletTypes.Vault
             ? translate('header>logged>hiWallet', { name: profile?.data?.name })
             : translate('header>logged>metamaskHiWallet', {
-                name: profile?.data?.name,
-              })}
+              name: profile?.data?.name,
+            })}
         </p>
         <div className="pw-flex pw-items-center">
           <p
@@ -71,50 +80,66 @@ export const NavigationLoginLoggedButton = ({
     </div>
   );
 };
-
 export const useDefaultMenuTabs = () => {
+  const isProduction = useIsProduction();
   const [translate] = useTranslation();
   const router = useRouter();
   const { signOut } = usePixwayAuthentication();
-  return useMemo<NavigationMenuTabs[]>(
-    () => [
-      {
-        name: translate('header>components>defaultTab>myAccount'),
-        route: PixwayAppRoutes.MY_PROFILE,
-        icon: <UserIcon />,
+  const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
+
+  const items = [
+    {
+      name: translate('header>components>defaultTab>myAccount'),
+      route: PixwayAppRoutes.MY_PROFILE,
+      icon: <UserIcon />,
+    },
+    {
+      name: translate('header>components>defaultTab>myTokens'),
+      route: PixwayAppRoutes.TOKENS,
+      icon: <MyTokenIcon />,
+    },
+    {
+      name: translate('header>components>defaultTab>wallet'),
+      route: PixwayAppRoutes.WALLET,
+      icon: <WalletIcon />,
+    },
+    // {
+    //   name: translate('header>components>defaultTab>settings'),
+    //   route: PixwayAppRoutes.SETTINGS,
+    //   icon: <SettingsIcon />,
+    // },
+    // {
+    //   name: translate('header>components>defaultTab>helpCenter'),
+    //   route: PixwayAppRoutes.HELP,
+    //   icon: <HelpIcon />,
+    // },
+    {
+      name: 'Logout',
+      icon: <LogoutIcon />,
+      action: () => {
+        signOut().then(() => {
+          router.push(PixwayAppRoutes.SIGN_IN);
+        });
       },
-      {
-        name: translate('header>components>defaultTab>myTokens'),
-        route: PixwayAppRoutes.TOKENS,
-        icon: <MyTokenIcon />,
-      },
-      {
-        name: translate('header>components>defaultTab>wallet'),
-        route: PixwayAppRoutes.WALLET,
-        icon: <WalletIcon />,
-      },
-      // {
-      //   name: translate('header>components>defaultTab>settings'),
-      //   route: PixwayAppRoutes.SETTINGS,
-      //   icon: <SettingsIcon />,
-      // },
-      // {
-      //   name: translate('header>components>defaultTab>helpCenter'),
-      //   route: PixwayAppRoutes.HELP,
-      //   icon: <HelpIcon />,
-      // },
-      {
-        name: 'Logout',
-        icon: <LogoutIcon />,
-        action: () => {
-          signOut().then(() => {
-            router.push(PixwayAppRoutes.SIGN_IN);
-          });
-        },
-      },
-    ],
-    [translate, router, signOut]
-  );
+    },
+  ];
+
+  useEffect(() => {
+    setTabsToShow(
+      !isProduction
+        ? [
+          ...items,
+          {
+            name: translate('header>components>defaultTab>tokenPass'),
+            route: PixwayAppRoutes.TOKENPASS,
+            icon: <TicketIcon width={17} height={17} />,
+          },
+        ]
+        : items
+    );
+  }, [isProduction, signOut]);
+
+  return tabsToShow;
 };
 
 const NavigationMenu = ({
@@ -184,9 +209,8 @@ const NavigationMenu = ({
   return (
     <div className="pw-relative">
       <div
-        className={`pw-absolute pw-mt-[1.68rem] ${
-          hasMainWallet ? 'pw-ml-[210px]' : ''
-        } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
+        className={`pw-absolute pw-mt-[1.68rem] ${hasMainWallet ? 'pw-ml-[210px]' : ''
+          } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
       >
         {hasMainWallet ? <WithWallet /> : <WithoutWallet />}
 

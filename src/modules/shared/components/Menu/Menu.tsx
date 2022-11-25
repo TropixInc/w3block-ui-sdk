@@ -78,16 +78,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       if (!isProduction) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         setTabsToShow([
+          {
+            title: translate('components>menu>dashboard'),
+            icon: <DashboardIcon width={17} height={17} />,
+            link: PixwayAppRoutes.DASHBOARD,
+          },
           ...tabsDefault,
           {
             title: translate('components>menu>tokenPass'),
             icon: <TicketIcon width={17} height={17} />,
             link: PixwayAppRoutes.TOKENPASS,
-          },
-          {
-            title: translate('components>menu>dashboard'),
-            icon: <DashboardIcon width={17} height={17} />,
-            link: PixwayAppRoutes.DASHBOARD,
           },
         ]);
       } else {
