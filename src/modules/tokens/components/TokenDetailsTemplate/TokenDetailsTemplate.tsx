@@ -1,5 +1,4 @@
 import { InternalPagesLayoutBase } from '../../../shared';
-import { ReactComponent as ChevronLeft } from '../../../shared/assets/icons/chevronLeftFilled.svg';
 import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -52,6 +51,7 @@ const _TokenDetailsTemplate = () => {
         title={publicTokenResponse?.data?.information.title}
         mainImage={publicTokenResponse?.data?.information.mainImage ?? ''}
         className="pw-mb-6"
+        isMultiplePass={true}
       />
 
       <MintedInfoCard
