@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.104](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.103...v0.1.1-alpha.104) (2022-11-25)
+
+
+### Features
+
+* **np-12:** create internal multiple pass page ([1cf1a69](https://github.com/TropixInc/w3block-ui-sdk/commit/1cf1a6929d39f658555c5135dbcbf772b09ec937))
+* **np-12:** Create pagination for table ([7c4d7c1](https://github.com/TropixInc/w3block-ui-sdk/commit/7c4d7c180f01ac7a04b3e8df4c54609fd64f3e48))
+* **np-12:** Finished first internal pass page ([68a4927](https://github.com/TropixInc/w3block-ui-sdk/commit/68a4927d71bb94491d54ab0ca795f05d976d45a7))
+* **np-12:** initial create of second page ([f90b7ad](https://github.com/TropixInc/w3block-ui-sdk/commit/f90b7ad9fff6867b84dd8005c3104a6241310f12))
+* **np-12:** re-install node_modules ([90d0b47](https://github.com/TropixInc/w3block-ui-sdk/commit/90d0b474f1e71fb2ebe9340bab194454bb779930))
+* **np-13:** Create generic table ([391401c](https://github.com/TropixInc/w3block-ui-sdk/commit/391401cfec8c6400ef1768653a3469b177cbdd1c))
+
 ### [0.1.1-alpha.103](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.102...v0.1.1-alpha.103) (2022-11-25)
 
 ### [0.1.1-alpha.102](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.101...v0.1.1-alpha.102) (2022-11-24)
