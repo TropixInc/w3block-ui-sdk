@@ -1,5 +1,4 @@
 import { InternalPagesLayoutBase } from '../../../shared';
-import { ReactComponent as ChevronLeft } from '../../../shared/assets/icons/chevronLeftFilled.svg';
 import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -29,9 +28,7 @@ const _TokenDetailsTemplate = () => {
           <button
             onClick={() => router.pushConnect(PixwayAppRoutes.TOKENS)}
             className="pw-flex pw-items-center pw-justify-center pw-rounded-full pw-border pw-border-[#777E8F] pw-bg-[#F7F7F7] pw-w-4 pw-h-4 pw-ml-[22px]"
-          >
-            <ChevronLeft className="pw-w-[4.25px] pw-h-[8.5px] pw-fill-[#777E8F]" />
-          </button>
+          ></button>
         </div>
 
         <div className="pw-w-full pw-h-[1px] pw-bg-[#EFEFEF]" />
@@ -52,6 +49,7 @@ const _TokenDetailsTemplate = () => {
         title={publicTokenResponse?.data?.information.title}
         mainImage={publicTokenResponse?.data?.information.mainImage ?? ''}
         className="pw-mb-6"
+        isMultiplePass={true}
       />
 
       <MintedInfoCard
