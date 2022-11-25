@@ -4,9 +4,11 @@ import { isAfter } from 'date-fns';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 import { CompleteSignUpSuccess } from '../CompleteSignUpSuccess';
 import { SignUpForm } from '../SignUpForm';
@@ -23,6 +25,10 @@ enum Steps {
 
 interface Props {
   classes?: AuthLayoutBaseClasses;
+  termsRedirectLink?: string;
+  privacyRedirectLink?: string;
+  afterLoginRedirectLink?: string;
+  hasWhitelist?: boolean;
 }
 
 const getIsTokenExpired = (token: string) => {
@@ -33,9 +39,18 @@ const getIsTokenExpired = (token: string) => {
   return isAfter(new Date(), new Date(Number(tokenSplitted[1])));
 };
 
-const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
-  const router = useRouter();
+const _CompleteSignUpTemplate = ({
+  classes = {},
+  termsRedirectLink,
+  privacyRedirectLink,
+  afterLoginRedirectLink = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+}: Props) => {
+  const router = useRouterConnect();
   const [translate] = useTranslation();
+  const { pushConnect } = useRouterConnect();
+  const { companyId } = useCompanyConfig();
+  const [password, setPassword] = useState<string>();
+  const { signOut, signIn } = usePixwayAuthentication();
   const { email, token, tenantId } = router.query;
   const { mutate, isLoading, isSuccess, isError } = useChangePassword();
   const [step, setStep] = useState(() => {
@@ -65,11 +80,28 @@ const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
   }, [token]);
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
-    mutate({
-      email: email as string,
-      password,
-      confirmation,
-      token: token as string,
+    mutate(
+      {
+        email: email as string,
+        password,
+        confirmation,
+        token: token as string,
+      },
+      {
+        onSuccess() {
+          setPassword(password);
+        },
+      }
+    );
+  };
+
+  const handleContinue = () => {
+    signOut().then(() => {
+      signIn({
+        email: email as string,
+        password: password as string,
+        companyId: companyId,
+      }).then(() => pushConnect(afterLoginRedirectLink));
     });
   };
 
@@ -103,9 +135,11 @@ const _CompleteSignUpTemplate = ({ classes = {} }: Props) => {
         isError ? translate('auth>signUpError>genericErrorMessage') : undefined
       }
       classes={classes}
+      privacyRedirect={privacyRedirectLink}
+      termsRedirect={termsRedirectLink}
     />
   ) : (
-    <CompleteSignUpSuccess classes={classes} />
+    <CompleteSignUpSuccess handleContinue={handleContinue} classes={classes} />
   );
 };
 

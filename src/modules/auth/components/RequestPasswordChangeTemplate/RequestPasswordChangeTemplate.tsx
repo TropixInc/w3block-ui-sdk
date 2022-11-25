@@ -8,7 +8,7 @@ import { Link } from '../../../shared/components/Link';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthButton } from '../AuthButton';
@@ -25,7 +25,7 @@ interface Form {
 const _RequestPasswordChangeTemplate = () => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
   const schema = object().shape({
     email: string()
@@ -103,7 +103,7 @@ const _RequestPasswordChangeTemplate = () => {
                   'companyAuth>requestPasswordChange>emailDoesntExistError'
                 ) ? (
                   <Link
-                    href={PixwayAppRoutes.SIGN_UP}
+                    href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
                     className="pw-font-poppins pw-text-xs pw-leading-[18px] pw-underline pw-text-[##353945]"
                   >
                     {translate(

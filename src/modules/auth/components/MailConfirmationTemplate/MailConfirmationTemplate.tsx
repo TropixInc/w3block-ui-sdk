@@ -6,7 +6,7 @@ import { isAfter } from 'date-fns';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { AuthButton } from '../AuthButton';
@@ -28,14 +28,14 @@ const _MailConfirmationTemplate = () => {
   const [translate] = useTranslation();
   const { logoUrl } = useCompanyConfig();
   const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
 
   const [_, cancel] = useDebounce(
     () => {
       if (step === Steps.EMAIL_VERIFIED) {
-        router.push(PixwayAppRoutes.SIGN_IN);
+        router.pushConnect(PixwayAppRoutes.SIGN_IN);
       }
     },
     TIME_TO_REDIRECT_TO_HOME,
@@ -108,7 +108,7 @@ const _MailConfirmationTemplate = () => {
       </p>
       <AuthButton
         fullWidth
-        onClick={() => router.push(PixwayAppRoutes.SIGN_IN)}
+        onClick={() => router.pushConnect(PixwayAppRoutes.SIGN_IN)}
         className="pw-mb-[18px]"
       >
         {translate('loginPage>formSubmitButton>signIn')}

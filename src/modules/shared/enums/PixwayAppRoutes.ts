@@ -1,5 +1,6 @@
 export enum PixwayAppRoutes {
   HOME = '/',
+  DASHBOARD = '/dashboard',
   ABOUT = '/about',
   TEAMS = '/teams',
   MARKETPLACE = '/marketplace',
@@ -34,4 +35,5 @@ export enum PixwayAppRoutes {
   COMPLETE_SIGNUP = '/auth/complete-profile',
   ADD_FUNDS_TYPE = '/addFunds/type',
   ADD_FUNDS_MANUAL = '/addFunds/type/manual',
+  VERIfY_WITH_CODE = '/auth/verify-sign-up/code',
 }

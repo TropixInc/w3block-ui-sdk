@@ -3,6 +3,7 @@ import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 
+import { useRouterConnect } from '../../../shared';
 import { Button } from '../../../shared/components/Buttons';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
 import { Link } from '../../../shared/components/Link';
@@ -23,6 +24,7 @@ interface Props {
   contractAddress: string;
   hasPass?: boolean;
   hasActivated?: boolean;
+  proccessing?: boolean;
 }
 
 const cardClassName =
@@ -41,8 +43,10 @@ export const WalletTokenCard = ({
   chainId,
   contractAddress,
   hasActivated,
+  proccessing = false,
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
+  const router = useRouterConnect();
   const actionsContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(actionsContainerRef, () => {
     if (isOpen) closeModal();
@@ -74,15 +78,16 @@ export const WalletTokenCard = ({
         )}
       >
         <Link
+          disabled={proccessing}
           className={className}
-          href={
+          href={router.routerToHref(
             PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
               .replace('{contractAddress}', contractAddress)
               .replace('{chainId}', chainId.toString()) as PixwayAppRoutes
-          }
+          )}
         >
           <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[10px]">
-            <div className="pw-relative pw-overflow-hidden pw-w-[260px] pw-h-[260px]">
+            <div className="pw-relative pw-overflow-hidden pw-w-full">
               {hasPass ? (
                 <div className="pw-bg-white pw-absolute pw-left-[13px] pw-top-[14px] pw-rounded-full">
                   <div className="pw-bg-brand-primary/30 pw-text-brand-primary pw-text-[12px] pw-leading-[18px] pw-font-bold pw-border pw-border-brand-primary pw-rounded-full pw-py-1 pw-px-2">
@@ -93,16 +98,16 @@ export const WalletTokenCard = ({
               {image ? (
                 <img
                   src={image}
-                  className="pw-w-[260px] pw-h-[260px] pw-object-cover"
-                  alt=""
+                  className="pw-w-full pw-h-[300px] pw-object-cover pw-rounded-[20px]"
+                  alt={name}
                 />
               ) : (
-                <FallbackImage className="pw-h-full pw-max-h-[274px] pw-min-h-[220px]" />
+                <FallbackImage className="pw-h-full pw-max-h-[300px] pw-w-full pw-min-h-[300px] pw-rounded-[20px]" />
               )}
             </div>
 
             <div className={descriptionContainerClassName}>
-              <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px]">
+              <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate">
                 {name}
               </p>
               {category ? (
@@ -119,24 +124,25 @@ export const WalletTokenCard = ({
         >
           <WalletTokenCardActionsPanel isOpen={isOpen} onClose={closeModal} />
           <button
+            disabled={proccessing}
             onClick={onClickOptionsButton}
             type="button"
             className="pw-border pw-border-[#C1C1C1] pw-rounded-[10px] pw-bg-white pw-p-2 pw-flex pw-gap-x-1"
           >
             {Array(3)
               .fill('')
-              .map((index) => (
+              .map((_, index) => (
                 <Pointer key={index} />
               ))}
           </button>
 
           {hasPass ? (
             hasActivated ? (
-              <Button model="primary" width="small">
+              <Button disabled={proccessing} model="primary" width="small">
                 {translate('connectTokens>tokensList>usePass')}
               </Button>
             ) : (
-              <Button model="secondary" width="small">
+              <Button disabled={proccessing} model="secondary" width="small">
                 {translate('connectTokens>tokensList>viewPass')}
               </Button>
             )

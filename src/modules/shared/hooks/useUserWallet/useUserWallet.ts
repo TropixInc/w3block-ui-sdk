@@ -42,7 +42,7 @@ export function useUserWallet() {
   const [wallet, setWallet] = useState<WalletSimple>();
   const { data: profile } = useProfile();
   const isProduction = useIsProduction();
-  const { data: balance } = useBalance({
+  const balance = useBalance({
     address: profile?.data.mainWallet?.address || '',
     chainId: isProduction ? ChainScan.POLYGON : ChainScan.MUMBAI,
   });
@@ -50,7 +50,6 @@ export function useUserWallet() {
   const user = useSessionUser();
   const { companyId } = useCompanyConfig();
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
-  const provider = metamask.library?.provider;
   const [connected, setConnected] = useState(metamask.active);
 
   useEffect(() => {
@@ -66,11 +65,11 @@ export function useUserWallet() {
         status: walletHere.status,
       });
       if (balance?.data && wallet) {
-        setWallet({ ...wallet, balance: balance?.data?.balance ?? '0' });
+        setWallet({ ...wallet, balance: balance?.data?.data.balance ?? '0' });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balance, profile]);
+  }, [profile]);
 
   async function claim() {
     if (!user?.accessToken) {
@@ -98,12 +97,10 @@ export function useUserWallet() {
 
     /* Request browser wallet provider to sign the association message. */
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const signature = await provider?.request!({
+    const signature = await metamask.library?.provider?.request!({
       method: 'eth_signTypedData_v4',
       params: [from, data?.message],
     });
-
-    /* Requesting the wallet to be assigned to the authenticated user. */
     await claimWalletMetamask(
       user.accessToken ?? '',
       companyId,
@@ -117,6 +114,8 @@ export function useUserWallet() {
         throw new Error(resp.data.message);
       }
     });
+
+    /* Requesting the wallet to be assigned to the authenticated user. */
   }
 
   /**
@@ -125,7 +124,7 @@ export function useUserWallet() {
 
   const connect = async (chainId?: number) => {
     try {
-      if (!metamask.active || !provider) {
+      if (!metamask.active || !metamask.library?.provider) {
         await metamask.activateBrowserWallet((cb) => {
           if (cb instanceof Error) {
             throw cb;
@@ -137,7 +136,7 @@ export function useUserWallet() {
         const hexChainId = utils.hexStripZeros(utils.hexlify(chainId));
         try {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          await provider?.request!({
+          await metamask.library?.provider?.request!({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: hexChainId }],
           });
@@ -150,7 +149,7 @@ export function useUserWallet() {
               );
 
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              await provider?.request!({
+              await metamask.library?.provider?.request!({
                 method: 'wallet_addEthereumChain',
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 params: [buildAddChain(chainConnector!)],

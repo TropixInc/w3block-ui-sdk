@@ -1,31 +1,33 @@
 import { MouseEventHandler, ReactNode } from 'react';
 
-import useRouter from '../../hooks/useRouter';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 
 export interface LinkProps {
   children: ReactNode;
   href: string;
   className?: string;
-  itemProp?: string;
+  disabled?: boolean;
 }
 
 export const Link = ({
   children,
   href,
   className = '',
-  itemProp = '',
+  disabled = false,
 }: LinkProps) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const onClickLink: MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
     router.push(href);
   };
 
-  return (
+  return disabled ? (
+    <div className={className}>{children}</div>
+  ) : (
     <a
+      aria-disabled={disabled}
       href={href}
       onClick={onClickLink}
-      itemProp={itemProp}
       className={className}
     >
       {children}

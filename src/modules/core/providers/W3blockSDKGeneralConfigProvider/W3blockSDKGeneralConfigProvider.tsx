@@ -13,12 +13,14 @@ interface Props {
     keyUrl: string;
     commerceUrl: string;
     pdfUrl: string;
+    pollUrl?: string;
   };
   locale: PixwayUISdkLocale;
   companyId: string;
   logoUrl: string;
   isProduction: boolean;
   appBaseUrl: string;
+  connectProxyPass?: string;
 }
 
 export const W3blockUISDKGeneralConfigProvider = ({
@@ -29,10 +31,11 @@ export const W3blockUISDKGeneralConfigProvider = ({
   logoUrl,
   isProduction,
   appBaseUrl,
+  connectProxyPass = '',
 }: Props) => {
   const companyValue = useMemo(
-    () => ({ companyId, logoUrl, appBaseUrl }),
-    [logoUrl, companyId, appBaseUrl]
+    () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass }),
+    [logoUrl, companyId, appBaseUrl, connectProxyPass]
   );
 
   const environmentValue = useMemo(
@@ -46,6 +49,7 @@ export const W3blockUISDKGeneralConfigProvider = ({
     <W3blockUISDKGereralConfigContext.Provider value={companyValue}>
       <EnvironmentContext.Provider value={environmentValue}>
         <W3blockApiProvider
+          w3BlockPollApiUrl={api.pollUrl ?? ''}
           w3blockIdAPIUrl={api.idUrl}
           w3blockKeyAPIUrl={api.keyUrl}
           w3blockCommerceAPIUrl={api.commerceUrl}

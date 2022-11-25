@@ -15,7 +15,7 @@ import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
@@ -42,12 +42,14 @@ export interface SignInTemplateProps {
   defaultRedirectRoute: string;
   routeToAttachWallet?: string;
   classes?: SignInTemplateClassses;
+  hasSignUp?: boolean;
 }
 
 const _SignInTemplate = ({
   defaultRedirectRoute,
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   classes = {},
+  hasSignUp = true,
 }: SignInTemplateProps) => {
   const { companyId, logoUrl: logo, appBaseUrl } = useCompanyConfig();
   const [translate] = useTranslation();
@@ -58,7 +60,7 @@ const _SignInTemplate = ({
   const { data: session } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
-  const router = useRouter();
+  const router = useRouterConnect();
   const { data: profile } = useProfile();
   const [callbackUrl, setCallbackUrl] = useLocalStorage<string>(
     LocalStorageFields.AUTHENTICATION_CALLBACK,
@@ -82,7 +84,7 @@ const _SignInTemplate = ({
   });
 
   useEffect(() => {
-    if (session) router.push(getRedirectUrl());
+    if (session) router.pushConnect(getRedirectUrl());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
 
@@ -160,7 +162,9 @@ const _SignInTemplate = ({
                   error={fieldState.error}
                 />
                 <Link
-                  href={PixwayAppRoutes.REQUEST_PASSWORD_CHANGE}
+                  href={router.routerToHref(
+                    PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
+                  )}
                   className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
                 >
                   {translate('auth>passwordChange>requestChangeFormTitle')}
@@ -178,17 +182,19 @@ const _SignInTemplate = ({
             >
               {translate('loginPage>formSubmitButton>signIn')}
             </AuthButton>
-            <p className="pw-text-[13px] pw-font-normal pw-leading-5 text-[#383857] text-center">
-              <Trans i18nKey={'auth>signIn>signUpCTA'}>
-                Não tem conta ainda?
-                <Link
-                  href={PixwayAppRoutes.SIGN_UP}
-                  className="pw-text-brand-primary pw-underline"
-                >
-                  Cadastre-se.
-                </Link>
-              </Trans>
-            </p>
+            {hasSignUp && (
+              <p className="pw-text-[13px] pw-font-normal pw-leading-5 text-[#383857] text-center">
+                <Trans i18nKey={'auth>signIn>signUpCTA'}>
+                  Não tem conta ainda?
+                  <Link
+                    href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
+                    className="pw-text-brand-primary pw-underline"
+                  >
+                    Cadastre-se.
+                  </Link>
+                </Trans>
+              </p>
+            )}
           </div>
           <AuthFooter />
         </form>
