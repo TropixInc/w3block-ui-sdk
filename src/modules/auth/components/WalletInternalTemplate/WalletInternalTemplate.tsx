@@ -18,7 +18,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 // import { WalletExtract } from '../WalletExtract';
@@ -31,7 +31,7 @@ const _WalletInternalTemplate = () => {
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
-  const router = useRouter();
+  const router = useRouterConnect();
 
   const isLoading = wallet == undefined;
 
@@ -89,7 +89,7 @@ const _WalletInternalTemplate = () => {
                 );
               })
             )}
-            <Link href={PixwayAppRoutes.ADD_FUNDS_TYPE}>
+            <Link href={router.routerToHref(PixwayAppRoutes.ADD_FUNDS_TYPE)}>
               <div className="pw-w-[165px] pw-bg-brand-primary pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
                 <div className="pw-rounded-full pw-border pw-bg-brand-primary pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
                   <CashIcon className="pw-fill-white" />
@@ -116,7 +116,9 @@ const _WalletInternalTemplate = () => {
                   showValue={showValue}
                   title={translate('wallet>page>principal')}
                   walletAddress={profile?.data.mainWallet?.address ?? ''}
-                  onClick={() => router.push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
+                  onClick={() =>
+                    router.pushConnect(PixwayAppRoutes.ADD_FUNDS_TYPE)
+                  }
                   textButton={translate('wallet>page>addFunds')}
                 />
               ) : (

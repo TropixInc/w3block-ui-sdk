@@ -13,7 +13,7 @@ import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
@@ -40,7 +40,7 @@ export const SigInWithoutLayout = ({
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   hasSignUp = true,
 }: SignInWithoutLayoutProps) => {
-  const { companyId, appBaseUrl } = useCompanyConfig();
+  const { companyId } = useCompanyConfig();
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
@@ -49,7 +49,7 @@ export const SigInWithoutLayout = ({
   const { data: session } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
-  const router = useRouter();
+  const router = useRouterConnect();
   const { data: profile } = useProfile();
   const [callbackUrl, setCallbackUrl] = useLocalStorage<string>(
     LocalStorageFields.AUTHENTICATION_CALLBACK,
@@ -75,7 +75,7 @@ export const SigInWithoutLayout = ({
   });
 
   useEffect(() => {
-    if (session) router.push(getRedirectUrl());
+    if (session) router.pushConnect(getRedirectUrl());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
 
@@ -86,7 +86,7 @@ export const SigInWithoutLayout = ({
 
   const checkForCallbackUrl = () => {
     if (!profile?.data.mainWallet) {
-      return appBaseUrl + routeToAttachWallet;
+      return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');
@@ -151,7 +151,9 @@ export const SigInWithoutLayout = ({
                 error={fieldState.error}
               />
               <a
-                href={PixwayAppRoutes.REQUEST_PASSWORD_CHANGE}
+                href={router.routerToHref(
+                  PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
+                )}
                 className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
               >
                 {translate('auth>passwordChange>requestChangeFormTitle')}
@@ -174,7 +176,7 @@ export const SigInWithoutLayout = ({
               <Trans i18nKey={'auth>signIn>signUpCTA'}>
                 Não tem conta ainda?
                 <a
-                  href={PixwayAppRoutes.SIGN_UP}
+                  href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
                   className="pw-text-brand-primary pw-underline"
                 >
                   Cadastre-se.

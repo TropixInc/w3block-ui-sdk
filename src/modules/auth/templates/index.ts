@@ -7,3 +7,4 @@ export * from './ConnectWalletTemplateSDK';
 export * from './SetCodeToCompleteProfileTemplate';
 export * from './RequestChangePasswordTemplateSDK';
 export * from './ResetPasswordTemplateSDK';
+export * from './VerifySignUpTemplateSDK';

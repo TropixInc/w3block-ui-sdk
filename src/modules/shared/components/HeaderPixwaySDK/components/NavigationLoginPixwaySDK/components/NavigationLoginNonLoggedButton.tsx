@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
-import useRouter from '../../../../../hooks/useRouter';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { PixwayButton } from '../../../../PixwayButton';
 
@@ -20,7 +20,7 @@ export const NavigationLoginNonLoggedButton = ({
   textColor = 'black',
 }: NavigationLoginNonLoggedButtonProps) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   return (
     <div className="pw-hidden sm:pw-block">
@@ -48,7 +48,7 @@ export const NavigationLoginNonLoggedButton = ({
         <div className="pw-relative">
           <div className="pw-absolute pw-mt-[1.68rem] pw-bg-white pw-w-[140px] pw-z-30 pw-px-[10px] pw-py-3 pw-rounded-b-[20px] pw-shadow-brand-shadow">
             <PixwayButton
-              onClick={() => router.push(signInRoute)}
+              onClick={() => router.pushConnect(signInRoute)}
               fullWidth
               className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
             >
@@ -56,7 +56,7 @@ export const NavigationLoginNonLoggedButton = ({
             </PixwayButton>
             {hasSignUp && (
               <PixwayButton
-                onClick={() => router.push(signUpRoute)}
+                onClick={() => router.pushConnect(signUpRoute)}
                 fullWidth
                 className="!pw-bg-[#EFEFEF] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px] !pw-outline-1 !pw-border-[#DCDCDC] !pw-border-1 pw-mt-[6px]"
               >

@@ -7,7 +7,7 @@ import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { usePrivateQuery } from '../usePrivateQuery';
-import useRouter from '../useRouter';
+import { useRouterConnect } from '../useRouterConnect';
 
 export interface Wallet {
   id: string;
@@ -22,7 +22,7 @@ export interface Wallet {
 
 export const useProfile = () => {
   const getW3blockIdSDK = useGetW3blockIdSDK();
-  const router = useRouter();
+  const router = useRouterConnect();
   return usePrivateQuery(
     [PixwayAPIRoutes.GET_PROFILE],
     async () => {
@@ -31,7 +31,7 @@ export const useProfile = () => {
     {
       retry: 1,
       onError() {
-        router.push(PixwayAppRoutes.SIGN_IN);
+        router.pushConnect(PixwayAppRoutes.SIGN_IN);
       },
     }
   );

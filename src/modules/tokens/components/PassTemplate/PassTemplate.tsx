@@ -7,7 +7,7 @@ import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/ar
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
@@ -21,7 +21,7 @@ const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting 
 
 const _PassTemplate = () => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const tokenId = (router.query.tokenId as string) || 'inactive';
   const [hasExpired, setHasExpired] = useToggle(false);
 

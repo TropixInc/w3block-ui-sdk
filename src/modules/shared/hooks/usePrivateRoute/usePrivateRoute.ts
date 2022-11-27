@@ -5,7 +5,7 @@ import { UserRoleEnum } from '@w3block/sdk-id';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { PrivateRouteStrategy } from '../../enums/PrivateRouteStrategy';
 import { usePixwaySession } from '../usePixwaySession';
-import useRouter from '../useRouter';
+import { useRouterConnect } from '../useRouterConnect';
 import { useSessionUser } from '../useSessionUser';
 
 interface Config {
@@ -22,13 +22,13 @@ export const usePrivateRoute = (
 ) => {
   const { status } = usePixwaySession();
   const user = useSessionUser();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { roles, strategy } = config ?? {};
   const isLoading = status !== 'authenticated';
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push(redirectRoute);
+      router.pushConnect(redirectRoute);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status === 'loading', redirectRoute]);

@@ -26,7 +26,7 @@ import { ReactComponent as WalletIcon } from '../../../../../assets/icons/wallet
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
 import { useIsProduction } from '../../../../../hooks/useIsProduction';
-import useRouter from '../../../../../hooks/useRouter';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -83,7 +83,7 @@ export const NavigationLoginLoggedButton = ({
 export const useDefaultMenuTabs = () => {
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
 
@@ -149,7 +149,7 @@ const NavigationMenu = ({
   const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
-  const router = useRouter();
+  const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
   const { wallet } = useUserWallet();
@@ -217,10 +217,10 @@ const NavigationMenu = ({
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
             <a
-              href={menu.route}
+              href={router.routerToHref(menu.route ?? '')}
               onClick={() => {
                 if (menu.route) {
-                  router.push(menu.route);
+                  router.push(router.routerToHref(menu.route));
                 } else if (menu.action) {
                   menu.action();
                 }

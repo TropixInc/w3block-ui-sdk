@@ -4,7 +4,7 @@ import { ReactComponent as CloseIcon } from '../../../../../assets/icons/closeIc
 import { ReactComponent as HamburguerIcon } from '../../../../../assets/icons/headerHamburger.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
-import useRouter from '../../../../../hooks/useRouter';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
@@ -20,7 +20,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   hasSignUp,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
 
@@ -60,7 +60,7 @@ export const NavigationTabsPixwaySDKMobile = ({
           {!session && (
             <div className="pw-flex pw-justify-center pw-gap-x-[26px]">
               <PixwayButton
-                onClick={() => router.push(signInRoute)}
+                onClick={() => router.pushConnect(signInRoute)}
                 fullWidth
                 className="!pw-bg-brand-primary !pw-px-[40px] !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
               >
@@ -68,7 +68,7 @@ export const NavigationTabsPixwaySDKMobile = ({
               </PixwayButton>
               {hasSignUp && (
                 <PixwayButton
-                  onClick={() => router.push(signUpRoute)}
+                  onClick={() => router.pushConnect(signUpRoute)}
                   fullWidth
                   className="!pw-bg-[#EFEFEF] !pw-px-[40px] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px]  !pw-border-[#DCDCDC] !pw-border-1"
                 >

@@ -5,8 +5,9 @@ import { addMinutes } from 'date-fns';
 
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
@@ -19,7 +20,8 @@ const HOUR_IN_MS = 3600000;
 
 export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
-  const { query, push } = useRouter();
+  const { query, pushConnect } = useRouterConnect();
+  const { connectProxyPass } = useCompanyConfig();
   const email = (query.email as string) ?? '';
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
@@ -59,14 +61,16 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, reset]);
 
-  const callbackPath = isPostSignUp
-    ? PixwayAppRoutes.COMPLETE_SIGNUP
-    : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
+  const callbackPath =
+    connectProxyPass +
+    (isPostSignUp
+      ? PixwayAppRoutes.COMPLETE_SIGNUP
+      : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
 
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6) {
-      push(
+      pushConnect(
         PixwayAppRoutes.COMPLETE_SIGNUP +
           `?email=${encodeURIComponent(email)}&token=${code};${
             Date.now() + HOUR_IN_MS
