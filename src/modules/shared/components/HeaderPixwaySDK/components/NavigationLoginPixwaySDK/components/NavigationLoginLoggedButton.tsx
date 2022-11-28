@@ -16,6 +16,7 @@ import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIcon
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
+import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
@@ -76,6 +77,7 @@ export const useDefaultMenuTabs = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
+  const { data: session } = usePixwaySession();
   return useMemo<NavigationMenuTabs[]>(
     () => [
       {
@@ -114,7 +116,7 @@ export const useDefaultMenuTabs = () => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [translate, router]
+    [translate, router, session]
   );
 };
 
@@ -194,7 +196,6 @@ const NavigationMenu = ({
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
             <a
-              href={router.routerToHref(menu.route ?? '')}
               onClick={() => {
                 if (menu.route) {
                   router.push(router.routerToHref(menu.route));
