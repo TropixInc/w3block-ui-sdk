@@ -28,7 +28,7 @@ export const QrCodeError = ({ hasOpen, onClose, type }: iProps) => {
   return hasOpen ? (
     <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
       <div
-        className="pw-rounded-full pw-flex pw-justify-center pw-items-center pw-w-9 pw-h-9 pw-text-xs pw-text-[#353945] pw-border pw-border-[#777E8F] pw-absolute pw-top-4 pw-right-4"
+        className="pw-rounded-full pw-flex pw-justify-center pw-items-center pw-w-9 pw-h-9 pw-text-xs pw-text-[#353945] pw-border pw-border-[#777E8F] pw-absolute pw-top-4 pw-right-4 pw-cursor-pointer"
         onClick={onClose}
       >
         x
@@ -43,7 +43,7 @@ export const QrCodeError = ({ hasOpen, onClose, type }: iProps) => {
 
       <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
         {type === TypeError.read
-          ? translate('token>pass>notPossibleGenerateQrCode')
+          ? translate('token>pass>notPossibleReadQrCode')
           : type === TypeError.expired
             ? translate('token>pass>outsideAllowedTime')
             : type === TypeError.use

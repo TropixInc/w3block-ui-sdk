@@ -6,6 +6,7 @@ import { format, getDay } from 'date-fns';
 
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import {
   Filters,
   ValidStatusProps,
@@ -48,6 +49,7 @@ export const ClientTemplate = () => {
 
   const status = validStatus.map(({ key }) => key);
 
+  const [translate] = useTranslation();
   const isProduction = useIsProduction();
   const isDevelopment = !isProduction;
   const [filteredData, setFilteredData] = useState(dataMoked);
