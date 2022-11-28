@@ -65,6 +65,7 @@ const _ConnectWalletTemplate = ({
 }: ConnectWalletProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
+  const [redirect, setRedirect] = useState(false);
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -88,7 +89,7 @@ const _ConnectWalletTemplate = ({
       const { wallets } = user;
 
       if (wallets?.length) {
-        router.push(PixwayAppRoutes.HOME);
+        router.push(redirect ? redirectLink : PixwayAppRoutes.HOME);
       } else {
         setIsLoading(false);
       }
@@ -153,6 +154,7 @@ const _ConnectWalletTemplate = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
+    setRedirect(true);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
     router.push(redirectLink, redirectLink);
   };
