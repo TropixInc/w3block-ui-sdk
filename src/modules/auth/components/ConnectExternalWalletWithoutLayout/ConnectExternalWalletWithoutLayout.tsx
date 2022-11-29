@@ -51,7 +51,6 @@ const _ConnectExternalWalletWithoutLayout = ({
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const { companyId } = useCompanyConfig();
-  const [printError, setPrintError] = useState();
   const token = useToken();
   const router = useRouterConnect();
   const { data: profile } = useProfile();
@@ -109,7 +108,6 @@ const _ConnectExternalWalletWithoutLayout = ({
       await claim();
       onCreateWalletSuccessfully();
     } catch (error: any) {
-      setPrintError(error);
       if (!error?.message || error.message == '') {
         router.pushConnect(redirectRoute);
         return;
@@ -271,7 +269,6 @@ const _ConnectExternalWalletWithoutLayout = ({
               {translate('companyAuth>signUp>connectToMetamask')}
             </AuthButton>
           </div>
-          <div>{printError}</div>
           <GenerateTokenDialog isOpen={isOpen} onClose={closeModal} />
         </div>
       )}
