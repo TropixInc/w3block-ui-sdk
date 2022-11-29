@@ -62,7 +62,7 @@ export const CheckoutPayment = () => {
               profile.data?.data.mainWallet?.address ?? '',
             successUrl:
               appBaseUrl +
-              PixwayAppRoutes.CHECKOUT_COMPLETED +
+              PixwayAppRoutes.MY_TOKENS +
               '?' +
               query.split('?')[0],
           },
