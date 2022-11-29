@@ -110,7 +110,7 @@ export function useUserWallet() {
         signature,
       }
     ).then((resp) => {
-      if (resp.data.statusCode !== 200) {
+      if (resp.data.statusCode != 200) {
         throw new Error(resp.data.message);
       }
     });
