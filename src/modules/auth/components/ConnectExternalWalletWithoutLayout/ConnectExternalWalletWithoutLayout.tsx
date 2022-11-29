@@ -42,6 +42,7 @@ interface ConnectExternalWalletWithoutLayoutProps {
 const _ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
   tenantName,
+  redirectLink,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
@@ -109,7 +110,7 @@ const _ConnectExternalWalletWithoutLayout = ({
       onCreateWalletSuccessfully();
     } catch (error: any) {
       if (!error?.message || error.message == '') {
-        router.pushConnect(redirectRoute);
+        router.pushConnect(redirectLink ?? redirectRoute);
         return;
       }
       console.error(error);
@@ -138,7 +139,7 @@ const _ConnectExternalWalletWithoutLayout = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
-    router.pushConnect(redirectRoute);
+    router.pushConnect(redirectLink ?? redirectRoute);
     //queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
   };
 
@@ -279,6 +280,7 @@ const _ConnectExternalWalletWithoutLayout = ({
 const MetamaskProvider = Provider as any;
 export const ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
+  redirectLink,
   tenantName,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   return (
@@ -292,6 +294,7 @@ export const ConnectExternalWalletWithoutLayout = ({
           <_ConnectExternalWalletWithoutLayout
             redirectRoute={redirectRoute}
             tenantName={tenantName}
+            redirectLink={redirectLink}
           />
         </MailVerifiedInterceptorProvider>
       </MetamaskProvider>
