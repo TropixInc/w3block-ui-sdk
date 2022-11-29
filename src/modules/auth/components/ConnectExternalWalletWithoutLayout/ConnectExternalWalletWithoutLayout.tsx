@@ -36,6 +36,7 @@ enum Step {
 interface ConnectExternalWalletWithoutLayoutProps {
   redirectRoute?: string;
   tenantName?: string;
+  redirectLink?: string;
 }
 
 const _ConnectExternalWalletWithoutLayout = ({
@@ -107,7 +108,12 @@ const _ConnectExternalWalletWithoutLayout = ({
       await claim();
       onCreateWalletSuccessfully();
     } catch (error: any) {
+      if (!error?.message || error.message == '') {
+        router.pushConnect(redirectRoute);
+        return;
+      }
       console.error(error);
+
       onError(error.message);
     }
   };
