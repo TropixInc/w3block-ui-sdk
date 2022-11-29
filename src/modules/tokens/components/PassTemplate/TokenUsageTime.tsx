@@ -5,6 +5,7 @@ import { differenceInHours, format } from 'date-fns';
 
 import { ReactComponent as ClockIcon } from '../../../shared/assets/icons/clockOutlined.svg';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const TokenUsageTime = ({
@@ -15,6 +16,8 @@ export const TokenUsageTime = ({
   hasExpiration?: boolean;
 }) => {
   const [translate] = useTranslation();
+  const router = useRouterConnect();
+  const tokenId = (router.query.tokenId as string) || '1';
 
   const differenceByHours = differenceInHours(date, new Date());
   return (

@@ -6,3 +6,4 @@ export * from './checkout';
 export * from './dashboard';
 export * from './addFunds';
 export * from './pass';
+export * from './poll';

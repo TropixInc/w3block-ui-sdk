@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
@@ -17,9 +17,9 @@ import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.sv
 import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
-import useRouter from '../../hooks/useRouter';
+import { useIsProduction } from '../../hooks/useIsProduction';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
-import { Link } from '../Link';
 import TranslatableComponent from '../TranslatableComponent';
 
 interface MenuProps {
@@ -35,20 +35,17 @@ interface TabsConfig {
 
 const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
-  const router = useRouter();
+  const router = useRouterConnect();
+  const isProduction = useIsProduction();
   const [translate] = useTranslation();
   const [state, copyToClipboard] = useCopyToClipboard();
   const [isCopied, setIsCopied] = useState(false);
   const createdAt = new Date((profile?.data.createdAt as string) || 0);
   const { signOut } = usePixwayAuthentication();
   const formatedDate = format(createdAt, 'dd/MM/yyyy');
+  const [tabsToShow, setTabsToShow] = useState(tabs);
 
   const tabsDefault: TabsConfig[] = [
-    {
-      title: translate('components>menu>dashboard'),
-      icon: <DashboardIcon width={17} height={17} />,
-      link: PixwayAppRoutes.DASHBOARD,
-    },
     {
       title: translate('components>menu>myProfile'),
       icon: <UserIcon width={17} height={17} />,
@@ -58,11 +55,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       title: translate('components>menu>myTokens'),
       icon: <ImageIcon width={17} height={17} />,
       link: PixwayAppRoutes.TOKENS,
-    },
-    {
-      title: translate('components>menu>tokenPass'),
-      icon: <TicketIcon width={17} height={17} />,
-      link: PixwayAppRoutes.TOKENPASS,
     },
     {
       title: translate('components>menu>wallet'),
@@ -81,7 +73,29 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     // },
   ];
 
-  const tabsMap: TabsConfig[] = tabs ? tabs : tabsDefault;
+  useEffect(() => {
+    if (!tabs)
+      if (!isProduction) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setTabsToShow([
+          ...tabsDefault,
+          {
+            title: translate('components>menu>tokenPass'),
+            icon: <TicketIcon width={17} height={17} />,
+            link: PixwayAppRoutes.TOKENPASS,
+          },
+          {
+            title: translate('components>menu>dashboard'),
+            icon: <DashboardIcon width={17} height={17} />,
+            link: PixwayAppRoutes.DASHBOARD,
+          },
+        ]);
+      } else {
+        setTabsToShow(tabsDefault);
+      }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);
@@ -90,15 +104,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   };
 
   const handleSignOut = () => {
-    signOut();
-    router.push(PixwayAppRoutes.HOME);
+    signOut().then(() => {
+      router.pushConnect(PixwayAppRoutes.SIGN_IN);
+    });
   };
 
   const RenderTab = (tab: TabsConfig) => {
     const isActive: boolean = router.pathname === tab.link;
 
     return (
-      <Link href={tab.link} key={tab.title}>
+      <a href={router.routerToHref(tab.link)} key={tab.title}>
         <li
           key={tab.title}
           className={classNames(
@@ -120,7 +135,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
             {tab.title}
           </p>
         </li>
-      </Link>
+      </a>
     );
   };
 
@@ -160,7 +175,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           )}
         </div>
         <ul className="pw-mx-auto pw-w-[248px]">
-          {tabsMap.map(RenderTab)}
+          {tabsToShow?.map(RenderTab)}
           <button
             onClick={handleSignOut}
             className="group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-w-full pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 pw-stroke-[#383857] hover:pw-stroke-brand-primary"

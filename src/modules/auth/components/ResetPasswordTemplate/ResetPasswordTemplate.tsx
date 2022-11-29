@@ -8,7 +8,7 @@ import { object, string } from 'yup';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePasswordAndSignIn } from '../../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
@@ -37,7 +37,7 @@ enum Steps {
 const _ResetPasswordTemplate = () => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const passwordSchema = usePasswordValidationSchema();
   const { mutate, isLoading, isSuccess, isExpired, isError } =
     useChangePasswordAndSignIn();

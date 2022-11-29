@@ -44,17 +44,20 @@ export const useGetNFTSByWallet = (chainId: number) => {
   const axios = useAxios(W3blockAPI.KEY);
   const { data: profile } = useProfile();
 
-  const address = profile?.data?.mainWallet?.address ?? '';
+  const address = profile?.data?.mainWallet?.address;
 
   return usePaginatedPrivateQuery<NFTByWalletDTO>(
-    [PixwayAPIRoutes.NFTS_BY_WALLET, address, chainId],
+    [PixwayAPIRoutes.NFTS_BY_WALLET, address as string, chainId],
     () => {
       return axios.get(
         PixwayAPIRoutes.NFTS_BY_WALLET.replace(
           '{chainId}',
           chainId.toString()
-        ).replace('{address}', address)
+        ).replace('{address}', address as string)
       );
+    },
+    {
+      enabled: address != undefined,
     }
   );
 };

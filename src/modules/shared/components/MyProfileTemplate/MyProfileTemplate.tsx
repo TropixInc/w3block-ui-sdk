@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { Menu } from '../Menu';
@@ -16,10 +18,12 @@ import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {
   const { mutate } = useRequestConfirmationMail();
+  useHasWallet();
   const { data: profile } = useProfile();
+  const { connectProxyPass } = useCompanyConfig();
   const { status } = usePixwaySession();
   const email = profile?.data?.email ?? '';
-  const callbackPath = PixwayAppRoutes.COMPLETE_SIGNUP;
+  const callbackPath = connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP;
   const [isOpen, setIsOpen] = useState(false);
 
   const formattedEmail = useMemo(() => {
@@ -87,7 +91,7 @@ const _MyProfileTemplate = () => {
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
-            <div className="sm:pw-pl-8 pw-w-full">
+            <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
               <MyProfile />
             </div>
           </div>

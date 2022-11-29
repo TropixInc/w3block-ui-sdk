@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Provider } from '@w3block/pixchain-react-metamask';
 import classNames from 'classnames';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
@@ -22,6 +23,8 @@ interface HeaderPixwaySDKProps {
   toogleOpenedTabs?: () => void;
   openedLogin?: boolean;
   toggleOpenedLogin?: () => void;
+  bgColor?: string;
+  textColor?: string;
   hasSignUp?: boolean;
 }
 
@@ -35,6 +38,8 @@ const _HeaderPixwaySDK = ({
   toogleOpenedTabs,
   openedLogin,
   toggleOpenedLogin,
+  bgColor = 'white',
+  textColor = 'black',
   hasSignUp = true,
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -61,10 +66,11 @@ const _HeaderPixwaySDK = ({
   };
 
   return (
-    <div className="w-full bg-white pw-shadow-md">
+    <div style={{ backgroundColor: bgColor }} className="w-full pw-shadow-md">
       <div
+        style={{ backgroundColor: bgColor }}
         className={classNames(
-          'pw-container pw-mx-auto pw-bg-white pw-px-4 sm:pw-px-0',
+          'pw-container pw-mx-auto  pw-px-4 sm:pw-px-0',
           headerClassName ?? ''
         )}
       >
@@ -84,16 +90,18 @@ const _HeaderPixwaySDK = ({
                 toogleMenu={toggleTabsMemo}
                 opened={openedMenu ? openedMenu : openedTabs}
                 hasSignUp={hasSignUp}
+                textColor={textColor}
               />
             </div>
 
             <div className="pw-order-1 sm:pw-order-2">
               <NavigationLoginPixwaySDK
+                hasSignUp={hasSignUp}
+                textColor={textColor}
                 toggleLoginMenu={toggleMenuMemo}
                 loginMenu={validatorMenuOpened}
                 signInRouter={signInRouter}
                 signUpRouter={signUpRouter}
-                hasSignUp={hasSignUp}
               />
             </div>
           </div>
@@ -103,10 +111,19 @@ const _HeaderPixwaySDK = ({
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MetamaskProvider = Provider as any;
+
 export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
   <TranslatableComponent>
-    <AttachWalletProvider>
-      <_HeaderPixwaySDK {...props} />
-    </AttachWalletProvider>
+    <MetamaskProvider
+      dappConfig={{
+        autoConnect: true,
+      }}
+    >
+      <AttachWalletProvider>
+        <_HeaderPixwaySDK {...props} />
+      </AttachWalletProvider>
+    </MetamaskProvider>
   </TranslatableComponent>
 );

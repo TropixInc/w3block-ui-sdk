@@ -16,7 +16,8 @@ import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIcon
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
-import useRouter from '../../../../../hooks/useRouter';
+import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -26,11 +27,13 @@ import { NavigationMenuTabs } from '../interfaces/menu';
 interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
   menuTabs?: NavigationMenuTabs[];
+  textColor?: string;
 }
 
 export const NavigationLoginLoggedButton = ({
   logo,
   menuTabs,
+  textColor = 'black',
 }: NavigationLoginLoggedButtonProps) => {
   const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
@@ -44,7 +47,10 @@ export const NavigationLoginLoggedButton = ({
   return (
     <div className="pw-ml-5" ref={ref}>
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
-        <p className="pw-text-xs pw-font-montserrat pw-font-[400] ">
+        <p
+          style={{ color: textColor }}
+          className="pw-text-xs pw-font-montserrat pw-font-[400] "
+        >
           {wallet?.type === WalletTypes.Vault
             ? translate('header>logged>hiWallet', { name: profile?.data?.name })
             : translate('header>logged>metamaskHiWallet', {
@@ -52,10 +58,13 @@ export const NavigationLoginLoggedButton = ({
               })}
         </p>
         <div className="pw-flex pw-items-center">
-          <p className="pw-text-sm pw-font-montserrat pw-font-[600]">
+          <p
+            style={{ color: textColor }}
+            className="pw-text-sm pw-font-montserrat pw-font-[600]"
+          >
             {profile?.data?.mainWallet?.address || '-'}
           </p>
-          <ArrowDown className="pw-ml-1" />
+          <ArrowDown style={{ stroke: textColor }} className="pw-ml-1" />
         </div>
       </div>
 
@@ -66,8 +75,9 @@ export const NavigationLoginLoggedButton = ({
 
 export const useDefaultMenuTabs = () => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
+  const { data: session } = usePixwaySession();
   return useMemo<NavigationMenuTabs[]>(
     () => [
       {
@@ -99,12 +109,14 @@ export const useDefaultMenuTabs = () => {
         name: 'Logout',
         icon: <LogoutIcon />,
         action: () => {
-          signOut();
-          router.push(PixwayAppRoutes.HOME);
+          signOut().then(() => {
+            router.pushConnect(PixwayAppRoutes.SIGN_IN);
+          });
         },
       },
     ],
-    [translate, router, signOut]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [translate, router, session]
   );
 };
 
@@ -115,7 +127,7 @@ const NavigationMenu = ({
   const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
-  const router = useRouter();
+  const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
   const { wallet } = useUserWallet();
@@ -175,7 +187,7 @@ const NavigationMenu = ({
   return (
     <div className="pw-relative">
       <div
-        className={`pw-absolute pw-mt-6 ${
+        className={`pw-absolute pw-mt-[1.68rem] ${
           hasMainWallet ? 'pw-ml-[210px]' : ''
         } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
       >
@@ -183,10 +195,10 @@ const NavigationMenu = ({
 
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
-            <div
+            <a
               onClick={() => {
                 if (menu.route) {
-                  router.push(menu.route);
+                  router.push(router.routerToHref(menu.route));
                 } else if (menu.action) {
                   menu.action();
                 }
@@ -198,7 +210,7 @@ const NavigationMenu = ({
               <p className="pw-font-poppins pw-font-[400] pw-text-xs">
                 {menu.name}
               </p>
-            </div>
+            </a>
           ))}
         </div>
       </div>

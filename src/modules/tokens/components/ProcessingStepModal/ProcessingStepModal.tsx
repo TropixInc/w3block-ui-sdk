@@ -12,7 +12,7 @@ interface Props {
   onClose: () => void;
   children?: ReactNode;
   linkText: string;
-  linkHref: PixwayAppRoutes | (() => void);
+  linkHref: PixwayAppRoutes | string | (() => void);
   isSuccess: boolean;
   subTitle: string;
   alternateMessage?: ReactNode;

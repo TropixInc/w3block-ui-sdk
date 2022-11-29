@@ -24,7 +24,7 @@ export const DisplayCardBase = ({
   >
     {onEdit ? (
       <button
-        className="pw-text-[#B09C60] pw-underline pw-absolute pw-right-6 pw-top-6"
+        className="pw-text-brand-primary pw-underline pw-absolute pw-right-6 pw-top-6"
         onClick={onEdit}
       >
         Editar

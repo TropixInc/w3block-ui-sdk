@@ -18,7 +18,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -39,6 +39,10 @@ enum Step {
   CONNECT_TO_METAMASK,
 }
 
+interface ConnectWalletProps {
+  redirectLink?: string;
+}
+
 export const ConnectToMetamaskButton = ({
   onClick,
   disabled = false,
@@ -56,16 +60,19 @@ export const ConnectToMetamaskButton = ({
   );
 };
 
-const _ConnectWalletTemplate = () => {
+const _ConnectWalletTemplate = ({
+  redirectLink = PixwayAppRoutes.HOME,
+}: ConnectWalletProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
+  const [redirect, setRedirect] = useState(false);
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const { companyId } = useCompanyConfig();
   const token = useToken();
-  const router = useRouter();
+  const router = useRouterConnect();
   const profile = useProfile();
   const sessionUser = usePixwaySession();
   const user = useSessionUser();
@@ -75,14 +82,14 @@ const _ConnectWalletTemplate = () => {
     const { data } = profile;
 
     if (sessionUser.status === 'unauthenticated')
-      router.push(PixwayAppRoutes.SIGN_IN);
+      router.pushConnect(PixwayAppRoutes.SIGN_IN);
 
     if (data) {
       const { data: user } = data;
       const { wallets } = user;
 
       if (wallets?.length) {
-        router.push(PixwayAppRoutes.HOME);
+        router.push(redirect ? redirectLink : PixwayAppRoutes.HOME);
       } else {
         setIsLoading(false);
       }
@@ -147,8 +154,9 @@ const _ConnectWalletTemplate = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
+    setRedirect(true);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(PixwayAppRoutes.HOME);
+    router.push(redirectLink, redirectLink);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -261,7 +269,7 @@ const _ConnectWalletTemplate = () => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MetamaskProvider = Provider as any;
-export const ConnectWalletTemplate = () => (
+export const ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => (
   <TranslatableComponent>
     <MetamaskProvider
       dappConfig={{
@@ -269,7 +277,7 @@ export const ConnectWalletTemplate = () => (
       }}
     >
       <MailVerifiedInterceptorProvider>
-        <_ConnectWalletTemplate />
+        <_ConnectWalletTemplate redirectLink={redirectLink} />
       </MailVerifiedInterceptorProvider>
     </MetamaskProvider>
   </TranslatableComponent>

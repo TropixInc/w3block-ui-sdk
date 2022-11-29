@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
 import { boolean, object, string } from 'yup';
 
+import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { Link } from '../../../shared/components/Link';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -40,6 +41,7 @@ export const SignUpForm = ({
   termsRedirect,
 }: Props) => {
   const { logoUrl } = useCompanyConfig();
+  const router = useRouterConnect();
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
 
@@ -119,12 +121,16 @@ export const SignUpForm = ({
           <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
             <AuthCheckbox
               name="acceptsTermsOfUse"
-              label="Aceito os Termos de Uso"
+              label="Aceito os"
+              keyTrans="companyAuth>signUp>acceptTermsOfUse"
+              linkText="Termos de uso"
               redirectLink={termsRedirect}
             />
             <AuthCheckbox
               name="acceptsPolicyTerms"
-              label="Aceito a Política de Privacidade"
+              keyTrans="companyAuth>signUp>acceptPrivacyPolicy"
+              linkText="Política de Privacidade"
+              label="Aceito os"
               redirectLink={privacyRedirect}
             />
           </div>
@@ -142,7 +148,7 @@ export const SignUpForm = ({
               Já possui uma conta?
               <Link
                 className="pw-text-brand-primary pw-underline"
-                href={PixwayAppRoutes.SIGN_IN}
+                href={router.routerToHref(PixwayAppRoutes.SIGN_IN)}
               >
                 Login
               </Link>

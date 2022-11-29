@@ -23,49 +23,6 @@ interface iExtract {
   transactionDate: string;
   type: typeCoin;
 }
-const extractData: iExtract[] = [
-  {
-    id: '1',
-    cashIn: true,
-    walletIn: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    walletOut: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    matic: '0.002',
-    value: '5500',
-    transactionDate: '01/01/2022',
-    type: 'ETH',
-  },
-  {
-    id: '2',
-    cashIn: false,
-    walletIn: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    walletOut: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    matic: '0.00023',
-    value: '5500',
-    transactionDate: '01/01/2022',
-    type: 'Polygon',
-  },
-  {
-    id: '3',
-    cashIn: false,
-    walletIn: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    walletOut: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    matic: '0.000048',
-    value: '5000',
-    transactionDate: '01/01/2022',
-    type: 'ETH',
-  },
-  {
-    id: '4',
-    cashIn: false,
-    walletIn: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    walletOut: '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0',
-    matic: '0.00023',
-    value: '5000',
-    transactionDate: '01/01/2022',
-    type: 'Polygon',
-  },
-];
-
 export const WalletExtract = () => {
   const [type, toggleType] = useToggle(false);
   const [filteredData, setFilteredData] = useState<iExtract[]>([]);
@@ -73,8 +30,9 @@ export const WalletExtract = () => {
 
   useEffect(() => {
     const filter = type ? 'ETH' : 'Polygon';
-    const filtered = extractData.filter((e) => e.type === filter);
+    const filtered = filteredData.filter((e) => e.type === filter);
     setFilteredData(filtered);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
   return (
     <>
@@ -91,7 +49,7 @@ export const WalletExtract = () => {
               type ? 'pw-justify-start' : 'pw-justify-end'
             )}
           >
-            <div className="pw-rounded-full pw-w-[19px] pw-h-[19px] pw-bg-[#B09C60]"></div>
+            <div className="pw-rounded-full pw-w-[19px] pw-h-[19px] pw-bg-brand-primary"></div>
           </div>
           <MaticIcon className="pw-fill-[#8247E5]" />
         </div>
