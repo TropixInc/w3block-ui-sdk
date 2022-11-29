@@ -11,12 +11,14 @@ import { TokenUsageTime } from './TokenUsageTime';
 interface iQrCodeSection {
   tokenId: string;
   eventDate: Date;
+  hasExpiration?: boolean;
   setExpired: (i: boolean) => void;
 }
 
 export const QrCodeSection = ({
   tokenId,
   eventDate,
+  hasExpiration = true,
   setExpired,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState(0);
@@ -37,12 +39,14 @@ export const QrCodeSection = ({
   return expired ? (
     <></>
   ) : (
-    <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
-      <div className="pw-flex pw-gap-[12px] sm:pw-gap-[16px] pw-px-[24px]">
+    <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px] pw-max-w-[347px] sm:pw-max-w-full">
+      <div className="pw-flex pw-gap-[12px] sm:pw-gap-[16px] pw-p-[16px] sm:pw-px-[24px]">
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
-          <QRCodeSVG value={String(codeQr)} size={120} level="H" />
+          <QRCodeSVG value={String(codeQr)} size={120} />
         </div>
-        <div className="pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
+
+        <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
+
         <div className="pw-flex pw-flex-col pw-justify-center">
           <div className="pw-text-[15px] pw-leading-[22.5px] pw-font-bold pw-text-[#353945]">
             {translate('token>pass>identifierCode')}
@@ -60,7 +64,7 @@ export const QrCodeSection = ({
           </div>
         </div>
       </div>
-      <TokenUsageTime date={eventDate} />
+      <TokenUsageTime hasExpiration={hasExpiration} date={eventDate} />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { format } from 'date-fns';
 
-import { Pagination } from '../../../shared/components/Pagination';
+import { PaginationNumbers } from '../../../shared/components/Pagination';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const TableBase = ({
@@ -16,7 +16,7 @@ export const TableBase = ({
   const [translate] = useTranslation();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const itensPerPage = 6;
+  const itensPerPage = 10;
 
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * itensPerPage;
@@ -30,7 +30,7 @@ export const TableBase = ({
 
   return (
     <div className="pw-w-full pw-flex pw-flex-col pw-gap-[16px]">
-      <div className="pw-w-full pw-overflow-x-scroll pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] ">
+      <div className="pw-w-full pw-overflow-x-scroll sm:pw-overflow-x-hidden pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] ">
         <div className="pw-flex pw-justify-between pw-bg-[#295BA6] pw-border pw-rounded-t-[16px]">
           {columns.map((item, index) => (
             <div
@@ -95,7 +95,7 @@ export const TableBase = ({
         </div>
       </div>
       <div className="pw-w-full pw-flex pw-justify-end pw-gap-2">
-        <Pagination
+        <PaginationNumbers
           onChangePage={setPage}
           pagesQuantity={totalPages}
           currentPage={page}
