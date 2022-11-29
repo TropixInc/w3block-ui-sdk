@@ -10,7 +10,6 @@ interface TokenLinkProps {
   href: string;
   label: string;
   className?: string;
-  renderTooltip?: boolean;
   chainId?: number;
 }
 
@@ -18,7 +17,6 @@ export const TokenScanLink = ({
   href,
   label,
   className = '',
-  renderTooltip = false,
   chainId,
 }: TokenLinkProps) => {
   const [translate] = useTranslation();
@@ -43,7 +41,7 @@ export const TokenScanLink = ({
   return (
     <div className="pw-relative">
       <Tooltip
-        visible={isTooltipOpen && renderTooltip}
+        visible={isTooltipOpen}
         className="pw-absolute -pw-top-12"
         classes={{
           content:
@@ -60,7 +58,7 @@ export const TokenScanLink = ({
         href={href}
         className={classNames(
           className,
-          'pw-flex pw-items-center pw-relative pw-z-20 pw-w-max pw-gap-x-4 pw-mb-[11px] pw-font-medium pw-leading-[19px] pw-text-[#B09C60] hover:pw-underline'
+          'pw-flex pw-items-center pw-relative pw-z-20 pw-w-max pw-gap-x-4 pw-mb-[11px] pw-font-medium pw-leading-[19px] pw-text-brand-primary hover:pw-underline'
         )}
         rel="noreferrer"
       >

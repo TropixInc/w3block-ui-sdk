@@ -46,7 +46,11 @@ export const CardWallet = ({
           )}
         </p>
         <button onClick={handleCopy}>
-          <CopyIcon width={17} height={17} className="pw-stroke-[#B09C60]" />
+          <CopyIcon
+            width={17}
+            height={17}
+            className="pw-stroke-brand-primary"
+          />
         </button>
         {isCopied && (
           <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
@@ -65,7 +69,7 @@ export const CardWallet = ({
           showValue={showValue}
           classes={{
             balance:
-              '!pw-font-bold !pw-text-[24px] !pw-leading-[29px] !pw-text-[#B09C60]',
+              '!pw-font-bold !pw-text-[24px] !pw-leading-[29px] !pw-text-brand-primary',
           }}
         />
       </div>

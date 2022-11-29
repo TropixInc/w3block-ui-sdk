@@ -1,6 +1,6 @@
 import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import useRouter from '../../hooks/useRouter';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
 import { PixwayButton } from '../PixwayButton';
 
@@ -17,7 +17,7 @@ export const ErrorMessage = ({
   tryAgain,
   cancel,
 }: ErrorMessageProps) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [translate] = useTranslation();
   return (
     <div

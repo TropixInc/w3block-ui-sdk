@@ -1,6 +1,6 @@
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ReactComponent as ErrorFilled } from '../../assets/icons/errorFilled.svg';
 import { AuthButton } from '../AuthButton';
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const AuthErrorChagingPassword = ({ onRetry }: Props) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   return (

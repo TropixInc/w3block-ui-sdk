@@ -25,4 +25,9 @@ export enum PixwayAPIRoutes {
   VERIFY_SIGN_UP = '/auth/verify-sign-up',
   REQUEST_CONFIRMATION_MAIL = '/auth/request-confirmation-email',
   PATCH_PROFILE = '/users/{companyId}/profile',
+  GET_POLL_BY_ID = '/polls/{companyId}/{pollId}',
+  GET_POLL_BY_SLUG = '/polls/{companyId}/slug-details/{slug}',
+  POST_POLL_ANSWER = '/answers/{companyId}/post-answer-with-user',
+  INVITE_USER_AFTER_POLL = '/users/{companyId}/invite-transfer',
+  METADATA_PROCESSING = '/metadata/processing/address/{address}/{chainId}',
 }
