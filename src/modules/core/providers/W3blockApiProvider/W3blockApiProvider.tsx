@@ -7,6 +7,7 @@ interface Props {
   w3blockCommerceAPIUrl: string;
   w3blockPdfAPIUrl: string;
   w3BlockPollApiUrl: string;
+  w3BlockPassApiUrl: string;
 }
 
 export const W3blockAPIContext = createContext({
@@ -15,6 +16,7 @@ export const W3blockAPIContext = createContext({
   w3blockCommerceAPIUrl: '',
   w3blockPdfAPIUrl: '',
   w3BlockPollApiUrl: '',
+  w3BlockPassApiUrl: '',
 });
 
 export const W3blockApiProvider = ({
@@ -24,6 +26,7 @@ export const W3blockApiProvider = ({
   w3blockCommerceAPIUrl,
   w3blockPdfAPIUrl,
   w3BlockPollApiUrl,
+  w3BlockPassApiUrl,
 }: Props) => {
   const value = useMemo(() => {
     return {
@@ -32,6 +35,7 @@ export const W3blockApiProvider = ({
       w3blockCommerceAPIUrl,
       w3blockPdfAPIUrl,
       w3BlockPollApiUrl,
+      w3BlockPassApiUrl,
     };
   }, [
     w3blockIdAPIUrl,
@@ -39,6 +43,7 @@ export const W3blockApiProvider = ({
     w3blockCommerceAPIUrl,
     w3blockPdfAPIUrl,
     w3BlockPollApiUrl,
+    w3BlockPassApiUrl,
   ]);
   return (
     <W3blockAPIContext.Provider value={value}>
