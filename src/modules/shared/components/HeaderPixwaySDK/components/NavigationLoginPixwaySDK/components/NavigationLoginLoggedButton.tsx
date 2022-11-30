@@ -16,7 +16,8 @@ import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIcon
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
-import useRouter from '../../../../../hooks/useRouter';
+import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -74,8 +75,9 @@ export const NavigationLoginLoggedButton = ({
 
 export const useDefaultMenuTabs = () => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
+  const { data: session } = usePixwaySession();
   return useMemo<NavigationMenuTabs[]>(
     () => [
       {
@@ -108,12 +110,13 @@ export const useDefaultMenuTabs = () => {
         icon: <LogoutIcon />,
         action: () => {
           signOut().then(() => {
-            router.push(PixwayAppRoutes.SIGN_IN);
+            router.pushConnect(PixwayAppRoutes.SIGN_IN);
           });
         },
       },
     ],
-    [translate, router, signOut]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [translate, router, session]
   );
 };
 
@@ -124,7 +127,7 @@ const NavigationMenu = ({
   const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
-  const router = useRouter();
+  const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
   const { wallet } = useUserWallet();
@@ -193,10 +196,9 @@ const NavigationMenu = ({
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => (
             <a
-              href={menu.route}
               onClick={() => {
                 if (menu.route) {
-                  router.push(menu.route);
+                  router.push(router.routerToHref(menu.route));
                 } else if (menu.action) {
                   menu.action();
                 }

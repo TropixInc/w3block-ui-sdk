@@ -1,12 +1,13 @@
 import { MouseEventHandler, ReactNode } from 'react';
 
-import useRouter from '../../hooks/useRouter';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 
 export interface LinkProps {
   children: ReactNode;
   href: string;
   className?: string;
   disabled?: boolean;
+  itemProp?: string;
 }
 
 export const Link = ({
@@ -14,8 +15,10 @@ export const Link = ({
   href,
   className = '',
   disabled = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  itemProp = '',
 }: LinkProps) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const onClickLink: MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
     router.push(href);

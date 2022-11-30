@@ -4,9 +4,11 @@ import { isAfter } from 'date-fns';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePassword } from '../../hooks/useChangePassword';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 import { CompleteSignUpSuccess } from '../CompleteSignUpSuccess';
 import { SignUpForm } from '../SignUpForm';
@@ -25,6 +27,8 @@ interface Props {
   classes?: AuthLayoutBaseClasses;
   termsRedirectLink?: string;
   privacyRedirectLink?: string;
+  afterLoginRedirectLink?: string;
+  hasWhitelist?: boolean;
 }
 
 const getIsTokenExpired = (token: string) => {
@@ -37,11 +41,16 @@ const getIsTokenExpired = (token: string) => {
 
 const _CompleteSignUpTemplate = ({
   classes = {},
-  termsRedirectLink,
-  privacyRedirectLink,
+  termsRedirectLink = PixwayAppRoutes.TERMS_CONDITIONS,
+  privacyRedirectLink = PixwayAppRoutes.PRIVACY_POLICY,
+  afterLoginRedirectLink = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
 }: Props) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [translate] = useTranslation();
+  const { pushConnect } = useRouterConnect();
+  const { companyId } = useCompanyConfig();
+  const [password, setPassword] = useState<string>();
+  const { signOut, signIn } = usePixwayAuthentication();
   const { email, token, tenantId } = router.query;
   const { mutate, isLoading, isSuccess, isError } = useChangePassword();
   const [step, setStep] = useState(() => {
@@ -71,11 +80,28 @@ const _CompleteSignUpTemplate = ({
   }, [token]);
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
-    mutate({
-      email: email as string,
-      password,
-      confirmation,
-      token: token as string,
+    mutate(
+      {
+        email: email as string,
+        password,
+        confirmation,
+        token: token as string,
+      },
+      {
+        onSuccess() {
+          setPassword(password);
+        },
+      }
+    );
+  };
+
+  const handleContinue = () => {
+    signOut().then(() => {
+      signIn({
+        email: email as string,
+        password: password as string,
+        companyId: companyId,
+      }).then(() => pushConnect(afterLoginRedirectLink));
     });
   };
 
@@ -113,7 +139,7 @@ const _CompleteSignUpTemplate = ({
       termsRedirect={termsRedirectLink}
     />
   ) : (
-    <CompleteSignUpSuccess classes={classes} />
+    <CompleteSignUpSuccess handleContinue={handleContinue} classes={classes} />
   );
 };
 

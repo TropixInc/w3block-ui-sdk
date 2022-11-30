@@ -23,10 +23,11 @@ interface SignUpTemplateSDKProps {
   logoUrl?: string;
   textContainer?: ContainerTextBesideProps;
   className?: string;
-  onSubmit: (data: SignUpFormData) => void;
-  isLoading: boolean;
+  onSubmit?: (data: SignUpFormData) => void;
+  isLoading?: boolean;
   email?: string;
   error?: string;
+  callbackUrl?: string;
   privacyRedirect?: string;
   termsRedirect?: string;
   extraBy?: ExtraBy[];

@@ -9,13 +9,13 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
-import { CompleteSigUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
+import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
 import { SignUpTemplateSDK } from '../SignUpTemplateSDK/SignUpTemplateSDK';
 import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
 import { VerifySignUpTokenExpiredTemplateSDK } from '../VerifySignUpTokenExpiredTemplateSDK';
@@ -37,6 +37,7 @@ export interface AllAuthPageProps {
   logoUrl?: string;
   textContainer?: ContainerTextBesideProps;
   className?: string;
+  extraBy?: ExtraBy[];
 }
 
 interface CompleteProfileCustomTemplateProps {
@@ -59,7 +60,7 @@ const _CompleteProfileCustomTemplate = ({
   verifyEmailProps,
   extraBy,
 }: CompleteProfileCustomTemplateProps) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [translate] = useTranslation();
   const { companyId } = useCompanyConfig();
   const { email, token } = router.query;
@@ -104,7 +105,9 @@ const _CompleteProfileCustomTemplate = ({
             password,
             companyId,
           })
-            .then(() => router.push(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET))
+            .then(() =>
+              router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
+            )
             .catch((e) => {
               // eslint-disable-next-line no-console
               console.log(e);
@@ -147,11 +150,7 @@ const _CompleteProfileCustomTemplate = ({
       }
     />
   ) : (
-    <CompleteSigUpSuccessTemplateSDK
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      props={verifyEmailProps!}
-      extraBy={extraBy}
-    />
+    <CompleteSignUpSuccessTemplateSDK {...verifyEmailProps} extraBy={extraBy} />
   );
 };
 

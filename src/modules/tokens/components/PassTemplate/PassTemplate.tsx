@@ -1,13 +1,14 @@
 import { ReactNode } from 'react';
 import { useToggle } from 'react-use';
 
+import classNames from 'classnames';
 import { add, format, getDay, isToday } from 'date-fns';
 
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import useRouter from '../../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
@@ -21,8 +22,9 @@ const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting 
 
 const _PassTemplate = () => {
   const [translate] = useTranslation();
-  const router = useRouter();
-  const tokenId = (router.query.tokenId as string) || 'inactive';
+  const router = useRouterConnect();
+  const mode = (router.query.mode as string) || '';
+
   const [hasExpired, setHasExpired] = useToggle(false);
 
   const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
@@ -42,7 +44,7 @@ const _PassTemplate = () => {
     },
   };
   const event = {
-    date: '10/20/2022 14:30',
+    date: '10/20/2023 14:30',
   };
   const detailsTokenMoked = [
     {
@@ -72,46 +74,47 @@ const _PassTemplate = () => {
   ];
 
   const eventDate =
-    tokenId === 'actived2'
+    mode === 'actived2'
       ? add(new Date(), { seconds: 10 })
       : new Date(event.date);
 
   const today = isToday(eventDate);
 
-  return tokenId.includes('error') ? (
-    tokenId === 'error-read' ? (
+  const isInactive = mode === 'inactive';
+
+  return mode.includes('error') ? (
+    mode === 'error-read' ? (
       <ErrorTemplate
         title={translate('token>pass>invalidQrCode')}
         description={translate('token>pass>notPossibleGenerateQrCode')}
         showButton={true}
       />
-    ) : tokenId === 'error-use' ? (
+    ) : mode === 'error-use' ? (
       <ErrorTemplate
         title={translate('token>pass>invalidQrCode')}
         description={translate('token>pass>usedAllTokens')}
       />
-    ) : tokenId === 'error-expired' ? (
+    ) : mode === 'error-expired' ? (
       <ErrorTemplate
         title={translate('token>pass>expiredTime')}
         description={translate('token>pass>outsideAllowedTime')}
       />
-    ) : (
-      <></>
-    )
+    ) : null
   ) : (
-    <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px]">
+    <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
       <div
-        className="pw-hidden sm:pw-flex pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
+        className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
         onClick={() => router.back()}
       >
-        <ArrowLeftIcon className="pw-stroke-[#295BA6]" />
+        <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
 
-        {translate('token>pass>back')}
+        <p className="sm:pw-hidden pw-block">{translate('token>pass>title')}</p>
+        <p className="pw-hidden sm:pw-block">{translate('token>pass>back')}</p>
       </div>
 
-      {tokenId === 'used' ? <UsedPass /> : null}
+      {mode === 'used' ? <UsedPass /> : null}
 
-      {tokenId === 'inactive' ? (
+      {isInactive ? (
         <InfoPass
           title={translate('token>pass>inactivePass')}
           description={translate('token>pass>inactivePassMessage')}
@@ -125,17 +128,13 @@ const _PassTemplate = () => {
         />
       ) : null}
 
-      <div className="pw-flex pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
-        <ArrowLeftIcon
-          className=" pw-cursor-pointer sm:pw-hidden pw-stroke-[#295BA6]"
-          onClick={() => router.back()}
-        />
+      <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
         {translate('token>pass>title')}
       </div>
 
       <div className="pw-flex pw-flex-col">
         <div className="pw-flex pw-flex-col pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
-          {tokenId === 'used' ? (
+          {mode === 'used' ? (
             <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-[16px] pw-pb-[16px] pw-px-[24px] pw-border-b pw-border-[#EFEFEF]">
               <div className="pw-w-[20px] pw-h-[20px]">
                 <CheckedIcon className="pw-stroke-[#295BA6] pw-w-[20px] pw-h-[20px]" />
@@ -158,7 +157,9 @@ const _PassTemplate = () => {
                 {format(eventDate, "HH'h'mm")}
               </div>
             </div>
-            <div className="pw-h-[119px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
+
+            <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
+
             <div className="pw-flex pw-flex-col pw-justify-center">
               <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
                 {token.name}
@@ -170,7 +171,7 @@ const _PassTemplate = () => {
                 {' - '}
                 {token.address.country}
               </div>
-              <div className="pw-flex pw-gap-1">
+              <div className="pw-flex pw-items-center pw-gap-2">
                 <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
                   {translate('token>pass>use')}
                 </span>
@@ -183,11 +184,8 @@ const _PassTemplate = () => {
             </div>
           </div>
 
-          {tokenId === 'inactive' ? (
-            <InactiveDateUseToken eventDate={eventDate} />
-          ) : null}
-
-          {hasExpired ? (
+          {isInactive ? <InactiveDateUseToken eventDate={eventDate} /> : null}
+          {hasExpired && !isInactive ? (
             <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
               <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
                 {today
@@ -201,67 +199,75 @@ const _PassTemplate = () => {
           ) : null}
         </div>
 
-        {!hasExpired || tokenId === 'unlimited' ? (
+        {!isInactive && (!hasExpired || mode === 'unlimited') ? (
           <QrCodeSection
             eventDate={eventDate}
             tokenId={token.id}
             setExpired={setHasExpired}
+            hasExpiration={!(mode === 'unlimited')}
           />
         ) : null}
       </div>
 
-      <DetailsTemplate title={translate('token>pass>detailsPass')}>
-        <DetailPass
-          title={translate('token>pass>description')}
-          description={Lorem}
-        />
-
-        <DetailPass
-          title={translate('token>pass>benefict')}
-          description={Lorem}
-        />
-
-        <DetailPass title={translate('token>pass>rules')} description={Lorem} />
-      </DetailsTemplate>
-
-      <DetailsTemplate title={translate('token>pass>useLocale')}>
-        <div className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2">
-          <div className="pw-flex pw-flex-col pw-gap-1">
-            <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-              {token.address.name}
-            </div>
-            <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-              {token.address.street}
-              {', '}
-              {token.address.city}
-              {' - '}
-              {token.address.country}
-            </div>
-          </div>
-          <div className="pw-flex pw-flex-col pw-gap-1">
-            <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-              {translate('token>pass>rules')}
-            </div>
-            <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-              {token.address.rules}
-            </div>
-          </div>
-        </div>
-      </DetailsTemplate>
-
-      <DetailsTemplate title={translate('token>pass>detailsToken')}>
-        <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 xl:pw-grid-cols-4 pw-gap-[30px]">
-          {detailsTokenMoked.map((item) => (
-            <DetailToken
-              key={item.title}
-              title={translate(item.title)}
-              description={item.description}
-              copyDescription={item.copyDescription}
-              titleLink={item.titleLink}
+      {!isInactive ? (
+        <>
+          <DetailsTemplate title={translate('token>pass>detailsPass')}>
+            <DetailPass
+              title={translate('token>pass>description')}
+              description={Lorem}
             />
-          ))}
-        </div>
-      </DetailsTemplate>
+
+            <DetailPass
+              title={translate('token>pass>benefict')}
+              description={Lorem}
+            />
+
+            <DetailPass
+              title={translate('token>pass>rules')}
+              description={Lorem}
+            />
+          </DetailsTemplate>
+
+          <DetailsTemplate title={translate('token>pass>useLocale')}>
+            <div className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2">
+              <div className="pw-flex pw-flex-col pw-gap-1">
+                <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                  {token.address.name}
+                </div>
+                <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                  {token.address.street}
+                  {', '}
+                  {token.address.city}
+                  {' - '}
+                  {token.address.country}
+                </div>
+              </div>
+              <div className="pw-flex pw-flex-col pw-gap-1">
+                <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                  {translate('token>pass>rules')}
+                </div>
+                <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                  {token.address.rules}
+                </div>
+              </div>
+            </div>
+          </DetailsTemplate>
+
+          <DetailsTemplate title={translate('token>pass>detailsToken')}>
+            <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 xl:pw-grid-cols-4 pw-gap-[30px]">
+              {detailsTokenMoked.map((item) => (
+                <DetailToken
+                  key={item.title}
+                  title={translate(item.title)}
+                  description={item.description}
+                  copyDescription={item.copyDescription}
+                  titleLink={item.titleLink}
+                />
+              ))}
+            </div>
+          </DetailsTemplate>
+        </>
+      ) : null}
 
       <div className="pw-flex pw-justify-center pw-items-center pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
         {translate('token>pass>purchaseMade', {
@@ -271,12 +277,14 @@ const _PassTemplate = () => {
         })}
       </div>
 
-      {tokenId === 'used' ? (
+      {mode === 'used' ? (
         <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">
-          <Button>{translate('token>pass>tokenPage')}</Button>
-          <Button onClick={() => router.back()}>
+          <PassButton model="primary">
+            {translate('token>pass>tokenPage')}
+          </PassButton>
+          <PassButton model="secondary" onClick={() => router.back()}>
             {translate('token>pass>back')}
-          </Button>
+          </PassButton>
         </div>
       ) : null}
     </div>
@@ -289,19 +297,26 @@ export const PassTemplate = () => (
   </TranslatableComponent>
 );
 
-const Button = ({
+const PassButton = ({
   children,
   onClick,
+  model = 'primary',
 }: {
+  model?: 'primary' | 'secondary';
   children: ReactNode;
   onClick?: () => void;
 }) => (
-  <div
-    className="pw-w-full pw-rounded-[48px] pw-py-[5px] pw-flex pw-justify-center pw-bg-[#EFEFEF] hover:pw-bg-[#295BA6] pw-text-[#FFFFFF] sm:pw-text-[#383857] pw-font-medium pw-text-[12px] pw-leading-[18px] pw-border-[#295BA6] hover:pw-border-[#FFFFFF] pw-border hover:pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] pw-cursor-pointer"
+  <button
+    className={classNames(
+      'pw-w-full pw-rounded-[48px] pw-py-[5px] pw-flex pw-justify-center pw-font-medium pw-text-[12px] pw-leading-[18px] pw-border',
+      model === 'primary'
+        ? 'pw-bg-[#295BA6] hover:pw-bg-[#4194CD] pw-text-white pw-border-[#FFFFFF] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] '
+        : 'pw-bg-[#EFEFEF] pw-text-[#383857]  pw-border-[#295BA6]  hover:pw-shadow-[0px_2px_4px_rgba(0,0,0,0.25)] '
+    )}
     onClick={onClick}
   >
     {children}
-  </div>
+  </button>
 );
 
 export const InfoPass = ({

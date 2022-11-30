@@ -1,13 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import { object, string, boolean } from 'yup';
 
+import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
+import { useSignUp } from '../../hooks/useSignUp';
 import { AuthButton } from '../AuthButton';
 import { AuthCheckbox } from '../AuthCheckbox';
 import { AuthFooter } from '../AuthFooter';
@@ -15,16 +19,23 @@ import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 import { AuthPasswordTips } from '../AuthPasswordTips';
 import { AuthTextController } from '../AuthTextController';
 import { SignUpFormData } from '../SignUpForm/interface';
+import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../SignUpTemplate';
+import { VerifySignUpMailSentWithoutLayout } from '../VerifySignUpMailSentWithoutLayout';
 
 interface Props {
-  onSubmit: (data: SignUpFormData) => void;
-  isLoading: boolean;
+  onSubmit?: (data: SignUpFormData) => void;
+  isLoading?: boolean;
   email?: string;
   error?: string;
   classes?: AuthLayoutBaseClasses;
   privacyRedirect?: string;
   termsRedirect?: string;
   title?: string;
+}
+
+enum Steps {
+  SIGN_UP = 1,
+  SUCCESS,
 }
 
 export const SignUpFormWithoutLayout = ({
@@ -38,6 +49,41 @@ export const SignUpFormWithoutLayout = ({
 }: Props) => {
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
+  const router = useRouterConnect();
+  const [step, setStep] = useState(Steps.SIGN_UP);
+  const [emailLocal, setEmail] = useState('');
+  const { connectProxyPass } = useCompanyConfig();
+  const {
+    mutate,
+    isLoading: signUpLoading,
+    error: signUpError,
+    isSuccess,
+  } = useSignUp();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setStep(Steps.SUCCESS);
+    }
+  }, [isSuccess]);
+
+  const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
+    setEmail(email);
+    mutate({
+      confirmation,
+      email,
+      password,
+      callbackUrl: connectProxyPass + PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+    });
+  };
+
+  const getErrorMessage = () => {
+    if (!signUpError) return undefined;
+    const typedError = signUpError as AxiosError;
+    return (typedError.response?.data as Record<string, string>)?.message ===
+      EMAIL_ALREADY_IN_USE_API_MESSAGE
+      ? translate('auth>signUpError>emailAlreadyInUse')
+      : translate('auth>signUpError>genericErrorMessage');
+  };
 
   const schema = object().shape({
     email: string().email(),
@@ -65,14 +111,17 @@ export const SignUpFormWithoutLayout = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email]);
 
-  return (
+  return step === Steps.SIGN_UP ? (
     <div>
-      {error ? (
+      {error || signUpError ? (
         <Alert
           variant="error"
           className="pw-flex pw-items-center pw-gap-x-2 pw-my-3"
         >
-          <Alert.Icon /> <span className="pw-text-xs">{error}</span>
+          <Alert.Icon />{' '}
+          <span className="pw-text-xs">
+            {error ? error : getErrorMessage()}
+          </span>
         </Alert>
       ) : null}
       <FormProvider {...methods}>
@@ -82,7 +131,14 @@ export const SignUpFormWithoutLayout = ({
           </p>
         ) : null}
 
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="sm:pw-mt-6">
+        <form
+          onSubmit={
+            onSubmit
+              ? methods.handleSubmit(onSubmit)
+              : methods.handleSubmit(onSubmitLocal)
+          }
+          className="sm:pw-mt-6"
+        >
           <AuthTextController
             disabled={Boolean(email)}
             name="email"
@@ -130,7 +186,7 @@ export const SignUpFormWithoutLayout = ({
             type="submit"
             fullWidth
             className="pw-mb-1"
-            disabled={isLoading || !methods.formState.isValid}
+            disabled={isLoading || signUpLoading || !methods.formState.isValid}
           >
             {translate('components>advanceButton>continue')}
           </AuthButton>
@@ -139,7 +195,7 @@ export const SignUpFormWithoutLayout = ({
               Já possui uma conta?
               <a
                 className="pw-text-brand-primary pw-underline"
-                href={PixwayAppRoutes.SIGN_IN}
+                href={router.routerToHref(PixwayAppRoutes.SIGN_IN)}
               >
                 Login
               </a>
@@ -149,5 +205,7 @@ export const SignUpFormWithoutLayout = ({
         </form>
       </FormProvider>
     </div>
+  ) : (
+    <VerifySignUpMailSentWithoutLayout email={emailLocal as string} />
   );
 };

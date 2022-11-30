@@ -1,1 +1,1 @@
-export * from './CompleteSigUpSuccessTemplateSDK';
+export * from './CompleteSignUpSuccessTemplateSDK';
