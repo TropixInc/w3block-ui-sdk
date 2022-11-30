@@ -8,6 +8,7 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 interface Payload {
   userId: string;
   tokenId: string;
+  benefitId: string;
   secret: string;
 }
 
@@ -22,7 +23,7 @@ const usePostBenefitRegisterUse = () => {
         PixwayAPIRoutes.PASS_BENEFIT_REGISTER_USE.replace(
           '{tenantId}',
           tenantId ?? ''
-        ),
+        ).replace('{id}', body.benefitId),
         body
       )
   );
