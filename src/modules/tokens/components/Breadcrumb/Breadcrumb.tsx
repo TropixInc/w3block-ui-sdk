@@ -30,7 +30,7 @@ const BreadcrumbItem = ({
         itemType="https://schema.org/ListItem"
         key={index}
       >
-        <Link itemProp="item" href={url} className="">
+        <Link href={url} className="">
           <span itemProp="name" className="">
             {name}
           </span>

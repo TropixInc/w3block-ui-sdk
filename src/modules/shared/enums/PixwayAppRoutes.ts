@@ -36,4 +36,5 @@ export enum PixwayAppRoutes {
   ADD_FUNDS_TYPE = '/addFunds/type',
   ADD_FUNDS_MANUAL = '/addFunds/type/manual',
   VERIfY_WITH_CODE = '/auth/verify-sign-up/code',
+  LIST_BENEFITS = '/tokens/{contractAddress}/{chainId}/{tokenId}/list-benefits',
 }

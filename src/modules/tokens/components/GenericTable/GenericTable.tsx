@@ -52,7 +52,7 @@ const GenericTable = <T, K extends keyof T>({
           limitRowsNumber={limitRowsNumber}
         />
       </div>
-      {limitRowsNumber !== data?.length ? (
+      {!showPagination ? (
         <div className="pw-w-full pw-flex pw-items-center pw-justify-end">
           <span
             className="pw-text-brand-primary pw-text-xs pw-font-medium pw-font-poppins pw-cursor-pointer"

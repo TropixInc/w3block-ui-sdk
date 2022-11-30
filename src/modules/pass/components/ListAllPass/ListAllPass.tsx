@@ -8,31 +8,43 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { usePublicTokenData } from '../../hooks/usePublicTokenData';
-import { Breadcrumb } from '../Breadcrumb';
-import { Filters, ValidStatusProps } from '../Filters';
-import GenericTable from '../GenericTable/GenericTable';
-import { InternalPageTitle } from '../InternalPageTitle';
-import { LineDivider } from '../LineDivider';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
+import { Breadcrumb } from '../../../tokens/components/Breadcrumb';
+import { Filters, ValidStatusProps } from '../../../tokens/components/Filters';
+import GenericTable from '../../../tokens/components/GenericTable/GenericTable';
+import { LineDivider } from '../../../tokens/components/LineDivider';
 import {
   headers,
   mobileHeaders,
   mobileTableData,
   tableData,
-} from '../TokenDetailsCard';
+} from '../../../tokens/components/TokenDetailsCard';
+import { usePublicTokenData } from '../../../tokens/hooks/usePublicTokenData';
+import useGetPassBenefitsByContractToken from '../../hooks/useGetPassBenefitsByContractToken';
 
 const _ListAllPass = () => {
   const router = useRouter();
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
-  const contractAddress = (router.query.contractAddress as string) ?? '';
-  const chainId = (router.query.chainId as string) ?? '';
+  const { wallet } = useUserWallet();
+
+  const contractAddress = '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0';
+  const chainId = '80001';
   const tokenId = (router.query.tokenId as string) ?? '';
+
   const { data: publicTokenResponse } = usePublicTokenData({
     contractAddress,
     chainId,
     tokenId,
   });
+
+  const benefitsList = useGetPassBenefitsByContractToken(
+    chainId,
+    contractAddress,
+    tokenId
+  );
+
+  console.log({ wallet, benefitsList });
 
   const status = {
     Ativo: '#009A6C',
@@ -110,17 +122,17 @@ const _ListAllPass = () => {
       name: translate('connect>ListAllPass>listBenefits'),
     },
   ];
-  return publicTokenResponse ? (
+  return !publicTokenResponse ? (
     <div
       className={classNames(
         'pw-flex pw-flex-col pw-p-[17px] sm:pw-p-6 pw-bg-white pw-relative pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-mx-[22px] sm:pw-mx-0'
       )}
     >
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
-      <InternalPageTitle
+      {/* <InternalPageTitle
         contract={publicTokenResponse?.data?.information?.contractName}
         title={publicTokenResponse?.data?.information?.title}
-      />
+      /> */}
       <LineDivider />
       <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black pw-mb-6">
         {translate('connect>ListAllPass>tableTitle')}
@@ -138,12 +150,14 @@ const _ListAllPass = () => {
             columns={mobileHeaders}
             data={mobileTableData}
             showPagination={true}
+            limitRowsNumber={5}
           />
         ) : (
           <GenericTable
             columns={headers}
             data={filteredData}
             showPagination={true}
+            limitRowsNumber={10}
           />
         )}
       </div>
