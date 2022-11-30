@@ -19,7 +19,9 @@ import { Chip } from './Chip';
 export const BaseTemplate = ({
   children,
   classes,
+  title,
 }: {
+  title: string;
   children: ReactNode;
   classes?: {
     modal?: string;
@@ -49,11 +51,12 @@ export const BaseTemplate = ({
               : 'pw-w-full pw-text-center pw-font-bold pw-text-[18px] pw-leading-[23px] sm:pw-hidden pw-mb-[30px]'
           )}
         >
+          {title}
           {translate('components>menu>tokenPass>clients')}
         </div>
         <div className="pw-w-full pw-items-center pw-justify-between pw-hidden sm:pw-flex">
           <span className="pw-font-semibold pw-text-[23px] pw-leading-[32px]">
-            {translate('components>menu>tokenPass>clients')}
+            {title}
           </span>
           <div className="pw-flex pw-items-center pw-gap-4">
             <div

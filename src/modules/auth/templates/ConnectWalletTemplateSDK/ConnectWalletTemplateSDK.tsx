@@ -25,6 +25,7 @@ interface ConnectWalletTemplateSDKProps {
   defaultRedirectRoute?: string;
   tenantName?: string;
   extraBy?: ExtraBy[];
+  redirectLink: string;
 }
 
 export const ConnectWalletTemplateSDK = ({
@@ -39,6 +40,7 @@ export const ConnectWalletTemplateSDK = ({
   className,
   defaultRedirectRoute = PixwayAppRoutes.HOME,
   tenantName,
+  redirectLink,
   extraBy,
 }: ConnectWalletTemplateSDKProps) => {
   return (
@@ -60,6 +62,7 @@ export const ConnectWalletTemplateSDK = ({
               <ConnectExternalWalletWithoutLayout
                 redirectRoute={defaultRedirectRoute}
                 tenantName={tenantName}
+                redirectLink={redirectLink}
               />
             </Box>
           }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 
 import { Provider } from '@w3block/pixchain-react-metamask';
 
@@ -11,7 +11,7 @@ import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/met
 import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
+// import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useModalController } from '../../../shared/hooks/useModalController';
@@ -36,11 +36,13 @@ enum Step {
 interface ConnectExternalWalletWithoutLayoutProps {
   redirectRoute?: string;
   tenantName?: string;
+  redirectLink?: string;
 }
 
 const _ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
   tenantName,
+  redirectLink,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
@@ -75,7 +77,7 @@ const _ConnectExternalWalletWithoutLayout = ({
   }, [profile, status]);
 
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const conn = !companyId && !token;
 
@@ -107,7 +109,12 @@ const _ConnectExternalWalletWithoutLayout = ({
       await claim();
       onCreateWalletSuccessfully();
     } catch (error: any) {
+      if (!error?.message || error.message == '') {
+        router.pushConnect(redirectLink ?? redirectRoute);
+        return;
+      }
       console.error(error);
+
       onError(error.message);
     }
   };
@@ -132,12 +139,12 @@ const _ConnectExternalWalletWithoutLayout = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
-    queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.pushConnect(redirectRoute);
+    router.pushConnect(redirectLink ?? redirectRoute);
+    //queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onError = (errorMessage: string) => {
+  const onError = (errorMessage: any) => {
     console.error(errorMessage);
     setErrorMsg(errorMessage);
     setIsConnecting(false);
@@ -273,6 +280,7 @@ const _ConnectExternalWalletWithoutLayout = ({
 const MetamaskProvider = Provider as any;
 export const ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
+  redirectLink,
   tenantName,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   return (
@@ -286,6 +294,7 @@ export const ConnectExternalWalletWithoutLayout = ({
           <_ConnectExternalWalletWithoutLayout
             redirectRoute={redirectRoute}
             tenantName={tenantName}
+            redirectLink={redirectLink}
           />
         </MailVerifiedInterceptorProvider>
       </MetamaskProvider>

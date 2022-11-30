@@ -35,6 +35,8 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
     return tokens.slice(startIndex, lastIndex);
   }, [page, tokens]);
 
+  // console.log('tokensDisplaying', tokensDisplaying);
+
   useEffect(() => {
     if (!isLoading) {
       setTotalPages(Math.ceil(tokens.length / 6));

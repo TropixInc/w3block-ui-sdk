@@ -7,6 +7,7 @@ export interface LinkProps {
   href: string;
   className?: string;
   disabled?: boolean;
+  itemProp?: string;
 }
 
 export const Link = ({
@@ -14,6 +15,8 @@ export const Link = ({
   href,
   className = '',
   disabled = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  itemProp = '',
 }: LinkProps) => {
   const router = useRouterConnect();
   const onClickLink: MouseEventHandler<HTMLAnchorElement> = (event) => {

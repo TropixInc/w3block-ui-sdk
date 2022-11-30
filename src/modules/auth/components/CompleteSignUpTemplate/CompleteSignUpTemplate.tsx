@@ -41,8 +41,8 @@ const getIsTokenExpired = (token: string) => {
 
 const _CompleteSignUpTemplate = ({
   classes = {},
-  termsRedirectLink,
-  privacyRedirectLink,
+  termsRedirectLink = PixwayAppRoutes.TERMS_CONDITIONS,
+  privacyRedirectLink = PixwayAppRoutes.PRIVACY_POLICY,
   afterLoginRedirectLink = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
 }: Props) => {
   const router = useRouterConnect();

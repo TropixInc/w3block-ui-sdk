@@ -6,6 +6,7 @@ import { format, getDay } from 'date-fns';
 
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import {
   Filters,
   ValidStatusProps,
@@ -48,6 +49,7 @@ export const ClientTemplate = () => {
 
   const status = validStatus.map(({ key }) => key);
 
+  const [translate] = useTranslation();
   const isProduction = useIsProduction();
   const isDevelopment = !isProduction;
   const [filteredData, setFilteredData] = useState(dataMoked);
@@ -91,7 +93,7 @@ export const ClientTemplate = () => {
   };
 
   return isDevelopment ? (
-    <BaseTemplate>
+    <BaseTemplate title={translate('components>menu>tokenPass>clients')}>
       <div className="pw-flex pw-flex-col sm:pw-flex-row pw-p-[16px] pw-gap-[24px] sm:pw-gap-[16px] pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[16px]">
         <img
           src={token.image}
