@@ -29,7 +29,7 @@ export const VerifySignUpMailSent = ({
   classes = {},
   isPostSignUp = false,
 }: PasswordChangeMailSentProps) => {
-  const { logoUrl: logo } = useCompanyConfig();
+  const { logoUrl: logo, connectProxyPass } = useCompanyConfig();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
@@ -51,9 +51,11 @@ export const VerifySignUpMailSent = ({
     }
   }, [isSuccess, setCountdownDate, reset]);
 
-  const callbackPath = isPostSignUp
-    ? PixwayAppRoutes.COMPLETE_SIGNUP
-    : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
+  const callbackPath =
+    connectProxyPass +
+    (isPostSignUp
+      ? PixwayAppRoutes.COMPLETE_SIGNUP
+      : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
 
   return (
     <AuthLayoutBase

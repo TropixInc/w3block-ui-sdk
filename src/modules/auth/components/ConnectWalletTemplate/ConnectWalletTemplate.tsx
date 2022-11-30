@@ -39,6 +39,10 @@ enum Step {
   CONNECT_TO_METAMASK,
 }
 
+interface ConnectWalletProps {
+  redirectLink?: string;
+}
+
 export const ConnectToMetamaskButton = ({
   onClick,
   disabled = false,
@@ -56,7 +60,7 @@ export const ConnectToMetamaskButton = ({
   );
 };
 
-const _ConnectWalletTemplate = () => {
+const _ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const [translate] = useTranslation();
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
@@ -148,7 +152,7 @@ const _ConnectWalletTemplate = () => {
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
-    router.push(PixwayAppRoutes.HOME);
+    router.push(redirectLink ? redirectLink : PixwayAppRoutes.HOME);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -261,7 +265,7 @@ const _ConnectWalletTemplate = () => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MetamaskProvider = Provider as any;
-export const ConnectWalletTemplate = () => (
+export const ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => (
   <TranslatableComponent>
     <MetamaskProvider
       dappConfig={{
@@ -269,7 +273,7 @@ export const ConnectWalletTemplate = () => (
       }}
     >
       <MailVerifiedInterceptorProvider>
-        <_ConnectWalletTemplate />
+        <_ConnectWalletTemplate redirectLink={redirectLink} />
       </MailVerifiedInterceptorProvider>
     </MetamaskProvider>
   </TranslatableComponent>

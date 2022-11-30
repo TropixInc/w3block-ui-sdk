@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
+// eslint-disable-next-line import-helpers/order-imports
+import { CurrencyEnum, currencyMap } from '../../enums/Currency';
+
 // import { ReactComponent as InfoIcon } from '../../assets/icons/informationCircled.svg';
 import { Shimmer } from '../Shimmer';
 import TranslatableComponent from '../TranslatableComponent';
@@ -11,6 +14,7 @@ interface PriceAndGasInfo {
   totalPrice: string;
   className?: string;
   loading?: boolean;
+  currency?: CurrencyEnum;
 }
 
 const _PriceAndGasInfo = ({
@@ -20,6 +24,7 @@ const _PriceAndGasInfo = ({
   className,
   loading,
   totalPrice,
+  currency = CurrencyEnum.BRL,
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
 
@@ -31,7 +36,8 @@ const _PriceAndGasInfo = ({
           <Shimmer />
         ) : (
           <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
-            R${price}
+            {currencyMap.get(currency)}
+            {price}
           </p>
         )}
       </div>
@@ -47,7 +53,8 @@ const _PriceAndGasInfo = ({
             <Shimmer />
           ) : (
             <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
-              R${parseFloat(service).toFixed(2)}
+              {currencyMap.get(currency)}
+              {parseFloat(service).toFixed(2)}
             </p>
           )
         ) : null}
@@ -63,7 +70,8 @@ const _PriceAndGasInfo = ({
           <Shimmer />
         ) : (
           <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
-            R${gasFee}
+            {currencyMap.get(currency)}
+            {gasFee}
           </p>
         )}
       </div>
@@ -76,7 +84,8 @@ const _PriceAndGasInfo = ({
           <Shimmer className="pw-h-6 pw-w-17" />
         ) : (
           <p className="pw-text-xl pw-font-[700] pw-text-[#35394C]">
-            R${totalPrice}
+            {currencyMap.get(currency)}
+            {totalPrice}
           </p>
         )}
       </div>
@@ -91,6 +100,7 @@ export const PriceAndGasInfo = ({
   loading = false,
   service,
   totalPrice,
+  currency,
 }: PriceAndGasInfo) => {
   return (
     <TranslatableComponent>
@@ -101,6 +111,7 @@ export const PriceAndGasInfo = ({
         price={price}
         gasFee={gasFee}
         totalPrice={totalPrice}
+        currency={currency}
       />
     </TranslatableComponent>
   );

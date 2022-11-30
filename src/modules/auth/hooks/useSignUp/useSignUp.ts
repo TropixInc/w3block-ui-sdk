@@ -19,14 +19,15 @@ interface Payload {
 
 export const useSignUp = () => {
   const getSDK = useGetW3blockIdSDK();
-  const { companyId, appBaseUrl } = useCompanyConfig();
+  const { companyId, appBaseUrl, connectProxyPass } = useCompanyConfig();
   return useMutation([PixwayAPIRoutes.USERS], async (payload: Payload) => {
     const sdk = await getSDK();
     return sdk.api.auth.signUp({
       ...payload,
       tenantId: companyId,
       callbackUrl: new URL(
-        payload.callbackUrl ?? PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+        payload.callbackUrl ??
+          connectProxyPass + PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
         appBaseUrl
       ).toString(),
     });

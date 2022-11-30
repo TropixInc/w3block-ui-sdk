@@ -5,7 +5,6 @@ import { RequestPasswordChangeWithoutLayout } from '../../components/RequestPass
 import { AllAuthPageProps } from '../CompleteProfileCustomTemplate';
 
 export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
-  console.log(props);
   return (
     <TranslatableComponent>
       <div style={{ backgroundColor: props.bgColor }}>
