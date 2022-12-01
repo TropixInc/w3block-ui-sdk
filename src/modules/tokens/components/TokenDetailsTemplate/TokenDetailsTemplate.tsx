@@ -1,3 +1,4 @@
+import useGetPassBenefitsByContractToken from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { InternalPagesLayoutBase } from '../../../shared';
 import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -18,6 +19,12 @@ const _TokenDetailsTemplate = () => {
   const { data: publicTokenResponse } = usePublicTokenData({
     contractAddress,
     chainId,
+    tokenId,
+  });
+
+  const { data: benefitsList } = useGetPassBenefitsByContractToken({
+    chainId,
+    contractAddress,
     tokenId,
   });
 
@@ -50,6 +57,7 @@ const _TokenDetailsTemplate = () => {
         mainImage={publicTokenResponse?.data?.information.mainImage ?? ''}
         className="pw-mb-6"
         isMultiplePass={true}
+        benefitsList={benefitsList?.data}
       />
 
       <MintedInfoCard

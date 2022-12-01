@@ -2,31 +2,33 @@ import { useState } from 'react';
 import { useDebounce } from 'react-use';
 
 import classNames from 'classnames';
+import { format } from 'date-fns';
 
 import { InternalPagesLayoutBase } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { Breadcrumb } from '../../../tokens/components/Breadcrumb';
+import { Button } from '../../../tokens/components/Button';
 import { Filters, ValidStatusProps } from '../../../tokens/components/Filters';
 import GenericTable from '../../../tokens/components/GenericTable/GenericTable';
 import { LineDivider } from '../../../tokens/components/LineDivider';
+import StatusTag from '../../../tokens/components/StatusTag/StatusTag';
 import {
   headers,
   mobileHeaders,
-  mobileTableData,
-  tableData,
-} from '../../../tokens/components/TokenDetailsCard';
+} from '../../../tokens/const/GenericTableHeaders';
 import { usePublicTokenData } from '../../../tokens/hooks/usePublicTokenData';
+import { BenefitStatus } from '../../enums/BenefitStatus';
+import { PassType } from '../../enums/PassType';
 import useGetPassBenefitsByContractToken from '../../hooks/useGetPassBenefitsByContractToken';
+import { BenefitAddress } from '../../interfaces/PassBenefitDTO';
 
 const _ListAllPass = () => {
   const router = useRouter();
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
-  const { wallet } = useUserWallet();
 
   const contractAddress = '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0';
   const chainId = '80001';
@@ -38,13 +40,11 @@ const _ListAllPass = () => {
     tokenId,
   });
 
-  const benefitsList = useGetPassBenefitsByContractToken(
+  const { data: benefitsList } = useGetPassBenefitsByContractToken({
     chainId,
     contractAddress,
-    tokenId
-  );
-
-  console.log({ wallet, benefitsList });
+    tokenId,
+  });
 
   const status = {
     Ativo: '#009A6C',
@@ -67,6 +67,57 @@ const _ListAllPass = () => {
     },
   ];
 
+  const handleLocal = (type: string, address?: BenefitAddress) => {
+    if (type == PassType.physical && address) {
+      return `${address.street} - ${address.city}`;
+    }
+
+    if (type == PassType.digital) {
+      return 'Aplicativo';
+    }
+  };
+
+  const formatDateToTable = (startsAt: string, endsAt?: string) => {
+    if (endsAt) {
+      return `${format(new Date(startsAt), 'dd/MM/yyyy')} > ${format(
+        new Date(endsAt),
+        'dd/MM/yyyy'
+      )}`;
+    } else {
+      return format(new Date(startsAt), 'dd/MM/yyyy');
+    }
+  };
+
+  const handleButtonToShow = (status: BenefitStatus) => {
+    if (status == BenefitStatus.active) {
+      return <Button>{translate('token>pass>benefits>useBenefit')}</Button>;
+    } else {
+      return (
+        <Button variant="secondary">
+          {translate('token>pass>benefits>viewBenefit')}
+        </Button>
+      );
+    }
+  };
+
+  const tableData = benefitsList?.data?.items?.map((benefit) => ({
+    name: benefit.name,
+    type: benefit.type,
+    local: benefit?.tokenPassBenefitAddresses
+      ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
+      : handleLocal(benefit.type),
+    date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
+    status: <StatusTag status={benefit.status} />,
+    actionComponent: handleButtonToShow(benefit.status),
+  }));
+
+  const mobileTableData = benefitsList?.data?.items?.map((benefit) => ({
+    name: benefit?.name,
+    type: benefit?.type,
+    status: <StatusTag status={benefit?.status} />,
+    actionComponent: handleButtonToShow(benefit?.status),
+  }));
+
   const [filteredData, setFilteredData] = useState(tableData);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState(Object.keys(status));
@@ -74,9 +125,9 @@ const _ListAllPass = () => {
   useDebounce(
     () => {
       const filter = searchTerm.toLowerCase();
-      const filteredData = tableData.filter(
+      const filteredData = tableData?.filter(
         (item) =>
-          (item.pass.toLowerCase().includes(filter) ||
+          (item.name.toLowerCase().includes(filter) ||
             item.type.toLowerCase().includes(filter)) &&
           Boolean(
             statusFilter.find(
@@ -141,25 +192,26 @@ const _ListAllPass = () => {
         setSearchTerm={setSearchTerm}
         setStatus={handleStatusFilter}
         status={statusFilter}
-        totalItens={filteredData.length}
+        totalItens={filteredData?.length}
         validStatus={validStatus}
       />
       <div className="pw-mt-4">
-        {isMobile ? (
+        {isMobile && mobileTableData ? (
           <GenericTable
             columns={mobileHeaders}
             data={mobileTableData}
             showPagination={true}
             limitRowsNumber={5}
           />
-        ) : (
+        ) : null}
+        {!isMobile && filteredData ? (
           <GenericTable
             columns={headers}
             data={filteredData}
             showPagination={true}
             limitRowsNumber={10}
           />
-        )}
+        ) : null}
       </div>
     </div>
   ) : null;

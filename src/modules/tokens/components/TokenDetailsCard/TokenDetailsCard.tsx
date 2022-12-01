@@ -1,8 +1,13 @@
 import classNames from 'classnames';
 import { format } from 'date-fns';
 
+import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
+import { PassType } from '../../../pass/enums/PassType';
+import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
+import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { headers, mobileHeaders } from '../../const/GenericTableHeaders';
 import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
 import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';
 import {
@@ -12,193 +17,13 @@ import {
 import { DynamicFormConfiguration } from '../../interfaces/DynamicFormConfiguration';
 import { Breadcrumb } from '../Breadcrumb';
 import { Button } from '../Button';
-import GenericTable, { ColumnType } from '../GenericTable/GenericTable';
+import GenericTable from '../GenericTable/GenericTable';
 import { InternalPageTitle } from '../InternalPageTitle';
 import { LineDivider } from '../LineDivider';
 import { SmartDataDisplayer } from '../SmartDataDisplayer';
 import { TextFieldDisplay } from '../SmartDisplay/TextFieldDisplay';
 import StatusTag from '../StatusTag/StatusTag';
 
-interface TableRow {
-  pass: string;
-  type: string;
-  local: string;
-  date: string;
-  status: JSX.Element;
-  actionComponent?: JSX.Element;
-}
-
-interface TableRowMobile {
-  pass: string;
-  type: string;
-  status: JSX.Element;
-  actionComponent?: JSX.Element;
-}
-
-export const mobileTableData = [
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="inativo" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="ativo" />,
-    actionComponent: <Button>Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="inativo" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="ativo" />,
-    actionComponent: <Button>Utilizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-];
-
-export const tableData = [
-  {
-    pass: 'Desconto',
-    type: 'Físico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="inativo" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'bebida',
-    type: 'Fisico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="ativo" />,
-    actionComponent: <Button>Utilizar</Button>,
-  },
-  {
-    pass: 'jantar',
-    type: 'Fisico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'online',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="inativo" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'online',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="ativo" />,
-    actionComponent: <Button>Utilizar</Button>,
-  },
-  {
-    pass: 'Nome do pass',
-    type: 'Físico',
-    local: 'Aplicativo',
-    date: format(new Date(), 'dd/MM/yyyy'),
-    status: <StatusTag status="indisponível" />,
-    actionComponent: <Button variant="secondary">Visualizar</Button>,
-  },
-];
-
-export const mobileHeaders: ColumnType<TableRowMobile, keyof TableRowMobile>[] =
-  [
-    {
-      key: 'pass',
-      header: 'Pass',
-    },
-    {
-      key: 'type',
-      header: 'Tipo',
-    },
-    {
-      key: 'status',
-      header: '',
-    },
-    {
-      key: 'actionComponent',
-      header: '',
-    },
-  ];
-
-export const headers: ColumnType<TableRow, keyof TableRow>[] = [
-  {
-    key: 'pass',
-    header: 'Pass',
-  },
-  {
-    key: 'type',
-    header: 'Tipo',
-  },
-  {
-    key: 'local',
-    header: 'Local',
-  },
-  {
-    key: 'date',
-    header: 'Data',
-  },
-  {
-    key: 'status',
-    header: 'Status',
-  },
-  {
-    key: 'actionComponent',
-    header: '',
-  },
-];
 interface Props {
   contract: string;
   title: string;
@@ -208,6 +33,7 @@ interface Props {
   tokenTemplate: DynamicFormConfiguration;
   className?: string;
   isMultiplePass?: boolean;
+  benefitsList?: BenefitsResponse;
 }
 
 export const TokenDetailsCard = ({
@@ -219,6 +45,7 @@ export const TokenDetailsCard = ({
   tokenTemplate,
   className = '',
   isMultiplePass = false,
+  benefitsList,
 }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
@@ -242,6 +69,57 @@ export const TokenDetailsCard = ({
     },
   ];
 
+  const handleLocal = (type: string, address?: BenefitAddress) => {
+    if (type == PassType.physical && address) {
+      return `${address.street} - ${address.city}`;
+    }
+
+    if (type == PassType.digital) {
+      return 'Aplicativo';
+    }
+  };
+
+  const formatDateToTable = (startsAt: string, endsAt?: string) => {
+    if (endsAt) {
+      return `${format(new Date(startsAt), 'dd/MM/yyyy')} > ${format(
+        new Date(endsAt),
+        'dd/MM/yyyy'
+      )}`;
+    } else {
+      return format(new Date(startsAt), 'dd/MM/yyyy');
+    }
+  };
+
+  const handleButtonToShow = (status: BenefitStatus) => {
+    if (status == BenefitStatus.active) {
+      return <Button>{translate('token>pass>benefits>useBenefit')}</Button>;
+    } else {
+      return (
+        <Button variant="secondary">
+          {translate('token>pass>benefits>viewBenefit')}
+        </Button>
+      );
+    }
+  };
+
+  const tableData = benefitsList?.items?.map((benefit) => ({
+    name: benefit.name,
+    type: benefit.type,
+    local: benefit?.tokenPassBenefitAddresses
+      ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
+      : handleLocal(benefit.type),
+    date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
+    status: <StatusTag status={benefit.status} />,
+    actionComponent: handleButtonToShow(benefit.status),
+  }));
+
+  const mobileTableData = benefitsList?.items?.map((benefit) => ({
+    name: benefit?.name,
+    type: benefit?.type,
+    status: <StatusTag status={benefit?.status} />,
+    actionComponent: handleButtonToShow(benefit?.status),
+  }));
+
   return (
     <div
       className={classNames(
@@ -257,19 +135,22 @@ export const TokenDetailsCard = ({
           <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
             {translate('connect>TokenDetailCard>passAssociated')}
           </p>
-          {isMobile ? (
+          {isMobile && mobileTableData ? (
             <GenericTable
               columns={mobileHeaders}
               data={mobileTableData}
               limitRowsNumber={3}
+              itensPerPage={3}
             />
-          ) : (
+          ) : null}
+          {!isMobile && tableData ? (
             <GenericTable
               columns={headers}
               data={tableData}
               limitRowsNumber={5}
+              itensPerPage={5}
             />
-          )}
+          ) : null}
         </div>
       )}
       <LineDivider />
