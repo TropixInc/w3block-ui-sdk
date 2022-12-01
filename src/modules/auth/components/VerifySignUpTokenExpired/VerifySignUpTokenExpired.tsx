@@ -26,7 +26,7 @@ export const VerifySignUpTokenExpired = ({
   classes = {},
   isPostSignUp = false,
 }: Props) => {
-  const { logoUrl } = useCompanyConfig();
+  const { logoUrl, connectProxyPass } = useCompanyConfig();
   const { mutate, isLoading, isSuccess } = useRequestConfirmationMail();
   const [translate] = useTranslation();
 
@@ -35,9 +35,11 @@ export const VerifySignUpTokenExpired = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const callbackPath = isPostSignUp
-    ? PixwayAppRoutes.COMPLETE_SIGNUP
-    : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION;
+  const callbackPath =
+    connectProxyPass +
+    (isPostSignUp
+      ? PixwayAppRoutes.COMPLETE_SIGNUP
+      : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
 
   return (
     <AuthLayoutBase

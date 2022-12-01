@@ -39,7 +39,7 @@ export const DetailToken = ({
       {description ? (
         <div
           className={
-            'pw-relative pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-flex pw-items-center pw-text-center pw-gap-1'
+            'pw-relative pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-flex pw-items-center pw-text-center pw-gap-1'
           }
         >
           {description}

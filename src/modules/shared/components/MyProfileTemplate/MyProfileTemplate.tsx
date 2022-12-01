@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
@@ -19,9 +20,10 @@ const _MyProfileTemplate = () => {
   const { mutate } = useRequestConfirmationMail();
   useHasWallet();
   const { data: profile } = useProfile();
+  const { connectProxyPass } = useCompanyConfig();
   const { status } = usePixwaySession();
   const email = profile?.data?.email ?? '';
-  const callbackPath = PixwayAppRoutes.COMPLETE_SIGNUP;
+  const callbackPath = connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP;
   const [isOpen, setIsOpen] = useState(false);
 
   const formattedEmail = useMemo(() => {

@@ -13,7 +13,7 @@ interface Payload {
 }
 
 export const useRequestPasswordChange = () => {
-  const { companyId, appBaseUrl } = useCompanyConfig();
+  const { companyId, appBaseUrl, connectProxyPass } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.ID);
   return useMutation(
     [PixwayAPIRoutes.REQUEST_PASSWORD_CHANGE],
@@ -27,7 +27,7 @@ export const useRequestPasswordChange = () => {
         tenantId: companyId,
         verificationType: verificationType ?? '',
         callbackUrl: new URL(
-          callbackPath ?? PixwayAppRoutes.RESET_PASSWORD,
+          callbackPath ?? connectProxyPass + PixwayAppRoutes.RESET_PASSWORD,
           appBaseUrl
         ).toString(),
       });

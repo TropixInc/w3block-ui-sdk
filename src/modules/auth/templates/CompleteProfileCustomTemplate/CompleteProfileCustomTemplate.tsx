@@ -37,6 +37,7 @@ export interface AllAuthPageProps {
   logoUrl?: string;
   textContainer?: ContainerTextBesideProps;
   className?: string;
+  extraBy?: ExtraBy[];
 }
 
 interface CompleteProfileCustomTemplateProps {
@@ -86,9 +87,6 @@ const _CompleteProfileCustomTemplate = ({
   useEffect(() => {
     if (token && getIsTokenExpired(token as string)) {
       setStep(Steps.TOKEN_EXPIRED);
-    }
-    if (token && !getIsTokenExpired(token as string)) {
-      setStep(Steps.MAIL_CONFIRMED);
     }
   }, [token]);
 
