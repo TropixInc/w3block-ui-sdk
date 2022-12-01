@@ -1,8 +1,12 @@
 import { useContext, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
+import { ChainId, WalletTypes } from '@w3block/sdk-id';
+
 import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
+import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
+import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfile } from '../../../../../hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
@@ -13,7 +17,6 @@ import { PixwayButton } from '../../../../PixwayButton';
 import { UserTag } from '../../../../UserTag/UserTag';
 import { NavigationMenuTabs } from '../interfaces/menu';
 import { useDefaultMenuTabs } from './NavigationLoginLoggedButton';
-
 interface NavigationLoginLoggedButtonMobileProps {
   menuOpened?: boolean;
   toggleMenu?: () => void;
@@ -38,28 +41,52 @@ export const NavigationLoginLoggedButtonMobile = ({
       toggleMenu();
     } else setUserMenu(!userMenu);
   };
-  const [_, copy] = useCopyToClipboard();
+  const [copied, setCopied] = useState<boolean>(false);
+  const [_, setCopy] = useCopyToClipboard();
+  const copyAddress = (address: string) => {
+    setCopied(true);
+    setCopy(address || '');
+    setTimeout(() => setCopied(false), 5000);
+  };
   const menuTabs = _menuTabs ?? defaultTabs;
   const validatorOpened = menuOpened ? menuOpened : userMenu;
 
   const { data: profile } = useProfile();
 
+  const renderIcon = () => {
+    return wallet?.chainId === ChainId.Polygon ||
+      wallet?.chainId === ChainId.Mumbai ? (
+      <MaticIcon className="pw-fill-[#8247E5]" />
+    ) : (
+      <ETHIcon className="pw-fill-black" />
+    );
+  };
+
   const WithWallet = () => {
     return (
       <div className="pw-mt-3 pw-px-[20px] pw-py-4 pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] pw-rounded-2xl pw-w-full pw-flex">
         <div className="pw-flex-1">
-          <div className="pw-flex pw-items-center pw-gap-2">
-            <p
-              onClick={() => setHideBalance(!hideBalance)}
-              className="pw-text-xs pw-font-[400] pw-font-montserrat"
-            >
-              {translate('header>logged>pixwayBalance')}
+          <div
+            onClick={() => setHideBalance(!hideBalance)}
+            className="pw-flex pw-items-center pw-gap-2 pw-cursor-pointer"
+          >
+            <p className="pw-text-xs pw-font-[400] pw-font-montserrat">
+              {wallet?.type === WalletTypes.Vault
+                ? translate('header>logged>pixwayBalance')
+                : translate('header>logged>metamaskBalance')}
             </p>
             <EyeIcon />
           </div>
-          <p className="pw-font-montserrat pw-text-xs pw-font-[700] pw-mt-[2px]">
-            R$ {hideBalance ? '******' : wallet?.balance ?? '0'}
-          </p>
+          {hideBalance ? (
+            <div className="pw-flex pw-gap-x-2">
+              {renderIcon()}
+              <p className="pw-font-montserrat pw-font-[700] pw-text-xs pw-ml-1">
+                {parseFloat(wallet?.balance ?? '').toFixed(2)}
+              </p>
+            </div>
+          ) : (
+            <p className="pw-font-montserrat pw-font-[700] pw-text-xs">*****</p>
+          )}
         </div>
       </div>
     );
@@ -86,13 +113,22 @@ export const NavigationLoginLoggedButtonMobile = ({
             {translate('header>logged>hiWallet', { name: profile?.data?.name })}
           </p>
           <div
-            onClick={() => copy(profile?.data.mainWallet?.address || '')}
+            onClick={() => copyAddress(profile?.data.mainWallet?.address || '')}
             className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
             <p className="pw-font-montserrat pw-text-xs pw-font-[400] pw-cursor-pointer">
               {profile?.data.mainWallet?.address || '-'}
             </p>
             <CopyIcon />
+            {copied ? (
+              <div className="pw-relative">
+                <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2 pw-absolute pw-bg-slate-300 pw-shadow-md pw-rounded-md pw-right-0 pw-top-3 pw-p-1">
+                  <p className="pw-font-montserrat pw-text-sm pw-text-[#353945]">
+                    {translate('components>menu>copied')}
+                  </p>
+                </div>
+              </div>
+            ) : null}
           </div>
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
           {wallet ? <WithWallet /> : <WithoutWallet />}

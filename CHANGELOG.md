@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.113](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.112...v0.1.1-alpha.113) (2022-12-01)
+
+### [0.1.1-alpha.112](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.111...v0.1.1-alpha.112) (2022-11-30)
+
+
+### Features
+
+* **np-42:** flow use pass ([1c9f2e7](https://github.com/TropixInc/w3block-ui-sdk/commit/1c9f2e74b5179f82eddf2dcd6c7bcca6da565048))
+* **np-42:** integration pass ([1ff2679](https://github.com/TropixInc/w3block-ui-sdk/commit/1ff26796ae2284cd9d71a2b54251e3cbf30530a3))
+
 ### [0.1.1-alpha.111](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.110...v0.1.1-alpha.111) (2022-11-29)
 
 ### [0.1.1-alpha.110](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.109...v0.1.1-alpha.110) (2022-11-29)

@@ -25,7 +25,7 @@ interface ConnectWalletTemplateSDKProps {
   defaultRedirectRoute?: string;
   tenantName?: string;
   extraBy?: ExtraBy[];
-  redirectLink: string;
+  redirectLink?: string;
 }
 
 export const ConnectWalletTemplateSDK = ({
