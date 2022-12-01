@@ -24,6 +24,7 @@ interface Props extends JSX.IntrinsicAttributes {
   isProduction: boolean;
   appBaseUrl: string;
   connectProxyPass?: string;
+  launchDarklyKey?: string;
 }
 
 export const W3blockUISDKGeneralConfig = ({
@@ -66,11 +67,10 @@ export const W3blockUISDKGeneralConfig = ({
   );
 };
 
-export const W3blockUISDKGeneralConfigProvider = (
-  props: Props & { launchDarklyKey?: string }
-) => {
-  const { launchDarklyKey = '', ...otherProps } = props;
-
+export const W3blockUISDKGeneralConfigProvider = ({
+  launchDarklyKey = '',
+  ...props
+}: Props) => {
   const LDProvider = useMemo(
     () =>
       launchDarklyKey !== ''
@@ -81,5 +81,5 @@ export const W3blockUISDKGeneralConfigProvider = (
     [launchDarklyKey]
   );
 
-  return <LDProvider {...otherProps} />;
+  return <LDProvider {...props} />;
 };
