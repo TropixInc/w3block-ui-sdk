@@ -26,6 +26,7 @@ interface HeaderPixwaySDKProps {
   bgColor?: string;
   textColor?: string;
   hasSignUp?: boolean;
+  brandText?: string;
 }
 
 const _HeaderPixwaySDK = ({
@@ -41,6 +42,7 @@ const _HeaderPixwaySDK = ({
   bgColor = 'white',
   textColor = 'black',
   hasSignUp = true,
+  brandText = '',
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
@@ -76,11 +78,17 @@ const _HeaderPixwaySDK = ({
       >
         <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
           <a href={PixwayAppRoutes.HOME}>
-            <img
-              style={{ height: logoHeight + 'px' }}
-              src={logoUrl}
-              className=" pw-object-contain pw-max-w-[150px]"
-            />
+            {brandText ? (
+              <p className="pw-font-poppins pw-text-[16px] pw-font-[600]">
+                {brandText}
+              </p>
+            ) : (
+              <img
+                style={{ height: logoHeight + 'px' }}
+                src={logoUrl}
+                className="pw-object-contain pw-max-w-[150px]"
+              />
+            )}
           </a>
 
           <div className="pw-flex pw-items-center">
