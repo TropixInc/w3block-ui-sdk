@@ -182,8 +182,6 @@ export const BlockchainGasTaxStepModal = ({
         dialogCard: '!pw-px-20 !pw-py-0 !pw-max-h-[calc(100vh_-_80px)]',
         actionContainer:
           '!pw-justify-between !pw-gap-x-13 !pw-pb-12 pw-shrink-0',
-        cancelButton: '!pw-py-3 pw-w-full',
-        confirmButton: '!pw-py-3 pw-w-full',
       }}
     >
       <div className="pw-max-h-[calc(100vh_-_200px)] pw-flex pw-flex-col pw-mb-6 !pw-pt-12">
