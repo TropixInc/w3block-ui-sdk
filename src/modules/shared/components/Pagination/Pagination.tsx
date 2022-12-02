@@ -45,7 +45,9 @@ export const Pagination = ({
   });
   const { page } = useWatch({ control: methods.control });
 
-  const isPageQuantityInvalid = page && Number(page) > currentPagesQuantity;
+  const isPageQuantityInvalid =
+    (page && Number(page) > currentPagesQuantity) ||
+    (page && Number(page) == 0);
 
   useEffect(() => {
     if (pagesQuantity && pagesQuantity !== currentPagesQuantity) {

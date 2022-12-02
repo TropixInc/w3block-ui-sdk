@@ -88,7 +88,13 @@ export const SignUpFormWithoutLayout = ({
   const schema = object().shape({
     email: string().email(),
     password: passwordSchema,
-    confirmation: passwordSchema,
+    confirmation: string()
+      .required(translate('auth>signUp>confirmationRequired'))
+      .test(
+        'Ok',
+        translate('auth>signUp>passwordConfirmation'),
+        (value, context) => value === context.parent.password
+      ),
     acceptsPolicyTerms: boolean().required().isTrue(),
     acceptsTermsOfUse: boolean().required().isTrue(),
   });

@@ -17,7 +17,7 @@ interface IThemeContext {
   setPageName: Dispatch<SetStateAction<string>>;
 }
 
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [defaultTheme, setDefaultTheme] = useState<Template | null>(null);
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageName, setPageName] = useState('');
@@ -52,10 +52,6 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   );
 };
 
-interface ThemeProviderProps {
-  children: ReactNode;
-}
-
 const sampleTemplate: Template = {
   header: {
     bgColor: 'rgba(255,127,127,0.5)',
@@ -64,6 +60,13 @@ const sampleTemplate: Template = {
   banner: {
     bgColor: 'rgba(255,127,127,0.5)',
     textColor: 'rgba(20,10,255,1)',
+  },
+  menu: {
+    bgColor: 'rgba(255,127,127,0.5)',
+    textColor: 'rgba(20,10,255,1)',
+  },
+  hero: {
+    data: 'text',
   },
 };
 
@@ -88,6 +91,27 @@ const sampleTemplateData: TemplateData = {
             type: 'external',
             value: 'https://www.nossosparceiros.com.br',
             newWindow: true,
+          },
+        ],
+      },
+    },
+    {
+      type: 'menu',
+      props: {
+        bgColor: 'rgba(20,10,255,1)',
+        textColor: '#fff',
+        categories: [
+          {
+            label: 'Vestuário',
+            slug: 'vestuario',
+          },
+          {
+            label: 'Sapatos',
+            slug: 'sapatos',
+          },
+          {
+            label: 'Sacolas',
+            slug: 'sacolas',
           },
         ],
       },

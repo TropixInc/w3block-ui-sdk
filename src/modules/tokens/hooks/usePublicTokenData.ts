@@ -1,5 +1,7 @@
 import { useQuery } from 'react-query';
 
+import { AxiosResponse } from 'axios';
+
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -60,14 +62,14 @@ export interface PublicTokenPageDTO {
 }
 
 export const usePublicTokenData = ({
-  rfid = '',
-  chainId = '',
-  contractAddress = '',
-  tokenId = '',
+  rfid,
+  chainId,
+  contractAddress,
+  tokenId,
 }: TokenData) => {
   const axios = useAxios(W3blockAPI.KEY);
 
-  return useQuery(
+  return useQuery<AxiosResponse<PublicTokenPageDTO>>(
     getPublicTokenDataQueryKey({
       contractAddress,
       rfid,
@@ -79,11 +81,16 @@ export const usePublicTokenData = ({
           ? PixwayAPIRoutes.METADATA_BY_RFID.replace('{rfid}', rfid)
           : PixwayAPIRoutes.METADATA_BY_CHAINADDRESS_AND_TOKENID.replace(
               '{contractAddress}',
-              contractAddress
+              contractAddress ?? ''
             )
-              .replace('{tokenId}', tokenId)
-              .replace('{chainId}', chainId)
+              .replace('{tokenId}', tokenId ?? '')
+              .replace('{chainId}', chainId ?? '')
       ),
-    { staleTime: Infinity, enabled: contractAddress != '' }
+    {
+      staleTime: Infinity,
+      enabled:
+        (Boolean(contractAddress) && Boolean(chainId) && Boolean(tokenId)) ||
+        Boolean(rfid),
+    }
   );
 };

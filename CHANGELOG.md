@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.120](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.119...v0.1.1-alpha.120) (2022-12-13)
+
+
+### Features
+
+* **np-142:** add brand text to header pixway ([23e3ec5](https://github.com/TropixInc/w3block-ui-sdk/commit/23e3ec56d47423d2c810ec73db2c42b8de4eedc0))
+* **pe-142:** create storefront header ([54b4c38](https://github.com/TropixInc/w3block-ui-sdk/commit/54b4c382f70a1e5508ea2dfe99787d91915ace48))
+* **pe-142:** create storefront preview component ([c3dc5c0](https://github.com/TropixInc/w3block-ui-sdk/commit/c3dc5c08d505e21d408fa3bbab8ebe35bd9e3e6f))
+* **pe-142:** create storefront theme interfaces ([c472b7b](https://github.com/TropixInc/w3block-ui-sdk/commit/c472b7b6604691cb4eafd71e4cd7a3fff3c5de1b))
+* **pe-142:** create theme context ([10f2f75](https://github.com/TropixInc/w3block-ui-sdk/commit/10f2f756cb51ca2d3d1042e1716b622a15f89aff))
+* **pe142:** add new sample types ([7ed5490](https://github.com/TropixInc/w3block-ui-sdk/commit/7ed549043dc56987e8d54fd41649f8c0fa671351))
+* **pe142:** display brandText if logo is absent ([79a46d6](https://github.com/TropixInc/w3block-ui-sdk/commit/79a46d68320b2829849eb5162d574cd89adb2be2))
+* **pe142:** remove console.log and 'any' type ([94c9666](https://github.com/TropixInc/w3block-ui-sdk/commit/94c966673d7462269498ac6a1e30e5fdca6b8262))
+
+### [0.1.1-alpha.119](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.118...v0.1.1-alpha.119) (2022-12-12)
+
+
+### Bug Fixes
+
+* **tk-929:** adjusted pagination to not accept 0 ([#107](https://github.com/TropixInc/w3block-ui-sdk/issues/107)) ([d99b305](https://github.com/TropixInc/w3block-ui-sdk/commit/d99b305e1982d728fd7ff2ede22ddd032a52ce71))
+
+### [0.1.1-alpha.118](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.117...v0.1.1-alpha.118) (2022-12-12)
+
+
+### Bug Fixes
+
+* **tk-932:** adjusted countdown on email verify ([#105](https://github.com/TropixInc/w3block-ui-sdk/issues/105)) ([466a186](https://github.com/TropixInc/w3block-ui-sdk/commit/466a186c6c587c60dda9cbfdc33c081d1cc5e64a))
+
+### [0.1.1-alpha.117](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.116...v0.1.1-alpha.117) (2022-12-09)
+
+### [0.1.1-alpha.116](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.115...v0.1.1-alpha.116) (2022-12-07)
+
+### [0.1.1-alpha.115](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.114...v0.1.1-alpha.115) (2022-12-06)
+
+
+### Bug Fixes
+
+* **tk-1005:** added password confirmation check on signUp ([#104](https://github.com/TropixInc/w3block-ui-sdk/issues/104)) ([48d8bee](https://github.com/TropixInc/w3block-ui-sdk/commit/48d8bee556d64059a29a7dc2168a7938b8c6ae8f))
+
+### [0.1.1-alpha.114](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.113...v0.1.1-alpha.114) (2022-12-02)
+
+
+### Features
+
+* **adjustsStoryChain:** created token commerce page ([#98](https://github.com/TropixInc/w3block-ui-sdk/issues/98)) ([941adef](https://github.com/TropixInc/w3block-ui-sdk/commit/941adefcf0a873881ede2c91f063b47b7afa4401))
+
+
+### Bug Fixes
+
+* **tk-901 & pe-146:** adjusted verify-signup and metamask buttons ([#101](https://github.com/TropixInc/w3block-ui-sdk/issues/101)) ([6dbb763](https://github.com/TropixInc/w3block-ui-sdk/commit/6dbb763a812644177aa7b605d3fec6dd9dc04e65))
+
 ### [0.1.1-alpha.113](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.112...v0.1.1-alpha.113) (2022-12-01)
 
 ### [0.1.1-alpha.112](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.111...v0.1.1-alpha.112) (2022-11-30)

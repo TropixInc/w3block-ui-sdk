@@ -4,7 +4,7 @@ import { useLockBodyScroll } from 'react-use';
 import classNames from 'classnames';
 
 import { ModalBase } from '../ModalBase';
-import { PixwayButton } from '../PixwayButton';
+import { WeblockButton } from '../WeblockButton/WeblockButton';
 
 interface Props {
   isOpen: boolean;
@@ -16,9 +16,7 @@ interface Props {
   classes?: {
     backdrop?: string;
     container?: string;
-    cancelButton?: string;
     dialogCard?: string;
-    confirmButton?: string;
     actionContainer?: string;
     closeButton?: string;
   };
@@ -59,31 +57,21 @@ export const DialogBase = ({
           classes.actionContainer ?? ''
         )}
       >
-        <PixwayButton
-          type="button"
-          variant="outlined"
-          className={classNames(
-            '!pw-text-[14px] pw-leading-4 pw-max-w-[200px]',
-            classes.cancelButton ?? ''
-          )}
+        <WeblockButton
           onClick={onCancel}
+          tailwindBgColor="pw-bg-white"
           fullWidth
           disabled={isCancelButtonDIsabled}
         >
           {cancelButtonText}
-        </PixwayButton>
-        <PixwayButton
-          type="button"
-          className={classNames(
-            '!pw-text-[14px] pw-leading-4 pw-max-w-[200px] !pw-bg-[#5682C3]',
-            classes.confirmButton ?? ''
-          )}
+        </WeblockButton>
+        <WeblockButton
           onClick={onConfirm}
           fullWidth
           disabled={isConfirmButtonDisabled}
         >
           {confirmButtonText}
-        </PixwayButton>
+        </WeblockButton>
       </div>
     </ModalBase>
   ) : null;

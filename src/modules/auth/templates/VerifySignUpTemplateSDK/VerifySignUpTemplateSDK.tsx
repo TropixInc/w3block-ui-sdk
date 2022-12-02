@@ -104,7 +104,8 @@ const _VerifySignUpTemplateSDK = ({
         const timeStamp = Number(tokenSplitted[1]);
         if (isAfter(new Date(), new Date(timeStamp)))
           setStep(Steps.TOKEN_EXPIRED);
-        else mutate({ email: email as string, token: token as string });
+        else if (!isLoading && !isError)
+          mutate({ email: email as string, token: token as string });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

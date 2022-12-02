@@ -138,7 +138,21 @@ export const WalletTokenCard = ({
 
           {hasPass ? (
             hasActivated ? (
-              <Button disabled={proccessing} model="primary" width="small">
+              <Button
+                disabled={proccessing}
+                model="primary"
+                width="small"
+                onClick={() =>
+                  router.pushConnect(
+                    PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
+                      .replace('{contractAddress}', contractAddress)
+                      .replace(
+                        '{chainId}',
+                        chainId.toString()
+                      ) as PixwayAppRoutes
+                  )
+                }
+              >
                 {translate('connectTokens>tokensList>usePass')}
               </Button>
             ) : (

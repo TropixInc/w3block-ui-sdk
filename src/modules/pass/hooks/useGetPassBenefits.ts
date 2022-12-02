@@ -1,5 +1,3 @@
-import { ChainId } from '@w3block/sdk-id';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -13,7 +11,7 @@ interface Response {
 
 interface Props {
   tokenId?: string;
-  chainId?: ChainId;
+  chainId?: string;
   contractAddress?: string;
 }
 const useGetPassBenefits = ({ tokenId, chainId, contractAddress }: Props) => {
@@ -25,9 +23,9 @@ const useGetPassBenefits = ({ tokenId, chainId, contractAddress }: Props) => {
       PixwayAPIRoutes.PASS_BENEFIT.replace('{tenantId}', tenantId ?? ''),
       {
         params: {
-          tokenId: tokenId && '',
-          chainId: chainId && '',
-          contractAddress: contractAddress && '',
+          tokenId: tokenId ?? '',
+          chainId: (chainId && parseInt(chainId)) ?? '',
+          contractAddress: contractAddress ?? '',
         },
       }
     )
