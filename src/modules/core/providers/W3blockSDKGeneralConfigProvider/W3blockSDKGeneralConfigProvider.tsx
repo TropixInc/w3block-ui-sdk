@@ -1,12 +1,14 @@
 import { ReactNode, useMemo } from 'react';
 
+import { withLDProvider } from 'launchdarkly-react-client-sdk';
+
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
 import { LocaleProvider } from '../LocaleProvider';
 import { W3blockApiProvider } from '../W3blockApiProvider';
 
-interface Props {
+interface Props extends JSX.IntrinsicAttributes {
   children: ReactNode;
   api: {
     idUrl: string;
@@ -22,9 +24,10 @@ interface Props {
   isProduction: boolean;
   appBaseUrl: string;
   connectProxyPass?: string;
+  launchDarklyKey?: string;
 }
 
-export const W3blockUISDKGeneralConfigProvider = ({
+export const W3blockUISDKGeneralConfig = ({
   children,
   api,
   locale,
@@ -62,4 +65,21 @@ export const W3blockUISDKGeneralConfigProvider = ({
       </EnvironmentContext.Provider>
     </W3blockUISDKGereralConfigContext.Provider>
   );
+};
+
+export const W3blockUISDKGeneralConfigProvider = ({
+  launchDarklyKey = '',
+  ...props
+}: Props) => {
+  const LDProvider = useMemo(
+    () =>
+      launchDarklyKey !== ''
+        ? withLDProvider<Props>({ clientSideID: launchDarklyKey })(
+            W3blockUISDKGeneralConfig
+          )
+        : W3blockUISDKGeneralConfig,
+    [launchDarklyKey]
+  );
+
+  return <LDProvider {...props} />;
 };
