@@ -22,15 +22,9 @@ const Storefront = () => {
     return () => window.removeEventListener('message', listener);
   });
 
-  console.log('My Context: ', context);
-
   const safeOrigin = 'http://localhost:3000/';
   const listener = (event: MessageEvent<TemplateData | string>) => {
-    console.log('Event Origin: ', event.origin);
-
     if (event.origin !== safeOrigin) return;
-
-    console.log('Received some data: ', event.data);
 
     if (typeof event.data === 'string') return context?.setPageName(event.data);
 
@@ -40,16 +34,19 @@ const Storefront = () => {
   const data = { ...context?.pageTheme, ...currentTheme };
   const themeContext = context?.defaultTheme;
 
+  if (!themeContext) return null;
+
   return (
     <>
       {data.items?.map((item) => {
         const Component = componentMap[item.type];
-        const props = {
-          defaultData: themeContext?.[item.type],
-          data: item.props,
-        };
-
-        return <Component key={item.type} {...(props as any)} />;
+        return (
+          <Component
+            key={item.type}
+            data={item.props}
+            defaultData={themeContext[item.type]}
+          />
+        );
       })}
     </>
   );
