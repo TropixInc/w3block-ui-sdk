@@ -37,39 +37,16 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
 
   const router = useRouter();
 
-  const queryContractAddress = router?.query?.contractAddress as string;
+  const payload = {
+    chainId: chainId ?? (router?.query?.chainId as string),
+    contractAddress:
+      contractAddress ?? (router?.query?.contractAddress as string),
+    tokenId: tokenId ?? (router?.query?.tokenId as string),
+  };
 
-  const queryChainId = router?.query?.chainId as string;
+  const { data: publicTokenResponse } = usePublicTokenData(payload);
 
-  const queryTokenId = router?.query?.tokenId as string;
-
-  const { data: publicTokenResponse } = usePublicTokenData(
-    chainId && contractAddress && tokenId
-      ? {
-          contractAddress,
-          chainId,
-          tokenId,
-        }
-      : {
-          queryContractAddress,
-          queryChainId,
-          queryTokenId,
-        }
-  );
-
-  const { data: benefitsList } = useGetPassBenefitsByContractToken(
-    chainId && contractAddress && tokenId
-      ? {
-          contractAddress,
-          chainId,
-          tokenId,
-        }
-      : {
-          queryContractAddress,
-          queryChainId,
-          queryTokenId,
-        }
-  );
+  const { data: benefitsList } = useGetPassBenefitsByContractToken(payload);
 
   const status = {
     Ativo: '#009A6C',
