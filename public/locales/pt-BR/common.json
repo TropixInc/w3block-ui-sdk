@@ -309,5 +309,7 @@
   "token>commerceTemplate>productDescription": "Descrição do Produto",
   "token>commerceTemplate>back": "Voltar",
   "token>commerceTemplate>title": "Título ou nome do item:",
-  "token>commerceTemplate>categories": "Categoria/Subcategoria:"
+  "token>commerceTemplate>categories": "Categoria/Subcategoria:",
+  "auth>signUp>passwordConfirmation": "Senhas não correspondem",
+  "auth>signUp>confirmationRequired": "Confirmação é obrigatória"
 }

@@ -147,5 +147,7 @@
   "token>commerceTemplate>productDescription": "Product Description",
   "token>commerceTemplate>back": "Back",
   "token>commerceTemplate>title": "Title or token name:",
-  "token>commerceTemplate>categories": "Category/Subcategory:"
+  "token>commerceTemplate>categories": "Category/Subcategory:",
+  "auth>signUp>passwordConfirmation": "Passwords don't match",
+  "auth>signUp>confirmationRequired": "Confirmation is required"
 }
