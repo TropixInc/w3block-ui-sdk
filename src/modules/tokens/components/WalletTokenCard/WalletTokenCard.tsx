@@ -143,7 +143,7 @@ export const WalletTokenCard = ({
                 model="primary"
                 width="small"
                 onClick={() =>
-                  router.routerToHref(
+                  router.pushConnect(
                     PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
                       .replace('{contractAddress}', contractAddress)
                       .replace(

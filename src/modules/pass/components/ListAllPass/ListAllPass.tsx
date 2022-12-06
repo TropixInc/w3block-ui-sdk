@@ -3,11 +3,11 @@ import { useDebounce } from 'react-use';
 
 import classNames from 'classnames';
 import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 
 import { InternalPagesLayoutBase } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
-import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Breadcrumb } from '../../../tokens/components/Breadcrumb';
 import { Button } from '../../../tokens/components/Button';
@@ -25,26 +25,51 @@ import { PassType } from '../../enums/PassType';
 import useGetPassBenefitsByContractToken from '../../hooks/useGetPassBenefitsByContractToken';
 import { BenefitAddress } from '../../interfaces/PassBenefitDTO';
 
-const _ListAllPass = () => {
-  const router = useRouter();
+interface Props {
+  chainId: string;
+  contractAddress: string;
+  tokenId: string;
+}
+
+const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
 
-  const contractAddress = '0x4f47a2218ee5c786943f1476a6b75624b3a7eee0';
-  const chainId = '80001';
-  const tokenId = (router.query.tokenId as string) ?? '';
+  const router = useRouter();
 
-  const { data: publicTokenResponse } = usePublicTokenData({
-    contractAddress,
-    chainId,
-    tokenId,
-  });
+  const queryContractAddress = router?.query?.contractAddress as string;
 
-  const { data: benefitsList } = useGetPassBenefitsByContractToken({
-    chainId,
-    contractAddress,
-    tokenId,
-  });
+  const queryChainId = router?.query?.chainId as string;
+
+  const queryTokenId = router?.query?.tokenId as string;
+
+  const { data: publicTokenResponse } = usePublicTokenData(
+    chainId && contractAddress && tokenId
+      ? {
+          contractAddress,
+          chainId,
+          tokenId,
+        }
+      : {
+          queryContractAddress,
+          queryChainId,
+          queryTokenId,
+        }
+  );
+
+  const { data: benefitsList } = useGetPassBenefitsByContractToken(
+    chainId && contractAddress && tokenId
+      ? {
+          contractAddress,
+          chainId,
+          tokenId,
+        }
+      : {
+          queryContractAddress,
+          queryChainId,
+          queryTokenId,
+        }
+  );
 
   const status = {
     Ativo: '#009A6C',
@@ -217,10 +242,14 @@ const _ListAllPass = () => {
   ) : null;
 };
 
-export const ListAllPass = () => (
+export const ListAllPass = ({ contractAddress, chainId, tokenId }: Props) => (
   <TranslatableComponent>
     <InternalPagesLayoutBase>
-      <_ListAllPass />
+      <_ListAllPass
+        chainId={chainId}
+        contractAddress={contractAddress}
+        tokenId={tokenId}
+      />
     </InternalPagesLayoutBase>
   </TranslatableComponent>
 );
