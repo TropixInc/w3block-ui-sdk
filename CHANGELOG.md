@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.115](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.114...v0.1.1-alpha.115) (2022-12-06)
+
+
+### Bug Fixes
+
+* **tk-1005:** added password confirmation check on signUp ([#104](https://github.com/TropixInc/w3block-ui-sdk/issues/104)) ([48d8bee](https://github.com/TropixInc/w3block-ui-sdk/commit/48d8bee556d64059a29a7dc2168a7938b8c6ae8f))
+
 ### [0.1.1-alpha.114](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.113...v0.1.1-alpha.114) (2022-12-02)
 
 
