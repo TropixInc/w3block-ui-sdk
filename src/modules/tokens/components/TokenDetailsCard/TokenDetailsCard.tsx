@@ -6,6 +6,7 @@ import { PassType } from '../../../pass/enums/PassType';
 import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
+import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { headers, mobileHeaders } from '../../const/GenericTableHeaders';
 import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
@@ -79,6 +80,9 @@ export const TokenDetailsCard = ({
     }
   };
 
+  const isProduction = useIsProduction();
+  const isDevelopment = !isProduction;
+
   const formatDateToTable = (startsAt: string, endsAt?: string) => {
     if (endsAt) {
       return `${format(new Date(startsAt), 'dd/MM/yyyy')} > ${format(
@@ -130,7 +134,7 @@ export const TokenDetailsCard = ({
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
       <InternalPageTitle contract={contract} title={title} />
       <LineDivider />
-      {isMultiplePass && (
+      {isMultiplePass && isDevelopment && (
         <div className="pw-flex pw-flex-col pw-gap-6">
           <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
             {translate('connect>TokenDetailCard>passAssociated')}
