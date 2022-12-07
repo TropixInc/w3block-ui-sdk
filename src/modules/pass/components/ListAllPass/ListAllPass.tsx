@@ -8,11 +8,13 @@ import { useRouter } from 'next/router';
 import { InternalPagesLayoutBase } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
+import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Breadcrumb } from '../../../tokens/components/Breadcrumb';
 import { Button } from '../../../tokens/components/Button';
 import { Filters, ValidStatusProps } from '../../../tokens/components/Filters';
 import GenericTable from '../../../tokens/components/GenericTable/GenericTable';
+import { InternalPageTitle } from '../../../tokens/components/InternalPageTitle';
 import { LineDivider } from '../../../tokens/components/LineDivider';
 import StatusTag from '../../../tokens/components/StatusTag/StatusTag';
 import {
@@ -47,6 +49,9 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
   const { data: publicTokenResponse } = usePublicTokenData(payload);
 
   const { data: benefitsList } = useGetPassBenefitsByContractToken(payload);
+
+  const isProduction = useIsProduction();
+  const isDevelopment = !isProduction;
 
   const status = {
     Ativo: '#009A6C',
@@ -175,17 +180,17 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
       name: translate('connect>ListAllPass>listBenefits'),
     },
   ];
-  return !publicTokenResponse ? (
+  return publicTokenResponse && isDevelopment ? (
     <div
       className={classNames(
         'pw-flex pw-flex-col pw-p-[17px] sm:pw-p-6 pw-bg-white pw-relative pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-mx-[22px] sm:pw-mx-0'
       )}
     >
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
-      {/* <InternalPageTitle
+      <InternalPageTitle
         contract={publicTokenResponse?.data?.information?.contractName}
         title={publicTokenResponse?.data?.information?.title}
-      /> */}
+      />
       <LineDivider />
       <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black pw-mb-6">
         {translate('connect>ListAllPass>tableTitle')}

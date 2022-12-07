@@ -134,7 +134,7 @@ export const TokenDetailsCard = ({
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
       <InternalPageTitle contract={contract} title={title} />
       <LineDivider />
-      {isMultiplePass && isDevelopment && (
+      {isMultiplePass && isDevelopment ? (
         <div className="pw-flex pw-flex-col pw-gap-6">
           <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
             {translate('connect>TokenDetailCard>passAssociated')}
@@ -156,7 +156,7 @@ export const TokenDetailsCard = ({
             />
           ) : null}
         </div>
-      )}
+      ) : null}
       <LineDivider />
       {mainImage || description ? (
         <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-x-[21px] pw-gap-y-4 sm:pw-py-6 sm:pw-gap-y-8 pw-w-full pw-break-words">
