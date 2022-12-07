@@ -1,4 +1,15 @@
 import { ChainScan } from '../../shared/enums/ChainId';
+import { BenefitStatus } from '../enums/BenefitStatus';
+
+export interface BenefitAddress {
+  name: string;
+  street: string;
+  number: number;
+  city: string;
+  state: string;
+  postalCode: string;
+  rules: string;
+}
 
 export interface PassBenefitDTO {
   id: string;
@@ -14,6 +25,8 @@ export interface PassBenefitDTO {
   tokenPassId: string;
   createdAt: string;
   updatedAt: string;
+  status: BenefitStatus;
+  tokenPassBenefitAddresses?: BenefitAddress[];
 }
 
 export enum TokenPassBenefitType {

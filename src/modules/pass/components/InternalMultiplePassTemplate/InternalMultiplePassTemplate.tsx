@@ -1,12 +1,12 @@
 import { InternalPagesLayoutBase } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useRouter from '../../../shared/hooks/useRouter';
-import { usePublicTokenData } from '../../hooks/usePublicTokenData';
+import { TokenDetailsCard } from '../../../tokens/components/TokenDetailsCard';
+import { usePublicTokenData } from '../../../tokens/hooks/usePublicTokenData';
 import {
   Dimensions2DValue,
   Dimensions3DValue,
-} from '../../interfaces/DimensionsValue';
-import { TokenDetailsCard } from '../TokenDetailsCard';
+} from '../../../tokens/interfaces/DimensionsValue';
 
 const _InternalMultiplePassTemplate = () => {
   const router = useRouter();

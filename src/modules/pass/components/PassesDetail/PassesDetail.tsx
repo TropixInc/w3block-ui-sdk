@@ -22,7 +22,6 @@ import useGetPassById from '../../hooks/useGetPassById';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import { BaseTemplate } from '../BaseTemplate';
 
-
 interface TableRow {
   id: string;
   name: string;
@@ -31,6 +30,7 @@ interface TableRow {
   status?: string;
   action: ReactNode;
 }
+
 
 export const PassesDetail = () => {
   const user = useSessionUser();
