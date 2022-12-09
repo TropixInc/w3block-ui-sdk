@@ -46,7 +46,7 @@ export const VerifySignUpMailSent = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setCountdownDate(addMinutes(new Date(), 3));
+      setCountdownDate(addMinutes(new Date(), 1));
       reset();
     }
   }, [isSuccess, setCountdownDate, reset]);
