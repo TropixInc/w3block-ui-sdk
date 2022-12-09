@@ -3,6 +3,7 @@ import { Trans } from 'react-i18next';
 import { useDebounce } from 'react-use';
 
 import { format, getDay } from 'date-fns';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
@@ -55,6 +56,7 @@ export const ClientTemplate = () => {
   const [filteredData, setFilteredData] = useState(dataMoked);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState(status);
+  const { pass } = useFlags();
 
   useDebounce(
     () => {
@@ -92,7 +94,7 @@ export const ClientTemplate = () => {
     }
   };
 
-  return isDevelopment ? (
+  return isDevelopment && pass ? (
     <BaseTemplate title={translate('components>menu>tokenPass>clients')}>
       <div className="pw-flex pw-flex-col sm:pw-flex-row pw-p-[16px] pw-gap-[24px] sm:pw-gap-[16px] pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[16px]">
         <img

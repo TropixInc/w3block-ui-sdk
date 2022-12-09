@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { format } from 'date-fns';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
@@ -54,6 +55,8 @@ export const TokenDetailsCard = ({
     tokenData,
     tokenTemplate
   );
+  const { pass } = useFlags();
+  console.log(pass);
 
   const renderTextValue = (label: string, value: string) => (
     <TextFieldDisplay label={label} value={value} inline />
@@ -132,9 +135,9 @@ export const TokenDetailsCard = ({
       )}
     >
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
-      <InternalPageTitle contract={contract} title={title} />
+      {pass ? <InternalPageTitle contract={contract} title={title} /> : null}
       <LineDivider />
-      {isMultiplePass && isDevelopment ? (
+      {isMultiplePass && isDevelopment && pass ? (
         <div className="pw-flex pw-flex-col pw-gap-6">
           <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
             {translate('connect>TokenDetailCard>passAssociated')}
