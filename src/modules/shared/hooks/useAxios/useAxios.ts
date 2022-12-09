@@ -18,7 +18,6 @@ export const useAxios = (type: W3blockAPI) => {
     [W3blockAPI.PASS, apisUrl.w3BlockPassApiUrl],
   ]);
   const baseUrl = apiBaseURLMap.get(type) ?? '';
-
   return useMemo(() => {
     if (token && !validateJwtToken(token)) {
       signOut();
