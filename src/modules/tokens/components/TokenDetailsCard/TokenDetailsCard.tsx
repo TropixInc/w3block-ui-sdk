@@ -56,7 +56,6 @@ export const TokenDetailsCard = ({
     tokenTemplate
   );
   const { pass } = useFlags();
-  console.log(pass);
 
   const renderTextValue = (label: string, value: string) => (
     <TextFieldDisplay label={label} value={value} inline />

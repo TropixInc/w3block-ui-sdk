@@ -23,7 +23,6 @@ const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting 
 
 const _PassTemplate = () => {
   const { pass } = useFlags();
-  console.log(pass);
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const mode = (router.query.mode as string) || '';

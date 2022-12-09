@@ -46,7 +46,6 @@ export const PassesDetail = () => {
   const [benefitSelectedId, setBenefitSelected] = useState('');
   const { pass } = useFlags();
 
-  console.log(pass);
   const { mutate: registerUse } = usePostBenefitRegisterUse();
   const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenId: tokenPassId });
   const { data: tokenPass } = useGetPassById(tokenPassId);
