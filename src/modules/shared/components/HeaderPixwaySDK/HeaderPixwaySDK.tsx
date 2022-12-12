@@ -78,16 +78,16 @@ const _HeaderPixwaySDK = ({
       >
         <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
           <a href={PixwayAppRoutes.HOME}>
-            {brandText ? (
-              <p className="pw-font-poppins pw-text-[16px] pw-font-[600]">
-                {brandText}
-              </p>
-            ) : (
+            {logoUrl ? (
               <img
                 style={{ height: logoHeight + 'px' }}
                 src={logoUrl}
                 className="pw-object-contain pw-max-w-[150px]"
               />
+            ) : (
+              <p className="pw-font-poppins pw-text-[16px] pw-font-[600]">
+                {brandText}
+              </p>
             )}
           </a>
 
