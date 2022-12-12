@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.118](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.117...v0.1.1-alpha.118) (2022-12-12)
+
+
+### Bug Fixes
+
+* **tk-932:** adjusted countdown on email verify ([#105](https://github.com/TropixInc/w3block-ui-sdk/issues/105)) ([466a186](https://github.com/TropixInc/w3block-ui-sdk/commit/466a186c6c587c60dda9cbfdc33c081d1cc5e64a))
+
 ### [0.1.1-alpha.117](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.116...v0.1.1-alpha.117) (2022-12-09)
 
 ### [0.1.1-alpha.116](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.115...v0.1.1-alpha.116) (2022-12-07)
