@@ -2,8 +2,8 @@ import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
-import { TemplateData } from '../interfaces';
-import { Header } from './Header';
+import { DefaultDataProps, TemplateData } from '../interfaces';
+import { Banner, Header, Hero } from './Header';
 
 export const StorefrontPreview = () => {
   return (
@@ -38,13 +38,15 @@ const Storefront = () => {
 
   return (
     <>
-      {data.items?.map((item) => {
+      {data.items?.map((item, i) => {
         const Component = componentMap[item.type];
         return (
           <Component
-            key={item.type}
+            key={item.type + i}
             data={item.props}
-            defaultData={themeContext[item.type]}
+            defaultData={
+              themeContext[item.type] as keyof DefaultDataProps['defaultData']
+            }
           />
         );
       })}
@@ -54,5 +56,6 @@ const Storefront = () => {
 
 const componentMap = {
   header: Header,
-  banner: () => <></>,
+  banner: Banner,
+  hero: Hero,
 };

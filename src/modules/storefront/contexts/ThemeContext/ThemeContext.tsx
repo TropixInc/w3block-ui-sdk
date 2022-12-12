@@ -17,7 +17,7 @@ interface IThemeContext {
   setPageName: Dispatch<SetStateAction<string>>;
 }
 
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [defaultTheme, setDefaultTheme] = useState<Template | null>(null);
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageName, setPageName] = useState('');
@@ -52,10 +52,6 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   );
 };
 
-interface ThemeProviderProps {
-  children: ReactNode;
-}
-
 const sampleTemplate: Template = {
   header: {
     bgColor: 'rgba(255,127,127,0.5)',
@@ -64,6 +60,9 @@ const sampleTemplate: Template = {
   banner: {
     bgColor: 'rgba(255,127,127,0.5)',
     textColor: 'rgba(20,10,255,1)',
+  },
+  hero: {
+    data: 'text',
   },
 };
 
