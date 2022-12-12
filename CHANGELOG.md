@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.119](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.118...v0.1.1-alpha.119) (2022-12-12)
+
+
+### Bug Fixes
+
+* **tk-929:** adjusted pagination to not accept 0 ([#107](https://github.com/TropixInc/w3block-ui-sdk/issues/107)) ([d99b305](https://github.com/TropixInc/w3block-ui-sdk/commit/d99b305e1982d728fd7ff2ede22ddd032a52ce71))
+
 ### [0.1.1-alpha.118](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.117...v0.1.1-alpha.118) (2022-12-12)
 
 
