@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/esm/locale';
@@ -7,6 +7,8 @@ import { useRouterConnect } from '../../../shared';
 import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 interface PublicTokenTemplateSDKProps {
   chainId?: string;
@@ -20,14 +22,32 @@ const _PublicTokenTemplateSDK = ({
   contractAddress,
 }: PublicTokenTemplateSDKProps) => {
   const router = useRouterConnect();
+  const { companyId } = useCompanyConfig();
   const contractAddressQ = (router.query?.contractAddress as string) ?? '';
   const chainIdQ = (router.query?.chainId as string) ?? '';
   const tokenIdQ = (router.query?.tokenId as string) ?? '';
-  const { data: publicTokenResponse } = usePublicTokenData({
+  const {
+    data: publicTokenResponse,
+    isSuccess,
+    isLoading,
+    isError,
+  } = usePublicTokenData({
     contractAddress: contractAddress ?? contractAddressQ,
     chainId: chainId ?? chainIdQ,
     tokenId: tokenId ?? tokenIdQ,
   });
+
+  useEffect(() => {
+    if (
+      isSuccess &&
+      publicTokenResponse &&
+      publicTokenResponse.data.company.id != companyId
+    ) {
+      router.pushConnect(PixwayAppRoutes.TOKENS);
+    } else if (!isLoading && (isError || !publicTokenResponse)) {
+      router.pushConnect(PixwayAppRoutes.TOKENS);
+    }
+  }, [isSuccess, isLoading]);
 
   const Title = ({ title }: { title: string }) => {
     return <p className="pw-font-roboto pw-font-[500]">{title}</p>;
