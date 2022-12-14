@@ -1,3 +1,5 @@
+import { useFlags } from 'launchdarkly-react-client-sdk';
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { TokenListTemplateSkeleton } from '../../../tokens/components/TokensListTemplate/Skeleton';
 import useGetPassByUser from '../../hooks/useGetPassByUser';
@@ -35,9 +37,10 @@ const _PassesList = () => {
 };
 
 export const PassesList = () => {
+  const { pass } = useFlags();
   return (
     <TranslatableComponent>
-      <_PassesList />
+      {pass ? <_PassesList /> : null}
     </TranslatableComponent>
   );
 };

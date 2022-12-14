@@ -8,6 +8,7 @@ import {
 import { useClickAway } from 'react-use';
 
 import { ChainId, WalletTypes } from '@w3block/sdk-id';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
@@ -84,6 +85,7 @@ export const useDefaultMenuTabs = () => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
+  const { pass } = useFlags();
 
   const items = [
     {
@@ -124,7 +126,7 @@ export const useDefaultMenuTabs = () => {
 
   useEffect(() => {
     setTabsToShow(
-      !isProduction
+      !isProduction && pass
         ? [
           ...items,
           {
@@ -135,7 +137,7 @@ export const useDefaultMenuTabs = () => {
         ]
         : items
     );
-  }, [isProduction, signOut]);
+  }, [isProduction, items, pass]);
 
   return tabsToShow;
 };

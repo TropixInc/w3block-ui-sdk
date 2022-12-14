@@ -55,7 +55,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
 
   useEffect(() => {
     if (emailSuccess) {
-      setCountdownDate(addMinutes(new Date(), 3));
+      setCountdownDate(addMinutes(new Date(), 1));
       emailReset();
     }
   }, [emailSuccess, setCountdownDate, emailReset]);

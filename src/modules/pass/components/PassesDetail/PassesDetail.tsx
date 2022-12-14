@@ -2,7 +2,8 @@
 import { ReactNode, useMemo, useState } from 'react';
 import { useBoolean } from 'react-use';
 
-import { compareAsc, format } from 'date-fns';
+import { format, compareAsc } from 'date-fns';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { QrCodeReader } from '../../../shared/components/QrCodeReader';
 import {
@@ -50,6 +51,7 @@ export const PassesDetail = () => {
   const [showError, setShowError] = useBoolean(false);
   const [error, setError] = useState<TypeError>(TypeError.read);
   const [benefitSelectedId, setBenefitSelected] = useState('');
+  const { pass } = useFlags();
 
   const { data: tokenPass } = useGetPassById(tokenPassId);
 
@@ -140,7 +142,7 @@ export const PassesDetail = () => {
     );
   };
 
-  return (
+  return pass ? (
     <BaseTemplate title="Token Pass">
       <div className="pw-flex pw-flex-col pw-gap-8">
         <div className="pw-flex pw-items-center pw-justify-start pw-p-4 pw-gap-4 pw-border pw-border-[#E6E8EC] pw-rounded-2xl">
@@ -170,21 +172,23 @@ export const PassesDetail = () => {
         }
       </div>
 
-      <QrCodeReader
-        hasOpen={showScan}
-        setHasOpen={() => setOpenScan()}
-        returnValue={(e) => validatePassToken(e)}
-      />
-      <QrCodeValidated
-        hasOpen={showSuccess}
-        onClose={() => setShowSuccess(false)}
-        collectionId={tokenPassId}
-      />
-      <QrCodeError
-        hasOpen={showError}
-        onClose={() => setShowError(false)}
-        type={error}
-      />
+
+      {pass ?
+        <>
+          <QrCodeReader
+            hasOpen={showScan}
+            setHasOpen={() => setOpenScan()}
+            returnValue={(e) => validatePassToken(e)} />
+          <QrCodeValidated
+            hasOpen={showSuccess}
+            onClose={() => setShowSuccess(false)}
+            collectionId={tokenPassId} />
+          <QrCodeError
+            hasOpen={showError}
+            onClose={() => setShowError(false)}
+            type={error} />
+        </>
+        : null}
     </BaseTemplate>
-  );
+  ) : null;
 };

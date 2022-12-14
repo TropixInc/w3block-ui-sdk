@@ -7,3 +7,4 @@ export * from './dashboard';
 export * from './addFunds';
 export * from './pass';
 export * from './poll';
+export * from './storefront';

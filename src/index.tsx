@@ -15,3 +15,4 @@ export * from './modules/checkout';
 export * from './modules/dashboard';
 export * from './modules/addFunds';
 export * from './modules/poll';
+export * from './modules/storefront';

@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "0.1.1-alpha.116",
+  "version": "0.1.1-alpha.120",
   "type": "module",
   "files": [
     "dist"
@@ -69,7 +69,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "next": "^12.2.3",
-    "next-auth": "^4.10.2",
+    "next-auth": "4.18.0",
     "path": "^0.12.7",
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",

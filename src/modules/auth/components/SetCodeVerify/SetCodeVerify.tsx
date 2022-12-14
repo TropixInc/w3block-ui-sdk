@@ -55,7 +55,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
 
   useEffect(() => {
     if (isSuccess) {
-      setNewCountdown(addMinutes(new Date(), 3));
+      setNewCountdown(addMinutes(new Date(), 1));
       reset();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,7 +124,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       </WeblockButton>
 
       <button
-        disabled={isLoading}
+        disabled={isLoading || isActive}
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
           mutate({
@@ -148,7 +148,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
           O link expira em 15 minutos
           <button
-            disabled={isLoading}
+            disabled={isLoading || isActive}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({

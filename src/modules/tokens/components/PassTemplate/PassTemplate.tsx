@@ -3,6 +3,7 @@ import { useToggle } from 'react-use';
 
 import classNames from 'classnames';
 import { add, format, getDay, isToday } from 'date-fns';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
@@ -21,6 +22,7 @@ import { UsedPass } from './UsedSection';
 const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`;
 
 const _PassTemplate = () => {
+  const { pass } = useFlags();
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const mode = (router.query.mode as string) || '';
@@ -100,7 +102,7 @@ const _PassTemplate = () => {
         description={translate('token>pass>outsideAllowedTime')}
       />
     ) : null
-  ) : (
+  ) : pass ? (
     <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
       <div
         className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
@@ -277,7 +279,7 @@ const _PassTemplate = () => {
         })}
       </div>
 
-      {mode === 'used' ? (
+      {mode === 'used' && pass ? (
         <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">
           <PassButton model="primary">
             {translate('token>pass>tokenPage')}
@@ -288,7 +290,7 @@ const _PassTemplate = () => {
         </div>
       ) : null}
     </div>
-  );
+  ) : null;
 };
 
 export const PassTemplate = () => (

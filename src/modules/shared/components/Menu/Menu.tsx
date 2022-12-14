@@ -4,6 +4,7 @@ import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
 import { format } from 'date-fns/esm';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
@@ -44,6 +45,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { signOut } = usePixwayAuthentication();
   const formatedDate = format(createdAt, 'dd/MM/yyyy');
   const [tabsToShow, setTabsToShow] = useState(tabs);
+  const { pass } = useFlags();
 
   const tabsDefault: TabsConfig[] = [
     {
@@ -76,26 +78,33 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   useEffect(() => {
     if (!tabs)
       if (!isProduction) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        setTabsToShow([
+        const tabsArr = [
           {
             title: translate('components>menu>dashboard'),
             icon: <DashboardIcon width={17} height={17} />,
             link: PixwayAppRoutes.DASHBOARD,
           },
           ...tabsDefault,
-          {
-            title: translate('components>menu>tokenPass'),
-            icon: <TicketIcon width={17} height={17} />,
-            link: PixwayAppRoutes.TOKENPASS,
-          },
-        ]);
+        ];
+
+        if (pass) {
+          setTabsToShow([
+            ...tabsArr,
+            {
+              title: translate('components>menu>tokenPass'),
+              icon: <TicketIcon width={17} height={17} />,
+              link: PixwayAppRoutes.TOKENPASS,
+            },
+          ]);
+        } else {
+          setTabsToShow(tabsArr);
+        }
       } else {
         setTabsToShow(tabsDefault);
       }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pass]);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);
