@@ -2,6 +2,7 @@ import { MouseEventHandler, useRef } from 'react';
 import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { useRouterConnect } from '../../../shared';
 import { Button } from '../../../shared/components/Buttons';
@@ -52,6 +53,7 @@ export const WalletTokenCard = ({
     if (isOpen) closeModal();
   });
   const [translate] = useTranslation();
+  const { pass } = useFlags();
 
   const onClickOptionsButton: MouseEventHandler<HTMLButtonElement> = (
     event
@@ -136,30 +138,32 @@ export const WalletTokenCard = ({
               ))}
           </button>
 
-          {hasPass ? (
-            hasActivated ? (
-              <Button
-                disabled={proccessing}
-                model="primary"
-                width="small"
-                onClick={() =>
-                  router.pushConnect(
-                    PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
-                      .replace('{contractAddress}', contractAddress)
-                      .replace(
-                        '{chainId}',
-                        chainId.toString()
-                      ) as PixwayAppRoutes
-                  )
-                }
-              >
-                {translate('connectTokens>tokensList>usePass')}
-              </Button>
-            ) : (
-              <Button disabled={proccessing} model="secondary" width="small">
-                {translate('connectTokens>tokensList>viewPass')}
-              </Button>
-            )
+          {pass ? (
+            hasPass ? (
+              hasActivated ? (
+                <Button
+                  disabled={proccessing}
+                  model="primary"
+                  width="small"
+                  onClick={() =>
+                    router.pushConnect(
+                      PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
+                        .replace('{contractAddress}', contractAddress)
+                        .replace(
+                          '{chainId}',
+                          chainId.toString()
+                        ) as PixwayAppRoutes
+                    )
+                  }
+                >
+                  {translate('connectTokens>tokensList>usePass')}
+                </Button>
+              ) : (
+                <Button disabled={proccessing} model="secondary" width="small">
+                  {translate('connectTokens>tokensList>viewPass')}
+                </Button>
+              )
+            ) : null
           ) : null}
         </div>
       </div>
