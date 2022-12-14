@@ -50,8 +50,6 @@ export const PoliciesAgreementStepModal = ({
       classes={{
         dialogCard: '!pw-px-20 !pw-py-12',
         actionContainer: '!pw-justify-between !pw-gap-x-13',
-        cancelButton: '!pw-py-3 pw-w-full',
-        confirmButton: '!pw-py-3 pw-w-full',
       }}
       onConfirm={onConfirm}
       onCancel={onCancel}

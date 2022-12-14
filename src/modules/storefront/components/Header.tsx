@@ -1,5 +1,12 @@
 import { HeaderPixwaySDK } from '../../shared';
-import { HeaderData, HeaderDefault } from '../interfaces';
+import {
+  BannerData,
+  BannerDefault,
+  HeaderData,
+  HeaderDefault,
+  HeroData,
+  HeroDefault,
+} from '../interfaces';
 
 export const Header = ({
   data,
@@ -19,4 +26,24 @@ export const Header = ({
       brandText={brandText}
     />
   );
+};
+
+export const Banner = ({
+  data,
+  defaultData,
+}: {
+  data: BannerData;
+  defaultData: BannerDefault;
+}) => {
+  return <>{JSON.stringify({ ...data, ...defaultData })}</>;
+};
+
+export const Hero = ({
+  data,
+  defaultData,
+}: {
+  data: HeroData;
+  defaultData: HeroDefault;
+}) => {
+  return <>{JSON.stringify({ ...data, ...defaultData })}</>;
 };
