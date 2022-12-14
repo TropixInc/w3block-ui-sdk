@@ -273,6 +273,7 @@ const _ConnectExternalWalletWithoutLayout = ({
           <GenerateTokenDialog isOpen={isOpen} onClose={closeModal} />
         </div>
       )}
+      <p>{window?.navigator?.userAgent ?? ''}</p>
     </div>
   );
 };
