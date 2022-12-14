@@ -65,6 +65,10 @@ const sampleTemplate: Template = {
     bgColor: 'rgba(255,127,127,0.5)',
     textColor: 'rgba(20,10,255,1)',
   },
+  menu: {
+    bgColor: 'rgba(255,127,127,0.5)',
+    textColor: 'rgba(20,10,255,1)',
+  },
 };
 
 const sampleTemplateData: TemplateData = {

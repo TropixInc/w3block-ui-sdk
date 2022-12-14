@@ -4,6 +4,7 @@ import { useEffectOnce } from 'react-use';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { TemplateData } from '../interfaces';
 import { Header } from './Header';
+import { Menu } from './Menu';
 
 export const StorefrontPreview = () => {
   return (
@@ -55,4 +56,5 @@ const Storefront = () => {
 const componentMap = {
   header: Header,
   banner: () => <></>,
+  menu: Menu,
 };
