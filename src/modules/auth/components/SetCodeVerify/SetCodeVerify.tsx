@@ -27,7 +27,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
   useEffect(() => {
-    setNewCountdown(new Date(Date.now() + 900000));
+    setNewCountdown(addMinutes(new Date(), 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const formattedEmail = useEmailProtectedLabel(email);
