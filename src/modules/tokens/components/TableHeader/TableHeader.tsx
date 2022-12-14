@@ -20,7 +20,7 @@ const TableHeader = <T, K extends keyof T>({
 
   return (
     <thead className="pw-flex pw-justify-between pw-bg-brand-primary pw-border pw-rounded-t-[16px]">
-      <tr>{headers}</tr>
+      {headers}
     </thead>
   );
 };

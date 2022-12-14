@@ -5,6 +5,23 @@ interface StatusTagProps {
   status: BenefitStatus;
 }
 
+export const statusMobile = ({ status }: StatusTagProps) => {
+  switch (status) {
+    case BenefitStatus.active:
+      return (
+        <div className="pw-bg-[#009A6C] pw-w-[6px] pw-h-[6px] pw-rounded-full"></div>
+      );
+    case BenefitStatus.inactive:
+      return (
+        <div className="pw-bg-[#C63535] pw-w-[6px] pw-h-[6px] pw-rounded-full"></div>
+      );
+    case BenefitStatus.unavailable:
+      return (
+        <div className="pw-bg-[#777E8F] pw-w-[6px] pw-h-[6px] pw-rounded-full"></div>
+      );
+  }
+};
+
 const StatusTag = ({ status }: StatusTagProps) => {
   const [translate] = useTranslation();
 
