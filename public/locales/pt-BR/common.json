@@ -239,7 +239,7 @@
   "token>pass>generateNewQrCode": "Gerar novo QR Code",
   "token>pass>invalidQrCode": "QR Code Inválido",
   "token>pass>notPossibleGenerateQrCode": "Não foi possível gerar esse QR Code. Favor gerar novo QR code",
-  "token>pass>notPossibleReadQrCode": "Não foi possível fazer a aleitura desse QR Code. Favor tentar novamente",
+  "token>pass>notPossibleReadQrCode": "Não foi possível fazer a leitura desse QR Code. Favor tentar novamente",
   "token>pass>usedAllTokens": "Você já utilizou todos os token pass disponíveis para esse evento.",
   "token>pass>expiredTime": "Tempo Expirado",
   "token>pass>outsideAllowedTime": "Usuário está está fora do horário permitido para utilização do Token Pass.",
