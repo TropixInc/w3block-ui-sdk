@@ -137,7 +137,8 @@ export const useDefaultMenuTabs = () => {
         ]
         : items
     );
-  }, [isProduction, items, pass]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isProduction, pass]);
 
   return tabsToShow;
 };
