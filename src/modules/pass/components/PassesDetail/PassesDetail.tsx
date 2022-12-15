@@ -18,26 +18,33 @@ import { Button } from '../../../tokens/components/Button';
 import GenericTable, {
   ColumnType,
 } from '../../../tokens/components/GenericTable/GenericTable';
+import StatusTag, { statusMobile } from '../../../tokens/components/StatusTag/StatusTag';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import useGetPassById from '../../hooks/useGetPassById';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
+import { PassBenefitDTO, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
 import { BaseTemplate } from '../BaseTemplate';
 
 interface TableRow {
-  id: string;
   name: string;
   local: string;
   period?: string;
-  status?: string;
+  status?: ReactNode;
   action: ReactNode;
 }
 
+interface formatAddressProps {
+  type: TokenPassBenefitType;
+  benefit: PassBenefitDTO;
+}
 
 export const PassesDetail = () => {
   const user = useSessionUser();
   const isMobile = useIsMobile();
   const router = useRouter();
-  const tokenPassId = String(router.query.passId) || '';
+  const tokenPassId = String(router.query.tokenPassId) || '';
+  const chainId = String(router.query.chainId) || '';
+  const contractAddress = String(router.query.contractAddress) || '';
 
   const [showScan, setOpenScan] = useBoolean(false);
   const [showSuccess, setShowSuccess] = useBoolean(false);
@@ -46,39 +53,47 @@ export const PassesDetail = () => {
   const [benefitSelectedId, setBenefitSelected] = useState('');
   const { pass } = useFlags();
 
-  const { mutate: registerUse } = usePostBenefitRegisterUse();
-  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenId: tokenPassId });
   const { data: tokenPass } = useGetPassById(tokenPassId);
+
+  const { mutate: registerUse } = usePostBenefitRegisterUse();
+  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenId: tokenPassId, chainId, contractAddress });
+
 
   const formatedData = useMemo(() => {
     const data = benefits?.data.items.map((benefit) => {
-      const period =
-        format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') +
-        ' - ' +
-        format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy');
+      const period = benefit?.eventEndsAt ?
+        format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') + ' - ' +
+        format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
 
       const handleAction = () => {
         setBenefitSelected(benefit.tokenPassId)
         setOpenScan()
       }
 
+      const formatAddress = ({ type, benefit }: formatAddressProps) => {
+        if (type == TokenPassBenefitType.PHYSICAL && benefit?.tokenPassBenefitAddresses) {
+          return `${benefit?.tokenPassBenefitAddresses[0]?.street}-${benefit?.tokenPassBenefitAddresses[0]?.city}`
+        } else {
+          return 'Online'
+        }
+      }
+
       const action = compareAsc(new Date(benefit.eventEndsAt), new Date()) ?
-        <Button variant='primary' onClick={() => handleAction()}> Validar</Button>
+        <Button variant='primary' onClick={() => handleAction()}>Validar</Button>
         : <Button variant='secondary' onClick={() => handleAction()}> Relatório</Button>
 
       const formatted: TableRow = {
-        id: benefit.id,
         name: benefit.name,
-        local: benefit.name,
+        local: formatAddress({ type: benefit?.type, benefit: benefit }),
         period,
-        status: benefit.type,
+        status: <StatusTag status={benefit.status} />,
         action,
       };
 
       const formmatedMobile: TableRow = {
-        id: benefit.id,
         name: benefit.name,
-        local: 'Praça da Tijuca Rio de Janeiro, RJ - Brasil',
+        local: formatAddress({ type: benefit?.type, benefit: benefit }),
+        status: statusMobile({ status: benefit?.status }),
         action,
       }
 
@@ -91,6 +106,7 @@ export const PassesDetail = () => {
   const headers: ColumnType<TableRow, keyof TableRow>[] = useMemo(() => isMobile ? [
     { key: 'name', header: 'Benefício' },
     { key: 'local', header: 'Local' },
+    { key: 'status', header: '' },
     { key: 'action', header: '' },
   ] : [
     { key: 'name', header: 'Benefício' },
@@ -99,7 +115,6 @@ export const PassesDetail = () => {
     { key: 'status', header: 'Status' },
     { key: 'action', header: '' },
   ], [isMobile])
-
 
   const validatePassToken = (secret: string) => {
 
@@ -157,22 +172,22 @@ export const PassesDetail = () => {
         }
       </div>
 
-      
-      {pass ? 
+
+      {pass ?
         <>
           <QrCodeReader
             hasOpen={showScan}
             setHasOpen={() => setOpenScan()}
-            returnValue={(e) => validatePassToken(e)}/>
+            returnValue={(e) => validatePassToken(e)} />
           <QrCodeValidated
             hasOpen={showSuccess}
             onClose={() => setShowSuccess(false)}
-            collectionId={tokenPassId}/>
+            collectionId={tokenPassId} />
           <QrCodeError
             hasOpen={showError}
             onClose={() => setShowError(false)}
-            type={error}/>
-        </> 
+            type={error} />
+        </>
         : null}
     </BaseTemplate>
   ) : null;

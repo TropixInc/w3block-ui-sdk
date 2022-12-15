@@ -24,6 +24,8 @@ const _PassesList = () => {
                   id={benefit.id}
                   image={benefit.imageUrl || ''}
                   name={benefit.name}
+                  contractAddress={benefit.contractAddress}
+                  chainId={`${benefit.chainId}`}
                 />
               </li>
             );
