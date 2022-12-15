@@ -239,7 +239,7 @@
   "token>pass>generateNewQrCode": "Gerar novo QR Code",
   "token>pass>invalidQrCode": "QR Code Inválido",
   "token>pass>notPossibleGenerateQrCode": "Não foi possível gerar esse QR Code. Favor gerar novo QR code",
-  "token>pass>notPossibleReadQrCode": "Não foi possível fazer a aleitura desse QR Code. Favor tentar novamente",
+  "token>pass>notPossibleReadQrCode": "Não foi possível fazer a leitura desse QR Code. Favor tentar novamente",
   "token>pass>usedAllTokens": "Você já utilizou todos os token pass disponíveis para esse evento.",
   "token>pass>expiredTime": "Tempo Expirado",
   "token>pass>outsideAllowedTime": "Usuário está está fora do horário permitido para utilização do Token Pass.",
@@ -313,5 +313,10 @@
   "token>commerceTemplate>title": "Título ou nome do item:",
   "token>commerceTemplate>categories": "Categoria/Subcategoria:",
   "auth>signUp>passwordConfirmation": "Senhas não correspondem",
-  "auth>signUp>confirmationRequired": "Confirmação é obrigatória"
+  "auth>signUp>confirmationRequired": "Confirmação é obrigatória",
+  "connectWallet>metamaskError>app>title":"Metamask não reconhecida",
+  "connectWallet>metamaskError>app>description":"Apesar de estar dentro da Metamask, alguns erros ainda podem ocorrer devido a instabilidades dentro do aplicativo. Para contornar tal problema, sugerimos que:",
+  "connectWallet>metamaskError>app>fristSuggestion":"Reinicie o aplicativo Metamask, colocando a url que se encontra agora",
+  "connectWallet>metamaskError>app>copyUrl":"copiar url",
+  "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop."
 }

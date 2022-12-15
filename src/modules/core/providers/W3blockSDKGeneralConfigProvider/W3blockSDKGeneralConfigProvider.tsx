@@ -68,16 +68,14 @@ export const W3blockUISDKGeneralConfig = ({
 };
 
 export const W3blockUISDKGeneralConfigProvider = ({
-  launchDarklyKey = '',
+  launchDarklyKey = '636e4bf4ec20a110ee5be93d',
   ...props
 }: Props) => {
   const LDProvider = useMemo(
     () =>
-      launchDarklyKey !== ''
-        ? withLDProvider<Props>({ clientSideID: launchDarklyKey })(
-            W3blockUISDKGeneralConfig
-          )
-        : W3blockUISDKGeneralConfig,
+      withLDProvider<Props>({ clientSideID: launchDarklyKey })(
+        W3blockUISDKGeneralConfig
+      ),
     [launchDarklyKey]
   );
 

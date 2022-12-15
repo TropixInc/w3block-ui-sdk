@@ -13,6 +13,8 @@ interface Props {
   image: string;
   className?: string;
   proccessing?: boolean;
+  contractAddress?: string;
+  chainId?: string;
 }
 
 const cardClassName =
@@ -21,9 +23,18 @@ const cardClassName =
 const descriptionContainerClassName =
   'pw-w-full pw-flex pw-flex-col pw-gap-y-2.5 pw-mt-2.5';
 
-export const PassCard = ({ image, name, id, proccessing = false }: Props) => {
+export const PassCard = ({
+  image,
+  name,
+  id,
+  proccessing = false,
+  chainId,
+  contractAddress,
+}: Props) => {
   const [translate] = useTranslation();
   const router = useRouter();
+
+  const query = `?chainId=${chainId}&contractAddress=${contractAddress}`;
 
   return (
     <div
@@ -65,7 +76,10 @@ export const PassCard = ({ image, name, id, proccessing = false }: Props) => {
           width="small"
           onClick={() =>
             router.push(
-              PixwayAppRoutes.TOKENPASS_DETAIL.replace('{benefitId}', id)
+              PixwayAppRoutes.TOKENPASS_DETAIL.replace(
+                '{tokenPassId}',
+                id
+              ).concat(query)
             )
           }
         >

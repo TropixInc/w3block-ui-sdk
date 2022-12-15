@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "0.1.1-alpha.120",
+  "version": "0.1.1-alpha.124",
   "type": "module",
   "files": [
     "dist"
@@ -57,7 +57,7 @@
     "@types/react-query": "^1.2.9",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
-    "@vitejs/plugin-react": "^2.0.0",
+    "@vitejs/plugin-react": "^3.0.0",
     "autoprefixer": "^10.4.7",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
@@ -83,7 +83,7 @@
     "tailwindcss-text-fill": "^0.2.0",
     "typescript": "^4.6.4",
     "url": "^0.11.0",
-    "vite": "^3.0.4",
+    "vite": "^4.0.0",
     "vite-plugin-dts": "^1.4.1",
     "vite-plugin-svgr": "^2.2.1",
     "watch": "^1.0.2"
@@ -91,8 +91,8 @@
   "peerDependencies": {
     "next": "^12.2.3",
     "next-auth": "^4.10.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.2",
+    "react-dom": "^18.0.2",
     "react-query": "^3.39.2"
   }
 }
