@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.124](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.123...v0.1.1-alpha.124) (2022-12-15)
+
+
+### Features
+
+* **np-43:** adjust validation pass flux ([afe3300](https://github.com/TropixInc/w3block-ui-sdk/commit/afe33009eab8396d1919b82c8f689c01f4b079f1))
+* **np-43:** removing yarn lock ([f2e3a04](https://github.com/TropixInc/w3block-ui-sdk/commit/f2e3a04598ededeb22f70e2b7aa5bf4a1746745c))
+
 ### [0.1.1-alpha.123](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.122...v0.1.1-alpha.123) (2022-12-15)
 
 ### [0.1.1-alpha.122](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.121...v0.1.1-alpha.122) (2022-12-14)
