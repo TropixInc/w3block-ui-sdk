@@ -6,10 +6,15 @@ export interface TemplateData {
   }[];
 }
 
-export type DefaultDataProps = HeaderProps | BannerProps | HeroProps;
+export type DefaultDataProps =
+  | HeaderProps
+  | BannerProps
+  | HeroProps
+  | MenuProps;
 
 type HeaderProps = { data: HeaderData; defaultData: HeaderDefault };
 type BannerProps = { data: BannerData; defaultData: BannerDefault };
+type MenuProps = { data: MenuData; defaultData: MenuDefault };
 type HeroProps = { data: HeroData; defaultData: HeroDefault };
 
 export interface Template {
@@ -37,15 +42,15 @@ export type BannerData = {
   categories?: CategoryItem[];
 };
 export type MenuData = {
-  brandText?: string;
   bgColor?: string;
   textColor?: string;
-  links?: HeaderLink[];
+  categories?: CategoryItem[];
 };
 
 export type MenuDefault = {
   bgColor: string;
   textColor: string;
+  categories?: CategoryItem[];
 };
 
 export type BannerDefault = {

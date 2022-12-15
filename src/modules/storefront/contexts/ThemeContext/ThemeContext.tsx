@@ -95,5 +95,26 @@ const sampleTemplateData: TemplateData = {
         ],
       },
     },
+    {
+      type: 'menu',
+      props: {
+        bgColor: 'rgba(20,10,255,1)',
+        textColor: '#fff',
+        categories: [
+          {
+            label: 'Vestuário',
+            slug: 'vestuario',
+          },
+          {
+            label: 'Sapatos',
+            slug: 'sapatos',
+          },
+          {
+            label: 'Sacolas',
+            slug: 'sacolas',
+          },
+        ],
+      },
+    },
   ],
 };
