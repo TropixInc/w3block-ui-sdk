@@ -27,6 +27,7 @@ import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
 import { ConnectToMetamaskButton } from '../ConnectWalletTemplate';
 import { GenerateTokenDialog } from '../ConnectWalletTemplate/GenerateTokenDialog';
+import { MetamaskAppErrorModal } from '../MetamaskAppErrorModal';
 
 enum Step {
   CONFIRMATION,
@@ -45,6 +46,11 @@ const _ConnectExternalWalletWithoutLayout = ({
   redirectLink,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
+  const {
+    isOpen: isOpenAppError,
+    closeModal: closeModalAppError,
+    openModal: openModalAppError,
+  } = useModalController();
   const [translate] = useTranslation();
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -84,11 +90,20 @@ const _ConnectExternalWalletWithoutLayout = ({
   const { connect, claim, connected } = useUserWallet();
 
   const onClickConnectToMetamaskExtension = async () => {
-    if (!(globalThis.window as any)?.ethereum) {
+    const agent = window.navigator.userAgent ?? '';
+    if (
+      !(globalThis.window as any)?.ethereum &&
+      !agent.includes('MetaMaskMobile')
+    ) {
       openModal();
       return;
+    } else if (
+      !(globalThis.window as any)?.ethereum &&
+      agent.includes('MetaMaskMobile')
+    ) {
+      openModalAppError();
+      return;
     }
-
     setStep(Step.CONNECT_TO_METAMASK);
     setIsConnecting(true);
 
@@ -271,9 +286,12 @@ const _ConnectExternalWalletWithoutLayout = ({
             </AuthButton>
           </div>
           <GenerateTokenDialog isOpen={isOpen} onClose={closeModal} />
+          <MetamaskAppErrorModal
+            isOpen={isOpenAppError}
+            closeModal={closeModalAppError}
+          />
         </div>
       )}
-      <p>{window?.navigator?.userAgent ?? ''}</p>
     </div>
   );
 };
