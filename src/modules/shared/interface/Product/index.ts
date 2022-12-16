@@ -24,3 +24,23 @@ export interface Images {
   original: string;
   thumb: string;
 }
+
+export interface MediaInterface {
+  gateway: string;
+  raw: string;
+  content_type: string;
+  cached: {
+    originalUrl: string;
+    bigSizeUrl: string;
+    mediumSizeUrl: string;
+    smallSizeUrl: string;
+  };
+}
+
+export interface MetadataInterface {
+  image: string;
+  name: string;
+  id: number;
+  description: string;
+  attributes: string[];
+}
