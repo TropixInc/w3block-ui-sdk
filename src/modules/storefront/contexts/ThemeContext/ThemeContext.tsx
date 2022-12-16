@@ -64,6 +64,10 @@ const sampleTemplate: Template = {
   hero: {
     data: 'text',
   },
+  footer: {
+    bgColor: 'rgba(255,127,127,0.5)',
+    textColor: 'rgba(20,10,255,1)',
+  },
 };
 
 const sampleTemplateData: TemplateData = {
@@ -89,6 +93,26 @@ const sampleTemplateData: TemplateData = {
             newWindow: true,
           },
         ],
+      },
+    },
+    {
+      type: 'footer',
+      props: {
+        bgColor: 'rgba(20,10,255,1)',
+        textColor: '#fff',
+        /* socialLinks: [
+          {
+            label: 'Instagram',
+            icon: '',
+          },
+          {
+            label: 'Twitter',
+            slug: 'twitter',
+          },
+          {
+            label: 'Facebook',
+          },
+        ], */
       },
     },
   ],

@@ -3,7 +3,7 @@ import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { DefaultDataProps, TemplateData } from '../interfaces';
-import { Banner, Header, Hero } from './Header';
+import { Banner, Header, Hero, Footer } from './Header';
 
 export const StorefrontPreview = () => {
   return (
@@ -41,13 +41,15 @@ const Storefront = () => {
       {data.items?.map((item, i) => {
         const Component = componentMap[item.type];
         return (
-          <Component
-            key={item.type + i}
-            data={item.props}
-            defaultData={
-              themeContext[item.type] as keyof DefaultDataProps['defaultData']
-            }
-          />
+          <>
+            <Component
+              key={item.type + i}
+              data={item.props}
+              defaultData={
+                themeContext[item.type] as keyof DefaultDataProps['defaultData']
+              }
+            />
+          </>
         );
       })}
     </>
@@ -58,4 +60,5 @@ const componentMap = {
   header: Header,
   banner: Banner,
   hero: Hero,
+  footer: Footer,
 };

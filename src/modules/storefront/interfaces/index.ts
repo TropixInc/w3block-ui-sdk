@@ -2,20 +2,26 @@ export interface TemplateData {
   title: string;
   items: {
     type: keyof Template;
-    props: HeaderData | BannerData | HeroData;
+    props: HeaderData | BannerData | HeroData | FooterData;
   }[];
 }
 
-export type DefaultDataProps = HeaderProps | BannerProps | HeroProps;
+export type DefaultDataProps =
+  | HeaderProps
+  | BannerProps
+  | HeroProps
+  | FooterProps;
 
 type HeaderProps = { data: HeaderData; defaultData: HeaderDefault };
 type BannerProps = { data: BannerData; defaultData: BannerDefault };
+type FooterProps = { data: FooterData; defaultData: FooterDefault };
 type HeroProps = { data: HeroData; defaultData: HeroDefault };
 
 export interface Template {
   header: HeaderDefault;
   banner: BannerDefault;
   hero: HeroDefault;
+  footer: FooterDefault;
 }
 
 export type HeaderData = {
@@ -49,10 +55,32 @@ export type HeroDefault = {
   data: string;
 };
 
+export type FooterData = {
+  bgColor?: string;
+  textColor?: string;
+  socialLinks?: SocialLinks[];
+  menuLinks?: HeaderLink[];
+  //  hoverColor: string;
+};
+
+export type FooterDefault = {
+  bgColor: string;
+  textColor: string;
+  iconColors?: string;
+};
+
 type CategoryItem = { label: string; slug: string };
 type HeaderLink = {
   label: string;
   type: 'internal' | 'external';
   value: string;
+  newWindow: boolean;
+};
+
+type SocialLinks = {
+  label: string;
+  type: 'internal' | 'external';
+  value: string;
+  icons: string;
   newWindow: boolean;
 };

@@ -24,7 +24,8 @@
     "build-storybook": "build-storybook",
     "prepare": "husky install",
     "release": "standard-version",
-    "pre-release": "standard-version --prerelease alpha"
+    "pre-release": "standard-version --prerelease alpha",
+    "start": "vite --port 3000"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.6",
