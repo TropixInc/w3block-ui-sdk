@@ -54,8 +54,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
 const sampleTemplate: Template = {
   header: {
-    bgColor: 'rgba(255,127,127,0.5)',
-    textColor: 'rgba(20,10,255,1)',
+    bgColor: 'white',
+    textColor: 'black',
   },
   banner: {
     bgColor: 'rgba(255,127,127,0.5)',
@@ -73,8 +73,8 @@ const sampleTemplateData: TemplateData = {
       type: 'header',
       props: {
         brandText: 'W3block Storefront Custom',
-        bgColor: 'rgba(255,127,127,0.5)',
-        textColor: 'rgba(20,10,255,1)',
+        bgColor: 'white',
+        textColor: 'black',
         links: [
           {
             label: 'Sobre',
@@ -89,6 +89,17 @@ const sampleTemplateData: TemplateData = {
             newWindow: true,
           },
         ],
+      },
+    },
+    {
+      type: 'hero',
+      props: {
+        bgColor: '',
+        brandText: '',
+        categories: [],
+        data: '',
+        links: [],
+        textColor: '',
       },
     },
   ],
