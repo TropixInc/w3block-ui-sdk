@@ -88,7 +88,7 @@
   "auth>emailConfirmation>mailResentStepTitle": "Confirmação de e-mail",
   "auth>emailConfirmation>mailSentToEmail": "Enviamos um link para confirmar seu e-mail:<1>{{email}}</1>",
   "auth>emailConfirmation>linkExpiresMessage": "O link expira em 15 minutos. Depois desse período, clique em <1>“Reenviar código”</1> para enviar outro.",
-  "auth>completeSignUp>mailAlreadyVerified": "Seu e-mail já foi verificado, com isso você já pode fazer qualquer ação em nosso ecosistema.",
+  "auth>completeSignUp>mailAlreadyVerified": "Seu e-mail já foi verificado, com isso você já pode fazer qualquer ação em nosso ecossistema.",
   "auth>signUpError>emailAlreadyInUse": "O e-mail informado já está em uso.",
   "auth>signUpError>genericErrorMessage": "Ocorreu um erro ao realizar o cadastro.",
   "components>menu>memberSince": "Membro desde",
@@ -313,5 +313,10 @@
   "token>commerceTemplate>title": "Título ou nome do item:",
   "token>commerceTemplate>categories": "Categoria/Subcategoria:",
   "auth>signUp>passwordConfirmation": "Senhas não correspondem",
-  "auth>signUp>confirmationRequired": "Confirmação é obrigatória"
+  "auth>signUp>confirmationRequired": "Confirmação é obrigatória",
+  "connectWallet>metamaskError>app>title":"Metamask não reconhecida",
+  "connectWallet>metamaskError>app>description":"Apesar de estar dentro da Metamask, alguns erros ainda podem ocorrer devido a instabilidades dentro do aplicativo. Para contornar tal problema, sugerimos que:",
+  "connectWallet>metamaskError>app>fristSuggestion":"Reinicie o aplicativo Metamask, colocando a url que se encontra agora",
+  "connectWallet>metamaskError>app>copyUrl":"copiar url",
+  "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop."
 }

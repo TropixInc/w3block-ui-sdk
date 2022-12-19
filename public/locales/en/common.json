@@ -149,5 +149,10 @@
   "token>commerceTemplate>title": "Title or token name:",
   "token>commerceTemplate>categories": "Category/Subcategory:",
   "auth>signUp>passwordConfirmation": "Passwords don't match",
-  "auth>signUp>confirmationRequired": "Confirmation is required"
+  "auth>signUp>confirmationRequired": "Confirmation is required",
+  "connectWallet>metamaskError>app>title":"Metamask not recognized",
+  "connectWallet>metamaskError>app>description":"Despite being inside Metamask, some errors may still occur due to instabilities within the application. To work around this problem, we suggest that:",
+  "connectWallet>metamaskError>app>fristSuggestion":"Restart the Metamask application, placing the url you are in now",
+  "connectWallet>metamaskError>app>copyUrl":"copy url",
+  "connectWallet>metamaskError>app>secondSuggestion":"Access this site from your computer and complete the procedure via desktop."
 }
