@@ -8,19 +8,19 @@ import { useRouterConnect } from '../useRouterConnect';
 
 interface useHasWalletProps {
   redirectRoute?: string;
-  needsSession?: boolean;
+  onlyWithSession?: boolean;
 }
 
 export const useHasWallet = ({
   redirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-  needsSession = false,
+  onlyWithSession = false,
 }: useHasWalletProps) => {
   const { data: session } = usePixwaySession();
   const { data: profile, isLoading, isSuccess } = useProfile();
   const router = useRouterConnect();
 
   useEffect(() => {
-    if (needsSession) {
+    if (onlyWithSession) {
       if (
         !profile?.data.mainWallet &&
         !isLoading &&
