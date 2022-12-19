@@ -23,7 +23,7 @@ interface Props {
 
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
-  useHasWallet();
+  useHasWallet({});
   const { wallet } = useUserWallet();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
