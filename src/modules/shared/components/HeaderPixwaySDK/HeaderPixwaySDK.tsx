@@ -72,7 +72,7 @@ const _HeaderPixwaySDK = ({
       <div
         style={{ backgroundColor: bgColor }}
         className={classNames(
-          'pw-container pw-mx-auto  pw-px-4 sm:pw-px-0',
+          'pw-max-w-[1536px] pw-mx-auto pw-px-4',
           headerClassName ?? ''
         )}
       >
