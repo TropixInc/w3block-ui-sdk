@@ -21,7 +21,7 @@ import GenericTable, {
 import StatusTag, { statusMobile } from '../../../tokens/components/StatusTag/StatusTag';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import useGetPassById from '../../hooks/useGetPassById';
-import usePostBenefitUse from '../../hooks/usePostBenefitUse';
+import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import { PassBenefitDTO, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
 import { BaseTemplate } from '../BaseTemplate';
 
@@ -43,19 +43,26 @@ export const PassesDetail = () => {
   const isMobile = useIsMobile();
   const router = useRouter();
   const tokenPassId = String(router.query.tokenPassId) || '';
+  const chainId = String(router.query.chainId) || '';
+  const contractAddress = String(router.query.contractAddress) || ''
 
   const [showScan, setOpenScan] = useBoolean(false);
   const [showSuccess, setShowSuccess] = useBoolean(false);
   const [showError, setShowError] = useBoolean(false);
   const [error, setError] = useState<TypeError>(TypeError.read);
+  const [benefitId, setBenefitId] = useState('');
   const { pass } = useFlags();
 
   const { data: tokenPass } = useGetPassById(tokenPassId);
 
-  const { mutate: registerUse } = usePostBenefitUse();
-  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({});
+  const { mutate: registerUse } = usePostBenefitRegisterUse();
+  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
 
-
+  /* const { data: publicTokenResponse } = usePublicTokenData({
+    contractAddress,
+    chainId,
+    tokenId: '1',
+  }); */
 
   const formatedData = useMemo(() => {
     const data = benefits?.data?.items?.map((benefit) => {
@@ -64,6 +71,7 @@ export const PassesDetail = () => {
         format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
 
       const handleAction = () => {
+        setBenefitId(benefit?.id);
         setOpenScan()
       }
 
@@ -119,6 +127,8 @@ export const PassesDetail = () => {
       {
         secret,
         userId: user?.id ?? '',
+        editionNumber: '2',
+        benefitId: benefitId,
       },
       {
         onSuccess: () => {

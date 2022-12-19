@@ -52,6 +52,7 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
 
   const { data: benefitsList } = useGetPassBenefitsByContractToken({
     editionNumber: publicTokenResponse?.data?.edition?.currentNumber,
+    collectionId: publicTokenResponse?.data?.group?.collectionId,
   });
 
   const isProduction = useIsProduction();

@@ -10,12 +10,12 @@ interface Response {
 }
 
 interface Props {
-  editionNumber?: string;
+  tokenPassId?: string;
   chainId?: string;
   contractAddress?: string;
 }
 const useGetPassBenefits = ({
-  editionNumber,
+  tokenPassId,
   chainId,
   contractAddress,
 }: Props) => {
@@ -27,7 +27,7 @@ const useGetPassBenefits = ({
       PixwayAPIRoutes.PASS_BENEFIT.replace('{tenantId}', tenantId ?? ''),
       {
         params: {
-          tokenId: editionNumber ?? '',
+          tokenPassId: tokenPassId ?? '',
           chainId: (chainId && parseInt(chainId)) ?? '',
           contractAddress: contractAddress ?? '',
         },
