@@ -23,9 +23,8 @@ const _TokenDetailsTemplate = () => {
   });
 
   const { data: benefitsList } = useGetPassBenefitsByContractToken({
-    chainId,
-    contractAddress,
-    tokenId,
+    collectionId: publicTokenResponse?.data?.group?.collectionId,
+    editionNumber: publicTokenResponse?.data.edition.currentNumber,
   });
 
   return publicTokenResponse ? (
