@@ -5,11 +5,11 @@ import { ptBR } from 'date-fns/esm/locale';
 
 import { useRouterConnect } from '../../../shared';
 import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { isVideo } from '../../../shared/utils/validators';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 interface PublicTokenTemplateSDKProps {
   chainId?: string;
@@ -84,24 +84,10 @@ const _PublicTokenTemplateSDK = ({
         <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4">
           <div className="pw-flex-1 pw-mr-6">
             <Title title="Imagem principal:" />
-            {isVideo(
-              publicTokenResponse?.data?.information?.mainImage ?? ''
-            ) ? (
-              <video
-                className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
-                autoPlay
-                loop
-                playsInline
-                muted
-                src={publicTokenResponse?.data?.information?.mainImage ?? ''}
-              ></video>
-            ) : (
-              <img
-                className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
-                src={publicTokenResponse?.data?.information?.mainImage ?? ''}
-                alt=""
-              />
-            )}
+            <ImageSDK
+              src={publicTokenResponse?.data?.information?.mainImage ?? ''}
+              className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
+            />
           </div>
           <div className="pw-flex-1">
             <Title title="Título ou nome do item:" />
