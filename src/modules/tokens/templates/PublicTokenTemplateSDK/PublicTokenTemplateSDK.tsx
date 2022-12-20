@@ -48,6 +48,7 @@ const _PublicTokenTemplateSDK = ({
     } else if (!isLoading && (isError || !publicTokenResponse)) {
       router.pushConnect(PixwayAppRoutes.TOKENS);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, isLoading]);
 
   const Title = ({ title }: { title: string }) => {
