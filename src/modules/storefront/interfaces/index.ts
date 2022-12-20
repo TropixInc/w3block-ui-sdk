@@ -28,7 +28,7 @@ export type HeaderData = {
   brandText?: string;
   bgColor?: string;
   textColor?: string;
-  links?: HeaderLink[];
+  links?: Link[];
 };
 
 export type HeaderDefault = {
@@ -58,29 +58,26 @@ export type HeroDefault = {
 export type FooterData = {
   bgColor?: string;
   textColor?: string;
-  socialLinks?: SocialLinks[];
-  menuLinks?: HeaderLink[];
-  //  hoverColor: string;
+  links?: Link[];
+  defaultSocialNetworks?: SocialNetwork[];
+  description?: string;
 };
 
 export type FooterDefault = {
   bgColor: string;
   textColor: string;
-  iconColors?: string;
 };
 
 type CategoryItem = { label: string; slug: string };
-type HeaderLink = {
+type Link = {
   label: string;
   type: 'internal' | 'external';
   value: string;
   newWindow: boolean;
 };
 
-type SocialLinks = {
-  label: string;
-  type: 'internal' | 'external';
-  value: string;
-  icons: string;
-  newWindow: boolean;
+type SocialNetwork = {
+  id: string;
+  url: string;
+  type: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'whatsapp' | 'url';
 };

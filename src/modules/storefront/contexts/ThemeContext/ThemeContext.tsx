@@ -100,19 +100,61 @@ const sampleTemplateData: TemplateData = {
       props: {
         bgColor: 'rgba(20,10,255,1)',
         textColor: '#fff',
-        /* socialLinks: [
+        description:
+          'O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.',
+        links: [
           {
-            label: 'Instagram',
-            icon: '',
+            label: 'Política de privacidade',
+            type: 'external',
+            value: 'privacy',
+            newWindow: true,
           },
           {
-            label: 'Twitter',
-            slug: 'twitter',
+            label: 'Termos e condições',
+            type: 'internal',
+            value: 'terms_conditions',
+            newWindow: false,
           },
           {
-            label: 'Facebook',
+            label: 'FAQ',
+            type: 'external',
+            value: 'FAQ',
+            newWindow: true,
           },
-        ], */
+          {
+            label: 'Fale conosco',
+            type: 'external',
+            value: 'contact',
+            newWindow: true,
+          },
+        ],
+        defaultSocialNetworks: [
+          {
+            id: 'facebook',
+            url: '',
+            type: 'facebook',
+          },
+          {
+            id: 'twitter',
+            url: '',
+            type: 'twitter',
+          },
+          {
+            id: 'whatsapp',
+            url: '',
+            type: 'whatsapp',
+          },
+          {
+            id: 'linkedin',
+            url: '',
+            type: 'linkedin',
+          },
+          {
+            id: 'link',
+            url: '',
+            type: 'url',
+          },
+        ],
       },
     },
   ],

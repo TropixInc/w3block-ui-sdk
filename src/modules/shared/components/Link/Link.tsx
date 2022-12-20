@@ -8,6 +8,7 @@ export interface LinkProps {
   className?: string;
   disabled?: boolean;
   itemProp?: string;
+  target?: string;
 }
 
 export const Link = ({

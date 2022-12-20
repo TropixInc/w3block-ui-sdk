@@ -1,7 +1,10 @@
-import { HeaderPixwaySDK } from '../../shared';
+/* import { HeaderPixwaySDK } from '../../shared';
+ */ import { HeaderPixwaySDK } from '../../shared/components/HeaderPixwaySDK/HeaderPixwaySDK';
 import {
   BannerData,
   BannerDefault,
+  FooterData,
+  FooterDefault,
   HeaderData,
   HeaderDefault,
   HeroData,
@@ -20,11 +23,13 @@ export const Header = ({
   const brandText = data.brandText;
 
   return (
-    <HeaderPixwaySDK
-      bgColor={backgroundColor}
-      textColor={color}
-      brandText={brandText}
-    />
+    <>
+      <HeaderPixwaySDK
+        bgColor={backgroundColor}
+        textColor={color}
+        brandText={brandText}
+      />
+    </>
   );
 };
 
@@ -44,6 +49,16 @@ export const Hero = ({
 }: {
   data: HeroData;
   defaultData: HeroDefault;
+}) => {
+  return <>{JSON.stringify({ ...data, ...defaultData })}</>;
+};
+
+export const Footer = ({
+  data,
+  defaultData,
+}: {
+  data: FooterData;
+  defaultData: FooterDefault;
 }) => {
   return <>{JSON.stringify({ ...data, ...defaultData })}</>;
 };

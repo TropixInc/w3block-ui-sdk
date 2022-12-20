@@ -3,7 +3,8 @@ import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { DefaultDataProps, TemplateData } from '../interfaces';
-import { Banner, Header, Hero, Footer } from './Header';
+import { Footer } from './Footer';
+import { Banner, Header, Hero } from './Header';
 
 export const StorefrontPreview = () => {
   return (
