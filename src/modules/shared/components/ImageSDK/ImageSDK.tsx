@@ -73,6 +73,10 @@ export const ImageSDK = ({
         <video
           className={className}
           ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
           onLoadedData={() => {
             if (videoRef.current && preImageRef.current) {
               videoRef.current.style.display = 'block';
