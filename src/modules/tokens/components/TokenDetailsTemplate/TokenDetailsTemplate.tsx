@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import useGetPassBenefitsByContractToken from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { InternalPagesLayoutBase } from '../../../shared';
 import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
@@ -22,10 +24,16 @@ const _TokenDetailsTemplate = () => {
     tokenId,
   });
 
-  const { data: benefitsList } = useGetPassBenefitsByContractToken({
+  const { data: benefitsList, isSuccess } = useGetPassBenefitsByContractToken({
     collectionId: publicTokenResponse?.data?.group?.collectionId,
     editionNumber: publicTokenResponse?.data.edition.currentNumber,
   });
+
+  const isMultiplePass = useMemo(() => {
+    if (isSuccess) {
+      return benefitsList?.data?.items?.length > 0;
+    }
+  }, [benefitsList, isSuccess]);
 
   return publicTokenResponse ? (
     <div className="pw-w-full sm:pw-max-w-[968px] pw-font-roboto">
@@ -55,7 +63,7 @@ const _TokenDetailsTemplate = () => {
         title={publicTokenResponse?.data?.information.title}
         mainImage={publicTokenResponse?.data?.information?.mainImage ?? ''}
         className="pw-mb-6"
-        isMultiplePass={true}
+        isMultiplePass={isMultiplePass}
         benefitsList={benefitsList?.data}
       />
 
