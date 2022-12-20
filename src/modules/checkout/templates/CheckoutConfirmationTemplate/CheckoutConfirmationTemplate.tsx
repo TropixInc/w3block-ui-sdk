@@ -18,7 +18,7 @@ export const CheckoutConfirmationTemplate = ({
   currencyId,
 }: CheckoutConfirmationTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
-  useHasWallet();
+  useHasWallet({});
   return !isAuthorized || isLoading ? null : (
     <>
       <CheckoutHeader onClick={returnTo} />

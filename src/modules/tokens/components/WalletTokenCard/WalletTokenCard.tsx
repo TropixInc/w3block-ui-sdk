@@ -7,6 +7,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useRouterConnect } from '../../../shared';
 import { Button } from '../../../shared/components/Buttons';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import { Link } from '../../../shared/components/Link';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -98,10 +99,9 @@ export const WalletTokenCard = ({
                 </div>
               ) : null}
               {image ? (
-                <img
+                <ImageSDK
                   src={image}
                   className="pw-w-full pw-h-[300px] pw-object-cover pw-rounded-[20px]"
-                  alt={name}
                 />
               ) : (
                 <FallbackImage className="pw-h-full pw-max-h-[300px] pw-w-full pw-min-h-[300px] pw-rounded-[20px]" />

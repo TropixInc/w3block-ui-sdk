@@ -6,6 +6,7 @@ import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
 import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -170,13 +171,13 @@ export const TokenDetailsCard = ({
           ) : (
             <div className="pw-hidden sm:pw-block" />
           )}
-          {!!mainImage && (
-            <img
+          <div className="pw-flex pw-justify-center">
+            <ImageSDK
+              className="pw-max-w-full pw-max-h-[351px] pw-object-contain pw-rounded-[12px] pw-overflow-hidden pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
               src={mainImage}
               alt=""
-              className="pw-w-[432px] pw-h-[351px] pw-object-contain pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
             />
-          )}
+          </div>
         </div>
       ) : null}
       <LineDivider />

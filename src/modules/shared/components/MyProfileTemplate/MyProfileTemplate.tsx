@@ -18,7 +18,7 @@ import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {
   const { mutate } = useRequestConfirmationMail();
-  useHasWallet();
+  useHasWallet({});
   const { data: profile } = useProfile();
   const { connectProxyPass } = useCompanyConfig();
   const { status } = usePixwaySession();

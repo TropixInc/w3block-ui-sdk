@@ -4,6 +4,6 @@ import { CheckoutPayment } from '../../components';
 
 export const CheckoutPaymentTemplate = () => {
   const { isAuthorized, isLoading } = usePrivateRoute();
-  useHasWallet();
+  useHasWallet({});
   return !isAuthorized || isLoading ? null : <CheckoutPayment />;
 };

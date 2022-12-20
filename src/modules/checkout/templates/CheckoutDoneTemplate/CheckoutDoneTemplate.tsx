@@ -19,7 +19,7 @@ export const CheckoutDoneTemplate = ({
 }: CheckoutDoneTemplateProps) => {
   const router = useRouterConnect();
   const { isAuthorized, isLoading } = usePrivateRoute();
-  useHasWallet();
+  useHasWallet({});
   return !isAuthorized || isLoading ? null : (
     <>
       <CheckoutHeader
