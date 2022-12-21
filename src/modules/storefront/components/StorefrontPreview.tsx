@@ -42,15 +42,13 @@ const Storefront = () => {
       {data.items?.map((item, i) => {
         const Component = componentMap[item.type];
         return (
-          <>
-            <Component
-              key={item.type + i}
-              data={item.props}
-              defaultData={
-                themeContext[item.type] as keyof DefaultDataProps['defaultData']
-              }
-            />
-          </>
+          <Component
+            key={item.type + i}
+            data={item.props}
+            defaultData={
+              themeContext[item.type] as keyof DefaultDataProps['defaultData']
+            }
+          />
         );
       })}
     </>

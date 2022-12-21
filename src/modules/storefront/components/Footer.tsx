@@ -19,7 +19,6 @@ export const Footer = ({
   const backgroundColor = data.bgColor || defaultData.bgColor;
   const color = data.textColor || defaultData.textColor;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const socialNetWorkLinkSharedClassnames =
     'pw-fill-[#090909] hover:pw-fill-brand-primary pw-w-4 pw-h-4 pw-p-2';
 
@@ -61,7 +60,7 @@ export const Footer = ({
     <>
       <div
         style={{ backgroundColor: backgroundColor }}
-        className="pw-w-full pw-flex-col pw-shadow-[0px_-4px_16px_rgba(0,0,0,0.15)] pw-flex pw-justify-center pw-items-center pw-relative "
+        className="pw-w-full pw-font-poppins pw-flex-col pw-shadow-[0px_-4px_16px_rgba(0,0,0,0.15)] pw-flex pw-justify-center pw-items-center pw-relative "
       >
         <div className="pw-flex pw-py-[22px] sm:pw-py-10 pw-flex-col pw-gap-[15px] sm:pw-gap-4 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full">
           <div className="pw-w-full pw-font-semibold pw-text-sm pw-leading-[17px] pw-gap-[7px] sm:pw-gap-[54px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
