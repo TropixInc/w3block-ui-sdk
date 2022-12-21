@@ -61,12 +61,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       link: PixwayAppRoutes.TOKENS,
     },
     {
-      title: translate('components>menu>clients'),
-      icon: <DashIcon width={17} height={17} />,
-      link: PixwayAppRoutes.TOKENS_CLIENTS,
-      sub: true,
-    },
-    {
       title: translate('components>menu>wallet'),
       icon: <CardIcon width={17} height={17} />,
       link: PixwayAppRoutes.WALLET,
@@ -91,6 +85,12 @@ const _Menu = ({ tabs, className }: MenuProps) => {
             title: translate('components>menu>dashboard'),
             icon: <DashboardIcon width={17} height={17} />,
             link: PixwayAppRoutes.DASHBOARD,
+          },
+          {
+            title: translate('components>menu>clients'),
+            icon: <DashIcon width={17} height={17} />,
+            link: PixwayAppRoutes.TOKENS_CLIENTS,
+            sub: true,
           },
           ...tabsDefault,
         ];
@@ -165,7 +165,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       )}
     >
       <div>
-        <p className="pw-text-center pw-font-poppins pw-text-2xl pw-font-semibold pw-text-[#35394C] pw-mx-auto pw-mb-2">
+        <p className="pw-text-center pw-font-poppins pw-text-2xl pw-font-semibold pw-text-[#35394C] pw-mx-auto pw-mb-2 pw-truncate">
           {profile?.data.name}
         </p>
         <div className="pw-flex pw-items-center pw-justify-center pw-mb-10">
