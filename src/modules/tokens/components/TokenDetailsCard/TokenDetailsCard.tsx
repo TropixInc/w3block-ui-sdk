@@ -173,6 +173,7 @@ export const TokenDetailsCard = ({
           )}
           <div className="pw-flex pw-justify-center">
             <ImageSDK
+              controls={true}
               className="pw-max-w-full pw-max-h-[351px] pw-object-contain pw-rounded-[12px] pw-overflow-hidden pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
               src={mainImage}
               alt=""
