@@ -22,7 +22,7 @@ export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
           extraBy={props.extraBy}
           infoComponent={
             <Box>
-              <RequestPasswordChangeWithoutLayout />
+              <RequestPasswordChangeWithoutLayout hasSignUp={props.hasSignUp} />
             </Box>
           }
         />

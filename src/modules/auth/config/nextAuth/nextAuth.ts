@@ -10,7 +10,8 @@ import { removeDuplicateSlahes } from '../../../shared/utils/removeDuplicateSlah
 import { SignInResponse } from '../../api/signIn';
 import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 
-const tokenMaxAgeInSeconds = 3600;
+const tokenMaxAgeInSeconds =
+  process.env.NEXT_PUBLIC_ENVIRONMENT != 'development' ? 3600 * 2 : 15 * 60;
 const BEFORE_TOKEN_EXPIRES = tokenMaxAgeInSeconds / 2;
 
 async function refreshAccessToken(
@@ -86,25 +87,24 @@ export const getNextAuthConfig = ({
         },
       },
       authorize: async (payload) => {
-        try {
-          const response = await fetch(
-            removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.SIGN_IN}`),
-            {
-              method: 'POST',
-              body: JSON.stringify({
-                tenantId: payload?.companyId ?? '',
-                email: payload?.email ?? '',
-                password: payload?.password ?? '',
-              }),
-              headers: { 'Content-type': 'application/json' },
-            }
-          );
-          const responseAsJSON = await response.json();
-          const user = mapSignInReponseToSessionUser(responseAsJSON);
-          return user;
-        } catch (err) {
-          return null;
+        const response = await fetch(
+          removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.SIGN_IN}`),
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              tenantId: payload?.companyId ?? '',
+              email: payload?.email ?? '',
+              password: payload?.password ?? '',
+            }),
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
+        const responseAsJSON = await response.json();
+        if (responseAsJSON.statusCode >= 300) {
+          throw new Error(responseAsJSON.message);
         }
+        const user = mapSignInReponseToSessionUser(responseAsJSON);
+        return user;
       },
     }),
     CredentialsProvider({
@@ -175,7 +175,6 @@ export const getNextAuthConfig = ({
           user,
         };
       }
-
       // Return previous token if the access token has not expired yet
       if (Date.now() < (token.accessTokenExpires as number)) {
         return token;
@@ -196,8 +195,8 @@ export const getNextAuthConfig = ({
     },
   },
   pages: {
-    signIn: '/auth/sign-in',
-    newUser: '/auth/sign-up',
+    signIn: '/auth/signIn',
+    newUser: '/auth/signUp',
     verifyRequest: '/auth/mail-confirmation/sign-up',
     signOut: '/auth',
   },
@@ -220,7 +219,7 @@ const mapSignInReponseToSessionUser = (
 
 function getTokenExpires(token: string, threshold = 0): number {
   const { exp } = jwtDecode(token) as { exp: number };
-  return (+exp + threshold) * 1000 + threshold;
+  return +exp * 1000 + threshold;
 }
 
 export default getNextAuthConfig;

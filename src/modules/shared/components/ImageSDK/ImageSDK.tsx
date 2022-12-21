@@ -5,8 +5,8 @@ import { isCloudinary, isVideo } from '../../utils/validators';
 interface ImageSDKProps extends ImageSDKInternalProps {
   src?: string;
   className?: string;
-  options?: ImageSDKInternalProps;
   alt?: string;
+  controls?: boolean;
 }
 
 interface ImageSDKInternalProps {
@@ -24,6 +24,7 @@ export const ImageSDK = ({
   quality = 'good',
   fit = 'fill',
   alt = '',
+  controls = false,
 }: ImageSDKProps) => {
   const preImageRef = useRef<HTMLImageElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -75,6 +76,9 @@ export const ImageSDK = ({
           ref={videoRef}
           autoPlay
           muted
+          controlsList="nodownload noplaybackrate"
+          disablePictureInPicture
+          controls={controls}
           loop
           playsInline
           onLoadedData={() => {
@@ -136,6 +140,9 @@ export const ImageSDK = ({
           autoPlay
           muted
           loop
+          controlsList="nodownload noplaybackrate"
+          disablePictureInPicture
+          controls={controls}
           playsInline
           className={`${className}`}
           src={src ?? ''}
