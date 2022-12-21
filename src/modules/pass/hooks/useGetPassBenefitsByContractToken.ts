@@ -10,30 +10,27 @@ export interface BenefitsResponse {
 }
 
 interface Props {
-  chainId: string;
-  contractAddress: string;
-  tokenId: string;
+  collectionId?: string;
+  editionNumber?: string;
 }
 
 const useGetPassBenefitsByContractToken = ({
-  chainId,
-  contractAddress,
-  tokenId,
+  collectionId = '',
+  editionNumber = '',
 }: Props) => {
   const axios = useAxios(W3blockAPI.PASS);
   const { companyId: tenantId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.PASS_BENEFIT_BY_CHAIN_CONTRACT_TOKEN],
+    [PixwayAPIRoutes.PASS_BENEFIT_BY_EDITION_NUMBER],
     () =>
       axios.get<BenefitsResponse>(
-        PixwayAPIRoutes.PASS_BENEFIT_BY_CHAIN_CONTRACT_TOKEN.replace(
+        PixwayAPIRoutes.PASS_BENEFIT_BY_EDITION_NUMBER.replace(
           '{tenantId}',
           tenantId ?? ''
         )
-          .replace('{chainId}', chainId ?? '')
-          .replace('{contractAddress}', contractAddress ?? '')
-          .replace('{tokenId}', tokenId ?? '')
+          .replace('{collectionId}', collectionId ?? '')
+          .replace('{editionNumber}', editionNumber ?? '')
       ),
     {
       enabled: Boolean(tenantId),

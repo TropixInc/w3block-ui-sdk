@@ -11,6 +11,7 @@ import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
 import { ReactComponent as DashboardIcon } from '../../assets/icons/dashboard.svg';
 // import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
+import { ReactComponent as DashIcon } from '../../assets/icons/dashOutlined.svg';
 import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
 import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.svg';
@@ -32,6 +33,7 @@ interface TabsConfig {
   title: string;
   icon: ReactNode;
   link: string;
+  sub?: boolean;
 }
 
 const _Menu = ({ tabs, className }: MenuProps) => {
@@ -57,6 +59,12 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       title: translate('components>menu>myTokens'),
       icon: <ImageIcon width={17} height={17} />,
       link: PixwayAppRoutes.TOKENS,
+    },
+    {
+      title: translate('components>menu>clients'),
+      icon: <DashIcon width={17} height={17} />,
+      link: PixwayAppRoutes.TOKENS_CLIENTS,
+      sub: true,
     },
     {
       title: translate('components>menu>wallet'),
@@ -127,6 +135,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           key={tab.title}
           className={classNames(
             'group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 hover:pw-stroke-brand-primary',
+            tab.sub ? 'pw-ml-6' : '',
             isActive
               ? 'pw-bg-brand-primary pw-bg-opacity-[0.4] pw-stroke-brand-primary'
               : 'pw-stroke-[#383857]'

@@ -2,7 +2,7 @@
 import { ReactNode, useMemo, useState } from 'react';
 import { useBoolean } from 'react-use';
 
-import { format, compareAsc } from 'date-fns';
+import { compareAsc, format } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { QrCodeReader } from '../../../shared/components/QrCodeReader';
@@ -44,29 +44,34 @@ export const PassesDetail = () => {
   const router = useRouter();
   const tokenPassId = String(router.query.tokenPassId) || '';
   const chainId = String(router.query.chainId) || '';
-  const contractAddress = String(router.query.contractAddress) || '';
+  const contractAddress = String(router.query.contractAddress) || ''
 
   const [showScan, setOpenScan] = useBoolean(false);
   const [showSuccess, setShowSuccess] = useBoolean(false);
   const [showError, setShowError] = useBoolean(false);
   const [error, setError] = useState<TypeError>(TypeError.read);
-  const [benefitSelectedId, setBenefitSelected] = useState('');
+  const [benefitId, setBenefitId] = useState('');
   const { pass } = useFlags();
 
   const { data: tokenPass } = useGetPassById(tokenPassId);
 
   const { mutate: registerUse } = usePostBenefitRegisterUse();
-  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenId: tokenPassId, chainId, contractAddress });
+  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
 
+  /* const { data: publicTokenResponse } = usePublicTokenData({
+    contractAddress,
+    chainId,
+    tokenId: '1',
+  }); */
 
   const formatedData = useMemo(() => {
-    const data = benefits?.data.items.map((benefit) => {
+    const data = benefits?.data?.items?.map((benefit) => {
       const period = benefit?.eventEndsAt ?
         format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') + ' - ' +
         format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
 
       const handleAction = () => {
-        setBenefitSelected(benefit.tokenPassId)
+        setBenefitId(benefit?.id);
         setOpenScan()
       }
 
@@ -121,9 +126,9 @@ export const PassesDetail = () => {
     registerUse(
       {
         secret,
-        benefitId: benefitSelectedId,
         userId: user?.id ?? '',
-        tokenId: benefitSelectedId,
+        editionNumber: '2',
+        benefitId: benefitId,
       },
       {
         onSuccess: () => {
