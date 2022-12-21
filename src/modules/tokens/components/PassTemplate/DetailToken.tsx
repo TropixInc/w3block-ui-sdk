@@ -31,7 +31,7 @@ export const DetailToken = ({
       <div className="pw-text-[#353945] pw-font-semibold pw-text-[15px] pw-leading-[22.5px] pw-flex pw-gap-[8px] pw-justify-center pw-items-center">
         {title}{' '}
         {titleLink ? (
-          <a href={titleLink} target="_blanc">
+          <a href={titleLink} target="_blank" rel="noreferrer">
             <LinkIcon className="pw-fill-[#295BA6]" />
           </a>
         ) : null}

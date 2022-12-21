@@ -6,9 +6,12 @@ import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
 import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
+import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
+import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { headers, mobileHeaders } from '../../const/GenericTableHeaders';
 import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
@@ -37,6 +40,9 @@ interface Props {
   className?: string;
   isMultiplePass?: boolean;
   benefitsList?: BenefitsResponse;
+  chainId?: string;
+  contractAddress?: string;
+  tokenId?: string;
 }
 
 export const TokenDetailsCard = ({
@@ -49,6 +55,7 @@ export const TokenDetailsCard = ({
   className = '',
   isMultiplePass = false,
   benefitsList,
+  tokenId = '',
 }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
@@ -57,6 +64,12 @@ export const TokenDetailsCard = ({
     tokenTemplate
   );
   const { pass } = useFlags();
+
+  const router = useRouter();
+
+  const queryParams = {
+    tokenId,
+  };
 
   const renderTextValue = (label: string, value: string) => (
     <TextFieldDisplay label={label} value={value} inline />
@@ -97,9 +110,21 @@ export const TokenDetailsCard = ({
     }
   };
 
-  const handleButtonToShow = (status: BenefitStatus) => {
+  const handleButtonToShow = (status: BenefitStatus, id: string) => {
     if (status == BenefitStatus.active) {
-      return <Button>{translate('token>pass>benefits>useBenefit')}</Button>;
+      return (
+        <Button
+          onClick={() =>
+            router.push(
+              PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', id).concat(
+                transformObjectToQuery(queryParams)
+              )
+            )
+          }
+        >
+          {translate('token>pass>benefits>useBenefit')}
+        </Button>
+      );
     } else {
       return (
         <Button variant="secondary">
@@ -117,14 +142,14 @@ export const TokenDetailsCard = ({
       : handleLocal(benefit.type),
     date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
     status: <StatusTag status={benefit.status} />,
-    actionComponent: handleButtonToShow(benefit.status),
+    actionComponent: handleButtonToShow(benefit.status, benefit.id),
   }));
 
   const mobileTableData = benefitsList?.items?.map((benefit) => ({
     name: benefit?.name,
     type: benefit?.type,
     status: <StatusTag status={benefit?.status} />,
-    actionComponent: handleButtonToShow(benefit?.status),
+    actionComponent: handleButtonToShow(benefit?.status, benefit.id),
   }));
 
   return (

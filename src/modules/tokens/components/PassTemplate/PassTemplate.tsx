@@ -1,16 +1,29 @@
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { useToggle } from 'react-use';
 
 import classNames from 'classnames';
-import { add, format, getDay, isToday } from 'date-fns';
+import {
+  add,
+  compareDesc,
+  differenceInHours,
+  format,
+  getDay,
+  isToday,
+} from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
+import { formatAddressProps } from '../../../pass';
+import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
+import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
+import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
+import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
 import { DetailToken } from './DetailToken';
@@ -19,39 +32,92 @@ import { InactiveDateUseToken } from './InactiveSection';
 import { QrCodeSection } from './QrCodeSection';
 import { UsedPass } from './UsedSection';
 
-const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`;
-
 const _PassTemplate = () => {
   const { pass } = useFlags();
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const mode = (router.query.mode as string) || '';
+  const tokenId = (router.query.tokenId as string) || '';
+  const benefitId = (router.query.benefitId as string) || '';
+  const successValidation = (router.query.success as string) || '';
+
+  const { data: benefit, isSuccess: isBenefitSucceed } =
+    useGetPassBenefitById(benefitId);
+
+  const { data: publicTokenResponse, isSuccess: isTokenSucceed } =
+    usePublicTokenData({
+      contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
+      chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
+      tokenId,
+    });
+
+  const editionNumber = useMemo(() => {
+    if (isTokenSucceed) {
+      return publicTokenResponse?.data?.edition?.currentNumber;
+    } else {
+      return '';
+    }
+  }, [isTokenSucceed, publicTokenResponse?.data?.edition?.currentNumber]);
+
+  const {
+    data: secret,
+    isError,
+    isSuccess: isSecretSucceed,
+  } = useGetQRCodeSecret({
+    benefitId,
+    editionNumber: editionNumber,
+  });
+
+  const startDate = useMemo(() => {
+    if (isBenefitSucceed) {
+      return benefit?.data?.eventStartsAt;
+    } else {
+      return new Date();
+    }
+  }, [benefit?.data?.eventStartsAt, isBenefitSucceed]);
+
+  const endDate = useMemo(() => {
+    if (isBenefitSucceed && benefit?.data?.eventEndsAt) {
+      return benefit?.data?.eventEndsAt;
+    } else {
+      return new Date();
+    }
+  }, [benefit?.data?.eventEndsAt, isBenefitSucceed]);
+
+  const expiredEvent = benefit?.data?.eventEndsAt
+    ? compareDesc(new Date(endDate), new Date()) === 1
+    : false;
+
+  const mode = useMemo(() => {
+    if (benefit?.data?.useLimit == 0) {
+      return 'error-use';
+    } else if (expiredEvent) {
+      return 'error-expired';
+    } else if (isError) {
+      return 'error-read';
+    } else {
+      return '';
+    }
+  }, [benefit?.data?.useLimit, expiredEvent, isError]);
 
   const [hasExpired, setHasExpired] = useToggle(false);
 
   const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-  const token = {
-    name: 'RIO World Skate Street World Championships',
-    type: 'unique',
-    id: '00000000000000000',
-    detail: {
-      name: '0Lorem Ipsum is simply dummy text of the printing.',
-    },
-    address: {
-      name: 'Nome do endereço',
-      street: 'Praça da Tijuca Rio de Janeiro',
-      city: 'RJ',
-      country: 'Brazil',
-      rules: Lorem,
-    },
+
+  const formatAddress = ({ type, benefit }: formatAddressProps) => {
+    if (
+      type == TokenPassBenefitType.PHYSICAL &&
+      benefit?.tokenPassBenefitAddresses
+    ) {
+      return `${benefit?.tokenPassBenefitAddresses[0]?.street}-${benefit?.tokenPassBenefitAddresses[0]?.city}`;
+    } else {
+      return 'Online';
+    }
   };
-  const event = {
-    date: '10/20/2023 14:30',
-  };
-  const detailsTokenMoked = [
+
+  const detailsToken = [
     {
       title: 'token>pass>tokenName',
-      description: token.detail.name,
+      description: publicTokenResponse?.data?.information?.title,
       copyDescription: false,
       titleLink: '',
     },
@@ -63,7 +129,7 @@ const _PassTemplate = () => {
     },
     {
       title: 'token>pass>mintedBy',
-      description: '0xf4207af...fe51c408f',
+      description: publicTokenResponse?.data?.edition?.mintedHash,
       copyDescription: true,
       titleLink: 'd',
     },
@@ -75,14 +141,32 @@ const _PassTemplate = () => {
     },
   ];
 
+  const calcHoursLeft = useMemo(() => {
+    if (benefit?.data?.eventEndsAt) {
+      return differenceInHours(
+        new Date(),
+        new Date(benefit?.data?.eventEndsAt)
+      );
+    } else {
+      return differenceInHours(
+        new Date(),
+        new Date(benefit?.data?.eventStartsAt || '')
+      );
+    }
+  }, [benefit?.data?.eventEndsAt, benefit?.data?.eventStartsAt]);
+
   const eventDate =
-    mode === 'actived2'
+    calcHoursLeft == 2
       ? add(new Date(), { seconds: 10 })
-      : new Date(event.date);
+      : endDate != new Date()
+      ? new Date(endDate)
+      : new Date(startDate);
 
   const today = isToday(eventDate);
 
-  const isInactive = mode === 'inactive';
+  const isInactive = benefit?.data?.status === BenefitStatus.inactive;
+
+  const hasExpiration = benefit?.data?.eventEndsAt ? true : false;
 
   return mode.includes('error') ? (
     mode === 'error-read' ? (
@@ -114,7 +198,7 @@ const _PassTemplate = () => {
         <p className="pw-hidden sm:pw-block">{translate('token>pass>back')}</p>
       </div>
 
-      {mode === 'used' ? <UsedPass /> : null}
+      {successValidation == 'true' ? <UsedPass /> : null}
 
       {isInactive ? (
         <InfoPass
@@ -136,13 +220,15 @@ const _PassTemplate = () => {
 
       <div className="pw-flex pw-flex-col">
         <div className="pw-flex pw-flex-col pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
-          {mode === 'used' ? (
+          {successValidation == 'true' ? (
             <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-[16px] pw-pb-[16px] pw-px-[24px] pw-border-b pw-border-[#EFEFEF]">
               <div className="pw-w-[20px] pw-h-[20px]">
                 <CheckedIcon className="pw-stroke-[#295BA6] pw-w-[20px] pw-h-[20px]" />
               </div>
               <div className="pw-text-[#353945] pw-font-bold pw-text-[14px] pw-leading-[21px] pw-text-center">
-                {translate('token>pass>checkedTime', { time: '12h30' })}
+                {translate('token>pass>checkedTime', {
+                  time: format(new Date(), 'HH:mm'),
+                })}
               </div>
             </div>
           ) : null}
@@ -164,21 +250,21 @@ const _PassTemplate = () => {
 
             <div className="pw-flex pw-flex-col pw-justify-center">
               <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                {token.name}
+                {publicTokenResponse?.data?.information?.title}
               </div>
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                {token.address.street}
-                {', '}
-                {token.address.city}
-                {' - '}
-                {token.address.country}
+                {isBenefitSucceed &&
+                  formatAddress({
+                    type: benefit?.data?.type,
+                    benefit: benefit?.data,
+                  })}
               </div>
               <div className="pw-flex pw-items-center pw-gap-2">
                 <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
                   {translate('token>pass>use')}
                 </span>
                 <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-                  {token.type === 'unique'
+                  {benefit?.data?.useLimit === 1
                     ? translate('token>pass>unique')
                     : translate('token>pass>youStillHave', { quantity: 5 })}
                 </div>
@@ -201,12 +287,18 @@ const _PassTemplate = () => {
           ) : null}
         </div>
 
-        {!isInactive && (!hasExpired || mode === 'unlimited') ? (
+        {!isInactive &&
+        isBenefitSucceed &&
+        isTokenSucceed &&
+        isSecretSucceed &&
+        (!hasExpired || hasExpiration) ? (
           <QrCodeSection
             eventDate={eventDate}
-            tokenId={token.id}
+            tokenId={publicTokenResponse?.data?.token?.tokenId ?? ''}
             setExpired={setHasExpired}
-            hasExpiration={!(mode === 'unlimited')}
+            hasExpiration={hasExpiration}
+            editionNumber={publicTokenResponse.data.edition.currentNumber}
+            secret={secret.data.secret}
           />
         ) : null}
       </div>
@@ -216,52 +308,54 @@ const _PassTemplate = () => {
           <DetailsTemplate title={translate('token>pass>detailsPass')}>
             <DetailPass
               title={translate('token>pass>description')}
-              description={Lorem}
-            />
-
-            <DetailPass
-              title={translate('token>pass>benefict')}
-              description={Lorem}
+              description={benefit?.data?.description ?? ''}
             />
 
             <DetailPass
               title={translate('token>pass>rules')}
-              description={Lorem}
+              description={benefit?.data?.rules ?? ''}
             />
           </DetailsTemplate>
 
-          <DetailsTemplate title={translate('token>pass>useLocale')}>
-            <div className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2">
-              <div className="pw-flex pw-flex-col pw-gap-1">
-                <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                  {token.address.name}
+          {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
+            <DetailsTemplate title={translate('token>pass>useLocale')}>
+              {benefit?.data?.tokenPassBenefitAddresses?.map((address) => (
+                <div
+                  key={address.name}
+                  className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
+                >
+                  <div className="pw-flex pw-flex-col pw-gap-1">
+                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                      {address.name}
+                    </div>
+                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                      {address?.street}
+                      {', '}
+                      {address?.city}
+                      {' - '}
+                      {address?.state}
+                    </div>
+                  </div>
+                  <div className="pw-flex pw-flex-col pw-gap-1">
+                    <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                      {translate('token>pass>rules')}
+                    </div>
+                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                      {address?.rules}
+                    </div>
+                  </div>
                 </div>
-                <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                  {token.address.street}
-                  {', '}
-                  {token.address.city}
-                  {' - '}
-                  {token.address.country}
-                </div>
-              </div>
-              <div className="pw-flex pw-flex-col pw-gap-1">
-                <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-                  {translate('token>pass>rules')}
-                </div>
-                <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                  {token.address.rules}
-                </div>
-              </div>
-            </div>
-          </DetailsTemplate>
+              ))}
+            </DetailsTemplate>
+          ) : null}
 
           <DetailsTemplate title={translate('token>pass>detailsToken')}>
             <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 xl:pw-grid-cols-4 pw-gap-[30px]">
-              {detailsTokenMoked.map((item) => (
+              {detailsToken.map((item) => (
                 <DetailToken
                   key={item.title}
                   title={translate(item.title)}
-                  description={item.description}
+                  description={item.description ?? ''}
                   copyDescription={item.copyDescription}
                   titleLink={item.titleLink}
                 />
@@ -279,7 +373,7 @@ const _PassTemplate = () => {
         })}
       </div>
 
-      {mode === 'used' && pass ? (
+      {successValidation && pass ? (
         <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">
           <PassButton model="primary">
             {translate('token>pass>tokenPage')}

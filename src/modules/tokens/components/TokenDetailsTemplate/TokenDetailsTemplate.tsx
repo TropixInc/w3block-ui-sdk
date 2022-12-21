@@ -65,6 +65,9 @@ const _TokenDetailsTemplate = () => {
         className="pw-mb-6"
         isMultiplePass={isMultiplePass}
         benefitsList={benefitsList?.data}
+        chainId={chainId}
+        contractAddress={contractAddress}
+        tokenId={tokenId}
       />
 
       <MintedInfoCard
