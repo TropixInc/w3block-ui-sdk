@@ -6,10 +6,10 @@ import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
 import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { isVideo } from '../../../shared/utils/validators';
 import { headers, mobileHeaders } from '../../const/GenericTableHeaders';
 import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
 import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';
@@ -172,22 +172,12 @@ export const TokenDetailsCard = ({
             <div className="pw-hidden sm:pw-block" />
           )}
           <div className="pw-flex pw-justify-center">
-            {mainImage && isVideo(mainImage) ? (
-              <video
-                className="pw-max-w-full pw-max-h-[351px] pw-object-contain pw-rounded-[12px] pw-overflow-hidden pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
-                loop
-                playsInline
-                muted
-                autoPlay
-                src={mainImage}
-              ></video>
-            ) : (
-              <img
-                src={mainImage}
-                alt=""
-                className="pw-max-w-[432px] pw-max-h-[351px] pw-object-contain pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-overflow-hidden"
-              />
-            )}
+            <ImageSDK
+              controls={true}
+              className="pw-max-w-full pw-max-h-[351px] pw-object-contain pw-rounded-[12px] pw-overflow-hidden pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
+              src={mainImage}
+              alt=""
+            />
           </div>
         </div>
       ) : null}

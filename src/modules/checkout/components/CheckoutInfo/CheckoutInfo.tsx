@@ -104,7 +104,8 @@ const _CheckoutInfo = ({
           companyId,
         },
         {
-          onSuccess: (data) => setOrderPreview(data),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onSuccess: (data: any) => setOrderPreview(data),
         }
       );
     }

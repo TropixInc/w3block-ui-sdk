@@ -176,7 +176,7 @@ const NavigationMenu = ({
     return (
       <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
         <div className="pw-flex">
-          <p className="pw-text-[10px] pw-font-montserrat pw-font-[500] pw-ml-[6px]">
+          <p className="pw-text-[10px] pw-font-montserrat pw-font-[500]">
             {wallet?.type === WalletTypes.Vault
               ? translate('header>logged>pixwayBalance')
               : translate('header>logged>metamaskBalance')}
