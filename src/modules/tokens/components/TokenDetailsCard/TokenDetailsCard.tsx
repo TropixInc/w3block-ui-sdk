@@ -7,11 +7,11 @@ import { PassType } from '../../../pass/enums/PassType';
 import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
+import { useRouterConnect } from '../../../shared';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
-import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { headers, mobileHeaders } from '../../const/GenericTableHeaders';
 import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
@@ -65,7 +65,7 @@ export const TokenDetailsCard = ({
   );
   const { pass } = useFlags();
 
-  const router = useRouter();
+  const router = useRouterConnect();
 
   const queryParams = {
     tokenId,
@@ -115,7 +115,7 @@ export const TokenDetailsCard = ({
       return (
         <Button
           onClick={() =>
-            router.push(
+            router.pushConnect(
               PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', id).concat(
                 transformObjectToQuery(queryParams)
               )

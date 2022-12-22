@@ -17,12 +17,18 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
   const axios = useAxios(W3blockAPI.PASS);
   const { companyId: tenantId } = useCompanyConfig();
 
-  return usePrivateQuery([PixwayAPIRoutes.TOKEN_PASS], () =>
-    axios.get<SecretResponse>(
-      PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
-        .replace('{id}', benefitId)
-        .replace('{editionNumber}', editionNumber)
-    )
+  return usePrivateQuery(
+    [PixwayAPIRoutes.TOKEN_PASS],
+    () => {
+      return axios.get<SecretResponse>(
+        PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
+          .replace('{id}', benefitId)
+          .replace('{editionNumber}', editionNumber)
+      );
+    },
+    {
+      enabled: Boolean(benefitId) && Boolean(editionNumber),
+    }
   );
 };
 

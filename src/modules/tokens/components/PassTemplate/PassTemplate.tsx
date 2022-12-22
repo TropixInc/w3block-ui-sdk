@@ -17,6 +17,7 @@ import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
 import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
 import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
+import { InternalPagesLayoutBase } from '../../../shared';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
@@ -32,13 +33,24 @@ import { InactiveDateUseToken } from './InactiveSection';
 import { QrCodeSection } from './QrCodeSection';
 import { UsedPass } from './UsedSection';
 
-const _PassTemplate = () => {
+interface PassTemplateProps {
+  tokenIdProp?: string;
+  benefitIdProp?: string;
+  successValidationProp?: string;
+}
+
+const _PassTemplate = ({
+  tokenIdProp,
+  benefitIdProp,
+  successValidationProp,
+}: PassTemplateProps) => {
   const { pass } = useFlags();
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const tokenId = (router.query.tokenId as string) || '';
-  const benefitId = (router.query.benefitId as string) || '';
-  const successValidation = (router.query.success as string) || '';
+  const tokenId = tokenIdProp || (router.query.tokenId as string) || '';
+  const benefitId = benefitIdProp || (router.query.benefitId as string) || '';
+  const successValidation =
+    successValidationProp || (router.query.success as string) || '';
 
   const { data: benefit, isSuccess: isBenefitSucceed } =
     useGetPassBenefitById(benefitId);
@@ -49,6 +61,8 @@ const _PassTemplate = () => {
       chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
       tokenId,
     });
+
+  console.log({ benefit, publicTokenResponse });
 
   const editionNumber = useMemo(() => {
     if (isTokenSucceed) {
@@ -389,7 +403,9 @@ const _PassTemplate = () => {
 
 export const PassTemplate = () => (
   <TranslatableComponent>
-    <_PassTemplate />
+    <InternalPagesLayoutBase>
+      <_PassTemplate />
+    </InternalPagesLayoutBase>
   </TranslatableComponent>
 );
 

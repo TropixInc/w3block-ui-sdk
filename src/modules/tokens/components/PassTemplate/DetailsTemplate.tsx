@@ -30,7 +30,7 @@ export const DetailsTemplate = ({
       <div
         className={classNames(
           isOpen ? '' : 'pw-hidden',
-          'pw-flex pw-flex-col pw-gap-[30px]'
+          'pw-flex pw-flex-col pw-gap-[30px] pw-w-full'
         )}
       >
         {children}
