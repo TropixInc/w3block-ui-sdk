@@ -13,7 +13,6 @@ import {
 import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
-import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { Button } from '../../../tokens/components/Button';
 import GenericTable, {
   ColumnType,
@@ -33,13 +32,12 @@ interface TableRow {
   action: ReactNode;
 }
 
-interface formatAddressProps {
+export interface formatAddressProps {
   type: TokenPassBenefitType;
   benefit: PassBenefitDTO;
 }
 
 export const PassesDetail = () => {
-  const user = useSessionUser();
   const isMobile = useIsMobile();
   const router = useRouter();
   const tokenPassId = String(router.query.tokenPassId) || '';
@@ -57,12 +55,6 @@ export const PassesDetail = () => {
 
   const { mutate: registerUse } = usePostBenefitRegisterUse();
   const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
-
-  /* const { data: publicTokenResponse } = usePublicTokenData({
-    contractAddress,
-    chainId,
-    tokenId: '1',
-  }); */
 
   const formatedData = useMemo(() => {
     const data = benefits?.data?.items?.map((benefit) => {
@@ -123,11 +115,13 @@ export const PassesDetail = () => {
 
   const validatePassToken = (secret: string) => {
 
+    const secretItems = secret.split(';');
+
     registerUse(
       {
-        secret,
-        userId: user?.id ?? '',
-        editionNumber: '2',
+        secret: secretItems[2],
+        userId: secretItems[1],
+        editionNumber: secretItems[0],
         benefitId: benefitId,
       },
       {

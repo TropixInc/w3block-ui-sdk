@@ -33,7 +33,8 @@ const useGetPassBenefitsByContractToken = ({
           .replace('{editionNumber}', editionNumber ?? '')
       ),
     {
-      enabled: Boolean(tenantId),
+      enabled:
+        Boolean(tenantId) && Boolean(collectionId) && Boolean(editionNumber),
       refetchInterval: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
