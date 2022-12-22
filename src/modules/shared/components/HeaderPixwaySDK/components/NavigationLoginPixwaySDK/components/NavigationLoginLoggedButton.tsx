@@ -16,6 +16,7 @@ import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDo
 import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 // import { ReactComponent as HelpIcon } from '../../../../../assets/icons/helpIconGray.svg';
+import { ReactComponent as IntegrationIcon } from '../../../../../assets/icons/integrationIconOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
 import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
 import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
@@ -31,7 +32,6 @@ import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
 import { PixwayButton } from '../../../../PixwayButton';
-import { ReactComponent as IntegrationIcon } from '../../assets/icons/integrationIconOutlined.svg';
 import { NavigationMenuTabs } from '../interfaces/menu';
 interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
