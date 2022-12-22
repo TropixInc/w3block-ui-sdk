@@ -62,8 +62,6 @@ const _PassTemplate = ({
       tokenId,
     });
 
-  console.log({ benefit, publicTokenResponse });
-
   const editionNumber = useMemo(() => {
     if (isTokenSucceed) {
       return publicTokenResponse?.data?.edition?.currentNumber;
