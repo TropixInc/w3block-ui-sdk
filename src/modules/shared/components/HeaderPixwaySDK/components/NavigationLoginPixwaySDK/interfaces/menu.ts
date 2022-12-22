@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface NavigationMenuTabs {
-  name: string;
+  name?: string;
   route?: string;
   icon?: ReactNode;
   action?: () => void;
