@@ -10,6 +10,7 @@ import { useClickAway } from 'react-use';
 import { ChainId, WalletTypes } from '@w3block/sdk-id';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
+
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
@@ -30,6 +31,7 @@ import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
 import { PixwayButton } from '../../../../PixwayButton';
+import { ReactComponent as IntegrationIcon } from '../../assets/icons/integrationIconOutlined.svg';
 import { NavigationMenuTabs } from '../interfaces/menu';
 interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
@@ -102,6 +104,11 @@ export const useDefaultMenuTabs = () => {
       name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon />,
+    },
+    {
+      title: translate('components>menu>integration'),
+      route: PixwayAppRoutes.INTEGRATION,
+      icon: <IntegrationIcon />,
     },
     // {
     //   name: translate('header>components>defaultTab>settings'),

@@ -15,10 +15,10 @@ export const ChipWallet = ({
       <Icon />
     </div>
     <div className="pw-w-[1px] pw-bg-[#35394C] pw-h-[32px]" />
-    <div className="flex flex-col pw-items-start pw-justify-center">
-      <span className="pw-font-semibold pw-text-[13px] pw-leading-[13px]">
+    <div className="pw-flex pw-flex-col pw-items-start pw-justify-center">
+      <div className="pw-font-semibold pw-text-[13px] pw-leading-[13px]">
         {title}
-      </span>
+      </div>
       <Balance showValue={showValue} />
     </div>
   </div>

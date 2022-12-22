@@ -10,8 +10,9 @@ import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentica
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
 import { ReactComponent as DashboardIcon } from '../../assets/icons/dashboard.svg';
-// import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
+import { ReactComponent as IntegrationIcon } from '../../assets/icons/integrationIconOutlined.svg';
+// import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
 import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.svg';
 // import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
@@ -62,6 +63,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       title: translate('components>menu>wallet'),
       icon: <CardIcon width={17} height={17} />,
       link: PixwayAppRoutes.WALLET,
+    },
+    {
+      title: translate('components>menu>integration'),
+      icon: <IntegrationIcon width={17} height={17} />,
+      link: PixwayAppRoutes.INTEGRATION,
     },
     // {
     //   title: translate('components>menu>settings'),

@@ -19,6 +19,7 @@ interface Props {
   children?: ReactNode;
   ownClass?: string;
   hideCloseButton?: boolean;
+  backdrop?: boolean;
 }
 
 export const ModalBase = ({
@@ -28,11 +29,14 @@ export const ModalBase = ({
   children,
   ownClass,
   hideCloseButton = false,
+  backdrop = true,
 }: Props) => {
   useLockBodyScroll(isOpen);
   return isOpen ? (
     <>
+    {backdrop &&
       <Backdrop onClick={onClose} />
+    }
       <div
         className={
           ownClass

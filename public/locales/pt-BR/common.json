@@ -318,5 +318,22 @@
   "connectWallet>metamaskError>app>description":"Apesar de estar dentro da Metamask, alguns erros ainda podem ocorrer devido a instabilidades dentro do aplicativo. Para contornar tal problema, sugerimos que:",
   "connectWallet>metamaskError>app>fristSuggestion":"Reinicie o aplicativo Metamask, colocando a url que se encontra agora",
   "connectWallet>metamaskError>app>copyUrl":"copiar url",
-  "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop."
+  "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop.",
+  "components>menu>integration": "Integração",
+  "components>walletIntegration>connectDiscord": "Sincronizar o Discord usando WalletConnect",
+  "components>walletIntegration>connectWallet": "Sincronize sua wallet com o Discord.",
+  "components>walletIntegration>connectText": "Você está conectado usando uma wallet MetaMask. Para sincronizar, faça esse passo no próprio app.",
+  "components>walletIntegration>learnConnect": "Aprenda a sincronizar",
+  "components>walletIntegration>connect": "Sincronizar",
+  "components>walletIntegration>copyCode": "Copie o código e cole",
+  "components>walletIntegration>chooseCollab": "Copie o código disponibilizado pela Collab.Land ao escolher a opção da WalletConnect e cole aqui.",
+  "components>walletIntegration>connectSuccess": "A sincronização foi realizada com sucesso!",
+  "components>walletIntegration>connectFailed": "A sincronização falhou e não foi concluída. Tente realizar o processo novamente.",
+  "components>walletIntegration>connectFail": "Falha ao sincronizar",
+  "components>walletIntegration>connectCompleted": "Sincronização concluída!",
+  "components>walletIntegration>seeTutorial": "Ver Tutorial",
+  "components>walletIntegration>skipTutorial": "'Pular Tutorial",
+  "components>walletIntegration>next": "Próximo",
+  "components>walletIntegration>tryAgain": "Tentar Novamente",
+  "components>walletIntegration>close": "Fechar"
 }
