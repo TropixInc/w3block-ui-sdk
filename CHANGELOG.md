@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.135](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.134...v0.1.1-alpha.135) (2022-12-22)
+
+
+### Features
+
+* **np-104:** code review corrections ([7a0c32e](https://github.com/TropixInc/w3block-ui-sdk/commit/7a0c32ed71d9a3396cd777042ef259363fa9609c))
+* **np-104:** Integration in use-benefit page ([6eb842e](https://github.com/TropixInc/w3block-ui-sdk/commit/6eb842e4fe5fac9cb1f2dcbf18709640efa7769b))
+
 ### [0.1.1-alpha.134](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.133...v0.1.1-alpha.134) (2022-12-21)
 
 ### [0.1.1-alpha.133](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.131...v0.1.1-alpha.133) (2022-12-21)
