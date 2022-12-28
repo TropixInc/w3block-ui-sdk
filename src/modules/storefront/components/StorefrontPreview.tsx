@@ -5,6 +5,7 @@ import { ThemeContext, ThemeProvider } from '../contexts';
 import { DefaultDataProps, TemplateData } from '../interfaces';
 import { Banner } from './Banner';
 import { Header } from './Header';
+import { Products } from './Products';
 
 export const StorefrontPreview = () => {
   return (
@@ -59,4 +60,5 @@ const componentMap = {
   header: Header,
   categories: () => <></>,
   banner: Banner,
+  products: Products,
 };

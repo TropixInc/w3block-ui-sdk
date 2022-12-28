@@ -64,7 +64,7 @@ export type BannerDefault = {
 export type ProductsData = {
   title?: string;
   filterTag?: string;
-  layout?: 'carousel' | 'grid';
+  layoutProducts?: 'carousel' | 'grid';
   autoSlide?: boolean;
   itemsPerLine?: number;
   numberOfLines?: number;
