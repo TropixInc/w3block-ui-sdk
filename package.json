@@ -20,7 +20,6 @@
     "dev": "yarn build",
     "dev:watch": "tsc && vite build --watch",
     "build": "tsc && vite build",
-    "start": "vite --port 3000 --host",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "prepare": "husky install",
