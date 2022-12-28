@@ -2,20 +2,26 @@ export interface TemplateData {
   title: string;
   items: {
     type: keyof Template;
-    props: HeaderData | CategoryData | BannerData;
+    props: HeaderData | CategoryData | BannerData | ProductsData;
   }[];
 }
 
-export type DefaultDataProps = HeaderProps | CategoryProps | BannerProps;
+export type DefaultDataProps =
+  | HeaderProps
+  | CategoryProps
+  | BannerProps
+  | ProductsProps;
 
 type HeaderProps = { data: HeaderData; defaultData: HeaderDefault };
 type CategoryProps = { data: CategoryData; defaultData: CategoryDefault };
 type BannerProps = { data: BannerData; defaultData: BannerDefault };
+type ProductsProps = { data: ProductsData; defaultData: ProductsDefault };
 
 export interface Template {
   header: HeaderDefault;
   categories: CategoryDefault;
   banner: BannerDefault;
+  products: ProductsDefault;
 }
 
 export type HeaderData = {
@@ -53,6 +59,59 @@ export type BannerDefault = {
   ratio: Ratio;
   autoSlide: boolean;
   slides: SlideContentDefault;
+};
+
+export type ProductsData = {
+  title?: string;
+  filterTag?: string;
+  layout?: 'carousel' | 'grid';
+  autoSlide?: boolean;
+  itemsPerLine?: number;
+  numberOfLines?: number;
+  listOrdering?: keyof ProductOmitImgAndID;
+  products?: Product[];
+  card?: {
+    hoverColor: string;
+    url: string;
+    button: boolean;
+  } & ProductBoolean<ProductOmitImgAndID>;
+  button?: {
+    text?: string;
+    textColor?: string;
+    bgColor?: string;
+    hoverColor?: string;
+  };
+};
+
+type ProductBoolean<T extends object> = Record<keyof T, boolean>;
+type ProductOmitImgAndID = Omit<Product, 'img' | 'id'>;
+
+export type ProductsDefault = {
+  filterTag: string;
+  layout: 'carousel' | 'grid';
+  autoSlide: boolean;
+  itemsPerLine: number;
+  numberOfLines: number;
+  listOrdering: keyof ProductOmitImgAndID;
+  card: {
+    hoverColor: string;
+    url: string;
+    button: boolean;
+  } & ProductBoolean<ProductOmitImgAndID>;
+  button: {
+    textColor: string;
+    bgColor: string;
+    hoverColor: string;
+  };
+};
+
+export type Product = {
+  id: string;
+  img: string;
+  name: string;
+  category: string;
+  description: string;
+  price: string;
 };
 
 export type SlideContentDefault = {
