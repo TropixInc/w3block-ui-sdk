@@ -25,8 +25,7 @@ export const Banner = ({
   const layout = data.layout || defaultData.layout;
   const ratio = data.ratio || defaultData.ratio;
 
-  const layoutClass =
-    layout === 'full_width' ? 'pw-w-full' : 'pw-max-w-[1200px]';
+  const layoutClass = layout === 'full_width' ? 'pw-w-full' : 'pw-container';
   const aspectRatioClass = ratios[ratio];
 
   return (
