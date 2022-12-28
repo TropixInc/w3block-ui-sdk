@@ -2,6 +2,7 @@ import classNames from 'classnames';
 
 import { Button } from '../../../shared/components/Buttons';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';
@@ -15,6 +16,7 @@ interface Props {
   proccessing?: boolean;
   contractAddress?: string;
   chainId?: string;
+  tokenName: string;
 }
 
 const cardClassName =
@@ -30,6 +32,7 @@ export const PassCard = ({
   proccessing = false,
   chainId,
   contractAddress,
+  tokenName,
 }: Props) => {
   const [translate] = useTranslation();
   const router = useRouter();
@@ -52,7 +55,7 @@ export const PassCard = ({
           </div>
 
           {image ? (
-            <img
+            <ImageSDK
               src={image}
               className="pw-w-full pw-h-[300px] pw-object-cover pw-rounded-[20px]"
               alt={name}
@@ -63,7 +66,10 @@ export const PassCard = ({
         </div>
 
         <div className={descriptionContainerClassName}>
-          <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate">
+          <p className="pw-text-black pw-font-semibold pw-text-base pw-leading-[22px] pw-truncate">
+            {tokenName}
+          </p>
+          <p className="pw-text-black pw-font-normal pw-text-sm pw-leading-[22px] pw-truncate">
             {name}
           </p>
         </div>

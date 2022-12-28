@@ -51,7 +51,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { pass } = useFlags();
 
   const userRoles = profile?.data.roles || [];
-  const isAdmin = userRoles.find((e) => e === 'admin' || e === 'superAdmin');
+  const isAdmin = Boolean(
+    userRoles.find((e) => e === 'admin' || e === 'superAdmin')
+  );
 
   useEffect(() => {
     const tabsDefault: TabsConfig[] = [
