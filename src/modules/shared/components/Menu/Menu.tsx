@@ -34,6 +34,7 @@ interface TabsConfig {
   icon: ReactNode;
   link: string;
   sub?: boolean;
+  isVisible: boolean;
 }
 
 const _Menu = ({ tabs, className }: MenuProps) => {
@@ -49,70 +50,64 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const [tabsToShow, setTabsToShow] = useState(tabs);
   const { pass } = useFlags();
 
-  const tabsDefault: TabsConfig[] = [
-    {
-      title: translate('components>menu>myProfile'),
-      icon: <UserIcon width={17} height={17} />,
-      link: PixwayAppRoutes.PROFILE,
-    },
-    {
-      title: translate('components>menu>myTokens'),
-      icon: <ImageIcon width={17} height={17} />,
-      link: PixwayAppRoutes.TOKENS,
-    },
-    {
-      title: translate('components>menu>wallet'),
-      icon: <CardIcon width={17} height={17} />,
-      link: PixwayAppRoutes.WALLET,
-    },
-    // {
-    //   title: translate('components>menu>settings'),
-    //   icon: <SettingsIcon width={17} height={17} />,
-    //   link: PixwayAppRoutes.SETTINGS,
-    // },
-    // {
-    //   title: translate('components>menu>help'),
-    //   icon: <HelpIcon width={17} height={17} />,
-    //   link: PixwayAppRoutes.HELP,
-    // },
-  ];
+  const userRoles = profile?.data.roles || [];
+  const isAdmin = userRoles.find((e) => e === 'admin' || e === 'superAdmin');
 
   useEffect(() => {
-    if (!tabs)
-      if (!isProduction) {
-        const tabsArr = [
-          {
-            title: translate('components>menu>dashboard'),
-            icon: <DashboardIcon width={17} height={17} />,
-            link: PixwayAppRoutes.DASHBOARD,
-          },
-          {
-            title: translate('components>menu>clients'),
-            icon: <DashIcon width={17} height={17} />,
-            link: PixwayAppRoutes.TOKENS_CLIENTS,
-            sub: true,
-          },
-          ...tabsDefault,
-        ];
+    const tabsDefault: TabsConfig[] = [
+      {
+        title: translate('components>menu>dashboard'),
+        icon: <DashboardIcon width={17} height={17} />,
+        link: PixwayAppRoutes.DASHBOARD,
+        isVisible: !isProduction,
+      },
+      {
+        title: translate('components>menu>myProfile'),
+        icon: <UserIcon width={17} height={17} />,
+        link: PixwayAppRoutes.PROFILE,
+        isVisible: true,
+      },
+      {
+        title: translate('components>menu>myTokens'),
+        icon: <ImageIcon width={17} height={17} />,
+        link: PixwayAppRoutes.TOKENS,
+        isVisible: true,
+      },
+      {
+        title: translate('components>menu>clients'),
+        icon: <DashIcon width={17} height={17} />,
+        link: PixwayAppRoutes.TOKENS_CLIENTS,
+        isVisible: !isProduction,
+        sub: true,
+      },
+      {
+        title: translate('components>menu>wallet'),
+        icon: <CardIcon width={17} height={17} />,
+        link: PixwayAppRoutes.WALLET,
+        isVisible: true,
+      },
+      {
+        title: translate('components>menu>tokenPass'),
+        icon: <TicketIcon width={17} height={17} />,
+        link: PixwayAppRoutes.TOKENPASS,
+        isVisible: pass && isAdmin,
+      },
+      // {
+      //   title: translate('components>menu>settings'),
+      //   icon: <SettingsIcon width={17} height={17} />,
+      //   link: PixwayAppRoutes.SETTINGS,
+      // },
+      // {
+      //   title: translate('components>menu>help'),
+      //   icon: <HelpIcon width={17} height={17} />,
+      //   link: PixwayAppRoutes.HELP,
+      // },
+    ];
 
-        if (pass) {
-          setTabsToShow([
-            ...tabsArr,
-            {
-              title: translate('components>menu>tokenPass'),
-              icon: <TicketIcon width={17} height={17} />,
-              link: PixwayAppRoutes.TOKENPASS,
-            },
-          ]);
-        } else {
-          setTabsToShow(tabsArr);
-        }
-      } else {
-        setTabsToShow(tabsDefault);
-      }
+    if (!tabs) setTabsToShow(tabsDefault);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pass]);
+  }, [pass, profile]);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);
@@ -193,7 +188,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           )}
         </div>
         <ul className="pw-mx-auto pw-w-[248px]">
-          {tabsToShow?.map(RenderTab)}
+          {tabsToShow?.map((e) => e.isVisible && RenderTab(e))}
           <button
             onClick={handleSignOut}
             className="group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-w-full pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 pw-stroke-[#383857] hover:pw-stroke-brand-primary"
