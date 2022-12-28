@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { useEffectOnce } from 'react-use';
 
-import { Template, TemplateData } from '../../interfaces';
+import { ProductsData, Template, TemplateData } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
 interface IThemeContext {
@@ -77,7 +77,41 @@ const sampleTemplate: Template = {
     bgColor: '',
     textColor: '',
   },
+  products: {
+    layout: 'carousel',
+    autoSlide: false,
+    itemsPerLine: 4,
+    numberOfLines: 4,
+    filterTag: 'best_seller',
+    card: {
+      category: true,
+      description: true,
+      name: true,
+      price: true,
+      hoverColor: 'white',
+      button: true,
+      url: '',
+    },
+    listOrdering: 'name',
+    button: {
+      bgColor: 'black',
+      hoverColor: 'white',
+      textColor: 'red',
+    },
+  },
 };
+
+const products = new Array(45).fill(0).map((_, i) => {
+  return {
+    id: String(i + 1),
+    img: 'https://i.ibb.co/gr1Qkkc/product.png',
+    category: 'calçados',
+    description: 'Lorem ipsum dolor sit amet',
+    name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado',
+    hoverColor: 'white',
+    price: '237,65',
+  };
+});
 
 const sampleTemplateData: TemplateData = {
   title: 'Home page',
@@ -318,6 +352,35 @@ const sampleTemplateData: TemplateData = {
         ],
       },
     },
+    {
+      type: 'products',
+      props: {
+        title: 'Mais vendidos',
+        filterTag: 'best_seller',
+        layout: 'carousel',
+        autoSlide: false,
+        itemsPerLine: 3,
+        numberOfLines: 3,
+        listOrdering: 'name',
+        card: {
+          category: true,
+          description: false,
+          name: true,
+          price: true,
+          hoverColor: '#d4d7dc', //d4d7dc
+          button: true,
+          url: '',
+        },
+        button: {
+          text: 'Comprar',
+          bgColor: '#295BA6',
+          hoverColor: '#64748B', //64748B
+          textColor: '#ffffff',
+        },
+        products,
+      } as ProductsData,
+    },
   ],
+  // .filter(s => s.type === 'products'),
   // .filter(s => s.props?.ratio === '16:9'),
 };
