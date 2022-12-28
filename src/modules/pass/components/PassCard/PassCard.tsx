@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { Button } from '../../../shared/components/Buttons';
 import { FallbackImage } from '../../../shared/components/FallbackImage';
@@ -33,6 +34,7 @@ export const PassCard = ({
 }: Props) => {
   const [translate] = useTranslation();
   const router = useRouter();
+  const { pass } = useFlags();
 
   const query = `?chainId=${chainId}&contractAddress=${contractAddress}`;
 
@@ -45,11 +47,15 @@ export const PassCard = ({
     >
       <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[10px]">
         <div className="pw-relative pw-overflow-hidden pw-w-full">
-          <div className="pw-bg-white pw-absolute pw-left-[13px] pw-top-[14px] pw-rounded-full">
-            <div className="pw-bg-brand-primary/30 pw-text-brand-primary pw-text-[12px] pw-leading-[18px] pw-font-bold pw-border pw-border-brand-primary pw-rounded-full pw-py-1 pw-px-2">
-              {translate('connectTokens>tokensList>tokenPass')}
+          {pass ? (
+            <div className="pw-bg-white pw-absolute pw-left-[13px] pw-top-[14px] pw-rounded-full">
+              <div className="pw-bg-brand-primary/30 pw-text-brand-primary pw-text-[12px] pw-leading-[18px] pw-font-bold pw-border pw-border-brand-primary pw-rounded-full pw-py-1 pw-px-2">
+                {translate('connectTokens>tokensList>tokenPass')}
+              </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
 
           {image ? (
             <img
