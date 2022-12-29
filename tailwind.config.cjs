@@ -5,9 +5,7 @@ module.exports = {
   ],
   theme: {
     screens: {
-      xs: '300px',
-      sm: '640px',
-      md: '768px',
+      sm: '768px',
       lg: '1024px',
       xl: '1306px',
       x2l: '1440px',
@@ -48,7 +46,6 @@ module.exports = {
     extend: {
       text: ['odd', 'even'],
     },
-    display: ['group-hover'],
   },
   prefix: 'pw-',
   corePlugins: {
