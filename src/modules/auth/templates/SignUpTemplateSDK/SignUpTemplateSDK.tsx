@@ -31,6 +31,7 @@ interface SignUpTemplateSDKProps {
   privacyRedirect?: string;
   termsRedirect?: string;
   extraBy?: ExtraBy[];
+  hasSignUp?: boolean;
 }
 
 export const SignUpTemplateSDK = ({
@@ -40,6 +41,7 @@ export const SignUpTemplateSDK = ({
   FAQContext,
   separation,
   classes,
+  hasSignUp = true,
   logoUrl,
   textContainer,
   className = '',
@@ -73,6 +75,7 @@ export const SignUpTemplateSDK = ({
                 email={email}
                 onSubmit={onSubmit}
                 isLoading={isLoading}
+                hasSignUp={hasSignUp}
                 error={error}
                 privacyRedirect={privacyRedirect}
                 termsRedirect={termsRedirect}

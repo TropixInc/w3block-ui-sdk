@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "0.1.1-alpha.124",
+  "version": "0.1.1-alpha.134",
   "type": "module",
   "files": [
     "dist"
@@ -20,7 +20,6 @@
     "dev": "yarn build",
     "dev:watch": "tsc && vite build --watch",
     "build": "tsc && vite build",
-    "start": "vite --port 3000 --host",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "prepare": "husky install",

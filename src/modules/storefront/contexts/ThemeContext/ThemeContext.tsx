@@ -67,6 +67,7 @@ const sampleTemplate: Template = {
       overlayColor: 'white',
       subtitleColor: 'black',
       button: {
+        hrefType: 'internal',
         bgColor: 'blue',
         textColor: 'black',
       },
@@ -203,6 +204,7 @@ const sampleTemplateData: TemplateData = {
             button: {
               bgColor: 'white',
               href: 'https://example.com',
+              hrefType: 'internal',
               text: 'Clique aqui',
               textColor: '#353945',
             },
@@ -287,6 +289,7 @@ const sampleTemplateData: TemplateData = {
             button: {
               bgColor: 'white',
               href: 'https://example.com',
+              hrefType: 'internal',
               text: 'Clique aqui',
               textColor: '#353945',
             },
@@ -303,6 +306,7 @@ const sampleTemplateData: TemplateData = {
             button: {
               bgColor: 'white',
               href: 'https://example.com',
+              hrefType: 'external',
               text: 'Clique aqui',
               textColor: '#353945',
             },

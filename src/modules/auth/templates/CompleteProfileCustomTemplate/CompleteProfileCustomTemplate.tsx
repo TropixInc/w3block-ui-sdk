@@ -29,6 +29,7 @@ enum Steps {
 
 export interface AllAuthPageProps {
   bgColor?: string;
+  hasSignUp?: boolean;
   infoPosition?: position;
   contentType?: contentTypeEnum;
   FAQContext?: FAQContextEnum;

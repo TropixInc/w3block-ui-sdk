@@ -23,7 +23,7 @@ interface Props {
 
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
-  useHasWallet();
+  useHasWallet({});
   const { wallet } = useUserWallet();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -48,12 +48,12 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
     <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between pw-px-4 sm:pw-px-0">
       <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
         {data?.map((token) => (
-          <li className="w-full pw-opacity-60" key={token.id}>
+          <li className="w-full pw-opacity-60" key={token.id.tokenId}>
             <WalletTokenCard
               category={''}
-              image={token.tokenCollection.mainImage}
-              name={token.tokenCollection.name}
-              id={token.id}
+              image={token?.metadata.image}
+              name={token?.title}
+              id={token.id.tokenId}
               chainId={wallet?.chainId ?? 80001}
               contractAddress={''}
               hasPass={!isProduction}

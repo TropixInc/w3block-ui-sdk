@@ -2,7 +2,7 @@
 import { ReactNode, useMemo, useState } from 'react';
 import { useBoolean } from 'react-use';
 
-import { format, compareAsc } from 'date-fns';
+import { compareAsc, format } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { QrCodeReader } from '../../../shared/components/QrCodeReader';
@@ -13,7 +13,6 @@ import {
 import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
-import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { Button } from '../../../tokens/components/Button';
 import GenericTable, {
   ColumnType,
@@ -33,40 +32,38 @@ interface TableRow {
   action: ReactNode;
 }
 
-interface formatAddressProps {
+export interface formatAddressProps {
   type: TokenPassBenefitType;
   benefit: PassBenefitDTO;
 }
 
 export const PassesDetail = () => {
-  const user = useSessionUser();
   const isMobile = useIsMobile();
   const router = useRouter();
   const tokenPassId = String(router.query.tokenPassId) || '';
   const chainId = String(router.query.chainId) || '';
-  const contractAddress = String(router.query.contractAddress) || '';
+  const contractAddress = String(router.query.contractAddress) || ''
 
   const [showScan, setOpenScan] = useBoolean(false);
   const [showSuccess, setShowSuccess] = useBoolean(false);
   const [showError, setShowError] = useBoolean(false);
   const [error, setError] = useState<TypeError>(TypeError.read);
-  const [benefitSelectedId, setBenefitSelected] = useState('');
+  const [benefitId, setBenefitId] = useState('');
   const { pass } = useFlags();
 
   const { data: tokenPass } = useGetPassById(tokenPassId);
 
   const { mutate: registerUse } = usePostBenefitRegisterUse();
-  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenId: tokenPassId, chainId, contractAddress });
-
+  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
 
   const formatedData = useMemo(() => {
-    const data = benefits?.data.items.map((benefit) => {
+    const data = benefits?.data?.items?.map((benefit) => {
       const period = benefit?.eventEndsAt ?
         format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') + ' - ' +
         format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
 
       const handleAction = () => {
-        setBenefitSelected(benefit.tokenPassId)
+        setBenefitId(benefit?.id);
         setOpenScan()
       }
 
@@ -118,12 +115,14 @@ export const PassesDetail = () => {
 
   const validatePassToken = (secret: string) => {
 
+    const secretItems = secret.split(';');
+
     registerUse(
       {
-        secret,
-        benefitId: benefitSelectedId,
-        userId: user?.id ?? '',
-        tokenId: benefitSelectedId,
+        secret: secretItems[2],
+        userId: secretItems[1],
+        editionNumber: secretItems[0],
+        benefitId: benefitId,
       },
       {
         onSuccess: () => {
@@ -182,7 +181,9 @@ export const PassesDetail = () => {
           <QrCodeValidated
             hasOpen={showSuccess}
             onClose={() => setShowSuccess(false)}
-            collectionId={tokenPassId} />
+            tokenPassId={tokenPassId}
+            chainId={chainId}
+            contractAddress={contractAddress} />
           <QrCodeError
             hasOpen={showError}
             onClose={() => setShowError(false)}

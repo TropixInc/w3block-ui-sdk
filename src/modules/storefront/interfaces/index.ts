@@ -123,6 +123,7 @@ export type SlideContentDefault = {
   button: {
     textColor: string;
     bgColor: string;
+    hrefType: 'internal' | 'external';
   };
 };
 export type SlideContentData = {
@@ -137,6 +138,7 @@ export type SlideContentData = {
   button?: {
     text?: string;
     href?: string;
+    hrefType?: 'internal' | 'external';
     textColor?: string;
     bgColor?: string;
   };

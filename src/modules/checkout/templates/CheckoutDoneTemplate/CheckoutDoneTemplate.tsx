@@ -1,4 +1,5 @@
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { CheckoutStatus } from '../../components';
@@ -18,6 +19,7 @@ export const CheckoutDoneTemplate = ({
 }: CheckoutDoneTemplateProps) => {
   const router = useRouterConnect();
   const { isAuthorized, isLoading } = usePrivateRoute();
+  useHasWallet({});
   return !isAuthorized || isLoading ? null : (
     <>
       <CheckoutHeader

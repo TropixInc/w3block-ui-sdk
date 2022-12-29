@@ -14,6 +14,7 @@ export enum PixwayAppRoutes {
   RESET_PASSWORD = '/auth/changePassword/newPassword',
   TOKEN_DETAILS = '/tokens/{contractAddress}/{chainId}/{tokenId}',
   TOKENS = '/tokens',
+  TOKENS_CLIENTS = '/tokens/clients',
   TOKENPASS = '/tokens/pass',
   TOKENPASS_DETAIL = '/tokens/pass/{tokenPassId}',
   TOKENPASS_CLIENTS = '/tokens/pass/client',
@@ -38,4 +39,5 @@ export enum PixwayAppRoutes {
   ADD_FUNDS_MANUAL = '/addFunds/type/manual',
   VERIfY_WITH_CODE = '/auth/verify-sign-up/code',
   LIST_BENEFITS = '/tokens/{contractAddress}/{chainId}/{tokenId}/list-benefits',
+  USE_BENEFIT = '/tokens/use-benefit/{benefitId}',
 }

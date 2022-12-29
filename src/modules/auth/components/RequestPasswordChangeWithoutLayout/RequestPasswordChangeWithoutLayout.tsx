@@ -17,7 +17,13 @@ interface Form {
   email: string;
 }
 
-export const RequestPasswordChangeWithoutLayout = () => {
+interface RequestPasswordChangeWithoutLayoutProps {
+  hasSignUp?: boolean;
+}
+
+export const RequestPasswordChangeWithoutLayout = ({
+  hasSignUp = true,
+}: RequestPasswordChangeWithoutLayoutProps) => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
@@ -86,14 +92,16 @@ export const RequestPasswordChangeWithoutLayout = () => {
               translate(
                 'companyAuth>requestPasswordChange>emailDoesntExistError'
               ) ? (
-                <a
-                  href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
-                  className="pw-font-poppins pw-text-xs pw-leading-[18px] pw-underline pw-text-[##353945]"
-                >
-                  {translate(
-                    'changePasswordPage>emailDontExistErrorTip>signUpLink'
-                  )}
-                </a>
+                hasSignUp ? (
+                  <a
+                    href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
+                    className="pw-font-poppins pw-text-xs pw-leading-[18px] pw-underline pw-text-[##353945]"
+                  >
+                    {translate(
+                      'changePasswordPage>emailDontExistErrorTip>signUpLink'
+                    )}
+                  </a>
+                ) : null
               ) : null}
             </div>
           )}

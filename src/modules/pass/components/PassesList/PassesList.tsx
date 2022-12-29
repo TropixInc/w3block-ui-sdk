@@ -1,5 +1,6 @@
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
+import { InternalPagesLayoutBase } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { TokenListTemplateSkeleton } from '../../../tokens/components/TokensListTemplate/Skeleton';
 import useGetPassByUser from '../../hooks/useGetPassByUser';
@@ -40,7 +41,9 @@ export const PassesList = () => {
   const { pass } = useFlags();
   return (
     <TranslatableComponent>
-      {pass ? <_PassesList /> : null}
+      <InternalPagesLayoutBase>
+        {pass ? <_PassesList /> : null}
+      </InternalPagesLayoutBase>
     </TranslatableComponent>
   );
 };

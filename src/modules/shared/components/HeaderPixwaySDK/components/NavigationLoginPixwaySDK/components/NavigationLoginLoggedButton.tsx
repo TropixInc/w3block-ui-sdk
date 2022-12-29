@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {
   ReactNode,
-  useContext,
-  useEffect, useRef,
+  useContext, useEffect, useRef,
   useState,
 } from 'react';
 import { useClickAway } from 'react-use';
@@ -87,21 +86,37 @@ export const useDefaultMenuTabs = () => {
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
   const { pass } = useFlags();
 
-  const items = [
+  const { data: profile } = useProfile();
+  const userRoles = profile?.data.roles || [];
+  const isAdmin = Boolean(
+    userRoles?.includes('admin') || userRoles?.includes('superAdmin')
+  );
+
+  const items: NavigationMenuTabs[] = [
     {
       name: translate('header>components>defaultTab>myAccount'),
       route: PixwayAppRoutes.MY_PROFILE,
       icon: <UserIcon />,
+      isVisible: true,
     },
     {
       name: translate('header>components>defaultTab>myTokens'),
       route: PixwayAppRoutes.TOKENS,
       icon: <MyTokenIcon />,
+      isVisible: true,
     },
     {
       name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon />,
+      isVisible: true,
+    },
+    {
+      name: translate('header>components>defaultTab>tokenPass'),
+      route: PixwayAppRoutes.TOKENPASS,
+      icon: <TicketIcon width={17} height={17} />,
+      isVisible: pass && isAdmin,
+
     },
     // {
     //   name: translate('header>components>defaultTab>settings'),
@@ -121,22 +136,12 @@ export const useDefaultMenuTabs = () => {
           router.push(PixwayAppRoutes.SIGN_IN);
         });
       },
+      isVisible: true,
     },
   ];
 
   useEffect(() => {
-    setTabsToShow(
-      !isProduction && pass
-        ? [
-          ...items,
-          {
-            name: translate('header>components>defaultTab>tokenPass'),
-            route: PixwayAppRoutes.TOKENPASS,
-            icon: <TicketIcon width={17} height={17} />,
-          },
-        ]
-        : items
-    );
+    setTabsToShow(items);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isProduction, pass]);
 
@@ -169,7 +174,7 @@ const NavigationMenu = ({
     return (
       <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
         <div className="pw-flex">
-          <p className="pw-text-[10px] pw-font-montserrat pw-font-[500] pw-ml-[6px]">
+          <p className="pw-text-[10px] pw-font-montserrat pw-font-[500]">
             {wallet?.type === WalletTypes.Vault
               ? translate('header>logged>pixwayBalance')
               : translate('header>logged>metamaskBalance')}
@@ -216,7 +221,7 @@ const NavigationMenu = ({
         {hasMainWallet ? <WithWallet /> : <WithoutWallet />}
 
         <div className="pw-mt-[10px]">
-          {menuTabs.map((menu) => (
+          {menuTabs.map((menu) => menu.isVisible && (
             <a
               onClick={() => {
                 if (menu.route) {
@@ -226,7 +231,7 @@ const NavigationMenu = ({
                 }
               }}
               key={menu.name}
-              className="pw-flex pw-items-center pw-gap-x-2 pw-py-[8px] pw-border-b pw-border-[#EFEFEF] pw-cursor-pointer"
+              className="pw-flex pw-items-center pw-gap-x-2 pw-py-[8px] pw-border-b pw-border-[#EFEFEF] pw-cursor-pointer pw-stroke-[#383857]"
             >
               {menu.icon}
               <p className="pw-font-poppins pw-font-[400] pw-text-xs">

@@ -25,8 +25,7 @@ export const Banner = ({
   const layout = data.layout || defaultData.layout;
   const ratio = data.ratio || defaultData.ratio;
 
-  const layoutClass =
-    layout === 'full_width' ? 'pw-w-full' : 'pw-max-w-[1200px]';
+  const layoutClass = layout === 'full_width' ? 'pw-w-full' : 'pw-container';
   const aspectRatioClass = ratios[ratio];
 
   return (
@@ -78,6 +77,7 @@ const Slide = ({
   const columnAlignmentClass = columnAlignments[alignment];
   const alignmentTextClass = alignmentsText[alignment];
   const href = content.button?.href;
+  const hrefType = content.button?.hrefType || defaultContent.button.hrefType;
   const overlay = content.overlayColor || defaultContent.overlayColor;
 
   const mediaType = guessMediaType(content.media || '');
@@ -94,6 +94,7 @@ const Slide = ({
     : mediaType === 'image'
     ? `${overlayProp}, ${bg}`
     : overlayProp;
+  const videoClass = mediaType === 'video' && 'pw-absolute';
 
   return (
     <div
@@ -126,9 +127,7 @@ const Slide = ({
       )}
 
       <div
-        className={`pw-h-max pw-flex pw-flex-col ${columnAlignmentClass} ${
-          mediaType === 'video' && 'pw-absolute'
-        } pw-px-14 pw-py-8`}
+        className={`pw-h-max pw-flex pw-flex-col ${columnAlignmentClass} ${videoClass} pw-px-14 pw-py-8`}
       >
         <h2
           style={{ color: titleColor }}
@@ -143,7 +142,8 @@ const Slide = ({
           style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
           className="pw-border-none pw-text-base pw-rounded-[60px] pw-px-4 pw-py-1"
           onClick={() => {
-            window.open(href, '_blank')?.focus();
+            const target = hrefType === 'external' ? '_blank' : '_self';
+            window.open(href, target)?.focus();
           }}
         >
           {content.button?.text}

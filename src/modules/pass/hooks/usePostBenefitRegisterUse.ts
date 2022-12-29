@@ -7,7 +7,7 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 
 interface Payload {
   userId: string;
-  tokenId: string;
+  editionNumber: string;
   benefitId: string;
   secret: string;
 }
