@@ -31,6 +31,7 @@ interface Props {
   privacyRedirect?: string;
   termsRedirect?: string;
   title?: string;
+  hasSignUp?: boolean;
 }
 
 enum Steps {
@@ -46,6 +47,7 @@ export const SignUpFormWithoutLayout = ({
   privacyRedirect = 'https://w3block.io/en/privacy-policy',
   termsRedirect = 'https://w3block.io/en/terms',
   title,
+  hasSignUp = true,
 }: Props) => {
   const passwordSchema = usePasswordValidationSchema();
   const [translate] = useTranslation();
@@ -59,6 +61,11 @@ export const SignUpFormWithoutLayout = ({
     error: signUpError,
     isSuccess,
   } = useSignUp();
+
+  useEffect(() => {
+    if (!hasSignUp) router.pushConnect(PixwayAppRoutes.SIGN_IN);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasSignUp]);
 
   useEffect(() => {
     if (isSuccess) {

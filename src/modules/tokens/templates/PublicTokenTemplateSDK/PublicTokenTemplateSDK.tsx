@@ -5,6 +5,7 @@ import { ptBR } from 'date-fns/esm/locale';
 
 import { useRouterConnect } from '../../../shared';
 import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -47,6 +48,7 @@ const _PublicTokenTemplateSDK = ({
     } else if (!isLoading && (isError || !publicTokenResponse)) {
       router.pushConnect(PixwayAppRoutes.TOKENS);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, isLoading]);
 
   const Title = ({ title }: { title: string }) => {
@@ -83,10 +85,10 @@ const _PublicTokenTemplateSDK = ({
         <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4">
           <div className="pw-flex-1 pw-mr-6">
             <Title title="Imagem principal:" />
-            <img
-              className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
+            <ImageSDK
+              controls={true}
               src={publicTokenResponse?.data?.information?.mainImage ?? ''}
-              alt=""
+              className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
             />
           </div>
           <div className="pw-flex-1">

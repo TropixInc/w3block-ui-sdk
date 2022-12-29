@@ -1,6 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
-
-import { useRouterConnect } from '../../hooks/useRouterConnect';
+import { ReactNode } from 'react';
 
 export interface LinkProps {
   children: ReactNode;
@@ -19,21 +17,10 @@ export const Link = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   itemProp = '',
 }: LinkProps) => {
-  const router = useRouterConnect();
-  const onClickLink: MouseEventHandler<HTMLAnchorElement> = (event) => {
-    event.preventDefault();
-    router.push(href);
-  };
-
   return disabled ? (
     <div className={className}>{children}</div>
   ) : (
-    <a
-      aria-disabled={disabled}
-      href={href}
-      onClick={onClickLink}
-      className={className}
-    >
+    <a aria-disabled={disabled} href={href} className={className}>
       {children}
     </a>
   );

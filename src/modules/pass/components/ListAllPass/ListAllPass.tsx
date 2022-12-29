@@ -50,7 +50,10 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
 
   const { data: publicTokenResponse } = usePublicTokenData(payload);
 
-  const { data: benefitsList } = useGetPassBenefitsByContractToken(payload);
+  const { data: benefitsList } = useGetPassBenefitsByContractToken({
+    editionNumber: publicTokenResponse?.data?.edition?.currentNumber,
+    collectionId: publicTokenResponse?.data?.group?.collectionId,
+  });
 
   const isProduction = useIsProduction();
   const isDevelopment = !isProduction;

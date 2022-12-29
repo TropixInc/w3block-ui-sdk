@@ -105,7 +105,7 @@ export const SigInWithoutLayout = ({
         companyId,
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (!(response as any)?.ok) showErrorMessage();
+      if (response.error && response?.error != '') showErrorMessage();
     } catch {
       showErrorMessage();
     } finally {

@@ -2,19 +2,21 @@ import { useQuery } from 'react-query';
 
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
+import { MediaInterface, MetadataInterface } from '../../interface';
 import { useAxios } from '../useAxios';
 import { useUserWallet } from '../useUserWallet';
 
 interface TokensProccessingInterface {
-  id: string;
-  editionNumber: string;
-  tokenCollection: TokenCollectionInterface;
-}
-
-interface TokenCollectionInterface {
-  name: string;
+  contract: {
+    address: string;
+  };
+  id: {
+    tokenId: string;
+  };
+  title: string;
   description: string;
-  mainImage: string;
+  media: MediaInterface[];
+  metadata: MetadataInterface;
 }
 
 export const useProcessingTokens = () => {

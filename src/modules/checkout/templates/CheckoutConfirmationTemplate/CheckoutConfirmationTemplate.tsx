@@ -1,3 +1,4 @@
+import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
@@ -17,6 +18,7 @@ export const CheckoutConfirmationTemplate = ({
   currencyId,
 }: CheckoutConfirmationTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
+  useHasWallet({});
   return !isAuthorized || isLoading ? null : (
     <>
       <CheckoutHeader onClick={returnTo} />

@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "0.1.1-alpha.124",
+  "version": "0.1.1-alpha.134",
   "type": "module",
   "files": [
     "dist"
@@ -46,6 +46,7 @@
     "react-i18next": "^11.18.1",
     "react-pdf": "^5.7.2",
     "react-use": "^17.4.0",
+    "swiper": "^8.4.5",
     "yup": "^0.32.11"
   },
   "devDependencies": {

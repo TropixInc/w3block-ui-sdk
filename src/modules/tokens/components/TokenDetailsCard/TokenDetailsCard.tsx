@@ -6,6 +6,10 @@ import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
 import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
+import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
+import { useRouterConnect } from '../../../shared';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -36,6 +40,9 @@ interface Props {
   className?: string;
   isMultiplePass?: boolean;
   benefitsList?: BenefitsResponse;
+  chainId?: string;
+  contractAddress?: string;
+  tokenId?: string;
 }
 
 export const TokenDetailsCard = ({
@@ -48,6 +55,7 @@ export const TokenDetailsCard = ({
   className = '',
   isMultiplePass = false,
   benefitsList,
+  tokenId = '',
 }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
@@ -56,6 +64,12 @@ export const TokenDetailsCard = ({
     tokenTemplate
   );
   const { pass } = useFlags();
+
+  const router = useRouterConnect();
+
+  const queryParams = {
+    tokenId,
+  };
 
   const renderTextValue = (label: string, value: string) => (
     <TextFieldDisplay label={label} value={value} inline />
@@ -96,9 +110,21 @@ export const TokenDetailsCard = ({
     }
   };
 
-  const handleButtonToShow = (status: BenefitStatus) => {
+  const handleButtonToShow = (status: BenefitStatus, id: string) => {
     if (status == BenefitStatus.active) {
-      return <Button>{translate('token>pass>benefits>useBenefit')}</Button>;
+      return (
+        <Button
+          onClick={() =>
+            router.pushConnect(
+              PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', id).concat(
+                transformObjectToQuery(queryParams)
+              )
+            )
+          }
+        >
+          {translate('token>pass>benefits>useBenefit')}
+        </Button>
+      );
     } else {
       return (
         <Button variant="secondary">
@@ -116,14 +142,14 @@ export const TokenDetailsCard = ({
       : handleLocal(benefit.type),
     date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
     status: <StatusTag status={benefit.status} />,
-    actionComponent: handleButtonToShow(benefit.status),
+    actionComponent: handleButtonToShow(benefit.status, benefit.id),
   }));
 
   const mobileTableData = benefitsList?.items?.map((benefit) => ({
     name: benefit?.name,
     type: benefit?.type,
     status: <StatusTag status={benefit?.status} />,
-    actionComponent: handleButtonToShow(benefit?.status),
+    actionComponent: handleButtonToShow(benefit?.status, benefit.id),
   }));
 
   return (
@@ -170,13 +196,14 @@ export const TokenDetailsCard = ({
           ) : (
             <div className="pw-hidden sm:pw-block" />
           )}
-          {!!mainImage && (
-            <img
+          <div className="pw-flex pw-justify-center">
+            <ImageSDK
+              controls={true}
+              className="pw-max-w-full pw-max-h-[351px] pw-object-contain pw-rounded-[12px] pw-overflow-hidden pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
               src={mainImage}
               alt=""
-              className="pw-w-[432px] pw-h-[351px] pw-object-contain pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
             />
-          )}
+          </div>
         </div>
       ) : null}
       <LineDivider />

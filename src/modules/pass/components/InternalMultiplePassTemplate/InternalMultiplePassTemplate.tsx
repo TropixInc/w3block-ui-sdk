@@ -33,7 +33,7 @@ const _InternalMultiplePassTemplate = () => {
       contract={publicTokenResponse?.data?.information?.contractName}
       description={publicTokenResponse?.data?.information?.description}
       title={publicTokenResponse?.data?.information?.title}
-      mainImage={publicTokenResponse?.data?.information.mainImage ?? ''}
+      mainImage={publicTokenResponse?.data?.information?.mainImage ?? ''}
       className="pw-mb-6"
       isMultiplePass={true}
     />
