@@ -2,25 +2,19 @@ export interface TemplateData {
   title: string;
   items: {
     type: keyof Template;
-    props: HeaderData | BannerData | HeroData | FooterData;
+    props: HeaderData | BannerData | FooterData;
   }[];
 }
 
-export type DefaultDataProps =
-  | HeaderProps
-  | BannerProps
-  | HeroProps
-  | FooterProps;
+export type DefaultDataProps = HeaderProps | BannerProps | FooterProps;
 
 type HeaderProps = { data: HeaderData; defaultData: HeaderDefault };
 type BannerProps = { data: BannerData; defaultData: BannerDefault };
 type FooterProps = { data: FooterData; defaultData: FooterDefault };
-type HeroProps = { data: HeroData; defaultData: HeroDefault };
 
 export interface Template {
   header: HeaderDefault;
   banner: BannerDefault;
-  hero: HeroDefault;
   footer: FooterDefault;
 }
 
@@ -47,37 +41,45 @@ export type BannerDefault = {
   textColor: string;
 };
 
-export type HeroData = {
-  data?: string;
-};
-
-export type HeroDefault = {
-  data: string;
-};
-
 export type FooterData = {
   bgColor?: string;
   textColor?: string;
-  links?: Link[];
-  defaultSocialNetworks?: SocialNetwork[];
   description?: string;
+
+  menuTextColor?: string;
+  menuHoverColor?: string;
+  menuLinks?: Link[];
+
+  socialNetworkIconColor?: string;
+  socialNetworkIconHoverColor?: string;
+  socialNetworks?: SocialNetwork[];
 };
 
 export type FooterDefault = {
   bgColor: string;
   textColor: string;
+  menuTextColor: string;
+  menuHoverColor: string;
+  socialNetworkIconColor: string;
+  socialNetworkIconHoverColor: string;
 };
 
 type CategoryItem = { label: string; slug: string };
+
 type Link = {
   label: string;
   type: 'internal' | 'external';
   value: string;
-  newWindow: boolean;
 };
 
-type SocialNetwork = {
-  id: string;
-  url: string;
-  type: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'whatsapp' | 'url';
-};
+type SocialNetwork = { url: string; type: SocialNetworkType };
+
+export type SocialNetworkType =
+  | 'twitter'
+  | 'telegram'
+  | 'discord'
+  | 'instagram'
+  | 'facebook'
+  | 'linkedin'
+  | 'whatsapp'
+  | 'website';
