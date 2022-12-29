@@ -5,6 +5,8 @@ import { useDebounce } from 'react-use';
 import { format, getDay } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
+import { InternalPagesLayoutBase } from '../../../shared';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -16,7 +18,7 @@ import { BaseTemplate } from '../BaseTemplate';
 import { TableBase } from '../TableBase';
 import { dataMoked } from './dataMoked';
 
-export const ClientTemplate = () => {
+const _ClientTemplate = () => {
   const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`;
   const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
   const token = {
@@ -169,3 +171,13 @@ const validStatus: ValidStatusProps[] = [
     statusColor: '#ED4971',
   },
 ];
+
+export const ClientTemplate = () => {
+  return (
+    <TranslatableComponent>
+      <InternalPagesLayoutBase>
+        <_ClientTemplate />
+      </InternalPagesLayoutBase>
+    </TranslatableComponent>
+  );
+};
