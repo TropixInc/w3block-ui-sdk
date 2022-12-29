@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { useEffectOnce } from 'react-use';
 
-import { Template, TemplateData } from '../../interfaces';
+import { FooterData, Template, TemplateData } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
 interface IThemeContext {
@@ -61,12 +61,13 @@ const sampleTemplate: Template = {
     bgColor: 'rgba(255,127,127,0.5)',
     textColor: 'rgba(20,10,255,1)',
   },
-  hero: {
-    data: 'text',
-  },
   footer: {
-    bgColor: 'rgba(255,127,127,0.5)',
-    textColor: 'rgba(20,10,255,1)',
+    bgColor: 'pink',
+    textColor: 'red',
+    menuHoverColor: 'rgba(20,10,255,1)',
+    menuTextColor: 'rgba(10,10,255,1)',
+    socialNetworkIconColor: 'blue',
+    socialNetworkIconHoverColor: 'rgba(20,10,255,1)',
   },
 };
 
@@ -74,88 +75,73 @@ const sampleTemplateData: TemplateData = {
   title: 'Home page',
   items: [
     {
-      type: 'header',
-      props: {
-        brandText: 'W3block Storefront Custom',
-        bgColor: 'rgba(255,127,127,0.5)',
-        textColor: 'rgba(20,10,255,1)',
-        links: [
-          {
-            label: 'Sobre',
-            type: 'internal',
-            value: 'about',
-            newWindow: false,
-          },
-          {
-            label: 'Nossos parceiros',
-            type: 'external',
-            value: 'https://www.nossosparceiros.com.br',
-            newWindow: true,
-          },
-        ],
-      },
-    },
-    {
       type: 'footer',
       props: {
-        bgColor: 'rgba(20,10,255,1)',
-        textColor: '#fff',
+        bgColor: '#0050FF',
+        textColor: '#FFF',
         description:
           'O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.',
-        links: [
+        menuTextColor: '#FFF',
+        menuHoverColor: '#333',
+        menuLinks: [
           {
             label: 'Política de privacidade',
             type: 'external',
             value: 'privacy',
-            newWindow: true,
           },
           {
             label: 'Termos e condições',
             type: 'internal',
             value: 'terms_conditions',
-            newWindow: false,
           },
           {
             label: 'FAQ',
             type: 'external',
             value: 'FAQ',
-            newWindow: true,
           },
           {
             label: 'Fale conosco',
             type: 'external',
             value: 'contact',
-            newWindow: true,
           },
         ],
-        defaultSocialNetworks: [
+        socialNetworkIconColor: '#000',
+        socialNetworkIconHoverColor: '#333',
+        socialNetworks: [
           {
-            id: 'facebook',
-            url: '',
-            type: 'facebook',
-          },
-          {
-            id: 'twitter',
-            url: '',
+            url: 'https://twitter.com/',
             type: 'twitter',
           },
           {
-            id: 'whatsapp',
-            url: '',
-            type: 'whatsapp',
+            url: 'https://web.telegram.org/',
+            type: 'telegram',
           },
           {
-            id: 'linkedin',
-            url: '',
+            url: 'https://discord.com/',
+            type: 'discord',
+          },
+          {
+            url: 'https://www.instagram.com/',
+            type: 'instagram',
+          },
+          {
+            url: 'https://www.facebook.com/',
+            type: 'facebook',
+          },
+          {
+            url: 'https://www.linkedin.com/',
             type: 'linkedin',
           },
           {
-            id: 'link',
-            url: '',
-            type: 'url',
+            url: 'https://www.whatsapp.com/',
+            type: 'whatsapp',
+          },
+          {
+            url: 'https://example.com/',
+            type: 'website',
           },
         ],
-      },
+      } satisfies FooterData,
     },
   ],
 };
