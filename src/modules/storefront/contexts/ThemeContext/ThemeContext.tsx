@@ -91,8 +91,8 @@ const sampleTemplateData: TemplateData = {
     {
       type: 'menu',
       props: {
-        bgColor: 'darkred',
-        textColor: 'gold',
+        bgColor: '#0050FF',
+        textColor: 'white',
         categories: [
           {
             label: 'Vestuário',

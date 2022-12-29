@@ -1,6 +1,6 @@
-import React from 'react';
+import { useToggle } from 'react-use';
 
-import { Link } from '../../shared/components/Link';
+import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/arrowDownLine.svg';
 import { MenuData, MenuDefault } from '../interfaces';
 
 export const Menu = ({
@@ -10,99 +10,65 @@ export const Menu = ({
   data: MenuData;
   defaultData: MenuDefault;
 }) => {
-  const color = data.bgColor || defaultData.textColor;
-  const categories = data.categories || defaultData.categories;
+  const [isMenuOpen, toggleMenu] = useToggle(false);
+
+  const bgColor = data?.bgColor || defaultData.menuBgColor;
+  const textColor = data?.textColor || defaultData.menuTextColor;
+  const categories = data?.categories;
 
   return (
     <div
-      style={{ backgroundColor: color }}
-      className="pw-w-full pw-px-5 absolute pw-h-57"
+      style={{ backgroundColor: bgColor, color: textColor }}
+      className="pw-w-full pw-px-5 absolute pw-h-57 pw-font-poppins"
     >
       <div className="pw-flex pw-justify-center pw-gap-2 pw-py-3 pw-items-center">
         <button
-          id="dropdownDefault"
-          data-dropdown-toggle="dropdown"
-          className="pw-text-white md:pw-w-44 xs:pw-w-52 pw-h-10 pw-gap-2 pw-justify-center pw-bg-transparent pw-rounded-3xl pw-text-sm sm:pw-px-4 pw-text-center pw-inline-flex pw-items-center pw-border-white pw-cursor-pointer"
-          type="button"
+          style={{ color: textColor }}
+          className="pw-border pw-border-solid pw-border-transparent pw-border-[#fff] md:pw-w-44 pw-h-10 pw-gap-2 pw-justify-center pw-bg-transparent pw-rounded-3xl pw-text-base pw-px-4 pw-text-center pw-items-center pw-cursor-pointer pw-inline-flex"
         >
-          ver tudo
-          <svg
-            className="w-fill-current pw-h-4 pw-w-4 pw-white"
-            fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-          </svg>
-          <div
-            id="dropdown"
-            className="pw-hidden pw-z-10 pw-w-52 bg-white pw-divide-y pw-divide-white dark:bg-gray-700 pw-rounded-none"
-          >
-            <ul
-              className="pw-py-1 text-sm pw-text-gray-700 dark:text-gray-200 group-hover:block"
-              aria-labelledby="dropdownDefault"
-            >
-              <li>
-                <Link
-                  href="#"
-                  className="pw-block pw-py-2 pw-list-none pw-px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  items
-                </Link>
-              </li>
-            </ul>
-          </div>
+          veja todos
+          <ArrowDownIcon />
         </button>
-        {categories?.map((nomes, index) => {
-          return (
-            <>
-              <div className="xs:pw-hidden sm:pw-block">
-                <ul key={index}>
-                  <li className="pw-list-none">
-                    <Link
-                      href={nomes.slug}
-                      className="pw-text-white pw-no-underline"
-                    >
-                      {nomes.label}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </>
-          );
-        })}
+
+        <div className="pw-hidden sm:pw-block">
+          <ul className="pw-flex">
+            {categories?.map((category) => {
+              return (
+                <li key={category.slug} className="pw-list-none pw-px-2">
+                  <a
+                    className="pw-no-underline pw-font-semibold"
+                    style={{ color: textColor }}
+                    href={category.slug}
+                  >
+                    {category.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
         <button
-          data-dropdown-toggle="dropdown"
-          className="pw-text-white md:pw-w-44 xs:pw-w-52 pw-h-10 pw-gap-2 pw-justify-center pw-bg-transparent pw-text-sm sm:pw-px-4 pw-py-2.5 pw-text-center pw-inline-flex pw-items-center pw-border-none pw-cursor-pointer"
-          type="button"
+          style={{ color: textColor }}
+          onClick={() => toggleMenu()}
+          className="pw-hidden sm:pw-inline-flex pw-relative md:pw-w-44 pw-h-10 pw-gap-2 pw-justify-center pw-bg-transparent pw-text-base pw-font-semibold pw-px-4 pw-py-2.5 pw-text-center pw-items-center pw-border-none pw-cursor-pointer"
         >
           Por atividade
-          <svg
-            className="w-fill-current pw-h-4 pw-w-4"
-            fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-          </svg>
-          <div
-            id="dropdown"
-            className="pw-hidden pw-z-10 pw-w-52 bg-white pw-rounded pw-divide-y pw-divide-white"
-          >
-            <ul
-              className="pw-py-1 text-sm pw-text-gray-700 dark:text-gray-200 group-hover:block"
-              aria-labelledby="dropdownDefault"
+          <ArrowDownIcon />
+          {isMenuOpen && (
+            <div
+              className="pw-absolute pw-top-10 pw-z-10 pw-drop-shadow-2xl pw-border-2 pw-border-blue-500 pw-px-6 pw-py-6 pw-flex pw-flex-col pw-justify-between pw-w-[164px]"
+              style={{ backgroundColor: bgColor }}
             >
-              <li>
-                <Link
-                  href="#"
-                  className="pw-block pw-py-2 pw-list-none pw-px-4 hover:bg-gray-100"
-                >
-                  items
-                </Link>
-              </li>
-            </ul>
-          </div>
+              {categories?.map((category) => {
+                return (
+                  <div key={category.slug} className="pw-py-4">
+                    {category.label}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </button>
       </div>
     </div>
