@@ -42,4 +42,5 @@ export enum PixwayAPIRoutes {
   PASS_BENEFIT_USE = '/token-pass-benefits/tenant/{tenantId}/{id}/use',
   TOKEN_PASS = '/token-passes/tenants/{tenantId}',
   WALLET_CONNECT = '/request-session-wallet-connect',
+  PASS_SECRET = '/token-pass-benefits/tenants/{tenantId}/{id}/{editionNumber}/secret',
 }

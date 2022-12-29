@@ -5,4 +5,5 @@ export interface NavigationMenuTabs {
   route?: string;
   icon?: ReactNode;
   action?: () => void;
+  isVisible: boolean;
 }

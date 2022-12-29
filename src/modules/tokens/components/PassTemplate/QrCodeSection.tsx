@@ -4,6 +4,7 @@ import { Trans } from 'react-i18next';
 import { add, compareDesc } from 'date-fns';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { useProfile } from '../../../shared';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenUsageTime } from './TokenUsageTime';
@@ -13,6 +14,8 @@ interface iQrCodeSection {
   eventDate: Date;
   hasExpiration?: boolean;
   setExpired: (i: boolean) => void;
+  editionNumber: string;
+  secret: string;
 }
 
 export const QrCodeSection = ({
@@ -20,15 +23,19 @@ export const QrCodeSection = ({
   eventDate,
   hasExpiration = true,
   setExpired,
+  editionNumber,
+  secret,
 }: iQrCodeSection) => {
-  const [codeQr, setCodeQr] = useState(0);
+  const [codeQr, setCodeQr] = useState('');
   const { setNewCountdown: setQrCountDown, ...qrCountDown } = useCountdown();
   const [translate] = useTranslation();
+
+  const { data: profile } = useProfile();
 
   useEffect(() => {
     if (qrCountDown.seconds === 0) {
       setQrCountDown(add(new Date(), { seconds: 60 }));
-      setCodeQr((codeQr) => codeQr + 1);
+      setCodeQr(`${editionNumber};${profile?.data?.id};${secret}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrCountDown.isActive]);
