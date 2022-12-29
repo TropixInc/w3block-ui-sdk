@@ -3,7 +3,8 @@ import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { DefaultDataProps, TemplateData } from '../interfaces';
-import { Banner, Header, Hero } from './Header';
+import { Banner } from './Banner';
+import { Header } from './Header';
 
 export const StorefrontPreview = () => {
   return (
@@ -56,6 +57,6 @@ const Storefront = () => {
 
 const componentMap = {
   header: Header,
+  categories: () => <></>,
   banner: Banner,
-  hero: Hero,
 };
