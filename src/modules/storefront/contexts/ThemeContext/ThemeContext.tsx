@@ -57,16 +57,9 @@ const sampleTemplate: Template = {
     bgColor: 'rgba(255,127,127,0.5)',
     textColor: 'rgba(20,10,255,1)',
   },
-  banner: {
-    bgColor: 'rgba(255,127,127,0.5)',
-    textColor: 'rgba(20,10,255,1)',
-  },
   menu: {
-    bgColor: 'rgba(255,127,127,0.5)',
-    textColor: 'rgba(20,10,255,1)',
-  },
-  hero: {
-    data: 'text',
+    menuBgColor: 'rgba(255,127,127,0.5)',
+    menuTextColor: 'rgba(20,10,255,1)',
   },
 };
 
@@ -98,8 +91,8 @@ const sampleTemplateData: TemplateData = {
     {
       type: 'menu',
       props: {
-        bgColor: 'rgba(20,10,255,1)',
-        textColor: '#fff',
+        bgColor: 'darkred',
+        textColor: 'gold',
         categories: [
           {
             label: 'Vestuário',

@@ -2,26 +2,18 @@ export interface TemplateData {
   title: string;
   items: {
     type: keyof Template;
-    props: HeaderData | BannerData | HeroData | MenuData;
+    props: HeaderData | MenuData;
   }[];
 }
 
-export type DefaultDataProps =
-  | HeaderProps
-  | BannerProps
-  | HeroProps
-  | MenuProps;
+export type DefaultDataProps = HeaderProps | MenuProps;
 
 type HeaderProps = { data: HeaderData; defaultData: HeaderDefault };
-type BannerProps = { data: BannerData; defaultData: BannerDefault };
 type MenuProps = { data: MenuData; defaultData: MenuDefault };
-type HeroProps = { data: HeroData; defaultData: HeroDefault };
 
 export interface Template {
   header: HeaderDefault;
-  banner: BannerDefault;
   menu: MenuDefault;
-  hero: HeroDefault;
 }
 
 export type HeaderData = {
@@ -36,11 +28,6 @@ export type HeaderDefault = {
   textColor: string;
 };
 
-export type BannerData = {
-  bgColor?: string;
-  textColor?: string;
-  categories?: CategoryItem[];
-};
 export type MenuData = {
   bgColor?: string;
   textColor?: string;
@@ -48,22 +35,8 @@ export type MenuData = {
 };
 
 export type MenuDefault = {
-  bgColor: string;
-  textColor: string;
-  categories?: CategoryItem[];
-};
-
-export type BannerDefault = {
-  bgColor: string;
-  textColor: string;
-};
-
-export type HeroData = {
-  data?: string;
-};
-
-export type HeroDefault = {
-  data: string;
+  menuBgColor: string;
+  menuTextColor: string;
 };
 
 type CategoryItem = { label: string; slug: string };
