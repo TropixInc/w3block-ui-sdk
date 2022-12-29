@@ -78,7 +78,7 @@ const sampleTemplateData: TemplateData = {
         description:
           'O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.',
         menuTextColor: '#FFF',
-        menuHoverColor: '#333',
+        menuHoverColor: 'red',
         menuLinks: [
           {
             label: 'Política de privacidade',
@@ -102,7 +102,7 @@ const sampleTemplateData: TemplateData = {
           },
         ],
         socialNetworkIconColor: '#000',
-        socialNetworkIconHoverColor: '#333',
+        socialNetworkIconHoverColor: 'red',
         socialNetworks: [
           {
             url: 'https://twitter.com/',
