@@ -2,19 +2,17 @@ export interface TemplateData {
   title: string;
   items: {
     type: keyof Template;
-    props: HeaderData | BannerData | FooterData;
+    props: HeaderData | FooterData;
   }[];
 }
 
-export type DefaultDataProps = HeaderProps | BannerProps | FooterProps;
+export type DefaultDataProps = HeaderProps | FooterProps;
 
 type HeaderProps = { data: HeaderData; defaultData: HeaderDefault };
-type BannerProps = { data: BannerData; defaultData: BannerDefault };
 type FooterProps = { data: FooterData; defaultData: FooterDefault };
 
 export interface Template {
   header: HeaderDefault;
-  banner: BannerDefault;
   footer: FooterDefault;
 }
 
@@ -26,17 +24,6 @@ export type HeaderData = {
 };
 
 export type HeaderDefault = {
-  bgColor: string;
-  textColor: string;
-};
-
-export type BannerData = {
-  bgColor?: string;
-  textColor?: string;
-  categories?: CategoryItem[];
-};
-
-export type BannerDefault = {
   bgColor: string;
   textColor: string;
 };
@@ -56,15 +43,13 @@ export type FooterData = {
 };
 
 export type FooterDefault = {
-  bgColor: string;
-  textColor: string;
+  footerBgColor: string;
+  footerTextColor: string;
   menuTextColor: string;
   menuHoverColor: string;
   socialNetworkIconColor: string;
   socialNetworkIconHoverColor: string;
 };
-
-type CategoryItem = { label: string; slug: string };
 
 type Link = {
   label: string;

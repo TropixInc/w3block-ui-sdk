@@ -57,13 +57,9 @@ const sampleTemplate: Template = {
     bgColor: 'rgba(255,127,127,0.5)',
     textColor: 'rgba(20,10,255,1)',
   },
-  banner: {
-    bgColor: 'rgba(255,127,127,0.5)',
-    textColor: 'rgba(20,10,255,1)',
-  },
   footer: {
-    bgColor: 'pink',
-    textColor: 'red',
+    footerBgColor: 'pink',
+    footerTextColor: 'red',
     menuHoverColor: 'rgba(20,10,255,1)',
     menuTextColor: 'rgba(10,10,255,1)',
     socialNetworkIconColor: 'blue',
