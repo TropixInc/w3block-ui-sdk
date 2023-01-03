@@ -27,7 +27,7 @@ import { ChipWallet } from './ChipWallet';
 
 const _WalletInternalTemplate = () => {
   const [showValue, toggleShowValue] = useToggle(false);
-  useHasWallet();
+  useHasWallet({});
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();

@@ -7,11 +7,11 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 
 export interface payload {
   userId: string;
-  tokenId: string;
+  editionNumber?: string;
   secret: string;
 }
 
-const usePostBenefitRegisterUse = () => {
+const usePostBenefitUse = () => {
   const axios = useAxios(W3blockAPI.PASS);
   const { companyId: tenantId } = useCompanyConfig();
 
@@ -23,4 +23,4 @@ const usePostBenefitRegisterUse = () => {
   );
 };
 
-export default usePostBenefitRegisterUse;
+export default usePostBenefitUse;

@@ -10,11 +10,15 @@ interface Response {
 }
 
 interface Props {
-  tokenId?: string;
+  tokenPassId?: string;
   chainId?: string;
   contractAddress?: string;
 }
-const useGetPassBenefits = ({ tokenId, chainId, contractAddress }: Props) => {
+const useGetPassBenefits = ({
+  tokenPassId,
+  chainId,
+  contractAddress,
+}: Props) => {
   const axios = useAxios(W3blockAPI.PASS);
   const { companyId: tenantId } = useCompanyConfig();
 
@@ -23,7 +27,7 @@ const useGetPassBenefits = ({ tokenId, chainId, contractAddress }: Props) => {
       PixwayAPIRoutes.PASS_BENEFIT.replace('{tenantId}', tenantId ?? ''),
       {
         params: {
-          tokenId: tokenId ?? '',
+          tokenPassId: tokenPassId ?? '',
           chainId: (chainId && parseInt(chainId)) ?? '',
           contractAddress: contractAddress ?? '',
         },

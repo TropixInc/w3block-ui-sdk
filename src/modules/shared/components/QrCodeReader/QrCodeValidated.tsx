@@ -1,8 +1,11 @@
+/* eslint-disable prettier/prettier */
+import { useMemo } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import { format, getDay } from 'date-fns';
 
-// import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
+import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
+import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { useProfile } from '../../../shared';
 import { ReactComponent as CheckCircledIcon } from '../../assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InformationCircledIcon } from '../../assets/icons/informationCircled.svg';
@@ -13,44 +16,45 @@ import { Button } from '../Buttons';
 
 interface iProps {
   hasOpen: boolean;
-  collectionId: string;
   onClose: () => void;
+  tokenPassId: string;
+  chainId: string;
+  contractAddress: string;
 }
 
-export const QrCodeValidated = ({ hasOpen, onClose }: iProps) => {
+export const QrCodeValidated = ({
+  hasOpen,
+  onClose,
+  chainId,
+  contractAddress,
+  tokenPassId,
+}: iProps) => {
   const router = useRouter();
 
   const { data: profile } = useProfile();
   const user = profile?.data;
 
-  // const { data } = useGetPassBenefits();
-  // console.log('useGetPass', data?.data);
-
-  const token = {
-    name: 'RIO World Skate Street World Championships',
-    type: 'unique',
-    id: '00000000000000000',
-    image:
-      'https://res.cloudinary.com/tropix-dev/image/upload/v1661523975/offpix-backend/927657fe-ea7d-40b6-a957-ff5f38f27daf/bd5a829c-9a56-44a8-b394-4fd6b4ba07fb.jpg',
-    detail: {
-      name: '0Lorem Ipsum is simply dummy text of the printing.',
-    },
-    address: {
-      name: 'Nome do endereço',
-      street: 'Praça da Tijuca Rio de Janeiro',
-      city: 'RJ',
-      country: 'Brazil',
-      rules: 'Lorem',
-      cabin: 'Camarote Bossa Nova',
-    },
-    startDate: '10/20/2022 14:30',
-  };
+  const { data: benefit } = useGetPassBenefits({
+    contractAddress,
+    chainId,
+    tokenPassId,
+  });
 
   const [translate] = useTranslation();
 
-  const eventDate = new Date(token.startDate);
+  const eventDate = useMemo(() => {
+    if (benefit?.data?.items[0]?.eventEndsAt) {
+      return new Date(benefit?.data?.items[0]?.eventEndsAt)
+    } else if (!benefit?.data?.items[0]?.eventEndsAt && benefit?.data?.items[0]?.eventStartsAt) {
+      return new Date(benefit?.data?.items[0]?.eventStartsAt)
+    } else {
+      return new Date()
+    }
+  }, [benefit?.data?.items]);
 
   useLockBodyScroll(hasOpen);
+
+  const time = `${new Date().getHours()}:${new Date().getMinutes()}`;
 
   return hasOpen ? (
     <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
@@ -73,7 +77,7 @@ export const QrCodeValidated = ({ hasOpen, onClose }: iProps) => {
           <CheckCircledIcon className="pw-w-[20px] pw-stroke-[#295BA6]" />
           <p className="pw-font-normal pw-text-[14px] pw-leading-[21px]">
             {translate('token>pass>validatedToken>checkInDone', {
-              time: '12h30',
+              time,
             })}
           </p>
         </div>
@@ -93,23 +97,31 @@ export const QrCodeValidated = ({ hasOpen, onClose }: iProps) => {
           <div className="pw-h-[119px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
           <div className="pw-flex pw-flex-col pw-justify-center">
             <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-              {token.name}
+              {benefit?.data?.items[0]?.name}
             </div>
-            <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-              {token.address.street}
-              {', '}
-              {token.address.city}
-              {' - '}
-              {token.address.country}
-            </div>
+            {benefit?.data?.items[0]?.type == TokenPassBenefitType.PHYSICAL &&
+              benefit?.data?.items[0] &&
+              benefit?.data?.items[0]?.tokenPassBenefitAddresses ? (
+              <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                {benefit?.data?.items[0]?.tokenPassBenefitAddresses[0]?.street}
+                {', '}
+                {benefit?.data?.items[0]?.tokenPassBenefitAddresses[0]?.city}
+              </div>
+            ) : (
+              <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                Online
+              </div>
+            )}
             <div className="pw-flex pw-gap-1">
               <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
                 {translate('token>pass>use')}
               </span>
               <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-                {token.type === 'unique'
+                {benefit?.data?.items[0]?.useLimit === 1
                   ? translate('token>pass>unique')
-                  : translate('token>pass>youStillHave', { quantity: 5 })}
+                  : translate('token>pass>youStillHave', {
+                    quantity: benefit?.data?.items[0]?.useLimit,
+                  })}
               </div>
             </div>
           </div>

@@ -33,6 +33,7 @@ export interface PublicTokenPageDTO {
     categoryId: string;
     subcategoryName: string;
     subcategoryId: string;
+    collectionId: string;
   };
   information: {
     title: string;

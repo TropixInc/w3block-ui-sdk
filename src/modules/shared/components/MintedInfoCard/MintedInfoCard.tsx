@@ -8,6 +8,7 @@ import { QRCodeModal } from '../../../tokens/components/QRCodeModal';
 import { TokenScanLink } from '../../../tokens/components/TokenScanLink';
 import useModalController from '../../../tokens/hooks/useDialogController';
 import { getPublicTokenPageURL } from '../../../tokens/utils/getPublicTokenPageURL';
+import { useRouterConnect } from '../../hooks';
 import useAdressBlockchainLink from '../../hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useChainScanLink } from '../../hooks/useChainScanLink/useChainScanLink';
 import useDateFnsLocale from '../../hooks/useDateFnsLocale/useDateFnsLocale';
@@ -41,6 +42,7 @@ export const MintedInfoCard = ({
   className = '',
 }: Props) => {
   const [translate] = useTranslation();
+  const router = useRouterConnect();
   const locale = useDateFnsLocale();
   const {
     closeModal: closeQRCodeModal,
@@ -71,7 +73,7 @@ export const MintedInfoCard = ({
       <div className="pw-w-full pw-flex pw-flex-col pw-items-center">
         <TokenScanLink
           label={translate('connect>tokenDetailsCard>tokenPublicPage')}
-          href={publicPageUrl}
+          href={router.routerToHref(publicPageUrl)}
           className="pw-justify-center sm:pw-justify-start pw-mb-4 sm:pw-mb-[11px] pw-font-medium"
         />
         <button
