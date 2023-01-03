@@ -11,7 +11,7 @@ export const Menu = ({
   data: MenuData;
   defaultData: MenuDefault;
 }) => {
-  const [isSeeAllMenuOpen, toggleSeeAllMenu] = useToggle(true);
+  const [isSeeAllMenuOpen, toggleSeeAllMenu] = useToggle(false);
   const [isByActivityMenuOpen, toggleByActivityMenu] = useToggle(false);
 
   const byActivityMenuRef = useRef<HTMLButtonElement>(null);
