@@ -1,12 +1,22 @@
+import {
+  CookiesData,
+  CookiesDefault,
+  CookiesProps,
+} from '../components/Cookies';
+
 export interface TemplateData {
   title: string;
   items: {
     type: keyof Template;
-    props: HeaderData | CategoryData | BannerData;
+    props: HeaderData | CategoryData | BannerData | CookiesData;
   }[];
 }
 
-export type DefaultDataProps = HeaderProps | CategoryProps | BannerProps;
+export type DefaultDataProps =
+  | HeaderProps
+  | CategoryProps
+  | BannerProps
+  | CookiesProps;
 
 type HeaderProps = { data: HeaderData; defaultData: HeaderDefault };
 type CategoryProps = { data: CategoryData; defaultData: CategoryDefault };
@@ -16,6 +26,7 @@ export interface Template {
   header: HeaderDefault;
   categories: CategoryDefault;
   banner: BannerDefault;
+  cookies: CookiesDefault;
 }
 
 export type HeaderData = {

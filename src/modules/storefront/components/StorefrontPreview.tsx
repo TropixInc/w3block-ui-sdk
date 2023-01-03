@@ -4,6 +4,7 @@ import { useEffectOnce } from 'react-use';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { DefaultDataProps, TemplateData } from '../interfaces';
 import { Banner } from './Banner';
+import { Cookies } from './Cookies';
 import { Header } from './Header';
 
 export const StorefrontPreview = () => {
@@ -51,6 +52,8 @@ const Storefront = () => {
           />
         );
       })}
+
+      <Copyright />
     </>
   );
 };
@@ -59,4 +62,13 @@ const componentMap = {
   header: Header,
   categories: () => <></>,
   banner: Banner,
+  cookies: Cookies,
+};
+
+const Copyright = () => {
+  return (
+    <div className="pw-w-full pw-grid pw-place-items-center pw-h-[42px] pw-bg-white pw-font-roboto pw-font-medium">
+      Copyright 2022 - [web/lock]
+    </div>
+  );
 };

@@ -78,6 +78,13 @@ const sampleTemplate: Template = {
     bgColor: '',
     textColor: '',
   },
+  cookies: {
+    cookiesBgColor: 'rgba(100, 133, 22, 1)',
+    cookiesButtonBgColor: 'rgba(9, 133, 22, 1)',
+    cookiesButtonTextColor: 'rgba(255, 34, 22, 1)',
+    cookiesTextColor: 'rgba(255, 133, 220, 1)',
+    privacyPolicyLinkColor: 'rgba(255, 133, 225, 1)',
+  },
 };
 
 const sampleTemplateData: TemplateData = {
@@ -320,6 +327,19 @@ const sampleTemplateData: TemplateData = {
             },
           },
         ],
+      },
+    },
+    {
+      type: 'cookies',
+      props: {
+        cookiesBgColor: '#DDE6F3',
+        cookiesTextColor: '#000',
+        cookiesButtonBgColor: '#0050FF',
+        cookiesButtonTextColor: '#FFF',
+        privacyPolicyLinkColor: '#0050FF',
+        privacyPolicyLink: 'https://example.com',
+        disclaimer:
+          'Nós utilizamos cookies e outras tecnologias semelhantes para coletar dados durante a navegação para melhorar a sua experiência em nossos serviços. Saiba mais em nossa',
       },
     },
   ],
