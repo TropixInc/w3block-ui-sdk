@@ -79,7 +79,7 @@ export const Footer = ({
 
           <div
             style={{ color: textColor }}
-            className="pw-flex pw-items-center pw-gap-1 pw-font-normal pw-text-sm pw-leading-[15px] pw-text-center sm:pw-mx-20 md:pw-mx-28"
+            className="pw-flex pw-items-center pw-gap-1 pw-font-normal pw-text-sm pw-leading-5 pw-text-center pw-px-20 sm:pw-px-28"
           >
             <p className="pw-text-center">{description}</p>
           </div>
