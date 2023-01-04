@@ -3,6 +3,7 @@ import { CSSProperties } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import {
   BannerData,
   BannerDefault,
@@ -13,7 +14,6 @@ import {
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import TranslatableComponent from '../../shared/components/TranslatableComponent';
 
 export const Banner = ({
   data,
