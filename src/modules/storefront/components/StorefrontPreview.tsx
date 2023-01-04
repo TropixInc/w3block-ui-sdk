@@ -68,7 +68,7 @@ const componentMap = {
 const Copyright = () => {
   return (
     <div className="pw-w-full pw-grid pw-place-items-center pw-h-[42px] pw-bg-white pw-font-roboto pw-font-medium">
-      Copyright 2022 - [web/lock]
+      Copyright {new Date().getFullYear()} - [web/lock]
     </div>
   );
 };
