@@ -319,5 +319,7 @@
   "connectWallet>metamaskError>app>description":"Apesar de estar dentro da Metamask, alguns erros ainda podem ocorrer devido a instabilidades dentro do aplicativo. Para contornar tal problema, sugerimos que:",
   "connectWallet>metamaskError>app>fristSuggestion":"Reinicie o aplicativo Metamask, colocando a url que se encontra agora",
   "connectWallet>metamaskError>app>copyUrl":"copiar url",
-  "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop."
+  "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop.",
+  "storefront>menu>dropdown>seeAll": "veja todos",
+  "storefront>menu>dropdown>byActivity": "Por atividade"
 }

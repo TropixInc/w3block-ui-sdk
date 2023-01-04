@@ -13,6 +13,7 @@ import {
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
 
 export const Banner = ({
   data,
@@ -29,30 +30,32 @@ export const Banner = ({
   const aspectRatioClass = ratios[ratio];
 
   return (
-    <div className={`${layoutClass} pw-mx-auto`}>
-      <Swiper
-        navigation
-        pagination
-        modules={[Navigation, Pagination]}
-        style={
-          {
-            '--swiper-pagination-color': '#F5F9FF',
-            '--swiper-navigation-color': '#F5F9FF',
-            '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
-          } as CSSProperties
-        }
-      >
-        {slides?.map((s) => (
-          <SwiperSlide key={JSON.stringify(s)}>
-            <Slide
-              content={s}
-              defaultContent={defaultData.slides}
-              ratioClassName={aspectRatioClass}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <TranslatableComponent>
+      <div className={`${layoutClass} pw-mx-auto`}>
+        <Swiper
+          navigation
+          pagination
+          modules={[Navigation, Pagination]}
+          style={
+            {
+              '--swiper-pagination-color': '#F5F9FF',
+              '--swiper-navigation-color': '#F5F9FF',
+              '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
+            } as CSSProperties
+          }
+        >
+          {slides?.map((s) => (
+            <SwiperSlide key={JSON.stringify(s)}>
+              <Slide
+                content={s}
+                defaultContent={defaultData.slides}
+                ratioClassName={aspectRatioClass}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </TranslatableComponent>
   );
 };
 
