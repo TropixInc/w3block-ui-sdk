@@ -4,35 +4,55 @@ import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Card } from '../../shared/components/Card';
-import { Product, ProductsData, ProductsDefault } from '../interfaces';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-export const Products = ({
-  data,
-  defaultData,
-}: {
-  data: ProductsData;
-  defaultData: ProductsDefault;
-}) => {
+// type AAA =Required<ProductsData> & { button: Required<ProductsData["button"]> }
+
+export const Products = (props: { data: ProductsProps }) => {
   // const [products, setProducts] = useState<Product[]>([]);
+  const {
+    layoutProducts,
+    itemsPerLine,
+    numberOfLines,
+    listOrdering,
+    filterTag,
+    autoSlide,
+    products,
+    title,
+    cardHoverColor,
+    cardUrl,
+    showCardButton,
+    showCardName,
+    showCardCategory,
+    showCardDescription,
+    showCardPrice,
+    buttonTextColor,
+    buttonText,
+    buttonBgColor,
+    buttonHoverColor,
+  } = props.data;
 
-  const layout = data?.layoutProducts || defaultData.layout;
-  const itemsPerLine = data?.itemsPerLine || defaultData.itemsPerLine;
-  const numberOfLines = data?.numberOfLines || defaultData.numberOfLines;
-  const listOrdering = data?.listOrdering || defaultData.listOrdering;
-  const filterTag = data?.filterTag || defaultData.filterTag;
-  const autoSlide = data?.autoSlide ?? defaultData.autoSlide;
-
-  const card = { ...defaultData.card, ...data?.card };
-  const button = { ...defaultData.button, ...data?.button };
+  const cardConfig = {
+    cardHoverColor,
+    cardUrl,
+    showCardButton,
+    showCardName,
+    showCardCategory,
+    showCardDescription,
+    showCardPrice,
+    buttonTextColor,
+    buttonText,
+    buttonBgColor,
+    buttonHoverColor,
+  };
 
   const gridMaxItemsTotal = itemsPerLine * numberOfLines;
   const carouselMaxItems = 12;
-  const clampedProducts = data.products?.slice(
+  const clampedProducts = products?.slice(
     0,
-    layout === 'grid' ? gridMaxItemsTotal : carouselMaxItems
+    layoutProducts === 'grid' ? gridMaxItemsTotal : carouselMaxItems
   );
 
   useEffect(() => {
@@ -56,7 +76,7 @@ export const Products = ({
         )},minmax(350px,1fr))]`}
       >
         {clampedProducts?.map((p) => (
-          <Card key={p.id} product={p} card={card} button={button} />
+          <Card key={p.id} product={p} config={cardConfig} />
         ))}
       </div>
     );
@@ -78,7 +98,7 @@ export const Products = ({
       >
         {clampedProducts?.map((p) => (
           <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
-            <Card key={p.id} product={p} card={card} button={button} />
+            <Card key={p.id} product={p} config={cardConfig} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -87,10 +107,10 @@ export const Products = ({
 
   return (
     <div className="pw-font-poppins pw-p-10">
-      <h2>{data.title}</h2>
+      <h2>{title}</h2>
 
       <div className="pw-flex pw-justify-center">
-        {layout === 'grid' ? <GridProducts /> : <SliderProducts />}
+        {layoutProducts === 'grid' ? <GridProducts /> : <SliderProducts />}
       </div>
     </div>
   );
@@ -111,4 +131,44 @@ const fetchProductsByTagAndOrder = async (
       price: '237,65',
     };
   });
+};
+
+export type ProductsData = {
+  type: 'products';
+  title?: string;
+  products?: Product[];
+} & Partial<ProductsDefault>;
+
+export type ProductsDefault = {
+  filterTag: string;
+  layoutProducts: 'carousel' | 'grid';
+  autoSlide: boolean;
+  itemsPerLine: number;
+  numberOfLines: number;
+  listOrdering: keyof Omit<Product, 'img' | 'id'>;
+} & CardConfig;
+
+type ProductsProps = Omit<ProductsData & ProductsDefault, 'type'>;
+
+export type CardConfig = {
+  cardHoverColor: string;
+  cardUrl: string;
+  showCardButton: boolean;
+  showCardName: boolean;
+  showCardCategory: boolean;
+  showCardDescription: boolean;
+  showCardPrice: boolean;
+  buttonText: string;
+  buttonTextColor: string;
+  buttonBgColor: string;
+  buttonHoverColor: string;
+};
+
+export type Product = {
+  id: string;
+  img: string;
+  name: string;
+  category: string;
+  description: string;
+  price: string;
 };
