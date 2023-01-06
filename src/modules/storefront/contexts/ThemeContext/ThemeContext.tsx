@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useEffectOnce } from 'react-use';
 
+import { useRouterConnect } from '../../../shared';
 import { TemplateDefault, TemplateData } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
@@ -24,8 +25,15 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageName, setPageName] = useState('');
 
+  const router = useRouterConnect();
+  const page = router.query?.page;
+
+  useEffect(() => {
+    if (typeof page === 'object') setPageName(page[0]);
+  }, [page]);
+
   useEffectOnce(() => {
-    //requisição pra pegar valores default
+    // // requisição pra pegar valores default
     // const baseURL = "https://api.w3block.io";
     // const location = "primesea.io";
     // const url = `${baseURL}/storefrontTheme?site=${location}`;
@@ -33,12 +41,18 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    // requisição pra pegar valores do user/página
+    if (!pageName) return;
+    // // requisição pra pegar valores do user/página
     // const baseURL = "https://api.w3block.io";
     // const location = "primesea.io";
     // const url = `${baseURL}/storeFrontPage?site=${location}&path=${pageName}`;
 
-    setPageTheme(sampleTemplateData);
+    (sampleTemplateData.items[0] as any).brandText = pageName.includes('one')
+      ? 'one'
+      : 'two';
+    const clone = { ...sampleTemplateData };
+
+    setPageTheme(clone);
   }, [pageName]);
 
   return (
