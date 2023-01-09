@@ -4,25 +4,16 @@ import { useClickAway, useToggle } from 'react-use';
 import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/arrowDown.svg';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { MenuData, MenuDefault } from '../interfaces';
 
-export const Menu = ({
-  data,
-  defaultData,
-}: {
-  data: MenuData;
-  defaultData: MenuDefault;
-}) => {
+export const Menu = (props: { data: MenuProps }) => {
+  const { bgColor, textColor, categories } = props.data;
+
   const [translate] = useTranslation();
   const [isSeeAllMenuOpen, toggleSeeAllMenu] = useToggle(false);
   const [isByActivityMenuOpen, toggleByActivityMenu] = useToggle(false);
 
   const byActivityMenuRef = useRef<HTMLButtonElement>(null);
   useClickAway(byActivityMenuRef, () => toggleByActivityMenu(false));
-
-  const bgColor = data?.bgColor || defaultData.menuBgColor;
-  const textColor = data?.textColor || defaultData.menuTextColor;
-  const categories = data?.categories;
 
   return (
     <TranslatableComponent>
@@ -93,7 +84,7 @@ export const Menu = ({
   );
 };
 
-const SeeAllMenu = (props: Props) => {
+const SeeAllMenu = (props: MenuProps & { isMenuSeeAllOpen: boolean }) => {
   const { bgColor, textColor, categories, isMenuSeeAllOpen } = props;
 
   if (!isMenuSeeAllOpen) return null;
@@ -123,9 +114,15 @@ const SeeAllMenu = (props: Props) => {
   );
 };
 
-type Props = {
-  bgColor: MenuData['bgColor'];
-  textColor: MenuData['textColor'];
-  categories: MenuData['categories'];
-  isMenuSeeAllOpen: boolean;
+export type MenuData = {
+  type: 'menu';
+  categories?: CategoryItem[];
+} & Partial<MenuDefault>;
+type CategoryItem = { label: string; slug: string };
+
+export type MenuDefault = {
+  bgColor: string;
+  textColor: string;
 };
+
+type MenuProps = Omit<MenuData & MenuDefault, 'type'>;
