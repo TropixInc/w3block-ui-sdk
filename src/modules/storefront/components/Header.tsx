@@ -1,22 +1,34 @@
 import { HeaderPixwaySDK } from '../../shared';
-import { HeaderData, HeaderDefault } from '../interfaces';
 
-export const Header = ({
-  data,
-  defaultData,
-}: {
-  data: HeaderData;
-  defaultData: HeaderDefault;
-}) => {
-  const backgroundColor = data.bgColor || defaultData.bgColor;
-  const color = data.textColor || defaultData.textColor;
-  const brandText = data.brandText;
+export const Header = (props: { data: HeaderProps }) => {
+  const { bgColor, textColor, brandText, links } = props.data;
 
   return (
     <HeaderPixwaySDK
-      bgColor={backgroundColor}
-      textColor={color}
+      bgColor={bgColor}
+      textColor={textColor}
       brandText={brandText}
+      tabs={links?.map((l) => ({ name: l.label, router: l.value }))}
     />
   );
+};
+
+export type HeaderData = {
+  type: 'header';
+  brandText?: string;
+  links?: HeaderLink[];
+} & Partial<HeaderDefault>;
+
+export type HeaderDefault = {
+  bgColor: string;
+  textColor: string;
+};
+
+type HeaderProps = Omit<HeaderData & HeaderDefault, 'type'>;
+
+type HeaderLink = {
+  type: 'internal' | 'external';
+  newWindow: boolean;
+  label: string;
+  value: string;
 };

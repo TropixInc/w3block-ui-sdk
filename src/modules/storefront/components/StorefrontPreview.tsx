@@ -2,10 +2,11 @@ import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
-import { DefaultDataProps, TemplateData } from '../interfaces';
+import { TemplateData } from '../interfaces';
 import { Banner } from './Banner';
 import { Cookies } from './Cookies';
 import { Header } from './Header';
+import { Products } from './Products';
 
 export const StorefrontPreview = () => {
   return (
@@ -45,10 +46,7 @@ const Storefront = () => {
         return (
           <Component
             key={item.type + i}
-            data={item.props}
-            defaultData={
-              themeContext[item.type] as keyof DefaultDataProps['defaultData']
-            }
+            data={{ ...themeContext[item.type], ...item } as any}
           />
         );
       })}
@@ -60,8 +58,8 @@ const Storefront = () => {
 
 const componentMap = {
   header: Header,
-  categories: () => <></>,
   banner: Banner,
+  products: Products,
   cookies: Cookies,
 };
 

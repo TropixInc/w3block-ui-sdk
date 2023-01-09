@@ -3,7 +3,7 @@ import { useLocalStorage } from 'react-use';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
 
-export const Cookies = ({ data, defaultData }: CookiesProps) => {
+export const Cookies = (props: { data: CookiesProps }) => {
   const [translate] = useTranslation();
   const [value, setValue] = useLocalStorage('acceptedCookies', 'false');
 
@@ -13,10 +13,9 @@ export const Cookies = ({ data, defaultData }: CookiesProps) => {
     cookiesButtonBgColor,
     cookiesButtonTextColor,
     privacyPolicyLinkColor,
-  } = { ...defaultData, ...data };
-
-  const disclaimer = data?.disclaimer;
-  const privacyPolicyLink = data?.privacyPolicyLink;
+    disclaimer,
+    privacyPolicyLink,
+  } = props.data;
 
   if (value === 'true') return null;
 
@@ -57,10 +56,11 @@ export const Cookies = ({ data, defaultData }: CookiesProps) => {
   );
 };
 
-export type CookiesData = Partial<CookiesDefault> & {
+export type CookiesData = {
+  type: 'cookies';
   privacyPolicyLink?: string;
   disclaimer?: string;
-};
+} & Partial<CookiesDefault>;
 
 export type CookiesDefault = {
   cookiesBgColor: string;
@@ -70,4 +70,4 @@ export type CookiesDefault = {
   privacyPolicyLinkColor: string;
 };
 
-export type CookiesProps = { data: CookiesData; defaultData: CookiesDefault };
+type CookiesProps = Omit<CookiesData & CookiesDefault, 'type'>;
