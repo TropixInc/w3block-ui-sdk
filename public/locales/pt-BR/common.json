@@ -321,5 +321,7 @@
   "connectWallet>metamaskError>app>copyUrl":"copiar url",
   "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop.",
   "storefront>menu>dropdown>seeAll": "veja todos",
-  "storefront>menu>dropdown>byActivity": "Por atividade"
+  "storefront>menu>dropdown>byActivity": "Por atividade",
+  "storefront>cookies>privacyPolicy": "Política de privacidade.",
+  "storefront>cookies>iAgree": "Estou ciente"
 }

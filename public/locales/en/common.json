@@ -156,5 +156,7 @@
   "connectWallet>metamaskError>app>copyUrl":"copy url",
   "connectWallet>metamaskError>app>secondSuggestion":"Access this site from your computer and complete the procedure via desktop.",
   "storefront>menu>dropdown>seeAll": "see all",
-  "storefront>menu>dropdown>byActivity": "By activity"
+  "storefront>menu>dropdown>byActivity": "By activity",
+  "storefront>cookies>privacyPolicy": "Privacy policy.",
+  "storefront>cookies>iAgree": "I agree"
 }

@@ -2,10 +2,12 @@ import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
-import { DefaultDataProps, TemplateData } from '../interfaces';
+import { TemplateData } from '../interfaces';
 import { Banner } from './Banner';
+import { Cookies } from './Cookies';
 import { Header } from './Header';
 import { Menu } from './Menu';
+import { Products } from './Products';
 
 export const StorefrontPreview = () => {
   return (
@@ -45,13 +47,12 @@ const Storefront = () => {
         return (
           <Component
             key={item.type + i}
-            data={item.props}
-            defaultData={
-              themeContext[item.type] as keyof DefaultDataProps['defaultData']
-            }
+            data={{ ...themeContext[item.type], ...item } as any}
           />
         );
       })}
+
+      <Copyright />
     </>
   );
 };
@@ -60,4 +61,14 @@ const componentMap = {
   header: Header,
   menu: Menu,
   banner: Banner,
+  products: Products,
+  cookies: Cookies,
+};
+
+const Copyright = () => {
+  return (
+    <div className="pw-w-full pw-grid pw-place-items-center pw-h-[42px] pw-bg-white pw-font-roboto pw-font-medium">
+      Copyright {new Date().getFullYear()} - [web/lock]
+    </div>
+  );
 };

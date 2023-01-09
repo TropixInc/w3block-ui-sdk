@@ -4,30 +4,14 @@ import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
-import {
-  BannerData,
-  BannerDefault,
-  SlideContentData,
-  SlideContentDefault,
-} from '../interfaces';
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-export const Banner = ({
-  data,
-  defaultData,
-}: {
-  data: BannerData;
-  defaultData: BannerDefault;
-}) => {
-  const slides = data.slides;
-  const layout = data.layout || defaultData.layout;
-  const ratio = data.ratio || defaultData.ratio;
+export const Banner = (props: { data: BannerProps }) => {
+  const { slides, layout, ratio, autoSlide, slideStyle } = props.data;
 
   const layoutClass = layout === 'full_width' ? 'pw-w-full' : 'pw-container';
-  const aspectRatioClass = ratios[ratio];
 
   return (
     <TranslatableComponent>
@@ -35,6 +19,7 @@ export const Banner = ({
         <Swiper
           navigation
           pagination
+          autoplay={autoSlide ? { delay: 2500 } : false}
           modules={[Navigation, Pagination]}
           style={
             {
@@ -44,12 +29,11 @@ export const Banner = ({
             } as CSSProperties
           }
         >
-          {slides?.map((s) => (
-            <SwiperSlide key={JSON.stringify(s)}>
+          {slides?.map((slide) => (
+            <SwiperSlide key={JSON.stringify(slide)}>
               <Slide
-                content={s}
-                defaultContent={defaultData.slides}
-                ratioClassName={aspectRatioClass}
+                data={{ ...slideStyle, ...slide }}
+                ratioClassName={ratios[ratio]}
               />
             </SwiperSlide>
           ))}
@@ -59,40 +43,59 @@ export const Banner = ({
   );
 };
 
+export type BannerData = {
+  type: 'banner';
+  slides?: SlideContentData[];
+} & Partial<BannerDefault>;
+
+export type BannerDefault = {
+  layout: Layout;
+  ratio: Ratio;
+  autoSlide: boolean;
+  slideStyle: SlideContentDefault;
+};
+
+type BannerProps = Omit<BannerData & BannerDefault, 'type'>;
+
+type Ratio = '20:9' | '16:9' | '3:1' | '4:1' | 'default';
+type Layout = 'full_width' | 'fixed';
+
 const Slide = ({
-  content,
-  defaultContent,
+  data,
   ratioClassName,
 }: {
-  content: SlideContentData;
-  defaultContent: SlideContentDefault;
-  ratioClassName: string;
+  data: SlideContentData & SlideContentDefault;
+  ratioClassName?: string;
 }) => {
-  const titleColor = content.titleColor || defaultContent.titleColor;
-  const subtitleColor = content.subtitleColor || defaultContent.subtitleColor;
-  const bgColor = content.bgColor || defaultContent.bgColor;
-  const buttonBgColor =
-    content.button?.bgColor || defaultContent.button.bgColor;
-  const buttonTextColor =
-    content.button?.textColor || defaultContent.button.textColor;
-  const alignment = content.alignment || defaultContent.alignment;
+  const {
+    titleColor,
+    subtitleColor,
+    bgColor,
+    buttonBgColor,
+    buttonTextColor,
+    alignment,
+    buttonHref,
+    buttonHrefType,
+    overlayColor,
+    media,
+    title,
+    buttonText,
+    subtitle,
+  } = data;
   const rowAlignmentClass = rowAlignments[alignment];
   const columnAlignmentClass = columnAlignments[alignment];
   const alignmentTextClass = alignmentsText[alignment];
-  const href = content.button?.href;
-  const hrefType = content.button?.hrefType || defaultContent.button.hrefType;
-  const overlay = content.overlayColor || defaultContent.overlayColor;
 
-  const mediaType = guessMediaType(content.media || '');
+  const mediaType = guessMediaType(media || '');
   const bg =
     mediaType === 'no-media'
       ? bgColor
       : mediaType === 'image'
-      ? `url('${content.media}')`
+      ? `url('${media}')`
       : '';
 
-  const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${overlay})`;
-  const overlayBg = !overlay
+  const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${overlayColor})`;
+  const overlayBg = !overlayColor
     ? bg
     : mediaType === 'image'
     ? `${overlayProp}, ${bg}`
@@ -111,7 +114,7 @@ const Slide = ({
       {mediaType === 'video' && (
         <>
           <video
-            src={content.media}
+            src={media}
             className={`${ratioClassName} pw-w-full pw-bg-black`}
             autoPlay
             playsInline
@@ -136,25 +139,46 @@ const Slide = ({
           style={{ color: titleColor }}
           className={`${alignmentTextClass} pw-font-semibold pw-text-4xl`}
         >
-          {content.title}
+          {title}
         </h2>
         <p style={{ color: subtitleColor }} className="pw-font-medium">
-          {content.subtitle}
+          {subtitle}
         </p>
         <button
           style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
           className="pw-border-none pw-text-base pw-rounded-[60px] pw-px-4 pw-py-1"
           onClick={() => {
-            const target = hrefType === 'external' ? '_blank' : '_self';
-            window.open(href, target)?.focus();
+            const target = buttonHrefType === 'external' ? '_blank' : '_self';
+            window.open(buttonHref, target)?.focus();
           }}
         >
-          {content.button?.text}
+          {buttonText}
         </button>
       </div>
     </div>
   );
 };
+
+type SlideContentData = {
+  media?: string;
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
+  buttonHref?: string;
+} & Partial<SlideContentDefault>;
+
+type SlideContentDefault = {
+  bgColor: string;
+  overlayColor: string;
+  alignment: Alignment;
+  titleColor: string;
+  subtitleColor: string;
+  buttonTextColor: string;
+  buttonBgColor: string;
+  buttonHrefType: 'internal' | 'external';
+};
+
+type Alignment = 'left' | 'center' | 'right';
 
 const ratios: Record<BannerDefault['ratio'], string> = {
   default: 'pw-aspect-[20/9]',
@@ -179,10 +203,7 @@ const alignmentsText: AlignmentClassNameMap = {
   right: 'pw-text-right',
   center: 'pw-text-center',
 };
-type AlignmentClassNameMap = Record<
-  BannerDefault['slides']['alignment'],
-  string
->;
+type AlignmentClassNameMap = Record<Alignment, string>;
 
 const guessMediaType = (media: string) => {
   if (!media) return 'no-media';
