@@ -50,7 +50,8 @@ export const Products = (props: { data: ProductsProps }) => {
 
   const gridMaxItemsTotal = itemsPerLine * numberOfLines;
   const carouselMaxItems = 12;
-  const carouselSize =   layoutProducts === 'grid' ? gridMaxItemsTotal : carouselMaxItems;
+  const carouselSize =
+    layoutProducts === 'grid' ? gridMaxItemsTotal : carouselMaxItems;
   const clampedProducts = products?.slice(
     0,
    carouselSize
