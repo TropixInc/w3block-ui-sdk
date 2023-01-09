@@ -44,7 +44,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    if (!pageName) return;
+    // if (!pageName) return;
     // // requisição pra pegar valores do user/página
     // const baseURL = "https://api.w3block.io";
     // const location = "primesea.io";

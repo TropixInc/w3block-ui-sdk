@@ -28,7 +28,7 @@ export const Banner = (props: { data: BannerProps }) => {
         }
       >
         {slides?.map((slide) => (
-          <SwiperSlide key={JSON.stringify(slide)}>
+          <SwiperSlide key={slide.title}>
             <Slide
               data={{ ...slideStyle, ...slide }}
               ratioClassName={ratios[ratio]}

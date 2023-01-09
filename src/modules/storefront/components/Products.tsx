@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,6 +12,7 @@ import 'swiper/css/navigation';
 
 export const Products = (props: { data: ProductsProps }) => {
   // const [products, setProducts] = useState<Product[]>([]);
+  const [error, setError] = useState('');
   const {
     layoutProducts,
     itemsPerLine,
@@ -55,9 +56,13 @@ export const Products = (props: { data: ProductsProps }) => {
   const clampedProducts = products?.slice(0, carouselSize);
 
   useEffect(() => {
-    fetchProductsByTagAndOrder(listOrdering, filterTag).then((_products) => {
-      //  setProducts(products)
-    });
+    fetchProductsByTagAndOrder(listOrdering, filterTag)
+      .then((_products) => {
+        //  setProducts(products)
+      })
+      .catch((e) => {
+        setError(e);
+      });
   }, [listOrdering, filterTag]);
 
   const GridProducts = () => {
@@ -103,6 +108,9 @@ export const Products = (props: { data: ProductsProps }) => {
       </Swiper>
     );
   };
+
+  if (error)
+    return <h2>Erro ao listar produtos, tente novamente mais tarde</h2>;
 
   return (
     <div className="pw-font-poppins pw-p-10">

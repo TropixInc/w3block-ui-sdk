@@ -18,12 +18,11 @@ export const Card = ({
     <div
       style={
         {
-          border: '1px solid #DCDCDC',
           boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.08)',
           '--products-card-hover-color': config.cardHoverColor,
         } as CSSProperties
       }
-      className="pw-w-[296px] pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card"
+      className="pw-border pw-border-solid pw-border-[#DCDCDC] pw-w-[296px] pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card"
       onClick={() => {
         // router.push(card.url);
       }}
@@ -54,7 +53,7 @@ export const Card = ({
               '--products-button-bg-color': config.buttonBgColor,
             } as CSSProperties
           }
-          className="pw-w-full pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button"
+          className="pw-w-full pw-border pw-border-solid pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button"
         >
           {config.buttonText}
         </button>
