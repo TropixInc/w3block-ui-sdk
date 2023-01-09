@@ -52,10 +52,7 @@ export const Products = (props: { data: ProductsProps }) => {
   const carouselMaxItems = 12;
   const carouselSize =
     layoutProducts === 'grid' ? gridMaxItemsTotal : carouselMaxItems;
-  const clampedProducts = products?.slice(
-    0,
-   carouselSize
-  );
+  const clampedProducts = products?.slice(0, carouselSize);
 
   useEffect(() => {
     fetchProductsByTagAndOrder(listOrdering, filterTag).then((_products) => {
