@@ -26,11 +26,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [pageName, setPageName] = useState('');
 
   const router = useRouterConnect();
-  const page = router.query?.page;
+  // o nome do arquivo que usa o componente StorefrontPreview precisa ser o mesmo que 'page'
+  // no connect temos storefront/[...page].tsx
+  // fazemos a requisição com o nome da página pra pegar os dados e estilos para exibir
+  const pageQueries = router.query?.page;
 
   useEffect(() => {
-    if (typeof page === 'object') setPageName(page[0]);
-  }, [page]);
+    if (Array.isArray(pageQueries)) setPageName(pageQueries[0]);
+  }, [pageQueries]);
 
   useEffectOnce(() => {
     // // requisição pra pegar valores default
