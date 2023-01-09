@@ -23,7 +23,7 @@ export const Card = ({
           '--products-card-hover-color': config.cardHoverColor,
         } as CSSProperties
       }
-      className={`pw-w-[296px] pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card`}
+      className="pw-w-[296px] pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card"
       onClick={() => {
         // router.push(card.url);
       }}
