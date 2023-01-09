@@ -54,7 +54,7 @@ export const Card = ({
               '--products-button-bg-color': config.buttonBgColor,
             } as CSSProperties
           }
-          className={`pw-w-full pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button`}
+          className="pw-w-full pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button"
         >
           {config.buttonText}
         </button>
