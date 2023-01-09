@@ -8,7 +8,6 @@ import { ReactComponent as LinkedinIcon } from '../../shared/assets/icons/linked
 import { ReactComponent as TelegramIcon } from '../../shared/assets/icons/message.svg';
 import { ReactComponent as TwitterIcon } from '../../shared/assets/icons/twitter.svg';
 import { ReactComponent as WhatsappIcon } from '../../shared/assets/icons/whatsapp.svg';
-import { FooterData, FooterDefault, SocialNetworkType } from '../interfaces';
 
 import './Footer.css';
 
@@ -18,25 +17,18 @@ type SVG = React.FunctionComponent<
   }
 >;
 
-export const Footer = ({
-  data,
-  defaultData,
-}: {
-  data: FooterData;
-  defaultData: FooterDefault;
-}) => {
-  const bgColor = data?.bgColor || defaultData.footerBgColor;
-  const textColor = data?.textColor || defaultData.footerTextColor;
-  const description = data?.description;
-  const menuTextColor = data?.menuTextColor || defaultData.menuTextColor;
-  const menuHoverColor = data?.menuHoverColor || defaultData.menuHoverColor;
-  const menuLinks = data?.menuLinks;
-  const socialNetworkIconColor =
-    data?.socialNetworkIconColor || defaultData.socialNetworkIconColor;
-  const socialNetworkIconHoverColor =
-    data?.socialNetworkIconHoverColor ||
-    defaultData.socialNetworkIconHoverColor;
-  const socialNetworks = data?.socialNetworks;
+export const Footer = (props: { data: FooterProps }) => {
+  const {
+    bgColor,
+    textColor,
+    description,
+    menuTextColor,
+    menuHoverColor,
+    menuLinks,
+    socialNetworkIconColor,
+    socialNetworkIconHoverColor,
+    socialNetworks,
+  } = props.data;
 
   const iconsMap: Record<SocialNetworkType, SVG> = {
     twitter: TwitterIcon,
@@ -112,3 +104,45 @@ export const Footer = ({
     </>
   );
 };
+
+export type FooterData = {
+  type: 'footer';
+  bgColor?: string;
+  textColor?: string;
+  description?: string;
+  menuTextColor?: string;
+  menuHoverColor?: string;
+  menuLinks?: Link[];
+  socialNetworkIconColor?: string;
+  socialNetworkIconHoverColor?: string;
+  socialNetworks?: SocialNetwork[];
+} & Partial<FooterDefault>;
+
+export type FooterDefault = {
+  bgColor: string;
+  textColor: string;
+  menuTextColor: string;
+  menuHoverColor: string;
+  socialNetworkIconColor: string;
+  socialNetworkIconHoverColor: string;
+};
+
+type FooterProps = Omit<FooterData & FooterDefault, 'type'>;
+
+type Link = {
+  label: string;
+  type: 'internal' | 'external';
+  value: string;
+};
+
+type SocialNetwork = { url: string; type: SocialNetworkType };
+
+export type SocialNetworkType =
+  | 'twitter'
+  | 'telegram'
+  | 'discord'
+  | 'instagram'
+  | 'facebook'
+  | 'linkedin'
+  | 'whatsapp'
+  | 'website';
