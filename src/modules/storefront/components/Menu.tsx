@@ -62,9 +62,14 @@ export const Menu = (props: { data: MenuProps }) => {
                 >
                   {categories?.map((category) => {
                     return (
-                      <div key={category.slug} className="pw-py-4">
+                      <a
+                        key={category.slug}
+                        className="pw-py-4"
+                        style={{ color: textColor }}
+                        href={category.slug}
+                      >
                         {category.label}
-                      </div>
+                      </a>
                     );
                   })}
                 </div>
