@@ -1459,7 +1459,7 @@
     "@typescript-eslint/scope-manager" "5.47.0"
     "@typescript-eslint/types" "5.47.0"
     "@typescript-eslint/typescript-estree" "5.47.0"
-    "debug" "^4.3.4"
+    debug "^4.3.4"
 
 "@typescript-eslint/scope-manager@5.47.0":
   version "5.47.0"
@@ -1498,19 +1498,23 @@
     tsutils "^3.21.0"
 
 "@typescript-eslint/utils@5.47.0":
-  "version" "5.47.0"
+  version "5.47.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.47.0.tgz#b5005f7d2696769a1fdc1e00897005a25b3a0ec7"
+  integrity sha512-U9xcc0N7xINrCdGVPwABjbAKqx4GK67xuMV87toI+HUqgXj26m6RBp9UshEXcTrgCkdGYFzgKLt8kxu49RilDw==
   dependencies:
     "@types/json-schema" "^7.0.9"
     "@types/semver" "^7.3.12"
     "@typescript-eslint/scope-manager" "5.47.0"
     "@typescript-eslint/types" "5.47.0"
     "@typescript-eslint/typescript-estree" "5.47.0"
-    "eslint-scope" "^5.1.1"
-    "eslint-utils" "^3.0.0"
-    "semver" "^7.3.7"
+    eslint-scope "^5.1.1"
+    eslint-utils "^3.0.0"
+    semver "^7.3.7"
 
 "@typescript-eslint/visitor-keys@5.47.0":
-  "version" "5.47.0"
+  version "5.47.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.47.0.tgz#4aca4efbdf6209c154df1f7599852d571b80bb45"
+  integrity sha512-ByPi5iMa6QqDXe/GmT/hR6MZtVPi0SqMQPDx15FczCBXJo/7M8T88xReOALAfpBLm+zxpPfmhuEvPb577JRAEg==
   dependencies:
     "@typescript-eslint/types" "5.47.0"
     eslint-visitor-keys "^3.3.0"
@@ -4001,9 +4005,9 @@ json-stringify-safe@^5.0.1:
   integrity sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==
 
 json5@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
-  integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.2.tgz#63d98d60f21b313b77c4d6da18bfa69d80e1d593"
+  integrity sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==
   dependencies:
     minimist "^1.2.0"
 
