@@ -55,6 +55,11 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 };
 
 const sampleTemplate: TemplateDefault = {
+  page: {
+    bgColor: 'white',
+    overlayColor: 'white',
+    textColor: 'black',
+  },
   header: {
     bgColor: 'white',
     textColor: 'black',
@@ -118,6 +123,13 @@ const sampleTemplateData: TemplateData = {
   title: 'Home page',
   items: [
     {
+      type: 'page',
+      bgColor: 'white',
+      overlayColor: 'white',
+      textColor: 'black',
+      media: '',
+    },
+    {
       type: 'header',
       brandText: 'W3block Storefront Custom',
       bgColor: 'white',
@@ -152,6 +164,20 @@ const sampleTemplateData: TemplateData = {
           subtitleColor: 'white',
           media:
             'https://imobiliario.cshg.com.br/wp-content/uploads/sites/327/2020/06/Centro-Empresarial-Seneca.mp4',
+          buttonBgColor: 'white',
+          buttonHref: 'https://example.com',
+          buttonText: 'Clique aqui',
+          buttonTextColor: '#353945',
+        },
+        {
+          bgColor: '#0ea5e9',
+          title: 'Nós empoderamos a arte com tecnologia!',
+          titleColor: 'white',
+          alignment: 'right',
+          overlayColor: 'rgba(1, 1, 1, 0.5)',
+          subtitle: 'Lorem ipsum dolor sit amet',
+          subtitleColor: 'white',
+          media: '',
           buttonBgColor: 'white',
           buttonHref: 'https://example.com',
           buttonText: 'Clique aqui',

@@ -92,12 +92,15 @@ const Slide = ({
       : '';
 
   const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${overlayColor})`;
-  const overlayBg = !overlayColor
-    ? bg
-    : mediaType === 'image'
-    ? `${overlayProp}, ${bg}`
-    : overlayProp;
-  const videoClass = mediaType === 'video' && 'pw-absolute';
+
+  const overlayBg =
+    mediaType === 'image'
+      ? `${overlayProp}, ${bg}`
+      : mediaType === 'video'
+      ? overlayProp
+      : bg;
+
+  const videoClass = mediaType === 'video' ? 'pw-absolute' : '';
 
   return (
     <div
@@ -202,7 +205,7 @@ const alignmentsText: AlignmentClassNameMap = {
 };
 type AlignmentClassNameMap = Record<Alignment, string>;
 
-const guessMediaType = (media: string) => {
+export const guessMediaType = (media: string) => {
   if (!media) return 'no-media';
   if (media.includes('.mp4')) return 'video';
   return 'image';
