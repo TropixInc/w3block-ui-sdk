@@ -46,19 +46,19 @@ const Storefront = () => {
 
   const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${pageStyle.overlayColor})`;
 
-  const bg =
-    mediaType === 'no-media'
-      ? pageStyle.bgColor
-      : mediaType === 'image'
-      ? `url('${pageStyle?.media}')`
-      : '';
+  let bg = '';
+  if (mediaType === 'no-media') {
+    bg = pageStyle.bgColor;
+  } else if (mediaType === 'image') {
+    bg = `url('${pageStyle?.media}')`;
+  }
 
-  const overlayBg =
-    mediaType === 'image'
-      ? `${overlayProp}, ${bg}`
-      : mediaType === 'video'
-      ? overlayProp
-      : bg;
+  let overlayBg = bg;
+  if (mediaType === 'image') {
+    overlayBg = `${overlayProp}, ${bg}`;
+  } else if (mediaType === 'video') {
+    overlayBg = overlayProp;
+  }
 
   return (
     <div

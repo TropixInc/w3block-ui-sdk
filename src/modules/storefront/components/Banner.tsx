@@ -84,21 +84,21 @@ const Slide = ({
   const alignmentTextClass = alignmentsText[alignment];
 
   const mediaType = guessMediaType(media || '');
-  const bg =
-    mediaType === 'no-media'
-      ? bgColor
-      : mediaType === 'image'
-      ? `url('${media}')`
-      : '';
+  let bg = '';
+  if (mediaType === 'no-media') {
+    bg = bgColor;
+  } else if (mediaType === 'image') {
+    bg = `url('${media}')`;
+  }
 
   const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${overlayColor})`;
 
-  const overlayBg =
-    mediaType === 'image'
-      ? `${overlayProp}, ${bg}`
-      : mediaType === 'video'
-      ? overlayProp
-      : bg;
+  let overlayBg = bg;
+  if (mediaType === 'image') {
+    overlayBg = `${overlayProp}, ${bg}`;
+  } else if (mediaType === 'video') {
+    overlayBg = overlayProp;
+  }
 
   const videoClass = mediaType === 'video' ? 'pw-absolute' : '';
 
