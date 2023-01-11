@@ -119,13 +119,25 @@ const sampleTemplate: TemplateDefault = {
   },
 };
 
+const bigDescription =
+  'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet';
+const smallDescription = 'Lorem ipsum dolor sit amet';
+
+const smallName = 'Tênis Easy Style Feminino';
+const bigName =
+  'Tênis Easy Style Feminino Evoltenn Solado Trançado Feminino Evoltenn Solado Trançado';
+
+const name = (i: number) => (i % 2 === 0 ? smallName : bigName);
+const description = (i: number) =>
+  i % 2 === 0 ? smallDescription : bigDescription;
+
 const products = new Array(45).fill(0).map((_, i) => {
   return {
     id: String(i + 1),
     img: 'https://i.ibb.co/gr1Qkkc/product.png',
     category: 'calçados',
-    description: 'Lorem ipsum dolor sit amet',
-    name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado',
+    description: description(i),
+    name: name(i),
     hoverColor: 'white',
     price: '237,65',
   };
@@ -162,6 +174,21 @@ const sampleTemplateData: TemplateData = {
         {
           bgColor: '#0ea5e9',
           title: 'Nós empoderamos a arte com tecnologia',
+          titleColor: 'white',
+          alignment: 'right',
+          overlayColor: 'rgba(1, 1, 1, 0.5)',
+          subtitle: 'Lorem ipsum dolor sit amet',
+          subtitleColor: 'white',
+          media:
+            'https://imobiliario.cshg.com.br/wp-content/uploads/sites/327/2020/06/Centro-Empresarial-Seneca.mp4',
+          buttonBgColor: 'white',
+          buttonHref: 'https://example.com',
+          buttonText: 'Clique aqui',
+          buttonTextColor: '#353945',
+        },
+        {
+          bgColor: '#0ea5e9',
+          title: 'Nós empoderamos a arte com tecnologia!',
           titleColor: 'white',
           alignment: 'right',
           overlayColor: 'rgba(1, 1, 1, 0.5)',

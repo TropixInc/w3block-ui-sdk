@@ -1,6 +1,8 @@
 import { CSSProperties } from 'react';
 
-import { CardConfig, Product } from '../../../storefront/components/Products';
+import { CardConfig } from '../../../storefront/interfaces/Card';
+import { Product } from '../../../storefront/interfaces/Product';
+import { ImageSDK } from '../ImageSDK';
 
 import './Card.css';
 
@@ -11,7 +13,6 @@ export const Card = ({
   product: Product;
   config: CardConfig;
 }) => {
-  const imgSize = 260;
   // const router = useRouter();
 
   return (
@@ -28,11 +29,15 @@ export const Card = ({
       }}
     >
       <div className="pw-flex pw-justify-center">
-        <img src={product.img} width={imgSize} height={imgSize} />
+        <ImageSDK src={product.img} className="pw-w-[260px] pw-h-[260px]" />
       </div>
-      {config.showCardName && <p>{product.name}</p>}
+      {config.showCardName && (
+        <p className="pw-line-clamp-2 pw-min-h-[36px]">{product.name}</p>
+      )}
       {config.showCardDescription && (
-        <p className="pw-text-[#7E7E7E]">{product.description}</p>
+        <p className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px]">
+          {product.description}
+        </p>
       )}
       {config.showCardCategory && (
         <p className="pw-text-[#C63535] pw-font-semibold">{product.category}</p>

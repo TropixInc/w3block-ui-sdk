@@ -4,6 +4,8 @@ import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Card } from '../../shared/components/Card';
+import { CardConfig } from '../interfaces/Card';
+import { Product } from '../interfaces/Product';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -156,26 +158,3 @@ export type ProductsDefault = {
 } & CardConfig;
 
 type ProductsProps = Omit<ProductsData & ProductsDefault, 'type'>;
-
-export type CardConfig = {
-  cardHoverColor: string;
-  cardUrl: string;
-  showCardButton: boolean;
-  showCardName: boolean;
-  showCardCategory: boolean;
-  showCardDescription: boolean;
-  showCardPrice: boolean;
-  buttonText: string;
-  buttonTextColor: string;
-  buttonBgColor: string;
-  buttonHoverColor: string;
-};
-
-export type Product = {
-  id: string;
-  img: string;
-  name: string;
-  category: string;
-  description: string;
-  price: string;
-};
