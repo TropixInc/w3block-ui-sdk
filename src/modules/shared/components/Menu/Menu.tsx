@@ -76,13 +76,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         isVisible: true,
       },
       {
-        title: translate('components>menu>clients'),
-        icon: <DashIcon width={17} height={17} />,
-        link: PixwayAppRoutes.TOKENS_CLIENTS,
-        isVisible: !isProduction,
-        sub: true,
-      },
-      {
         title: translate('components>menu>wallet'),
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WALLET,
@@ -93,6 +86,13 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         icon: <TicketIcon width={17} height={17} />,
         link: PixwayAppRoutes.TOKENPASS,
         isVisible: pass && isAdmin,
+      },
+      {
+        title: translate('components>menu>clients'),
+        icon: <DashIcon width={17} height={17} />,
+        link: PixwayAppRoutes.TOKENS_CLIENTS,
+        isVisible: !isProduction && isAdmin,
+        sub: true,
       },
       // {
       //   title: translate('components>menu>settings'),
