@@ -341,5 +341,14 @@
   "storefront>menu>dropdown>byActivity": "Por atividade",
   "storefront>cookies>privacyPolicy": "Política de privacidade.",
   "storefront>cookies>iAgree": "Estou ciente",
-  "storefront>products>error": "Erro ao listar produtos, tente novamente mais tarde"
+  "storefront>products>error": "Erro ao listar produtos, tente novamente mais tarde",
+  "components>walletIntegration>disconnectSuccess": "Sua carteira foi desconectada do WalletConnect com sucesso!",
+  "components>walletIntegration>disconnectFail": "Houve um erro ao tentar desconectar, por favor tente novamente.",
+  "components>walletIntegration>cancel": "Cancelar",
+  "components>walletIntegration>disconnect": "Desconectar",
+  "components>walletIntegration>continue": "Continuar",
+  "components>walletIntegration>confirmDisconnect": "Tem certeza que deseja desconectar do WalletConnect?",
+  "components>walletIntegration>walletConnected": "Carteira sincronizada",
+  "components>walletIntegration>syncDate": "Sincronizado em: {{date}}"
+  
 }

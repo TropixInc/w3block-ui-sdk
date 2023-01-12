@@ -177,5 +177,13 @@
   "storefront>menu>dropdown>byActivity": "By activity",
   "storefront>cookies>privacyPolicy": "Privacy policy.",
   "storefront>cookies>iAgree": "I agree",
-  "storefront>products>error": "Error listing products, please try again later"
+  "storefront>products>error": "Error listing products, please try again later",
+  "components>walletIntegration>disconnectSuccess": "Your wallet was successfully disconnected from WalletConnect",
+  "components>walletIntegration>disconnectFail": "There was an error trying to disconnect, please try again.",
+  "components>walletIntegration>cancel": "Cancel",
+  "components>walletIntegration>disconnect": "Desconnect",
+  "components>walletIntegration>continue": "Continue",
+  "components>walletIntegration>confirmDisconnect": "Are you sure you want to disconnect from WalletConnect?",
+  "components>walletIntegration>walletConnected": "Wallet connected",
+  "components>walletIntegration>syncDate": "Connected in: {{date}}"
 }

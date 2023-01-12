@@ -104,10 +104,12 @@ const _WalletConnectIntegration = () => {
             {hasWalletConnect ? (
               <>
                 <p className="pw-text-base pw-font-poppins pw-font-medium">
-                  Carteira sincronizada
+                  {translate('components>walletIntegration>walletConnected')}
                 </p>
                 <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
-                  Sincronizado em: {sincDate.toLocaleDateString()}
+                  {translate('components>walletIntegration>syncDate', {
+                    date: sincDate.toLocaleDateString(),
+                  })}
                 </p>
               </>
             ) : (

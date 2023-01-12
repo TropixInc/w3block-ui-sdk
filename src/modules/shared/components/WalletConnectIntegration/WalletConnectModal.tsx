@@ -447,7 +447,7 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
           <>
             <div className="pw-my-[36px] pw-text-center">
               <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
-                Sua carteira foi desconectada do WalletConnect com sucesso!
+                {translate('components>walletIntegration>disconnectSuccess')}
               </p>
             </div>
           </>
@@ -457,7 +457,7 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
           <>
             <div className="pw-my-[36px] pw-text-center">
               <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
-                Houve um erro ao tentar desconectar, por favor tente novamente.
+                {translate('components>walletIntegration>disconnectFail')}
               </p>
             </div>
             {disconnectLoading ? (
@@ -470,13 +470,13 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                   onClick={handleClose}
                   className="pw-px-[24px] pw-h-[33px] pw-w-[277px] pw-mr-4 pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
                 >
-                  Cancelar
+                  {translate('components>walletIntegration>cancel')}
                 </button>
                 <WeblockButton
                   onClick={handleDisconnect}
                   className="!pw-h-[33px] pw-w-[277px]"
                 >
-                  Tentar Novamente
+                  {translate('components>walletIntegration>tryAgain')}
                 </WeblockButton>
               </div>
             )}
@@ -487,7 +487,7 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
           <>
             <div className="pw-my-[36px] pw-text-center">
               <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
-                Tem certeza que deseja desconectar do WalletConnect?
+                {translate('components>walletIntegration>confirmDisconnect')}
               </p>
             </div>
             {disconnectLoading ? (
@@ -500,13 +500,13 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                   onClick={handleClose}
                   className="pw-px-[24px] pw-h-[33px] pw-w-[277px] pw-mr-4 pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
                 >
-                  Cancelar
+                  {translate('components>walletIntegration>cancel')}
                 </button>
                 <WeblockButton
                   onClick={handleDisconnect}
                   className="!pw-h-[33px] pw-w-[277px]"
                 >
-                  Continuar
+                  {translate('components>walletIntegration>continue')}
                 </WeblockButton>
               </div>
             )}
@@ -517,7 +517,7 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
     return (
       <>
         <div className="pw-font-poppins pw-font-medium sm:pw-text-2xl pw-text-base pw-text-center pw-max-w-[419px] pw-mx-auto">
-          Desconectar
+          {translate('components>walletIntegration>disconnect')}
         </div>
         {renderChildren()}
       </>
