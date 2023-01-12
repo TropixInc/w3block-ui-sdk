@@ -2,8 +2,8 @@ import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
-import { TemplateData } from '../interfaces';
-import { Banner } from './Banner';
+import { PageData, TemplateData } from '../interfaces';
+import { Banner, guessMediaType } from './Banner';
 import { Cookies } from './Cookies';
 import { Header } from './Header';
 import { Menu } from './Menu';
@@ -40,8 +40,34 @@ const Storefront = () => {
 
   if (!themeContext) return null;
 
+  const pageData = data.items?.find((item) => item.type === 'page') as PageData;
+  const pageDefault = themeContext.page;
+  const pageStyle = { ...pageDefault, ...pageData };
+  const mediaType = guessMediaType(pageStyle?.media || '');
+
+  const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${pageStyle.overlayColor})`;
+
+  let bg = '';
+  if (mediaType === 'no-media') {
+    bg = pageStyle.bgColor;
+  } else if (mediaType === 'image') {
+    bg = `url('${pageStyle?.media}')`;
+  }
+
+  let overlayBg = bg;
+  if (mediaType === 'image') {
+    overlayBg = `${overlayProp}, ${bg}`;
+  } else if (mediaType === 'video') {
+    overlayBg = overlayProp;
+  }
+
   return (
-    <>
+    <div
+      style={{
+        color: pageStyle.textColor,
+        background: overlayBg,
+      }}
+    >
       {data.items?.map((item, i) => {
         const Component = componentMap[item.type];
         return (
@@ -53,11 +79,12 @@ const Storefront = () => {
       })}
 
       <Copyright />
-    </>
+    </div>
   );
 };
 
 const componentMap = {
+  page: () => <></>,
   header: Header,
   menu: Menu,
   banner: Banner,

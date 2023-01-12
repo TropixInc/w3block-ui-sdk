@@ -72,6 +72,11 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 };
 
 const sampleTemplate: TemplateDefault = {
+  page: {
+    bgColor: 'white',
+    overlayColor: 'white',
+    textColor: 'black',
+  },
   header: {
     bgColor: 'white',
     textColor: 'black',
@@ -150,6 +155,13 @@ const products = new Array(45).fill(0).map((_, i) => {
 const sampleTemplateData: TemplateData = {
   title: 'Home page',
   items: [
+    {
+      type: 'page',
+      bgColor: 'white',
+      overlayColor: 'white',
+      textColor: 'black',
+      media: '',
+    },
     {
       type: 'header',
       brandText: 'W3block Storefront Custom',
@@ -313,8 +325,7 @@ const sampleTemplateData: TemplateData = {
           overlayColor: 'rgba(1, 1, 1, 0.5)',
           subtitle: 'Lorem ipsum dolor sit amet',
           subtitleColor: 'white',
-          media:
-            'https://imobiliario.cshg.com.br/wp-content/uploads/sites/327/2020/06/Centro-Empresarial-Seneca.mp4',
+          media: '',
           buttonBgColor: 'white',
           buttonHref: 'https://example.com',
           buttonText: 'Clique aqui',
