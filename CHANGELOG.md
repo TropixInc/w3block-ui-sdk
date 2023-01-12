@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.137](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.136...v0.1.1-alpha.137) (2023-01-12)
+
+
+### Features
+
+* add base page styles ([b9353fe](https://github.com/TropixInc/w3block-ui-sdk/commit/b9353fe0fa9086bcb5545c6862c10bc73e4ed2da))
+* add listener and page path for changing the theme ([46ce751](https://github.com/TropixInc/w3block-ui-sdk/commit/46ce751f559c268309538b7cc4ce3cb197905e14))
+* **footer:** basic design ([0d6cae5](https://github.com/TropixInc/w3block-ui-sdk/commit/0d6cae5756b3f05584d1b4700825425e7ee40c8a))
+* **footer:** storefront footer ([ffea0fa](https://github.com/TropixInc/w3block-ui-sdk/commit/ffea0fa2b392f61fb94ee4098aadb391af3acb7a))
+* **menu:** finishes categories menu ([b1d6565](https://github.com/TropixInc/w3block-ui-sdk/commit/b1d6565a78ba8daa28784630a75779832cd7db5d))
+* **menu:** menu structure ([74e2adf](https://github.com/TropixInc/w3block-ui-sdk/commit/74e2adfc3870258650bdd8472c5fcec0eea42404))
+* **pe-143:** add new arrow icon ([0f00e8f](https://github.com/TropixInc/w3block-ui-sdk/commit/0f00e8fc6194c1e8ac2d93a65d5085bacecdc14b))
+* **pe-143:** create 'all categories' dropdown menu ([44274df](https://github.com/TropixInc/w3block-ui-sdk/commit/44274df41e73894c2a6afa0ba1f5abcd46b64cb7))
+* **pe-143:** remove sample components ([35f7e30](https://github.com/TropixInc/w3block-ui-sdk/commit/35f7e30520f754253bc09c93196d234fb34fbb51))
+* **pe-143:** update menu component ([602b199](https://github.com/TropixInc/w3block-ui-sdk/commit/602b199c69c224e924f47321ac8a15b716792281))
+* **pe-165:** add footer icons ([f0239de](https://github.com/TropixInc/w3block-ui-sdk/commit/f0239def69b498f0dedf60dc46826d20fb41fc7a))
+* **pe-165:** add sample template data ([8dcbc2d](https://github.com/TropixInc/w3block-ui-sdk/commit/8dcbc2d62715d7f0ff4dda159a943fef1c6a554c))
+* **pe-165:** create footer component ([868b99f](https://github.com/TropixInc/w3block-ui-sdk/commit/868b99f9d8672f7fcfc4f08a0ca377b770a1b0d1))
+* **pe-165:** remove sample components from header ([a6160a6](https://github.com/TropixInc/w3block-ui-sdk/commit/a6160a67e206dce820937810d2bb1d16cb8b0eef))
+* **pe-165:** update footer types ([08b9912](https://github.com/TropixInc/w3block-ui-sdk/commit/08b9912cc24b6956eb0a583cb45d84366e6c950f))
+* **pe142:** remove console.log and 'any' type ([508c3ad](https://github.com/TropixInc/w3block-ui-sdk/commit/508c3ad5d904ce299f1175cfc5d0cd74f56a2417))
+* wrap components with translatable feature ([7a206bb](https://github.com/TropixInc/w3block-ui-sdk/commit/7a206bb229b0fd81502752763d540326db812019))
+
+
+### Bug Fixes
+
+* add line clamp on card text ([d9eb7a2](https://github.com/TropixInc/w3block-ui-sdk/commit/d9eb7a2a658265be12a34fba4d2d33f949e52858))
+* add menu types to template type ([893757e](https://github.com/TropixInc/w3block-ui-sdk/commit/893757e3d280ebfcfd1fc46291c789fff0ae0493))
+* add translation ([564a3d9](https://github.com/TropixInc/w3block-ui-sdk/commit/564a3d999ddc8e529d7c59f57c43b549095ad5ac))
+* dropdown menu closed by default ([e43a7e6](https://github.com/TropixInc/w3block-ui-sdk/commit/e43a7e67d8287ce56e08fc9526f66ec13e7982af))
+* import order ([76aa4c8](https://github.com/TropixInc/w3block-ui-sdk/commit/76aa4c83363703280f4f3c257f5bef219b9de7be))
+* import orders ([8e8aaa2](https://github.com/TropixInc/w3block-ui-sdk/commit/8e8aaa29e42b7bb127528e6304af48a6f11a3581))
+* **pe-143:** revert tailwind config change ([c039e8f](https://github.com/TropixInc/w3block-ui-sdk/commit/c039e8f78b2ab413796c3c839104dad8a30d9a36))
+* **pe-165:** revert package json script ([10c2645](https://github.com/TropixInc/w3block-ui-sdk/commit/10c26453057308e2beafc981dffe443b1d44583e))
+* **pe-165:** revert tailwind config change ([6805e78](https://github.com/TropixInc/w3block-ui-sdk/commit/6805e788194dbd15fdd5b5a900f01d84c3d8e7c1))
+* **pe-165:** solve type conflict ([1301da9](https://github.com/TropixInc/w3block-ui-sdk/commit/1301da955a453227754de98d5018fa96e7bb35ad))
+* pr adjustments ([2929701](https://github.com/TropixInc/w3block-ui-sdk/commit/29297019266134470cdf16bd03f1cf1f4e95f134))
+* use link for categories ([c2af4de](https://github.com/TropixInc/w3block-ui-sdk/commit/c2af4de89d4f137cdd44269484342c9886f71553))
+
 ### [0.1.1-alpha.136](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.134...v0.1.1-alpha.136) (2023-01-11)
 
 
