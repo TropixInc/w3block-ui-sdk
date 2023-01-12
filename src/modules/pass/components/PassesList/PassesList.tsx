@@ -1,6 +1,6 @@
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
-import { InternalPagesLayoutBase } from '../../../shared';
+import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { TokenListTemplateSkeleton } from '../../../tokens/components/TokensListTemplate/Skeleton';
 import useGetPassByUser from '../../hooks/useGetPassByUser';
@@ -25,6 +25,7 @@ const _PassesList = () => {
                   id={benefit.id}
                   image={benefit.imageUrl || ''}
                   name={benefit.name}
+                  tokenName={benefit.tokenName}
                   contractAddress={benefit.contractAddress}
                   chainId={`${benefit.chainId}`}
                 />
@@ -39,10 +40,15 @@ const _PassesList = () => {
 
 export const PassesList = () => {
   const { pass } = useFlags();
+  const { data: profile } = useProfile();
+  const userRoles = profile?.data.roles || [];
+  const isAdmin = Boolean(
+    userRoles.find((e) => e === 'admin' || e === 'superAdmin')
+  );
   return (
     <TranslatableComponent>
       <InternalPagesLayoutBase>
-        {pass ? <_PassesList /> : null}
+        {pass && isAdmin && <_PassesList />}
       </InternalPagesLayoutBase>
     </TranslatableComponent>
   );

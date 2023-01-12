@@ -3,40 +3,46 @@ import { CSSProperties } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { isImage, isVideo } from '../../shared/utils/validators';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-export const Banner = (props: { data: BannerProps }) => {
-  const { slides, layout, ratio, autoSlide, slideStyle } = props.data;
+export const Banner = ({ data }: { data: BannerProps }) => {
+  const { slides, layout, ratio, autoSlide, slideStyle } = data;
 
   const layoutClass = layout === 'full_width' ? 'pw-w-full' : 'pw-container';
 
   return (
-    <div className={`${layoutClass} pw-mx-auto`}>
-      <Swiper
-        navigation
-        pagination
-        autoplay={autoSlide ? { delay: 2500 } : false}
-        modules={[Navigation, Pagination]}
-        style={
-          {
-            '--swiper-pagination-color': '#F5F9FF',
-            '--swiper-navigation-color': '#F5F9FF',
-            '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
-          } as CSSProperties
-        }
-      >
-        {slides?.map((slide) => (
-          <SwiperSlide key={JSON.stringify(slide)}>
-            <Slide
-              data={{ ...slideStyle, ...slide }}
-              ratioClassName={ratios[ratio]}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <TranslatableComponent>
+      <div className={`${layoutClass} pw-mx-auto`}>
+        <Swiper
+          navigation
+          pagination
+          autoplay={autoSlide ? { delay: 2500 } : false}
+          modules={[Navigation, Pagination]}
+          style={
+            {
+              '--swiper-pagination-color': '#F5F9FF',
+              '--swiper-navigation-color': '#F5F9FF',
+              '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
+            } as CSSProperties
+          }
+        >
+          {slides?.map((slide) => (
+            <SwiperSlide key={slide.title}>
+              <Slide
+                data={{ ...slideStyle, ...slide }}
+                ratioClassName={ratios[ratio]}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </TranslatableComponent>
   );
 };
 
@@ -110,13 +116,9 @@ const Slide = ({
     >
       {mediaType === 'video' && (
         <>
-          <video
+          <ImageSDK
             src={media}
             className={`${ratioClassName} pw-w-full pw-bg-black`}
-            autoPlay
-            playsInline
-            muted
-            loop
           />
           <div
             style={{
@@ -204,6 +206,6 @@ type AlignmentClassNameMap = Record<Alignment, string>;
 
 const guessMediaType = (media: string) => {
   if (!media) return 'no-media';
-  if (media.includes('.mp4')) return 'video';
-  return 'image';
+  if (isImage(media)) return 'image';
+  if (isVideo(media)) return 'video';
 };

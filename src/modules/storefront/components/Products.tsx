@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Card } from '../../shared/components/Card';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { CardConfig } from '../interfaces/Card';
+import { Product } from '../interfaces/Product';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -12,6 +15,9 @@ import 'swiper/css/navigation';
 
 export const Products = (props: { data: ProductsProps }) => {
   // const [products, setProducts] = useState<Product[]>([]);
+  const [error, setError] = useState('');
+  const [translate] = useTranslation();
+
   const {
     layoutProducts,
     itemsPerLine,
@@ -50,15 +56,18 @@ export const Products = (props: { data: ProductsProps }) => {
 
   const gridMaxItemsTotal = itemsPerLine * numberOfLines;
   const carouselMaxItems = 12;
-  const clampedProducts = products?.slice(
-    0,
-    layoutProducts === 'grid' ? gridMaxItemsTotal : carouselMaxItems
-  );
+  const carouselSize =
+    layoutProducts === 'grid' ? gridMaxItemsTotal : carouselMaxItems;
+  const clampedProducts = products?.slice(0, carouselSize);
 
   useEffect(() => {
-    fetchProductsByTagAndOrder(listOrdering, filterTag).then((_products) => {
-      //  setProducts(products)
-    });
+    fetchProductsByTagAndOrder(listOrdering, filterTag)
+      .then((_products) => {
+        //  setProducts(products)
+      })
+      .catch((e) => {
+        setError(e);
+      });
   }, [listOrdering, filterTag]);
 
   const GridProducts = () => {
@@ -105,6 +114,8 @@ export const Products = (props: { data: ProductsProps }) => {
     );
   };
 
+  if (error) return <h2>{translate('storefront>products>error')}</h2>;
+
   return (
     <div className="pw-font-poppins pw-p-10">
       <h2>{title}</h2>
@@ -149,26 +160,3 @@ export type ProductsDefault = {
 } & CardConfig;
 
 type ProductsProps = Omit<ProductsData & ProductsDefault, 'type'>;
-
-export type CardConfig = {
-  cardHoverColor: string;
-  cardUrl: string;
-  showCardButton: boolean;
-  showCardName: boolean;
-  showCardCategory: boolean;
-  showCardDescription: boolean;
-  showCardPrice: boolean;
-  buttonText: string;
-  buttonTextColor: string;
-  buttonBgColor: string;
-  buttonHoverColor: string;
-};
-
-export type Product = {
-  id: string;
-  img: string;
-  name: string;
-  category: string;
-  description: string;
-  price: string;
-};
