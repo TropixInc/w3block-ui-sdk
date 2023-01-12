@@ -59,6 +59,10 @@ const sampleTemplate: TemplateDefault = {
     bgColor: 'white',
     textColor: 'black',
   },
+  menu: {
+    bgColor: 'rgba(255,127,127,0.5)',
+    textColor: 'rgba(20,10,255,1)',
+  },
   banner: {
     ratio: '16:9',
     layout: 'full_width',
@@ -134,6 +138,121 @@ const sampleTemplateData: TemplateData = {
           type: 'external',
           value: 'https://www.nossosparceiros.com.br',
           newWindow: true,
+        },
+      ],
+    },
+    {
+      type: 'menu',
+      bgColor: '#0050FF',
+      textColor: 'white',
+      categories: [
+        {
+          label: 'Vestuário',
+          slug: 'a',
+        },
+        {
+          label: 'Sapatos',
+          slug: 's',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'd',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'f',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'g',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'h',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'j',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'k',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'l',
+        },
+        {
+          label: 'informática e acessórios',
+          slug: 'e',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'q',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'w',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'r',
+        },
+        {
+          label: 'Sapatos',
+          slug: 't',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'y',
+        },
+        {
+          label: 'utilidades domésticas',
+          slug: 'u',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'i',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'o',
+        },
+        {
+          label: 'utilidades domésticas',
+          slug: 'p',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'z',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'x',
+        },
+        {
+          label: 'informática e acessórios',
+          slug: 'c',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'v',
+        },
+        {
+          label: 'utilidades domésticas',
+          slug: 'b',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'n',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'm',
+        },
+        {
+          label: 'informática e acessórios',
+          slug: '1',
         },
       ],
     },

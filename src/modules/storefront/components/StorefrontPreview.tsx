@@ -6,6 +6,7 @@ import { TemplateData } from '../interfaces';
 import { Banner } from './Banner';
 import { Cookies } from './Cookies';
 import { Header } from './Header';
+import { Menu } from './Menu';
 import { Products } from './Products';
 
 export const StorefrontPreview = () => {
@@ -58,6 +59,7 @@ const Storefront = () => {
 
 const componentMap = {
   header: Header,
+  menu: Menu,
   banner: Banner,
   products: Products,
   cookies: Cookies,
