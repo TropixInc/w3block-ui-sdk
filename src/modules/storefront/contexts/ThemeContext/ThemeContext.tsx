@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useEffectOnce } from 'react-use';
 
+import { useRouterConnect } from '../../../shared';
 import { TemplateDefault, TemplateData } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
@@ -24,8 +25,18 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageName, setPageName] = useState('');
 
+  const router = useRouterConnect();
+  // o nome do arquivo que usa o componente StorefrontPreview precisa ser o mesmo que 'page'
+  // no connect temos storefront/[...page].tsx
+  // fazemos a requisição com o nome da página pra pegar os dados e estilos para exibir
+  const pageQueries = router.query?.page;
+
+  useEffect(() => {
+    if (Array.isArray(pageQueries)) setPageName(pageQueries[0]);
+  }, [pageQueries]);
+
   useEffectOnce(() => {
-    //requisição pra pegar valores default
+    // // requisição pra pegar valores default
     // const baseURL = "https://api.w3block.io";
     // const location = "primesea.io";
     // const url = `${baseURL}/storefrontTheme?site=${location}`;
@@ -33,12 +44,18 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    // requisição pra pegar valores do user/página
+    // if (!pageName) return;
+    // // requisição pra pegar valores do user/página
     // const baseURL = "https://api.w3block.io";
     // const location = "primesea.io";
     // const url = `${baseURL}/storeFrontPage?site=${location}&path=${pageName}`;
 
-    setPageTheme(sampleTemplateData);
+    (sampleTemplateData.items[0] as any).brandText = pageName.includes('one')
+      ? 'one'
+      : 'two';
+    const clone = { ...sampleTemplateData };
+
+    setPageTheme(clone);
   }, [pageName]);
 
   return (
@@ -106,13 +123,25 @@ const sampleTemplate: TemplateDefault = {
   },
 };
 
+const bigDescription =
+  'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet';
+const smallDescription = 'Lorem ipsum dolor sit amet';
+
+const smallName = 'Tênis Easy Style Feminino';
+const bigName =
+  'Tênis Easy Style Feminino Evoltenn Solado Trançado Feminino Evoltenn Solado Trançado';
+
+const name = (i: number) => (i % 2 === 0 ? smallName : bigName);
+const description = (i: number) =>
+  i % 2 === 0 ? smallDescription : bigDescription;
+
 const products = new Array(45).fill(0).map((_, i) => {
   return {
     id: String(i + 1),
     img: 'https://i.ibb.co/gr1Qkkc/product.png',
     category: 'calçados',
-    description: 'Lorem ipsum dolor sit amet',
-    name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado',
+    description: description(i),
+    name: name(i),
     hoverColor: 'white',
     price: '237,65',
   };
@@ -264,6 +293,21 @@ const sampleTemplateData: TemplateData = {
         {
           bgColor: '#0ea5e9',
           title: 'Nós empoderamos a arte com tecnologia',
+          titleColor: 'white',
+          alignment: 'right',
+          overlayColor: 'rgba(1, 1, 1, 0.5)',
+          subtitle: 'Lorem ipsum dolor sit amet',
+          subtitleColor: 'white',
+          media:
+            'https://imobiliario.cshg.com.br/wp-content/uploads/sites/327/2020/06/Centro-Empresarial-Seneca.mp4',
+          buttonBgColor: 'white',
+          buttonHref: 'https://example.com',
+          buttonText: 'Clique aqui',
+          buttonTextColor: '#353945',
+        },
+        {
+          bgColor: '#0ea5e9',
+          title: 'Nós empoderamos a arte com tecnologia!',
           titleColor: 'white',
           alignment: 'right',
           overlayColor: 'rgba(1, 1, 1, 0.5)',

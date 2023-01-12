@@ -3,13 +3,16 @@ import { CSSProperties } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { ImageSDK } from '../../shared/components/ImageSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { isImage, isVideo } from '../../shared/utils/validators';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-export const Banner = (props: { data: BannerProps }) => {
-  const { slides, layout, ratio, autoSlide, slideStyle } = props.data;
+export const Banner = ({ data }: { data: BannerProps }) => {
+  const { slides, layout, ratio, autoSlide, slideStyle } = data;
 
   const layoutClass = layout === 'full_width' ? 'pw-w-full' : 'pw-container';
 
@@ -30,7 +33,7 @@ export const Banner = (props: { data: BannerProps }) => {
           }
         >
           {slides?.map((slide) => (
-            <SwiperSlide key={JSON.stringify(slide)}>
+            <SwiperSlide key={slide.title}>
               <Slide
                 data={{ ...slideStyle, ...slide }}
                 ratioClassName={ratios[ratio]}
@@ -113,13 +116,9 @@ const Slide = ({
     >
       {mediaType === 'video' && (
         <>
-          <video
+          <ImageSDK
             src={media}
             className={`${ratioClassName} pw-w-full pw-bg-black`}
-            autoPlay
-            playsInline
-            muted
-            loop
           />
           <div
             style={{
@@ -207,6 +206,6 @@ type AlignmentClassNameMap = Record<Alignment, string>;
 
 const guessMediaType = (media: string) => {
   if (!media) return 'no-media';
-  if (media.includes('.mp4')) return 'video';
-  return 'image';
+  if (isImage(media)) return 'image';
+  if (isVideo(media)) return 'video';
 };
