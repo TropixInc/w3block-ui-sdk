@@ -3,12 +3,13 @@ import { CSSProperties } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { ImageSDK } from '../../shared/components/ImageSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { isImage, isVideo } from '../../shared/utils/validators';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { ImageSDK } from '../../shared/components/ImageSDK';
-import { isImage, isVideo } from '../../shared/utils/validators';
 
 export const Banner = ({ data }: { data: BannerProps }) => {
   const { slides, layout, ratio, autoSlide, slideStyle } = data;
