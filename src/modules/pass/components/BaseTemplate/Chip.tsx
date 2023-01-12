@@ -16,9 +16,11 @@ export const Chip = ({
       <Icon />
     </div>
     <div className="pw-w-[1px] pw-bg-[#35394C] pw-h-[32px]" />
-    <div className="flex flex-col pw-items-start pw-justify-center">
-      <span className="font-semibold text-[13px] leading-[13px]">{title}</span>
-      <span className="font-medium text-[11px] leading-[11px]">
+    <div className="pw-flex pw-flex-col pw-items-start pw-justify-center">
+      <span className="pw-font-semibold pw-text-[13px] pw-leading-[13px]">
+        {title}
+      </span>
+      <span className="pw-font-medium pw-text-[11px] pw-leading-[11px]">
         {showValue ? `R$${parseFloat(value).toFixed(2)}` : '****'}
       </span>
     </div>

@@ -155,6 +155,8 @@
   "connectWallet>metamaskError>app>fristSuggestion":"Restart the Metamask application, placing the url you are in now",
   "connectWallet>metamaskError>app>copyUrl":"copy url",
   "connectWallet>metamaskError>app>secondSuggestion":"Access this site from your computer and complete the procedure via desktop.",
+  "storefront>menu>dropdown>seeAll": "see all",
+  "storefront>menu>dropdown>byActivity": "By activity",
   "storefront>cookies>privacyPolicy": "Privacy policy.",
   "storefront>cookies>iAgree": "I agree"
 }

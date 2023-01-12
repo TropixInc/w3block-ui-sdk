@@ -3,6 +3,7 @@ import { CSSProperties } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -15,30 +16,32 @@ export const Banner = ({ data }: { data: BannerProps }) => {
   const layoutClass = layout === 'full_width' ? 'pw-w-full' : 'pw-container';
 
   return (
-    <div className={`${layoutClass} pw-mx-auto`}>
-      <Swiper
-        navigation
-        pagination
-        autoplay={autoSlide ? { delay: 2500 } : false}
-        modules={[Navigation, Pagination]}
-        style={
-          {
-            '--swiper-pagination-color': '#F5F9FF',
-            '--swiper-navigation-color': '#F5F9FF',
-            '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
-          } as CSSProperties
-        }
-      >
-        {slides?.map((slide) => (
-          <SwiperSlide key={slide.title}>
-            <Slide
-              data={{ ...slideStyle, ...slide }}
-              ratioClassName={ratios[ratio]}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <TranslatableComponent>
+      <div className={`${layoutClass} pw-mx-auto`}>
+        <Swiper
+          navigation
+          pagination
+          autoplay={autoSlide ? { delay: 2500 } : false}
+          modules={[Navigation, Pagination]}
+          style={
+            {
+              '--swiper-pagination-color': '#F5F9FF',
+              '--swiper-navigation-color': '#F5F9FF',
+              '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
+            } as CSSProperties
+          }
+        >
+          {slides?.map((slide) => (
+            <SwiperSlide key={slide.title}>
+              <Slide
+                data={{ ...slideStyle, ...slide }}
+                ratioClassName={ratios[ratio]}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </TranslatableComponent>
   );
 };
 
