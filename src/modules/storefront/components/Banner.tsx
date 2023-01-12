@@ -90,20 +90,23 @@ const Slide = ({
   const alignmentTextClass = alignmentsText[alignment];
 
   const mediaType = guessMediaType(media || '');
-  const bg =
-    mediaType === 'no-media'
-      ? bgColor
-      : mediaType === 'image'
-      ? `url('${media}')`
-      : '';
+  let bg = '';
+  if (mediaType === 'no-media') {
+    bg = bgColor;
+  } else if (mediaType === 'image') {
+    bg = `url('${media}')`;
+  }
 
   const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${overlayColor})`;
-  const overlayBg = !overlayColor
-    ? bg
-    : mediaType === 'image'
-    ? `${overlayProp}, ${bg}`
-    : overlayProp;
-  const videoClass = mediaType === 'video' && 'pw-absolute';
+
+  let overlayBg = bg;
+  if (mediaType === 'image') {
+    overlayBg = `${overlayProp}, ${bg}`;
+  } else if (mediaType === 'video') {
+    overlayBg = overlayProp;
+  }
+
+  const videoClass = mediaType === 'video' ? 'pw-absolute' : '';
 
   return (
     <div
@@ -204,7 +207,7 @@ const alignmentsText: AlignmentClassNameMap = {
 };
 type AlignmentClassNameMap = Record<Alignment, string>;
 
-const guessMediaType = (media: string) => {
+export const guessMediaType = (media: string) => {
   if (!media) return 'no-media';
   if (isImage(media)) return 'image';
   if (isVideo(media)) return 'video';

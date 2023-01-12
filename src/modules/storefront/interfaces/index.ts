@@ -8,6 +8,7 @@ import { ProductsData, ProductsDefault } from '../components/Products';
 export type TemplateData = {
   title: string;
   items: (
+    | PageData
     | HeaderData
     | MenuData
     | BannerData
@@ -18,10 +19,22 @@ export type TemplateData = {
 };
 
 export type TemplateDefault = {
+  page: PageDefault;
   header: HeaderDefault;
   menu: MenuDefault;
   banner: BannerDefault;
   products: ProductsDefault;
   cookies: CookiesDefault;
   footer: FooterDefault;
+};
+
+export type PageData = {
+  type: 'page';
+  media?: string;
+} & Partial<PageDefault>;
+
+export type PageDefault = {
+  bgColor: string;
+  textColor: string;
+  overlayColor: string;
 };
