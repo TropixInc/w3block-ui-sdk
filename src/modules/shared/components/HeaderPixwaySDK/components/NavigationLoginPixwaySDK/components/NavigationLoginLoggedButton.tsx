@@ -121,9 +121,10 @@ export const useDefaultMenuTabs = () => {
 
     },
     {
-      title: translate('components>menu>integration'),
+      name: translate('components>menu>integration'),
       route: PixwayAppRoutes.INTEGRATION,
       icon: <IntegrationIcon />,
+      isVisible: true,
     },
     // {
     //   name: translate('header>components>defaultTab>settings'),

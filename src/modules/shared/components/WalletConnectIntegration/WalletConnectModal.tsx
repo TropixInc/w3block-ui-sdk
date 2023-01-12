@@ -8,6 +8,8 @@ import { ReactComponent as VaultFirstIMG } from '../../assets/images/vaultFirst.
 import { ReactComponent as VaultFourthIMG } from '../../assets/images/vaultFourth.svg';
 import { ReactComponent as VaultSecondIMG } from '../../assets/images/vaultSecond.svg';
 import { ReactComponent as VaultThirdIMG } from '../../assets/images/vaultThird.svg';
+import { useDisconnectWalletConnect } from '../../hooks/useDisconnectWalletConnect';
+import { useIntegrations } from '../../hooks/useIntegrations';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { useRequestWalletConnect } from '../../hooks/useRequestWalletConnect';
 import useTranslation from '../../hooks/useTranslation';
@@ -40,15 +42,34 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
     wallet?.type === WalletTypes.Metamask ? 1 : 6
   );
   const [uriValue, setUriValue] = useState('');
-  const { mutate, isSuccess, isLoading, isError } = useRequestWalletConnect();
+  const {
+    mutate: connectMutate,
+    isSuccess: connectSuccess,
+    isLoading: connectLoading,
+    isError: connectError,
+  } = useRequestWalletConnect();
+  const {
+    mutate: disconnectMutate,
+    isSuccess: disconnectSuccess,
+    isLoading: disconnectLoading,
+    isError: disconnectError,
+  } = useDisconnectWalletConnect();
+  const { data: integrations } = useIntegrations();
 
   useEffect(() => {
-    if (isError) setSteps(StepsVault.ERROR);
-    if (isSuccess) setSteps(StepsVault.FINISHED);
-  }, [isError, isSuccess]);
+    if (connectError) setSteps(StepsVault.ERROR);
+    if (connectSuccess) setSteps(StepsVault.FINISHED);
+  }, [connectError, connectSuccess]);
+
+  const hasWalletConnect = integrations ? integrations.data[0]?.active : false;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUriValue(event.target.value);
+  };
+
+  const handleClose = () => {
+    onClose();
+    setSteps(wallet?.type === WalletTypes.Metamask ? 1 : 6);
   };
 
   const renderStepsVault = () => {
@@ -181,9 +202,9 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 {translate('components>walletIntegration>copyCode')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F]">
-                {translate('components>walletIntegration>chooseColab')}
+                {translate('components>walletIntegration>chooseCollab')}
               </p>
-              {isLoading ? (
+              {connectLoading ? (
                 <div className="pw-flex pw-justify-center pw-items-center pw-my-3">
                   <Spinner />
                 </div>
@@ -198,13 +219,13 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
           );
         case StepsVault.FINISHED:
           return (
-            <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
+            <p className="pw-font-normal pw-text-base !pw-text-center pw-font-poppins pw-text-[#777E8F]">
               {translate('components>walletIntegration>connectSuccess')}
             </p>
           );
         case StepsVault.ERROR:
           return (
-            <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
+            <p className="pw-font-normal pw-text-base !pw-text-center pw-font-poppins pw-text-[#777E8F]">
               {translate('components>walletIntegration>connectFailed')}
             </p>
           );
@@ -221,7 +242,7 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
 
     const handleNext = () => {
       if (steps === StepsVault.LAST && wallet) {
-        mutate({
+        connectMutate({
           chainId: wallet.chainId,
           address: wallet.address,
           uri: uriValue,
@@ -268,12 +289,15 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
           </div>
         )}
         {steps === StepsVault.ERROR && (
-          <WeblockButton
-            onClick={() => setSteps(StepsVault.LAST)}
-            className="!pw-h-[33px] pw-w-[277px]"
-          >
-            {translate('components>walletIntegration>tryAgain')}
-          </WeblockButton>
+          <div className="pw-w-full">
+            <WeblockButton
+              onClick={() => setSteps(StepsVault.LAST)}
+              className="!pw-h-[33px]"
+              fullWidth
+            >
+              {translate('components>walletIntegration>tryAgain')}
+            </WeblockButton>
+          </div>
         )}
       </>
     );
@@ -378,7 +402,7 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
 
     const handleNext = () => {
       if (steps === StepsVault.LAST) {
-        onClose();
+        handleClose();
       } else {
         setSteps(steps + 1);
       }
@@ -407,6 +431,99 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
     );
   };
 
+  const renderDesincOption = () => {
+    const handleDisconnect = () => {
+      if (hasWalletConnect && wallet) {
+        disconnectMutate({
+          chainId: wallet.chainId,
+          address: wallet.address,
+        });
+      }
+    };
+
+    const renderChildren = () => {
+      if (disconnectSuccess)
+        return (
+          <>
+            <div className="pw-my-[36px] pw-text-center">
+              <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
+                Sua carteira foi desconectada do WalletConnect com sucesso!
+              </p>
+            </div>
+          </>
+        );
+      if (disconnectError)
+        return (
+          <>
+            <div className="pw-my-[36px] pw-text-center">
+              <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
+                Houve um erro ao tentar desconectar, por favor tente novamente.
+              </p>
+            </div>
+            {disconnectLoading ? (
+              <div className="pw-flex pw-justify-center pw-items-center pw-my-3">
+                <Spinner />
+              </div>
+            ) : (
+              <div className="pw-flex pw-flex-row">
+                <button
+                  onClick={handleClose}
+                  className="pw-px-[24px] pw-h-[33px] pw-w-[277px] pw-mr-4 pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                >
+                  Cancelar
+                </button>
+                <WeblockButton
+                  onClick={handleDisconnect}
+                  className="!pw-h-[33px] pw-w-[277px]"
+                >
+                  Tentar Novamente
+                </WeblockButton>
+              </div>
+            )}
+          </>
+        );
+      else
+        return (
+          <>
+            <div className="pw-my-[36px] pw-text-center">
+              <p className="pw-font-normal pw-text-base pw-font-poppins pw-text-[#777E8F]">
+                Tem certeza que deseja desconectar do WalletConnect?
+              </p>
+            </div>
+            {disconnectLoading ? (
+              <div className="pw-flex pw-justify-center pw-items-center pw-my-3">
+                <Spinner />
+              </div>
+            ) : (
+              <div className="pw-flex pw-flex-row">
+                <button
+                  onClick={handleClose}
+                  className="pw-px-[24px] pw-h-[33px] pw-w-[277px] pw-mr-4 pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                >
+                  Cancelar
+                </button>
+                <WeblockButton
+                  onClick={handleDisconnect}
+                  className="!pw-h-[33px] pw-w-[277px]"
+                >
+                  Continuar
+                </WeblockButton>
+              </div>
+            )}
+          </>
+        );
+    };
+
+    return (
+      <>
+        <div className="pw-font-poppins pw-font-medium sm:pw-text-2xl pw-text-base pw-text-center pw-max-w-[419px] pw-mx-auto">
+          Desconectar
+        </div>
+        {renderChildren()}
+      </>
+    );
+  };
+
   return (
     <ModalBase
       classes={{
@@ -415,10 +532,12 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
           : '',
       }}
       isOpen={isOpen}
-      onClose={onClose}
-      backdrop={false}
+      onClose={handleClose}
+      backdrop={!isMobile}
     >
-      {wallet?.type === WalletTypes.Metamask
+      {hasWalletConnect
+        ? renderDesincOption()
+        : wallet?.type === WalletTypes.Metamask
         ? renderStepsMetamask()
         : renderStepsVault()}
     </ModalBase>

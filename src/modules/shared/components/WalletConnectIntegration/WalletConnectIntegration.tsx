@@ -12,6 +12,7 @@ import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/met
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useHasWallet, useRouterConnect } from '../../hooks';
+import { useIntegrations } from '../../hooks/useIntegrations';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { useProfile } from '../../hooks/useProfile';
 import useTranslation from '../../hooks/useTranslation';
@@ -23,12 +24,19 @@ import { WalletConnectModal } from './WalletConnectModal';
 
 const _WalletConnectIntegration = () => {
   const { data: profile } = useProfile();
+  const { data: integrations } = useIntegrations();
   const router = useRouterConnect();
   const [showValue, toggleShowValue] = useToggle(false);
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
   const [isOpen, setIsOpen] = useState(false);
   const isLoading = wallet == undefined;
+
+  const hasWalletConnect = integrations ? integrations.data[0]?.active : false;
+
+  const sincDate = integrations
+    ? new Date(integrations.data[0]?.createdAt)
+    : new Date();
 
   return (
     <>
@@ -93,23 +101,38 @@ const _WalletConnectIntegration = () => {
         </div>
         <div className="pw-flex pw-flex-row sm:pw-justify-between pw-justify-center pw-items-center pw-w-full">
           <div className="pw-flex pw-flex-col">
-            <p className="pw-text-base pw-font-poppins pw-font-medium">
-              {translate('components>walletIntegration>connectDiscord')}
-            </p>
-            <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
-              {translate('components>walletIntegration>connectWallet')}
-            </p>
-            {wallet?.type === WalletTypes.Metamask && (
-              <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
-                {translate('components>walletIntegration>connectText')}
-              </p>
+            {hasWalletConnect ? (
+              <>
+                <p className="pw-text-base pw-font-poppins pw-font-medium">
+                  Carteira sincronizada
+                </p>
+                <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
+                  Sincronizado em: {sincDate.toLocaleDateString()}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="pw-text-base pw-font-poppins pw-font-medium">
+                  {translate('components>walletIntegration>connectDiscord')}
+                </p>
+                <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
+                  {translate('components>walletIntegration>connectWallet')}
+                </p>
+                {wallet?.type === WalletTypes.Metamask && (
+                  <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
+                    {translate('components>walletIntegration>connectText')}
+                  </p>
+                )}
+              </>
             )}
           </div>
           <button
             onClick={() => setIsOpen(true)}
             className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
           >
-            {wallet?.type === WalletTypes.Metamask
+            {hasWalletConnect
+              ? 'Dessincronizar'
+              : wallet?.type === WalletTypes.Metamask
               ? translate(
                   'components>walletIntegration>connectTextlearnConnect'
                 )

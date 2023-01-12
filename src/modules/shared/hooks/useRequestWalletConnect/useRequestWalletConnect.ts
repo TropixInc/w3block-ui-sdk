@@ -4,10 +4,10 @@ import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
 
-interface RequestWalletConnectDTO {
+export interface RequestWalletConnectDTO {
   chainId: number;
   address: string;
-  uri: string;
+  uri?: string;
 }
 
 export const useRequestWalletConnect = () => {
