@@ -323,5 +323,6 @@
   "storefront>menu>dropdown>seeAll": "veja todos",
   "storefront>menu>dropdown>byActivity": "Por atividade",
   "storefront>cookies>privacyPolicy": "Política de privacidade.",
-  "storefront>cookies>iAgree": "Estou ciente"
+  "storefront>cookies>iAgree": "Estou ciente",
+  "storefront>products>error": "Erro ao listar produtos, tente novamente mais tarde"
 }

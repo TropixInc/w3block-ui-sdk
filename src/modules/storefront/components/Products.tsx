@@ -9,12 +9,15 @@ import { Product } from '../interfaces/Product';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 // type AAA =Required<ProductsData> & { button: Required<ProductsData["button"]> }
 
 export const Products = (props: { data: ProductsProps }) => {
   // const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState('');
+  const [translate] = useTranslation();
+
   const {
     layoutProducts,
     itemsPerLine,
@@ -111,8 +114,7 @@ export const Products = (props: { data: ProductsProps }) => {
     );
   };
 
-  if (error)
-    return <h2>Erro ao listar produtos, tente novamente mais tarde</h2>;
+  if (error) return <h2>{translate('storefront>products>error')}</h2>;
 
   return (
     <div className="pw-font-poppins pw-p-10">

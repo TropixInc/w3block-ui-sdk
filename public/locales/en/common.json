@@ -158,5 +158,6 @@
   "storefront>menu>dropdown>seeAll": "see all",
   "storefront>menu>dropdown>byActivity": "By activity",
   "storefront>cookies>privacyPolicy": "Privacy policy.",
-  "storefront>cookies>iAgree": "I agree"
+  "storefront>cookies>iAgree": "I agree",
+  "storefront>products>error": "Error listing products, please try again later"
 }
