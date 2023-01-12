@@ -5,6 +5,7 @@ import { ThemeContext, ThemeProvider } from '../contexts';
 import { PageData, TemplateData } from '../interfaces';
 import { Banner, guessMediaType } from './Banner';
 import { Cookies } from './Cookies';
+import { Footer } from './Footer';
 import { Header } from './Header';
 import { Menu } from './Menu';
 import { Products } from './Products';
@@ -90,6 +91,7 @@ const componentMap = {
   banner: Banner,
   products: Products,
   cookies: Cookies,
+  footer: Footer,
 };
 
 const Copyright = () => {

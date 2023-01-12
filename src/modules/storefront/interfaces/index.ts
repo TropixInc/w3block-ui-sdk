@@ -1,5 +1,6 @@
 import { BannerData, BannerDefault } from '../components/Banner';
 import { CookiesData, CookiesDefault } from '../components/Cookies';
+import { FooterData, FooterDefault } from '../components/Footer';
 import { HeaderData, HeaderDefault } from '../components/Header';
 import { MenuData, MenuDefault } from '../components/Menu';
 import { ProductsData, ProductsDefault } from '../components/Products';
@@ -13,6 +14,7 @@ export type TemplateData = {
     | BannerData
     | ProductsData
     | CookiesData
+    | FooterData
   )[];
 };
 
@@ -23,6 +25,7 @@ export type TemplateDefault = {
   banner: BannerDefault;
   products: ProductsDefault;
   cookies: CookiesDefault;
+  footer: FooterDefault;
 };
 
 export type PageData = {

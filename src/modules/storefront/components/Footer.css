@@ -1,0 +1,23 @@
+:root {
+  --footer-menu-color: '#fff';
+  --footer-menu-hover-color: '#fff';
+
+  --footer-social-network-color: '#fff';
+  --footer-social-network-hover-color: '#fff';
+}
+
+.footer-menu {
+  color: var(--footer-menu-color);
+}
+
+.footer-menu:hover {
+  color: var(--footer-menu-hover-color);
+}
+
+.footer-social-network {
+  background-color: var(--footer-social-network-color);
+}
+
+.footer-social-network:hover {
+  background-color: var(--footer-social-network-hover-color);
+}

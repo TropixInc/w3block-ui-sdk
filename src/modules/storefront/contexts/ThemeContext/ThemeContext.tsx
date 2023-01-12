@@ -81,6 +81,14 @@ const sampleTemplate: TemplateDefault = {
     bgColor: 'white',
     textColor: 'black',
   },
+  footer: {
+    bgColor: 'pink',
+    textColor: 'red',
+    menuHoverColor: 'rgba(20,10,255,1)',
+    menuTextColor: 'rgba(10,10,255,1)',
+    socialNetworkIconColor: 'blue',
+    socialNetworkIconHoverColor: 'rgba(20,10,255,1)',
+  },
   menu: {
     bgColor: 'rgba(255,127,127,0.5)',
     textColor: 'rgba(20,10,255,1)',
@@ -365,6 +373,73 @@ const sampleTemplateData: TemplateData = {
       privacyPolicyLink: 'https://example.com',
       disclaimer:
         'Nós utilizamos cookies e outras tecnologias semelhantes para coletar dados durante a navegação para melhorar a sua experiência em nossos serviços. Saiba mais em nossa',
+    },
+    {
+      type: 'footer',
+      bgColor: '#0050FF',
+      textColor: '#FFF',
+      description:
+        'O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.',
+      menuTextColor: '#FFF',
+      menuHoverColor: 'red',
+      menuLinks: [
+        {
+          label: 'Política de privacidade',
+          type: 'external',
+          value: 'privacy',
+        },
+        {
+          label: 'Termos e condições',
+          type: 'internal',
+          value: 'terms_conditions',
+        },
+        {
+          label: 'FAQ',
+          type: 'external',
+          value: 'FAQ',
+        },
+        {
+          label: 'Fale conosco',
+          type: 'external',
+          value: 'contact',
+        },
+      ],
+      socialNetworkIconColor: '#000',
+      socialNetworkIconHoverColor: 'red',
+      socialNetworks: [
+        {
+          url: 'https://twitter.com/',
+          type: 'twitter',
+        },
+        {
+          url: 'https://web.telegram.org/',
+          type: 'telegram',
+        },
+        {
+          url: 'https://discord.com/',
+          type: 'discord',
+        },
+        {
+          url: 'https://www.instagram.com/',
+          type: 'instagram',
+        },
+        {
+          url: 'https://www.facebook.com/',
+          type: 'facebook',
+        },
+        {
+          url: 'https://www.linkedin.com/',
+          type: 'linkedin',
+        },
+        {
+          url: 'https://www.whatsapp.com/',
+          type: 'whatsapp',
+        },
+        {
+          url: 'https://example.com/',
+          type: 'website',
+        },
+      ],
     },
   ],
 };
