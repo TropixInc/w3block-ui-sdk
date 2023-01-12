@@ -13,6 +13,8 @@ import { ReactComponent as DashboardIcon } from '../../assets/icons/dashboard.sv
 // import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as DashIcon } from '../../assets/icons/dashOutlined.svg';
 import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
+import { ReactComponent as IntegrationIcon } from '../../assets/icons/integrationIconOutlined.svg';
+// import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
 import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.svg';
 // import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
@@ -93,6 +95,12 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         link: PixwayAppRoutes.TOKENS_CLIENTS,
         isVisible: !isProduction && isAdmin,
         sub: true,
+      },
+      {
+        title: translate('components>menu>integration'),
+        icon: <IntegrationIcon width={17} height={17} />,
+        link: PixwayAppRoutes.INTEGRATION,
+        isVisible: true,
       },
       // {
       //   title: translate('components>menu>settings'),

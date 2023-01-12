@@ -9,11 +9,13 @@ import { useClickAway } from 'react-use';
 import { ChainId, WalletTypes } from '@w3block/sdk-id';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
+
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 // import { ReactComponent as HelpIcon } from '../../../../../assets/icons/helpIconGray.svg';
+import { ReactComponent as IntegrationIcon } from '../../../../../assets/icons/integrationIconOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
 import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
 import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
@@ -117,6 +119,12 @@ export const useDefaultMenuTabs = () => {
       icon: <TicketIcon width={17} height={17} />,
       isVisible: pass && isAdmin,
 
+    },
+    {
+      name: translate('components>menu>integration'),
+      route: PixwayAppRoutes.INTEGRATION,
+      icon: <IntegrationIcon />,
+      isVisible: true,
     },
     // {
     //   name: translate('header>components>defaultTab>settings'),

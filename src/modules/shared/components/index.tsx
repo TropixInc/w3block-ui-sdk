@@ -10,3 +10,4 @@ export * from './FAQ';
 export * from './PoweredBy';
 export * from './MyProfileTemplate';
 export * from './ContainerControllerSDK';
+export * from './WalletConnectIntegration';
