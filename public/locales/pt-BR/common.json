@@ -320,6 +320,9 @@
   "connectWallet>metamaskError>app>fristSuggestion":"Reinicie o aplicativo Metamask, colocando a url que se encontra agora",
   "connectWallet>metamaskError>app>copyUrl":"copiar url",
   "connectWallet>metamaskError>app>secondSuggestion":"Acesse este site pelo computador e conclua o procedimento via desktop.",
+  "storefront>menu>dropdown>seeAll": "veja todos",
+  "storefront>menu>dropdown>byActivity": "Por atividade",
   "storefront>cookies>privacyPolicy": "Política de privacidade.",
-  "storefront>cookies>iAgree": "Estou ciente"
+  "storefront>cookies>iAgree": "Estou ciente",
+  "storefront>products>error": "Erro ao listar produtos, tente novamente mais tarde"
 }

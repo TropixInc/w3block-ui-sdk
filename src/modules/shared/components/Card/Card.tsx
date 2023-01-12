@@ -1,6 +1,8 @@
 import { CSSProperties } from 'react';
 
-import { CardConfig, Product } from '../../../storefront/components/Products';
+import { CardConfig } from '../../../storefront/interfaces/Card';
+import { Product } from '../../../storefront/interfaces/Product';
+import { ImageSDK } from '../ImageSDK';
 
 import './Card.css';
 
@@ -11,29 +13,31 @@ export const Card = ({
   product: Product;
   config: CardConfig;
 }) => {
-  const imgSize = 260;
   // const router = useRouter();
 
   return (
     <div
       style={
         {
-          border: '1px solid #DCDCDC',
           boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.08)',
           '--products-card-hover-color': config.cardHoverColor,
         } as CSSProperties
       }
-      className={`pw-w-[296px] pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card`}
+      className="pw-border pw-border-solid pw-border-[#DCDCDC] pw-w-[296px] pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card"
       onClick={() => {
         // router.push(card.url);
       }}
     >
       <div className="pw-flex pw-justify-center">
-        <img src={product.img} width={imgSize} height={imgSize} />
+        <ImageSDK src={product.img} className="pw-w-[260px] pw-h-[260px]" />
       </div>
-      {config.showCardName && <p>{product.name}</p>}
+      {config.showCardName && (
+        <p className="pw-line-clamp-2 pw-min-h-[36px]">{product.name}</p>
+      )}
       {config.showCardDescription && (
-        <p className="pw-text-[#7E7E7E]">{product.description}</p>
+        <p className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px]">
+          {product.description}
+        </p>
       )}
       {config.showCardCategory && (
         <p className="pw-text-[#C63535] pw-font-semibold">{product.category}</p>
@@ -54,7 +58,7 @@ export const Card = ({
               '--products-button-bg-color': config.buttonBgColor,
             } as CSSProperties
           }
-          className={`pw-w-full pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button`}
+          className="pw-w-full pw-border pw-border-solid pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button"
         >
           {config.buttonText}
         </button>

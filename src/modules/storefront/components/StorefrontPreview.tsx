@@ -6,6 +6,7 @@ import { PageData, TemplateData } from '../interfaces';
 import { Banner, guessMediaType } from './Banner';
 import { Cookies } from './Cookies';
 import { Header } from './Header';
+import { Menu } from './Menu';
 import { Products } from './Products';
 
 export const StorefrontPreview = () => {
@@ -19,20 +20,20 @@ export const StorefrontPreview = () => {
 const Storefront = () => {
   const context = useContext(ThemeContext);
   const [currentTheme, setCurrentTheme] = useState<TemplateData | null>(null);
-  useEffectOnce(() => {
-    window.addEventListener('message', listener);
 
-    return () => window.removeEventListener('message', listener);
-  });
+  const listener = ({ data }: MessageEvent<TemplateData | string>) => {
+    if (typeof data === 'string') {
+      return context?.setPageName(data);
+    }
 
-  const safeOrigin = 'http://localhost:3000/';
-  const listener = (event: MessageEvent<TemplateData | string>) => {
-    if (event.origin !== safeOrigin) return;
-
-    if (typeof event.data === 'string') return context?.setPageName(event.data);
-
-    setCurrentTheme(event.data);
+    setCurrentTheme(data);
   };
+
+  useEffectOnce(() => {
+    addEventListener('message', listener);
+
+    return () => removeEventListener('message', listener);
+  });
 
   const data = { ...context?.pageTheme, ...currentTheme };
   const themeContext = context?.defaultTheme;
@@ -85,6 +86,7 @@ const Storefront = () => {
 const componentMap = {
   page: () => <></>,
   header: Header,
+  menu: Menu,
   banner: Banner,
   products: Products,
   cookies: Cookies,

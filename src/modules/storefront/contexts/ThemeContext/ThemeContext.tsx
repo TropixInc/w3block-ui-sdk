@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useEffectOnce } from 'react-use';
 
+import { useRouterConnect } from '../../../shared';
 import { TemplateDefault, TemplateData } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
@@ -24,8 +25,18 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageName, setPageName] = useState('');
 
+  const router = useRouterConnect();
+  // o nome do arquivo que usa o componente StorefrontPreview precisa ser o mesmo que 'page'
+  // no connect temos storefront/[...page].tsx
+  // fazemos a requisição com o nome da página pra pegar os dados e estilos para exibir
+  const pageQueries = router.query?.page;
+
+  useEffect(() => {
+    if (Array.isArray(pageQueries)) setPageName(pageQueries[0]);
+  }, [pageQueries]);
+
   useEffectOnce(() => {
-    //requisição pra pegar valores default
+    // // requisição pra pegar valores default
     // const baseURL = "https://api.w3block.io";
     // const location = "primesea.io";
     // const url = `${baseURL}/storefrontTheme?site=${location}`;
@@ -33,12 +44,18 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    // requisição pra pegar valores do user/página
+    // if (!pageName) return;
+    // // requisição pra pegar valores do user/página
     // const baseURL = "https://api.w3block.io";
     // const location = "primesea.io";
     // const url = `${baseURL}/storeFrontPage?site=${location}&path=${pageName}`;
 
-    setPageTheme(sampleTemplateData);
+    (sampleTemplateData.items[0] as any).brandText = pageName.includes('one')
+      ? 'one'
+      : 'two';
+    const clone = { ...sampleTemplateData };
+
+    setPageTheme(clone);
   }, [pageName]);
 
   return (
@@ -63,6 +80,10 @@ const sampleTemplate: TemplateDefault = {
   header: {
     bgColor: 'white',
     textColor: 'black',
+  },
+  menu: {
+    bgColor: 'rgba(255,127,127,0.5)',
+    textColor: 'rgba(20,10,255,1)',
   },
   banner: {
     ratio: '16:9',
@@ -107,13 +128,25 @@ const sampleTemplate: TemplateDefault = {
   },
 };
 
+const bigDescription =
+  'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet';
+const smallDescription = 'Lorem ipsum dolor sit amet';
+
+const smallName = 'Tênis Easy Style Feminino';
+const bigName =
+  'Tênis Easy Style Feminino Evoltenn Solado Trançado Feminino Evoltenn Solado Trançado';
+
+const name = (i: number) => (i % 2 === 0 ? smallName : bigName);
+const description = (i: number) =>
+  i % 2 === 0 ? smallDescription : bigDescription;
+
 const products = new Array(45).fill(0).map((_, i) => {
   return {
     id: String(i + 1),
     img: 'https://i.ibb.co/gr1Qkkc/product.png',
     category: 'calçados',
-    description: 'Lorem ipsum dolor sit amet',
-    name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado',
+    description: description(i),
+    name: name(i),
     hoverColor: 'white',
     price: '237,65',
   };
@@ -146,6 +179,121 @@ const sampleTemplateData: TemplateData = {
           type: 'external',
           value: 'https://www.nossosparceiros.com.br',
           newWindow: true,
+        },
+      ],
+    },
+    {
+      type: 'menu',
+      bgColor: '#0050FF',
+      textColor: 'white',
+      categories: [
+        {
+          label: 'Vestuário',
+          slug: 'a',
+        },
+        {
+          label: 'Sapatos',
+          slug: 's',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'd',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'f',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'g',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'h',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'j',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'k',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'l',
+        },
+        {
+          label: 'informática e acessórios',
+          slug: 'e',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'q',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'w',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'r',
+        },
+        {
+          label: 'Sapatos',
+          slug: 't',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'y',
+        },
+        {
+          label: 'utilidades domésticas',
+          slug: 'u',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'i',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'o',
+        },
+        {
+          label: 'utilidades domésticas',
+          slug: 'p',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'z',
+        },
+        {
+          label: 'Sacolas',
+          slug: 'x',
+        },
+        {
+          label: 'informática e acessórios',
+          slug: 'c',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'v',
+        },
+        {
+          label: 'utilidades domésticas',
+          slug: 'b',
+        },
+        {
+          label: 'Vestuário',
+          slug: 'n',
+        },
+        {
+          label: 'Sapatos',
+          slug: 'm',
+        },
+        {
+          label: 'informática e acessórios',
+          slug: '1',
         },
       ],
     },
