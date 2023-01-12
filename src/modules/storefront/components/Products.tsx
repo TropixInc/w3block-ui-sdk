@@ -4,12 +4,12 @@ import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Card } from '../../shared/components/Card';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { CardConfig } from '../interfaces/Card';
 import { Product } from '../interfaces/Product';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import useTranslation from '../../shared/hooks/useTranslation';
 
 // type AAA =Required<ProductsData> & { button: Required<ProductsData["button"]> }
 
