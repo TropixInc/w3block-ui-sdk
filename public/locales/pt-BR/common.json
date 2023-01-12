@@ -336,5 +336,10 @@
   "components>walletIntegration>skipTutorial": "'Pular Tutorial",
   "components>walletIntegration>next": "Próximo",
   "components>walletIntegration>tryAgain": "Tentar Novamente",
-  "components>walletIntegration>close": "Fechar"
+  "components>walletIntegration>close": "Fechar",
+  "storefront>menu>dropdown>seeAll": "veja todos",
+  "storefront>menu>dropdown>byActivity": "Por atividade",
+  "storefront>cookies>privacyPolicy": "Política de privacidade.",
+  "storefront>cookies>iAgree": "Estou ciente",
+  "storefront>products>error": "Erro ao listar produtos, tente novamente mais tarde"
 }

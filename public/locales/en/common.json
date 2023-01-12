@@ -172,5 +172,10 @@
   "components>walletIntegration>next": "Next",
   "components>walletIntegration>tryAgain": "Try Again",
   "components>walletIntegration>close": "Close",
-  "components>walletIntegration>connectMetamask": "Connect Discord using Metamask"
+  "components>walletIntegration>connectMetamask": "Connect Discord using Metamask",
+  "storefront>menu>dropdown>seeAll": "see all",
+  "storefront>menu>dropdown>byActivity": "By activity",
+  "storefront>cookies>privacyPolicy": "Privacy policy.",
+  "storefront>cookies>iAgree": "I agree",
+  "storefront>products>error": "Error listing products, please try again later"
 }

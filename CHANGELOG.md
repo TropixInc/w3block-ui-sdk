@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.136](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.134...v0.1.1-alpha.136) (2023-01-11)
+
+
+### Features
+
+* create cookies component ([9bab9b3](https://github.com/TropixInc/w3block-ui-sdk/commit/9bab9b3cfe65c1d8ae66b975f658564b3d9e155c))
+* create storefront local previewer ([336b34f](https://github.com/TropixInc/w3block-ui-sdk/commit/336b34f36166810032769f6008991cc162443cff))
+* **np-104:** code review corrections ([7a0c32e](https://github.com/TropixInc/w3block-ui-sdk/commit/7a0c32ed71d9a3396cd777042ef259363fa9609c))
+* **np-104:** Integration in use-benefit page ([6eb842e](https://github.com/TropixInc/w3block-ui-sdk/commit/6eb842e4fe5fac9cb1f2dcbf18709640efa7769b))
+* **pe-167:** add sample banner data ([ec887a8](https://github.com/TropixInc/w3block-ui-sdk/commit/ec887a8cfe4dd0cfa051a1dcc8458d93a97ad8ee))
+* **pe-167:** add swiper package ([bca15b5](https://github.com/TropixInc/w3block-ui-sdk/commit/bca15b536f77ab96249f8d7c86aee20285352894))
+* **pe-167:** add url type (external or internal) ([a49023b](https://github.com/TropixInc/w3block-ui-sdk/commit/a49023b9f9b5126fb50834609a3d2ff4caf645d9))
+* **pe-167:** create banner component ([e50258c](https://github.com/TropixInc/w3block-ui-sdk/commit/e50258c17ed00ce2f0595239f491496abf47e463))
+* **pe-167:** remove margin  for preview ([7fb4301](https://github.com/TropixInc/w3block-ui-sdk/commit/7fb430162b5261561e23fb37a4de90b4cb884b3a))
+* **pe-167:** remove sample categories component ([ca9900a](https://github.com/TropixInc/w3block-ui-sdk/commit/ca9900a950ed9a038cc06b98956f56231efce71c))
+* **pe-170:** add products sample data ([725b3aa](https://github.com/TropixInc/w3block-ui-sdk/commit/725b3aa2cc043d9dae948086098d05277642f58e))
+* **pe-170:** create products list component ([2c9abe8](https://github.com/TropixInc/w3block-ui-sdk/commit/2c9abe883ba491b74aa25a79538bd915d93fdd2f))
+* **pe-170:** create products types ([5df0363](https://github.com/TropixInc/w3block-ui-sdk/commit/5df036389d5b1d3868b5f27e4bc26416a03c8f89))
+
+
+### Bug Fixes
+
+* add dynamic year on copyright text ([7f195ac](https://github.com/TropixInc/w3block-ui-sdk/commit/7f195acc26cebbc06b7797a44b6d3744c6d561d1))
+* add translation for Cookies component ([535577b](https://github.com/TropixInc/w3block-ui-sdk/commit/535577b5d20dd4774671d79e12344f822f7013bc))
+* **np-102 & np-117:** adjusted pass card ([#123](https://github.com/TropixInc/w3block-ui-sdk/issues/123)) ([cbf5eaa](https://github.com/TropixInc/w3block-ui-sdk/commit/cbf5eaafa075f27211e00ca728ecb6807b036596))
+* **np-116:** integration in success validation page  ([6ef0241](https://github.com/TropixInc/w3block-ui-sdk/commit/6ef0241b4716c92cbc0af2280baa3bfee59a03d5))
+* **np-119 & np-124:** adjusts on menu ([#124](https://github.com/TropixInc/w3block-ui-sdk/issues/124)) ([bb26e42](https://github.com/TropixInc/w3block-ui-sdk/commit/bb26e42c77c1f88c79a4c86424fcdea8b1c1cd0b))
+* **np-92:** menu item onnly admin ([#117](https://github.com/TropixInc/w3block-ui-sdk/issues/117)) ([4a87578](https://github.com/TropixInc/w3block-ui-sdk/commit/4a87578a35ea0246aaef50081906fe1c050e0924))
+* **np-99:** order menu and item only admin ([#118](https://github.com/TropixInc/w3block-ui-sdk/issues/118)) ([e531672](https://github.com/TropixInc/w3block-ui-sdk/commit/e5316720445828435735ddba0c0a7231fe2789da))
+* **pe-167:** change max width to container class ([655ae36](https://github.com/TropixInc/w3block-ui-sdk/commit/655ae360947df628003acbd4c2a5300293cad84a))
+* **pe-167:** menu half visible on mobile screen ([8889d88](https://github.com/TropixInc/w3block-ui-sdk/commit/8889d883e155483a9bd39ccb677daec45b6087be))
+* **pe-167:** remove preview ([3609e91](https://github.com/TropixInc/w3block-ui-sdk/commit/3609e917b68b62ec9588faae9f6639bb162ae9b8))
+* **pe-167:** undo header class change ([5122bbc](https://github.com/TropixInc/w3block-ui-sdk/commit/5122bbcff51f4805e4c80159b2a40bb0649c5a4f))
+
 ### [0.1.1-alpha.134](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.133...v0.1.1-alpha.134) (2022-12-21)
 
 ### [0.1.1-alpha.133](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.131...v0.1.1-alpha.133) (2022-12-21)

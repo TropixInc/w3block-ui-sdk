@@ -1,0 +1,17 @@
+:root {
+  --products-card-hover-color: '#fff';
+  --products-button-hover-color: '#fff';
+  --products-button-bg-color: '#fff';
+}
+
+.product-card:hover {
+  background-color: var(--products-card-hover-color);
+}
+
+.product-card-button {
+  background-color: var(--products-button-bg-color);
+}
+
+.product-card-button:hover {
+  background-color: var(--products-button-hover-color);
+}
