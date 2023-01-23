@@ -2,13 +2,9 @@ import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
-import { PageData, TemplateData } from '../interfaces';
-import { Banner, guessMediaType } from './Banner';
-import { Cookies } from './Cookies';
-import { Footer } from './Footer';
+import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Header } from './Header';
 import { Menu } from './Menu';
-import { Products } from './Products';
 
 export const StorefrontPreview = () => {
   return (
@@ -20,14 +16,20 @@ export const StorefrontPreview = () => {
 
 const Storefront = () => {
   const context = useContext(ThemeContext);
-  const [currentTheme, setCurrentTheme] = useState<TemplateData | null>(null);
+  const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
 
-  const listener = ({ data }: MessageEvent<TemplateData | string>) => {
-    if (typeof data === 'string') {
-      return context?.setPageName(data);
+  const listener = ({
+    data,
+  }: MessageEvent<{ update: string; theme: Theme; page: TemplateData }>) => {
+    console.log(data);
+
+    if (data && data.theme) {
+      context?.setDefaultTheme?.(data.theme);
     }
-
-    setCurrentTheme(data);
+    if (data && data.page) {
+      setCurrentPage(data.page);
+    }
+    //setCurrentPage(data);
   };
 
   useEffectOnce(() => {
@@ -36,63 +38,53 @@ const Storefront = () => {
     return () => removeEventListener('message', listener);
   });
 
-  const data = { ...context?.pageTheme, ...currentTheme };
+  console.log(currentPage);
+
+  const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
 
+  console.log(data);
   if (!themeContext) return null;
 
-  const pageData = data.items?.find((item) => item.type === 'page') as PageData;
-  const pageDefault = themeContext.page;
-  const pageStyle = { ...pageDefault, ...pageData };
-  const mediaType = guessMediaType(pageStyle?.media || '');
-
-  const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${pageStyle.overlayColor})`;
-
-  let bg = '';
-  if (mediaType === 'no-media') {
-    bg = pageStyle.bgColor;
-  } else if (mediaType === 'image') {
-    bg = `url('${pageStyle?.media}')`;
-  }
-
-  let overlayBg = bg;
-  if (mediaType === 'image') {
-    overlayBg = `${overlayProp}, ${bg}`;
-  } else if (mediaType === 'video') {
-    overlayBg = overlayProp;
-  }
-
+  const pageDefault = themeContext.configurations;
   return (
     <div
       style={{
-        color: pageStyle.textColor,
-        background: overlayBg,
+        color: pageDefault.styleData.textColor,
+        background: pageDefault.styleData.backgroundColor,
       }}
     >
-      {data.items?.map((item, i) => {
-        const Component = componentMap[item.type];
-        return (
-          <Component
-            key={item.type + i}
-            data={{ ...themeContext[item.type], ...item } as any}
-          />
-        );
-      })}
+      <Header data={themeContext.header} />
+      {data.modules?.map((item) => {
+        //const Component = componentMap[item.type];
 
+        switch (item.type) {
+          case ModulesType.CATEGORIES:
+            return <Menu data={{ ...themeContext.categories, ...item }} />;
+
+          default:
+            break;
+        }
+        // return (
+        //   <Component
+        //     key={item.type + i}
+        //     data={{ ...themeContext[item.type], ...item } as any}
+        //   />
+        // );
+      })}
       <Copyright />
     </div>
   );
 };
 
-const componentMap = {
-  page: () => <></>,
-  header: Header,
-  menu: Menu,
-  banner: Banner,
-  products: Products,
-  cookies: Cookies,
-  footer: Footer,
-};
+// const componentMap = {
+//   header: Header,
+//   menu: Menu,
+//   banner: Banner,
+//   products: Products,
+//   cookies: Cookies,
+//   footer: Footer,
+// };
 
 const Copyright = () => {
   return (

@@ -1,34 +1,26 @@
 import { HeaderPixwaySDK } from '../../shared';
+import { MainModuleThemeInterface } from '../interfaces';
 
-export const Header = (props: { data: HeaderProps }) => {
-  const { bgColor, textColor, brandText, links } = props.data;
+export const Header = (props: { data: MainModuleThemeInterface }) => {
+  const {
+    styleData: {
+      backgroundColor,
+      textColor,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      hoverTextColor,
+      tabs,
+      logoSrc,
+      brandName,
+    },
+  } = props.data;
 
   return (
     <HeaderPixwaySDK
-      bgColor={bgColor}
+      logoSrc={logoSrc}
+      bgColor={backgroundColor}
       textColor={textColor}
-      brandText={brandText}
-      tabs={links?.map((l) => ({ name: l.label, router: l.value }))}
+      brandText={brandName}
+      tabs={tabs?.map((l: any) => ({ name: l.name, router: l.slug }))}
     />
   );
-};
-
-export type HeaderData = {
-  type: 'header';
-  brandText?: string;
-  links?: HeaderLink[];
-} & Partial<HeaderDefault>;
-
-export type HeaderDefault = {
-  bgColor: string;
-  textColor: string;
-};
-
-type HeaderProps = Omit<HeaderData & HeaderDefault, 'type'>;
-
-type HeaderLink = {
-  type: 'internal' | 'external';
-  newWindow: boolean;
-  label: string;
-  value: string;
 };
