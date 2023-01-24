@@ -131,7 +131,7 @@ export const ImageSDK = ({
   };
 
   return useMemo(() => {
-    if (isCloud) {
+    if (isCloud && src?.includes('https://')) {
       return isVid ? <VideoThreath /> : <ImageThreath />;
     } else {
       return isVid ? (

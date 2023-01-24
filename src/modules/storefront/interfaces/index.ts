@@ -1,4 +1,3 @@
-import { BannerData, BannerDefault } from '../components/Banner';
 import { CookiesDefault } from '../components/Cookies';
 import { FooterDefault } from '../components/Footer';
 import { ProductsData, ProductsDefault } from '../components/Products';
@@ -13,7 +12,7 @@ export type Theme = {
   configurations: MainModuleThemeInterface;
   header: MainModuleThemeInterface;
   categories: MainModuleThemeInterface;
-  banner: BannerDefault;
+  banner?: BannerData;
   products: ProductsDefault;
   cookies: CookiesDefault;
   footer: FooterDefault;
@@ -77,7 +76,39 @@ export interface CategoriesData extends MainModuleThemeInterface {
     hoverTextColor?: string;
   };
 }
+
+export interface BannerData extends MainModuleThemeInterface {
+  type: ModulesType.BANNER;
+  styleData: {
+    bannerDisposition?: Layout;
+    bannerRatio?: Ratio;
+    autoSlide?: boolean;
+    banners?: SpecificBannerInfo[];
+  };
+}
+
+export interface SpecificBannerInfo {
+  backgroundColor?: string;
+  backgroundUrl?: string;
+  overlay?: boolean;
+  overlayColor?: string;
+  textAligment?: AlignmentEnum;
+  title?: string;
+  titleColor?: string;
+  subtitle?: string;
+  subtitleColor?: string;
+  actionButton?: boolean;
+  buttonText?: string;
+  buttonLink?: string;
+  buttonTextColor?: string;
+  buttonColor?: string;
+}
+
 type CategoryItem = { name: string; slug: string };
+
+export type Ratio = '20:9' | '16:9' | '3:1' | '4:1' | 'default';
+
+export type Layout = 'fullWidth' | 'fixed';
 
 export type MenuDefault = {
   bgColor: string;

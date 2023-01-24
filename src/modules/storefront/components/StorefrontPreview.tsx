@@ -3,6 +3,7 @@ import { useEffectOnce } from 'react-use';
 
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
+import { Banner } from './Banner';
 import { Header } from './Header';
 import { Menu } from './Menu';
 
@@ -21,8 +22,6 @@ const Storefront = () => {
   const listener = ({
     data,
   }: MessageEvent<{ update: string; theme: Theme; page: TemplateData }>) => {
-    console.log(data);
-
     if (data && data.theme) {
       context?.setDefaultTheme?.(data.theme);
     }
@@ -61,7 +60,8 @@ const Storefront = () => {
         switch (item.type) {
           case ModulesType.CATEGORIES:
             return <Menu data={{ ...themeContext.categories, ...item }} />;
-
+          case ModulesType.BANNER:
+            return <Banner data={{ ...themeContext.banner, ...item }} />;
           default:
             break;
         }

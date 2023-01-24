@@ -80,7 +80,10 @@ const _HeaderPixwaySDK = ({
       );
     } else if (brandText) {
       return (
-        <p className="pw-font-poppins pw-text-[16px] pw-font-[600]">
+        <p
+          style={{ color: textColor }}
+          className="pw-font-poppins pw-text-[16px] pw-font-[600]"
+        >
           {brandText}
         </p>
       );

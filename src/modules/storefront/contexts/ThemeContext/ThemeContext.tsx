@@ -100,21 +100,6 @@ const sampleTemplate: Theme = {
       allCategories: false,
     },
   },
-  banner: {
-    ratio: '16:9',
-    layout: 'full_width',
-    slideStyle: {
-      alignment: 'center',
-      bgColor: 'white',
-      buttonBgColor: 'blue',
-      buttonHrefType: 'external',
-      buttonTextColor: 'white',
-      overlayColor: 'white',
-      subtitleColor: 'black',
-      titleColor: 'black',
-    },
-    autoSlide: false,
-  },
   products: {
     layoutProducts: 'carousel',
     autoSlide: false,
