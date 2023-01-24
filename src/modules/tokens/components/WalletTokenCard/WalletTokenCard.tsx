@@ -13,6 +13,7 @@ import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { TokenActionsProvider } from '../../providers/TokenActionsProvider';
 import { WalletTokenCardActionsPanel } from './ActionsPanel';
 
@@ -24,8 +25,6 @@ interface Props {
   className?: string;
   chainId: number;
   contractAddress: string;
-  hasPass?: boolean;
-  hasActivated?: boolean;
   proccessing?: boolean;
 }
 
@@ -41,10 +40,8 @@ export const WalletTokenCard = ({
   name,
   id,
   className = '',
-  hasPass = false,
   chainId,
   contractAddress,
-  hasActivated,
   proccessing = false,
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
@@ -55,6 +52,13 @@ export const WalletTokenCard = ({
   });
   const [translate] = useTranslation();
   const { pass } = useFlags();
+  const { data: publicTokenResponse } = usePublicTokenData({
+    chainId: chainId.toString(),
+    tokenId: id,
+    contractAddress,
+  });
+
+  const hasPass = publicTokenResponse?.data.group.collectionPass && pass;
 
   const onClickOptionsButton: MouseEventHandler<HTMLButtonElement> = (
     event
@@ -66,7 +70,7 @@ export const WalletTokenCard = ({
 
   return (
     <TokenActionsProvider
-      collectionId={id}
+      collectionId={publicTokenResponse?.data.group.collectionId || ''}
       collectionName={name}
       imageSrc={image}
       contractAddress={contractAddress}
@@ -138,33 +142,22 @@ export const WalletTokenCard = ({
               ))}
           </button>
 
-          {pass ? (
-            hasPass ? (
-              hasActivated ? (
-                <Button
-                  disabled={proccessing}
-                  model="primary"
-                  width="small"
-                  onClick={() =>
-                    router.pushConnect(
-                      PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
-                        .replace('{contractAddress}', contractAddress)
-                        .replace(
-                          '{chainId}',
-                          chainId.toString()
-                        ) as PixwayAppRoutes
-                    )
-                  }
-                >
-                  {translate('connectTokens>tokensList>usePass')}
-                </Button>
-              ) : (
-                <Button disabled={proccessing} model="secondary" width="small">
-                  {translate('connectTokens>tokensList>viewPass')}
-                </Button>
-              )
-            ) : null
-          ) : null}
+          {hasPass && (
+            <Button
+              disabled={proccessing}
+              model="primary"
+              width="small"
+              onClick={() =>
+                router.pushConnect(
+                  PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
+                    .replace('{contractAddress}', contractAddress)
+                    .replace('{chainId}', chainId.toString()) as PixwayAppRoutes
+                )
+              }
+            >
+              {translate('connectTokens>tokensList>usePass')}
+            </Button>
+          )}
         </div>
       </div>
     </TokenActionsProvider>

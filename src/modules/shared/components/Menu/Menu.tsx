@@ -50,7 +50,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { signOut } = usePixwayAuthentication();
   const formatedDate = format(createdAt, 'dd/MM/yyyy');
   const [tabsToShow, setTabsToShow] = useState(tabs);
-  const { pass } = useFlags();
+  const { pass, integration } = useFlags();
 
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
@@ -100,7 +100,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         title: translate('components>menu>integration'),
         icon: <IntegrationIcon width={17} height={17} />,
         link: PixwayAppRoutes.INTEGRATION,
-        isVisible: true,
+        isVisible: integration,
       },
       // {
       //   title: translate('components>menu>settings'),

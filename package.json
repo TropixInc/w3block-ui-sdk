@@ -31,6 +31,7 @@
     "@stripe/react-stripe-js": "^1.13.0",
     "@stripe/stripe-js": "^1.41.0",
     "@types/react-pdf": "^5.7.2",
+    "@types/validator": "^13.7.11",
     "@w3block/pixchain-react-metamask": "^2.8.1",
     "@w3block/sdk-id": "^0.1.4",
     "axios": "^0.27.2",
@@ -47,6 +48,7 @@
     "react-pdf": "^5.7.2",
     "react-use": "^17.4.0",
     "swiper": "^8.4.5",
+    "validator": "^13.7.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

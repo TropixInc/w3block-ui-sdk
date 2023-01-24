@@ -278,7 +278,9 @@ const _PassTemplate = ({
                 <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
                   {benefit?.data?.useLimit === 1
                     ? translate('token>pass>unique')
-                    : translate('token>pass>youStillHave', { quantity: 5 })}
+                    : translate('token>pass>youStillHave', {
+                        quantity: benefit?.data.useLimit,
+                      })}
                 </div>
               </div>
             </div>
