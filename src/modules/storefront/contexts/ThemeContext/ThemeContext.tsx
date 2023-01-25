@@ -84,12 +84,79 @@ const sampleTemplate: Theme = {
     },
   },
   footer: {
-    bgColor: 'pink',
-    textColor: 'red',
-    menuHoverColor: 'rgba(20,10,255,1)',
-    menuTextColor: 'rgba(10,10,255,1)',
-    socialNetworkIconColor: 'blue',
-    socialNetworkIconHoverColor: 'rgba(20,10,255,1)',
+    id: 'my-footer',
+    name: 'my-footer',
+    type: ModulesType.FOOTER,
+    styleData: {
+      backgroundColor: 'pink',
+      textColor: 'red',
+      menuLinksColor: 'rgba(10,10,255,1)',
+      menuLinksHoverColor: 'rgba(20,10,255,1)',
+      socialNetworksIconColor: 'blue',
+      socialNetworksIconHoverColor: 'rgba(145,143,205,1)',
+      w3blockSignature: true,
+      menuLinks: [
+        {
+          label: 'Política de privacidade',
+          type: 'external',
+          value: 'privacy',
+        },
+        {
+          label: 'Termos e condições',
+          type: 'internal',
+          value: 'terms_conditions',
+        },
+        {
+          label: 'FAQ',
+          type: 'external',
+          value: 'FAQ',
+        },
+        {
+          label: 'Fale conosco',
+          type: 'external',
+          value: 'contact',
+        },
+      ],
+      socialNetworks: true,
+    },
+    contentData: {
+      description:
+        'O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.',
+      socialNetworkItems: [
+        {
+          url: 'https://twitter.com/',
+          type: 'twitter',
+        },
+        {
+          url: 'https://web.telegram.org/',
+          type: 'telegram',
+        },
+        {
+          url: 'https://discord.com/',
+          type: 'discord',
+        },
+        {
+          url: 'https://www.instagram.com/',
+          type: 'instagram',
+        },
+        {
+          url: 'https://www.facebook.com/',
+          type: 'facebook',
+        },
+        {
+          url: 'https://www.linkedin.com/',
+          type: 'linkedin',
+        },
+        {
+          url: 'https://www.whatsapp.com/',
+          type: 'whatsapp',
+        },
+        {
+          url: 'https://example.com/',
+          type: 'website',
+        },
+      ],
+    },
   },
   categories: {
     name: 'categories',

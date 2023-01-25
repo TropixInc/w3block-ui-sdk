@@ -1,11 +1,17 @@
 import { CookiesDefault } from '../components/Cookies';
-import { FooterDefault } from '../components/Footer';
+import { SocialNetworkType } from '../components/Footer';
 import { ProductsData, ProductsDefault } from '../components/Products';
 
 export type TemplateData = {
   title: string;
   slug: string;
-  modules: (CategoriesData | BannerData | ProductsData)[];
+  modules: (
+    | CategoriesData
+    | BannerData
+    | ProductsData
+    | CookiesData
+    | FooterData
+  )[];
 };
 
 export type Theme = {
@@ -15,7 +21,7 @@ export type Theme = {
   banner?: BannerData;
   products: ProductsDefault;
   cookies: CookiesDefault;
-  footer: FooterDefault;
+  footer: FooterData;
 };
 
 export interface MainModuleThemeInterface {
@@ -114,6 +120,47 @@ export type MenuDefault = {
   bgColor: string;
   textColor: string;
 };
+
+export interface CookiesData extends MainModuleThemeInterface {
+  type: ModulesType.COOKIE;
+  styleData: {
+    privacyPolicyLink?: string;
+    disclaimer?: string;
+
+    cookiesBgColor?: string;
+    cookiesTextColor?: string;
+    cookiesButtonBgColor?: string;
+    cookiesButtonTextColor?: string;
+    privacyPolicyLinkColor?: string;
+  };
+}
+
+export interface FooterData extends MainModuleThemeInterface {
+  type: ModulesType.FOOTER;
+  styleData: {
+    backgroundColor?: string;
+    w3blockSignature?: boolean;
+    textColor?: string;
+    menuLinks?: Link[];
+    menuLinksColor?: string;
+    menuLinksHoverColor?: string;
+    socialNetworks?: boolean;
+    socialNetworksIconColor?: string;
+    socialNetworksIconHoverColor?: string;
+  };
+  contentData: {
+    socialNetworkItems: SocialNetwork[];
+    description?: string;
+  };
+}
+
+type Link = {
+  label: string;
+  type: 'internal' | 'external';
+  value: string;
+};
+
+type SocialNetwork = { url: string; type: SocialNetworkType };
 
 export enum ModulesType {
   HEADER = 'Header',

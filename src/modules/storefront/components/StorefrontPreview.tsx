@@ -4,8 +4,10 @@ import { useEffectOnce } from 'react-use';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Banner } from './Banner';
+import { Footer } from './Footer';
 import { Header } from './Header';
 import { Menu } from './Menu';
+// import { Cookies } from './Cookies';
 
 export const StorefrontPreview = () => {
   return (
@@ -37,12 +39,9 @@ const Storefront = () => {
     return () => removeEventListener('message', listener);
   });
 
-  console.log(currentPage);
-
   const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
 
-  console.log(data);
   if (!themeContext) return null;
 
   const pageDefault = themeContext.configurations;
@@ -54,6 +53,9 @@ const Storefront = () => {
       }}
     >
       <Header data={themeContext.header} />
+      <Footer data={themeContext.footer} />
+      {/* <Cookies data={themeContext.cookies} /> */}
+
       {data.modules?.map((item) => {
         //const Component = componentMap[item.type];
 
@@ -72,7 +74,6 @@ const Storefront = () => {
         //   />
         // );
       })}
-      <Copyright />
     </div>
   );
 };
@@ -85,11 +86,3 @@ const Storefront = () => {
 //   cookies: Cookies,
 //   footer: Footer,
 // };
-
-const Copyright = () => {
-  return (
-    <div className="pw-w-full pw-grid pw-place-items-center pw-h-[42px] pw-bg-white pw-font-roboto pw-font-medium">
-      Copyright {new Date().getFullYear()} - [web/lock]
-    </div>
-  );
-};
