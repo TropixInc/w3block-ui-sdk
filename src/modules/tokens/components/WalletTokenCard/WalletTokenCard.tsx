@@ -70,7 +70,7 @@ export const WalletTokenCard = ({
 
   return (
     <TokenActionsProvider
-      collectionId={publicTokenResponse?.data.group.collectionId || ''}
+      collectionId={publicTokenResponse?.data?.group?.collectionId || ''}
       collectionName={name}
       imageSrc={image}
       contractAddress={contractAddress}
