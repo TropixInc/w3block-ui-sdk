@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useMemo } from 'react';
+
 import classNames from 'classnames';
 import { format } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
-import { BenefitsResponse } from '../../../pass/hooks/useGetPassBenefitsByContractToken';
+import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
 import { useRouterConnect } from '../../../shared';
@@ -39,10 +42,10 @@ interface Props {
   tokenTemplate: DynamicFormConfiguration;
   className?: string;
   isMultiplePass?: boolean;
-  benefitsList?: BenefitsResponse;
   chainId?: string;
   contractAddress?: string;
   tokenId?: string;
+  collectionId?: string;
 }
 
 export const TokenDetailsCard = ({
@@ -53,9 +56,10 @@ export const TokenDetailsCard = ({
   tokenData,
   tokenTemplate,
   className = '',
-  isMultiplePass = false,
-  benefitsList,
   tokenId = '',
+  chainId,
+  contractAddress,
+  collectionId,
 }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
@@ -64,6 +68,18 @@ export const TokenDetailsCard = ({
     tokenTemplate
   );
   const { pass } = useFlags();
+
+  const { data: benefitsList, isSuccess } = useGetPassBenefits({
+    tokenPassId: collectionId,
+    chainId: chainId,
+    contractAddress: contractAddress,
+  });
+
+  const isMultiplePass = useMemo(() => {
+    if (isSuccess) {
+      return benefitsList?.data?.items?.length > 0;
+    }
+  }, [benefitsList, isSuccess]);
 
   const router = useRouterConnect();
 
@@ -127,14 +143,23 @@ export const TokenDetailsCard = ({
       );
     } else {
       return (
-        <Button variant="secondary">
+        <Button
+          variant="secondary"
+          onClick={() =>
+            router.pushConnect(
+              PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', id).concat(
+                transformObjectToQuery(queryParams)
+              )
+            )
+          }
+        >
           {translate('token>pass>benefits>viewBenefit')}
         </Button>
       );
     }
   };
 
-  const tableData = benefitsList?.items?.map((benefit) => ({
+  const tableData = benefitsList?.data?.items?.map((benefit) => ({
     name: benefit.name,
     type: benefit.type,
     local: benefit?.tokenPassBenefitAddresses
@@ -145,7 +170,7 @@ export const TokenDetailsCard = ({
     actionComponent: handleButtonToShow(benefit.status, benefit.id),
   }));
 
-  const mobileTableData = benefitsList?.items?.map((benefit) => ({
+  const mobileTableData = benefitsList?.data?.items?.map((benefit) => ({
     name: benefit?.name,
     type: benefit?.type,
     status: <StatusTag status={benefit?.status} />,
@@ -161,29 +186,31 @@ export const TokenDetailsCard = ({
     >
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
       {pass ? <InternalPageTitle contract={contract} title={title} /> : null}
-      <LineDivider />
       {isMultiplePass && isDevelopment && pass ? (
-        <div className="pw-flex pw-flex-col pw-gap-6">
-          <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
-            {translate('connect>TokenDetailCard>passAssociated')}
-          </p>
-          {isMobile && mobileTableData ? (
-            <GenericTable
-              columns={mobileHeaders}
-              data={mobileTableData}
-              limitRowsNumber={3}
-              itensPerPage={3}
-            />
-          ) : null}
-          {!isMobile && tableData ? (
-            <GenericTable
-              columns={headers}
-              data={tableData}
-              limitRowsNumber={5}
-              itensPerPage={5}
-            />
-          ) : null}
-        </div>
+        <>
+          <LineDivider />
+          <div className="pw-flex pw-flex-col pw-gap-6">
+            <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
+              {translate('connect>TokenDetailCard>passAssociated')}
+            </p>
+            {isMobile && mobileTableData ? (
+              <GenericTable
+                columns={mobileHeaders}
+                data={mobileTableData}
+                limitRowsNumber={3}
+                itensPerPage={3}
+              />
+            ) : null}
+            {!isMobile && tableData ? (
+              <GenericTable
+                columns={headers}
+                data={tableData}
+                limitRowsNumber={5}
+                itensPerPage={5}
+              />
+            ) : null}
+          </div>
+        </>
       ) : null}
       <LineDivider />
       {mainImage || description ? (
