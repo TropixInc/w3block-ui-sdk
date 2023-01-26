@@ -108,7 +108,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
               ))}
           </div>
 
-          <div className="pw-w-full pw-bg-[#2D66E2] pw-h-[1px] pw-my-[10px]" />
+          <div className="pw-w-full pw-bg-[#ffffffaa] pw-h-[1px] pw-my-[10px]" />
 
           <div
             style={{ color: textColor }}
