@@ -29,7 +29,8 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
       );
     },
     {
-      enabled: validator.isUUID(benefitId) && validator.isUUID(editionNumber),
+      enabled:
+        validator.isUUID(benefitId) && validator.isNumeric(editionNumber),
     }
   );
 };
