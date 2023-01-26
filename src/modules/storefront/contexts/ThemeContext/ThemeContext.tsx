@@ -88,12 +88,12 @@ const sampleTemplate: Theme = {
     name: 'my-footer',
     type: ModulesType.FOOTER,
     styleData: {
-      backgroundColor: 'pink',
-      textColor: 'red',
-      menuLinksColor: 'rgba(10,10,255,1)',
-      menuLinksHoverColor: 'rgba(20,10,255,1)',
-      socialNetworksIconColor: 'blue',
-      socialNetworksIconHoverColor: 'rgba(145,143,205,1)',
+      backgroundColor: '#0050FF',
+      textColor: 'white',
+      menuLinksColor: 'white',
+      menuLinksHoverColor: 'gray',
+      socialNetworksIconColor: 'black',
+      socialNetworksIconHoverColor: 'gray',
       w3blockSignature: true,
       menuLinks: [
         {
@@ -187,11 +187,21 @@ const sampleTemplate: Theme = {
     listOrdering: 'name',
   },
   cookies: {
-    cookiesBgColor: 'rgba(100, 133, 22, 1)',
-    cookiesButtonBgColor: 'rgba(9, 133, 22, 1)',
-    cookiesButtonTextColor: 'rgba(255, 34, 22, 1)',
-    cookiesTextColor: 'rgba(255, 133, 220, 1)',
-    privacyPolicyLinkColor: 'rgba(255, 133, 225, 1)',
+    id: 'my-cookies',
+    name: 'my-cookies',
+    type: ModulesType.COOKIE,
+    styleData: {
+      backgroundColor: '#DDE6F3',
+      textColor: 'black',
+      buttonBgColor: '#0050FF',
+      buttonTextColor: 'white',
+      privacyPolicy: true,
+      privacyPolicyLinkColor: '#0050FF',
+      privacyPolicyLink: 'https://example.com',
+    },
+    contentData: {
+      disclaimer: '',
+    },
   },
 };
 

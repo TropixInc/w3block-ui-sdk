@@ -1,4 +1,3 @@
-import { CookiesDefault } from '../components/Cookies';
 import { SocialNetworkType } from '../components/Footer';
 import { ProductsData, ProductsDefault } from '../components/Products';
 
@@ -20,7 +19,7 @@ export type Theme = {
   categories: MainModuleThemeInterface;
   banner?: BannerData;
   products: ProductsDefault;
-  cookies: CookiesDefault;
+  cookies: CookiesData;
   footer: FooterData;
 };
 
@@ -124,14 +123,16 @@ export type MenuDefault = {
 export interface CookiesData extends MainModuleThemeInterface {
   type: ModulesType.COOKIE;
   styleData: {
-    privacyPolicyLink?: string;
-    disclaimer?: string;
-
-    cookiesBgColor?: string;
-    cookiesTextColor?: string;
-    cookiesButtonBgColor?: string;
-    cookiesButtonTextColor?: string;
+    backgroundColor?: string;
+    textColor?: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    privacyPolicy?: boolean;
     privacyPolicyLinkColor?: string;
+    privacyPolicyLink?: string;
+  };
+  contentData: {
+    disclaimer?: string;
   };
 }
 

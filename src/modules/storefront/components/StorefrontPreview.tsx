@@ -4,10 +4,10 @@ import { useEffectOnce } from 'react-use';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Banner } from './Banner';
+import { Cookies } from './Cookies';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Menu } from './Menu';
-// import { Cookies } from './Cookies';
 
 export const StorefrontPreview = () => {
   return (
@@ -54,7 +54,7 @@ const Storefront = () => {
     >
       <Header data={themeContext.header} />
       <Footer data={themeContext.footer} />
-      {/* <Cookies data={themeContext.cookies} /> */}
+      <Cookies data={themeContext.cookies} />
 
       {data.modules?.map((item) => {
         //const Component = componentMap[item.type];
