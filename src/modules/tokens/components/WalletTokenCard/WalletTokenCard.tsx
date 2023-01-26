@@ -58,7 +58,7 @@ export const WalletTokenCard = ({
     contractAddress,
   });
 
-  const hasPass = publicTokenResponse?.data.group.collectionPass && pass;
+  const hasPass = publicTokenResponse?.data?.group?.collectionPass && pass;
 
   const onClickOptionsButton: MouseEventHandler<HTMLButtonElement> = (
     event
