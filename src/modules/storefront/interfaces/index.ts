@@ -1,4 +1,3 @@
-import { SocialNetworkType } from '../components/Footer';
 import { ProductsData, ProductsDefault } from '../components/Products';
 
 export type TemplateData = {
@@ -150,7 +149,14 @@ export interface FooterData extends MainModuleThemeInterface {
     socialNetworksIconHoverColor?: string;
   };
   contentData: {
-    socialNetworkItems: SocialNetwork[];
+    twitter?: string;
+    telegram?: string;
+    discord?: string;
+    instagram?: string;
+    facebook?: string;
+    linkedin?: string;
+    whatsapp?: string;
+    website?: string;
     description?: string;
   };
 }
@@ -160,8 +166,6 @@ type Link = {
   type: 'internal' | 'external';
   value: string;
 };
-
-type SocialNetwork = { url: string; type: SocialNetworkType };
 
 export enum ModulesType {
   HEADER = 'Header',

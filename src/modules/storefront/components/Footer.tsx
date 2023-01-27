@@ -43,42 +43,21 @@ export const Footer = ({ data }: { data: FooterData }) => {
     website: GlobeIcon,
   };
 
-  const sampleSocialLinks = [
-    {
-      url: 'https://twitter.com/',
-      type: 'twitter',
-    },
-    {
-      url: 'https://web.telegram.org/',
-      type: 'telegram',
-    },
-    {
-      url: 'https://discord.com/',
-      type: 'discord',
-    },
-    {
-      url: 'https://www.instagram.com/',
-      type: 'instagram',
-    },
-    {
-      url: 'https://www.facebook.com/',
-      type: 'facebook',
-    },
-    {
-      url: 'https://www.linkedin.com/',
-      type: 'linkedin',
-    },
-    {
-      url: 'https://www.whatsapp.com/',
-      type: 'whatsapp',
-    },
-    {
-      url: 'https://example.com/',
-      type: 'website',
-    },
+  const names: (keyof FooterData['contentData'])[] = [
+    'twitter',
+    'telegram',
+    'discord',
+    'instagram',
+    'facebook',
+    'linkedin',
+    'whatsapp',
+    'website',
   ];
-  const sampleDescription =
-    'O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.';
+
+  const socialLinks = names.map((name) => ({
+    url: contentData?.[name],
+    type: name as SocialNetworkType,
+  }));
 
   return (
     <>
@@ -115,37 +94,35 @@ export const Footer = ({ data }: { data: FooterData }) => {
             className="pw-text-sm pw-leading-5 pw-text-center pw-px-7 sm:pw-px-28"
           >
             <p className="pw-text-center pw-font-roboto">
-              {contentData?.description || sampleDescription}
+              {contentData?.description}
             </p>
           </div>
 
           {socialNetworks && (
             <div className="pw-w-full pw-flex pw-flex-wrap pw-gap-2 pw-justify-center pw-pt-4">
-              {(contentData?.socialNetworkItems || sampleSocialLinks)?.map(
-                ({ type, url }) => {
-                  const Icon = iconsMap[type];
+              {socialLinks.map((socialLink) => {
+                const Icon = iconsMap[socialLink.type];
 
-                  return (
-                    <a
-                      key={type}
-                      href={url}
-                      target="_blank"
-                      className="pw-rounded-full pw-grid pw-place-items-center pw-p-2 footer-social-network"
-                      style={
-                        {
-                          '--footer-social-network-color':
-                            socialNetworksIconColor,
-                          '--footer-social-network-hover-color':
-                            socialNetworksIconHoverColor,
-                        } as CSSProperties
-                      }
-                      rel="noreferrer"
-                    >
-                      <Icon className="pw-fill-white pw-w-4 pw-h-4" />
-                    </a>
-                  );
-                }
-              )}
+                return (
+                  <a
+                    key={socialLink.type}
+                    href={socialLink.url}
+                    target="_blank"
+                    className="pw-rounded-full pw-grid pw-place-items-center pw-p-2 footer-social-network"
+                    style={
+                      {
+                        '--footer-social-network-color':
+                          socialNetworksIconColor,
+                        '--footer-social-network-hover-color':
+                          socialNetworksIconHoverColor,
+                      } as CSSProperties
+                    }
+                    rel="noreferrer"
+                  >
+                    <Icon className="pw-fill-white pw-w-4 pw-h-4" />
+                  </a>
+                );
+              })}
             </div>
           )}
         </div>
@@ -160,7 +137,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
   );
 };
 
-export type SocialNetworkType =
+type SocialNetworkType =
   | 'twitter'
   | 'telegram'
   | 'discord'
