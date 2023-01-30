@@ -122,40 +122,6 @@ const sampleTemplate: Theme = {
     contentData: {
       description:
         'O Clube não se trata de oferta de valores mobiliários ou investimento coletivo. A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens do XPTO.',
-      socialNetworkItems: [
-        {
-          url: 'https://twitter.com/',
-          type: 'twitter',
-        },
-        {
-          url: 'https://web.telegram.org/',
-          type: 'telegram',
-        },
-        {
-          url: 'https://discord.com/',
-          type: 'discord',
-        },
-        {
-          url: 'https://www.instagram.com/',
-          type: 'instagram',
-        },
-        {
-          url: 'https://www.facebook.com/',
-          type: 'facebook',
-        },
-        {
-          url: 'https://www.linkedin.com/',
-          type: 'linkedin',
-        },
-        {
-          url: 'https://www.whatsapp.com/',
-          type: 'whatsapp',
-        },
-        {
-          url: 'https://example.com/',
-          type: 'website',
-        },
-      ],
     },
   },
   categories: {
