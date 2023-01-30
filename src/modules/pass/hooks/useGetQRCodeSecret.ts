@@ -22,15 +22,19 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
   return usePrivateQuery(
     [PixwayAPIRoutes.TOKEN_PASS],
     () => {
-      return axios.get<SecretResponse>(
-        PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
-          .replace('{id}', benefitId)
-          .replace('{editionNumber}', editionNumber)
-      );
+      return axios
+        .get<SecretResponse>(
+          PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
+            .replace('{id}', benefitId)
+            .replace('{editionNumber}', editionNumber)
+        )
+        .catch((e) => e.response);
     },
     {
       enabled:
-        validator.isUUID(benefitId) && validator.isNumeric(editionNumber),
+        validator.isUUID(benefitId) &&
+        !validator.isEmpty(String(editionNumber)),
+      retry: 1,
     }
   );
 };
