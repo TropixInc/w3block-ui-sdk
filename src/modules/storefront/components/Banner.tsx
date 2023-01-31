@@ -6,11 +6,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { isImage, isVideo } from '../../shared/utils/validators';
-
+import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const {
@@ -98,9 +97,11 @@ const Slide = ({
   return (
     <div
       style={{
-        background: overlayBg,
+        backgroundImage: overlayBg,
+        backgroundPosition: 'center',
+        backgroundColor: backgroundColor,
         backgroundRepeat: 'no-repeat',
-        backgroundSize: '100% 100%',
+        backgroundSize: 'cover',
       }}
       className={`${ratioClassName} pw-font-poppins pw-flex ${rowAlignmentClass} pw-items-center`}
     >

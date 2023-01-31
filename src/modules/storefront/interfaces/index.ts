@@ -1,5 +1,3 @@
-import { ProductsData, ProductsDefault } from '../components/Products';
-
 export type TemplateData = {
   title: string;
   slug: string;
@@ -16,8 +14,8 @@ export type Theme = {
   configurations: MainModuleThemeInterface;
   header: MainModuleThemeInterface;
   categories: MainModuleThemeInterface;
-  banner?: BannerData;
-  products: ProductsDefault;
+  banner?: MainModuleThemeInterface;
+  products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
 };
@@ -166,6 +164,82 @@ type Link = {
   type: 'internal' | 'external';
   value: string;
 };
+export interface ProductsData extends MainModuleThemeInterface {
+  type: ModulesType.CARDS;
+  styleData: {
+    layoutDisposition?: CardLayoutDisposition;
+    autoSlide?: boolean;
+    numberOfLines?: number;
+    itensPerLine?: number;
+    ordering?: CardsOrderingEnum;
+    showCardTitle?: boolean;
+    showCardCategory?: boolean;
+    showCardDescription?: boolean;
+    showCardValue?: boolean;
+    totalRows?: number;
+    cardBackgroundColor?: string;
+    cardHoverColor?: string;
+    cardProductNameColor?: string;
+    cardCategoryColor?: string;
+    cardDescriptionColor?: string;
+    cardValueColor?: string;
+    cardActionButton?: boolean;
+    cardButtonText?: string;
+    cardButtonTextColor?: string;
+    cardButtonColor?: string;
+    cardButtonHoverColor?: string;
+    sessionButton?: boolean;
+    sessionAlignment?: AlignmentEnum;
+    sessionButtonText?: string;
+    sessionButtonTextColor?: string;
+    sessionButtonColor?: string;
+    sessionHoverColor?: string;
+    sessionLink?: string;
+    backgroundSession?: boolean;
+    backgroundColor?: string;
+    backgroundUrl?: string;
+    overlay?: boolean;
+    overlayColor?: string;
+  };
+  contentData: {
+    cardType?: CardTypesEnum;
+    moduleTitle?: string;
+    cardSearch?: CardSearchEnum;
+    contentCards?: SpecificContentCard[];
+  };
+}
+
+export interface SpecificContentCard {
+  title?: string;
+  description?: string;
+  image?: string;
+  category?: string;
+  value?: string;
+  hasLink?: boolean;
+  link?: string;
+}
+
+export enum CardSearchEnum {
+  FEATURED = 'featured',
+  MOST_SEEN = 'mostSeen',
+  CHEAPER = 'cheaper',
+}
+
+export enum CardTypesEnum {
+  DYNAMIC = 'dynamic',
+  CONTENT = 'content',
+}
+
+export enum CardsOrderingEnum {
+  NAME = 'name',
+  VALUE = 'value',
+  RELEVANCE = 'relevance',
+}
+
+export enum CardLayoutDisposition {
+  CARROUSEL = 'carrousel',
+  GRID = 'grid',
+}
 
 export enum ModulesType {
   HEADER = 'Header',
