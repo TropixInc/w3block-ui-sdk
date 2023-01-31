@@ -27,9 +27,9 @@ const useGetPassBenefits = ({
       PixwayAPIRoutes.PASS_BENEFIT.replace('{tenantId}', tenantId ?? ''),
       {
         params: {
-          tokenPassId: tokenPassId ?? '',
-          chainId: (chainId && parseInt(chainId)) ?? '',
-          contractAddress: contractAddress ?? '',
+          tokenPassId: tokenPassId,
+          chainId: chainId && parseInt(chainId),
+          contractAddress: contractAddress,
         },
       }
     )

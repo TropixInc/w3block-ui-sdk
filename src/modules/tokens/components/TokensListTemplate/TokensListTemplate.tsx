@@ -4,7 +4,6 @@ import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
-import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -27,7 +26,6 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const { wallet } = useUserWallet();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const isProduction = useIsProduction();
   const { data } = useProcessingTokens();
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 6;
@@ -56,13 +54,11 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               id={token.id.tokenId}
               chainId={wallet?.chainId ?? 80001}
               contractAddress={''}
-              hasPass={!isProduction}
-              hasActivated={false}
               proccessing={true}
             />
           </li>
         ))}
-        {tokensDisplaying.map((token, index) => (
+        {tokensDisplaying.map((token) => (
           <li className="w-full" key={token.id}>
             <WalletTokenCard
               category={token.category || ''}
@@ -71,8 +67,6 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               id={token.id}
               chainId={token.chainId}
               contractAddress={token.contractAddress}
-              hasPass={!isProduction}
-              hasActivated={index % 2 === 0}
             />
           </li>
         ))}

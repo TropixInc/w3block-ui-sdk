@@ -36,10 +36,12 @@ const GenericTable = <T, K extends keyof T>({
     const startIndex = (page - 1) * itensPerPage;
     const lastIndex = page * itensPerPage;
     return data.slice(startIndex, lastIndex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, data]);
 
   useEffect(() => {
     setTotalPages(Math.ceil(data.length / itensPerPage));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
