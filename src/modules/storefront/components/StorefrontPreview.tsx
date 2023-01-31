@@ -6,6 +6,7 @@ import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Banner } from './Banner';
 import { Header } from './Header';
 import { Menu } from './Menu';
+import { Products } from './Products';
 
 export const StorefrontPreview = () => {
   return (
@@ -37,8 +38,6 @@ const Storefront = () => {
     return () => removeEventListener('message', listener);
   });
 
-  console.log(currentPage);
-
   const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
 
@@ -62,6 +61,8 @@ const Storefront = () => {
             return <Menu data={{ ...themeContext.categories, ...item }} />;
           case ModulesType.BANNER:
             return <Banner data={{ ...themeContext.banner, ...item }} />;
+          case ModulesType.CARDS:
+            return <Products data={{ ...themeContext.products, ...item }} />;
           default:
             break;
         }

@@ -5,7 +5,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Card } from '../../shared/components/Card';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { CardConfig } from '../interfaces/Card';
+import {
+  CardLayoutDisposition,
+  CardsOrderingEnum,
+  ProductsData,
+} from '../interfaces';
 import { Product } from '../interfaces/Product';
 
 import 'swiper/css';
@@ -13,79 +17,50 @@ import 'swiper/css/navigation';
 
 // type AAA =Required<ProductsData> & { button: Required<ProductsData["button"]> }
 
-export const Products = (props: { data: ProductsProps }) => {
-  // const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState('');
+export const Products = (props: { data: ProductsData }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [error, _] = useState('');
   const [translate] = useTranslation();
 
   const {
-    layoutProducts,
-    itemsPerLine,
-    numberOfLines,
-    listOrdering,
-    filterTag,
-    autoSlide,
-    products,
-    title,
-    cardHoverColor,
-    cardUrl,
-    showCardButton,
-    showCardName,
-    showCardCategory,
-    showCardDescription,
-    showCardPrice,
-    buttonTextColor,
-    buttonText,
-    buttonBgColor,
-    buttonHoverColor,
+    styleData: {
+      layoutDisposition,
+      autoSlide,
+      itensPerLine,
+      ordering,
+      totalRows,
+      backgroundColor,
+      backgroundUrl,
+    },
+    contentData: { moduleTitle },
   } = props.data;
 
-  const cardConfig = {
-    cardHoverColor,
-    cardUrl,
-    showCardButton,
-    showCardName,
-    showCardCategory,
-    showCardDescription,
-    showCardPrice,
-    buttonTextColor,
-    buttonText,
-    buttonBgColor,
-    buttonHoverColor,
-  };
-
-  const gridMaxItemsTotal = itemsPerLine * numberOfLines;
-  const carouselMaxItems = 12;
+  const gridMaxItemsTotal =
+    (itensPerLine ? itensPerLine : 4) * (totalRows ? totalRows : 2)!;
+  const carouselMaxItems = (itensPerLine ? itensPerLine : 4) * 4;
   const carouselSize =
-    layoutProducts === 'grid' ? gridMaxItemsTotal : carouselMaxItems;
+    layoutDisposition === CardLayoutDisposition.GRID
+      ? gridMaxItemsTotal
+      : carouselMaxItems;
   const clampedProducts = products?.slice(0, carouselSize);
 
   useEffect(() => {
-    fetchProductsByTagAndOrder(listOrdering, filterTag)
-      .then((_products) => {
-        //  setProducts(products)
-      })
-      .catch((e) => {
-        setError(e);
-      });
-  }, [listOrdering, filterTag]);
+    const _products = fetchProductsByTagAndOrder(ordering);
+
+    setProducts(_products);
+  }, []);
 
   const GridProducts = () => {
     return (
       <div
-        className={`pw-grid pw-gap-4 pw-grid-cols-[repeat(1,minmax(350px,1fr))] sm:pw-grid-cols-[repeat(${Math.min(
-          itemsPerLine,
-          2
-        )},minmax(350px,1fr))] lg:pw-grid-cols-[repeat(${Math.min(
-          itemsPerLine,
-          3
-        )},minmax(350px,1fr))] xl:pw-grid-cols-[repeat(${Math.min(
-          itemsPerLine,
-          4
-        )},minmax(350px,1fr))]`}
+        style={{
+          gridTemplateColumns: `repeat(${itensPerLine ?? 4}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${totalRows ?? 2}, minmax(0, 1fr))`,
+        }}
+        className="pw-grid pw-gap-4"
       >
         {clampedProducts?.map((p) => (
-          <Card key={p.id} product={p} config={cardConfig} />
+          <Card key={p.id} product={p} config={props.data} />
         ))}
       </div>
     );
@@ -98,16 +73,16 @@ export const Products = (props: { data: ProductsProps }) => {
         modules={[Navigation, Autoplay]}
         autoplay={autoSlide ? { delay: 2500 } : false}
         breakpoints={{
-          640: { slidesPerView: 1, spaceBetween: 10 },
-          768: { slidesPerView: 2, spaceBetween: 10 },
-          1024: { slidesPerView: 3, spaceBetween: 10 },
-          1280: { slidesPerView: 4, spaceBetween: 10 },
+          640: { slidesPerView: 1, spaceBetween: 16 },
+          768: { slidesPerView: 2, spaceBetween: 16 },
+          1024: { slidesPerView: 3, spaceBetween: 16 },
+          1280: { slidesPerView: 4, spaceBetween: 16 },
         }}
         className="pw-max-w-[1500px] md:pw-px-6"
       >
         {clampedProducts?.map((p) => (
           <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
-            <Card key={p.id} product={p} config={cardConfig} />
+            <Card key={p.id} product={p} config={props.data} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -117,20 +92,36 @@ export const Products = (props: { data: ProductsProps }) => {
   if (error) return <h2>{translate('storefront>products>error')}</h2>;
 
   return (
-    <div className="pw-font-poppins pw-p-10">
-      <h2>{title}</h2>
+    <div
+      style={{
+        background: backgroundUrl
+          ? `url('${backgroundUrl}')`
+          : backgroundColor
+          ? backgroundColor
+          : 'transparent',
+      }}
+      className="pw-font-poppins"
+    >
+      <div className="pw-container pw-mx-auto pw-pb-10">
+        {moduleTitle && moduleTitle != '' && (
+          <h2 className="pw-font-poppins pw-font-semibold pw-text-lg pw-pt-10">
+            {moduleTitle}
+          </h2>
+        )}
 
-      <div className="pw-flex pw-justify-center">
-        {layoutProducts === 'grid' ? <GridProducts /> : <SliderProducts />}
+        <div className="pw-flex pw-justify-center pw-pt-10">
+          {layoutDisposition === CardLayoutDisposition.GRID ? (
+            <GridProducts />
+          ) : (
+            <SliderProducts />
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-const fetchProductsByTagAndOrder = async (
-  _order: string,
-  _tag: string
-): Promise<Product[]> => {
+const fetchProductsByTagAndOrder = (_order?: CardsOrderingEnum): Product[] => {
   return new Array(45).fill(0).map((_, i) => {
     return {
       id: String(i + 1),
@@ -143,20 +134,3 @@ const fetchProductsByTagAndOrder = async (
     };
   });
 };
-
-export type ProductsData = {
-  type: 'products';
-  title?: string;
-  products?: Product[];
-} & Partial<ProductsDefault>;
-
-export type ProductsDefault = {
-  filterTag: string;
-  layoutProducts: 'carousel' | 'grid';
-  autoSlide: boolean;
-  itemsPerLine: number;
-  numberOfLines: number;
-  listOrdering: keyof Omit<Product, 'img' | 'id'>;
-} & CardConfig;
-
-type ProductsProps = Omit<ProductsData & ProductsDefault, 'type'>;
