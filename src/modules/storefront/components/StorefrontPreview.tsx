@@ -53,7 +53,6 @@ const Storefront = () => {
       }}
     >
       <Header data={themeContext.header} />
-      <Footer data={themeContext.footer} />
       <Cookies data={themeContext.cookies} />
 
       {data.modules?.map((item) => {
@@ -74,6 +73,8 @@ const Storefront = () => {
         //   />
         // );
       })}
+
+      <Footer data={themeContext.footer} />
     </div>
   );
 };

@@ -31,7 +31,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
     <TranslatableComponent>
       <div
         style={{ backgroundColor }}
-        className="pw-box-border lg:pw-max-h-[89px] pw-py-3 lg:pw-py-[23.5px] pw-px-14 lg:pw-px-[114px] pw-flex pw-justify-center pw-items-center pw-bottom-0 pw-left-0 pw-right-0 pw-z-50 pw-sticky"
+        className="pw-box-border lg:pw-max-h-[89px] pw-py-3 lg:pw-py-[23.5px] pw-px-14 lg:pw-px-[114px] pw-flex pw-justify-center pw-items-center pw-bottom-0 pw-left-0 pw-right-0 pw-z-50 pw-fixed"
       >
         <div className="pw-max-w-[1029px] pw-flex pw-items-center pw-justify-between pw-h-full pw-flex-wrap lg:pw-flex-nowrap pw-gap-2">
           <p

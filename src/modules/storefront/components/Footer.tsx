@@ -101,6 +101,8 @@ export const Footer = ({ data }: { data: FooterData }) => {
           {socialNetworks && (
             <div className="pw-w-full pw-flex pw-flex-wrap pw-gap-2 pw-justify-center pw-pt-4">
               {socialLinks.map((socialLink) => {
+                if (!socialLink.url) return null;
+
                 const Icon = iconsMap[socialLink.type];
 
                 return (
