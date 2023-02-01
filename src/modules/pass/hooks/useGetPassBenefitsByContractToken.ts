@@ -38,7 +38,7 @@ const useGetPassBenefitsByContractToken = ({
       enabled:
         validator.isUUID(tenantId) &&
         validator.isUUID(collectionId) &&
-        validator.isNumeric(editionNumber),
+        !validator.isEmpty(String(editionNumber)),
       refetchInterval: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
