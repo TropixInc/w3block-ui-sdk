@@ -70,17 +70,24 @@ export const Products = (props: { data: ProductsData }) => {
   };
 
   const SliderProducts = () => {
+    const slicedBreakPoints = [
+      { key: 640, value: { slidesPerView: 1, spaceBetween: 16 } },
+      { key: 768, value: { slidesPerView: 2, spaceBetween: 16 } },
+      { key: 1024, value: { slidesPerView: 3, spaceBetween: 16 } },
+      { key: 1280, value: { slidesPerView: itensPerLine, spaceBetween: 16 } },
+    ]
+      .slice(0, itensPerLine)
+      .reduce(
+        (obj, item) => Object.assign(obj, { [item.key]: item.value }),
+        {}
+      );
+
     return (
       <Swiper
         navigation
         modules={[Navigation, Autoplay]}
         autoplay={autoSlide ? { delay: 2500 } : false}
-        breakpoints={{
-          640: { slidesPerView: 1, spaceBetween: 16 },
-          768: { slidesPerView: 2, spaceBetween: 16 },
-          1024: { slidesPerView: 3, spaceBetween: 16 },
-          1280: { slidesPerView: itensPerLine, spaceBetween: 16 },
-        }}
+        breakpoints={{ ...slicedBreakPoints }}
         className="pw-max-w-[1500px] md:pw-px-6"
       >
         {clampedProducts?.map((p) => (

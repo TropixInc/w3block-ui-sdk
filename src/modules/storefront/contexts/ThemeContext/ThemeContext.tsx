@@ -124,8 +124,8 @@ export const sampleTemplate: Theme = {
     type: ModulesType.CARDS,
     styleData: {
       autoSlide: false,
-      layoutDisposition: CardLayoutDisposition.GRID,
-      itensPerLine: 4,
+      layoutDisposition: CardLayoutDisposition.CARROUSEL,
+      itensPerLine: 1,
       totalRows: 2,
       showCardTitle: showCardData,
       showCardCategory: showCardData,
