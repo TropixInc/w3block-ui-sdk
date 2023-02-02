@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
-import { ThemeContext, ThemeProvider } from '../contexts';
+import { sampleTemplate, ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Banner } from './Banner';
 import { Header } from './Header';
@@ -18,7 +18,14 @@ export const StorefrontPreview = () => {
 
 const Storefront = () => {
   const context = useContext(ThemeContext);
-  const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
+  const [currentPage, setCurrentPage] = useState<TemplateData | null>({
+    slug: 'home',
+    title: 'Home',
+    modules: [
+      // eslint-ignore
+      sampleTemplate.products as any,
+    ],
+  });
 
   const listener = ({
     data,

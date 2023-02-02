@@ -9,7 +9,16 @@ import {
 import { useEffectOnce } from 'react-use';
 
 import { useRouterConnect } from '../../../shared';
-import { Theme, TemplateData, ModulesType } from '../../interfaces';
+import {
+  Theme,
+  TemplateData,
+  ModulesType,
+  CardSearchEnum,
+  CardTypesEnum,
+  AlignmentEnum,
+  CardsOrderingEnum,
+  CardLayoutDisposition,
+} from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
 interface IThemeContext {
@@ -65,7 +74,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const sampleTemplate: Theme = {
+const showCardData = true;
+
+export const sampleTemplate: Theme = {
   configurations: {
     name: 'configurations',
     type: ModulesType.CONFIGURATION,
@@ -106,6 +117,61 @@ const sampleTemplate: Theme = {
     cookiesButtonTextColor: 'rgba(255, 34, 22, 1)',
     cookiesTextColor: 'rgba(255, 133, 220, 1)',
     privacyPolicyLinkColor: 'rgba(255, 133, 225, 1)',
+  },
+  products: {
+    id: 'products',
+    name: 'products',
+    type: ModulesType.CARDS,
+    styleData: {
+      autoSlide: false,
+      layoutDisposition: CardLayoutDisposition.GRID,
+      itensPerLine: 4,
+      totalRows: 2,
+      showCardTitle: showCardData,
+      showCardCategory: showCardData,
+      showCardDescription: showCardData,
+      showCardValue: showCardData,
+      cardActionButton: showCardData,
+      ordering: CardsOrderingEnum.NAME,
+      cardBackgroundColor: 'white',
+      cardHoverColor: 'gray',
+      cardProductNameColor: 'black',
+      cardCategoryColor: 'red',
+      cardDescriptionColor: 'lightblue',
+      cardValueColor: 'green',
+      cardButtonText: 'Compre',
+      cardButtonTextColor: 'white',
+      cardButtonColor: 'blue',
+      cardButtonHoverColor: 'darkblue',
+      sessionButton: false,
+      sessionAlignment: AlignmentEnum.LEFT,
+      sessionButtonText: '',
+      sessionButtonTextColor: 'black',
+      sessionButtonColor: 'blue',
+      sessionHoverColor: 'darkblue',
+      sessionLink: '',
+      backgroundSession: false,
+      backgroundColor: 'white',
+      backgroundUrl: '',
+      overlay: false,
+      overlayColor: '',
+    },
+    contentData: {
+      cardType: CardTypesEnum.DYNAMIC,
+      moduleTitle: 'Produtos mais vendidos',
+      cardSearch: CardSearchEnum.FEATURED,
+      contentCards: [
+        {
+          title: 'Produto Zero',
+          description: 'Descrição do produto zero',
+          image: '',
+          category: 'calçados',
+          value: '123',
+          hasLink: false,
+          link: '',
+        },
+      ],
+    },
   },
 };
 
