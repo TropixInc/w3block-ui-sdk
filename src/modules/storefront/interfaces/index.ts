@@ -160,9 +160,9 @@ export interface FooterData extends MainModuleThemeInterface {
 }
 
 type Link = {
-  label: string;
+  name: string;
   type: 'internal' | 'external';
-  value: string;
+  slug: string;
 };
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;

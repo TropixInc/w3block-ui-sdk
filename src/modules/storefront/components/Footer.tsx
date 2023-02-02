@@ -67,24 +67,22 @@ export const Footer = ({ data }: { data: FooterData }) => {
       >
         <div className="pw-pb-6 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-pt-10">
           <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row pw-font-roboto">
-            {menuLinks
-              ?.map((l: any) => ({ label: l.name, value: l.slug }))
-              ?.map(({ label, value }) => (
-                <a
-                  key={value}
-                  href={value}
-                  className="footer-menu"
-                  style={
-                    {
-                      textDecoration: 'none',
-                      '--footer-menu-color': menuLinksColor,
-                      '--footer-menu-hover-color': menuLinksHoverColor,
-                    } as CSSProperties
-                  }
-                >
-                  {label}
-                </a>
-              ))}
+            {menuLinks?.map(({ name, slug }) => (
+              <a
+                key={slug}
+                href={slug}
+                className="footer-menu"
+                style={
+                  {
+                    textDecoration: 'none',
+                    '--footer-menu-color': menuLinksColor,
+                    '--footer-menu-hover-color': menuLinksHoverColor,
+                  } as CSSProperties
+                }
+              >
+                {name}
+              </a>
+            ))}
           </div>
 
           <div className="pw-w-full pw-bg-[#ffffffaa] pw-h-[1px] pw-my-[10px]" />

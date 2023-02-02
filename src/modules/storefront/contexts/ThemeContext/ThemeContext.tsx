@@ -97,24 +97,24 @@ const sampleTemplate: Theme = {
       w3blockSignature: true,
       menuLinks: [
         {
-          label: 'Política de privacidade',
+          name: 'Política de privacidade',
           type: 'external',
-          value: 'privacy',
+          slug: 'privacy',
         },
         {
-          label: 'Termos e condições',
+          name: 'Termos e condições',
           type: 'internal',
-          value: 'terms_conditions',
+          slug: 'terms_conditions',
         },
         {
-          label: 'FAQ',
+          name: 'FAQ',
           type: 'external',
-          value: 'FAQ',
+          slug: 'FAQ',
         },
         {
-          label: 'Fale conosco',
+          name: 'Fale conosco',
           type: 'external',
-          value: 'contact',
+          slug: 'contact',
         },
       ],
       socialNetworks: true,
