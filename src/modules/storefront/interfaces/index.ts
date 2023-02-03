@@ -1,10 +1,13 @@
-import { CookiesDefault } from '../components/Cookies';
-import { FooterDefault } from '../components/Footer';
-
 export type TemplateData = {
   title: string;
   slug: string;
-  modules: (CategoriesData | BannerData | ProductsData)[];
+  modules: (
+    | CategoriesData
+    | BannerData
+    | ProductsData
+    | CookiesData
+    | FooterData
+  )[];
 };
 
 export type Theme = {
@@ -13,8 +16,8 @@ export type Theme = {
   categories: MainModuleThemeInterface;
   banner?: MainModuleThemeInterface;
   products?: MainModuleThemeInterface;
-  cookies: CookiesDefault;
-  footer: FooterDefault;
+  cookies: CookiesData;
+  footer: FooterData;
 };
 
 export interface MainModuleThemeInterface {
@@ -114,6 +117,53 @@ export type MenuDefault = {
   textColor: string;
 };
 
+export interface CookiesData extends MainModuleThemeInterface {
+  type: ModulesType.COOKIE;
+  styleData: {
+    backgroundColor?: string;
+    textColor?: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    privacyPolicy?: boolean;
+    privacyPolicyLinkColor?: string;
+    privacyPolicyLink?: string;
+  };
+  contentData: {
+    disclaimer?: string;
+  };
+}
+
+export interface FooterData extends MainModuleThemeInterface {
+  type: ModulesType.FOOTER;
+  styleData: {
+    backgroundColor?: string;
+    w3blockSignature?: boolean;
+    textColor?: string;
+    menuLinks?: Link[];
+    menuLinksColor?: string;
+    menuLinksHoverColor?: string;
+    socialNetworks?: boolean;
+    socialNetworksIconColor?: string;
+    socialNetworksIconHoverColor?: string;
+  };
+  contentData: {
+    twitter?: string;
+    telegram?: string;
+    discord?: string;
+    instagram?: string;
+    facebook?: string;
+    linkedin?: string;
+    whatsapp?: string;
+    website?: string;
+    description?: string;
+  };
+}
+
+type Link = {
+  name: string;
+  type: 'internal' | 'external';
+  slug: string;
+};
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
   styleData: {

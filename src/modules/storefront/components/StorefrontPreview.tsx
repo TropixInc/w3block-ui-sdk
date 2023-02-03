@@ -4,6 +4,8 @@ import { useEffectOnce } from 'react-use';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Banner } from './Banner';
+import { Cookies } from './Cookies';
+import { Footer } from './Footer';
 import { Header } from './Header';
 import { Menu } from './Menu';
 import { Products } from './Products';
@@ -61,9 +63,19 @@ const Storefront = () => {
           }
         }
       />
-      {data.modules?.map((item) => {
-        //const Component = componentMap[item.type];
+      <Cookies
+        data={
+          theme.cookies ?? {
+            id: '',
+            name: 'cookies',
+            type: ModulesType.COOKIE,
+            styleData: {},
+            contentData: {},
+          }
+        }
+      />
 
+      {data.modules?.map((item) => {
         switch (item.type) {
           case ModulesType.CATEGORIES:
             return <Menu data={{ ...theme.categories, ...item }} />;
@@ -74,31 +86,19 @@ const Storefront = () => {
           default:
             break;
         }
-        // return (
-        //   <Component
-        //     key={item.type + i}
-        //     data={{ ...themeContext[item.type], ...item } as any}
-        //   />
-        // );
       })}
-      <Copyright />
-    </div>
-  );
-};
 
-// const componentMap = {
-//   header: Header,
-//   menu: Menu,
-//   banner: Banner,
-//   products: Products,
-//   cookies: Cookies,
-//   footer: Footer,
-// };
-
-const Copyright = () => {
-  return (
-    <div className="pw-w-full pw-grid pw-place-items-center pw-h-[42px] pw-bg-white pw-font-roboto pw-font-medium">
-      Copyright {new Date().getFullYear()} - [web/lock]
+      <Footer
+        data={
+          theme.footer ?? {
+            id: '',
+            name: 'footer',
+            type: ModulesType.FOOTER,
+            styleData: {},
+            contentData: {},
+          }
+        }
+      />
     </div>
   );
 };
