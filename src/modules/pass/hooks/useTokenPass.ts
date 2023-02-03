@@ -1,5 +1,7 @@
 import { useQueryClient } from 'react-query';
 
+import validator from 'validator';
+
 import { ChainScan } from '../../shared/enums/ChainId';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
@@ -34,7 +36,7 @@ const useGetTokenPass = () => {
         PixwayAPIRoutes.TOKEN_PASS.replace('{tenantId}', tenantId ?? '')
       ),
     {
-      enabled: Boolean(tenantId),
+      enabled: validator.isUUID(tenantId),
       onSuccess: () => {
         queryClient.invalidateQueries([PixwayAPIRoutes.TOKEN_EDITIONS]);
       },

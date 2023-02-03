@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import { add, compareDesc } from 'date-fns';
+import { add } from 'date-fns';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { useProfile } from '../../../shared';
@@ -13,7 +13,7 @@ interface iQrCodeSection {
   tokenId: string;
   eventDate: Date;
   hasExpiration?: boolean;
-  setExpired: (i: boolean) => void;
+  hasExpired?: boolean;
   editionNumber: string;
   secret: string;
 }
@@ -22,8 +22,8 @@ export const QrCodeSection = ({
   tokenId,
   eventDate,
   hasExpiration = true,
-  setExpired,
   editionNumber,
+  hasExpired,
   secret,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState('');
@@ -40,10 +40,7 @@ export const QrCodeSection = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrCountDown.isActive]);
 
-  const expired = compareDesc(eventDate, new Date()) === 1;
-  expired && setExpired(true);
-
-  return expired ? (
+  return hasExpired ? (
     <></>
   ) : (
     <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px] pw-max-w-[347px] sm:pw-max-w-full">

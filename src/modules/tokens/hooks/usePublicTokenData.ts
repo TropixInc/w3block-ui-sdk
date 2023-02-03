@@ -34,6 +34,7 @@ export interface PublicTokenPageDTO {
     subcategoryName: string;
     subcategoryId: string;
     collectionId: string;
+    collectionPass: boolean;
   };
   information: {
     title: string;
