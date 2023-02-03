@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
-import { sampleTemplate, ThemeContext, ThemeProvider } from '../contexts';
+import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Banner } from './Banner';
 import { Header } from './Header';
@@ -18,20 +18,13 @@ export const StorefrontPreview = () => {
 
 const Storefront = () => {
   const context = useContext(ThemeContext);
-  const [currentPage, setCurrentPage] = useState<TemplateData | null>({
-    slug: 'home',
-    title: 'Home',
-    modules: [
-      // eslint-ignore
-      sampleTemplate.products as any,
-    ],
-  });
-
+  const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
+  const [themeListener, setThemeListener] = useState<Theme | null>();
   const listener = ({
     data,
   }: MessageEvent<{ update: string; theme: Theme; page: TemplateData }>) => {
     if (data && data.theme) {
-      context?.setDefaultTheme?.(data.theme);
+      setThemeListener(data.theme);
     }
     if (data && data.page) {
       setCurrentPage(data.page);
@@ -48,28 +41,36 @@ const Storefront = () => {
   const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
 
-  console.log(data);
   if (!themeContext) return null;
 
-  const pageDefault = themeContext.configurations;
+  const theme = { ...context.defaultTheme, ...themeListener };
   return (
     <div
       style={{
-        color: pageDefault.styleData.textColor,
-        background: pageDefault.styleData.backgroundColor,
+        color: theme.configurations?.styleData.textColor ?? 'black',
+        background: theme.configurations?.styleData.backgroundColor ?? 'white',
       }}
     >
-      <Header data={themeContext.header} />
+      <Header
+        data={
+          theme.header ?? {
+            id: '',
+            name: 'header',
+            type: ModulesType.HEADER,
+            styleData: {},
+          }
+        }
+      />
       {data.modules?.map((item) => {
         //const Component = componentMap[item.type];
 
         switch (item.type) {
           case ModulesType.CATEGORIES:
-            return <Menu data={{ ...themeContext.categories, ...item }} />;
+            return <Menu data={{ ...theme.categories, ...item }} />;
           case ModulesType.BANNER:
-            return <Banner data={{ ...themeContext.banner, ...item }} />;
+            return <Banner data={{ ...theme.banner, ...item }} />;
           case ModulesType.CARDS:
-            return <Products data={{ ...themeContext.products, ...item }} />;
+            return <Products data={{ ...theme.products, ...item }} />;
           default:
             break;
         }

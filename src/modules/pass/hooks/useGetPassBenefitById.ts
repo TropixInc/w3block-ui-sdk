@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -19,7 +21,7 @@ const useGetPassBenefitById = (benefitId: string) => {
         ).replace('{benefitId}', benefitId)
       ),
     {
-      enabled: Boolean(tenantId),
+      enabled: validator.isUUID(tenantId),
     }
   );
 };

@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from 'react';
 
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
+import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
@@ -68,15 +69,20 @@ export const W3blockUISDKGeneralConfig = ({
 };
 
 export const W3blockUISDKGeneralConfigProvider = ({
-  launchDarklyKey = '636e4bf4ec20a110ee5be93d',
+  launchDarklyKey,
   ...props
 }: Props) => {
+  const isProduction = useIsProduction();
   const LDProvider = useMemo(
     () =>
-      withLDProvider<Props>({ clientSideID: launchDarklyKey })(
-        W3blockUISDKGeneralConfig
-      ),
-    [launchDarklyKey]
+      withLDProvider<Props>({
+        clientSideID: launchDarklyKey
+          ? launchDarklyKey
+          : isProduction
+          ? '636e4bf4ec20a110ee5be93d'
+          : '636e4bf4ec20a110ee5be93c',
+      })(W3blockUISDKGeneralConfig),
+    [isProduction, launchDarklyKey]
   );
 
   return <LDProvider {...props} />;

@@ -20,6 +20,8 @@ export interface PassBenefitDTO {
   useLimit: number;
   eventStartsAt: string;
   eventEndsAt: string;
+  checkInStartsAt: string;
+  checkInEndsAt: string;
   linkUrl: string;
   tokenPass: TokenPassEntity;
   tokenPassId: string;

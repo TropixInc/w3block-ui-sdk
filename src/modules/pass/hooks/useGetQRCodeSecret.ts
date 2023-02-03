@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -20,14 +22,19 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
   return usePrivateQuery(
     [PixwayAPIRoutes.TOKEN_PASS],
     () => {
-      return axios.get<SecretResponse>(
-        PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
-          .replace('{id}', benefitId)
-          .replace('{editionNumber}', editionNumber)
-      );
+      return axios
+        .get<SecretResponse>(
+          PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
+            .replace('{id}', benefitId)
+            .replace('{editionNumber}', editionNumber)
+        )
+        .catch((e) => e.response);
     },
     {
-      enabled: Boolean(benefitId) && Boolean(editionNumber),
+      enabled:
+        validator.isUUID(benefitId) &&
+        !validator.isEmpty(String(editionNumber)),
+      retry: 1,
     }
   );
 };

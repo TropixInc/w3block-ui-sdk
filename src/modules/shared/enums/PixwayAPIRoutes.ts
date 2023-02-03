@@ -45,4 +45,6 @@ export enum PixwayAPIRoutes {
   PASS_SECRET = '/token-pass-benefits/tenants/{tenantId}/{id}/{editionNumber}/secret',
   DISCONNECT_WALLET_CONNECT = '/blockchain/disconnect-session-wallet-connect',
   WALLET_INTEGRATIONS = '/integrations',
+  GET_THEME = '/projects/get-theme',
+  GET_PAGE = '/projects/get-page',
 }
