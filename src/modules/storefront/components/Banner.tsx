@@ -123,7 +123,7 @@ const Slide = ({
       )}
 
       <div
-        className={`pw-h-max pw-flex pw-flex-col pw-container pw-mx-auto ${columnAlignmentClass} ${videoClass} pw-px-14 pw-py-8`}
+        className={`pw-h-max pw-flex pw-flex-col pw-container pw-mx-auto ${columnAlignmentClass} ${videoClass} pw-py-8`}
       >
         <h2
           style={{ color: titleColor ?? 'white' }}

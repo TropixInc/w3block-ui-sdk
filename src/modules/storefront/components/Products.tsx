@@ -57,7 +57,7 @@ export const Products = (props: { data: ProductsData }) => {
           gridTemplateColumns: `repeat(${itensPerLine ?? 4}, minmax(0, 1fr))`,
           gridTemplateRows: `repeat(${totalRows ?? 2}, minmax(0, 1fr))`,
         }}
-        className="pw-grid pw-gap-4"
+        className="pw-grid pw-gap-4 pw-flex-1"
       >
         {clampedProducts?.map((p) => (
           <Card key={p.id} product={p} config={props.data} />

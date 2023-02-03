@@ -24,12 +24,12 @@ export const Card = ({
           '--products-card-hover-color': styleData.cardHoverColor,
         } as CSSProperties
       }
-      className="pw-border pw-border-solid pw-border-[#DCDCDC] pw-w-full pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card"
+      className="pw-border pw-box-border pw-border-solid pw-border-[#DCDCDC] pw-w-full pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card"
       onClick={() => {
         // router.push(card.url);
       }}
     >
-      <div className="pw-flex pw-justify-center">
+      <div className="pw-flex pw-justify-center pw-w-full">
         <ImageSDK
           src={product.img}
           className="pw-w-full pw-min-h-[180px] pw-h-[180px] pw-object-cover pw-rounded-md"
