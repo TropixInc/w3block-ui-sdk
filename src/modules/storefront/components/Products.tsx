@@ -15,8 +15,6 @@ import { Product } from '../interfaces/Product';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-// type AAA =Required<ProductsData> & { button: Required<ProductsData["button"]> }
-
 export const Products = (props: { data: ProductsData }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, _] = useState('');
@@ -50,14 +48,19 @@ export const Products = (props: { data: ProductsData }) => {
     setProducts(_products);
   }, []);
 
+  const responsiveClasses = [
+    'pw-grid-cols-1',
+    'sm:pw-grid-cols-2',
+    'lg:pw-grid-cols-3',
+    'xl:pw-grid-cols-' + itensPerLine,
+  ];
+
   const GridProducts = () => {
+    const slicedClasses = responsiveClasses.slice(0, itensPerLine).join(' ');
+
     return (
       <div
-        style={{
-          gridTemplateColumns: `repeat(${itensPerLine ?? 4}, minmax(0, 1fr))`,
-          gridTemplateRows: `repeat(${totalRows ?? 2}, minmax(0, 1fr))`,
-        }}
-        className="pw-grid pw-gap-4"
+        className={`pw-grid pw-gap-4 pw-w-full pw-box-border ${slicedClasses}`}
       >
         {clampedProducts?.map((p) => (
           <Card key={p.id} product={p} config={props.data} />
@@ -67,17 +70,24 @@ export const Products = (props: { data: ProductsData }) => {
   };
 
   const SliderProducts = () => {
+    const slicedBreakPoints = [
+      { key: 640, value: { slidesPerView: 1, spaceBetween: 16 } },
+      { key: 768, value: { slidesPerView: 2, spaceBetween: 16 } },
+      { key: 1024, value: { slidesPerView: 3, spaceBetween: 16 } },
+      { key: 1280, value: { slidesPerView: itensPerLine, spaceBetween: 16 } },
+    ]
+      .slice(0, itensPerLine)
+      .reduce(
+        (obj, item) => Object.assign(obj, { [item.key]: item.value }),
+        {}
+      );
+
     return (
       <Swiper
         navigation
         modules={[Navigation, Autoplay]}
         autoplay={autoSlide ? { delay: 2500 } : false}
-        breakpoints={{
-          640: { slidesPerView: 1, spaceBetween: 16 },
-          768: { slidesPerView: 2, spaceBetween: 16 },
-          1024: { slidesPerView: 3, spaceBetween: 16 },
-          1280: { slidesPerView: 4, spaceBetween: 16 },
-        }}
+        breakpoints={{ ...slicedBreakPoints }}
         className="pw-max-w-[1500px] md:pw-px-6"
       >
         {clampedProducts?.map((p) => (
@@ -128,7 +138,8 @@ const fetchProductsByTagAndOrder = (_order?: CardsOrderingEnum): Product[] => {
       img: 'https://i.ibb.co/gr1Qkkc/product.png',
       category: 'calçados',
       description: 'Lorem ipsum dolor sit amet',
-      name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado',
+      // name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado: ' + String(i + 1),
+      name: String(i + 1),
       hoverColor: 'white',
       price: '237,65',
     };
