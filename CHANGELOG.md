@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.144](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.143...v0.1.1-alpha.144) (2023-02-06)
+
+
+### Bug Fixes
+
+* add content data for footer ([b283e74](https://github.com/TropixInc/w3block-ui-sdk/commit/b283e740c5183db6544894a0ad9d15fc67fac8e2))
+* carousel when items per line is 1 ([d3d7f38](https://github.com/TropixInc/w3block-ui-sdk/commit/d3d7f3871c92bed0a3495dd71746d934a0d9b22c))
+* change footer separator line color ([77ac994](https://github.com/TropixInc/w3block-ui-sdk/commit/77ac994cf8ff51e6bf084c52aa37724d485bc742))
+* cookies layout and props ([a4ecd5e](https://github.com/TropixInc/w3block-ui-sdk/commit/a4ecd5edea611e631ce8b48e46daa55c315b9532))
+* footer layout and style data ([1dd3bbc](https://github.com/TropixInc/w3block-ui-sdk/commit/1dd3bbc98cc40e40b30d2d8fcfd56a355fef84c1))
+* grid and carousel ([07ad820](https://github.com/TropixInc/w3block-ui-sdk/commit/07ad820915e65240a3348cd2cb0fc293390e78ba))
+* pr adjustments ([ab5d764](https://github.com/TropixInc/w3block-ui-sdk/commit/ab5d764d0636b2cadfc906c9a8846b9c2f50cf66))
+* remove map ([ec64227](https://github.com/TropixInc/w3block-ui-sdk/commit/ec64227409f85077e5fa31d9f1cf5ec872172df8))
+* remove old array of social items ([48f7898](https://github.com/TropixInc/w3block-ui-sdk/commit/48f7898b9821d970261565c6a6ac06847e7a4205))
+
 ### [0.1.1-alpha.143](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.142...v0.1.1-alpha.143) (2023-02-03)
 
 ### [0.1.1-alpha.142](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.141...v0.1.1-alpha.142) (2023-02-01)
