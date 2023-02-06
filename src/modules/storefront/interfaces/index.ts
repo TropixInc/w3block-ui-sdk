@@ -183,6 +183,13 @@ export interface ProductsData extends MainModuleThemeInterface {
     cardCategoryColor?: string;
     cardDescriptionColor?: string;
     cardValueColor?: string;
+    showCardImage?: boolean;
+    format?:
+      | 'product'
+      | 'square'
+      | 'rounded'
+      | 'rectHorizontal'
+      | 'rectVertical';
     cardActionButton?: boolean;
     cardButtonText?: string;
     cardButtonTextColor?: string;
@@ -200,16 +207,19 @@ export interface ProductsData extends MainModuleThemeInterface {
     backgroundUrl?: string;
     overlay?: boolean;
     overlayColor?: string;
+    textOverImage?: boolean;
   };
   contentData: {
     cardType?: CardTypesEnum;
     moduleTitle?: string;
     cardSearch?: CardSearchEnum;
     contentCards?: SpecificContentCard[];
+    moduleTitleColor?: string;
   };
 }
 
 export interface SpecificContentCard {
+  id?: string;
   title?: string;
   description?: string;
   image?: string;
@@ -217,6 +227,8 @@ export interface SpecificContentCard {
   value?: string;
   hasLink?: boolean;
   link?: string;
+  overlay?: boolean;
+  cardOverlayColor?: string;
 }
 
 export enum CardSearchEnum {

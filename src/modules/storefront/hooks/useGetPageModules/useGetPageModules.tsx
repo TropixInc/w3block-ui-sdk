@@ -10,14 +10,17 @@ export const useGetPageModules = () => {
 
   useEffect(() => {
     if (window) {
-      //setHref(window.location.href);
-      setHref('https://stg.primesea.io/storefront/');
+      setHref(window.location.href);
+      //setHref('https://stg.primesea.io/storefront');
     }
   }, []);
 
-  return useQuery([PixwayAPIRoutes.GET_PAGE, href], () =>
-    axios
-      .get(PixwayAPIRoutes.GET_PAGE + `?url=${href}`)
-      .then((data) => data.data)
+  return useQuery(
+    [PixwayAPIRoutes.GET_PAGE, href],
+    () =>
+      axios
+        .get(PixwayAPIRoutes.GET_PAGE + `?url=${href}`)
+        .then((data) => data.data),
+    { enabled: href != undefined && href != '', refetchOnWindowFocus: false }
   );
 };

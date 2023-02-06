@@ -4,6 +4,10 @@ import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Card } from '../../shared/components/Card';
+import {
+  breakpointsEnum,
+  useBreakpoints,
+} from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import useTranslation from '../../shared/hooks/useTranslation';
 import {
   CardLayoutDisposition,
@@ -11,6 +15,7 @@ import {
   ProductsData,
 } from '../interfaces';
 import { Product } from '../interfaces/Product';
+import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -19,7 +24,7 @@ export const Products = (props: { data: ProductsData }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, _] = useState('');
   const [translate] = useTranslation();
-
+  const breakpoint = useBreakpoints();
   const {
     styleData: {
       layoutDisposition,
@@ -29,8 +34,9 @@ export const Products = (props: { data: ProductsData }) => {
       totalRows,
       backgroundColor,
       backgroundUrl,
+      format,
     },
-    contentData: { moduleTitle },
+    contentData: { moduleTitle, cardType, contentCards, moduleTitleColor },
   } = props.data;
 
   const gridMaxItemsTotal =
@@ -48,23 +54,54 @@ export const Products = (props: { data: ProductsData }) => {
     setProducts(_products);
   }, []);
 
-  const responsiveClasses = [
-    'pw-grid-cols-1',
-    'sm:pw-grid-cols-2',
-    'lg:pw-grid-cols-3',
-    'xl:pw-grid-cols-' + itensPerLine,
-  ];
+  const quantityOfItemsGrid = () => {
+    if (breakpoint == breakpointsEnum.SM && itensPerLine && itensPerLine > 2) {
+      return 2;
+    } else if (
+      breakpoint == breakpointsEnum.LG &&
+      itensPerLine &&
+      itensPerLine > 3
+    ) {
+      return 3;
+    } else {
+      return itensPerLine ?? 4;
+    }
+  };
 
   const GridProducts = () => {
-    const slicedClasses = responsiveClasses.slice(0, itensPerLine).join(' ');
-
     return (
       <div
-        className={`pw-grid pw-gap-4 pw-w-full pw-flex-1 pw-box-border ${slicedClasses}`}
+        style={{
+          gridTemplateColumns: `repeat(${quantityOfItemsGrid()}, minmax(0, 1fr))`,
+        }}
+        className={`pw-grid pw-gap-4 pw-w-full pw-flex-1 pw-box-border`}
       >
-        {clampedProducts?.map((p) => (
-          <Card key={p.id} product={p} config={props.data} />
-        ))}
+        {cardType == 'content' && format && format != 'product'
+          ? contentCards
+              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
+              .map((card) => (
+                <ContentCard product={card} config={props.data} key={card.id} />
+              ))
+          : cardType == 'content' && (!format || format == 'product')
+          ? contentCards
+              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
+              .map((p) => (
+                <Card
+                  key={p.id}
+                  product={{
+                    id: p.id ?? '',
+                    category: p.category ?? '',
+                    img: p.image ?? '',
+                    name: p.title ?? '',
+                    description: p.description ?? '',
+                    price: p.value ?? '',
+                  }}
+                  config={props.data}
+                />
+              ))
+          : clampedProducts?.map((p) => (
+              <Card key={p.id} product={p} config={props.data} />
+            ))}
       </div>
     );
   };
@@ -90,11 +127,46 @@ export const Products = (props: { data: ProductsData }) => {
         breakpoints={{ ...slicedBreakPoints }}
         className="pw-max-w-[1500px] md:pw-px-6"
       >
-        {clampedProducts?.map((p) => (
-          <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
-            <Card key={p.id} product={p} config={props.data} />
-          </SwiperSlide>
-        ))}
+        {cardType == 'content' && format && format != 'product'
+          ? contentCards
+              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
+              .map((card) => (
+                <SwiperSlide
+                  key={card.id}
+                  className="pw-flex pw-justify-center"
+                >
+                  {' '}
+                  <ContentCard
+                    product={card}
+                    config={props.data}
+                    key={card.id}
+                  />
+                </SwiperSlide>
+              ))
+          : cardType == 'content' && (!format || format == 'product')
+          ? contentCards
+              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
+              .map((p) => (
+                <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
+                  <Card
+                    key={p.id}
+                    product={{
+                      id: p.id ?? '',
+                      category: p.category ?? '',
+                      img: p.image ?? '',
+                      name: p.title ?? '',
+                      description: p.description ?? '',
+                      price: p.value ?? '',
+                    }}
+                    config={props.data}
+                  />
+                </SwiperSlide>
+              ))
+          : clampedProducts?.map((p) => (
+              <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
+                <Card key={p.id} product={p} config={props.data} />
+              </SwiperSlide>
+            ))}
       </Swiper>
     );
   };
@@ -114,7 +186,10 @@ export const Products = (props: { data: ProductsData }) => {
     >
       <div className="pw-container pw-mx-auto pw-pb-10">
         {moduleTitle && moduleTitle != '' && (
-          <h2 className="pw-font-poppins pw-font-semibold pw-text-lg pw-pt-10">
+          <h2
+            style={{ color: moduleTitleColor ?? 'black' }}
+            className="pw-font-poppins pw-font-semibold pw-text-lg pw-pt-10"
+          >
             {moduleTitle}
           </h2>
         )}
