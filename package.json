@@ -101,5 +101,8 @@
   },
   "resolutions": {
     "rollup": "2.74.1"
+  },
+  "overrides": {
+    "rollup": "2.74.1"
   }
 }
