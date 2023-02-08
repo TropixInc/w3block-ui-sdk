@@ -8,6 +8,7 @@ import { Cookies } from './Cookies';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Menu } from './Menu';
+import { Paragraph } from './Paragraph';
 import { Products } from './Products';
 
 export const StorefrontPreview = () => {
@@ -83,6 +84,8 @@ const Storefront = () => {
             return <Banner data={{ ...theme.banner, ...item }} />;
           case ModulesType.CARDS:
             return <Products data={{ ...theme.products, ...item }} />;
+          case ModulesType.PARAGRAPH:
+            return <Paragraph data={{ ...theme.paragraph, ...item }} />;
           default:
             break;
         }

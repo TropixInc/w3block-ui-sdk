@@ -7,6 +7,7 @@ export type TemplateData = {
     | ProductsData
     | CookiesData
     | FooterData
+    | ParagraphData
   )[];
 };
 
@@ -18,6 +19,7 @@ export type Theme = {
   products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
+  paragraph?: MainModuleThemeInterface;
 };
 
 export interface MainModuleThemeInterface {
@@ -231,6 +233,17 @@ export interface SpecificContentCard {
   cardOverlayColor?: string;
 }
 
+export interface ParagraphData extends MainModuleThemeInterface {
+  type: ModulesType.PARAGRAPH;
+  styleData: {
+    alignment?: AlignmentEnum;
+    titleInput?: string;
+    titleColor?: string;
+    textInput?: string;
+    textColor?: string;
+  };
+}
+
 export enum CardSearchEnum {
   FEATURED = 'featured',
   MOST_SEEN = 'mostSeen',
@@ -261,4 +274,5 @@ export enum ModulesType {
   CARDS = 'Cards',
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
+  PARAGRAPH = 'Paragraph',
 }
