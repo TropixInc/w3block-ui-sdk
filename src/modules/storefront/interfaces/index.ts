@@ -7,6 +7,7 @@ export type TemplateData = {
     | ProductsData
     | CookiesData
     | FooterData
+    | ImagePlusTextData
   )[];
 };
 
@@ -18,6 +19,7 @@ export type Theme = {
   products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
+  imagePlusText?: MainModuleThemeInterface;
 };
 
 export interface MainModuleThemeInterface {
@@ -253,6 +255,26 @@ export enum CardLayoutDisposition {
   GRID = 'grid',
 }
 
+export interface ImagePlusTextData extends MainModuleThemeInterface {
+  type: ModulesType.IMAGE_PLUS_TEXT;
+  styleData: {
+    image?: string;
+    textAlignment?: AlignmentEnum;
+    titleColor?: string;
+    contentColor?: string;
+    imagePosition?: ImagePositionEnum;
+  };
+  contentData: {
+    title?: string;
+    content?: string;
+  };
+}
+
+enum ImagePositionEnum {
+  LEFT = 'left',
+  RIGHT = 'right',
+}
+
 export enum ModulesType {
   HEADER = 'Header',
   CONFIGURATION = 'Configuration',
@@ -261,4 +283,5 @@ export enum ModulesType {
   CARDS = 'Cards',
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
+  IMAGE_PLUS_TEXT = 'Image_Plus_Text',
 }

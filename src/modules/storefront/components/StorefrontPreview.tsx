@@ -7,6 +7,7 @@ import { Banner } from './Banner';
 import { Cookies } from './Cookies';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { ImagePlusText } from './ImagePlusText';
 import { Menu } from './Menu';
 import { Products } from './Products';
 
@@ -83,6 +84,8 @@ const Storefront = () => {
             return <Banner data={{ ...theme.banner, ...item }} />;
           case ModulesType.CARDS:
             return <Products data={{ ...theme.products, ...item }} />;
+          case ModulesType.IMAGE_PLUS_TEXT:
+            return <ImagePlusText data={{ ...theme.imagePlusText, ...item }} />;
           default:
             break;
         }
