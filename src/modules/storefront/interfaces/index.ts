@@ -7,6 +7,7 @@ export type TemplateData = {
     | ProductsData
     | CookiesData
     | FooterData
+    | AccordionsData
   )[];
 };
 
@@ -18,6 +19,7 @@ export type Theme = {
   products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
+  accordions?: MainModuleThemeInterface;
 };
 
 export interface MainModuleThemeInterface {
@@ -253,6 +255,24 @@ export enum CardLayoutDisposition {
   GRID = 'grid',
 }
 
+export interface AccordionsData extends MainModuleThemeInterface {
+  type: ModulesType.ACCORDIONS;
+  styleData: {
+    titleAndArrowColor?: string;
+    titleAndArrowHoverColor?: string;
+    contentColor?: string;
+    backgroundColor?: string;
+  };
+  contentData: {
+    accordionsItems?: SpecificContentAccordion[];
+  };
+}
+
+export interface SpecificContentAccordion {
+  title?: string;
+  content?: string;
+}
+
 export enum ModulesType {
   HEADER = 'Header',
   CONFIGURATION = 'Configuration',
@@ -261,4 +281,5 @@ export enum ModulesType {
   CARDS = 'Cards',
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
+  ACCORDIONS = 'Accordions',
 }
