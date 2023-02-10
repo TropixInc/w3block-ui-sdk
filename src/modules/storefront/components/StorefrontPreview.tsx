@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
+import { useRouterConnect } from '../../shared';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Banner } from './Banner';
@@ -8,18 +9,24 @@ import { Cookies } from './Cookies';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Menu } from './Menu';
+import { ProductPage } from './ProductPage';
 import { Products } from './Products';
 
-export const StorefrontPreview = () => {
+interface StorefrontPreviewProps {
+  params?: string[];
+}
+
+export const StorefrontPreview = ({ params }: StorefrontPreviewProps) => {
   return (
     <ThemeProvider>
-      <Storefront />
+      <Storefront params={params} />
     </ThemeProvider>
   );
 };
 
-const Storefront = () => {
+const Storefront = ({ params }: StorefrontPreviewProps) => {
   const context = useContext(ThemeContext);
+  const { asPath } = useRouterConnect();
   const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
   const [themeListener, setThemeListener] = useState<Theme | null>();
   const listener = ({
@@ -44,7 +51,8 @@ const Storefront = () => {
   const themeContext = context?.defaultTheme;
 
   if (!themeContext) return null;
-
+  const isProductPage =
+    asPath.includes('/product/slug') && params?.[params?.length - 1] != 'slug';
   const theme = { ...context.defaultTheme, ...themeListener };
   return (
     <div
@@ -74,7 +82,19 @@ const Storefront = () => {
           }
         }
       />
-
+      {isProductPage && (
+        <ProductPage
+          params={params}
+          data={
+            theme.productPage ?? {
+              id: '',
+              name: 'productsPage',
+              type: ModulesType.PRODUCT_PAGE,
+              styleData: {},
+            }
+          }
+        />
+      )}
       {data.modules?.map((item) => {
         switch (item.type) {
           case ModulesType.CATEGORIES:

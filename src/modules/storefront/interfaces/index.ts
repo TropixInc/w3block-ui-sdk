@@ -18,6 +18,7 @@ export type Theme = {
   products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
+  productPage: ProductPageData;
 };
 
 export interface MainModuleThemeInterface {
@@ -40,10 +41,14 @@ export interface PageData extends MainModuleThemeInterface {
   };
 }
 
+export interface AssetInterface {
+  assetId: string;
+  assetUrl: string;
+}
 export interface HeaderData extends MainModuleThemeInterface {
   type: ModulesType.HEADER;
   styleData: {
-    logoSrc?: string;
+    logoSrc?: AssetInterface;
     brandName?: string;
     tabs?: HeaderLink[];
     backgroundColor?: string;
@@ -91,7 +96,7 @@ export interface BannerData extends MainModuleThemeInterface {
 
 export interface SpecificBannerInfo {
   backgroundColor?: string;
-  backgroundUrl?: string;
+  backgroundUrl?: AssetInterface;
   overlay?: boolean;
   overlayColor?: string;
   textAligment?: AlignmentEnum;
@@ -204,7 +209,7 @@ export interface ProductsData extends MainModuleThemeInterface {
     sessionLink?: string;
     backgroundSession?: boolean;
     backgroundColor?: string;
-    backgroundUrl?: string;
+    backgroundUrl?: AssetInterface;
     overlay?: boolean;
     overlayColor?: string;
     textOverImage?: boolean;
@@ -222,13 +227,40 @@ export interface SpecificContentCard {
   id?: string;
   title?: string;
   description?: string;
-  image?: string;
+  image?: AssetInterface;
   category?: string;
   value?: string;
   hasLink?: boolean;
   link?: string;
   overlay?: boolean;
   cardOverlayColor?: string;
+}
+
+export interface ProductPageData extends MainModuleThemeInterface {
+  type: ModulesType.PRODUCT_PAGE;
+  styleData: {
+    backTextColor?: string;
+    backBackgroundColor?: string;
+    backgroundColor?: string;
+    textColor?: string;
+    categoriesTagBackgroundColor?: string;
+    categoriesTagTextColor?: string;
+    categoriesTextColor?: string;
+    descriptionTextColor?: string;
+    priceTextColor?: string;
+    nameTextColor?: string;
+    actionButton?: boolean;
+    buttonText?: string;
+    buttonTextColor?: string;
+    buttonColor?: string;
+    showBlockchainInfo?: boolean;
+    showValue?: boolean;
+    showDescription?: boolean;
+    showCategory?: boolean;
+    showProductName?: boolean;
+    blockchainInfoBackgroundColor?: string;
+    blockchainInfoTextColor?: string;
+  };
 }
 
 export enum CardSearchEnum {
@@ -261,4 +293,5 @@ export enum ModulesType {
   CARDS = 'Cards',
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
+  PRODUCT_PAGE = 'Product_page',
 }

@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { isCloudinary, isVideo } from '../../utils/validators';
 
@@ -16,6 +16,9 @@ interface ImageSDKInternalProps {
   fit?: 'fill' | 'fit';
 }
 
+const imagePlaceholder =
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png';
+
 export const ImageSDK = ({
   src,
   className = '',
@@ -31,6 +34,7 @@ export const ImageSDK = ({
   const imageRef = useRef<HTMLImageElement>(null);
   const isCloud = isCloudinary(src ?? '');
   const isVid = isVideo(src ?? '');
+  const [isError, setError] = useState(false);
 
   const threathUrlCloudinary = (
     s: string,
@@ -101,12 +105,17 @@ export const ImageSDK = ({
           alt={alt}
           className={className}
           ref={preImageRef}
-          src={threathUrlCloudinary(src ?? '', {
-            width,
-            height,
-            fit,
-            quality: 'low',
-          })}
+          onError={() => setError(true)}
+          src={
+            isError
+              ? imagePlaceholder
+              : threathUrlCloudinary(src ?? '', {
+                  width,
+                  height,
+                  fit,
+                  quality: 'low',
+                })
+          }
         ></img>
         <img
           alt={alt}
@@ -118,13 +127,18 @@ export const ImageSDK = ({
               preImageRef.current.style.display = 'none';
             }
           }}
+          onError={() => setError(true)}
           style={{ display: 'none' }}
-          src={threathUrlCloudinary(src ?? '', {
-            width,
-            height,
-            quality: 'good',
-            fit,
-          })}
+          src={
+            isError
+              ? imagePlaceholder
+              : threathUrlCloudinary(src ?? '', {
+                  width,
+                  height,
+                  quality: 'good',
+                  fit,
+                })
+          }
         ></img>
       </>
     );
@@ -148,9 +162,14 @@ export const ImageSDK = ({
           src={src ?? ''}
         ></video>
       ) : (
-        <img alt={alt} className={`${className}`} src={src ?? ''}></img>
+        <img
+          alt={alt}
+          onError={() => setError(true)}
+          className={`${className}`}
+          src={isError ? imagePlaceholder : src}
+        ></img>
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src]);
+  }, [src, isError]);
 };

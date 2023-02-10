@@ -75,7 +75,7 @@ const Slide = ({
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
 
-  const mediaType = guessMediaType(backgroundUrl || '');
+  const mediaType = guessMediaType(backgroundUrl?.assetUrl || '');
   let bg = '';
   if (mediaType === 'no-media') {
     bg = backgroundColor ?? '';
@@ -92,7 +92,8 @@ const Slide = ({
     overlayBg = overlayProp;
   }
 
-  const videoClass = mediaType === 'video' ? 'pw-absolute' : '';
+  const videoClass =
+    mediaType === 'video' || mediaType === 'image' ? 'pw-absolute' : '';
 
   return (
     <div
@@ -105,10 +106,10 @@ const Slide = ({
       }}
       className={`${ratioClassName} pw-font-poppins pw-flex ${rowAlignmentClass} pw-items-center`}
     >
-      {mediaType === 'video' && (
+      {mediaType === 'video' || mediaType === 'image' ? (
         <>
           <ImageSDK
-            src={backgroundUrl}
+            src={backgroundUrl?.assetUrl}
             className={`${ratioClassName} pw-w-full pw-bg-black`}
           />
           <div
@@ -120,7 +121,7 @@ const Slide = ({
             className={`pw-w-full pw-h-full pw-absolute`}
           ></div>
         </>
-      )}
+      ) : null}
 
       <div
         className={`pw-h-max pw-flex pw-flex-col pw-container pw-mx-auto ${columnAlignmentClass} ${videoClass} pw-py-8`}
