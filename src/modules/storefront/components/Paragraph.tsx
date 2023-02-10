@@ -17,18 +17,16 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const alignmentTextClass = alignmentsText[alignment ?? AlignmentEnum.LEFT];
 
   return (
-    <div className="pw-p-15">
-      <h1
-        className={classNames(
-          titleColor ? titleColor : 'pw-font-black',
-          'pw-font-poppins pw-font-semibold pw-text-xl'
-        )}
+    <div className="pw-container pw-mx-auto">
+      <h2
+        style={{ color: titleColor ?? 'black' }}
+        className={classNames('pw-font-poppins pw-font-semibold pw-text-xl')}
       >
         {titleInput}
-      </h1>
+      </h2>
       <p
+        style={{ color: textColor ?? 'black' }}
         className={classNames(
-          textColor ? textColor : 'pw-font-black',
           alignmentTextClass,
           'pw-font-poppins pw-font-normal pw-text-sm'
         )}
