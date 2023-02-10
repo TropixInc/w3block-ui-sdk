@@ -172,6 +172,8 @@ type Link = {
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
   styleData: {
+    margin?: string;
+    padding?: string;
     layoutDisposition?: CardLayoutDisposition;
     autoSlide?: boolean;
     numberOfLines?: number;

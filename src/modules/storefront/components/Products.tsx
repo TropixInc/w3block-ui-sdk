@@ -42,6 +42,8 @@ export const Products = (props: { data: ProductsData }) => {
       sessionAlignment,
       sessionLink,
       sessionButtonText,
+      margin,
+      padding,
     },
     contentData: { moduleTitle, cardType, contentCards, moduleTitleColor },
   } = props.data;
@@ -222,6 +224,8 @@ export const Products = (props: { data: ProductsData }) => {
               style={{
                 backgroundColor: sessionButtonColor ?? '#F5F9FF',
                 color: sessionButtonTextColor ?? '#353945',
+                margin: convertSpacingToCSS(margin),
+                padding: convertSpacingToCSS(padding),
               }}
               className="pw-px-[60px] pw-py-3 pw-text-center pw-rounded-lg pw-font-[600] pw-text-sm pw-cursor-pointer"
               href={sessionLink}
@@ -234,6 +238,12 @@ export const Products = (props: { data: ProductsData }) => {
     </div>
   );
 };
+
+const convertSpacingToCSS = (spacing: string | undefined) =>
+  spacing
+    ?.split(',')
+    .map((s) => (s || 0) + 'px')
+    .join(' ');
 
 const fetchProductsByTagAndOrder = (_order?: CardsOrderingEnum): Product[] => {
   return new Array(45).fill(0).map((_, i) => {
