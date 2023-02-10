@@ -10,6 +10,7 @@ import {
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import useTranslation from '../../shared/hooks/useTranslation';
 import {
+  AlignmentEnum,
   CardLayoutDisposition,
   CardsOrderingEnum,
   ProductsData,
@@ -35,6 +36,12 @@ export const Products = (props: { data: ProductsData }) => {
       backgroundColor,
       backgroundUrl,
       format,
+      sessionButton,
+      sessionButtonColor,
+      sessionButtonTextColor,
+      sessionAlignment,
+      sessionLink,
+      sessionButtonText,
     },
     contentData: { moduleTitle, cardType, contentCards, moduleTitleColor },
   } = props.data;
@@ -91,7 +98,7 @@ export const Products = (props: { data: ProductsData }) => {
                   product={{
                     id: p.id ?? '',
                     category: p.category ?? '',
-                    img: p.image ?? '',
+                    img: p.image ?? { assetId: '', assetUrl: '' },
                     name: p.title ?? '',
                     description: p.description ?? '',
                     price: p.value ?? '',
@@ -111,9 +118,12 @@ export const Products = (props: { data: ProductsData }) => {
       { key: 640, value: { slidesPerView: 1, spaceBetween: 16 } },
       { key: 768, value: { slidesPerView: 2, spaceBetween: 16 } },
       { key: 1024, value: { slidesPerView: 3, spaceBetween: 16 } },
-      { key: 1280, value: { slidesPerView: itensPerLine, spaceBetween: 16 } },
+      {
+        key: 1280,
+        value: { slidesPerView: itensPerLine, spaceBetween: 16 },
+      },
     ]
-      .slice(0, itensPerLine)
+      .slice(0, 10)
       .reduce(
         (obj, item) => Object.assign(obj, { [item.key]: item.value }),
         {}
@@ -125,43 +135,35 @@ export const Products = (props: { data: ProductsData }) => {
         modules={[Navigation, Autoplay]}
         autoplay={autoSlide ? { delay: 2500 } : false}
         breakpoints={{ ...slicedBreakPoints }}
-        className="pw-max-w-[1500px] md:pw-px-6"
+        className="pw-w-full md:pw-px-6"
       >
         {cardType == 'content' && format && format != 'product'
-          ? contentCards
-              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
-              .map((card) => (
-                <SwiperSlide
-                  key={card.id}
-                  className="pw-flex pw-justify-center"
-                >
-                  {' '}
-                  <ContentCard
-                    product={card}
-                    config={props.data}
-                    key={card.id}
-                  />
-                </SwiperSlide>
-              ))
+          ? contentCards?.map((card) => (
+              <SwiperSlide
+                key={card.id}
+                className="pw-flex pw-w-full pw-justify-center"
+              >
+                {' '}
+                <ContentCard product={card} config={props.data} key={card.id} />
+              </SwiperSlide>
+            ))
           : cardType == 'content' && (!format || format == 'product')
-          ? contentCards
-              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
-              .map((p) => (
-                <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
-                  <Card
-                    key={p.id}
-                    product={{
-                      id: p.id ?? '',
-                      category: p.category ?? '',
-                      img: p.image ?? '',
-                      name: p.title ?? '',
-                      description: p.description ?? '',
-                      price: p.value ?? '',
-                    }}
-                    config={props.data}
-                  />
-                </SwiperSlide>
-              ))
+          ? contentCards?.map((p) => (
+              <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
+                <Card
+                  key={p.id}
+                  product={{
+                    id: p.id ?? '',
+                    category: p.category ?? '',
+                    img: p.image ?? { assetId: '', assetUrl: '' },
+                    name: p.title ?? '',
+                    description: p.description ?? '',
+                    price: p.value ?? '',
+                  }}
+                  config={props.data}
+                />
+              </SwiperSlide>
+            ))
           : clampedProducts?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
                 <Card key={p.id} product={p} config={props.data} />
@@ -176,23 +178,28 @@ export const Products = (props: { data: ProductsData }) => {
   return (
     <div
       style={{
-        background: backgroundUrl
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundImage: backgroundUrl
           ? `url('${backgroundUrl}')`
           : backgroundColor
           ? backgroundColor
           : 'transparent',
+        backgroundColor: backgroundColor ?? 'transparent',
       }}
       className="pw-font-poppins"
     >
       <div className="pw-container pw-mx-auto pw-pb-10">
-        {moduleTitle && moduleTitle != '' && (
-          <h2
-            style={{ color: moduleTitleColor ?? 'black' }}
-            className="pw-font-poppins pw-font-semibold pw-text-lg pw-pt-10"
-          >
-            {moduleTitle}
-          </h2>
-        )}
+        <div className="pw-flex pw-justify-between">
+          {moduleTitle && moduleTitle != '' && (
+            <h2
+              style={{ color: moduleTitleColor ?? 'black' }}
+              className="pw-font-poppins pw-font-semibold pw-text-lg pw-pt-10"
+            >
+              {moduleTitle}
+            </h2>
+          )}
+        </div>
 
         <div className="pw-flex pw-justify-center pw-pt-10">
           {layoutDisposition === CardLayoutDisposition.GRID ? (
@@ -201,6 +208,28 @@ export const Products = (props: { data: ProductsData }) => {
             <SliderProducts />
           )}
         </div>
+        {sessionButton ? (
+          <div
+            className={`pw-mt-8 pw-flex ${
+              sessionAlignment == AlignmentEnum.CENTER
+                ? 'pw-justify-center'
+                : sessionAlignment == AlignmentEnum.RIGHT
+                ? 'pw-justify-end'
+                : 'pw-justify-start'
+            }`}
+          >
+            <a
+              style={{
+                backgroundColor: sessionButtonColor ?? '#F5F9FF',
+                color: sessionButtonTextColor ?? '#353945',
+              }}
+              className="pw-px-[60px] pw-py-3 pw-text-center pw-rounded-lg pw-font-[600] pw-text-sm pw-cursor-pointer"
+              href={sessionLink}
+            >
+              {sessionButtonText ?? 'Saiba mais'}
+            </a>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -210,7 +239,10 @@ const fetchProductsByTagAndOrder = (_order?: CardsOrderingEnum): Product[] => {
   return new Array(45).fill(0).map((_, i) => {
     return {
       id: String(i + 1),
-      img: 'https://i.ibb.co/gr1Qkkc/product.png',
+      img: {
+        assetId: i.toString(),
+        assetUrl: 'https://i.ibb.co/gr1Qkkc/product.png',
+      },
       category: 'calçados',
       description: 'Lorem ipsum dolor sit amet',
       // name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado: ' + String(i + 1),

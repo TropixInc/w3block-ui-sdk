@@ -31,7 +31,7 @@ export const Card = ({
     >
       <div className="pw-flex pw-justify-center pw-w-full">
         <ImageSDK
-          src={product.img}
+          src={product.img.assetUrl}
           className="pw-w-full pw-min-h-[180px] pw-h-[180px] pw-object-cover pw-rounded-md"
         />
       </div>
