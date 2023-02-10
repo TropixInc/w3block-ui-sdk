@@ -26,10 +26,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
       </h2>
       <p
         style={{ color: textColor ?? 'black' }}
-        className={classNames(
-          alignmentTextClass,
-          'pw-font-poppins pw-font-normal pw-text-sm'
-        )}
+        className={classNames(alignmentTextClass, 'pw-font-poppins pw-text-sm')}
       >
         {textInput}
       </p>
