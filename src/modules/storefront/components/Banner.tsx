@@ -10,17 +10,31 @@ import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const {
-    styleData: { autoSlide, banners, bannerDisposition, bannerRatio },
+    styleData: {
+      autoSlide,
+      banners,
+      bannerDisposition,
+      bannerRatio,
+      margin,
+      padding,
+    },
   } = data;
   const layoutClass =
     bannerDisposition === 'fullWidth' ? 'pw-w-full' : 'pw-container';
 
   return (
     <TranslatableComponent>
-      <div className={`${layoutClass} pw-mx-auto`}>
+      <div
+        className={`${layoutClass} pw-mx-auto`}
+        style={{
+          margin: convertSpacingToCSS(margin),
+          padding: convertSpacingToCSS(padding),
+        }}
+      >
         <Swiper
           navigation
           pagination

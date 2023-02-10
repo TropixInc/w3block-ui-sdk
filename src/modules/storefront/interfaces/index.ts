@@ -87,6 +87,8 @@ export interface CategoriesData extends MainModuleThemeInterface {
 export interface BannerData extends MainModuleThemeInterface {
   type: ModulesType.BANNER;
   styleData: {
+    margin?: string;
+    padding?: string;
     bannerDisposition?: Layout;
     bannerRatio?: Ratio;
     autoSlide?: boolean;

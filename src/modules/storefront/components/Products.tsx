@@ -20,6 +20,7 @@ import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 
 export const Products = (props: { data: ProductsData }) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -238,12 +239,6 @@ export const Products = (props: { data: ProductsData }) => {
     </div>
   );
 };
-
-const convertSpacingToCSS = (spacing: string | undefined) =>
-  spacing
-    ?.split(',')
-    .map((s) => (s || 0) + 'px')
-    .join(' ');
 
 const fetchProductsByTagAndOrder = (_order?: CardsOrderingEnum): Product[] => {
   return new Array(45).fill(0).map((_, i) => {
