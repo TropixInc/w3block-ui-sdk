@@ -4,6 +4,7 @@ import { useEffectOnce } from 'react-use';
 import { useRouterConnect } from '../../shared';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
+import { Accordions } from './Accordions';
 import { Banner } from './Banner';
 import { Cookies } from './Cookies';
 import { Footer } from './Footer';
@@ -105,6 +106,8 @@ const Storefront = ({ params }: StorefrontPreviewProps) => {
             return <Banner data={{ ...theme.banner, ...item }} />;
           case ModulesType.CARDS:
             return <Products data={{ ...theme.products, ...item }} />;
+          case ModulesType.ACCORDIONS:
+            return <Accordions data={{ ...theme.accordions, ...item }} />;
           case ModulesType.IMAGE_PLUS_TEXT:
             return <ImagePlusText data={{ ...theme.imagePlusText, ...item }} />;
           case ModulesType.PARAGRAPH:

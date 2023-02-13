@@ -1,14 +1,22 @@
 import { CSSProperties } from 'react';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ImagePlusTextData } from '../interfaces';
 
 import './ImagePlusText.css';
 
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { styleData, contentData } = data;
-  const { image, imagePosition, textAlignment, titleColor, contentColor } =
-    styleData;
+  const {
+    image,
+    imagePosition,
+    textAlignment,
+    titleColor,
+    contentColor,
+    margin,
+    padding,
+  } = styleData;
 
   return (
     <div className="pw-w-full">
@@ -20,6 +28,8 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               imagePosition === 'left' ? 'column' : 'column-reverse',
             '--image-plus-text-direction-desktop':
               imagePosition === 'left' ? 'row' : 'row-reverse',
+            margin: convertSpacingToCSS(margin),
+            padding: convertSpacingToCSS(padding),
           } as CSSProperties
         }
       >
