@@ -1,6 +1,8 @@
+import { AssetInterface } from '.';
+
 export interface Product {
   id: string;
-  img: string;
+  img: AssetInterface;
   name: string;
   category: string;
   description: string;

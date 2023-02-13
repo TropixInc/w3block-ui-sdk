@@ -11,7 +11,7 @@ export const useGetPageModules = () => {
   useEffect(() => {
     if (window) {
       setHref(window.location.href);
-      //setHref('https://stg.primesea.io/storefront');
+      //setHref('https://stg.primesea.io/storefront/product/slug');
     }
   }, []);
 
@@ -21,6 +21,10 @@ export const useGetPageModules = () => {
       axios
         .get(PixwayAPIRoutes.GET_PAGE + `?url=${href}`)
         .then((data) => data.data),
-    { enabled: href != undefined && href != '', refetchOnWindowFocus: false }
+    {
+      enabled:
+        href != undefined && href != '' && !href.includes('/product/slug'),
+      refetchOnWindowFocus: false,
+    }
   );
 };
