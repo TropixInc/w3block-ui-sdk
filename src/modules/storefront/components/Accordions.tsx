@@ -11,7 +11,9 @@ export const Accordions = ({ data }: { data: AccordionsData }) => {
     <div className="pw-flex pw-flex-col pw-gap-8 pw-px-2 sm:pw-px-0">
       {contentData?.accordionsItems?.map((itemData) => (
         <div key={itemData.title} className="pw-w-full">
-          <Accordion styleData={styleData} contentData={itemData} />
+          <div className="pw-container pw-mx-auto">
+            <Accordion styleData={styleData} contentData={itemData} />
+          </div>
         </div>
       ))}
     </div>
@@ -33,10 +35,10 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
 
   return (
     <details
-      className="pw-box-border pw-min-h-20 pw-shadow-[0_4px_11px_rgba(0,0,0,0.15)] pw-rounded-2xl pw-px-8 pw-py-[22px] pw-container pw-mx-auto"
+      className="pw-box-border pw-min-h-20 pw-shadow-[0_4px_11px_rgba(0,0,0,0.15)] pw-rounded-2xl pw-px-8 pw-py-[22px]"
       style={
         {
-          background: backgroundColor,
+          background: backgroundColor || 'white',
         } as CSSProperties
       }
     >
@@ -66,7 +68,7 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
 
       <p
         className="pw-font-poppins pw-text-[15px] pw-leading-[22.5px]"
-        style={{ color: contentColor }}
+        style={{ color: contentColor || 'black' }}
       >
         {contentData.content}
       </p>
