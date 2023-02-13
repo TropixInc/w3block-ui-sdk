@@ -10,6 +10,7 @@ import { Footer } from './Footer';
 import { Header } from './Header';
 import { ImagePlusText } from './ImagePlusText';
 import { Menu } from './Menu';
+import { Midia } from './Midia';
 import { Paragraph } from './Paragraph';
 import { ProductPage } from './ProductPage';
 import { Products } from './Products';
@@ -109,6 +110,8 @@ const Storefront = ({ params }: StorefrontPreviewProps) => {
             return <ImagePlusText data={{ ...theme.imagePlusText, ...item }} />;
           case ModulesType.PARAGRAPH:
             return <Paragraph data={{ ...theme.paragraph, ...item }} />;
+          case ModulesType.MIDIA:
+            return <Midia data={{ ...theme.midia, ...item }} />;
           default:
             break;
         }
