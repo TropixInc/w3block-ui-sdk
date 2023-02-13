@@ -253,6 +253,8 @@ export interface SpecificContentCard {
 export interface ParagraphData extends MainModuleThemeInterface {
   type: ModulesType.PARAGRAPH;
   styleData: {
+    margin?: string;
+    padding?: string;
     alignment?: AlignmentEnum;
     titleInput?: string;
     titleColor?: string;
@@ -330,6 +332,8 @@ export interface SpecificContentAccordion {
 export interface ImagePlusTextData extends MainModuleThemeInterface {
   type: ModulesType.IMAGE_PLUS_TEXT;
   styleData: {
+    margin?: string;
+    padding?: string;
     image?: string;
     textAlignment?: AlignmentEnum;
     titleColor?: string;
