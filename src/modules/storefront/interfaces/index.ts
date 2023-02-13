@@ -334,7 +334,7 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
   styleData: {
     margin?: string;
     padding?: string;
-    image?: string;
+    image?: AssetInterface;
     textAlignment?: AlignmentEnum;
     titleColor?: string;
     contentColor?: string;
@@ -360,7 +360,7 @@ export enum ModulesType {
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
   ACCORDIONS = 'Accordions',
-  IMAGE_PLUS_TEXT = 'Image_Plus_Text',
+  IMAGE_PLUS_TEXT = 'Imagem + Texto',
   PARAGRAPH = 'Paragraph',
   PRODUCT_PAGE = 'Product_page',
 }

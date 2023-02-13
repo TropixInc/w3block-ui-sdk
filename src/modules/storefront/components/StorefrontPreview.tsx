@@ -57,6 +57,8 @@ const Storefront = ({ params }: StorefrontPreviewProps) => {
   const isProductPage =
     asPath.includes('/product/slug') && params?.[params?.length - 1] != 'slug';
   const theme = { ...context.defaultTheme, ...themeListener };
+  console.log(data.modules);
+  console.log(theme);
   return (
     <div
       style={{
