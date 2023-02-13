@@ -3,7 +3,6 @@ import { CSSProperties } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ImageSDK } from '../../shared/components/ImageSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
@@ -66,6 +65,7 @@ const Slide = ({
     overlayColor,
     backgroundUrl,
     title,
+    overlay,
     buttonText,
     actionButton,
     subtitle,
@@ -75,56 +75,21 @@ const Slide = ({
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
 
-  const mediaType = guessMediaType(backgroundUrl?.assetUrl || '');
-  let bg = '';
-  if (mediaType === 'no-media') {
-    bg = backgroundColor ?? '';
-  } else if (mediaType === 'image' || !mediaType) {
-    bg = `url('${backgroundUrl}')`;
-  }
-
-  const overlayProp = `linear-gradient(0deg, rgba(0, 0, 0, 0.5), ${overlayColor})`;
-
-  let overlayBg = bg;
-  if (mediaType === 'image') {
-    overlayBg = `${overlayProp}, ${bg}`;
-  } else if (mediaType === 'video') {
-    overlayBg = overlayProp;
-  }
-
-  const videoClass =
-    mediaType === 'video' || mediaType === 'image' ? 'pw-absolute' : '';
-
   return (
     <div
       style={{
-        backgroundImage: overlayBg,
+        background: `${
+          overlay ? `linear-gradient(${overlayColor},${overlayColor})` : ''
+        }, url('${backgroundUrl?.assetUrl}') `,
         backgroundPosition: 'center',
-        backgroundColor: backgroundColor,
+        backgroundColor: backgroundColor ?? '',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
       }}
       className={`${ratioClassName} pw-font-poppins pw-flex ${rowAlignmentClass} pw-items-center`}
     >
-      {mediaType === 'video' || mediaType === 'image' ? (
-        <>
-          <ImageSDK
-            src={backgroundUrl?.assetUrl}
-            className={`${ratioClassName} pw-w-full pw-bg-black`}
-          />
-          <div
-            style={{
-              background: overlayBg,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: '100% 100%',
-            }}
-            className={`pw-w-full pw-h-full pw-absolute`}
-          ></div>
-        </>
-      ) : null}
-
       <div
-        className={`pw-h-max pw-flex pw-flex-col pw-container pw-mx-auto ${columnAlignmentClass} ${videoClass} pw-py-8`}
+        className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8`}
       >
         <h2
           style={{ color: titleColor ?? 'white' }}

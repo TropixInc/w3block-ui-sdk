@@ -217,18 +217,22 @@ export interface ProductsData extends MainModuleThemeInterface {
   contentData: {
     cardType?: CardTypesEnum;
     moduleTitle?: string;
-    cardSearch?: CardSearchEnum;
+    cardSearch?: ComboBoxReturnInterface[];
     contentCards?: SpecificContentCard[];
     moduleTitleColor?: string;
   };
 }
 
+interface ComboBoxReturnInterface {
+  label: string;
+  value: string;
+}
 export interface SpecificContentCard {
   id?: string;
   title?: string;
   description?: string;
   image?: AssetInterface;
-  category?: string;
+  category?: ComboBoxReturnInterface[];
   value?: string;
   hasLink?: boolean;
   link?: string;

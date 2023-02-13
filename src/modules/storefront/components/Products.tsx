@@ -4,18 +4,21 @@ import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Card } from '../../shared/components/Card';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useAxios } from '../../shared/hooks/useAxios';
 import {
   breakpointsEnum,
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import {
   AlignmentEnum,
   CardLayoutDisposition,
-  CardsOrderingEnum,
+  CardTypesEnum,
   ProductsData,
 } from '../interfaces';
-import { Product } from '../interfaces/Product';
 import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
@@ -31,7 +34,6 @@ export const Products = (props: { data: ProductsData }) => {
       layoutDisposition,
       autoSlide,
       itensPerLine,
-      ordering,
       totalRows,
       backgroundColor,
       backgroundUrl,
@@ -43,26 +45,32 @@ export const Products = (props: { data: ProductsData }) => {
       sessionLink,
       sessionButtonText,
     },
-    contentData: { moduleTitle, cardType, contentCards, moduleTitleColor },
+    contentData: {
+      moduleTitle,
+      cardType,
+      contentCards,
+      moduleTitleColor,
+      cardSearch,
+    },
   } = props.data;
 
-  const gridMaxItemsTotal =
-    (itensPerLine ? itensPerLine : 4) * (totalRows ? totalRows : 2)!;
-  const carouselMaxItems = (itensPerLine ? itensPerLine : 4) * 4;
-  const carouselSize =
-    layoutDisposition === CardLayoutDisposition.GRID
-      ? gridMaxItemsTotal
-      : carouselMaxItems;
-  const clampedProducts = products?.slice(0, carouselSize);
-
+  const { companyId } = useCompanyConfig();
+  const axios = useAxios(W3blockAPI.COMMERCE);
   useEffect(() => {
-    const _products = fetchProductsByTagAndOrder(ordering);
-
-    setProducts(_products);
-  }, []);
+    if (cardType == CardTypesEnum.DYNAMIC) {
+      callApiForDynamicProducts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardSearch, cardType, breakpoint, totalRows, itensPerLine]);
 
   const quantityOfItemsGrid = () => {
-    if (breakpoint == breakpointsEnum.SM && itensPerLine && itensPerLine > 2) {
+    if (breakpoint == breakpointsEnum.XS) {
+      return 1;
+    } else if (
+      breakpoint == breakpointsEnum.SM &&
+      itensPerLine &&
+      itensPerLine > 2
+    ) {
       return 2;
     } else if (
       breakpoint == breakpointsEnum.LG &&
@@ -74,6 +82,32 @@ export const Products = (props: { data: ProductsData }) => {
       return itensPerLine ?? 4;
     }
   };
+
+  const gridMaxItemsTotal = quantityOfItemsGrid() * (totalRows ? totalRows : 2);
+  const carouselMaxItems = (itensPerLine ? itensPerLine : 4) * 4;
+  const carouselSize =
+    layoutDisposition === CardLayoutDisposition.GRID
+      ? gridMaxItemsTotal
+      : carouselMaxItems;
+
+  const callApiForDynamicProducts = () => {
+    const limit = carouselSize;
+    axios
+      .get(
+        `/companies/${companyId}/products?limit=${limit}&${
+          cardSearch && cardSearch.length > 0
+            ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+            : ''
+        }`
+      )
+      .then((data) => {
+        if (data) {
+          setProducts(data.data.items);
+        }
+      });
+  };
+
+  const clampedProducts = products?.slice(0, carouselSize);
 
   const GridProducts = () => {
     return (
@@ -96,12 +130,23 @@ export const Products = (props: { data: ProductsData }) => {
                 <Card
                   key={p.id}
                   product={{
-                    id: p.id ?? '',
-                    category: p.category ?? '',
-                    img: p.image ?? { assetId: '', assetUrl: '' },
                     name: p.title ?? '',
                     description: p.description ?? '',
-                    price: p.value ?? '',
+                    id: p.id ?? '',
+                    slug: '',
+                    images: [
+                      {
+                        assetId: p.image?.assetId,
+                        thumb: p.image?.assetUrl,
+                        original: p.image?.assetUrl,
+                      },
+                    ],
+                    prices: [
+                      {
+                        amount: p.value ?? '',
+                        currency: { symbol: 'R$' ?? '' },
+                      },
+                    ],
                   }}
                   config={props.data}
                 />
@@ -153,12 +198,23 @@ export const Products = (props: { data: ProductsData }) => {
                 <Card
                   key={p.id}
                   product={{
-                    id: p.id ?? '',
-                    category: p.category ?? '',
-                    img: p.image ?? { assetId: '', assetUrl: '' },
                     name: p.title ?? '',
                     description: p.description ?? '',
-                    price: p.value ?? '',
+                    id: p.id ?? '',
+                    slug: '',
+                    images: [
+                      {
+                        assetId: p.image?.assetId,
+                        thumb: p.image?.assetUrl,
+                        original: p.image?.assetUrl,
+                      },
+                    ],
+                    prices: [
+                      {
+                        amount: p.value ?? '',
+                        currency: { symbol: 'R$' ?? '' },
+                      },
+                    ],
                   }}
                   config={props.data}
                 />
@@ -180,14 +236,14 @@ export const Products = (props: { data: ProductsData }) => {
       style={{
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundImage: backgroundUrl
-          ? `url('${backgroundUrl}')`
+        backgroundImage: backgroundUrl?.assetUrl
+          ? `url('${backgroundUrl.assetUrl}')`
           : backgroundColor
           ? backgroundColor
           : 'transparent',
         backgroundColor: backgroundColor ?? 'transparent',
       }}
-      className="pw-font-poppins"
+      className="pw-font-poppins pw-px-4 sm:pw-px-0"
     >
       <div className="pw-container pw-mx-auto pw-pb-10">
         <div className="pw-flex pw-justify-between">
@@ -233,22 +289,4 @@ export const Products = (props: { data: ProductsData }) => {
       </div>
     </div>
   );
-};
-
-const fetchProductsByTagAndOrder = (_order?: CardsOrderingEnum): Product[] => {
-  return new Array(45).fill(0).map((_, i) => {
-    return {
-      id: String(i + 1),
-      img: {
-        assetId: i.toString(),
-        assetUrl: 'https://i.ibb.co/gr1Qkkc/product.png',
-      },
-      category: 'calçados',
-      description: 'Lorem ipsum dolor sit amet',
-      // name: 'Tênis Easy Style Feminino Evoltenn Solado Trançado: ' + String(i + 1),
-      name: String(i + 1),
-      hoverColor: 'white',
-      price: '237,65',
-    };
-  });
 };

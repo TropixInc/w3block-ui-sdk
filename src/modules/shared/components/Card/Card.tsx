@@ -1,9 +1,8 @@
 import { CSSProperties } from 'react';
 
+import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { ProductsData } from '../../../storefront/interfaces';
-import { Product } from '../../../storefront/interfaces/Product';
 import { ImageSDK } from '../ImageSDK';
-
 import './Card.css';
 
 export const Card = ({
@@ -31,7 +30,7 @@ export const Card = ({
     >
       <div className="pw-flex pw-justify-center pw-w-full">
         <ImageSDK
-          src={product.img.assetUrl}
+          src={product.images[0].thumb}
           className="pw-w-full pw-min-h-[180px] pw-h-[180px] pw-object-cover pw-rounded-md"
         />
       </div>
@@ -56,7 +55,7 @@ export const Card = ({
           style={{ color: styleData.cardCategoryColor ?? '#C63535' }}
           className="pw-text-[#C63535] pw-font-semibold pw-font-poppins pw-text-sm pw-mt-2 pw-leading-5"
         >
-          {product.category}
+          {product.tags?.map((tag: any) => tag.name).join('/')}
         </p>
       )}
       {styleData.showCardValue && (
@@ -64,8 +63,10 @@ export const Card = ({
           style={{ color: styleData.cardValueColor ?? 'black' }}
           className="pw-font-bold pw-font-poppins pw-text-lg pw-mt-2"
         >
-          <span className="pw-text-sm pw-pr-2">R$</span>
-          {product.price}
+          <span className="pw-text-sm pw-pr-2">
+            {product.prices[0].currency.symbol}
+          </span>
+          {product.prices[0].amount}
         </p>
       )}
       {styleData.cardActionButton && (

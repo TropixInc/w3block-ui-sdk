@@ -10,8 +10,10 @@ export const useGetPageModules = () => {
 
   useEffect(() => {
     if (window) {
-      setHref(window.location.href);
-      //setHref('https://stg.primesea.io/storefront/product/slug');
+      if (!window.location.href.includes('/product/slug')) {
+        //setHref('https://stg.primesea.io/storefront');
+        setHref(window.location.href);
+      }
     }
   }, []);
 
