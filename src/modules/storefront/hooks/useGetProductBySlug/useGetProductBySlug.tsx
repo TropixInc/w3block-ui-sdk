@@ -8,46 +8,46 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 export type ProductPrice = {
   amount: string;
   currency: {
-    code: string;
-    createdAt: string;
-    crypto: string;
-    id: string;
-    name: string;
+    code?: string;
+    createdAt?: string;
+    crypto?: string;
+    id?: string;
+    name?: string;
     symbol: string;
-    updatedAt: string;
+    updatedAt?: string;
   };
-  currencyId: string;
+  currencyId?: string;
 };
 
 export interface Product {
-  canPurchase: boolean;
-  chainId: number;
-  companyId: string;
-  contractAddress: string;
-  createdAt: string;
+  canPurchase?: boolean;
+  chainId?: number;
+  companyId?: string;
+  contractAddress?: string;
+  createdAt?: string;
   description: string;
-  distributionType: string;
-  draftData: {
-    keyCollectionId: string;
-    quantity: number;
-    range: string;
+  distributionType?: string;
+  draftData?: {
+    keyCollectionId?: string;
+    quantity?: number;
+    range?: string;
   };
-  endSaleAt: string;
+  endSaleAt?: string;
   id: string;
-  images: any[];
+  images: { assetId?: string; original?: string; thumb?: string }[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  metadata: any;
+  metadata?: any;
   name: string;
   prices: ProductPrice[];
-  pricingType: string;
+  pricingType?: string;
   slug: string;
-  startSaleAt: string;
-  status: string;
-  stockAmount: number;
+  startSaleAt?: string;
+  status?: string;
+  stockAmount?: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tags: any[];
-  tokensAmount: number;
-  updatedAt: string;
+  tags?: any[];
+  tokensAmount?: number;
+  updatedAt?: string;
 }
 
 export interface ProductsResponse {
