@@ -7,6 +7,7 @@ export type TemplateData = {
     | ProductsData
     | CookiesData
     | FooterData
+    | ParagraphData
   )[];
 };
 
@@ -18,6 +19,7 @@ export type Theme = {
   products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
+  paragraph?: MainModuleThemeInterface;
   productPage: ProductPageData;
 };
 
@@ -87,6 +89,8 @@ export interface CategoriesData extends MainModuleThemeInterface {
 export interface BannerData extends MainModuleThemeInterface {
   type: ModulesType.BANNER;
   styleData: {
+    margin?: string;
+    padding?: string;
     bannerDisposition?: Layout;
     bannerRatio?: Ratio;
     autoSlide?: boolean;
@@ -172,6 +176,8 @@ type Link = {
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
   styleData: {
+    margin?: string;
+    padding?: string;
     layoutDisposition?: CardLayoutDisposition;
     autoSlide?: boolean;
     numberOfLines?: number;
@@ -240,6 +246,16 @@ export interface SpecificContentCard {
   cardOverlayColor?: string;
 }
 
+export interface ParagraphData extends MainModuleThemeInterface {
+  type: ModulesType.PARAGRAPH;
+  styleData: {
+    alignment?: AlignmentEnum;
+    titleInput?: string;
+    titleColor?: string;
+    textInput?: string;
+    textColor?: string;
+  };
+}
 export interface ProductPageData extends MainModuleThemeInterface {
   type: ModulesType.PRODUCT_PAGE;
   styleData: {
@@ -297,5 +313,6 @@ export enum ModulesType {
   CARDS = 'Cards',
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
+  PARAGRAPH = 'Paragraph',
   PRODUCT_PAGE = 'Product_page',
 }
