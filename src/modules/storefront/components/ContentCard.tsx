@@ -80,7 +80,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     style={{ color: cardCategoryColor ?? '#C63535' }}
                     className="pw-text-[#C63535] pw-font-semibold pw-font-poppins pw-text-sm pw-mt-2 pw-leading-5"
                   >
-                    {product.category}
+                    {product.category?.map((cat: any) => cat.label).join('/')}
                   </p>
                 )}
                 {showCardValue && (
@@ -128,7 +128,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                 }}
                 className="pw-text-[#C63535] pw-font-semibold pw-font-poppins pw-text-sm pw-mt-2 pw-leading-5"
               >
-                {product.category}
+                {product.category?.map((cat: any) => cat.label).join('/')}
               </p>
             )}
             {showCardValue && (

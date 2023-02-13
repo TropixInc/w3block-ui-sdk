@@ -8,6 +8,8 @@ export type TemplateData = {
     | CookiesData
     | FooterData
     | AccordionsData
+    | ImagePlusTextData
+    | ParagraphData
   )[];
 };
 
@@ -20,6 +22,8 @@ export type Theme = {
   cookies: CookiesData;
   footer: FooterData;
   accordions?: MainModuleThemeInterface;
+  imagePlusText?: MainModuleThemeInterface;
+  paragraph?: MainModuleThemeInterface;
   productPage: ProductPageData;
 };
 
@@ -89,6 +93,8 @@ export interface CategoriesData extends MainModuleThemeInterface {
 export interface BannerData extends MainModuleThemeInterface {
   type: ModulesType.BANNER;
   styleData: {
+    margin?: string;
+    padding?: string;
     bannerDisposition?: Layout;
     bannerRatio?: Ratio;
     autoSlide?: boolean;
@@ -174,6 +180,8 @@ type Link = {
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
   styleData: {
+    margin?: string;
+    padding?: string;
     layoutDisposition?: CardLayoutDisposition;
     autoSlide?: boolean;
     numberOfLines?: number;
@@ -219,18 +227,22 @@ export interface ProductsData extends MainModuleThemeInterface {
   contentData: {
     cardType?: CardTypesEnum;
     moduleTitle?: string;
-    cardSearch?: CardSearchEnum;
+    cardSearch?: ComboBoxReturnInterface[];
     contentCards?: SpecificContentCard[];
     moduleTitleColor?: string;
   };
 }
 
+interface ComboBoxReturnInterface {
+  label: string;
+  value: string;
+}
 export interface SpecificContentCard {
   id?: string;
   title?: string;
   description?: string;
   image?: AssetInterface;
-  category?: string;
+  category?: ComboBoxReturnInterface[];
   value?: string;
   hasLink?: boolean;
   link?: string;
@@ -238,6 +250,16 @@ export interface SpecificContentCard {
   cardOverlayColor?: string;
 }
 
+export interface ParagraphData extends MainModuleThemeInterface {
+  type: ModulesType.PARAGRAPH;
+  styleData: {
+    alignment?: AlignmentEnum;
+    titleInput?: string;
+    titleColor?: string;
+    textInput?: string;
+    textColor?: string;
+  };
+}
 export interface ProductPageData extends MainModuleThemeInterface {
   type: ModulesType.PRODUCT_PAGE;
   styleData: {
@@ -305,6 +327,26 @@ export interface SpecificContentAccordion {
   content?: string;
 }
 
+export interface ImagePlusTextData extends MainModuleThemeInterface {
+  type: ModulesType.IMAGE_PLUS_TEXT;
+  styleData: {
+    image?: string;
+    textAlignment?: AlignmentEnum;
+    titleColor?: string;
+    contentColor?: string;
+    imagePosition?: ImagePositionEnum;
+  };
+  contentData: {
+    title?: string;
+    content?: string;
+  };
+}
+
+enum ImagePositionEnum {
+  LEFT = 'left',
+  RIGHT = 'right',
+}
+
 export enum ModulesType {
   HEADER = 'Header',
   CONFIGURATION = 'Configuration',
@@ -314,5 +356,7 @@ export enum ModulesType {
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
   ACCORDIONS = 'Accordions',
+  IMAGE_PLUS_TEXT = 'Image_Plus_Text',
+  PARAGRAPH = 'Paragraph',
   PRODUCT_PAGE = 'Product_page',
 }
