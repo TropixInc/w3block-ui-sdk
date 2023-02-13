@@ -22,13 +22,13 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
   const txtOver = textOverImage != undefined ? textOverImage : true;
   return (
     <>
-      <div>
+      <div className="pw-w-full">
         {' '}
         <div
           style={{
             backgroundImage:
-              product.image && showCardImage
-                ? `url('${product.image}') `
+              product.image?.assetUrl && showCardImage
+                ? `url('${product.image.assetUrl}') `
                 : 'white',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
