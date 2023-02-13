@@ -23,8 +23,8 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
           } as CSSProperties
         }
       >
-        <div className="pw-w-full pw-h-full pw-grid pw-place-items-center">
-          <ImageSDK src={image} />
+        <div className="pw-grid pw-place-items-center">
+          <ImageSDK src={image} className="pw-max-w-[260px] pw-max-h-[274px]" />
         </div>
 
         <div
