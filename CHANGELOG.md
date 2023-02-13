@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.146](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.145...v0.1.1-alpha.146) (2023-02-13)
+
+
+### Features
+
+* add spacing to banner ([bccee20](https://github.com/TropixInc/w3block-ui-sdk/commit/bccee20ef02b533c2a721320b3159750c641e0e6))
+* add spacing to cards component ([d19bb24](https://github.com/TropixInc/w3block-ui-sdk/commit/d19bb24d06f5f917ff8d34c132a84468aca7cf86))
+* add spacing to paragraph and image + text ([8494b2b](https://github.com/TropixInc/w3block-ui-sdk/commit/8494b2b267d45a959e24de4c978ffce295c202a5))
+* create accordions module ([017f40e](https://github.com/TropixInc/w3block-ui-sdk/commit/017f40ec9b970c80eca3132dbe8696955c1fb211))
+* create image plus text component ([0a66511](https://github.com/TropixInc/w3block-ui-sdk/commit/0a66511fd0ca9c26ec17e0fdb39ffce9be51cc0f))
+* **pe-204:** added paragraph module on constructor ([#136](https://github.com/TropixInc/w3block-ui-sdk/issues/136)) ([0a68392](https://github.com/TropixInc/w3block-ui-sdk/commit/0a6839275c2d4d8d20ad25c3d84be1e538606717))
+
+
+### Bug Fixes
+
+* add default colors ([feabecc](https://github.com/TropixInc/w3block-ui-sdk/commit/feabecc7d4a64e042d5803de4f4a51247016744b))
+* container accordion style ([158fd26](https://github.com/TropixInc/w3block-ui-sdk/commit/158fd26a03dc8706c733b983aa8b67d007a66b7d))
+* max image size ([86fb296](https://github.com/TropixInc/w3block-ui-sdk/commit/86fb2965d6df7949ce4315977c10c7f7e1c93bf1))
+
 ### [0.1.1-alpha.145](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.144...v0.1.1-alpha.145) (2023-02-06)
 
 ### [0.1.1-alpha.144](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.143...v0.1.1-alpha.144) (2023-02-06)
