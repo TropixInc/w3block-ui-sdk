@@ -131,22 +131,27 @@ export const Products = (props: { data: ProductsData }) => {
               ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
               .map((p) => (
                 <Card
-                  key={p.id}
+                  key={p?.id}
                   product={{
-                    name: p.title ?? '',
-                    description: p.description ?? '',
-                    id: p.id ?? '',
+                    tags:
+                      p?.category?.map((cat) => ({
+                        name: cat.label,
+                        id: cat.value,
+                      })) ?? [],
+                    name: p?.title ?? '',
+                    description: p?.description ?? '',
+                    id: p?.id ?? '',
                     slug: '',
                     images: [
                       {
-                        assetId: p.image?.assetId,
-                        thumb: p.image?.assetUrl,
-                        original: p.image?.assetUrl,
+                        assetId: p?.image?.assetId,
+                        thumb: p?.image?.assetUrl,
+                        original: p?.image?.assetUrl,
                       },
                     ],
                     prices: [
                       {
-                        amount: p.value ?? '',
+                        amount: p?.value ?? '',
                         currency: { symbol: 'R$' ?? '' },
                       },
                     ],
@@ -199,22 +204,27 @@ export const Products = (props: { data: ProductsData }) => {
           ? contentCards?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
                 <Card
-                  key={p.id}
+                  key={p?.id}
                   product={{
-                    name: p.title ?? '',
-                    description: p.description ?? '',
-                    id: p.id ?? '',
+                    name: p?.title ?? '',
+                    description: p?.description ?? '',
+                    id: p?.id ?? '',
                     slug: '',
+                    tags:
+                      p?.category?.map((cat) => ({
+                        name: cat.label,
+                        id: cat.value,
+                      })) ?? [],
                     images: [
                       {
-                        assetId: p.image?.assetId,
-                        thumb: p.image?.assetUrl,
-                        original: p.image?.assetUrl,
+                        assetId: p?.image?.assetId,
+                        thumb: p?.image?.assetUrl,
+                        original: p?.image?.assetUrl,
                       },
                     ],
                     prices: [
                       {
-                        amount: p.value ?? '',
+                        amount: p?.value ?? '',
                         currency: { symbol: 'R$' ?? '' },
                       },
                     ],

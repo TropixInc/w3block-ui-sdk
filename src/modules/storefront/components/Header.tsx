@@ -1,4 +1,4 @@
-import { HeaderPixwaySDK } from '../../shared';
+import { HeaderPixwaySDK, useRouterConnect } from '../../shared';
 import { MainModuleThemeInterface } from '../interfaces';
 
 export const Header = (props: { data: MainModuleThemeInterface }) => {
@@ -14,13 +14,18 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
     },
   } = props.data;
 
+  const { routerToHref } = useRouterConnect();
+
   return (
     <HeaderPixwaySDK
       logoSrc={logoSrc}
       bgColor={backgroundColor}
       textColor={textColor}
       brandText={brandName}
-      tabs={tabs?.map((l: any) => ({ name: l.name, router: l.slug }))}
+      tabs={tabs?.map((l: any) => ({
+        name: l.name,
+        router: routerToHref(l.value),
+      }))}
     />
   );
 };
