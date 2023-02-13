@@ -8,14 +8,16 @@ export const Accordions = ({ data }: { data: AccordionsData }) => {
   const { styleData, contentData } = data;
 
   return (
-    <div className="pw-flex pw-flex-col pw-gap-8 pw-px-2 sm:pw-px-0">
-      {contentData?.accordionsItems?.map((itemData) => (
-        <div key={itemData.title} className="pw-w-full">
-          <div className="pw-container pw-mx-auto">
-            <Accordion styleData={styleData} contentData={itemData} />
-          </div>
-        </div>
-      ))}
+    <div className="pw-container pw-mx-auto">
+      <div className="pw-flex pw-flex-col pw-gap-8 pw-px-2 sm:pw-px-0">
+        {contentData?.accordionsItems?.map((itemData) => (
+          <Accordion
+            key={itemData.title}
+            styleData={styleData}
+            contentData={itemData}
+          />
+        ))}
+      </div>
     </div>
   );
 };
