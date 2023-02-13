@@ -20,6 +20,7 @@ import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 
 export const Products = (props: { data: ProductsData }) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -42,6 +43,8 @@ export const Products = (props: { data: ProductsData }) => {
       sessionAlignment,
       sessionLink,
       sessionButtonText,
+      margin,
+      padding,
     },
     contentData: { moduleTitle, cardType, contentCards, moduleTitleColor },
   } = props.data;
@@ -222,6 +225,8 @@ export const Products = (props: { data: ProductsData }) => {
               style={{
                 backgroundColor: sessionButtonColor ?? '#F5F9FF',
                 color: sessionButtonTextColor ?? '#353945',
+                margin: convertSpacingToCSS(margin),
+                padding: convertSpacingToCSS(padding),
               }}
               className="pw-px-[60px] pw-py-3 pw-text-center pw-rounded-lg pw-font-[600] pw-text-sm pw-cursor-pointer"
               href={sessionLink}

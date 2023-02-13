@@ -87,6 +87,8 @@ export interface CategoriesData extends MainModuleThemeInterface {
 export interface BannerData extends MainModuleThemeInterface {
   type: ModulesType.BANNER;
   styleData: {
+    margin?: string;
+    padding?: string;
     bannerDisposition?: Layout;
     bannerRatio?: Ratio;
     autoSlide?: boolean;
@@ -172,6 +174,8 @@ type Link = {
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
   styleData: {
+    margin?: string;
+    padding?: string;
     layoutDisposition?: CardLayoutDisposition;
     autoSlide?: boolean;
     numberOfLines?: number;
