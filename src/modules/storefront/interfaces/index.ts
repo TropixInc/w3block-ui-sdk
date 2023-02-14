@@ -7,6 +7,7 @@ export type TemplateData = {
     | ProductsData
     | CookiesData
     | FooterData
+    | AccordionsData
     | ImagePlusTextData
     | ParagraphData
     | MidiaData
@@ -21,6 +22,7 @@ export type Theme = {
   products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
+  accordions?: MainModuleThemeInterface;
   imagePlusText?: MainModuleThemeInterface;
   paragraph?: MainModuleThemeInterface;
   productPage: ProductPageData;
@@ -253,6 +255,8 @@ export interface SpecificContentCard {
 export interface ParagraphData extends MainModuleThemeInterface {
   type: ModulesType.PARAGRAPH;
   styleData: {
+    margin?: string;
+    padding?: string;
     alignment?: AlignmentEnum;
     titleInput?: string;
     titleColor?: string;
@@ -318,10 +322,30 @@ export enum CardLayoutDisposition {
   GRID = 'grid',
 }
 
+export interface AccordionsData extends MainModuleThemeInterface {
+  type: ModulesType.ACCORDIONS;
+  styleData: {
+    titleAndArrowColor?: string;
+    titleAndArrowHoverColor?: string;
+    contentColor?: string;
+    backgroundColor?: string;
+  };
+  contentData: {
+    accordionsItems?: SpecificContentAccordion[];
+  };
+}
+
+export interface SpecificContentAccordion {
+  title?: string;
+  content?: string;
+}
+
 export interface ImagePlusTextData extends MainModuleThemeInterface {
   type: ModulesType.IMAGE_PLUS_TEXT;
   styleData: {
-    image?: string;
+    margin?: string;
+    padding?: string;
+    image?: AssetInterface;
     textAlignment?: AlignmentEnum;
     titleColor?: string;
     contentColor?: string;
@@ -346,7 +370,8 @@ export enum ModulesType {
   CARDS = 'Cards',
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
-  IMAGE_PLUS_TEXT = 'Image_Plus_Text',
+  ACCORDIONS = 'Accordions',
+  IMAGE_PLUS_TEXT = 'Imagem + Texto',
   PARAGRAPH = 'Paragraph',
   PRODUCT_PAGE = 'Product_page',
   MIDIA = 'Midia',

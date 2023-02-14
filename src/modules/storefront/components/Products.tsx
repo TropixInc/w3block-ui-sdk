@@ -255,6 +255,8 @@ export const Products = (props: { data: ProductsData }) => {
           ? backgroundColor
           : 'transparent',
         backgroundColor: backgroundColor ?? 'transparent',
+        margin: convertSpacingToCSS(margin),
+        padding: convertSpacingToCSS(padding),
       }}
       className="pw-font-poppins pw-px-4 sm:pw-px-0"
     >
@@ -291,8 +293,6 @@ export const Products = (props: { data: ProductsData }) => {
               style={{
                 backgroundColor: sessionButtonColor ?? '#F5F9FF',
                 color: sessionButtonTextColor ?? '#353945',
-                margin: convertSpacingToCSS(margin),
-                padding: convertSpacingToCSS(padding),
               }}
               className="pw-px-[60px] pw-py-3 pw-text-center pw-rounded-lg pw-font-[600] pw-text-sm pw-cursor-pointer"
               href={sessionLink}

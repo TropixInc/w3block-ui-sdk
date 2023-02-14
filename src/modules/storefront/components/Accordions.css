@@ -1,0 +1,46 @@
+:root {
+  --accordions-title-color: '#fff';
+  --accordions-title-hover-color: '#fff';
+
+  --accordions-arrow-color: '#fff';
+  --accordions-arrow-hover-color: '#fff';
+  
+  --accordions-arrow-selected-bg-color: '#fff';
+}
+
+.accordions-title {
+  color: var(--accordions-title-color);
+}
+
+.accordions-title:hover {
+  color: var(--accordions-title-hover-color);
+}
+
+.accordions-arrow > svg {
+  stroke: var(--accordions-arrow-color);
+}
+
+.accordions-arrow:hover > svg {
+  stroke: var(--accordions-arrow-hover-color);
+}
+
+details[open] .accordions-arrow:hover > svg {
+  stroke: white;
+}
+
+details[open] .accordions-arrow:hover {
+  background: var(--accordions-arrow-hover-color);
+}
+
+details[open] summary > div > svg {
+  rotate: 180deg;
+  stroke: white;
+}
+
+details summary > div {
+  background: white;
+}
+
+details[open] summary > div {
+  background: var(--accordions-arrow-selected-bg-color);
+}

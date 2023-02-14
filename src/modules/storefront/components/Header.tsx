@@ -15,15 +15,14 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
   } = props.data;
 
   const { routerToHref } = useRouterConnect();
-
   return (
     <HeaderPixwaySDK
-      logoSrc={logoSrc}
+      logoSrc={logoSrc?.assetUrl}
       bgColor={backgroundColor}
       textColor={textColor}
       brandText={brandName}
       tabs={tabs?.map((l: any) => ({
-        name: l.name,
+        name: l.label,
         router: routerToHref(l.value),
       }))}
     />

@@ -129,8 +129,8 @@ export const Footer = ({ data }: { data: FooterData }) => {
       </div>
 
       {w3blockSignature && (
-        <div className="pw-w-full pw-grid pw-place-items-center pw-h-[14px] pw-bg-white pw-font-roboto pw-font-medium pw-text-xs pw-py-[14px]">
-          Copyright {new Date().getFullYear()} - [web/lock]
+        <div className="pw-w-full pw-grid pw-place-items-center pw-h-[14px] pw-bg-white pw-font-roboto pw-font-medium pw-text-xs pw-my-[14px]">
+          <p>Copyright {new Date().getFullYear()} - [web/lock]</p>
         </div>
       )}
     </>

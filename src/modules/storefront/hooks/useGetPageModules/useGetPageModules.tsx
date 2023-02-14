@@ -11,7 +11,7 @@ export const useGetPageModules = () => {
   useEffect(() => {
     if (window) {
       if (!window.location.href.includes('/product/slug')) {
-        //setHref('https://stg.primesea.io/storefront');
+        //setHref('https://foodbusters.stg.w3block.io/');
         setHref(window.location.href);
       }
     }
