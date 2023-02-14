@@ -10,6 +10,7 @@ export type TemplateData = {
     | AccordionsData
     | ImagePlusTextData
     | ParagraphData
+    | MidiaData
   )[];
 };
 
@@ -25,6 +26,7 @@ export type Theme = {
   imagePlusText?: MainModuleThemeInterface;
   paragraph?: MainModuleThemeInterface;
   productPage: ProductPageData;
+  midia?: MidiaData;
 };
 
 export interface MainModuleThemeInterface {
@@ -288,6 +290,15 @@ export interface ProductPageData extends MainModuleThemeInterface {
     blockchainInfoTextColor?: string;
   };
 }
+export interface MidiaData extends MainModuleThemeInterface {
+  type: ModulesType.MIDIA;
+  styleData: {
+    midiaUrl: AssetInterface;
+    imageDisposition: string;
+    imageRatio: string;
+    imageAlignment: AlignmentEnum;
+  };
+}
 
 export enum CardSearchEnum {
   FEATURED = 'featured',
@@ -363,4 +374,5 @@ export enum ModulesType {
   IMAGE_PLUS_TEXT = 'Imagem + Texto',
   PARAGRAPH = 'Paragraph',
   PRODUCT_PAGE = 'Product_page',
+  MIDIA = 'Midia',
 }
