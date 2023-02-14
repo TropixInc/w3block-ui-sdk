@@ -35,13 +35,18 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
     >
       <h2
         style={{ color: titleColor ?? 'black' }}
-        className={classNames('pw-font-poppins pw-font-semibold pw-text-xl')}
+        className={classNames(
+          'pw-font-poppins pw-font-semibold pw-text-[19px]'
+        )}
       >
         {titleInput}
       </h2>
       <p
         style={{ color: textColor ?? 'black' }}
-        className={classNames(alignmentTextClass, 'pw-font-poppins pw-text-sm')}
+        className={classNames(
+          alignmentTextClass,
+          'pw-font-poppins pw-text-sm pw-mt-4'
+        )}
       >
         {textInput}
       </p>
