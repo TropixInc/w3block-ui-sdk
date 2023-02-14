@@ -8,6 +8,7 @@ import { ReactComponent as LinkedinIcon } from '../../shared/assets/icons/linked
 import { ReactComponent as TelegramIcon } from '../../shared/assets/icons/message.svg';
 import { ReactComponent as TwitterIcon } from '../../shared/assets/icons/twitter.svg';
 import { ReactComponent as WhatsappIcon } from '../../shared/assets/icons/whatsapp.svg';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { FooterData } from '../interfaces';
 
 import './Footer.css';
@@ -30,6 +31,8 @@ export const Footer = ({ data }: { data: FooterData }) => {
     socialNetworksIconHoverColor,
     socialNetworks,
     w3blockSignature,
+    margin,
+    padding,
   } = styleData;
 
   const iconsMap: Record<SocialNetworkType, SVG> = {
@@ -60,7 +63,12 @@ export const Footer = ({ data }: { data: FooterData }) => {
   }));
 
   return (
-    <>
+    <div
+      style={{
+        margin: convertSpacingToCSS(margin),
+        padding: convertSpacingToCSS(padding),
+      }}
+    >
       <div
         style={{ backgroundColor }}
         className="pw-w-full pw-shadow-[0px_-4px_16px_rgba(0,0,0,0.15)] pw-flex pw-justify-center pw-items-center"
@@ -133,7 +141,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
           <p>Copyright {new Date().getFullYear()} - [web/lock]</p>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

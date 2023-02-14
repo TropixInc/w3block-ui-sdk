@@ -28,6 +28,8 @@ interface HeaderPixwaySDKProps {
   hasSignUp?: boolean;
   brandText?: string;
   logoSrc?: string;
+  margin?: string;
+  padding?: string;
 }
 
 const _HeaderPixwaySDK = ({
@@ -45,6 +47,8 @@ const _HeaderPixwaySDK = ({
   hasSignUp = true,
   brandText = '',
   logoSrc = '',
+  margin,
+  padding,
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
@@ -99,7 +103,10 @@ const _HeaderPixwaySDK = ({
   };
 
   return (
-    <div style={{ backgroundColor: bgColor }} className="w-full pw-shadow-md">
+    <div
+      style={{ backgroundColor: bgColor, margin, padding }}
+      className="w-full pw-shadow-md"
+    >
       <div
         style={{ backgroundColor: bgColor }}
         className={classNames(

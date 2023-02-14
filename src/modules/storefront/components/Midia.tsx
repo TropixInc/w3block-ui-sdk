@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { AlignmentEnum, MidiaData } from '../interfaces';
 
 const ratios: Record<string, string> = {
@@ -20,7 +21,14 @@ const rowAlignments: AlignmentClassNameMap = {
 
 export const Midia = ({ data }: { data: MidiaData }) => {
   const {
-    styleData: { midiaUrl, imageDisposition, imageRatio, imageAlignment },
+    styleData: {
+      midiaUrl,
+      imageDisposition,
+      imageRatio,
+      imageAlignment,
+      margin,
+      padding,
+    },
   } = data;
 
   const layoutClass =
@@ -29,7 +37,13 @@ export const Midia = ({ data }: { data: MidiaData }) => {
   const rowAlignmentClass = rowAlignments[imageAlignment ?? AlignmentEnum.LEFT];
 
   return (
-    <div className="pw-w-full">
+    <div
+      className="pw-w-full"
+      style={{
+        margin: convertSpacingToCSS(margin),
+        padding: convertSpacingToCSS(padding),
+      }}
+    >
       <div
         className={classNames(
           ratios[imageRatio ?? 'default'],
