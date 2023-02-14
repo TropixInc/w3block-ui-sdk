@@ -12,7 +12,7 @@ export const useGetTheme = () => {
   useEffect(() => {
     if (window) {
       setHref(window.location.href);
-      //setHref('https://stg.primesea.io/storefront');
+      //setHref('https://foodbusters.stg.w3block.io/');
     }
   }, []);
 

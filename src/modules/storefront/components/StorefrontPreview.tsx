@@ -100,25 +100,28 @@ const Storefront = ({ params }: StorefrontPreviewProps) => {
           }
         />
       )}
-      {data.modules?.map((item) => {
-        switch (item.type) {
-          case ModulesType.CATEGORIES:
-            return <Menu data={{ ...theme.categories, ...item }} />;
-          case ModulesType.BANNER:
-            return <Banner data={{ ...theme.banner, ...item }} />;
-          case ModulesType.CARDS:
-            return <Products data={{ ...theme.products, ...item }} />;
-          case ModulesType.ACCORDIONS:
-            return <Accordions data={{ ...theme.accordions, ...item }} />;
-          case ModulesType.IMAGE_PLUS_TEXT:
-            return <ImagePlusText data={{ ...theme.imagePlusText, ...item }} />;
-          case ModulesType.PARAGRAPH:
-            return <Paragraph data={{ ...theme.paragraph, ...item }} />;
-          default:
-            break;
-        }
-      })}
-
+      <div className="pw-min-h-[calc(100vh-150px)]">
+        {data.modules?.map((item) => {
+          switch (item.type) {
+            case ModulesType.CATEGORIES:
+              return <Menu data={{ ...theme.categories, ...item }} />;
+            case ModulesType.BANNER:
+              return <Banner data={{ ...theme.banner, ...item }} />;
+            case ModulesType.CARDS:
+              return <Products data={{ ...theme.products, ...item }} />;
+            case ModulesType.ACCORDIONS:
+              return <Accordions data={{ ...theme.accordions, ...item }} />;
+            case ModulesType.IMAGE_PLUS_TEXT:
+              return (
+                <ImagePlusText data={{ ...theme.imagePlusText, ...item }} />
+              );
+            case ModulesType.PARAGRAPH:
+              return <Paragraph data={{ ...theme.paragraph, ...item }} />;
+            default:
+              break;
+          }
+        })}
+      </div>
       <Footer
         data={
           theme.footer ?? {

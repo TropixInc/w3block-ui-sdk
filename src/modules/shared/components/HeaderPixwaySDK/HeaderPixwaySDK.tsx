@@ -80,12 +80,12 @@ const _HeaderPixwaySDK = ({
       );
     } else if (brandText) {
       return (
-        <p
+        <div
+          className="pw-font-poppins pw-text-[16px] pw-font-[600] pw-flex pw-full pw-items-center"
           style={{ color: textColor, height: logoHeight + 'px' }}
-          className="pw-font-poppins pw-text-[16px] pw-font-[600]"
         >
-          {brandText}
-        </p>
+          <p>{brandText}</p>
+        </div>
       );
     } else {
       return (
