@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.148](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.147...v0.1.1-alpha.148) (2023-02-14)
+
+
+### Features
+
+* **pe-205:** added midia module on constructor ([#140](https://github.com/TropixInc/w3block-ui-sdk/issues/140)) ([c7bb6a4](https://github.com/TropixInc/w3block-ui-sdk/commit/c7bb6a4c75d9a0407ee4d7540523f14f5e9e4ba6))
+
 ### [0.1.1-alpha.147](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.146...v0.1.1-alpha.147) (2023-02-14)
 
 ### [0.1.1-alpha.146](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.145...v0.1.1-alpha.146) (2023-02-13)
