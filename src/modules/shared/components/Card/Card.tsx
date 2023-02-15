@@ -1,7 +1,8 @@
 import { CSSProperties } from 'react';
 
 import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
-import { ProductsData } from '../../../storefront/interfaces';
+import { CardTypesEnum, ProductsData } from '../../../storefront/interfaces';
+import { useRouterConnect } from '../../hooks';
 import { ImageSDK } from '../ImageSDK';
 import './Card.css';
 
@@ -12,10 +13,19 @@ export const Card = ({
   product: Product;
   config: ProductsData;
 }) => {
-  // const router = useRouter();
+  const router = useRouterConnect();
   const { styleData } = config;
   return (
     <div
+      onClick={() => {
+        if (config.contentData.cardType == CardTypesEnum.CONTENT) {
+          if (product.hasLink) {
+            router.pushConnect(product.slug ?? '');
+          }
+        } else {
+          router.pushConnect(`/product/slug/${product.slug}`);
+        }
+      }}
       style={
         {
           backgroundColor: styleData.cardBackgroundColor ?? 'white',
@@ -23,10 +33,7 @@ export const Card = ({
           '--products-card-hover-color': styleData.cardHoverColor,
         } as CSSProperties
       }
-      className="pw-box-border pw-border pw-border-solid pw-border-[#DCDCDC] pw-w-full pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card"
-      onClick={() => {
-        // router.push(card.url);
-      }}
+      className="pw-box-border pw-border pw-border-solid pw-border-[#DCDCDC] pw-w-full pw-p-[18px] pw-rounded-[20px] pw-bg-white product-card pw-cursor-pointer"
     >
       <div className="pw-flex pw-justify-center pw-w-full">
         <ImageSDK

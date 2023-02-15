@@ -17,5 +17,5 @@ export const isGif = (url: string): boolean => {
 };
 
 export const isCloudinary = (url: string): boolean => {
-  return url.includes('res.cloudinary');
+  return url.includes('res.cloudinary') && !url.includes('/image/fetch/');
 };

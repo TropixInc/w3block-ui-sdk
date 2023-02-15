@@ -141,7 +141,8 @@ export const Products = (props: { data: ProductsData }) => {
                     name: p?.title ?? '',
                     description: p?.description ?? '',
                     id: p?.id ?? '',
-                    slug: '',
+                    slug: p.link ?? '',
+                    hasLink: p.hasLink,
                     images: [
                       {
                         assetId: p?.image?.assetId,
@@ -209,7 +210,8 @@ export const Products = (props: { data: ProductsData }) => {
                     name: p?.title ?? '',
                     description: p?.description ?? '',
                     id: p?.id ?? '',
-                    slug: '',
+                    slug: p.link ?? '',
+                    hasLink: p.hasLink,
                     tags:
                       p?.category?.map((cat) => ({
                         name: cat.label,
