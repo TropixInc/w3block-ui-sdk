@@ -258,14 +258,14 @@ export const Products = (props: { data: ProductsData }) => {
         margin: convertSpacingToCSS(margin),
         padding: convertSpacingToCSS(padding),
       }}
-      className="pw-font-poppins pw-px-4 sm:pw-px-0"
+      className="pw-px-4 sm:pw-px-0"
     >
       <div className="pw-container pw-mx-auto pw-pb-10">
         <div className="pw-flex pw-justify-between">
           {moduleTitle && moduleTitle != '' && (
             <h2
               style={{ color: moduleTitleColor ?? 'black' }}
-              className="pw-font-poppins pw-font-semibold pw-text-lg pw-pt-10"
+              className="pw-font-semibold pw-text-lg pw-pt-10"
             >
               {moduleTitle}
             </h2>

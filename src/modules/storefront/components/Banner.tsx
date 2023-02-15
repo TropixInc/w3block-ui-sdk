@@ -105,20 +105,20 @@ const Slide = ({
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
       }}
-      className={`${ratioClassName} pw-font-poppins pw-flex ${rowAlignmentClass} pw-items-center`}
+      className={`${ratioClassName} pw-flex ${rowAlignmentClass} pw-items-center`}
     >
       <div
         className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8`}
       >
         <h2
           style={{ color: titleColor ?? 'white' }}
-          className={`${alignmentTextClass} pw-font-poppins pw-font-semibold pw-text-4xl pw-max-w-[400px]`}
+          className={`${alignmentTextClass} pw-font-semibold pw-text-4xl pw-max-w-[400px]`}
         >
           {title}
         </h2>
         <p
           style={{ color: subtitleColor ?? 'white' }}
-          className={` ${alignmentTextClass} pw-font-medium text-xs pw-font-poppins pw-mt-4 pw-max-w-[230px]`}
+          className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[230px]`}
         >
           {subtitle}
         </p>

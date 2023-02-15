@@ -43,7 +43,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
 
           <div
             style={{ textAlign: textAlignment }}
-            className="pw-font-poppins pw-px-2 sm:pw-px-0"
+            className="pw-px-2 sm:pw-px-0"
           >
             <h3
               style={{ color: titleColor }}

@@ -14,6 +14,7 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
       brandName,
       margin,
       padding,
+      fontFamily,
     },
   } = props.data;
 
@@ -30,6 +31,7 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
         name: l.label,
         router: routerToHref(l.value),
       }))}
+      fontFamily={fontFamily}
     />
   );
 };
