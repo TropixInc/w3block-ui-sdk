@@ -40,6 +40,7 @@ export interface MainModuleThemeInterface {
 export interface PageData extends MainModuleThemeInterface {
   type: ModulesType.CONFIGURATION;
   styleData: {
+    padding?: string;
     textColor?: string;
     background?: boolean;
     backgroundColor?: string;
@@ -56,6 +57,8 @@ export interface AssetInterface {
 export interface HeaderData extends MainModuleThemeInterface {
   type: ModulesType.HEADER;
   styleData: {
+    margin?: string;
+    padding?: string;
     logoSrc?: AssetInterface;
     brandName?: string;
     tabs?: HeaderLink[];
@@ -81,6 +84,8 @@ export enum AlignmentEnum {
 export interface CategoriesData extends MainModuleThemeInterface {
   type: ModulesType.CATEGORIES;
   styleData: {
+    margin?: string;
+    padding?: string;
     categories?: CategoryItem[];
     allCategories?: boolean;
     allCategoriesText?: string;
@@ -119,6 +124,11 @@ export interface SpecificBannerInfo {
   buttonLink?: string;
   buttonTextColor?: string;
   buttonColor?: string;
+  secondaryActionButton?: boolean;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  secondaryButtonTextColor?: string;
+  secondaryButtonColor?: string;
 }
 
 type CategoryItem = { name: string; slug: string };
@@ -135,6 +145,8 @@ export type MenuDefault = {
 export interface CookiesData extends MainModuleThemeInterface {
   type: ModulesType.COOKIE;
   styleData: {
+    margin?: string;
+    padding?: string;
     backgroundColor?: string;
     textColor?: string;
     buttonBgColor?: string;
@@ -151,6 +163,8 @@ export interface CookiesData extends MainModuleThemeInterface {
 export interface FooterData extends MainModuleThemeInterface {
   type: ModulesType.FOOTER;
   styleData: {
+    margin?: string;
+    padding?: string;
     backgroundColor?: string;
     w3blockSignature?: boolean;
     textColor?: string;
@@ -267,6 +281,8 @@ export interface ParagraphData extends MainModuleThemeInterface {
 export interface ProductPageData extends MainModuleThemeInterface {
   type: ModulesType.PRODUCT_PAGE;
   styleData: {
+    margin?: string;
+    padding?: string;
     backTextColor?: string;
     backBackgroundColor?: string;
     backgroundColor?: string;
@@ -293,6 +309,8 @@ export interface ProductPageData extends MainModuleThemeInterface {
 export interface MidiaData extends MainModuleThemeInterface {
   type: ModulesType.MIDIA;
   styleData: {
+    margin?: string;
+    padding?: string;
     midiaUrl: AssetInterface;
     imageDisposition: string;
     imageRatio: string;
@@ -325,6 +343,8 @@ export enum CardLayoutDisposition {
 export interface AccordionsData extends MainModuleThemeInterface {
   type: ModulesType.ACCORDIONS;
   styleData: {
+    margin?: string;
+    padding?: string;
     titleAndArrowColor?: string;
     titleAndArrowHoverColor?: string;
     contentColor?: string;

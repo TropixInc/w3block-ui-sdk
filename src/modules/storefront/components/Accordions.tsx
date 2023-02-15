@@ -1,6 +1,7 @@
 import { CSSProperties } from 'react';
 
 import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/chevronDownOutlined.svg';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { AccordionsData, SpecificContentAccordion } from '../interfaces';
 import './Accordions.css';
 
@@ -8,7 +9,13 @@ export const Accordions = ({ data }: { data: AccordionsData }) => {
   const { styleData, contentData } = data;
 
   return (
-    <div className="pw-container pw-mx-auto">
+    <div
+      className="pw-container pw-mx-auto"
+      style={{
+        margin: convertSpacingToCSS(styleData.margin),
+        padding: convertSpacingToCSS(styleData.padding),
+      }}
+    >
       <div className="pw-flex pw-flex-col pw-gap-8 pw-px-2 sm:pw-px-0">
         {contentData?.accordionsItems?.map((itemData) => (
           <Accordion

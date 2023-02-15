@@ -2,6 +2,7 @@ import { ReactNode, useContext, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { useRouterConnect } from '../../shared';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
 import { Accordions } from './Accordions';
@@ -69,6 +70,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
       style={{
         color: theme.configurations?.styleData.textColor ?? 'black',
         background: theme.configurations?.styleData.backgroundColor ?? 'white',
+        padding: convertSpacingToCSS(theme.configurations?.styleData.padding),
       }}
     >
       <Header

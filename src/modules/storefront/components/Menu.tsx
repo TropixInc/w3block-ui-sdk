@@ -4,6 +4,7 @@ import { useClickAway, useToggle } from 'react-use';
 import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/arrowDown.svg';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { AlignmentEnum, CategoriesData } from '../interfaces';
 
 export const Menu = (props: { data: CategoriesData }) => {
@@ -16,6 +17,8 @@ export const Menu = (props: { data: CategoriesData }) => {
       hoverTextColor,
       allCategories,
       allCategoriesText,
+      margin,
+      padding,
     },
   } = props.data;
 
@@ -30,7 +33,12 @@ export const Menu = (props: { data: CategoriesData }) => {
 
   return (
     <TranslatableComponent>
-      <div>
+      <div
+        style={{
+          margin: convertSpacingToCSS(margin),
+          padding: convertSpacingToCSS(padding),
+        }}
+      >
         <div
           style={{
             backgroundColor: backgroundColor ? backgroundColor : '#0050FF',

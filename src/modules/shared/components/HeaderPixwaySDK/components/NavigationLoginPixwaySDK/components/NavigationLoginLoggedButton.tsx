@@ -86,7 +86,7 @@ export const useDefaultMenuTabs = () => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
-  const { pass, integration } = useFlags();
+  const { pass } = useFlags();
 
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
@@ -124,7 +124,7 @@ export const useDefaultMenuTabs = () => {
       name: translate('components>menu>integration'),
       route: PixwayAppRoutes.INTEGRATION,
       icon: <IntegrationIcon />,
-      isVisible: integration,
+      isVisible: true,
     },
     // {
     //   name: translate('header>components>defaultTab>settings'),

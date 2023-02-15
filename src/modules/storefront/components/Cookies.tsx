@@ -2,6 +2,7 @@ import { useLocalStorage } from 'react-use';
 
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { CookiesData } from '../interfaces';
 
 export const Cookies = ({ data }: { data: CookiesData }) => {
@@ -20,6 +21,8 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
     privacyPolicy,
     privacyPolicyLinkColor,
     privacyPolicyLink,
+    margin,
+    padding,
   } = styleData;
 
   const sampleDisclaimer =
@@ -30,7 +33,11 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
   return (
     <TranslatableComponent>
       <div
-        style={{ backgroundColor }}
+        style={{
+          backgroundColor,
+          margin: convertSpacingToCSS(margin),
+          padding: convertSpacingToCSS(padding),
+        }}
         className="pw-box-border lg:pw-max-h-[89px] pw-py-3 lg:pw-py-[23.5px] pw-px-14 lg:pw-px-[114px] pw-flex pw-justify-center pw-items-center pw-bottom-0 pw-left-0 pw-right-0 pw-z-50 pw-fixed"
       >
         <div className="pw-max-w-[1029px] pw-flex pw-items-center pw-justify-between pw-h-full pw-flex-wrap lg:pw-flex-nowrap pw-gap-2">
