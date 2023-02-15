@@ -1,6 +1,7 @@
 import { useRouterConnect } from '../../shared';
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import useGetProductBySlug from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { ProductPageData } from '../interfaces';
 
@@ -14,7 +15,12 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
   const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
   const categories = [{ name: 'tenis' }, { name: 'nike' }];
   return (
-    <div>
+    <div
+      style={{
+        margin: convertSpacingToCSS(data.styleData.margin),
+        padding: convertSpacingToCSS(data.styleData.padding),
+      }}
+    >
       <div
         style={{
           backgroundColor: data.styleData.backBackgroundColor ?? 'white',
