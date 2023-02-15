@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.150](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.149...v0.1.1-alpha.150) (2023-02-15)
+
+
+### Features
+
+* add secondary button on banner module ([7b723b7](https://github.com/TropixInc/w3block-ui-sdk/commit/7b723b754e44c83a173f1de01a1f23f78d46e751))
+* add spacing properties on all modules ([342507c](https://github.com/TropixInc/w3block-ui-sdk/commit/342507c99b35bdde2606999f226504e864651a98))
+
 ### [0.1.1-alpha.149](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.148...v0.1.1-alpha.149) (2023-02-14)
 
 
