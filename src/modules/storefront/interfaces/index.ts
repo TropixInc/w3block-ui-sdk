@@ -119,6 +119,11 @@ export interface SpecificBannerInfo {
   buttonLink?: string;
   buttonTextColor?: string;
   buttonColor?: string;
+  secondaryActionButton?: boolean;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  secondaryButtonTextColor?: string;
+  secondaryButtonColor?: string;
 }
 
 type CategoryItem = { name: string; slug: string };

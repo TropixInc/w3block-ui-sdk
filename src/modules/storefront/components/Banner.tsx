@@ -83,6 +83,11 @@ const Slide = ({
     buttonText,
     actionButton,
     subtitle,
+    secondaryActionButton,
+    secondaryButtonText,
+    secondaryButtonLink,
+    secondaryButtonTextColor,
+    secondaryButtonColor,
   } = data;
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
@@ -117,21 +122,39 @@ const Slide = ({
         >
           {subtitle}
         </p>
-        {actionButton && (
-          <button
-            style={{
-              backgroundColor: buttonColor ?? 'white',
-              color: buttonTextColor,
-            }}
-            className="pw-border-none pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
-            onClick={() => {
-              const target = '_blank';
-              window.open(buttonLink, target)?.focus();
-            }}
-          >
-            {buttonText ?? 'Saiba mais'}
-          </button>
-        )}
+
+        <div className="pw-flex pw-gap-4">
+          {actionButton && (
+            <button
+              style={{
+                backgroundColor: buttonColor ?? 'white',
+                color: buttonTextColor,
+              }}
+              className="pw-border-none pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
+              onClick={() => {
+                const target = '_blank';
+                window.open(buttonLink, target)?.focus();
+              }}
+            >
+              {buttonText ?? 'Saiba mais'}
+            </button>
+          )}
+          {secondaryActionButton && (
+            <button
+              style={{
+                backgroundColor: secondaryButtonColor ?? 'white',
+                color: secondaryButtonTextColor,
+              }}
+              className="pw-border-none pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
+              onClick={() => {
+                const target = '_blank';
+                window.open(secondaryButtonLink, target)?.focus();
+              }}
+            >
+              {secondaryButtonText ?? 'Saiba mais'}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
