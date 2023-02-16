@@ -16,10 +16,31 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     contentColor,
     margin,
     padding,
+    backgroundUrl,
+    backgroundSession,
+    backgroundColor,
+    overlay,
+    overlayColor,
   } = styleData;
 
   return (
-    <div className="pw-w-full">
+    <div
+      style={{
+        background:
+          backgroundSession && backgroundUrl
+            ? `${
+                overlay
+                  ? `linear-gradient(${overlayColor},${overlayColor}),`
+                  : ''
+              } url('${backgroundUrl?.assetUrl}') `
+            : '',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundColor: backgroundColor ?? 'rgba(255,255,255,0)',
+      }}
+      className="pw-w-full"
+    >
       <div className="pw-container pw-mx-auto">
         <div
           className="pw-flex pw-gap-8 image-plus-text"
@@ -43,7 +64,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
 
           <div
             style={{ textAlign: textAlignment }}
-            className="pw-px-2 sm:pw-px-0"
+            className="pw-px-2 sm:pw-px-0 pw-flex-1"
           >
             <h3
               style={{ color: titleColor }}

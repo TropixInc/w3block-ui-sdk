@@ -1,4 +1,4 @@
-import { HeaderPixwaySDK, useRouterConnect } from '../../shared';
+import { HeaderPixwaySDK } from '../../shared';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { MainModuleThemeInterface } from '../interfaces';
 
@@ -18,7 +18,6 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
     },
   } = props.data;
 
-  const { routerToHref } = useRouterConnect();
   return (
     <HeaderPixwaySDK
       logoSrc={logoSrc?.assetUrl}
@@ -29,7 +28,7 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
       padding={convertSpacingToCSS(padding)}
       tabs={tabs?.map((l: any) => ({
         name: l.label,
-        router: routerToHref(l.value),
+        router: l.value,
       }))}
       fontFamily={fontFamily}
     />

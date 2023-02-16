@@ -1,6 +1,7 @@
 import { useRouterConnect } from '../../shared';
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import useGetProductBySlug from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { ProductPageData } from '../interfaces';
@@ -11,7 +12,7 @@ interface ProductPageProps {
 }
 
 export const ProductPage = ({ data, params }: ProductPageProps) => {
-  const { back } = useRouterConnect();
+  const { back, pushConnect } = useRouterConnect();
   const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
   const categories = [{ name: 'tenis' }, { name: 'nike' }];
   return (
@@ -128,6 +129,14 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               ) : null}
               {data.styleData.actionButton && (
                 <button
+                  onClick={() => {
+                    if (product?.id && product.prices) {
+                      pushConnect(
+                        PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                          `?productIds=${product.id}&currencyId=${product.prices[0].currencyId}`
+                      );
+                    }
+                  }}
                   style={{
                     backgroundColor: data.styleData.buttonColor ?? '#0050FF',
                     color: data.styleData.buttonTextColor ?? 'white',

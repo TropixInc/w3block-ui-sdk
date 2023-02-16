@@ -36,6 +36,8 @@ export const Midia = ({ data }: { data: MidiaData }) => {
 
   const rowAlignmentClass = rowAlignments[imageAlignment ?? AlignmentEnum.LEFT];
 
+  const ratio = ratios[imageRatio ?? 'default'];
+
   return (
     <div
       className="pw-w-full"
@@ -44,15 +46,13 @@ export const Midia = ({ data }: { data: MidiaData }) => {
         padding: convertSpacingToCSS(padding),
       }}
     >
-      <div
-        className={classNames(
-          ratios[imageRatio ?? 'default'],
-          layoutClass,
-          'pw-mx-auto'
-        )}
-      >
+      <div className={classNames(ratio, layoutClass, 'pw-mx-auto')}>
         <ImageSDK
-          className={classNames(rowAlignmentClass, 'pw-object-cover')}
+          className={classNames(
+            ratio,
+            rowAlignmentClass,
+            'pw-object-cover pw-w-full pw-h-full'
+          )}
           src={midiaUrl?.assetUrl}
         />
       </div>

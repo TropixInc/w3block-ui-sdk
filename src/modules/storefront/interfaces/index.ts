@@ -124,11 +124,13 @@ export interface SpecificBannerInfo {
   buttonLink?: string;
   buttonTextColor?: string;
   buttonColor?: string;
+  buttonBorderColor?: string;
   secondaryActionButton?: boolean;
   secondaryButtonText?: string;
   secondaryButtonLink?: string;
   secondaryButtonTextColor?: string;
   secondaryButtonColor?: string;
+  secondaryButtonBorderColor?: string;
 }
 
 type CategoryItem = { name: string; slug: string };
@@ -370,6 +372,11 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
     titleColor?: string;
     contentColor?: string;
     imagePosition?: ImagePositionEnum;
+    backgroundSession?: boolean;
+    backgroundColor?: string;
+    backgroundUrl?: AssetInterface;
+    overlay?: boolean;
+    overlayColor?: string;
   };
   contentData: {
     title?: string;

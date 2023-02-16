@@ -26,6 +26,7 @@ export interface Product {
   contractAddress?: string;
   createdAt?: string;
   description: string;
+  hasLink?: boolean;
   distributionType?: string;
   draftData?: {
     keyCollectionId?: string;

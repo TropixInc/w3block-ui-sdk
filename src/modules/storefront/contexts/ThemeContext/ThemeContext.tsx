@@ -17,6 +17,7 @@ interface IThemeContext {
   setDefaultTheme?: (Theme: Theme) => void;
   pageTheme: TemplateData | null;
   setPageName: Dispatch<SetStateAction<string>>;
+  isError: boolean;
 }
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
@@ -24,7 +25,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [_, setPageName] = useState('');
   const { data: theme } = useGetTheme();
-  const { data: pageModules } = useGetPageModules();
+  const { data: pageModules, isError } = useGetPageModules();
   useEffect(() => {
     if (theme) {
       setDefaultTheme(theme.data);
@@ -44,6 +45,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         pageTheme,
         setPageName,
         setDefaultTheme,
+        isError,
       }}
     >
       {children}

@@ -109,13 +109,12 @@ const _HeaderPixwaySDK = ({
       style={{
         backgroundColor: bgColor,
         margin,
-        padding,
         fontFamily: (fontFamily ? fontFamily : 'Poppins') + ', sans-serif',
       }}
       className="w-full pw-shadow-md"
     >
       <div
-        style={{ backgroundColor: bgColor }}
+        style={{ backgroundColor: bgColor, padding }}
         className={classNames(
           'pw-container pw-mx-auto pw-px-4 sm:pw-px-0',
           headerClassName ?? ''
