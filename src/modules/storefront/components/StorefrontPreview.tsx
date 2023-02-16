@@ -57,6 +57,24 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     return () => removeEventListener('message', listener);
   });
 
+  const preventOutsideLinkClick = (e: MouseEvent) => {
+    if (
+      e.target instanceof HTMLAnchorElement &&
+      !e.target.href.includes(window.location.host)
+    ) {
+      e.preventDefault();
+    }
+  };
+
+  useEffectOnce(() => {
+    const insideIframe = window.self !== window.top;
+    if (insideIframe) {
+      addEventListener('click', preventOutsideLinkClick);
+
+      return () => removeEventListener('click', preventOutsideLinkClick);
+    }
+  });
+
   const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
 

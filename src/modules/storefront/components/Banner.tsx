@@ -129,38 +129,36 @@ const Slide = ({
 
         <div className="pw-flex pw-gap-4">
           {actionButton && (
-            <button
+            <a
               style={{
                 backgroundColor: buttonColor ?? 'white',
                 color: buttonTextColor,
                 borderColor: buttonBorderColor ?? 'transparent',
                 borderWidth: buttonBorderColor ? '2px' : '0',
               }}
-              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
-              onClick={() => {
-                const target = '_blank';
-                window.open(buttonLink, target)?.focus();
-              }}
+              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
+              href={buttonLink}
+              target="_blank"
+              rel="noreferrer"
             >
               {buttonText ?? 'Saiba mais'}
-            </button>
+            </a>
           )}
           {secondaryActionButton && (
-            <button
+            <a
               style={{
                 backgroundColor: secondaryButtonColor ?? 'white',
                 color: secondaryButtonTextColor,
                 borderColor: secondaryButtonBorderColor ?? 'transparent',
                 borderWidth: secondaryButtonBorderColor ? '2px' : '0',
               }}
-              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
-              onClick={() => {
-                const target = '_blank';
-                window.open(secondaryButtonLink, target)?.focus();
-              }}
+              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
+              href={secondaryButtonLink}
+              target="_blank"
+              rel="noreferrer"
             >
               {secondaryButtonText ?? 'Saiba mais'}
-            </button>
+            </a>
           )}
         </div>
       </div>
