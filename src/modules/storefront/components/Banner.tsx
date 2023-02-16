@@ -88,6 +88,8 @@ const Slide = ({
     secondaryButtonLink,
     secondaryButtonTextColor,
     secondaryButtonColor,
+    buttonBorderColor,
+    secondaryButtonBorderColor,
   } = data;
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
@@ -98,8 +100,10 @@ const Slide = ({
     <div
       style={{
         background: `${
-          overlay ? `linear-gradient(${overlayColor},${overlayColor})` : ''
-        }, url('${backgroundUrl?.assetUrl}') `,
+          overlay && overlayColor
+            ? `linear-gradient(${overlayColor},${overlayColor}),`
+            : ''
+        } url('${backgroundUrl?.assetUrl}') `,
         backgroundPosition: 'center',
         backgroundColor: backgroundColor ?? '',
         backgroundRepeat: 'no-repeat',
@@ -129,8 +133,10 @@ const Slide = ({
               style={{
                 backgroundColor: buttonColor ?? 'white',
                 color: buttonTextColor,
+                borderColor: buttonBorderColor ?? 'transparent',
+                borderWidth: buttonBorderColor ? '2px' : '0',
               }}
-              className="pw-border-none pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
+              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
               onClick={() => {
                 const target = '_blank';
                 window.open(buttonLink, target)?.focus();
@@ -144,8 +150,10 @@ const Slide = ({
               style={{
                 backgroundColor: secondaryButtonColor ?? 'white',
                 color: secondaryButtonTextColor,
+                borderColor: secondaryButtonBorderColor ?? 'transparent',
+                borderWidth: secondaryButtonBorderColor ? '2px' : '0',
               }}
-              className="pw-border-none pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
+              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6"
               onClick={() => {
                 const target = '_blank';
                 window.open(secondaryButtonLink, target)?.focus();
