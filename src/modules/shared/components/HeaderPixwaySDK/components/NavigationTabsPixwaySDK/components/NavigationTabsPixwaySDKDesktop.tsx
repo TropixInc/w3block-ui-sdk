@@ -10,7 +10,7 @@ export const NavigationTabsPixwaySDKDesktop = ({
       {tabs?.map((tab) => (
         <a
           style={{ color: textColor }}
-          className={`pw-font-poppins pw-text-[14px] pw-font-[600] ${classNames?.tabClassName}`}
+          className={`pw-text-[14px] pw-font-[600] ${classNames?.tabClassName}`}
           key={tab.name}
           href={tab.router}
         >

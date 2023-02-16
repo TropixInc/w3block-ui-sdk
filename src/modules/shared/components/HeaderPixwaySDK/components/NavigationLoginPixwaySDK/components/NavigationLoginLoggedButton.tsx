@@ -36,12 +36,14 @@ interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
   menuTabs?: NavigationMenuTabs[];
   textColor?: string;
+  fontFamily?: string;
 }
 
 export const NavigationLoginLoggedButton = ({
   logo,
   menuTabs,
   textColor = 'black',
+  fontFamily,
 }: NavigationLoginLoggedButtonProps) => {
   const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
@@ -55,10 +57,7 @@ export const NavigationLoginLoggedButton = ({
   return (
     <div className="pw-ml-5" ref={ref}>
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
-        <p
-          style={{ color: textColor }}
-          className="pw-text-xs pw-font-montserrat pw-font-[400] "
-        >
+        <p className="pw-text-xs pw-font-[400]">
           {wallet?.type === WalletTypes.Vault
             ? translate('header>logged>hiWallet', { name: profile?.data?.name })
             : translate('header>logged>metamaskHiWallet', {
@@ -66,17 +65,14 @@ export const NavigationLoginLoggedButton = ({
             })}
         </p>
         <div className="pw-flex pw-items-center">
-          <p
-            style={{ color: textColor }}
-            className="pw-text-sm pw-font-montserrat pw-font-[600]"
-          >
+          <p style={{ color: textColor }} className="pw-text-sm pw-font-[600]">
             {profile?.data?.mainWallet?.address || '-'}
           </p>
           <ArrowDown style={{ stroke: textColor }} className="pw-ml-1" />
         </div>
       </div>
 
-      {menu && <NavigationMenu menuTabs={menuTabs} logo={logo} />}
+      {menu && <NavigationMenu menuTabs={menuTabs} logo={logo} fontFamily={fontFamily} />}
     </div>
   );
 };
@@ -158,6 +154,7 @@ export const useDefaultMenuTabs = () => {
 
 const NavigationMenu = ({
   menuTabs: _menuTabs,
+  fontFamily,
 }: NavigationLoginLoggedButtonProps) => {
   const defaultTabs = useDefaultMenuTabs();
   const { setAttachModal } = useContext(AttachWalletContext);
@@ -182,7 +179,7 @@ const NavigationMenu = ({
     return (
       <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
         <div className="pw-flex">
-          <p className="pw-text-[10px] pw-font-montserrat pw-font-[500]">
+          <p className="pw-text-[10px] pw-font-[500]">
             {wallet?.type === WalletTypes.Vault
               ? translate('header>logged>pixwayBalance')
               : translate('header>logged>metamaskBalance')}
@@ -196,12 +193,12 @@ const NavigationMenu = ({
           {showValue ? (
             <>
               {renderIcon()}
-              <p className="pw-font-montserrat pw-font-[700] pw-text-xs pw-ml-1">
+              <p className="pw-font-[700] pw-text-xs pw-ml-1">
                 {parseFloat(wallet?.balance ?? '').toFixed(2)}
               </p>
             </>
           ) : (
-            <p className="pw-font-montserrat pw-font-[700] pw-text-xs">*****</p>
+            <p className="pw-font-[700] pw-text-xs">*****</p>
           )}
         </div>
       </div>
@@ -242,7 +239,7 @@ const NavigationMenu = ({
               className="pw-flex pw-items-center pw-gap-x-2 pw-py-[8px] pw-border-b pw-border-[#EFEFEF] pw-cursor-pointer pw-stroke-[#383857]"
             >
               {menu.icon}
-              <p className="pw-font-poppins pw-font-[400] pw-text-xs">
+              <p className="pw-font-[400] pw-text-xs" style={{ fontFamily: (fontFamily ? fontFamily : 'Poppins') + ', sans-serif' }}>
                 {menu.name}
               </p>
             </a>

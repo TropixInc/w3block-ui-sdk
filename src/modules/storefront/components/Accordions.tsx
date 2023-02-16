@@ -52,7 +52,7 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
       }
     >
       <summary
-        className="accordions-title pw-cursor-pointer pw-font-roboto pw-font-bold pw-text-2xl pw-list-none pw-flex pw-justify-between pw-items-center"
+        className="accordions-title pw-cursor-pointer pw-font-bold pw-text-2xl pw-list-none pw-flex pw-justify-between pw-items-center"
         style={
           {
             '--accordions-title-color': titleAndArrowColor,
@@ -76,7 +76,7 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
       </summary>
 
       <p
-        className="pw-font-poppins pw-text-[15px] pw-leading-[22.5px]"
+        className="pw-text-[15px] pw-leading-[22.5px]"
         style={{ color: contentColor || 'black' }}
       >
         {contentData.content}

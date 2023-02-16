@@ -15,6 +15,7 @@ export interface NavigationTabsPixwaySDKProps {
   toogleMenu?: () => void;
   textColor?: string;
   hasSignUp?: boolean;
+  fontFamily?: string;
 }
 
 interface NavigationTabsClassNames {
@@ -36,6 +37,7 @@ export const NavigationTabsPixwaySDK = ({
   opened,
   textColor = 'black',
   hasSignUp,
+  fontFamily,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -82,7 +84,13 @@ export const NavigationTabsPixwaySDK = ({
         />
       </div>
       {session && tabs?.length === 0 ? null : (
-        <div className="pw-block sm:pw-hidden">
+        <div
+          className="pw-block sm:pw-hidden"
+          style={{
+            fontFamily:
+              (fontFamily ? fontFamily : 'Montserrat') + ', sans-serif',
+          }}
+        >
           <NavigationTabsPixwaySDKMobile
             opened={opened ? opened : openedTabs}
             toogleMenu={toggleTabsMemo}
