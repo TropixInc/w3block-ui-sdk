@@ -328,7 +328,7 @@
   "components>walletIntegration>connect": "Sincronizar",
   "components>walletIntegration>copyCode": "Copie o código e cole",
   "components>walletIntegration>chooseCollab": "Copie o código disponibilizado pela Collab.Land ao escolher a opção da WalletConnect e cole aqui.",
-  "components>walletIntegration>connectSuccess": "A sincronização foi realizada com sucesso!",
+  "components>walletIntegration>connectSuccess": "Carteira sincronizada com sucesso! Não esqueça agora de voltar à aba aberta do CollabLand e clicar na opção \"Sign\" (Assinar), concluindo o vínculo da sua carteira com seu usuário no Discord.",
   "components>walletIntegration>connectFailed": "A sincronização falhou e não foi concluída. Tente realizar o processo novamente.",
   "components>walletIntegration>connectFail": "Falha ao sincronizar",
   "components>walletIntegration>connectCompleted": "Sincronização concluída!",
