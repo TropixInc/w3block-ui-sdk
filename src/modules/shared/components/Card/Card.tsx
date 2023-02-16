@@ -43,7 +43,7 @@ export const Card = ({
       {styleData.showCardTitle && (
         <p
           style={{ color: styleData.cardProductNameColor ?? 'black' }}
-          className="pw-line-clamp-2 pw-min-h-[36px] pw-text-sm pw-font-poppins pw-font-[400] pw-mt-2 pw-leading-5"
+          className="pw-line-clamp-2 pw-min-h-[36px] pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
         >
           {product.name}
         </p>
@@ -51,7 +51,7 @@ export const Card = ({
       {styleData.showCardDescription && (
         <p
           style={{ color: styleData.cardDescriptionColor ?? '#7E7E7E' }}
-          className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px] pw-mt-2 pw-text-sm pw-font-poppins pw-leading-5"
+          className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px] pw-mt-2 pw-text-sm pw-leading-5"
         >
           {product.description}
         </p>
@@ -59,7 +59,7 @@ export const Card = ({
       {styleData.showCardCategory && (
         <p
           style={{ color: styleData.cardCategoryColor ?? '#C63535' }}
-          className="pw-text-[#C63535] pw-font-semibold pw-font-poppins pw-text-sm pw-mt-2 pw-leading-5"
+          className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
         >
           {product.tags?.map((tag: any) => tag.name).join('/')}
         </p>
@@ -67,7 +67,7 @@ export const Card = ({
       {styleData.showCardValue && (
         <p
           style={{ color: styleData.cardValueColor ?? 'black' }}
-          className="pw-font-bold pw-font-poppins pw-text-lg pw-mt-2"
+          className="pw-font-bold pw-text-lg pw-mt-2"
         >
           <span className="pw-text-sm pw-pr-2">
             {product.prices[0].currency.symbol}
@@ -86,7 +86,7 @@ export const Card = ({
                 styleData.cardButtonColor ?? '#295BA6',
             } as CSSProperties
           }
-          className="pw-w-full pw-border pw-mt-2 pw-border-solid pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button pw-font-poppins pw-text-xs"
+          className="pw-w-full pw-border pw-mt-2 pw-border-solid pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button pw-text-xs"
         >
           {styleData.cardButtonText ?? 'Comprar agora'}
         </button>

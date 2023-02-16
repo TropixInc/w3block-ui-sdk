@@ -42,7 +42,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
       >
         <div className="pw-max-w-[1029px] pw-flex pw-items-center pw-justify-between pw-h-full pw-flex-wrap lg:pw-flex-nowrap pw-gap-2">
           <p
-            className="pw-text-sm pw-max-w-[949px] pw-font-roboto pw-leading-5"
+            className="pw-text-sm pw-max-w-[949px] pw-leading-5"
             style={{ color: textColor }}
           >
             {contentData?.disclaimer || sampleDisclaimer}{' '}
@@ -63,7 +63,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
               background: buttonBgColor,
               color: buttonTextColor,
             }}
-            className="pw-border-none pw-text-sm pw-h-[32px] pw-w-[109px] pw-px-4 pw-py-2 pw-rounded-lg pw-whitespace-nowrap pw-font-roboto pw-leading-4"
+            className="pw-border-none pw-text-sm pw-h-[32px] pw-w-[109px] pw-px-4 pw-py-2 pw-rounded-lg pw-whitespace-nowrap pw-leading-4"
             onClick={() => setAcceptedCookies('true')}
           >
             {translate('storefront>cookies>iAgree')}

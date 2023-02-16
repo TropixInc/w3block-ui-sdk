@@ -46,7 +46,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   ? data.styleData.textColor
                   : '#777E8F',
             }}
-            className="pw-font-poppins pw-text-sm"
+            className="pw-text-sm"
           >
             Voltar
           </p>
@@ -69,13 +69,13 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 <>
                   <p
                     style={{ color: data.styleData.textColor ?? 'black' }}
-                    className="pw-font-poppins pw-text-sm"
+                    className="pw-text-sm"
                   >
                     Título ou nome do item
                   </p>
                   <p
                     style={{ color: data.styleData.nameTextColor ?? 'black' }}
-                    className="pw-font-poppins pw-text-[36px] pw-font-[600]"
+                    className="pw-text-[36px] pw-font-[600]"
                   >
                     {product?.name}
                   </p>
@@ -86,7 +86,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   style={{
                     color: data.styleData.categoriesTextColor ?? '#C63535',
                   }}
-                  className="pw-mt-4 pw-font-poppins pw-font-[700] pw-text-lg"
+                  className="pw-mt-4 pw-font-[700] pw-text-lg"
                 >
                   {product?.tags?.join('/')}
                 </p>
@@ -94,7 +94,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               {data.styleData.showValue && (
                 <p
                   style={{ color: data.styleData.priceTextColor ?? 'black' }}
-                  className="pw-font-poppins pw-text-2xl pw-mt-4 pw-font-[700]"
+                  className="pw-text-2xl pw-mt-4 pw-font-[700]"
                 >
                   {product?.prices[0].currency.symbol}{' '}
                   {product?.prices[0].amount}
@@ -104,7 +104,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 <>
                   <p
                     style={{ color: data.styleData.textColor ?? 'black' }}
-                    className="pw-mt-4 pw-font-poppins pw-text-sm"
+                    className="pw-mt-4 pw-text-sm"
                   >
                     Categoria/subcategoria:
                   </p>
@@ -119,7 +119,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                           color:
                             data.styleData.categoriesTagTextColor ?? 'black',
                         }}
-                        className="pw-py-2 pw-px-6 pw-text-sm pw-font-[600] pw-font-poppins pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                        className="pw-py-2 pw-px-6 pw-text-sm pw-font-[600] pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
                         {cat.name}
                       </div>
@@ -141,7 +141,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     backgroundColor: data.styleData.buttonColor ?? '#0050FF',
                     color: data.styleData.buttonTextColor ?? 'white',
                   }}
-                  className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-font-poppins pw-mt-6 pw-rounded-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                  className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-6 pw-rounded-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                 >
                   {data.styleData.buttonText ?? 'Comprar agora'}
                 </button>
@@ -154,7 +154,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 style={{
                   color: data.styleData.descriptionTextColor ?? 'black',
                 }}
-                className="pw-text-2xl pw-font-[600] pw-font-poppins pw-mt-3"
+                className="pw-text-2xl pw-font-[600] pw-mt-3"
               >
                 Descrição
               </p>
@@ -162,7 +162,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 style={{
                   color: data.styleData.descriptionTextColor ?? 'black',
                 }}
-                className="pw-font-poppins pw-text-sm pw-pb-8 pw-mt-6"
+                className="pw-text-sm pw-pb-8 pw-mt-6"
               >
                 {product?.description}
               </p>

@@ -70,7 +70,7 @@ export const NavigationLoginLoggedButtonMobile = ({
             onClick={() => setHideBalance(!hideBalance)}
             className="pw-flex pw-items-center pw-gap-2 pw-cursor-pointer"
           >
-            <p className="pw-text-xs pw-font-[400] pw-font-montserrat">
+            <p className="pw-text-xs pw-font-[400]">
               {wallet?.type === WalletTypes.Vault
                 ? translate('header>logged>pixwayBalance')
                 : translate('header>logged>metamaskBalance')}
@@ -80,12 +80,12 @@ export const NavigationLoginLoggedButtonMobile = ({
           {hideBalance ? (
             <div className="pw-flex pw-gap-x-2">
               {renderIcon()}
-              <p className="pw-font-montserrat pw-font-[700] pw-text-xs pw-ml-1">
+              <p className="pw-font-[700] pw-text-xs pw-ml-1">
                 {parseFloat(wallet?.balance ?? '').toFixed(2)}
               </p>
             </div>
           ) : (
-            <p className="pw-font-montserrat pw-font-[700] pw-text-xs">*****</p>
+            <p className="pw-font-[700] pw-text-xs">*****</p>
           )}
         </div>
       </div>
@@ -105,25 +105,25 @@ export const NavigationLoginLoggedButtonMobile = ({
   };
 
   return session ? (
-    <div className="">
+    <div>
       <UserTag onClick={toggleTabsMemo} className="pw-mr-4 pw-cursor-pointer" />
       {validatorOpened ? (
         <div className="pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center">
-          <p className="pw-font-montserrat pw-text-xs pw-font-[400]">
+          <p className="pw-text-xs pw-font-[400]">
             {translate('header>logged>hiWallet', { name: profile?.data?.name })}
           </p>
           <div
             onClick={() => copyAddress(profile?.data.mainWallet?.address || '')}
             className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
-            <p className="pw-font-montserrat pw-text-xs pw-font-[400] pw-cursor-pointer">
+            <p className="pw-text-xs pw-font-[400] pw-cursor-pointer">
               {profile?.data.mainWallet?.address || '-'}
             </p>
             <CopyIcon />
             {copied ? (
               <div className="pw-relative">
                 <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2 pw-absolute pw-bg-slate-300 pw-shadow-md pw-rounded-md pw-right-0 pw-top-3 pw-p-1">
-                  <p className="pw-font-montserrat pw-text-sm pw-text-[#353945]">
+                  <p className="pw-text-sm pw-text-[#353945]">
                     {translate('components>menu>copied')}
                   </p>
                 </div>
@@ -142,7 +142,7 @@ export const NavigationLoginLoggedButtonMobile = ({
                     router.pushConnect(tab.route);
                   }
                 }}
-                className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-font-montserrat pw-text-[#383857] hover:pw-text-black"
+                className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-text-[#383857] hover:pw-text-black"
                 key={tab.name}
               >
                 {tab.icon}
