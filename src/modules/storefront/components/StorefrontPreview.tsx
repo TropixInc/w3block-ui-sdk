@@ -5,6 +5,7 @@ import { useRouterConnect } from '../../shared';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
+import { Page404 } from './404';
 import { Accordions } from './Accordions';
 import { Banner } from './Banner';
 import { Cookies } from './Cookies';
@@ -63,8 +64,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const isProductPage =
     asPath.includes('/product/slug') && params?.[params?.length - 1] != 'slug';
   const theme = { ...context.defaultTheme, ...themeListener };
-  console.log(data.modules);
-  console.log(theme);
+
   return (
     <div
       style={{
@@ -94,47 +94,58 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
           }
         }
       />
-      {isProductPage && (
-        <ProductPage
-          params={params}
-          data={
-            theme.productPage ?? {
-              id: '',
-              name: 'productsPage',
-              type: ModulesType.PRODUCT_PAGE,
-              styleData: {},
-            }
-          }
-        />
-      )}
-      {children ? (
-        children
+      {context.isError ? (
+        <Page404 />
       ) : (
-        <div className="pw-min-h-[calc(100vh-150px)]">
-          {data.modules?.map((item) => {
-            switch (item.type) {
-              case ModulesType.CATEGORIES:
-                return <Menu data={{ ...theme.categories, ...item }} />;
-              case ModulesType.BANNER:
-                return <Banner data={{ ...theme.banner, ...item }} />;
-              case ModulesType.CARDS:
-                return <Products data={{ ...theme.products, ...item }} />;
-              case ModulesType.ACCORDIONS:
-                return <Accordions data={{ ...theme.accordions, ...item }} />;
-              case ModulesType.IMAGE_PLUS_TEXT:
-                return (
-                  <ImagePlusText data={{ ...theme.imagePlusText, ...item }} />
-                );
-              case ModulesType.PARAGRAPH:
-                return <Paragraph data={{ ...theme.paragraph, ...item }} />;
-              case ModulesType.MIDIA:
-                return <Midia data={{ ...theme.midia, ...item }} />;
-              default:
-                break;
-            }
-          })}
-        </div>
+        <>
+          {isProductPage && (
+            <ProductPage
+              params={params}
+              data={
+                theme.productPage ?? {
+                  id: '',
+                  name: 'productsPage',
+                  type: ModulesType.PRODUCT_PAGE,
+                  styleData: {},
+                }
+              }
+            />
+          )}
+          {children ? (
+            children
+          ) : (
+            <div className="pw-min-h-[calc(100vh-150px)]">
+              {data.modules?.map((item) => {
+                switch (item.type) {
+                  case ModulesType.CATEGORIES:
+                    return <Menu data={{ ...theme.categories, ...item }} />;
+                  case ModulesType.BANNER:
+                    return <Banner data={{ ...theme.banner, ...item }} />;
+                  case ModulesType.CARDS:
+                    return <Products data={{ ...theme.products, ...item }} />;
+                  case ModulesType.ACCORDIONS:
+                    return (
+                      <Accordions data={{ ...theme.accordions, ...item }} />
+                    );
+                  case ModulesType.IMAGE_PLUS_TEXT:
+                    return (
+                      <ImagePlusText
+                        data={{ ...theme.imagePlusText, ...item }}
+                      />
+                    );
+                  case ModulesType.PARAGRAPH:
+                    return <Paragraph data={{ ...theme.paragraph, ...item }} />;
+                  case ModulesType.MIDIA:
+                    return <Midia data={{ ...theme.midia, ...item }} />;
+                  default:
+                    break;
+                }
+              })}
+            </div>
+          )}
+        </>
       )}
+
       <Footer
         data={
           theme.footer ?? {
