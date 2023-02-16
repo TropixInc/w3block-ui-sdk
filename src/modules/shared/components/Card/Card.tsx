@@ -2,7 +2,6 @@ import { CSSProperties } from 'react';
 
 import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { CardTypesEnum, ProductsData } from '../../../storefront/interfaces';
-import { useRouterConnect } from '../../hooks';
 import { ImageSDK } from '../ImageSDK';
 import './Card.css';
 
@@ -13,19 +12,19 @@ export const Card = ({
   product: Product;
   config: ProductsData;
 }) => {
-  const router = useRouterConnect();
   const { styleData } = config;
+  const linkToSend = () => {
+    if (config.contentData.cardType == CardTypesEnum.CONTENT) {
+      if (product.hasLink) {
+        return product.slug ?? '';
+      }
+    } else {
+      return `/product/slug/${product.slug}`;
+    }
+  };
   return (
-    <div
-      onClick={() => {
-        if (config.contentData.cardType == CardTypesEnum.CONTENT) {
-          if (product.hasLink) {
-            router.pushConnect(product.slug ?? '');
-          }
-        } else {
-          router.pushConnect(`/product/slug/${product.slug}`);
-        }
-      }}
+    <a
+      href={linkToSend()}
       style={
         {
           backgroundColor: styleData.cardBackgroundColor ?? 'white',
@@ -92,6 +91,6 @@ export const Card = ({
           {styleData.cardButtonText ?? 'Comprar agora'}
         </button>
       )}
-    </div>
+    </a>
   );
 };

@@ -1,4 +1,3 @@
-import { useRouterConnect } from '../../shared';
 import { ProductsData, SpecificContentCard } from '../interfaces';
 
 interface ContentCardProps {
@@ -21,16 +20,15 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
     textOverImage,
   } = config.styleData;
   const txtOver = textOverImage != undefined ? textOverImage : true;
-  const router = useRouterConnect();
   return (
     <>
-      <div
-        onClick={() => {
-          if (product.hasLink && product.link && product.link != '') {
-            router.pushConnect(product.link);
-          }
-        }}
-        className="pw-w-full pw-cursor-pointer"
+      <a
+        href={
+          product.hasLink && product.link && product.link != ''
+            ? product.link
+            : ''
+        }
+        className={`pw-w-full ${product.hasLink && 'pw-cursor-pointer'} `}
       >
         {' '}
         <div
@@ -154,7 +152,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
             )}
           </div>
         ) : null}
-      </div>
+      </a>
     </>
   );
 };
