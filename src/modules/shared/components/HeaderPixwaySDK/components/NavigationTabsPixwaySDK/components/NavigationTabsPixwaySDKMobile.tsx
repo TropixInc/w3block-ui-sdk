@@ -51,7 +51,7 @@ export const NavigationTabsPixwaySDKMobile = ({
             <a
               style={{ color: textColor }}
               href={tab.router}
-              className={`pw-font-montserrat pw-font-[600] pw-text-sm ${classNames?.tabClassName}`}
+              className={`pw-font-[600] pw-text-sm ${classNames?.tabClassName}`}
               key={tab.name}
             >
               {tab.name}

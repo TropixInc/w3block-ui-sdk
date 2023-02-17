@@ -80,8 +80,25 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
 
   if (!themeContext) return null;
   const isProductPage =
-    asPath.includes('/product/slug') && params?.[params?.length - 1] != 'slug';
+    (asPath || '').includes('/product/slug') &&
+    params?.[params?.length - 1] != 'slug';
   const theme = { ...context.defaultTheme, ...themeListener };
+  const fontName = theme.configurations?.styleData.fontFamily;
+  const fontFamily = fontName
+    ? `"${fontName}", ${fontName === 'Aref Ruqaa' ? 'serif' : 'sans-serif'}`
+    : 'sans-serif';
+
+  const headerData = theme.header
+    ? {
+        ...theme.header,
+        styleData: { ...theme.header.styleData, fontFamily },
+      }
+    : {
+        id: '',
+        name: 'header',
+        type: ModulesType.HEADER,
+        styleData: {},
+      };
 
   return (
     <div
@@ -89,18 +106,11 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
         color: theme.configurations?.styleData.textColor ?? 'black',
         background: theme.configurations?.styleData.backgroundColor ?? 'white',
         padding: convertSpacingToCSS(theme.configurations?.styleData.padding),
+        fontFamily,
       }}
     >
-      <Header
-        data={
-          theme.header ?? {
-            id: '',
-            name: 'header',
-            type: ModulesType.HEADER,
-            styleData: {},
-          }
-        }
-      />
+      <Header data={headerData} />
+
       <Cookies
         data={
           theme.cookies ?? {

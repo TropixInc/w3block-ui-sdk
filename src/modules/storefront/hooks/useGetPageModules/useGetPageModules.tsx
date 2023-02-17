@@ -25,7 +25,10 @@ export const useGetPageModules = () => {
         .then((data) => data.data),
     {
       enabled:
-        href != undefined && href != '' && !href.includes('/product/slug'),
+        href != undefined &&
+        href != '' &&
+        !href.includes('/product/slug') &&
+        !href.includes('/checkout/'),
       refetchOnWindowFocus: false,
     }
   );

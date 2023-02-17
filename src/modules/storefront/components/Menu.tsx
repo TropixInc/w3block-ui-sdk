@@ -44,7 +44,7 @@ export const Menu = (props: { data: CategoriesData }) => {
             backgroundColor: backgroundColor ? backgroundColor : '#0050FF',
             color: textColor ?? 'white',
           }}
-          className="pw-w-full pw-flex pw-justify-center pw-px-5 pw-font-poppins pw-max-h-57"
+          className="pw-w-full pw-flex pw-justify-center pw-px-5 pw-max-h-57"
         >
           <div className="pw-flex pw-justify-center pw-gap-2 pw-py-3 pw-items-center pw-container pw-mx-auto">
             {allCategories && (
@@ -137,7 +137,7 @@ const SeeAllMenu = (props: CategoriesData) => {
         backgroundColor: backgroundColor ? backgroundColor : '#0050FF',
         color: textColor ?? 'white',
       }}
-      className="pw-w-full pw-flex pw-justify-center pw-px-5 pw-font-poppins "
+      className="pw-w-full pw-flex pw-justify-center pw-px-5 "
     >
       <div className="pw-flex pw-justify-center pw-gap-2 pw-py-3 pw-items-center pw-container">
         <div className={`pw-flex pw-flex-wrap pw-w-full ${alignmentClass()}`}>

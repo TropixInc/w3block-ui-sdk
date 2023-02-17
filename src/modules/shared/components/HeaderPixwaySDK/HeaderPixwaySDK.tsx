@@ -30,6 +30,7 @@ interface HeaderPixwaySDKProps {
   logoSrc?: string;
   margin?: string;
   padding?: string;
+  fontFamily?: string;
 }
 
 const _HeaderPixwaySDK = ({
@@ -49,6 +50,7 @@ const _HeaderPixwaySDK = ({
   logoSrc = '',
   margin,
   padding,
+  fontFamily,
 }: HeaderPixwaySDKProps) => {
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
@@ -85,7 +87,7 @@ const _HeaderPixwaySDK = ({
     } else if (brandText) {
       return (
         <div
-          className="pw-font-poppins pw-text-[16px] pw-font-[600] pw-flex pw-full pw-items-center"
+          className="pw-text-[16px] pw-font-[600] pw-flex pw-full pw-items-center"
           style={{ color: textColor, height: logoHeight + 'px' }}
         >
           <p>{brandText}</p>
@@ -104,7 +106,11 @@ const _HeaderPixwaySDK = ({
 
   return (
     <div
-      style={{ backgroundColor: bgColor, margin }}
+      style={{
+        backgroundColor: bgColor,
+        margin,
+        fontFamily: (fontFamily ? fontFamily : 'Poppins') + ', sans-serif',
+      }}
       className="w-full pw-shadow-md"
     >
       <div
@@ -127,6 +133,7 @@ const _HeaderPixwaySDK = ({
                 opened={openedMenu ? openedMenu : openedTabs}
                 hasSignUp={hasSignUp}
                 textColor={textColor}
+                fontFamily={fontFamily}
               />
             </div>
 
@@ -138,6 +145,7 @@ const _HeaderPixwaySDK = ({
                 loginMenu={validatorMenuOpened}
                 signInRouter={signInRouter}
                 signUpRouter={signUpRouter}
+                fontFamily={fontFamily}
               />
             </div>
           </div>

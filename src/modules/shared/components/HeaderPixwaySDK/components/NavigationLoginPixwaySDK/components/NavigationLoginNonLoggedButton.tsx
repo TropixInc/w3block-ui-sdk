@@ -28,17 +28,11 @@ export const NavigationLoginNonLoggedButton = ({
         onClick={() => setOpenMenu(!openMenu)}
         className="pw-ml-5 pw-cursor-pointer"
       >
-        <p
-          style={{ color: textColor }}
-          className="pw-font-montserrat pw-font-[400] pw-text-xs"
-        >
+        <p style={{ color: textColor }} className="pw-font-[400] pw-text-xs">
           Login
         </p>
         <div className="pw-flex pw-items-center pw-gap-x-1">
-          <p
-            style={{ color: textColor }}
-            className="pw-text-sm pw-font-[600] pw-font-montserrat"
-          >
+          <p style={{ color: textColor }} className="pw-text-sm pw-font-[600]">
             {translate('shared>myAcount')}
           </p>
           <ArrowDown style={{ stroke: textColor }} />
