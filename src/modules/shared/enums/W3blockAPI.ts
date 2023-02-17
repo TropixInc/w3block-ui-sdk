@@ -4,4 +4,5 @@ export enum W3blockAPI {
   COMMERCE,
   POLL,
   PASS,
+  DIRECTORY,
 }

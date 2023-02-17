@@ -9,6 +9,8 @@ import { boolean, object, string } from 'yup';
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { Link } from '../../../shared/components/Link';
+import SmartInputsController from '../../../shared/components/SmartInputsController';
+import { KYCTypes } from '../../../shared/enums/KYCTypes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -124,6 +126,11 @@ export const SignUpForm = ({
             type="password"
           />
           <AuthPasswordTips passwordFieldName="password" className="pw-mb-6" />
+          <SmartInputsController
+            label={'File'}
+            name={'File'}
+            type={KYCTypes.FILE}
+          />
           <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
             <AuthCheckbox
               name="acceptsTermsOfUse"

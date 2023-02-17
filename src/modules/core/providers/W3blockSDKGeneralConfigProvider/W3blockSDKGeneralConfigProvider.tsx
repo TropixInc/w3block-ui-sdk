@@ -18,6 +18,7 @@ interface Props extends JSX.IntrinsicAttributes {
     pdfUrl: string;
     pollUrl?: string;
     passUrl: string;
+    directory?: string;
   };
   locale: PixwayUISdkLocale;
   companyId: string;
@@ -60,6 +61,7 @@ export const W3blockUISDKGeneralConfig = ({
           w3blockCommerceAPIUrl={api.commerceUrl}
           w3blockPdfAPIUrl={api.pdfUrl}
           w3BlockPassApiUrl={api.passUrl ?? ''}
+          w3blockDirectoryApiUrl={api.directory ?? ''}
         >
           <LocaleProvider locale={locale}>{children}</LocaleProvider>
         </W3blockApiProvider>
