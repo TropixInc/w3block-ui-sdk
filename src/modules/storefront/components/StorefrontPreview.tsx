@@ -58,10 +58,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   });
 
   const preventOutsideLinkClick = (e: MouseEvent) => {
-    if (
-      e.target instanceof HTMLAnchorElement &&
-      !e.target.href.includes(window.location.host)
-    ) {
+    if (e.target instanceof HTMLAnchorElement) {
       e.preventDefault();
     }
   };
