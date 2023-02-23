@@ -1,5 +1,4 @@
 import { CheckoutStatus } from '../../../checkout';
-import { ReactComponent as Loading } from '../../assets/icons/loading.svg';
 import { CurrencyEnum, currencyMap } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
 import { Shimmer } from '../Shimmer';
@@ -33,7 +32,6 @@ export const ProductInfo = ({
             <p className="pw-text-sm pw-text-[#295BA6] pw-font-[600]">
               {translate('shared>processing')}
             </p>
-            <Loading className="pw-animate-spin" />
           </div>
         );
       default:

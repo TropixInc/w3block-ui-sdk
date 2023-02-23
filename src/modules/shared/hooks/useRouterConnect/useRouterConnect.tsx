@@ -1,5 +1,6 @@
 import { useLocation } from 'react-use';
 
+import { removeDoubleSlashesOnUrl } from '../../utils/removeDuplicateSlahes';
 import { useCompanyConfig } from '../useCompanyConfig';
 import useRouter from '../useRouter';
 
@@ -13,12 +14,12 @@ export const useRouterConnect = () => {
       (location.hostname?.includes('localhost') ||
       location.href?.includes('/connect/') ||
       !connectProxyPass
-        ? ''
+        ? '/'
         : connectProxyPass) + path
     );
   };
   const routerToHref = (path: string) => {
-    return (connectProxyPass ?? '') + path;
+    return removeDoubleSlashesOnUrl((connectProxyPass ?? '') + path);
   };
   return { ...router, pushConnect, routerToHref };
 };

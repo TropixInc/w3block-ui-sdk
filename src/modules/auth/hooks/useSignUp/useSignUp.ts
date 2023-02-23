@@ -25,11 +25,11 @@ export const useSignUp = () => {
     return sdk.api.auth.signUp({
       ...payload,
       tenantId: companyId,
-      callbackUrl: new URL(
+      callbackUrl:
         payload.callbackUrl ??
-          connectProxyPass + PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
-        appBaseUrl
-      ).toString(),
+        appBaseUrl +
+          connectProxyPass +
+          PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
     });
   });
 };
