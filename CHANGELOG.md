@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.154](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.153...v0.1.1-alpha.154) (2023-02-27)
+
+
+### Features
+
+* add listener for external links clicks ([0dd34db](https://github.com/TropixInc/w3block-ui-sdk/commit/0dd34dbfa052b9daf5f47459b76cfa8224b9753e))
+* prevent router push on iframe ([347cfbf](https://github.com/TropixInc/w3block-ui-sdk/commit/347cfbf3888e262313df11c6c5e1720ad8f49619))
+
+
+### Bug Fixes
+
+* **pe-225:** adjusts on wallet connect ([#146](https://github.com/TropixInc/w3block-ui-sdk/issues/146)) ([6e42457](https://github.com/TropixInc/w3block-ui-sdk/commit/6e424579b08b4b5a41be8987714917f41d8fa525))
+
 ### [0.1.1-alpha.153](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.152...v0.1.1-alpha.153) (2023-02-23)
 
 ### [0.1.1-alpha.152](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.151...v0.1.1-alpha.152) (2023-02-16)
