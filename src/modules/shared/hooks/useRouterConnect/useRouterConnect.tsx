@@ -10,6 +10,7 @@ export const useRouterConnect = () => {
   const location = useLocation();
 
   const pushConnect = (path: string) => {
+    if (window.self !== window.top) return;
     router.push(
       removeDoubleSlashesOnUrl(
         (location.hostname?.includes('localhost') ||

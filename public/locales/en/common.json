@@ -163,7 +163,7 @@
   "components>walletIntegration>connect": "Connect",
   "components>walletIntegration>copyCode": "Copy and paste the code",
   "components>walletIntegration>chooseCollab": "Copy the code you received on Collab.Land by choosing the option WalletConnect and past it here",
-  "components>walletIntegration>connectSuccess": "You were successfully connected!",
+  "components>walletIntegration>connectSuccess": "Wallet synced successfully! Don't forget now to go back to the open CollabLand tab and click on the \"Sign\" option, completing the link between your wallet and your Discord user",
   "components>walletIntegration>connectFailed": "The connection has failed and was not completed. Please try repeting the process",
   "components>walletIntegration>connectFail": "Failed to connect",
   "components>walletIntegration>connectCompleted": "Connection completed!",
