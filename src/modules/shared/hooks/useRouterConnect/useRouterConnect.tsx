@@ -11,11 +11,13 @@ export const useRouterConnect = () => {
 
   const pushConnect = (path: string) => {
     router.push(
-      (location.hostname?.includes('localhost') ||
-      location.href?.includes('/connect/') ||
-      !connectProxyPass
-        ? '/'
-        : connectProxyPass) + path
+      removeDoubleSlashesOnUrl(
+        (location.hostname?.includes('localhost') ||
+        location.href?.includes('/connect/') ||
+        !connectProxyPass
+          ? '/'
+          : connectProxyPass) + path
+      )
     );
   };
   const routerToHref = (path: string) => {
