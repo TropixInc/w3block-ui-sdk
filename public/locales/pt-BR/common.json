@@ -349,6 +349,7 @@
   "components>walletIntegration>continue": "Continuar",
   "components>walletIntegration>confirmDisconnect": "Tem certeza que deseja desconectar do WalletConnect?",
   "components>walletIntegration>walletConnected": "Carteira sincronizada",
-  "components>walletIntegration>syncDate": "Sincronizado em: {{date}}"
-  
+  "components>walletIntegration>syncDate": "Sincronizado em: {{date}}",
+  "token>pass>passOutsideCheckin": "Esse token está fora do período de check-in.",
+  "token>pass>checkinAvaibleAt": "Check-in disponível às:"
 }
