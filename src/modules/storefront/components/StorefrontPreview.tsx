@@ -1,7 +1,8 @@
-import { ReactNode, useContext, useState } from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { useRouterConnect } from '../../shared';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
@@ -36,7 +37,7 @@ export const StorefrontPreview = ({
 
 const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const context = useContext(ThemeContext);
-  const { asPath } = useRouterConnect();
+  const { asPath, pushConnect } = useRouterConnect();
   const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
   const [themeListener, setThemeListener] = useState<Theme | null>();
   const listener = ({
@@ -50,6 +51,13 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     }
     //setCurrentPage(data);
   };
+
+  useEffect(() => {
+    if (context?.isThemeError) {
+      pushConnect(PixwayAppRoutes.SIGN_IN);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context?.isThemeError]);
 
   useEffectOnce(() => {
     addEventListener('message', listener);
@@ -96,7 +104,6 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
         type: ModulesType.HEADER,
         styleData: {},
       };
-
   return (
     <div
       style={{
