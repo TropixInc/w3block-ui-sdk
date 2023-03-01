@@ -87,7 +87,7 @@ export const Products = (props: { data: ProductsData }) => {
   };
 
   const gridMaxItemsTotal = quantityOfItemsGrid() * (totalRows ? totalRows : 2);
-  const carouselMaxItems = (itensPerLine ? itensPerLine : 4) * 4;
+  const carouselMaxItems = (itensPerLine ? itensPerLine : 4) * (totalRows ?? 2);
   const carouselSize =
     layoutDisposition === CardLayoutDisposition.GRID
       ? gridMaxItemsTotal
@@ -122,13 +122,13 @@ export const Products = (props: { data: ProductsData }) => {
       >
         {cardType == 'content' && format && format != 'product'
           ? contentCards
-              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
+              ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
               .map((card) => (
                 <ContentCard product={card} config={props.data} key={card.id} />
               ))
           : cardType == 'content' && (!format || format == 'product')
           ? contentCards
-              ?.slice(0, quantityOfItemsGrid() * (totalRows ?? 2))
+              ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
               .map((p) => (
                 <Card
                   key={p?.id}
