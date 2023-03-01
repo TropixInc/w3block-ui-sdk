@@ -86,18 +86,32 @@ const _PassTemplate = ({
     editionNumber: editionNumber as string,
   });
 
+  const hasExpired =
+    secret?.data?.statusCode === 400 &&
+    secret?.data?.message?.includes('ended the period of use');
+
+  const waitCheckin =
+    secret?.data?.statusCode === 400 &&
+    secret?.data?.message?.includes('check -in until Invalid date');
+
   const mode = useMemo(() => {
     if (benefit?.data?.useLimit == 0) {
       return 'error-use';
     } else if (
       secret?.data?.statusCode === 400 &&
-      !secret?.data?.message?.includes('ended the period of use')
+      !hasExpired &&
+      !waitCheckin
     ) {
       return 'error-read';
     } else {
       return '';
     }
-  }, [benefit?.data?.useLimit, secret]);
+  }, [
+    benefit?.data?.useLimit,
+    secret?.data?.statusCode,
+    hasExpired,
+    waitCheckin,
+  ]);
 
   const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
@@ -160,10 +174,6 @@ const _PassTemplate = ({
   const isUnavaible =
     benefitData && benefitData[0]?.status === BenefitStatus.unavailable;
 
-  const hasExpired =
-    secret?.data?.statusCode === 400 &&
-    secret?.data?.message?.includes('ended the period of use');
-
   return isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken ? (
     <Spinner />
   ) : mode.includes('error') ? (
@@ -200,10 +210,17 @@ const _PassTemplate = ({
         />
       )}
 
-      {(hasExpired || isUnavaible) && (
+      {hasExpired && isUnavaible && (
         <InfoPass
           title={translate('token>pass>passUnavailable')}
           description={translate('token>pass>passUnavailableMessage')}
+        />
+      )}
+
+      {waitCheckin && isUnavaible && (
+        <InfoPass
+          title={translate('token>pass>passUnavailable')}
+          description={translate('token>pass>passOutsideCheckin')}
         />
       )}
 
@@ -287,6 +304,18 @@ const _PassTemplate = ({
                     new Date(benefit?.data?.eventEndsAt || ''),
                     today ? 'HH:mm' : 'dd/MM/yyyy'
                   )}
+                </span>
+              </div>
+            </div>
+          ) : null}
+          {waitCheckin ? (
+            <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
+              <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
+                {translate('token>pass>checkinAvaibleAt')}
+                <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                  {benefit?.data.checkInStartsAt.slice(0, 5)}
+                  {benefit?.data.checkInEndsAt &&
+                    ' - ' + benefit?.data.checkInEndsAt.slice(0, 5)}
                 </span>
               </div>
             </div>

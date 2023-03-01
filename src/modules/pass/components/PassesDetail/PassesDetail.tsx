@@ -159,7 +159,7 @@ export const PassesDetail = () => {
             <p className="pw-w-full pw-font-normal pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
               <span className="pw-font-bold">Descrição:</span> {tokenPass?.data.description}
             </p>
-          </div>
+          </div> 
         </div>
 
         {isLoadingBenefits ? <>Carregando...</> :
