@@ -158,14 +158,26 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               >
                 Descrição
               </p>
-              <p
-                style={{
-                  color: data.styleData.descriptionTextColor ?? 'black',
-                }}
-                className="pw-text-sm pw-pb-8 pw-mt-6"
-              >
-                {product?.description}
-              </p>
+              {product?.htmlContent && product?.htmlContent != '' ? (
+                <div
+                  style={{
+                    color: data.styleData.descriptionTextColor ?? 'black',
+                  }}
+                  className="pw-text-sm pw-pb-8 pw-mt-6"
+                  dangerouslySetInnerHTML={{
+                    __html: product?.htmlContent ?? '',
+                  }}
+                ></div>
+              ) : (
+                <p
+                  style={{
+                    color: data.styleData.descriptionTextColor ?? 'black',
+                  }}
+                  className="pw-text-sm pw-pb-8 pw-mt-6"
+                >
+                  {product?.description}
+                </p>
+              )}
             </>
           )}
           <p></p>

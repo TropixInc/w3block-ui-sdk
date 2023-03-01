@@ -22,6 +22,7 @@ export type ProductPrice = {
 export interface Product {
   canPurchase?: boolean;
   chainId?: number;
+  htmlContent?: string;
   companyId?: string;
   contractAddress?: string;
   createdAt?: string;
