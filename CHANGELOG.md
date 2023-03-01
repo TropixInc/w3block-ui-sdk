@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.156](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.155...v0.1.1-alpha.156) (2023-03-01)
+
+
+### Bug Fixes
+
+* **np-111:** adjusted checkin and endsat dates on pass ([#147](https://github.com/TropixInc/w3block-ui-sdk/issues/147)) ([883b718](https://github.com/TropixInc/w3block-ui-sdk/commit/883b7181efc7d6c9315e9edc83f8dd6b225fcb5c))
+
 ### [0.1.1-alpha.155](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.154...v0.1.1-alpha.155) (2023-02-27)
 
 ### [0.1.1-alpha.154](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.153...v0.1.1-alpha.154) (2023-02-27)
