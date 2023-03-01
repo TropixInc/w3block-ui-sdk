@@ -6,6 +6,7 @@ import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
+import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 
 interface Payload {
   password: string;
@@ -27,9 +28,11 @@ export const useSignUp = () => {
       tenantId: companyId,
       callbackUrl:
         payload.callbackUrl ??
-        appBaseUrl +
-          connectProxyPass +
-          PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+        removeDoubleSlashesOnUrl(
+          appBaseUrl +
+            connectProxyPass +
+            PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION
+        ),
     });
   });
 };
