@@ -287,7 +287,7 @@
   "auth>poll>redirectLogin>alreadyAccount": "Já possui uma conta?",
   "signUp>connectWallet>connectOrCreate": "Conectar ou Criar Carteira",
   "signUp>connectWallet>createWallet": "Quer criar sua carteira {{name}} agora?",
-  "signUp>connectWallet>createText": "Agora que você terminou o cadastro, já pode criar sua carteira digital do {{name}}. É só clicar no botão abaixo.",
+  "signUp>connectWallet>createText": "Agora que você terminou o cadastro, já pode criar sua carteira digital {{name}}. É só clicar no botão abaixo.",
   "signUp>connectWallet>connectExternal": "Já possui uma carteira externa?",
   "signUp>connectWallet>connectButton": "Criar uma carteira",
   "poll>achievedLimit>noTokens": "Tokens esgotados!",

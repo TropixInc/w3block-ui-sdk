@@ -146,7 +146,9 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
           {children ? (
             children
           ) : (
-            <div className="pw-min-h-[calc(100vh-150px)]">
+            <div
+              className={!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}
+            >
               {data.modules?.map((item) => {
                 switch (item.type) {
                   case ModulesType.CATEGORIES:

@@ -57,10 +57,10 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
         style={{ backgroundColor: data.styleData.backgroundColor ?? '#EFEFEF' }}
       >
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-pt-6">
-          <div className="pw-flex pw-w-full pw-gap-8">
+          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-8">
             <div className="pw-max-h-[500px]  pw-flex-1">
               <ImageSDK
-                className="pw-w-full pw-max-h-[500px] pw-object-cover pw-object-center"
+                className="pw-w-full pw-max-h-[400px] sm:pw-max-h-[500px] pw-object-cover pw-object-center"
                 src={product?.images[0].original}
               />
             </div>
@@ -149,7 +149,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
             </div>
           </div>
           {data.styleData.showDescription && (
-            <>
+            <div className="pw-mt-6 sm:pw-mt-0">
               <p
                 style={{
                   color: data.styleData.descriptionTextColor ?? 'black',
@@ -178,7 +178,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   {product?.description}
                 </p>
               )}
-            </>
+            </div>
           )}
           <p></p>
         </div>

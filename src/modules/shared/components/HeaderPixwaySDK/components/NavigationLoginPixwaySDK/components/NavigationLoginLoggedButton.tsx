@@ -57,7 +57,7 @@ export const NavigationLoginLoggedButton = ({
   return (
     <div className="pw-ml-5" ref={ref}>
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
-        <p className="pw-text-xs pw-font-[400]">
+        <p style={{ color: textColor }} className="pw-text-xs pw-font-[400]">
           {wallet?.type === WalletTypes.Vault
             ? translate('header>logged>hiWallet', { name: profile?.data?.name })
             : translate('header>logged>metamaskHiWallet', {
