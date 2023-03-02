@@ -8,9 +8,12 @@ import { AuthButton } from '../../../auth/components/AuthButton';
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { ReactComponent as CloseIcon } from '../../assets/icons/closeCircledOutlined.svg';
 import { LocalStorageFields } from '../../enums/LocalStorageFields';
+import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useCountdown from '../../hooks/useCountdown/useCountdown';
 import { useSessionUser } from '../../hooks/useSessionUser';
 import useTranslation from '../../hooks/useTranslation';
+import { removeDoubleSlashesOnUrl } from '../../utils/removeDuplicateSlahes';
 
 interface ModalBlockedActionProps {
   email: string;
@@ -28,6 +31,7 @@ export const ModalBlockedAction = ({
   minutesResendEmail,
 }: ModalBlockedActionProps) => {
   const [translate] = useTranslation();
+  const { appBaseUrl, connectProxyPass } = useCompanyConfig();
   const user = useSessionUser();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
@@ -58,7 +62,14 @@ export const ModalBlockedAction = ({
   const resendEmail = () => {
     if (user?.email) {
       setCountdownDate(addMinutes(new Date(), minutesResendEmail));
-      mutate({ email: user.email });
+      mutate({
+        email: user.email,
+        callbackPath: removeDoubleSlashesOnUrl(
+          appBaseUrl +
+            connectProxyPass +
+            PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION
+        ),
+      });
     }
   };
 
