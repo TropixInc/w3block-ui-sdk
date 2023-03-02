@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.164](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.163...v0.1.1-alpha.164) (2023-03-02)
+
 ### [0.1.1-alpha.163](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.162...v0.1.1-alpha.163) (2023-03-02)
 
 ### [0.1.1-alpha.162](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.161...v0.1.1-alpha.162) (2023-03-01)
