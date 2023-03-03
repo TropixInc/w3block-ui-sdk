@@ -8,3 +8,4 @@ export * from './RequestPasswordChangeTemplate';
 export * from './ResetPasswordTemplate';
 export * from './ConnectWalletTemplate';
 export * from './WalletInternalTemplate';
+export * from './VerifySignUpWithCodeWithoutLayout';

@@ -26,6 +26,7 @@ export const useSignUp = () => {
     return sdk.api.auth.signUp({
       ...payload,
       tenantId: companyId,
+      verificationType: 'numeric',
       callbackUrl:
         payload.callbackUrl ??
         removeDoubleSlashesOnUrl(

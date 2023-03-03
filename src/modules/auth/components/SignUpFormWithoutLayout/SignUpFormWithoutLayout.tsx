@@ -19,7 +19,7 @@ import { AuthPasswordTips } from '../AuthPasswordTips';
 import { AuthTextController } from '../AuthTextController';
 import { SignUpFormData } from '../SignUpForm/interface';
 import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../SignUpTemplate';
-import { VerifySignUpMailSentWithoutLayout } from '../VerifySignUpMailSentWithoutLayout';
+import { VerifySignUpWithCodeWithoutLayout } from '../VerifySignUpWithCodeWithoutLayout';
 
 interface Props {
   onSubmit?: (data: SignUpFormData) => void;
@@ -216,6 +216,9 @@ export const SignUpFormWithoutLayout = ({
       </FormProvider>
     </div>
   ) : (
-    <VerifySignUpMailSentWithoutLayout email={emailLocal as string} />
+    <VerifySignUpWithCodeWithoutLayout
+      emailLocal={emailLocal}
+      password={methods.getValues('password')}
+    />
   );
 };

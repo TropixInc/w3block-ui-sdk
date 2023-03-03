@@ -7,11 +7,12 @@ import { W3blockUISdkResendConfirmEmail } from '../../context/ResendConfirmEmail
 
 interface Props {
   children?: ReactNode;
+  code?: boolean;
 }
 
-export const MailVerifiedInterceptorProvider = ({ children }: Props) => {
+export const MailVerifiedInterceptorProvider = ({ children, code }: Props) => {
   const [openModal, setOpenModal] = useToggle(false);
-  const { data: profileResponse } = useProfile();
+  const { data: profileResponse, refetch } = useProfile();
   useLockBodyScroll(openModal);
 
   const needsMailConfirmationInterceptor = useCallback(
@@ -30,10 +31,16 @@ export const MailVerifiedInterceptorProvider = ({ children }: Props) => {
       value={needsMailConfirmationInterceptor}
     >
       <ModalBlockedAction
-        minutesResendEmail={3}
+        code={code}
+        minutesResendEmail={code ? 1 : 3}
         email={profileResponse?.data.email || ''}
         isOpen={openModal}
-        toggleOpen={setOpenModal}
+        toggleOpen={(val, refe) => {
+          if (refe) {
+            refetch();
+          }
+          setOpenModal(val);
+        }}
       />
       {children}
     </W3blockUISdkResendConfirmEmail.Provider>

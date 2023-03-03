@@ -309,7 +309,7 @@ export const ConnectExternalWalletWithoutLayout = ({
           autoConnect: true,
         }}
       >
-        <MailVerifiedInterceptorProvider>
+        <MailVerifiedInterceptorProvider code={true}>
           <_ConnectExternalWalletWithoutLayout
             redirectRoute={redirectRoute}
             tenantName={tenantName}
