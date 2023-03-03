@@ -1574,13 +1574,13 @@
     p-memoize "4.0.3"
     swr "1.1.2"
 
-"@w3block/sdk-id@^0.1.4":
-  version "0.1.38"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.38.tgz#199e06a8566df30e890005b207a7ddbe2346ed4a"
-  integrity sha512-adA7Gv7EXfJJm59+hUwZnTzkEVb2Jm/dMml8wW+uwuHbAZUN4NxKeK6dJUqeUgbwoBjYQlLQlfn5t8Hh+EE8ZQ==
+"@w3block/sdk-id@^0.1.40":
+  version "0.1.40"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.40.tgz#17d447b0b1878ef9f8eeeaa0b68e5a343ad5c306"
+  integrity sha512-SP6AQWZsDXzaW1Nf8z/CGWPmDaCLTQIoO1dCtOjPfN64Bdvdxo0PY3xfChozarGJTih8z8QwU99li+oe6Qyjqw==
   dependencies:
     axios "^0.24.0"
-    date-fns "2.29.3"
+    date-fns "2.29.1"
     dotenv "^16.0.1"
     jwt-decode "3.1.2"
     lodash "^4.17.21"
@@ -2551,10 +2551,10 @@ dargs@^7.0.0:
   resolved "https://registry.yarnpkg.com/dargs/-/dargs-7.0.0.tgz#04015c41de0bcb69ec84050f3d9be0caf8d6d5cc"
   integrity sha512-2iy1EkLdlBzQGvbweYRFxmFath8+K7+AKB0TlhHWkNuH+TmovaMH/Wp7V7R4u7f4SnX3OgLsU9t1NI9ioDnUpg==
 
-date-fns@2.29.3, date-fns@^2.29.1:
-  version "2.29.3"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
-  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
+date-fns@2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.1.tgz#9667c2615525e552b5135a3116b95b1961456e60"
+  integrity sha512-dlLD5rKaKxpFdnjrs+5azHDFOPEu4ANy/LTh04A1DTzMM7qoajmKCBc8pkKRFT41CNzw+4gQh79X5C+Jq27HAw==
 
 dateformat@^3.0.0:
   version "3.0.3"
@@ -2736,9 +2736,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.284:
-  version "1.4.317"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.317.tgz#9a3d38a1a37f26a417d3d95dafe198ff11ed072b"
-  integrity sha512-JhCRm9v30FMNzQSsjl4kXaygU+qHBD0Yh7mKxyjmF0V8VwYVB6qpBRX28GyAucrM9wDCpSUctT6FpMUQxbyKuA==
+  version "1.4.318"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.318.tgz#7e0755bb80638175327bd9bc14dc4b9a0dbb62b5"
+  integrity sha512-EQHZE/yO9Sg6gIP9VezPltDWFA8pMnv7dNRb4Y0ukels3iyXTH313gbHvK/tZwUF+jeh5F5fDf1rqWb8ZWX8fw==
 
 elliptic@6.5.4, elliptic@^6.5.3:
   version "6.5.4"
@@ -3661,10 +3661,10 @@ html-parse-stringify@^3.0.1:
   dependencies:
     void-elements "3.1.0"
 
-html5-qrcode@^2.3.1:
-  version "2.3.7"
-  resolved "https://registry.yarnpkg.com/html5-qrcode/-/html5-qrcode-2.3.7.tgz#09ed2ca7473a47bd551088c15fcfcb7cb409a5be"
-  integrity sha512-Jmlok9Ynm49hgVXkdupWryf8o430proIFoQsRl1LmTg4Rq461W72omylR9yw9tsEMtswMEw3wacUM5y0agOBQA==
+html5-qrcode@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/html5-qrcode/-/html5-qrcode-2.3.1.tgz#81861de0feb006de5aa6a1dbe8d301b244a7bb6f"
+  integrity sha512-sSAgpmmUlssKm9az18I6d7fytH5jPq4xG7E4mCuhsGpMsDwk05AumKNsag5rfxwgMFPiUQg7CcRiOCXlgSJxmg==
 
 https-browserify@^1.0.0:
   version "1.0.0"
