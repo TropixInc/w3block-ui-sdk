@@ -3,6 +3,7 @@ import { CSSProperties } from 'react';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { ImageSDK } from '../../shared/components/ImageSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
@@ -10,7 +11,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { ImageSDK } from '../../shared/components/ImageSDK';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const {
