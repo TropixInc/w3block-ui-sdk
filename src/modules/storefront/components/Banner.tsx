@@ -10,6 +10,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { ImageSDK } from '../../shared/components/ImageSDK';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const {
@@ -111,6 +112,12 @@ const Slide = ({
       }}
       className={`${ratioClassName} pw-flex ${rowAlignmentClass} pw-items-center`}
     >
+      {isVideo(backgroundUrl?.assetUrl ?? '') && (
+        <ImageSDK
+          src={backgroundUrl?.assetUrl}
+          className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
+        />
+      )}
       <div
         className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8`}
       >
