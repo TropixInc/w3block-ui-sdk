@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 
-import { I18NLocaleEnum } from '@w3block/sdk-id';
+import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
 
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -26,7 +26,7 @@ export const useSignUp = () => {
     return sdk.api.auth.signUp({
       ...payload,
       tenantId: companyId,
-      verificationType: 'numeric',
+      verificationType: VerificationType.Numeric,
       callbackUrl:
         payload.callbackUrl ??
         removeDoubleSlashesOnUrl(
