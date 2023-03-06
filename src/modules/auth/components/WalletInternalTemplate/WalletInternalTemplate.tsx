@@ -22,7 +22,8 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 // import { WalletExtract } from '../WalletExtract';
-import { CardWallet } from './CardWallet';
+import { TokensListTemplate } from '../../../tokens';
+//import { CardWallet } from './CardWallet';
 import { ChipWallet } from './ChipWallet';
 
 const _WalletInternalTemplate = () => {
@@ -45,23 +46,36 @@ const _WalletInternalTemplate = () => {
 
   return (
     <div className="pw-flex pw-flex-col pw-px-4 sm:pw-px-0">
-      <div className="pw-w-full pw-font-bold pw-text-[18px] pw-leading-[23px] sm:pw-hidden pw-mb-[30px]">
+      <div className="pw-w-full pw-font-bold pw-text-[18px] pw-leading-[23px] pw-hidden pw-mb-[30px]">
         {translate('components>menu>wallet')}
       </div>
       <div className="pw-bg-[#F7F7F7] pw-border pw-border-[#E4E4E4] pw-rounded-[14px] pw-p-6 pw-shadow-[0px_4px_20px_rgba(0,0,0,0.12)] pw-flex pw-flex-col pw-gap-[24px]">
-        <div className="pw-w-full pw-items-center pw-justify-between pw-hidden sm:pw-flex">
-          <span className="pw-font-semibold pw-text-[23px] pw-leading-[32px]">
-            {translate('components>menu>wallet')}
-          </span>
-          <div className="pw-flex pw-items-center pw-gap-4">
+        <div className="pw-w-full pw-items-center pw-justify-between sm:pw-flex">
+          <div>
+            <span className="pw-font-semibold pw-text-lg pw-flex pw-items-baseline sm:pw-text-[23px] pw-leading-[32px]">
+              {translate('components>menu>wallet')}
+              <a
+                className="pw-flex pw-items-baseline pw-ml-3"
+                href={extractLink()}
+              >
+                <p className="pw-stroke-[#777E8F] hover:pw-stroke-brand-primary pw-text-xs sm:pw-text-sm  pw-text-gray-700">
+                  {translate('wallet>page>extract')}
+                </p>
+                <ExternalLinkIcon className="sm:pw-ml-1 pw-h-[12px] pw-stroke-[#777E8F] hover:pw-stroke-brand-primary" />
+              </a>
+            </span>
+            <p className=" pw-text-gray-700 pw-text-xs">{wallet?.address}</p>
+          </div>
+
+          <div className="pw-flex pw-items-center pw-mt-6 sm:pw-mt-0 pw-gap-2 sm:pw-gap-4">
             <div
               className="pw-w-[33px] pw-h-[33px] pw-border-2 pw-border-[#353945] pw-rounded-full pw-cursor-pointer pw-flex pw-justify-center pw-items-center"
               onClick={() => toggleShowValue()}
             >
               {showValue ? (
-                <EyeIcon className="pw-stroke-brand-primary" />
+                <EyeIcon className="pw-stroke-brand-primary pw-w-4 sm:pw-w-auto" />
               ) : (
-                <EyeCrossedIcon className="pw-stroke-brand-primary" />
+                <EyeCrossedIcon className="pw-stroke-brand-primary pw-w-4 sm:pw-w-auto" />
               )}
             </div>
             {isLoading ? (
@@ -105,7 +119,7 @@ const _WalletInternalTemplate = () => {
             </Link>
           </div>
         </div>
-        <div className="pw-w-full pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-[23px]">
+        {/* <div className="pw-w-full pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-[23px]">
           {isLoading ? (
             <CardWallet.Skeleton />
           ) : (
@@ -131,14 +145,14 @@ const _WalletInternalTemplate = () => {
               );
             })
           )}
-        </div>
+        </div> */}
       </div>
-      <div className="pw-flex pw-items-center pw-text-[#777E8F] pw-font-bold pw-text-2xl pw-my-[30px]">
+      {/* <div className="pw-flex pw-items-center pw-text-[#777E8F] pw-font-bold pw-text-2xl pw-my-[30px]">
         {translate('wallet>page>extract')}
         <a href={extractLink()} target="_blank" rel="noreferrer">
           <ExternalLinkIcon className="pw-ml-3 pw-stroke-[#777E8F] hover:pw-stroke-brand-primary" />
         </a>
-      </div>
+      </div> */}
 
       {/* Componente comentado enquando não possuimos rota para mostrar os dados do extrato
        <WalletExtract /> 
@@ -153,6 +167,9 @@ const _WalletInternalTemplate = () => {
         <FilterIcon className="pw-stroke-brand-primary" />
         {translate('wallet>page>disconnect')}
       </div> */}
+      <div className="pw-mt-6">
+        <TokensListTemplate withLayout={false} />
+      </div>
     </div>
   );
 };

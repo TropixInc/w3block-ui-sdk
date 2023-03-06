@@ -84,6 +84,7 @@ const _CheckoutInfo = ({
       if (preview) {
         setOrderPreview({
           products: [preview.product],
+          totalPrice: preview.totalPrice,
         });
       }
     }
@@ -127,9 +128,7 @@ const _CheckoutInfo = ({
       case CheckoutStatus.CONFIRMATION:
         return ''; //translate('checkout>components>checkoutInfo>redirectInfo');
       case CheckoutStatus.FINISHED:
-        return translate(
-          'checkout>components>checkoutInfo>proccessingBlockchain'
-        );
+        return translate('checkout>components>checkoutInfo>creditCard');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkoutStatus]);
@@ -147,6 +146,7 @@ const _CheckoutInfo = ({
         orderProducts,
         currencyId: currencyIdState || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
+        totalPrice: orderPreview?.totalPrice ?? '',
       });
     }
     if (proccedAction) {
@@ -216,7 +216,7 @@ const _CheckoutInfo = ({
               }
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
             >
-              {translate('shared>exit')}
+              {translate('tokens>tokenTransferController>goToMyTokens')}
             </PixwayButton>
           </div>
         );
@@ -226,21 +226,35 @@ const _CheckoutInfo = ({
   return (
     <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[80px] pw-px-6">
       <p className="pw-text-[18px] pw-font-[700]">Checkout</p>
-      <div className="pw-flex pw-mt-3 pw-items-center pw-gap-x-2">
-        <CreditCardIcon />
-        <p className=" pw-font-[700] pw-text-lg pw-text-[#35394C]">
-          {translate('checkout>components>checkoutInfo>payment')}
-        </p>
-      </div>
+      {checkoutStatus == CheckoutStatus.CONFIRMATION && (
+        <div className="pw-flex pw-mt-3 pw-items-center pw-gap-x-2">
+          <CreditCardIcon />
+          <p className=" pw-font-[700] pw-text-lg pw-text-[#35394C]">
+            {translate('checkout>components>checkoutInfo>payment')}
+          </p>
+        </div>
+      )}
       <p className="pw-font-[700] pw-text-2xl">
-        {translate('checkout>components>checkoutInfo>creditCard')}
+        {checkoutStatus == CheckoutStatus.FINISHED
+          ? translate('checkout>components>checkoutInfo>proccessingBlockchain')
+          : translate('checkout>components>checkoutInfo>creditCard')}
       </p>
-      <p className="pw-font-[600] pw-text-[#35394C] pw-text-[15px] pw-mt-3">
+      {checkoutStatus == CheckoutStatus.FINISHED && (
+        <div className="pw-flex pw-mt-3 pw-items-center pw-gap-x-2">
+          <CreditCardIcon />
+          <p className=" pw-font-[700] pw-text-lg pw-text-[#35394C]">
+            {translate('checkout>components>checkoutInfo>payment')}
+          </p>
+        </div>
+      )}
+      <p
+        className={`pw-font-[600] pw-text-[#35394C] pw-text-[15px] ${
+          checkoutStatus == CheckoutStatus.CONFIRMATION ? 'pw-mt-3' : 'pw-mt-1'
+        }`}
+      >
         {UnderCreditText}
       </p>
-      <p className="pw-font-[700] pw-text-lg pw-mt-4">
-        {translate('shared>product')}
-      </p>
+      <p className="pw-font-[700] pw-text-lg pw-mt-4">Item</p>
       <ProductInfo
         currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
         loading={isLoading}
@@ -250,9 +264,11 @@ const _CheckoutInfo = ({
         id={orderPreview?.products[0]?.contractAddress || ''}
         name={orderPreview?.products[0]?.name || ''}
         price={
-          parseFloat(
-            orderPreview?.products[0]?.prices[0].amount || '0'
-          ).toFixed(2) || ''
+          checkoutStatus == CheckoutStatus.FINISHED
+            ? parseFloat(orderPreview?.totalPrice ?? '0').toFixed(2)
+            : parseFloat(
+                orderPreview?.products[0]?.prices[0].amount || '0'
+              ).toFixed(2) || ''
         }
       />
       <_ButtonsToShow />

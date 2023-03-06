@@ -16,7 +16,7 @@ interface ProductInfoProps {
 export const ProductInfo = ({
   image,
   name,
-  id,
+  //id,
   status,
   price,
   className,
@@ -58,16 +58,16 @@ export const ProductInfo = ({
           {loading ? (
             <>
               <Shimmer className="pw-mb-1 pw-w-[120px]" />{' '}
-              <Shimmer className="pw-mb-1 pw-w-[190px]" />
+              {/* <Shimmer className="pw-mb-1 pw-w-[190px]" /> */}
             </>
           ) : (
             <>
               <p className="pw-font-[600] pw-text-sm pw-text-[#353945] pw-min-w-0 pw-truncate">
                 {name}
               </p>
-              <p className="pw-font-[600] pw-max-w-[130px] sm:pw-max-w-full pw-text-xs pw-min-w-0 pw-text-[#353945] pw-truncate">
+              {/* <p className="pw-font-[600] pw-max-w-[130px] sm:pw-max-w-full pw-text-xs pw-min-w-0 pw-text-[#353945] pw-truncate">
                 {id}
-              </p>
+              </p> */}
             </>
           )}
         </div>

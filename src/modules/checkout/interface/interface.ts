@@ -14,6 +14,7 @@ export interface OrderPreviewCache {
   product: Product;
   orderProducts: OrderProductsInterface[];
   signedGasFee: string;
+  totalPrice: string;
 }
 
 interface OrderProductsInterface {

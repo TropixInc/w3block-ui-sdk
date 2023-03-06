@@ -18,7 +18,7 @@ import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.s
 import { ReactComponent as IntegrationIcon } from '../../../../../assets/icons/integrationIconOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
 import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
-import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
+//import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
 // import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
 import { ReactComponent as TicketIcon } from '../../../../../assets/icons/ticketFilled.svg';
 import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
@@ -45,28 +45,28 @@ export const NavigationLoginLoggedButton = ({
   textColor = 'black',
   fontFamily,
 }: NavigationLoginLoggedButtonProps) => {
-  const [translate] = useTranslation();
+  //const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
   const ref = useRef(null);
   useClickAway(ref, () => {
     if (menu) setMenu(false);
   });
   const { data: profile } = useProfile();
-  const { wallet } = useUserWallet();
+  //const { wallet } = useUserWallet();
 
   return (
     <div className="pw-ml-5" ref={ref}>
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
-        <p style={{ color: textColor }} className="pw-text-xs pw-font-[400]">
+        {/* <p style={{ color: textColor }} className="pw-text-xs pw-font-[400]">
           {wallet?.type === WalletTypes.Vault
             ? translate('header>logged>hiWallet', { name: profile?.data?.name })
             : translate('header>logged>metamaskHiWallet', {
               name: profile?.data?.name,
             })}
-        </p>
+        </p> */}
         <div className="pw-flex pw-items-center">
-          <p style={{ color: textColor }} className="pw-text-sm pw-font-[600]">
-            {profile?.data?.mainWallet?.address || '-'}
+          <p style={{ color: textColor }} className="pw-text-sm pw-font-[600] pw-w-[165px] pw-truncate pw-overflow-hidden pw-text-right">
+            {profile?.data?.email || '-'}
           </p>
           <ArrowDown style={{ stroke: textColor }} className="pw-ml-1" />
         </div>
@@ -98,12 +98,6 @@ export const useDefaultMenuTabs = () => {
       isVisible: true,
     },
     {
-      name: translate('header>components>defaultTab>myTokens'),
-      route: PixwayAppRoutes.TOKENS,
-      icon: <MyTokenIcon />,
-      isVisible: true,
-    },
-    {
       name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon />,
@@ -118,7 +112,7 @@ export const useDefaultMenuTabs = () => {
     },
     {
       name: translate('components>menu>integration'),
-      route: PixwayAppRoutes.INTEGRATION,
+      route: PixwayAppRoutes.CONNECTION,
       icon: <IntegrationIcon />,
       isVisible: true,
     },
@@ -220,7 +214,7 @@ const NavigationMenu = ({
   return (
     <div className="pw-relative">
       <div
-        className={`pw-absolute pw-mt-[1.68rem] ${hasMainWallet ? 'pw-ml-[210px]' : ''
+        className={`pw-absolute pw-mt-[1.68rem] ${hasMainWallet ? 'pw-ml-[50px]' : ''
           } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
       >
         {hasMainWallet ? <WithWallet /> : <WithoutWallet />}

@@ -1,20 +1,20 @@
 /* eslint-disable react/jsx-key */
 
-import classNames from 'classnames';
+import { CSSProperties, useContext } from 'react';
 
-import { ReactComponent as ComercialIcon } from '../../assets/icons/comercial.svg';
-import { ReactComponent as FacebookIcon } from '../../assets/icons/facebookFilled.svg';
-import { ReactComponent as InstagramIcon } from '../../assets/icons/instagramFilled.svg';
-import { ReactComponent as LinkedinIcon } from '../../assets/icons/linkedinFilled.svg';
-import { ReactComponent as LinkIcon } from '../../assets/icons/linkFilled.svg';
-import { ReactComponent as TwitterIcon } from '../../assets/icons/twitterFilled.svg';
-import { ReactComponent as WhatsappIcon } from '../../assets/icons/whatsappFilled.svg';
-import { position } from '../../enums';
-import { ExternalRoutes } from '../../enums/ExternalRoutes';
-import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../hooks/useCompanyConfig';
-import useTranslation from '../../hooks/useTranslation';
-import { ExtraBy, PoweredBy } from '../PoweredBy';
+import { ThemeContext, ThemeProvider } from '../../../storefront/contexts';
+import { FooterData } from '../../../storefront/interfaces';
+import { ReactComponent as DiscordIcon } from '../../assets/icons/discord.svg';
+import { ReactComponent as FacebookIcon } from '../../assets/icons/facebook.svg';
+import { ReactComponent as GlobeIcon } from '../../assets/icons/globe.svg';
+import { ReactComponent as InstagramIcon } from '../../assets/icons/instagram.svg';
+import { ReactComponent as LinkedinIcon } from '../../assets/icons/linkedin.svg';
+import { ReactComponent as TelegramIcon } from '../../assets/icons/message.svg';
+import { ReactComponent as TwitterIcon } from '../../assets/icons/twitter.svg';
+import W3blockLogo from '../../assets/icons/weblock_logo.svg';
+import { ReactComponent as WhatsappIcon } from '../../assets/icons/whatsapp.svg';
+import { convertSpacingToCSS } from '../../utils/convertSpacingToCSS';
+import { ExtraBy } from '../PoweredBy';
 import TranslatableComponent from '../TranslatableComponent';
 
 interface SocialNetwork {
@@ -38,182 +38,171 @@ interface W3blockFooterProps {
   extraBy?: ExtraBy[];
 }
 
-const socialNetWorkLinkSharedClassnames =
-  'pw-fill-[#090909] hover:pw-fill-brand-primary pw-w-8 pw-h-8';
-
-const defaultSocialNetworks: Array<SocialNetwork> = [
-  {
-    id: 'facebook',
-    url: ExternalRoutes.FACEBOOK,
-    type: 'facebook',
-  },
-  {
-    id: 'twitter',
-    url: ExternalRoutes.TWITTER,
-    type: 'twitter',
-  },
-  {
-    id: 'whatsapp',
-    url: ExternalRoutes.WHATSAPP,
-    type: 'whatsapp',
-  },
-  {
-    id: 'linkedin',
-    url: ExternalRoutes.LINKEDIN,
-    type: 'linkedin',
-  },
-  {
-    id: 'link',
-    url: ExternalRoutes.LINK,
-    type: 'url',
-  },
-];
+type SVG = React.FunctionComponent<
+  React.SVGProps<SVGSVGElement> & {
+    title?: string | undefined;
+  }
+>;
 
 const _W3blockFooter = ({
-  socialNetworks = defaultSocialNetworks,
+  socialNetworks,
   links,
   bgColor = 'white',
   textColor = 'black',
-  poweredByLogoColor = 'black',
   infoAboutSite,
-  extraBy,
 }: W3blockFooterProps) => {
-  const [translate] = useTranslation();
-  const { logoUrl } = useCompanyConfig();
+  const context = useContext(ThemeContext);
 
-  const defaultLinks: Array<Url> = [
-    {
-      name: translate('home>footer>privacyPolicy'),
-      router: PixwayAppRoutes.PRIVACY_POLICY,
-    },
-    {
-      router: PixwayAppRoutes.TERMS_CONDITIONS,
-      name: translate('home>footer>termsConditions'),
-    },
-    {
-      router: PixwayAppRoutes.FAQ,
-      name: translate('home>footer>faq'),
-    },
-    {
-      router: PixwayAppRoutes.CONTACT_US,
-      name: translate('home>footer>contactUs'),
-    },
+  const iconsMap: Record<SocialNetworkType, SVG> = {
+    twitter: TwitterIcon,
+    telegram: TelegramIcon,
+    discord: DiscordIcon,
+    instagram: InstagramIcon,
+    facebook: FacebookIcon,
+    linkedin: LinkedinIcon,
+    whatsapp: WhatsappIcon,
+    website: GlobeIcon,
+  };
+
+  const names: (keyof FooterData['contentData'])[] = [
+    'twitter',
+    'telegram',
+    'discord',
+    'instagram',
+    'facebook',
+    'linkedin',
+    'whatsapp',
+    'website',
   ];
 
-  const typeToIcon = new Map([
-    [
-      'facebook',
-      <FacebookIcon
-        className={socialNetWorkLinkSharedClassnames}
-        style={{ fill: textColor }}
-      />,
-    ],
-    [
-      'twitter',
-      <TwitterIcon
-        className={socialNetWorkLinkSharedClassnames}
-        style={{ fill: textColor }}
-      />,
-    ],
-    ['instagram', <InstagramIcon />],
-    [
-      'whatsapp',
-      <WhatsappIcon
-        className={socialNetWorkLinkSharedClassnames}
-        style={{ fill: textColor }}
-      />,
-    ],
-    [
-      'linkedin',
-      <LinkedinIcon
-        className={socialNetWorkLinkSharedClassnames}
-        style={{ fill: textColor }}
-      />,
-    ],
+  const socialLinks = names.map((name) => ({
+    url:
+      context?.defaultTheme?.footer?.contentData?.[name] ??
+      socialNetworks?.find((sn) => sn.type == name),
+    type: name as SocialNetworkType,
+  }));
 
-    [
-      'url',
-      <LinkIcon
-        className={socialNetWorkLinkSharedClassnames}
-        style={{ fill: textColor }}
-      />,
-    ],
-  ]);
-
-  return (
+  const styleData = context?.defaultTheme?.footer?.styleData;
+  const contentData = context?.defaultTheme?.footer?.contentData;
+  return context?.isThemeError || context?.isThemeSuccess ? (
     <div
-      style={{ backgroundColor: bgColor }}
-      className="pw-w-ful pw-shadow-[0px_-4px_16px_rgba(0,0,0,0.15)] pw-flex pw-justify-center pw-relative "
+      style={{
+        margin: convertSpacingToCSS(styleData?.margin),
+        padding: convertSpacingToCSS(styleData?.padding),
+      }}
     >
-      <div className="pw-flex pw-py-[22px] sm:pw-py-4 pw-flex-col pw-gap-[15px] sm:pw-gap-4 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-text-[#090909]">
-        <div className="pw-w-full pw-font-semibold pw-text-sm pw-leading-[17px] pw-gap-[7px] sm:pw-gap-[54px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
-          <a href={PixwayAppRoutes.HOME} className="footer-link-logo">
-            <img
-              src={logoUrl}
-              alt="logo"
-              className="footer-logo-image pw-max-w-[140px] pw-max-h-[60px]"
-            />
-          </a>
-          {(links ?? defaultLinks).map(({ name, router }) => (
-            <a style={{ color: textColor }} href={router} key={router}>
-              {name}
-            </a>
-          ))}
-        </div>
-        <div className="pw-w-[304px] sm:pw-w-full pw-bg-[#090909] sm:pw-bg-[#E4E4E4] pw-h-[1px]" />
-        <div
-          style={{ color: textColor }}
-          className="pw-max-w-[335px] sm:pw-max-w-[725px] pw-w-full pw-text-[13px] pw-leading-4s pw-text-center"
-        >
-          {infoAboutSite ??
-            'A presente oferta de compra não se trata de recomendação de investimento e não foi concebida para prover lucro nem qualquer tipo de retorno financeiro e sim, tão e somente, o acesso ao clube de vantagens.'}
-        </div>
+      <div
+        style={{ backgroundColor: styleData?.backgroundColor ?? bgColor }}
+        className="pw-w-full pw-shadow-[0px_-4px_16px_rgba(0,0,0,0.15)] pw-flex pw-justify-center pw-items-center"
+      >
+        <div className="pw-pb-6 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-pt-10">
+          <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
+            {styleData?.menuLinks
+              ? styleData?.menuLinks?.map(({ name, slug }) => (
+                  <a
+                    key={slug}
+                    href={slug}
+                    className="footer-menu"
+                    style={
+                      {
+                        textDecoration: 'none',
+                        '--footer-menu-color':
+                          styleData?.menuLinksColor ?? textColor,
+                        '--footer-menu-hover-color':
+                          styleData?.menuLinksHoverColor ?? textColor,
+                      } as CSSProperties
+                    }
+                  >
+                    {name}
+                  </a>
+                ))
+              : links?.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.router}
+                    className="footer-menu"
+                    style={
+                      {
+                        textDecoration: 'none',
+                        '--footer-menu-color':
+                          styleData?.menuLinksColor ?? textColor,
+                        '--footer-menu-hover-color':
+                          styleData?.menuLinksHoverColor ?? textColor,
+                      } as CSSProperties
+                    }
+                  >
+                    {link.name}
+                  </a>
+                ))}
+          </div>
 
-        <div className="pw-w-full pw-flex pw-gap-4 pw-justify-center">
-          {socialNetworks.map(({ type, id, url }) => (
-            <a
-              key={id}
-              href={url}
-              target="_blank"
-              className={classNames(
-                socialNetWorkLinkSharedClassnames,
-                'pw-w-8 pw-h-8'
-              )}
-              rel="noreferrer"
-            >
-              {typeToIcon.get(type)}
-            </a>
-          ))}
+          <div className="pw-w-full pw-bg-[#ffffffaa] pw-h-[1px] pw-my-[10px]" />
+
+          <div
+            style={{ color: textColor }}
+            className="pw-text-sm pw-leading-5 pw-text-center pw-px-7 sm:pw-px-28"
+          >
+            <p className="pw-text-center">
+              {contentData?.description ?? infoAboutSite}
+            </p>
+          </div>
+
+          {socialNetworks && (
+            <div className="pw-w-full pw-flex pw-flex-wrap pw-gap-2 pw-justify-center pw-pt-4">
+              {socialLinks.map((socialLink) => {
+                if (!socialLink.url || socialLink.url == '') return null;
+
+                const Icon = iconsMap[socialLink.type];
+
+                return (
+                  <a
+                    key={socialLink.type}
+                    href={socialLink.url.toString()}
+                    target="_blank"
+                    className="pw-rounded-full pw-grid pw-place-items-center pw-p-2 footer-social-network"
+                    style={
+                      {
+                        '--footer-social-network-color':
+                          styleData?.socialNetworksIconColor ?? textColor,
+                        '--footer-social-network-hover-color':
+                          styleData?.socialNetworksIconHoverColor ?? textColor,
+                      } as CSSProperties
+                    }
+                    rel="noreferrer"
+                  >
+                    <Icon className="pw-fill-white pw-w-4 pw-h-4" />
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
-        <div className="pw-w-[304px] sm:pw-w-full pw-bg-[#090909] sm:pw-bg-[#E4E4E4] pw-h-[1px]" />
-        <div
-          style={{ color: textColor }}
-          className="pw-flex pw-items-center pw-gap-1 pw-font-normal pw-text-xs pw-leading-[15px] pw-text-center"
-        >
-          <ComercialIcon
-            style={{ fill: textColor }}
-            className="pw-h-4 pw-w-4"
-          />
-          {translate('home>footer>copyright')}
-        </div>
-        <PoweredBy
-          classes={{
-            title:
-              poweredByLogoColor === 'black'
-                ? 'pw-text-black'
-                : 'pw-text-white',
-          }}
-          PwPosition={position.CENTER}
-          logoColor={poweredByLogoColor}
-          extraBy={extraBy}
-        />
       </div>
+
+      {styleData?.w3blockSignature && (
+        <div className="pw-w-full pw-py-[14px] pw-flex pw-justify-center pw-itens-center pw-place-items-center pw-h-[14px] pw-bg-white pw-font-medium pw-text-xs">
+          <p>Copyright {new Date().getFullYear()} -</p>
+          <img className="pw-h-[20px]" src={W3blockLogo} />
+        </div>
+      )}
     </div>
-  );
+  ) : null;
 };
 
 export const W3blockFooter = (props: W3blockFooterProps) => (
   <TranslatableComponent>
-    <_W3blockFooter {...props} />
+    <ThemeProvider>
+      <_W3blockFooter {...props} />
+    </ThemeProvider>
   </TranslatableComponent>
 );
+
+type SocialNetworkType =
+  | 'twitter'
+  | 'telegram'
+  | 'discord'
+  | 'instagram'
+  | 'facebook'
+  | 'linkedin'
+  | 'whatsapp'
+  | 'website';
