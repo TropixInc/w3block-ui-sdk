@@ -1,6 +1,7 @@
 import { CheckoutStatus } from '../../../checkout';
 import { CurrencyEnum, currencyMap } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
+import { isVideo } from '../../utils/validators';
 import { Shimmer } from '../Shimmer';
 interface ProductInfoProps {
   status?: CheckoutStatus;
@@ -47,10 +48,17 @@ export const ProductInfo = ({
           <Shimmer className="!pw-w-[48px] !pw-h-[48px] pw-rounded-lg " />
         ) : (
           <div className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-overflow-hidden">
-            <img
-              className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
-              src={image}
-            />
+            {isVideo(image) ? (
+              <video
+                src={image}
+                className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
+              />
+            ) : (
+              <img
+                className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
+                src={image}
+              />
+            )}
           </div>
         )}
 
