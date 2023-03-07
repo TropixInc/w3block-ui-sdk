@@ -164,7 +164,7 @@ const _CheckoutInfo = ({
             <PriceAndGasInfo
               currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
               totalPrice={orderPreview?.totalPrice || '0'}
-              service={orderPreview?.serviceFee || '0'}
+              service={orderPreview?.clientServiceFee || '0'}
               loading={isLoading}
               className="pw-mt-4"
               price={
