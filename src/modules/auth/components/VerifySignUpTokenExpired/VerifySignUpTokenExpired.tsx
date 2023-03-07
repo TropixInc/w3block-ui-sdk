@@ -3,10 +3,10 @@ import { Trans } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { removeDoubleSlashesOnUrl } from '../../../../../dist/src/modules/shared/utils/removeDuplicateSlahes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
