@@ -3,6 +3,7 @@ import { Trans } from 'react-i18next';
 
 import classNames from 'classnames';
 
+import { removeDoubleSlashesOnUrl } from '../../../../../dist/src/modules/shared/utils/removeDuplicateSlahes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -26,8 +27,9 @@ export const VerifySignUpTokenExpired = ({
   classes = {},
   isPostSignUp = false,
 }: Props) => {
-  const { logoUrl, connectProxyPass } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess } = useRequestConfirmationMail();
+  const { logoUrl, connectProxyPass, appBaseUrl } = useCompanyConfig();
+  const { mutate, isLoading, isSuccess, isError } =
+    useRequestConfirmationMail();
   const [translate] = useTranslation();
 
   useEffect(() => {
@@ -35,11 +37,13 @@ export const VerifySignUpTokenExpired = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const callbackPath =
-    connectProxyPass +
-    (isPostSignUp
-      ? PixwayAppRoutes.COMPLETE_SIGNUP
-      : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
+  const callbackPath = removeDoubleSlashesOnUrl(
+    appBaseUrl +
+      connectProxyPass +
+      (isPostSignUp
+        ? PixwayAppRoutes.COMPLETE_SIGNUP
+        : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION)
+  );
 
   return (
     <AuthLayoutBase
@@ -76,7 +80,11 @@ export const VerifySignUpTokenExpired = ({
         <div className="pw-mb-6">
           <MailError className="pw-w-[187px] pw-h-[187px]" />
         </div>
-
+        {isError && (
+          <p className="pw-mt-4 pw-text-sm pw-text-red-500">
+            Erro ao enviar código, por favor entre em contato com o suporte
+          </p>
+        )}
         <AuthFooter />
       </div>
     </AuthLayoutBase>
