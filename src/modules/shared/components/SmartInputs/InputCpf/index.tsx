@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useController } from 'react-hook-form';
 
 import classNames from 'classnames';
 
@@ -8,16 +9,23 @@ import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromStr
 interface InputCPFProps {
   label: string;
   name: string;
+
+  docValue?: string;
 }
 
-const InputCpf = ({ label, name }: InputCPFProps) => {
+const InputCpf = ({ label, name, docValue }: InputCPFProps) => {
+  const { field } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
-  const [isInvalidCpf, setIsInvalidCpf] = useState(false);
+
   const CPFMask = /^(\d{3})(\d{3})(\d{3})(\d{2})/;
 
   const handleChange = (value: string) => {
     if (value) {
       setInputValue(getNumbersFromString(value, false));
+      field.onChange({
+        inputId: name,
+        value: getNumbersFromString(value, false),
+      });
     } else {
       setInputValue('');
     }
@@ -26,24 +34,29 @@ const InputCpf = ({ label, name }: InputCPFProps) => {
   const formatCpfValue = () => {
     if (inputValue && inputValue.length === 11) {
       setInputValue(inputValue.replace(CPFMask, '$1.$2.$3-$4'));
-      setIsInvalidCpf(false);
-    } else {
-      setIsInvalidCpf(true);
     }
   };
+
+  useEffect(() => {
+    if (docValue) {
+      setInputValue(docValue);
+      field.onChange({ inputId: name, value: docValue });
+    }
+  }, [docValue]);
 
   return (
     <div className="pw-mb-3">
       <AuthFormController label={label} name={name}>
         <input
+          readOnly={Boolean(docValue)}
+          name={name}
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}
           placeholder="Digite apenas numeros"
           maxLength={11}
           onBlur={() => formatCpfValue()}
           className={classNames(
-            '!pw-px-[10px] !pw-py-[14px] !pw-text-[13px] pw-rounded-md  pw-text-fill-[#353945] pw-text-base pw-leading-4 pw-font-normal pw-w-full pw-border-[#94B8ED] pw-border pw-outline-none pw-bg-transparent placeholder:!pw-text-[#777E8F]',
-            !isInvalidCpf ? 'pw-border-[#94B8ED]' : 'pw-border-[#C63535]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-outline-brand-primary pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
           )}
         />
       </AuthFormController>

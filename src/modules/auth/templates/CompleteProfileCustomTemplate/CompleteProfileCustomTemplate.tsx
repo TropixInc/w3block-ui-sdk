@@ -92,30 +92,32 @@ const _CompleteProfileCustomTemplate = ({
   }, [token]);
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
-    mutate(
-      {
-        email: emailToUse.replaceAll(' ', '+'),
-        password,
-        confirmation,
-        token: (token as string).split(';')[0],
-      },
-      {
-        onSuccess() {
-          signIn({
-            email: emailToUse.replaceAll(' ', '+'),
-            password,
-            companyId,
-          })
-            .then(() =>
-              router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
-            )
-            .catch((e) => {
-              // eslint-disable-next-line no-console
-              console.log(e);
-            });
+    {
+      mutate(
+        {
+          email: emailToUse.replaceAll(' ', '+'),
+          password,
+          confirmation,
+          token: (token as string).split(';')[0],
         },
-      }
-    );
+        {
+          onSuccess() {
+            signIn({
+              email: emailToUse.replaceAll(' ', '+'),
+              password,
+              companyId,
+            })
+              .then(() =>
+                router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
+              )
+              .catch((e) => {
+                // eslint-disable-next-line no-console
+                console.log(e);
+              });
+          },
+        }
+      );
+    }
   };
 
   if (step === Steps.TOKEN_EXPIRED)

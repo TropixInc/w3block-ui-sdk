@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { useTranslation, Trans } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { I18NLocaleEnum } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
-import { object, string, boolean } from 'yup';
+import { boolean, object, string } from 'yup';
 
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
@@ -54,7 +55,17 @@ export const SignUpFormWithoutLayout = ({
   const router = useRouterConnect();
   const [step, setStep] = useState(Steps.SIGN_UP);
   const [emailLocal, setEmail] = useState('');
-  const { connectProxyPass } = useCompanyConfig();
+  const [language, _] = useState(() => {
+    if (window) {
+      return window.navigator.language === 'pt-BR'
+        ? I18NLocaleEnum.PtBr
+        : I18NLocaleEnum.En;
+    } else {
+      return I18NLocaleEnum.En;
+    }
+  });
+
+  const { connectProxyPass, companyId } = useCompanyConfig();
   const {
     mutate,
     isLoading: signUpLoading,
@@ -73,13 +84,18 @@ export const SignUpFormWithoutLayout = ({
     }
   }, [isSuccess]);
 
-  const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
-    setEmail(email);
+  const onSubmitLocal = () => {
+    const getMethodsValue = methods.getValues();
+
+    setEmail(getMethodsValue.email);
+
     mutate({
-      confirmation,
-      email,
-      password,
+      confirmation: getMethodsValue.confirmation,
+      email: getMethodsValue.email,
+      password: getMethodsValue.email,
       callbackUrl: connectProxyPass + PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+      tenantId: companyId,
+      i18nLocale: language,
     });
   };
 
@@ -177,6 +193,7 @@ export const SignUpFormWithoutLayout = ({
             )}
             type="password"
           />
+
           <AuthPasswordTips passwordFieldName="password" className="pw-mb-6" />
           <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
             <AuthCheckbox

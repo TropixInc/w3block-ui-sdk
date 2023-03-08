@@ -1,32 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useController } from 'react-hook-form';
 
-import isUrl from 'validator/lib/isUrl';
+import classNames from 'classnames';
 
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
 
 interface InputUrlProps {
   label: string;
   name: string;
+  docValue?: string;
 }
 
-const InputUrl = ({ label, name }: InputUrlProps) => {
+const InputUrl = ({ label, name, docValue }: InputUrlProps) => {
+  const { field } = useController({ name });
   const [url, setUrl] = useState('');
 
-  const validUrl = () => {
-    if (url) {
-      return isUrl(url);
+  const onChangeUrl = (value: string) => {
+    if (value) {
+      setUrl(value);
+      field.onChange({ inputId: name, value: value });
+    } else {
+      setUrl('');
+      field.onChange({ inputId: name, value: '' });
     }
   };
 
+  useEffect(() => {
+    if (docValue) {
+      setUrl(docValue);
+      field.onChange({ inputId: name, value: docValue });
+    }
+  }, [docValue]);
+
   return (
-    <div>
+    <div className="pw-mb-3">
       <AuthFormController label={label} name={name}>
         <input
+          name={name}
+          readOnly={Boolean(docValue)}
           type="url"
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          onBlur={validUrl}
-          className="!pw-px-[10px] !pw-py-[14px] !pw-text-[13px] pw-rounded-md  pw-text-fill-[#353945] pw-text-base pw-leading-4 pw-font-normal pw-w-full pw-border-[#94B8ED] pw-border pw-outline-none pw-bg-transparent placeholder:!pw-text-[#777E8F]"
+          onChange={(e) => onChangeUrl(e.target.value)}
+          className={classNames(
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-outline-brand-primary pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+          )}
         />
       </AuthFormController>
     </div>

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useController } from 'react-hook-form';
 
 import classNames from 'classnames';
 import isEmail from 'validator/lib/isEmail';
@@ -8,14 +9,17 @@ import AuthFormController from '../../../../auth/components/AuthFormController/A
 interface InputCPFProps {
   label: string;
   name: string;
+  docValue?: string;
 }
 
-const InputEmail = ({ label, name }: InputCPFProps) => {
+const InputEmail = ({ label, name, docValue }: InputCPFProps) => {
+  const { field } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [isValid, setIsValid] = useState(true);
   const handleChange = (value: string) => {
     if (value) {
       setInputValue(value);
+      field.onChange({ inputId: name, value: value });
     } else {
       setInputValue('');
     }
@@ -27,17 +31,26 @@ const InputEmail = ({ label, name }: InputCPFProps) => {
     }
   };
 
+  useEffect(() => {
+    if (docValue) {
+      setInputValue(docValue);
+      field.onChange({ inputId: name, value: docValue });
+    }
+  }, [docValue]);
+
   return (
     <div className="pw-mb-3">
       <AuthFormController label={label} name={name}>
         <input
+          name={name}
+          readOnly={Boolean(docValue)}
           onChange={(e) => handleChange(e.target.value)}
           onBlur={validEmail}
           value={inputValue}
           type="email"
           className={classNames(
-            '!pw-px-[10px] !pw-py-[14px] !pw-text-[13px] pw-rounded-md  pw-text-fill-[#353945] pw-text-base pw-leading-4 pw-font-normal pw-w-full pw-border-[#94B8ED] pw-border pw-outline-none pw-bg-transparent placeholder:!pw-text-[#777E8F]',
-            isValid ? 'pw-border-[#94B8ED]' : 'pw-border-[#C63535]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
+            isValid ? 'pw-outline-brand-primary' : 'pw-outline-[#FF0505]'
           )}
         />
       </AuthFormController>

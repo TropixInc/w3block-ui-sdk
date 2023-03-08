@@ -1,56 +1,99 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useController } from 'react-hook-form';
 
+import { AssetTargetEnum, AssetTypeEnum } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
 import { ReactComponent as FileIcon } from '../../../assets/icons/fileOutlined.svg';
+import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
+import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 
 interface InputFileProps {
   label: string;
   name: string;
+  docValue?: string;
+  assetId?: string | null;
 }
 
-const InputFile = ({ label, name }: InputFileProps) => {
+const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
   const [isInvalidFile, _] = useState(false);
+  const { field } = useController({ name });
   const [file, setFile] = useState<File | undefined>();
+  const { companyId: tenantId } = useCompanyConfig();
 
-  const cloudFile = useUploadFileToCloudinary(file as File).then((res) => res);
+  const { mutate: mutateAssets, data: assets } = useUploadAssets();
+
+  const { mutate, data, isSuccess } = useUploadFileToCloudinary();
 
   const onDrop = useCallback((acceptedFiles: string | any[]) => {
-    if (acceptedFiles.length) setFile(acceptedFiles[0]);
+    if (acceptedFiles.length) {
+      setFile(acceptedFiles[0]);
+      const type = acceptedFiles[0].type.includes('pdf')
+        ? AssetTypeEnum.Document
+        : AssetTypeEnum.Image;
+      mutateAssets({
+        tenantId: tenantId as string,
+        body: {
+          type: type,
+          target: AssetTargetEnum.UserDocument,
+        },
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
+    accept: ['.png', '.jpeg', '.jpg', '.pdf'],
+    disabled: Boolean(docValue),
   });
 
   useEffect(() => {
-    if (file) {
-      console.log(cloudFile);
+    if (file && assets?.data.id) {
+      mutate({ file: file, assets: assets.data, config: {} });
     }
-  }, [file]);
+  }, [assets?.data, file]);
+
+  useEffect(() => {
+    if (isSuccess && data && assets) {
+      field.onChange({ inputId: name, assetId: assets.data.id });
+    }
+  }, [isSuccess, data, assets]);
+
+  useEffect(() => {
+    if (docValue && assetId) {
+      field.onChange({ inputId: name, assetId: assetId });
+    }
+  }, [docValue]);
+
+  const renderName = () => {
+    if (docValue) {
+      return docValue;
+    } else {
+      return file && file.name ? file?.name : 'Selecione um arquivo';
+    }
+  };
 
   return (
     <div className="pw-mb-3">
       <AuthFormController label={label} name={name}>
         <div
           className={classNames(
-            '!pw-px-[10px] !pw-py-[14px]  pw-rounded-md pw-h-[45px] pw-flex pw-gap-x-[9px] pw-items-center pw-w-full pw-border-[#94B8ED] pw-border pw-outline-none pw-bg-transparent',
-            !isInvalidFile ? 'pw-border-[#94B8ED]' : 'pw-border-[#C63535]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default',
+            !isInvalidFile ? 'pw-outline-brand-primary' : 'pw-outline-[#FF0505]'
           )}
           {...getRootProps()}
         >
-          <input {...getInputProps()} />
-          <FileIcon />
-          <p className="!pw-text-[13px] pw-text-[#777E8F]  pw-text-base pw-leading-4 pw-font-normal">
-            Selecionar arquivo
+          <input {...getInputProps()} readOnly={Boolean(docValue)} />
+          <FileIcon className="pw-w-4" />
+          <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
+            {renderName()}
           </p>
         </div>
       </AuthFormController>
-      {file && <p className="pw-text-[13px] pw-text-[#353945]">{file.name}</p>}
     </div>
   );
 };

@@ -1,33 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useController } from 'react-hook-form';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import Input from 'react-phone-number-input/input';
 
 import classNames from 'classnames';
 
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
-import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromString';
 
 interface InputPhoneProps {
   label: string;
   name: string;
+
+  docValue?: string;
 }
 
-const InputPhone = ({ label, name }: InputPhoneProps) => {
+const InputPhone = ({ label, name, docValue }: InputPhoneProps) => {
+  const { field } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [invalidNumber, onChangeInvalidNumber] = useState(false);
 
   const handleChange = (value: string) => {
     if (value) {
-      setInputValue(getNumbersFromString(value, false));
+      setInputValue(value);
+      field.onChange({ inputId: name, value: value });
     } else {
       setInputValue('');
     }
   };
 
+  useEffect(() => {
+    if (docValue) {
+      setInputValue(docValue);
+      field.onChange({ inputId: name, value: docValue });
+    }
+  }, [docValue]);
+
   return (
     <div className="pw-mb-3">
       <AuthFormController label={label} name={name}>
         <Input
+          readOnly={Boolean(docValue)}
           name={name}
           value={inputValue}
           onChange={handleChange}
@@ -40,8 +52,8 @@ const InputPhone = ({ label, name }: InputPhoneProps) => {
               : () => onChangeInvalidNumber(false)
           }
           className={classNames(
-            'text-base h-[46px] text-[#969696] leading-4 w-full shadow-[0_4px_15px_#00000012] outline-1 rounded-lg outline-none bg-transparent px-[10px] autofill:bg-transparent',
-            invalidNumber ? 'outline-[#FF0505]' : 'outline-[#94B8ED]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
+            invalidNumber ? 'pw-outline-[#FF0505]' : 'pw-outline-brand-primary'
           )}
         />
       </AuthFormController>
