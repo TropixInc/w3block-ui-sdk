@@ -5,6 +5,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 
 interface Payload {
   email: string;
@@ -26,10 +27,11 @@ export const useRequestPasswordChange = () => {
         email,
         tenantId: companyId,
         verificationType: verificationType ?? '',
-        callbackUrl: new URL(
-          callbackPath ?? connectProxyPass + PixwayAppRoutes.RESET_PASSWORD,
-          appBaseUrl
-        ).toString(),
+        callbackUrl:
+          callbackPath ??
+          removeDoubleSlashesOnUrl(
+            appBaseUrl + connectProxyPass + PixwayAppRoutes.RESET_PASSWORD
+          ),
       });
     }
   );

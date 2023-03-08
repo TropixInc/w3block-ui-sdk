@@ -12,7 +12,7 @@ export const useGetTheme = () => {
   useEffect(() => {
     if (window) {
       setHref(window.location.href);
-      //setHref('https://stg.primesea.io/storefront');
+      //setHref('https://foodbusters.stg.w3block.io/');
     }
   }, []);
 
@@ -22,6 +22,10 @@ export const useGetTheme = () => {
       axios
         .get(PixwayAPIRoutes.GET_THEME + `?url=${href}`)
         .then((data) => data.data),
-    { enabled: href != undefined && href != '', refetchOnWindowFocus: false }
+    {
+      enabled: href != undefined && href != '',
+      refetchOnWindowFocus: false,
+      retry: 3,
+    }
   );
 };

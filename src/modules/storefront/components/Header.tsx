@@ -1,4 +1,5 @@
 import { HeaderPixwaySDK } from '../../shared';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { MainModuleThemeInterface } from '../interfaces';
 
 export const Header = (props: { data: MainModuleThemeInterface }) => {
@@ -11,16 +12,25 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
       tabs,
       logoSrc,
       brandName,
+      margin,
+      padding,
+      fontFamily,
     },
   } = props.data;
 
   return (
     <HeaderPixwaySDK
-      logoSrc={logoSrc}
+      logoSrc={logoSrc?.assetUrl}
       bgColor={backgroundColor}
       textColor={textColor}
       brandText={brandName}
-      tabs={tabs?.map((l: any) => ({ name: l.name, router: l.slug }))}
+      margin={convertSpacingToCSS(margin)}
+      padding={convertSpacingToCSS(padding)}
+      tabs={tabs?.map((l: any) => ({
+        name: l.label,
+        router: l.value,
+      }))}
+      fontFamily={fontFamily}
     />
   );
 };

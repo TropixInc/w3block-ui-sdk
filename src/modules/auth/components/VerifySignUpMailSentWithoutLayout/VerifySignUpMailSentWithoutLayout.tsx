@@ -9,6 +9,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
 import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
@@ -60,11 +61,12 @@ export const VerifySignUpMailSentWithoutLayout = ({
     }
   }, [emailSuccess, setCountdownDate, emailReset]);
 
-  const callbackPath =
+  const callbackPath = removeDoubleSlashesOnUrl(
     connectProxyPass +
-    (isPostSignUp
-      ? PixwayAppRoutes.COMPLETE_SIGNUP
-      : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
+      (isPostSignUp
+        ? PixwayAppRoutes.COMPLETE_SIGNUP
+        : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION)
+  );
 
   const handleClick = () => {
     if (isPostSignUp) {

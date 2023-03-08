@@ -1,4 +1,5 @@
 import { ReactNode, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/esm/locale';
@@ -22,6 +23,7 @@ const _PublicTokenTemplateSDK = ({
   tokenId,
   contractAddress,
 }: PublicTokenTemplateSDKProps) => {
+  const [translate] = useTranslation();
   const router = useRouterConnect();
   const { companyId } = useCompanyConfig();
   const contractAddressQ = (router.query?.contractAddress as string) ?? '';
@@ -188,7 +190,7 @@ const _PublicTokenTemplateSDK = ({
               rel="noreferrer"
             >
               <p className="pw-font-roboto pw-font-[500] pw-text-[#045CE0]">
-                Mais informações sobre esse NFT
+                {translate('connect>tokenDetailsCard>moreInformation')}
               </p>
               <ExternalLinkIcon className="pw-stroke-[#045CE0]" />
             </a>

@@ -1,0 +1,14 @@
+:root {
+  --image-plus-text-direction-mobile: 'column';
+  --image-plus-text-direction-desktop: 'row';
+}
+
+.image-plus-text {
+  flex-direction: var(--image-plus-text-direction-mobile);
+}
+
+@media (min-width: 768px) {
+  .image-plus-text {
+    flex-direction: var(--image-plus-text-direction-desktop);
+  }
+}

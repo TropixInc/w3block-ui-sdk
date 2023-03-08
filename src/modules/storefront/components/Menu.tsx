@@ -4,6 +4,7 @@ import { useClickAway, useToggle } from 'react-use';
 import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/arrowDown.svg';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { AlignmentEnum, CategoriesData } from '../interfaces';
 
 export const Menu = (props: { data: CategoriesData }) => {
@@ -16,6 +17,8 @@ export const Menu = (props: { data: CategoriesData }) => {
       hoverTextColor,
       allCategories,
       allCategoriesText,
+      margin,
+      padding,
     },
   } = props.data;
 
@@ -30,13 +33,18 @@ export const Menu = (props: { data: CategoriesData }) => {
 
   return (
     <TranslatableComponent>
-      <div>
+      <div
+        style={{
+          margin: convertSpacingToCSS(margin),
+          padding: convertSpacingToCSS(padding),
+        }}
+      >
         <div
           style={{
             backgroundColor: backgroundColor ? backgroundColor : '#0050FF',
             color: textColor ?? 'white',
           }}
-          className="pw-w-full pw-flex pw-justify-center pw-px-5 pw-font-poppins pw-max-h-57"
+          className="pw-w-full pw-flex pw-justify-center pw-px-5 pw-max-h-57"
         >
           <div className="pw-flex pw-justify-center pw-gap-2 pw-py-3 pw-items-center pw-container pw-mx-auto">
             {allCategories && (
@@ -129,7 +137,7 @@ const SeeAllMenu = (props: CategoriesData) => {
         backgroundColor: backgroundColor ? backgroundColor : '#0050FF',
         color: textColor ?? 'white',
       }}
-      className="pw-w-full pw-flex pw-justify-center pw-px-5 pw-font-poppins "
+      className="pw-w-full pw-flex pw-justify-center pw-px-5 "
     >
       <div className="pw-flex pw-justify-center pw-gap-2 pw-py-3 pw-items-center pw-container">
         <div className={`pw-flex pw-flex-wrap pw-w-full ${alignmentClass()}`}>

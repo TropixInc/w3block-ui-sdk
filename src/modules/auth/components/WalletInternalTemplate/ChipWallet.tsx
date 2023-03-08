@@ -11,12 +11,12 @@ export const ChipWallet = ({
   Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }) => (
   <div className="pw-w-[165px] pw-bg-[#FFFFFF] pw-p-2 pw-border-2 pw-border-[#353945] pw-rounded-[148px] pw-flex pw-justify-start pw-items-center pw-gap-[10px]">
-    <div className="pw-rounded-full pw-bg-[#EFEFEF] pw-w-[30px] pw-h-[30px] pw-flex pw-justify-center pw-items-center">
+    <div className="pw-rounded-full pw-bg-[#EFEFEF] pw-w-[22px] pw-h-[22px] sm:pw-w-[30px] sm:pw-h-[30px] pw-flex pw-justify-center pw-items-center">
       <Icon />
     </div>
     <div className="pw-w-[1px] pw-bg-[#35394C] pw-h-[32px]" />
     <div className="pw-flex pw-flex-col pw-items-start pw-justify-center">
-      <div className="pw-font-semibold pw-text-[13px] pw-leading-[13px]">
+      <div className="pw-font-semibold pw-text-xs sm:pw-text-[13px] pw-leading-[13px]">
         {title}
       </div>
       <Balance showValue={showValue} />

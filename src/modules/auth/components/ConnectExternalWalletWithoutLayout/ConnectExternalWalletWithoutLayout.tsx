@@ -38,12 +38,14 @@ interface ConnectExternalWalletWithoutLayoutProps {
   redirectRoute?: string;
   tenantName?: string;
   redirectLink?: string;
+  forceVault?: boolean;
 }
 
 const _ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
   tenantName,
   redirectLink,
+  forceVault = false,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   const { closeModal, isOpen, openModal } = useModalController();
   const {
@@ -76,6 +78,9 @@ const _ConnectExternalWalletWithoutLayout = ({
       if (wallets?.length) {
         router.pushConnect(redirectRoute);
       } else {
+        if (forceVault) {
+          onClickContinue();
+        }
         setIsLoading(false);
       }
     }
@@ -187,7 +192,7 @@ const _ConnectExternalWalletWithoutLayout = ({
     return <h1>{translate('companyAuth>externalWallet>CompanyNotFound')}</h1>;
   }
 
-  if (isLoading) {
+  if (isLoading || forceVault) {
     return (
       <div className="pw-flex pw-justify-center pw-items-center pw-py-10">
         <Spinner />
@@ -301,6 +306,7 @@ export const ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
   redirectLink,
   tenantName,
+  forceVault,
 }: ConnectExternalWalletWithoutLayoutProps) => {
   return (
     <TranslatableComponent>
@@ -309,8 +315,9 @@ export const ConnectExternalWalletWithoutLayout = ({
           autoConnect: true,
         }}
       >
-        <MailVerifiedInterceptorProvider>
+        <MailVerifiedInterceptorProvider code={true}>
           <_ConnectExternalWalletWithoutLayout
+            forceVault={forceVault}
             redirectRoute={redirectRoute}
             tenantName={tenantName}
             redirectLink={redirectLink}

@@ -59,22 +59,24 @@ const _PriceAndGasInfo = ({
           )
         ) : null}
       </div>
-      <div className="pw-flex pw-justify-between pw-mt-2">
-        <div className="pw-flex pw-gap-x-1">
-          <p className="pw-text-sm text-[#35394C] pw-font-[400]">
-            {translate('shared>components>gasPriceinfo')}
-          </p>
-          {/* <InfoIcon className="pw-mt-[2px]" /> */}
+      {parseFloat(gasFee) == 0 ? null : (
+        <div className="pw-flex pw-justify-between pw-mt-2">
+          <div className="pw-flex pw-gap-x-1">
+            <p className="pw-text-sm text-[#35394C] pw-font-[400]">
+              {translate('shared>components>gasPriceinfo')}
+            </p>
+            {/* <InfoIcon className="pw-mt-[2px]" /> */}
+          </div>
+          {loading ? (
+            <Shimmer />
+          ) : parseFloat(gasFee) == 0 ? null : (
+            <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
+              {currencyMap.get(currency)}
+              {gasFee}
+            </p>
+          )}
         </div>
-        {loading ? (
-          <Shimmer />
-        ) : (
-          <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
-            {currencyMap.get(currency)}
-            {gasFee}
-          </p>
-        )}
-      </div>
+      )}
       <div className="pw-w-full pw-h-[1px] pw-bg-[#777E8F] pw-my-2"></div>
       <div className="pw-flex pw-justify-between">
         <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">

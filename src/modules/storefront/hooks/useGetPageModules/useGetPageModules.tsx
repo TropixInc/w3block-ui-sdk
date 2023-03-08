@@ -10,8 +10,10 @@ export const useGetPageModules = () => {
 
   useEffect(() => {
     if (window) {
-      setHref(window.location.href);
-      //setHref('https://stg.primesea.io/storefront');
+      if (!window.location.href.includes('/product/slug')) {
+        //setHref('https://foodbusters.stg.w3block.io/');
+        setHref(window.location.href);
+      }
     }
   }, []);
 
@@ -21,6 +23,13 @@ export const useGetPageModules = () => {
       axios
         .get(PixwayAPIRoutes.GET_PAGE + `?url=${href}`)
         .then((data) => data.data),
-    { enabled: href != undefined && href != '', refetchOnWindowFocus: false }
+    {
+      enabled:
+        href != undefined &&
+        href != '' &&
+        !href.includes('/product/slug') &&
+        !href.includes('/checkout/'),
+      refetchOnWindowFocus: false,
+    }
   );
 };

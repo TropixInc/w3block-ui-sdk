@@ -20,6 +20,7 @@ import { useUserWallet } from '../../hooks/useUserWallet';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Link } from '../Link';
 import TranslatableComponent from '../TranslatableComponent';
+import { WalletConnectDesinModal } from './WalletConnectDesincModal';
 import { WalletConnectModal } from './WalletConnectModal';
 
 const _WalletConnectIntegration = () => {
@@ -30,6 +31,7 @@ const _WalletConnectIntegration = () => {
   const [translate] = useTranslation();
   const { wallet } = useUserWallet();
   const [isOpen, setIsOpen] = useState(false);
+  const [isDesincOpen, setIsDesincOpen] = useState(false);
   const isLoading = wallet == undefined;
 
   const hasWalletConnect = integrations ? integrations.data[0]?.active : false;
@@ -37,6 +39,11 @@ const _WalletConnectIntegration = () => {
   const sincDate = integrations
     ? new Date(integrations.data[0]?.createdAt)
     : new Date();
+
+  const handleClick = () => {
+    if (hasWalletConnect) setIsDesincOpen(true);
+    else setIsOpen(true);
+  };
 
   return (
     <>
@@ -129,7 +136,7 @@ const _WalletConnectIntegration = () => {
             )}
           </div>
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={handleClick}
             className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
           >
             {hasWalletConnect
@@ -143,6 +150,10 @@ const _WalletConnectIntegration = () => {
         </div>
       </div>
       <WalletConnectModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <WalletConnectDesinModal
+        isOpen={isDesincOpen}
+        onClose={() => setIsDesincOpen(false)}
+      />
     </>
   );
 };

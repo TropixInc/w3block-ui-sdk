@@ -2,6 +2,108 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.169](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.168...v0.1.1-alpha.169) (2023-03-07)
+
+### [0.1.1-alpha.168](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.167...v0.1.1-alpha.168) (2023-03-06)
+
+### [0.1.1-alpha.167](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.166...v0.1.1-alpha.167) (2023-03-06)
+
+### [0.1.1-alpha.166](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.165...v0.1.1-alpha.166) (2023-03-03)
+
+### [0.1.1-alpha.165](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.164...v0.1.1-alpha.165) (2023-03-03)
+
+### [0.1.1-alpha.164](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.163...v0.1.1-alpha.164) (2023-03-02)
+
+### [0.1.1-alpha.163](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.162...v0.1.1-alpha.163) (2023-03-02)
+
+### [0.1.1-alpha.162](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.161...v0.1.1-alpha.162) (2023-03-01)
+
+### [0.1.1-alpha.161](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.160...v0.1.1-alpha.161) (2023-03-01)
+
+### [0.1.1-alpha.160](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.159...v0.1.1-alpha.160) (2023-03-01)
+
+### [0.1.1-alpha.159](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.158...v0.1.1-alpha.159) (2023-03-01)
+
+### [0.1.1-alpha.158](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.157...v0.1.1-alpha.158) (2023-03-01)
+
+### [0.1.1-alpha.157](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.156...v0.1.1-alpha.157) (2023-03-01)
+
+### [0.1.1-alpha.156](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.155...v0.1.1-alpha.156) (2023-03-01)
+
+
+### Bug Fixes
+
+* **np-111:** adjusted checkin and endsat dates on pass ([#147](https://github.com/TropixInc/w3block-ui-sdk/issues/147)) ([883b718](https://github.com/TropixInc/w3block-ui-sdk/commit/883b7181efc7d6c9315e9edc83f8dd6b225fcb5c))
+
+### [0.1.1-alpha.155](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.154...v0.1.1-alpha.155) (2023-02-27)
+
+### [0.1.1-alpha.154](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.153...v0.1.1-alpha.154) (2023-02-27)
+
+
+### Features
+
+* add listener for external links clicks ([0dd34db](https://github.com/TropixInc/w3block-ui-sdk/commit/0dd34dbfa052b9daf5f47459b76cfa8224b9753e))
+* prevent router push on iframe ([347cfbf](https://github.com/TropixInc/w3block-ui-sdk/commit/347cfbf3888e262313df11c6c5e1720ad8f49619))
+
+
+### Bug Fixes
+
+* **pe-225:** adjusts on wallet connect ([#146](https://github.com/TropixInc/w3block-ui-sdk/issues/146)) ([6e42457](https://github.com/TropixInc/w3block-ui-sdk/commit/6e424579b08b4b5a41be8987714917f41d8fa525))
+
+### [0.1.1-alpha.153](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.152...v0.1.1-alpha.153) (2023-02-23)
+
+### [0.1.1-alpha.152](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.151...v0.1.1-alpha.152) (2023-02-16)
+
+### [0.1.1-alpha.151](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.150...v0.1.1-alpha.151) (2023-02-16)
+
+
+### Features
+
+* remove specific font family ([a21e29d](https://github.com/TropixInc/w3block-ui-sdk/commit/a21e29d288609f2e2c8926384ef93a702f1193ef))
+
+### [0.1.1-alpha.150](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.149...v0.1.1-alpha.150) (2023-02-15)
+
+
+### Features
+
+* add secondary button on banner module ([7b723b7](https://github.com/TropixInc/w3block-ui-sdk/commit/7b723b754e44c83a173f1de01a1f23f78d46e751))
+* add spacing properties on all modules ([342507c](https://github.com/TropixInc/w3block-ui-sdk/commit/342507c99b35bdde2606999f226504e864651a98))
+
+### [0.1.1-alpha.149](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.148...v0.1.1-alpha.149) (2023-02-14)
+
+
+### Bug Fixes
+
+* **integration:** removed unused tags on integration ([#141](https://github.com/TropixInc/w3block-ui-sdk/issues/141)) ([cf69637](https://github.com/TropixInc/w3block-ui-sdk/commit/cf69637e5ec12a7773e3d6ee6aade587a7e5b0a4))
+
+### [0.1.1-alpha.148](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.147...v0.1.1-alpha.148) (2023-02-14)
+
+
+### Features
+
+* **pe-205:** added midia module on constructor ([#140](https://github.com/TropixInc/w3block-ui-sdk/issues/140)) ([c7bb6a4](https://github.com/TropixInc/w3block-ui-sdk/commit/c7bb6a4c75d9a0407ee4d7540523f14f5e9e4ba6))
+
+### [0.1.1-alpha.147](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.146...v0.1.1-alpha.147) (2023-02-14)
+
+### [0.1.1-alpha.146](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.145...v0.1.1-alpha.146) (2023-02-13)
+
+
+### Features
+
+* add spacing to banner ([bccee20](https://github.com/TropixInc/w3block-ui-sdk/commit/bccee20ef02b533c2a721320b3159750c641e0e6))
+* add spacing to cards component ([d19bb24](https://github.com/TropixInc/w3block-ui-sdk/commit/d19bb24d06f5f917ff8d34c132a84468aca7cf86))
+* add spacing to paragraph and image + text ([8494b2b](https://github.com/TropixInc/w3block-ui-sdk/commit/8494b2b267d45a959e24de4c978ffce295c202a5))
+* create accordions module ([017f40e](https://github.com/TropixInc/w3block-ui-sdk/commit/017f40ec9b970c80eca3132dbe8696955c1fb211))
+* create image plus text component ([0a66511](https://github.com/TropixInc/w3block-ui-sdk/commit/0a66511fd0ca9c26ec17e0fdb39ffce9be51cc0f))
+* **pe-204:** added paragraph module on constructor ([#136](https://github.com/TropixInc/w3block-ui-sdk/issues/136)) ([0a68392](https://github.com/TropixInc/w3block-ui-sdk/commit/0a6839275c2d4d8d20ad25c3d84be1e538606717))
+
+
+### Bug Fixes
+
+* add default colors ([feabecc](https://github.com/TropixInc/w3block-ui-sdk/commit/feabecc7d4a64e042d5803de4f4a51247016744b))
+* container accordion style ([158fd26](https://github.com/TropixInc/w3block-ui-sdk/commit/158fd26a03dc8706c733b983aa8b67d007a66b7d))
+* max image size ([86fb296](https://github.com/TropixInc/w3block-ui-sdk/commit/86fb2965d6df7949ce4315977c10c7f7e1c93bf1))
+
 ### [0.1.1-alpha.145](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.144...v0.1.1-alpha.145) (2023-02-06)
 
 ### [0.1.1-alpha.144](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.143...v0.1.1-alpha.144) (2023-02-06)

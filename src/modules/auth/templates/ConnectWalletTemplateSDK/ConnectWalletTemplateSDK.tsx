@@ -26,6 +26,7 @@ interface ConnectWalletTemplateSDKProps {
   tenantName?: string;
   extraBy?: ExtraBy[];
   redirectLink?: string;
+  forceVault?: boolean;
 }
 
 export const ConnectWalletTemplateSDK = ({
@@ -42,6 +43,7 @@ export const ConnectWalletTemplateSDK = ({
   tenantName,
   redirectLink,
   extraBy,
+  forceVault,
 }: ConnectWalletTemplateSDKProps) => {
   return (
     <TranslatableComponent>
@@ -60,6 +62,7 @@ export const ConnectWalletTemplateSDK = ({
           infoComponent={
             <Box>
               <ConnectExternalWalletWithoutLayout
+                forceVault={forceVault}
                 redirectRoute={defaultRedirectRoute}
                 tenantName={tenantName}
                 redirectLink={redirectLink}

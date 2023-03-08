@@ -8,6 +8,7 @@ import { ReactComponent as LinkedinIcon } from '../../shared/assets/icons/linked
 import { ReactComponent as TelegramIcon } from '../../shared/assets/icons/message.svg';
 import { ReactComponent as TwitterIcon } from '../../shared/assets/icons/twitter.svg';
 import { ReactComponent as WhatsappIcon } from '../../shared/assets/icons/whatsapp.svg';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { FooterData } from '../interfaces';
 
 import './Footer.css';
@@ -30,6 +31,8 @@ export const Footer = ({ data }: { data: FooterData }) => {
     socialNetworksIconHoverColor,
     socialNetworks,
     w3blockSignature,
+    margin,
+    padding,
   } = styleData;
 
   const iconsMap: Record<SocialNetworkType, SVG> = {
@@ -60,13 +63,18 @@ export const Footer = ({ data }: { data: FooterData }) => {
   }));
 
   return (
-    <>
+    <div
+      style={{
+        margin: convertSpacingToCSS(margin),
+        padding: convertSpacingToCSS(padding),
+      }}
+    >
       <div
         style={{ backgroundColor }}
         className="pw-w-full pw-shadow-[0px_-4px_16px_rgba(0,0,0,0.15)] pw-flex pw-justify-center pw-items-center"
       >
         <div className="pw-pb-6 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-pt-10">
-          <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row pw-font-roboto">
+          <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
             {menuLinks?.map(({ name, slug }) => (
               <a
                 key={slug}
@@ -91,15 +99,13 @@ export const Footer = ({ data }: { data: FooterData }) => {
             style={{ color: textColor }}
             className="pw-text-sm pw-leading-5 pw-text-center pw-px-7 sm:pw-px-28"
           >
-            <p className="pw-text-center pw-font-roboto">
-              {contentData?.description}
-            </p>
+            <p className="pw-text-center">{contentData?.description}</p>
           </div>
 
           {socialNetworks && (
             <div className="pw-w-full pw-flex pw-flex-wrap pw-gap-2 pw-justify-center pw-pt-4">
               {socialLinks.map((socialLink) => {
-                if (!socialLink.url) return null;
+                if (!socialLink.url || socialLink.url == '') return null;
 
                 const Icon = iconsMap[socialLink.type];
 
@@ -129,11 +135,11 @@ export const Footer = ({ data }: { data: FooterData }) => {
       </div>
 
       {w3blockSignature && (
-        <div className="pw-w-full pw-grid pw-place-items-center pw-h-[14px] pw-bg-white pw-font-roboto pw-font-medium pw-text-xs pw-py-[14px]">
-          Copyright {new Date().getFullYear()} - [web/lock]
+        <div className="pw-w-full pw-grid pw-place-items-center pw-h-[14px] pw-bg-white pw-font-medium pw-text-xs pw-my-[14px]">
+          <p>Copyright {new Date().getFullYear()} - [web/lock]</p>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

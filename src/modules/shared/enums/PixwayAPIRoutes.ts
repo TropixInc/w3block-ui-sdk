@@ -48,4 +48,5 @@ export enum PixwayAPIRoutes {
   GET_THEME = '/projects/get-theme',
   GET_PAGE = '/projects/get-page',
   GET_SIGNED_CLOUDINARY_URL = '/users-documents/{tenantId}/generate-signature',
+  PRODUCT_BY_SLUG = '/companies/{companyId}/products/get-by-slug/{slug}',
 }

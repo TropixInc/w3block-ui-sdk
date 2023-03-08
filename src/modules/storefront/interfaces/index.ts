@@ -7,6 +7,10 @@ export type TemplateData = {
     | ProductsData
     | CookiesData
     | FooterData
+    | AccordionsData
+    | ImagePlusTextData
+    | ParagraphData
+    | MidiaData
   )[];
 };
 
@@ -18,6 +22,11 @@ export type Theme = {
   products?: MainModuleThemeInterface;
   cookies: CookiesData;
   footer: FooterData;
+  accordions?: MainModuleThemeInterface;
+  imagePlusText?: MainModuleThemeInterface;
+  paragraph?: MainModuleThemeInterface;
+  productPage: ProductPageData;
+  midia?: MidiaData;
 };
 
 export interface MainModuleThemeInterface {
@@ -31,6 +40,7 @@ export interface MainModuleThemeInterface {
 export interface PageData extends MainModuleThemeInterface {
   type: ModulesType.CONFIGURATION;
   styleData: {
+    padding?: string;
     textColor?: string;
     background?: boolean;
     backgroundColor?: string;
@@ -40,10 +50,16 @@ export interface PageData extends MainModuleThemeInterface {
   };
 }
 
+export interface AssetInterface {
+  assetId: string;
+  assetUrl: string;
+}
 export interface HeaderData extends MainModuleThemeInterface {
   type: ModulesType.HEADER;
   styleData: {
-    logoSrc?: string;
+    margin?: string;
+    padding?: string;
+    logoSrc?: AssetInterface;
     brandName?: string;
     tabs?: HeaderLink[];
     backgroundColor?: string;
@@ -68,6 +84,8 @@ export enum AlignmentEnum {
 export interface CategoriesData extends MainModuleThemeInterface {
   type: ModulesType.CATEGORIES;
   styleData: {
+    margin?: string;
+    padding?: string;
     categories?: CategoryItem[];
     allCategories?: boolean;
     allCategoriesText?: string;
@@ -82,6 +100,8 @@ export interface CategoriesData extends MainModuleThemeInterface {
 export interface BannerData extends MainModuleThemeInterface {
   type: ModulesType.BANNER;
   styleData: {
+    margin?: string;
+    padding?: string;
     bannerDisposition?: Layout;
     bannerRatio?: Ratio;
     autoSlide?: boolean;
@@ -91,7 +111,7 @@ export interface BannerData extends MainModuleThemeInterface {
 
 export interface SpecificBannerInfo {
   backgroundColor?: string;
-  backgroundUrl?: string;
+  backgroundUrl?: AssetInterface;
   overlay?: boolean;
   overlayColor?: string;
   textAligment?: AlignmentEnum;
@@ -104,6 +124,13 @@ export interface SpecificBannerInfo {
   buttonLink?: string;
   buttonTextColor?: string;
   buttonColor?: string;
+  buttonBorderColor?: string;
+  secondaryActionButton?: boolean;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  secondaryButtonTextColor?: string;
+  secondaryButtonColor?: string;
+  secondaryButtonBorderColor?: string;
 }
 
 type CategoryItem = { name: string; slug: string };
@@ -120,6 +147,8 @@ export type MenuDefault = {
 export interface CookiesData extends MainModuleThemeInterface {
   type: ModulesType.COOKIE;
   styleData: {
+    margin?: string;
+    padding?: string;
     backgroundColor?: string;
     textColor?: string;
     buttonBgColor?: string;
@@ -136,6 +165,8 @@ export interface CookiesData extends MainModuleThemeInterface {
 export interface FooterData extends MainModuleThemeInterface {
   type: ModulesType.FOOTER;
   styleData: {
+    margin?: string;
+    padding?: string;
     backgroundColor?: string;
     w3blockSignature?: boolean;
     textColor?: string;
@@ -167,6 +198,8 @@ type Link = {
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
   styleData: {
+    margin?: string;
+    padding?: string;
     layoutDisposition?: CardLayoutDisposition;
     autoSlide?: boolean;
     numberOfLines?: number;
@@ -204,7 +237,7 @@ export interface ProductsData extends MainModuleThemeInterface {
     sessionLink?: string;
     backgroundSession?: boolean;
     backgroundColor?: string;
-    backgroundUrl?: string;
+    backgroundUrl?: AssetInterface;
     overlay?: boolean;
     overlayColor?: string;
     textOverImage?: boolean;
@@ -212,23 +245,79 @@ export interface ProductsData extends MainModuleThemeInterface {
   contentData: {
     cardType?: CardTypesEnum;
     moduleTitle?: string;
-    cardSearch?: CardSearchEnum;
+    cardSearch?: ComboBoxReturnInterface[];
     contentCards?: SpecificContentCard[];
     moduleTitleColor?: string;
   };
 }
 
+interface ComboBoxReturnInterface {
+  label: string;
+  value: string;
+}
 export interface SpecificContentCard {
   id?: string;
   title?: string;
   description?: string;
-  image?: string;
-  category?: string;
+  image?: AssetInterface;
+  category?: ComboBoxReturnInterface[];
   value?: string;
   hasLink?: boolean;
   link?: string;
   overlay?: boolean;
   cardOverlayColor?: string;
+}
+
+export interface ParagraphData extends MainModuleThemeInterface {
+  type: ModulesType.PARAGRAPH;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    alignment?: AlignmentEnum;
+    titleInput?: string;
+    titleColor?: string;
+    textInput?: string;
+    textColor?: string;
+  };
+}
+export interface ProductPageData extends MainModuleThemeInterface {
+  type: ModulesType.PRODUCT_PAGE;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    backTextColor?: string;
+    backBackgroundColor?: string;
+    backgroundColor?: string;
+    textColor?: string;
+    categoriesTagBackgroundColor?: string;
+    categoriesTagTextColor?: string;
+    categoriesTextColor?: string;
+    descriptionTextColor?: string;
+    priceTextColor?: string;
+    nameTextColor?: string;
+    actionButton?: boolean;
+    buttonText?: string;
+    buttonTextColor?: string;
+    buttonColor?: string;
+    showBlockchainInfo?: boolean;
+    showValue?: boolean;
+    showDescription?: boolean;
+    showCategory?: boolean;
+    showProductName?: boolean;
+    blockchainInfoBackgroundColor?: string;
+    blockchainInfoTextColor?: string;
+  };
+}
+export interface MidiaData extends MainModuleThemeInterface {
+  type: ModulesType.MIDIA;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    midiaUrl: AssetInterface;
+    imageDisposition: string;
+    imageRatio: string;
+    imageAlignment: AlignmentEnum;
+  };
 }
 
 export enum CardSearchEnum {
@@ -253,6 +342,53 @@ export enum CardLayoutDisposition {
   GRID = 'grid',
 }
 
+export interface AccordionsData extends MainModuleThemeInterface {
+  type: ModulesType.ACCORDIONS;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    titleAndArrowColor?: string;
+    titleAndArrowHoverColor?: string;
+    contentColor?: string;
+    backgroundColor?: string;
+  };
+  contentData: {
+    accordionsItems?: SpecificContentAccordion[];
+  };
+}
+
+export interface SpecificContentAccordion {
+  title?: string;
+  content?: string;
+}
+
+export interface ImagePlusTextData extends MainModuleThemeInterface {
+  type: ModulesType.IMAGE_PLUS_TEXT;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    image?: AssetInterface;
+    textAlignment?: AlignmentEnum;
+    titleColor?: string;
+    contentColor?: string;
+    imagePosition?: ImagePositionEnum;
+    backgroundSession?: boolean;
+    backgroundColor?: string;
+    backgroundUrl?: AssetInterface;
+    overlay?: boolean;
+    overlayColor?: string;
+  };
+  contentData: {
+    title?: string;
+    content?: string;
+  };
+}
+
+enum ImagePositionEnum {
+  LEFT = 'left',
+  RIGHT = 'right',
+}
+
 export enum ModulesType {
   HEADER = 'Header',
   CONFIGURATION = 'Configuration',
@@ -261,4 +397,9 @@ export enum ModulesType {
   CARDS = 'Cards',
   FOOTER = 'Footer',
   COOKIE = 'Cookie',
+  ACCORDIONS = 'Accordions',
+  IMAGE_PLUS_TEXT = 'Imagem + Texto',
+  PARAGRAPH = 'Paragraph',
+  PRODUCT_PAGE = 'Product_page',
+  MIDIA = 'Midia',
 }
