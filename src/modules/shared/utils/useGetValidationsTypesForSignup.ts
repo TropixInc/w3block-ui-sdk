@@ -1,7 +1,7 @@
 import { DataTypesEnum, TenantInputEntityDto } from '@w3block/sdk-id';
 import { AnySchema, object, string } from 'yup';
 
-import useTranslation from '../../../../dist/src/modules/shared/hooks/useTranslation';
+import useTranslation from '../hooks/useTranslation';
 
 export interface ValidationsValues {
   yupKey: string;
