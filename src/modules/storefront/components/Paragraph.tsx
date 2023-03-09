@@ -12,15 +12,8 @@ type AlignmentClassNameMap = Record<AlignmentEnum, string>;
 
 export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const {
-    styleData: {
-      alignment,
-      textColor,
-      textInput,
-      titleColor,
-      titleInput,
-      margin,
-      padding,
-    },
+    styleData: { alignment, textColor, titleColor, margin, padding },
+    contentData: { textInput, titleInput },
   } = data;
 
   const alignmentTextClass = alignmentsText[alignment ?? AlignmentEnum.LEFT];
@@ -39,12 +32,11 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
       >
         {titleInput}
       </h2>
-      <p
+      <div
         style={{ color: textColor ?? 'black' }}
         className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
-      >
-        {textInput}
-      </p>
+        dangerouslySetInnerHTML={{ __html: textInput ?? '' }}
+      />
     </div>
   );
 };

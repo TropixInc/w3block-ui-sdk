@@ -274,10 +274,12 @@ export interface ParagraphData extends MainModuleThemeInterface {
     margin?: string;
     padding?: string;
     alignment?: AlignmentEnum;
-    titleInput?: string;
     titleColor?: string;
-    textInput?: string;
     textColor?: string;
+  };
+  contentData: {
+    titleInput?: string;
+    textInput?: string;
   };
 }
 export interface ProductPageData extends MainModuleThemeInterface {
