@@ -75,12 +75,11 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
         </div>
       </summary>
 
-      <p
+      <div
         className="pw-text-[15px] pw-leading-[22.5px]"
         style={{ color: contentColor || 'black' }}
-      >
-        {contentData.content}
-      </p>
+        dangerouslySetInnerHTML={{ __html: contentData.content ?? '' }}
+      />
     </details>
   );
 };
