@@ -7,14 +7,22 @@ export interface OrderPreviewResponse {
   clientServiceFee?: string;
   gasFee?: GasFee;
   totalPrice?: string;
+  providersForSelection?: PaymentMethodsAvaiable[];
 }
 
+export interface PaymentMethodsAvaiable {
+  paymentMethod: string;
+  paymentProvider: string;
+  inputs: string[];
+}
 export interface OrderPreviewCache {
   currencyId: string;
   product: Product;
   orderProducts: OrderProductsInterface[];
   signedGasFee: string;
   totalPrice: string;
+  choosedPayment?: PaymentMethodsAvaiable;
+  cpfCnpj?: string;
 }
 
 interface OrderProductsInterface {
@@ -29,6 +37,8 @@ export interface CreateOrder {
   addressId?: string;
   signedGasFee: string;
   successUrl: string;
+  paymentMethod?: string;
+  providerInputs?: unknown;
 }
 
 export interface CreateOrderProduct {

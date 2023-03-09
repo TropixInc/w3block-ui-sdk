@@ -1015,9 +1015,9 @@
     "@jridgewell/sourcemap-codec" "1.4.14"
 
 "@mertasan/tailwindcss-variables@^2.3.0":
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/@mertasan/tailwindcss-variables/-/tailwindcss-variables-2.5.2.tgz#8fd1b6412523095818ebe53f03dc4040921c3423"
-  integrity sha512-5KPa2yhCryJYTqWdZP82qed4Dm9qH0jq6+zoAXgOMjutZqjqoGvTDfCasoTG1VFnoztPvPG9zhhVZZ9jATZ9MQ==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@mertasan/tailwindcss-variables/-/tailwindcss-variables-2.6.0.tgz#1519262897f8a0f26a9d1acb9114caf0144079bd"
+  integrity sha512-XQFs+5cw27QvL97FJeU/T1clcomUV3or8poA6vwiHyRjounI+KcfNbvILSTKVbB8kF9+EvgCW7k4GCVnBWmrGQ==
   dependencies:
     lodash "^4.17.21"
 
@@ -1575,9 +1575,9 @@
     swr "1.1.2"
 
 "@w3block/sdk-id@^0.1.40":
-  version "0.1.40"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.40.tgz#17d447b0b1878ef9f8eeeaa0b68e5a343ad5c306"
-  integrity sha512-SP6AQWZsDXzaW1Nf8z/CGWPmDaCLTQIoO1dCtOjPfN64Bdvdxo0PY3xfChozarGJTih8z8QwU99li+oe6Qyjqw==
+  version "0.1.42"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.42.tgz#071c5f1e15545046925c024174578fe0a2eb8bfc"
+  integrity sha512-CeuAuNP9dQN7CvRtOS2OCueSciXsOxvWJFO86lFaUlql56Yl0hxVarc34WqoTeNkQA19oyTR1gDPeB8YFjp7XQ==
   dependencies:
     axios "^0.24.0"
     date-fns "2.29.1"
@@ -2098,9 +2098,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001426, caniuse-lite@^1.0.30001449:
-  version "1.0.30001460"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001460.tgz#31d2e26f0a2309860ed3eff154e03890d9d851a7"
-  integrity sha512-Bud7abqjvEjipUkpLs4D7gR0l8hBYBHoa+tGtKJHvT2AYzLp1z7EmVkUT4ERpVUfca8S2HGIVs883D8pUH1ZzQ==
+  version "1.0.30001462"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001462.tgz#b2e801e37536d453731286857c8520d3dcee15fe"
+  integrity sha512-PDd20WuOBPiasZ7KbFnmQRyuLE7cFXW2PVd7dmALzbkUXEP46upAuCDm9eY9vho8fgNMGmbAX92QBZHzcnWIqw==
 
 chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
@@ -2736,9 +2736,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.284:
-  version "1.4.320"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.320.tgz#4d83a90ff74f93939c5413c2ac5a16c696600632"
-  integrity sha512-h70iRscrNluMZPVICXYl5SSB+rBKo22XfuIS1ER0OQxQZpKTnFpuS6coj7wY9M/3trv7OR88rRMOlKmRvDty7Q==
+  version "1.4.325"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.325.tgz#7b97238a61192d85d055d97f3149832b3617d37b"
+  integrity sha512-K1C03NT4I7BuzsRdCU5RWkgZxtswnKDYM6/eMhkEXqKu4e5T+ck610x3FPzu1y7HVFSiQKZqP16gnJzPpji1TQ==
 
 elliptic@6.5.4, elliptic@^6.5.3:
   version "6.5.4"
@@ -5732,9 +5732,9 @@ sourcemap-codec@^1.4.8:
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
 spdx-correct@^3.0.0:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/spdx-correct/-/spdx-correct-3.1.1.tgz#dece81ac9c1e6713e5f7d1b6f17d468fa53d89a9"
-  integrity sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/spdx-correct/-/spdx-correct-3.2.0.tgz#4f5ab0668f0059e34f9c00dce331784a12de4e9c"
+  integrity sha512-kN9dJbvnySHULIluDHy32WHRUu3Og7B9sbY7tsFLctQkIqnMh3hErYgdMjTYuqmcXX+lK5T1lnUt3G7zNswmZA==
   dependencies:
     spdx-expression-parse "^3.0.0"
     spdx-license-ids "^3.0.0"

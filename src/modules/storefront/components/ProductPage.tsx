@@ -96,8 +96,11 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   style={{ color: data.styleData.priceTextColor ?? 'black' }}
                   className="pw-text-2xl pw-mt-4 pw-font-[700]"
                 >
-                  {product?.prices[0].currency.symbol}{' '}
-                  {product?.prices[0].amount}
+                  {product?.stockAmount == 0
+                    ? 'Esgotado'
+                    : product
+                    ? `${product?.prices[0].currency.symbol} ${product?.prices[0].amount}`
+                    : ''}
                 </p>
               )}
               {data.styleData.showCategory && product?.tags?.length ? (
@@ -129,6 +132,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               ) : null}
               {data.styleData.actionButton && (
                 <button
+                  disabled={product?.stockAmount == 0}
                   onClick={() => {
                     if (product?.id && product.prices) {
                       pushConnect(
@@ -138,8 +142,16 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     }
                   }}
                   style={{
-                    backgroundColor: data.styleData.buttonColor ?? '#0050FF',
-                    color: data.styleData.buttonTextColor ?? 'white',
+                    backgroundColor:
+                      product && product.stockAmount == 0
+                        ? '#DCDCDC'
+                        : data.styleData.buttonColor
+                        ? data.styleData.buttonColor
+                        : '#0050FF',
+                    color:
+                      product && product.stockAmount == 0
+                        ? '#777E8F'
+                        : data.styleData.buttonTextColor ?? 'white',
                   }}
                   className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-6 pw-rounded-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                 >
