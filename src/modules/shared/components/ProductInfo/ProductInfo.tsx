@@ -1,7 +1,7 @@
 import { CheckoutStatus } from '../../../checkout';
 import { CurrencyEnum, currencyMap } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
-import { isVideo } from '../../utils/validators';
+import { ImageSDK } from '../ImageSDK';
 import { Shimmer } from '../Shimmer';
 interface ProductInfoProps {
   status?: CheckoutStatus;
@@ -17,7 +17,6 @@ interface ProductInfoProps {
 export const ProductInfo = ({
   image,
   name,
-  //id,
   status,
   price,
   className,
@@ -48,35 +47,20 @@ export const ProductInfo = ({
           <Shimmer className="!pw-w-[48px] !pw-h-[48px] pw-rounded-lg " />
         ) : (
           <div className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-overflow-hidden">
-            {isVideo(image) ? (
-              <video
-                src={image}
-                className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
-              />
-            ) : (
-              <img
-                className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
-                src={image}
-              />
-            )}
+            <ImageSDK
+              src={image}
+              className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
+            />
           </div>
         )}
 
         <div className="pw-flex pw-flex-col pw-flex-1 pw-overflow-ellipsis pw-overflow-hidden ">
           {loading ? (
-            <>
-              <Shimmer className="pw-mb-1 pw-w-[120px]" />{' '}
-              {/* <Shimmer className="pw-mb-1 pw-w-[190px]" /> */}
-            </>
+            <Shimmer className="pw-mb-1 pw-w-[120px]" />
           ) : (
-            <>
-              <p className="pw-font-[600] pw-text-sm pw-text-[#353945] pw-min-w-0 pw-truncate">
-                {name}
-              </p>
-              {/* <p className="pw-font-[600] pw-max-w-[130px] sm:pw-max-w-full pw-text-xs pw-min-w-0 pw-text-[#353945] pw-truncate">
-                {id}
-              </p> */}
-            </>
+            <p className="pw-font-[600] pw-text-sm pw-text-[#353945] pw-min-w-0 pw-truncate">
+              {name}
+            </p>
           )}
         </div>
       </div>
