@@ -1,7 +1,7 @@
 import { DataTypesEnum, TenantInputEntityDto } from '@w3block/sdk-id';
 import { AnySchema, object, string } from 'yup';
 
-//import * from 'yup';
+import useTranslation from '../../../../dist/src/modules/shared/hooks/useTranslation';
 
 export interface ValidationsValues {
   yupKey: string;
@@ -10,9 +10,10 @@ export interface ValidationsValues {
 
 const validates: Array<ValidationsValues> = [];
 
-export const getValidationsTypesForSignup = (
+export const useGetValidationsTypesForSignup = (
   values: Array<TenantInputEntityDto>
 ) => {
+  const [translate] = useTranslation();
   values.forEach(({ type, id }) => {
     switch (type) {
       case DataTypesEnum.Email:
@@ -21,8 +22,14 @@ export const getValidationsTypesForSignup = (
           validations: object().shape({
             inputId: string(),
             value: string()
-              .email('insira um email valido')
-              .required('insira um email valido'),
+              .email(
+                translate('auth>getValidationsTypesForSignup>insertValidEmail')
+              )
+              .required(
+                translate(
+                  'companyAuth>requestPasswordChange>emailFieldPlaceholder'
+                )
+              ),
           }),
         });
         break;
@@ -32,8 +39,17 @@ export const getValidationsTypesForSignup = (
           validations: object().shape({
             inputId: string(),
             value: string()
-              .required('insira um CPF valido')
-              .min(11, 'insira um CPF valido'),
+              .required(
+                translate('auth>getValidationsTypesForSignup>insertYourCPF')
+              )
+              .min(
+                11,
+                translate('auth>getValidationsTypesForSignup>insertValidCPF')
+              )
+              .max(
+                11,
+                translate('auth>getValidationsTypesForSignup>insertValidCPF')
+              ),
           }),
         });
         break;
@@ -43,8 +59,13 @@ export const getValidationsTypesForSignup = (
           validations: object().shape({
             inputId: string(),
             value: string()
-              .required('insira um telefone valido')
-              .min(9, 'insira um telefone valido'),
+              .required(
+                translate('auth>getValidationsTypesForSignup>insertYourPhone')
+              )
+              .min(
+                10,
+                translate('auth>getValidationsTypesForSignup>insertValidPhone')
+              ),
           }),
         });
         break;
@@ -53,12 +74,9 @@ export const getValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string()
-              .matches(
-                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-                'Insira uma URL valida!'
-              )
-              .required('Insira uma URL'),
+            value: string().required(
+              translate('auth>getValidationsTypesForSignup>insertUrl')
+            ),
           }),
         });
         break;
@@ -67,7 +85,9 @@ export const getValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string().required('insira um texto'),
+            value: string().required(
+              translate('auth>getValidationsTypesForSignup>insertText')
+            ),
           }),
         });
         break;

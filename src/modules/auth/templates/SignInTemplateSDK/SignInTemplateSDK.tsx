@@ -1,4 +1,4 @@
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
@@ -15,7 +15,7 @@ import { SigInWithoutLayout } from '../../components/SignInWithoutLayout/SignInW
 interface SignInSignupTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;

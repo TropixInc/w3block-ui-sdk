@@ -35,11 +35,9 @@ const _SignUpTemplate = ({
   const { connectProxyPass, companyId } = useCompanyConfig();
   const [language, _] = useState(() => {
     if (window) {
-      return window.navigator.language === 'pt-BR'
+      return window?.navigator?.language === 'pt-BR'
         ? I18NLocaleEnum.PtBr
         : I18NLocaleEnum.En;
-    } else {
-      return I18NLocaleEnum.En;
     }
   });
 

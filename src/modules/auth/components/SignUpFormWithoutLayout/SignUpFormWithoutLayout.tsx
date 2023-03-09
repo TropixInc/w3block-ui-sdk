@@ -57,11 +57,9 @@ export const SignUpFormWithoutLayout = ({
   const [emailLocal, setEmail] = useState('');
   const [language, _] = useState(() => {
     if (window) {
-      return window.navigator.language === 'pt-BR'
+      return window?.navigator?.language === 'pt-BR'
         ? I18NLocaleEnum.PtBr
         : I18NLocaleEnum.En;
-    } else {
-      return I18NLocaleEnum.En;
     }
   });
 
@@ -85,14 +83,14 @@ export const SignUpFormWithoutLayout = ({
   }, [isSuccess]);
 
   const onSubmitLocal = () => {
-    const getMethodsValue = methods.getValues();
+    const userInfos = methods.getValues();
 
-    setEmail(getMethodsValue.email);
+    setEmail(userInfos.email);
 
     mutate({
-      confirmation: getMethodsValue.confirmation,
-      email: getMethodsValue.email,
-      password: getMethodsValue.email,
+      confirmation: userInfos.confirmation,
+      email: userInfos.email,
+      password: userInfos.email,
       callbackUrl: connectProxyPass + PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
       tenantId: companyId,
       i18nLocale: language,

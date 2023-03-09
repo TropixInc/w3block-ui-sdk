@@ -11,9 +11,7 @@ interface SmartProps {
   type: DataTypesEnum;
   label: string;
   name: string;
-
   value?: string;
-
   assetId?: string | null;
 }
 

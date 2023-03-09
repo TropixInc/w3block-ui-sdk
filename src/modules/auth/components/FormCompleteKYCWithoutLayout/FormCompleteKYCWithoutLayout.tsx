@@ -11,8 +11,9 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignupForm';
-import { getValidationsTypesForSignup } from '../../../shared/utils/getValidationsTypesForSignup';
+import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { AuthButton } from '../AuthButton';
 
 interface Props {
@@ -20,6 +21,7 @@ interface Props {
 }
 
 const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
+  const [translate] = useTranslation();
   const { mutate } = usePostUsersDocuments();
   const { companyId: tenantId } = useCompanyConfig();
   const [validForm, setValidForm] = useState<boolean>(false);
@@ -31,7 +33,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
     contextId: tenantInputs.data?.data[0].contextId ?? '',
   });
 
-  const validations = getValidationsTypesForSignup(
+  const validations = useGetValidationsTypesForSignup(
     tenantInputs?.data?.data ?? []
   );
   const yupSchema = createSchemaSignupForm(validations);
@@ -45,30 +47,30 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
 
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
-
-    const arrayValues = Object.values(dynamicValues);
-
-    if (tenantInputs.data?.data && userId)
+    if (tenantInputs.data?.data?.length && userId) {
+      const { contextId } = tenantInputs.data.data[0];
       mutate({
         tenantId,
-        contextId: tenantInputs.data?.data[0].contextId,
-        userId: userId,
+        contextId,
+        userId,
         documents: {
-          documents: arrayValues,
+          documents: Object.values(dynamicValues),
         },
       });
+    }
   };
 
   useEffect(() => {
     const values = dynamicMethods.getValues();
-    const arrayValues = Object.values(values);
-
-    if (arrayValues.every((obj) => obj !== undefined)) {
-      setValidForm(true);
-    } else {
-      setValidForm(false);
-    }
+    const documents = Object.values(values);
+    const isVallidForm = documents.every((obj) => obj !== undefined);
+    setValidForm(isVallidForm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dynamicMethods.watch()]);
+
+  function getDocumentByInputId(inputId: string) {
+    return documents?.data.find((doc) => doc.inputId === inputId);
+  }
 
   return (
     <FormProvider {...dynamicMethods}>
@@ -80,18 +82,8 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
               label={item.label}
               name={item.id}
               type={item.type}
-              assetId={
-                documents?.data.find((doc) => doc.inputId === item.id)
-                  ? documents?.data.find((doc) => doc.inputId === item.id)
-                      ?.assetId
-                  : ''
-              }
-              value={
-                documents?.data.find((doc) => doc.inputId === item.id)
-                  ? documents?.data.find((doc) => doc.inputId === item.id)
-                      ?.value
-                  : ''
-              }
+              assetId={getDocumentByInputId(item?.id)?.assetId}
+              value={getDocumentByInputId(item?.id)?.value}
             />
           ))}
         <AuthButton
@@ -99,7 +91,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
           className="pw-w-full pw-mt-5"
           disabled={!validForm}
         >
-          Continuar
+          {translate('components>advanceButton>continue')}
         </AuthButton>
       </form>
     </FormProvider>

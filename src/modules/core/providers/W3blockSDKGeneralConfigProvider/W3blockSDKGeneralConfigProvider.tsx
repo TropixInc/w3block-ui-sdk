@@ -61,7 +61,6 @@ export const W3blockUISDKGeneralConfig = ({
           w3blockCommerceAPIUrl={api.commerceUrl}
           w3blockPdfAPIUrl={api.pdfUrl}
           w3BlockPassApiUrl={api.passUrl ?? ''}
-          w3blockDirectoryApiUrl={api.directory ?? ''}
         >
           <LocaleProvider locale={locale}>{children}</LocaleProvider>
         </W3blockApiProvider>

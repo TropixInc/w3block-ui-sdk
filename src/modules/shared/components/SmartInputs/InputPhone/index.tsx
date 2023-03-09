@@ -46,9 +46,7 @@ const InputPhone = ({ label, name, docValue }: InputPhoneProps) => {
           placeholder="+XX XX XXXXX XXXX"
           onBlur={
             inputValue
-              ? isValidPhoneNumber(inputValue)
-                ? () => onChangeInvalidNumber(false)
-                : () => onChangeInvalidNumber(true)
+              ? () => onChangeInvalidNumber(!isValidPhoneNumber(inputValue))
               : () => onChangeInvalidNumber(false)
           }
           className={classNames(

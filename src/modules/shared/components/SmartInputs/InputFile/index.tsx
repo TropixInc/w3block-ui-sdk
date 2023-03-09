@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
 import { ReactComponent as FileIcon } from '../../../assets/icons/fileOutlined.svg';
 import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
+import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 
@@ -19,6 +20,7 @@ interface InputFileProps {
 }
 
 const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
+  const [translate] = useTranslation();
   const [isInvalidFile, _] = useState(false);
   const { field } = useController({ name });
   const [file, setFile] = useState<File | undefined>();
@@ -28,10 +30,11 @@ const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
 
   const { mutate, data, isSuccess } = useUploadFileToCloudinary();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDrop = useCallback((acceptedFiles: string | any[]) => {
     if (acceptedFiles.length) {
       setFile(acceptedFiles[0]);
-      const type = acceptedFiles[0].type.includes('pdf')
+      const type = acceptedFiles[0]?.type?.includes('pdf')
         ? AssetTypeEnum.Document
         : AssetTypeEnum.Image;
       mutateAssets({
@@ -52,28 +55,33 @@ const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
   });
 
   useEffect(() => {
-    if (file && assets?.data.id) {
+    if (file && assets?.data?.id) {
       mutate({ file: file, assets: assets.data, config: {} });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assets?.data, file]);
 
   useEffect(() => {
-    if (isSuccess && data && assets) {
+    if (isSuccess && data && assets?.data?.id) {
       field.onChange({ inputId: name, assetId: assets.data.id });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, data, assets]);
 
   useEffect(() => {
     if (docValue && assetId) {
       field.onChange({ inputId: name, assetId: assetId });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
 
   const renderName = () => {
     if (docValue) {
       return docValue;
     } else {
-      return file && file.name ? file?.name : 'Selecione um arquivo';
+      return file && file.name
+        ? file?.name
+        : translate('auth>inputFile>selectFile');
     }
   };
 

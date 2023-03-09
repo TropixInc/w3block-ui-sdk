@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 
-import { contentTypeEnum } from '../../../poll';
+import { KycStatus } from '@w3block/sdk-id';
+
+import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
@@ -19,7 +21,7 @@ import { FormCompleteKYCWithoutLayout } from '../../components/FormCompleteKYCWi
 interface CompleteKYCTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;
@@ -50,7 +52,7 @@ export const CompleteKYCTemplateSDK = ({
 
   useEffect(() => {
     if (profile) {
-      if (profile.data.kycStatus !== 'pending') {
+      if (profile.data.kycStatus !== KycStatus.Pending) {
         router.pushConnect(defaultRedirectRoute);
       }
     }
@@ -72,7 +74,7 @@ export const CompleteKYCTemplateSDK = ({
           extraBy={extraBy}
           infoComponent={
             <Box>
-              <FormCompleteKYCWithoutLayout userId={profile?.data.id} />
+              <FormCompleteKYCWithoutLayout userId={profile?.data?.id} />
             </Box>
           }
         />

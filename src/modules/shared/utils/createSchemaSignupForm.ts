@@ -1,4 +1,4 @@
-import { ValidationsValues } from './getValidationsTypesForSignup';
+import { ValidationsValues } from './useGetValidationsTypesForSignup';
 
 export const createSchemaSignupForm = (validates: Array<ValidationsValues>) => {
   const valuesSchema = validates.map(({ validations, yupKey }) => ({

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { isAfter } from 'date-fns';
 
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import { ContainerControllerClasses, ExtraBy, position } from '../../../shared';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -31,7 +31,7 @@ export interface AllAuthPageProps {
   bgColor?: string;
   hasSignUp?: boolean;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;

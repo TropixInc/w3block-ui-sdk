@@ -36,6 +36,7 @@ const InputEmail = ({ label, name, docValue }: InputCPFProps) => {
       setInputValue(docValue);
       field.onChange({ inputId: name, value: docValue });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
 
   return (
