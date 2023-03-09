@@ -6,6 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { ErrorMessage, useProfile } from '../../../shared';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
+import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -26,6 +27,7 @@ export const CheckoutPayment = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
   const shouldLock = useRef(true);
+  const [requestError, setRequestError] = useState(false);
   const profile = useProfile();
   const [sending, setSending] = useState<boolean>(false);
   const { companyId, appBaseUrl } = useCompanyConfig();
@@ -58,6 +60,18 @@ export const CheckoutPayment = () => {
             orderProducts: orderInfo.orderProducts,
             signedGasFee: orderInfo.signedGasFee,
             currencyId: orderInfo.currencyId,
+            paymentMethod: orderInfo.choosedPayment?.paymentMethod,
+            providerInputs: orderInfo.choosedPayment?.inputs
+              ? {
+                  ...orderInfo?.choosedPayment?.inputs?.reduce((acc, val) => {
+                    (acc as any)[val as string] = orderInfo.cpfCnpj
+                      ?.replaceAll('.', '')
+                      .replaceAll('-', '')
+                      .replaceAll('/', '');
+                    return { ...acc };
+                  }, {}),
+                }
+              : undefined,
             destinationWalletAddress:
               profile.data?.data.mainWallet?.address ?? '',
             successUrl:
@@ -68,7 +82,7 @@ export const CheckoutPayment = () => {
           },
         },
         {
-          onSuccess: (data) => {
+          onSuccess: (data: any) => {
             setLoading(false);
             if (data.paymentProvider == PaymentMethod.STRIPE) {
               setIsStripe(data.paymentInfo.clientSecret ?? '');
@@ -78,9 +92,12 @@ export const CheckoutPayment = () => {
             }
             setSending(false);
           },
+          onError: () => {
+            setRequestError(true);
+          },
         }
       );
-    }
+    } else setRequestError(true);
   };
 
   const stripePromise = useMemo(() => {
@@ -92,19 +109,28 @@ export const CheckoutPayment = () => {
   const WichPaymentMethod = () => {
     if (iframeLink) {
       return (
-        <iframe
-          onLoad={(e: SyntheticEvent<HTMLIFrameElement>) => {
-            if (
-              e.currentTarget.contentWindow?.location.hostname ===
-              window?.location.hostname
-            ) {
-              router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
-            }
-          }}
-          ref={iframeRef}
-          className="pw-w-full pw-min-h-screen"
-          src={iframeLink}
-        />
+        <>
+          {productCache?.choosedPayment?.paymentMethod === 'pix' && (
+            <p className="pw-text-center pw-w-[450px] pw-text-sm pw-mx-auto pw-mt-4">
+              Após a conclusão do pagamento, em alguns minutos você poderá
+              visualizar os itens comprados em sua carteira.
+            </p>
+          )}
+
+          <iframe
+            onLoad={(e: SyntheticEvent<HTMLIFrameElement>) => {
+              if (
+                e.currentTarget.contentWindow?.location.hostname ===
+                window?.location.hostname
+              ) {
+                router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
+              }
+            }}
+            ref={iframeRef}
+            className="pw-w-full pw-min-h-screen"
+            src={iframeLink}
+          />
+        </>
       );
     } else if (isStripe && stripePromise) {
       return (
@@ -134,5 +160,26 @@ export const CheckoutPayment = () => {
     }
   };
 
-  return <div className="">{WichPaymentMethod()}</div>;
+  return (
+    <div className="pw-min-h-[95vh]">
+      {requestError ? (
+        <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
+          <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center pw-mx-auto">
+            <p className="pw-font-bold pw-text-black pw-text-center pw-mb-6">
+              Houve um erro de comunicação com o servidor, entre em contato com
+              nosso suporte.
+            </p>
+            <WeblockButton
+              className="pw-text-white"
+              onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
+            >
+              Voltar para a home
+            </WeblockButton>
+          </div>
+        </div>
+      ) : (
+        WichPaymentMethod()
+      )}
+    </div>
+  );
 };
