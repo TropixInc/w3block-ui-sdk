@@ -7,6 +7,7 @@ import { format } from 'date-fns/esm';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
+import useGetPassByUser from '../../../pass/hooks/useGetPassByUser';
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
 import { ReactComponent as DashboardIcon } from '../../assets/icons/dashboard.svg';
@@ -51,6 +52,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const formatedDate = format(createdAt, 'dd/MM/yyyy');
   const [tabsToShow, setTabsToShow] = useState(tabs);
   const { pass } = useFlags();
+  const { data: passData } = useGetPassByUser();
+  const hasPassAssociated =
+    passData?.data.items.length !== 0 && passData?.data.items !== undefined;
 
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
@@ -87,13 +91,13 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         title: translate('components>menu>tokenPass'),
         icon: <TicketIcon width={17} height={17} />,
         link: PixwayAppRoutes.TOKENPASS,
-        isVisible: pass && isAdmin,
+        isVisible: pass && isAdmin && hasPassAssociated,
       },
       {
         title: translate('components>menu>clients'),
         icon: <DashIcon width={17} height={17} />,
         link: PixwayAppRoutes.TOKENS_CLIENTS,
-        isVisible: !isProduction && isAdmin,
+        isVisible: false,
         sub: true,
       },
       {

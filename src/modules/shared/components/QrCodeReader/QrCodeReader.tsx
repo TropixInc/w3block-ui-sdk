@@ -8,6 +8,7 @@ import { Html5QrcodeCameraScanConfig } from 'html5-qrcode/esm/html5-qrcode';
 import { useRouter } from 'next/router';
 
 import { ReactComponent as LoadingIcon } from '../../../shared/assets/icons/loading.svg';
+import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
 import { ReactComponent as W3block } from '../../assets/images/w3blockWhite.svg';
 import useTranslation from '../../hooks/useTranslation';
 
@@ -15,9 +16,15 @@ interface iProps {
   hasOpen: boolean;
   setHasOpen: () => void;
   returnValue: (i: string) => void;
+  onClose?: () => void;
 }
 
-export const QrCodeReader = ({ hasOpen, setHasOpen, returnValue }: iProps) => {
+export const QrCodeReader = ({
+  hasOpen,
+  setHasOpen,
+  returnValue,
+  onClose,
+}: iProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [translate] = useTranslation();
 
@@ -60,6 +67,7 @@ export const QrCodeReader = ({ hasOpen, setHasOpen, returnValue }: iProps) => {
         onScanFailure
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasOpen]);
 
   return hasOpen ? (
@@ -69,7 +77,15 @@ export const QrCodeReader = ({ hasOpen, setHasOpen, returnValue }: iProps) => {
         isLoading ? 'pw-bg-[#353945]' : 'pw-bg-black/90'
       )}
     >
-      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[55px] pw-text-white pw-font-bold pw-text-[18px] pw-leading-[23px] pw-text-center">
+      <div className="pw-flex pw-flex-col pw-justify-center -pw-mt-[100px] pw-items-center pw-gap-[55px] pw-text-white pw-font-bold pw-text-[18px] pw-leading-[23px] pw-text-center">
+        <button
+          onClick={onClose}
+          className={classNames(
+            'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center'
+          )}
+        >
+          <XIcon className="pw-pw-fill-[#5682C3]" />
+        </button>
         <W3block className="pw-w-[109px] pw-h-5" />
         <p className="">
           {translate(

@@ -11,6 +11,8 @@ import {
   TypeError,
 } from '../../../shared/components/QrCodeReader/QrCodeError';
 import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
+import { Spinner } from '../../../shared/components/Spinner';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
 import { Button } from '../../../tokens/components/Button';
@@ -25,7 +27,7 @@ import { PassBenefitDTO, TokenPassBenefitType } from '../../interfaces/PassBenef
 import { BaseTemplate } from '../BaseTemplate';
 
 interface TableRow {
-  name: string;
+  name: ReactNode;
   local: string;
   period?: string;
   status?: ReactNode;
@@ -77,10 +79,16 @@ export const PassesDetail = () => {
 
       const action = compareAsc(new Date(benefit.eventEndsAt), new Date()) ?
         <Button variant='primary' onClick={() => handleAction()}>Validar</Button>
-        : <Button variant='secondary' onClick={() => handleAction()}> Relatório</Button>
+        : null
+
+      const BenefitName = () => {
+        return <a href={PixwayAppRoutes.BENEFIT_DETAILS.replace('{benefitId}', benefit.id)}>
+          {benefit.name}
+        </a>
+      }  
 
       const formatted: TableRow = {
-        name: benefit.name,
+        name: <BenefitName/>,
         local: formatAddress({ type: benefit?.type, benefit: benefit }),
         period,
         status: <StatusTag status={benefit.status} />,
@@ -88,7 +96,7 @@ export const PassesDetail = () => {
       };
 
       const formmatedMobile: TableRow = {
-        name: benefit.name,
+        name: <BenefitName/>,
         local: formatAddress({ type: benefit?.type, benefit: benefit }),
         status: statusMobile({ status: benefit?.status }),
         action,
@@ -98,6 +106,7 @@ export const PassesDetail = () => {
     });
 
     return data || [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [benefits, isMobile]);
 
   const headers: ColumnType<TableRow, keyof TableRow>[] = useMemo(() => isMobile ? [
@@ -162,11 +171,16 @@ export const PassesDetail = () => {
           </div> 
         </div>
 
-        {isLoadingBenefits ? <>Carregando...</> :
+        {isLoadingBenefits ? 
+          <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+            <Spinner />
+          </div> :
           <GenericTable
             columns={headers}
             data={formatedData}
             showPagination={true}
+            limitRowsNumber={isMobile ? 3 : 5}
+            itensPerPage={isMobile ? 3 : 5}
           />
         }
       </div>
@@ -177,13 +191,17 @@ export const PassesDetail = () => {
           <QrCodeReader
             hasOpen={showScan}
             setHasOpen={() => setOpenScan()}
-            returnValue={(e) => validatePassToken(e)} />
+            returnValue={(e) => validatePassToken(e)} 
+            onClose={() => setOpenScan(false)}
+            />
           <QrCodeValidated
             hasOpen={showSuccess}
             onClose={() => setShowSuccess(false)}
             tokenPassId={tokenPassId}
             chainId={chainId}
-            contractAddress={contractAddress} />
+            contractAddress={contractAddress} 
+            validateAgain={() => setOpenScan()}
+            />
           <QrCodeError
             hasOpen={showError}
             onClose={() => setShowError(false)}

@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import useRouter from '../../../shared/hooks/useRouter';
-import useTranslation from '../../../shared/hooks/useTranslation';
 import { DataGridPagination } from '../DataGridPagination';
 import TableHeader from '../TableHeader/TableHeader';
 import TableRows from '../TableRow/TableRow';
@@ -27,8 +25,6 @@ const GenericTable = <T, K extends keyof T>({
   showPagination = false,
   itensPerPage = 10,
 }: TableProps<T, K>): JSX.Element => {
-  const [translate] = useTranslation();
-  const router = useRouter();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -54,17 +50,7 @@ const GenericTable = <T, K extends keyof T>({
           limitRowsNumber={limitRowsNumber}
         />
       </div>
-      {data?.length > limitRowsNumber ? (
-        <div className="pw-w-full pw-flex pw-items-center pw-justify-end">
-          <span
-            className="pw-text-brand-primary pw-text-xs pw-font-medium pw-font-poppins pw-cursor-pointer"
-            onClick={() => router.push(`${router.asPath}/list-benefits`)}
-          >
-            {translate('connect>GenericTable>seeMore')}
-          </span>
-        </div>
-      ) : null}
-      {showPagination && totalPages > 2 ? (
+      {showPagination && totalPages >= 2 ? (
         <DataGridPagination
           changePage={setPage}
           totalPages={totalPages}

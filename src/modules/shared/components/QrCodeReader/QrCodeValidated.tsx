@@ -1,15 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { useMemo } from 'react';
-import { useLockBodyScroll } from 'react-use';
+import { useLockBodyScroll } from 'react-use'; 
 
+import classNames from 'classnames';
 import { format, getDay } from 'date-fns';
+
 
 import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
 import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
-import { useProfile } from '../../../shared';
 import { ReactComponent as CheckCircledIcon } from '../../assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as InformationCircledIcon } from '../../assets/icons/informationCircled.svg';
-import useRouter from '../../hooks/useRouter';
+import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
 import useTranslation from '../../hooks/useTranslation';
 import { shortDays } from '../../utils/shortDays';
 import { Button } from '../Buttons';
@@ -20,6 +19,7 @@ interface iProps {
   tokenPassId: string;
   chainId: string;
   contractAddress: string;
+  validateAgain: () => void;
 }
 
 export const QrCodeValidated = ({
@@ -28,42 +28,34 @@ export const QrCodeValidated = ({
   chainId,
   contractAddress,
   tokenPassId,
+  validateAgain,
 }: iProps) => {
-  const router = useRouter();
-
-  const { data: profile } = useProfile();
-  const user = profile?.data;
-
+  const [translate] = useTranslation();
   const { data: benefit } = useGetPassBenefits({
     contractAddress,
     chainId,
     tokenPassId,
   });
 
-  const [translate] = useTranslation();
-
-  const eventDate = useMemo(() => {
-    if (benefit?.data?.items[0]?.eventEndsAt) {
-      return new Date(benefit?.data?.items[0]?.eventEndsAt)
-    } else if (!benefit?.data?.items[0]?.eventEndsAt && benefit?.data?.items[0]?.eventStartsAt) {
-      return new Date(benefit?.data?.items[0]?.eventStartsAt)
-    } else {
-      return new Date()
-    }
-  }, [benefit?.data?.items]);
-
   useLockBodyScroll(hasOpen);
 
   const time = `${new Date().getHours()}:${new Date().getMinutes()}`;
 
+  const handleNext = () => {
+    onClose();
+    validateAgain();
+  }
+
   return hasOpen ? (
     <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
-      <div
-        className="pw-rounded-full pw-flex pw-justify-center pw-items-center pw-w-9 pw-h-9 pw-text-xs pw-text-[#353945] pw-border pw-border-[#777E8F] pw-absolute pw-top-4 pw-right-4 pw-cursor-pointer"
-        onClick={onClose}
-      >
-        x
-      </div>
+      <button
+          onClick={onClose}
+          className={classNames(
+            'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center'
+          )}
+        >
+          <XIcon className="pw-pw-fill-[#5682C3]" />
+        </button>
 
       <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
         <CheckCircledIcon className="pw-w-[60px] pw-h-[60px] pw-stroke-[#76DE8D]" />
@@ -85,13 +77,13 @@ export const QrCodeValidated = ({
         <div className="pw-flex pw-gap-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
           <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
             <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
-              {shortDays[getDay(eventDate)]}
+              {shortDays[getDay(new Date())]}
             </div>
             <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
-              {format(eventDate, 'dd MMM yyyy')}
+              {format(new Date(), 'dd MMM yyyy')}
             </div>
             <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945] pw-text-center">
-              {format(eventDate, "HH'h'mm")}
+              {format(new Date(), "HH'h'mm")}
             </div>
           </div>
           <div className="pw-h-[119px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
@@ -112,65 +104,28 @@ export const QrCodeValidated = ({
                 Online
               </div>
             )}
-            <div className="pw-flex pw-gap-1">
-              <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
-                {translate('token>pass>use')}
-              </span>
-              <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-                {benefit?.data?.items[0]?.useLimit === 1
-                  ? translate('token>pass>unique')
-                  : translate('token>pass>youStillHave', {
-                    quantity: benefit?.data?.items[0]?.useLimit,
-                  })}
-              </div>
-            </div>
           </div>
         </div>
       </div>
-
-      <div className="pw-border pw-border-[#EFEFEF] pw-shadow-[2px_2px_10px_rgba(0, 0,0,0.08)] pw-rounded-2xl pw-w-full">
-        <div className="pw-border-y pw-border-[#EFEFEF] pw-w-full pw-py-4 pw-flex pw-gap-1 pw-justify-center pw-items-center">
-          <InformationCircledIcon />
-          {translate('token>pass>validatedToken>userDetails')}
-        </div>
-        <div className="pw-border-y pw-border-[#EFEFEF] pw-px-4 pw-py-3">
-          <p className="pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-[#777E8F]">
-            {translate('token>pass>validatedToken>name')}
-          </p>
-          <p className="pw-font-semibold pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
-            {user?.name}
-          </p>
-        </div>
-
-        <div className="pw-border-y pw-border-[#EFEFEF] pw-px-4 pw-py-3">
-          <p className="pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-[#777E8F]">
-            {translate('token>pass>validatedToken>email')}
-          </p>
-          <p className="pw-font-semibold pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
-            {user?.email}
-          </p>
-        </div>
-        {user?.phone ? (
-          <div className="pw-border-y pw-border-[#EFEFEF] pw-px-4 pw-py-3">
-            <p className="pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-[#777E8F]">
-              {translate('token>pass>validatedToken>phone')}
-            </p>
-            <p className="pw-font-semibold pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
-              {user?.phone}
-            </p>
-          </div>
-        ) : (
-          <></>
-        )}
+      <div className='pw-col'>
+        <Button
+          type="button"
+          model="secondary"
+          width="full"
+          onClick={onClose}
+        >
+          {translate('token>pass>validatedToken>back')}
+        </Button>
+        <Button
+          type="button"
+          model="primary"
+          width="full"
+          className='mt-5'
+          onClick={handleNext}
+        >
+          Validar outro QRCode
+        </Button>
       </div>
-      <Button
-        type="button"
-        model="secondary"
-        width="full"
-        onClick={() => router.back()}
-      >
-        {translate('token>pass>validatedToken>back')}
-      </Button>
     </div>
   ) : (
     <></>

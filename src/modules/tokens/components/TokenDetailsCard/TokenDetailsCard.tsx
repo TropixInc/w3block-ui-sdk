@@ -7,6 +7,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
+import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
 import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
@@ -46,6 +47,7 @@ interface Props {
   contractAddress?: string;
   tokenId?: string;
   collectionId?: string;
+  editionNumber?: string;
 }
 
 export const TokenDetailsCard = ({
@@ -60,6 +62,7 @@ export const TokenDetailsCard = ({
   chainId,
   contractAddress,
   collectionId,
+  editionNumber,
 }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
@@ -73,6 +76,11 @@ export const TokenDetailsCard = ({
     tokenPassId: collectionId,
     chainId: chainId,
     contractAddress: contractAddress,
+  });
+
+  const { data: benefitsByEdition } = useGetBenefitsByEditionNumber({
+    tokenPassId: collectionId as string,
+    editionNumber: parseInt(editionNumber || ''),
   });
 
   const isMultiplePass = useMemo(() => {
@@ -130,6 +138,7 @@ export const TokenDetailsCard = ({
     if (status == BenefitStatus.active) {
       return (
         <Button
+          className="pw-w-full"
           onClick={() =>
             router.pushConnect(
               PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', id).concat(
@@ -144,6 +153,7 @@ export const TokenDetailsCard = ({
     } else {
       return (
         <Button
+          className="pw-w-full"
           variant="secondary"
           onClick={() =>
             router.pushConnect(
@@ -159,20 +169,30 @@ export const TokenDetailsCard = ({
     }
   };
 
-  const tableData = benefitsList?.data?.items?.map((benefit) => ({
-    name: benefit.name,
-    type: benefit.type,
+  const type = (type: string) => {
+    if (type === 'physical') return translate('token>pass>typePhysical');
+    else return translate('token>pass>typeDigital');
+  };
+
+  const tableLocale = benefitsList?.data?.items?.map((benefit) => ({
+    id: benefit.id,
     local: benefit?.tokenPassBenefitAddresses
       ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
       : handleLocal(benefit.type),
+  }));
+
+  const tableData = benefitsByEdition?.data?.items?.map((benefit) => ({
+    name: benefit.name,
+    type: type(benefit?.type),
+    local: tableLocale?.find((value) => value.id === benefit.id)?.local,
     date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
     status: <StatusTag status={benefit.status} />,
     actionComponent: handleButtonToShow(benefit.status, benefit.id),
   }));
 
-  const mobileTableData = benefitsList?.data?.items?.map((benefit) => ({
+  const mobileTableData = benefitsByEdition?.data?.items?.map((benefit) => ({
     name: benefit?.name,
-    type: benefit?.type,
+    type: type(benefit?.type),
     status: <StatusTag status={benefit?.status} />,
     actionComponent: handleButtonToShow(benefit?.status, benefit.id),
   }));
@@ -195,6 +215,7 @@ export const TokenDetailsCard = ({
             </p>
             {isMobile && mobileTableData ? (
               <GenericTable
+                showPagination
                 columns={mobileHeaders}
                 data={mobileTableData}
                 limitRowsNumber={3}
@@ -203,6 +224,7 @@ export const TokenDetailsCard = ({
             ) : null}
             {!isMobile && tableData ? (
               <GenericTable
+                showPagination
                 columns={headers}
                 data={tableData}
                 limitRowsNumber={5}

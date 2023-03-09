@@ -48,4 +48,5 @@ export enum PixwayAPIRoutes {
   GET_THEME = '/projects/get-theme',
   GET_PAGE = '/projects/get-page',
   PRODUCT_BY_SLUG = '/companies/{companyId}/products/get-by-slug/{slug}',
+  PASS_BENEFITS_BY_EDITION = 'token-passes/tenants/{tenantId}/{id}/token-editions/{editionNumber}/benefits',
 }

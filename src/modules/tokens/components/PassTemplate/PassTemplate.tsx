@@ -6,8 +6,8 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { formatAddressProps } from '../../../pass';
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
+import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
 import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
-import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
 import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
 import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { InternalPagesLayoutBase } from '../../../shared';
@@ -16,6 +16,8 @@ import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/chec
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
@@ -63,10 +65,11 @@ const _PassTemplate = ({
   });
 
   const { data: benefitsResponse, isLoading: isLoadingBenefitsResponse } =
-    useGetPassBenefits({
-      contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
-      chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
+    useGetBenefitsByEditionNumber({
       tokenPassId: publicTokenResponse?.data?.group?.collectionId ?? '',
+      editionNumber: parseInt(
+        publicTokenResponse?.data?.edition?.currentNumber ?? ''
+      ),
     });
 
   const benefitData = benefitsResponse?.data.items.filter(
@@ -92,7 +95,11 @@ const _PassTemplate = ({
 
   const waitCheckin =
     secret?.data?.statusCode === 400 &&
-    secret?.data?.message?.includes('check -in until Invalid date');
+    secret?.data?.message?.includes('check -in at Invalid date');
+
+  const reachedUsageLimit =
+    secret?.data?.statusCode === 400 &&
+    secret?.data?.message?.includes('reached the usage limit');
 
   const mode = useMemo(() => {
     if (benefit?.data?.useLimit == 0) {
@@ -100,7 +107,8 @@ const _PassTemplate = ({
     } else if (
       secret?.data?.statusCode === 400 &&
       !hasExpired &&
-      !waitCheckin
+      !waitCheckin &&
+      !reachedUsageLimit
     ) {
       return 'error-read';
     } else {
@@ -111,6 +119,7 @@ const _PassTemplate = ({
     secret?.data?.statusCode,
     hasExpired,
     waitCheckin,
+    reachedUsageLimit,
   ]);
 
   const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
@@ -126,6 +135,15 @@ const _PassTemplate = ({
     }
   };
 
+  const chainScanLink = useChainScanLink(
+    benefit?.data?.tokenPass?.chainId,
+    publicTokenResponse?.data?.edition?.mintedHash
+  );
+  const addresBlockchainLink = useAdressBlockchainLink(
+    benefit?.data?.tokenPass?.chainId,
+    benefit?.data?.tokenPass?.contractAddress
+  );
+
   const detailsToken = [
     {
       title: 'token>pass>tokenName',
@@ -137,13 +155,13 @@ const _PassTemplate = ({
       title: 'token>pass>linkBlockchain',
       description: '',
       copyDescription: false,
-      titleLink: 'd',
+      titleLink: addresBlockchainLink,
     },
     {
       title: 'token>pass>mintedBy',
       description: publicTokenResponse?.data?.edition?.mintedHash,
       copyDescription: true,
-      titleLink: 'd',
+      titleLink: chainScanLink,
     },
     {
       title: 'token>pass>network',
@@ -174,8 +192,16 @@ const _PassTemplate = ({
   const isUnavaible =
     benefitData && benefitData[0]?.status === BenefitStatus.unavailable;
 
+  const isDynamic = benefitData && benefitData[0]?.dynamicQrCode;
+
+  const usesLeft =
+    benefitData &&
+    benefitData[0]?.useLimit - benefitData[0]?.tokenPassBenefitUses.length;
+
   return isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken ? (
-    <Spinner />
+    <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+      <Spinner />
+    </div>
   ) : mode.includes('error') ? (
     mode === 'error-read' ? (
       <ErrorTemplate
@@ -203,24 +229,17 @@ const _PassTemplate = ({
 
       {successValidation == 'true' && <UsedPass />}
 
-      {isInactive && (
+      {(isInactive || waitCheckin) && (
         <InfoPass
           title={translate('token>pass>inactivePass')}
           description={translate('token>pass>inactivePassMessage')}
         />
       )}
 
-      {hasExpired && isUnavaible && (
+      {(hasExpired || reachedUsageLimit) && isUnavaible && (
         <InfoPass
           title={translate('token>pass>passUnavailable')}
           description={translate('token>pass>passUnavailableMessage')}
-        />
-      )}
-
-      {waitCheckin && isUnavaible && (
-        <InfoPass
-          title={translate('token>pass>passUnavailable')}
-          description={translate('token>pass>passOutsideCheckin')}
         />
       )}
 
@@ -280,20 +299,20 @@ const _PassTemplate = ({
                     {benefit?.data?.useLimit === 1
                       ? translate('token>pass>unique')
                       : translate('token>pass>youStillHave', {
-                          quantity: benefit?.data?.useLimit,
+                          quantity: usesLeft,
                         })}
                   </div>
                 </div>
               )}
             </div>
           </div>
-          {isInactive && (
+          {!waitCheckin && isInactive && (
             <InactiveDateUseToken
               eventDate={new Date(benefit?.data?.eventStartsAt || '')}
               title={translate('token>pass>useThisTokenFrom')}
             />
           )}
-          {hasExpired ? (
+          {hasExpired && isUnavaible && (
             <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
               <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
                 {today
@@ -307,8 +326,8 @@ const _PassTemplate = ({
                 </span>
               </div>
             </div>
-          ) : null}
-          {waitCheckin ? (
+          )}
+          {waitCheckin && isInactive && (
             <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
               <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
                 {translate('token>pass>checkinAvaibleAt')}
@@ -319,7 +338,7 @@ const _PassTemplate = ({
                 </span>
               </div>
             </div>
-          ) : null}
+          )}
         </div>
 
         {!hasExpired &&
@@ -330,19 +349,22 @@ const _PassTemplate = ({
         isSecretSucceed ? (
           <QrCodeSection
             eventDate={new Date(benefit?.data?.eventEndsAt)}
-            tokenId={publicTokenResponse?.data?.token?.tokenId ?? ''}
             hasExpiration={hasExpiration}
             hasExpired={hasExpired}
             editionNumber={
               publicTokenResponse?.data?.edition?.currentNumber as string
             }
             secret={secret?.data?.secret}
+            isDynamic={isDynamic ?? false}
           />
         ) : null}
       </div>
 
       <>
-        <DetailsTemplate title={translate('token>pass>detailsPass')}>
+        <DetailsTemplate
+          title={translate('token>pass>detailsPass')}
+          autoExpand={true}
+        >
           <DetailPass
             title={translate('token>pass>description')}
             description={benefit?.data?.description ?? ''}
@@ -355,7 +377,10 @@ const _PassTemplate = ({
         </DetailsTemplate>
 
         {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
-          <DetailsTemplate title={translate('token>pass>useLocale')}>
+          <DetailsTemplate
+            title={translate('token>pass>useLocale')}
+            autoExpand={true}
+          >
             {benefit?.data?.tokenPassBenefitAddresses?.map((address) => (
               <div
                 key={address?.name}
@@ -400,14 +425,6 @@ const _PassTemplate = ({
           </div>
         </DetailsTemplate>
       </>
-
-      <div className="pw-flex pw-justify-center pw-items-center pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
-        {translate('token>pass>purchaseMade', {
-          date: '14/02/2022',
-          time: '15:51',
-          order: '1528',
-        })}
-      </div>
 
       {successValidation && pass ? (
         <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">

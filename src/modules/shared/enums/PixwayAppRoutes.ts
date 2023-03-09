@@ -41,4 +41,5 @@ export enum PixwayAppRoutes {
   LIST_BENEFITS = '/tokens/{contractAddress}/{chainId}/{tokenId}/list-benefits',
   INTEGRATION = '/integration',
   USE_BENEFIT = '/tokens/use-benefit/{benefitId}',
+  BENEFIT_DETAILS = '/tokens/benefit-details/{benefitId}',
 }
