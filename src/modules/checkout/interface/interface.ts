@@ -4,16 +4,25 @@ import { OrderStatus, PaymentMethod } from '../enum';
 export interface OrderPreviewResponse {
   products: Product[];
   cartPrice?: string;
-  serviceFee?: string;
+  clientServiceFee?: string;
   gasFee?: GasFee;
   totalPrice?: string;
+  providersForSelection?: PaymentMethodsAvaiable[];
 }
 
+export interface PaymentMethodsAvaiable {
+  paymentMethod: string;
+  paymentProvider: string;
+  inputs: string[];
+}
 export interface OrderPreviewCache {
   currencyId: string;
   product: Product;
   orderProducts: OrderProductsInterface[];
   signedGasFee: string;
+  totalPrice: string;
+  choosedPayment?: PaymentMethodsAvaiable;
+  cpfCnpj?: string;
 }
 
 interface OrderProductsInterface {
@@ -28,6 +37,8 @@ export interface CreateOrder {
   addressId?: string;
   signedGasFee: string;
   successUrl: string;
+  paymentMethod?: string;
+  providerInputs?: unknown;
 }
 
 export interface CreateOrderProduct {
@@ -52,7 +63,7 @@ export interface CreateOrderResponse {
   paymentMethod: string;
   paymentProvider: PaymentMethod;
   providerTransactionId: string;
-  serviceFee: string;
+  clientServiceFee: string;
   status: OrderStatus;
   updatedAt: string;
   userId: string;

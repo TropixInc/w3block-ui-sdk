@@ -69,14 +69,21 @@ export const Card = ({
           style={{ color: styleData.cardValueColor ?? 'black' }}
           className="pw-font-bold pw-text-lg pw-mt-2"
         >
-          <span className="pw-text-sm pw-pr-2">
-            {product.prices[0].currency.symbol}
-          </span>
-          {product.prices[0].amount}
+          {product.stockAmount == 0 ? (
+            'Esgotado'
+          ) : (
+            <>
+              <span className="pw-text-sm pw-pr-2">
+                {product.prices[0].currency.symbol}
+              </span>
+              {product.prices[0].amount}
+            </>
+          )}
         </p>
       )}
       {styleData.cardActionButton && (
         <button
+          disabled={product.stockAmount == 0}
           style={
             {
               boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.26)',

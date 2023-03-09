@@ -24,7 +24,7 @@ export enum PixwayAppRoutes {
   CHECKOUT_PROCESSING = '/checkout/processing',
   CHECKOUT_COMPLETED = '/checkout/completed',
   PROFILE = '/profile',
-  MY_TOKENS = '/tokens',
+  MY_TOKENS = '/wallet',
   WALLET = '/wallet',
   SETTINGS = '/settings',
   HELP = '/help',
@@ -39,7 +39,7 @@ export enum PixwayAppRoutes {
   ADD_FUNDS_MANUAL = '/addFunds/type/manual',
   VERIfY_WITH_CODE = '/auth/verify-sign-up/code',
   LIST_BENEFITS = '/tokens/{contractAddress}/{chainId}/{tokenId}/list-benefits',
-  INTEGRATION = '/integration',
+  CONNECTION = '/connection',
   USE_BENEFIT = '/tokens/use-benefit/{benefitId}',
   BENEFIT_DETAILS = '/tokens/benefit-details/{benefitId}',
 }

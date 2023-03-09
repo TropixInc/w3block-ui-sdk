@@ -13,7 +13,7 @@ import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutline
 import { ReactComponent as DashboardIcon } from '../../assets/icons/dashboard.svg';
 // import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as DashIcon } from '../../assets/icons/dashOutlined.svg';
-import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
+//import { ReactComponent as ImageIcon } from '../../assets/icons/imageOutlined.svg';
 import { ReactComponent as IntegrationIcon } from '../../assets/icons/integrationIconOutlined.svg';
 // import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
@@ -75,12 +75,12 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         link: PixwayAppRoutes.PROFILE,
         isVisible: true,
       },
-      {
-        title: translate('components>menu>myTokens'),
-        icon: <ImageIcon width={17} height={17} />,
-        link: PixwayAppRoutes.TOKENS,
-        isVisible: true,
-      },
+      // {
+      //   title: translate('components>menu>myTokens'),
+      //   icon: <ImageIcon width={17} height={17} />,
+      //   link: PixwayAppRoutes.TOKENS,
+      //   isVisible: true,
+      // },
       {
         title: translate('components>menu>wallet'),
         icon: <CardIcon width={17} height={17} />,
@@ -103,7 +103,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       {
         title: translate('components>menu>integration'),
         icon: <IntegrationIcon width={17} height={17} />,
-        link: PixwayAppRoutes.INTEGRATION,
+        link: PixwayAppRoutes.CONNECTION,
         isVisible: true,
       },
       // {

@@ -16,8 +16,9 @@ import { WalletTokenCard } from '../WalletTokenCard';
 import { TokenListTemplateSkeleton } from './Skeleton';
 
 interface Props {
-  tokens: Array<Token>;
-  isLoading: boolean;
+  tokens?: Array<Token>;
+  isLoading?: boolean;
+  withLayout?: boolean;
 }
 
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
@@ -30,19 +31,19 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 6;
     const lastIndex = page * 6;
-    return tokens.slice(startIndex, lastIndex);
+    return tokens?.slice(startIndex, lastIndex);
   }, [page, tokens]);
 
   // console.log('tokensDisplaying', tokensDisplaying);
 
   useEffect(() => {
     if (!isLoading) {
-      setTotalPages(Math.ceil(tokens.length / 6));
+      setTotalPages(Math.ceil(tokens?.length ? tokens.length : 1 / 6));
     }
   }, [tokens, isLoading]);
 
   if (isLoading) return <TokenListTemplateSkeleton />;
-  return tokensDisplaying.length || data?.length ? (
+  return tokensDisplaying?.length || data?.length ? (
     <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between pw-px-4 sm:pw-px-0">
       <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
         {data?.map((token) => (
@@ -58,7 +59,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
             />
           </li>
         ))}
-        {tokensDisplaying.map((token) => (
+        {tokensDisplaying?.map((token) => (
           <li className="w-full" key={token.id}>
             <WalletTokenCard
               category={token.category || ''}
@@ -81,7 +82,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
     </div>
   ) : (
     <div className="pw-flex pw-flex-1 pw-px-10 pw-flex-col pw-relative pw-font-poppins pw-items-center pw-justify-start sm:pw-justify-center pw-mb-13">
-      <h1 className="pw-font-semibold pw-ctext-[15px] pw-leading-[22px] pw-block sm:pw-hidden pw-mb-[61px]">
+      <h1 className="pw-font-semibold pw-ctext-[15px] pw-leading-[22px]  pw-hidden pw-mb-[61px]">
         {translate('connectTokens>tokensList>pageTitle')}
       </h1>
 
@@ -102,7 +103,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   );
 };
 
-export const TokensListTemplate = () => {
+export const TokensListTemplate = ({ withLayout = true }: Props) => {
   const { isLoading, isAuthorized } = usePrivateRoute();
 
   const { isLoading: isLoadingProfile } = useProfile();
@@ -120,12 +121,19 @@ export const TokensListTemplate = () => {
 
   return isLoading || !isAuthorized ? null : (
     <TranslatableComponent>
-      <InternalPagesLayoutBase>
+      {withLayout ? (
+        <InternalPagesLayoutBase>
+          <_TokensListTemplate
+            tokens={tokens}
+            isLoading={isLoadingETH || isLoadingProfile}
+          />
+        </InternalPagesLayoutBase>
+      ) : (
         <_TokensListTemplate
           tokens={tokens}
           isLoading={isLoadingETH || isLoadingProfile}
         />
-      </InternalPagesLayoutBase>
+      )}
     </TranslatableComponent>
   );
 };
