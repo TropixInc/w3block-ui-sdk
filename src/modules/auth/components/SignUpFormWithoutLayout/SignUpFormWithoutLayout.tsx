@@ -9,6 +9,8 @@ import { object, string, boolean } from 'yup';
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { useSignUp } from '../../hooks/useSignUp';
 import { AuthButton } from '../AuthButton';
@@ -49,6 +51,7 @@ export const SignUpFormWithoutLayout = ({
   hasSignUp = true,
 }: Props) => {
   const passwordSchema = usePasswordValidationSchema();
+  const { appBaseUrl, connectProxyPass } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const [step, setStep] = useState(Steps.SIGN_UP);
@@ -71,12 +74,22 @@ export const SignUpFormWithoutLayout = ({
     }
   }, [isSuccess]);
 
+  const queryString = new URLSearchParams(router.query as any).toString();
+
   const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
     mutate({
       confirmation,
       email,
       password,
+      callbackUrl:
+        removeDoubleSlashesOnUrl(
+          appBaseUrl +
+            connectProxyPass +
+            PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION
+        ) +
+        '?' +
+        queryString,
     });
   };
 

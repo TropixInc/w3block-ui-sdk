@@ -55,6 +55,9 @@ export const SigInWithoutLayout = ({
     LocalStorageFields.AUTHENTICATION_CALLBACK,
     ''
   );
+  const queryString = new URLSearchParams(
+    (router.query as any) ?? {}
+  ).toString();
 
   const schema = object().shape({
     email: string()
@@ -75,7 +78,7 @@ export const SigInWithoutLayout = ({
   });
 
   useEffect(() => {
-    if (session) router.pushConnect(getRedirectUrl());
+    if (session) router.pushConnect(getRedirectUrl(), router.query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
 
@@ -176,7 +179,9 @@ export const SigInWithoutLayout = ({
               <Trans i18nKey={'auth>signIn>signUpCTA'}>
                 Não tem conta ainda?
                 <a
-                  href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}
+                  href={router.routerToHref(
+                    PixwayAppRoutes.SIGN_UP + '?' + queryString
+                  )}
                   className="pw-text-brand-primary pw-underline"
                 >
                   Cadastre-se.

@@ -116,13 +116,13 @@ const Slide = ({
       >
         <h2
           style={{ color: titleColor ?? 'white' }}
-          className={`${alignmentTextClass} pw-font-semibold pw-text-4xl pw-max-w-[400px]`}
+          className={`${alignmentTextClass} pw-font-semibold pw-text-4xl pw-max-w-[550px]`}
         >
           {title}
         </h2>
         <p
           style={{ color: subtitleColor ?? 'white' }}
-          className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[230px]`}
+          className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
         >
           {subtitle}
         </p>

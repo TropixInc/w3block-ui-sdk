@@ -24,6 +24,7 @@ export const useGetPageModules = () => {
         .get(PixwayAPIRoutes.GET_PAGE + `?url=${href}`)
         .then((data) => data.data),
     {
+      retry: 0,
       enabled:
         href != undefined &&
         href != '' &&

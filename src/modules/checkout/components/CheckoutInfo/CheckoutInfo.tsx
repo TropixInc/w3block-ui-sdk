@@ -256,9 +256,9 @@ const _CheckoutInfo = ({
       </div>
     </div>
   ) : (
-    <div className="pw-flex">
+    <div className="pw-flex pw-flex-col sm:pw-flex-row">
       {orderPreview?.providersForSelection?.length && (
-        <div className="pw-order-2 sm:pw-order-1 pw-w-full sm:pw-w-auto">
+        <div className=" pw-w-full sm:pw-w-auto">
           <p className="pw-text-[18px] pw-w-[200px] pw-font-[700]">
             Forma de pagamento
           </p>
@@ -287,7 +287,7 @@ const _CheckoutInfo = ({
         </div>
       )}
 
-      <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-order-1 sm:pw-order-2">
+      <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-mt-6 sm:pw-mt-0">
         {choosedPayment?.paymentMethod == 'pix' && (
           <>
             <p className="pw-text-[18px] pw-font-[700]">

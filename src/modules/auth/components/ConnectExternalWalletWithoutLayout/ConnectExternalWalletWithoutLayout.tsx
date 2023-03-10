@@ -62,7 +62,7 @@ const _ConnectExternalWalletWithoutLayout = ({
   const { companyId } = useCompanyConfig();
   const token = useToken();
   const router = useRouterConnect();
-  const { data: profile } = useProfile();
+  const { data: profile, refetch } = useProfile();
   const { status } = usePixwaySession();
   const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
@@ -76,7 +76,11 @@ const _ConnectExternalWalletWithoutLayout = ({
       const { wallets } = user;
 
       if (wallets?.length) {
-        router.pushConnect(redirectRoute);
+        router.pushConnect(
+          router.query.callbackPath
+            ? (router.query.callbackPath as string)
+            : redirectRoute
+        );
       } else {
         if (forceVault) {
           onClickContinue();
@@ -130,7 +134,12 @@ const _ConnectExternalWalletWithoutLayout = ({
       onCreateWalletSuccessfully();
     } catch (error: any) {
       if (!error?.message || error.message == '') {
-        router.pushConnect(redirectLink ?? redirectRoute);
+        if (router.query.callbackPath) {
+          router.pushConnect(router.query.callbackPath as string);
+        } else {
+          router.pushConnect(redirectLink ?? redirectRoute);
+        }
+
         return;
       }
       console.error(error);
@@ -158,8 +167,15 @@ const _ConnectExternalWalletWithoutLayout = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCreateWalletSuccessfully = () => {
-    setIsConnecting(false);
-    router.pushConnect(redirectLink ?? redirectRoute);
+    refetch().then(() => {
+      setIsConnecting(false);
+      if (router.query.callbackPath) {
+        router.pushConnect(router.query.callbackPath as string);
+      } else {
+        router.pushConnect(redirectLink ?? redirectRoute);
+      }
+    });
+
     //queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
   };
 

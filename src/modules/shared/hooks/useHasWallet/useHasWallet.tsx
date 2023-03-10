@@ -20,6 +20,8 @@ export const useHasWallet = ({
   const router = useRouterConnect();
 
   useEffect(() => {
+    const routerToRedirect =
+      redirectRoute + `?callbackPath=${window.location.href}`;
     if (onlyWithSession) {
       if (
         !profile?.data.mainWallet &&
@@ -28,7 +30,7 @@ export const useHasWallet = ({
         isSuccess &&
         session
       ) {
-        router.pushConnect(redirectRoute);
+        router.pushConnect(routerToRedirect);
       }
     } else {
       if (
@@ -37,7 +39,7 @@ export const useHasWallet = ({
         router.isReady &&
         isSuccess
       ) {
-        router.pushConnect(redirectRoute);
+        router.pushConnect(routerToRedirect);
       }
     }
 
