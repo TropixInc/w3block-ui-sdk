@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.171](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.170...v0.1.1-alpha.171) (2023-03-10)
+
+
+### Features
+
+* add rich text to constructor modules ([96846b0](https://github.com/TropixInc/w3block-ui-sdk/commit/96846b0b79e83c2a139e42f03f83b0dbce194570))
+
+
+### Bug Fixes
+
+* add video for token checkout ([35e1610](https://github.com/TropixInc/w3block-ui-sdk/commit/35e16109bbdad68b3c41d2c8e149b63bd43da990))
+* import order ([d5cbe31](https://github.com/TropixInc/w3block-ui-sdk/commit/d5cbe3111ff94bebd47a9bd99af3769817ee8e38))
+* support for videos on banner ([f4a9ab9](https://github.com/TropixInc/w3block-ui-sdk/commit/f4a9ab9176632c97c46e8fa61e1b43de26e1e3ed))
+* use image sdk component ([ca10b77](https://github.com/TropixInc/w3block-ui-sdk/commit/ca10b772ed6f10aa4cca0d8aa9752146f9276555))
+
 ### [0.1.1-alpha.170](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.169...v0.1.1-alpha.170) (2023-03-09)
 
 ### [0.1.1-alpha.169](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.168...v0.1.1-alpha.169) (2023-03-07)
