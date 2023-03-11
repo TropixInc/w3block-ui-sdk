@@ -14,6 +14,7 @@ interface ProductInfoProps {
   currency?: CurrencyEnum;
   quantity?: number;
   changeQuantity?: (n: number) => void;
+  stockAmount: number;
 }
 
 export const ProductInfo = ({
@@ -26,8 +27,11 @@ export const ProductInfo = ({
   loading = false,
   currency = CurrencyEnum.BRL,
   changeQuantity,
+  stockAmount,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
+  const maxUp = stockAmount > 5 ? 5 : stockAmount;
+
   const StatusToShow = () => {
     switch (status) {
       case CheckoutStatus.FINISHED:
@@ -89,7 +93,9 @@ export const ProductInfo = ({
             <p
               className=" pw-cursor-pointer pw-text-[#353945]"
               onClick={() =>
-                changeQuantity?.(quantity && quantity < 5 ? quantity + 1 : 5)
+                changeQuantity?.(
+                  quantity && quantity < maxUp ? quantity + 1 : maxUp
+                )
               }
             >
               +

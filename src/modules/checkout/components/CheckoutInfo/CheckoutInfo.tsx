@@ -328,6 +328,7 @@ const _CheckoutInfo = ({
         <ProductInfo
           currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
           quantity={quantity}
+          stockAmount={orderPreview?.products[0].stockAmount ?? 1}
           changeQuantity={changeQuantity}
           loading={isLoading}
           status={checkoutStatus}

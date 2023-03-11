@@ -26,7 +26,6 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
   const [quantity, setQuantity] = useState(1);
   const [quantityOpen, setQuantityOpen] = useState(false);
   const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
-  const possibleValues = [1, 2, 3, 4, 5];
   const categories: any[] = [];
   return (
     <div
@@ -116,48 +115,56 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     : ''}
                 </p>
               )}
-              {data.styleData.actionButton && (
-                <div>
-                  <div ref={refToClickAway} className="pw-mt-4">
-                    <p className="pw-text-sm pw-text-black pw-mb-1">
-                      Quantidade
-                    </p>
-                    <div
-                      onClick={() => setQuantityOpen(!quantityOpen)}
-                      className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
-                        quantityOpen
-                          ? 'pw-border-none pw-bg-white'
-                          : 'pw-border pw-border-black'
-                      }`}
-                    >
-                      <p className="pw-text-xs pw-font-[600] pw-text-black">
-                        {quantity}
+              {data.styleData.actionButton &&
+                product?.stockAmount &&
+                product?.stockAmount > 0 && (
+                  <div>
+                    <div ref={refToClickAway} className="pw-mt-4">
+                      <p className="pw-text-sm pw-text-black pw-mb-1">
+                        Quantidade
                       </p>
-                      <ArrowDown className="pw-stroke-black" />
-                    </div>
-                    {quantityOpen && (
-                      <div className="pw-relative">
-                        <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
-                          <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
-                          <div className=""></div>
-                          {possibleValues.map((val) => (
-                            <p
-                              onClick={() => {
-                                setQuantity(val);
-                                setQuantityOpen(false);
-                              }}
-                              key={val}
-                              className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
-                            >
-                              {val}
-                            </p>
-                          ))}
-                        </div>
+                      <div
+                        onClick={() => setQuantityOpen(!quantityOpen)}
+                        className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
+                          quantityOpen
+                            ? 'pw-border-none pw-bg-white'
+                            : 'pw-border pw-border-black'
+                        }`}
+                      >
+                        <p className="pw-text-xs pw-font-[600] pw-text-black">
+                          {quantity}
+                        </p>
+                        <ArrowDown className="pw-stroke-black" />
                       </div>
-                    )}
+                      {quantityOpen && (
+                        <div className="pw-relative">
+                          <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
+                            <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
+                            <div className=""></div>
+                            {Array(
+                              product?.stockAmount && product?.stockAmount > 5
+                                ? 5
+                                : product?.stockAmount
+                            )
+                              .fill(0)
+                              .map((val, index) => (
+                                <p
+                                  onClick={() => {
+                                    setQuantity(index + 1);
+                                    setQuantityOpen(false);
+                                  }}
+                                  key={index}
+                                  className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
+                                >
+                                  {index + 1}
+                                </p>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
               {data.styleData.showCategory && product?.tags?.length ? (
                 <>
                   <p
