@@ -12,16 +12,20 @@ interface ProductInfoProps {
   className?: string;
   loading?: boolean;
   currency?: CurrencyEnum;
+  quantity?: number;
+  changeQuantity?: (n: number) => void;
 }
 
 export const ProductInfo = ({
   image,
   name,
+  quantity,
   status,
   price,
   className,
   loading = false,
   currency = CurrencyEnum.BRL,
+  changeQuantity,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const StatusToShow = () => {
@@ -64,6 +68,36 @@ export const ProductInfo = ({
           )}
         </div>
       </div>
+      <div>
+        <p className="pw-text-center pw-text-[#353945] pw-text-[10px]">
+          Quant.
+        </p>
+        <div className="pw-flex pw-gap-x-4 pw-items-center pw-justify-center">
+          {status == CheckoutStatus.CONFIRMATION && (
+            <p
+              onClick={() =>
+                changeQuantity?.(quantity && quantity > 1 ? quantity - 1 : 1)
+              }
+              className=" pw-cursor-pointer pw-text-[#353945]"
+            >
+              -
+            </p>
+          )}
+
+          <p className="pw-text-sm pw-text-[#353945]">{quantity}</p>
+          {status == CheckoutStatus.CONFIRMATION && (
+            <p
+              className=" pw-cursor-pointer pw-text-[#353945]"
+              onClick={() =>
+                changeQuantity?.(quantity && quantity < 5 ? quantity + 1 : 5)
+              }
+            >
+              +
+            </p>
+          )}
+        </div>
+      </div>
+
       {loading ? (
         <Shimmer className="pw-w-[80px] pw-h-6" />
       ) : (

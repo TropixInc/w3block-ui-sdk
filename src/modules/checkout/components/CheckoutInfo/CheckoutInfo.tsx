@@ -45,6 +45,7 @@ const _CheckoutInfo = ({
   const [requestError, setRequestError] = useState(false);
   const [cpfError, setCpfError] = useState(false);
   const { getOrderPreview } = useCheckout();
+  const [quantity, setQuantity] = useState(1);
   const [translate] = useTranslation();
   const [productCache, setProductCache, deleteKey] =
     useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
@@ -91,8 +92,9 @@ const _CheckoutInfo = ({
     } else {
       const preview = productCache;
       if (preview) {
+        setQuantity(preview.products?.length);
         setOrderPreview({
-          products: [preview.product],
+          products: [...preview.products],
           totalPrice: preview.totalPrice,
         });
       }
@@ -119,6 +121,7 @@ const _CheckoutInfo = ({
             if (data && data.providersForSelection?.length) {
               setChoosedPayment(data.providersForSelection[0]);
             }
+            setQuantity(data.products.length);
             setOrderPreview(data);
           },
           onError: () => {
@@ -157,7 +160,7 @@ const _CheckoutInfo = ({
         };
       });
       setProductCache({
-        product: orderPreview.products[0],
+        products: orderPreview.products,
         orderProducts,
         currencyId: currencyIdState || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
@@ -171,6 +174,11 @@ const _CheckoutInfo = ({
     } else {
       router.pushConnect(PixwayAppRoutes.CHECKOUT_PAYMENT + '?' + query);
     }
+  };
+
+  const changeQuantity = (n: number) => {
+    setQuantity(n);
+    setProductIds(Array(n).fill(productIds?.[0]));
   };
 
   const _ButtonsToShow = () => {
@@ -319,6 +327,8 @@ const _CheckoutInfo = ({
         )}
         <ProductInfo
           currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
+          quantity={quantity}
+          changeQuantity={changeQuantity}
           loading={isLoading}
           status={checkoutStatus}
           className="pw-mt-3"
