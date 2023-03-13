@@ -1,4 +1,8 @@
+import { useRef, useState } from 'react';
+import { useClickAway } from 'react-use';
+
 import { useRouterConnect } from '../../shared';
+import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
@@ -13,8 +17,16 @@ interface ProductPageProps {
 
 export const ProductPage = ({ data, params }: ProductPageProps) => {
   const { back, pushConnect } = useRouterConnect();
+  const refToClickAway = useRef<HTMLDivElement>(null);
+  useClickAway(refToClickAway, () => {
+    if (quantityOpen) {
+      setQuantityOpen(false);
+    }
+  });
+  const [quantity, setQuantity] = useState(1);
+  const [quantityOpen, setQuantityOpen] = useState(false);
   const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
-  const categories = [{ name: 'tenis' }, { name: 'nike' }];
+  const categories: any[] = [];
   return (
     <div
       style={{
@@ -103,6 +115,56 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     : ''}
                 </p>
               )}
+              {data.styleData.actionButton &&
+                product?.stockAmount &&
+                product?.stockAmount > 0 && (
+                  <div>
+                    <div ref={refToClickAway} className="pw-mt-4">
+                      <p className="pw-text-sm pw-text-black pw-mb-1">
+                        Quantidade
+                      </p>
+                      <div
+                        onClick={() => setQuantityOpen(!quantityOpen)}
+                        className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
+                          quantityOpen
+                            ? 'pw-border-none pw-bg-white'
+                            : 'pw-border pw-border-black'
+                        }`}
+                      >
+                        <p className="pw-text-xs pw-font-[600] pw-text-black">
+                          {quantity}
+                        </p>
+                        <ArrowDown className="pw-stroke-black" />
+                      </div>
+                      {quantityOpen && (
+                        <div className="pw-relative">
+                          <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
+                            <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
+                            <div className=""></div>
+                            {Array(
+                              product?.stockAmount && product?.stockAmount > 5
+                                ? 5
+                                : product?.stockAmount
+                            )
+                              .fill(0)
+                              .map((val, index) => (
+                                <p
+                                  onClick={() => {
+                                    setQuantity(index + 1);
+                                    setQuantityOpen(false);
+                                  }}
+                                  key={index}
+                                  className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
+                                >
+                                  {index + 1}
+                                </p>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               {data.styleData.showCategory && product?.tags?.length ? (
                 <>
                   <p
@@ -137,7 +199,11 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     if (product?.id && product.prices) {
                       pushConnect(
                         PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                          `?productIds=${product.id}&currencyId=${product.prices[0].currencyId}`
+                          `?productIds=${Array(quantity)
+                            .fill(product.id)
+                            .join(',')}&currencyId=${
+                            product.prices[0].currencyId
+                          }`
                       );
                     }
                   }}

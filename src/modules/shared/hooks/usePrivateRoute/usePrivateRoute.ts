@@ -28,7 +28,7 @@ export const usePrivateRoute = (
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.pushConnect(redirectRoute);
+      router.pushConnect(redirectRoute, { callbackPath: window.location.href });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status === 'loading', redirectRoute]);

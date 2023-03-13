@@ -107,11 +107,35 @@ export const CheckoutPayment = () => {
   }, [isStripe, stripeKey]);
 
   const WichPaymentMethod = () => {
-    if (iframeLink) {
+    if (productCache?.choosedPayment?.paymentMethod == 'pix' && iframeLink) {
+      return (
+        <div className="pw-container pw-mx-auto pw-h-full">
+          <div className="pw-flex pw-justify-center pw-items-center pw-h-full">
+            <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-items-center pw-justify-center pw-mt-10 sm:pw-mt-15 pw-px-4">
+              <p className="pw-text-center pw-max-w-[450px] pw-text-slate-700 pw-text-sm pw-font-[600] pw-mx-auto pw-mt-4">
+                Após a conclusão do pagamento, em alguns minutos você poderá
+                visualizar os itens comprados em sua carteira.
+              </p>
+              <p className="pw-text-center pw-font-semibold pw-text-black pw-mt-6">
+                Clique no link abaixo para efetuar o pagamento
+              </p>
+              <a
+                className="pw-mt-2 pw-text-center pw-font-bold pw-text-brand-primary pw-underline"
+                target="_blank"
+                href={iframeLink}
+                rel="noreferrer"
+              >
+                {iframeLink}
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (iframeLink) {
       return (
         <>
           {productCache?.choosedPayment?.paymentMethod === 'pix' && (
-            <p className="pw-text-center pw-w-[450px] pw-text-sm pw-mx-auto pw-mt-4">
+            <p className="pw-text-center pw-max-w-[450px] pw-text-sm pw-mx-auto pw-mt-4">
               Após a conclusão do pagamento, em alguns minutos você poderá
               visualizar os itens comprados em sua carteira.
             </p>

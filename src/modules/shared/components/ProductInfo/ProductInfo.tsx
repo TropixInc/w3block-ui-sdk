@@ -1,6 +1,7 @@
 import { CheckoutStatus } from '../../../checkout';
 import { CurrencyEnum, currencyMap } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
+import { ImageSDK } from '../ImageSDK';
 import { Shimmer } from '../Shimmer';
 interface ProductInfoProps {
   status?: CheckoutStatus;
@@ -11,19 +12,26 @@ interface ProductInfoProps {
   className?: string;
   loading?: boolean;
   currency?: CurrencyEnum;
+  quantity?: number;
+  changeQuantity?: (n: number) => void;
+  stockAmount: number;
 }
 
 export const ProductInfo = ({
   image,
   name,
-  //id,
+  quantity,
   status,
   price,
   className,
   loading = false,
   currency = CurrencyEnum.BRL,
+  changeQuantity,
+  stockAmount,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
+  const maxUp = stockAmount > 5 ? 5 : stockAmount;
+
   const StatusToShow = () => {
     switch (status) {
       case CheckoutStatus.FINISHED:
@@ -47,31 +55,55 @@ export const ProductInfo = ({
           <Shimmer className="!pw-w-[48px] !pw-h-[48px] pw-rounded-lg " />
         ) : (
           <div className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-overflow-hidden">
-            <img
-              className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
+            <ImageSDK
               src={image}
+              className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
             />
           </div>
         )}
 
         <div className="pw-flex pw-flex-col pw-flex-1 pw-overflow-ellipsis pw-overflow-hidden ">
           {loading ? (
-            <>
-              <Shimmer className="pw-mb-1 pw-w-[120px]" />{' '}
-              {/* <Shimmer className="pw-mb-1 pw-w-[190px]" /> */}
-            </>
+            <Shimmer className="pw-mb-1 pw-w-[120px]" />
           ) : (
-            <>
-              <p className="pw-font-[600] pw-text-sm pw-text-[#353945] pw-min-w-0 pw-truncate">
-                {name}
-              </p>
-              {/* <p className="pw-font-[600] pw-max-w-[130px] sm:pw-max-w-full pw-text-xs pw-min-w-0 pw-text-[#353945] pw-truncate">
-                {id}
-              </p> */}
-            </>
+            <p className="pw-font-[600] pw-text-sm pw-text-[#353945] pw-min-w-0 pw-truncate">
+              {name}
+            </p>
           )}
         </div>
       </div>
+      <div>
+        <p className="pw-text-center pw-text-[#353945] pw-text-[10px]">
+          Quant.
+        </p>
+        <div className="pw-flex pw-gap-x-4 pw-items-center pw-justify-center">
+          {status == CheckoutStatus.CONFIRMATION && (
+            <p
+              onClick={() =>
+                changeQuantity?.(quantity && quantity > 1 ? quantity - 1 : 1)
+              }
+              className=" pw-cursor-pointer pw-text-[#353945]"
+            >
+              -
+            </p>
+          )}
+
+          <p className="pw-text-sm pw-text-[#353945]">{quantity}</p>
+          {status == CheckoutStatus.CONFIRMATION && (
+            <p
+              className=" pw-cursor-pointer pw-text-[#353945]"
+              onClick={() =>
+                changeQuantity?.(
+                  quantity && quantity < maxUp ? quantity + 1 : maxUp
+                )
+              }
+            >
+              +
+            </p>
+          )}
+        </div>
+      </div>
+
       {loading ? (
         <Shimmer className="pw-w-[80px] pw-h-6" />
       ) : (

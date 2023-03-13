@@ -45,6 +45,7 @@ const _CheckoutInfo = ({
   const [requestError, setRequestError] = useState(false);
   const [cpfError, setCpfError] = useState(false);
   const { getOrderPreview } = useCheckout();
+  const [quantity, setQuantity] = useState(1);
   const [translate] = useTranslation();
   const [productCache, setProductCache, deleteKey] =
     useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
@@ -91,8 +92,9 @@ const _CheckoutInfo = ({
     } else {
       const preview = productCache;
       if (preview) {
+        setQuantity(preview.products?.length);
         setOrderPreview({
-          products: [preview.product],
+          products: [...preview.products],
           totalPrice: preview.totalPrice,
         });
       }
@@ -119,6 +121,7 @@ const _CheckoutInfo = ({
             if (data && data.providersForSelection?.length) {
               setChoosedPayment(data.providersForSelection[0]);
             }
+            setQuantity(data.products.length);
             setOrderPreview(data);
           },
           onError: () => {
@@ -157,7 +160,7 @@ const _CheckoutInfo = ({
         };
       });
       setProductCache({
-        product: orderPreview.products[0],
+        products: orderPreview.products,
         orderProducts,
         currencyId: currencyIdState || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
@@ -171,6 +174,11 @@ const _CheckoutInfo = ({
     } else {
       router.pushConnect(PixwayAppRoutes.CHECKOUT_PAYMENT + '?' + query);
     }
+  };
+
+  const changeQuantity = (n: number) => {
+    setQuantity(n);
+    setProductIds(Array(n).fill(productIds?.[0]));
   };
 
   const _ButtonsToShow = () => {
@@ -256,9 +264,9 @@ const _CheckoutInfo = ({
       </div>
     </div>
   ) : (
-    <div className="pw-flex">
+    <div className="pw-flex pw-flex-col sm:pw-flex-row">
       {orderPreview?.providersForSelection?.length && (
-        <div className="pw-order-2 sm:pw-order-1 pw-w-full sm:pw-w-auto">
+        <div className=" pw-w-full sm:pw-w-auto">
           <p className="pw-text-[18px] pw-w-[200px] pw-font-[700]">
             Forma de pagamento
           </p>
@@ -287,7 +295,7 @@ const _CheckoutInfo = ({
         </div>
       )}
 
-      <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-order-1 sm:pw-order-2">
+      <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-mt-6 sm:pw-mt-0">
         {choosedPayment?.paymentMethod == 'pix' && (
           <>
             <p className="pw-text-[18px] pw-font-[700]">
@@ -319,6 +327,9 @@ const _CheckoutInfo = ({
         )}
         <ProductInfo
           currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
+          quantity={quantity}
+          stockAmount={orderPreview?.products[0].stockAmount ?? 1}
+          changeQuantity={changeQuantity}
           loading={isLoading}
           status={checkoutStatus}
           className="pw-mt-3"

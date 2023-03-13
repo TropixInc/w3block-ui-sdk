@@ -6,6 +6,7 @@ export const removeDoubleSlashesOnUrl = (url: string) => {
   const http = url.includes('http:');
   let urlThreat = url
     .replace(https ? 'https://' : 'http://', '')
+    .replace('///', '/')
     .replace('//', '/');
   if (!https && !http) {
     return urlThreat;
