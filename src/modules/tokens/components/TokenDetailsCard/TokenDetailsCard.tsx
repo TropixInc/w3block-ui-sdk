@@ -17,7 +17,11 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { headers, mobileHeaders } from '../../const/GenericTableHeaders';
+import {
+  headers,
+  mobileHeaders,
+  TableRow,
+} from '../../const/GenericTableHeaders';
 import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
 import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';
 import {
@@ -174,28 +178,41 @@ export const TokenDetailsCard = ({
     else return translate('token>pass>typeDigital');
   };
 
-  const tableLocale = benefitsList?.data?.items?.map((benefit) => ({
-    id: benefit.id,
-    local: benefit?.tokenPassBenefitAddresses
-      ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
-      : handleLocal(benefit.type),
-  }));
+  const formatedData = useMemo(() => {
+    const tableLocale = benefitsList?.data?.items?.map((benefit) => ({
+      id: benefit.id,
+      local: benefit?.tokenPassBenefitAddresses
+        ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
+        : handleLocal(benefit.type),
+    }));
 
-  const tableData = benefitsByEdition?.data?.items?.map((benefit) => ({
-    name: benefit.name,
-    type: type(benefit?.type),
-    local: tableLocale?.find((value) => value.id === benefit.id)?.local,
-    date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
-    status: <StatusTag status={benefit.status} />,
-    actionComponent: handleButtonToShow(benefit.status, benefit.id),
-  }));
+    const data = benefitsByEdition?.data?.items.map((benefit) => {
+      const tableData: TableRow = {
+        name: benefit.name,
+        type: type(benefit?.type),
+        local: tableLocale?.find((value) => value.id === benefit.id)?.local,
+        date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
+        status: <StatusTag status={benefit.status} />,
+        actionComponent: handleButtonToShow(benefit.status, benefit.id),
+      };
 
-  const mobileTableData = benefitsByEdition?.data?.items?.map((benefit) => ({
-    name: benefit?.name,
-    type: type(benefit?.type),
-    status: <StatusTag status={benefit?.status} />,
-    actionComponent: handleButtonToShow(benefit?.status, benefit.id),
-  }));
+      const mobileTableData: TableRow = {
+        name: benefit?.name,
+        type: type(benefit?.type),
+        status: <StatusTag status={benefit?.status} />,
+        actionComponent: handleButtonToShow(benefit?.status, benefit.id),
+      };
+      return isMobile ? mobileTableData : tableData;
+    });
+
+    return data || [];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [benefitsList, benefitsByEdition, isMobile]);
+
+  const formattedHeaders = useMemo(
+    () => (isMobile ? mobileHeaders : headers),
+    [isMobile]
+  );
 
   return (
     <div
@@ -213,24 +230,15 @@ export const TokenDetailsCard = ({
             <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
               {translate('connect>TokenDetailCard>passAssociated')}
             </p>
-            {isMobile && mobileTableData ? (
+            {formatedData && (
               <GenericTable
                 showPagination
-                columns={mobileHeaders}
-                data={mobileTableData}
-                limitRowsNumber={3}
-                itensPerPage={3}
+                columns={formattedHeaders}
+                data={formatedData}
+                limitRowsNumber={isMobile ? 3 : 5}
+                itensPerPage={isMobile ? 3 : 5}
               />
-            ) : null}
-            {!isMobile && tableData ? (
-              <GenericTable
-                showPagination
-                columns={headers}
-                data={tableData}
-                limitRowsNumber={5}
-                itensPerPage={5}
-              />
-            ) : null}
+            )}
           </div>
         </>
       ) : null}

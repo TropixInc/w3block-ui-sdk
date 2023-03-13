@@ -4,12 +4,14 @@ import classNames from 'classnames';
 import { format, getDay, isSameDay, isToday } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
-import { formatAddressProps } from '../../../pass';
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
 import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
 import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
-import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
+import {
+  PassBenefitDTO,
+  TokenPassBenefitType,
+} from '../../../pass/interfaces/PassBenefitDTO';
 import { InternalPagesLayoutBase } from '../../../shared';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
@@ -33,6 +35,11 @@ interface PassTemplateProps {
   tokenIdProp?: string;
   benefitIdProp?: string;
   successValidationProp?: string;
+}
+
+interface formatAddressProps {
+  type: TokenPassBenefitType;
+  benefit: PassBenefitDTO;
 }
 
 const _PassTemplate = ({

@@ -82,7 +82,7 @@ export interface TokenPassEntity {
   tokenPassBenefits: TokenPassBenefits[];
 }
 
-interface TokenPassBenefits {
+export interface TokenPassBenefits {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -100,10 +100,10 @@ interface TokenPassBenefits {
   dynamicQrCode: boolean;
   tokenPassId: string;
   tokenPassBenefitAddresses: BenefitAddress[];
-  tokenPassBenefitOperator: TokenPassBenefitOperator[];
+  tokenPassBenefitOperators: tokenPassBenefitOperators[];
 }
 
-interface TokenPassBenefitOperator {
+interface tokenPassBenefitOperators {
   id: string;
   createdAt: string;
   updatedAt: string;

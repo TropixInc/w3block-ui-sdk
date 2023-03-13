@@ -7,7 +7,7 @@ export interface TableRow {
   type?: string;
   local?: string;
   date?: string;
-  status?: string;
+  status?: ReactNode;
   actionComponent?: ReactNode;
 }
 

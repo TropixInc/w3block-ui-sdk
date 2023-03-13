@@ -234,7 +234,7 @@
   "token>pass>checkedTime": "Check in feito as {{time}}",
   "token>pass>tokenPage": "Página do token",
   "token>pass>passUnavailable": "Pass indisponível",
-  "token>pass>passUnavailableMessage": "Esse token está indisponível no momento, você ja fez a utilizacao permitida ou a data ja foi expirada.",
+  "token>pass>passUnavailableMessage": "Esse token está indisponível no momento, você ja fez a utilização permitida ou a data ja foi expirada.",
   "token>pass>tokenExpiredIn": "Token expirado em",
   "token>pass>tokenExpiredAt": "Token expirado às ",
   "token>pass>generateNewQrCode": "Gerar novo QR Code",
