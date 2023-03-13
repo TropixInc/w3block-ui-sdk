@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
+import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
@@ -11,9 +12,10 @@ interface InputCPFProps {
   name: string;
 
   docValue?: string;
+  docStatus?: UserDocumentStatus;
 }
 
-const InputCpf = ({ label, name, docValue }: InputCPFProps) => {
+const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
   const { field } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
 
@@ -38,7 +40,7 @@ const InputCpf = ({ label, name, docValue }: InputCPFProps) => {
   };
 
   useEffect(() => {
-    if (docValue) {
+    if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
       setInputValue(docValue);
       field.onChange({ inputId: name, value: docValue });
     }
@@ -48,7 +50,9 @@ const InputCpf = ({ label, name, docValue }: InputCPFProps) => {
     <div className="pw-mb-3">
       <AuthFormController label={label} name={name}>
         <input
-          readOnly={Boolean(docValue)}
+          readOnly={Boolean(
+            docValue && docStatus !== UserDocumentStatus.RequiredReview
+          )}
           name={name}
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}

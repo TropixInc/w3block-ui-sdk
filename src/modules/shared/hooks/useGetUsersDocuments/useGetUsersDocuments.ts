@@ -15,6 +15,10 @@ export const useGetUsersDocuments = ({ userId, contextId }: Params) => {
   return usePrivateQuery([userId, contextId], async () => {
     const sdk = await getSDKId();
 
-    return sdk.api.users.getAllByContext(tenantId, userId, contextId);
+    return sdk.api.users.getAllByContextByUserIdAndContextId(
+      tenantId,
+      userId,
+      contextId
+    );
   });
 };

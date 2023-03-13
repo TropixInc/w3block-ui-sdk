@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
+import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import isEmail from 'validator/lib/isEmail';
 
@@ -10,9 +11,10 @@ interface InputCPFProps {
   label: string;
   name: string;
   docValue?: string;
+  docStatus?: UserDocumentStatus;
 }
 
-const InputEmail = ({ label, name, docValue }: InputCPFProps) => {
+const InputEmail = ({ label, name, docValue, docStatus }: InputCPFProps) => {
   const { field } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [isValid, setIsValid] = useState(true);
@@ -32,7 +34,7 @@ const InputEmail = ({ label, name, docValue }: InputCPFProps) => {
   };
 
   useEffect(() => {
-    if (docValue) {
+    if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
       setInputValue(docValue);
       field.onChange({ inputId: name, value: docValue });
     }
@@ -44,7 +46,9 @@ const InputEmail = ({ label, name, docValue }: InputCPFProps) => {
       <AuthFormController label={label} name={name}>
         <input
           name={name}
-          readOnly={Boolean(docValue)}
+          readOnly={Boolean(
+            docValue && docStatus !== UserDocumentStatus.RequiredReview
+          )}
           onChange={(e) => handleChange(e.target.value)}
           onBlur={validEmail}
           value={inputValue}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
+import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import isURL from 'validator/lib/isURL';
 
@@ -10,9 +11,10 @@ interface InputUrlProps {
   label: string;
   name: string;
   docValue?: string;
+  docStatus?: UserDocumentStatus;
 }
 
-const InputUrl = ({ label, name, docValue }: InputUrlProps) => {
+const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
   const { field } = useController({ name });
   const [url, setUrl] = useState('');
   const [validUrl, setValidUrl] = useState<boolean | undefined>();
@@ -36,7 +38,11 @@ const InputUrl = ({ label, name, docValue }: InputUrlProps) => {
   };
 
   useEffect(() => {
-    if (docValue && isURL(docValue)) {
+    if (
+      docValue &&
+      isURL(docValue) &&
+      docStatus !== UserDocumentStatus.RequiredReview
+    ) {
       setUrl(docValue);
       field.onChange({ inputId: name, value: docValue });
     }
@@ -48,7 +54,11 @@ const InputUrl = ({ label, name, docValue }: InputUrlProps) => {
       <AuthFormController label={label} name={name}>
         <input
           name={name}
-          readOnly={Boolean(docValue && isURL(docValue))}
+          readOnly={Boolean(
+            docValue &&
+              docStatus !== UserDocumentStatus.RequiredReview &&
+              isURL(docValue)
+          )}
           type="url"
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}

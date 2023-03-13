@@ -2,7 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useController } from 'react-hook-form';
 
-import { AssetTargetEnum, AssetTypeEnum } from '@w3block/sdk-id';
+import {
+  AssetTargetEnum,
+  AssetTypeEnum,
+  UserDocumentStatus,
+} from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
@@ -17,9 +21,16 @@ interface InputFileProps {
   name: string;
   docValue?: string;
   assetId?: string | null;
+  docStatus?: UserDocumentStatus;
 }
 
-const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
+const InputFile = ({
+  label,
+  name,
+  docValue,
+  assetId,
+  docStatus,
+}: InputFileProps) => {
   const [translate] = useTranslation();
   const [isInvalidFile, _] = useState(false);
   const { field } = useController({ name });
@@ -51,7 +62,9 @@ const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: ['.png', '.jpeg', '.jpg', '.pdf'],
-    disabled: Boolean(docValue),
+    // disabled: Boolean(
+    //   docValue && docStatus !== UserDocumentStatus.RequiredReview
+    // ),
   });
 
   useEffect(() => {
@@ -69,14 +82,18 @@ const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
   }, [isSuccess, data, assets]);
 
   useEffect(() => {
-    if (docValue && assetId) {
+    if (
+      docValue &&
+      assetId &&
+      docStatus !== UserDocumentStatus.RequiredReview
+    ) {
       field.onChange({ inputId: name, assetId: assetId });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
 
   const renderName = () => {
-    if (docValue) {
+    if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
       return docValue;
     } else {
       return file && file.name
@@ -95,7 +112,12 @@ const InputFile = ({ label, name, docValue, assetId }: InputFileProps) => {
           )}
           {...getRootProps()}
         >
-          <input {...getInputProps()} readOnly={Boolean(docValue)} />
+          <input
+            {...getInputProps()}
+            readOnly={Boolean(
+              docValue && docStatus !== UserDocumentStatus.RequiredReview
+            )}
+          />
           <FileIcon className="pw-w-4" />
           <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
             {renderName()}

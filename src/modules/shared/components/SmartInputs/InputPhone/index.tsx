@@ -3,6 +3,7 @@ import { useController } from 'react-hook-form';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import Input from 'react-phone-number-input/input';
 
+import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
@@ -12,9 +13,10 @@ interface InputPhoneProps {
   name: string;
 
   docValue?: string;
+  docStatus?: UserDocumentStatus;
 }
 
-const InputPhone = ({ label, name, docValue }: InputPhoneProps) => {
+const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
   const { field } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [invalidNumber, onChangeInvalidNumber] = useState(false);
@@ -29,7 +31,7 @@ const InputPhone = ({ label, name, docValue }: InputPhoneProps) => {
   };
 
   useEffect(() => {
-    if (docValue) {
+    if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
       setInputValue(docValue);
       field.onChange({ inputId: name, value: docValue });
     }
@@ -39,7 +41,9 @@ const InputPhone = ({ label, name, docValue }: InputPhoneProps) => {
     <div className="pw-mb-3">
       <AuthFormController label={label} name={name}>
         <Input
-          readOnly={Boolean(docValue)}
+          readOnly={Boolean(
+            docValue && docStatus !== UserDocumentStatus.RequiredReview
+          )}
           name={name}
           value={inputValue}
           onChange={handleChange}

@@ -1,4 +1,4 @@
-import { DataTypesEnum } from '@w3block/sdk-id';
+import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
 
 import InputCpf from '../SmartInputs/InputCpf';
 import InputEmail from '../SmartInputs/InputEmail';
@@ -13,6 +13,8 @@ interface SmartProps {
   name: string;
   value?: string;
   assetId?: string | null;
+
+  docStatus?: UserDocumentStatus;
 }
 
 const SmartInputsController = ({
@@ -21,19 +23,55 @@ const SmartInputsController = ({
   type,
   value,
   assetId,
+  docStatus,
 }: SmartProps) => {
   const renderInput = () => {
     switch (type) {
       case DataTypesEnum.Cpf:
-        return <InputCpf label={label} name={name} docValue={value} />;
+        return (
+          <InputCpf
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
       case DataTypesEnum.Text:
-        return <InputText label={label} name={name} docValue={value} />;
+        return (
+          <InputText
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
       case DataTypesEnum.Phone:
-        return <InputPhone label={label} name={name} docValue={value} />;
+        return (
+          <InputPhone
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
       case DataTypesEnum.Email:
-        return <InputEmail label={label} name={name} docValue={value} />;
+        return (
+          <InputEmail
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
       case DataTypesEnum.Url:
-        return <InputUrl label={label} name={name} docValue={value} />;
+        return (
+          <InputUrl
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
       case DataTypesEnum.File:
         return (
           <InputFile
@@ -41,6 +79,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             assetId={assetId}
+            docStatus={docStatus}
           />
         );
     }

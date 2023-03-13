@@ -11,6 +11,6 @@ export const useGetTenantContext = () => {
   return useQuery([], async () => {
     const sdk = await getSDK();
 
-    return await sdk.api.tenantContext.findAll(tenantId as string);
+    return await sdk.api.tenantContext.findTenantContext(tenantId as string);
   });
 };
