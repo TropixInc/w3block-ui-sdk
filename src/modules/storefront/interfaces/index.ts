@@ -112,6 +112,7 @@ export interface BannerData extends MainModuleThemeInterface {
 export interface SpecificBannerInfo {
   backgroundColor?: string;
   backgroundUrl?: AssetInterface;
+  backgroundUrlMobile?: AssetInterface;
   overlay?: boolean;
   overlayColor?: string;
   textAligment?: AlignmentEnum;
