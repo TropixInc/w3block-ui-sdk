@@ -1,4 +1,4 @@
-import { CSSProperties, useLayoutEffect, useState } from 'react';
+import { CSSProperties } from 'react';
 
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,6 +11,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import {
+  useBreakpoints,
+  breakpointsEnum,
+} from '../../shared/hooks/useBreakpoints/useBreakpoints';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const {
@@ -62,21 +66,6 @@ export const Banner = ({ data }: { data: BannerData }) => {
   );
 };
 
-function useWindowSize() {
-  const [size, setSize] = useState(361);
-
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize(window.innerWidth);
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
-  return size;
-}
-
 const Slide = ({
   data,
   ratioClassName,
@@ -113,10 +102,13 @@ const Slide = ({
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
 
-  const width = useWindowSize();
+  const breakpoint = useBreakpoints();
 
   const bgUrl =
-    backgroundUrlMobile && width <= 360 ? backgroundUrlMobile : backgroundUrl;
+    backgroundUrlMobile &&
+    (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
+      ? backgroundUrlMobile
+      : backgroundUrl;
 
   return (
     <div
