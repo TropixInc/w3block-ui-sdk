@@ -114,7 +114,6 @@ const Slide = ({
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
 
   const width = useWindowSize();
-  console.log(width);
 
   const bgUrl =
     backgroundUrlMobile && width <= 360 ? backgroundUrlMobile : backgroundUrl;
