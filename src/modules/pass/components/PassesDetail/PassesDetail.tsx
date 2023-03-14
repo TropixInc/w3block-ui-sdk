@@ -62,19 +62,19 @@ export const PassesDetail = () => {
   const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
 
   const formatedData = useMemo(() => {
-    const filteredBenefits = tokenPass?.data.tokenPassBenefits.filter(benefit => {
-      const isOperatorForBenefit = !! benefit.tokenPassBenefitOperators.find(operator => operator.userId === user?.id);
+    const filteredBenefits = tokenPass?.data?.tokenPassBenefits?.filter(benefit => {
+      const isOperatorForBenefit = benefit.tokenPassBenefitOperators?.some(operator => operator.userId === user?.id);
       return isOperatorForBenefit;
     })
 
-    const benefitStatus = benefits?.data.items.map((benefit) => ({
+    const benefitStatus = benefits?.data?.items?.map((benefit) => ({
       id: benefit?.id,
       status: benefit?.status,
     }));
 
     
     const data = filteredBenefits?.map((benefit) => {
-      const period = benefit?.eventEndsAt ?
+      const period = Date.parse(benefit?.eventEndsAt) ?
       format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') + ' - ' +
       format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
       

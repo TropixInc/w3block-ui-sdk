@@ -85,7 +85,7 @@ export const useDefaultMenuTabs = () => {
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
   const { pass } = useFlags();
   const { data: passData } = useGetPassByUser();
-  const hasPassAssociated = passData?.data.items.length !== 0 && passData?.data.items !== undefined;
+  const hasPassAssociated = passData?.data.items !== undefined && passData?.data?.items?.length > 0;
 
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];

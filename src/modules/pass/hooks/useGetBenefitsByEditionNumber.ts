@@ -35,8 +35,8 @@ const useGetBenefitsByEditionNumber = ({
       ),
     {
       enabled:
-        !validator.isEmpty(String(tokenPassId)) &&
-        !validator.isEmpty(String(editionNumber)),
+        validator.isNotEmpty(String(tokenPassId)) &&
+        validator.isNotEmpty(String(editionNumber)),
     }
   );
 };

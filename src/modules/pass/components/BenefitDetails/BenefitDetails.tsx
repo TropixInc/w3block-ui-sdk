@@ -24,85 +24,100 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
   const { data: benefit, isLoading: isLoadingBenefit } =
     useGetPassBenefitById(benefitId);
 
-  return isLoadingBenefit ? (
-    <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
-      <Spinner />
-    </div>
-  ) : pass ? (
-    <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
-      <div
-        className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
-        onClick={() => router.back()}
-      >
-        <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
-
-        <p className="sm:pw-hidden pw-block">{translate('token>pass>title')}</p>
-        <p className="pw-hidden sm:pw-block">{translate('token>pass>back')}</p>
+  if (isLoadingBenefit) {
+    return (
+      <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+        <Spinner />
       </div>
-      <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
-        {translate('token>pass>title')}
-      </div>
-      <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
-        <div className="pw-ml-5 pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-          {benefit?.data.name}
-        </div>
-        <div className="pw-ml-5 pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-          {translate('token>benefits>useLimit') + ' ' + benefit?.data.useLimit}
-        </div>
-      </div>
-      <>
-        <DetailsTemplate
-          title={translate('token>benefits>details')}
-          autoExpand={true}
+    );
+  }
+  if (pass) {
+    return (
+      <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
+        <div
+          className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
+          onClick={() => router.back()}
         >
-          <DetailPass
-            title={translate('token>pass>description')}
-            description={benefit?.data?.description ?? ''}
-          />
+          <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
 
-          <DetailPass
-            title={translate('token>pass>rules')}
-            description={benefit?.data?.rules ?? ''}
-          />
-        </DetailsTemplate>
-
-        {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
+          <p className="sm:pw-hidden pw-block">
+            {translate('token>pass>title')}
+          </p>
+          <p className="pw-hidden sm:pw-block">
+            {translate('token>pass>back')}
+          </p>
+        </div>
+        <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
+          {translate('token>pass>title')}
+        </div>
+        <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
+          <div className="pw-ml-5 pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+            {benefit?.data?.name}
+          </div>
+          <div className="pw-ml-5 pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+            {translate('token>benefits>useLimit') +
+              ' ' +
+              benefit?.data?.useLimit}
+          </div>
+        </div>
+        <>
           <DetailsTemplate
-            title={translate('token>pass>useLocale')}
+            title={translate('token>benefits>details')}
             autoExpand={true}
           >
-            {benefit?.data?.tokenPassBenefitAddresses?.map((address) => (
-              <div
-                key={address?.name}
-                className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
-              >
-                <div className="pw-flex pw-flex-col pw-gap-1">
-                  <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                    {address?.name}
-                  </div>
-                  <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                    {address?.street}
-                    {', '}
-                    {address?.city}
-                    {' - '}
-                    {address?.state}
-                  </div>
-                </div>
-                <div className="pw-flex pw-flex-col pw-gap-1">
-                  <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-                    {translate('token>pass>rules')}
-                  </div>
-                  <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                    {address?.rules}
-                  </div>
-                </div>
-              </div>
-            ))}
+            <DetailPass
+              title={translate('token>pass>description')}
+              description={benefit?.data?.description ?? ''}
+            />
+
+            <DetailPass
+              title={translate('token>pass>rules')}
+              description={benefit?.data?.rules ?? ''}
+            />
           </DetailsTemplate>
-        ) : null}
-      </>
-    </div>
-  ) : null;
+
+          {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
+            <DetailsTemplate
+              title={translate('token>pass>useLocale')}
+              autoExpand={true}
+            >
+              {benefit?.data?.tokenPassBenefitAddresses
+                ?.filter((address) => address)
+                .map((address) => (
+                  <div
+                    key={address.name}
+                    className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
+                  >
+                    <div className="pw-flex pw-flex-col pw-gap-1">
+                      <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                        {address.name}
+                      </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        {address.street && address.street + ', '}
+                        {address.city && address.city + ' - '}
+                        {address.state}
+                      </div>
+                    </div>
+                    {address.rules && (
+                      <div className="pw-flex pw-flex-col pw-gap-1">
+                        <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                          {translate('token>pass>rules')}
+                        </div>
+                        <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                          {address.rules}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+            </DetailsTemplate>
+          ) : null}
+        </>
+      </div>
+    );
+  } else {
+    return null;
+  }
 };
 
 export const BenefitDetails = () => (

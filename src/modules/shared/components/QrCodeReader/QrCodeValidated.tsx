@@ -1,17 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { useLockBodyScroll } from 'react-use'; 
 
-import classNames from 'classnames';
 import { format, getDay } from 'date-fns';
 
 
 import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
 import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { ReactComponent as CheckCircledIcon } from '../../assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
 import useTranslation from '../../hooks/useTranslation';
 import { shortDays } from '../../utils/shortDays';
 import { Button } from '../Buttons';
+import { CloseButton } from '../CloseButton';
 
 interface iProps {
   hasOpen: boolean;
@@ -48,15 +47,7 @@ export const QrCodeValidated = ({
 
   return hasOpen ? (
     <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
-      <button
-          onClick={onClose}
-          className={classNames(
-            'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center'
-          )}
-        >
-          <XIcon className="pw-pw-fill-[#5682C3]" />
-        </button>
-
+      <CloseButton onClose={onClose} />
       <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
         <CheckCircledIcon className="pw-w-[60px] pw-h-[60px] pw-stroke-[#76DE8D]" />
         <p className="pw-font-bold pw-text-[18px] pw-leading-[23px]">
@@ -123,7 +114,7 @@ export const QrCodeValidated = ({
           className='mt-5'
           onClick={handleNext}
         >
-          Validar outro QRCode
+          {translate('token>qrCode>validatedAgain')}
         </Button>
       </div>
     </div>

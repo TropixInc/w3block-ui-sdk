@@ -54,7 +54,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { pass } = useFlags();
   const { data: passData } = useGetPassByUser();
   const hasPassAssociated =
-    passData?.data.items.length !== 0 && passData?.data.items !== undefined;
+    passData?.data.items !== undefined && passData?.data?.items?.length > 0;
 
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(

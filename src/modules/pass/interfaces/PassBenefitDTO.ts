@@ -21,9 +21,9 @@ export interface PassBenefitDTO {
   type: TokenPassBenefitType;
   useLimit: number;
   eventStartsAt: string;
-  eventEndsAt: string;
-  checkInStartsAt: string;
-  checkInEndsAt: string;
+  eventEndsAt?: string;
+  checkInStartsAt?: string;
+  checkInEndsAt?: string;
   linkUrl: string;
   tokenPass: TokenPassEntity;
   tokenPassId: string;

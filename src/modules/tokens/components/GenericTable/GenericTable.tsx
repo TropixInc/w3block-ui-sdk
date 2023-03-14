@@ -50,7 +50,7 @@ const GenericTable = <T, K extends keyof T>({
           limitRowsNumber={limitRowsNumber}
         />
       </div>
-      {showPagination && totalPages >= 2 ? (
+      {showPagination && totalPages > 1 ? (
         <DataGridPagination
           changePage={setPage}
           totalPages={totalPages}

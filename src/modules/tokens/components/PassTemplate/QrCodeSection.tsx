@@ -10,7 +10,7 @@ import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenUsageTime } from './TokenUsageTime';
 
 interface iQrCodeSection {
-  eventDate: Date;
+  eventDate?: Date;
   hasExpiration?: boolean;
   hasExpired?: boolean;
   editionNumber: string;
@@ -70,7 +70,9 @@ export const QrCodeSection = ({
           )}
         </div>
       </div>
-      <TokenUsageTime hasExpiration={hasExpiration} date={eventDate} />
+      {eventDate && (
+        <TokenUsageTime hasExpiration={hasExpiration} date={eventDate} />
+      )}
     </div>
   );
 };

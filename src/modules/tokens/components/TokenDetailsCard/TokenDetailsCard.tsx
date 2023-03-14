@@ -51,7 +51,7 @@ interface Props {
   contractAddress?: string;
   tokenId?: string;
   collectionId?: string;
-  editionNumber?: string;
+  editionNumber: string;
 }
 
 export const TokenDetailsCard = ({
@@ -84,7 +84,7 @@ export const TokenDetailsCard = ({
 
   const { data: benefitsByEdition } = useGetBenefitsByEditionNumber({
     tokenPassId: collectionId as string,
-    editionNumber: parseInt(editionNumber || ''),
+    editionNumber: +editionNumber,
   });
 
   const isMultiplePass = useMemo(() => {
@@ -181,7 +181,7 @@ export const TokenDetailsCard = ({
   const formatedData = useMemo(() => {
     const tableLocale = benefitsList?.data?.items?.map((benefit) => ({
       id: benefit.id,
-      local: benefit?.tokenPassBenefitAddresses
+      local: benefit?.tokenPassBenefitAddresses?.length
         ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
         : handleLocal(benefit.type),
     }));

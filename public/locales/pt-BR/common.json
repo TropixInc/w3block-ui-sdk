@@ -355,5 +355,6 @@
   "token>pass>typePhysical": "Físico",
   "token>pass>typeDigital": "Digital",
   "token>benefits>useLimit": "Limites de uso:",
-  "token>benefits>details": "Detalhes do benefício"
+  "token>benefits>details": "Detalhes do benefício",
+  "token>qrCode>validatedAgain": "Validar outro QRCode"
 }

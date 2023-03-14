@@ -20,13 +20,13 @@ import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
+import { useLocale } from '../../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
 import { DetailToken } from './DetailToken';
-import { ErrorTemplate } from './ErrorTemplate';
 import { InactiveDateUseToken } from './InactiveSection';
 import { QrCodeSection } from './QrCodeSection';
 import { UsedPass } from './UsedSection';
@@ -42,6 +42,52 @@ interface formatAddressProps {
   benefit: PassBenefitDTO;
 }
 
+const PassButton = ({
+  children,
+  onClick,
+  model = 'primary',
+}: {
+  model?: 'primary' | 'secondary';
+  children: ReactNode;
+  onClick?: () => void;
+}) => (
+  <button
+    className={classNames(
+      'pw-w-full pw-rounded-[48px] pw-py-[5px] pw-flex pw-justify-center pw-font-medium pw-text-[12px] pw-leading-[18px] pw-border',
+      model === 'primary'
+        ? 'pw-bg-[#295BA6] hover:pw-bg-[#4194CD] pw-text-white pw-border-[#FFFFFF] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] '
+        : 'pw-bg-[#EFEFEF] pw-text-[#383857]  pw-border-[#295BA6]  hover:pw-shadow-[0px_2px_4px_rgba(0,0,0,0.25)] '
+    )}
+    onClick={onClick}
+  >
+    {children}
+  </button>
+);
+
+export const InfoPass = ({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) => {
+  return (
+    <div className="pw-bg-[#E5EDF9] pw-rounded-[8px] pw-w-full pw-p-[16px_16px_24px] pw-flex pw-gap-[8px]">
+      <div className="pw-w-[17px] pw-h-[17px]">
+        <InfoCircledIcon className="pw-w-[17px] pw-h-[17px]" />
+      </div>
+      <div className="pw-flex pw-flex-col ">
+        <div className="pw-text-[#295BA6] pw-font-semibold pw-text-[15px] pw-leading-[22.5px]">
+          {title}
+        </div>
+        <div className="pw-text-[#333333] pw-font-normal pw-text-[14px] pw-leading-[21px]">
+          {description}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const _PassTemplate = ({
   tokenIdProp,
   benefitIdProp,
@@ -49,6 +95,7 @@ const _PassTemplate = ({
 }: PassTemplateProps) => {
   const { pass } = useFlags();
   const [translate] = useTranslation();
+  const locale = useLocale();
   const router = useRouterConnect();
   const tokenId = tokenIdProp || (router?.query?.tokenId as string) || '';
   const benefitId = benefitIdProp || (router?.query?.benefitId as string) || '';
@@ -71,18 +118,6 @@ const _PassTemplate = ({
     tokenId,
   });
 
-  const { data: benefitsResponse, isLoading: isLoadingBenefitsResponse } =
-    useGetBenefitsByEditionNumber({
-      tokenPassId: publicTokenResponse?.data?.group?.collectionId ?? '',
-      editionNumber: parseInt(
-        publicTokenResponse?.data?.edition?.currentNumber ?? ''
-      ),
-    });
-
-  const benefitData = benefitsResponse?.data.items.filter(
-    (e) => e.id === benefit?.data.id
-  );
-
   const editionNumber = useMemo(() => {
     if (isTokenSucceed) {
       return publicTokenResponse?.data?.edition?.currentNumber;
@@ -90,6 +125,16 @@ const _PassTemplate = ({
       return '';
     }
   }, [isTokenSucceed, publicTokenResponse?.data?.edition?.currentNumber]);
+
+  const { data: benefitsResponse, isLoading: isLoadingBenefitsResponse } =
+    useGetBenefitsByEditionNumber({
+      tokenPassId: publicTokenResponse?.data?.group?.collectionId ?? '',
+      editionNumber: +editionNumber,
+    });
+
+  const benefitData = benefitsResponse?.data.items.filter(
+    (e) => e.id === benefit?.data.id
+  );
 
   const { data: secret, isSuccess: isSecretSucceed } = useGetQRCodeSecret({
     benefitId,
@@ -108,28 +153,10 @@ const _PassTemplate = ({
     secret?.data?.statusCode === 400 &&
     secret?.data?.message?.includes('reached the usage limit');
 
-  const mode = useMemo(() => {
-    if (benefit?.data?.useLimit == 0) {
-      return 'error-use';
-    } else if (
-      secret?.data?.statusCode === 400 &&
-      !hasExpired &&
-      !waitCheckin &&
-      !reachedUsageLimit
-    ) {
-      return 'error-read';
-    } else {
-      return '';
-    }
-  }, [
-    benefit?.data?.useLimit,
-    secret?.data?.statusCode,
-    hasExpired,
-    waitCheckin,
-    reachedUsageLimit,
-  ]);
-
-  const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+  const shortDay = {
+    'pt-BR': ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'],
+    en: ['SUN', 'MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT'],
+  };
 
   const formatAddress = ({ type, benefit }: formatAddressProps) => {
     if (
@@ -182,6 +209,7 @@ const _PassTemplate = ({
 
   const isSingleDate =
     benefit &&
+    benefit?.data?.eventEndsAt &&
     isSameDay(
       new Date(benefit.data.eventStartsAt),
       new Date(benefit.data.eventEndsAt)
@@ -205,292 +233,247 @@ const _PassTemplate = ({
     benefitData &&
     benefitData[0]?.useLimit - benefitData[0]?.tokenPassBenefitUses.length;
 
-  return isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken ? (
-    <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
-      <Spinner />
-    </div>
-  ) : mode.includes('error') ? (
-    mode === 'error-read' ? (
-      <ErrorTemplate
-        title={translate('token>pass>invalidQrCode')}
-        description={translate('token>pass>notPossibleGenerateQrCode')}
-        showButton={true}
-      />
-    ) : mode === 'error-use' ? (
-      <ErrorTemplate
-        title={translate('token>pass>invalidQrCode')}
-        description={translate('token>pass>usedAllTokens')}
-      />
-    ) : null
-  ) : pass ? (
-    <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
-      <div
-        className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
-        onClick={() => router.back()}
-      >
-        <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
+  const inactiveDateUseToken = !waitCheckin && isInactive;
+  const tokenExpired = hasExpired && isUnavaible;
+  const inactiveDueCheckin = waitCheckin && isInactive;
 
-        <p className="sm:pw-hidden pw-block">{translate('token>pass>title')}</p>
-        <p className="pw-hidden sm:pw-block">{translate('token>pass>back')}</p>
+  if (isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken) {
+    return (
+      <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+        <Spinner />
       </div>
+    );
+  }
+  if (pass) {
+    return (
+      <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
+        <div
+          className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
+          onClick={() => router.back()}
+        >
+          <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
 
-      {successValidation == 'true' && <UsedPass />}
-
-      {(isInactive || waitCheckin) && (
-        <InfoPass
-          title={translate('token>pass>inactivePass')}
-          description={translate('token>pass>inactivePassMessage')}
-        />
-      )}
-
-      {(hasExpired || reachedUsageLimit) && isUnavaible && (
-        <InfoPass
-          title={translate('token>pass>passUnavailable')}
-          description={translate('token>pass>passUnavailableMessage')}
-        />
-      )}
-
-      <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
-        {translate('token>pass>title')}
-      </div>
-
-      <div className="pw-flex pw-flex-col">
-        <div className="pw-flex pw-flex-col pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
-          {successValidation == 'true' ? (
-            <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-[16px] pw-pb-[16px] pw-px-[24px] pw-border-b pw-border-[#EFEFEF]">
-              <div className="pw-w-[20px] pw-h-[20px]">
-                <CheckedIcon className="pw-stroke-[#295BA6] pw-w-[20px] pw-h-[20px]" />
-              </div>
-              <div className="pw-text-[#353945] pw-font-bold pw-text-[14px] pw-leading-[21px] pw-text-center">
-                {translate('token>pass>checkedTime', {
-                  time: format(new Date(), 'HH:mm'),
-                })}
-              </div>
-            </div>
-          ) : null}
-
-          <div className="pw-flex pw-gap-[16px] pw-px-[24px]">
-            {eventDate !== undefined && (
-              <>
-                <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
-                  <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
-                    {shortDay[getDay(eventDate)]}
-                  </div>
-                  <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
-                    {format(eventDate, 'dd MMM yyyy')}
-                  </div>
-                  <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945] pw-text-center">
-                    {format(eventDate, "HH'h'mm")}
-                  </div>
-                </div>
-                <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
-              </>
-            )}
-            <div className="pw-flex pw-flex-col pw-justify-center">
-              <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                {publicTokenResponse?.data?.information?.title}
-              </div>
-              <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                {isBenefitSucceed &&
-                  formatAddress({
-                    type: benefit?.data?.type,
-                    benefit: benefit?.data,
-                  })}
-              </div>
-              {!hasExpired && (
-                <div className="pw-flex pw-items-center pw-gap-2">
-                  <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
-                    {translate('token>pass>use')}
-                  </span>
-                  <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-                    {benefit?.data?.useLimit === 1
-                      ? translate('token>pass>unique')
-                      : translate('token>pass>youStillHave', {
-                          quantity: usesLeft,
-                        })}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          {!waitCheckin && isInactive && (
-            <InactiveDateUseToken
-              eventDate={new Date(benefit?.data?.eventStartsAt || '')}
-              title={translate('token>pass>useThisTokenFrom')}
-            />
-          )}
-          {hasExpired && isUnavaible && (
-            <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
-              <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
-                {today
-                  ? translate('token>pass>tokenExpiredAt')
-                  : translate('token>pass>tokenExpiredIn')}
-                <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                  {format(
-                    new Date(benefit?.data?.eventEndsAt || ''),
-                    today ? 'HH:mm' : 'dd/MM/yyyy'
-                  )}
-                </span>
-              </div>
-            </div>
-          )}
-          {waitCheckin && isInactive && (
-            <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
-              <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
-                {translate('token>pass>checkinAvaibleAt')}
-                <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                  {benefit?.data.checkInStartsAt.slice(0, 5)}
-                  {benefit?.data.checkInEndsAt &&
-                    ' - ' + benefit?.data.checkInEndsAt.slice(0, 5)}
-                </span>
-              </div>
-            </div>
-          )}
+          <p className="sm:pw-hidden pw-block">
+            {translate('token>pass>title')}
+          </p>
+          <p className="pw-hidden sm:pw-block">
+            {translate('token>pass>back')}
+          </p>
         </div>
 
-        {!hasExpired &&
-        !isInactive &&
-        !isUnavaible &&
-        isBenefitSucceed &&
-        isTokenSucceed &&
-        isSecretSucceed ? (
-          <QrCodeSection
-            eventDate={new Date(benefit?.data?.eventEndsAt)}
-            hasExpiration={hasExpiration}
-            hasExpired={hasExpired}
-            editionNumber={
-              publicTokenResponse?.data?.edition?.currentNumber as string
-            }
-            secret={secret?.data?.secret}
-            isDynamic={isDynamic ?? false}
-          />
-        ) : null}
-      </div>
+        {successValidation == 'true' && <UsedPass />}
 
-      <>
-        <DetailsTemplate
-          title={translate('token>pass>detailsPass')}
-          autoExpand={true}
-        >
-          <DetailPass
-            title={translate('token>pass>description')}
-            description={benefit?.data?.description ?? ''}
+        {(isInactive || waitCheckin) && (
+          <InfoPass
+            title={translate('token>pass>inactivePass')}
+            description={translate('token>pass>inactivePassMessage')}
           />
+        )}
 
-          <DetailPass
-            title={translate('token>pass>rules')}
-            description={benefit?.data?.rules ?? ''}
+        {(hasExpired || reachedUsageLimit) && isUnavaible && (
+          <InfoPass
+            title={translate('token>pass>passUnavailable')}
+            description={translate('token>pass>passUnavailableMessage')}
           />
-        </DetailsTemplate>
+        )}
 
-        {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
+        <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
+          {translate('token>pass>title')}
+        </div>
+
+        <div className="pw-flex pw-flex-col">
+          <div className="pw-flex pw-flex-col pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
+            {successValidation == 'true' ? (
+              <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-[16px] pw-pb-[16px] pw-px-[24px] pw-border-b pw-border-[#EFEFEF]">
+                <div className="pw-w-[20px] pw-h-[20px]">
+                  <CheckedIcon className="pw-stroke-[#295BA6] pw-w-[20px] pw-h-[20px]" />
+                </div>
+                <div className="pw-text-[#353945] pw-font-bold pw-text-[14px] pw-leading-[21px] pw-text-center">
+                  {translate('token>pass>checkedTime', {
+                    time: format(new Date(), 'HH:mm'),
+                  })}
+                </div>
+              </div>
+            ) : null}
+
+            <div className="pw-flex pw-gap-[16px] pw-px-[24px]">
+              {eventDate !== undefined && (
+                <>
+                  <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
+                    <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
+                      {shortDay[(getDay(eventDate), locale)]}
+                    </div>
+                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
+                      {format(eventDate, 'dd MMM yyyy')}
+                    </div>
+                    <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945] pw-text-center">
+                      {format(eventDate, "HH'h'mm")}
+                    </div>
+                  </div>
+                  <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
+                </>
+              )}
+              <div className="pw-flex pw-flex-col pw-justify-center">
+                <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                  {publicTokenResponse?.data?.information?.title}
+                </div>
+                <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                  {isBenefitSucceed &&
+                    formatAddress({
+                      type: benefit?.data?.type,
+                      benefit: benefit?.data,
+                    })}
+                </div>
+                {!hasExpired && (
+                  <div className="pw-flex pw-items-center pw-gap-2">
+                    <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
+                      {translate('token>pass>use')}
+                    </span>
+                    <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
+                      {benefit?.data?.useLimit === 1
+                        ? translate('token>pass>unique')
+                        : translate('token>pass>youStillHave', {
+                            quantity: usesLeft,
+                          })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            {inactiveDateUseToken && (
+              <InactiveDateUseToken
+                eventDate={new Date(benefit?.data?.eventStartsAt || '')}
+                title={translate('token>pass>useThisTokenFrom')}
+              />
+            )}
+            {tokenExpired && (
+              <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
+                <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
+                  {today
+                    ? translate('token>pass>tokenExpiredAt')
+                    : translate('token>pass>tokenExpiredIn')}
+                  <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                    {format(
+                      new Date(benefit?.data?.eventEndsAt || ''),
+                      today ? 'HH:mm' : 'dd/MM/yyyy'
+                    )}
+                  </span>
+                </div>
+              </div>
+            )}
+            {inactiveDueCheckin && (
+              <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
+                <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
+                  {translate('token>pass>checkinAvaibleAt')}
+                  <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                    {benefit?.data?.checkInStartsAt?.slice(0, 5)}
+                    {benefit?.data?.checkInEndsAt &&
+                      ' - ' + benefit?.data?.checkInEndsAt?.slice(0, 5)}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+          {!hasExpired &&
+            !isInactive &&
+            !isUnavaible &&
+            isBenefitSucceed &&
+            isTokenSucceed &&
+            isSecretSucceed && (
+              <QrCodeSection
+                eventDate={new Date(benefit?.data?.eventEndsAt || '')}
+                hasExpiration={hasExpiration}
+                hasExpired={hasExpired}
+                editionNumber={
+                  publicTokenResponse?.data?.edition?.currentNumber as string
+                }
+                secret={secret?.data?.secret}
+                isDynamic={isDynamic ?? false}
+              />
+            )}
+        </div>
+
+        <>
           <DetailsTemplate
-            title={translate('token>pass>useLocale')}
+            title={translate('token>pass>detailsPass')}
             autoExpand={true}
           >
-            {benefit?.data?.tokenPassBenefitAddresses?.map((address) => (
-              <div
-                key={address?.name}
-                className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
-              >
-                <div className="pw-flex pw-flex-col pw-gap-1">
-                  <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                    {address?.name}
-                  </div>
-                  <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                    {address?.street}
-                    {', '}
-                    {address?.city}
-                    {' - '}
-                    {address?.state}
-                  </div>
-                </div>
-                <div className="pw-flex pw-flex-col pw-gap-1">
-                  <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-                    {translate('token>pass>rules')}
-                  </div>
-                  <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                    {address?.rules}
-                  </div>
-                </div>
-              </div>
-            ))}
+            <DetailPass
+              title={translate('token>pass>description')}
+              description={benefit?.data?.description ?? ''}
+            />
+
+            <DetailPass
+              title={translate('token>pass>rules')}
+              description={benefit?.data?.rules ?? ''}
+            />
           </DetailsTemplate>
-        ) : null}
 
-        <DetailsTemplate title={translate('token>pass>detailsToken')}>
-          <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 xl:pw-grid-cols-4 pw-gap-[30px]">
-            {detailsToken.map((item) => (
-              <DetailToken
-                key={item?.title}
-                title={translate(item?.title)}
-                description={item?.description ?? ''}
-                copyDescription={item?.copyDescription}
-                titleLink={item?.titleLink}
-              />
-            ))}
+          {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
+            <DetailsTemplate
+              title={translate('token>pass>useLocale')}
+              autoExpand={true}
+            >
+              {benefit?.data?.tokenPassBenefitAddresses?.map((address) => (
+                <div
+                  key={address?.name}
+                  className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
+                >
+                  <div className="pw-flex pw-flex-col pw-gap-1">
+                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                      {address?.name}
+                    </div>
+                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                      {address?.street}
+                      {', '}
+                      {address?.city}
+                      {' - '}
+                      {address?.state}
+                    </div>
+                  </div>
+                  <div className="pw-flex pw-flex-col pw-gap-1">
+                    <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                      {translate('token>pass>rules')}
+                    </div>
+                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                      {address?.rules}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </DetailsTemplate>
+          ) : null}
+
+          <DetailsTemplate title={translate('token>pass>detailsToken')}>
+            <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 xl:pw-grid-cols-4 pw-gap-[30px]">
+              {detailsToken.map((item) => (
+                <DetailToken
+                  key={item?.title}
+                  title={translate(item?.title)}
+                  description={item?.description ?? ''}
+                  copyDescription={item?.copyDescription}
+                  titleLink={item?.titleLink}
+                />
+              ))}
+            </div>
+          </DetailsTemplate>
+        </>
+
+        {successValidation && pass ? (
+          <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">
+            <PassButton model="primary">
+              {translate('token>pass>tokenPage')}
+            </PassButton>
+            <PassButton model="secondary" onClick={() => router.back()}>
+              {translate('token>pass>back')}
+            </PassButton>
           </div>
-        </DetailsTemplate>
-      </>
-
-      {successValidation && pass ? (
-        <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">
-          <PassButton model="primary">
-            {translate('token>pass>tokenPage')}
-          </PassButton>
-          <PassButton model="secondary" onClick={() => router.back()}>
-            {translate('token>pass>back')}
-          </PassButton>
-        </div>
-      ) : null}
-    </div>
-  ) : null;
-};
-
-const PassButton = ({
-  children,
-  onClick,
-  model = 'primary',
-}: {
-  model?: 'primary' | 'secondary';
-  children: ReactNode;
-  onClick?: () => void;
-}) => (
-  <button
-    className={classNames(
-      'pw-w-full pw-rounded-[48px] pw-py-[5px] pw-flex pw-justify-center pw-font-medium pw-text-[12px] pw-leading-[18px] pw-border',
-      model === 'primary'
-        ? 'pw-bg-[#295BA6] hover:pw-bg-[#4194CD] pw-text-white pw-border-[#FFFFFF] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] '
-        : 'pw-bg-[#EFEFEF] pw-text-[#383857]  pw-border-[#295BA6]  hover:pw-shadow-[0px_2px_4px_rgba(0,0,0,0.25)] '
-    )}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-);
-
-export const InfoPass = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) => {
-  return (
-    <div className="pw-bg-[#E5EDF9] pw-rounded-[8px] pw-w-full pw-p-[16px_16px_24px] pw-flex pw-gap-[8px]">
-      <div className="pw-w-[17px] pw-h-[17px]">
-        <InfoCircledIcon className="pw-w-[17px] pw-h-[17px]" />
+        ) : null}
       </div>
-      <div className="pw-flex pw-flex-col ">
-        <div className="pw-text-[#295BA6] pw-font-semibold pw-text-[15px] pw-leading-[22.5px]">
-          {title}
-        </div>
-        <div className="pw-text-[#333333] pw-font-normal pw-text-[14px] pw-leading-[21px]">
-          {description}
-        </div>
-      </div>
-    </div>
-  );
+    );
+  } else {
+    return null;
+  }
 };
 
 export const PassTemplate = () => (
