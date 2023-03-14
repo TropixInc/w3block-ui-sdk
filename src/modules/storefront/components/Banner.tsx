@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, useLayoutEffect, useState } from 'react';
 
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -62,6 +62,21 @@ export const Banner = ({ data }: { data: BannerData }) => {
   );
 };
 
+function useWindowSize() {
+  const [size, setSize] = useState(361);
+
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize(window.innerWidth);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  return size;
+}
+
 const Slide = ({
   data,
   ratioClassName,
@@ -79,6 +94,7 @@ const Slide = ({
     buttonLink,
     overlayColor,
     backgroundUrl,
+    backgroundUrlMobile,
     title,
     overlay,
     buttonText,
@@ -97,6 +113,12 @@ const Slide = ({
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
 
+  const width = useWindowSize();
+  console.log(width);
+
+  const bgUrl =
+    backgroundUrlMobile && width <= 360 ? backgroundUrlMobile : backgroundUrl;
+
   return (
     <div
       style={{
@@ -104,7 +126,7 @@ const Slide = ({
           overlay && overlayColor
             ? `linear-gradient(${overlayColor},${overlayColor}),`
             : ''
-        } url('${backgroundUrl?.assetUrl}') `,
+        } url('${bgUrl?.assetUrl}') `,
         backgroundPosition: 'center',
         backgroundColor: backgroundColor ?? '',
         backgroundRepeat: 'no-repeat',
@@ -112,9 +134,9 @@ const Slide = ({
       }}
       className={`${ratioClassName} pw-flex ${rowAlignmentClass} pw-items-center`}
     >
-      {isVideo(backgroundUrl?.assetUrl ?? '') && (
+      {isVideo(bgUrl?.assetUrl ?? '') && (
         <ImageSDK
-          src={backgroundUrl?.assetUrl}
+          src={bgUrl?.assetUrl}
           className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
         />
       )}
