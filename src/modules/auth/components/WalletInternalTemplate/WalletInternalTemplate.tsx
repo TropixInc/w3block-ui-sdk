@@ -56,7 +56,9 @@ const _WalletInternalTemplate = () => {
               {translate('components>menu>wallet')}
               <a
                 className="pw-flex pw-items-baseline pw-ml-3"
+                target="_blank"
                 href={extractLink()}
+                rel="noreferrer"
               >
                 <p className="pw-stroke-[#777E8F] hover:pw-stroke-brand-primary pw-text-xs sm:pw-text-sm  pw-text-gray-700">
                   {translate('wallet>page>extract')}

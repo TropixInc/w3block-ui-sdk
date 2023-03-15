@@ -7,6 +7,7 @@ import { ThemeContext, ThemeProvider } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
+import { CartButton } from '../CartButton/CartButton';
 import TranslatableComponent from '../TranslatableComponent';
 import {
   NavigationLoginPixwaySDK,
@@ -155,7 +156,7 @@ const _HeaderPixwaySDK = ({
           </a>
 
           <div className="pw-flex pw-items-center">
-            <div className="pw-order-2 sm:pw-order-1">
+            <div className="pw-order-3 sm:pw-order-1">
               <NavigationTabsPixwaySDK
                 tabs={tabsToPass}
                 toogleMenu={toggleTabsMemo}
@@ -174,8 +175,16 @@ const _HeaderPixwaySDK = ({
                 }
               />
             </div>
-
-            <div className="pw-order-1 sm:pw-order-2">
+            <CartButton
+              iconColor={
+                context?.defaultTheme?.header?.styleData?.textColor ?? textColor
+              }
+              borderColor={
+                context?.defaultTheme?.header?.styleData?.textColor ?? textColor
+              }
+              className="pw-border-x pw-ml-[40px]"
+            />
+            <div className="pw-order-1 sm:pw-order-3">
               <NavigationLoginPixwaySDK
                 hasSignUp={hasSignUp}
                 textColor={
