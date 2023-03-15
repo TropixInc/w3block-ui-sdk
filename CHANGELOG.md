@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.179](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.178...v0.1.1-alpha.179) (2023-03-15)
+
+
+### Features
+
+* **TK-1111:** implement request information KYC ([2d723f4](https://github.com/TropixInc/w3block-ui-sdk/commit/2d723f4a5363a059cd372d4d60a29cc5f65fdaee))
+
 ### [0.1.1-alpha.178](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.177...v0.1.1-alpha.178) (2023-03-15)
 
 ### [0.1.1-alpha.177](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.176...v0.1.1-alpha.177) (2023-03-14)
