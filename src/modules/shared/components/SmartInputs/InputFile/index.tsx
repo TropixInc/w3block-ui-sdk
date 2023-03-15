@@ -62,9 +62,9 @@ const InputFile = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: ['.png', '.jpeg', '.jpg', '.pdf'],
-    // disabled: Boolean(
-    //   docValue && docStatus !== UserDocumentStatus.RequiredReview
-    // ),
+    disabled: Boolean(
+      docValue && docStatus !== UserDocumentStatus.RequiredReview
+    ),
   });
 
   useEffect(() => {
@@ -89,8 +89,7 @@ const InputFile = ({
     ) {
       field.onChange({ inputId: name, assetId: assetId });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [docValue]);
+  }, [assetId, docStatus, docValue, name]);
 
   const renderName = () => {
     if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {

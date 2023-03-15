@@ -129,6 +129,9 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
               assetId={getDocumentByInputId(item?.id)?.assetId}
               value={getDocumentByInputId(item?.id)?.value}
               docStatus={getDocumentByInputId(item?.id)?.status}
+              docFileValue={
+                getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
+              }
             />
           ))}
         <AuthButton

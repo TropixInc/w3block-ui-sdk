@@ -39,7 +39,7 @@ export const ConnectWalletTemplateSDK = ({
   logoUrl,
   textContainer,
   className,
-  defaultRedirectRoute = PixwayAppRoutes.HOME,
+  defaultRedirectRoute = PixwayAppRoutes.TOKENS,
   tenantName,
   redirectLink,
   extraBy,

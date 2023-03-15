@@ -38,7 +38,7 @@ export const SignInTemplateSDK = ({
   textContainer,
   className,
   hasSignUp = true,
-  defaultRedirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+  defaultRedirectRoute = PixwayAppRoutes.COMPLETE_KYC,
   extraBy,
 }: SignInSignupTemplateSDKProps) => {
   return (

@@ -15,6 +15,8 @@ interface SmartProps {
   assetId?: string | null;
 
   docStatus?: UserDocumentStatus;
+
+  docFileValue?: string;
 }
 
 const SmartInputsController = ({
@@ -24,6 +26,7 @@ const SmartInputsController = ({
   value,
   assetId,
   docStatus,
+  docFileValue,
 }: SmartProps) => {
   const renderInput = () => {
     switch (type) {
@@ -77,7 +80,7 @@ const SmartInputsController = ({
           <InputFile
             label={label}
             name={name}
-            docValue={value}
+            docValue={docFileValue}
             assetId={assetId}
             docStatus={docStatus}
           />
