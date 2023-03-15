@@ -1,6 +1,10 @@
 import classNames from 'classnames';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import {
+  breakpointsEnum,
+  useBreakpoints,
+} from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { AlignmentEnum, MidiaData } from '../interfaces';
 
@@ -23,6 +27,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
   const {
     styleData: {
       midiaUrl,
+      midiaUrlMobile,
       imageDisposition,
       imageRatio,
       imageAlignment,
@@ -37,6 +42,14 @@ export const Midia = ({ data }: { data: MidiaData }) => {
   const rowAlignmentClass = rowAlignments[imageAlignment ?? AlignmentEnum.LEFT];
 
   const ratio = ratios[imageRatio ?? 'default'];
+
+  const breakpoint = useBreakpoints();
+
+  const bgUrl =
+    midiaUrlMobile &&
+    (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
+      ? midiaUrlMobile
+      : midiaUrl;
 
   return (
     <div
@@ -53,7 +66,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
             rowAlignmentClass,
             'pw-object-cover pw-w-full pw-h-full'
           )}
-          src={midiaUrl?.assetUrl}
+          src={bgUrl?.assetUrl}
         />
       </div>
     </div>
