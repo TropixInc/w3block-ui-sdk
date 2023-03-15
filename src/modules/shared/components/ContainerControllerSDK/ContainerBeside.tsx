@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import { position } from '../../enums';
 import { FAQContextEnum } from '../../enums/FAQContext';
 import {
@@ -13,7 +13,7 @@ import { ContainerControllerClasses } from './ContainerControllerSDK';
 interface ContainerBesideProps {
   infoComponent: ReactNode | JSX.Element;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   separation?: boolean;
   classes?: ContainerControllerClasses;
@@ -25,7 +25,7 @@ export const ContainerBeside = ({
   infoComponent,
   separation = true,
   infoPosition = position.RIGHT,
-  contentType = contentTypeEnum.FAQ,
+  contentType = ContentTypeEnum.FAQ,
   classes,
   FAQContext = FAQContextEnum.POST_SALE,
   logoUrl,
@@ -35,7 +35,7 @@ export const ContainerBeside = ({
     infoPosition === position.RIGHT ? 'sm:pw-flex-row-reverse pw-flex-row' : '';
   const contentTypeComponent = () => {
     switch (contentType) {
-      case contentTypeEnum.FAQ:
+      case ContentTypeEnum.FAQ:
         return <FAQ name={FAQContext} />;
       default:
         return <ContainerTextBeside logo={logoUrl} {...textContainer} />;

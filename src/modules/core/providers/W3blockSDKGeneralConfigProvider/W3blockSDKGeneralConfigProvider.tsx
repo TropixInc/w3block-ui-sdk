@@ -19,6 +19,7 @@ interface Props extends JSX.IntrinsicAttributes {
     pdfUrl: string;
     pollUrl?: string;
     passUrl: string;
+    directory?: string;
   };
   locale: PixwayUISdkLocale;
   companyId: string;

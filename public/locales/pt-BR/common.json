@@ -351,5 +351,14 @@
   "components>walletIntegration>walletConnected": "Carteira sincronizada",
   "components>walletIntegration>syncDate": "Sincronizado em: {{date}}",
   "token>pass>passOutsideCheckin": "Esse token está fora do período de check-in.",
-  "token>pass>checkinAvaibleAt": "Check-in disponível às:"
+  "token>pass>checkinAvaibleAt": "Check-in disponível às:",
+  "auth>inputFile>selectFile": "Selecione um arquivo",
+  "auth>getValidationsTypesForSignup>insertValidEmail": "Insira um email válido",
+  "auth>getValidationsTypesForSignup>insertYourCPF": "Insira seu CPF",
+  "auth>getValidationsTypesForSignup>insertValidCPF": "Insira um CPF válido",
+  "auth>getValidationsTypesForSignup>insertYourPhone": "Insira seu telefone",
+  "auth>getValidationsTypesForSignup>insertValidPhone": "Insira um telefone válido",
+  "auth>getValidationsTypesForSignup>insertUrl": "Insira uma url",
+  "auth>getValidationsTypesForSignup>insertText": "Insira um texto",
+  "auth>formCompletKYCWithoutLayout>reviewData": "Encontramos alguns problemas validando seus dados. Por favor, revise os campos a seguir:"
 }
