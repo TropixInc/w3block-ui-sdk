@@ -7,14 +7,14 @@ import isEmail from 'validator/lib/isEmail';
 
 import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
 
-interface InputCPFProps {
+interface InputEmailProps {
   label: string;
   name: string;
   docValue?: string;
   docStatus?: UserDocumentStatus;
 }
 
-const InputEmail = ({ label, name, docValue, docStatus }: InputCPFProps) => {
+const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
   const { field } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [isValid, setIsValid] = useState(true);

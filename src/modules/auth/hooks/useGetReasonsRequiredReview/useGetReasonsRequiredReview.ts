@@ -7,10 +7,14 @@ export const useGetReasonsRequiredReview = (
   contextId: string
 ) => {
   const getSDK = useGetW3blockIdSDK();
-  return usePrivateQuery([tenantId, userId, contextId], async () => {
-    const sdk = await getSDK();
-    return sdk.api.users.findUsersContextByUserId(tenantId, userId, {
-      contextId: contextId,
-    });
-  });
+  return usePrivateQuery(
+    [tenantId, userId, contextId],
+    async () => {
+      const sdk = await getSDK();
+      return sdk.api.users.findUsersContextByUserId(tenantId, userId, {
+        contextId: contextId,
+      });
+    },
+    { enabled: Boolean(tenantId && userId && contextId) }
+  );
 };

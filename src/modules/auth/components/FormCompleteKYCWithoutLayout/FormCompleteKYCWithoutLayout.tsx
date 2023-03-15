@@ -70,9 +70,13 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET);
+      router.pushConnect(
+        router.query.callbackPath
+          ? (router.query.callbackPath as string)
+          : PixwayAppRoutes.CONNECT_EXTERNAL_WALLET
+      );
     }
-  }, [isSuccess]);
+  }, [isSuccess, router]);
 
   useEffect(() => {
     const values = dynamicMethods.getValues();
@@ -100,9 +104,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
 
   return (
     <FormProvider {...dynamicMethods}>
-      {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
-      {/*@ts-ignore*/}
-      {reasons?.data?.items[0]?.logs?.at(-1)?.inputIds?.length > 0 ? (
+      {reasons?.data?.items[0]?.logs?.at(-1)?.inputIds?.length ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
           <p className="pw-mb-2 pw-text-[#FF0505]">
             {translate('auth>formCompletKYCWithoutLayout>reviewData')}
