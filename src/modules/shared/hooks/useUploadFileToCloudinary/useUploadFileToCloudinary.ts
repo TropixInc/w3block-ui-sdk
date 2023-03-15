@@ -93,12 +93,15 @@ export const useUploadFileToCloudinary = () => {
           formData.append('public_id', publicId);
           formData.append('upload_preset', uploadPreset as string);
 
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          formData.append('filename_override', queryParams?.filename_override);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          formData.append('unique_filename', queryParams?.unique_filename);
+          formData.append(
+            'filename_override',
+            queryParams?.filename_override?.toString()
+          );
+
+          formData.append(
+            'unique_filename',
+            queryParams?.unique_filename?.toString()
+          );
           formData.append('file', file);
         }
       }

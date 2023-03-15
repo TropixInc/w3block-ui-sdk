@@ -1390,9 +1390,9 @@
     p-memoize "4.0.3"
     swr "1.1.2"
 
-"@w3block/sdk-id@^0.1.44":
-  version "0.1.46"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.46.tgz#bff1d6e93f89bae7b0ef03b31cc58c2b29625c3e"
+"@w3block/sdk-id@^0.1.48":
+  version "0.1.48"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.48.tgz#04f5ece4899c919962923a5783bfeb089f566489"
   dependencies:
     axios "^0.24.0"
     date-fns "2.29.1"

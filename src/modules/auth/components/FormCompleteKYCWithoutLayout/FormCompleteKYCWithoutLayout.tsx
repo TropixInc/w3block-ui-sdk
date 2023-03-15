@@ -109,8 +109,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
           <p className="pw-mb-2 pw-text-[#FF0505]">
             {translate('auth>formCompletKYCWithoutLayout>reviewData')}
           </p>
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/*@ts-ignore*/}
+
           {reasons?.data.items[0]?.logs.at(-1)?.inputIds.map((item: string) => {
             return getInputByInputId(item);
           })}

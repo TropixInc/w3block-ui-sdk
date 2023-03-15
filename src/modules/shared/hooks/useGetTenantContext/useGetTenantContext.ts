@@ -10,7 +10,7 @@ export const useGetTenantContext = () => {
   const getSDK = useGetW3blockIdSDK();
 
   return useQuery(
-    [PixwayAPIRoutes.TENANT_CONTEXT],
+    [PixwayAPIRoutes.TENANT_CONTEXT, tenantId],
     async () => {
       const sdk = await getSDK();
 

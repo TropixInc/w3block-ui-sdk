@@ -9,7 +9,7 @@ export const useGetTenantInputsBySlug = () => {
   const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.TENANT_INPUTS_BY_SLUG],
+    [PixwayAPIRoutes.TENANT_INPUTS_BY_SLUG, companyId],
     async () => {
       const sdk = await getSdk();
 
