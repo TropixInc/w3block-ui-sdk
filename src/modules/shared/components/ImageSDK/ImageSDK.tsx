@@ -171,5 +171,5 @@ export const ImageSDK = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src, isError]);
+  }, [src, isError, className]);
 };

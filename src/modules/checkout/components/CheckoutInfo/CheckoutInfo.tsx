@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage, useTimeoutFn } from 'react-use';
 
-import { PriceAndGasInfo, ProductInfo } from '../../../shared';
+import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
@@ -13,6 +13,7 @@ import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { isValidCNPJ, isValidCPF } from '../../../shared/utils/validators';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
   OrderPreviewCache,
@@ -32,6 +33,7 @@ interface CheckoutInfoProps {
   proccedAction?: (query: string) => void;
   productId?: string[];
   currencyId?: string;
+  isCart?: boolean;
 }
 
 const _CheckoutInfo = ({
@@ -40,13 +42,14 @@ const _CheckoutInfo = ({
   proccedAction,
   productId,
   currencyId,
+  isCart = false,
 }: CheckoutInfoProps) => {
   const router = useRouterConnect();
   const [requestError, setRequestError] = useState(false);
   const [cpfError, setCpfError] = useState(false);
   const { getOrderPreview } = useCheckout();
-  const [quantity, setQuantity] = useState(1);
   const [translate] = useTranslation();
+  const { setCart, cart } = useCart();
   const [productCache, setProductCache, deleteKey] =
     useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
   const [choosedPayment, setChoosedPayment] = useState<
@@ -92,10 +95,12 @@ const _CheckoutInfo = ({
     } else {
       const preview = productCache;
       if (preview) {
-        setQuantity(preview.products?.length);
         setOrderPreview({
           products: [...preview.products],
           totalPrice: preview.totalPrice,
+          clientServiceFee: preview.clientServiceFee,
+          gasFee: { amount: preview.gasFee ?? '0', signature: '' },
+          cartPrice: preview.cartPrice,
         });
       }
     }
@@ -121,7 +126,6 @@ const _CheckoutInfo = ({
             if (data && data.providersForSelection?.length) {
               setChoosedPayment(data.providersForSelection[0]);
             }
-            setQuantity(data.products.length);
             setOrderPreview(data);
           },
           onError: () => {
@@ -146,8 +150,10 @@ const _CheckoutInfo = ({
   const beforeProcced = () => {
     if (
       choosedPayment?.paymentMethod == 'pix' &&
-      !isValidCPF(cnpfCpfVal) &&
-      !isValidCNPJ(cnpfCpfVal)
+      !isValidCPF(cnpfCpfVal.replaceAll('.', '').replaceAll('-', '')) &&
+      !isValidCNPJ(
+        cnpfCpfVal.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
+      )
     ) {
       setCpfError(true);
       return;
@@ -165,6 +171,10 @@ const _CheckoutInfo = ({
         currencyId: currencyIdState || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
         totalPrice: orderPreview?.totalPrice ?? '',
+        clientServiceFee: orderPreview?.clientServiceFee || '0',
+        gasFee:
+          parseFloat(orderPreview?.gasFee?.amount || '0').toFixed(2) || '0',
+        cartPrice: parseFloat(orderPreview?.cartPrice || '0').toFixed(2) || '0',
         choosedPayment: choosedPayment,
         cpfCnpj: cnpfCpfVal,
       });
@@ -172,16 +182,83 @@ const _CheckoutInfo = ({
     if (proccedAction) {
       proccedAction(query);
     } else {
-      router.pushConnect(PixwayAppRoutes.CHECKOUT_PAYMENT + '?' + query);
+      router.pushConnect(
+        PixwayAppRoutes.CHECKOUT_PAYMENT +
+          '?' +
+          query +
+          (isCart ? '&cart=true' : '')
+      );
     }
   };
 
-  const changeQuantity = (n: number) => {
-    setQuantity(n);
-    setProductIds(Array(n).fill(productIds?.[0]));
+  const changeQuantity = (n: number, id: string) => {
+    let newArray: Array<string> = [];
+    if (
+      productIds &&
+      productIds?.filter((filteredId) => filteredId == id).length < n
+    ) {
+      newArray = [...productIds, id];
+    } else {
+      productIds?.forEach((idProd) => {
+        if (
+          id != idProd ||
+          newArray.filter((idNew) => idNew == idProd).length < n
+        ) {
+          newArray.push(idProd);
+        }
+      });
+    }
+    router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
+      query: {
+        productIds: newArray.join(','),
+        currencyId: orderPreview?.products[0].prices[0].currencyId,
+      },
+    });
+    if (isCart) {
+      const newCart = newArray.map((id) =>
+        cart.find((prodCart) => prodCart.id == id)
+      );
+
+      setCart(newCart);
+    }
+
+    setProductIds(newArray);
   };
 
-  const _ButtonsToShow = () => {
+  const deleteProduct = (id: string) => {
+    router.push(
+      isCart
+        ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
+        : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
+      {
+        query: {
+          productIds: productIds?.filter((p) => p != id).join(','),
+          currencyId: orderPreview?.products[0].prices[0].currencyId,
+        },
+      }
+    );
+    if (isCart) {
+      setCart(cart.filter((prod) => prod.id != id));
+    }
+
+    setProductIds(productIds?.filter((p) => p != id));
+  };
+
+  const differentProducts = useMemo<Array<Product>>(() => {
+    if (orderPreview && orderPreview.products.length) {
+      const uniqueProduct: Product[] = [];
+      orderPreview.products.forEach((p) => {
+        if (!uniqueProduct.some((prod) => p.id == prod.id)) {
+          uniqueProduct.push(p);
+        }
+      });
+      return uniqueProduct;
+    } else {
+      return [];
+    }
+  }, [orderPreview]);
+
+  const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
         return (
@@ -231,6 +308,20 @@ const _CheckoutInfo = ({
                 'checkout>components>checkoutInfo>infoAboutProcessing'
               )}
             </p>
+            <PriceAndGasInfo
+              currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
+              totalPrice={orderPreview?.totalPrice || '0'}
+              service={orderPreview?.clientServiceFee || '0'}
+              loading={isLoading}
+              className="pw-mt-4"
+              price={
+                parseFloat(orderPreview?.cartPrice || '0').toFixed(2) || '0'
+              }
+              gasFee={
+                parseFloat(orderPreview?.gasFee?.amount || '0').toFixed(2) ||
+                '0'
+              }
+            />
             <PixwayButton
               onClick={
                 returnAction
@@ -246,7 +337,8 @@ const _CheckoutInfo = ({
           </div>
         );
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderPreview, cnpfCpfVal]);
 
   return requestError ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
@@ -317,34 +409,39 @@ const _CheckoutInfo = ({
           </>
         )}
 
-        <p className="pw-text-[18px] pw-font-[700]">Resumo da compra</p>
+        <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
+          Resumo da compra
+        </p>
         {checkoutStatus == CheckoutStatus.FINISHED && (
-          <p className="pw-font-[700] pw-text-2xl">
+          <p className="pw-font-[700] pw-text-2xl pw-mb-6 pw-mt-2">
             {translate(
               'checkout>components>checkoutInfo>proccessingBlockchain'
             )}
           </p>
         )}
-        <ProductInfo
-          currency={orderPreview?.products[0]?.prices[0]?.currency?.name}
-          quantity={quantity}
-          stockAmount={orderPreview?.products[0].stockAmount ?? 1}
-          changeQuantity={changeQuantity}
-          loading={isLoading}
-          status={checkoutStatus}
-          className="pw-mt-3"
-          image={orderPreview?.products[0]?.images[0]?.thumb || ''}
-          id={orderPreview?.products[0]?.contractAddress || ''}
-          name={orderPreview?.products[0]?.name || ''}
-          price={
-            checkoutStatus == CheckoutStatus.FINISHED
-              ? parseFloat(orderPreview?.totalPrice ?? '0').toFixed(2)
-              : parseFloat(
-                  orderPreview?.products[0]?.prices[0].amount || '0'
-                ).toFixed(2) || ''
-          }
-        />
-        <_ButtonsToShow />
+        <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
+          {differentProducts.map((prod) => (
+            <ProductInfo
+              isCart={isCart}
+              className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
+              currency={prod.prices[0]?.currency?.name}
+              quantity={
+                productIds ? productIds?.filter((p) => p == prod.id).length : 1
+              }
+              stockAmount={prod.stockAmount}
+              changeQuantity={changeQuantity}
+              loading={isLoading}
+              status={checkoutStatus}
+              deleteProduct={deleteProduct}
+              id={prod.id}
+              key={prod.id}
+              image={prod.images[0].thumb}
+              name={prod.name}
+              price={parseFloat(prod.prices[0].amount).toFixed(2)}
+            />
+          ))}
+        </div>
+        {_ButtonsToShow}
       </div>
     </div>
   );
@@ -356,6 +453,7 @@ export const CheckoutInfo = ({
   proccedAction,
   productId,
   currencyId,
+  isCart,
 }: CheckoutInfoProps) => {
   return (
     <TranslatableComponent>
@@ -365,6 +463,7 @@ export const CheckoutInfo = ({
         checkoutStatus={checkoutStatus}
         productId={productId}
         currencyId={currencyId}
+        isCart={isCart}
       />
     </TranslatableComponent>
   );

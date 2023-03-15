@@ -45,9 +45,7 @@ export const NavigationLoginPixwaySDK = ({
         fontFamily: (fontFamily ? fontFamily : 'Montserrat') + ', sans-serif',
       }}
     >
-      <div
-        className={`sm:pw-flex pw-border-l pw-border-[#777E8F] pw-items-center pw-hidden pw-ml-[40px] ${className}`}
-      >
+      <div className={`sm:pw-flex  pw-items-center pw-hidden ${className}`}>
         {session ? (
           <NavigationLoginLoggedButton
             textColor={textColor}

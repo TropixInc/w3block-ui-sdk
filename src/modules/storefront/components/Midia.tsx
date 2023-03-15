@@ -5,7 +5,7 @@ import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { AlignmentEnum, MidiaData } from '../interfaces';
 
 const ratios: Record<string, string> = {
-  default: 'pw-aspect-[20/9]',
+  default: '',
   '4:1': 'pw-aspect-[4/1]',
   '3:1': 'pw-aspect-[3/1]',
   '16:9': 'pw-aspect-video',
@@ -48,11 +48,8 @@ export const Midia = ({ data }: { data: MidiaData }) => {
     >
       <div className={classNames(ratio, layoutClass, 'pw-mx-auto')}>
         <ImageSDK
-          className={classNames(
-            ratio,
-            rowAlignmentClass,
-            'pw-object-cover pw-w-full pw-h-full'
-          )}
+          className={`${ratio} ${rowAlignmentClass} !pw-object-center  pw-object-cover pw-w-full pw-h-full'
+          `}
           src={midiaUrl?.assetUrl}
         />
       </div>

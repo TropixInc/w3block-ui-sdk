@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
+import { useCart } from '../../checkout/hooks/useCart';
 import { useRouterConnect } from '../../shared';
 import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
@@ -17,6 +18,7 @@ interface ProductPageProps {
 
 export const ProductPage = ({ data, params }: ProductPageProps) => {
   const { back, pushConnect } = useRouterConnect();
+  const { setCart, cart } = useCart();
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (quantityOpen) {
@@ -79,12 +81,6 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
             <div className="pw-max-w-[400px] pw-w-full">
               {data.styleData.showProductName && (
                 <>
-                  <p
-                    style={{ color: data.styleData.textColor ?? 'black' }}
-                    className="pw-text-sm"
-                  >
-                    Título ou nome do item
-                  </p>
                   <p
                     style={{ color: data.styleData.nameTextColor ?? 'black' }}
                     className="pw-text-[36px] pw-font-[600]"
@@ -193,36 +189,64 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 </>
               ) : null}
               {data.styleData.actionButton && (
-                <button
-                  disabled={product?.stockAmount == 0}
-                  onClick={() => {
-                    if (product?.id && product.prices) {
-                      pushConnect(
-                        PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                          `?productIds=${Array(quantity)
-                            .fill(product.id)
-                            .join(',')}&currencyId=${
-                            product.prices[0].currencyId
-                          }`
-                      );
-                    }
-                  }}
-                  style={{
-                    backgroundColor:
-                      product && product.stockAmount == 0
-                        ? '#DCDCDC'
-                        : data.styleData.buttonColor
-                        ? data.styleData.buttonColor
-                        : '#0050FF',
-                    color:
-                      product && product.stockAmount == 0
-                        ? '#777E8F'
-                        : data.styleData.buttonTextColor ?? 'white',
-                  }}
-                  className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-6 pw-rounded-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-                >
-                  {data.styleData.buttonText ?? 'Comprar agora'}
-                </button>
+                <>
+                  <button
+                    disabled={product?.stockAmount == 0}
+                    onClick={() => {
+                      cart.some((p) => p.id == product?.id)
+                        ? setCart(cart.filter((p) => p.id != product?.id))
+                        : setCart([...cart, ...Array(quantity).fill(product)]);
+                    }}
+                    style={{
+                      backgroundColor: 'none',
+                      borderColor:
+                        product && product.stockAmount == 0
+                          ? '#DCDCDC'
+                          : data.styleData.buttonColor
+                          ? data.styleData.buttonColor
+                          : '#0050FF',
+                      color:
+                        product && product.stockAmount == 0
+                          ? '#777E8F'
+                          : data.styleData.buttonColor ?? '#0050FF',
+                    }}
+                    className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                  >
+                    {cart.some((p) => p.id == product?.id)
+                      ? 'Remover do carrinho'
+                      : 'Adicionar ao carrinho'}
+                  </button>
+                  <button
+                    disabled={product?.stockAmount == 0}
+                    onClick={() => {
+                      if (product?.id && product.prices) {
+                        pushConnect(
+                          PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                            `?productIds=${Array(quantity)
+                              .fill(product.id)
+                              .join(',')}&currencyId=${
+                              product.prices[0].currencyId
+                            }`
+                        );
+                      }
+                    }}
+                    style={{
+                      backgroundColor:
+                        product && product.stockAmount == 0
+                          ? '#DCDCDC'
+                          : data.styleData.buttonColor
+                          ? data.styleData.buttonColor
+                          : '#0050FF',
+                      color:
+                        product && product.stockAmount == 0
+                          ? '#777E8F'
+                          : data.styleData.buttonTextColor ?? 'white',
+                    }}
+                    className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                  >
+                    {data.styleData.buttonText ?? 'Comprar agora'}
+                  </button>
+                </>
               )}
             </div>
           </div>

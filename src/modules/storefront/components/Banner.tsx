@@ -97,20 +97,20 @@ const Slide = ({
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
 
+  const bg = `${
+    overlay && overlayColor
+      ? `linear-gradient(${overlayColor},${overlayColor}),`
+      : ''
+  } url("${backgroundUrl?.assetUrl}") no-repeat center`;
+
   return (
     <div
       style={{
-        background: `${
-          overlay && overlayColor
-            ? `linear-gradient(${overlayColor},${overlayColor}),`
-            : ''
-        } url('${backgroundUrl?.assetUrl}') `,
-        backgroundPosition: 'center',
         backgroundColor: backgroundColor ?? '',
-        backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
+        background: bg,
       }}
-      className={`${ratioClassName} pw-flex ${rowAlignmentClass} pw-items-center`}
+      className={`${ratioClassName} !pw-bg-cover  pw-flex ${rowAlignmentClass} pw-items-center`}
     >
       {isVideo(backgroundUrl?.assetUrl ?? '') && (
         <ImageSDK

@@ -20,6 +20,7 @@ export enum PixwayAppRoutes {
   TOKENPASS_CLIENTS = '/tokens/pass/client',
   TOKENPASS_REPORT = '/tokens/pass/repor',
   CHECKOUT_CONFIRMATION = '/checkout/confirmation',
+  CHECKOUT_CART_CONFIRMATION = '/checkout/cart/confirmation',
   CHECKOUT_PAYMENT = '/checkout/payment',
   CHECKOUT_PROCESSING = '/checkout/processing',
   CHECKOUT_COMPLETED = '/checkout/completed',
