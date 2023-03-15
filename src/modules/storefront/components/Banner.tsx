@@ -11,6 +11,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import {
+  useBreakpoints,
+  breakpointsEnum,
+} from '../../shared/hooks/useBreakpoints/useBreakpoints';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const {
@@ -79,6 +83,7 @@ const Slide = ({
     buttonLink,
     overlayColor,
     backgroundUrl,
+    backgroundUrlMobile,
     title,
     overlay,
     buttonText,
@@ -96,25 +101,30 @@ const Slide = ({
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
-
+  const breakpoint = useBreakpoints();
+  const bgUrl =
+    backgroundUrlMobile &&
+    (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
+      ? backgroundUrlMobile
+      : backgroundUrl;
   const bg = `${
     overlay && overlayColor
       ? `linear-gradient(${overlayColor},${overlayColor}),`
       : ''
-  } url("${backgroundUrl?.assetUrl}") no-repeat center`;
+  } url("${bgUrl?.assetUrl}") no-repeat center`;
 
   return (
     <div
       style={{
-        backgroundColor: backgroundColor ?? '',
         backgroundSize: 'cover',
+        backgroundColor: backgroundColor,
         background: bg,
       }}
       className={`${ratioClassName} !pw-bg-cover  pw-flex ${rowAlignmentClass} pw-items-center`}
     >
-      {isVideo(backgroundUrl?.assetUrl ?? '') && (
+      {isVideo(bgUrl?.assetUrl ?? '') && (
         <ImageSDK
-          src={backgroundUrl?.assetUrl}
+          src={bgUrl?.assetUrl}
           className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
         />
       )}
