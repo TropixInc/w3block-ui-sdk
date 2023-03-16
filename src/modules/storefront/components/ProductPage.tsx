@@ -1,4 +1,9 @@
+import { useRef, useState } from 'react';
+import { useClickAway } from 'react-use';
+
+import { useCart } from '../../checkout/hooks/useCart';
 import { useRouterConnect } from '../../shared';
+import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
@@ -13,8 +18,17 @@ interface ProductPageProps {
 
 export const ProductPage = ({ data, params }: ProductPageProps) => {
   const { back, pushConnect } = useRouterConnect();
+  const { setCart, cart } = useCart();
+  const refToClickAway = useRef<HTMLDivElement>(null);
+  useClickAway(refToClickAway, () => {
+    if (quantityOpen) {
+      setQuantityOpen(false);
+    }
+  });
+  const [quantity, setQuantity] = useState(1);
+  const [quantityOpen, setQuantityOpen] = useState(false);
   const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
-  const categories = [{ name: 'tenis' }, { name: 'nike' }];
+  const categories: any[] = [];
   return (
     <div
       style={{
@@ -68,12 +82,6 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               {data.styleData.showProductName && (
                 <>
                   <p
-                    style={{ color: data.styleData.textColor ?? 'black' }}
-                    className="pw-text-sm"
-                  >
-                    Título ou nome do item
-                  </p>
-                  <p
                     style={{ color: data.styleData.nameTextColor ?? 'black' }}
                     className="pw-text-[36px] pw-font-[600]"
                   >
@@ -103,6 +111,56 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     : ''}
                 </p>
               )}
+              {data.styleData.actionButton &&
+                product?.stockAmount &&
+                product?.stockAmount > 0 && (
+                  <div>
+                    <div ref={refToClickAway} className="pw-mt-4">
+                      <p className="pw-text-sm pw-text-black pw-mb-1">
+                        Quantidade
+                      </p>
+                      <div
+                        onClick={() => setQuantityOpen(!quantityOpen)}
+                        className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
+                          quantityOpen
+                            ? 'pw-border-none pw-bg-white'
+                            : 'pw-border pw-border-black'
+                        }`}
+                      >
+                        <p className="pw-text-xs pw-font-[600] pw-text-black">
+                          {quantity}
+                        </p>
+                        <ArrowDown className="pw-stroke-black" />
+                      </div>
+                      {quantityOpen && (
+                        <div className="pw-relative">
+                          <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
+                            <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
+                            <div className=""></div>
+                            {Array(
+                              product?.stockAmount && product?.stockAmount > 5
+                                ? 5
+                                : product?.stockAmount
+                            )
+                              .fill(0)
+                              .map((val, index) => (
+                                <p
+                                  onClick={() => {
+                                    setQuantity(index + 1);
+                                    setQuantityOpen(false);
+                                  }}
+                                  key={index}
+                                  className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
+                                >
+                                  {index + 1}
+                                </p>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               {data.styleData.showCategory && product?.tags?.length ? (
                 <>
                   <p
@@ -131,32 +189,64 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 </>
               ) : null}
               {data.styleData.actionButton && (
-                <button
-                  disabled={product?.stockAmount == 0}
-                  onClick={() => {
-                    if (product?.id && product.prices) {
-                      pushConnect(
-                        PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                          `?productIds=${product.id}&currencyId=${product.prices[0].currencyId}`
-                      );
-                    }
-                  }}
-                  style={{
-                    backgroundColor:
-                      product && product.stockAmount == 0
-                        ? '#DCDCDC'
-                        : data.styleData.buttonColor
-                        ? data.styleData.buttonColor
-                        : '#0050FF',
-                    color:
-                      product && product.stockAmount == 0
-                        ? '#777E8F'
-                        : data.styleData.buttonTextColor ?? 'white',
-                  }}
-                  className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-6 pw-rounded-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-                >
-                  {data.styleData.buttonText ?? 'Comprar agora'}
-                </button>
+                <>
+                  <button
+                    disabled={product?.stockAmount == 0}
+                    onClick={() => {
+                      cart.some((p) => p.id == product?.id)
+                        ? setCart(cart.filter((p) => p.id != product?.id))
+                        : setCart([...cart, ...Array(quantity).fill(product)]);
+                    }}
+                    style={{
+                      backgroundColor: 'none',
+                      borderColor:
+                        product && product.stockAmount == 0
+                          ? '#DCDCDC'
+                          : data.styleData.buttonColor
+                          ? data.styleData.buttonColor
+                          : '#0050FF',
+                      color:
+                        product && product.stockAmount == 0
+                          ? '#777E8F'
+                          : data.styleData.buttonColor ?? '#0050FF',
+                    }}
+                    className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                  >
+                    {cart.some((p) => p.id == product?.id)
+                      ? 'Remover do carrinho'
+                      : 'Adicionar ao carrinho'}
+                  </button>
+                  <button
+                    disabled={product?.stockAmount == 0}
+                    onClick={() => {
+                      if (product?.id && product.prices) {
+                        pushConnect(
+                          PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                            `?productIds=${Array(quantity)
+                              .fill(product.id)
+                              .join(',')}&currencyId=${
+                              product.prices[0].currencyId
+                            }`
+                        );
+                      }
+                    }}
+                    style={{
+                      backgroundColor:
+                        product && product.stockAmount == 0
+                          ? '#DCDCDC'
+                          : data.styleData.buttonColor
+                          ? data.styleData.buttonColor
+                          : '#0050FF',
+                      color:
+                        product && product.stockAmount == 0
+                          ? '#777E8F'
+                          : data.styleData.buttonTextColor ?? 'white',
+                    }}
+                    className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                  >
+                    {data.styleData.buttonText ?? 'Comprar agora'}
+                  </button>
+                </>
               )}
             </div>
           </div>

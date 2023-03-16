@@ -123,7 +123,9 @@ export const SignUpForm = ({
             )}
             type="password"
           />
+
           <AuthPasswordTips passwordFieldName="password" className="pw-mb-6" />
+
           <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
             <AuthCheckbox
               name="acceptsTermsOfUse"

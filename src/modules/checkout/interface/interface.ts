@@ -17,12 +17,15 @@ export interface PaymentMethodsAvaiable {
 }
 export interface OrderPreviewCache {
   currencyId: string;
-  product: Product;
+  products: Product[];
   orderProducts: OrderProductsInterface[];
   signedGasFee: string;
   totalPrice: string;
   choosedPayment?: PaymentMethodsAvaiable;
   cpfCnpj?: string;
+  clientServiceFee?: string;
+  gasFee?: string;
+  cartPrice?: string;
 }
 
 interface OrderProductsInterface {

@@ -356,5 +356,14 @@
   "token>pass>typeDigital": "Digital",
   "token>benefits>useLimit": "Limites de uso:",
   "token>benefits>details": "Detalhes do benefício",
-  "token>qrCode>validatedAgain": "Validar outro QRCode"
+  "token>qrCode>validatedAgain": "Validar outro QRCode",
+  "auth>inputFile>selectFile": "Selecione um arquivo",
+  "auth>getValidationsTypesForSignup>insertValidEmail": "Insira um email válido",
+  "auth>getValidationsTypesForSignup>insertYourCPF": "Insira seu CPF",
+  "auth>getValidationsTypesForSignup>insertValidCPF": "Insira um CPF válido",
+  "auth>getValidationsTypesForSignup>insertYourPhone": "Insira seu telefone",
+  "auth>getValidationsTypesForSignup>insertValidPhone": "Insira um telefone válido",
+  "auth>getValidationsTypesForSignup>insertUrl": "Insira uma url",
+  "auth>getValidationsTypesForSignup>insertText": "Insira um texto",
+  "auth>formCompletKYCWithoutLayout>reviewData": "Encontramos alguns problemas validando seus dados. Por favor, revise os campos a seguir:"
 }

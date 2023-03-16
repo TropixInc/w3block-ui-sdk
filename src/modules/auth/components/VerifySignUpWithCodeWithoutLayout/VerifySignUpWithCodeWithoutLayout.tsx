@@ -68,6 +68,8 @@ export const VerifySignUpWithCodeWithoutLayout = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, reset]);
 
+  const queryString = new URLSearchParams(query as any).toString();
+
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6 && emailLocal) {
@@ -79,7 +81,11 @@ export const VerifySignUpWithCodeWithoutLayout = ({
               signIn({ email: emailLocal, password, companyId }).then(
                 (data) => {
                   if (data.error == null) {
-                    pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET);
+                    pushConnect(
+                      PixwayAppRoutes.CONNECT_EXTERNAL_WALLET +
+                        '?' +
+                        queryString
+                    );
                   }
                 }
               );

@@ -9,8 +9,9 @@ export const useRouterConnect = () => {
   const { connectProxyPass } = useCompanyConfig();
   const location = useLocation();
 
-  const pushConnect = (path: string) => {
+  const pushConnect = (path: string, query?: any) => {
     if (window.self !== window.top) return;
+    const queryString = new URLSearchParams(query).toString();
     router.push(
       removeDoubleSlashesOnUrl(
         (location.hostname?.includes('localhost') ||
@@ -18,7 +19,9 @@ export const useRouterConnect = () => {
         !connectProxyPass
           ? '/'
           : connectProxyPass) + path
-      )
+      ) +
+        (queryString && queryString != '' ? '?' : '') +
+        queryString
     );
   };
   const routerToHref = (path: string) => {

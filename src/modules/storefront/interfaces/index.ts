@@ -112,6 +112,7 @@ export interface BannerData extends MainModuleThemeInterface {
 export interface SpecificBannerInfo {
   backgroundColor?: string;
   backgroundUrl?: AssetInterface;
+  backgroundUrlMobile?: AssetInterface;
   overlay?: boolean;
   overlayColor?: string;
   textAligment?: AlignmentEnum;
@@ -274,10 +275,12 @@ export interface ParagraphData extends MainModuleThemeInterface {
     margin?: string;
     padding?: string;
     alignment?: AlignmentEnum;
-    titleInput?: string;
     titleColor?: string;
-    textInput?: string;
     textColor?: string;
+  };
+  contentData: {
+    titleInput?: string;
+    textInput?: string;
   };
 }
 export interface ProductPageData extends MainModuleThemeInterface {

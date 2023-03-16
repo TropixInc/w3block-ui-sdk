@@ -1,4 +1,4 @@
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerSDK,
   position,
@@ -16,7 +16,7 @@ import { SignUpFormWithoutLayout } from '../../components/SignUpFormWithoutLayou
 interface SignUpTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;
@@ -37,7 +37,7 @@ interface SignUpTemplateSDKProps {
 export const SignUpTemplateSDK = ({
   bgColor = 'rgba(255,255,255)',
   infoPosition = position.CENTER,
-  contentType = contentTypeEnum.TEXT_LOGO,
+  contentType = ContentTypeEnum.TEXT_LOGO,
   FAQContext,
   separation,
   classes,

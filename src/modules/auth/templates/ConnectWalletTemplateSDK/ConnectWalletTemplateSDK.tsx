@@ -1,4 +1,4 @@
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
@@ -15,7 +15,7 @@ import { ConnectExternalWalletWithoutLayout } from '../../components/ConnectExte
 interface ConnectWalletTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;
@@ -39,7 +39,7 @@ export const ConnectWalletTemplateSDK = ({
   logoUrl,
   textContainer,
   className,
-  defaultRedirectRoute = PixwayAppRoutes.HOME,
+  defaultRedirectRoute = PixwayAppRoutes.TOKENS,
   tenantName,
   redirectLink,
   extraBy,

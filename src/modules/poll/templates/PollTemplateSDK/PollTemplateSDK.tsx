@@ -9,12 +9,12 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { PollBox } from '../../components';
-import { contentTypeEnum } from '../../enums/contentType';
+import { ContentTypeEnum } from '../../enums/contentType';
 
 interface PolltemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;
@@ -29,7 +29,7 @@ interface PolltemplateSDKProps {
 export const PollTemplateSDK = ({
   bgColor = 'rgba(0,0,0)',
   infoPosition = position.CENTER,
-  contentType = contentTypeEnum.TEXT_LOGO,
+  contentType = ContentTypeEnum.TEXT_LOGO,
   FAQContext,
   separation,
   classes,
