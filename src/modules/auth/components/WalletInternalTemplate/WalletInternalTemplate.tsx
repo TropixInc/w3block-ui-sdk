@@ -9,7 +9,6 @@ import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFil
 import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
 import { ReactComponent as EyeIcon } from '../../../shared/assets/icons/eyeIcon.svg';
 import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/eyeIconCrossed.svg';
-// import { ReactComponent as FilterIcon } from '../../../shared/assets/icons/filterOutlined.svg';
 import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
@@ -83,7 +82,8 @@ const _WalletInternalTemplate = () => {
             {isLoading ? (
               <ChipWallet.Skeleton />
             ) : (
-              profile?.data.wallets?.map((wallet) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              profile?.data.wallets?.map((wallet: any) => {
                 return wallet.type === WalletTypes.Vault ? (
                   <ChipWallet
                     key={wallet.id}
@@ -121,54 +121,7 @@ const _WalletInternalTemplate = () => {
             </Link>
           </div>
         </div>
-        {/* <div className="pw-w-full pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-[23px]">
-          {isLoading ? (
-            <CardWallet.Skeleton />
-          ) : (
-            profile?.data.wallets?.map((wallet) => {
-              return wallet.type === WalletTypes.Vault ? (
-                <CardWallet
-                  key={wallet.id}
-                  showValue={showValue}
-                  title={translate('wallet>page>principal')}
-                  walletAddress={profile?.data.mainWallet?.address ?? ''}
-                  onClick={() =>
-                    router.pushConnect(PixwayAppRoutes.ADD_FUNDS_TYPE)
-                  }
-                  textButton={translate('wallet>page>addFunds')}
-                />
-              ) : (
-                <CardWallet
-                  key={wallet.id}
-                  showValue={showValue}
-                  title={translate('wallet>page>metamask')}
-                  walletAddress={profile?.data.mainWallet?.address ?? ''}
-                />
-              );
-            })
-          )}
-        </div> */}
       </div>
-      {/* <div className="pw-flex pw-items-center pw-text-[#777E8F] pw-font-bold pw-text-2xl pw-my-[30px]">
-        {translate('wallet>page>extract')}
-        <a href={extractLink()} target="_blank" rel="noreferrer">
-          <ExternalLinkIcon className="pw-ml-3 pw-stroke-[#777E8F] hover:pw-stroke-brand-primary" />
-        </a>
-      </div> */}
-
-      {/* Componente comentado enquando não possuimos rota para mostrar os dados do extrato
-       <WalletExtract /> 
-      */}
-
-      {/* 
-        Comentado para poder fazer função futuramente
-      <div
-        className="pw-w-full pw-py-[13.75px] pw-px-[48px] pw-rounded-[48px] pw-bg-[#EFEFEF] pw-border pw-border-[#DCDCDC] pw-flex pw-justify-center pw-items-center pw-mt-[26px] pw-text-[#090909] pw-text-[12px] pw-font-medium pw-leading-[15px] pw-cursor-pointer"
-        onClick={() => console.log('Desconectar')}
-      >
-        <FilterIcon className="pw-stroke-brand-primary" />
-        {translate('wallet>page>disconnect')}
-      </div> */}
       <div className="pw-mt-6">
         <TokensListTemplate withLayout={false} />
       </div>

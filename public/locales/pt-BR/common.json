@@ -133,6 +133,7 @@
   "header>components>defaultTab>myAccount": "Meu perfil",
   "header>components>defaultTab>myTokens": "Meus tokens",
   "header>components>defaultTab>wallet": "Carteira",
+  "header>components>defaultTab>myOrders": "Minhas compras",
   "header>components>defaultTab>settings": "Configurações",
   "header>components>defaultTab>tokenPass": "Token Pass",
   "header>components>defaultTab>helpCenter": "Central de ajuda",

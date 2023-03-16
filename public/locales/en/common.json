@@ -64,6 +64,7 @@
   "header>components>defaultTab>myTokens": "My tokens",
   "header>components>defaultTab>tokenPass": "Token Pass",
   "header>components>defaultTab>wallet": "Wallet",
+  "header>components>defaultTab>myOrders": "My orders",
   "header>components>defaultTab>settings": "Settings",
   "header>components>defaultTab>helpCenter": "Help center",
   "shared>components>servicePriceinfo": "Service fee",

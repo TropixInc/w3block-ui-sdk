@@ -18,6 +18,7 @@ import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.s
 import { ReactComponent as IntegrationIcon } from '../../../../../assets/icons/integrationIconOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
 import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
+import { ReactComponent as MyOrdersIcon } from "../../../../../assets/icons/myOrders.svg"
 //import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
 // import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
 import { ReactComponent as TicketIcon } from '../../../../../assets/icons/ticketFilled.svg';
@@ -101,6 +102,12 @@ export const useDefaultMenuTabs = () => {
       name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon />,
+      isVisible: true,
+    },
+    {
+      name: translate('header>components>defaultTab>myOrders'),
+      route: PixwayAppRoutes.MY_ORDERS,
+      icon: <MyOrdersIcon />,
       isVisible: true,
     },
     {
