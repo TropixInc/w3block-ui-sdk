@@ -186,7 +186,7 @@ export const TokenDetailsCard = ({
         : handleLocal(benefit.type),
     }));
 
-    const data = benefitsByEdition?.data?.items.map((benefit) => {
+    const data = benefitsByEdition?.data?.map((benefit) => {
       const tableData: TableRow = {
         name: benefit.name,
         type: type(benefit?.type),

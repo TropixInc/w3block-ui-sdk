@@ -132,7 +132,7 @@ const _PassTemplate = ({
       editionNumber: +editionNumber,
     });
 
-  const benefitData = benefitsResponse?.data.items.filter(
+  const benefitData = benefitsResponse?.data.filter(
     (e) => e.id === benefit?.data.id
   );
 
@@ -229,9 +229,7 @@ const _PassTemplate = ({
 
   const isDynamic = benefitData && benefitData[0]?.dynamicQrCode;
 
-  const usesLeft =
-    benefitData &&
-    benefitData[0]?.useLimit - benefitData[0]?.tokenPassBenefitUses.length;
+  const usesLeft = benefitData && benefitData[0]?.useAvailable;
 
   const inactiveDateUseToken = !waitCheckin && isInactive;
   const tokenExpired = hasExpired && isUnavaible;
@@ -315,7 +313,8 @@ const _PassTemplate = ({
               )}
               <div className="pw-flex pw-flex-col pw-justify-center">
                 <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                  {publicTokenResponse?.data?.information?.title}
+                  {publicTokenResponse?.data?.information?.title} -{' '}
+                  {benefitData && benefitData[0]?.name}
                 </div>
                 <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
                   {isBenefitSucceed &&

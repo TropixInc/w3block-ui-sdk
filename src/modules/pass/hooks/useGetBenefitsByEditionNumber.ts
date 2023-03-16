@@ -7,10 +7,6 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
 import { BenefitsByEditionNumberDTO } from '../interfaces/PassBenefitDTO';
 
-interface Response {
-  items: BenefitsByEditionNumberDTO[];
-}
-
 interface Props {
   tokenPassId: string;
   editionNumber: number;
@@ -25,7 +21,7 @@ const useGetBenefitsByEditionNumber = ({
   return usePrivateQuery(
     [PixwayAPIRoutes.PASS_BENEFITS_BY_EDITION],
     () =>
-      axios.get<Response>(
+      axios.get<BenefitsByEditionNumberDTO[]>(
         PixwayAPIRoutes.PASS_BENEFITS_BY_EDITION.replace(
           '{tenantId}',
           tenantId ?? ''

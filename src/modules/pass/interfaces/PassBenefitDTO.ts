@@ -32,34 +32,36 @@ export interface PassBenefitDTO {
 }
 
 export interface BenefitsByEditionNumberDTO {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  name: string;
-  description: string;
-  rules: string;
-  type: TokenPassBenefitType;
-  useLimit: number;
-  eventStartsAt: string;
-  eventEndsAt: string;
-  checkInStartsAt: string;
   checkInEndsAt: string;
-  linkUrl: string;
-  linkRules: string;
+  checkInStartsAt: string;
+  createdAt: string;
+  description: string;
   dynamicQrCode: boolean;
-  tokenPassId: string;
-  tokenPassBenefitUses: TokenPassBenefitUsesDTO[];
+  eventEndsAt: string;
+  eventStartsAt: string;
+  id: string;
+  linkRules: string;
+  linkUrl: string;
+  name: string;
+  rules: string;
   status: BenefitStatus;
   statusMessage: string;
+  tokenPass: TokenPassEntity;
+  tokenPassBenefitUsage: TokenPassBenefitUsesDTO;
+  type: TokenPassBenefitType;
+  updatedAt: string;
+  useAvailable: number;
+  useLimit: number;
+  tokenPassId: string;
 }
 
 interface TokenPassBenefitUsesDTO {
-  id: string;
   createdAt: string;
-  updatedAt: string;
-  userId: string;
   editionNumber: number;
+  id: string;
   tokenPassBenefitId: string;
+  updatedAt: string;
+  uses: number;
 }
 
 export enum TokenPassBenefitType {
