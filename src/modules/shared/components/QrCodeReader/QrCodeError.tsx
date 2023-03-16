@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { useLockBodyScroll } from 'react-use';
+import { useLockBodyScroll } from 'react-use'; 
+
+import classNames from 'classnames';
 
 import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
-import useRouter from '../../hooks/useRouter';
+import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
 import useTranslation from '../../hooks/useTranslation';
 import { Button } from '../Buttons';
 
@@ -19,7 +21,6 @@ interface iProps {
 }
 
 export const QrCodeError = ({ hasOpen, onClose, type }: iProps) => {
-  const router = useRouter();
 
   const [translate] = useTranslation();
 
@@ -27,12 +28,14 @@ export const QrCodeError = ({ hasOpen, onClose, type }: iProps) => {
 
   return hasOpen ? (
     <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
-      <div
-        className="pw-rounded-full pw-flex pw-justify-center pw-items-center pw-w-9 pw-h-9 pw-text-xs pw-text-[#353945] pw-border pw-border-[#777E8F] pw-absolute pw-top-4 pw-right-4 pw-cursor-pointer"
-        onClick={onClose}
-      >
-        x
-      </div>
+      <button
+          onClick={onClose}
+          className={classNames(
+            'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center'
+          )}
+        >
+          <XIcon className="pw-pw-fill-[#5682C3]" />
+        </button>
 
       <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
         <ErrorIcon className="pw-w-[60px] pw-h-[60px]" />
@@ -55,7 +58,7 @@ export const QrCodeError = ({ hasOpen, onClose, type }: iProps) => {
         type="button"
         model="secondary"
         width="full"
-        onClick={() => router.back()}
+        onClick={onClose}
       >
         {translate('token>pass>validatedToken>back')}
       </Button>

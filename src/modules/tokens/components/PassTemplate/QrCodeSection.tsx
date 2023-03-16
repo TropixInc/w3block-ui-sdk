@@ -10,21 +10,21 @@ import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenUsageTime } from './TokenUsageTime';
 
 interface iQrCodeSection {
-  tokenId: string;
-  eventDate: Date;
+  eventDate?: Date;
   hasExpiration?: boolean;
   hasExpired?: boolean;
   editionNumber: string;
   secret: string;
+  isDynamic: boolean;
 }
 
 export const QrCodeSection = ({
-  tokenId,
   eventDate,
   hasExpiration = true,
   editionNumber,
   hasExpired,
   secret,
+  isDynamic,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState('');
   const { setNewCountdown: setQrCountDown, ...qrCountDown } = useCountdown();
@@ -43,10 +43,10 @@ export const QrCodeSection = ({
   return hasExpired ? (
     <></>
   ) : (
-    <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px] pw-max-w-[347px] sm:pw-max-w-full">
-      <div className="pw-flex pw-gap-[12px] sm:pw-gap-[16px] pw-p-[16px] sm:pw-px-[24px]">
+    <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px] pw-max-w-full">
+      <div className="pw-flex pw-flex-col pw-gap-[12px] sm:pw-gap-[16px] pw-p-[16px] sm:pw-px-[24px]">
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
-          <QRCodeSVG value={String(codeQr)} size={120} />
+          <QRCodeSVG value={String(codeQr)} size={300} />
         </div>
 
         <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
@@ -55,20 +55,24 @@ export const QrCodeSection = ({
           <div className="pw-text-[15px] pw-leading-[22.5px] pw-font-bold pw-text-[#353945]">
             {translate('token>pass>identifierCode')}
           </div>
-          <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-            {tokenId}
+          <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F] pw-break-words">
+            {secret}
           </div>
-          <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#295BA6]">
-            <Trans
-              i18nKey={'token>pass>qrCodeExpires'}
-              tOptions={{ seconds: qrCountDown.seconds }}
-            >
-              1<span className="pw-font-semibold">2</span>
-            </Trans>
-          </div>
+          {isDynamic && (
+            <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#295BA6]">
+              <Trans
+                i18nKey={'token>pass>qrCodeExpires'}
+                tOptions={{ seconds: qrCountDown.seconds }}
+              >
+                1<span className="pw-font-semibold">2</span>
+              </Trans>
+            </div>
+          )}
         </div>
       </div>
-      <TokenUsageTime hasExpiration={hasExpiration} date={eventDate} />
+      {eventDate && (
+        <TokenUsageTime hasExpiration={hasExpiration} date={eventDate} />
+      )}
     </div>
   );
 };

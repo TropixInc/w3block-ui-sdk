@@ -27,7 +27,7 @@ export const DetailToken = ({
   };
 
   return (
-    <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-rounded-[16px] pw-p-[24px] pw-gap-[9px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] ">
+    <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-start pw-rounded-[16px] pw-p-[24px] pw-gap-[9px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] ">
       <div className="pw-text-[#353945] pw-font-semibold pw-text-[15px] pw-leading-[22.5px] pw-flex pw-gap-[8px] pw-justify-center pw-items-center">
         {title}{' '}
         {titleLink ? (
@@ -39,7 +39,7 @@ export const DetailToken = ({
       {description ? (
         <div
           className={
-            'pw-relative pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-flex pw-items-center pw-text-center pw-gap-1 pw-w-full pw-overflow-hidden pw-text-ellipsis'
+            'pw-relative pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-flex pw-items-center pw-text-left pw-gap-1 pw-w-full pw-overflow-hidden pw-text-ellipsis'
           }
         >
           {description}

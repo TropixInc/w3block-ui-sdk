@@ -42,6 +42,6 @@ export enum PixwayAppRoutes {
   LIST_BENEFITS = '/tokens/{contractAddress}/{chainId}/{tokenId}/list-benefits',
   CONNECTION = '/connection',
   USE_BENEFIT = '/tokens/use-benefit/{benefitId}',
-
+  BENEFIT_DETAILS = '/tokens/benefit-details/{benefitId}',
   COMPLETE_KYC = '/auth/complete-kyc',
 }
