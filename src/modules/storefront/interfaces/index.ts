@@ -349,8 +349,8 @@ export interface MidiaData extends MainModuleThemeInterface {
   styleData: {
     margin?: string;
     padding?: string;
-    midiaUrl: AssetInterface;
-    midiaUrlMobile: AssetInterface;
+    mediaUrl: AssetInterface;
+    mediaUrlMobile: AssetInterface;
     imageDisposition: string;
     imageRatio: string;
     imageAlignment: AlignmentEnum;

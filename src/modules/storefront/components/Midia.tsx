@@ -26,8 +26,8 @@ const rowAlignments: AlignmentClassNameMap = {
 export const Midia = ({ data }: { data: MidiaData }) => {
   const {
     styleData: {
-      midiaUrl,
-      midiaUrlMobile,
+      mediaUrl,
+      mediaUrlMobile,
       imageDisposition,
       imageRatio,
       imageAlignment,
@@ -45,10 +45,9 @@ export const Midia = ({ data }: { data: MidiaData }) => {
 
   const breakpoint = useBreakpoints();
 
-  const breakPointsMobile = [breakpointsEnum.SM , breakpointsEnum.XS];
-  const bgUrl = mediaUrlMobile && breakPointsMobile.includes(breakpoint)
-      ? mediaUrlMobile
-      : mediaUrl;
+  const breakPointsMobile = [breakpointsEnum.SM, breakpointsEnum.XS];
+  const isMobile = mediaUrlMobile && breakPointsMobile.includes(breakpoint);
+  const bgUrl = isMobile ? mediaUrlMobile : mediaUrl;
 
   return (
     <div
