@@ -18,6 +18,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   signUpRoute = PixwayAppRoutes.SIGN_UP,
   textColor = 'black',
   hasSignUp,
+  bgColor,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
@@ -46,7 +47,10 @@ export const NavigationTabsPixwaySDKMobile = ({
         />
       )}
       {opened ? (
-        <div className="pw-flex pw-flex-col pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-py-8 pw-items-center pw-gap-y-4">
+        <div
+          style={{ backgroundColor: bgColor }}
+          className="pw-flex pw-flex-col pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-py-8 pw-items-center pw-gap-y-4"
+        >
           {tabs?.map((tab) => (
             <a
               style={{ color: textColor }}
