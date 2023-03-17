@@ -11,6 +11,7 @@ export type TemplateData = {
     | ImagePlusTextData
     | ParagraphData
     | MidiaData
+    | GridItemAreaData
   )[];
 };
 
@@ -27,6 +28,7 @@ export type Theme = {
   paragraph?: MainModuleThemeInterface;
   productPage: ProductPageData;
   midia?: MidiaData;
+  GridItemArea?: GridItemAreaData;
 };
 
 export interface MainModuleThemeInterface {
@@ -35,6 +37,37 @@ export interface MainModuleThemeInterface {
   id: string;
   styleData?: any;
   contentData?: any;
+}
+
+export enum FitImage {
+  CONTAIN = 'contain',
+  COVER = 'cover',
+  FILL = 'fill',
+}
+
+export interface GridItemAreaData extends MainModuleThemeInterface {
+  type: ModulesType.GRID_ITEM_AREA;
+  styleData: {
+    container?: Layout;
+    backgroundColor?: string;
+    backgroundImage?: AssetInterface;
+    padding?: string;
+    columnSizes?: string;
+    rowSizes?: string;
+    margin?: string;
+    gridColumns?: string;
+    gridRows?: string;
+    gapX?: string;
+    gapY?: string;
+    Items?: {
+      target?: '_self' | '_blank';
+      quadrants?: number[];
+      imageAlign?: AlignmentEnum;
+      fit?: FitImage;
+      link?: string;
+      image: AssetInterface;
+    }[];
+  };
 }
 
 export interface PageData extends MainModuleThemeInterface {
@@ -405,4 +438,5 @@ export enum ModulesType {
   PARAGRAPH = 'Paragraph',
   PRODUCT_PAGE = 'Product_page',
   MIDIA = 'Midia',
+  GRID_ITEM_AREA = 'GridItemArea',
 }
