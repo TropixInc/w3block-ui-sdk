@@ -101,29 +101,26 @@ const Slide = ({
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
   const alignmentTextClass = alignmentsText[textAligment ?? AlignmentEnum.LEFT];
-
   const breakpoint = useBreakpoints();
-
   const bgUrl =
     backgroundUrlMobile &&
     (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
       ? backgroundUrlMobile
       : backgroundUrl;
+  const bg = `${
+    overlay && overlayColor
+      ? `linear-gradient(${overlayColor},${overlayColor}),`
+      : ''
+  } url("${bgUrl?.assetUrl}") no-repeat center`;
 
   return (
     <div
       style={{
-        background: `${
-          overlay && overlayColor
-            ? `linear-gradient(${overlayColor},${overlayColor}),`
-            : ''
-        } url('${bgUrl?.assetUrl}') `,
-        backgroundPosition: 'center',
-        backgroundColor: backgroundColor ?? '',
-        backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
+        backgroundColor: backgroundColor,
+        background: bg,
       }}
-      className={`${ratioClassName} pw-flex ${rowAlignmentClass} pw-items-center`}
+      className={`${ratioClassName} !pw-bg-cover  pw-flex ${rowAlignmentClass} pw-items-center`}
     >
       {isVideo(bgUrl?.assetUrl ?? '') && (
         <ImageSDK

@@ -20,13 +20,13 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
   const { companyId: tenantId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.TOKEN_PASS],
+    [PixwayAPIRoutes.TOKEN_PASS, benefitId, editionNumber],
     () => {
       return axios
         .get<SecretResponse>(
           PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
             .replace('{id}', benefitId)
-            .replace('{editionNumber}', editionNumber)
+            .replace('{editionNumber}', editionNumber.toString())
         )
         .catch((e) => e.response);
     },

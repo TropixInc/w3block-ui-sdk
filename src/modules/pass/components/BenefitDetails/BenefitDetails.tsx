@@ -1,0 +1,129 @@
+import { useFlags } from 'launchdarkly-react-client-sdk';
+
+import { InternalPagesLayoutBase } from '../../../shared';
+import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
+import { Spinner } from '../../../shared/components/Spinner';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
+import { DetailPass } from '../../../tokens/components/PassTemplate/DetailPass';
+import { DetailsTemplate } from '../../../tokens/components/PassTemplate/DetailsTemplate';
+import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
+import { TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
+
+interface BenefitDetailsProps {
+  benefitIdProp?: string;
+}
+
+const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
+  const { pass } = useFlags();
+  const [translate] = useTranslation();
+  const router = useRouterConnect();
+  const benefitId = benefitIdProp || (router?.query?.benefitId as string) || '';
+
+  const { data: benefit, isLoading: isLoadingBenefit } =
+    useGetPassBenefitById(benefitId);
+
+  if (isLoadingBenefit) {
+    return (
+      <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+        <Spinner />
+      </div>
+    );
+  }
+  if (pass) {
+    return (
+      <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
+        <div
+          className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
+          onClick={() => router.back()}
+        >
+          <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
+
+          <p className="sm:pw-hidden pw-block">
+            {translate('token>pass>title')}
+          </p>
+          <p className="pw-hidden sm:pw-block">
+            {translate('token>pass>back')}
+          </p>
+        </div>
+        <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
+          {translate('token>pass>title')}
+        </div>
+        <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
+          <div className="pw-ml-5 pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+            {benefit?.data?.name}
+          </div>
+          <div className="pw-ml-5 pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+            {translate('token>benefits>useLimit') +
+              ' ' +
+              benefit?.data?.useLimit}
+          </div>
+        </div>
+        <>
+          <DetailsTemplate
+            title={translate('token>benefits>details')}
+            autoExpand={true}
+          >
+            <DetailPass
+              title={translate('token>pass>description')}
+              description={benefit?.data?.description ?? ''}
+            />
+
+            <DetailPass
+              title={translate('token>pass>rules')}
+              description={benefit?.data?.rules ?? ''}
+            />
+          </DetailsTemplate>
+
+          {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
+            <DetailsTemplate
+              title={translate('token>pass>useLocale')}
+              autoExpand={true}
+            >
+              {benefit?.data?.tokenPassBenefitAddresses
+                ?.filter((address) => address)
+                .map((address) => (
+                  <div
+                    key={address.name}
+                    className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
+                  >
+                    <div className="pw-flex pw-flex-col pw-gap-1">
+                      <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                        {address.name}
+                      </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        {address.street && address.street + ', '}
+                        {address.city && address.city + ' - '}
+                        {address.state}
+                      </div>
+                    </div>
+                    {address.rules && (
+                      <div className="pw-flex pw-flex-col pw-gap-1">
+                        <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                          {translate('token>pass>rules')}
+                        </div>
+                        <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                          {address.rules}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+            </DetailsTemplate>
+          ) : null}
+        </>
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
+
+export const BenefitDetails = () => (
+  <TranslatableComponent>
+    <InternalPagesLayoutBase>
+      <_BenefitDetails />
+    </InternalPagesLayoutBase>
+  </TranslatableComponent>
+);

@@ -11,6 +11,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
+import useGetPassByUser from '../../../../../../pass/hooks/useGetPassByUser';
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
@@ -83,6 +84,8 @@ export const useDefaultMenuTabs = () => {
   const { signOut } = usePixwayAuthentication();
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
   const { pass } = useFlags();
+  const { data: passData } = useGetPassByUser();
+  const hasPassAssociated = passData?.data.items !== undefined && passData?.data?.items?.length > 0;
 
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
@@ -107,7 +110,7 @@ export const useDefaultMenuTabs = () => {
       name: translate('header>components>defaultTab>tokenPass'),
       route: PixwayAppRoutes.TOKENPASS,
       icon: <TicketIcon width={17} height={17} />,
-      isVisible: pass && isAdmin,
+      isVisible: pass && isAdmin && hasPassAssociated,
 
     },
     {

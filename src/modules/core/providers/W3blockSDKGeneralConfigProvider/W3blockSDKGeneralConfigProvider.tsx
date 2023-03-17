@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from 'react';
 
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
+import { CartProvider } from '../../../checkout/providers/cartProvider';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
@@ -18,6 +19,7 @@ interface Props extends JSX.IntrinsicAttributes {
     pdfUrl: string;
     pollUrl?: string;
     passUrl: string;
+    directory?: string;
   };
   locale: PixwayUISdkLocale;
   companyId: string;
@@ -61,7 +63,9 @@ export const W3blockUISDKGeneralConfig = ({
           w3blockPdfAPIUrl={api.pdfUrl}
           w3BlockPassApiUrl={api.passUrl ?? ''}
         >
-          <LocaleProvider locale={locale}>{children}</LocaleProvider>
+          <CartProvider>
+            <LocaleProvider locale={locale}>{children}</LocaleProvider>
+          </CartProvider>
         </W3blockApiProvider>
       </EnvironmentContext.Provider>
     </W3blockUISDKGereralConfigContext.Provider>

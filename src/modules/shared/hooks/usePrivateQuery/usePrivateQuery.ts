@@ -1,8 +1,8 @@
 import {
   QueryFunction,
   QueryKey,
-  useQuery,
   UseQueryOptions,
+  useQuery,
 } from 'react-query';
 
 import { useToken } from '../useToken';

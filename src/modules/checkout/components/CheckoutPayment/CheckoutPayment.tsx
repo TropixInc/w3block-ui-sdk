@@ -14,6 +14,7 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 import { PaymentMethod } from '../../enum';
+import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
 import { OrderPreviewCache } from '../../interface/interface';
 import { CheckoutStripeForm } from '../CheckoutStripeForm/CheckoutStripeForm';
@@ -35,6 +36,7 @@ export const CheckoutPayment = () => {
   const [productCache] = useLocalStorage<OrderPreviewCache>(
     PRODUCT_CART_INFO_KEY
   );
+  const { setCart } = useCart();
   const { data: session } = usePixwaySession();
   const [query, setQuery] = useState('');
   useEffect(() => {
@@ -91,6 +93,9 @@ export const CheckoutPayment = () => {
               setIframeLink(data.paymentInfo.paymentUrl ?? '');
             }
             setSending(false);
+            if (router.query.cart && router.query.cart == 'true') {
+              setCart([]);
+            }
           },
           onError: () => {
             setRequestError(true);
@@ -185,7 +190,7 @@ export const CheckoutPayment = () => {
   };
 
   return (
-    <div className="pw-min-h-[95vh]">
+    <div className="pw-min-h-[95vh] pw-bg-[#F7F7F7]">
       {requestError ? (
         <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
           <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center pw-mx-auto">

@@ -2,6 +2,7 @@ interface ButtonProps {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary';
   onClick?: () => void;
+  className?: string;
 }
 
 const primaryVariant = 'pw-bg-brand-primary pw-text-white pw-shadow-md';
@@ -13,13 +14,14 @@ export const Button = ({
   children,
   variant = 'primary',
   onClick,
+  className = '',
 }: ButtonProps) => {
   return (
     <button
       onClick={onClick}
       className={`${
         variant == 'primary' ? primaryVariant : secondaryVariant
-      } pw-py-[10px] active:pw-scale-90 pw-px-[24px] sm:pw-min-w-[118px] pw-font-poppins pw-font-medium pw-text-xs pw-rounded-[48px]`}
+      } ${className} pw-py-[10px] active:pw-scale-90 pw-px-[24px] sm:pw-min-w-[118px] pw-font-poppins pw-font-medium pw-text-xs pw-rounded-[48px]`}
     >
       {children}
     </button>

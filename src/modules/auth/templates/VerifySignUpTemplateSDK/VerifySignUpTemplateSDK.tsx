@@ -3,7 +3,7 @@ import { useDebounce } from 'react-use';
 
 import { isAfter } from 'date-fns';
 
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import { ContainerControllerClasses, ExtraBy, position } from '../../../shared';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -27,7 +27,7 @@ interface VerifySignUpTemplateSDKProps {
   extraBy?: ExtraBy[];
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   separation?: boolean;
   logoUrl?: string;

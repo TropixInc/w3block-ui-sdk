@@ -1,4 +1,4 @@
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
@@ -16,7 +16,7 @@ interface VerifySignUpMailSentTemplateSDKProps {
   isPostSignUp?: boolean;
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;

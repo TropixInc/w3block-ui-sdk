@@ -13,22 +13,55 @@ export interface BenefitAddress {
 
 export interface PassBenefitDTO {
   id: string;
+  createdAt: string;
+  updatedAt: string;
   name: string;
   description: string;
   rules: string;
   type: TokenPassBenefitType;
   useLimit: number;
   eventStartsAt: string;
-  eventEndsAt: string;
-  checkInStartsAt: string;
-  checkInEndsAt: string;
+  eventEndsAt?: string;
+  checkInStartsAt?: string;
+  checkInEndsAt?: string;
   linkUrl: string;
   tokenPass: TokenPassEntity;
   tokenPassId: string;
-  createdAt: string;
-  updatedAt: string;
   status: BenefitStatus;
   tokenPassBenefitAddresses?: BenefitAddress[];
+}
+
+export interface BenefitsByEditionNumberDTO {
+  checkInEndsAt: string;
+  checkInStartsAt: string;
+  createdAt: string;
+  description: string;
+  dynamicQrCode: boolean;
+  eventEndsAt: string;
+  eventStartsAt: string;
+  id: string;
+  linkRules: string;
+  linkUrl: string;
+  name: string;
+  rules: string;
+  status: BenefitStatus;
+  statusMessage: string;
+  tokenPass: TokenPassEntity;
+  tokenPassBenefitUsage: TokenPassBenefitUsesDTO;
+  type: TokenPassBenefitType;
+  updatedAt: string;
+  useAvailable: number;
+  useLimit: number;
+  tokenPassId: string;
+}
+
+interface TokenPassBenefitUsesDTO {
+  createdAt: string;
+  editionNumber: number;
+  id: string;
+  tokenPassBenefitId: string;
+  updatedAt: string;
+  uses: number;
 }
 
 export enum TokenPassBenefitType {
@@ -39,14 +72,43 @@ export enum TokenPassBenefitType {
 export interface TokenPassEntity {
   id: string;
   tokenName: string;
+  tenantId: string;
   contractAddress: string;
   chainId: ChainScan;
   name: string;
   description: string;
   rules: string;
   imageUrl: string;
-  tenantId: string;
   createdAt: string;
   updatedAt: string;
-  collectionId: string;
+  tokenPassBenefits: TokenPassBenefits[];
+}
+
+export interface TokenPassBenefits {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+  description: string;
+  rules: string;
+  type: TokenPassBenefitType;
+  useLimit: number;
+  eventStartsAt: string;
+  eventEndsAt: string;
+  checkInStartsAt: string;
+  checkInEndsAt: string;
+  linkUrl: string;
+  linkRules: string;
+  dynamicQrCode: boolean;
+  tokenPassId: string;
+  tokenPassBenefitAddresses: BenefitAddress[];
+  tokenPassBenefitOperators: tokenPassBenefitOperators[];
+}
+
+interface tokenPassBenefitOperators {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  tokenPassBenefitId: string;
 }

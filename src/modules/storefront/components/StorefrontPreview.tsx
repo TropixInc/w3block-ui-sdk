@@ -11,6 +11,7 @@ import { Accordions } from './Accordions';
 import { Banner } from './Banner';
 import { Cookies } from './Cookies';
 import { Footer } from './Footer';
+import { GridItemArea } from './GridItemArea';
 import { Header } from './Header';
 import { ImagePlusText } from './ImagePlusText';
 import { Menu } from './Menu';
@@ -169,6 +170,10 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
                     );
                   case ModulesType.PARAGRAPH:
                     return <Paragraph data={{ ...theme.paragraph, ...item }} />;
+                  case ModulesType.GRID_ITEM_AREA:
+                    return (
+                      <GridItemArea data={{ ...theme.GridItemArea, ...item }} />
+                    );
                   case ModulesType.MIDIA:
                     return <Midia data={{ ...theme.midia, ...item }} />;
                   default:
@@ -179,7 +184,6 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
           )}
         </>
       )}
-
       <Footer
         data={
           theme.footer ?? {

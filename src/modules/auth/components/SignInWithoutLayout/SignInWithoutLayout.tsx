@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import { object, string } from 'yup';
 
@@ -32,12 +33,15 @@ interface Form {
 interface SignInWithoutLayoutProps {
   defaultRedirectRoute: string;
   routeToAttachWallet?: string;
+
+  routerToAttachKyc?: string;
   hasSignUp?: boolean;
 }
 
 export const SigInWithoutLayout = ({
   defaultRedirectRoute,
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+  routerToAttachKyc = PixwayAppRoutes.COMPLETE_KYC,
   hasSignUp = true,
 }: SignInWithoutLayoutProps) => {
   const { companyId } = useCompanyConfig();
@@ -88,7 +92,9 @@ export const SigInWithoutLayout = ({
   });
 
   const checkForCallbackUrl = () => {
-    if (!profile?.data.mainWallet) {
+    if (profile?.data.kycStatus === KycStatus.Pending) {
+      return routerToAttachKyc;
+    } else if (!profile?.data.mainWallet) {
       return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;

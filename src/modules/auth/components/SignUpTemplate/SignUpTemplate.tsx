@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import { I18NLocaleEnum } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useSignUp } from '../../hooks/useSignUp';
 import { SignUpForm } from '../SignUpForm';
@@ -30,6 +32,14 @@ const _SignUpTemplate = ({
   const [step, setStep] = useState(Steps.SIGN_UP);
   const { mutate, isLoading, isSuccess, error } = useSignUp();
   const [email, setEmail] = useState('');
+  const { connectProxyPass, companyId } = useCompanyConfig();
+  const [language, _] = useState(() => {
+    if (window) {
+      return window?.navigator?.language === 'pt-BR'
+        ? I18NLocaleEnum.PtBr
+        : I18NLocaleEnum.En;
+    }
+  });
 
   useEffect(() => {
     if (isSuccess) {
@@ -43,6 +53,9 @@ const _SignUpTemplate = ({
       confirmation,
       email,
       password,
+      callbackUrl: connectProxyPass + PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION,
+      tenantId: companyId,
+      i18nLocale: language,
     });
   };
 

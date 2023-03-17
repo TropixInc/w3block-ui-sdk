@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { useTranslation, Trans } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { I18NLocaleEnum } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
-import { object, string, boolean } from 'yup';
+import { boolean, object, string } from 'yup';
 
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
@@ -56,6 +57,14 @@ export const SignUpFormWithoutLayout = ({
   const router = useRouterConnect();
   const [step, setStep] = useState(Steps.SIGN_UP);
   const [emailLocal, setEmail] = useState('');
+  const [language, _] = useState(() => {
+    if (window) {
+      return window?.navigator?.language === 'pt-BR'
+        ? I18NLocaleEnum.PtBr
+        : I18NLocaleEnum.En;
+    }
+  });
+
   const {
     mutate,
     isLoading: signUpLoading,
@@ -82,6 +91,7 @@ export const SignUpFormWithoutLayout = ({
       confirmation,
       email,
       password,
+      i18nLocale: language,
       callbackUrl:
         removeDoubleSlashesOnUrl(
           appBaseUrl +
@@ -187,6 +197,7 @@ export const SignUpFormWithoutLayout = ({
             )}
             type="password"
           />
+
           <AuthPasswordTips passwordFieldName="password" className="pw-mb-6" />
           <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
             <AuthCheckbox

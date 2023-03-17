@@ -1,4 +1,4 @@
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
   ContainerControllerSDK,
@@ -15,7 +15,7 @@ import { SigInWithoutLayout } from '../../components/SignInWithoutLayout/SignInW
 interface SignInSignupTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;
@@ -38,7 +38,7 @@ export const SignInTemplateSDK = ({
   textContainer,
   className,
   hasSignUp = true,
-  defaultRedirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+  defaultRedirectRoute = PixwayAppRoutes.COMPLETE_KYC,
   extraBy,
 }: SignInSignupTemplateSDKProps) => {
   return (
