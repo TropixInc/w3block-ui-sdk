@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import { position } from '../../enums';
 import { FAQContextEnum } from '../../enums/FAQContext';
 import { ContainerTextBesideProps } from '../ContainerTextBeside/ContainerTextBeside';
@@ -11,7 +11,7 @@ import { ContainerCenter } from './ContainerCenter';
 interface ContainerControllerProps {
   bgColor?: string;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   infoComponent?: ReactNode | JSX.Element;
   className?: string;
   FAQContext?: FAQContextEnum;
@@ -31,7 +31,7 @@ export interface ContainerControllerClasses {
 export const ContainerControllerSDK = ({
   bgColor = 'rgb(255,255,255)',
   infoPosition = position.CENTER,
-  contentType = contentTypeEnum.FAQ,
+  contentType = ContentTypeEnum.FAQ,
   FAQContext = FAQContextEnum.POST_SALE,
   infoComponent,
   classes,

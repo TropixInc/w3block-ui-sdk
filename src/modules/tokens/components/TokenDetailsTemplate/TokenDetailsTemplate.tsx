@@ -53,6 +53,7 @@ const _TokenDetailsTemplate = () => {
         contractAddress={contractAddress}
         tokenId={tokenId}
         collectionId={publicTokenResponse?.data?.group?.collectionId}
+        editionNumber={publicTokenResponse.data?.edition?.currentNumber}
       />
 
       <MintedInfoCard

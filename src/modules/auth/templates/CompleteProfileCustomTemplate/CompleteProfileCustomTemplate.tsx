@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { isAfter } from 'date-fns';
 
-import { contentTypeEnum } from '../../../poll';
+import { ContentTypeEnum } from '../../../poll';
 import { ContainerControllerClasses, ExtraBy, position } from '../../../shared';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -31,7 +31,7 @@ export interface AllAuthPageProps {
   bgColor?: string;
   hasSignUp?: boolean;
   infoPosition?: position;
-  contentType?: contentTypeEnum;
+  contentType?: ContentTypeEnum;
   FAQContext?: FAQContextEnum;
   classes?: ContainerControllerClasses;
   separation?: boolean;
@@ -92,30 +92,32 @@ const _CompleteProfileCustomTemplate = ({
   }, [token]);
 
   const onSubmit = ({ confirmation, password }: SignUpFormData) => {
-    mutate(
-      {
-        email: emailToUse.replaceAll(' ', '+'),
-        password,
-        confirmation,
-        token: (token as string).split(';')[0],
-      },
-      {
-        onSuccess() {
-          signIn({
-            email: emailToUse.replaceAll(' ', '+'),
-            password,
-            companyId,
-          })
-            .then(() =>
-              router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
-            )
-            .catch((e) => {
-              // eslint-disable-next-line no-console
-              console.log(e);
-            });
+    {
+      mutate(
+        {
+          email: emailToUse.replaceAll(' ', '+'),
+          password,
+          confirmation,
+          token: (token as string).split(';')[0],
         },
-      }
-    );
+        {
+          onSuccess() {
+            signIn({
+              email: emailToUse.replaceAll(' ', '+'),
+              password,
+              companyId,
+            })
+              .then(() =>
+                router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
+              )
+              .catch((e) => {
+                // eslint-disable-next-line no-console
+                console.log(e);
+              });
+          },
+        }
+      );
+    }
   };
 
   if (step === Steps.TOKEN_EXPIRED)

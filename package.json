@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "0.1.1-alpha.178",
+  "version": "0.1.1-alpha.181",
   "type": "module",
   "files": [
     "dist"
@@ -34,7 +34,7 @@
     "@types/react-pdf": "^5.7.2",
     "@types/validator": "^13.7.11",
     "@w3block/pixchain-react-metamask": "^2.8.1",
-    "@w3block/sdk-id": "^0.1.40",
+    "@w3block/sdk-id": "^0.1.48",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
     "date-fns": "2.29.1",
@@ -44,9 +44,11 @@
     "jwt-decode": "^3.1.2",
     "launchdarkly-react-client-sdk": "^2.29.2",
     "qrcode.react": "^3.1.0",
+    "react-dropzone": "^12.0.4",
     "react-hook-form": "^7.33.1",
     "react-i18next": "^11.18.1",
     "react-pdf": "^5.7.2",
+    "react-phone-number-input": "^3.2.19",
     "react-use": "^17.4.0",
     "swiper": "^8.4.5",
     "validator": "^13.7.0",

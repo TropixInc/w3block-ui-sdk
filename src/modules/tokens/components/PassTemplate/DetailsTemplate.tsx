@@ -5,16 +5,20 @@ import classNames from 'classnames';
 
 import { ReactComponent as ChevronDown } from '../../../shared/assets/icons/chevronDownOutlined.svg';
 
-export const DetailsTemplate = ({
-  children,
-  title,
-}: {
+interface Props {
   title: string;
   children: ReactNode;
-}) => {
-  const [isOpen, toggleOpen] = useToggle(false);
+  autoExpand?: boolean;
+}
+
+export const DetailsTemplate = ({
+  title,
+  children,
+  autoExpand = false,
+}: Props) => {
+  const [isOpen, toggleOpen] = useToggle(autoExpand);
   return (
-    <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-py-[11px] pw-gap-[30px]">
+    <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-start pw-py-[11px] pw-gap-[30px]">
       <div
         className="pw-text-[#295BA6] pw-font-medium pw-text-[12px] pw-leading-[18px] pw-flex pw-gap-[10px] pw-cursor-pointer"
         onClick={toggleOpen}

@@ -13,8 +13,8 @@ export const DetailPass = ({
 }) => {
   const [isOpen, toggleOpen] = useToggle(true);
   return (
-    <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-py-[11px] pw-rounded-[16px] pw-border pw-border-[#EFEFEF] ">
-      <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-p-[16px] pw-border-b pw-border-[#EFEFEF] pw-w-full pw-justify-center sm:pw-justify-start">
+    <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-start pw-rounded-[16px] pw-border pw-border-[#EFEFEF] ">
+      <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-p-[16px] pw-border-b pw-border-[#EFEFEF] pw-w-full pw-justify-start">
         {title}
       </div>
       <div
