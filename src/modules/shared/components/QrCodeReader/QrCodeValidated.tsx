@@ -109,9 +109,9 @@ export const QrCodeValidated = ({
         </Button>
         <Button
           type="button"
-          model="primary"
           width="full"
-          className='mt-5'
+          model="secondary"
+          className='pw-mt-5'
           onClick={handleNext}
         >
           {translate('token>qrCode>validatedAgain')}
