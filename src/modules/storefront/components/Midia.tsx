@@ -28,6 +28,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
     styleData: {
       mediaUrl,
       mediaUrlMobile,
+      mediaLink,
       imageDisposition,
       imageRatio,
       imageAlignment,
@@ -58,14 +59,16 @@ export const Midia = ({ data }: { data: MidiaData }) => {
       }}
     >
       <div className={classNames(ratio, layoutClass, 'pw-mx-auto')}>
-        <ImageSDK
-          className={classNames(
-            ratio,
-            rowAlignmentClass,
-            '!pw-object-center pw-object-cover pw-w-full pw-h-full'
-          )}
-          src={bgUrl?.assetUrl}
-        />
+        <a href={mediaLink}>
+          <ImageSDK
+            className={classNames(
+              ratio,
+              rowAlignmentClass,
+              '!pw-object-center pw-object-cover pw-w-full pw-h-full'
+            )}
+            src={bgUrl?.assetUrl}
+          />
+        </a>
       </div>
     </div>
   );
