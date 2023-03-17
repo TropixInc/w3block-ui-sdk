@@ -45,11 +45,10 @@ export const Midia = ({ data }: { data: MidiaData }) => {
 
   const breakpoint = useBreakpoints();
 
-  const bgUrl =
-    midiaUrlMobile &&
-    (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
-      ? midiaUrlMobile
-      : midiaUrl;
+  const breakPointsMobile = [breakpointsEnum.SM , breakpointsEnum.XS];
+  const bgUrl = mediaUrlMobile && breakPointsMobile.includes(breakpoint)
+      ? mediaUrlMobile
+      : mediaUrl;
 
   return (
     <div
