@@ -45,7 +45,7 @@ const _HeaderPixwaySDK = ({
   toogleOpenedTabs,
   openedLogin,
   toggleOpenedLogin,
-  bgColor = 'white',
+  bgColor,
   textColor = 'black',
   hasSignUp = true,
   brandText = '',
@@ -125,11 +125,14 @@ const _HeaderPixwaySDK = ({
     }
   };
 
+  const defaultBgColor =
+    context?.defaultTheme?.header?.styleData?.backgroundColor;
+  const headerBgColor = bgColor ?? defaultBgColor;
+
   return context?.isThemeError || context?.isThemeSuccess ? (
     <div
       style={{
-        backgroundColor:
-          context?.defaultTheme?.header?.styleData?.backgroundColor ?? bgColor,
+        backgroundColor: headerBgColor,
         margin,
         fontFamily:
           (fontFamily || context?.defaultTheme?.header?.styleData?.fontFamily
@@ -140,9 +143,7 @@ const _HeaderPixwaySDK = ({
     >
       <div
         style={{
-          backgroundColor:
-            context?.defaultTheme?.header?.styleData?.backgroundColor ??
-            bgColor,
+          backgroundColor: headerBgColor,
           padding: context?.defaultTheme?.header?.styleData?.padding ?? padding,
         }}
         className={classNames(
@@ -166,6 +167,7 @@ const _HeaderPixwaySDK = ({
                   context?.defaultTheme?.header?.styleData?.textColor ??
                   textColor
                 }
+                bgColor={headerBgColor}
                 fontFamily={
                   (fontFamily ||
                   context?.defaultTheme?.header?.styleData?.fontFamily

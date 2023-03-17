@@ -1,6 +1,10 @@
 import classNames from 'classnames';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import {
+  breakpointsEnum,
+  useBreakpoints,
+} from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { AlignmentEnum, MidiaData } from '../interfaces';
 
@@ -22,7 +26,9 @@ const rowAlignments: AlignmentClassNameMap = {
 export const Midia = ({ data }: { data: MidiaData }) => {
   const {
     styleData: {
-      midiaUrl,
+      mediaUrl,
+      mediaUrlMobile,
+      mediaLink,
       imageDisposition,
       imageRatio,
       imageAlignment,
@@ -38,6 +44,12 @@ export const Midia = ({ data }: { data: MidiaData }) => {
 
   const ratio = ratios[imageRatio ?? 'default'];
 
+  const breakpoint = useBreakpoints();
+
+  const breakPointsMobile = [breakpointsEnum.SM, breakpointsEnum.XS];
+  const isMobile = mediaUrlMobile && breakPointsMobile.includes(breakpoint);
+  const bgUrl = isMobile ? mediaUrlMobile : mediaUrl;
+
   return (
     <div
       className="pw-w-full"
@@ -47,11 +59,16 @@ export const Midia = ({ data }: { data: MidiaData }) => {
       }}
     >
       <div className={classNames(ratio, layoutClass, 'pw-mx-auto')}>
-        <ImageSDK
-          className={`${ratio} ${rowAlignmentClass} !pw-object-center  pw-object-cover pw-w-full pw-h-full'
-          `}
-          src={midiaUrl?.assetUrl}
-        />
+        <a href={mediaLink}>
+          <ImageSDK
+            className={classNames(
+              ratio,
+              rowAlignmentClass,
+              '!pw-object-center pw-object-cover pw-w-full pw-h-full'
+            )}
+            src={bgUrl?.assetUrl}
+          />
+        </a>
       </div>
     </div>
   );
