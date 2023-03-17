@@ -8,10 +8,7 @@ import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
 import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
 import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
-import {
-  PassBenefitDTO,
-  TokenPassBenefitType,
-} from '../../../pass/interfaces/PassBenefitDTO';
+import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { InternalPagesLayoutBase } from '../../../shared';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
@@ -39,7 +36,6 @@ interface PassTemplateProps {
 
 interface formatAddressProps {
   type: TokenPassBenefitType;
-  benefit: PassBenefitDTO;
 }
 
 const PassButton = ({
@@ -158,23 +154,24 @@ const _PassTemplate = ({
     en: ['SUN', 'MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT'],
   };
 
-  const formatAddress = ({ type, benefit }: formatAddressProps) => {
+  const formatAddress = ({ type }: formatAddressProps) => {
     if (
       type == TokenPassBenefitType.PHYSICAL &&
-      benefit?.tokenPassBenefitAddresses
+      benefitData &&
+      benefitData[0]?.tokenPassBenefitAddresses
     ) {
-      return `${benefit?.tokenPassBenefitAddresses[0]?.street}-${benefit?.tokenPassBenefitAddresses[0]?.city}`;
+      return `${benefitData[0]?.tokenPassBenefitAddresses[0]?.street}-${benefitData[0]?.tokenPassBenefitAddresses[0]?.city}`;
     } else {
       return 'Online';
     }
   };
 
   const chainScanLink = useChainScanLink(
-    benefit?.data?.tokenPass?.chainId,
+    benefit && +benefit?.data?.tokenPass?.chainId,
     publicTokenResponse?.data?.edition?.mintedHash
   );
   const addresBlockchainLink = useAdressBlockchainLink(
-    benefit?.data?.tokenPass?.chainId,
+    benefit && +benefit?.data?.tokenPass?.chainId,
     benefit?.data?.tokenPass?.contractAddress
   );
 
@@ -229,7 +226,10 @@ const _PassTemplate = ({
 
   const isDynamic = benefitData && benefitData[0]?.dynamicQrCode;
 
-  const usesLeft = benefitData && benefitData[0]?.useAvailable;
+  const usesLeft =
+    benefitData && benefitData[0]?.useAvailable
+      ? benefitData[0].useAvailable
+      : benefitData && benefitData[0]?.useLimit;
 
   const inactiveDateUseToken = !waitCheckin && isInactive;
   const tokenExpired = hasExpired && isUnavaible;
@@ -320,7 +320,6 @@ const _PassTemplate = ({
                   {isBenefitSucceed &&
                     formatAddress({
                       type: benefit?.data?.type,
-                      benefit: benefit?.data,
                     })}
                 </div>
                 {!hasExpired && (
@@ -413,33 +412,34 @@ const _PassTemplate = ({
               title={translate('token>pass>useLocale')}
               autoExpand={true}
             >
-              {benefit?.data?.tokenPassBenefitAddresses?.map((address) => (
-                <div
-                  key={address?.name}
-                  className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
-                >
-                  <div className="pw-flex pw-flex-col pw-gap-1">
-                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                      {address?.name}
+              {benefitData &&
+                benefitData[0]?.tokenPassBenefitAddresses?.map((address) => (
+                  <div
+                    key={address?.name}
+                    className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
+                  >
+                    <div className="pw-flex pw-flex-col pw-gap-1">
+                      <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                        {address?.name}
+                      </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        {address?.street}
+                        {', '}
+                        {address?.city}
+                        {' - '}
+                        {address?.state}
+                      </div>
                     </div>
-                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                      {address?.street}
-                      {', '}
-                      {address?.city}
-                      {' - '}
-                      {address?.state}
+                    <div className="pw-flex pw-flex-col pw-gap-1">
+                      <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                        {translate('token>pass>rules')}
+                      </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        {address?.rules}
+                      </div>
                     </div>
                   </div>
-                  <div className="pw-flex pw-flex-col pw-gap-1">
-                    <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-                      {translate('token>pass>rules')}
-                    </div>
-                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                      {address?.rules}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
             </DetailsTemplate>
           ) : null}
 

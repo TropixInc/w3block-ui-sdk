@@ -8,7 +8,6 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
 import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
-import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
 import { useRouterConnect } from '../../../shared';
@@ -47,8 +46,6 @@ interface Props {
   tokenTemplate: DynamicFormConfiguration;
   className?: string;
   isMultiplePass?: boolean;
-  chainId?: string;
-  contractAddress?: string;
   tokenId?: string;
   collectionId?: string;
   editionNumber: string;
@@ -63,8 +60,6 @@ export const TokenDetailsCard = ({
   tokenTemplate,
   className = '',
   tokenId = '',
-  chainId,
-  contractAddress,
   collectionId,
   editionNumber,
 }: Props) => {
@@ -76,22 +71,16 @@ export const TokenDetailsCard = ({
   );
   const { pass } = useFlags();
 
-  const { data: benefitsList, isSuccess } = useGetPassBenefits({
-    tokenPassId: collectionId,
-    chainId: chainId,
-    contractAddress: contractAddress,
-  });
-
-  const { data: benefitsByEdition } = useGetBenefitsByEditionNumber({
+  const { data: benefitsByEdition, isSuccess } = useGetBenefitsByEditionNumber({
     tokenPassId: collectionId as string,
     editionNumber: +editionNumber,
   });
 
   const isMultiplePass = useMemo(() => {
     if (isSuccess) {
-      return benefitsList?.data?.items?.length > 0;
+      return benefitsByEdition && benefitsByEdition?.data?.length > 0;
     }
-  }, [benefitsList, isSuccess]);
+  }, [benefitsByEdition, isSuccess]);
 
   const router = useRouterConnect();
 
@@ -179,18 +168,13 @@ export const TokenDetailsCard = ({
   };
 
   const formatedData = useMemo(() => {
-    const tableLocale = benefitsList?.data?.items?.map((benefit) => ({
-      id: benefit.id,
-      local: benefit?.tokenPassBenefitAddresses?.length
-        ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
-        : handleLocal(benefit.type),
-    }));
-
     const data = benefitsByEdition?.data?.map((benefit) => {
       const tableData: TableRow = {
         name: benefit.name,
         type: type(benefit?.type),
-        local: tableLocale?.find((value) => value.id === benefit.id)?.local,
+        local: benefit?.tokenPassBenefitAddresses?.length
+          ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
+          : handleLocal(benefit.type),
         date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
         status: <StatusTag status={benefit.status} />,
         actionComponent: handleButtonToShow(benefit.status, benefit.id),
@@ -207,7 +191,7 @@ export const TokenDetailsCard = ({
 
     return data || [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [benefitsList, benefitsByEdition, isMobile]);
+  }, [benefitsByEdition, isMobile]);
 
   const formattedHeaders = useMemo(
     () => (isMobile ? mobileHeaders : headers),

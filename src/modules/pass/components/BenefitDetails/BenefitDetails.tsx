@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { InternalPagesLayoutBase } from '../../../shared';
@@ -9,6 +11,7 @@ import useTranslation from '../../../shared/hooks/useTranslation';
 import { DetailPass } from '../../../tokens/components/PassTemplate/DetailPass';
 import { DetailsTemplate } from '../../../tokens/components/PassTemplate/DetailsTemplate';
 import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
+import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import { TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
 
 interface BenefitDetailsProps {
@@ -23,6 +26,20 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
 
   const { data: benefit, isLoading: isLoadingBenefit } =
     useGetPassBenefitById(benefitId);
+
+  const { data: benefitsList } = useGetPassBenefits({
+    tokenPassId: benefit?.data?.tokenPassId,
+    chainId: benefit?.data?.tokenPass?.chainId,
+    contractAddress: benefit?.data?.tokenPass?.contractAddress,
+  });
+
+  const formattedData = useMemo(() => {
+    const filteredData = benefitsList?.data?.items?.filter(
+      (benefit) => benefit?.id === benefitId
+    );
+    const local = filteredData && filteredData[0]?.tokenPassBenefitAddresses;
+    return local;
+  }, [benefitId, benefitsList?.data?.items]);
 
   if (isLoadingBenefit) {
     return (
@@ -81,30 +98,29 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
               title={translate('token>pass>useLocale')}
               autoExpand={true}
             >
-              {benefit?.data?.tokenPassBenefitAddresses
-                ?.filter((address) => address)
-                .map((address) => (
+              {formattedData &&
+                formattedData.map((address) => (
                   <div
-                    key={address.name}
+                    key={address?.name}
                     className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
                   >
                     <div className="pw-flex pw-flex-col pw-gap-1">
                       <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                        {address.name}
+                        {address?.name}
                       </div>
                       <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                        {address.street && address.street + ', '}
-                        {address.city && address.city + ' - '}
-                        {address.state}
+                        {address?.street && address?.street + ', '}
+                        {address?.city && address?.city + ' - '}
+                        {address?.state}
                       </div>
                     </div>
-                    {address.rules && (
+                    {address?.rules && (
                       <div className="pw-flex pw-flex-col pw-gap-1">
                         <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
                           {translate('token>pass>rules')}
                         </div>
                         <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                          {address.rules}
+                          {address?.rules}
                         </div>
                       </div>
                     )}

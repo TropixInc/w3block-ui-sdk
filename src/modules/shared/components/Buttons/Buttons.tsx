@@ -36,7 +36,7 @@ const getPrimaryButtonClassNames = ({
     'pw-rounded-full pw-font-medium pw-text-[12px] pw-leading-[18px]',
     className ? className :
       model === 'primary' ?
-        'pw-text-[#FFFFFF]  !pw-bg-[#295BA6] hover:!pw-bg-[#4194CD] disabled:!pw-bg-[#DCDCDC] disabled:pw-text-[#777E8F] pw-border-b pw-border-[#FFFFFF] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] '
+        'pw-text-[#FFFFFF]  !pw-bg-[#295BA6] hover:!pw-bg-[#4194CD] disabled:!pw-bg-[#DCDCDC] disabled:pw-text-[#777E8F] pw-border pw-border-[#FFFFFF] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] '
         : 'pw-text-[#383857] !pw-bg-[#EFEFEF] disabled:!pw-bg-[#DCDCDC] disabled:pw-text-[#777E8F] active:pw-text-[#295BA6] pw-border pw-border-[#295BA6] disabled:pw-border-[#777E8F] hover:pw-shadow-[0px_4px_20px_rgba(0,0,0,0.25)] ',
     getButtonSize({ width: width || 'big' })
   );

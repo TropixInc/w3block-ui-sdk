@@ -49,8 +49,6 @@ const _TokenDetailsTemplate = () => {
         title={publicTokenResponse?.data?.information?.title}
         mainImage={publicTokenResponse?.data?.information?.mainImage ?? ''}
         className="pw-mb-6"
-        chainId={chainId}
-        contractAddress={contractAddress}
         tokenId={tokenId}
         collectionId={publicTokenResponse?.data?.group?.collectionId}
         editionNumber={publicTokenResponse.data?.edition?.currentNumber}
