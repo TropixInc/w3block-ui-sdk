@@ -51,7 +51,53 @@ export const ProductInfo = ({
         return null;
     }
   };
-  return (
+  return status == CheckoutStatus.MY_ORDER ? (
+    <div
+      className={`pw-w-full pw-px-4 pw-py-5 pw-flex pw-justify-between pw-items-center  pw-gap-x-3 pw-overflow-auto ${className}`}
+    >
+      <div>
+        {loading ? (
+          <Shimmer className="!pw-w-[48px] !pw-h-[48px] pw-rounded-lg " />
+        ) : (
+          <div className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-overflow-hidden">
+            <ImageSDK
+              src={image}
+              className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
+            />
+          </div>
+        )}
+      </div>
+      <div className="pw-flex-1 pw-ml-3">
+        {loading ? (
+          <Shimmer className="pw-mb-1 pw-w-[120px]" />
+        ) : (
+          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate">
+            {name}
+          </p>
+        )}
+        {loading ? (
+          <Shimmer className="pw-w-[80px] pw-h-6" />
+        ) : (
+          <div className="pw-flex pw-flex-col">
+            <p className="pw-font-[400] pw-text-[#35394C] pw-text-sm">
+              {currencyMap.get(currency)}
+              {price}
+            </p>
+          </div>
+        )}
+        <p className="pw-text-[13px] pw-font-[400] pw-text-[#35394C]">
+          Quantidade: {quantity}
+        </p>
+      </div>
+      <div>
+        <p className="pw-text-[13px] pw-font-[400] pw-text-[#35394C]">Total</p>
+        <p className="pw-text-sm pw-font-[700] pw-text-[#35394C]">
+          {currencyMap.get(currency)}
+          {(parseFloat(price) * (quantity ?? 1)).toFixed(2)}
+        </p>
+      </div>
+    </div>
+  ) : (
     <div
       className={`pw-w-full pw-px-4 pw-py-5 pw-flex pw-justify-between  pw-gap-x-3 pw-overflow-auto ${className}`}
     >

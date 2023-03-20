@@ -53,4 +53,5 @@ export enum PixwayAPIRoutes {
   TENANT_INPUTS_BY_SLUG = '/tenant-input/{tenantId}/slug/{slug}',
   DOCUMENTS_BY_USER_BY_CONTEXT = '/users/{tenantId}/documents/{userId}/context/{contextId}',
   SAVE_DOCUMENTS_BY_USER = '/users/{tenantId}/documents/{userId}/context/{contextId}',
+  GET_SPECIFIC_ORDER = '/companies/{companyId}/orders/{orderId}',
 }

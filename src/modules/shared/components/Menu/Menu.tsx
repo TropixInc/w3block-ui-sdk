@@ -17,6 +17,7 @@ import { ReactComponent as DashIcon } from '../../assets/icons/dashOutlined.svg'
 import { ReactComponent as IntegrationIcon } from '../../assets/icons/integrationIconOutlined.svg';
 // import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
+import { ReactComponent as MyOrdersIcon } from '../../assets/icons/myOrders.svg';
 import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.svg';
 // import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
 import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
@@ -58,7 +59,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
-    userRoles.find((e) => e === 'admin' || e === 'superAdmin')
+    userRoles.find((e: string) => e === 'admin' || e === 'superAdmin')
   );
 
   useEffect(() => {
@@ -85,6 +86,12 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         title: translate('components>menu>wallet'),
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WALLET,
+        isVisible: true,
+      },
+      {
+        title: translate('header>components>defaultTab>myOrders'),
+        link: PixwayAppRoutes.MY_ORDERS,
+        icon: <MyOrdersIcon />,
         isVisible: true,
       },
       {

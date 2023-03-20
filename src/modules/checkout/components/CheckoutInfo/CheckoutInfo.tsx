@@ -25,6 +25,7 @@ import CpfCnpj from '../CpfCnpjInput/CpfCnpjInput';
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',
+  MY_ORDER = 'MY_ORDER',
 }
 
 interface CheckoutInfoProps {
