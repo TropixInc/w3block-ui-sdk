@@ -1,4 +1,3 @@
-import { ChainScan } from '../../shared/enums/ChainId';
 import { BenefitStatus } from '../enums/BenefitStatus';
 
 export interface BenefitAddress {
@@ -48,6 +47,7 @@ export interface BenefitsByEditionNumberDTO {
   statusMessage: string;
   tokenPass: TokenPassEntity;
   tokenPassBenefitUsage: TokenPassBenefitUsesDTO;
+  tokenPassBenefitAddresses?: BenefitAddress[];
   type: TokenPassBenefitType;
   updatedAt: string;
   useAvailable: number;
@@ -74,7 +74,7 @@ export interface TokenPassEntity {
   tokenName: string;
   tenantId: string;
   contractAddress: string;
-  chainId: ChainScan;
+  chainId: string;
   name: string;
   description: string;
   rules: string;

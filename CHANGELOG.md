@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.182](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.181...v0.1.1-alpha.182) (2023-03-17)
+
+
+### Features
+
+* add link to media ([fe97e4e](https://github.com/TropixInc/w3block-ui-sdk/commit/fe97e4e4587d3af8eb07d8a0604884bd23fde98a))
+
+
+### Bug Fixes
+
+* bg color header on mobile ([0e066ae](https://github.com/TropixInc/w3block-ui-sdk/commit/0e066aedc8080a07a7a4778886540e2c4585966d))
+* change media name ([84eea30](https://github.com/TropixInc/w3block-ui-sdk/commit/84eea3055a0437fe46cac7ff14ef343cb5292d76))
+* **pass:** adjusts on pass ([#158](https://github.com/TropixInc/w3block-ui-sdk/issues/158)) ([8fd65eb](https://github.com/TropixInc/w3block-ui-sdk/commit/8fd65eb007f3dffed6864394696cb7665b8b539f))
+
 ### [0.1.1-alpha.181](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.180...v0.1.1-alpha.181) (2023-03-16)
 
 
