@@ -3,6 +3,7 @@ import { useLocalStorage } from 'react-use';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { CookiesData } from '../interfaces';
 
 export const Cookies = ({ data }: { data: CookiesData }) => {
@@ -12,7 +13,11 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
     'false'
   );
 
-  const { styleData, contentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+
+  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedContentData = useMergeMobileData(contentData, mobileContentData);
+
   const {
     backgroundColor,
     textColor,
@@ -23,7 +28,9 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
     privacyPolicyLink,
     margin,
     padding,
-  } = styleData;
+  } = mergedStyleData;
+
+  const { disclaimer } = mergedContentData;
 
   const sampleDisclaimer =
     'Nós utilizamos cookies e outras tecnologias semelhantes para coletar dados durante a navegação para melhorar a sua experiência em nossos serviços. Saiba mais em nossa';
@@ -45,7 +52,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
             className="pw-text-sm pw-max-w-[949px] pw-leading-5"
             style={{ color: textColor }}
           >
-            {contentData?.disclaimer || sampleDisclaimer}{' '}
+            {disclaimer || sampleDisclaimer}{' '}
             {privacyPolicy && (
               <a
                 href={privacyPolicyLink}

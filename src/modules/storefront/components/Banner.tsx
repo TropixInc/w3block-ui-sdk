@@ -15,18 +15,21 @@ import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
 
 export const Banner = ({ data }: { data: BannerData }) => {
+  const { styleData, mobileStyleData } = data;
+
+  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+
   const {
-    styleData: {
-      autoSlide,
-      banners,
-      bannerDisposition,
-      bannerRatio,
-      margin,
-      padding,
-    },
-  } = data;
+    autoSlide,
+    banners,
+    bannerDisposition,
+    bannerRatio,
+    margin,
+    padding,
+  } = mergedStyleData;
   const layoutClass =
     bannerDisposition === 'fullWidth' ? 'pw-w-full' : 'pw-container';
 

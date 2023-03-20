@@ -9,6 +9,7 @@ import { ReactComponent as TelegramIcon } from '../../shared/assets/icons/messag
 import { ReactComponent as TwitterIcon } from '../../shared/assets/icons/twitter.svg';
 import { ReactComponent as WhatsappIcon } from '../../shared/assets/icons/whatsapp.svg';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { FooterData } from '../interfaces';
 
 import './Footer.css';
@@ -20,7 +21,12 @@ type SVG = React.FunctionComponent<
 >;
 
 export const Footer = ({ data }: { data: FooterData }) => {
-  const { styleData, contentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+
+  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedContentData =
+    useMergeMobileData(contentData, mobileContentData) || {};
+
   const {
     backgroundColor,
     textColor,
@@ -33,7 +39,9 @@ export const Footer = ({ data }: { data: FooterData }) => {
     w3blockSignature,
     margin,
     padding,
-  } = styleData;
+  } = mergedStyleData;
+
+  const { description } = mergedContentData;
 
   const iconsMap: Record<SocialNetworkType, SVG> = {
     twitter: TwitterIcon,
@@ -58,7 +66,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
   ];
 
   const socialLinks = names.map((name) => ({
-    url: contentData?.[name],
+    url: mergedContentData?.[name],
     type: name as SocialNetworkType,
   }));
 
@@ -99,7 +107,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
             style={{ color: textColor }}
             className="pw-text-sm pw-leading-5 pw-text-center pw-px-7 sm:pw-px-28"
           >
-            <p className="pw-text-center">{contentData?.description}</p>
+            <p className="pw-text-center">{description}</p>
           </div>
 
           {socialNetworks && (

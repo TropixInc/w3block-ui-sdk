@@ -5,22 +5,25 @@ import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/arrow
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, CategoriesData } from '../interfaces';
 
-export const Menu = (props: { data: CategoriesData }) => {
+export const Menu = ({ data }: { data: CategoriesData }) => {
+  const { styleData, mobileStyleData } = data;
+
+  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+
   const {
-    styleData: {
-      backgroundColor,
-      textColor,
-      categories,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      hoverTextColor,
-      allCategories,
-      allCategoriesText,
-      margin,
-      padding,
-    },
-  } = props.data;
+    backgroundColor,
+    textColor,
+    categories,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    hoverTextColor,
+    allCategories,
+    allCategoriesText,
+    margin,
+    padding,
+  } = mergedStyleData;
 
   const [translate] = useTranslation();
   const [isSeeAllMenuOpen, toggleSeeAllMenu] = useToggle(false);
@@ -28,8 +31,6 @@ export const Menu = (props: { data: CategoriesData }) => {
 
   const byActivityMenuRef = useRef<HTMLButtonElement>(null);
   useClickAway(byActivityMenuRef, () => toggleByActivityMenu(false));
-
-  console.log(backgroundColor);
 
   return (
     <TranslatableComponent>
@@ -111,15 +112,19 @@ export const Menu = (props: { data: CategoriesData }) => {
         </div>
 
         {isSeeAllMenuOpen && allCategories ? (
-          <SeeAllMenu {...props.data} />
+          <SeeAllMenu mergedStyleData={mergedStyleData} />
         ) : null}
       </div>
     </TranslatableComponent>
   );
 };
 
-const SeeAllMenu = (props: CategoriesData) => {
-  const { backgroundColor, textColor, categories, alignment } = props.styleData;
+const SeeAllMenu = ({
+  mergedStyleData,
+}: {
+  mergedStyleData: CategoriesData['styleData'];
+}) => {
+  const { backgroundColor, textColor, categories, alignment } = mergedStyleData;
 
   const alignmentClass = () => {
     if (alignment == AlignmentEnum.CENTER) {

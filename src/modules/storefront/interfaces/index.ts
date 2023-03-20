@@ -37,6 +37,9 @@ export interface MainModuleThemeInterface {
   id: string;
   styleData?: any;
   contentData?: any;
+  deviceType?: 'mobile' | 'desktop';
+  mobileStyleData?: any;
+  mobileContentData?: any;
 }
 
 export enum FitImage {
@@ -68,6 +71,7 @@ export interface GridItemAreaData extends MainModuleThemeInterface {
       image: AssetInterface;
     }[];
   };
+  mobileStyleData: GridItemAreaData['styleData'];
 }
 
 export interface PageData extends MainModuleThemeInterface {
@@ -99,6 +103,7 @@ export interface HeaderData extends MainModuleThemeInterface {
     textColor?: string;
     hoverTextColor?: string;
   };
+  mobileStyleData: HeaderData['styleData'];
 }
 
 type HeaderLink = {
@@ -128,6 +133,7 @@ export interface CategoriesData extends MainModuleThemeInterface {
     textColor?: string;
     hoverTextColor?: string;
   };
+  mobileStyleData: CategoriesData['styleData'];
 }
 
 export interface BannerData extends MainModuleThemeInterface {
@@ -140,6 +146,7 @@ export interface BannerData extends MainModuleThemeInterface {
     autoSlide?: boolean;
     banners?: SpecificBannerInfo[];
   };
+  mobileStyleData: BannerData['styleData'];
 }
 
 export interface SpecificBannerInfo {
@@ -194,6 +201,8 @@ export interface CookiesData extends MainModuleThemeInterface {
   contentData: {
     disclaimer?: string;
   };
+  mobileStyleData: CookiesData['styleData'];
+  mobileContentData: CookiesData['contentData'];
 }
 
 export interface FooterData extends MainModuleThemeInterface {
@@ -222,6 +231,8 @@ export interface FooterData extends MainModuleThemeInterface {
     website?: string;
     description?: string;
   };
+  mobileStyleData: FooterData['styleData'];
+  mobileContentData: FooterData['contentData'];
 }
 
 type Link = {
@@ -283,6 +294,8 @@ export interface ProductsData extends MainModuleThemeInterface {
     contentCards?: SpecificContentCard[];
     moduleTitleColor?: string;
   };
+  mobileStyleData: ProductsData['styleData'];
+  mobileContentData: ProductsData['contentData'];
 }
 
 interface ComboBoxReturnInterface {
@@ -315,6 +328,8 @@ export interface ParagraphData extends MainModuleThemeInterface {
     titleInput?: string;
     textInput?: string;
   };
+  mobileStyleData: ParagraphData['styleData'];
+  mobileContentData: ParagraphData['contentData'];
 }
 export interface ProductPageData extends MainModuleThemeInterface {
   type: ModulesType.PRODUCT_PAGE;
@@ -343,6 +358,7 @@ export interface ProductPageData extends MainModuleThemeInterface {
     blockchainInfoBackgroundColor?: string;
     blockchainInfoTextColor?: string;
   };
+  mobileStyleData: ProductPageData['styleData'];
 }
 export interface MidiaData extends MainModuleThemeInterface {
   type: ModulesType.MIDIA;
@@ -356,6 +372,7 @@ export interface MidiaData extends MainModuleThemeInterface {
     imageRatio: string;
     imageAlignment: AlignmentEnum;
   };
+  mobileStyleData: MidiaData['styleData'];
 }
 
 export enum CardSearchEnum {
@@ -393,6 +410,8 @@ export interface AccordionsData extends MainModuleThemeInterface {
   contentData: {
     accordionsItems?: SpecificContentAccordion[];
   };
+  mobileStyleData: AccordionsData['styleData'];
+  mobileContentData: AccordionsData['contentData'];
 }
 
 export interface SpecificContentAccordion {
@@ -420,6 +439,8 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
     title?: string;
     content?: string;
   };
+  mobileStyleData: ImagePlusTextData['styleData'];
+  mobileContentData: ImagePlusTextData['contentData'];
 }
 
 enum ImagePositionEnum {

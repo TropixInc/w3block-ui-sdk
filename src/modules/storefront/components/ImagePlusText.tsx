@@ -2,12 +2,17 @@ import { CSSProperties } from 'react';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ImagePlusTextData } from '../interfaces';
 
 import './ImagePlusText.css';
 
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
-  const { styleData, contentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+
+  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedContentData = useMergeMobileData(contentData, mobileContentData);
+
   const {
     image,
     imagePosition,
@@ -21,7 +26,9 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     backgroundColor,
     overlay,
     overlayColor,
-  } = styleData;
+  } = mergedStyleData;
+
+  const { title, content } = mergedContentData;
 
   const isImageOnLeft = imagePosition === 'left' || imagePosition === undefined;
 
@@ -74,12 +81,12 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               style={{ color: titleColor }}
               className="pw-font-semibold pw-text-[19px]"
             >
-              {contentData.title}
+              {title}
             </h3>
             <div
               style={{ color: contentColor }}
               className="pw-text-[15px]"
-              dangerouslySetInnerHTML={{ __html: contentData.content ?? '' }}
+              dangerouslySetInnerHTML={{ __html: content ?? '' }}
             />
           </div>
         </div>
