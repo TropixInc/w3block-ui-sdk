@@ -78,24 +78,24 @@ const _HeaderPixwaySDK = ({
     } else setOpenedTabs(!openedTabs);
   };
 
-  const tabsToPass = context?.defaultTheme?.header?.styleData?.tabs
-    ? context?.defaultTheme?.header?.styleData?.tabs?.map((l: any) => ({
-        name: l.label,
-        router: l.value,
-      }))
-    : tabs;
+  const tabsToPass =
+    tabs ||
+    context?.defaultTheme?.header?.styleData?.tabs?.map((l: any) => ({
+      name: l.label,
+      router: l.value,
+    }));
 
   const LogoToShow = () => {
     if (
-      context?.defaultTheme?.header?.styleData?.logoSrc?.assetUrl ||
-      logoSrc
+      logoSrc ||
+      context?.defaultTheme?.header?.styleData?.logoSrc?.assetUrl
     ) {
       return (
         <img
           style={{ height: logoHeight + 'px' }}
           src={
-            context?.defaultTheme?.header?.styleData?.logoSrc?.assetUrl ??
-            logoSrc
+            logoSrc ??
+            context?.defaultTheme?.header?.styleData?.logoSrc?.assetUrl
           }
           className="pw-object-contain pw-max-w-[150px]"
         />
@@ -110,7 +110,7 @@ const _HeaderPixwaySDK = ({
           style={{ color: textColor, height: logoHeight + 'px' }}
         >
           <p>
-            {context?.defaultTheme?.header?.styleData?.brandName ?? brandText}
+            {brandText ?? context?.defaultTheme?.header?.styleData?.brandName}
           </p>
         </div>
       );
@@ -136,7 +136,7 @@ const _HeaderPixwaySDK = ({
         margin,
         fontFamily:
           (fontFamily || context?.defaultTheme?.header?.styleData?.fontFamily
-            ? context?.defaultTheme?.header?.styleData?.fontFamily ?? fontFamily
+            ? fontFamily ?? context?.defaultTheme?.header?.styleData?.fontFamily
             : 'Poppins') + ', sans-serif',
       }}
       className="w-full pw-shadow-md"
@@ -144,7 +144,7 @@ const _HeaderPixwaySDK = ({
       <div
         style={{
           backgroundColor: headerBgColor,
-          padding: context?.defaultTheme?.header?.styleData?.padding ?? padding,
+          padding: padding ?? context?.defaultTheme?.header?.styleData?.padding,
         }}
         className={classNames(
           'pw-container pw-mx-auto pw-px-4 sm:pw-px-0',
@@ -164,25 +164,25 @@ const _HeaderPixwaySDK = ({
                 opened={openedMenu ? openedMenu : openedTabs}
                 hasSignUp={hasSignUp}
                 textColor={
-                  context?.defaultTheme?.header?.styleData?.textColor ??
-                  textColor
+                  textColor ??
+                  context?.defaultTheme?.header?.styleData?.textColor
                 }
                 bgColor={headerBgColor}
                 fontFamily={
                   (fontFamily ||
                   context?.defaultTheme?.header?.styleData?.fontFamily
-                    ? context?.defaultTheme?.header?.styleData?.fontFamily ??
-                      fontFamily
+                    ? fontFamily ??
+                      context?.defaultTheme?.header?.styleData?.fontFamily
                     : 'Poppins') + ', sans-serif'
                 }
               />
             </div>
             <CartButton
               iconColor={
-                context?.defaultTheme?.header?.styleData?.textColor ?? textColor
+                textColor ?? context?.defaultTheme?.header?.styleData?.textColor
               }
               borderColor={
-                context?.defaultTheme?.header?.styleData?.textColor ?? textColor
+                textColor ?? context?.defaultTheme?.header?.styleData?.textColor
               }
               className="pw-border-x pw-ml-[40px]"
             />
@@ -190,8 +190,8 @@ const _HeaderPixwaySDK = ({
               <NavigationLoginPixwaySDK
                 hasSignUp={hasSignUp}
                 textColor={
-                  context?.defaultTheme?.header?.styleData?.textColor ??
-                  textColor
+                  textColor ??
+                  context?.defaultTheme?.header?.styleData?.textColor
                 }
                 toggleLoginMenu={toggleMenuMemo}
                 loginMenu={validatorMenuOpened}
@@ -200,8 +200,8 @@ const _HeaderPixwaySDK = ({
                 fontFamily={
                   (fontFamily ||
                   context?.defaultTheme?.header?.styleData?.fontFamily
-                    ? context?.defaultTheme?.header?.styleData?.fontFamily ??
-                      fontFamily
+                    ? fontFamily ??
+                      context?.defaultTheme?.header?.styleData?.fontFamily
                     : 'Poppins') + ', sans-serif'
                 }
               />
