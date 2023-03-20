@@ -73,7 +73,7 @@
   "checkout>components>checkoutInfo>infoAboutProcessing": "Your items are in the process of being transferred and will soon be available in your wallet. Processing time may take a few minutes. You will receive an email once the process is complete.",
   "checkout>components>warning>problemWithCheckout": "We had a problem with the purchase.",
   "shared>tryAgain": "Try again",
-  "shared>components>price&gasInfo": "Price",
+  "shared>components>price&gasInfo": "Total amount",
   "shared>header>connectWallet": "Connect wallet",
   "components>genericMessages>mintedBy": "Minted by W3block",
   "tokenization>publicTokenTemplate>moreInfoThisNFT": "More information about this item on Blockchain",
