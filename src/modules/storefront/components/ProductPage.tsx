@@ -9,7 +9,7 @@ import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import useGetProductBySlug from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ProductPageData } from '../interfaces';
 
 interface ProductPageProps {
@@ -20,7 +20,10 @@ interface ProductPageProps {
 export const ProductPage = ({ data, params }: ProductPageProps) => {
   const { styleData, mobileStyleData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
 
   const {
     actionButton,

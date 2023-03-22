@@ -1,12 +1,15 @@
 import { HeaderPixwaySDK } from '../../shared';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { MainModuleThemeInterface } from '../interfaces';
 
 export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
   const { styleData, mobileStyleData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
 
   const {
     backgroundColor,

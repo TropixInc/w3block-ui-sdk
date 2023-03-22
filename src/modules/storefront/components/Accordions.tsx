@@ -2,15 +2,21 @@ import { CSSProperties } from 'react';
 
 import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/chevronDownOutlined.svg';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AccordionsData, SpecificContentAccordion } from '../interfaces';
 import './Accordions.css';
 
 export const Accordions = ({ data }: { data: AccordionsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
-  const mergedContentData = useMergeMobileData(contentData, mobileContentData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+  const mergedContentData = useMobilePreferenceDataWhenMobile(
+    contentData,
+    mobileContentData
+  );
 
   const { margin, padding } = mergedStyleData;
   const { accordionsItems } = mergedContentData;

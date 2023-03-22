@@ -15,12 +15,15 @@ import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const { styleData, mobileStyleData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
 
   const {
     autoSlide,

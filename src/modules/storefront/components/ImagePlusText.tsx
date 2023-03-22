@@ -2,7 +2,7 @@ import { CSSProperties } from 'react';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ImagePlusTextData } from '../interfaces';
 
 import './ImagePlusText.css';
@@ -10,8 +10,14 @@ import './ImagePlusText.css';
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
-  const mergedContentData = useMergeMobileData(contentData, mobileContentData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+  const mergedContentData = useMobilePreferenceDataWhenMobile(
+    contentData,
+    mobileContentData
+  );
 
   const {
     image,

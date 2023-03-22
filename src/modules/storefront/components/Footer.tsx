@@ -9,7 +9,7 @@ import { ReactComponent as TelegramIcon } from '../../shared/assets/icons/messag
 import { ReactComponent as TwitterIcon } from '../../shared/assets/icons/twitter.svg';
 import { ReactComponent as WhatsappIcon } from '../../shared/assets/icons/whatsapp.svg';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { FooterData } from '../interfaces';
 
 import './Footer.css';
@@ -23,9 +23,12 @@ type SVG = React.FunctionComponent<
 export const Footer = ({ data }: { data: FooterData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
   const mergedContentData =
-    useMergeMobileData(contentData, mobileContentData) || {};
+    useMobilePreferenceDataWhenMobile(contentData, mobileContentData) || {};
 
   const {
     backgroundColor,

@@ -5,7 +5,7 @@ import {
 
 const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
 
-export const useMergeMobileData: UseMergeMobileData = (
+export const useMobilePreferenceDataWhenMobile: UseMobilePreferenceData = (
   desktopData,
   mobileData
 ) => {
@@ -15,4 +15,4 @@ export const useMergeMobileData: UseMergeMobileData = (
     : desktopData;
 };
 
-type UseMergeMobileData = <T>(desktopData: T, mobileData: T) => T;
+type UseMobilePreferenceData = <T>(desktopData: T, mobileData: T) => T;

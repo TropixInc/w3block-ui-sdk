@@ -2,13 +2,16 @@ import { CSSProperties } from 'react';
 
 import './GridItemArea.css';
 import { useRouterConnect } from '../../shared';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { FitImage, GridItemAreaData } from '../interfaces';
 
 export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
   const { styleData, mobileStyleData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
 
   const {
     backgroundColor,

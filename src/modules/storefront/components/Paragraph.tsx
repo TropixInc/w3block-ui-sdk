@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, ParagraphData } from '../interfaces';
 
 const alignmentsText: AlignmentClassNameMap = {
@@ -14,8 +14,14 @@ type AlignmentClassNameMap = Record<AlignmentEnum, string>;
 export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
-  const mergedContentData = useMergeMobileData(contentData, mobileContentData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+  const mergedContentData = useMobilePreferenceDataWhenMobile(
+    contentData,
+    mobileContentData
+  );
 
   const { alignment, textColor, titleColor, margin, padding } = mergedStyleData;
   const { textInput, titleInput } = mergedContentData;

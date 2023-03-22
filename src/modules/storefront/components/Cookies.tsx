@@ -3,7 +3,7 @@ import { useLocalStorage } from 'react-use';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { CookiesData } from '../interfaces';
 
 export const Cookies = ({ data }: { data: CookiesData }) => {
@@ -15,8 +15,14 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
 
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
-  const mergedContentData = useMergeMobileData(contentData, mobileContentData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+  const mergedContentData = useMobilePreferenceDataWhenMobile(
+    contentData,
+    mobileContentData
+  );
 
   const {
     backgroundColor,

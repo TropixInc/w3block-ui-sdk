@@ -5,13 +5,16 @@ import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/arrow
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, CategoriesData } from '../interfaces';
 
 export const Menu = ({ data }: { data: CategoriesData }) => {
   const { styleData, mobileStyleData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
 
   const {
     backgroundColor,

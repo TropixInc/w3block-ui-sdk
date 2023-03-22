@@ -24,13 +24,19 @@ import { ContentCard } from './ContentCard';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMergeMobileData } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
-  const mergedStyleData = useMergeMobileData(styleData, mobileStyleData);
-  const mergedContentData = useMergeMobileData(contentData, mobileContentData);
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+  const mergedContentData = useMobilePreferenceDataWhenMobile(
+    contentData,
+    mobileContentData
+  );
 
   const [products, setProducts] = useState<Product[]>([]);
   const [error, _] = useState('');
