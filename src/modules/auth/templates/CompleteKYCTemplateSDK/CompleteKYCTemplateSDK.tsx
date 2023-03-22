@@ -60,7 +60,7 @@ export const CompleteKYCTemplateSDK = ({
   );
 
   useEffect(() => {
-    if (session && profile) {
+    if (session && profile?.data) {
       const { data: user } = profile;
       if (user.kycStatus !== KycStatus.Pending) {
         router.pushConnect(getRedirectUrl(), router.query);
