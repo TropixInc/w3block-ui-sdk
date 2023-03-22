@@ -26,10 +26,7 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
       brandText={brandName}
       margin={convertSpacingToCSS(margin)}
       padding={convertSpacingToCSS(padding)}
-      tabs={tabs?.map((l: any) => ({
-        name: l.label,
-        router: l.value,
-      }))}
+      tabs={tabs}
       fontFamily={fontFamily}
     />
   );

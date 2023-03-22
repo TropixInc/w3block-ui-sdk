@@ -80,12 +80,8 @@ const _HeaderPixwaySDK = ({
     } else setOpenedTabs(!openedTabs);
   };
 
-  const tabsToPass =
-    tabs ||
-    context?.defaultTheme?.header?.styleData?.tabs?.map((l: any) => ({
-      name: l.label,
-      router: l.value,
-    }));
+  const defaultTabs = tabs || context?.defaultTheme?.header?.styleData?.tabs;
+  const tabsToPass = defaultTabs?.map(mapOptionsToTabs);
 
   const LogoToShow = () => {
     if (
@@ -238,3 +234,12 @@ export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
     </MetamaskProvider>
   </TranslatableComponent>
 );
+
+const mapOptionsToTabs = (item: any): NavigationTabsPixwaySDKTabs => {
+  if (item.value) return { name: item.label, router: item.value };
+
+  return {
+    name: item.label,
+    tabs: item.tabs.map((t: any) => ({ name: t.label, router: t.value })),
+  };
+};
