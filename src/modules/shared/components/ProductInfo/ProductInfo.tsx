@@ -16,6 +16,7 @@ interface ProductInfoProps {
   quantity?: number;
   changeQuantity?: (n: number, id: string) => void;
   stockAmount: number;
+  canPurchaseAmount?: number;
   deleteProduct?: (id: string) => void;
   isCart?: boolean;
 }
@@ -32,7 +33,9 @@ export const ProductInfo = ({
   currency = CurrencyEnum.BRL,
   changeQuantity,
   stockAmount,
+  canPurchaseAmount = 5,
   deleteProduct,
+  isCart,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const maxUp = stockAmount > 5 ? 5 : stockAmount;
@@ -132,8 +135,12 @@ export const ProductInfo = ({
           </div>
         )}
       </div>
-      <div className={`pw-flex pw-flex-col pw-items-end pw-justify-between `}>
-        {status == CheckoutStatus.CONFIRMATION ? (
+      <div
+        className={`pw-flex pw-flex-col pw-items-end ${
+          isCart ? 'pw-justify-between' : 'pw-justify-end'
+        } `}
+      >
+        {status == CheckoutStatus.CONFIRMATION && isCart ? (
           <TrashIcon
             onClick={() => deleteProduct?.(id)}
             className="pw-cursor-pointer"
@@ -151,7 +158,11 @@ export const ProductInfo = ({
                   id
                 )
               }
-              className=" pw-cursor-pointer pw-text-xs pw-border-brand-primary pw-text-[#353945] pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px]"
+              className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                quantity && quantity > 1
+                  ? 'pw-text-[#353945] pw-border-brand-primary'
+                  : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)]'
+              }`}
             >
               -
             </p>
@@ -170,13 +181,25 @@ export const ProductInfo = ({
 
           {status == CheckoutStatus.CONFIRMATION && (
             <p
-              className=" pw-cursor-pointer pw-text-xs pw-border-brand-primary pw-text-[#353945] pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px]"
-              onClick={() =>
-                changeQuantity?.(
-                  quantity && quantity < maxUp ? quantity + 1 : maxUp,
-                  id
-                )
-              }
+              className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                quantity &&
+                quantity < canPurchaseAmount &&
+                quantity < stockAmount
+                  ? 'pw-border-brand-primary pw-text-[#353945]'
+                  : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)]'
+              }`}
+              onClick={() => {
+                if (
+                  quantity &&
+                  quantity < canPurchaseAmount &&
+                  quantity < stockAmount
+                ) {
+                  changeQuantity?.(
+                    quantity && quantity < maxUp ? quantity + 1 : maxUp,
+                    id
+                  );
+                }
+              }}
             >
               +
             </p>

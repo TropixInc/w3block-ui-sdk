@@ -33,6 +33,7 @@ interface HeaderPixwaySDKProps {
   margin?: string;
   padding?: string;
   fontFamily?: string;
+  hasCart?: boolean;
 }
 
 const _HeaderPixwaySDK = ({
@@ -53,6 +54,7 @@ const _HeaderPixwaySDK = ({
   margin,
   padding,
   fontFamily,
+  hasCart = true,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -177,15 +179,20 @@ const _HeaderPixwaySDK = ({
                 }
               />
             </div>
-            <CartButton
-              iconColor={
-                textColor ?? context?.defaultTheme?.header?.styleData?.textColor
-              }
-              borderColor={
-                textColor ?? context?.defaultTheme?.header?.styleData?.textColor
-              }
-              className="pw-border-x pw-ml-[40px]"
-            />
+            {hasCart && (
+              <CartButton
+                iconColor={
+                  textColor ??
+                  context?.defaultTheme?.header?.styleData?.textColor
+                }
+                borderColor={
+                  textColor ??
+                  context?.defaultTheme?.header?.styleData?.textColor
+                }
+                className="pw-border-x pw-ml-[40px] pw-mr-4"
+              />
+            )}
+
             <div className="pw-order-1 sm:pw-order-3">
               <NavigationLoginPixwaySDK
                 hasSignUp={hasSignUp}

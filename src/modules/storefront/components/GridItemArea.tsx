@@ -20,9 +20,9 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
   const letters = 'abcdefghijklmnopqrst';
   const { pushConnect } = useRouterConnect();
   const getTemplateAreas = () => {
-    const filledArrays = Array(gridRows ?? 2)
+    const filledArrays = Array(parseInt(gridRows ?? '2'))
       .fill('')
-      .map(() => Array(gridColumns ?? 4).fill('x'));
+      .map(() => Array(parseInt(gridColumns ?? '4')).fill('x'));
     Items?.forEach((it, index) => {
       it.quadrants?.forEach((q) => {
         const divisor = Math.floor(q / parseInt(gridColumns ?? '4'));
@@ -106,7 +106,7 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
             ) ? null : (
               <div
                 className="pw-bg-orange"
-                style={{ gridArea: 'x' + index }}
+                style={{ gridArea: 'x' + index, zIndex: index }}
                 key={index}
               >
                 <img

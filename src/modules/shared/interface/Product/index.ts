@@ -17,6 +17,7 @@ export interface Product {
   startSaleAt: string;
   endSaleAt: string;
   stockAmount: number;
+  canPurchaseAmount: number;
   tokensAmount: number;
 }
 

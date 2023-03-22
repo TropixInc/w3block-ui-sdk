@@ -46,6 +46,7 @@ export interface Product {
   startSaleAt?: string;
   status?: string;
   stockAmount?: number;
+  canPurchaseAmount?: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tags?: any[];
   tokensAmount?: number;
