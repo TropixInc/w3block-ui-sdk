@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { useProfile } from '..';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { removeDoubleSlashesOnUrl } from '../../utils/removeDuplicateSlahes';
+import { useCompanyConfig } from '../useCompanyConfig';
 import { usePixwaySession } from '../usePixwaySession';
 import { useRouterConnect } from '../useRouterConnect';
 
@@ -16,12 +18,14 @@ export const useHasWallet = ({
   onlyWithSession = false,
 }: useHasWalletProps) => {
   const { data: session } = usePixwaySession();
+  const { appBaseUrl, connectProxyPass } = useCompanyConfig();
   const { data: profile, isLoading, isSuccess } = useProfile();
   const router = useRouterConnect();
 
   useEffect(() => {
     const routerToRedirect =
-      redirectRoute + `?callbackPath=${window.location.href}`;
+      removeDoubleSlashesOnUrl(appBaseUrl + connectProxyPass + redirectRoute) +
+      `?callbackPath=${window.location.href}`;
     if (onlyWithSession) {
       if (
         !profile?.data.mainWallet &&

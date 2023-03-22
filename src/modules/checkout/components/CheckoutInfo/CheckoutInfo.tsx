@@ -339,7 +339,7 @@ const _CheckoutInfo = ({
         );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderPreview, cnpfCpfVal]);
+  }, [orderPreview, cnpfCpfVal, choosedPayment]);
 
   return requestError ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
@@ -430,6 +430,7 @@ const _CheckoutInfo = ({
                 productIds ? productIds?.filter((p) => p == prod.id).length : 1
               }
               stockAmount={prod.stockAmount}
+              canPurchaseAmount={prod.canPurchaseAmount}
               changeQuantity={changeQuantity}
               loading={isLoading}
               status={checkoutStatus}

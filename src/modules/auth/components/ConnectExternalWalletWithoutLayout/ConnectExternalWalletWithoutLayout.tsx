@@ -79,6 +79,8 @@ const _ConnectExternalWalletWithoutLayout = ({
         router.pushConnect(
           router.query.callbackPath
             ? (router.query.callbackPath as string)
+            : redirectLink
+            ? redirectLink
             : redirectRoute
         );
       } else {

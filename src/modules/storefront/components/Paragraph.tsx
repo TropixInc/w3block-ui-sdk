@@ -29,24 +29,25 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const alignmentTextClass = alignmentsText[alignment ?? AlignmentEnum.LEFT];
 
   return (
-    <div
-      className="pw-container pw-mx-auto"
-      style={{
-        margin: convertSpacingToCSS(margin),
-        padding: convertSpacingToCSS(padding),
-      }}
-    >
-      <h2
-        style={{ color: titleColor ?? 'black' }}
-        className={classNames('pw-font-semibold pw-text-[19px]')}
-      >
-        {titleInput}
-      </h2>
+    <div className="pw-container pw-mx-auto">
       <div
-        style={{ color: textColor ?? 'black' }}
-        className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
-        dangerouslySetInnerHTML={{ __html: textInput ?? '' }}
-      />
+        style={{
+          margin: convertSpacingToCSS(margin),
+          padding: convertSpacingToCSS(padding),
+        }}
+      >
+        <h2
+          style={{ color: titleColor ?? 'black' }}
+          className={classNames('pw-font-semibold pw-text-[19px]')}
+        >
+          {titleInput}
+        </h2>
+        <div
+          style={{ color: textColor ?? 'black' }}
+          className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
+          dangerouslySetInnerHTML={{ __html: textInput ?? '' }}
+        />
+      </div>
     </div>
   );
 };

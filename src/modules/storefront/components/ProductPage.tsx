@@ -66,6 +66,12 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
   const [quantityOpen, setQuantityOpen] = useState(false);
   const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
   const categories: any[] = [];
+  const limit =
+    product?.stockAmount &&
+    product.canPurchaseAmount &&
+    product?.stockAmount > product.canPurchaseAmount
+      ? product.canPurchaseAmount
+      : product?.stockAmount;
   return (
     <div
       style={{
@@ -168,11 +174,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                           <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
                             <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
                             <div className=""></div>
-                            {Array(
-                              product?.stockAmount && product?.stockAmount > 5
-                                ? 5
-                                : product?.stockAmount
-                            )
+                            {Array(limit && limit > 5 ? 5 : limit)
                               .fill(0)
                               .map((val, index) => (
                                 <p
@@ -220,7 +222,10 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               {actionButton && (
                 <>
                   <button
-                    disabled={product?.stockAmount == 0}
+                    disabled={
+                      product?.stockAmount == 0 ||
+                      product?.canPurchaseAmount == 0
+                    }
                     onClick={() => {
                       cart.some((p) => p.id == product?.id)
                         ? setCart(cart.filter((p) => p.id != product?.id))
@@ -229,13 +234,17 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     style={{
                       backgroundColor: 'none',
                       borderColor:
-                        product && product.stockAmount == 0
+                        product &&
+                        (product.stockAmount == 0 ||
+                          product?.canPurchaseAmount == 0)
                           ? '#DCDCDC'
                           : buttonColor
                           ? buttonColor
                           : '#0050FF',
                       color:
-                        product && product.stockAmount == 0
+                        product &&
+                        (product.stockAmount == 0 ||
+                          product?.canPurchaseAmount == 0)
                           ? '#777E8F'
                           : buttonColor ?? '#0050FF',
                     }}
@@ -246,7 +255,10 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                       : 'Adicionar ao carrinho'}
                   </button>
                   <button
-                    disabled={product?.stockAmount == 0}
+                    disabled={
+                      product?.stockAmount == 0 ||
+                      product?.canPurchaseAmount == 0
+                    }
                     onClick={() => {
                       if (product?.id && product.prices) {
                         pushConnect(
@@ -261,13 +273,17 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     }}
                     style={{
                       backgroundColor:
-                        product && product.stockAmount == 0
+                        product &&
+                        (product.stockAmount == 0 ||
+                          product?.canPurchaseAmount == 0)
                           ? '#DCDCDC'
                           : buttonColor
                           ? buttonColor
                           : '#0050FF',
                       color:
-                        product && product.stockAmount == 0
+                        product &&
+                        (product.stockAmount == 0 ||
+                          product?.canPurchaseAmount == 0)
                           ? '#777E8F'
                           : buttonTextColor ?? 'white',
                     }}

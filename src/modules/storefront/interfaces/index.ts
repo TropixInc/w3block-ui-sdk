@@ -154,6 +154,7 @@ export interface SpecificBannerInfo {
   backgroundUrl?: AssetInterface;
   backgroundUrlMobile?: AssetInterface;
   overlay?: boolean;
+  padding?: string;
   overlayColor?: string;
   textAligment?: AlignmentEnum;
   title?: string;
