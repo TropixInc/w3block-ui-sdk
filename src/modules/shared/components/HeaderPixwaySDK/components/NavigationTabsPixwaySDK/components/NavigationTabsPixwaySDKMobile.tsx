@@ -67,7 +67,6 @@ export const NavigationTabsPixwaySDKMobile = ({
                         setSelectedTitle('');
                       }}
                     >
-                      {' '}
                       <ChevronLeft className="pw-w-4 pw-h-4" /> {selectedTitle}
                     </p>
                     <hr />

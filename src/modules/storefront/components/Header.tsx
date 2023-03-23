@@ -1,4 +1,4 @@
-import { HeaderPixwaySDK } from '../../shared';
+import { HeaderPixwaySDK, mapOptionsToTabs } from '../../shared';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { MainModuleThemeInterface } from '../interfaces';
 
@@ -26,7 +26,7 @@ export const Header = (props: { data: MainModuleThemeInterface }) => {
       brandText={brandName}
       margin={convertSpacingToCSS(margin)}
       padding={convertSpacingToCSS(padding)}
-      tabs={tabs}
+      tabs={tabs?.map(mapOptionsToTabs)}
       fontFamily={fontFamily}
     />
   );

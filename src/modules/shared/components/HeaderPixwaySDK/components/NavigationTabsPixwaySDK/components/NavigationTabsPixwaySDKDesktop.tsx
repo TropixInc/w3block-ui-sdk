@@ -26,9 +26,8 @@ export const NavigationTabsPixwaySDKDesktop = ({
                     className={`
                       pw-absolute pw-z-10
                       pw-py-4 pw-px-1 pw-rounded-2xl pw-w-[160px]
-                      pw-flex pw-flex-wrap pw-gap-4 pw-text-center pw-justify-center
+                      pw-flex pw-flex-col pw-gap-4 pw-text-center pw-justify-center
                       pw-drop-shadow-lg
-                      pw-border pw-border-black pw-border-solid
                   `}
                   >
                     {tab.tabs.map((t) => {
