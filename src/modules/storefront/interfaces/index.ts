@@ -121,19 +121,21 @@ export enum AlignmentEnum {
 
 export interface CategoriesData extends MainModuleThemeInterface {
   type: ModulesType.CATEGORIES;
-  styleData: {
-    margin?: string;
-    padding?: string;
-    categories?: CategoryItem[];
-    allCategories?: boolean;
-    allCategoriesText?: string;
-    alignment?: AlignmentEnum;
-    background?: boolean;
-    backgroundColor?: string;
-    textColor?: string;
-    hoverTextColor?: string;
-  };
-  mobileStyleData: CategoriesData['styleData'];
+  styleData: CategoriesDataStyleData;
+  mobileStyleData: CategoriesDataStyleData;
+}
+
+export interface CategoriesDataStyleData {
+  margin?: string;
+  padding?: string;
+  categories?: CategoryItem[];
+  allCategories?: boolean;
+  allCategoriesText?: string;
+  alignment?: AlignmentEnum;
+  background?: boolean;
+  backgroundColor?: string;
+  textColor?: string;
+  hoverTextColor?: string;
 }
 
 export interface BannerData extends MainModuleThemeInterface {
@@ -243,51 +245,7 @@ type Link = {
 };
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
-  styleData: {
-    margin?: string;
-    padding?: string;
-    layoutDisposition?: CardLayoutDisposition;
-    autoSlide?: boolean;
-    numberOfLines?: number;
-    itensPerLine?: number;
-    ordering?: CardsOrderingEnum;
-    showCardTitle?: boolean;
-    showCardCategory?: boolean;
-    showCardDescription?: boolean;
-    showCardValue?: boolean;
-    totalRows?: number;
-    cardBackgroundColor?: string;
-    cardHoverColor?: string;
-    cardProductNameColor?: string;
-    cardCategoryColor?: string;
-    cardDescriptionColor?: string;
-    cardValueColor?: string;
-    showCardImage?: boolean;
-    format?:
-      | 'product'
-      | 'square'
-      | 'rounded'
-      | 'rectHorizontal'
-      | 'rectVertical';
-    cardActionButton?: boolean;
-    cardButtonText?: string;
-    cardButtonTextColor?: string;
-    cardButtonColor?: string;
-    cardButtonHoverColor?: string;
-    sessionButton?: boolean;
-    sessionAlignment?: AlignmentEnum;
-    sessionButtonText?: string;
-    sessionButtonTextColor?: string;
-    sessionButtonColor?: string;
-    sessionHoverColor?: string;
-    sessionLink?: string;
-    backgroundSession?: boolean;
-    backgroundColor?: string;
-    backgroundUrl?: AssetInterface;
-    overlay?: boolean;
-    overlayColor?: string;
-    textOverImage?: boolean;
-  };
+  styleData: ProductsDataStyleData;
   contentData: {
     cardType?: CardTypesEnum;
     moduleTitle?: string;
@@ -295,8 +253,49 @@ export interface ProductsData extends MainModuleThemeInterface {
     contentCards?: SpecificContentCard[];
     moduleTitleColor?: string;
   };
-  mobileStyleData: ProductsData['styleData'];
+  mobileStyleData: ProductsDataStyleData;
   mobileContentData: ProductsData['contentData'];
+}
+
+export interface ProductsDataStyleData {
+  margin?: string;
+  padding?: string;
+  layoutDisposition?: CardLayoutDisposition;
+  autoSlide?: boolean;
+  numberOfLines?: number;
+  itensPerLine?: number;
+  ordering?: CardsOrderingEnum;
+  showCardTitle?: boolean;
+  showCardCategory?: boolean;
+  showCardDescription?: boolean;
+  showCardValue?: boolean;
+  totalRows?: number;
+  cardBackgroundColor?: string;
+  cardHoverColor?: string;
+  cardProductNameColor?: string;
+  cardCategoryColor?: string;
+  cardDescriptionColor?: string;
+  cardValueColor?: string;
+  showCardImage?: boolean;
+  format?: 'product' | 'square' | 'rounded' | 'rectHorizontal' | 'rectVertical';
+  cardActionButton?: boolean;
+  cardButtonText?: string;
+  cardButtonTextColor?: string;
+  cardButtonColor?: string;
+  cardButtonHoverColor?: string;
+  sessionButton?: boolean;
+  sessionAlignment?: AlignmentEnum;
+  sessionButtonText?: string;
+  sessionButtonTextColor?: string;
+  sessionButtonColor?: string;
+  sessionHoverColor?: string;
+  sessionLink?: string;
+  backgroundSession?: boolean;
+  backgroundColor?: string;
+  backgroundUrl?: AssetInterface;
+  overlay?: boolean;
+  overlayColor?: string;
+  textOverImage?: boolean;
 }
 
 interface ComboBoxReturnInterface {

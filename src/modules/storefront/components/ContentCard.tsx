@@ -1,7 +1,7 @@
-import { ProductsData, SpecificContentCard } from '../interfaces';
+import { ProductsDataStyleData, SpecificContentCard } from '../interfaces';
 
 interface ContentCardProps {
-  config: ProductsData['styleData'];
+  config: ProductsDataStyleData;
   product: SpecificContentCard;
 }
 

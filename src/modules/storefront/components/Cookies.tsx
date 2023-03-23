@@ -58,7 +58,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
             className="pw-text-sm pw-max-w-[949px] pw-leading-5"
             style={{ color: textColor }}
           >
-            {disclaimer || sampleDisclaimer}{' '}
+            {disclaimer || sampleDisclaimer}
             {privacyPolicy && (
               <a
                 href={privacyPolicyLink}

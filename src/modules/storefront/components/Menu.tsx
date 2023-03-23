@@ -6,7 +6,11 @@ import TranslatableComponent from '../../shared/components/TranslatableComponent
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { AlignmentEnum, CategoriesData } from '../interfaces';
+import {
+  AlignmentEnum,
+  CategoriesData,
+  CategoriesDataStyleData,
+} from '../interfaces';
 
 export const Menu = ({ data }: { data: CategoriesData }) => {
   const { styleData, mobileStyleData } = data;
@@ -125,7 +129,7 @@ export const Menu = ({ data }: { data: CategoriesData }) => {
 const SeeAllMenu = ({
   mergedStyleData,
 }: {
-  mergedStyleData: CategoriesData['styleData'];
+  mergedStyleData: CategoriesDataStyleData;
 }) => {
   const { backgroundColor, textColor, categories, alignment } = mergedStyleData;
 
