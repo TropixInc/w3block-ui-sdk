@@ -168,28 +168,32 @@ export const TokenDetailsCard = ({
   };
 
   const formatedData = useMemo(() => {
-    const data = benefitsByEdition?.data?.map((benefit) => {
-      const tableData: TableRow = {
-        name: benefit.name,
-        type: type(benefit?.type),
-        local: benefit?.tokenPassBenefitAddresses?.length
-          ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
-          : handleLocal(benefit.type),
-        date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
-        status: <StatusTag status={benefit.status} />,
-        actionComponent: handleButtonToShow(benefit.status, benefit.id),
-      };
+    if (Array.isArray(benefitsByEdition?.data)) {
+      const data = benefitsByEdition?.data?.map((benefit) => {
+        const tableData: TableRow = {
+          name: benefit.name,
+          type: type(benefit?.type),
+          local: benefit?.tokenPassBenefitAddresses?.length
+            ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
+            : handleLocal(benefit.type),
+          date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
+          status: <StatusTag status={benefit.status} />,
+          actionComponent: handleButtonToShow(benefit.status, benefit.id),
+        };
 
-      const mobileTableData: TableRow = {
-        name: benefit?.name,
-        type: type(benefit?.type),
-        status: <StatusTag status={benefit?.status} />,
-        actionComponent: handleButtonToShow(benefit?.status, benefit.id),
-      };
-      return isMobile ? mobileTableData : tableData;
-    });
+        const mobileTableData: TableRow = {
+          name: benefit?.name,
+          type: type(benefit?.type),
+          status: <StatusTag status={benefit?.status} />,
+          actionComponent: handleButtonToShow(benefit?.status, benefit.id),
+        };
+        return isMobile ? mobileTableData : tableData;
+      });
 
-    return data || [];
+      return data || [];
+    }
+    return [];
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [benefitsByEdition, isMobile]);
 
