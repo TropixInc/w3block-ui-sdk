@@ -143,7 +143,7 @@ const _PassTemplate = ({
 
   const waitCheckin =
     secret?.data?.statusCode === 400 &&
-    secret?.data?.message?.includes('check -in at Invalid date');
+    secret?.data?.message?.includes('has check-in at');
 
   const reachedUsageLimit =
     secret?.data?.statusCode === 400 &&
