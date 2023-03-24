@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { Html5Qrcode } from 'html5-qrcode';
 import { QrcodeSuccessCallback } from 'html5-qrcode/esm/core';
 import { Html5QrcodeCameraScanConfig } from 'html5-qrcode/esm/html5-qrcode';
-import { useRouter } from 'next/router';
 
 import { ReactComponent as LoadingIcon } from '../../../shared/assets/icons/loading.svg';
 import { ReactComponent as W3block } from '../../assets/images/w3blockWhite.svg';
@@ -29,10 +28,6 @@ export const QrCodeReader = ({
   const [translate] = useTranslation();
 
   useLockBodyScroll(hasOpen);
-
-  const isDevelopment = process.env.NEXT_PUBLIC_ENVIRONMENT === 'development';
-  const router = useRouter();
-  if (!isDevelopment) router.back();
 
   useEffect(() => {
     if (hasOpen) {
