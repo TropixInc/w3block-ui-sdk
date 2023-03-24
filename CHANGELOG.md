@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.189](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.188...v0.1.1-alpha.189) (2023-03-24)
+
+
+### Bug Fixes
+
+* **TK-1116:** fix redirect ([feccb57](https://github.com/TropixInc/w3block-ui-sdk/commit/feccb574568dcc88966ba19989e633c84f6c3559))
+
 ### [0.1.1-alpha.188](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.187...v0.1.1-alpha.188) (2023-03-24)
 
 
