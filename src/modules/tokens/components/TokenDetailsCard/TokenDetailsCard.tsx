@@ -14,7 +14,6 @@ import { useRouterConnect } from '../../../shared';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
-import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import {
   headers,
@@ -113,9 +112,6 @@ export const TokenDetailsCard = ({
     }
   };
 
-  const isProduction = useIsProduction();
-  const isDevelopment = !isProduction;
-
   const formatDateToTable = (startsAt: string, endsAt?: string) => {
     if (endsAt) {
       return `${format(new Date(startsAt), 'dd/MM/yyyy')} > ${format(
@@ -211,7 +207,7 @@ export const TokenDetailsCard = ({
     >
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
       {pass ? <InternalPageTitle contract={contract} title={title} /> : null}
-      {isMultiplePass && isDevelopment && pass ? (
+      {isMultiplePass && pass ? (
         <>
           <LineDivider />
           <div className="pw-flex pw-flex-col pw-gap-6">
