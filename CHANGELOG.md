@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.192](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.191...v0.1.1-alpha.192) (2023-03-24)
+
+
+### Bug Fixes
+
+* **TK-1121:** fix redirect signup and implement validations ([965874a](https://github.com/TropixInc/w3block-ui-sdk/commit/965874aee8c04c546e94a4845ad6aa2d79e171fb))
+
 ### [0.1.1-alpha.191](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.190...v0.1.1-alpha.191) (2023-03-24)
 
 ### [0.1.1-alpha.190](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.189...v0.1.1-alpha.190) (2023-03-24)
