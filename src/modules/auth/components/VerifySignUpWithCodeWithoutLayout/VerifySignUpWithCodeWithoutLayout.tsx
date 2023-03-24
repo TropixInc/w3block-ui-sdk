@@ -82,9 +82,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
                 (data) => {
                   if (data.error == null) {
                     pushConnect(
-                      PixwayAppRoutes.CONNECT_EXTERNAL_WALLET +
-                        '?' +
-                        queryString
+                      PixwayAppRoutes.COMPLETE_KYC + '?' + queryString
                     );
                   }
                 }

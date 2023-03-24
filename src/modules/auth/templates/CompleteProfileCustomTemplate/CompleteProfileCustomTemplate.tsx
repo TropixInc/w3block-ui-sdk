@@ -107,9 +107,7 @@ const _CompleteProfileCustomTemplate = ({
               password,
               companyId,
             })
-              .then(() =>
-                router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
-              )
+              .then(() => router.pushConnect(PixwayAppRoutes.COMPLETE_KYC))
               .catch((e) => {
                 // eslint-disable-next-line no-console
                 console.log(e);

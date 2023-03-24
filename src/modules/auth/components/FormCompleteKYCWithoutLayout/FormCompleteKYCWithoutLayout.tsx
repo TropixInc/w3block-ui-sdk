@@ -6,7 +6,9 @@ import { DocumentDto } from '@w3block/sdk-id';
 import { object } from 'yup';
 
 import { useRouterConnect } from '../../../shared';
+import { Alert } from '../../../shared/components/Alert';
 import SmartInputsController from '../../../shared/components/SmartInputsController';
+import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -26,7 +28,7 @@ interface Props {
 const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   const router = useRouterConnect();
   const [translate] = useTranslation();
-  const { mutate, isSuccess } = usePostUsersDocuments();
+  const { mutate, isSuccess, isError, isLoading } = usePostUsersDocuments();
   const { companyId: tenantId } = useCompanyConfig();
   const [validForm, setValidForm] = useState<boolean>(false);
 
@@ -104,6 +106,12 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
 
   return (
     <FormProvider {...dynamicMethods}>
+      {isError && (
+        <Alert variant="error" className="pw-flex pw-gap-x-3 pw-mb-5">
+          <Alert.Icon />
+          <p>{translate('auth>poll>unexpectedError')}</p>
+        </Alert>
+      )}
       {reasons?.data?.items[0]?.logs?.at(-1)?.inputIds?.length ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
           <p className="pw-mb-2 pw-text-[#FF0505]">
@@ -119,6 +127,9 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
           </p>
         </div>
       ) : null}
+      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
+        {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
+      </p>
       <form onSubmit={dynamicMethods.handleSubmit(onSubmit)}>
         {tenantInputs?.data &&
           tenantInputs?.data?.map((item) => (
@@ -137,10 +148,14 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
           ))}
         <AuthButton
           type="submit"
-          className="pw-w-full pw-mt-5"
-          disabled={!validForm}
+          className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
+          disabled={!validForm || isLoading}
         >
-          {translate('components>advanceButton>continue')}
+          {isLoading ? (
+            <Spinner className="pw-w-4 pw-h-4" />
+          ) : (
+            translate('components>advanceButton>continue')
+          )}
         </AuthButton>
       </form>
     </FormProvider>

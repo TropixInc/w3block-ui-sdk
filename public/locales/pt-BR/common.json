@@ -366,5 +366,6 @@
   "auth>getValidationsTypesForSignup>insertValidPhone": "Insira um telefone válido",
   "auth>getValidationsTypesForSignup>insertUrl": "Insira uma url",
   "auth>getValidationsTypesForSignup>insertText": "Insira um texto",
-  "auth>formCompletKYCWithoutLayout>reviewData": "Encontramos alguns problemas validando seus dados. Por favor, revise os campos a seguir:"
+  "auth>formCompletKYCWithoutLayout>reviewData": "Encontramos alguns problemas validando seus dados. Por favor, revise os campos a seguir:",
+  "auth>formCompletKYCWithoutLayout>pageLabel": "Precisamos de mais alguns dados para completar seu cadastro."
 }
