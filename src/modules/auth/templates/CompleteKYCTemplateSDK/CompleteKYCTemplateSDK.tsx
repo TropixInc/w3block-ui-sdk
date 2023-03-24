@@ -60,9 +60,14 @@ export const CompleteKYCTemplateSDK = ({
   );
 
   useEffect(() => {
-    if (session) router.pushConnect(getRedirectUrl(), router.query);
+    if (session && profile?.data) {
+      const { data: user } = profile;
+      if (user.kycStatus !== KycStatus.Pending) {
+        router.pushConnect(getRedirectUrl(), router.query);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, router]);
+  }, [session, router, profile]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -71,7 +76,6 @@ export const CompleteKYCTemplateSDK = ({
 
     if (profile) {
       const { data: user } = profile;
-
       if (user.kycStatus !== KycStatus.Pending) {
         router.pushConnect(defaultRedirectRoute);
       }
