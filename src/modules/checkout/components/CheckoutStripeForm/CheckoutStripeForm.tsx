@@ -18,7 +18,9 @@ export const CheckoutStripeForm = () => {
   const elements = useElements();
   const { appBaseUrl } = useCompanyConfig();
   const [loading, setLoading] = useState(false);
+  const [cardError, setCardError] = useState('');
   const submitPayment = async (e: SyntheticEvent) => {
+    setCardError('');
     setLoading(true);
     e.preventDefault();
     if (!stripe || !elements) {
@@ -32,7 +34,8 @@ export const CheckoutStripeForm = () => {
     });
     if (result.error) {
       // eslint-disable-next-line no-console
-      console.log(result.error.message);
+      console.log(result.error.code, result.error.decline_code);
+      setCardError(result.error.message ?? 'Erro não identificado');
       setLoading(false);
     }
   };
@@ -45,7 +48,10 @@ export const CheckoutStripeForm = () => {
           </p>
           <PaymentElement />
         </div>
-        <div className="pw-flex pw-justify-end">
+        <div className="pw-flex pw-justify-between pw-items-center pw-gap-2">
+          <div className="pw-mt-6">
+            <p className="pw-text-sm pw-text-red-500">{cardError}</p>
+          </div>
           <WeblockButton
             onClick={(e) => submitPayment(e)}
             className="pw-mt-6 pw-text-white pw-accent-brand-primary-500"

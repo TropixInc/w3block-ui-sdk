@@ -5,16 +5,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
-import { isImage, isVideo } from '../../shared/utils/validators';
-import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { isImage, isVideo } from '../../shared/utils/validators';
+import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const {
@@ -36,7 +37,6 @@ export const Banner = ({ data }: { data: BannerData }) => {
         className={`${layoutClass} pw-mx-auto`}
         style={{
           margin: convertSpacingToCSS(margin),
-          padding: convertSpacingToCSS(padding),
         }}
       >
         <Swiper
@@ -55,7 +55,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
           {banners?.map((banner) => (
             <SwiperSlide key={banner.title}>
               <Slide
-                data={banner}
+                data={{ ...banner, padding }}
                 ratioClassName={ratios[bannerRatio ?? 'default']}
               />
             </SwiperSlide>
@@ -85,6 +85,7 @@ const Slide = ({
     backgroundUrl,
     backgroundUrlMobile,
     title,
+    padding,
     overlay,
     buttonText,
     actionButton,
@@ -119,6 +120,7 @@ const Slide = ({
         backgroundSize: 'cover',
         backgroundColor: backgroundColor,
         background: bg,
+        padding: convertSpacingToCSS(padding),
       }}
       className={`${ratioClassName} !pw-bg-cover  pw-flex ${rowAlignmentClass} pw-items-center`}
     >

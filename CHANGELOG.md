@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.188](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.187...v0.1.1-alpha.188) (2023-03-24)
+
+
+### Bug Fixes
+
+* **benefits:** fixed validation ([#164](https://github.com/TropixInc/w3block-ui-sdk/issues/164)) ([29fdf9f](https://github.com/TropixInc/w3block-ui-sdk/commit/29fdf9fc7b1bce62eded647bd68d8c4f591ceed4))
+
+### [0.1.1-alpha.187](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.186...v0.1.1-alpha.187) (2023-03-23)
+
+
+### Bug Fixes
+
+* check if is array to map ([#163](https://github.com/TropixInc/w3block-ui-sdk/issues/163)) ([9785194](https://github.com/TropixInc/w3block-ui-sdk/commit/97851948153be681a5e63bc4a8af9f0fed39226a))
+
+### [0.1.1-alpha.186](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.185...v0.1.1-alpha.186) (2023-03-22)
+
 ### [0.1.1-alpha.185](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.184...v0.1.1-alpha.185) (2023-03-20)
 
 ### [0.1.1-alpha.184](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.183...v0.1.1-alpha.184) (2023-03-20)

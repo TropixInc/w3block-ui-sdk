@@ -14,7 +14,6 @@ import { useRouterConnect } from '../../../shared';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
-import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import {
   headers,
@@ -113,9 +112,6 @@ export const TokenDetailsCard = ({
     }
   };
 
-  const isProduction = useIsProduction();
-  const isDevelopment = !isProduction;
-
   const formatDateToTable = (startsAt: string, endsAt?: string) => {
     if (endsAt) {
       return `${format(new Date(startsAt), 'dd/MM/yyyy')} > ${format(
@@ -168,28 +164,32 @@ export const TokenDetailsCard = ({
   };
 
   const formatedData = useMemo(() => {
-    const data = benefitsByEdition?.data?.map((benefit) => {
-      const tableData: TableRow = {
-        name: benefit.name,
-        type: type(benefit?.type),
-        local: benefit?.tokenPassBenefitAddresses?.length
-          ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
-          : handleLocal(benefit.type),
-        date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
-        status: <StatusTag status={benefit.status} />,
-        actionComponent: handleButtonToShow(benefit.status, benefit.id),
-      };
+    if (Array.isArray(benefitsByEdition?.data)) {
+      const data = benefitsByEdition?.data?.map((benefit) => {
+        const tableData: TableRow = {
+          name: benefit.name,
+          type: type(benefit?.type),
+          local: benefit?.tokenPassBenefitAddresses?.length
+            ? handleLocal(benefit.type, benefit?.tokenPassBenefitAddresses[0])
+            : handleLocal(benefit.type),
+          date: formatDateToTable(benefit.eventStartsAt, benefit?.eventEndsAt),
+          status: <StatusTag status={benefit.status} />,
+          actionComponent: handleButtonToShow(benefit.status, benefit.id),
+        };
 
-      const mobileTableData: TableRow = {
-        name: benefit?.name,
-        type: type(benefit?.type),
-        status: <StatusTag status={benefit?.status} />,
-        actionComponent: handleButtonToShow(benefit?.status, benefit.id),
-      };
-      return isMobile ? mobileTableData : tableData;
-    });
+        const mobileTableData: TableRow = {
+          name: benefit?.name,
+          type: type(benefit?.type),
+          status: <StatusTag status={benefit?.status} />,
+          actionComponent: handleButtonToShow(benefit?.status, benefit.id),
+        };
+        return isMobile ? mobileTableData : tableData;
+      });
 
-    return data || [];
+      return data || [];
+    }
+    return [];
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [benefitsByEdition, isMobile]);
 
@@ -207,7 +207,7 @@ export const TokenDetailsCard = ({
     >
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
       {pass ? <InternalPageTitle contract={contract} title={title} /> : null}
-      {isMultiplePass && isDevelopment && pass ? (
+      {isMultiplePass && pass ? (
         <>
           <LineDivider />
           <div className="pw-flex pw-flex-col pw-gap-6">
