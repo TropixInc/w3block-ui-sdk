@@ -4,6 +4,7 @@ import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import { object, string } from 'yup';
 
@@ -40,6 +41,7 @@ interface SignInTemplateClassses {
 
 export interface SignInTemplateProps {
   defaultRedirectRoute: string;
+  routeToAttachKYC?: string;
   routeToAttachWallet?: string;
   classes?: SignInTemplateClassses;
   hasSignUp?: boolean;
@@ -47,6 +49,7 @@ export interface SignInTemplateProps {
 
 const _SignInTemplate = ({
   defaultRedirectRoute,
+  routeToAttachKYC = PixwayAppRoutes.COMPLETE_KYC,
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   classes = {},
   hasSignUp = true,
@@ -94,8 +97,10 @@ const _SignInTemplate = ({
   });
 
   const checkForCallbackUrl = () => {
-    if (!profile?.data.mainWallet) {
-      return appBaseUrl + routeToAttachWallet;
+    if (profile?.data?.kycStatus === KycStatus.Pending) {
+      return appBaseUrl + routeToAttachKYC;
+    } else if (!profile?.data?.mainWallet) {
+      return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');

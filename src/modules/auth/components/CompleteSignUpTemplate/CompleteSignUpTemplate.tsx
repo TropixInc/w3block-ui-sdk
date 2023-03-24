@@ -43,7 +43,7 @@ const _CompleteSignUpTemplate = ({
   classes = {},
   termsRedirectLink = PixwayAppRoutes.TERMS_CONDITIONS,
   privacyRedirectLink = PixwayAppRoutes.PRIVACY_POLICY,
-  afterLoginRedirectLink = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+  afterLoginRedirectLink = PixwayAppRoutes.COMPLETE_KYC,
 }: Props) => {
   const router = useRouterConnect();
   const [translate] = useTranslation();
@@ -69,7 +69,7 @@ const _CompleteSignUpTemplate = ({
 
   useEffect(() => {
     if ((!token || !email) && router.isReady) {
-      router.push(PixwayAppRoutes.HOME);
+      router.push(PixwayAppRoutes.COMPLETE_KYC);
     }
   }, [token, email, router]);
 
