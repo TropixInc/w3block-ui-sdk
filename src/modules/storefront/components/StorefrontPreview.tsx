@@ -127,7 +127,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
           }
         }
       />
-      {context.isError ? (
+      {context.isError && !children ? (
         <Page404 />
       ) : (
         <>
