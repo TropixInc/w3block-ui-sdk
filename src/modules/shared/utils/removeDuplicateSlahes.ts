@@ -4,17 +4,17 @@ export const removeDuplicateSlahes = (url: string) =>
 export const removeDoubleSlashesOnUrl = (url: string) => {
   const https = url.includes('https:');
   const http = url.includes('http:');
+  const query = new RegExp(/(\?.*)/, 'g').exec(url);
+  const queryToSave = query?.length ? query[0] : '';
   let urlThreat = url
-    .replaceAll(https ? 'https://' : 'http://', https ? '${https}' : '${http}')
+    .replace(/(\?.*)/, '')
+    .replace(https ? 'https://' : 'http://', '')
     .replace('///', '/')
     .replace('//', '/');
   if (!https && !http) {
-    return urlThreat;
+    return urlThreat + queryToSave;
   } else {
-    urlThreat = urlThreat.replaceAll(
-      https ? '${https}' : '${http}',
-      https ? 'https://' : 'http://'
-    );
+    urlThreat = (https ? 'https://' : 'http://') + urlThreat + queryToSave;
     return urlThreat;
   }
 };
