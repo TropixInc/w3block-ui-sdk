@@ -7,7 +7,7 @@ export const removeDoubleSlashesOnUrl = (url: string) => {
   const query = new RegExp(/(\?.*)/, 'g').exec(url);
   const queryToSave = query?.length ? query[0] : '';
   let urlThreat = url
-    .replace(/(\?.*)/, '')
+    .replace(/\?.*/, '')
     .replace(https ? 'https://' : 'http://', '')
     .replace('///', '/')
     .replace('//', '/');
