@@ -176,6 +176,19 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
               className={!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}
             >
               {data.modules?.map((item) => {
+                if (item.deviceType == 'none') return null;
+
+                if (
+                  item.deviceType == 'desktop' &&
+                  mobileBreakpoints.includes(breakpoint)
+                )
+                  return null;
+                if (
+                  item.deviceType == 'mobile' &&
+                  !mobileBreakpoints.includes(breakpoint)
+                )
+                  return null;
+
                 switch (item.type) {
                   case ModulesType.CATEGORIES:
                     return <Menu data={{ ...theme.categories, ...item }} />;

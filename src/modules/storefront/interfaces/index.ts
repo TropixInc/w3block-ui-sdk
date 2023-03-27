@@ -37,7 +37,7 @@ export interface MainModuleThemeInterface {
   id: string;
   styleData?: any;
   contentData?: any;
-  deviceType?: 'mobile' | 'desktop';
+  deviceType?: 'none' | 'mobile' | 'desktop';
   mobileStyleData?: any;
   mobileContentData?: any;
 }
