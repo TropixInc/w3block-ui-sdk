@@ -73,9 +73,9 @@ const _ConnectExternalWalletWithoutLayout = ({
 
     if (profile) {
       const { data: user } = profile;
-      const { wallets } = user;
+      const { mainWalletId } = user;
 
-      if (wallets?.length) {
+      if (mainWalletId) {
         router.pushConnect(
           router.query.callbackPath
             ? (router.query.callbackPath as string)
