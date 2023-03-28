@@ -18,13 +18,19 @@ interface iProps {
   hasOpen: boolean;
   onClose: () => void;
   type: TypeError;
+  validateAgain: ()=> void;
 }
 
-export const QrCodeError = ({ hasOpen, onClose, type }: iProps) => {
+export const QrCodeError = ({ hasOpen, onClose, validateAgain, type }: iProps) => {
 
   const [translate] = useTranslation();
 
   useLockBodyScroll(hasOpen);
+
+  const handleNext = () => {
+    onClose();
+    validateAgain();
+  }
 
   return hasOpen ? (
     <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
@@ -54,14 +60,25 @@ export const QrCodeError = ({ hasOpen, onClose, type }: iProps) => {
               : ''}
       </div>
 
-      <Button
-        type="button"
-        model="secondary"
-        width="full"
-        onClick={onClose}
-      >
-        {translate('token>pass>validatedToken>back')}
-      </Button>
+      <div className='pw-col'>
+        <Button
+          type="button"
+          model="secondary"
+          width="full"
+          onClick={onClose}
+        >
+          {translate('token>pass>validatedToken>back')}
+        </Button>
+        <Button
+          type="button"
+          width="full"
+          model="secondary"
+          className='pw-mt-5'
+          onClick={handleNext}
+        >
+          {translate('token>qrCode>validatedAgain')}
+        </Button>
+      </div>
     </div>
   ) : (
     <></>

@@ -13,17 +13,11 @@ import { CloseButton } from '../CloseButton';
 
 interface iProps {
   hasOpen: boolean;
-  setHasOpen: () => void;
   returnValue: (i: string) => void;
   onClose: () => void;
 }
 
-export const QrCodeReader = ({
-  hasOpen,
-  setHasOpen,
-  returnValue,
-  onClose,
-}: iProps) => {
+export const QrCodeReader = ({ hasOpen, returnValue, onClose }: iProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [translate] = useTranslation();
 
@@ -49,10 +43,11 @@ export const QrCodeReader = ({
         html5QrCode.stop();
 
         setTimeout(() => {
-          setIsLoading(false);
-          setHasOpen();
           returnValue(decodedText);
         }, 2000);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2500);
       };
 
       html5QrCode.start(
