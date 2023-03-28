@@ -152,6 +152,7 @@ export const PassesDetail = () => {
       {
         onSuccess: () => {
           setShowSuccess(true);
+          setOpenScan(false);
         },
         onError: (error) => {
           console.error('Register Use: ', error)
@@ -160,7 +161,8 @@ export const PassesDetail = () => {
               setError(TypeError.use)
             }
           }
-          setShowError()
+          setShowError();
+          setOpenScan(false);
         },
       }
     );
@@ -206,7 +208,6 @@ export const PassesDetail = () => {
         <>
           <QrCodeReader
             hasOpen={showScan}
-            setHasOpen={() => setOpenScan()}
             returnValue={(e) => validatePassToken(e)} 
             onClose={() => setOpenScan(false)}
             />
@@ -221,6 +222,7 @@ export const PassesDetail = () => {
           <QrCodeError
             hasOpen={showError}
             onClose={() => setShowError(false)}
+            validateAgain={() => setOpenScan()}
             type={error} />
         </>
         : null}
