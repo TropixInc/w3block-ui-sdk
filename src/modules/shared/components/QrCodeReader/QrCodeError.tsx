@@ -76,7 +76,7 @@ export const QrCodeError = ({ hasOpen, onClose, validateAgain, type }: iProps) =
           className='pw-mt-5'
           onClick={handleNext}
         >
-          {translate('token>qrCode>validatedAgain')}
+          {translate('token>qrCode>tryAgain')}
         </Button>
       </div>
     </div>
