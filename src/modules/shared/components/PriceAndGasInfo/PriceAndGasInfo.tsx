@@ -37,28 +37,31 @@ const _PriceAndGasInfo = ({
         ) : (
           <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
             {currencyMap.get(currency)}
-            {price}
+            {parseFloat(price).toFixed(2)}
           </p>
         )}
       </div>
-      <div className="pw-flex pw-justify-between pw-mt-2">
-        <div className="pw-flex pw-gap-x-1">
-          <p className="pw-text-sm text-[#35394C] pw-font-[400]">
-            {translate('shared>components>servicePriceinfo')}
-          </p>
-          {/* <InfoIcon className="pw-mt-[2px]" /> */}
-        </div>
-        {service && parseFloat(service) > 0 ? (
-          loading ? (
-            <Shimmer />
-          ) : (
-            <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
-              {currencyMap.get(currency)}
-              {parseFloat(service).toFixed(2)}
+      {service && parseFloat(service) > 0 && (
+        <div className="pw-flex pw-justify-between pw-mt-2">
+          <div className="pw-flex pw-gap-x-1">
+            <p className="pw-text-sm text-[#35394C] pw-font-[400]">
+              {translate('shared>components>servicePriceinfo')}
             </p>
-          )
-        ) : null}
-      </div>
+            {/* <InfoIcon className="pw-mt-[2px]" /> */}
+          </div>
+          {service && parseFloat(service) > 0 ? (
+            loading ? (
+              <Shimmer />
+            ) : (
+              <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
+                {currencyMap.get(currency)}
+                {parseFloat(service).toFixed(2)}
+              </p>
+            )
+          ) : null}
+        </div>
+      )}
+
       {parseFloat(gasFee) == 0 ? null : (
         <div className="pw-flex pw-justify-between pw-mt-2">
           <div className="pw-flex pw-gap-x-1">
