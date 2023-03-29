@@ -9,6 +9,7 @@ import { ReactComponent as ArrowIcon } from '../../../shared/assets/icons/arrowD
 import { ReactComponent as CheckIcon } from '../../../shared/assets/icons/checkOutlined.svg';
 import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copy.svg';
 import { ReactComponent as XIcon } from '../../../shared/assets/icons/x-circle.svg';
+import { CurrencyEnum } from '../../../shared/enums/Currency';
 export enum OrderStatusEnum {
   PENDING = 'pending',
   EXPIRED = 'expired',
@@ -114,15 +115,12 @@ export const OrderCardComponentSDK = ({
               : null}
           </div>
           <PriceAndGasInfo
+            currency={order.data.currency.code ?? CurrencyEnum.BRL}
             className="pw-mt-6"
             gasFee={order.data.gasFee}
             service={order.data.clientServiceFee}
-            price={order.data.currencyAmount}
-            totalPrice={(
-              parseFloat(order.data.clientServiceFee) +
-              parseFloat(order.data.currencyAmount) +
-              parseFloat(order.data.gasFee)
-            ).toFixed(2)}
+            price={order.data.totalAmount}
+            totalPrice={parseFloat(order.data.totalAmount).toFixed(2)}
           />
         </div>
       )}
@@ -135,7 +133,11 @@ const getStatusText = (status: OrderStatusEnum) => {
     case OrderStatusEnum.CANCELLED:
       return { title: 'Cancelado', color: '#ED4971', icon: <XIcon /> };
     case OrderStatusEnum.CONCLUDED:
-      return { title: 'Finalizado', color: '#295BA6', icon: <CheckIcon /> };
+      return {
+        title: 'Finalizado',
+        color: '#295BA6',
+        icon: <CheckIcon className="pw-stroke-blue-700" />,
+      };
     case OrderStatusEnum.CONFIRMING_PAYMENT:
       return { title: 'Confirmando o pagamento', color: '#295BA6' };
     case OrderStatusEnum.DELIVERING:
