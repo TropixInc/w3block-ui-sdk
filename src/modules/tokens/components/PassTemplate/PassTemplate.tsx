@@ -235,6 +235,8 @@ const _PassTemplate = ({
 
   const isSecretError = secret?.data?.error;
 
+  const isSecretUndefined = secret?.data?.secret === undefined;
+
   if (isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken) {
     return (
       <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
@@ -381,6 +383,7 @@ const _PassTemplate = ({
           {!isSecretError &&
             !isInactive &&
             !isUnavaible &&
+            !isSecretUndefined &&
             isBenefitSucceed &&
             isTokenSucceed && (
               <QrCodeSection

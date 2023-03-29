@@ -4,19 +4,13 @@ import { Trans } from 'react-i18next';
 import { add } from 'date-fns';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { PassDates } from '../../../pass/interfaces/PassDates';
 import { useProfile } from '../../../shared';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenUsageTime } from './TokenUsageTime';
-
-interface Dates {
-  startDate: Date;
-  endDate?: Date;
-  checkInStart?: string;
-  checkInEnd?: string;
-}
 interface iQrCodeSection {
-  eventDate?: Dates;
+  eventDate?: PassDates;
   hasExpired?: boolean;
   editionNumber: string;
   secret: string;

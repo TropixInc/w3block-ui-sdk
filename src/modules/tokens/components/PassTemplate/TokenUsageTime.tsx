@@ -3,18 +3,12 @@ import { Trans } from 'react-i18next';
 
 import { differenceInHours, format } from 'date-fns';
 
+import { PassDates } from '../../../pass/interfaces/PassDates';
 import { ReactComponent as ClockIcon } from '../../../shared/assets/icons/clockOutlined.svg';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
-
-interface Dates {
-  startDate: Date;
-  endDate?: Date;
-  checkInStart?: string;
-  checkInEnd?: string;
-}
 interface Props {
-  date: Dates;
+  date: PassDates;
   hasExpiration: boolean;
 }
 
