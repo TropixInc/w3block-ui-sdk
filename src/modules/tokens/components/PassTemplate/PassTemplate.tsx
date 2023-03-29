@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 
 import classNames from 'classnames';
-import { format, getDay, isSameDay, isToday } from 'date-fns';
+import { format, getDay, isSameDay } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
@@ -25,7 +25,6 @@ import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
 import { DetailToken } from './DetailToken';
-import { InactiveDateUseToken } from './InactiveSection';
 import { QrCodeSection } from './QrCodeSection';
 import { UsedPass } from './UsedSection';
 
@@ -144,11 +143,15 @@ const _PassTemplate = ({
 
   const waitCheckin =
     secret?.data?.statusCode === 400 &&
-    secret?.data?.message?.includes('has check-in at');
+    secret?.data?.message?.includes('has check-in');
 
   const reachedUsageLimit =
     secret?.data?.statusCode === 400 &&
     secret?.data?.message?.includes('reached the usage limit');
+
+  const waitingToStart =
+    secret?.data?.statusCode === 400 &&
+    secret?.data?.message?.includes('will start the period of use');
 
   const shortDay = {
     'pt-BR': ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'],
@@ -217,8 +220,6 @@ const _PassTemplate = ({
     ? new Date(benefit.data.eventStartsAt)
     : undefined;
 
-  const today = eventDate !== undefined && isToday(eventDate);
-
   const isInactive =
     benefitData && benefitData[0]?.status === BenefitStatus.inactive;
 
@@ -228,13 +229,10 @@ const _PassTemplate = ({
   const isDynamic = benefitData && benefitData[0]?.dynamicQrCode;
 
   const usesLeft =
-    benefitData && benefitData[0]?.useAvailable
+    benefitData && benefitData[0]?.useAvailable >= 0
       ? benefitData[0].useAvailable
       : benefitData && benefitData[0]?.useLimit;
 
-  const inactiveDateUseToken = !waitCheckin && isInactive;
-  const tokenExpired = hasExpired && isUnavaible;
-  const inactiveDueCheckin = waitCheckin && isInactive;
   const isSecretError = secret?.data?.error;
 
   if (isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken) {
@@ -277,9 +275,13 @@ const _PassTemplate = ({
           />
         )}
 
-        {isSecretError && !hasExpired && !waitCheckin && !reachedUsageLimit && (
-          <Alert variant="error">{secret?.data?.message}</Alert>
-        )}
+        {isSecretError &&
+          !hasExpired &&
+          !waitCheckin &&
+          !reachedUsageLimit &&
+          !waitingToStart && (
+            <Alert variant="error">{secret?.data?.message}</Alert>
+          )}
 
         <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
           {translate('token>pass>title')}
@@ -334,8 +336,8 @@ const _PassTemplate = ({
                       {translate('token>pass>use')}
                     </span>
                     <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-                      {benefit?.data?.useLimit === 1
-                        ? translate('token>pass>unique')
+                      {usesLeft === 0
+                        ? translate('token>pass>noMoreUses')
                         : translate('token>pass>youStillHave', {
                             quantity: usesLeft,
                           })}
@@ -344,37 +346,35 @@ const _PassTemplate = ({
                 )}
               </div>
             </div>
-            {inactiveDateUseToken && (
-              <InactiveDateUseToken
-                eventDate={new Date(benefit?.data?.eventStartsAt || '')}
-                title={translate('token>pass>useThisTokenFrom')}
-              />
-            )}
-            {tokenExpired && (
-              <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
+            {(isInactive || isUnavaible) && !reachedUsageLimit && (
+              <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
                 <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
-                  {today
-                    ? translate('token>pass>tokenExpiredAt')
-                    : translate('token>pass>tokenExpiredIn')}
+                  {benefit?.data?.eventEndsAt
+                    ? translate('token>pass>useThisTokenUntil')
+                    : translate('token>pass>useThisTokenFrom')}
                   <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
                     {format(
-                      new Date(benefit?.data?.eventEndsAt || ''),
-                      today ? 'HH:mm' : 'dd/MM/yyyy'
+                      new Date(benefit?.data?.eventStartsAt || ''),
+                      'dd/MM/yyyy'
                     )}
+                    {benefit?.data?.eventEndsAt &&
+                      translate('token>pass>until') +
+                        format(
+                          new Date(benefit?.data?.eventEndsAt || ''),
+                          'dd/MM/yyyy'
+                        )}
                   </span>
                 </div>
-              </div>
-            )}
-            {inactiveDueCheckin && (
-              <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
-                <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
-                  {translate('token>pass>checkinAvaibleAt')}
-                  <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                    {benefit?.data?.checkInStartsAt?.slice(0, 5)}
-                    {benefit?.data?.checkInEndsAt &&
-                      ' - ' + benefit?.data?.checkInEndsAt?.slice(0, 5)}
-                  </span>
-                </div>
+                {benefit?.data?.checkInStartsAt && (
+                  <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center pw-mt-5">
+                    {translate('token>pass>checkinAvaibleAt')}
+                    <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                      {benefit?.data?.checkInStartsAt?.slice(0, 5)}
+                      {benefit?.data?.checkInEndsAt &&
+                        ' - ' + benefit?.data?.checkInEndsAt?.slice(0, 5)}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -384,7 +384,12 @@ const _PassTemplate = ({
             isBenefitSucceed &&
             isTokenSucceed && (
               <QrCodeSection
-                eventDate={new Date(benefit?.data?.eventEndsAt || '')}
+                eventDate={{
+                  startDate: new Date(benefit?.data?.eventStartsAt),
+                  endDate: new Date(benefit?.data?.eventEndsAt ?? ''),
+                  checkInEnd: benefit?.data?.checkInEndsAt,
+                  checkInStart: benefit?.data?.checkInStartsAt,
+                }}
                 hasExpiration={hasExpiration}
                 hasExpired={hasExpired}
                 editionNumber={

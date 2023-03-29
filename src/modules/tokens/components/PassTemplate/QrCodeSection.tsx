@@ -9,22 +9,28 @@ import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenUsageTime } from './TokenUsageTime';
 
+interface Dates {
+  startDate: Date;
+  endDate?: Date;
+  checkInStart?: string;
+  checkInEnd?: string;
+}
 interface iQrCodeSection {
-  eventDate?: Date;
-  hasExpiration?: boolean;
+  eventDate?: Dates;
   hasExpired?: boolean;
   editionNumber: string;
   secret: string;
   isDynamic: boolean;
+  hasExpiration: boolean;
 }
 
 export const QrCodeSection = ({
   eventDate,
-  hasExpiration = true,
   editionNumber,
   hasExpired,
   secret,
   isDynamic,
+  hasExpiration,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState('');
   const { setNewCountdown: setQrCountDown, ...qrCountDown } = useCountdown();
@@ -34,7 +40,7 @@ export const QrCodeSection = ({
 
   useEffect(() => {
     if (qrCountDown.seconds === 0) {
-      setQrCountDown(add(new Date(), { seconds: 60 }));
+      setQrCountDown(add(new Date(), { seconds: 15 }));
       setCodeQr(`${editionNumber};${profile?.data?.id};${secret}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
