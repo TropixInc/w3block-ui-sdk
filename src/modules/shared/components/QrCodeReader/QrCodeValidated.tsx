@@ -38,7 +38,7 @@ export const QrCodeValidated = ({
 
   useLockBodyScroll(hasOpen);
 
-  const time = `${new Date().getHours()}:${new Date().getMinutes()}`;
+  const time = format(new Date(), "HH':'mm");
 
   const handleNext = () => {
     onClose();

@@ -192,5 +192,6 @@
   "token>pass>typePhysical": "Physical",
   "token>benefits>useLimit": "Use limit:",
   "token>benefits>details": "Benefit details",
-  "token>qrCode>validatedAgain": "Validate another QRCode"
+  "token>qrCode>validatedAgain": "Validate another QRCode",
+  "token>qrCode>tryAgain": "Try again"
 }

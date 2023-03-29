@@ -13,6 +13,7 @@ import { InternalPagesLayoutBase } from '../../../shared';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
+import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
@@ -132,7 +133,7 @@ const _PassTemplate = ({
     (e) => e.id === benefit?.data.id
   );
 
-  const { data: secret, isSuccess: isSecretSucceed } = useGetQRCodeSecret({
+  const { data: secret } = useGetQRCodeSecret({
     benefitId,
     editionNumber: editionNumber as string,
   });
@@ -234,6 +235,7 @@ const _PassTemplate = ({
   const inactiveDateUseToken = !waitCheckin && isInactive;
   const tokenExpired = hasExpired && isUnavaible;
   const inactiveDueCheckin = waitCheckin && isInactive;
+  const isSecretError = secret?.data?.error;
 
   if (isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken) {
     return (
@@ -273,6 +275,10 @@ const _PassTemplate = ({
             title={translate('token>pass>passUnavailable')}
             description={translate('token>pass>passUnavailableMessage')}
           />
+        )}
+
+        {isSecretError && !hasExpired && !waitCheckin && !reachedUsageLimit && (
+          <Alert variant="error">{secret?.data?.message}</Alert>
         )}
 
         <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
@@ -372,12 +378,11 @@ const _PassTemplate = ({
               </div>
             )}
           </div>
-          {!hasExpired &&
+          {!isSecretError &&
             !isInactive &&
             !isUnavaible &&
             isBenefitSucceed &&
-            isTokenSucceed &&
-            isSecretSucceed && (
+            isTokenSucceed && (
               <QrCodeSection
                 eventDate={new Date(benefit?.data?.eventEndsAt || '')}
                 hasExpiration={hasExpiration}
@@ -425,9 +430,14 @@ const _PassTemplate = ({
                       <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
                         {address?.street}
                         {', '}
+                        {address?.number}
+                        {', '}
                         {address?.city}
                         {' - '}
                         {address?.state}
+                      </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        CEP: {address?.postalCode}
                       </div>
                     </div>
                     <div className="pw-flex pw-flex-col pw-gap-1">
