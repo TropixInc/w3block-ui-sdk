@@ -24,38 +24,43 @@ import { ContentCard } from './ContentCard';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 
-export const Products = (props: { data: ProductsData }) => {
+export const Products = ({ data }: { data: ProductsData }) => {
+  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+  const mergedContentData = useMobilePreferenceDataWhenMobile(
+    contentData,
+    mobileContentData
+  );
+
   const [products, setProducts] = useState<Product[]>([]);
   const [error, _] = useState('');
   const [translate] = useTranslation();
   const breakpoint = useBreakpoints();
   const {
-    styleData: {
-      layoutDisposition,
-      autoSlide,
-      itensPerLine,
-      totalRows,
-      backgroundColor,
-      backgroundUrl,
-      format,
-      sessionButton,
-      sessionButtonColor,
-      sessionButtonTextColor,
-      sessionAlignment,
-      sessionLink,
-      sessionButtonText,
-      margin,
-      padding,
-    },
-    contentData: {
-      moduleTitle,
-      cardType,
-      contentCards,
-      moduleTitleColor,
-      cardSearch,
-    },
-  } = props.data;
+    layoutDisposition,
+    autoSlide,
+    itensPerLine,
+    totalRows,
+    backgroundColor,
+    backgroundUrl,
+    format,
+    sessionButton,
+    sessionButtonColor,
+    sessionButtonTextColor,
+    sessionAlignment,
+    sessionLink,
+    sessionButtonText,
+    margin,
+    padding,
+  } = mergedStyleData;
+  const { moduleTitle, cardType, contentCards, moduleTitleColor, cardSearch } =
+    mergedContentData;
 
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.COMMERCE);
@@ -103,9 +108,9 @@ export const Products = (props: { data: ProductsData }) => {
             : ''
         }`
       )
-      .then((data) => {
-        if (data) {
-          setProducts(data.data.items);
+      .then((response) => {
+        if (response) {
+          setProducts(response.data.items);
         }
       });
   };
@@ -124,7 +129,11 @@ export const Products = (props: { data: ProductsData }) => {
           ? contentCards
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
               .map((card) => (
-                <ContentCard product={card} config={props.data} key={card.id} />
+                <ContentCard
+                  key={card.id}
+                  product={card}
+                  config={mergedStyleData}
+                />
               ))
           : cardType == 'content' && (!format || format == 'product')
           ? contentCards
@@ -157,11 +166,21 @@ export const Products = (props: { data: ProductsData }) => {
                       },
                     ],
                   }}
-                  config={props.data}
+                  config={{
+                    styleData: mergedStyleData,
+                    contentData: mergedContentData,
+                  }}
                 />
               ))
           : clampedProducts?.map((p) => (
-              <Card key={p.id} product={p} config={props.data} />
+              <Card
+                key={p.id}
+                product={p}
+                config={{
+                  styleData: mergedStyleData,
+                  contentData: mergedContentData,
+                }}
+              />
             ))}
       </div>
     );
@@ -198,7 +217,11 @@ export const Products = (props: { data: ProductsData }) => {
                 className="pw-flex pw-w-full pw-justify-center"
               >
                 {' '}
-                <ContentCard product={card} config={props.data} key={card.id} />
+                <ContentCard
+                  product={card}
+                  config={mergedStyleData}
+                  key={card.id}
+                />
               </SwiperSlide>
             ))
           : cardType == 'content' && (!format || format == 'product')
@@ -231,13 +254,23 @@ export const Products = (props: { data: ProductsData }) => {
                       },
                     ],
                   }}
-                  config={props.data}
+                  config={{
+                    styleData: mergedStyleData,
+                    contentData: mergedContentData,
+                  }}
                 />
               </SwiperSlide>
             ))
           : clampedProducts?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
-                <Card key={p.id} product={p} config={props.data} />
+                <Card
+                  key={p.id}
+                  product={p}
+                  config={{
+                    styleData: mergedStyleData,
+                    contentData: mergedContentData,
+                  }}
+                />
               </SwiperSlide>
             ))}
       </Swiper>

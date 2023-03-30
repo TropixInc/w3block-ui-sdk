@@ -3,6 +3,10 @@ import { useEffectOnce } from 'react-use';
 
 import { useRouterConnect } from '../../shared';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import {
+  breakpointsEnum,
+  useBreakpoints,
+} from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import { ModulesType, TemplateData, Theme } from '../interfaces';
@@ -84,20 +88,38 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
 
+  const breakpoint = useBreakpoints();
+  const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
+
   if (!themeContext) return null;
   const isProductPage =
     (asPath || '').includes('/product/slug') &&
     params?.[params?.length - 1] != 'slug';
   const theme = { ...context.defaultTheme, ...themeListener };
-  const fontName = theme.configurations?.styleData.fontFamily;
+
+  const configStyleData = theme.configurations?.styleData;
+  const configMobileStyleData = theme.configurations?.mobileStyleData;
+
+  const mergedConfigStyleData = mobileBreakpoints.includes(breakpoint)
+    ? { ...configStyleData, ...configMobileStyleData }
+    : configStyleData;
+
+  const fontName = mergedConfigStyleData.fontFamily;
   const fontFamily = fontName
     ? `"${fontName}", ${fontName === 'Aref Ruqaa' ? 'serif' : 'sans-serif'}`
     : 'sans-serif';
 
+  const headerStyleData = theme.header?.styleData;
+  const headerMobileStyleData = theme.header?.mobileStyleData;
+
+  const mergedHeaderStyleData = mobileBreakpoints.includes(breakpoint)
+    ? { ...headerStyleData, ...headerMobileStyleData }
+    : headerStyleData;
+
   const headerData = theme.header
     ? {
         ...theme.header,
-        styleData: { ...theme.header.styleData, fontFamily },
+        styleData: { ...mergedHeaderStyleData, fontFamily },
       }
     : {
         id: '',
@@ -108,9 +130,9 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   return (
     <div
       style={{
-        color: theme.configurations?.styleData.textColor ?? 'black',
-        background: theme.configurations?.styleData.backgroundColor ?? 'white',
-        padding: convertSpacingToCSS(theme.configurations?.styleData.padding),
+        color: mergedConfigStyleData.textColor ?? 'black',
+        background: mergedConfigStyleData.backgroundColor ?? 'white',
+        padding: convertSpacingToCSS(mergedConfigStyleData.padding),
         fontFamily,
       }}
     >
@@ -124,6 +146,8 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
             type: ModulesType.COOKIE,
             styleData: {},
             contentData: {},
+            mobileStyleData: {},
+            mobileContentData: {},
           }
         }
       />
@@ -140,6 +164,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
                   name: 'productsPage',
                   type: ModulesType.PRODUCT_PAGE,
                   styleData: {},
+                  mobileStyleData: {},
                 }
               }
             />
@@ -151,6 +176,19 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
               className={!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}
             >
               {data.modules?.map((item) => {
+                if (item.deviceType == 'none') return null;
+
+                if (
+                  item.deviceType == 'desktop' &&
+                  mobileBreakpoints.includes(breakpoint)
+                )
+                  return null;
+                if (
+                  item.deviceType == 'mobile' &&
+                  !mobileBreakpoints.includes(breakpoint)
+                )
+                  return null;
+
                 switch (item.type) {
                   case ModulesType.CATEGORIES:
                     return <Menu data={{ ...theme.categories, ...item }} />;
@@ -192,6 +230,8 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
             type: ModulesType.FOOTER,
             styleData: {},
             contentData: {},
+            mobileStyleData: {},
+            mobileContentData: {},
           }
         }
       />

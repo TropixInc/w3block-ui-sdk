@@ -6,6 +6,7 @@ import {
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, MidiaData } from '../interfaces';
 
 const ratios: Record<string, string> = {
@@ -24,18 +25,23 @@ const rowAlignments: AlignmentClassNameMap = {
 };
 
 export const Midia = ({ data }: { data: MidiaData }) => {
+  const { styleData, mobileStyleData } = data;
+
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+
   const {
-    styleData: {
-      mediaUrl,
-      mediaUrlMobile,
-      mediaLink,
-      imageDisposition,
-      imageRatio,
-      imageAlignment,
-      margin,
-      padding,
-    },
-  } = data;
+    mediaUrl,
+    mediaUrlMobile,
+    mediaLink,
+    imageDisposition,
+    imageRatio,
+    imageAlignment,
+    margin,
+    padding,
+  } = mergedStyleData;
 
   const layoutClass =
     imageDisposition === 'fixed' ? 'pw-container' : 'pw-w-full';

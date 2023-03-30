@@ -1,22 +1,28 @@
 import { HeaderPixwaySDK } from '../../shared';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { MainModuleThemeInterface } from '../interfaces';
 
-export const Header = (props: { data: MainModuleThemeInterface }) => {
+export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
+  const { styleData, mobileStyleData } = data;
+
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+
   const {
-    styleData: {
-      backgroundColor,
-      textColor,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      hoverTextColor,
-      tabs,
-      logoSrc,
-      brandName,
-      margin,
-      padding,
-      fontFamily,
-    },
-  } = props.data;
+    backgroundColor,
+    textColor,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    hoverTextColor,
+    tabs,
+    logoSrc,
+    brandName,
+    margin,
+    padding,
+    fontFamily,
+  } = mergedStyleData;
 
   return (
     <HeaderPixwaySDK
