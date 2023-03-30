@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.201](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.200...v0.1.1-alpha.201) (2023-03-30)
+
+
+### Features
+
+* add mobile style and content data ([9a81b76](https://github.com/TropixInc/w3block-ui-sdk/commit/9a81b7688ff02116c01c6e9489467bdc0a263b73))
+* hide module based on device type ([839022f](https://github.com/TropixInc/w3block-ui-sdk/commit/839022f37b27076351dd484a82cbf9ff4cae40b9))
+
+
+### Bug Fixes
+
+* code review changes ([1b72001](https://github.com/TropixInc/w3block-ui-sdk/commit/1b720014ba816ee2912ee0a32470e6f32bd6810e))
+* **np-134:** Adjusts on benefite-use page ([#168](https://github.com/TropixInc/w3block-ui-sdk/issues/168)) ([c48ba6c](https://github.com/TropixInc/w3block-ui-sdk/commit/c48ba6cd29de5f3625532153f7018334e7ce0cdd))
+
 ### [0.1.1-alpha.200](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.199...v0.1.1-alpha.200) (2023-03-28)
 
 
