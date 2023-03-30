@@ -43,7 +43,9 @@ export const PassesList = () => {
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
-    userRoles.find((e) => e === 'admin' || e === 'superAdmin')
+    userRoles.find(
+      (e) => e === 'admin' || e === 'superAdmin' || e === 'operator'
+    )
   );
   return (
     <TranslatableComponent>

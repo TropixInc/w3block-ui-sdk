@@ -169,7 +169,7 @@ export const PassesDetail = () => {
   };
 
   return pass ? (
-    <BaseTemplate title="Token Pass">
+    <BaseTemplate title="Token Pass" classes={{modal: 'pw-mx-[22px] sm:pw-mx-0'}}>
       <div className="pw-flex pw-flex-col pw-gap-8">
         <div className="pw-flex pw-items-center pw-justify-start pw-p-4 pw-gap-4 pw-border pw-border-[#E6E8EC] pw-rounded-2xl">
           <img

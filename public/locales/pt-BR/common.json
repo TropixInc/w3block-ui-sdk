@@ -225,8 +225,8 @@
   "token>pass>qrCodeExpires": "QR Code expira em <1>{{seconds}} segundos</1>",
   "token>pass>youStillHave": "Você ainda tem {{quantity}} passes para utilizar",
   "token>pass>purchaseMade": "Compra realizada em {{date}}, as {{time}} Pedido: {{order}}",
-  "token>pass>useThisTokenFrom": "Utilização desse token a partir de",
-  "token>pass>useThisToken": "Utilização desse token até",
+  "token>pass>useThisTokenFrom": "Utilização desse benefício a partir de:",
+  "token>pass>useThisToken": "Utilização desse benefício até:",
   "token>pass>itRemainsForTheUseOfThatToken": "Faltam <1>{{hours}}h {{minutes}}m {{seconds}}s</1> <2>para a utilização desse token.</2>",
   "token>pass>validUntil": "Valido até",
   "token>pass>unlimited": "Sem data limite",
@@ -368,5 +368,8 @@
   "auth>getValidationsTypesForSignup>insertText": "Insira um texto",
   "auth>formCompletKYCWithoutLayout>reviewData": "Encontramos alguns problemas validando seus dados. Por favor, revise os campos a seguir:",
   "auth>formCompletKYCWithoutLayout>pageLabel": "Precisamos de mais alguns dados para completar seu cadastro.",
-  "token>qrCode>tryAgain": "Tentar novamente"
+  "token>qrCode>tryAgain": "Tentar novamente",
+  "token>pass>until": " até ",
+  "token>pass>noMoreUses": "Você não tem mais usos disponíveis",
+  "token>pass>useThisTokenUntil": "Utilização desse benefício:"
 }
