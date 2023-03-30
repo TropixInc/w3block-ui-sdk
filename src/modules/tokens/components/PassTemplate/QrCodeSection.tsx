@@ -6,6 +6,7 @@ import { QRCodeSVG } from 'qrcode.react';
 
 import { PassDates } from '../../../pass/interfaces/PassDates';
 import { useProfile } from '../../../shared';
+import { Spinner } from '../../../shared/components/Spinner';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenUsageTime } from './TokenUsageTime';
@@ -33,12 +34,12 @@ export const QrCodeSection = ({
   const { data: profile } = useProfile();
 
   useEffect(() => {
-    if (qrCountDown.seconds === 0) {
+    if (qrCountDown.seconds === 0 && secret !== undefined) {
       setQrCountDown(add(new Date(), { seconds: 15 }));
       setCodeQr(`${editionNumber};${profile?.data?.id};${secret}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qrCountDown.isActive]);
+  }, [qrCountDown.isActive, secret]);
 
   return hasExpired ? (
     <></>
@@ -46,7 +47,13 @@ export const QrCodeSection = ({
     <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px] pw-max-w-full">
       <div className="pw-flex pw-flex-col pw-gap-[12px] sm:pw-gap-[16px] pw-p-[16px] sm:pw-px-[24px]">
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
-          <QRCodeSVG value={String(codeQr)} size={300} />
+          {codeQr === '' ? (
+            <div className="pw-w-[300px] pw-h-[300px] pw-flex pw-justify-center pw-items-center">
+              <Spinner />
+            </div>
+          ) : (
+            <QRCodeSVG value={String(codeQr)} size={300} />
+          )}
         </div>
 
         <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />

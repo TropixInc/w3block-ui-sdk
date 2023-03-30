@@ -179,8 +179,6 @@ export const TokenDetailsCard = ({
 
         const mobileTableData: TableRow = {
           name: benefit?.name,
-          type: type(benefit?.type),
-          status: <StatusTag status={benefit?.status} />,
           actionComponent: handleButtonToShow(benefit?.status, benefit.id),
         };
         return isMobile ? mobileTableData : tableData;

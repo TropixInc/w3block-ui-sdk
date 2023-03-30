@@ -132,7 +132,7 @@ const _PassTemplate = ({
     (e) => e.id === benefit?.data.id
   );
 
-  const { data: secret } = useGetQRCodeSecret({
+  const { data: secret, isLoading: isLoadingSecret } = useGetQRCodeSecret({
     benefitId,
     editionNumber: editionNumber as string,
   });
@@ -235,9 +235,12 @@ const _PassTemplate = ({
 
   const isSecretError = secret?.data?.error;
 
-  const isSecretUndefined = secret?.data?.secret === undefined;
-
-  if (isLoadingBenefit || isLoadingBenefitsResponse || isLoadingToken) {
+  if (
+    isLoadingBenefit ||
+    isLoadingBenefitsResponse ||
+    isLoadingToken ||
+    isLoadingSecret
+  ) {
     return (
       <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
         <Spinner />
@@ -384,7 +387,6 @@ const _PassTemplate = ({
             {!isSecretError &&
               !isInactive &&
               !isUnavaible &&
-              !isSecretUndefined &&
               isBenefitSucceed &&
               isTokenSucceed && (
                 <QrCodeSection

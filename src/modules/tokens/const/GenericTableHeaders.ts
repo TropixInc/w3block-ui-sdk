@@ -25,14 +25,6 @@ export const mobileHeaders: ColumnType<TableRowMobile, keyof TableRowMobile>[] =
       header: 'Pass',
     },
     {
-      key: 'type',
-      header: 'Tipo',
-    },
-    {
-      key: 'status',
-      header: '',
-    },
-    {
       key: 'actionComponent',
       header: '',
     },
