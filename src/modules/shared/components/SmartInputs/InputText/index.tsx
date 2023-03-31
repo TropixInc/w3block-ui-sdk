@@ -40,7 +40,7 @@ const InputText = ({ label, name, docValue, docStatus }: InputText) => {
           )}
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
-          className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full  pw-border !pw-border-[#11335b] pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
+          className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full  pw-border !pw-border-brand-primary !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
         />
       </AuthFormController>
     </div>

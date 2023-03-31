@@ -64,8 +64,8 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
           onChange={(e) => onChangeUrl(e.target.value)}
           onBlur={() => onValidUrl()}
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-outline-brand-primary pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
-            validUrl ? 'pw-outline-brand-primary' : 'pw-outline-[#FF0505]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-border pw-border-brand-primary !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
+            validUrl ? 'pw-border-brand-primary' : 'pw-border-[#FF0505]'
           )}
         />
       </AuthFormController>
