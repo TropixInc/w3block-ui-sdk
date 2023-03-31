@@ -1,4 +1,4 @@
-import { HeaderPixwaySDK } from '../../shared';
+import { HeaderPixwaySDK, NavigationTabsPixwaySDKTabs } from '../../shared';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { MainModuleThemeInterface } from '../interfaces';
@@ -32,11 +32,24 @@ export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
       brandText={brandName}
       margin={convertSpacingToCSS(margin)}
       padding={convertSpacingToCSS(padding)}
-      tabs={tabs?.map((l: any) => ({
-        name: l.label,
-        router: l.value,
-      }))}
+      tabs={tabs?.map(mapOptionsToTabs)}
       fontFamily={fontFamily}
     />
   );
+};
+
+type Item = {
+  label: string;
+  value: string;
+};
+
+type ItemWithTabs = Item & { tabs: { label: string; value: string }[] };
+
+const mapOptionsToTabs = (item: ItemWithTabs): NavigationTabsPixwaySDKTabs => {
+  if (item.value) return { name: item.label, router: item.value };
+
+  return {
+    name: item.label,
+    tabs: item.tabs.map((t: Item) => ({ name: t.label, router: t.value })),
+  };
 };

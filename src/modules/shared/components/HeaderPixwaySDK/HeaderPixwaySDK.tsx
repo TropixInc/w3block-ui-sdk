@@ -80,12 +80,8 @@ const _HeaderPixwaySDK = ({
     } else setOpenedTabs(!openedTabs);
   };
 
-  const tabsToPass =
-    tabs ||
-    context?.defaultTheme?.header?.styleData?.tabs?.map((l: any) => ({
-      name: l.label,
-      router: l.value,
-    }));
+  const defaultTabs = context?.defaultTheme?.header?.styleData?.tabs;
+  const tabsToPass = tabs ? tabs : defaultTabs;
 
   const LogoToShow = () => {
     if (

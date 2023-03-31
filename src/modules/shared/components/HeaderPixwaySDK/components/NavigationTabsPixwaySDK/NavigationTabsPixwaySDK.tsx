@@ -26,7 +26,8 @@ interface NavigationTabsClassNames {
 
 export interface NavigationTabsPixwaySDKTabs {
   name: string;
-  router: string;
+  router?: string;
+  tabs?: NavigationTabsPixwaySDKTabs[];
 }
 
 export const NavigationTabsPixwaySDK = ({
@@ -83,6 +84,7 @@ export const NavigationTabsPixwaySDK = ({
           classNames={classNames}
           textColor={textColor}
           hasSignUp={hasSignUp}
+          bgColor={bgColor}
         />
       </div>
       {session && tabs?.length === 0 ? null : (
