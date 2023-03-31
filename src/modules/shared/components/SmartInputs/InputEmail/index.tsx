@@ -54,8 +54,8 @@ const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
           value={inputValue}
           type="email"
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
-            isValid ? 'pw-outline-brand-primary' : 'pw-outline-[#FF0505]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-border !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
+            isValid ? 'pw-border-brand-primary' : 'pw-border-[#FF0505]'
           )}
         />
       </AuthFormController>

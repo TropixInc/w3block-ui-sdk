@@ -106,8 +106,8 @@ const InputFile = ({
       <AuthFormController label={label} name={name}>
         <div
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default',
-            !isInvalidFile ? 'pw-outline-brand-primary' : 'pw-outline-[#FF0505]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-border !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default',
+            !isInvalidFile ? 'pw-border-brand-primary' : 'pw-border-[#FF0505]'
           )}
           {...getRootProps()}
         >

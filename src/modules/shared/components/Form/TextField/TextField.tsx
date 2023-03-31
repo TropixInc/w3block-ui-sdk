@@ -21,6 +21,7 @@ interface TextFieldProps {
     input?: string;
   };
   readOnly?: boolean;
+  autoComplete?: string;
 }
 
 export const TextField = ({
@@ -33,6 +34,7 @@ export const TextField = ({
   onBlur: _onBlur,
   type = 'text',
   readOnly = false,
+  autoComplete,
 }: TextFieldProps) => {
   const { field, fieldState } = useController({ name });
   const { onChange, onBlur, ...rest } = field;
@@ -90,6 +92,7 @@ export const TextField = ({
         {...rest}
         onChange={onTextFieldChange}
         onBlur={onInputBlur}
+        autoComplete={autoComplete}
       />
       {type == 'password' ? renderRevealPasswordButton() : null}
     </FormItemContainer>

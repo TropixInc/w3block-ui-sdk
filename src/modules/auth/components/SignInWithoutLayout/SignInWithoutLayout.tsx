@@ -82,9 +82,9 @@ export const SigInWithoutLayout = ({
   });
 
   useEffect(() => {
-    if (session) router.pushConnect(getRedirectUrl(), router.query);
+    if (session && profile) router.pushConnect(getRedirectUrl(), router.query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, router]);
+  }, [session, router, profile]);
 
   const { fieldState } = useController({
     control: methods.control,
@@ -146,9 +146,11 @@ export const SigInWithoutLayout = ({
           label={translate('home>contactModal>email')}
           className="pw-mb-3"
           placeholder={translate('companyAuth>newPassword>enterYourEmail')}
+          autoComplete="username"
         />
         <AuthTextController
           name="password"
+          autoComplete="current-password"
           label={translate('companyAuth>newPassword>passwordFieldLabel')}
           type="password"
           className="pw-mb-6"
