@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.202](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.201...v0.1.1-alpha.202) (2023-03-31)
+
+
+### Features
+
+* add support for nested tabs on header ([f0f11f4](https://github.com/TropixInc/w3block-ui-sdk/commit/f0f11f4a31708e3eb0387bc22e70be07a6ec154c))
+
+
+### Bug Fixes
+
+* add types ([189e01e](https://github.com/TropixInc/w3block-ui-sdk/commit/189e01eae996ef700d0b1ae942df86ae36fdda71))
+* adjusted kyc inputs ([#169](https://github.com/TropixInc/w3block-ui-sdk/issues/169)) ([82b8ced](https://github.com/TropixInc/w3block-ui-sdk/commit/82b8cedf573fcb26554df94ae9bfa191b2560d40))
+* code review changes ([f054e18](https://github.com/TropixInc/w3block-ui-sdk/commit/f054e18927536d4456043671a1da60b678596c49))
+
 ### [0.1.1-alpha.201](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.200...v0.1.1-alpha.201) (2023-03-30)
 
 
