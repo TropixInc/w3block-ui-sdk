@@ -214,6 +214,7 @@ export const PassesDetail = () => {
           <QrCodeValidated
             hasOpen={showSuccess}
             onClose={() => setShowSuccess(false)}
+            benefitId={benefitId}
             tokenPassId={tokenPassId}
             chainId={chainId}
             contractAddress={contractAddress} 
