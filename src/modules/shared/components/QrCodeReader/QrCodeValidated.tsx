@@ -38,7 +38,7 @@ export const QrCodeValidated = ({
     tokenPassId,
   });
 
-  const benefitData = benefit?.data?.items?.filter(({id}) => id === benefitId);
+  const benefitData = benefit?.data?.items?.find(({id}) => id === benefitId);
 
   useLockBodyScroll(hasOpen);
 
@@ -84,15 +84,15 @@ export const QrCodeValidated = ({
           <div className="pw-h-[119px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
           <div className="pw-flex pw-flex-col pw-justify-center">
             <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-              {benefitData?.[0]?.name}
+              {benefitData?.name}
             </div>
-            {benefitData?.[0]?.type == TokenPassBenefitType.PHYSICAL &&
+            {benefitData?.type == TokenPassBenefitType.PHYSICAL &&
               benefitData &&
-              benefitData?.[0]?.tokenPassBenefitAddresses ? (
+              benefitData?.tokenPassBenefitAddresses ? (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                {benefitData[0].tokenPassBenefitAddresses[0]?.street}
+                {benefitData.tokenPassBenefitAddresses[0]?.street}
                 {', '}
-                {benefitData[0].tokenPassBenefitAddresses[0]?.city}
+                {benefitData.tokenPassBenefitAddresses[0]?.city}
               </div>
             ) : (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
