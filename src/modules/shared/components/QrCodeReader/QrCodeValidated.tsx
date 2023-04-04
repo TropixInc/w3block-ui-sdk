@@ -38,7 +38,7 @@ export const QrCodeValidated = ({
     tokenPassId,
   });
 
-  const benefitData = benefit?.data.items.filter(({id}) => id === benefitId )
+  const benefitData = benefit?.data?.items?.filter(({id}) => id === benefitId);
 
   useLockBodyScroll(hasOpen);
 
