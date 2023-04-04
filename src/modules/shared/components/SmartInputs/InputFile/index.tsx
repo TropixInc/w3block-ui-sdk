@@ -9,12 +9,14 @@ import {
 } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
+import { ReactComponent as CheckIcon } from '../../../assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as FileIcon } from '../../../assets/icons/fileOutlined.svg';
+import { ReactComponent as ErrorIcon } from '../../../assets/icons/x-circle.svg';
 import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
+import { FormItemContainer } from '../../Form/FormItemContainer';
 
 interface InputFileProps {
   label: string;
@@ -33,7 +35,7 @@ const InputFile = ({
 }: InputFileProps) => {
   const [translate] = useTranslation();
   const [isInvalidFile, _] = useState(false);
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
   const [file, setFile] = useState<File | undefined>();
   const { companyId: tenantId } = useCompanyConfig();
 
@@ -89,6 +91,7 @@ const InputFile = ({
     ) {
       field.onChange({ inputId: name, assetId: assetId });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetId, docStatus, docValue, name]);
 
   const renderName = () => {
@@ -101,13 +104,29 @@ const InputFile = ({
     }
   };
 
+  const renderStatus = () => {
+    if (field.value) {
+      if (fieldState.invalid) {
+        return (
+          <p className="pw-flex pw-items-center pw-gap-x-1">
+            <ErrorIcon className="pw-stroke-[#ED4971] pw-w-3 pw-h-3" />
+          </p>
+        );
+      } else {
+        return <CheckIcon className="pw-stroke-[#18ee4d] pw-w-3 pw-h-3" />;
+      }
+    }
+  };
+
   return (
     <div className="pw-mb-3">
-      <AuthFormController label={label} name={name}>
+      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        {label}
+      </p>
+      <FormItemContainer invalid={isInvalidFile}>
         <div
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-border !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default',
-            !isInvalidFile ? 'pw-border-brand-primary' : 'pw-border-[#FF0505]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
           )}
           {...getRootProps()}
         >
@@ -122,7 +141,8 @@ const InputFile = ({
             {renderName()}
           </p>
         </div>
-      </AuthFormController>
+      </FormItemContainer>
+      <p className="mt-5">{renderStatus()}</p>
     </div>
   );
 };

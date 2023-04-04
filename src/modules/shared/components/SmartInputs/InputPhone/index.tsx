@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import { isValidPhoneNumber } from 'react-phone-number-input';
 import Input from 'react-phone-number-input/input';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
+import { ReactComponent as CheckIcon } from '../../../assets/icons/checkCircledOutlined.svg';
+import { ReactComponent as ErrorIcon } from '../../../assets/icons/x-circle.svg';
+import { FormItemContainer } from '../../Form/FormItemContainer';
 
 interface InputPhoneProps {
   label: string;
@@ -17,9 +18,8 @@ interface InputPhoneProps {
 }
 
 const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
-  const [invalidNumber, onChangeInvalidNumber] = useState(false);
 
   const handleChange = (value: string) => {
     if (value) {
@@ -35,11 +35,29 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
       setInputValue(docValue);
       field.onChange({ inputId: name, value: docValue });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
+
+  const renderStatus = () => {
+    if (field.value) {
+      if (fieldState.invalid) {
+        return (
+          <p className="pw-flex pw-items-center pw-gap-x-1">
+            <ErrorIcon className="pw-stroke-[#ED4971] pw-w-3 pw-h-3" />
+          </p>
+        );
+      } else {
+        return <CheckIcon className="pw-stroke-[#18ee4d] pw-w-3 pw-h-3" />;
+      }
+    }
+  };
 
   return (
     <div className="pw-mb-3">
-      <AuthFormController label={label} name={name}>
+      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        {label}
+      </p>
+      <FormItemContainer invalid={fieldState.invalid}>
         <Input
           readOnly={Boolean(
             docValue && docStatus !== UserDocumentStatus.RequiredReview
@@ -48,17 +66,12 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
           value={inputValue}
           onChange={handleChange}
           placeholder="+XX XX XXXXX XXXX"
-          onBlur={
-            inputValue
-              ? () => onChangeInvalidNumber(!isValidPhoneNumber(inputValue))
-              : () => onChangeInvalidNumber(false)
-          }
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-border !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
-            invalidNumber ? 'pw-border-[#FF0505]' : 'pw-border-brand-primary'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
           )}
         />
-      </AuthFormController>
+      </FormItemContainer>
+      <p className="mt-5">{renderStatus()}</p>
     </div>
   );
 };
