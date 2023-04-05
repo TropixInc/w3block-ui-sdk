@@ -52,7 +52,6 @@ export const BaseTemplate = ({
           )}
         >
           {title}
-          {translate('components>menu>tokenPass>clients')}
         </div>
         <div className="pw-w-full pw-items-center pw-justify-between pw-hidden sm:pw-flex">
           <span className="pw-font-semibold pw-text-[23px] pw-leading-[32px]">

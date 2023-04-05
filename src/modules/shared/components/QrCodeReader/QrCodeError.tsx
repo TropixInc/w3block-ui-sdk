@@ -20,9 +20,10 @@ interface iProps {
   onClose: () => void;
   type: TypeError;
   validateAgain: ()=> void;
+  error?: string;
 }
 
-export const QrCodeError = ({ hasOpen, onClose, validateAgain, type }: iProps) => {
+export const QrCodeError = ({ hasOpen, onClose, validateAgain, type, error = '' }: iProps) => {
 
   const [translate] = useTranslation();
 
@@ -62,6 +63,11 @@ export const QrCodeError = ({ hasOpen, onClose, validateAgain, type }: iProps) =
                 ? translate('token>pass>invalidBenefitQrCode')
                 : ''}
       </div>
+      {error !== '' && 
+        <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
+          {error}
+        </div>}
+      
 
       <div className='pw-col'>
         <Button

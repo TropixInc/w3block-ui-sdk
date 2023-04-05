@@ -7,6 +7,8 @@ import { ReactComponent as CheckCircledIcon } from '../../../shared/assets/icons
 import { ReactComponent as ErrorIcon } from '../../../shared/assets/icons/errorIconRed.svg';
 import { CloseButton } from '../../../shared/components/CloseButton'
 import { Spinner } from '../../../shared/components/Spinner';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';
 
@@ -25,6 +27,7 @@ interface iProps {
 
 const RenderChildren = ({ isSuccess, isLoading, isError, benefit, useBenefit, onClose }: iProps) => {
   const [translate] = useTranslation();
+  const router = useRouter();
 
   if (isLoading) {
     return (
@@ -33,57 +36,70 @@ const RenderChildren = ({ isSuccess, isLoading, isError, benefit, useBenefit, on
   }
   if (isSuccess) {
     return (
-      <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
-        <CheckCircledIcon className="pw-w-[60px] pw-h-[60px] pw-stroke-[#76DE8D]" />
-        <p className="pw-text-[18px] pw-leading-[23px] pw-text-black pw-text-center">
-          {translate('token>pass>selfUseValidated', { name: benefit?.name })}
-        </p>
-        <Button
-          className='pw-mt-5 !pw-w-[250px] !pw-border-black'
-          variant='secondary'
-          onClick={onClose}
-        >
-          {translate('token>pass>close')}
-        </Button>
-      </div>
+      <>
+        <CloseButton onClose={() => router.push(PixwayAppRoutes.WALLET)} />
+        <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+          <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
+            <CheckCircledIcon className="pw-w-[60px] pw-h-[60px] pw-stroke-[#76DE8D]" />
+            <p className="pw-text-[18px] pw-leading-[23px] pw-text-black pw-text-center">
+              {translate('token>pass>selfUseValidated', { name: benefit?.name })}
+            </p>
+            <Button
+              className='pw-mt-5 !pw-w-[250px] !pw-border-black'
+              variant='secondary'
+              onClick={() => router.push(PixwayAppRoutes.WALLET)}
+            >
+              {translate('token>pass>close')}
+            </Button>
+          </div>
+        </div>
+      </>
     )
   }
   if (isError) {
     return (
-      <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
-        <ErrorIcon className="pw-w-[60px] pw-h-[60px]" />
-        <p className="pw-font-bold pw-text-[18px] pw-leading-[23px] pw-text-black pw-text-center">
-          {translate('token>pass>selfError')}
-        </p>
-        <Button
-          className='pw-mt-5 !pw-w-[250px] !pw-border-black'
-          variant='secondary'
-          onClick={onClose}
-        >
-          {translate('token>pass>close')}
-        </Button>
-      </div>
+      <>
+        <CloseButton onClose={onClose} />
+        <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+          <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
+            <ErrorIcon className="pw-w-[60px] pw-h-[60px]" />
+            <p className="pw-font-bold pw-text-[18px] pw-leading-[23px] pw-text-black pw-text-center">
+              {translate('token>pass>selfError')}
+            </p>
+            <Button
+              className='pw-mt-5 !pw-w-[250px] !pw-border-black'
+              variant='secondary'
+              onClick={onClose}
+            >
+              {translate('token>pass>close')}
+            </Button>
+          </div>
+        </div>
+      </>
     )
   } else {
     return (
       <>
-        <div className="pw-flex pw-flex-col">
-          <p className="pw-text-[18px] pw-leading-[23px] pw-text-black pw-text-center">
-            {translate('token>pass>validateSelfUse', { name: benefit?.name })}
-          </p>
-          <Button
-            className='pw-mt-5'
-            onClick={useBenefit}
-          >
-            {translate('token>pass>selfUse')}
-          </Button>
-          <Button
-            className='pw-mt-5'
-            variant='secondary'
-            onClick={onClose}
-          >
-            {translate('token>pass>cancel')}
-          </Button>
+        <CloseButton onClose={onClose} />
+        <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+          <div className="pw-flex pw-flex-col">
+            <p className="pw-text-[18px] pw-leading-[23px] pw-text-black pw-text-center">
+              {translate('token>pass>validateSelfUse', { name: benefit?.name })}
+            </p>
+            <Button
+              className='pw-mt-5'
+              onClick={useBenefit}
+            >
+              {translate('token>pass>selfUse')}
+            </Button>
+            <Button
+              className='pw-mt-5'
+              variant='secondary'
+              onClick={onClose}
+            >
+              {translate('token>pass>cancel')}
+            </Button>
+          </div>
         </div>
       </>
     )
