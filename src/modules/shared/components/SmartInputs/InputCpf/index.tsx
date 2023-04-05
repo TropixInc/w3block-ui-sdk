@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromString';
-import { ReactComponent as CheckIcon } from '../../../assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as ErrorIcon } from '../../../assets/icons/x-circle.svg';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import InputStatus from '../InputStatus';
 
 interface InputCPFProps {
   label: string;
@@ -20,6 +20,7 @@ interface InputCPFProps {
 const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
+  const [translate] = useTranslation();
 
   const CPFMask = /^(\d{3})(\d{3})(\d{3})(\d{2})/;
 
@@ -49,26 +50,12 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
 
-  const renderStatus = () => {
-    if (field.value) {
-      if (fieldState.invalid) {
-        return (
-          <p className="pw-flex pw-items-center pw-gap-x-1">
-            <ErrorIcon className="pw-stroke-[#ED4971] pw-w-3 pw-h-3" />
-          </p>
-        );
-      } else {
-        return <CheckIcon className="pw-stroke-[#18ee4d] pw-w-3 pw-h-3" />;
-      }
-    }
-  };
-
   return (
     <div className="pw-mb-3">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid}>
+      <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           readOnly={Boolean(
             docValue && docStatus !== UserDocumentStatus.RequiredReview
@@ -76,7 +63,7 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
           name={name}
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}
-          placeholder="Digite apenas numeros"
+          placeholder={translate('auth>inputCpf>placeholder')}
           maxLength={11}
           onBlur={() => formatCpfValue()}
           className={classNames(
@@ -84,7 +71,9 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
           )}
         />
       </FormItemContainer>
-      <p className="mt-5">{renderStatus()}</p>
+      <p className="mt-5">
+        {field.value && <InputStatus invalid={fieldState.invalid} />}
+      </p>
     </div>
   );
 };

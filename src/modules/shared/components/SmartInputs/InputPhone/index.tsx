@@ -5,9 +5,8 @@ import Input from 'react-phone-number-input/input';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import { ReactComponent as CheckIcon } from '../../../assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as ErrorIcon } from '../../../assets/icons/x-circle.svg';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import InputStatus from '../InputStatus';
 
 interface InputPhoneProps {
   label: string;
@@ -38,26 +37,12 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
 
-  const renderStatus = () => {
-    if (field.value) {
-      if (fieldState.invalid) {
-        return (
-          <p className="pw-flex pw-items-center pw-gap-x-1">
-            <ErrorIcon className="pw-stroke-[#ED4971] pw-w-3 pw-h-3" />
-          </p>
-        );
-      } else {
-        return <CheckIcon className="pw-stroke-[#18ee4d] pw-w-3 pw-h-3" />;
-      }
-    }
-  };
-
   return (
     <div className="pw-mb-3">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid}>
+      <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <Input
           readOnly={Boolean(
             docValue && docStatus !== UserDocumentStatus.RequiredReview
@@ -71,7 +56,9 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
           )}
         />
       </FormItemContainer>
-      <p className="mt-5">{renderStatus()}</p>
+      <p className="mt-5">
+        {field.value && <InputStatus invalid={fieldState.invalid} />}
+      </p>
     </div>
   );
 };

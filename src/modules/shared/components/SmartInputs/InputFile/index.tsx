@@ -9,14 +9,13 @@ import {
 } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import { ReactComponent as CheckIcon } from '../../../assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as FileIcon } from '../../../assets/icons/fileOutlined.svg';
-import { ReactComponent as ErrorIcon } from '../../../assets/icons/x-circle.svg';
 import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import InputStatus from '../InputStatus';
 
 interface InputFileProps {
   label: string;
@@ -108,26 +107,12 @@ const InputFile = ({
     }
   };
 
-  const renderStatus = () => {
-    if (field.value) {
-      if (isError || mutateError) {
-        return (
-          <p className="pw-flex pw-items-center pw-gap-x-1">
-            <ErrorIcon className="pw-stroke-[#ED4971] pw-w-3 pw-h-3" />
-          </p>
-        );
-      } else {
-        return <CheckIcon className="pw-stroke-[#18ee4d] pw-w-3 pw-h-3" />;
-      }
-    }
-  };
-
   return (
     <div className="pw-mb-3">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={isError || mutateError}>
+      <FormItemContainer invalid={isError || mutateError || !field.value}>
         <div
           className={classNames(
             'pw-mt-1 pw-text-base pw-h-[46px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
@@ -146,7 +131,9 @@ const InputFile = ({
           </p>
         </div>
       </FormItemContainer>
-      <p className="mt-5">{renderStatus()}</p>
+      <p className="mt-5">
+        {field.value && <InputStatus invalid={isError || mutateError} />}
+      </p>
     </div>
   );
 };

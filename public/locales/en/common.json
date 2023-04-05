@@ -196,5 +196,6 @@
   "token>qrCode>tryAgain": "Try again",
   "token>pass>until": " until ",
   "token>pass>noMoreUses": "You have no more uses available",
-  "token>pass>useThisTokenUntil": "Use of this benefit:"
+  "token>pass>useThisTokenUntil": "Use of this benefit:",
+  "auth>inputCpf>placeholder": "Enter only numbers"
 }
