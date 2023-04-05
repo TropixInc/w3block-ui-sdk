@@ -86,7 +86,7 @@ export const useGetValidationsTypesForSignup = (
             value: string()
               .test(
                 'url',
-                translate('auth>getValidationsTypesForSignup>insertValidPhone'),
+                translate('auth>getValidationsTypesForSignup>insertUrl'),
                 (value) => {
                   return value ? isURL(value) : true;
                 }
