@@ -379,5 +379,6 @@
   "token>pass>selfUse": "Usar benefício",
   "token>pass>cancel": "Cancelar",
   "token>pass>selfError": "Erro ao validar o benefício, por favor tente novamente.",
-  "token>pass>scanQRCode": "Escanear QR Code"
+  "token>pass>scanQRCode": "Escanear QR Code",
+  "token>pass>benefit": "Benefício:"
 }
