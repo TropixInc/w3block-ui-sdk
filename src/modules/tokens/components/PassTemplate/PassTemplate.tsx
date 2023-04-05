@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import { format, getDay, isSameDay } from 'date-fns';
@@ -8,8 +8,9 @@ import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
 import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
 import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
+import usePostSelfUseBenefit from '../../../pass/hooks/usePostSelfUseBenefit';
 import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
-import { InternalPagesLayoutBase } from '../../../shared';
+import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
@@ -22,10 +23,12 @@ import { useLocale } from '../../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
+import { Button } from '../Button';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
 import { DetailToken } from './DetailToken';
 import { QrCodeSection } from './QrCodeSection';
+import { SelfUseModal } from './SelfUseModal';
 import { UsedPass } from './UsedSection';
 
 interface PassTemplateProps {
@@ -97,6 +100,9 @@ const _PassTemplate = ({
   const benefitId = benefitIdProp || (router?.query?.benefitId as string) || '';
   const successValidation =
     successValidationProp || (router?.query?.success as string) || '';
+  const [showUseBenefit, setShowUseBenefit] = useState(false);
+
+  const { data: profile } = useProfile();
 
   const {
     data: benefit,
@@ -135,6 +141,16 @@ const _PassTemplate = ({
   const { data: secret, isLoading: isLoadingSecret } = useGetQRCodeSecret({
     benefitId,
     editionNumber: editionNumber as string,
+  });
+
+  const {
+    mutate: useBenefit,
+    isError: isUseError,
+    isLoading: isUseLoading,
+    isSuccess: isUseSuccess,
+  } = usePostSelfUseBenefit({
+    body: { editionNumber: editionNumber, userId: profile?.data?.id || '' },
+    benefitId,
   });
 
   const hasExpired =
@@ -325,31 +341,46 @@ const _PassTemplate = ({
                     <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
                   </>
                 )}
-                <div className="pw-flex pw-flex-col pw-justify-center">
-                  <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                    {publicTokenResponse?.data?.information?.title} -{' '}
-                    {benefitData && benefitData[0]?.name}
-                  </div>
-                  <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                    {isBenefitSucceed &&
-                      formatAddress({
-                        type: benefit?.data?.type,
-                      })}
-                  </div>
-                  {!hasExpired && (
-                    <div className="pw-flex pw-items-center pw-gap-2">
-                      <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
-                        {translate('token>pass>use')}
-                      </span>
-                      <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-                        {usesLeft === 0
-                          ? translate('token>pass>noMoreUses')
-                          : translate('token>pass>youStillHave', {
-                              quantity: usesLeft,
-                            })}
-                      </div>
+                <div className="pw-flex sm:pw-flex-row pw-flex-col pw-w-full sm:pw-justify-between pw-justify-center">
+                  <div className="pw-flex pw-flex-col pw-justify-center">
+                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                      {publicTokenResponse?.data?.information?.title} -{' '}
+                      {benefitData && benefitData[0]?.name}
                     </div>
-                  )}
+                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                      {isBenefitSucceed &&
+                        formatAddress({
+                          type: benefit?.data?.type,
+                        })}
+                    </div>
+                    {!hasExpired && (
+                      <div className="pw-flex pw-items-center pw-gap-2">
+                        <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
+                          {translate('token>pass>use')}
+                        </span>
+                        <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
+                          {usesLeft === 0
+                            ? translate('token>pass>noMoreUses')
+                            : translate('token>pass>youStillHave', {
+                                quantity: usesLeft,
+                              })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {benefit?.data.allowSelfUse &&
+                    !isSecretError &&
+                    !isInactive &&
+                    !isUnavaible &&
+                    isBenefitSucceed &&
+                    isTokenSucceed && (
+                      <Button
+                        onClick={() => setShowUseBenefit(true)}
+                        className="!pw-h-[40px] !pw-mb-auto !pw-mt-[20px] sm:!pw-mt-auto"
+                      >
+                        {translate('token>pass>selfUse')}
+                      </Button>
+                    )}
                 </div>
               </div>
               {(isInactive || isUnavaible) && !reachedUsageLimit && (
@@ -401,11 +432,27 @@ const _PassTemplate = ({
                   editionNumber={
                     publicTokenResponse?.data?.edition?.currentNumber as string
                   }
+                  benefitId={benefitId}
                   secret={secret?.data?.secret}
                   isDynamic={isDynamic ?? false}
                 />
               )}
           </div>
+
+          {benefit?.data.allowSelfUse && (
+            <SelfUseModal
+              hasOpen={showUseBenefit}
+              onClose={() => setShowUseBenefit(false)}
+              useBenefit={useBenefit}
+              isLoading={isUseLoading}
+              isSuccess={isUseSuccess}
+              isError={isUseError}
+              benefit={{
+                name: benefit?.data?.name,
+                usesLeft: usesLeft,
+              }}
+            />
+          )}
 
           <>
             <DetailsTemplate

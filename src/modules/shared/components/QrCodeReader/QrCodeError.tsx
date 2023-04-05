@@ -12,6 +12,7 @@ export enum TypeError {
   read,
   use,
   expired,
+  invalid,
 }
 
 interface iProps {
@@ -57,7 +58,9 @@ export const QrCodeError = ({ hasOpen, onClose, validateAgain, type }: iProps) =
             ? translate('token>pass>outsideAllowedTime')
             : type === TypeError.use
               ? translate('token>pass>usedAllTokens')
-              : ''}
+              : type === TypeError.invalid 
+                ? translate('token>pass>invalidBenefitQrCode')
+                : ''}
       </div>
 
       <div className='pw-col'>

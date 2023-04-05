@@ -17,6 +17,7 @@ interface iQrCodeSection {
   secret: string;
   isDynamic: boolean;
   hasExpiration: boolean;
+  benefitId: string;
 }
 
 export const QrCodeSection = ({
@@ -26,6 +27,7 @@ export const QrCodeSection = ({
   secret,
   isDynamic,
   hasExpiration,
+  benefitId,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState('');
   const { setNewCountdown: setQrCountDown, ...qrCountDown } = useCountdown();
@@ -36,7 +38,7 @@ export const QrCodeSection = ({
   useEffect(() => {
     if (qrCountDown.seconds === 0 && secret !== undefined) {
       setQrCountDown(add(new Date(), { seconds: 15 }));
-      setCodeQr(`${editionNumber};${profile?.data?.id};${secret}`);
+      setCodeQr(`${editionNumber};${profile?.data?.id};${secret};${benefitId}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrCountDown.isActive, secret]);
