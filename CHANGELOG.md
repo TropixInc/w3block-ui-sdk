@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.204](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.203...v0.1.1-alpha.204) (2023-04-06)
+
+
+### Bug Fixes
+
+* **TK-1127:** fix redirect ([3fe751d](https://github.com/TropixInc/w3block-ui-sdk/commit/3fe751d7e0ba9c47e14576f2aa7a42f077fc863b))
+* **TK-1128:** fix loop in sign ([22ad133](https://github.com/TropixInc/w3block-ui-sdk/commit/22ad133da9568a0c58867151c341105797bb0fa3))
+
 ### [0.1.1-alpha.203](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.202...v0.1.1-alpha.203) (2023-04-04)
 
 
