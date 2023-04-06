@@ -2395,8 +2395,13 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
 
 electron-to-chromium@^1.4.284:
+<<<<<<< HEAD
   version "1.4.354"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.354.tgz#3433d360936c3b117fc2c8f71fd531f891b957ae"
+=======
+  version "1.4.352"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.352.tgz#be96bd7c2f4b980deebc9338a49a67430a33ed73"
+>>>>>>> staging
 
 elliptic@6.5.4, elliptic@^6.5.3:
   version "6.5.4"

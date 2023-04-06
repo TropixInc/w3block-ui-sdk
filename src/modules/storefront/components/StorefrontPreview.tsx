@@ -58,11 +58,11 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   };
 
   useEffect(() => {
-    if (context?.isThemeError) {
+    if (context?.isThemeError && !children) {
       pushConnect(PixwayAppRoutes.SIGN_IN);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context?.isThemeError]);
+  }, [context?.isThemeError, children]);
 
   useEffectOnce(() => {
     addEventListener('message', listener);

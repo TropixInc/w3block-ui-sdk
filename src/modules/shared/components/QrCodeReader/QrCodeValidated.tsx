@@ -18,6 +18,7 @@ interface iProps {
   tokenPassId: string;
   chainId: string;
   contractAddress: string;
+  benefitId: string;
   validateAgain: () => void;
 }
 
@@ -27,6 +28,7 @@ export const QrCodeValidated = ({
   chainId,
   contractAddress,
   tokenPassId,
+  benefitId,
   validateAgain,
 }: iProps) => {
   const [translate] = useTranslation();
@@ -35,6 +37,8 @@ export const QrCodeValidated = ({
     chainId,
     tokenPassId,
   });
+
+  const benefitData = benefit?.data?.items?.find(({id}) => id === benefitId);
 
   useLockBodyScroll(hasOpen);
 
@@ -80,15 +84,15 @@ export const QrCodeValidated = ({
           <div className="pw-h-[119px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
           <div className="pw-flex pw-flex-col pw-justify-center">
             <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-              {benefit?.data?.items[0]?.name}
+              {benefitData?.name}
             </div>
-            {benefit?.data?.items[0]?.type == TokenPassBenefitType.PHYSICAL &&
-              benefit?.data?.items[0] &&
-              benefit?.data?.items[0]?.tokenPassBenefitAddresses ? (
+            {benefitData?.type == TokenPassBenefitType.PHYSICAL &&
+              benefitData &&
+              benefitData?.tokenPassBenefitAddresses ? (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                {benefit?.data?.items[0]?.tokenPassBenefitAddresses[0]?.street}
+                {benefitData.tokenPassBenefitAddresses[0]?.street}
                 {', '}
-                {benefit?.data?.items[0]?.tokenPassBenefitAddresses[0]?.city}
+                {benefitData.tokenPassBenefitAddresses[0]?.city}
               </div>
             ) : (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
