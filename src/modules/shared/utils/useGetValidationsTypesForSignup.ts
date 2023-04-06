@@ -1,10 +1,15 @@
+import { isValidPhoneNumber } from 'react-phone-number-input';
+
 import { DataTypesEnum, TenantInputEntityDto } from '@w3block/sdk-id';
+import isURL from 'validator/lib/isURL';
 import { AnySchema, object, string } from 'yup';
+import * as yup from 'yup';
 
 import useTranslation from '../hooks/useTranslation';
 
 export interface ValidationsValues {
   yupKey: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validations: AnySchema<any, any, any>;
 }
 
@@ -58,13 +63,17 @@ export const useGetValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string()
+            value: yup
+              .string()
+              .test(
+                'phone',
+                translate('auth>getValidationsTypesForSignup>insertValidPhone'),
+                (value) => {
+                  return value ? isValidPhoneNumber(value) : true;
+                }
+              )
               .required(
                 translate('auth>getValidationsTypesForSignup>insertYourPhone')
-              )
-              .min(
-                10,
-                translate('auth>getValidationsTypesForSignup>insertValidPhone')
               ),
           }),
         });
@@ -74,9 +83,17 @@ export const useGetValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string().required(
-              translate('auth>getValidationsTypesForSignup>insertUrl')
-            ),
+            value: string()
+              .test(
+                'url',
+                translate('auth>getValidationsTypesForSignup>insertUrl'),
+                (value) => {
+                  return value ? isURL(value) : true;
+                }
+              )
+              .required(
+                translate('auth>getValidationsTypesForSignup>insertUrl')
+              ),
           }),
         });
         break;
