@@ -83,6 +83,7 @@ export const SigInWithoutLayout = ({
 
   useEffect(() => {
     if (session && profile) router.pushConnect(getRedirectUrl(), router.query);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router, profile]);
 
@@ -100,6 +101,8 @@ export const SigInWithoutLayout = ({
       const url = callbackUrl;
       setCallbackUrl('');
       return url;
+    } else {
+      return PixwayAppRoutes.TOKENS;
     }
   };
 
