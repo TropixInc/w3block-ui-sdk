@@ -129,7 +129,10 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-          disabled={!validForm || isLoading}
+          disabled={
+            Boolean(!dynamicMethods.formState.isValid && !validForm) ||
+            isLoading
+          }
         >
           {isLoading ? (
             <Spinner className="pw-w-4 pw-h-4" />

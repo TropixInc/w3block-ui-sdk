@@ -5,7 +5,8 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import isURL from 'validator/lib/isURL';
 
-import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
+import { FormItemContainer } from '../../Form/FormItemContainer';
+import InputStatus from '../InputStatus';
 
 interface InputUrlProps {
   label: string;
@@ -15,9 +16,8 @@ interface InputUrlProps {
 }
 
 const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
   const [url, setUrl] = useState('');
-  const [validUrl, setValidUrl] = useState<boolean | undefined>();
 
   const onChangeUrl = (value: string) => {
     if (value) {
@@ -26,14 +26,6 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
     } else {
       setUrl('');
       field.onChange({ inputId: name, value: '' });
-    }
-  };
-
-  const onValidUrl = () => {
-    if (isURL(url)) {
-      setValidUrl(true);
-    } else {
-      setValidUrl(false);
     }
   };
 
@@ -51,7 +43,10 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
 
   return (
     <div className="pw-mb-3">
-      <AuthFormController label={label} name={name}>
+      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        {label}
+      </p>
+      <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           name={name}
           readOnly={Boolean(
@@ -62,13 +57,14 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
           type="url"
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}
-          onBlur={() => onValidUrl()}
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-border pw-border-brand-primary !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
-            validUrl ? 'pw-border-brand-primary' : 'pw-border-[#FF0505]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
           )}
         />
-      </AuthFormController>
+      </FormItemContainer>
+      <p className="mt-5">
+        {field.value && <InputStatus invalid={fieldState.invalid} />}
+      </p>
     </div>
   );
 };
