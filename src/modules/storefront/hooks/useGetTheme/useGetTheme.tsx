@@ -11,8 +11,8 @@ export const useGetTheme = () => {
 
   useEffect(() => {
     if (window) {
-      setHref(window.location.href);
-      //setHref('https://foodbusters.stg.w3block.io/');
+      //setHref(window.location.href);
+      setHref('https://foodbusters.stg.w3block.io/');
     }
   }, []);
 

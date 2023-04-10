@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import isURL from 'validator/lib/isURL';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
 interface InputUrlProps {
@@ -17,6 +18,7 @@ interface InputUrlProps {
 
 const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
   const { field, fieldState } = useController({ name });
+  const error: unknown = fieldState?.error;
   const [url, setUrl] = useState('');
 
   const onChangeUrl = (value: string) => {
@@ -63,7 +65,12 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
         />
       </FormItemContainer>
       <p className="mt-5">
-        {field.value && <InputStatus invalid={fieldState.invalid} />}
+        {field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={(error as InputError)?.value?.message}
+          />
+        )}
       </p>
     </div>
   );

@@ -6,6 +6,7 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
 interface InputPhoneProps {
@@ -19,6 +20,7 @@ interface InputPhoneProps {
 const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
+  const error: unknown = fieldState?.error;
 
   const handleChange = (value: string) => {
     if (value) {
@@ -57,7 +59,12 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
         />
       </FormItemContainer>
       <p className="mt-5">
-        {field.value && <InputStatus invalid={fieldState.invalid} />}
+        {field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={(error as InputError)?.value?.message}
+          />
+        )}
       </p>
     </div>
   );

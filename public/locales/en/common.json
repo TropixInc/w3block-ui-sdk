@@ -197,5 +197,6 @@
   "token>pass>until": " until ",
   "token>pass>noMoreUses": "You have no more uses available",
   "token>pass>useThisTokenUntil": "Use of this benefit:",
-  "auth>inputCpf>placeholder": "Enter only numbers"
+  "auth>inputCpf>placeholder": "Enter only numbers",
+  "auth>inputFile>aceptFile": "Accepted file types: .png, .jpeg, .jpg, .pdf"
 }

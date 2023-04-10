@@ -3,9 +3,9 @@ import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
-import isEmail from 'validator/lib/isEmail';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
 interface InputEmailProps {
@@ -17,20 +17,15 @@ interface InputEmailProps {
 
 const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
   const { field, fieldState } = useController({ name });
+  const error: unknown = fieldState?.error;
   const [inputValue, setInputValue] = useState<string | undefined>();
-  const [isValid, setIsValid] = useState(true);
+
   const handleChange = (value: string) => {
     if (value) {
       setInputValue(value);
       field.onChange({ inputId: name, value: value });
     } else {
       setInputValue('');
-    }
-  };
-
-  const validEmail = () => {
-    if (inputValue) {
-      setIsValid(isEmail(inputValue));
     }
   };
 
@@ -47,16 +42,13 @@ const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer
-        invalid={(fieldState.invalid && isValid) || !field.value}
-      >
+      <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           name={name}
           readOnly={Boolean(
             docValue && docStatus !== UserDocumentStatus.RequiredReview
           )}
           onChange={(e) => handleChange(e.target.value)}
-          onBlur={validEmail}
           value={inputValue}
           type="email"
           className={classNames(
@@ -65,7 +57,12 @@ const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
         />
       </FormItemContainer>
       <p className="mt-5">
-        {field.value && <InputStatus invalid={fieldState.invalid} />}
+        {field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={(error as InputError)?.value?.message}
+          />
+        )}
       </p>
     </div>
   );

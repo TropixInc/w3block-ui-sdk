@@ -372,5 +372,6 @@
   "token>pass>until": " até ",
   "token>pass>noMoreUses": "Você não tem mais usos disponíveis",
   "token>pass>useThisTokenUntil": "Utilização desse benefício:",
-  "auth>inputCpf>placeholder": "Digite apenas números"
+  "auth>inputCpf>placeholder": "Digite apenas números",
+  "auth>inputFile>aceptFile": "Tipos de arquivos aceitos: .png, .jpeg, .jpg, .pdf"
 }
