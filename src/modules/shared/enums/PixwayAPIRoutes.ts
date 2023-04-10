@@ -54,4 +54,6 @@ export enum PixwayAPIRoutes {
   DOCUMENTS_BY_USER_BY_CONTEXT = '/users/{tenantId}/documents/{userId}/context/{contextId}',
   SAVE_DOCUMENTS_BY_USER = '/users/{tenantId}/documents/{userId}/context/{contextId}',
   GET_SPECIFIC_ORDER = '/companies/{companyId}/orders/{orderId}',
+  VERIFY_BENEFIT = '/token-pass-benefits/tenants/{tenantId}/{benefitId}/verify',
+  PASS_BENEFIT_SELF_USE = '/token-pass-benefits/tenants/{tenantId}/{id}/use',
 }
