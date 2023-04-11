@@ -17,7 +17,7 @@ interface InputText {
 const InputText = ({ label, name, docValue, docStatus }: InputText) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
-  const error: unknown = fieldState?.error;
+  const error = fieldState?.error as unknown as InputError;
 
   const handleTextChange = (value: string) => {
     if (value) {
@@ -55,7 +55,7 @@ const InputText = ({ label, name, docValue, docStatus }: InputText) => {
         {field.value && (
           <InputStatus
             invalid={fieldState.invalid}
-            errorMessage={(error as InputError)?.value?.message}
+            errorMessage={error?.value?.message}
           />
         )}
       </p>

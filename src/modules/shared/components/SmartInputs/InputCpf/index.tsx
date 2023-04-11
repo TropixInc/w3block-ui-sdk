@@ -23,7 +23,7 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [translate] = useTranslation();
 
-  const error: unknown = fieldState?.error;
+  const error = fieldState?.error as unknown as InputError;
 
   const CPFMask = /^(\d{3})(\d{3})(\d{3})(\d{2})/;
 
@@ -78,7 +78,7 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
         {field.value && (
           <InputStatus
             invalid={fieldState.invalid}
-            errorMessage={(error as InputError)?.value?.message}
+            errorMessage={error?.value?.message}
           />
         )}
       </p>

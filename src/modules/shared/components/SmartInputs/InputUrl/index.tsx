@@ -18,7 +18,7 @@ interface InputUrlProps {
 
 const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
   const { field, fieldState } = useController({ name });
-  const error: unknown = fieldState?.error;
+  const error = fieldState?.error as unknown as InputError;
   const [url, setUrl] = useState('');
 
   const onChangeUrl = (value: string) => {
@@ -68,7 +68,7 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
         {field.value && (
           <InputStatus
             invalid={fieldState.invalid}
-            errorMessage={(error as InputError)?.value?.message}
+            errorMessage={error?.value?.message}
           />
         )}
       </p>

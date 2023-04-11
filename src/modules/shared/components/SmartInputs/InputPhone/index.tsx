@@ -20,7 +20,7 @@ interface InputPhoneProps {
 const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
-  const error: unknown = fieldState?.error;
+  const error = fieldState?.error as unknown as InputError;
 
   const handleChange = (value: string) => {
     if (value) {
@@ -62,7 +62,7 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
         {field.value && (
           <InputStatus
             invalid={fieldState.invalid}
-            errorMessage={(error as InputError)?.value?.message}
+            errorMessage={error?.value?.message}
           />
         )}
       </p>

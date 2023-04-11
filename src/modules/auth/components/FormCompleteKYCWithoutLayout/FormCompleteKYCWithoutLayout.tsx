@@ -46,7 +46,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   });
 
   const errorPost = error as AxiosError;
-  const errorMessage = errorPost?.response?.data;
+  const errorMessage = errorPost?.response?.data as ErrorProps;
 
   const { data: reasons } = useGetReasonsRequiredReview(
     tenantId,
@@ -106,13 +106,13 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
       {isError && (
         <Alert variant="error" className="pw-flex pw-gap-x-3 pw-mb-5">
           <Alert.Icon />
-          <p>{(errorMessage as ErrorProps)?.message}</p>
+          <p>{errorMessage?.message}</p>
         </Alert>
       )}
       {reasons?.data?.items[0]?.logs?.at(-1)?.reason ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
           <p className="pw-mt-2 pw-text-[#FF0505]">
-            {reasons?.data.items[0]?.logs.at(-1)?.reason}
+            {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
           </p>
         </div>
       ) : null}
