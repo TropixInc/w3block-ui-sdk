@@ -3,9 +3,7 @@ import { useLockBodyScroll } from 'react-use';
 
 import { format, getDay } from 'date-fns';
 
-
-import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
-import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
+import { BenefitAddress, TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { ReactComponent as CheckCircledIcon } from '../../assets/icons/checkCircledOutlined.svg';
 import useTranslation from '../../hooks/useTranslation';
 import { shortDays } from '../../utils/shortDays';
@@ -15,33 +13,22 @@ import { CloseButton } from '../CloseButton';
 interface iProps {
   hasOpen: boolean;
   onClose: () => void;
-  tokenPassId: string;
-  chainId: string;
-  contractAddress: string;
-  benefitId: string;
   validateAgain: () => void;
+  name?: string;
+  type?: TokenPassBenefitType;
+  tokenPassBenefitAddresses?: BenefitAddress[];
 }
 
 export const QrCodeValidated = ({
   hasOpen,
   onClose,
-  chainId,
-  contractAddress,
-  tokenPassId,
-  benefitId,
   validateAgain,
+  name,
+  type,
+  tokenPassBenefitAddresses,
 }: iProps) => {
   const [translate] = useTranslation();
-  const { data: benefit } = useGetPassBenefits({
-    contractAddress,
-    chainId,
-    tokenPassId,
-  });
-
-  const benefitData = benefit?.data?.items?.find(({id}) => id === benefitId);
-
   useLockBodyScroll(hasOpen);
-
   const time = format(new Date(), "HH':'mm");
 
   const handleNext = () => {
@@ -84,15 +71,14 @@ export const QrCodeValidated = ({
           <div className="pw-h-[119px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
           <div className="pw-flex pw-flex-col pw-justify-center">
             <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-              {benefitData?.name}
+              {name}
             </div>
-            {benefitData?.type == TokenPassBenefitType.PHYSICAL &&
-              benefitData &&
-              benefitData?.tokenPassBenefitAddresses ? (
+            {type == TokenPassBenefitType.PHYSICAL &&
+              tokenPassBenefitAddresses ? (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                {benefitData.tokenPassBenefitAddresses[0]?.street}
+                {tokenPassBenefitAddresses[0]?.street}
                 {', '}
-                {benefitData.tokenPassBenefitAddresses[0]?.city}
+                {tokenPassBenefitAddresses[0]?.city}
               </div>
             ) : (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">

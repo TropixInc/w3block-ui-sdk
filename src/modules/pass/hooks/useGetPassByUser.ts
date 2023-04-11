@@ -6,7 +6,7 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 
-interface PassByUser {
+export interface PassByUser {
   tokenName: string;
   contractAddress: string;
   chainId: ChainScan;

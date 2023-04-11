@@ -25,8 +25,10 @@ import { BenefitStatus } from '../../enums/BenefitStatus';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import useGetPassById from '../../hooks/useGetPassById';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
+import useVerifyBenefit from '../../hooks/useVerifyBenefit';
 import { TokenPassBenefits, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
 import { BaseTemplate } from '../BaseTemplate';
+import { VerifyBenefit } from '../VerifyBenefit';
 
 interface TableRow {
   name: ReactNode;
@@ -51,15 +53,28 @@ export const PassesDetail = () => {
   const [showScan, setOpenScan] = useBoolean(false);
   const [showSuccess, setShowSuccess] = useBoolean(false);
   const [showError, setShowError] = useBoolean(false);
-  const [error, setError] = useState<TypeError>(TypeError.read);
+  const [error, setError] = useState('');
+  const [showVerify, setShowVerify] = useBoolean(false);
+  const [errorType, setErrorType] = useState<TypeError>(TypeError.read);
   const [benefitId, setBenefitId] = useState('');
+  const [qrCodeData, setQrCodeData] = useState('');
   const { pass } = useFlags();
+
+  const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(';');
+  const { data: verifyBenefit, isLoading: verifyLoading } = useVerifyBenefit({
+    benefitId: benefitIdQR,
+    secret,
+    userId,
+    editionNumber,
+    enabled: secret !== '',
+  })
 
   const { data: tokenPass } = useGetPassById(tokenPassId);
   const user = useSessionUser();
 
-  const { mutate: registerUse } = usePostBenefitRegisterUse();
+  const { mutate: registerUse, isLoading: registerLoading } = usePostBenefitRegisterUse();
   const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
+  const filteredBenefit = benefits?.data.items.find(({ id }) => id === benefitId);
 
   const formatedData = useMemo(() => {
     const filteredBenefits = tokenPass?.data?.tokenPassBenefits?.filter(benefit => {
@@ -72,17 +87,17 @@ export const PassesDetail = () => {
       status: benefit?.status,
     }));
 
-    
+
     const data = filteredBenefits?.map((benefit) => {
       const period = Date.parse(benefit?.eventEndsAt) ?
-      format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') + ' - ' +
-      format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
-      
+        format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') + ' - ' +
+        format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
+
       const handleAction = () => {
         setBenefitId(benefit?.id);
         setOpenScan()
       }
-      
+
       const status = benefitStatus?.find((value) => value.id === benefit.id)?.status
 
       const formatAddress = ({ type, benefit }: formatAddressProps) => {
@@ -101,10 +116,10 @@ export const PassesDetail = () => {
         return <a href={PixwayAppRoutes.BENEFIT_DETAILS.replace('{benefitId}', benefit.id)}>
           {benefit.name}
         </a>
-      }  
+      }
 
       const formatted: TableRow = {
-        name: <BenefitName/>,
+        name: <BenefitName />,
         local: formatAddress({ type: benefit?.type, benefit: benefit }),
         period,
         status: <StatusTag status={status ?? BenefitStatus.unavailable} />,
@@ -112,9 +127,9 @@ export const PassesDetail = () => {
       };
 
       const formmatedMobile: TableRow = {
-        name: <BenefitName/>,
+        name: <BenefitName />,
         local: formatAddress({ type: benefit?.type, benefit: benefit }),
-        status: statusMobile({ status: status ?? BenefitStatus.unavailable}),
+        status: statusMobile({ status: status ?? BenefitStatus.unavailable }),
         action,
       }
 
@@ -122,7 +137,7 @@ export const PassesDetail = () => {
     });
 
     return data || [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [benefits, tokenPass, isMobile]);
 
   const headers: ColumnType<TableRow, keyof TableRow>[] = useMemo(() => isMobile ? [
@@ -138,38 +153,68 @@ export const PassesDetail = () => {
     { key: 'action', header: '' },
   ], [isMobile])
 
-  const validatePassToken = (secret: string) => {
+  const verifyBenefitUse = (qrCodeData: string) => {
+    const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(';');
+    setOpenScan(false);
 
-    const secretItems = secret.split(';');
+    if (editionNumber && userId && secret && benefitIdQR && benefitId !== benefitIdQR) {
+      setError('');
+      setErrorType(TypeError.invalid)
+      setShowError(true);
+    } else if (editionNumber && userId && secret && benefitIdQR && benefitId === benefitIdQR) {
+      setQrCodeData(qrCodeData);
+      setShowVerify(true);
+    } else {
+      setError(
+        'QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar.'
+      );
+      setErrorType(TypeError.read);
+      setShowError(true);
+    }
+  };
 
-    registerUse(
-      {
-        secret: secretItems[2],
-        userId: secretItems[1],
-        editionNumber: secretItems[0],
-        benefitId: benefitId,
-      },
-      {
-        onSuccess: () => {
-          setShowSuccess(true);
-          setOpenScan(false);
+  const validateBenefitUse = (qrCodeData: string) => {
+    const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(';');
+
+    if (benefitId === benefitIdQR) {
+      registerUse(
+        {
+          benefitId: benefitIdQR,
+          secret,
+          userId,
+          editionNumber,
         },
-        onError: (error) => {
-          console.error('Register Use: ', error)
-          if (error instanceof Error) {
-            if (error?.message === "ERR_BAD_REQUEST") {
-              setError(TypeError.use)
+        {
+          onSuccess: () => {
+            setShowSuccess(true);
+            setShowVerify(false);
+            setOpenScan(false);
+          },
+          onError: (error) => {
+            console.error('Register Use: ', error);
+            if (error instanceof Error) {
+              if (error?.message === 'ERR_BAD_REQUEST') {
+                setErrorType(TypeError.use);
+              }
             }
-          }
-          setShowError();
-          setOpenScan(false);
-        },
-      }
-    );
+            setError('');
+            setShowError(true);
+            setShowVerify(false);
+            setOpenScan(false);
+          },
+        }
+      );
+    } else {
+      setError('');
+      setErrorType(TypeError.invalid)
+      setShowError(true);
+      setShowVerify(false);
+      setOpenScan(false);
+    }
   };
 
   return pass ? (
-    <BaseTemplate title="Token Pass" classes={{modal: 'pw-mx-[22px] sm:pw-mx-0'}}>
+    <BaseTemplate title="Token Pass" classes={{ modal: 'pw-mx-[22px] sm:pw-mx-0' }}>
       <div className="pw-flex pw-flex-col pw-gap-8">
         <div className="pw-flex pw-items-center pw-justify-start pw-p-4 pw-gap-4 pw-border pw-border-[#E6E8EC] pw-rounded-2xl">
           <img
@@ -186,10 +231,10 @@ export const PassesDetail = () => {
             <p className="pw-w-full pw-font-normal pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
               <span className="pw-font-bold">Descrição:</span> {tokenPass?.data.description}
             </p>
-          </div> 
+          </div>
         </div>
 
-        {isLoadingBenefits ? 
+        {isLoadingBenefits ?
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
           </div> :
@@ -208,23 +253,32 @@ export const PassesDetail = () => {
         <>
           <QrCodeReader
             hasOpen={showScan}
-            returnValue={(e) => validatePassToken(e)} 
+            returnValue={(e) => verifyBenefitUse(e)}
             onClose={() => setOpenScan(false)}
-            />
+          />
           <QrCodeValidated
             hasOpen={showSuccess}
             onClose={() => setShowSuccess(false)}
-            benefitId={benefitId}
-            tokenPassId={tokenPassId}
-            chainId={chainId}
-            contractAddress={contractAddress} 
             validateAgain={() => setOpenScan()}
-            />
+            name={filteredBenefit?.name}
+            type={filteredBenefit?.type}
+            tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
+          />
           <QrCodeError
             hasOpen={showError}
             onClose={() => setShowError(false)}
             validateAgain={() => setOpenScan()}
-            type={error} />
+            type={errorType}
+            error={error}
+          />
+          <VerifyBenefit
+            hasOpen={showVerify}
+            isLoading={registerLoading}
+            isLoadingInfo={verifyLoading}
+            onClose={() => setShowVerify(false)}
+            useBenefit={() => validateBenefitUse(qrCodeData)}
+            data={verifyBenefit}
+          />
         </>
         : null}
     </BaseTemplate>
