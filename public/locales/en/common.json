@@ -197,6 +197,8 @@
   "token>pass>until": " until ",
   "token>pass>noMoreUses": "You have no more uses available",
   "token>pass>useThisTokenUntil": "Use of this benefit:",
+  "auth>inputCpf>placeholder": "Enter only numbers",
+  "auth>inputFile>aceptFile": "Accepted file types: .png, .jpeg, .jpg, .pdf",
   "token>pass>invalidBenefitQrCode": "The QR Code benefit selected by the user does not match the benefit selected by the operator",
   "token>pass>validateSelfUse": "Are you sure you want to use the benefit: {{name}}? ",
   "token>pass>selfUseValidated": "Benefit: {{name}} successfully used!",
@@ -205,6 +207,5 @@
   "token>pass>cancel": "Cancel",
   "token>pass>selfError": "Error validating the benefit, please try again.",
   "token>pass>scanQRCode": "Scan QR Code",
-  "token>pass>benefit": "Benefit:",
-  "auth>inputCpf>placeholder": "Enter only numbers"
+  "token>pass>benefit": "Benefit:"
 }
