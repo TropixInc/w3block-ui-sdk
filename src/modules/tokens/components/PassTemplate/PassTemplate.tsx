@@ -1,22 +1,26 @@
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import { format, getDay, isSameDay } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
+import { VerifyBenefit } from '../../../pass/components/VerifyBenefit';
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
 import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
 import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
 import usePostSelfUseBenefit from '../../../pass/hooks/usePostSelfUseBenefit';
+import useVerifyBenefit from '../../../pass/hooks/useVerifyBenefit';
 import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import { Alert } from '../../../shared/components/Alert';
+import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
 import { useLocale } from '../../../shared/hooks/useLocale';
@@ -27,8 +31,8 @@ import { Button } from '../Button';
 import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
 import { DetailToken } from './DetailToken';
+import { ErrorModal } from './ErrorModal';
 import { QrCodeSection } from './QrCodeSection';
-import { SelfUseModal } from './SelfUseModal';
 import { UsedPass } from './UsedSection';
 
 interface PassTemplateProps {
@@ -94,13 +98,15 @@ const _PassTemplate = ({
 }: PassTemplateProps) => {
   const { pass } = useFlags();
   const [translate] = useTranslation();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [showVerify, setShowVerify] = useState(false);
   const locale = useLocale();
   const router = useRouterConnect();
   const tokenId = tokenIdProp || (router?.query?.tokenId as string) || '';
   const benefitId = benefitIdProp || (router?.query?.benefitId as string) || '';
   const successValidation =
     successValidationProp || (router?.query?.success as string) || '';
-  const [showUseBenefit, setShowUseBenefit] = useState(false);
 
   const { data: profile } = useProfile();
 
@@ -134,7 +140,7 @@ const _PassTemplate = ({
       editionNumber: +editionNumber,
     });
 
-  const benefitData = benefitsResponse?.data.filter(
+  const benefitData = benefitsResponse?.data.find(
     (e) => e.id === benefit?.data.id
   );
 
@@ -145,13 +151,40 @@ const _PassTemplate = ({
 
   const {
     mutate: useBenefit,
-    isError: isUseError,
     isLoading: isUseLoading,
     isSuccess: isUseSuccess,
+    isError: isUseError,
   } = usePostSelfUseBenefit({
     body: { editionNumber: editionNumber, userId: profile?.data?.id || '' },
     benefitId,
   });
+
+  const { data: verifyBenefit, isLoading: verifyLoading } = useVerifyBenefit({
+    benefitId: benefitId,
+    secret: secret?.data?.secret,
+    userId: profile?.data?.id || '',
+    editionNumber: editionNumber,
+    enabled: secret?.data?.secret !== '',
+  });
+
+  useEffect(() => {
+    if (isUseSuccess) {
+      setShowSuccess(true);
+      setShowVerify(false);
+    }
+  }, [isUseSuccess]);
+
+  useEffect(() => {
+    if (isUseError) {
+      setShowError(true);
+      setShowVerify(false);
+    }
+  }, [isUseError]);
+
+  const handleClose = () => {
+    router.push(PixwayAppRoutes.WALLET);
+    setShowSuccess(false);
+  };
 
   const hasExpired =
     secret?.data?.statusCode === 400 &&
@@ -178,9 +211,9 @@ const _PassTemplate = ({
     if (
       type == TokenPassBenefitType.PHYSICAL &&
       benefitData &&
-      benefitData[0]?.tokenPassBenefitAddresses
+      benefitData?.tokenPassBenefitAddresses
     ) {
-      return `${benefitData[0]?.tokenPassBenefitAddresses[0]?.street}-${benefitData[0]?.tokenPassBenefitAddresses[0]?.city}`;
+      return `${benefitData?.tokenPassBenefitAddresses[0]?.street}-${benefitData?.tokenPassBenefitAddresses[0]?.city}`;
     } else {
       return 'Online';
     }
@@ -237,17 +270,17 @@ const _PassTemplate = ({
     : undefined;
 
   const isInactive =
-    benefitData && benefitData[0]?.status === BenefitStatus.inactive;
+    benefitData && benefitData?.status === BenefitStatus.inactive;
 
   const isUnavaible =
-    benefitData && benefitData[0]?.status === BenefitStatus.unavailable;
+    benefitData && benefitData?.status === BenefitStatus.unavailable;
 
-  const isDynamic = benefitData && benefitData[0]?.dynamicQrCode;
+  const isDynamic = benefitData && benefitData?.dynamicQrCode;
 
   const usesLeft =
-    benefitData && benefitData[0]?.useAvailable >= 0
-      ? benefitData[0].useAvailable
-      : benefitData && benefitData[0]?.useLimit;
+    benefitData && benefitData?.useAvailable >= 0
+      ? benefitData.useAvailable
+      : benefitData && benefitData?.useLimit;
 
   const isSecretError = secret?.data?.error;
 
@@ -345,7 +378,7 @@ const _PassTemplate = ({
                   <div className="pw-flex pw-flex-col pw-justify-center">
                     <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
                       {publicTokenResponse?.data?.information?.title} -{' '}
-                      {benefitData && benefitData[0]?.name}
+                      {benefitData && benefitData?.name}
                     </div>
                     <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
                       {isBenefitSucceed &&
@@ -375,7 +408,7 @@ const _PassTemplate = ({
                     isBenefitSucceed &&
                     isTokenSucceed && (
                       <Button
-                        onClick={() => setShowUseBenefit(true)}
+                        onClick={() => setShowVerify(true)}
                         className="!pw-h-[40px] !pw-mb-auto !pw-mt-[20px] sm:!pw-mt-auto"
                       >
                         {translate('token>pass>selfUse')}
@@ -440,18 +473,34 @@ const _PassTemplate = ({
           </div>
 
           {benefit?.data?.allowSelfUse && (
-            <SelfUseModal
-              hasOpen={showUseBenefit}
-              onClose={() => setShowUseBenefit(false)}
-              useBenefit={useBenefit}
-              isLoading={isUseLoading}
-              isSuccess={isUseSuccess}
-              isError={isUseError}
-              benefit={{
-                name: benefit?.data?.name,
-                usesLeft: usesLeft,
-              }}
-            />
+            <>
+              <ErrorModal
+                hasOpen={showError}
+                onClose={() => setShowError(false)}
+              />
+              <QrCodeValidated
+                hasOpen={showSuccess}
+                onClose={handleClose}
+                name={verifyBenefit?.data?.tokenPassBenefit?.name}
+                type={verifyBenefit?.data?.tokenPassBenefit?.type}
+                tokenPassBenefitAddresses={
+                  benefitData?.tokenPassBenefitAddresses
+                }
+                userEmail={verifyBenefit?.data?.user?.email}
+                userName={verifyBenefit?.data?.user?.name}
+              />
+              <VerifyBenefit
+                hasOpen={showVerify}
+                isLoading={isUseLoading}
+                isLoadingInfo={verifyLoading}
+                onClose={() => setShowVerify(false)}
+                useBenefit={useBenefit}
+                data={verifyBenefit?.data}
+                tokenPassBenefitAddresses={
+                  benefitData?.tokenPassBenefitAddresses
+                }
+              />
+            </>
           )}
 
           <>
@@ -475,39 +524,38 @@ const _PassTemplate = ({
                 title={translate('token>pass>useLocale')}
                 autoExpand={true}
               >
-                {benefitData &&
-                  benefitData[0]?.tokenPassBenefitAddresses?.map((address) => (
-                    <div
-                      key={address?.name}
-                      className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
-                    >
-                      <div className="pw-flex pw-flex-col pw-gap-1">
-                        <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                          {address?.name}
-                        </div>
-                        <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                          {address?.street}
-                          {', '}
-                          {address?.number}
-                          {', '}
-                          {address?.city}
-                          {' - '}
-                          {address?.state}
-                        </div>
-                        <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                          CEP: {address?.postalCode}
-                        </div>
+                {benefitData?.tokenPassBenefitAddresses?.map((address) => (
+                  <div
+                    key={address?.name}
+                    className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
+                  >
+                    <div className="pw-flex pw-flex-col pw-gap-1">
+                      <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                        {address?.name}
                       </div>
-                      <div className="pw-flex pw-flex-col pw-gap-1">
-                        <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-                          {translate('token>pass>rules')}
-                        </div>
-                        <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                          {address?.rules}
-                        </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        {address?.street}
+                        {', '}
+                        {address?.number}
+                        {', '}
+                        {address?.city}
+                        {' - '}
+                        {address?.state}
+                      </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        CEP: {address?.postalCode}
                       </div>
                     </div>
-                  ))}
+                    <div className="pw-flex pw-flex-col pw-gap-1">
+                      <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                        {translate('token>pass>rules')}
+                      </div>
+                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                        {address?.rules}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </DetailsTemplate>
             ) : null}
 
