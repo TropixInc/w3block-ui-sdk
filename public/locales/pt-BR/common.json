@@ -381,5 +381,7 @@
   "token>pass>selfError": "Erro ao validar o benefício, por favor tente novamente.",
   "token>pass>scanQRCode": "Escanear QR Code",
   "token>pass>benefit": "Benefício:",
-  "auth>inputCpf>placeholder": "Digite apenas números"
+  "auth>inputCpf>placeholder": "Digite apenas números",
+  "token>pass>user": "Usuário",
+  "token>pass>invalidFormat": "QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar."
 }
