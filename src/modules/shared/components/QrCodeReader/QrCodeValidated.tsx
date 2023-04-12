@@ -91,17 +91,17 @@ export const QrCodeValidated = ({
             )}
           </div>
         </div>
-        <>
-          <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
-            {translate('token>pass>user')}
-          </div>
-          <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-            Username: {userName}
-          </div>
-          <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-            E-mail: {userEmail}
-          </div>
-        </>
+      </div>
+      <div className="pw-flex pw-justify-center pw-items-center pw-gap-[16px] pw-px-[24px] pw-border pw-border-[#EFEFEF]">
+        <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
+          {translate('token>pass>user')}
+        </div>
+        <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+          Username: {userName}
+        </div>
+        <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+          E-mail: {userEmail}
+        </div>
       </div>
       <div className='pw-col'>
         <Button
