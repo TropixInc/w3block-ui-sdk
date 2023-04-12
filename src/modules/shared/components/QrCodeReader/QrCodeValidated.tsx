@@ -37,7 +37,7 @@ export const QrCodeValidated = ({
 
   const handleNext = () => {
     onClose();
-    if(validateAgain) {
+    if (typeof validateAgain === 'function') {
       validateAgain();
     }
   }

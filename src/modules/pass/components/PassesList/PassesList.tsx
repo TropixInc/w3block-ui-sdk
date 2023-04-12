@@ -25,7 +25,7 @@ import { VerifyBenefit } from '../VerifyBenefit';
 const _PassesList = () => {
   const { data, isLoading } = useGetPassByUser();
   const [translate] = useTranslation();
-  const passes = data?.data.items;
+  const passes = data?.data?.items || [];
   const [qrCodeData, setQrCodeData] = useState('');
   const [showScan, setOpenScan] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -49,8 +49,6 @@ const _PassesList = () => {
     chainId: filteredPass?.chainId,
     contractAddress: filteredPass?.contractAddress,
   });
-
-  console.log(benefitByPass);
 
   const benefitById = benefitByPass?.data?.items?.find(
     ({ id }) => id === benefitId
