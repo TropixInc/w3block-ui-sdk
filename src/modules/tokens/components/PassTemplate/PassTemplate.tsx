@@ -368,7 +368,7 @@ const _PassTemplate = ({
                       </div>
                     )}
                   </div>
-                  {benefit?.data.allowSelfUse &&
+                  {benefit?.data?.allowSelfUse &&
                     !isSecretError &&
                     !isInactive &&
                     !isUnavaible &&
@@ -439,7 +439,7 @@ const _PassTemplate = ({
               )}
           </div>
 
-          {benefit?.data.allowSelfUse && (
+          {benefit?.data?.allowSelfUse && (
             <SelfUseModal
               hasOpen={showUseBenefit}
               onClose={() => setShowUseBenefit(false)}

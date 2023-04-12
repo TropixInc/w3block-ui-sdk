@@ -5,16 +5,7 @@ import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
-import { BenefitStatus } from '../enums/BenefitStatus';
-import {
-  BenefitAddress,
-  TokenPassBenefitOperators,
-  TokenPassBenefitUsesDTO,
-} from '../interfaces/PassBenefitDTO';
-import {
-  TokenPassBenefitType,
-  TokenPassEntity,
-} from '../interfaces/PassBenefitOperatorsDTO';
+import { VerifyBenefitResponse } from '../interfaces/PassBenefitDTO';
 
 interface VerifyBenefit {
   benefitId: string;
@@ -22,30 +13,6 @@ interface VerifyBenefit {
   editionNumber: string;
   secret: string;
   enabled?: boolean;
-}
-
-export interface VerifyBenefitResponse {
-  id: string;
-  tokenPassId: string;
-  tokenPass: TokenPassEntity;
-  tokenPassBenefitUsage: TokenPassBenefitUsesDTO;
-  status: BenefitStatus;
-  name: string;
-  description: string;
-  rules: string;
-  type: TokenPassBenefitType;
-  useLimit: number;
-  eventStartsAt: string;
-  eventEndsAt: string;
-  checkInStartsAt: string;
-  checkInEndsAt: string;
-  linkUrl: string;
-  linkRules: string;
-  dynamicQrCode: boolean;
-  tokenPassBenefitAddresses: BenefitAddress[];
-  tokenPassBenefitOperators: TokenPassBenefitOperators[];
-  createdAt: string;
-  updatedAt: string;
 }
 
 const useVerifyBenefit = ({

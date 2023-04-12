@@ -113,3 +113,18 @@ export interface TokenPassBenefitOperators {
   userId: string;
   tokenPassBenefitId: string;
 }
+
+export interface VerifyBenefitResponse {
+  id: string;
+  editionNumber: number;
+  tokenPassBenefit: PassBenefitDTO;
+  tokenPassBenefitId: string;
+  uses: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  user: {
+    name: string;
+    email: string;
+  };
+}

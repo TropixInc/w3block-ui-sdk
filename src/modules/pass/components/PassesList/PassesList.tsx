@@ -13,6 +13,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';
 import { TokenListTemplateSkeleton } from '../../../tokens/components/TokensListTemplate/Skeleton';
+import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
 import useGetPassByUser from '../../hooks/useGetPassByUser';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import useVerifyBenefit from '../../hooks/useVerifyBenefit';
@@ -39,6 +40,7 @@ const _PassesList = () => {
     editionNumber: editionNumber,
     enabled: secret !== '',
   });
+  const { data: benefitById } = useGetPassBenefitById(benefitId);
 
   const { mutate: registerUse, isLoading: registerLoading } =
     usePostBenefitRegisterUse();
@@ -51,9 +53,7 @@ const _PassesList = () => {
       setQrCodeData(qrCodeData);
       setShowVerify(true);
     } else {
-      setError(
-        'QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar.'
-      );
+      setError(translate('token>pass>invalidFormat'));
       setShowError(true);
     }
   };
@@ -128,11 +128,13 @@ const _PassesList = () => {
           hasOpen={showSuccess}
           onClose={() => setShowSuccess(false)}
           validateAgain={() => setOpenScan(true)}
-          name={verifyBenefit?.data?.name}
-          type={verifyBenefit?.data?.type}
+          name={verifyBenefit?.data?.tokenPassBenefit?.name}
+          type={verifyBenefit?.data?.tokenPassBenefit?.type}
           tokenPassBenefitAddresses={
-            verifyBenefit?.data.tokenPassBenefitAddresses
+            benefitById?.data?.tokenPassBenefitAddresses
           }
+          userEmail={verifyBenefit?.data?.user?.email}
+          userName={verifyBenefit?.data?.user?.name}
         />
         <QrCodeError
           hasOpen={showError}
@@ -147,7 +149,10 @@ const _PassesList = () => {
           isLoadingInfo={verifyLoading}
           onClose={() => setShowVerify(false)}
           useBenefit={() => validateBenefitUse(qrCodeData)}
-          data={verifyBenefit}
+          data={verifyBenefit?.data}
+          tokenPassBenefitAddresses={
+            benefitById?.data?.tokenPassBenefitAddresses
+          }
         />
       </>
     </BaseTemplate>

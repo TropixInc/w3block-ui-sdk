@@ -207,5 +207,7 @@
   "token>pass>cancel": "Cancel",
   "token>pass>selfError": "Error validating the benefit, please try again.",
   "token>pass>scanQRCode": "Scan QR Code",
-  "token>pass>benefit": "Benefit:"
+  "token>pass>benefit": "Benefit:",
+  "token>pass>user": "User",
+  "token>pass>invalidFormat": "QRCode in invalid format. Please check if the scanned QR Code corresponds to the benefit you want to use."
 }
