@@ -21,7 +21,7 @@ const useGetPassBenefitById = (benefitId: string) => {
         ).replace('{benefitId}', benefitId)
       ),
     {
-      enabled: validator.isUUID(tenantId) && !validator.isEmpty(benefitId),
+      enabled: validator.isUUID(tenantId) && validator.isUUID(benefitId ?? ''),
     }
   );
 };

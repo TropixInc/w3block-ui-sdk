@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import validator from 'validator';
 
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 import { QrCodeReader } from '../../../shared/components/QrCodeReader';
@@ -13,7 +14,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';
 import { TokenListTemplateSkeleton } from '../../../tokens/components/TokensListTemplate/Skeleton';
-import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
+import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import useGetPassByUser from '../../hooks/useGetPassByUser';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import useVerifyBenefit from '../../hooks/useVerifyBenefit';
@@ -24,7 +25,7 @@ import { VerifyBenefit } from '../VerifyBenefit';
 const _PassesList = () => {
   const { data, isLoading } = useGetPassByUser();
   const [translate] = useTranslation();
-  const benefits = data?.data.items;
+  const passes = data?.data?.items || [];
   const [qrCodeData, setQrCodeData] = useState('');
   const [showScan, setOpenScan] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -38,9 +39,20 @@ const _PassesList = () => {
     secret: secret,
     userId: userId,
     editionNumber: editionNumber,
-    enabled: secret !== '',
+    enabled: !validator.isEmpty(secret ?? ''),
   });
-  const { data: benefitById } = useGetPassBenefitById(benefitId);
+  const filteredPass = passes?.find(
+    ({ id }) => id === verifyBenefit?.data?.tokenPassBenefit?.tokenPass?.id
+  );
+
+  const { data: benefitByPass } = useGetPassBenefits({
+    chainId: filteredPass?.chainId,
+    contractAddress: filteredPass?.contractAddress,
+  });
+
+  const benefitById = benefitByPass?.data?.items?.find(
+    ({ id }) => id === benefitId
+  );
 
   const { mutate: registerUse, isLoading: registerLoading } =
     usePostBenefitRegisterUse();
@@ -102,16 +114,16 @@ const _PassesList = () => {
           {translate('token>pass>scanQRCode')}
         </Button>
         <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
-          {benefits?.map((benefit) => {
+          {passes?.map((passes) => {
             return (
-              <li className="w-full" key={benefit.id}>
+              <li className="w-full" key={passes.id}>
                 <PassCard
-                  id={benefit.id}
-                  image={benefit.imageUrl || ''}
-                  name={benefit.name}
-                  tokenName={benefit.tokenName}
-                  contractAddress={benefit.contractAddress}
-                  chainId={`${benefit.chainId}`}
+                  id={passes.id}
+                  image={passes.imageUrl || ''}
+                  name={passes.name}
+                  tokenName={passes.tokenName}
+                  contractAddress={passes.contractAddress}
+                  chainId={`${passes.chainId}`}
                 />
               </li>
             );
@@ -130,9 +142,7 @@ const _PassesList = () => {
           validateAgain={() => setOpenScan(true)}
           name={verifyBenefit?.data?.tokenPassBenefit?.name}
           type={verifyBenefit?.data?.tokenPassBenefit?.type}
-          tokenPassBenefitAddresses={
-            benefitById?.data?.tokenPassBenefitAddresses
-          }
+          tokenPassBenefitAddresses={benefitById?.tokenPassBenefitAddresses}
           userEmail={verifyBenefit?.data?.user?.email}
           userName={verifyBenefit?.data?.user?.name}
         />
@@ -150,9 +160,7 @@ const _PassesList = () => {
           onClose={() => setShowVerify(false)}
           useBenefit={() => validateBenefitUse(qrCodeData)}
           data={verifyBenefit?.data}
-          tokenPassBenefitAddresses={
-            benefitById?.data?.tokenPassBenefitAddresses
-          }
+          tokenPassBenefitAddresses={benefitById?.tokenPassBenefitAddresses}
         />
       </>
     </BaseTemplate>

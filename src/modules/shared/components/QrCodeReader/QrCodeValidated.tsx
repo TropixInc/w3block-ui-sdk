@@ -13,7 +13,7 @@ import { CloseButton } from '../CloseButton';
 interface iProps {
   hasOpen: boolean;
   onClose: () => void;
-  validateAgain: () => void;
+  validateAgain?: () => void;
   name?: string;
   type?: TokenPassBenefitType;
   tokenPassBenefitAddresses?: BenefitAddress[];
@@ -37,7 +37,9 @@ export const QrCodeValidated = ({
 
   const handleNext = () => {
     onClose();
-    validateAgain();
+    if (typeof validateAgain === 'function') {
+      validateAgain();
+    }
   }
 
   return hasOpen ? (
@@ -92,8 +94,8 @@ export const QrCodeValidated = ({
           </div>
         </div>
       </div>
-      <div className="pw-flex pw-justify-center pw-items-center pw-gap-[16px] pw-px-[24px] pw-border pw-border-t-0 pw-border-[#EFEFEF]">
-        <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
+      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[16px] pw-px-[24px] pw-py-5 pw-border pw-rounded-2xl pw-border-[#EFEFEF]">
+        <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px]">
           {translate('token>pass>user')}
         </div>
         <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
@@ -112,15 +114,17 @@ export const QrCodeValidated = ({
         >
           {translate('token>pass>validatedToken>back')}
         </Button>
-        <Button
-          type="button"
-          width="full"
-          model="secondary"
-          className='pw-mt-5'
-          onClick={handleNext}
-        >
-          {translate('token>qrCode>validatedAgain')}
-        </Button>
+        {validateAgain &&
+          <Button
+            type="button"
+            width="full"
+            model="secondary"
+            className='pw-mt-5'
+            onClick={handleNext}
+          >
+            {translate('token>qrCode>validatedAgain')}
+          </Button>
+        }
       </div>
     </div>
   ) : (

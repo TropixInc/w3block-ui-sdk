@@ -41,7 +41,7 @@ export const VerifyBenefit = ({
             <CloseButton onClose={onClose} />
             <div className="pw-w-full pw-rounded-[16px] pw-p-[24px] pw-mt-8 pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2">
               <div className="pw-px-[16px] pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                {data?.tokenPass?.name}
+                {data?.tokenPassBenefit?.tokenPass?.name}
                 <p className="pw-text-[18px] pw-leading-[23px] pw-font-bold">
                   {translate('token>pass>benefit')}{' '}
                   {data?.tokenPassBenefit?.name}
