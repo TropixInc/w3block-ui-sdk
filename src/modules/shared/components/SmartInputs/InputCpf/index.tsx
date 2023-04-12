@@ -7,6 +7,7 @@ import classNames from 'classnames';
 
 import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromString';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
 interface InputCPFProps {
@@ -21,6 +22,8 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [translate] = useTranslation();
+
+  const error = fieldState?.error as unknown as InputError;
 
   const CPFMask = /^(\d{3})(\d{3})(\d{3})(\d{2})/;
 
@@ -72,7 +75,12 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
         />
       </FormItemContainer>
       <p className="mt-5">
-        {field.value && <InputStatus invalid={fieldState.invalid} />}
+        {field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={error?.value?.message}
+          />
+        )}
       </p>
     </div>
   );

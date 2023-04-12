@@ -4,6 +4,7 @@ import { useController } from 'react-hook-form';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
 interface InputText {
@@ -16,6 +17,8 @@ interface InputText {
 const InputText = ({ label, name, docValue, docStatus }: InputText) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
+  const error = fieldState?.error as unknown as InputError;
+
   const handleTextChange = (value: string) => {
     if (value) {
       setInputValue(value);
@@ -49,7 +52,12 @@ const InputText = ({ label, name, docValue, docStatus }: InputText) => {
         />
       </FormItemContainer>
       <p className="mt-5">
-        {field.value && <InputStatus invalid={fieldState.invalid} />}
+        {field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={error?.value?.message}
+          />
+        )}
       </p>
     </div>
   );

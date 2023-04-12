@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.206](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.205...v0.1.1-alpha.206) (2023-04-11)
+
+
+### Bug Fixes
+
+* **TK-1130:** add valitations in KYC ([2072a56](https://github.com/TropixInc/w3block-ui-sdk/commit/2072a56d2bcecea753ea2a4360dc1f18b84d9842))
+
 ### [0.1.1-alpha.205](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.204...v0.1.1-alpha.205) (2023-04-10)
 
 

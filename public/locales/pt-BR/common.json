@@ -372,6 +372,8 @@
   "token>pass>until": " até ",
   "token>pass>noMoreUses": "Você não tem mais usos disponíveis",
   "token>pass>useThisTokenUntil": "Utilização desse benefício:",
+  "auth>inputCpf>placeholder": "Digite apenas números",
+  "auth>inputFile>aceptFile": "Tipos de arquivos aceitos: .png, .jpeg, .jpg, .pdf",
   "token>pass>invalidBenefitQrCode": "O benefício do QR Code selecionado pelo usuário não corresponde ao benefício selecionado pelo operador",
   "token>pass>validateSelfUse": "Tem certeza que deseja utilizar o benefício: {{name}}? ",
   "token>pass>selfUseValidated": "Benefício: {{name}} utilizado com sucesso!",
@@ -381,7 +383,6 @@
   "token>pass>selfError": "Erro ao validar o benefício, por favor tente novamente.",
   "token>pass>scanQRCode": "Escanear QR Code",
   "token>pass>benefit": "Benefício:",
-  "auth>inputCpf>placeholder": "Digite apenas números",
   "token>pass>user": "Usuário",
   "token>pass>invalidFormat": "QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar."
 }

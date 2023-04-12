@@ -19,6 +19,13 @@ interface SmartProps {
   docFileValue?: string;
 }
 
+export interface InputError {
+  inputId: string;
+  value: {
+    message: string;
+  };
+}
+
 const SmartInputsController = ({
   label,
   name,

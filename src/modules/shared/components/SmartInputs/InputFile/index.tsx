@@ -34,7 +34,7 @@ const InputFile = ({
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
   const [file, setFile] = useState<File | undefined>();
   const { companyId: tenantId } = useCompanyConfig();
 
@@ -64,7 +64,7 @@ const InputFile = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
     accept: ['.png', '.jpeg', '.jpg', '.pdf'],
     disabled: Boolean(
@@ -112,7 +112,9 @@ const InputFile = ({
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={isError || mutateError || !field.value}>
+      <FormItemContainer
+        invalid={isError || mutateError || !field.value || fieldState.invalid}
+      >
         <div
           className={classNames(
             'pw-mt-1 pw-text-base pw-h-[46px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
@@ -132,7 +134,14 @@ const InputFile = ({
         </div>
       </FormItemContainer>
       <p className="mt-5">
-        {field.value && <InputStatus invalid={isError || mutateError} />}
+        {field.value || Boolean(fileRejections.length) ? (
+          <InputStatus
+            invalid={isError || mutateError || Boolean(fileRejections.length)}
+            errorMessage={
+              fileRejections.length ? translate('auth>inputFile>aceptFile') : ''
+            }
+          />
+        ) : null}
       </p>
     </div>
   );
