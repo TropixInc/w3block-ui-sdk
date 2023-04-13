@@ -8,6 +8,7 @@ import { PriceAndGasInfo, ProductInfo } from '../../../shared';
 import { ReactComponent as ArrowIcon } from '../../../shared/assets/icons/arrowDown.svg';
 import { ReactComponent as CheckIcon } from '../../../shared/assets/icons/checkOutlined.svg';
 import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copy.svg';
+import { ReactComponent as InfoIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import { ReactComponent as XIcon } from '../../../shared/assets/icons/x-circle.svg';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 export enum OrderStatusEnum {
@@ -24,17 +25,22 @@ interface OrderCardComponentSDKProps {
   id: string;
   status: OrderStatusEnum;
   createdAt: string;
+  expiresIn?: string;
+  paymentProvider?: string;
 }
 
 export const OrderCardComponentSDK = ({
   id,
   status,
   createdAt,
+  expiresIn,
+  paymentProvider,
 }: OrderCardComponentSDKProps) => {
   const [opened, setOpened] = useState(false);
   const { data: order } = useGetEspecificOrder(id, opened);
   const statusObj = getStatusText(status);
   const products = order?.data.products;
+  const [infoOpened, setInfoOpened] = useState(false);
   return (
     <div className="pw-p-6 pw-bg-white pw-rounded-xl pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-w-full">
       <div className="pw-flex pw-justify-between">
@@ -45,8 +51,42 @@ export const OrderCardComponentSDK = ({
           >
             <span>{statusObj?.icon}</span>
             {statusObj?.title}
+            {paymentProvider == 'crypto' &&
+              status == OrderStatusEnum.PENDING && (
+                <>
+                  <div
+                    onMouseEnter={() => {
+                      if (!infoOpened) setInfoOpened(true);
+                    }}
+                    onMouseLeave={() => {
+                      if (infoOpened) setInfoOpened(false);
+                    }}
+                  >
+                    <InfoIcon className="pw-w-[14px] pw-h-[14px]" />
+                    <div className="pw-relative">
+                      {infoOpened && (
+                        <div className="pw-absolute pw-z-10 pw-bg-white pw-p-2 pw-rounded-lg pw-shadow-md pw-w-[150px]">
+                          <p className="pw-text-xs pw-text-slate-600 pw-font-normal">
+                            Sua compra está aguardando o processamento e
+                            confirmação do pagamento na blockchain.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
           </p>
-
+          {status === OrderStatusEnum.PENDING && expiresIn && (
+            <div className="pw-flex pw-gap-1">
+              <p className="pw-text-xs pw-text-slate-500 pw-font-medium">
+                Expira as:{' '}
+              </p>
+              <p className="pw-text-xs pw-text-slate-500">
+                {format(new Date(expiresIn), 'H:mm d MMM, yyyy ')}
+              </p>
+            </div>
+          )}
           <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
             ID: {id}{' '}
             <span>
@@ -91,9 +131,10 @@ export const OrderCardComponentSDK = ({
                   }, [])
                   .map((prod: any, index: number) => (
                     <ProductInfo
+                      currency={order.data.currency.symbol ?? CurrencyEnum.BRL}
                       image={
                         prod?.productToken?.product?.images?.length
-                          ? prod?.productToken?.product?.images?.thumb
+                          ? prod?.productToken?.product?.images[0].thumb
                           : prod.productToken.metadata.media[0].cached
                               .smallSizeUrl
                       }

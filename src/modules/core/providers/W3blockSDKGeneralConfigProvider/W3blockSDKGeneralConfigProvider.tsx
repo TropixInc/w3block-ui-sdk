@@ -7,6 +7,8 @@ import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
+import { MetamaskProviderUiSDK } from '../../metamask';
+import { SocketProviderUiSDK } from '../../metamask/providers/SocketProviderUiSDK';
 import { LocaleProvider } from '../LocaleProvider';
 import { W3blockApiProvider } from '../W3blockApiProvider';
 
@@ -28,6 +30,7 @@ interface Props extends JSX.IntrinsicAttributes {
   appBaseUrl: string;
   connectProxyPass?: string;
   launchDarklyKey?: string;
+  name?: string;
 }
 
 export const W3blockUISDKGeneralConfig = ({
@@ -39,10 +42,11 @@ export const W3blockUISDKGeneralConfig = ({
   isProduction,
   appBaseUrl,
   connectProxyPass = '',
+  name = '',
 }: Props) => {
   const companyValue = useMemo(
-    () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass }),
-    [logoUrl, companyId, appBaseUrl, connectProxyPass]
+    () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass, name }),
+    [logoUrl, companyId, appBaseUrl, connectProxyPass, name]
   );
 
   const environmentValue = useMemo(
@@ -63,9 +67,13 @@ export const W3blockUISDKGeneralConfig = ({
           w3blockPdfAPIUrl={api.pdfUrl}
           w3BlockPassApiUrl={api.passUrl ?? ''}
         >
-          <CartProvider>
-            <LocaleProvider locale={locale}>{children}</LocaleProvider>
-          </CartProvider>
+          <MetamaskProviderUiSDK>
+            <SocketProviderUiSDK>
+              <CartProvider>
+                <LocaleProvider locale={locale}>{children}</LocaleProvider>
+              </CartProvider>
+            </SocketProviderUiSDK>
+          </MetamaskProviderUiSDK>
         </W3blockApiProvider>
       </EnvironmentContext.Provider>
     </W3blockUISDKGereralConfigContext.Provider>

@@ -16,7 +16,7 @@ export const CartButton = ({
   className = '',
   borderColor,
 }: CartButtonProps) => {
-  const { cart } = useCart();
+  const { cart, cartCurrencyId } = useCart();
   const { pushConnect } = useRouterConnect();
   const quantity = useMemo(() => {
     const unique: Array<Product> = [];
@@ -27,7 +27,9 @@ export const CartButton = ({
     });
     return unique;
   }, [cart]);
-  const currencyId = cart.length ? cart[0].prices[0].currencyId : '';
+  const currencyId = cart.length
+    ? cartCurrencyId?.id ?? cart[0].prices[0].currencyId
+    : '';
   return (
     <div
       style={{ borderColor: borderColor ?? 'black' }}

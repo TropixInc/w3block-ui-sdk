@@ -1,6 +1,7 @@
 import { CheckoutStatus } from '../../../checkout';
+import { ReactComponent as EthIcon } from '../../assets/icons/Eth.svg';
+import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
 import { ReactComponent as TrashIcon } from '../../assets/icons/trash.svg';
-import { CurrencyEnum, currencyMap } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
 import { ImageSDK } from '../ImageSDK';
 import { Shimmer } from '../Shimmer';
@@ -12,7 +13,7 @@ interface ProductInfoProps {
   price: string;
   className?: string;
   loading?: boolean;
-  currency?: CurrencyEnum;
+  currency?: string;
   quantity?: number;
   changeQuantity?: (n: number, id: string) => void;
   stockAmount: number;
@@ -30,7 +31,7 @@ export const ProductInfo = ({
   id,
   className,
   loading = false,
-  currency = CurrencyEnum.BRL,
+  currency = 'R$',
   changeQuantity,
   stockAmount,
   canPurchaseAmount = 5,
@@ -82,8 +83,14 @@ export const ProductInfo = ({
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
           <div className="pw-flex pw-flex-col">
-            <p className="pw-font-[400] pw-text-[#35394C] pw-text-sm">
-              {currencyMap.get(currency)}
+            <p className="pw-font-[400] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
+              {currency == 'MATIC' ? (
+                <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+              ) : currency == 'ETH' ? (
+                <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+              ) : (
+                currency
+              )}
               {price}
             </p>
           </div>
@@ -94,8 +101,14 @@ export const ProductInfo = ({
       </div>
       <div>
         <p className="pw-text-[13px] pw-font-[400] pw-text-[#35394C]">Total</p>
-        <p className="pw-text-sm pw-font-[700] pw-text-[#35394C]">
-          {currencyMap.get(currency)}
+        <p className="pw-text-sm pw-font-[700] pw-text-[#35394C] pw-flex pw-items-center">
+          {currency == 'MATIC' ? (
+            <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+          ) : currency == 'ETH' ? (
+            <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+          ) : (
+            currency
+          )}
           {(parseFloat(price) * (quantity ?? 1)).toFixed(2)}
         </p>
       </div>
@@ -128,8 +141,14 @@ export const ProductInfo = ({
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
           <div className="pw-fle pw-flex-col">
-            <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm">
-              {currencyMap.get(currency)}
+            <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
+              {currency == 'MATIC' ? (
+                <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+              ) : currency === 'ETH' ? (
+                <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
+              ) : (
+                currency
+              )}
               {price}
             </p>
           </div>
@@ -149,62 +168,64 @@ export const ProductInfo = ({
           <StatusToShow />
         )}
 
-        <div className="pw-flex pw-gap-x-4 pw-items-center pw-justify-center">
-          {status == CheckoutStatus.CONFIRMATION && (
-            <p
-              onClick={() =>
-                changeQuantity?.(
-                  quantity && quantity > 1 ? quantity - 1 : 1,
-                  id
-                )
-              }
-              className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                quantity && quantity > 1
-                  ? 'pw-text-[#353945] pw-border-brand-primary'
-                  : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)]'
-              }`}
-            >
-              -
-            </p>
-          )}
-          <div>
-            {status === CheckoutStatus.FINISHED && (
-              <p className="pw-text-center pw-text-xs pw-text-[#353945]">
-                Quant.
+        {currency != 'MATIC' && currency != 'ETH' && (
+          <div className="pw-flex pw-gap-x-4 pw-items-center pw-justify-center">
+            {status == CheckoutStatus.CONFIRMATION && (
+              <p
+                onClick={() =>
+                  changeQuantity?.(
+                    quantity && quantity > 1 ? quantity - 1 : 1,
+                    id
+                  )
+                }
+                className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                  quantity && quantity > 1
+                    ? 'pw-text-[#353945] pw-border-brand-primary'
+                    : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)]'
+                }`}
+              >
+                -
               </p>
             )}
+            <div>
+              {status === CheckoutStatus.FINISHED && (
+                <p className="pw-text-center pw-text-xs pw-text-[#353945]">
+                  Quant.
+                </p>
+              )}
 
-            <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
-              {quantity}
-            </p>
-          </div>
+              <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
+                {quantity}
+              </p>
+            </div>
 
-          {status == CheckoutStatus.CONFIRMATION && (
-            <p
-              className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                quantity &&
-                quantity < canPurchaseAmount &&
-                quantity < stockAmount
-                  ? 'pw-border-brand-primary pw-text-[#353945]'
-                  : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)]'
-              }`}
-              onClick={() => {
-                if (
+            {status == CheckoutStatus.CONFIRMATION && (
+              <p
+                className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                   quantity &&
                   quantity < canPurchaseAmount &&
                   quantity < stockAmount
-                ) {
-                  changeQuantity?.(
-                    quantity && quantity < maxUp ? quantity + 1 : maxUp,
-                    id
-                  );
-                }
-              }}
-            >
-              +
-            </p>
-          )}
-        </div>
+                    ? 'pw-border-brand-primary pw-text-[#353945]'
+                    : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)]'
+                }`}
+                onClick={() => {
+                  if (
+                    quantity &&
+                    quantity < canPurchaseAmount &&
+                    quantity < stockAmount
+                  ) {
+                    changeQuantity?.(
+                      quantity && quantity < maxUp ? quantity + 1 : maxUp,
+                      id
+                    );
+                  }
+                }}
+              >
+                +
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
