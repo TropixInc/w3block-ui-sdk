@@ -26,6 +26,10 @@ const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
       field.onChange({ inputId: name, value: value });
     } else {
       setInputValue('');
+      field.onChange({
+        inputId: undefined,
+        value: undefined,
+      });
     }
   };
 

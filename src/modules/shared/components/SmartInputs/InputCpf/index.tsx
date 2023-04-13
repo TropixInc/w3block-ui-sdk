@@ -27,7 +27,7 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
 
   const CPFMask = /^(\d{3})(\d{3})(\d{3})(\d{2})/;
 
-  const handleChange = (value: string) => {
+  const handleChange = (value: string | undefined) => {
     if (value) {
       setInputValue(getNumbersFromString(value, false));
       field.onChange({
@@ -36,6 +36,10 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
       });
     } else {
       setInputValue('');
+      field.onChange({
+        inputId: undefined,
+        value: undefined,
+      });
     }
   };
 

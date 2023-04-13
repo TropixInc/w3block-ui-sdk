@@ -107,6 +107,14 @@ const InputFile = ({
     }
   };
 
+  useEffect(() => {
+    if (fileRejections.length) {
+      field.onChange({ inputId: undefined, assetId: undefined });
+      setFile(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fileRejections.length]);
+
   return (
     <div className="pw-mb-3">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">

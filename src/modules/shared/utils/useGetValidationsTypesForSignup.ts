@@ -1,6 +1,7 @@
 import { isValidPhoneNumber } from 'react-phone-number-input';
 
 import { DataTypesEnum, TenantInputEntityDto } from '@w3block/sdk-id';
+import { cpf } from 'cpf-cnpj-validator';
 import isURL from 'validator/lib/isURL';
 import { AnySchema, object, string } from 'yup';
 import * as yup from 'yup';
@@ -21,6 +22,17 @@ export const useGetValidationsTypesForSignup = (
   const [translate] = useTranslation();
   values.forEach(({ type, id }) => {
     switch (type) {
+      case DataTypesEnum.File:
+        validates.push({
+          yupKey: id,
+          validations: object().shape({
+            inputId: string(),
+            assetId: string().required(
+              translate('auth>getValidationsTypesForSignup>insertFile')
+            ),
+          }),
+        });
+        break;
       case DataTypesEnum.Email:
         validates.push({
           yupKey: id,
@@ -47,13 +59,12 @@ export const useGetValidationsTypesForSignup = (
               .required(
                 translate('auth>getValidationsTypesForSignup>insertYourCPF')
               )
-              .min(
-                11,
-                translate('auth>getValidationsTypesForSignup>insertValidCPF')
-              )
-              .max(
-                11,
-                translate('auth>getValidationsTypesForSignup>insertValidCPF')
+              .test(
+                'cpf',
+                translate('auth>getValidationsTypesForSignup>insertValidCPF'),
+                (value) => {
+                  return value ? cpf.isValid(value) : true;
+                }
               ),
           }),
         });
