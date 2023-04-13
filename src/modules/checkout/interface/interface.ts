@@ -1,3 +1,4 @@
+import { Status } from '../../core/metamask/interface';
 import { Product } from '../../shared';
 import { GasFee } from '../../shared/interface/GasFee';
 import { OrderStatus, PaymentMethod } from '../enum';
@@ -8,6 +9,40 @@ export interface OrderPreviewResponse {
   gasFee?: GasFee;
   totalPrice?: string;
   providersForSelection?: PaymentMethodsAvaiable[];
+}
+
+export interface createOrderResponse {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  companyId: string;
+  userId: string;
+  destinationWalletAddress: string;
+  addressId?: string;
+  currencyId: string;
+  currencyAmount: string;
+  status: Status;
+  paymentProvider: string;
+  providerTransactionId: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  paymentMethod: any;
+  paymentInfo: {
+    split: {
+      percentage: number;
+      destination: string;
+    }[];
+    approved: boolean;
+    payRoyalty: boolean;
+    totalPrice: string;
+    w3blockFeePercentage?: number;
+    remainingFeePercentage?: number;
+  };
+  deliverDate?: string;
+  expiresIn: string;
+  gasFee: string;
+  clientServiceFee: string;
+  failReason: string;
+  totalAmount: string;
 }
 
 export interface PaymentMethodsAvaiable {
@@ -39,7 +74,7 @@ export interface CreateOrder {
   destinationWalletAddress: string;
   addressId?: string;
   signedGasFee: string;
-  successUrl: string;
+  successUrl?: string;
   paymentMethod?: string;
   providerInputs?: unknown;
 }

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
 import { useCart } from '../../checkout/hooks/useCart';
@@ -8,7 +8,9 @@ import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLef
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import useGetProductBySlug from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import useGetProductBySlug, {
+  CurrencyResponse,
+} from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { ProductPageData } from '../interfaces';
 
 interface ProductPageProps {
@@ -18,16 +20,20 @@ interface ProductPageProps {
 
 export const ProductPage = ({ data, params }: ProductPageProps) => {
   const { back, pushConnect } = useRouterConnect();
-  const { setCart, cart } = useCart();
+  const { setCart, cart, setCartCurrencyId } = useCart();
+  const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (quantityOpen) {
       setQuantityOpen(false);
     }
   });
+
   const [quantity, setQuantity] = useState(1);
   const [quantityOpen, setQuantityOpen] = useState(false);
-  const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
+  const { data: product, isSuccess } = useGetProductBySlug(
+    params?.[params.length - 1]
+  );
   const categories: any[] = [];
   const limit =
     product?.stockAmount &&
@@ -35,6 +41,17 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
     product?.stockAmount > product.canPurchaseAmount
       ? product.canPurchaseAmount
       : product?.stockAmount;
+
+  const addToCart = () => {
+    setCartCurrencyId?.(currencyId);
+    cart.some((p) => p.id == product?.id)
+      ? setCart(cart.filter((p) => p.id != product?.id))
+      : setCart([...cart, ...Array(quantity).fill(product)]);
+  };
+
+  useEffect(() => {
+    if (isSuccess) setCurrencyId(product?.prices[0]?.currency ?? undefined);
+  }, [product, isSuccess]);
   return (
     <div
       style={{
@@ -106,20 +123,58 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 </p>
               )}
               {data.styleData.showValue && (
-                <p
-                  style={{ color: data.styleData.priceTextColor ?? 'black' }}
-                  className="pw-text-2xl pw-mt-4 pw-font-[700]"
-                >
-                  {product?.stockAmount == 0
-                    ? 'Esgotado'
-                    : product
-                    ? `${product?.prices[0].currency.symbol} ${product?.prices[0].amount}`
-                    : ''}
-                </p>
+                <>
+                  {product?.prices && product?.prices.length > 1 && (
+                    <div className="">
+                      <p className="pw-text-sm pw-text-black pw-font-[700] pw-mb-2">
+                        Pagar em:
+                      </p>
+                      <form className="pw-flex pw-gap-4" action="submit">
+                        {product?.prices.map((price) => (
+                          <div
+                            key={price.currencyId}
+                            className="pw-flex pw-gap-2"
+                          >
+                            <input
+                              onChange={() => setCurrencyId?.(price?.currency)}
+                              checked={price.currencyId === currencyId?.id}
+                              name="currency"
+                              value={price.currencyId}
+                              type="radio"
+                            />
+                            <p className="pw-text-xs pw-text-slate-600 pw-font-[600]">
+                              {price.currency.symbol}
+                            </p>
+                          </div>
+                        ))}
+                      </form>
+                    </div>
+                  )}
+
+                  <p
+                    style={{ color: data.styleData.priceTextColor ?? 'black' }}
+                    className="pw-text-2xl pw-mt-4 pw-font-[700]"
+                  >
+                    {product?.stockAmount == 0
+                      ? 'Esgotado'
+                      : product
+                      ? `${
+                          product?.prices.find(
+                            (price) => price.currencyId == currencyId?.id
+                          )?.currency.symbol
+                        } ${
+                          product?.prices.find(
+                            (price) => price.currencyId == currencyId?.id
+                          )?.amount
+                        }`
+                      : ''}
+                  </p>
+                </>
               )}
               {data.styleData.actionButton &&
                 product?.stockAmount &&
-                product?.stockAmount > 0 && (
+                product?.stockAmount > 0 &&
+                !currencyId?.crypto && (
                   <div>
                     <div ref={refToClickAway} className="pw-mt-4">
                       <p className="pw-text-sm pw-text-black pw-mb-1">
@@ -192,39 +247,38 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               ) : null}
               {data.styleData.actionButton && (
                 <>
-                  <button
-                    disabled={
-                      product?.stockAmount == 0 ||
-                      product?.canPurchaseAmount == 0
-                    }
-                    onClick={() => {
-                      cart.some((p) => p.id == product?.id)
-                        ? setCart(cart.filter((p) => p.id != product?.id))
-                        : setCart([...cart, ...Array(quantity).fill(product)]);
-                    }}
-                    style={{
-                      backgroundColor: 'none',
-                      borderColor:
-                        product &&
-                        (product.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0)
-                          ? '#DCDCDC'
-                          : data.styleData.buttonColor
-                          ? data.styleData.buttonColor
-                          : '#0050FF',
-                      color:
-                        product &&
-                        (product.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0)
-                          ? '#777E8F'
-                          : data.styleData.buttonColor ?? '#0050FF',
-                    }}
-                    className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
-                  >
-                    {cart.some((p) => p.id == product?.id)
-                      ? 'Remover do carrinho'
-                      : 'Adicionar ao carrinho'}
-                  </button>
+                  {!currencyId?.crypto && (
+                    <button
+                      disabled={
+                        product?.stockAmount == 0 ||
+                        product?.canPurchaseAmount == 0 ||
+                        currencyId?.crypto
+                      }
+                      onClick={addToCart}
+                      style={{
+                        backgroundColor: 'none',
+                        borderColor:
+                          product &&
+                          (product.stockAmount == 0 ||
+                            product?.canPurchaseAmount == 0)
+                            ? '#DCDCDC'
+                            : data.styleData.buttonColor
+                            ? data.styleData.buttonColor
+                            : '#0050FF',
+                        color:
+                          product &&
+                          (product.stockAmount == 0 ||
+                            product?.canPurchaseAmount == 0)
+                            ? '#777E8F'
+                            : data.styleData.buttonColor ?? '#0050FF',
+                      }}
+                      className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                    >
+                      {cart.some((p) => p.id == product?.id)
+                        ? 'Remover do carrinho'
+                        : 'Adicionar ao carrinho'}
+                    </button>
+                  )}
                   <button
                     disabled={
                       product?.stockAmount == 0 ||
@@ -236,9 +290,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                           PixwayAppRoutes.CHECKOUT_CONFIRMATION +
                             `?productIds=${Array(quantity)
                               .fill(product.id)
-                              .join(',')}&currencyId=${
-                              product.prices[0].currencyId
-                            }`
+                              .join(',')}&currencyId=${currencyId?.id}`
                         );
                       }
                     }}

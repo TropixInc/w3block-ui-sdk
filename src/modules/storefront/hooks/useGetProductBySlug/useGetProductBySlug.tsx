@@ -7,18 +7,19 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 
 export type ProductPrice = {
   amount: string;
-  currency: {
-    code?: string;
-    createdAt?: string;
-    crypto?: string;
-    id?: string;
-    name?: string;
-    symbol: string;
-    updatedAt?: string;
-  };
+  currency: CurrencyResponse;
   currencyId?: string;
 };
 
+export interface CurrencyResponse {
+  code?: string;
+  createdAt?: string;
+  crypto?: boolean;
+  id?: string;
+  name?: string;
+  symbol: string;
+  updatedAt?: string;
+}
 export interface Product {
   canPurchase?: boolean;
   chainId?: number;

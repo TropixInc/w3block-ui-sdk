@@ -5,6 +5,7 @@ export interface IW3blockUISDKGereralConfigContext {
   logoUrl: string;
   appBaseUrl: string;
   connectProxyPass: string;
+  name?: string;
 }
 
 export const W3blockUISDKGereralConfigContext = createContext({
