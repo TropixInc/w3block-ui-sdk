@@ -28,6 +28,10 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
       field.onChange({ inputId: name, value: value });
     } else {
       setInputValue('');
+      field.onChange({
+        inputId: undefined,
+        value: undefined,
+      });
     }
   };
 
