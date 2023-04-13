@@ -60,7 +60,7 @@ export const MetamaskProviderUiSDK = ({
     useState<ethers.providers.Web3Provider>();
   const [chainId, setChainId] = useState<number>();
   const [accounts, setAccounts] = useState<string>();
-  const eth = (window as any).ethereum;
+  const eth = typeof window != 'undefined' ? (window as any).ethereum : null;
 
   const isConnected = useMemo(() => {
     if ((window as any)?.ethereum && (window as any)?.ethereum.isConnected()) {
