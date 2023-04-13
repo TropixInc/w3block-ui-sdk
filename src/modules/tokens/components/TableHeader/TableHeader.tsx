@@ -11,7 +11,7 @@ const TableHeader = <T, K extends keyof T>({
     return (
       <th
         key={`headCell-${index}`}
-        className="pw-py-[13.5px] pw-pl-[20px] pw-text-left pw-w-[95px] sm:pw-min-w-[150px] pw-text-[14px] pw-text-[#FFFFFF] pw-font-semibold pw-leading-[21px]"
+        className="pw-py-[13.5px] sm:pw-pl-[20px] pw-pl-2 pw-text-left pw-w-[95px] sm:pw-min-w-[150px] pw-text-[14px] pw-text-[#FFFFFF] pw-font-semibold pw-leading-[21px]"
       >
         {column.header}
       </th>

@@ -14,6 +14,7 @@ import {
 } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
@@ -50,7 +51,7 @@ export const CompleteKYCTemplateSDK = ({
   className,
   extraBy,
 }: CompleteKYCTemplateSDKProps) => {
-  const { data: profile } = useProfile();
+  const { data: profile, isLoading: isLoadingProfile } = useProfile();
   const router = useRouterConnect();
   const { status } = usePixwaySession();
   const { data: session } = usePixwaySession();
@@ -95,7 +96,11 @@ export const CompleteKYCTemplateSDK = ({
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
-  return profile ? (
+  return isLoadingProfile ? (
+    <div className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center">
+      <Spinner />
+    </div>
+  ) : profile ? (
     <TranslatableComponent>
       <div style={{ backgroundColor: bgColor }}>
         <ContainerControllerSDK

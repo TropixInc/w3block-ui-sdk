@@ -42,7 +42,6 @@ export const DataGridPagination = ({
   }, [currentPage]);
 
   const changePageState = (number: number) => {
-    console.log({ number, totalPages });
     if (number > totalPages) setCurrentPage(totalPages);
     else if (number < 1) setCurrentPage(1);
     else setCurrentPage(number);

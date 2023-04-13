@@ -10,6 +10,7 @@ interface AuthTextFieldProps {
   placeholder?: string;
   type?: 'text' | 'password';
   disabled?: boolean;
+  autoComplete?: string;
 }
 
 export const AuthTextField = ({
@@ -18,6 +19,7 @@ export const AuthTextField = ({
   placeholder,
   type = 'text',
   disabled = false,
+  autoComplete,
 }: AuthTextFieldProps) => {
   const getOutlineClassName = () => {
     if (invalid) return '!pw-outline-[#C63535]';
@@ -39,6 +41,7 @@ export const AuthTextField = ({
       )}
       placeholder={placeholder}
       disabled={disabled}
+      autoComplete={autoComplete}
       classes={{
         rootDisabled: '!pw-outline-[#676767] pw-bg-transparent',
         input: `!pw-px-[10px] !pw-py-[14px] placeholder:!pw-text-[#777E8F] !pw-text-[13px] !pw-leading-[18px] autofill:pw-bg-transparent disabled:pw-text-[#353945] disabled:pw-bg-[#EFEFEF] pw-text-fill-[#353945] autofill:pw-bg-transparent autofill:pw-shadow-[0_0_0_30px_#ffffff_inset] ${

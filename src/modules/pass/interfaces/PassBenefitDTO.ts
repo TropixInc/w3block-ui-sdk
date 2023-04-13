@@ -27,6 +27,7 @@ export interface PassBenefitDTO {
   tokenPass: TokenPassEntity;
   tokenPassId: string;
   status: BenefitStatus;
+  allowSelfUse: boolean;
   tokenPassBenefitAddresses?: BenefitAddress[];
 }
 
@@ -55,7 +56,7 @@ export interface BenefitsByEditionNumberDTO {
   tokenPassId: string;
 }
 
-interface TokenPassBenefitUsesDTO {
+export interface TokenPassBenefitUsesDTO {
   createdAt: string;
   editionNumber: number;
   id: string;
@@ -102,13 +103,28 @@ export interface TokenPassBenefits {
   dynamicQrCode: boolean;
   tokenPassId: string;
   tokenPassBenefitAddresses: BenefitAddress[];
-  tokenPassBenefitOperators: tokenPassBenefitOperators[];
+  tokenPassBenefitOperators: TokenPassBenefitOperators[];
 }
 
-interface tokenPassBenefitOperators {
+export interface TokenPassBenefitOperators {
   id: string;
   createdAt: string;
   updatedAt: string;
   userId: string;
   tokenPassBenefitId: string;
+}
+
+export interface VerifyBenefitResponse {
+  id: string;
+  editionNumber: number;
+  tokenPassBenefit: PassBenefitDTO;
+  tokenPassBenefitId: string;
+  uses: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  user: {
+    name: string;
+    email: string;
+  };
 }

@@ -10,11 +10,14 @@ export const Card = ({
   config,
 }: {
   product: Product;
-  config: ProductsData;
+  config: {
+    styleData: ProductsData['styleData'];
+    contentData: ProductsData['contentData'];
+  };
 }) => {
-  const { styleData } = config;
+  const { styleData, contentData } = config;
   const linkToSend = () => {
-    if (config.contentData.cardType == CardTypesEnum.CONTENT) {
+    if (contentData.cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink) {
         return product.slug ?? '';
       }

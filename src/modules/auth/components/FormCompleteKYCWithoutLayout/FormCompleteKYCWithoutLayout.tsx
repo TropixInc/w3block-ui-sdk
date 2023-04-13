@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { DocumentDto } from '@w3block/sdk-id';
+import { AxiosError } from 'axios';
 import { object } from 'yup';
 
 import { useRouterConnect } from '../../../shared';
@@ -25,10 +26,15 @@ interface Props {
   userId: string;
 }
 
+interface ErrorProps {
+  message: string;
+}
+
 const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   const router = useRouterConnect();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isError, isLoading } = usePostUsersDocuments();
+  const { mutate, isSuccess, isError, isLoading, error } =
+    usePostUsersDocuments();
   const { companyId: tenantId } = useCompanyConfig();
   const [validForm, setValidForm] = useState<boolean>(false);
 
@@ -38,6 +44,9 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
     userId: userId ?? '',
     contextId: tenantInputs?.data[0].contextId ?? '',
   });
+
+  const errorPost = error as AxiosError;
+  const errorMessage = errorPost?.response?.data as ErrorProps;
 
   const { data: reasons } = useGetReasonsRequiredReview(
     tenantId,
@@ -92,38 +101,18 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
 
-  function getInputByInputId(inputId: string) {
-    const inputs = tenantInputs?.data.filter((input) => input.id === inputId);
-
-    return inputs?.map(({ label, id }) => {
-      return (
-        <p key={id} className="pw-text-[#FF0505]">
-          {label}
-        </p>
-      );
-    });
-  }
-
   return (
     <FormProvider {...dynamicMethods}>
       {isError && (
         <Alert variant="error" className="pw-flex pw-gap-x-3 pw-mb-5">
           <Alert.Icon />
-          <p>{translate('auth>poll>unexpectedError')}</p>
+          <p>{errorMessage?.message}</p>
         </Alert>
       )}
-      {reasons?.data?.items[0]?.logs?.at(-1)?.inputIds?.length ? (
+      {reasons?.data?.items[0]?.logs?.at(-1)?.reason ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
-          <p className="pw-mb-2 pw-text-[#FF0505]">
-            {translate('auth>formCompletKYCWithoutLayout>reviewData')}
-          </p>
-
-          {reasons?.data.items[0]?.logs.at(-1)?.inputIds.map((item: string) => {
-            return getInputByInputId(item);
-          })}
-
           <p className="pw-mt-2 pw-text-[#FF0505]">
-            {reasons?.data.items[0]?.logs.at(-1)?.reason}
+            {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
           </p>
         </div>
       ) : null}
@@ -149,7 +138,10 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-          disabled={!validForm || isLoading}
+          disabled={
+            Boolean(!dynamicMethods.formState.isValid && !validForm) ||
+            isLoading
+          }
         >
           {isLoading ? (
             <Spinner className="pw-w-4 pw-h-4" />

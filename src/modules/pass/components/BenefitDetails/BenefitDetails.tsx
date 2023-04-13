@@ -102,7 +102,7 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
                 formattedData.map((address) => (
                   <div
                     key={address?.name}
-                    className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
+                    className="pw-w-full pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
                   >
                     <div className="pw-flex pw-flex-col pw-gap-1">
                       <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">

@@ -15,11 +15,13 @@ interface Props {
   tokenPassId?: string;
   chainId?: string;
   contractAddress?: string;
+  enabled?: boolean;
 }
 const useGetPassBenefits = ({
   tokenPassId,
   chainId,
   contractAddress,
+  enabled,
 }: Props) => {
   const axios = useAxios(W3blockAPI.PASS);
   const { companyId: tenantId } = useCompanyConfig();
@@ -32,16 +34,16 @@ const useGetPassBenefits = ({
         {
           params: {
             tokenPassId: tokenPassId,
-            chainId: chainId && parseInt(chainId),
+            chainId: chainId && +chainId,
             contractAddress: contractAddress,
           },
         }
       ),
     {
       enabled:
-        !validator.isEmpty(String(contractAddress)) &&
-        !validator.isEmpty(String(tokenPassId)) &&
-        !validator.isEmpty(String(chainId)),
+        !validator.isEmpty(String(contractAddress ?? '')) &&
+        !validator.isEmpty(String(chainId ?? '')) &&
+        enabled,
     }
   );
 };

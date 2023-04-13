@@ -1,7 +1,7 @@
-import { ProductsData, SpecificContentCard } from '../interfaces';
+import { ProductsDataStyleData, SpecificContentCard } from '../interfaces';
 
 interface ContentCardProps {
-  config: ProductsData;
+  config: ProductsDataStyleData;
   product: SpecificContentCard;
 }
 
@@ -18,7 +18,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
     cardCategoryColor,
     cardValueColor,
     textOverImage,
-  } = config.styleData;
+  } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
   return (
     <>

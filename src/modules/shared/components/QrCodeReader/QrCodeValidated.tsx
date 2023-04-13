@@ -1,11 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { useLockBodyScroll } from 'react-use'; 
+import { useLockBodyScroll } from 'react-use';
 
 import { format, getDay } from 'date-fns';
 
-
-import useGetPassBenefits from '../../../pass/hooks/useGetPassBenefits';
-import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
+import { BenefitAddress, TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
 import { ReactComponent as CheckCircledIcon } from '../../assets/icons/checkCircledOutlined.svg';
 import useTranslation from '../../hooks/useTranslation';
 import { shortDays } from '../../utils/shortDays';
@@ -15,34 +13,33 @@ import { CloseButton } from '../CloseButton';
 interface iProps {
   hasOpen: boolean;
   onClose: () => void;
-  tokenPassId: string;
-  chainId: string;
-  contractAddress: string;
-  validateAgain: () => void;
+  validateAgain?: () => void;
+  name?: string;
+  type?: TokenPassBenefitType;
+  tokenPassBenefitAddresses?: BenefitAddress[];
+  userName?: string;
+  userEmail?: string;
 }
 
 export const QrCodeValidated = ({
   hasOpen,
   onClose,
-  chainId,
-  contractAddress,
-  tokenPassId,
   validateAgain,
+  name,
+  type,
+  tokenPassBenefitAddresses,
+  userEmail,
+  userName,
 }: iProps) => {
   const [translate] = useTranslation();
-  const { data: benefit } = useGetPassBenefits({
-    contractAddress,
-    chainId,
-    tokenPassId,
-  });
-
   useLockBodyScroll(hasOpen);
-
   const time = format(new Date(), "HH':'mm");
 
   const handleNext = () => {
     onClose();
-    validateAgain();
+    if (typeof validateAgain === 'function') {
+      validateAgain();
+    }
   }
 
   return hasOpen ? (
@@ -80,15 +77,14 @@ export const QrCodeValidated = ({
           <div className="pw-h-[119px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
           <div className="pw-flex pw-flex-col pw-justify-center">
             <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-              {benefit?.data?.items[0]?.name}
+              {name}
             </div>
-            {benefit?.data?.items[0]?.type == TokenPassBenefitType.PHYSICAL &&
-              benefit?.data?.items[0] &&
-              benefit?.data?.items[0]?.tokenPassBenefitAddresses ? (
+            {type == TokenPassBenefitType.PHYSICAL &&
+              tokenPassBenefitAddresses?.length ? (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                {benefit?.data?.items[0]?.tokenPassBenefitAddresses[0]?.street}
+                {tokenPassBenefitAddresses[0]?.street}
                 {', '}
-                {benefit?.data?.items[0]?.tokenPassBenefitAddresses[0]?.city}
+                {tokenPassBenefitAddresses[0]?.city}
               </div>
             ) : (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
@@ -96,6 +92,17 @@ export const QrCodeValidated = ({
               </div>
             )}
           </div>
+        </div>
+      </div>
+      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[16px] pw-px-[24px] pw-py-5 pw-border pw-rounded-2xl pw-border-[#EFEFEF]">
+        <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px]">
+          {translate('token>pass>user')}
+        </div>
+        <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+          Username: {userName}
+        </div>
+        <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+          E-mail: {userEmail}
         </div>
       </div>
       <div className='pw-col'>
@@ -107,15 +114,17 @@ export const QrCodeValidated = ({
         >
           {translate('token>pass>validatedToken>back')}
         </Button>
-        <Button
-          type="button"
-          width="full"
-          model="secondary"
-          className='pw-mt-5'
-          onClick={handleNext}
-        >
-          {translate('token>qrCode>validatedAgain')}
-        </Button>
+        {validateAgain &&
+          <Button
+            type="button"
+            width="full"
+            model="secondary"
+            className='pw-mt-5'
+            onClick={handleNext}
+          >
+            {translate('token>qrCode>validatedAgain')}
+          </Button>
+        }
       </div>
     </div>
   ) : (

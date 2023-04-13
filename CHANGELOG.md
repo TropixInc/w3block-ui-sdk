@@ -2,6 +2,77 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.208](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.207...v0.1.1-alpha.208) (2023-04-12)
+
+
+### Bug Fixes
+
+* **np-138:** many corrections on benefit use flow ([#176](https://github.com/TropixInc/w3block-ui-sdk/issues/176)) ([28e7126](https://github.com/TropixInc/w3block-ui-sdk/commit/28e7126680fa4b5b5637e8329eaa97e4436fbff3))
+
+### [0.1.1-alpha.207](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.206...v0.1.1-alpha.207) (2023-04-12)
+
+
+### Bug Fixes
+
+* **np-138:** code review and dto adjusts ([#175](https://github.com/TropixInc/w3block-ui-sdk/issues/175)) ([070bb96](https://github.com/TropixInc/w3block-ui-sdk/commit/070bb96ebdd45f10bf44d83f9b1729407553c049))
+
+### [0.1.1-alpha.206](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.205...v0.1.1-alpha.206) (2023-04-11)
+
+
+### Bug Fixes
+
+* **TK-1130:** add valitations in KYC ([2072a56](https://github.com/TropixInc/w3block-ui-sdk/commit/2072a56d2bcecea753ea2a4360dc1f18b84d9842))
+
+### [0.1.1-alpha.205](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.204...v0.1.1-alpha.205) (2023-04-10)
+
+
+### Features
+
+* **np-138:** changed validation flow ([#173](https://github.com/TropixInc/w3block-ui-sdk/issues/173)) ([639eb2d](https://github.com/TropixInc/w3block-ui-sdk/commit/639eb2d0b1628dff14e74769d73a31c323453033))
+
+### [0.1.1-alpha.204](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.203...v0.1.1-alpha.204) (2023-04-06)
+
+
+### Bug Fixes
+
+* **TK-1127:** fix redirect ([3fe751d](https://github.com/TropixInc/w3block-ui-sdk/commit/3fe751d7e0ba9c47e14576f2aa7a42f077fc863b))
+* **TK-1128:** fix loop in sign ([22ad133](https://github.com/TropixInc/w3block-ui-sdk/commit/22ad133da9568a0c58867151c341105797bb0fa3))
+
+### [0.1.1-alpha.203](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.202...v0.1.1-alpha.203) (2023-04-04)
+
+
+### Bug Fixes
+
+* **np-137:** fixed validation screen ([#170](https://github.com/TropixInc/w3block-ui-sdk/issues/170)) ([86599cc](https://github.com/TropixInc/w3block-ui-sdk/commit/86599cc311e6b9a7cc5ca7cd419bca7a0764e1a2))
+
+### [0.1.1-alpha.202](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.201...v0.1.1-alpha.202) (2023-03-31)
+
+
+### Features
+
+* add support for nested tabs on header ([f0f11f4](https://github.com/TropixInc/w3block-ui-sdk/commit/f0f11f4a31708e3eb0387bc22e70be07a6ec154c))
+
+
+### Bug Fixes
+
+* add types ([189e01e](https://github.com/TropixInc/w3block-ui-sdk/commit/189e01eae996ef700d0b1ae942df86ae36fdda71))
+* adjusted kyc inputs ([#169](https://github.com/TropixInc/w3block-ui-sdk/issues/169)) ([82b8ced](https://github.com/TropixInc/w3block-ui-sdk/commit/82b8cedf573fcb26554df94ae9bfa191b2560d40))
+* code review changes ([f054e18](https://github.com/TropixInc/w3block-ui-sdk/commit/f054e18927536d4456043671a1da60b678596c49))
+
+### [0.1.1-alpha.201](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.200...v0.1.1-alpha.201) (2023-03-30)
+
+
+### Features
+
+* add mobile style and content data ([9a81b76](https://github.com/TropixInc/w3block-ui-sdk/commit/9a81b7688ff02116c01c6e9489467bdc0a263b73))
+* hide module based on device type ([839022f](https://github.com/TropixInc/w3block-ui-sdk/commit/839022f37b27076351dd484a82cbf9ff4cae40b9))
+
+
+### Bug Fixes
+
+* code review changes ([1b72001](https://github.com/TropixInc/w3block-ui-sdk/commit/1b720014ba816ee2912ee0a32470e6f32bd6810e))
+* **np-134:** Adjusts on benefite-use page ([#168](https://github.com/TropixInc/w3block-ui-sdk/issues/168)) ([c48ba6c](https://github.com/TropixInc/w3block-ui-sdk/commit/c48ba6cd29de5f3625532153f7018334e7ce0cdd))
+
 ### [0.1.1-alpha.200](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.199...v0.1.1-alpha.200) (2023-03-28)
 
 

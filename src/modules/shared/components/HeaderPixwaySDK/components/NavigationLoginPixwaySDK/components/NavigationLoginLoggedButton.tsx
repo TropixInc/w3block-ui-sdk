@@ -91,7 +91,7 @@ export const useDefaultMenuTabs = () => {
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
-    userRoles?.includes('admin') || userRoles?.includes('superAdmin')
+    userRoles?.includes('admin') || userRoles?.includes('superAdmin') || userRoles?.includes('operator')
   );
 
   const items: NavigationMenuTabs[] = [

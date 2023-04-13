@@ -11,6 +11,7 @@ import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import useGetProductBySlug, {
   CurrencyResponse,
 } from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ProductPageData } from '../interfaces';
 
 interface ProductPageProps {
@@ -19,6 +20,42 @@ interface ProductPageProps {
 }
 
 export const ProductPage = ({ data, params }: ProductPageProps) => {
+  const { styleData, mobileStyleData } = data;
+
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+
+  const {
+    actionButton,
+    backBackgroundColor,
+    backTextColor,
+    backgroundColor,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    blockchainInfoBackgroundColor,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    blockchainInfoTextColor,
+    buttonColor,
+    buttonText,
+    buttonTextColor,
+    categoriesTagBackgroundColor,
+    categoriesTagTextColor,
+    categoriesTextColor,
+    descriptionTextColor,
+    margin,
+    nameTextColor,
+    padding,
+    priceTextColor,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    showBlockchainInfo,
+    showCategory,
+    showDescription,
+    showProductName,
+    showValue,
+    textColor,
+  } = mergedStyleData;
+
   const { back, pushConnect } = useRouterConnect();
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
@@ -55,13 +92,13 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
   return (
     <div
       style={{
-        margin: convertSpacingToCSS(data.styleData.margin),
-        padding: convertSpacingToCSS(data.styleData.padding),
+        margin: convertSpacingToCSS(margin),
+        padding: convertSpacingToCSS(padding),
       }}
     >
       <div
         style={{
-          backgroundColor: data.styleData.backBackgroundColor ?? 'white',
+          backgroundColor: backBackgroundColor ?? 'white',
         }}
       >
         <div
@@ -70,18 +107,12 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
         >
           <BackButton
             style={{
-              stroke:
-                data.styleData.backTextColor ?? data.styleData.textColor
-                  ? data.styleData.textColor
-                  : '#777E8F',
+              stroke: backTextColor ?? textColor ? textColor : '#777E8F',
             }}
           />
           <p
             style={{
-              color:
-                data.styleData.backTextColor ?? data.styleData.textColor
-                  ? data.styleData.textColor
-                  : '#777E8F',
+              color: backTextColor ?? textColor ? textColor : '#777E8F',
             }}
             className="pw-text-sm"
           >
@@ -91,7 +122,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
       </div>
       <div
         className="pw-min-h-[95vh]"
-        style={{ backgroundColor: data.styleData.backgroundColor ?? '#EFEFEF' }}
+        style={{ backgroundColor: backgroundColor ?? '#EFEFEF' }}
       >
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-pt-6">
           <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-8">
@@ -102,57 +133,60 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               />
             </div>
             <div className="pw-max-w-[400px] pw-w-full">
-              {data.styleData.showProductName && (
+              {showProductName && (
                 <>
                   <p
-                    style={{ color: data.styleData.nameTextColor ?? 'black' }}
+                    style={{ color: nameTextColor ?? 'black' }}
                     className="pw-text-[36px] pw-font-[600]"
                   >
                     {product?.name}
                   </p>
                 </>
               )}
-              {data.styleData.showCategory && (
+              {showCategory && (
                 <p
                   style={{
-                    color: data.styleData.categoriesTextColor ?? '#C63535',
+                    color: categoriesTextColor ?? '#C63535',
                   }}
                   className="pw-mt-4 pw-font-[700] pw-text-lg"
                 >
                   {product?.tags?.join('/')}
                 </p>
               )}
-              {data.styleData.showValue && (
+              {showValue && (
                 <>
-                  {product?.prices && product?.prices.length > 1 && (
-                    <div className="">
-                      <p className="pw-text-sm pw-text-black pw-font-[700] pw-mb-2">
-                        Pagar em:
-                      </p>
-                      <form className="pw-flex pw-gap-4" action="submit">
-                        {product?.prices.map((price) => (
-                          <div
-                            key={price.currencyId}
-                            className="pw-flex pw-gap-2"
-                          >
-                            <input
-                              onChange={() => setCurrencyId?.(price?.currency)}
-                              checked={price.currencyId === currencyId?.id}
-                              name="currency"
-                              value={price.currencyId}
-                              type="radio"
-                            />
-                            <p className="pw-text-xs pw-text-slate-600 pw-font-[600]">
-                              {price.currency.symbol}
-                            </p>
-                          </div>
-                        ))}
-                      </form>
-                    </div>
-                  )}
+                  {product?.prices != undefined &&
+                    product?.prices?.length > 1 && (
+                      <div className="">
+                        <p className="pw-text-sm pw-text-black pw-font-[700] pw-mb-2">
+                          Pagar em:
+                        </p>
+                        <form className="pw-flex pw-gap-4" action="submit">
+                          {product?.prices.map((price) => (
+                            <div
+                              key={price.currencyId}
+                              className="pw-flex pw-gap-2"
+                            >
+                              <input
+                                onChange={() =>
+                                  setCurrencyId?.(price?.currency)
+                                }
+                                checked={price.currencyId === currencyId?.id}
+                                name="currency"
+                                value={price.currencyId}
+                                type="radio"
+                              />
+                              <p className="pw-text-xs pw-text-slate-600 pw-font-[600]">
+                                {price.currency.symbol}
+                              </p>
+                            </div>
+                          ))}
+                        </form>
+                      </div>
+                    )}
 
                   <p
-                    style={{ color: data.styleData.priceTextColor ?? 'black' }}
+                    style={{ color: priceTextColor ?? 'black' }}
                     className="pw-text-2xl pw-mt-4 pw-font-[700]"
                   >
                     {product?.stockAmount == 0
@@ -171,7 +205,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   </p>
                 </>
               )}
-              {data.styleData.actionButton &&
+              {actionButton &&
                 product?.stockAmount &&
                 product?.stockAmount > 0 &&
                 !currencyId?.crypto && (
@@ -218,10 +252,10 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     </div>
                   </div>
                 )}
-              {data.styleData.showCategory && product?.tags?.length ? (
+              {showCategory && product?.tags?.length ? (
                 <>
                   <p
-                    style={{ color: data.styleData.textColor ?? 'black' }}
+                    style={{ color: textColor ?? 'black' }}
                     className="pw-mt-4 pw-text-sm"
                   >
                     Categoria/subcategoria:
@@ -232,10 +266,8 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                         key={cat.name}
                         style={{
                           backgroundColor:
-                            data.styleData.categoriesTagBackgroundColor ??
-                            'white',
-                          color:
-                            data.styleData.categoriesTagTextColor ?? 'black',
+                            categoriesTagBackgroundColor ?? 'white',
+                          color: categoriesTagTextColor ?? 'black',
                         }}
                         className="pw-py-2 pw-px-6 pw-text-sm pw-font-[600] pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
@@ -245,7 +277,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   </div>
                 </>
               ) : null}
-              {data.styleData.actionButton && (
+              {actionButton && (
                 <>
                   {!currencyId?.crypto && (
                     <button
@@ -259,18 +291,18 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                         backgroundColor: 'none',
                         borderColor:
                           product &&
-                          (product.stockAmount == 0 ||
+                          (product?.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0)
                             ? '#DCDCDC'
-                            : data.styleData.buttonColor
-                            ? data.styleData.buttonColor
+                            : buttonColor
+                            ? buttonColor
                             : '#0050FF',
                         color:
                           product &&
-                          (product.stockAmount == 0 ||
+                          (product?.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0)
                             ? '#777E8F'
-                            : data.styleData.buttonColor ?? '#0050FF',
+                            : buttonColor ?? '#0050FF',
                       }}
                       className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
                     >
@@ -300,29 +332,29 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                         (product.stockAmount == 0 ||
                           product?.canPurchaseAmount == 0)
                           ? '#DCDCDC'
-                          : data.styleData.buttonColor
-                          ? data.styleData.buttonColor
+                          : buttonColor
+                          ? buttonColor
                           : '#0050FF',
                       color:
                         product &&
                         (product.stockAmount == 0 ||
                           product?.canPurchaseAmount == 0)
                           ? '#777E8F'
-                          : data.styleData.buttonTextColor ?? 'white',
+                          : buttonTextColor ?? 'white',
                     }}
                     className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                   >
-                    {data.styleData.buttonText ?? 'Comprar agora'}
+                    {buttonText ?? 'Comprar agora'}
                   </button>
                 </>
               )}
             </div>
           </div>
-          {data.styleData.showDescription && (
+          {showDescription && (
             <div className="pw-mt-6 sm:pw-mt-0">
               <p
                 style={{
-                  color: data.styleData.descriptionTextColor ?? 'black',
+                  color: descriptionTextColor ?? 'black',
                 }}
                 className="pw-text-2xl pw-font-[600] pw-mt-3"
               >
@@ -331,7 +363,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               {product?.htmlContent && product?.htmlContent != '' ? (
                 <div
                   style={{
-                    color: data.styleData.descriptionTextColor ?? 'black',
+                    color: descriptionTextColor ?? 'black',
                   }}
                   className="pw-text-sm pw-pb-8 pw-mt-6"
                   dangerouslySetInnerHTML={{
@@ -341,7 +373,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               ) : (
                 <p
                   style={{
-                    color: data.styleData.descriptionTextColor ?? 'black',
+                    color: descriptionTextColor ?? 'black',
                   }}
                   className="pw-text-sm pw-pb-8 pw-mt-6"
                 >

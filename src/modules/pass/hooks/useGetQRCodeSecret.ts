@@ -34,7 +34,7 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
       enabled:
         validator.isUUID(benefitId) &&
         !validator.isEmpty(String(editionNumber)),
-      retry: 1,
+      retry: false,
     }
   );
 };

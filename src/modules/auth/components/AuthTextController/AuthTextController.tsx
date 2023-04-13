@@ -11,6 +11,7 @@ interface AuthTextControllerProps {
   label: string;
   renderTips?: AuthFormControllerRenderTipsFunction;
   disabled?: boolean;
+  autoComplete?: string;
 }
 
 export const AuthTextController = ({
@@ -21,6 +22,7 @@ export const AuthTextController = ({
   placeholder = '',
   renderTips,
   disabled,
+  autoComplete,
 }: AuthTextControllerProps) => {
   return (
     <AuthFormController
@@ -35,6 +37,7 @@ export const AuthTextController = ({
         className="pw-mb-[5.5px]"
         placeholder={placeholder}
         disabled={disabled}
+        autoComplete={autoComplete}
       />
     </AuthFormController>
   );

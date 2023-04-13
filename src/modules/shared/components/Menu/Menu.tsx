@@ -59,7 +59,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
-    userRoles.find((e: string) => e === 'admin' || e === 'superAdmin')
+    userRoles.find(
+      (e: string) => e === 'admin' || e === 'superAdmin' || e === 'operator'
+    )
   );
 
   useEffect(() => {

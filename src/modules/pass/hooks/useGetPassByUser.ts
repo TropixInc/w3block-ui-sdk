@@ -1,4 +1,3 @@
-import { ChainScan } from '../../shared/enums/ChainId';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -6,10 +5,10 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 
-interface PassByUser {
+export interface PassByUser {
   tokenName: string;
   contractAddress: string;
-  chainId: ChainScan;
+  chainId: string;
   collectionId: string;
   name: string;
   description: string;

@@ -11,6 +11,7 @@ import {
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { isImage, isVideo } from '../../shared/utils/validators';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 
 import 'swiper/css';
@@ -18,16 +19,21 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 export const Banner = ({ data }: { data: BannerData }) => {
+  const { styleData, mobileStyleData } = data;
+
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+
   const {
-    styleData: {
-      autoSlide,
-      banners,
-      bannerDisposition,
-      bannerRatio,
-      margin,
-      padding,
-    },
-  } = data;
+    autoSlide,
+    banners,
+    bannerDisposition,
+    bannerRatio,
+    margin,
+    padding,
+  } = mergedStyleData;
   const layoutClass =
     bannerDisposition === 'fullWidth' ? 'pw-w-full' : 'pw-container';
 

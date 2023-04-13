@@ -2,20 +2,26 @@ import { CSSProperties } from 'react';
 
 import './GridItemArea.css';
 import { useRouterConnect } from '../../shared';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { FitImage, GridItemAreaData } from '../interfaces';
 
 export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
+  const { styleData, mobileStyleData } = data;
+
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+
   const {
-    styleData: {
-      backgroundColor,
-      container,
-      gridColumns,
-      gridRows,
-      Items,
-      columnSizes,
-      rowSizes,
-    },
-  } = data;
+    backgroundColor,
+    container,
+    gridColumns,
+    gridRows,
+    Items,
+    columnSizes,
+    rowSizes,
+  } = mergedStyleData;
 
   const letters = 'abcdefghijklmnopqrst';
   const { pushConnect } = useRouterConnect();

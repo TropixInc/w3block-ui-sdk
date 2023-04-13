@@ -3,9 +3,10 @@ import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
-import isEmail from 'validator/lib/isEmail';
 
-import AuthFormController from '../../../../auth/components/AuthFormController/AuthFormController';
+import { FormItemContainer } from '../../Form/FormItemContainer';
+import { InputError } from '../../SmartInputsController';
+import InputStatus from '../InputStatus';
 
 interface InputEmailProps {
   label: string;
@@ -15,21 +16,16 @@ interface InputEmailProps {
 }
 
 const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
+  const error = fieldState?.error as unknown as InputError;
   const [inputValue, setInputValue] = useState<string | undefined>();
-  const [isValid, setIsValid] = useState(true);
+
   const handleChange = (value: string) => {
     if (value) {
       setInputValue(value);
       field.onChange({ inputId: name, value: value });
     } else {
       setInputValue('');
-    }
-  };
-
-  const validEmail = () => {
-    if (inputValue) {
-      setIsValid(isEmail(inputValue));
     }
   };
 
@@ -43,22 +39,31 @@ const InputEmail = ({ label, name, docValue, docStatus }: InputEmailProps) => {
 
   return (
     <div className="pw-mb-3">
-      <AuthFormController label={label} name={name}>
+      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        {label}
+      </p>
+      <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           name={name}
           readOnly={Boolean(
             docValue && docStatus !== UserDocumentStatus.RequiredReview
           )}
           onChange={(e) => handleChange(e.target.value)}
-          onBlur={validEmail}
           value={inputValue}
           type="email"
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-outline-1 pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent',
-            isValid ? 'pw-outline-brand-primary' : 'pw-outline-[#FF0505]'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
           )}
         />
-      </AuthFormController>
+      </FormItemContainer>
+      <p className="mt-5">
+        {field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={error?.value?.message}
+          />
+        )}
+      </p>
     </div>
   );
 };

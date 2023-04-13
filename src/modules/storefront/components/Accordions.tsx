@@ -2,26 +2,39 @@ import { CSSProperties } from 'react';
 
 import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/chevronDownOutlined.svg';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AccordionsData, SpecificContentAccordion } from '../interfaces';
 import './Accordions.css';
 
 export const Accordions = ({ data }: { data: AccordionsData }) => {
-  const { styleData, contentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+
+  const mergedStyleData = useMobilePreferenceDataWhenMobile(
+    styleData,
+    mobileStyleData
+  );
+  const mergedContentData = useMobilePreferenceDataWhenMobile(
+    contentData,
+    mobileContentData
+  );
+
+  const { margin, padding } = mergedStyleData;
+  const { accordionsItems } = mergedContentData;
 
   return (
     <div
       className="pw-container pw-mx-auto"
       style={{
-        margin: convertSpacingToCSS(styleData.margin),
-        padding: convertSpacingToCSS(styleData.padding),
+        margin: convertSpacingToCSS(margin),
+        padding: convertSpacingToCSS(padding),
       }}
     >
       <div className="pw-flex pw-flex-col pw-gap-8 pw-px-2 sm:pw-px-0">
-        {contentData?.accordionsItems?.map((itemData) => (
+        {accordionsItems?.map((accordion) => (
           <Accordion
-            key={itemData.title}
-            styleData={styleData}
-            contentData={itemData}
+            key={accordion.title}
+            styleData={mergedStyleData}
+            contentData={accordion}
           />
         ))}
       </div>
