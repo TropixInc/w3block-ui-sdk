@@ -207,5 +207,6 @@
   "token>pass>cancel": "Cancel",
   "token>pass>selfError": "Error validating the benefit, please try again.",
   "token>pass>scanQRCode": "Scan QR Code",
-  "token>pass>benefit": "Benefit:"
+  "token>pass>benefit": "Benefit:",
+  "auth>getValidationsTypesForSignup>insertFile": "Insert a file"
 }

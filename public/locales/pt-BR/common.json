@@ -364,6 +364,7 @@
   "auth>getValidationsTypesForSignup>insertValidCPF": "Insira um CPF válido",
   "auth>getValidationsTypesForSignup>insertYourPhone": "Insira seu telefone",
   "auth>getValidationsTypesForSignup>insertValidPhone": "Insira um telefone válido",
+  "auth>getValidationsTypesForSignup>insertFile": "Insira um arquivo",
   "auth>getValidationsTypesForSignup>insertUrl": "Insira uma url",
   "auth>getValidationsTypesForSignup>insertText": "Insira um texto",
   "auth>formCompletKYCWithoutLayout>reviewData": "Encontramos alguns problemas validando seus dados. Por favor, revise os campos a seguir:",

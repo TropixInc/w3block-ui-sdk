@@ -27,7 +27,7 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
       field.onChange({ inputId: name, value: value });
     } else {
       setUrl('');
-      field.onChange({ inputId: name, value: '' });
+      field.onChange({ inputId: undefined, value: undefined });
     }
   };
 

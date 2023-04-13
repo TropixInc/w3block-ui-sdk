@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -36,7 +36,6 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
   const { companyId: tenantId } = useCompanyConfig();
-  const [validForm, setValidForm] = useState<boolean>(false);
 
   const { data: tenantInputs } = useGetTenantInputsBySlug();
 
@@ -89,14 +88,6 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
     }
   }, [isSuccess, router]);
 
-  useEffect(() => {
-    const values = dynamicMethods.getValues();
-    const documents = Object.values(values);
-    const isVallidForm = documents.every((obj) => obj !== undefined);
-    setValidForm(isVallidForm);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dynamicMethods.watch()]);
-
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
@@ -138,10 +129,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-          disabled={
-            Boolean(!dynamicMethods.formState.isValid && !validForm) ||
-            isLoading
-          }
+          disabled={!dynamicMethods.formState.isValid || isLoading}
         >
           {isLoading ? (
             <Spinner className="pw-w-4 pw-h-4" />

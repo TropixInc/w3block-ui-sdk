@@ -25,6 +25,10 @@ const InputText = ({ label, name, docValue, docStatus }: InputText) => {
       field.onChange({ inputId: name, value: value });
     } else {
       setInputValue('');
+      field.onChange({
+        inputId: undefined,
+        value: undefined,
+      });
     }
   };
 
