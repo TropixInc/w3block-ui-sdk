@@ -6,7 +6,7 @@ import { CloseButton } from '../../../shared/components/CloseButton'
 import { Spinner } from '../../../shared/components/Spinner';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';
-import { TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
+import { BenefitAddress, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
 
 interface iProps {
   hasOpen: boolean;
@@ -15,6 +15,7 @@ interface iProps {
   data: any;
   isLoading: boolean;
   isLoadingInfo: boolean;
+  tokenPassBenefitAddresses?: BenefitAddress[];
 }
 
 export const VerifyBenefit = ({
@@ -24,6 +25,7 @@ export const VerifyBenefit = ({
   isLoading,
   isLoadingInfo,
   data,
+  tokenPassBenefitAddresses,
 }: iProps) => {
   useLockBodyScroll(hasOpen);
   const [translate] = useTranslation();
@@ -39,35 +41,46 @@ export const VerifyBenefit = ({
             <CloseButton onClose={onClose} />
             <div className="pw-w-full pw-rounded-[16px] pw-p-[24px] pw-mt-8 pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2">
               <div className="pw-px-[16px] pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                {data?.data?.tokenPass?.name}
+                {data?.tokenPassBenefit?.tokenPass?.name}
                 <p className="pw-text-[18px] pw-leading-[23px] pw-font-bold">
                   {translate('token>pass>benefit')}{' '}
-                  {data?.data?.name}
+                  {data?.tokenPassBenefit?.name}
                 </p>
               </div>
-              {data?.data?.description &&
+              {data?.tokenPassBenefit?.description &&
                 <>
                   <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                     {translate('token>pass>description')}
                   </div>
                   <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                    {data?.data?.description}
+                    {data?.tokenPassBenefit?.description}
                   </div>
                 </>
               }
-              {data?.data?.rules &&
+              {data?.tokenPassBenefit?.rules &&
                 <>
                   <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                     {translate('token>pass>rules')}
                   </div>
                   <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                    {data?.data?.rules}
+                    {data?.tokenPassBenefit?.rules}
                   </div>
                 </>
               }
-              {data?.data?.type == TokenPassBenefitType.PHYSICAL ? (
-                data &&
-                data?.data?.tokenPassBenefitAddresses.map((address: any) => (
+              <>
+                <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
+                  {translate('token>pass>user')}
+                </div>
+                <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+                  Username: {data?.user?.name}
+                </div>
+                <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+                  E-mail: {data?.user?.email}
+                </div>
+              </>
+              {data?.tokenPassBenefit?.type == TokenPassBenefitType.PHYSICAL ? (
+                tokenPassBenefitAddresses?.length &&
+                tokenPassBenefitAddresses.map((address: any) => (
                   <>
                     <div className="pw-flex pw-flex-col pw-gap-1 pw-px-[16px] pw-mt-[20px]">
                       <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
@@ -97,14 +110,14 @@ export const VerifyBenefit = ({
               <Button
                 onClick={useBenefit}
               >
-                Usar o Benefício
+                {translate('token>pass>selfUse')}
               </Button>
               <Button
                 className='pw-mt-5'
                 variant='secondary'
                 onClick={onClose}
               >
-                Cancelar
+                {translate('token>pass>cancel')}
               </Button>
             </div>
           </>

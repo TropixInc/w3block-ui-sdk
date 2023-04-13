@@ -16,6 +16,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';
 import GenericTable, {
   ColumnType,
@@ -49,7 +50,7 @@ export const PassesDetail = () => {
   const tokenPassId = String(router.query.tokenPassId) || '';
   const chainId = String(router.query.chainId) || '';
   const contractAddress = String(router.query.contractAddress) || ''
-
+  const [translate] = useTranslation();
   const [showScan, setOpenScan] = useBoolean(false);
   const [showSuccess, setShowSuccess] = useBoolean(false);
   const [showError, setShowError] = useBoolean(false);
@@ -157,19 +158,19 @@ export const PassesDetail = () => {
     const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(';');
     setOpenScan(false);
 
-    if (editionNumber && userId && secret && benefitIdQR && benefitId !== benefitIdQR) {
-      setError('');
-      setErrorType(TypeError.invalid)
-      setShowError(true);
-    } else if (editionNumber && userId && secret && benefitIdQR && benefitId === benefitIdQR) {
-      setQrCodeData(qrCodeData);
-      setShowVerify(true);
-    } else {
+    if (!editionNumber || !userId || !secret || !benefitIdQR) {
       setError(
-        'QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar.'
+        translate('token>pass>invalidFormat')
       );
       setErrorType(TypeError.read);
       setShowError(true);
+    } else if (benefitId !== benefitIdQR) {
+      setError('');
+      setErrorType(TypeError.invalid)
+      setShowError(true);
+    } else if (benefitId === benefitIdQR) {
+      setQrCodeData(qrCodeData);
+      setShowVerify(true);
     }
   };
 
@@ -263,6 +264,8 @@ export const PassesDetail = () => {
             name={filteredBenefit?.name}
             type={filteredBenefit?.type}
             tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
+            userEmail={verifyBenefit?.data?.user?.email}
+            userName={verifyBenefit?.data?.user?.name}
           />
           <QrCodeError
             hasOpen={showError}
@@ -277,7 +280,8 @@ export const PassesDetail = () => {
             isLoadingInfo={verifyLoading}
             onClose={() => setShowVerify(false)}
             useBenefit={() => validateBenefitUse(qrCodeData)}
-            data={verifyBenefit}
+            data={verifyBenefit?.data}
+            tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
           />
         </>
         : null}

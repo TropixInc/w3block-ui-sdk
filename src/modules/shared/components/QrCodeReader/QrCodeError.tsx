@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { useLockBodyScroll } from 'react-use'; 
+import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
+import validator from 'validator';
 
 import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
 import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
@@ -19,7 +20,7 @@ interface iProps {
   hasOpen: boolean;
   onClose: () => void;
   type: TypeError;
-  validateAgain: ()=> void;
+  validateAgain: () => void;
   error?: string;
 }
 
@@ -34,16 +35,31 @@ export const QrCodeError = ({ hasOpen, onClose, validateAgain, type, error = '' 
     validateAgain();
   }
 
+  const getMessageByTypeError = (type: TypeError) => {
+    switch (type) {
+      case TypeError.read:
+        return translate('token>pass>notPossibleReadQrCode');
+      case TypeError.expired:
+        return translate('token>pass>outsideAllowedTime');
+      case TypeError.use:
+        return translate('token>pass>usedAllTokens');
+      case TypeError.invalid:
+        return translate('token>pass>invalidBenefitQrCode');
+      default:
+        return '';
+    }
+  };
+
   return hasOpen ? (
     <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
       <button
-          onClick={onClose}
-          className={classNames(
-            'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center'
-          )}
-        >
-          <XIcon className="pw-pw-fill-[#5682C3]" />
-        </button>
+        onClick={onClose}
+        className={classNames(
+          'pw-bg-white pw-rounded-full pw-shadow-[0px_0px_5px_rgba(0,0,0,0.25)] pw-w-8 pw-h-8 pw-absolute pw-right-4 pw-top-4 pw-flex pw-items-center pw-justify-center'
+        )}
+      >
+        <XIcon className="pw-pw-fill-[#5682C3]" />
+      </button>
 
       <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
         <ErrorIcon className="pw-w-[60px] pw-h-[60px]" />
@@ -53,21 +69,13 @@ export const QrCodeError = ({ hasOpen, onClose, validateAgain, type, error = '' 
       </div>
 
       <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
-        {type === TypeError.read
-          ? translate('token>pass>notPossibleReadQrCode')
-          : type === TypeError.expired
-            ? translate('token>pass>outsideAllowedTime')
-            : type === TypeError.use
-              ? translate('token>pass>usedAllTokens')
-              : type === TypeError.invalid 
-                ? translate('token>pass>invalidBenefitQrCode')
-                : ''}
+        {getMessageByTypeError(type)}
       </div>
-      {error !== '' && 
+      {!validator.isEmpty(error) &&
         <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
           {error}
         </div>}
-      
+
 
       <div className='pw-col'>
         <Button

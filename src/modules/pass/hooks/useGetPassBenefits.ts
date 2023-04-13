@@ -41,9 +41,8 @@ const useGetPassBenefits = ({
       ),
     {
       enabled:
-        !validator.isEmpty(String(contractAddress)) &&
-        !validator.isEmpty(String(tokenPassId)) &&
-        !validator.isEmpty(String(chainId)) &&
+        !validator.isEmpty(String(contractAddress ?? '')) &&
+        !validator.isEmpty(String(chainId ?? '')) &&
         enabled,
     }
   );

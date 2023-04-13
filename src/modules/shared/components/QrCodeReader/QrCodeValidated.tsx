@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { useLockBodyScroll } from 'react-use'; 
+import { useLockBodyScroll } from 'react-use';
 
 import { format, getDay } from 'date-fns';
 
@@ -13,10 +13,12 @@ import { CloseButton } from '../CloseButton';
 interface iProps {
   hasOpen: boolean;
   onClose: () => void;
-  validateAgain: () => void;
+  validateAgain?: () => void;
   name?: string;
   type?: TokenPassBenefitType;
   tokenPassBenefitAddresses?: BenefitAddress[];
+  userName?: string;
+  userEmail?: string;
 }
 
 export const QrCodeValidated = ({
@@ -26,6 +28,8 @@ export const QrCodeValidated = ({
   name,
   type,
   tokenPassBenefitAddresses,
+  userEmail,
+  userName,
 }: iProps) => {
   const [translate] = useTranslation();
   useLockBodyScroll(hasOpen);
@@ -33,7 +37,9 @@ export const QrCodeValidated = ({
 
   const handleNext = () => {
     onClose();
-    validateAgain();
+    if (typeof validateAgain === 'function') {
+      validateAgain();
+    }
   }
 
   return hasOpen ? (
@@ -74,7 +80,7 @@ export const QrCodeValidated = ({
               {name}
             </div>
             {type == TokenPassBenefitType.PHYSICAL &&
-              tokenPassBenefitAddresses ? (
+              tokenPassBenefitAddresses?.length ? (
               <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
                 {tokenPassBenefitAddresses[0]?.street}
                 {', '}
@@ -88,6 +94,17 @@ export const QrCodeValidated = ({
           </div>
         </div>
       </div>
+      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[16px] pw-px-[24px] pw-py-5 pw-border pw-rounded-2xl pw-border-[#EFEFEF]">
+        <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px]">
+          {translate('token>pass>user')}
+        </div>
+        <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+          Username: {userName}
+        </div>
+        <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+          E-mail: {userEmail}
+        </div>
+      </div>
       <div className='pw-col'>
         <Button
           type="button"
@@ -97,15 +114,17 @@ export const QrCodeValidated = ({
         >
           {translate('token>pass>validatedToken>back')}
         </Button>
-        <Button
-          type="button"
-          width="full"
-          model="secondary"
-          className='pw-mt-5'
-          onClick={handleNext}
-        >
-          {translate('token>qrCode>validatedAgain')}
-        </Button>
+        {validateAgain &&
+          <Button
+            type="button"
+            width="full"
+            model="secondary"
+            className='pw-mt-5'
+            onClick={handleNext}
+          >
+            {translate('token>qrCode>validatedAgain')}
+          </Button>
+        }
       </div>
     </div>
   ) : (
