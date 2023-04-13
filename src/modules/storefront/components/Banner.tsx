@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 
-import { Navigation, Pagination } from 'swiper';
+import { Navigation, Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
@@ -33,9 +33,22 @@ export const Banner = ({ data }: { data: BannerData }) => {
     bannerRatio,
     margin,
     padding,
+    height,
+    heightUnity,
   } = mergedStyleData;
   const layoutClass =
     bannerDisposition === 'fullWidth' ? 'pw-w-full' : 'pw-container';
+
+  const bannerHeight = () => {
+    if (height && !heightUnity) {
+      return height + 'px';
+    }
+    if (height && heightUnity) {
+      return height + heightUnity;
+    } else {
+      return '60vh';
+    }
+  };
 
   return (
     <TranslatableComponent>
@@ -43,18 +56,28 @@ export const Banner = ({ data }: { data: BannerData }) => {
         className={`${layoutClass} pw-mx-auto`}
         style={{
           margin: convertSpacingToCSS(margin),
+          height: bannerHeight(),
         }}
       >
         <Swiper
           navigation
           pagination
-          autoplay={autoSlide ? { delay: 2500 } : false}
-          modules={[Navigation, Pagination]}
+          autoplay={
+            autoSlide
+              ? {
+                  delay: 3500,
+                  pauseOnMouseEnter: true,
+                  disableOnInteraction: true,
+                }
+              : false
+          }
+          modules={[Navigation, Pagination, Autoplay]}
           style={
             {
               '--swiper-pagination-color': '#F5F9FF',
               '--swiper-navigation-color': '#F5F9FF',
               '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
+              height: '100%',
             } as CSSProperties
           }
         >
@@ -128,7 +151,7 @@ const Slide = ({
         background: bg,
         padding: convertSpacingToCSS(padding),
       }}
-      className={`${ratioClassName} !pw-bg-cover  pw-flex ${rowAlignmentClass} pw-items-center`}
+      className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full  pw-flex ${rowAlignmentClass} pw-items-center`}
     >
       {isVideo(bgUrl?.assetUrl ?? '') && (
         <ImageSDK
