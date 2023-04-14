@@ -61,8 +61,11 @@ export const MetamaskProviderUiSDK = ({
   const [chainId, setChainId] = useState<number>();
   const [accounts, setAccounts] = useState<string>();
   const eth =
-    globalThis?.window && (globalThis?.window as any).ethereum
-      ? (globalThis.window as any).ethereum
+    globalThis.window != undefined &&
+    globalThis?.window &&
+    (globalThis?.window as any)?.ethereum != undefined &&
+    (globalThis?.window as any)?.ethereum
+      ? (globalThis.window as any)?.ethereum
       : undefined;
 
   const isConnected = useMemo(() => {
@@ -89,7 +92,7 @@ export const MetamaskProviderUiSDK = ({
       setProvider(provider);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window]);
+  }, [eth]);
 
   const handleAccountChange = (data: Array<string>) => {
     if (data.length) {
