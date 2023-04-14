@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocalStorage, useTimeoutFn } from 'react-use';
+import { useInterval, useLocalStorage } from 'react-use';
 
 import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
 import { ModalBase } from '../../../shared/components/ModalBase';
@@ -155,7 +155,7 @@ const _CheckoutInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds, currencyIdState, token]);
 
-  useTimeoutFn(() => {
+  useInterval(() => {
     getOrderPreviewFn();
   }, 30000);
 
