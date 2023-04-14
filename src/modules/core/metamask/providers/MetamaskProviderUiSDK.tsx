@@ -61,7 +61,7 @@ export const MetamaskProviderUiSDK = ({
   const [chainId, setChainId] = useState<number>();
   const [accounts, setAccounts] = useState<string>();
   const eth = useMemo(() => {
-    if (window) {
+    if (typeof window !== 'undefined') {
       return (window as any).ethereum;
     } else {
       return undefined;
@@ -88,9 +88,7 @@ export const MetamaskProviderUiSDK = ({
 
   useEffect(() => {
     if (eth) {
-      const provider = new ethers.providers.Web3Provider(
-        (window as any).ethereum
-      );
+      const provider = new ethers.providers.Web3Provider(eth);
       setProvider(provider);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,7 +159,7 @@ export const MetamaskProviderUiSDK = ({
   };
 
   useEffect(() => {
-    if (hasMetamask && isConnected) {
+    if (hasMetamask && isConnected && eth) {
       eth.on('accountsChanged', handleAccountChange);
       eth.on('chainChanged', handleChainChanged);
       eth
@@ -175,8 +173,10 @@ export const MetamaskProviderUiSDK = ({
     }
 
     return () => {
-      eth.removeListener('accountsChanged', handleAccountChange);
-      eth.removeListener('chainChanged', handleChainChanged);
+      if (eth) {
+        eth.removeListener('accountsChanged', handleAccountChange);
+        eth.removeListener('chainChanged', handleChainChanged);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window]);
