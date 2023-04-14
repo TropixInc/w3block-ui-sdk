@@ -61,12 +61,12 @@ export const MetamaskProviderUiSDK = ({
   const [chainId, setChainId] = useState<number>();
   const [accounts, setAccounts] = useState<string>();
   const eth = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      return (window as any).ethereum;
+    if (typeof globalThis.window !== 'undefined') {
+      return (globalThis.window as any).ethereum;
     } else {
       return undefined;
     }
-  }, [window]);
+  }, [globalThis.window]);
 
   const isConnected = useMemo(() => {
     if (eth && eth?.isConnected()) {
@@ -75,7 +75,7 @@ export const MetamaskProviderUiSDK = ({
       return false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window]);
+  }, [globalThis.window]);
 
   const hasMetamask = useMemo(() => {
     if (eth) {
@@ -84,7 +84,7 @@ export const MetamaskProviderUiSDK = ({
       return false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window]);
+  }, [globalThis.window]);
 
   useEffect(() => {
     if (eth) {
@@ -92,7 +92,7 @@ export const MetamaskProviderUiSDK = ({
       setProvider(provider);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window]);
+  }, [globalThis.window]);
 
   const handleAccountChange = (data: Array<string>) => {
     if (data.length) {
@@ -179,7 +179,7 @@ export const MetamaskProviderUiSDK = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window]);
+  }, [globalThis.window]);
 
   const connectMetamask = (): Promise<ERROR_STATUS | null> => {
     if (hasMetamask && providerState) {
