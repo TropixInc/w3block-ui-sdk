@@ -60,10 +60,16 @@ export const MetamaskProviderUiSDK = ({
     useState<ethers.providers.Web3Provider>();
   const [chainId, setChainId] = useState<number>();
   const [accounts, setAccounts] = useState<string>();
-  const eth = typeof window != 'undefined' ? (window as any).ethereum : null;
+  const eth = useMemo(() => {
+    if (window) {
+      return (window as any).ethereum;
+    } else {
+      return undefined;
+    }
+  }, [window]);
 
   const isConnected = useMemo(() => {
-    if ((window as any)?.ethereum && (window as any)?.ethereum.isConnected()) {
+    if (eth && eth?.isConnected()) {
       return true;
     } else {
       return false;
@@ -72,7 +78,7 @@ export const MetamaskProviderUiSDK = ({
   }, [window]);
 
   const hasMetamask = useMemo(() => {
-    if ((window as any)?.ethereum) {
+    if (eth) {
       return true;
     } else {
       return false;
@@ -81,7 +87,7 @@ export const MetamaskProviderUiSDK = ({
   }, [window]);
 
   useEffect(() => {
-    if ((window as any)?.ethereum != null) {
+    if (eth) {
       const provider = new ethers.providers.Web3Provider(
         (window as any).ethereum
       );
