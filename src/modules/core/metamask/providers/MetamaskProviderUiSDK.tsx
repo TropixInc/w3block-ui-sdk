@@ -61,12 +61,7 @@ export const MetamaskProviderUiSDK = ({
   const [chainId, setChainId] = useState<number>();
   const [accounts, setAccounts] = useState<string>();
   const eth =
-    globalThis.window != undefined &&
-    globalThis?.window &&
-    (globalThis?.window as any)?.ethereum != undefined &&
-    (globalThis?.window as any)?.ethereum
-      ? (globalThis.window as any)?.ethereum
-      : undefined;
+    window && (window as any).ethereum ? (window as any).ethereum : null;
 
   const isConnected = useMemo(() => {
     if (eth && eth?.isConnected()) {
