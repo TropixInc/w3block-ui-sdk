@@ -131,7 +131,7 @@ export const ConfirmCryptoBuy = ({
           },
         },
         {
-          onSuccess(data) {
+          onSuccess(data: any) {
             setOrderResponse(data as unknown as createOrderResponse);
             if (wallet.type == 'vault') {
               router.pushConnect(
