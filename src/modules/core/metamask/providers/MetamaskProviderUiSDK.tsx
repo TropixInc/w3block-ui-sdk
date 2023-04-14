@@ -88,12 +88,12 @@ export const MetamaskProviderUiSDK = ({
     if (eth) {
       const provider = new ethers.providers.Web3Provider(eth);
       setProvider(provider);
-      setAccounts(eth.selectedAddress);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eth]);
 
   const handleAccountChange = (data: Array<string>) => {
+    console.log('handleAccountChange', data);
     if (data.length) {
       setAccounts(data[0]);
     }
@@ -158,6 +158,7 @@ export const MetamaskProviderUiSDK = ({
   };
 
   useEffect(() => {
+    console.log(hasMetamask, isConnected, eth);
     if (hasMetamask && isConnected && eth) {
       eth.on('accountsChanged', handleAccountChange);
       eth.on('chainChanged', handleChainChanged);
@@ -178,7 +179,7 @@ export const MetamaskProviderUiSDK = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eth]);
+  }, [eth, eth.isConnected()]);
 
   const connectMetamask = (): Promise<ERROR_STATUS | null> => {
     if (hasMetamask && providerState) {

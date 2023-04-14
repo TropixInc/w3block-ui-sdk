@@ -171,12 +171,10 @@ export const ConfirmCryptoBuy = ({
 
   console.log(accounts, chainId);
 
-  const sameAccount =
-    hasWallet &&
-    isConnected &&
-    globalThis.window &&
-    (globalThis.window as any).ethereum &&
-    (globalThis.window as any).ethereum.selectedAddress == wallet?.address;
+  const sameAccount = useMemo(
+    () => hasWallet && isConnected && accounts == wallet?.address,
+    [hasWallet, isConnected, accounts, wallet?.address]
+  );
   const sameChainId = hasWallet && isConnected && productChainId == chainId;
   return (
     <div className="pw-flex pw-justify-center pw-flex-col pw-items-center">
