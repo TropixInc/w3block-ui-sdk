@@ -88,6 +88,7 @@ export const MetamaskProviderUiSDK = ({
     if (eth) {
       const provider = new ethers.providers.Web3Provider(eth);
       setProvider(provider);
+      setAccounts(eth.selectedAddress);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eth]);
