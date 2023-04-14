@@ -46,7 +46,7 @@ export const ConfirmCryptoBuy = ({
   const [errMessage, setErrMessage] = useState<any>();
   const [orderResponse, setOrderResponse] = useState<createOrderResponse>();
   const { signinRequest, emitTransactionCloncluded } = useSocket();
-  const { sendSignedRequest, isConnected, accounts, chainId } = useMetamask();
+  const { sendSignedRequest, accounts, chainId } = useMetamask();
   const router = useRouterConnect();
   const { companyId, name } = useCompanyConfig();
   const { createOrder } = useCheckout();
@@ -191,13 +191,10 @@ export const ConfirmCryptoBuy = ({
   };
 
   const sameAccount = useMemo(
-    () =>
-      hasWallet &&
-      isConnected &&
-      accounts?.toLowerCase() == wallet?.address.toLowerCase(),
-    [hasWallet, isConnected, accounts, wallet?.address]
+    () => hasWallet && accounts?.toLowerCase() == wallet?.address.toLowerCase(),
+    [hasWallet, accounts, wallet?.address]
   );
-  const sameChainId = hasWallet && isConnected && productChainId == chainId;
+  const sameChainId = hasWallet && productChainId == chainId;
   return (
     <div className="pw-flex pw-justify-center pw-flex-col pw-items-center">
       <p className="pw-text-[24px] pw-text-center pw-font-bold pw-text-black">
