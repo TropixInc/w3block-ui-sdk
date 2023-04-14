@@ -159,7 +159,7 @@ export const MetamaskProviderUiSDK = ({
 
   useEffect(() => {
     console.log(hasMetamask, isConnected, eth);
-    if (hasMetamask && isConnected && eth) {
+    if (hasMetamask && isConnected) {
       eth.on('accountsChanged', handleAccountChange);
       eth.on('chainChanged', handleChainChanged);
       eth
@@ -179,7 +179,7 @@ export const MetamaskProviderUiSDK = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eth, eth.isConnected()]);
+  }, [eth, isConnected, hasMetamask]);
 
   const connectMetamask = (): Promise<ERROR_STATUS | null> => {
     if (hasMetamask && providerState) {
