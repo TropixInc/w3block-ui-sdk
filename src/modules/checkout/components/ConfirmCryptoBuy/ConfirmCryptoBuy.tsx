@@ -108,11 +108,23 @@ export const ConfirmCryptoBuy = ({
   };
 
   const buyWithVault = () => {
-    console.log((window as any).ethereum.selectedAddress);
-    if ((window as any).ethereum.selectedAddress != wallet?.address) {
+    if (
+      (window as any).ethereum.selectedAddress.toLowerCase() !=
+      wallet?.address.toLowerCase()
+    ) {
       setErr('Conta selecionada não é a mesma da carteira');
       setErrMessage(
         'Para prosseguir com a compra, selecione a conta da carteira na MetaMask após clicar no botão de comprar. '
+      );
+      return;
+    }
+
+    if (productChainId && chainId && productChainId != chainId) {
+      setErr(
+        'A sua carteira MetaMask não está utilizando a rede do produto à venda.'
+      );
+      setErrMessage(
+        'Por favor, altere a sua rede no MetaMask para a Polygon e tente novamente.'
       );
       return;
     }
@@ -178,10 +190,11 @@ export const ConfirmCryptoBuy = ({
     }
   };
 
-  console.log(accounts, chainId);
-
   const sameAccount = useMemo(
-    () => hasWallet && isConnected && accounts == wallet?.address,
+    () =>
+      hasWallet &&
+      isConnected &&
+      accounts?.toLowerCase() == wallet?.address.toLowerCase(),
     [hasWallet, isConnected, accounts, wallet?.address]
   );
   const sameChainId = hasWallet && isConnected && productChainId == chainId;

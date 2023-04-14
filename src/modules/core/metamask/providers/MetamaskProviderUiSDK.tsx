@@ -158,8 +158,7 @@ export const MetamaskProviderUiSDK = ({
   };
 
   useEffect(() => {
-    console.log(hasMetamask, isConnected, eth);
-    if (hasMetamask && isConnected) {
+    if (hasMetamask) {
       eth.on('accountsChanged', handleAccountChange);
       eth.on('chainChanged', handleChainChanged);
       eth
