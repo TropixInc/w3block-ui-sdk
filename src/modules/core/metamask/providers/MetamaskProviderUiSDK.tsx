@@ -66,7 +66,7 @@ export const MetamaskProviderUiSDK = ({
     } else {
       return undefined;
     }
-  }, [window]);
+  }, []);
 
   const isConnected = useMemo(() => {
     if (eth && eth?.isConnected()) {
