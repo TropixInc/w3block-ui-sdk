@@ -108,6 +108,15 @@ export const ConfirmCryptoBuy = ({
   };
 
   const buyWithVault = () => {
+    console.log((window as any).ethereum.selectedAddress);
+    if ((window as any).ethereum.selectedAddress != wallet?.address) {
+      setErr('Conta selecionada não é a mesma da carteira');
+      setErrMessage(
+        'Para prosseguir com a compra, selecione a conta da carteira na MetaMask após clicar no botão de comprar. '
+      );
+      return;
+    }
+
     if (orderInfo && wallet?.balance && !canBuy) {
       setStatus(BuyStatus.VALIDATING);
       setErr(undefined);
@@ -272,9 +281,9 @@ export const ConfirmCryptoBuy = ({
             ></ErrorMessage>
           )}
           <WeblockButton
-            disabled={
-              wallet?.type == 'metamask' && (!sameAccount || !sameChainId)
-            }
+            // disabled={
+            //   wallet?.type == 'metamask' && (!sameAccount || !sameChainId)
+            // }
             onClick={() => buyWithVault()}
             tailwindBgColor={`${
               wallet?.type == 'metamask' && (!sameAccount || !sameChainId)
