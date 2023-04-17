@@ -7,6 +7,8 @@ import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import useGetProductBySlug, {
   CurrencyResponse,
@@ -47,7 +49,6 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
     nameTextColor,
     padding,
     priceTextColor,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     showBlockchainInfo,
     showCategory,
     showDescription,
@@ -56,6 +57,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
     textColor,
   } = mergedStyleData;
 
+  const [translate] = useTranslation();
   const { back, pushConnect } = useRouterConnect();
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
@@ -71,6 +73,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
   const { data: product, isSuccess } = useGetProductBySlug(
     params?.[params.length - 1]
   );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const categories: any[] = [];
   const limit =
     product?.stockAmount &&
@@ -89,6 +92,30 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
   useEffect(() => {
     if (isSuccess) setCurrencyId(product?.prices[0]?.currency ?? undefined);
   }, [product, isSuccess]);
+
+  const tokensSold =
+    product?.tokensAmount && product?.stockAmount
+      ? product?.tokensAmount - product?.stockAmount
+      : 0;
+
+  const addresBlockchainLink = useAdressBlockchainLink(
+    product?.chainId,
+    product?.contractAddress
+  );
+
+  const chain = () => {
+    switch (product?.chainId) {
+      case 137:
+        return 'Polygon';
+      case 4:
+        return 'Rinkeby';
+      case 1:
+        return 'Ethereum';
+      default:
+        return 'Mumbai';
+    }
+  };
+
   return (
     <div
       style={{
@@ -124,8 +151,8 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
         className="pw-min-h-[95vh]"
         style={{ backgroundColor: backgroundColor ?? '#EFEFEF' }}
       >
-        <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-pt-6">
-          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-8">
+        <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
+          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-8 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <div className="pw-max-h-[500px]  pw-flex-1">
               <ImageSDK
                 className="pw-w-full pw-max-h-[400px] sm:pw-max-h-[500px] pw-object-cover pw-object-center"
@@ -350,39 +377,82 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               )}
             </div>
           </div>
-          {showDescription && (
-            <div className="pw-mt-6 sm:pw-mt-0">
-              <p
-                style={{
-                  color: descriptionTextColor ?? 'black',
-                }}
-                className="pw-text-2xl pw-font-[600] pw-mt-3"
+          <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-11 pw-w-full pw-mt-6">
+            {showDescription && (
+              <div
+                className={`${
+                  showBlockchainInfo ? 'pw-max-w-[590px]' : ''
+                } pw-flex-grow-[3] pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
               >
-                Descrição
-              </p>
-              {product?.htmlContent && product?.htmlContent != '' ? (
-                <div
-                  style={{
-                    color: descriptionTextColor ?? 'black',
-                  }}
-                  className="pw-text-sm pw-pb-8 pw-mt-6"
-                  dangerouslySetInnerHTML={{
-                    __html: product?.htmlContent ?? '',
-                  }}
-                ></div>
-              ) : (
                 <p
                   style={{
                     color: descriptionTextColor ?? 'black',
                   }}
-                  className="pw-text-sm pw-pb-8 pw-mt-6"
+                  className="pw-text-[15px] pw-font-[600]"
                 >
-                  {product?.description}
+                  {translate('commerce>productPage>description')}
                 </p>
-              )}
-            </div>
-          )}
-          <p></p>
+                {product?.htmlContent && product?.htmlContent != '' ? (
+                  <div
+                    style={{
+                      color: descriptionTextColor ?? 'black',
+                    }}
+                    className="pw-text-[13px] pw-pb-8 pw-mt-6"
+                    dangerouslySetInnerHTML={{
+                      __html: product?.htmlContent ?? '',
+                    }}
+                  ></div>
+                ) : (
+                  <p
+                    style={{
+                      color: descriptionTextColor ?? 'black',
+                    }}
+                    className="pw-text-[13px] pw-pb-8 pw-mt-6"
+                  >
+                    {product?.description}
+                  </p>
+                )}
+              </div>
+            )}
+            {showBlockchainInfo && (
+              <div className="pw-flex-grow pw-max-h-[265px] pw-rounded-[14px] pw-text-black pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
+                <p className="pw-text-[15px] pw-font-[600] pw-mb-4">
+                  {translate('commerce>productPage>tokenDetails')}
+                </p>
+                <span className="pw-border-[#E6E8EC] pw-block pw-border pw-border-solid pw-w-full pw-mx-auto" />
+                <div className="pw-mt-7 pw-text-[13px] pw-flex pw-justify-between">
+                  <div>
+                    <p>Contract Address</p>
+                    <p className="pw-mt-[10px]">
+                      {translate('commerce>productPage>totalTokens')}
+                    </p>
+                    <p className="pw-mt-[10px]">
+                      {translate('commerce>productPage>soldTokens')}
+                    </p>
+                    <p className="pw-mt-[10px]">Token Standard</p>
+                    <p className="pw-mt-[10px]">Chain</p>
+                  </div>
+                  <div
+                    className={`pw-text-right ${
+                      showDescription
+                        ? 'sm:pw-max-w-[150px] pw-max-w-[100px]'
+                        : 'pw-max-w-[100px] sm:pw-max-w-[295px]'
+                    }`}
+                  >
+                    <p className="pw-truncate pw-underline pw-text-[#4194CD]">
+                      <a href={addresBlockchainLink}>
+                        {product?.contractAddress}
+                      </a>
+                    </p>
+                    <p className="pw-mt-[10px]">{product?.tokensAmount}</p>
+                    <p className="pw-mt-[10px]">{tokensSold}</p>
+                    <p className="pw-mt-[10px]">ERC-721</p>
+                    <p className="pw-mt-[10px]">{chain()}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

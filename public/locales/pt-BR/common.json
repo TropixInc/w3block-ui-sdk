@@ -385,5 +385,9 @@
   "token>pass>scanQRCode": "Escanear QR Code",
   "token>pass>benefit": "Benefício:",
   "token>pass>user": "Usuário",
-  "token>pass>invalidFormat": "QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar."
+  "token>pass>invalidFormat": "QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar.",
+  "commerce>productPage>tokenDetails": "Detalhes do token",
+  "commerce>productPage>totalTokens": "Número de tokens",
+  "commerce>productPage>soldTokens": "Tokens vendidos",
+  "commerce>productPage>description": "Descrição"
 }
