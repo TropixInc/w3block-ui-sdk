@@ -9,6 +9,7 @@ import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
@@ -39,6 +40,8 @@ export const Banner = ({ data }: { data: BannerData }) => {
   const layoutClass =
     bannerDisposition === 'fullWidth' ? 'pw-w-full' : 'pw-container';
 
+  const isMobile = useIsMobile();
+
   const bannerHeight = () => {
     if (height && !heightUnity) {
       return height + 'px';
@@ -67,7 +70,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
               ? {
                   delay: 3500,
                   pauseOnMouseEnter: true,
-                  disableOnInteraction: true,
+                  disableOnInteraction: isMobile,
                 }
               : false
           }

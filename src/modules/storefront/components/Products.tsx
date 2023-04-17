@@ -12,6 +12,7 @@ import {
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
@@ -194,6 +195,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
   };
 
   const SliderProducts = () => {
+    const isMobile = useIsMobile();
     const slicedBreakPoints = [
       { key: 640, value: { slidesPerView: 1, spaceBetween: 16 } },
       { key: 768, value: { slidesPerView: 2, spaceBetween: 16 } },
@@ -218,7 +220,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
             ? {
                 delay: 3500,
                 pauseOnMouseEnter: true,
-                disableOnInteraction: true,
+                disableOnInteraction: isMobile,
               }
             : false
         }
