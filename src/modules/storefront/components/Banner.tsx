@@ -9,6 +9,7 @@ import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
@@ -17,7 +18,6 @@ import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const { styleData, mobileStyleData } = data;

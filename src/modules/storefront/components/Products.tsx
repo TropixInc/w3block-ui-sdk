@@ -12,6 +12,7 @@ import {
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
@@ -26,7 +27,6 @@ import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
