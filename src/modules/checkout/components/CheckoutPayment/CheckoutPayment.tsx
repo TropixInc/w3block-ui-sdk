@@ -112,7 +112,10 @@ export const CheckoutPayment = () => {
   }, [isStripe, stripeKey]);
 
   const WichPaymentMethod = () => {
-    if (productCache?.choosedPayment?.paymentMethod == 'pix' && iframeLink) {
+    if (
+      productCache?.choosedPayment?.paymentProvider == 'asaas' &&
+      iframeLink
+    ) {
       return (
         <div className="pw-container pw-mx-auto pw-h-full">
           <div className="pw-flex pw-justify-center pw-items-center pw-h-full">
