@@ -210,5 +210,6 @@
   "token>pass>benefit": "Benefit:",
   "auth>getValidationsTypesForSignup>insertFile": "Insert a file",
   "token>pass>user": "User",
-  "token>pass>invalidFormat": "QRCode in invalid format. Please check if the scanned QR Code corresponds to the benefit you want to use."
+  "token>pass>invalidFormat": "QRCode in invalid format. Please check if the scanned QR Code corresponds to the benefit you want to use.",
+  "auth>formCompleteKYCWithoutLayout>signout": "and continue later"
 }
