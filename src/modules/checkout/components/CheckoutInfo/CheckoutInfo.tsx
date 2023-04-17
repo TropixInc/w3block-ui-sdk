@@ -190,8 +190,8 @@ const _CheckoutInfo = ({
         totalPrice: orderPreview?.totalPrice ?? '',
         clientServiceFee: orderPreview?.clientServiceFee || '0',
         gasFee:
-          parseFloat(orderPreview?.gasFee?.amount || '0').toFixed(2) || '0',
-        cartPrice: parseFloat(orderPreview?.cartPrice || '0').toFixed(2) || '0',
+          parseFloat(orderPreview?.gasFee?.amount || '0').toString() || '0',
+        cartPrice: parseFloat(orderPreview?.cartPrice || '0').toString() || '0',
         choosedPayment: choosedPayment,
         cpfCnpj: cnpfCpfVal,
       });
@@ -304,10 +304,10 @@ const _CheckoutInfo = ({
               loading={isLoading}
               className="pw-mt-4"
               price={
-                parseFloat(orderPreview?.cartPrice || '0').toFixed(2) || '0'
+                parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
               }
               gasFee={
-                parseFloat(orderPreview?.gasFee?.amount || '0').toFixed(2) ||
+                parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
                 '0'
               }
             />
@@ -354,10 +354,10 @@ const _CheckoutInfo = ({
               loading={isLoading}
               className="pw-mt-4"
               price={
-                parseFloat(orderPreview?.cartPrice || '0').toFixed(2) || '0'
+                parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
               }
               gasFee={
-                parseFloat(orderPreview?.gasFee?.amount || '0').toFixed(2) ||
+                parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
                 '0'
               }
             />
@@ -488,7 +488,7 @@ const _CheckoutInfo = ({
                   prod.prices.find(
                     (price) => price.currencyId == currencyIdState
                   )?.amount ?? '0'
-                ).toFixed(2)}
+                ).toString()}
               />
             ))}
           </div>
