@@ -153,9 +153,9 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
       >
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
           <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-8 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
-            <div className="pw-max-h-[500px]  pw-flex-1">
+            <div className="pw-w-full pw-flex-1">
               <ImageSDK
-                className="pw-w-full pw-max-h-[400px] sm:pw-max-h-[500px] pw-object-cover pw-object-center"
+                className="sm:pw-w-[500px] pw-w-[347] sm:pw-h-[437px] pw-h-[283] pw-mx-auto pw-object-cover pw-object-center"
                 src={product?.images[0].original}
               />
             </div>
@@ -164,7 +164,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 <>
                   <p
                     style={{ color: nameTextColor ?? 'black' }}
-                    className="pw-text-[36px] pw-font-[600]"
+                    className="sm:pw-text-[36px] pw-text-2xl pw-font-[600]"
                   >
                     {product?.name}
                   </p>
@@ -381,8 +381,8 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
             {showDescription && (
               <div
                 className={`${
-                  showBlockchainInfo ? 'pw-max-w-[590px]' : ''
-                } pw-flex-grow-[3] pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
+                  showBlockchainInfo ? 'pw-flex-[2]' : 'pw-w-full'
+                } pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
               >
                 <p
                   style={{
@@ -415,7 +415,13 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               </div>
             )}
             {showBlockchainInfo && (
-              <div className="pw-flex-grow pw-max-h-[265px] pw-rounded-[14px] pw-text-black pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
+              <div
+                className={`${
+                  showDescription
+                    ? 'pw-flex-[1.5] lg:pw-flex-[1.3]'
+                    : 'pw-w-full'
+                } pw-max-h-[265px] pw-text-black pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
+              >
                 <p className="pw-text-[15px] pw-font-[600] pw-mb-4">
                   {translate('commerce>productPage>tokenDetails')}
                 </p>
@@ -440,7 +446,11 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     }`}
                   >
                     <p className="pw-truncate pw-underline pw-text-[#4194CD]">
-                      <a href={addresBlockchainLink}>
+                      <a
+                        href={addresBlockchainLink}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         {product?.contractAddress}
                       </a>
                     </p>
