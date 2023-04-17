@@ -81,9 +81,9 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   useEffect(() => {
     if (isSuccess) {
       router.pushConnect(
-        router.query.callbackPath
-          ? (router.query.callbackPath as string)
-          : PixwayAppRoutes.CONNECT_EXTERNAL_WALLET
+        PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        router.query as any
       );
     }
   }, [isSuccess, router]);
