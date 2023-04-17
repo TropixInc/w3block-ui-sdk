@@ -26,6 +26,7 @@ import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
@@ -194,6 +195,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
   };
 
   const SliderProducts = () => {
+    const isMobile = useIsMobile();
     const slicedBreakPoints = [
       { key: 640, value: { slidesPerView: 1, spaceBetween: 16 } },
       { key: 768, value: { slidesPerView: 2, spaceBetween: 16 } },
@@ -218,7 +220,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
             ? {
                 delay: 3500,
                 pauseOnMouseEnter: true,
-                disableOnInteraction: true,
+                disableOnInteraction: isMobile,
               }
             : false
         }

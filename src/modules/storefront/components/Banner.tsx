@@ -17,6 +17,7 @@ import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const { styleData, mobileStyleData } = data;
@@ -38,6 +39,8 @@ export const Banner = ({ data }: { data: BannerData }) => {
   } = mergedStyleData;
   const layoutClass =
     bannerDisposition === 'fullWidth' ? 'pw-w-full' : 'pw-container';
+
+  const isMobile = useIsMobile();
 
   const bannerHeight = () => {
     if (height && !heightUnity) {
@@ -67,7 +70,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
               ? {
                   delay: 3500,
                   pauseOnMouseEnter: true,
-                  disableOnInteraction: true,
+                  disableOnInteraction: isMobile,
                 }
               : false
           }
