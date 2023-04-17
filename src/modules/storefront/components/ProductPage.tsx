@@ -152,14 +152,12 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
         style={{ backgroundColor: backgroundColor ?? '#EFEFEF' }}
       >
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
-          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-8 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
-            <div className="pw-w-full pw-flex-1">
-              <ImageSDK
-                className="sm:pw-w-[500px] pw-w-[347] sm:pw-h-[437px] pw-h-[283] pw-mx-auto pw-object-cover pw-object-center"
-                src={product?.images[0].original}
-              />
-            </div>
-            <div className="pw-max-w-[400px] pw-w-full">
+          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-12 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
+            <ImageSDK
+              className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] xl:pw-h-[437px] sm:pw-h-[337px] pw-h-[283px] pw-rounded-[14px] pw-object-cover pw-object-center"
+              src={product?.images[0].original}
+            />
+            <div className="pw-w-full">
               {showProductName && (
                 <>
                   <p
@@ -305,7 +303,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 </>
               ) : null}
               {actionButton && (
-                <>
+                <div className="pw-flex pw-flex-col">
                   {!currencyId?.crypto && (
                     <button
                       disabled={
@@ -373,7 +371,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   >
                     {buttonText ?? 'Comprar agora'}
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
