@@ -428,7 +428,7 @@ const _CheckoutInfo = ({
         )}
 
         <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-mt-6 sm:pw-mt-0">
-          {choosedPayment?.inputs && choosedPayment.inputs.length && (
+          {choosedPayment?.inputs && choosedPayment.inputs.length ? (
             <>
               <p className="pw-text-[18px] pw-font-[700]">
                 Por favor, digite seu CPF ou CNPJ
@@ -447,7 +447,7 @@ const _CheckoutInfo = ({
                 {cpfError ? 'CPF ou CNPJ inválido' : ''}
               </p>
             </>
-          )}
+          ) : null}
 
           <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
             Resumo da compra
