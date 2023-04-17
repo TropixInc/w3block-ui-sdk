@@ -163,7 +163,8 @@ const _CheckoutInfo = ({
 
   const beforeProcced = () => {
     if (
-      choosedPayment?.paymentMethod == 'pix' &&
+      choosedPayment?.inputs &&
+      choosedPayment.inputs.length &&
       !isValidCPF(cnpfCpfVal.replaceAll('.', '').replaceAll('-', '')) &&
       !isValidCNPJ(
         cnpfCpfVal.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
@@ -427,7 +428,7 @@ const _CheckoutInfo = ({
         )}
 
         <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-mt-6 sm:pw-mt-0">
-          {choosedPayment?.paymentMethod == 'pix' && (
+          {choosedPayment?.inputs && choosedPayment.inputs.length && (
             <>
               <p className="pw-text-[18px] pw-font-[700]">
                 Por favor, digite seu CPF ou CNPJ
