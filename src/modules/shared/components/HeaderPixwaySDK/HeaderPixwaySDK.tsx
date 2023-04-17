@@ -95,17 +95,13 @@ const _HeaderPixwaySDK = ({
     } else setOpenedTabs(!openedTabs);
   };
 
-  console.log(signupContext?.active);
-
   useEffect(() => {
     if (profile) {
       if (signupContext) {
-        console.log('aqui');
         if (
           profile?.data?.kycStatus === KycStatus.Pending ||
           signupContext.active
         ) {
-          console.log('aqui agora');
           router.push(PixwayAppRoutes.COMPLETE_KYC);
         }
       }
