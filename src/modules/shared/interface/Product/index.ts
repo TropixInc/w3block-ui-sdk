@@ -1,4 +1,4 @@
-import { Price } from '../Price';
+import { CurrencyResponse } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 
 export interface Product {
   id: string;
@@ -9,7 +9,7 @@ export interface Product {
   name: string;
   description: string;
   images: Images[];
-  prices: Price[];
+  prices: { amount?: string; currency: CurrencyResponse; currencyId: string }[];
   distributionType: string;
   pricingType: string;
   contractAddress: string;

@@ -54,7 +54,10 @@ export const useCheckout = () => {
   );
 
   const createOrder = useMutation(
-    ({ companyId, createOrder }: CreateOrderPayload) => {
+    ({
+      companyId,
+      createOrder,
+    }: CreateOrderPayload): Promise<CreateOrderResponse> => {
       return axios
         .post<
           CreateOrderResponse,
@@ -64,8 +67,8 @@ export const useCheckout = () => {
           PixwayAPIRoutes.CREATE_ORDER.replace('{companyId}', companyId),
           createOrder
         )
-        .then((res) => {
-          return res.data;
+        .then((res): CreateOrderResponse => {
+          return res.data as CreateOrderResponse;
         });
     }
   );

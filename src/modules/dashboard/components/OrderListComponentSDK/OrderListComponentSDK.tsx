@@ -21,6 +21,8 @@ export const OrderListComponentSDK = () => {
             id={order.id}
             key={order.id}
             createdAt={order.createdAt}
+            expiresIn={order.expiresIn}
+            paymentProvider={order.paymentProvider}
           />
         ))}
         <Pagination

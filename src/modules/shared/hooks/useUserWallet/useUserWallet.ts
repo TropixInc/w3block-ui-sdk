@@ -32,7 +32,7 @@ export interface WalletSimple {
   id?: string;
   address: string;
   chainId: number;
-  balance: string;
+  balance?: string;
   ownerId: string;
   type: 'metamask' | 'vault';
   status: string;
@@ -59,13 +59,13 @@ export function useUserWallet() {
         id: walletHere.id ?? '',
         address: walletHere.address,
         chainId: isProduction ? ChainScan.POLYGON : ChainScan.MUMBAI,
-        balance: '0',
+        balance: undefined,
         ownerId: walletHere.ownerId,
         type: walletHere.type,
         status: walletHere.status,
       });
       if (balance?.data && wallet) {
-        setWallet({ ...wallet, balance: balance?.data?.data.balance ?? '0' });
+        setWallet({ ...wallet, balance: balance?.data?.data.balance });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

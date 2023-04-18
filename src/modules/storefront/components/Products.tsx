@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import classNames from 'classnames';
 import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -11,8 +12,11 @@ import {
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import {
   AlignmentEnum,
   CardLayoutDisposition,
@@ -23,8 +27,6 @@ import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
@@ -59,8 +61,14 @@ export const Products = ({ data }: { data: ProductsData }) => {
     margin,
     padding,
   } = mergedStyleData;
-  const { moduleTitle, cardType, contentCards, moduleTitleColor, cardSearch } =
-    mergedContentData;
+  const {
+    moduleTitle,
+    cardType,
+    contentCards,
+    moduleTitleColor,
+    cardSearch,
+    titleAlignment,
+  } = mergedContentData;
 
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.COMMERCE);
@@ -187,6 +195,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
   };
 
   const SliderProducts = () => {
+    const isMobile = useIsMobile();
     const slicedBreakPoints = [
       { key: 640, value: { slidesPerView: 1, spaceBetween: 16 } },
       { key: 768, value: { slidesPerView: 2, spaceBetween: 16 } },
@@ -206,7 +215,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
       <Swiper
         navigation
         modules={[Navigation, Autoplay]}
-        autoplay={autoSlide ? { delay: 2500 } : false}
+        autoplay={
+          autoSlide
+            ? {
+                delay: 3500,
+                pauseOnMouseEnter: true,
+                disableOnInteraction: isMobile,
+              }
+            : false
+        }
         breakpoints={{ ...slicedBreakPoints }}
         className="pw-w-full md:pw-px-6"
       >
@@ -279,6 +296,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
 
   if (error) return <h2>{translate('storefront>products>error')}</h2>;
 
+  type AlignmentClassNameMap = Record<AlignmentEnum, string>;
+  const alignmentsText: AlignmentClassNameMap = {
+    left: 'pw-text-left',
+    right: 'pw-text-right',
+    center: 'pw-text-center',
+  };
+  const alignmentTextClass =
+    alignmentsText[titleAlignment ?? AlignmentEnum.LEFT];
+
   return (
     <div
       style={{
@@ -293,20 +319,21 @@ export const Products = ({ data }: { data: ProductsData }) => {
         margin: convertSpacingToCSS(margin),
         padding: convertSpacingToCSS(padding),
       }}
-      className="pw-px-4 sm:pw-px-0"
     >
-      <div className="pw-container pw-mx-auto pw-pb-10">
-        <div className="pw-flex pw-justify-between">
-          {moduleTitle && moduleTitle != '' && (
-            <h2
-              style={{ color: moduleTitleColor ?? 'black' }}
-              className="pw-font-semibold pw-text-lg pw-pt-10"
-            >
-              {moduleTitle}
-            </h2>
-          )}
-        </div>
-
+      <div className="pw-container pw-mx-auto pw-pb-10 pw-px-4 sm:pw-px-0">
+        {moduleTitle && moduleTitle != '' && (
+          <h2
+            style={{
+              color: moduleTitleColor ?? 'black',
+            }}
+            className={classNames(
+              'pw-font-semibold pw-text-lg pw-pt-10 pw-w-full',
+              alignmentTextClass
+            )}
+          >
+            {moduleTitle}
+          </h2>
+        )}
         <div className="pw-flex pw-justify-center pw-pt-10">
           {layoutDisposition === CardLayoutDisposition.GRID ? (
             <GridProducts />

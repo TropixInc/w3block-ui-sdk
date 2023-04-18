@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
 import { useCart } from '../../checkout/hooks/useCart';
@@ -7,8 +7,12 @@ import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import useGetProductBySlug from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import useGetProductBySlug, {
+  CurrencyResponse,
+} from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ProductPageData } from '../interfaces';
 
@@ -45,7 +49,6 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
     nameTextColor,
     padding,
     priceTextColor,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     showBlockchainInfo,
     showCategory,
     showDescription,
@@ -54,17 +57,23 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
     textColor,
   } = mergedStyleData;
 
+  const [translate] = useTranslation();
   const { back, pushConnect } = useRouterConnect();
-  const { setCart, cart } = useCart();
+  const { setCart, cart, setCartCurrencyId } = useCart();
+  const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (quantityOpen) {
       setQuantityOpen(false);
     }
   });
+
   const [quantity, setQuantity] = useState(1);
   const [quantityOpen, setQuantityOpen] = useState(false);
-  const { data: product } = useGetProductBySlug(params?.[params.length - 1]);
+  const { data: product, isSuccess } = useGetProductBySlug(
+    params?.[params.length - 1]
+  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const categories: any[] = [];
   const limit =
     product?.stockAmount &&
@@ -72,6 +81,41 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
     product?.stockAmount > product.canPurchaseAmount
       ? product.canPurchaseAmount
       : product?.stockAmount;
+
+  const addToCart = () => {
+    setCartCurrencyId?.(currencyId);
+    cart.some((p) => p.id == product?.id)
+      ? setCart(cart.filter((p) => p.id != product?.id))
+      : setCart([...cart, ...Array(quantity).fill(product)]);
+  };
+
+  useEffect(() => {
+    if (isSuccess) setCurrencyId(product?.prices[0]?.currency ?? undefined);
+  }, [product, isSuccess]);
+
+  const tokensSold =
+    product?.tokensAmount && product?.stockAmount
+      ? product?.tokensAmount - product?.stockAmount
+      : 0;
+
+  const addresBlockchainLink = useAdressBlockchainLink(
+    product?.chainId,
+    product?.contractAddress
+  );
+
+  const chain = () => {
+    switch (product?.chainId) {
+      case 137:
+        return 'Polygon';
+      case 4:
+        return 'Rinkeby';
+      case 1:
+        return 'Ethereum';
+      default:
+        return 'Mumbai';
+    }
+  };
+
   return (
     <div
       style={{
@@ -107,20 +151,18 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
         className="pw-min-h-[95vh]"
         style={{ backgroundColor: backgroundColor ?? '#EFEFEF' }}
       >
-        <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-pt-6">
-          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-8">
-            <div className="pw-max-h-[500px]  pw-flex-1">
-              <ImageSDK
-                className="pw-w-full pw-max-h-[400px] sm:pw-max-h-[500px] pw-object-cover pw-object-center"
-                src={product?.images[0].original}
-              />
-            </div>
-            <div className="pw-max-w-[400px] pw-w-full">
+        <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
+          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-12 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
+            <ImageSDK
+              className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] xl:pw-h-[437px] sm:pw-h-[337px] pw-h-[283px] pw-rounded-[14px] pw-object-cover pw-object-center"
+              src={product?.images[0].original}
+            />
+            <div className="pw-w-full">
               {showProductName && (
                 <>
                   <p
                     style={{ color: nameTextColor ?? 'black' }}
-                    className="pw-text-[36px] pw-font-[600]"
+                    className="sm:pw-text-[36px] pw-text-2xl pw-font-[600]"
                   >
                     {product?.name}
                   </p>
@@ -137,20 +179,61 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 </p>
               )}
               {showValue && (
-                <p
-                  style={{ color: priceTextColor ?? 'black' }}
-                  className="pw-text-2xl pw-mt-4 pw-font-[700]"
-                >
-                  {product?.stockAmount == 0
-                    ? 'Esgotado'
-                    : product
-                    ? `${product?.prices[0].currency.symbol} ${product?.prices[0].amount}`
-                    : ''}
-                </p>
+                <>
+                  {product?.prices != undefined &&
+                    product?.prices?.length > 1 && (
+                      <div className="">
+                        <p className="pw-text-sm pw-text-black pw-font-[700] pw-mb-2">
+                          Pagar em:
+                        </p>
+                        <form className="pw-flex pw-gap-4" action="submit">
+                          {product?.prices.map((price) => (
+                            <div
+                              key={price.currencyId}
+                              className="pw-flex pw-gap-2"
+                            >
+                              <input
+                                onChange={() =>
+                                  setCurrencyId?.(price?.currency)
+                                }
+                                checked={price.currencyId === currencyId?.id}
+                                name="currency"
+                                value={price.currencyId}
+                                type="radio"
+                              />
+                              <p className="pw-text-xs pw-text-slate-600 pw-font-[600]">
+                                {price.currency.symbol}
+                              </p>
+                            </div>
+                          ))}
+                        </form>
+                      </div>
+                    )}
+
+                  <p
+                    style={{ color: priceTextColor ?? 'black' }}
+                    className="pw-text-2xl pw-mt-4 pw-font-[700]"
+                  >
+                    {product?.stockAmount == 0
+                      ? 'Esgotado'
+                      : product
+                      ? `${
+                          product?.prices.find(
+                            (price) => price.currencyId == currencyId?.id
+                          )?.currency.symbol
+                        } ${
+                          product?.prices.find(
+                            (price) => price.currencyId == currencyId?.id
+                          )?.amount
+                        }`
+                      : ''}
+                  </p>
+                </>
               )}
               {actionButton &&
                 product?.stockAmount &&
-                product?.stockAmount > 0 && (
+                product?.stockAmount > 0 &&
+                !currencyId?.crypto && (
                   <div>
                     <div ref={refToClickAway} className="pw-mt-4">
                       <p className="pw-text-sm pw-text-black pw-mb-1">
@@ -220,40 +303,39 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                 </>
               ) : null}
               {actionButton && (
-                <>
-                  <button
-                    disabled={
-                      product?.stockAmount == 0 ||
-                      product?.canPurchaseAmount == 0
-                    }
-                    onClick={() => {
-                      cart.some((p) => p.id == product?.id)
-                        ? setCart(cart.filter((p) => p.id != product?.id))
-                        : setCart([...cart, ...Array(quantity).fill(product)]);
-                    }}
-                    style={{
-                      backgroundColor: 'none',
-                      borderColor:
-                        product &&
-                        (product.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0)
-                          ? '#DCDCDC'
-                          : buttonColor
-                          ? buttonColor
-                          : '#0050FF',
-                      color:
-                        product &&
-                        (product.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0)
-                          ? '#777E8F'
-                          : buttonColor ?? '#0050FF',
-                    }}
-                    className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
-                  >
-                    {cart.some((p) => p.id == product?.id)
-                      ? 'Remover do carrinho'
-                      : 'Adicionar ao carrinho'}
-                  </button>
+                <div className="pw-flex pw-flex-col">
+                  {!currencyId?.crypto && (
+                    <button
+                      disabled={
+                        product?.stockAmount == 0 ||
+                        product?.canPurchaseAmount == 0 ||
+                        currencyId?.crypto
+                      }
+                      onClick={addToCart}
+                      style={{
+                        backgroundColor: 'none',
+                        borderColor:
+                          product &&
+                          (product?.stockAmount == 0 ||
+                            product?.canPurchaseAmount == 0)
+                            ? '#DCDCDC'
+                            : buttonColor
+                            ? buttonColor
+                            : '#0050FF',
+                        color:
+                          product &&
+                          (product?.stockAmount == 0 ||
+                            product?.canPurchaseAmount == 0)
+                            ? '#777E8F'
+                            : buttonColor ?? '#0050FF',
+                      }}
+                      className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                    >
+                      {cart.some((p) => p.id == product?.id)
+                        ? 'Remover do carrinho'
+                        : 'Adicionar ao carrinho'}
+                    </button>
+                  )}
                   <button
                     disabled={
                       product?.stockAmount == 0 ||
@@ -265,9 +347,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                           PixwayAppRoutes.CHECKOUT_CONFIRMATION +
                             `?productIds=${Array(quantity)
                               .fill(product.id)
-                              .join(',')}&currencyId=${
-                              product.prices[0].currencyId
-                            }`
+                              .join(',')}&currencyId=${currencyId?.id}`
                         );
                       }
                     }}
@@ -291,43 +371,96 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                   >
                     {buttonText ?? 'Comprar agora'}
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
-          {showDescription && (
-            <div className="pw-mt-6 sm:pw-mt-0">
-              <p
-                style={{
-                  color: descriptionTextColor ?? 'black',
-                }}
-                className="pw-text-2xl pw-font-[600] pw-mt-3"
+          <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-11 pw-w-full pw-mt-6">
+            {showDescription && (
+              <div
+                className={`${
+                  showBlockchainInfo ? 'pw-flex-[2]' : 'pw-w-full'
+                } pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
               >
-                Descrição
-              </p>
-              {product?.htmlContent && product?.htmlContent != '' ? (
-                <div
-                  style={{
-                    color: descriptionTextColor ?? 'black',
-                  }}
-                  className="pw-text-sm pw-pb-8 pw-mt-6"
-                  dangerouslySetInnerHTML={{
-                    __html: product?.htmlContent ?? '',
-                  }}
-                ></div>
-              ) : (
                 <p
                   style={{
                     color: descriptionTextColor ?? 'black',
                   }}
-                  className="pw-text-sm pw-pb-8 pw-mt-6"
+                  className="pw-text-[15px] pw-font-[600]"
                 >
-                  {product?.description}
+                  {translate('commerce>productPage>description')}
                 </p>
-              )}
-            </div>
-          )}
-          <p></p>
+                {product?.htmlContent && product?.htmlContent != '' ? (
+                  <div
+                    style={{
+                      color: descriptionTextColor ?? 'black',
+                    }}
+                    className="pw-text-[13px] pw-pb-8 pw-mt-6"
+                    dangerouslySetInnerHTML={{
+                      __html: product?.htmlContent ?? '',
+                    }}
+                  ></div>
+                ) : (
+                  <p
+                    style={{
+                      color: descriptionTextColor ?? 'black',
+                    }}
+                    className="pw-text-[13px] pw-pb-8 pw-mt-6"
+                  >
+                    {product?.description}
+                  </p>
+                )}
+              </div>
+            )}
+            {showBlockchainInfo && (
+              <div
+                className={`${
+                  showDescription
+                    ? 'pw-flex-[1.5] lg:pw-flex-[1.3]'
+                    : 'pw-w-full'
+                } pw-max-h-[265px] pw-text-black pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
+              >
+                <p className="pw-text-[15px] pw-font-[600] pw-mb-4">
+                  {translate('commerce>productPage>tokenDetails')}
+                </p>
+                <span className="pw-border-[#E6E8EC] pw-block pw-border pw-border-solid pw-w-full pw-mx-auto" />
+                <div className="pw-mt-7 pw-text-[13px] pw-flex pw-justify-between">
+                  <div>
+                    <p>Contract Address</p>
+                    <p className="pw-mt-[10px]">
+                      {translate('commerce>productPage>totalTokens')}
+                    </p>
+                    <p className="pw-mt-[10px]">
+                      {translate('commerce>productPage>soldTokens')}
+                    </p>
+                    <p className="pw-mt-[10px]">Token Standard</p>
+                    <p className="pw-mt-[10px]">Chain</p>
+                  </div>
+                  <div
+                    className={`pw-text-right ${
+                      showDescription
+                        ? 'sm:pw-max-w-[150px] pw-max-w-[100px]'
+                        : 'pw-max-w-[100px] sm:pw-max-w-[295px]'
+                    }`}
+                  >
+                    <p className="pw-truncate pw-underline pw-text-[#4194CD]">
+                      <a
+                        href={addresBlockchainLink}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {product?.contractAddress}
+                      </a>
+                    </p>
+                    <p className="pw-mt-[10px]">{product?.tokensAmount}</p>
+                    <p className="pw-mt-[10px]">{tokensSold}</p>
+                    <p className="pw-mt-[10px]">ERC-721</p>
+                    <p className="pw-mt-[10px]">{chain()}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

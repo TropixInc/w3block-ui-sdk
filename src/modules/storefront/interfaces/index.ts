@@ -147,6 +147,8 @@ export interface BannerData extends MainModuleThemeInterface {
     bannerRatio?: Ratio;
     autoSlide?: boolean;
     banners?: SpecificBannerInfo[];
+    height?: string;
+    heightUnity?: string;
   };
   mobileStyleData: BannerData['styleData'];
 }
@@ -249,6 +251,7 @@ export interface ProductsData extends MainModuleThemeInterface {
   contentData: {
     cardType?: CardTypesEnum;
     moduleTitle?: string;
+    titleAlignment?: AlignmentEnum;
     cardSearch?: ComboBoxReturnInterface[];
     contentCards?: SpecificContentCard[];
     moduleTitleColor?: string;

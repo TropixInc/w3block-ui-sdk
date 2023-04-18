@@ -2,6 +2,68 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.234](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.233...v0.1.1-alpha.234) (2023-04-17)
+
+### [0.1.1-alpha.233](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.232...v0.1.1-alpha.233) (2023-04-17)
+
+### [0.1.1-alpha.232](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.231...v0.1.1-alpha.232) (2023-04-17)
+
+### [0.1.1-alpha.231](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.230...v0.1.1-alpha.231) (2023-04-17)
+
+### [0.1.1-alpha.230](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.229...v0.1.1-alpha.230) (2023-04-17)
+
+### [0.1.1-alpha.229](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.228...v0.1.1-alpha.229) (2023-04-17)
+
+### [0.1.1-alpha.228](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.227...v0.1.1-alpha.228) (2023-04-17)
+
+
+### Bug Fixes
+
+* **pe-259:** adjusts on product page ([#179](https://github.com/TropixInc/w3block-ui-sdk/issues/179)) ([1e93441](https://github.com/TropixInc/w3block-ui-sdk/commit/1e93441051c8550592b6ee0dfa41902472cdf10a))
+
+### [0.1.1-alpha.227](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.226...v0.1.1-alpha.227) (2023-04-17)
+
+### [0.1.1-alpha.226](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.225...v0.1.1-alpha.226) (2023-04-14)
+
+### [0.1.1-alpha.225](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.224...v0.1.1-alpha.225) (2023-04-14)
+
+### [0.1.1-alpha.224](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.223...v0.1.1-alpha.224) (2023-04-14)
+
+### [0.1.1-alpha.223](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.222...v0.1.1-alpha.223) (2023-04-14)
+
+### [0.1.1-alpha.222](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.221...v0.1.1-alpha.222) (2023-04-14)
+
+### [0.1.1-alpha.221](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.220...v0.1.1-alpha.221) (2023-04-14)
+
+### [0.1.1-alpha.220](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.219...v0.1.1-alpha.220) (2023-04-14)
+
+### [0.1.1-alpha.219](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.218...v0.1.1-alpha.219) (2023-04-14)
+
+### [0.1.1-alpha.218](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.217...v0.1.1-alpha.218) (2023-04-14)
+
+### [0.1.1-alpha.217](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.216...v0.1.1-alpha.217) (2023-04-14)
+
+### [0.1.1-alpha.216](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.215...v0.1.1-alpha.216) (2023-04-14)
+
+### [0.1.1-alpha.215](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.214...v0.1.1-alpha.215) (2023-04-14)
+
+### [0.1.1-alpha.214](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.213...v0.1.1-alpha.214) (2023-04-14)
+
+### [0.1.1-alpha.213](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.212...v0.1.1-alpha.213) (2023-04-14)
+
+### [0.1.1-alpha.212](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.211...v0.1.1-alpha.212) (2023-04-14)
+
+### [0.1.1-alpha.211](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.210...v0.1.1-alpha.211) (2023-04-13)
+
+### [0.1.1-alpha.210](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.209...v0.1.1-alpha.210) (2023-04-13)
+
+
+### Bug Fixes
+
+* **np-258:** adjusts on constructor ([#178](https://github.com/TropixInc/w3block-ui-sdk/issues/178)) ([1a043f7](https://github.com/TropixInc/w3block-ui-sdk/commit/1a043f75b2ca85f60bd030c10611a8fb22bef93e))
+
+### [0.1.1-alpha.209](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.208...v0.1.1-alpha.209) (2023-04-13)
+
 ### [0.1.1-alpha.208](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.207...v0.1.1-alpha.208) (2023-04-12)
 
 
