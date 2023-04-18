@@ -16,7 +16,7 @@ export const useGetTenantContext = () => {
     async () => {
       const sdk = await getSDK();
 
-      return await sdk.api.tenantContext.findTenantContext('faoasij');
+      return await sdk.api.tenantContext.findTenantContext(tenantId);
     },
     {
       enabled: Boolean(tenantId && profile),
