@@ -5,4 +5,9 @@ export interface Token {
   id: string;
   contractAddress: string;
   chainId: number;
+  collectionData: {
+    id: string;
+    name: string;
+    pass: boolean;
+  };
 }

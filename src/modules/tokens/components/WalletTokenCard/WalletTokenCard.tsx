@@ -13,7 +13,6 @@ import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { TokenActionsProvider } from '../../providers/TokenActionsProvider';
 import { WalletTokenCardActionsPanel } from './ActionsPanel';
 
@@ -26,6 +25,11 @@ interface Props {
   chainId: number;
   contractAddress: string;
   proccessing?: boolean;
+  collectionData?: {
+    id: string;
+    name: string;
+    pass: boolean;
+  };
 }
 
 const cardClassName =
@@ -43,6 +47,7 @@ export const WalletTokenCard = ({
   chainId,
   contractAddress,
   proccessing = false,
+  collectionData,
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
   const router = useRouterConnect();
@@ -52,13 +57,9 @@ export const WalletTokenCard = ({
   });
   const [translate] = useTranslation();
   const { pass } = useFlags();
-  const { data: publicTokenResponse } = usePublicTokenData({
-    chainId: chainId.toString(),
-    tokenId: id,
-    contractAddress,
-  });
+  const isInternalToken = collectionData !== undefined ? true : false;
 
-  const hasPass = publicTokenResponse?.data?.group?.collectionPass && pass;
+  const hasPass = collectionData?.pass && pass;
 
   const onClickOptionsButton: MouseEventHandler<HTMLButtonElement> = (
     event
@@ -70,22 +71,25 @@ export const WalletTokenCard = ({
 
   return (
     <TokenActionsProvider
-      collectionId={publicTokenResponse?.data?.group?.collectionId || ''}
+      collectionId={collectionData?.id ?? ''}
       collectionName={name}
       imageSrc={image}
       contractAddress={contractAddress}
       name={name}
       chainId={chainId}
       tokenId={id}
+      isInternalToken={isInternalToken}
     >
       <div
         className={classNames(
           cardClassName,
-          'pw-flex pw-flex-col pw-gap-[24px] pw-relative pw-overflow-hidden'
+          'pw-flex pw-flex-col pw-gap-[24px] pw-relative pw-overflow-hidden',
+          !isInternalToken &&
+            'hover:!pw-border-[#E6E8EC] hover:!pw-cursor-default'
         )}
       >
         <Link
-          disabled={proccessing}
+          disabled={proccessing || !isInternalToken}
           className={className}
           href={router.routerToHref(
             PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
@@ -113,8 +117,12 @@ export const WalletTokenCard = ({
             </div>
 
             <div className={descriptionContainerClassName}>
-              <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate">
-                {name}
+              <p
+                className={`${
+                  name !== '' ? 'pw-text-black' : 'pw-text-gray-500'
+                } pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate`}
+              >
+                {name !== '' ? name : 'Token sem nome'}
               </p>
               {category ? (
                 <p className="pw-text-[#C63535] pw-text-sm pw-leading-[21px] pw-font-semibold pw-lowercase">
@@ -124,41 +132,48 @@ export const WalletTokenCard = ({
             </div>
           </div>
         </Link>
-        <div
-          className="pw-relative pw-flex pw-justify-between pw-items-center"
-          ref={actionsContainerRef}
-        >
-          <WalletTokenCardActionsPanel isOpen={isOpen} onClose={closeModal} />
-          <button
-            disabled={proccessing}
-            onClick={onClickOptionsButton}
-            type="button"
-            className="pw-border pw-border-[#C1C1C1] pw-rounded-[10px] pw-bg-white pw-p-2 pw-flex pw-gap-x-1"
+        {isInternalToken ? (
+          <div
+            className="pw-relative pw-flex pw-justify-between pw-items-center"
+            ref={actionsContainerRef}
           >
-            {Array(3)
-              .fill('')
-              .map((_, index) => (
-                <Pointer key={index} />
-              ))}
-          </button>
-
-          {hasPass && (
-            <Button
+            <WalletTokenCardActionsPanel isOpen={isOpen} onClose={closeModal} />
+            <button
               disabled={proccessing}
-              model="primary"
-              width="small"
-              onClick={() =>
-                router.pushConnect(
-                  PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
-                    .replace('{contractAddress}', contractAddress)
-                    .replace('{chainId}', chainId.toString()) as PixwayAppRoutes
-                )
-              }
+              onClick={onClickOptionsButton}
+              type="button"
+              className="pw-border pw-border-[#C1C1C1] pw-rounded-[10px] pw-bg-white pw-p-2 pw-flex pw-gap-x-1"
             >
-              {translate('connectTokens>tokensList>usePass')}
-            </Button>
-          )}
-        </div>
+              {Array(3)
+                .fill('')
+                .map((_, index) => (
+                  <Pointer key={index} />
+                ))}
+            </button>
+
+            {hasPass && (
+              <Button
+                disabled={proccessing}
+                model="primary"
+                width="small"
+                onClick={() =>
+                  router.pushConnect(
+                    PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)
+                      .replace('{contractAddress}', contractAddress)
+                      .replace(
+                        '{chainId}',
+                        chainId.toString()
+                      ) as PixwayAppRoutes
+                  )
+                }
+              >
+                {translate('connectTokens>tokensList>usePass')}
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="pw-h-[24px]"></div>
+        )}
       </div>
     </TokenActionsProvider>
   );
