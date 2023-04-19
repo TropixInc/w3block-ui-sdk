@@ -119,7 +119,7 @@ export const WalletTokenCard = ({
             <div className={descriptionContainerClassName}>
               <p
                 className={`${
-                  name !== '' ? 'pw-text-black' : 'pw-text-red-800'
+                  name !== '' ? 'pw-text-black' : 'pw-text-gray-500'
                 } pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate`}
               >
                 {name !== '' ? name : 'Token sem nome'}
