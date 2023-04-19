@@ -241,9 +241,8 @@ export interface FooterData extends MainModuleThemeInterface {
 }
 
 type Link = {
-  name: string;
-  type: 'internal' | 'external';
-  slug: string;
+  label: string;
+  value: string;
 };
 export interface ProductsData extends MainModuleThemeInterface {
   type: ModulesType.CARDS;
