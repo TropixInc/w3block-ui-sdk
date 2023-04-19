@@ -28,7 +28,7 @@ const _PriceAndGasInfo = ({
   return (
     <div className={`pw-w-full ${className}`}>
       <div className="pw-flex pw-justify-between">
-        <p className="pw-text-sm text-[#35394C] pw-font-[400]">Subtotal</p>
+        <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">Subtotal</p>
         {loading ? (
           <Shimmer />
         ) : (
@@ -47,7 +47,7 @@ const _PriceAndGasInfo = ({
       {service && parseFloat(service) > 0 && (
         <div className="pw-flex pw-justify-between pw-mt-2">
           <div className="pw-flex pw-gap-x-1">
-            <p className="pw-text-sm text-[#35394C] pw-font-[400]">
+            <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
               {translate('shared>components>servicePriceinfo')}
             </p>
             {/* <InfoIcon className="pw-mt-[2px]" /> */}
@@ -74,7 +74,7 @@ const _PriceAndGasInfo = ({
       {parseFloat(gasFee) == 0 ? null : (
         <div className="pw-flex pw-justify-between pw-mt-2">
           <div className="pw-flex pw-gap-x-1">
-            <p className="pw-text-sm text-[#35394C] pw-font-[400]">
+            <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
               {translate('shared>components>gasPriceinfo')}
             </p>
             {/* <InfoIcon className="pw-mt-[2px]" /> */}

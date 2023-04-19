@@ -22,9 +22,11 @@ import {
   OrderPreviewCache,
   OrderPreviewResponse,
   PaymentMethodsAvaiable,
+  ProductErrorInterface,
 } from '../../interface/interface';
 import { ConfirmCryptoBuy } from '../ConfirmCryptoBuy/ConfirmCryptoBuy';
 import CpfCnpj from '../CpfCnpjInput/CpfCnpjInput';
+import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
 
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
@@ -56,6 +58,7 @@ const _CheckoutInfo = ({
   const { getOrderPreview } = useCheckout();
   const [translate] = useTranslation();
   const { setCart, cart } = useCart();
+  const [productErros, setProductErros] = useState<ProductErrorInterface[]>([]);
   const [productCache, setProductCache, deleteKey] =
     useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
   const [choosedPayment, setChoosedPayment] = useState<
@@ -75,6 +78,30 @@ const _CheckoutInfo = ({
   const { data: session } = usePixwaySession();
 
   const token = session ? (session.accessToken as string) : null;
+
+  const getErrorMessage = (error: ProductErrorInterface) => {
+    const product = orderPreview?.products.find(
+      (p) => p.id === error.productId
+    );
+
+    switch (error.error.code) {
+      case 'insufficient-stock':
+        return {
+          title: `Estoque insuficiente`,
+          message: `O item ${product?.name} não possui estoque suficiente para a quantidade solicitada. Quantidade disponível: ${product?.stockAmount}`,
+        };
+      case 'purchase-limit':
+        return {
+          title: `Limite de compra excedido`,
+          message: `O item ${product?.name} possui limite de compra de ${error.error.limit} unidades por CPF/CNPJ.`,
+        };
+      default:
+        return {
+          title: `Erro ao processar o item ${product?.name}`,
+          message: `Ocorreu um erro ao processar o item ${product?.name}. Por favor, tente novamente mais tarde.`,
+        };
+    }
+  };
 
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
@@ -139,6 +166,9 @@ const _CheckoutInfo = ({
           onSuccess: (data: OrderPreviewResponse) => {
             if (data && data.providersForSelection?.length && !choosedPayment) {
               setChoosedPayment(data.providersForSelection[0]);
+            }
+            if (data.productsErrors && data.productsErrors?.length > 0) {
+              setProductErros(data.productsErrors ?? []);
             }
             setOrderPreview(data);
             if (data.products.map((p) => p.id).length != productIds.length) {
@@ -430,7 +460,7 @@ const _CheckoutInfo = ({
           </div>
         )}
 
-        <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-mt-6 sm:pw-mt-0">
+        <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
           {choosedPayment?.inputs && choosedPayment.inputs.length ? (
             <>
               <p className="pw-text-[18px] pw-font-[700]">
@@ -456,7 +486,7 @@ const _CheckoutInfo = ({
             Resumo da compra
           </p>
           {checkoutStatus == CheckoutStatus.FINISHED && (
-            <p className="pw-font-[700] pw-text-2xl pw-mb-6 pw-mt-2">
+            <p className="pw-font-[700] pw-text-[#295BA6] pw-text-2xl pw-mb-6 pw-mt-2">
               {translate(
                 'checkout>components>checkoutInfo>proccessingBlockchain'
               )}
@@ -494,6 +524,24 @@ const _CheckoutInfo = ({
                 ).toString()}
               />
             ))}
+          </div>
+          <div>
+            {productErros
+              .reduce(
+                (acc: ProductErrorInterface[], prod: ProductErrorInterface) => {
+                  if (acc.some((p) => p.productId == prod.productId))
+                    return acc;
+                  else return [...acc, prod];
+                },
+                []
+              )
+              .map((prod: ProductErrorInterface) => (
+                <ErrorMessage
+                  className="pw-mt-2"
+                  {...getErrorMessage(prod)}
+                  key={prod.productId}
+                />
+              ))}
           </div>
           {_ButtonsToShow}
         </div>

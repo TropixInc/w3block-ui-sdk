@@ -8,9 +8,17 @@ export interface OrderPreviewResponse {
   clientServiceFee?: string;
   gasFee?: GasFee;
   totalPrice?: string;
+  productsErrors?: ProductErrorInterface[];
   providersForSelection?: PaymentMethodsAvaiable[];
 }
 
+export interface ProductErrorInterface {
+  productId: string;
+  error: {
+    code: string;
+    limit: number;
+  };
+}
 export interface createOrderResponse {
   id: string;
   createdAt: string;

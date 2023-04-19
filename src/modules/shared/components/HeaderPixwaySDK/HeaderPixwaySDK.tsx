@@ -191,6 +191,7 @@ const _HeaderPixwaySDK = ({
 
             <div className="pw-order-1 sm:pw-order-3">
               <NavigationLoginPixwaySDK
+                backgroundColor={headerBgColor}
                 hasSignUp={hasSignUp}
                 textColor={
                   textColor ??
