@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.237](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.236...v0.1.1-alpha.237) (2023-04-19)
+
+
+### Bug Fixes
+
+* adjusted tokens card interaction with external tokens ([#184](https://github.com/TropixInc/w3block-ui-sdk/issues/184)) ([09c5daf](https://github.com/TropixInc/w3block-ui-sdk/commit/09c5daf993c0fb7e1d77fb4da169b83b581bfa00))
+
 ### [0.1.1-alpha.236](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.235...v0.1.1-alpha.236) (2023-04-19)
 
 ### [0.1.1-alpha.235](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.234...v0.1.1-alpha.235) (2023-04-19)
