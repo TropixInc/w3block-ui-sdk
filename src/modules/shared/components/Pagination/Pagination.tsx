@@ -121,6 +121,7 @@ export const Pagination = ({
           >
             <input
               {...rest}
+              disabled={pagesQuantity === 1}
               onChange={(event) => onInputChange(event, onChange)}
               onKeyDown={(event) => onEnterInput(event)}
               onBlur={() => onInputBlur(onBlur)}

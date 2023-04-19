@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { AxiosResponse } from 'axios';
+import validator from 'validator';
 
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
@@ -14,6 +15,7 @@ interface TokenData {
   contractAddress?: string;
   chainId?: string;
   tokenId?: string;
+  enabled?: boolean;
 }
 
 export interface CompanyTheme {
@@ -68,6 +70,7 @@ export const usePublicTokenData = ({
   chainId,
   contractAddress,
   tokenId,
+  enabled = true,
 }: TokenData) => {
   const axios = useAxios(W3blockAPI.KEY);
 
@@ -91,8 +94,10 @@ export const usePublicTokenData = ({
     {
       staleTime: Infinity,
       enabled:
-        (Boolean(contractAddress) && Boolean(chainId) && Boolean(tokenId)) ||
-        Boolean(rfid),
+        !validator.isEmpty(contractAddress ?? '') &&
+        !validator.isEmpty(tokenId ?? '') &&
+        !validator.isEmpty(chainId ?? '') &&
+        enabled,
     }
   );
 };

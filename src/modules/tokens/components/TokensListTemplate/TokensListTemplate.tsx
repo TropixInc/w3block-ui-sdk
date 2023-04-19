@@ -34,11 +34,9 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
     return tokens?.slice(startIndex, lastIndex);
   }, [page, tokens]);
 
-  // console.log('tokensDisplaying', tokensDisplaying);
-
   useEffect(() => {
     if (!isLoading) {
-      setTotalPages(Math.ceil(tokens?.length ? tokens.length : 1 / 6));
+      setTotalPages(Math.ceil(tokens?.length ? tokens.length / 6 : 1 / 6));
     }
   }, [tokens, isLoading]);
 
@@ -62,6 +60,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
         {tokensDisplaying?.map((token) => (
           <li className="w-full" key={token.id}>
             <WalletTokenCard
+              collectionData={token.collectionData}
               category={token.category || ''}
               image={token.image}
               name={token.name}

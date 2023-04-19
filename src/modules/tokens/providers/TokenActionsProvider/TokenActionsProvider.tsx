@@ -19,6 +19,7 @@ interface Props {
   name: string;
   chainId: number;
   tokenId: string;
+  isInternalToken: boolean;
 }
 
 export const TokenActionsProvider = ({
@@ -30,12 +31,14 @@ export const TokenActionsProvider = ({
   name,
   chainId,
   tokenId,
+  isInternalToken,
 }: Props) => {
   const [translate] = useTranslation();
   const { data: publicTokenResponse } = usePublicTokenData({
     chainId: chainId.toString(),
     tokenId,
     contractAddress,
+    enabled: isInternalToken,
   });
   const {
     isOpen: isOpenTransferModal,
