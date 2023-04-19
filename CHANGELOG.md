@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.235](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.234...v0.1.1-alpha.235) (2023-04-19)
+
+
+### Bug Fixes
+
+* **pe-262:** adjusts on cards and footer ([#183](https://github.com/TropixInc/w3block-ui-sdk/issues/183)) ([59d70f3](https://github.com/TropixInc/w3block-ui-sdk/commit/59d70f31143698a8f5c3e7bd777dd69ecdb79590))
+
 ### [0.1.1-alpha.234](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.233...v0.1.1-alpha.234) (2023-04-17)
 
 ### [0.1.1-alpha.233](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.232...v0.1.1-alpha.233) (2023-04-17)
