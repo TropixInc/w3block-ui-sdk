@@ -98,10 +98,10 @@ const _W3blockFooter = ({
         <div className="pw-pb-6 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-pt-10">
           <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
             {styleData?.menuLinks
-              ? styleData?.menuLinks?.map(({ name, slug }) => (
+              ? styleData?.menuLinks?.map(({ label, value }) => (
                   <a
-                    key={slug}
-                    href={slug}
+                    key={label}
+                    href={value}
                     className="footer-menu"
                     style={
                       {
@@ -113,7 +113,7 @@ const _W3blockFooter = ({
                       } as CSSProperties
                     }
                   >
-                    {name}
+                    {label}
                   </a>
                 ))
               : links?.map((link) => (

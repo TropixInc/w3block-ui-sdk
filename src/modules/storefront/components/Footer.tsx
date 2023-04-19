@@ -7,6 +7,7 @@ import { ReactComponent as InstagramIcon } from '../../shared/assets/icons/insta
 import { ReactComponent as LinkedinIcon } from '../../shared/assets/icons/linkedin.svg';
 import { ReactComponent as TelegramIcon } from '../../shared/assets/icons/message.svg';
 import { ReactComponent as TwitterIcon } from '../../shared/assets/icons/twitter.svg';
+import { ReactComponent as WeblockLogo } from '../../shared/assets/icons/w3block_logo_white.svg';
 import { ReactComponent as WhatsappIcon } from '../../shared/assets/icons/whatsapp.svg';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
@@ -86,10 +87,10 @@ export const Footer = ({ data }: { data: FooterData }) => {
       >
         <div className="pw-pb-6 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-pt-10">
           <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
-            {menuLinks?.map(({ name, slug }) => (
+            {menuLinks?.map(({ label, value }) => (
               <a
-                key={slug}
-                href={slug}
+                key={label}
+                href={value}
                 className="footer-menu"
                 style={
                   {
@@ -99,7 +100,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
                   } as CSSProperties
                 }
               >
-                {name}
+                {label}
               </a>
             ))}
           </div>
@@ -146,8 +147,18 @@ export const Footer = ({ data }: { data: FooterData }) => {
       </div>
 
       {w3blockSignature && (
-        <div className="pw-w-full pw-grid pw-place-items-center pw-h-[14px] pw-bg-white pw-font-medium pw-text-xs pw-my-[14px]">
-          <p>Copyright {new Date().getFullYear()} - [web/lock]</p>
+        <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-h-[14px] pw-bg-black pw-font-medium pw-text-xs pw-py-[25px]">
+          <a
+            href="https://w3block.io"
+            className="pw-flex"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p className="pw-text-center pw-text-white pw-font-medium pw-text-[11px] pw-mr-[6px]">
+              Powered by
+            </p>
+            <WeblockLogo width={56} height={16} />
+          </a>
         </div>
       )}
     </div>
