@@ -137,10 +137,13 @@ const _CheckoutInfo = ({
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess: (data: OrderPreviewResponse) => {
-            if (data && data.providersForSelection?.length) {
+            if (data && data.providersForSelection?.length && !choosedPayment) {
               setChoosedPayment(data.providersForSelection[0]);
             }
             setOrderPreview(data);
+            if (data.products.map((p) => p.id).length != productIds.length) {
+              setProductIds(data.products.map((p) => p.id));
+            }
           },
           onError: () => {
             setRequestError(true);

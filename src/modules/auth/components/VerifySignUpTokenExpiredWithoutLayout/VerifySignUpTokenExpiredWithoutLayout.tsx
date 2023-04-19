@@ -4,6 +4,7 @@ import { Trans } from 'react-i18next';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
 import { useRequestPasswordChange } from '../../hooks';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
@@ -21,7 +22,7 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
   onSendEmail,
   isPostSignUp = false,
 }: Props) => {
-  const { connectProxyPass } = useCompanyConfig();
+  const { connectProxyPass, appBaseUrl } = useCompanyConfig();
   const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
   const {
     mutate: emailMutate,
@@ -40,12 +41,13 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailSuccess]);
 
-  const callbackPath =
-    connectProxyPass +
-    (isPostSignUp
-      ? PixwayAppRoutes.COMPLETE_SIGNUP
-      : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
-
+  const callbackPath = removeDoubleSlashesOnUrl(
+    appBaseUrl +
+      connectProxyPass +
+      (isPostSignUp
+        ? PixwayAppRoutes.COMPLETE_SIGNUP
+        : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION)
+  );
   const handleClick = () => {
     if (isPostSignUp) {
       mutate({

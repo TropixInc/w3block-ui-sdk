@@ -27,6 +27,7 @@ interface ProductToSendPayload {
 interface OrderPreviewPayload {
   orderProducts: ProductToSendPayload[];
   currencyId: string;
+  acceptIncompleteCart?: boolean;
 }
 
 export const useCheckout = () => {
@@ -48,6 +49,7 @@ export const useCheckout = () => {
       >(PixwayAPIRoutes.ORDER_PREVIEW.replace('{companyId}', companyId), {
         orderProducts: products,
         currencyId,
+        acceptIncompleteCart: true,
       });
       return preview.data;
     }

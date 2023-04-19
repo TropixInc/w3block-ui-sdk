@@ -26,7 +26,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
   isPostSignUp = false,
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
-  const { connectProxyPass } = useCompanyConfig();
+  const { connectProxyPass, appBaseUrl } = useCompanyConfig();
   const { mutate, isSuccess, isLoading, reset } = useRequestPasswordChange();
   const {
     mutate: emailMutate,
@@ -62,7 +62,8 @@ export const VerifySignUpMailSentWithoutLayout = ({
   }, [emailSuccess, setCountdownDate, emailReset]);
 
   const callbackPath = removeDoubleSlashesOnUrl(
-    connectProxyPass +
+    appBaseUrl +
+      connectProxyPass +
       (isPostSignUp
         ? PixwayAppRoutes.COMPLETE_SIGNUP
         : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION)
