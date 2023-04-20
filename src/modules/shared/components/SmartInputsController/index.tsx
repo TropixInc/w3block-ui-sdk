@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
 
 import InputCpf from '../SmartInputs/InputCpf';
@@ -35,6 +37,7 @@ const SmartInputsController = ({
   docStatus,
   docFileValue,
 }: SmartProps) => {
+  const [translate] = useTranslation();
   const renderInput = () => {
     switch (type) {
       case DataTypesEnum.Cpf:
@@ -90,6 +93,20 @@ const SmartInputsController = ({
             docValue={docFileValue}
             assetId={assetId}
             docStatus={docStatus}
+            acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
+          />
+        );
+
+      case DataTypesEnum.MultifaceSelfie:
+        return (
+          <InputFile
+            label={label}
+            name={name}
+            docValue={docFileValue}
+            assetId={assetId}
+            docStatus={docStatus}
+            subtitle={translate('auth>smartInputsController>subtitleInputFile')}
+            acceptTypesDocs={['.png', '.jpeg', '.jpg']}
           />
         );
     }

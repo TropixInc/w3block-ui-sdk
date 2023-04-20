@@ -23,6 +23,8 @@ interface InputFileProps {
   docValue?: string;
   assetId?: string | null;
   docStatus?: UserDocumentStatus;
+  subtitle?: string;
+  acceptTypesDocs: Array<string>;
 }
 
 const InputFile = ({
@@ -31,6 +33,8 @@ const InputFile = ({
   docValue,
   assetId,
   docStatus,
+  subtitle,
+  acceptTypesDocs,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -66,7 +70,7 @@ const InputFile = ({
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
-    accept: ['.png', '.jpeg', '.jpg', '.pdf'],
+    accept: acceptTypesDocs,
     disabled: Boolean(
       docValue && docStatus !== UserDocumentStatus.RequiredReview
     ),
@@ -119,6 +123,9 @@ const InputFile = ({
     <div className="pw-mb-3">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
+      </p>
+      <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
+        {subtitle}
       </p>
       <FormItemContainer
         invalid={isError || mutateError || !field.value || fieldState.invalid}

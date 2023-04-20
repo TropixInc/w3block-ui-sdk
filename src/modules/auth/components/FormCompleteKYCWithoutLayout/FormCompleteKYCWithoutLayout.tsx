@@ -65,6 +65,11 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
 
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
+
+    const documents = Object.values(dynamicValues);
+
+    const validDocs = documents.filter((item) => item);
+
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
       mutate({
@@ -72,7 +77,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
         contextId,
         userId,
         documents: {
-          documents: Object.values(dynamicValues),
+          documents: validDocs,
         },
       });
     }
