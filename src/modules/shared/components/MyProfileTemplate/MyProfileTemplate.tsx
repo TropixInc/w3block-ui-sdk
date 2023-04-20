@@ -7,13 +7,16 @@ import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfir
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
+import InfosKYC from '../InfosKYC/InfosKYC';
 import { Menu } from '../Menu';
 import { ModalBase } from '../ModalBase';
 import { MyProfile } from '../MyProfile/MyProfile';
 import { PixwayButton } from '../PixwayButton';
+import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {
@@ -25,6 +28,17 @@ const _MyProfileTemplate = () => {
   const email = profile?.data?.email ?? '';
   const callbackPath = connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP;
   const [isOpen, setIsOpen] = useState(false);
+  const { data: tenantContext, isLoading: isLoadingTenantContext } =
+    useGetTenantContext();
+
+  const contextsActivated = useMemo(() => {
+    if (!isLoadingTenantContext && tenantContext) {
+      const contexts = tenantContext?.data?.items.filter(
+        ({ active }) => active
+      );
+      return contexts;
+    }
+  }, [isLoadingTenantContext, tenantContext]);
 
   const formattedEmail = useMemo(() => {
     const emailSplitted = email.split('@');
@@ -87,12 +101,31 @@ const _MyProfileTemplate = () => {
           )}
         >
           {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
-          <div className="pw-flex pw-w-full pw-justify-between pw-my-[25px]">
+          <div className="pw-flex pw-w-full pw-gap-x-6 pw-my-[25px]">
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
-            <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-              <MyProfile />
+            <div className="pw-w-full">
+              <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
+                <MyProfile />
+              </div>
+              <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
+                {isLoadingTenantContext ? (
+                  <div className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-center pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
+                    <Spinner />
+                  </div>
+                ) : (
+                  contextsActivated?.length &&
+                  contextsActivated.map(({ contextId, context }) => (
+                    <InfosKYC
+                      key={contextId}
+                      contextId={contextId}
+                      contextName={context?.slug ?? ''}
+                      userId={profile?.data?.id ?? ''}
+                    />
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>

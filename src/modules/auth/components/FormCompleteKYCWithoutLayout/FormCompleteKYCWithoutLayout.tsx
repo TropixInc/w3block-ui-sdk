@@ -37,7 +37,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
     usePostUsersDocuments();
   const { companyId: tenantId } = useCompanyConfig();
 
-  const { data: tenantInputs } = useGetTenantInputsBySlug();
+  const { data: tenantInputs } = useGetTenantInputsBySlug({ slug: 'signup' });
 
   const { data: documents } = useGetUsersDocuments({
     userId: userId ?? '',

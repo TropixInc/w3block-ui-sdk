@@ -14,9 +14,16 @@ interface InputUrlProps {
   name: string;
   docValue?: string;
   docStatus?: UserDocumentStatus;
+  hidenValidations?: boolean;
 }
 
-const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
+const InputUrl = ({
+  label,
+  name,
+  docValue,
+  docStatus,
+  hidenValidations = false,
+}: InputUrlProps) => {
   const { field, fieldState } = useController({ name });
   const error = fieldState?.error as unknown as InputError;
   const [url, setUrl] = useState('');
@@ -44,11 +51,14 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3">
+    <div className="pw-mb-3 pw-w-full">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
+      <FormItemContainer
+        invalid={fieldState.invalid || !field.value}
+        className="pw-w-full"
+      >
         <input
           name={name}
           readOnly={Boolean(
@@ -64,14 +74,16 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
           )}
         />
       </FormItemContainer>
-      <p className="mt-5">
-        {field.value && (
-          <InputStatus
-            invalid={fieldState.invalid}
-            errorMessage={error?.value?.message}
-          />
-        )}
-      </p>
+      {!hidenValidations && (
+        <p className="mt-5">
+          {field.value && (
+            <InputStatus
+              invalid={fieldState.invalid}
+              errorMessage={error?.value?.message}
+            />
+          )}
+        </p>
+      )}
     </div>
   );
 };

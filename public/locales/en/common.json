@@ -214,5 +214,6 @@
   "commerce>productPage>tokenDetails": "Token details",
   "commerce>productPage>totalTokens": "Total tokens",
   "commerce>productPage>soldTokens": "Sold tokens",
-  "commerce>productPage>description": "Description"
+  "commerce>productPage>description": "Description",
+  "shared>InfosKYC>errorRequest": "There was an error fetching the data, please try again later."
 }

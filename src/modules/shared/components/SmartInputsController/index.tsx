@@ -15,8 +15,10 @@ interface SmartProps {
   assetId?: string | null;
 
   docStatus?: UserDocumentStatus;
+  openDocs?: boolean;
 
   docFileValue?: string;
+  hidenValidations?: boolean;
 }
 
 export interface InputError {
@@ -34,6 +36,8 @@ const SmartInputsController = ({
   assetId,
   docStatus,
   docFileValue,
+  hidenValidations = false,
+  openDocs,
 }: SmartProps) => {
   const renderInput = () => {
     switch (type) {
@@ -44,6 +48,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.Text:
@@ -53,6 +58,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.Phone:
@@ -62,6 +68,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.Email:
@@ -71,6 +78,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.Url:
@@ -80,6 +88,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.File:
@@ -90,6 +99,8 @@ const SmartInputsController = ({
             docValue={docFileValue}
             assetId={assetId}
             docStatus={docStatus}
+            hidenValidations={hidenValidations}
+            openDocs={openDocs}
           />
         );
     }

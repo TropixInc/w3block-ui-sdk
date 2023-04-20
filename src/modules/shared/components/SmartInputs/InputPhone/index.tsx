@@ -15,9 +15,16 @@ interface InputPhoneProps {
 
   docValue?: string;
   docStatus?: UserDocumentStatus;
+  hidenValidations?: boolean;
 }
 
-const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
+const InputPhone = ({
+  label,
+  name,
+  docValue,
+  docStatus,
+  hidenValidations = false,
+}: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const error = fieldState?.error as unknown as InputError;
@@ -44,7 +51,7 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3">
+    <div className="pw-mb-3 pw-w-full">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
@@ -62,14 +69,16 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
           )}
         />
       </FormItemContainer>
-      <p className="mt-5">
-        {field.value && (
-          <InputStatus
-            invalid={fieldState.invalid}
-            errorMessage={error?.value?.message}
-          />
-        )}
-      </p>
+      {!hidenValidations && (
+        <p className="mt-5">
+          {field.value && (
+            <InputStatus
+              invalid={fieldState.invalid}
+              errorMessage={error?.value?.message}
+            />
+          )}
+        </p>
+      )}
     </div>
   );
 };

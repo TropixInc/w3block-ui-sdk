@@ -23,6 +23,8 @@ interface InputFileProps {
   docValue?: string;
   assetId?: string | null;
   docStatus?: UserDocumentStatus;
+  hidenValidations?: boolean;
+  openDocs?: boolean;
 }
 
 const InputFile = ({
@@ -31,6 +33,8 @@ const InputFile = ({
   docValue,
   assetId,
   docStatus,
+  hidenValidations = false,
+  openDocs,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -116,7 +120,7 @@ const InputFile = ({
   }, [fileRejections.length]);
 
   return (
-    <div className="pw-mb-3">
+    <div className="pw-mb-3 pw-w-full">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
@@ -137,20 +141,30 @@ const InputFile = ({
           />
           <FileIcon className="pw-w-4" />
           <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
-            {renderName()}
+            {openDocs ? (
+              <a href={docValue} target="_blank" rel="noreferrer">
+                {docValue}
+              </a>
+            ) : (
+              renderName()
+            )}
           </p>
         </div>
       </FormItemContainer>
-      <p className="mt-5">
-        {field.value || Boolean(fileRejections.length) ? (
-          <InputStatus
-            invalid={isError || mutateError || Boolean(fileRejections.length)}
-            errorMessage={
-              fileRejections.length ? translate('auth>inputFile>aceptFile') : ''
-            }
-          />
-        ) : null}
-      </p>
+      {!hidenValidations && (
+        <p className="mt-5">
+          {field.value || Boolean(fileRejections.length) ? (
+            <InputStatus
+              invalid={isError || mutateError || Boolean(fileRejections.length)}
+              errorMessage={
+                fileRejections.length
+                  ? translate('auth>inputFile>aceptFile')
+                  : ''
+              }
+            />
+          ) : null}
+        </p>
+      )}
     </div>
   );
 };
