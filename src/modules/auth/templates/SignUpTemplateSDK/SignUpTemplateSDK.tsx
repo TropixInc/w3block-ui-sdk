@@ -1,3 +1,5 @@
+import { useContext, useMemo } from 'react';
+
 import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerSDK,
@@ -9,7 +11,12 @@ import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
+import {
+  breakpointsEnum,
+  useBreakpoints,
+} from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { ThemeContext } from '../../../storefront/contexts';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
 import { SignUpFormWithoutLayout } from '../../components/SignUpFormWithoutLayout';
 
@@ -54,16 +61,34 @@ export const SignUpTemplateSDK = ({
   extraBy,
 }: SignUpTemplateSDKProps) => {
   const [translate] = useTranslation();
+  const context = useContext(ThemeContext);
+  const breakpoint = useBreakpoints();
+  const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
+  const style = useMemo(() => {
+    if (context && context.defaultTheme) {
+      const configStyleData = context.defaultTheme?.configurations?.styleData;
+      const configMobileStyleData =
+        context.defaultTheme?.configurations?.mobileStyleData;
+      const mergedConfigStyleData = mobileBreakpoints.includes(breakpoint)
+        ? { ...configStyleData, ...configMobileStyleData }
+        : configStyleData;
+      return mergedConfigStyleData;
+    }
+    return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context]);
   return (
     <TranslatableComponent>
-      <div style={{ backgroundColor: bgColor }}>
+      <div
+        style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
+      >
         <ContainerControllerSDK
           className={className}
-          logoUrl={logoUrl}
+          logoUrl={style?.onBoardingLogoSrc?.assetUrl ?? logoUrl}
           FAQContext={FAQContext}
           classes={classes}
           contentType={contentType}
-          bgColor={bgColor}
+          bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           infoPosition={infoPosition}
           separation={separation}
           textContainer={textContainer}
@@ -77,8 +102,8 @@ export const SignUpTemplateSDK = ({
                 isLoading={isLoading}
                 hasSignUp={hasSignUp}
                 error={error}
-                privacyRedirect={privacyRedirect}
-                termsRedirect={termsRedirect}
+                privacyRedirect={style?.privacyPolicy ?? privacyRedirect}
+                termsRedirect={style?.termsOfUse ?? termsRedirect}
               />
             </Box>
           }
