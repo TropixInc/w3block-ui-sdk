@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
 
 import { KycStatus } from '@w3block/sdk-id';
@@ -19,7 +19,12 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import {
+  useBreakpoints,
+  breakpointsEnum,
+} from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { ThemeContext } from '../../../storefront/contexts';
 import { FormCompleteKYCWithoutLayout } from '../../components/FormCompleteKYCWithoutLayout';
 
 interface CompleteKYCTemplateSDKProps {
@@ -96,23 +101,45 @@ export const CompleteKYCTemplateSDK = ({
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
+  const context = useContext(ThemeContext);
+  const breakpoint = useBreakpoints();
+  const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
+  const style = useMemo(() => {
+    if (context && context.defaultTheme) {
+      const configStyleData = context.defaultTheme?.configurations?.styleData;
+      const configMobileStyleData =
+        context.defaultTheme?.configurations?.mobileStyleData;
+      const mergedConfigStyleData = mobileBreakpoints.includes(breakpoint)
+        ? { ...configStyleData, ...configMobileStyleData }
+        : configStyleData;
+      return mergedConfigStyleData;
+    }
+    return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context]);
+
   return isLoadingProfile ? (
-    <div className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center">
+    <div
+      style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
+      className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center"
+    >
       <Spinner />
     </div>
   ) : profile ? (
     <TranslatableComponent>
-      <div style={{ backgroundColor: bgColor }}>
+      <div
+        style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
+      >
         <ContainerControllerSDK
           infoPosition={infoPosition}
           contentType={contentType}
           FAQContext={FAQContext}
           classes={classes}
           separation={separation}
-          logoUrl={logoUrl}
+          logoUrl={style?.onBoardingLogoSrc?.assetUrl ?? logoUrl}
           textContainer={textContainer}
           className={className}
-          bgColor={bgColor}
+          bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           extraBy={extraBy}
           infoComponent={
             <Box>

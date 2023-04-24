@@ -19,9 +19,14 @@ import { ProductPageData } from '../interfaces';
 interface ProductPageProps {
   data: ProductPageData;
   params?: string[];
+  hasCart?: boolean;
 }
 
-export const ProductPage = ({ data, params }: ProductPageProps) => {
+export const ProductPage = ({
+  data,
+  params,
+  hasCart = true,
+}: ProductPageProps) => {
   const { styleData, mobileStyleData } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
@@ -187,7 +192,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                           Pagar em:
                         </p>
                         <form className="pw-flex pw-gap-4" action="submit">
-                          {product?.prices.map((price) => (
+                          {product?.prices.map((price: any) => (
                             <div
                               key={price.currencyId}
                               className="pw-flex pw-gap-2"
@@ -219,11 +224,11 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                       : product
                       ? `${
                           product?.prices.find(
-                            (price) => price.currencyId == currencyId?.id
+                            (price: any) => price.currencyId == currencyId?.id
                           )?.currency.symbol
                         } ${
                           product?.prices.find(
-                            (price) => price.currencyId == currencyId?.id
+                            (price: any) => price.currencyId == currencyId?.id
                           )?.amount
                         }`
                       : ''}
@@ -304,7 +309,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               ) : null}
               {actionButton && (
                 <div className="pw-flex pw-flex-col">
-                  {!currencyId?.crypto && (
+                  {!currencyId?.crypto && hasCart ? (
                     <button
                       disabled={
                         product?.stockAmount == 0 ||
@@ -335,7 +340,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                         ? 'Remover do carrinho'
                         : 'Adicionar ao carrinho'}
                     </button>
-                  )}
+                  ) : null}
                   <button
                     disabled={
                       product?.stockAmount == 0 ||
