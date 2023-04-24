@@ -34,7 +34,7 @@
     "@types/react-pdf": "^5.7.2",
     "@types/validator": "^13.7.11",
     "@w3block/pixchain-react-metamask": "^2.8.1",
-    "@w3block/sdk-id": "^0.1.48",
+    "@w3block/sdk-id": "^0.1.50",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
     "cpf-cnpj-validator": "^1.0.3",

@@ -389,5 +389,6 @@
   "commerce>productPage>tokenDetails": "Detalhes do token",
   "commerce>productPage>totalTokens": "Número de tokens",
   "commerce>productPage>soldTokens": "Tokens vendidos",
-  "commerce>productPage>description": "Descrição"
+  "commerce>productPage>description": "Descrição",
+  "auth>smartInputsController>subtitleInputFile": "Favor incluir uma imagem selfie em boas condições de iluminação e resolução."
 }

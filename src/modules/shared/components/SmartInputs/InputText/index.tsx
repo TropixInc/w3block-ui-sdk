@@ -45,7 +45,7 @@ const InputText = ({ label, name, docValue, docStatus }: InputText) => {
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
+      <FormItemContainer invalid={fieldState.invalid}>
         <input
           readOnly={Boolean(
             docValue && docStatus !== UserDocumentStatus.RequiredReview
