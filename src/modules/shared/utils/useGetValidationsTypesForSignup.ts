@@ -16,6 +16,11 @@ export interface ValidationsValues {
 
 const validates: Array<ValidationsValues> = [];
 
+const validDate = (value: string) => {
+  console.log(new Date(value));
+  return true;
+};
+
 export const useGetValidationsTypesForSignup = (
   values: Array<TenantInputEntityDto>
 ) => {
@@ -161,6 +166,29 @@ export const useGetValidationsTypesForSignup = (
               ? string().required(
                   translate('auth>getValidationsTypesForSignup>insertText')
                 )
+              : string(),
+          }),
+        });
+        break;
+      case DataTypesEnum.Birthday:
+        validates.push({
+          yupKey: id,
+          validations: object().shape({
+            inputId: string(),
+            value: mandatory
+              ? string()
+                  .required(
+                    translate('auth>getValidationsTypesForSignup>insertText')
+                  )
+                  .test(
+                    'cpf',
+                    translate(
+                      'auth>getValidationsTypesForSignup>insertValidCPF'
+                    ),
+                    (value) => {
+                      return value ? validDate(value) : true;
+                    }
+                  )
               : string(),
           }),
         });

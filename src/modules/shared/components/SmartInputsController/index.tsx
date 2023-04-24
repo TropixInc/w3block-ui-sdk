@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
 
+import InputBirthdate from '../SmartInputs/InputBirthdate';
 import InputCpf from '../SmartInputs/InputCpf';
 import InputEmail from '../SmartInputs/InputEmail';
 import InputFile from '../SmartInputs/InputFile';
@@ -52,6 +53,15 @@ const SmartInputsController = ({
       case DataTypesEnum.Text:
         return (
           <InputText
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
+      case DataTypesEnum.Birthday:
+        return (
+          <InputBirthdate
             label={label}
             name={name}
             docValue={value}
