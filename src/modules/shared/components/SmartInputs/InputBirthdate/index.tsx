@@ -27,12 +27,12 @@ const InputBirthdate = ({
 
   const handleTextChange = (value: string) => {
     setInputValue(value);
-    field.onChange({ inputId: undefined, value: value });
+    field.onChange({ inputId: name, value: value });
   };
 
   useEffect(() => {
     if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
-      const formattedValue = format(new Date(docValue), 'dd/MM/yyyy');
+      const formattedValue = format(new Date(docValue), 'yyyy-MM-dd'); // TODO VALIDAR SE FUNCIONA ASSIM NO DATEFNS
       setInputValue(formattedValue);
       field.onChange({ inputId: name, value: formattedValue });
     }
@@ -47,9 +47,8 @@ const InputBirthdate = ({
       <FormItemContainer invalid={fieldState.invalid}>
         <input
           type="date"
-          placeholder="dd/mm/yyyy"
           readOnly={Boolean(
-            docValue && docStatus !== UserDocumentStatus.RequiredReview
+            docValue && ![UserDocumentStatus.Approved, UserDocumentStatus.Denied].includes(docStatus) // TODO acredito que seja essa logica certa
           )}
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
