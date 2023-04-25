@@ -27,15 +27,21 @@ import { Products } from './Products';
 interface StorefrontPreviewProps {
   params?: string[];
   children?: ReactNode;
+  hasHeader?: boolean;
+  hasFooter?: boolean;
 }
 
 export const StorefrontPreview = ({
   params,
   children,
+  hasFooter = true,
+  hasHeader = true,
 }: StorefrontPreviewProps) => {
   return (
     <ThemeProvider>
-      <Storefront params={params}>{children}</Storefront>
+      <Storefront hasFooter={hasFooter} hasHeader={hasHeader} params={params}>
+        {children}
+      </Storefront>
     </ThemeProvider>
   );
 };
@@ -127,6 +133,17 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
         type: ModulesType.HEADER,
         styleData: {},
       };
+
+  const hasHeaderDefault =
+    mergedConfigStyleData?.hasHeader != undefined &&
+    (asPath || '').includes('/auth/')
+      ? mergedConfigStyleData.hasHeader
+      : true;
+  const hasFooterDefault =
+    mergedConfigStyleData.hasFooter != undefined &&
+    (asPath || '').includes('/auth/')
+      ? mergedConfigStyleData.hasFooter
+      : true;
   return (
     <div
       style={{
@@ -136,7 +153,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
         fontFamily,
       }}
     >
-      <Header data={headerData} />
+      {hasHeaderDefault && <Header data={headerData} />}
 
       <Cookies
         data={
@@ -157,6 +174,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
         <>
           {isProductPage && (
             <ProductPage
+              hasCart={mergedConfigStyleData.hasCart}
               params={params}
               data={
                 theme.productPage ?? {
@@ -222,19 +240,21 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
           )}
         </>
       )}
-      <Footer
-        data={
-          theme.footer ?? {
-            id: '',
-            name: 'footer',
-            type: ModulesType.FOOTER,
-            styleData: {},
-            contentData: {},
-            mobileStyleData: {},
-            mobileContentData: {},
+      {hasFooterDefault && (
+        <Footer
+          data={
+            theme.footer ?? {
+              id: '',
+              name: 'footer',
+              type: ModulesType.FOOTER,
+              styleData: {},
+              contentData: {},
+              mobileStyleData: {},
+              mobileContentData: {},
+            }
           }
-        }
-      />
+        />
+      )}
     </div>
   );
 };

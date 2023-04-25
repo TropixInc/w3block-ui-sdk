@@ -1,13 +1,40 @@
+import { useContext, useMemo } from 'react';
+
 import { ContainerControllerSDK } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import {
+  useBreakpoints,
+  breakpointsEnum,
+} from '../../../shared/hooks/useBreakpoints/useBreakpoints';
+import { ThemeContext } from '../../../storefront/contexts';
 import { RequestPasswordChangeWithoutLayout } from '../../components/RequestPasswordChangeWithoutLayout';
 import { AllAuthPageProps } from '../CompleteProfileCustomTemplate';
 
 export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
+  const context = useContext(ThemeContext);
+  const breakpoint = useBreakpoints();
+  const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
+  const style = useMemo(() => {
+    if (context && context.defaultTheme) {
+      const configStyleData = context.defaultTheme?.configurations?.styleData;
+      const configMobileStyleData =
+        context.defaultTheme?.configurations?.mobileStyleData;
+      const mergedConfigStyleData = mobileBreakpoints.includes(breakpoint)
+        ? { ...configStyleData, ...configMobileStyleData }
+        : configStyleData;
+      return mergedConfigStyleData;
+    }
+    return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context]);
   return (
     <TranslatableComponent>
-      <div style={{ backgroundColor: props.bgColor }}>
+      <div
+        style={{
+          backgroundColor: style?.onBoardingBackgroundColor ?? props.bgColor,
+        }}
+      >
         <ContainerControllerSDK
           fullScreen
           contentType={props.contentType}
@@ -16,9 +43,9 @@ export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
           separation={props.separation}
           className={props.className}
           classes={props.classes}
-          bgColor={props.bgColor}
+          bgColor={style?.onBoardingBackgroundColor ?? props.bgColor}
           infoPosition={props.infoPosition}
-          logoUrl={props.logoUrl}
+          logoUrl={style?.onBoardingLogoSrc?.assetUrl ?? props.logoUrl}
           extraBy={props.extraBy}
           infoComponent={
             <Box>

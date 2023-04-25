@@ -63,6 +63,7 @@ export const ContainerControllerSDK = ({
           <ContainerCenter
             className={classes?.infoComponentClass}
             infoComponent={infoComponent}
+            logoUrl={logoUrl}
           />
         ) : (
           <ContainerBeside
