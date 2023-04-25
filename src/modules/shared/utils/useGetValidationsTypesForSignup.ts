@@ -16,6 +16,21 @@ export interface ValidationsValues {
 
 const validates: Array<ValidationsValues> = [];
 
+const validateBirthdate = (date: string | undefined): boolean => {
+  const today = new Date();
+  if (date) {
+    const birthdate = new Date(date);
+    let age = today.getFullYear() - birthdate.getFullYear();
+    const month = today.getMonth() - birthdate.getMonth();
+
+    if (month < 0 || (month === 0 && today.getDate() < birthdate.getDate())) {
+      age--;
+    }
+
+    return age >= 18;
+  } else return false;
+};
+
 export const useGetValidationsTypesForSignup = (
   values: Array<TenantInputEntityDto>
 ) => {
@@ -162,6 +177,29 @@ export const useGetValidationsTypesForSignup = (
                   translate('auth>getValidationsTypesForSignup>insertText')
                 )
               : string(),
+          }),
+        });
+        break;
+      case DataTypesEnum.Birthdate:
+        validates.push({
+          yupKey: id,
+          validations: object().shape({
+            inputId: string(),
+            value: mandatory
+              ? string()
+                  .required(
+                    translate('auth>getValidationsTypesForSignup>insertText')
+                  )
+                  .test(
+                    'birthdate',
+                    'Você precisa ter 18 anos ou mais.',
+                    (value) => validateBirthdate(value)
+                  )
+              : string().test(
+                  'birthdate',
+                  'Você precisa ter 18 anos ou mais.',
+                  (value) => validateBirthdate(value)
+                ),
           }),
         });
         break;
