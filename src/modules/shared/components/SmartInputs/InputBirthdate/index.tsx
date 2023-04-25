@@ -1,42 +1,40 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import InputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
+import { format } from 'date-fns';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
-interface InputText {
+interface InputBirthdate {
   label: string;
   name: string;
   docValue?: string;
   docStatus?: UserDocumentStatus;
 }
 
-const InputBirthdate = ({ label, name, docValue, docStatus }: InputText) => {
+const InputBirthdate = ({
+  label,
+  name,
+  docValue,
+  docStatus,
+}: InputBirthdate) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const error = fieldState?.error as unknown as InputError;
 
   const handleTextChange = (value: string) => {
-    if (value) {
-      setInputValue(value);
-      field.onChange({ inputId: name, value: value });
-    } else {
-      setInputValue('');
-      field.onChange({
-        inputId: undefined,
-        value: undefined,
-      });
-    }
+    setInputValue(value);
+    field.onChange({ inputId: undefined, value: value });
   };
 
   useEffect(() => {
     if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
-      setInputValue(docValue);
-      field.onChange({ inputId: name, value: docValue });
+      const formattedValue = format(new Date(docValue), 'dd/MM/yyyy');
+      setInputValue(formattedValue);
+      field.onChange({ inputId: name, value: formattedValue });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
@@ -47,8 +45,9 @@ const InputBirthdate = ({ label, name, docValue, docStatus }: InputText) => {
         {label}
       </p>
       <FormItemContainer invalid={fieldState.invalid}>
-        <InputMask
-          mask="99/99/9999"
+        <input
+          type="date"
+          placeholder="dd/mm/yyyy"
           readOnly={Boolean(
             docValue && docStatus !== UserDocumentStatus.RequiredReview
           )}

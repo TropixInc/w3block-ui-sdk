@@ -59,7 +59,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
           />
         );
-      case DataTypesEnum.Birthday:
+      case DataTypesEnum.Birthdate:
         return (
           <InputBirthdate
             label={label}

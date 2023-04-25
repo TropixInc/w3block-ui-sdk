@@ -16,9 +16,19 @@ export interface ValidationsValues {
 
 const validates: Array<ValidationsValues> = [];
 
-const validDate = (value: string) => {
-  console.log(new Date(value));
-  return true;
+const validateBirthdate = (date: string | undefined): boolean => {
+  const today = new Date();
+  if (date) {
+    const birthdate = new Date(date);
+    let age = today.getFullYear() - birthdate.getFullYear();
+    const month = today.getMonth() - birthdate.getMonth();
+
+    if (month < 0 || (month === 0 && today.getDate() < birthdate.getDate())) {
+      age--;
+    }
+
+    return age >= 18;
+  } else return false;
 };
 
 export const useGetValidationsTypesForSignup = (
@@ -170,7 +180,7 @@ export const useGetValidationsTypesForSignup = (
           }),
         });
         break;
-      case DataTypesEnum.Birthday:
+      case DataTypesEnum.Birthdate:
         validates.push({
           yupKey: id,
           validations: object().shape({
@@ -181,15 +191,15 @@ export const useGetValidationsTypesForSignup = (
                     translate('auth>getValidationsTypesForSignup>insertText')
                   )
                   .test(
-                    'cpf',
-                    translate(
-                      'auth>getValidationsTypesForSignup>insertValidCPF'
-                    ),
-                    (value) => {
-                      return value ? validDate(value) : true;
-                    }
+                    'birthdate',
+                    'Você precisa ter 18 anos ou mais.',
+                    (value) => validateBirthdate(value)
                   )
-              : string(),
+              : string().test(
+                  'birthdate',
+                  'Você precisa ter 18 anos ou mais.',
+                  (value) => validateBirthdate(value)
+                ),
           }),
         });
         break;
