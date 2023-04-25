@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import { format } from 'date-fns';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
@@ -27,14 +26,13 @@ const InputBirthdate = ({
 
   const handleTextChange = (value: string) => {
     setInputValue(value);
-    field.onChange({ inputId: undefined, value: value });
+    field.onChange({ inputId: name, value: value });
   };
 
   useEffect(() => {
     if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
-      const formattedValue = format(new Date(docValue), 'dd/MM/yyyy');
-      setInputValue(formattedValue);
-      field.onChange({ inputId: name, value: formattedValue });
+      setInputValue(docValue);
+      field.onChange({ inputId: name, value: docValue });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
@@ -47,9 +45,13 @@ const InputBirthdate = ({
       <FormItemContainer invalid={fieldState.invalid}>
         <input
           type="date"
-          placeholder="dd/mm/yyyy"
           readOnly={Boolean(
-            docValue && docStatus !== UserDocumentStatus.RequiredReview
+            docValue &&
+              ![
+                UserDocumentStatus.Approved,
+                UserDocumentStatus.Denied,
+                UserDocumentStatus.RequiredReview,
+              ].includes(docStatus as UserDocumentStatus)
           )}
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
