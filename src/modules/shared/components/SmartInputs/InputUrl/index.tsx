@@ -56,7 +56,7 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
               docStatus !== UserDocumentStatus.RequiredReview &&
               isURL(docValue)
           )}
-          type="url"
+          type="text"
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}
           className={classNames(
