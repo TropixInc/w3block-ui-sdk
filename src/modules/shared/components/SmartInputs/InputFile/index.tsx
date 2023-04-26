@@ -14,6 +14,7 @@ import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import InputStatus from '../InputStatus';
 
@@ -138,9 +139,7 @@ const InputFile = ({
         >
           <input
             {...getInputProps()}
-            readOnly={Boolean(
-              docValue && docStatus !== UserDocumentStatus.RequiredReview
-            )}
+            readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           />
           <FileIcon className="pw-w-4" />
           <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">

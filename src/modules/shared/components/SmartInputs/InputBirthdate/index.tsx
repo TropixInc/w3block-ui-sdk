@@ -3,6 +3,7 @@ import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -45,14 +46,7 @@ const InputBirthdate = ({
       <FormItemContainer invalid={fieldState.invalid}>
         <input
           type="date"
-          readOnly={Boolean(
-            docValue &&
-              ![
-                UserDocumentStatus.Approved,
-                UserDocumentStatus.Denied,
-                UserDocumentStatus.RequiredReview,
-              ].includes(docStatus as UserDocumentStatus)
-          )}
+          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"

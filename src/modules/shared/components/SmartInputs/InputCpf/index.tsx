@@ -6,6 +6,7 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromString';
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -64,9 +65,7 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
-          readOnly={Boolean(
-            docValue && docStatus !== UserDocumentStatus.RequiredReview
-          )}
+          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           name={name}
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}
