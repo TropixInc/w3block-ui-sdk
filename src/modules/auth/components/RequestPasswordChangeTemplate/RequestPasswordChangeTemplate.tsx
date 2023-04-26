@@ -86,7 +86,7 @@ const _RequestPasswordChangeTemplate = () => {
           onSubmit={methods.handleSubmit(onSubmit)}
           className="pw-pt-0 pw-pb-6 sm:pw-my-6"
         >
-          <h2 className="pw-text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6 text-[#35394C]">
+          <h2 className="pw-text-center pw-font-medium pw-text-lg pw-leading-[23px] pw-mb-6 pw-text-[#35394C]">
             {translate('companyAuth>requestPasswordChange>formTitle')}
           </h2>
 

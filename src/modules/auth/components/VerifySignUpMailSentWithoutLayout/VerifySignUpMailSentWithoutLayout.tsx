@@ -62,11 +62,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
   }, [emailSuccess, setCountdownDate, emailReset]);
 
   const callbackPath = removeDoubleSlashesOnUrl(
-    appBaseUrl +
-      connectProxyPass +
-      (isPostSignUp
-        ? PixwayAppRoutes.COMPLETE_SIGNUP
-        : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION)
+    appBaseUrl + connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP
   );
 
   const handleClick = () => {
@@ -80,6 +76,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
       emailMutate({
         email,
         callbackPath,
+        verificationType: 'invisible',
       });
     }
   };
@@ -102,14 +99,20 @@ export const VerifySignUpMailSentWithoutLayout = ({
             className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
             onClick={handleClick}
           >
-            {translate('auth>mailStep>resentCodeButton')}
+            {translate(
+              isPostSignUp
+                ? 'auth>mailStep>resentCodeButton'
+                : 'auth>mailStep>resentLinkButton'
+            )}
           </button>
         </div>
 
         {isActive ? (
           <p className="pw-text-[#353945] pw-text-[13px] pw-leading-[15.85px] pw-text-center pw-mt-[18px]">
             {translate(
-              'companyAuth>sendMailToChangePassword>cooldownTimeMessage',
+              isPostSignUp
+                ? 'companyAuth>sendMailToChangePassword>cooldownTimeMessage'
+                : 'companyAuth>sendMailToChangePassword>cooldownTimeMessageCode',
               {
                 minutes,
                 seconds: seconds.toString().padStart(2, '0'),
@@ -122,7 +125,13 @@ export const VerifySignUpMailSentWithoutLayout = ({
       <MailSent className="pw-max-w-[186px] pw-max-h-[178px] pw-stroke-brand-primary" />
 
       <p className="pw-text-[#353945] pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-mt-[23px] pw-mb-[18px]">
-        <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
+        <Trans
+          i18nKey={
+            isPostSignUp
+              ? 'auth>emailConfirmation>codeExpiresMessage'
+              : 'auth>emailConfirmation>linkExpiresMessage'
+          }
+        >
           O link expira em 15 minutos
           <button
             disabled={isActive || isLoading || emailLoading}
