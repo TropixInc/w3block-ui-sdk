@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import { format } from 'date-fns';
 
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -32,9 +32,8 @@ const InputBirthdate = ({
 
   useEffect(() => {
     if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
-      const formattedValue = format(new Date(docValue), 'yyyy-MM-dd'); // TODO VALIDAR SE FUNCIONA ASSIM NO DATEFNS
-      setInputValue(formattedValue);
-      field.onChange({ inputId: name, value: formattedValue });
+      setInputValue(docValue);
+      field.onChange({ inputId: name, value: docValue });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
@@ -47,9 +46,7 @@ const InputBirthdate = ({
       <FormItemContainer invalid={fieldState.invalid}>
         <input
           type="date"
-          readOnly={Boolean(
-            docValue && ![UserDocumentStatus.Approved, UserDocumentStatus.Denied].includes(docStatus) // TODO acredito que seja essa logica certa
-          )}
+          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
