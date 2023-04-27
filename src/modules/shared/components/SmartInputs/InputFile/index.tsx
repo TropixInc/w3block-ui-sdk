@@ -26,6 +26,7 @@ interface InputFileProps {
   docStatus?: UserDocumentStatus;
   subtitle?: string;
   acceptTypesDocs: Array<string>;
+  onChangeUploadProgess: (value: boolean) => void;
 }
 
 const InputFile = ({
@@ -36,6 +37,7 @@ const InputFile = ({
   docStatus,
   subtitle,
   acceptTypesDocs,
+  onChangeUploadProgess,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -47,9 +49,16 @@ const InputFile = ({
     mutate: mutateAssets,
     data: assets,
     isError: mutateError,
+    isLoading: isLoadingAsset,
   } = useUploadAssets();
 
-  const { mutate, data, isSuccess, isError } = useUploadFileToCloudinary();
+  const {
+    mutate,
+    data,
+    isSuccess,
+    isError,
+    isLoading: isLoadingUpload,
+  } = useUploadFileToCloudinary();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDrop = useCallback((acceptedFiles: string | any[]) => {
@@ -76,6 +85,11 @@ const InputFile = ({
       docValue && docStatus !== UserDocumentStatus.RequiredReview
     ),
   });
+
+  useEffect(() => {
+    onChangeUploadProgess(isLoadingUpload || isLoadingAsset);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingUpload, isLoadingAsset]);
 
   useEffect(() => {
     if (file && assets?.data?.id) {
