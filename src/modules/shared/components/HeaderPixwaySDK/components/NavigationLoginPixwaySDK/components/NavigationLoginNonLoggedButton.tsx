@@ -11,6 +11,7 @@ interface NavigationLoginNonLoggedButtonProps {
   signUpRoute?: string;
   hasSignUp?: boolean;
   textColor?: string;
+  backgroundColor?: string;
 }
 
 export const NavigationLoginNonLoggedButton = ({
@@ -18,6 +19,7 @@ export const NavigationLoginNonLoggedButton = ({
   signUpRoute = PixwayAppRoutes.SIGN_UP,
   hasSignUp = true,
   textColor = 'black',
+  backgroundColor = 'white',
 }: NavigationLoginNonLoggedButtonProps) => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
@@ -40,7 +42,10 @@ export const NavigationLoginNonLoggedButton = ({
       </div>
       {openMenu ? (
         <div className="pw-relative">
-          <div className="pw-absolute pw-mt-[1.68rem] pw-bg-white pw-w-[140px] pw-z-30 pw-px-[10px] pw-py-3 pw-rounded-b-[20px] pw-shadow-md">
+          <div
+            style={{ backgroundColor }}
+            className="pw-absolute pw-mt-[1.68rem] pw-w-[140px] pw-z-30 pw-px-[10px] pw-py-3 pw-rounded-b-[20px] pw-shadow-md"
+          >
             <PixwayButton
               onClick={() => router.pushConnect(signInRoute)}
               fullWidth

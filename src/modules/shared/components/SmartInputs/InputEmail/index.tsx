@@ -4,6 +4,7 @@ import { useController } from 'react-hook-form';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -56,9 +57,7 @@ const InputEmail = ({
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           name={name}
-          readOnly={Boolean(
-            docValue && docStatus !== UserDocumentStatus.RequiredReview
-          )}
+          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}
           type="email"

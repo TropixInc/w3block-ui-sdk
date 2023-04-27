@@ -5,6 +5,7 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import isURL from 'validator/lib/isURL';
 
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -61,12 +62,8 @@ const InputUrl = ({
       >
         <input
           name={name}
-          readOnly={Boolean(
-            docValue &&
-              docStatus !== UserDocumentStatus.RequiredReview &&
-              isURL(docValue)
-          )}
-          type="url"
+          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+          type="text"
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}
           className={classNames(

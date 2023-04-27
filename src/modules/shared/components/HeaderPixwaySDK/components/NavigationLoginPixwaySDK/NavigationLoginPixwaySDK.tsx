@@ -14,6 +14,7 @@ interface NavigationLoginPixwaySDKProps {
   hasSignUp?: boolean;
   textColor?: string;
   fontFamily?: string;
+  backgroundColor?: string;
 }
 
 export const NavigationLoginPixwaySDK = ({
@@ -25,6 +26,7 @@ export const NavigationLoginPixwaySDK = ({
   hasSignUp,
   textColor = 'black',
   fontFamily,
+  backgroundColor = 'white',
 }: NavigationLoginPixwaySDKProps) => {
   const { data: session } = usePixwaySession();
   const [userMenu, setUserMenu] = useState<boolean>(false);
@@ -50,6 +52,7 @@ export const NavigationLoginPixwaySDK = ({
           <NavigationLoginLoggedButton
             textColor={textColor}
             fontFamily={fontFamily}
+            backgroundColor={backgroundColor}
           />
         ) : (
           <NavigationLoginNonLoggedButton
@@ -57,13 +60,16 @@ export const NavigationLoginPixwaySDK = ({
             signUpRoute={signUpRouter}
             hasSignUp={hasSignUp}
             textColor={textColor}
+            backgroundColor={backgroundColor}
           />
         )}
       </div>
       <div className="sm:pw-hidden">
         <NavigationLoginLoggedButtonMobile
+          textColor={textColor}
           menuOpened={validatorOpened}
           toggleMenu={toggleTabsMemo}
+          backgroundColor={backgroundColor}
         />
       </div>
     </div>

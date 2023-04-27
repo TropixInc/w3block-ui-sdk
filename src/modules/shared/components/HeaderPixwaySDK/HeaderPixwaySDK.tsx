@@ -185,12 +185,13 @@ const _HeaderPixwaySDK = ({
                   textColor ??
                   context?.defaultTheme?.header?.styleData?.textColor
                 }
-                className="pw-border-x pw-ml-[40px] pw-mr-4"
+                className="pw-border-l sm:pw-ml-4"
               />
             )}
 
-            <div className="pw-order-1 sm:pw-order-3">
+            <div className="pw-order-1 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
               <NavigationLoginPixwaySDK
+                backgroundColor={headerBgColor}
                 hasSignUp={hasSignUp}
                 textColor={
                   textColor ??

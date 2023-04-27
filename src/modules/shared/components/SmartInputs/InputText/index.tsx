@@ -3,6 +3,7 @@ import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -52,11 +53,9 @@ const InputText = ({
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
+      <FormItemContainer invalid={fieldState.invalid}>
         <input
-          readOnly={Boolean(
-            docValue && docStatus !== UserDocumentStatus.RequiredReview
-          )}
+          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"

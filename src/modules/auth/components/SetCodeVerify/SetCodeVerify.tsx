@@ -88,10 +88,10 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       </p>
       <p className="pw-text-[#353945] pw-mt-4 pw-mb-6 pw-text-center pw-text-[13px] pw-leading-[20px] pw-font-normal">
         <Trans
-          i18nKey="auth>emailConfirmation>mailSentToEmail"
+          i18nKey="auth>emailConfirmation>codeSentToEmail"
           values={{ email: formattedEmail }}
         >
-          Enviamos um email para:
+          Enviamos um código para:
           <span className="pw-block">email</span>
         </Trans>
       </p>
@@ -146,7 +146,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       ) : null}
       <p className="pw-text-[#353945] pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-mt-[23px] pw-mb-[18px]">
         <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
-          O link expira em 15 minutos
+          O código expira em 15 minutos
           <button
             disabled={isLoading || isActive}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"

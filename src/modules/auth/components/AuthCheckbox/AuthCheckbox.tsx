@@ -24,7 +24,7 @@ export const AuthCheckbox = ({
   const checkboxRef = useRef<HTMLInputElement>(null);
   const { field } = useController({ name });
   return (
-    <div className="pw-flex pw-items-center pw-gap-x-2 pw-cursor-pointer">
+    <div className="pw-flex pw-items-center pw-gap-x-2 pw-cursor-pointer pw-text-[#353945]">
       <input
         type="checkbox"
         {...field}
@@ -36,7 +36,7 @@ export const AuthCheckbox = ({
         className={classNames(
           field.value
             ? 'pw-hidden'
-            : 'pw-w-[12.75px] pw-h-[12.75px] pw-border pw-border-brand-primary pw-rounded-sm'
+            : 'pw-w-[12.75px] pw-h-[12.75px] pw-border pw-border-[#353945] pw-rounded-sm'
         )}
       />
       <CheckboxOutlined
@@ -49,9 +49,11 @@ export const AuthCheckbox = ({
       />
       {redirectLink ? (
         <Trans i18nKey={keyTrans}>
-          <p className="text-[13px] leading-[15.85px]">{label}</p>
+          <p className="pw-text-[13px] pw-leading-[15.85px] pw-text-[#353945]">
+            {label}
+          </p>
           <a
-            className="pw-text-[13px] pw-leading-[15.85px] pw-underline"
+            className="pw-text-[13px] pw-leading-[15.85px] pw-underline pw-text-[#353945]"
             href={redirectLink}
             target="_blank"
             rel="noreferrer"
@@ -61,7 +63,7 @@ export const AuthCheckbox = ({
         </Trans>
       ) : (
         <label
-          className="pw-text-[13px] pw-leading-[15.85px]"
+          className="pw-text-[13px] pw-leading-[15.85px] pw-text-[#353945]"
           onClick={() => checkboxRef.current?.click()}
         >
           {label}

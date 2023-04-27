@@ -21,15 +21,19 @@ interface NavigationLoginLoggedButtonMobileProps {
   menuOpened?: boolean;
   toggleMenu?: () => void;
   menuTabs?: NavigationMenuTabs[];
+  backgroundColor?: string;
+  textColor?: string;
 }
 
 export const NavigationLoginLoggedButtonMobile = ({
   menuOpened,
   toggleMenu,
   menuTabs: _menuTabs,
+  backgroundColor,
+  textColor,
 }: NavigationLoginLoggedButtonMobileProps) => {
   const { setAttachModal } = useContext(AttachWalletContext);
-  const defaultTabs = useDefaultMenuTabs();
+  const defaultTabs = useDefaultMenuTabs(textColor ?? 'black');
   const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
   const router = useRouterConnect();
@@ -105,7 +109,7 @@ export const NavigationLoginLoggedButtonMobile = ({
   };
 
   return session ? (
-    <div>
+    <div style={{ backgroundColor }}>
       <UserTag onClick={toggleTabsMemo} className="pw-mr-4 pw-cursor-pointer" />
       {validatorOpened ? (
         <div className="pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center">

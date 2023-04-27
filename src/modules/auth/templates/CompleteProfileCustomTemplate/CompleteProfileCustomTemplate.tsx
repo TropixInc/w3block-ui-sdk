@@ -123,7 +123,7 @@ const _CompleteProfileCustomTemplate = ({
       <VerifySignUpTokenExpiredTemplateSDK
         email={emailToUse.replaceAll(' ', '+') ?? ''}
         onSendEmail={() => setStep(Steps.CONFIRMATION_MAIL_SENT)}
-        isPostSignUp
+        isPostSignUp={!email}
         extraBy={extraBy}
         {...verifyEmailProps}
       />
@@ -135,7 +135,7 @@ const _CompleteProfileCustomTemplate = ({
         {...verifyEmailProps}
         extraBy={extraBy}
         email={emailToUse.replaceAll(' ', '+') ?? ''}
-        isPostSignUp
+        isPostSignUp={!email}
       />
     );
 

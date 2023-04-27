@@ -65,7 +65,13 @@ export const VerifySignUpTokenExpired = ({
         </p>
 
         <span className="pw-text-brand-primary pw-text-sm pw-leading-[21px]">
-          <Trans i18nKey="auth>emailConfirmation>resendEmailAction">
+          <Trans
+            i18nKey={
+              isPostSignUp
+                ? 'auth>emailConfirmation>resendCodeAction'
+                : 'auth>emailConfirmation>resendEmailAction'
+            }
+          >
             <button
               onClick={() => mutate({ email, tenantId, callbackPath })}
               disabled={isLoading}

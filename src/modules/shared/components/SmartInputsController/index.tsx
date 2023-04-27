@@ -1,5 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
 
+import InputBirthdate from '../SmartInputs/InputBirthdate';
 import InputCpf from '../SmartInputs/InputCpf';
 import InputEmail from '../SmartInputs/InputEmail';
 import InputFile from '../SmartInputs/InputFile';
@@ -13,12 +16,9 @@ interface SmartProps {
   name: string;
   value?: string;
   assetId?: string | null;
-
   docStatus?: UserDocumentStatus;
   openDocs?: boolean;
-
   docFileValue?: string;
-  hidenValidations?: boolean;
 }
 
 export interface InputError {
@@ -36,9 +36,9 @@ const SmartInputsController = ({
   assetId,
   docStatus,
   docFileValue,
-  hidenValidations = false,
   openDocs,
 }: SmartProps) => {
+  const [translate] = useTranslation();
   const renderInput = () => {
     switch (type) {
       case DataTypesEnum.Cpf:
@@ -48,7 +48,6 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
-            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.Text:
@@ -58,7 +57,15 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
-            hidenValidations={hidenValidations}
+          />
+        );
+      case DataTypesEnum.Birthdate:
+        return (
+          <InputBirthdate
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
           />
         );
       case DataTypesEnum.Phone:
@@ -68,7 +75,6 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
-            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.Email:
@@ -78,7 +84,6 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
-            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.Url:
@@ -88,7 +93,6 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
-            hidenValidations={hidenValidations}
           />
         );
       case DataTypesEnum.File:
@@ -99,8 +103,21 @@ const SmartInputsController = ({
             docValue={docFileValue}
             assetId={assetId}
             docStatus={docStatus}
-            hidenValidations={hidenValidations}
             openDocs={openDocs}
+            acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
+          />
+        );
+
+      case DataTypesEnum.MultifaceSelfie:
+        return (
+          <InputFile
+            label={label}
+            name={name}
+            docValue={docFileValue}
+            assetId={assetId}
+            docStatus={docStatus}
+            subtitle={translate('auth>smartInputsController>subtitleInputFile')}
+            acceptTypesDocs={['.png', '.jpeg', '.jpg']}
           />
         );
     }

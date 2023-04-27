@@ -14,6 +14,7 @@ import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import InputStatus from '../InputStatus';
 
@@ -25,6 +26,8 @@ interface InputFileProps {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   openDocs?: boolean;
+  subtitle?: string;
+  acceptTypesDocs: Array<string>;
 }
 
 const InputFile = ({
@@ -35,6 +38,8 @@ const InputFile = ({
   docStatus,
   hidenValidations = false,
   openDocs,
+  subtitle,
+  acceptTypesDocs,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -70,7 +75,7 @@ const InputFile = ({
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
-    accept: ['.png', '.jpeg', '.jpg', '.pdf'],
+    accept: acceptTypesDocs,
     disabled: Boolean(
       docValue && docStatus !== UserDocumentStatus.RequiredReview
     ),
@@ -124,6 +129,9 @@ const InputFile = ({
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
+      <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
+        {subtitle}
+      </p>
       <FormItemContainer
         invalid={isError || mutateError || !field.value || fieldState.invalid}
       >
@@ -135,9 +143,7 @@ const InputFile = ({
         >
           <input
             {...getInputProps()}
-            readOnly={Boolean(
-              docValue && docStatus !== UserDocumentStatus.RequiredReview
-            )}
+            readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           />
           <FileIcon className="pw-w-4" />
           <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
