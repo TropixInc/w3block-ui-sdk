@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { DocumentDto } from '@w3block/sdk-id';
+import { DocumentDto, KycStatus } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import { object } from 'yup';
 
@@ -27,6 +27,8 @@ interface Props {
   contextId?: string;
   contextSlug?: string;
   renderSubtitle?: boolean;
+  profilePage?: boolean;
+  userKycStatus?: KycStatus;
 }
 
 interface ErrorProps {
@@ -37,14 +39,14 @@ const _FormCompleteKYCWithoutLayout = ({
   userId,
   contextSlug,
   renderSubtitle = true,
+  profilePage,
+  userKycStatus,
 }: Props) => {
   const router = useRouterConnect();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
   const { companyId: tenantId } = useCompanyConfig();
-
-  console.log(contextSlug, 'contextSlug');
 
   const { data: tenantInputs } = useGetTenantInputsBySlug({
     slug: contextSlug ? contextSlug : 'signup',
@@ -96,19 +98,19 @@ const _FormCompleteKYCWithoutLayout = ({
 
   useEffect(() => {
     if (isSuccess) {
-      router.pushConnect(
-        PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        router.query as any
-      );
+      if (!profilePage) {
+        router.pushConnect(
+          PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          router.query as any
+        );
+      }
     }
-  }, [isSuccess, router]);
+  }, [isSuccess, profilePage, router]);
 
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
-
-  console.log(dynamicMethods.getValues());
 
   return (
     <FormProvider {...dynamicMethods}>
@@ -118,7 +120,8 @@ const _FormCompleteKYCWithoutLayout = ({
           <p>{errorMessage?.message}</p>
         </Alert>
       )}
-      {reasons?.data?.items[0]?.logs?.at(-1)?.reason ? (
+      {reasons?.data?.items[0]?.logs?.at(-1)?.reason &&
+      reasons?.data?.items[0]?.logs?.at(-1)?.inputIds.length ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
           <p className="pw-mt-2 pw-text-[#FF0505]">
             {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
@@ -147,10 +150,26 @@ const _FormCompleteKYCWithoutLayout = ({
               }
             />
           ))}
+
+        {isSuccess && (
+          <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
+            <Alert.Icon />
+            <div className="pw-p-3 pw-w-full pw-rounded-lg">
+              <p className="pw-text-green-300">
+                {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
+              </p>
+            </div>
+          </Alert>
+        )}
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-          disabled={!dynamicMethods.formState.isValid || isLoading}
+          disabled={
+            !dynamicMethods.formState.isValid ||
+            isLoading ||
+            userKycStatus === KycStatus.Approved ||
+            userKycStatus === KycStatus.Denied
+          }
         >
           {isLoading ? (
             <Spinner className="pw-w-4 pw-h-4" />
@@ -167,12 +186,16 @@ export const FormCompleteKYCWithoutLayout = ({
   userId,
   contextSlug,
   renderSubtitle,
+  profilePage,
+  userKycStatus,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
       userId={userId}
       contextSlug={contextSlug}
       renderSubtitle={renderSubtitle}
+      profilePage={profilePage}
+      userKycStatus={userKycStatus}
     />
   </TranslatableComponent>
 );

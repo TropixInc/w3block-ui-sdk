@@ -132,6 +132,8 @@ const _MyProfileTemplate = () => {
                             userId={profile?.data.id}
                             contextId={contextId}
                             contextSlug={context?.slug}
+                            userKycStatus={profile?.data?.kycStatus}
+                            profilePage
                           />
                         </div>
                       </div>
