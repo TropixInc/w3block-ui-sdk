@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -35,6 +35,8 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   const [translate] = useTranslation();
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
+
+  const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
 
   const { data: tenantInputs } = useGetTenantInputsBySlug();
@@ -99,12 +101,6 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
 
   return (
     <FormProvider {...dynamicMethods}>
-      {isError && (
-        <Alert variant="error" className="pw-flex pw-gap-x-3 pw-mb-5">
-          <Alert.Icon />
-          <p>{errorMessage?.message}</p>
-        </Alert>
-      )}
       {reasons?.data?.items[0]?.logs?.at(-1)?.reason ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
           <p className="pw-mt-2 pw-text-[#FF0505]">
@@ -129,12 +125,21 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
               docFileValue={
                 getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
               }
+              onChangeUploadProgess={setUploadProgress}
             />
           ))}
+        {isError && (
+          <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+            <Alert.Icon />
+            <p>{errorMessage?.message}</p>
+          </Alert>
+        )}
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-          disabled={!dynamicMethods.formState.isValid || isLoading}
+          disabled={
+            !dynamicMethods.formState.isValid || isLoading || uploadProgress
+          }
         >
           {isLoading ? (
             <Spinner className="pw-w-4 pw-h-4" />
