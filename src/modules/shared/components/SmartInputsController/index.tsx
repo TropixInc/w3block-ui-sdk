@@ -18,7 +18,7 @@ interface SmartProps {
   assetId?: string | null;
 
   docStatus?: UserDocumentStatus;
-
+  onChangeUploadProgess: (value: boolean) => void;
   docFileValue?: string;
 }
 
@@ -37,6 +37,7 @@ const SmartInputsController = ({
   assetId,
   docStatus,
   docFileValue,
+  onChangeUploadProgess,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -104,6 +105,7 @@ const SmartInputsController = ({
             assetId={assetId}
             docStatus={docStatus}
             acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
+            onChangeUploadProgess={onChangeUploadProgess}
           />
         );
 
@@ -117,6 +119,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             subtitle={translate('auth>smartInputsController>subtitleInputFile')}
             acceptTypesDocs={['.png', '.jpeg', '.jpg']}
+            onChangeUploadProgess={onChangeUploadProgess}
           />
         );
     }
