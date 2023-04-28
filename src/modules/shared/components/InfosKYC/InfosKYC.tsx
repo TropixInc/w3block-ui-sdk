@@ -71,7 +71,6 @@ const InfosKYC = ({ contextId, contextName, userId }: InfosProps) => {
                   docFileValue={
                     getDocumentByInputId(id)?.asset?.directLink ?? ''
                   }
-                  hidenValidations
                   openDocs
                 />
               ))}

@@ -24,20 +24,31 @@ import { AuthButton } from '../AuthButton';
 
 interface Props {
   userId: string;
+  contextId?: string;
+  contextSlug?: string;
+  renderSubtitle?: boolean;
 }
 
 interface ErrorProps {
   message: string;
 }
 
-const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
+const _FormCompleteKYCWithoutLayout = ({
+  userId,
+  contextSlug,
+  renderSubtitle = true,
+}: Props) => {
   const router = useRouterConnect();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
   const { companyId: tenantId } = useCompanyConfig();
 
-  const { data: tenantInputs } = useGetTenantInputsBySlug({ slug: 'signup' });
+  console.log(contextSlug, 'contextSlug');
+
+  const { data: tenantInputs } = useGetTenantInputsBySlug({
+    slug: contextSlug ? contextSlug : 'signup',
+  });
 
   const { data: documents } = useGetUsersDocuments({
     userId: userId ?? '',
@@ -97,6 +108,8 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
 
+  console.log(dynamicMethods.getValues());
+
   return (
     <FormProvider {...dynamicMethods}>
       {isError && (
@@ -112,9 +125,12 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
           </p>
         </div>
       ) : null}
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
-        {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
-      </p>
+      {renderSubtitle && (
+        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
+          {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
+        </p>
+      )}
+
       <form onSubmit={dynamicMethods.handleSubmit(onSubmit)}>
         {tenantInputs?.data &&
           tenantInputs?.data?.map((item) => (
@@ -147,8 +163,16 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   );
 };
 
-export const FormCompleteKYCWithoutLayout = ({ userId }: Props) => (
+export const FormCompleteKYCWithoutLayout = ({
+  userId,
+  contextSlug,
+  renderSubtitle,
+}: Props) => (
   <TranslatableComponent>
-    <_FormCompleteKYCWithoutLayout userId={userId} />
+    <_FormCompleteKYCWithoutLayout
+      userId={userId}
+      contextSlug={contextSlug}
+      renderSubtitle={renderSubtitle}
+    />
   </TranslatableComponent>
 );

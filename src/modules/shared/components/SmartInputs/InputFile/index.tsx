@@ -76,9 +76,7 @@ const InputFile = ({
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
     accept: acceptTypesDocs,
-    disabled: Boolean(
-      docValue && docStatus !== UserDocumentStatus.RequiredReview
-    ),
+    disabled: validateIfStatusKycIsReadonly(docStatus as UserDocumentStatus),
   });
 
   useEffect(() => {
