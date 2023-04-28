@@ -16,6 +16,7 @@ import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { Spinner } from '../../Spinner/Spinner';
 import InputStatus from '../InputStatus';
 
 interface InputFileProps {
@@ -156,9 +157,15 @@ const InputFile = ({
             readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           />
           <FileIcon className="pw-w-4" />
-          <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
-            {renderName()}
-          </p>
+          {isLoadingUpload || isLoadingAsset ? (
+            <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
+              <Spinner className="pw-w-4 pw-h-4 !pw-border-2" />
+            </div>
+          ) : (
+            <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
+              {renderName()}
+            </p>
+          )}
         </div>
       </FormItemContainer>
       <p className="mt-5">
