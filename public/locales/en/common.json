@@ -220,5 +220,6 @@
   "commerce>productPage>totalTokens": "Total tokens",
   "commerce>productPage>soldTokens": "Sold tokens",
   "commerce>productPage>description": "Description",
-  "auth>smartInputsController>subtitleInputFile": "Please include a selfie image in good lighting conditions and resolution"
+  "auth>smartInputsController>subtitleInputFile": "Please include a selfie image in good lighting conditions and resolution",
+  "auth>formCompletKYCWithoutLayout>sendInforms": "Please wait, sending files"
 }

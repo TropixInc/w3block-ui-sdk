@@ -134,6 +134,11 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
             <p>{errorMessage?.message}</p>
           </Alert>
         )}
+        {uploadProgress && (
+          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+            {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
+          </p>
+        )}
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
@@ -142,7 +147,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
           }
         >
           {isLoading ? (
-            <Spinner className="pw-w-4 pw-h-4" />
+            <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
           ) : (
             translate('components>advanceButton>continue')
           )}
