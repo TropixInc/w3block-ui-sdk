@@ -34,6 +34,7 @@ interface HeaderPixwaySDKProps {
   padding?: string;
   fontFamily?: string;
   hasCart?: boolean;
+  logoLink?: string;
 }
 
 const _HeaderPixwaySDK = ({
@@ -55,6 +56,7 @@ const _HeaderPixwaySDK = ({
   padding,
   fontFamily,
   hasCart = true,
+  logoLink,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -150,7 +152,13 @@ const _HeaderPixwaySDK = ({
         )}
       >
         <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
-          <a href={PixwayAppRoutes.HOME}>
+          <a
+            href={
+              logoLink && logoLink.trim() != ''
+                ? logoLink
+                : PixwayAppRoutes.HOME
+            }
+          >
             <LogoToShow />
           </a>
 

@@ -102,6 +102,7 @@ export interface HeaderData extends MainModuleThemeInterface {
     backgroundColor?: string;
     textColor?: string;
     hoverTextColor?: string;
+    logoLink?: string;
   };
   mobileStyleData: HeaderData['styleData'];
 }
