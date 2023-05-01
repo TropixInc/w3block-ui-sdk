@@ -160,7 +160,7 @@ export const ProductPage = ({
           <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-12 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <ImageSDK
               className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] xl:pw-h-[437px] sm:pw-h-[337px] pw-h-[283px] pw-rounded-[14px] pw-object-cover pw-object-center"
-              src={product?.images[0].original}
+              src={product?.images?.[0]?.original ?? ''}
             />
             <div className="pw-w-full">
               {showProductName && (
