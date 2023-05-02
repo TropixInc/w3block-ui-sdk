@@ -5,6 +5,7 @@ import { useCart } from '../../checkout/hooks/useCart';
 import { useRouterConnect } from '../../shared';
 import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
+import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
@@ -219,10 +220,28 @@ export const ProductPage = ({
                     style={{ color: priceTextColor ?? 'black' }}
                     className="pw-text-2xl pw-mt-4 pw-font-[700]"
                   >
-                    {product?.stockAmount == 0
-                      ? 'Esgotado'
-                      : product
-                      ? `${
+                    {product?.stockAmount == 0 ? (
+                      'Esgotado'
+                    ) : product ? (
+                      product?.prices.find(
+                        (price: any) => price.currencyId == currencyId?.id
+                      )?.currency.crypto ? (
+                        <CriptoValueComponent
+                          size={24}
+                          fontClass="pw-ml-1"
+                          code={
+                            product?.prices.find(
+                              (price: any) => price.currencyId == currencyId?.id
+                            )?.currency.name
+                          }
+                          value={
+                            product?.prices.find(
+                              (price: any) => price.currencyId == currencyId?.id
+                            )?.amount
+                          }
+                        ></CriptoValueComponent>
+                      ) : (
+                        `${
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
                           )?.currency.symbol
@@ -231,7 +250,10 @@ export const ProductPage = ({
                             (price: any) => price.currencyId == currencyId?.id
                           )?.amount
                         }`
-                      : ''}
+                      )
+                    ) : (
+                      ''
+                    )}
                   </p>
                 </>
               )}
@@ -377,6 +399,29 @@ export const ProductPage = ({
                     {buttonText ?? 'Comprar agora'}
                   </button>
                 </div>
+              )}
+              {product?.prices.find(
+                (price: any) => price.currencyId == currencyId?.id
+              )?.anchorCurrencyId && (
+                <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
+                  *O valor do produto em{' '}
+                  {
+                    product?.prices.find(
+                      (price: any) => price.currencyId == currencyId?.id
+                    )?.currency.symbol
+                  }{' '}
+                  pode variar de acordo com a cotação desta moeda em{' '}
+                  {
+                    product.prices.find(
+                      (priceF) =>
+                        priceF.currencyId ==
+                        product?.prices.find(
+                          (price: any) => price.currencyId == currencyId?.id
+                        )?.anchorCurrencyId
+                    )?.currency.symbol
+                  }
+                  .
+                </p>
               )}
             </div>
           </div>

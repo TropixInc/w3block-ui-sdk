@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useInterval, useLocalStorage } from 'react-use';
 
 import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
+import { ReactComponent as ValueChangeIcon } from '../../../shared/assets/icons/icon-up-down.svg';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -27,7 +28,6 @@ import {
 import { ConfirmCryptoBuy } from '../ConfirmCryptoBuy/ConfirmCryptoBuy';
 import CpfCnpj from '../CpfCnpjInput/CpfCnpjInput';
 import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
-
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',
@@ -412,6 +412,12 @@ const _CheckoutInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview, cnpfCpfVal, choosedPayment, currencyIdState]);
 
+  const anchorCurrencyId = useMemo(() => {
+    return orderPreview?.products
+      .find((prod) => prod.prices.some((price) => price.anchorCurrencyId))
+      ?.prices.find((price) => price.anchorCurrencyId)?.anchorCurrencyId;
+  }, [orderPreview]);
+
   return requestError ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
       <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
@@ -544,6 +550,40 @@ const _CheckoutInfo = ({
               ))}
           </div>
           {_ButtonsToShow}
+          <div>
+            {anchorCurrencyId && (
+              <div className="pw-flex pw-gap-2">
+                <ValueChangeIcon />
+                <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
+                  *O valor do produto em{' '}
+                  {
+                    orderPreview?.products
+                      .find((prod) =>
+                        prod.prices.find(
+                          (price) => price.currencyId == currencyIdState
+                        )
+                      )
+                      ?.prices.find(
+                        (price) => price.currencyId == currencyIdState
+                      )?.currency.symbol
+                  }{' '}
+                  pode variar de acordo com a cotação desta moeda em{' '}
+                  {
+                    orderPreview?.products
+                      .find((prod) =>
+                        prod.prices.some(
+                          (price) => price.currencyId == anchorCurrencyId
+                        )
+                      )
+                      ?.prices.find(
+                        (price) => price.currencyId == anchorCurrencyId
+                      )?.currency.symbol
+                  }
+                  .
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <ModalBase
