@@ -397,5 +397,6 @@
   "commerce>productPage>description": "Descrição",
   "shared>InfosKYC>errorRequest": "Houve um erro ao buscar os dados, tente novamente mais tarde.",
   "auth>smartInputsController>subtitleInputFile": "Favor incluir uma imagem selfie em boas condições de iluminação e resolução.",
-  "auth>ormCompletKYCWithoutLayout>saveInfosSucess": "Suas informações foram salvas com sucesso!"
+  "auth>ormCompletKYCWithoutLayout>saveInfosSucess": "Suas informações foram salvas com sucesso!",
+  "auth>formCompletKYCWithoutLayout>sendInforms": "Aguarde, enviando arquivos"
 }

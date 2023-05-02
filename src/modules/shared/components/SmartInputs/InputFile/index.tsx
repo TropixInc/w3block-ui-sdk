@@ -16,6 +16,7 @@ import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { Spinner } from '../../Spinner/Spinner';
 import InputStatus from '../InputStatus';
 
 interface InputFileProps {
@@ -28,6 +29,7 @@ interface InputFileProps {
   openDocs?: boolean;
   subtitle?: string;
   acceptTypesDocs: Array<string>;
+  onChangeUploadProgess: (value: boolean) => void;
 }
 
 const InputFile = ({
@@ -40,6 +42,7 @@ const InputFile = ({
   openDocs,
   subtitle,
   acceptTypesDocs,
+  onChangeUploadProgess,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -51,9 +54,16 @@ const InputFile = ({
     mutate: mutateAssets,
     data: assets,
     isError: mutateError,
+    isLoading: isLoadingAsset,
   } = useUploadAssets();
 
-  const { mutate, data, isSuccess, isError } = useUploadFileToCloudinary();
+  const {
+    mutate,
+    data,
+    isSuccess,
+    isError,
+    isLoading: isLoadingUpload,
+  } = useUploadFileToCloudinary();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDrop = useCallback((acceptedFiles: string | any[]) => {
@@ -78,6 +88,11 @@ const InputFile = ({
     accept: acceptTypesDocs,
     disabled: validateIfStatusKycIsReadonly(docStatus as UserDocumentStatus),
   });
+
+  useEffect(() => {
+    onChangeUploadProgess(isLoadingUpload || isLoadingAsset);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingUpload, isLoadingAsset]);
 
   useEffect(() => {
     if (file && assets?.data?.id) {
@@ -144,15 +159,21 @@ const InputFile = ({
             readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           />
           <FileIcon className="pw-w-4" />
-          <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
-            {openDocs ? (
-              <a href={docValue} target="_blank" rel="noreferrer">
-                {docValue}
-              </a>
-            ) : (
-              renderName()
-            )}
-          </p>
+          {isLoadingUpload || isLoadingAsset ? (
+            <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
+              <Spinner className="pw-w-4 pw-h-4 !pw-border-2" />
+            </div>
+          ) : (
+            <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
+              {openDocs ? (
+                <a href={docValue} target="_blank" rel="noreferrer">
+                  {docValue}
+                </a>
+              ) : (
+                renderName()
+              )}
+            </p>
+          )}
         </div>
       </FormItemContainer>
       {!hidenValidations && (

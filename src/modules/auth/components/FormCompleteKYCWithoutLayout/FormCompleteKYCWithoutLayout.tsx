@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -46,6 +46,8 @@ const _FormCompleteKYCWithoutLayout = ({
   const [translate] = useTranslation();
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
+
+  const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
 
   const { data: tenantInputs } = useGetTenantInputsBySlug({
@@ -114,12 +116,6 @@ const _FormCompleteKYCWithoutLayout = ({
 
   return (
     <FormProvider {...dynamicMethods}>
-      {isError && (
-        <Alert variant="error" className="pw-flex pw-gap-x-3 pw-mb-5">
-          <Alert.Icon />
-          <p>{errorMessage?.message}</p>
-        </Alert>
-      )}
       {reasons?.data?.items[0]?.logs?.at(-1)?.reason &&
       reasons?.data?.items[0]?.logs?.at(-1)?.inputIds.length ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
@@ -148,6 +144,7 @@ const _FormCompleteKYCWithoutLayout = ({
               docFileValue={
                 getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
               }
+              onChangeUploadProgess={setUploadProgress}
             />
           ))}
 
@@ -161,6 +158,17 @@ const _FormCompleteKYCWithoutLayout = ({
             </div>
           </Alert>
         )}
+        {isError && (
+          <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+            <Alert.Icon />
+            <p>{errorMessage?.message}</p>
+          </Alert>
+        )}
+        {uploadProgress && (
+          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+            {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
+          </p>
+        )}
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
@@ -172,7 +180,7 @@ const _FormCompleteKYCWithoutLayout = ({
           }
         >
           {isLoading ? (
-            <Spinner className="pw-w-4 pw-h-4" />
+            <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
           ) : (
             translate('components>advanceButton>continue')
           )}
