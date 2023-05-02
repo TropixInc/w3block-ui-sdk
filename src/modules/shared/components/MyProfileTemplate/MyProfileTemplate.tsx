@@ -12,6 +12,7 @@ import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenan
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
+import KYCStatus from '../KYCStatus';
 import { Menu } from '../Menu';
 import { ModalBase } from '../ModalBase';
 import { MyProfile } from '../MyProfile/MyProfile';
@@ -123,9 +124,13 @@ const _MyProfileTemplate = () => {
                         key={contextId}
                         className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]"
                       >
-                        <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
-                          KYC - {context?.slug}
-                        </p>
+                        <div className="pw-w-full pw-flex pw-justify-between">
+                          <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
+                            KYC - {context?.slug}
+                          </p>
+                          <KYCStatus status={profile?.data?.kycStatus} />
+                        </div>
+
                         <div className="pw-w-full">
                           <FormCompleteKYCWithoutLayout
                             renderSubtitle={false}

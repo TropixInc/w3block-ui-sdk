@@ -223,5 +223,8 @@
   "shared>InfosKYC>errorRequest": "There was an error fetching the data, please try again later.",
   "auth>smartInputsController>subtitleInputFile": "Please include a selfie image in good lighting conditions and resolution",
   "auth>ormCompletKYCWithoutLayout>saveInfosSucess": "Your information has been successfully saved!",
-  "auth>formCompletKYCWithoutLayout>sendInforms": "Please wait, sending files"
+  "auth>formCompletKYCWithoutLayout>sendInforms": "Please wait, sending files",
+  "shared>KYCStatys>approved": "Approved",
+  "shared>KYCStatys>denied": "Denied",
+  "auth>formCompletKYCWithoutLayout>notEditInfos": "It is not possible to edit the information as this user has already been reviewed"
 }

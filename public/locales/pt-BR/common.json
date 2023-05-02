@@ -398,5 +398,8 @@
   "shared>InfosKYC>errorRequest": "Houve um erro ao buscar os dados, tente novamente mais tarde.",
   "auth>smartInputsController>subtitleInputFile": "Favor incluir uma imagem selfie em boas condições de iluminação e resolução.",
   "auth>ormCompletKYCWithoutLayout>saveInfosSucess": "Suas informações foram salvas com sucesso!",
-  "auth>formCompletKYCWithoutLayout>sendInforms": "Aguarde, enviando arquivos"
+  "auth>formCompletKYCWithoutLayout>sendInforms": "Aguarde, enviando arquivos",
+  "shared>KYCStatys>approved": "Aprovado",
+  "shared>KYCStatys>denied": "Reprovado",
+  "auth>formCompletKYCWithoutLayout>notEditInfos": "Não é possivel editar as informações pois este usuário já foi revisado"
 }

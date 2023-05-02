@@ -169,6 +169,12 @@ const _FormCompleteKYCWithoutLayout = ({
             {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
           </p>
         )}
+        {userKycStatus === KycStatus.Approved ||
+        userKycStatus === KycStatus.Denied ? (
+          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+            {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
+          </p>
+        ) : null}
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
