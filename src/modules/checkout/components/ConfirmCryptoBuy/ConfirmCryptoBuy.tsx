@@ -227,6 +227,7 @@ export const ConfirmCryptoBuy = ({
                   size={13}
                   value={wallet?.balance ?? '0'}
                   code={code}
+                  crypto={true}
                 />
               </div>
               {(!sameAccount || !sameChainId) && wallet?.type == 'metamask' && (
@@ -266,6 +267,7 @@ export const ConfirmCryptoBuy = ({
                     size={13}
                     value={gasPrice ?? '0'}
                     code={code}
+                    crypto={true}
                   />
                 </div>
                 <div className="pw-flex pw-justify-between pw-mt-1">
@@ -275,6 +277,7 @@ export const ConfirmCryptoBuy = ({
                     size={13}
                     value={serviceFee ?? '0'}
                     code={code}
+                    crypto={true}
                   />
                 </div>
                 <div className="pw-flex pw-justify-between pw-mt-1">
@@ -284,6 +287,7 @@ export const ConfirmCryptoBuy = ({
                     size={13}
                     value={totalPrice ?? '0'}
                     code={code}
+                    crypto={true}
                   />
                 </div>
               </>
