@@ -225,7 +225,7 @@ export const ConfirmCryptoBuy = ({
                 <CriptoValueComponent
                   fontClass="pw-text-sm"
                   size={13}
-                  value={wallet?.balance}
+                  value={wallet?.balance ?? '0'}
                   code={code}
                 />
               </div>
@@ -264,7 +264,7 @@ export const ConfirmCryptoBuy = ({
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
-                    value={gasPrice}
+                    value={gasPrice ?? '0'}
                     code={code}
                   />
                 </div>
@@ -273,7 +273,7 @@ export const ConfirmCryptoBuy = ({
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
-                    value={serviceFee}
+                    value={serviceFee ?? '0'}
                     code={code}
                   />
                 </div>
@@ -282,7 +282,7 @@ export const ConfirmCryptoBuy = ({
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
-                    value={totalPrice}
+                    value={totalPrice ?? '0'}
                     code={code}
                   />
                 </div>

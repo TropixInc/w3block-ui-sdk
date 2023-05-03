@@ -223,34 +223,25 @@ export const ProductPage = ({
                     {product?.stockAmount == 0 ? (
                       'Esgotado'
                     ) : product ? (
-                      product?.prices.find(
-                        (price: any) => price.currencyId == currencyId?.id
-                      )?.currency.crypto ? (
-                        <CriptoValueComponent
-                          size={24}
-                          fontClass="pw-ml-1"
-                          code={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.name
-                          }
-                          value={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.amount
-                          }
-                        ></CriptoValueComponent>
-                      ) : (
-                        `${
+                      <CriptoValueComponent
+                        size={24}
+                        fontClass="pw-ml-1"
+                        crypto={
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
-                          )?.currency.symbol
-                        } ${
+                          )?.currency.crypto
+                        }
+                        code={
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
-                          )?.amount
-                        }`
-                      )
+                          )?.currency.name
+                        }
+                        value={
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.amount ?? '0'
+                        }
+                      ></CriptoValueComponent>
                     ) : (
                       ''
                     )}
