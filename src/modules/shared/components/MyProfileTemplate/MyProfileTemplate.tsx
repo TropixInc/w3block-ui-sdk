@@ -34,7 +34,7 @@ const _MyProfileTemplate = () => {
 
   const contextsActivated = useMemo(() => {
     if (!isLoadingTenantContext && tenantContext) {
-      const contexts = tenantContext?.data?.items.filter(
+      const contexts = tenantContext?.data?.items?.filter(
         ({ active }) => active
       );
       return contexts;
@@ -128,7 +128,9 @@ const _MyProfileTemplate = () => {
                           <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
                             KYC - {context?.slug}
                           </p>
-                          <KYCStatus status={profile?.data?.kycStatus} />
+                          {context?.slug === 'signup' && (
+                            <KYCStatus status={profile?.data?.kycStatus} />
+                          )}
                         </div>
 
                         <div className="pw-w-full">
@@ -163,12 +165,3 @@ export const MyProfileTemplate = () => {
     </TranslatableComponent>
   );
 };
-
-{
-  /* <InfosKYC
-                      key={contextId}
-                      contextId={contextId}
-                      contextName={context?.slug ?? ''}
-                      userId={profile?.data?.id ?? ''}
-                    /> */
-}

@@ -116,8 +116,8 @@ const _FormCompleteKYCWithoutLayout = ({
 
   return (
     <FormProvider {...dynamicMethods}>
-      {reasons?.data?.items[0]?.logs?.at(-1)?.reason &&
-      reasons?.data?.items[0]?.logs?.at(-1)?.inputIds.length ? (
+      {reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
+      reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
         <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
           <p className="pw-mt-2 pw-text-[#FF0505]">
             {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
