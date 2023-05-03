@@ -20,6 +20,7 @@ import useTranslation from '../../../shared/hooks/useTranslation';
 import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignupForm';
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { useGetReasonsRequiredReview } from '../../hooks/useGetReasonsRequiredReview';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthButton } from '../AuthButton';
 
 interface Props {
@@ -43,6 +44,7 @@ const _FormCompleteKYCWithoutLayout = ({
   userKycStatus,
 }: Props) => {
   const router = useRouterConnect();
+  const { signOut } = usePixwayAuthentication();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
@@ -192,6 +194,19 @@ const _FormCompleteKYCWithoutLayout = ({
           )}
         </AuthButton>
       </form>
+      <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
+        <button
+          onClick={() =>
+            signOut().then(() => {
+              router.pushConnect(PixwayAppRoutes.HOME);
+            })
+          }
+          className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
+        >
+          {translate('shared>exit')}
+        </button>{' '}
+        {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
+      </p>
     </FormProvider>
   );
 };
