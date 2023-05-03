@@ -156,6 +156,7 @@ export const OrderCardComponentSDK = ({
               : null}
           </div>
           <PriceAndGasInfo
+            name={order.data.currency.code ?? CurrencyEnum.BRL}
             currency={order.data.currency.code ?? CurrencyEnum.BRL}
             className="pw-mt-6"
             gasFee={order.data.gasFee}

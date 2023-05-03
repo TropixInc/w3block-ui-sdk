@@ -327,6 +327,11 @@ const _CheckoutInfo = ({
         return (
           <>
             <PriceAndGasInfo
+              name={
+                orderPreview?.products[0].prices.find(
+                  (price) => price.currency.id == currencyIdState
+                )?.currency.name
+              }
               currency={
                 orderPreview?.products[0].prices.find(
                   (price) => price.currency.id == currencyIdState
@@ -376,6 +381,12 @@ const _CheckoutInfo = ({
               )}
             </p>
             <PriceAndGasInfo
+              name={
+                productCache?.products[0].prices.find(
+                  (price) =>
+                    price.currencyId == (router.query.currencyId as string)
+                )?.currency.name
+              }
               currency={
                 productCache?.products[0].prices.find(
                   (price) =>
@@ -552,9 +563,9 @@ const _CheckoutInfo = ({
           {_ButtonsToShow}
           <div>
             {anchorCurrencyId && (
-              <div className="pw-flex pw-gap-2">
-                <ValueChangeIcon />
-                <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
+              <div className="pw-flex pw-gap-2 pw-mt-2 pw-items-center">
+                <ValueChangeIcon className="pw-mt-1" />
+                <p className="pw-text-xs  pw-font-medium pw-text-[#777E8F]">
                   *O valor do produto em{' '}
                   {
                     orderPreview?.products

@@ -160,7 +160,7 @@ export const ProductPage = ({
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
           <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-12 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <ImageSDK
-              className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] xl:pw-h-[437px] sm:pw-h-[337px] pw-h-[283px] pw-rounded-[14px] pw-object-cover pw-object-center"
+              className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
               src={product?.images?.[0]?.original}
             />
             <div className="pw-w-full">
@@ -223,34 +223,25 @@ export const ProductPage = ({
                     {product?.stockAmount == 0 ? (
                       'Esgotado'
                     ) : product ? (
-                      product?.prices.find(
-                        (price: any) => price.currencyId == currencyId?.id
-                      )?.currency.crypto ? (
-                        <CriptoValueComponent
-                          size={24}
-                          fontClass="pw-ml-1"
-                          code={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.name
-                          }
-                          value={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.amount
-                          }
-                        ></CriptoValueComponent>
-                      ) : (
-                        `${
+                      <CriptoValueComponent
+                        size={24}
+                        fontClass="pw-ml-1"
+                        crypto={
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
-                          )?.currency.symbol
-                        } ${
+                          )?.currency.crypto
+                        }
+                        code={
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
-                          )?.amount
-                        }`
-                      )
+                          )?.currency.name
+                        }
+                        value={
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.amount ?? '0'
+                        }
+                      ></CriptoValueComponent>
                     ) : (
                       ''
                     )}
