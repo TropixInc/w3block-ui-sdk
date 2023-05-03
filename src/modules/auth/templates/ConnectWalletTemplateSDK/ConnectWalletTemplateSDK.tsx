@@ -1,3 +1,5 @@
+import { useContext, useMemo } from 'react';
+
 import { ContentTypeEnum } from '../../../poll';
 import {
   ContainerControllerClasses,
@@ -10,6 +12,11 @@ import { ContainerTextBesideProps } from '../../../shared/components/ContainerTe
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import {
+  useBreakpoints,
+  breakpointsEnum,
+} from '../../../shared/hooks/useBreakpoints/useBreakpoints';
+import { ThemeContext } from '../../../storefront/contexts';
 import { ConnectExternalWalletWithoutLayout } from '../../components/ConnectExternalWalletWithoutLayout';
 
 interface ConnectWalletTemplateSDKProps {
@@ -45,19 +52,37 @@ export const ConnectWalletTemplateSDK = ({
   extraBy,
   forceVault,
 }: ConnectWalletTemplateSDKProps) => {
+  const context = useContext(ThemeContext);
+  const breakpoint = useBreakpoints();
+  const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
+  const style = useMemo(() => {
+    if (context && context.defaultTheme) {
+      const configStyleData = context.defaultTheme?.configurations?.styleData;
+      const configMobileStyleData =
+        context.defaultTheme?.configurations?.mobileStyleData;
+      const mergedConfigStyleData = mobileBreakpoints.includes(breakpoint)
+        ? { ...configStyleData, ...configMobileStyleData }
+        : configStyleData;
+      return mergedConfigStyleData;
+    }
+    return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context]);
   return (
     <TranslatableComponent>
-      <div style={{ backgroundColor: bgColor }}>
+      <div
+        style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
+      >
         <ContainerControllerSDK
           infoPosition={infoPosition}
           contentType={contentType}
           FAQContext={FAQContext}
           classes={classes}
           separation={separation}
-          logoUrl={logoUrl}
+          logoUrl={style?.onBoardingLogoSrc?.assetUrl ?? logoUrl}
           textContainer={textContainer}
           className={className}
-          bgColor={bgColor}
+          bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           extraBy={extraBy}
           infoComponent={
             <Box>

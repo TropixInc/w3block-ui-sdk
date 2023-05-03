@@ -38,6 +38,7 @@ interface HeaderPixwaySDKProps {
   padding?: string;
   fontFamily?: string;
   hasCart?: boolean;
+  logoLink?: string;
 }
 
 const _HeaderPixwaySDK = ({
@@ -59,6 +60,7 @@ const _HeaderPixwaySDK = ({
   padding,
   fontFamily,
   hasCart = true,
+  logoLink,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
   const router = useRouter();
@@ -179,7 +181,13 @@ const _HeaderPixwaySDK = ({
         )}
       >
         <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
-          <a href={PixwayAppRoutes.HOME}>
+          <a
+            href={
+              logoLink && logoLink.trim() != ''
+                ? logoLink
+                : PixwayAppRoutes.HOME
+            }
+          >
             <LogoToShow />
           </a>
 
@@ -214,12 +222,13 @@ const _HeaderPixwaySDK = ({
                   textColor ??
                   context?.defaultTheme?.header?.styleData?.textColor
                 }
-                className="pw-border-x pw-ml-[40px] pw-mr-4"
+                className="pw-border-l sm:pw-ml-4"
               />
             )}
 
-            <div className="pw-order-1 sm:pw-order-3">
+            <div className="pw-order-1 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
               <NavigationLoginPixwaySDK
+                backgroundColor={headerBgColor}
                 hasSignUp={hasSignUp}
                 textColor={
                   textColor ??

@@ -14,7 +14,9 @@ import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { Spinner } from '../../Spinner/Spinner';
 import InputStatus from '../InputStatus';
 
 interface InputFileProps {
@@ -23,6 +25,9 @@ interface InputFileProps {
   docValue?: string;
   assetId?: string | null;
   docStatus?: UserDocumentStatus;
+  subtitle?: string;
+  acceptTypesDocs: Array<string>;
+  onChangeUploadProgess: (value: boolean) => void;
 }
 
 const InputFile = ({
@@ -31,6 +36,9 @@ const InputFile = ({
   docValue,
   assetId,
   docStatus,
+  subtitle,
+  acceptTypesDocs,
+  onChangeUploadProgess,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -42,9 +50,16 @@ const InputFile = ({
     mutate: mutateAssets,
     data: assets,
     isError: mutateError,
+    isLoading: isLoadingAsset,
   } = useUploadAssets();
 
-  const { mutate, data, isSuccess, isError } = useUploadFileToCloudinary();
+  const {
+    mutate,
+    data,
+    isSuccess,
+    isError,
+    isLoading: isLoadingUpload,
+  } = useUploadFileToCloudinary();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDrop = useCallback((acceptedFiles: string | any[]) => {
@@ -66,11 +81,16 @@ const InputFile = ({
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
-    accept: ['.png', '.jpeg', '.jpg', '.pdf'],
+    accept: acceptTypesDocs,
     disabled: Boolean(
       docValue && docStatus !== UserDocumentStatus.RequiredReview
     ),
   });
+
+  useEffect(() => {
+    onChangeUploadProgess(isLoadingUpload || isLoadingAsset);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingUpload, isLoadingAsset]);
 
   useEffect(() => {
     if (file && assets?.data?.id) {
@@ -120,6 +140,9 @@ const InputFile = ({
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
+      <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
+        {subtitle}
+      </p>
       <FormItemContainer
         invalid={isError || mutateError || !field.value || fieldState.invalid}
       >
@@ -131,14 +154,18 @@ const InputFile = ({
         >
           <input
             {...getInputProps()}
-            readOnly={Boolean(
-              docValue && docStatus !== UserDocumentStatus.RequiredReview
-            )}
+            readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           />
           <FileIcon className="pw-w-4" />
-          <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
-            {renderName()}
-          </p>
+          {isLoadingUpload || isLoadingAsset ? (
+            <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
+              <Spinner className="pw-w-4 pw-h-4 !pw-border-2" />
+            </div>
+          ) : (
+            <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
+              {renderName()}
+            </p>
+          )}
         </div>
       </FormItemContainer>
       <p className="mt-5">

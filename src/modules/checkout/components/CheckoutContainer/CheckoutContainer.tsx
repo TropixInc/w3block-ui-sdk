@@ -1,4 +1,3 @@
-import { FAQ } from '../../../shared/components/FAQ';
 import { CheckoutInfo, CheckoutStatus } from '../CheckoutInfo';
 
 interface CheckoutContainerProps {
@@ -31,15 +30,15 @@ export const CheckoutContainer = ({
             checkoutStatus={checkoutStatus}
           />
         </div>
-        <div className="lg:pw-h-[370px] lg:pw-w-[2px] pw-w-full pw-h-[2px] pw-bg-[#DCDCDC] pw-mt-[24px] lg:pw-mt-0" />
+        {/* <div className="lg:pw-h-[370px] lg:pw-w-[2px] pw-w-full pw-h-[2px] pw-bg-[#DCDCDC] pw-mt-[24px] lg:pw-mt-0" /> */}
         <div className="pw-flex pw-mt-[32px] lg:pw-mt-0">
-          <FAQ
+          {/* <FAQ
             name={
               checkoutStatus === CheckoutStatus.FINISHED
                 ? 'post_sale'
                 : 'pre_sale'
             }
-          />
+          /> */}
         </div>
       </div>
     </div>

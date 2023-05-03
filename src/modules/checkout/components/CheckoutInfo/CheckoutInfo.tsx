@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useInterval, useLocalStorage } from 'react-use';
 
 import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
+import { ReactComponent as ValueChangeIcon } from '../../../shared/assets/icons/icon-up-down.svg';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -22,10 +23,11 @@ import {
   OrderPreviewCache,
   OrderPreviewResponse,
   PaymentMethodsAvaiable,
+  ProductErrorInterface,
 } from '../../interface/interface';
 import { ConfirmCryptoBuy } from '../ConfirmCryptoBuy/ConfirmCryptoBuy';
 import CpfCnpj from '../CpfCnpjInput/CpfCnpjInput';
-
+import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',
@@ -56,6 +58,7 @@ const _CheckoutInfo = ({
   const { getOrderPreview } = useCheckout();
   const [translate] = useTranslation();
   const { setCart, cart } = useCart();
+  const [productErros, setProductErros] = useState<ProductErrorInterface[]>([]);
   const [productCache, setProductCache, deleteKey] =
     useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
   const [choosedPayment, setChoosedPayment] = useState<
@@ -75,6 +78,30 @@ const _CheckoutInfo = ({
   const { data: session } = usePixwaySession();
 
   const token = session ? (session.accessToken as string) : null;
+
+  const getErrorMessage = (error: ProductErrorInterface) => {
+    const product = orderPreview?.products.find(
+      (p) => p.id === error.productId
+    );
+
+    switch (error.error.code) {
+      case 'insufficient-stock':
+        return {
+          title: `Estoque insuficiente`,
+          message: `O item ${product?.name} não possui estoque suficiente para a quantidade solicitada. Quantidade disponível: ${product?.stockAmount}`,
+        };
+      case 'purchase-limit':
+        return {
+          title: `Limite de compra excedido`,
+          message: `O item ${product?.name} possui limite de compra de ${error.error.limit} unidades por CPF/CNPJ.`,
+        };
+      default:
+        return {
+          title: `Erro ao processar o item ${product?.name}`,
+          message: `Ocorreu um erro ao processar o item ${product?.name}. Por favor, tente novamente mais tarde.`,
+        };
+    }
+  };
 
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
@@ -137,10 +164,16 @@ const _CheckoutInfo = ({
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess: (data: OrderPreviewResponse) => {
-            if (data && data.providersForSelection?.length) {
+            if (data && data.providersForSelection?.length && !choosedPayment) {
               setChoosedPayment(data.providersForSelection[0]);
             }
+            if (data.productsErrors && data.productsErrors?.length > 0) {
+              setProductErros(data.productsErrors ?? []);
+            }
             setOrderPreview(data);
+            if (data.products.map((p) => p.id).length != productIds.length) {
+              setProductIds(data.products.map((p) => p.id));
+            }
           },
           onError: () => {
             setRequestError(true);
@@ -294,6 +327,11 @@ const _CheckoutInfo = ({
         return (
           <>
             <PriceAndGasInfo
+              name={
+                orderPreview?.products[0].prices.find(
+                  (price) => price.currency.id == currencyIdState
+                )?.currency.name
+              }
               currency={
                 orderPreview?.products[0].prices.find(
                   (price) => price.currency.id == currencyIdState
@@ -343,6 +381,12 @@ const _CheckoutInfo = ({
               )}
             </p>
             <PriceAndGasInfo
+              name={
+                productCache?.products[0].prices.find(
+                  (price) =>
+                    price.currencyId == (router.query.currencyId as string)
+                )?.currency.name
+              }
               currency={
                 productCache?.products[0].prices.find(
                   (price) =>
@@ -378,6 +422,12 @@ const _CheckoutInfo = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview, cnpfCpfVal, choosedPayment, currencyIdState]);
+
+  const anchorCurrencyId = useMemo(() => {
+    return orderPreview?.products
+      .find((prod) => prod.prices.some((price) => price.anchorCurrencyId))
+      ?.prices.find((price) => price.anchorCurrencyId)?.anchorCurrencyId;
+  }, [orderPreview]);
 
   return requestError ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
@@ -427,7 +477,7 @@ const _CheckoutInfo = ({
           </div>
         )}
 
-        <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-6 pw-mt-6 sm:pw-mt-0">
+        <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
           {choosedPayment?.inputs && choosedPayment.inputs.length ? (
             <>
               <p className="pw-text-[18px] pw-font-[700]">
@@ -453,7 +503,7 @@ const _CheckoutInfo = ({
             Resumo da compra
           </p>
           {checkoutStatus == CheckoutStatus.FINISHED && (
-            <p className="pw-font-[700] pw-text-2xl pw-mb-6 pw-mt-2">
+            <p className="pw-font-[700] pw-text-[#295BA6] pw-text-2xl pw-mb-6 pw-mt-2">
               {translate(
                 'checkout>components>checkoutInfo>proccessingBlockchain'
               )}
@@ -492,7 +542,59 @@ const _CheckoutInfo = ({
               />
             ))}
           </div>
+          <div>
+            {productErros
+              .reduce(
+                (acc: ProductErrorInterface[], prod: ProductErrorInterface) => {
+                  if (acc.some((p) => p.productId == prod.productId))
+                    return acc;
+                  else return [...acc, prod];
+                },
+                []
+              )
+              .map((prod: ProductErrorInterface) => (
+                <ErrorMessage
+                  className="pw-mt-2"
+                  {...getErrorMessage(prod)}
+                  key={prod.productId}
+                />
+              ))}
+          </div>
           {_ButtonsToShow}
+          <div>
+            {anchorCurrencyId && (
+              <div className="pw-flex pw-gap-2 pw-mt-2 pw-items-center">
+                <ValueChangeIcon className="pw-mt-1" />
+                <p className="pw-text-xs  pw-font-medium pw-text-[#777E8F]">
+                  *O valor do produto em{' '}
+                  {
+                    orderPreview?.products
+                      .find((prod) =>
+                        prod.prices.find(
+                          (price) => price.currencyId == currencyIdState
+                        )
+                      )
+                      ?.prices.find(
+                        (price) => price.currencyId == currencyIdState
+                      )?.currency.symbol
+                  }{' '}
+                  pode variar de acordo com a cotação desta moeda em{' '}
+                  {
+                    orderPreview?.products
+                      .find((prod) =>
+                        prod.prices.some(
+                          (price) => price.currencyId == anchorCurrencyId
+                        )
+                      )
+                      ?.prices.find(
+                        (price) => price.currencyId == anchorCurrencyId
+                      )?.currency.symbol
+                  }
+                  .
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <ModalBase

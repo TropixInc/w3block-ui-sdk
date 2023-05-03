@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { ReactComponent as EthIcon } from '../../assets/icons/Eth.svg';
-import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
+import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
 import { Shimmer } from '../Shimmer';
 import TranslatableComponent from '../TranslatableComponent';
 
@@ -13,6 +12,7 @@ interface PriceAndGasInfo {
   className?: string;
   loading?: boolean;
   currency?: string;
+  name?: string;
 }
 
 const _PriceAndGasInfo = ({
@@ -23,31 +23,28 @@ const _PriceAndGasInfo = ({
   loading,
   totalPrice,
   currency = 'R$',
+  name = 'BRL',
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
   return (
     <div className={`pw-w-full ${className}`}>
       <div className="pw-flex pw-justify-between">
-        <p className="pw-text-sm text-[#35394C] pw-font-[400]">Subtotal</p>
+        <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">Subtotal</p>
         {loading ? (
           <Shimmer />
         ) : (
-          <p className="pw-text-sm pw-font-[600] pw-text-[#35394C] pw-flex pw-items-center">
-            {currency == 'MATIC' ? (
-              <MaticIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-            ) : currency === 'ETH' ? (
-              <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-            ) : (
-              currency
-            )}
-            {parseFloat(price).toFixed(2)}
-          </p>
+          <CriptoValueComponent
+            code={name}
+            value={price}
+            crypto={currency == 'MATIC' || currency == 'ETH'}
+            fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+          />
         )}
       </div>
       {service && parseFloat(service) > 0 && (
         <div className="pw-flex pw-justify-between pw-mt-2">
           <div className="pw-flex pw-gap-x-1">
-            <p className="pw-text-sm text-[#35394C] pw-font-[400]">
+            <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
               {translate('shared>components>servicePriceinfo')}
             </p>
             {/* <InfoIcon className="pw-mt-[2px]" /> */}
@@ -56,16 +53,12 @@ const _PriceAndGasInfo = ({
             loading ? (
               <Shimmer />
             ) : (
-              <p className="pw-text-sm pw-font-[600] pw-text-[#35394C] pw-flex pw-items-center">
-                {currency == 'MATIC' ? (
-                  <MaticIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-                ) : currency === 'ETH' ? (
-                  <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-                ) : (
-                  currency
-                )}
-                {parseFloat(service).toFixed(2)}
-              </p>
+              <CriptoValueComponent
+                code={name}
+                value={service}
+                crypto={currency == 'MATIC' || currency == 'ETH'}
+                fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+              />
             )
           ) : null}
         </div>
@@ -74,7 +67,7 @@ const _PriceAndGasInfo = ({
       {parseFloat(gasFee) == 0 ? null : (
         <div className="pw-flex pw-justify-between pw-mt-2">
           <div className="pw-flex pw-gap-x-1">
-            <p className="pw-text-sm text-[#35394C] pw-font-[400]">
+            <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
               {translate('shared>components>gasPriceinfo')}
             </p>
             {/* <InfoIcon className="pw-mt-[2px]" /> */}
@@ -82,16 +75,12 @@ const _PriceAndGasInfo = ({
           {loading ? (
             <Shimmer />
           ) : parseFloat(gasFee) == 0 ? null : (
-            <p className="pw-text-sm pw-font-[600] pw-text-[#35394C] pw-flex pw-items-center">
-              {currency == 'MATIC' ? (
-                <MaticIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-              ) : currency === 'ETH' ? (
-                <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-              ) : (
-                currency
-              )}
-              {gasFee}
-            </p>
+            <CriptoValueComponent
+              code={name}
+              value={gasFee}
+              crypto={currency == 'MATIC' || currency == 'ETH'}
+              fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+            />
           )}
         </div>
       )}
@@ -103,16 +92,14 @@ const _PriceAndGasInfo = ({
         {loading ? (
           <Shimmer className="pw-h-6 pw-w-17" />
         ) : (
-          <p className="pw-text-xl pw-font-[700] pw-text-[#35394C] pw-flex pw-items-center">
-            {currency == 'MATIC' ? (
-              <MaticIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-            ) : currency === 'ETH' ? (
-              <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-            ) : (
-              currency
-            )}
-            {totalPrice}
-          </p>
+          <>
+            <CriptoValueComponent
+              code={name}
+              value={totalPrice}
+              crypto={currency == 'MATIC' || currency == 'ETH'}
+              fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
+            />
+          </>
         )}
       </div>
     </div>
@@ -127,6 +114,7 @@ export const PriceAndGasInfo = ({
   service,
   totalPrice,
   currency,
+  name = 'BRL',
 }: PriceAndGasInfo) => {
   return (
     <TranslatableComponent>
@@ -138,6 +126,7 @@ export const PriceAndGasInfo = ({
         gasFee={gasFee}
         totalPrice={totalPrice}
         currency={currency}
+        name={name}
       />
     </TranslatableComponent>
   );

@@ -1,5 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
 
+import InputBirthdate from '../SmartInputs/InputBirthdate';
 import InputCpf from '../SmartInputs/InputCpf';
 import InputEmail from '../SmartInputs/InputEmail';
 import InputFile from '../SmartInputs/InputFile';
@@ -15,7 +18,7 @@ interface SmartProps {
   assetId?: string | null;
 
   docStatus?: UserDocumentStatus;
-
+  onChangeUploadProgess: (value: boolean) => void;
   docFileValue?: string;
 }
 
@@ -34,7 +37,9 @@ const SmartInputsController = ({
   assetId,
   docStatus,
   docFileValue,
+  onChangeUploadProgess,
 }: SmartProps) => {
+  const [translate] = useTranslation();
   const renderInput = () => {
     switch (type) {
       case DataTypesEnum.Cpf:
@@ -49,6 +54,15 @@ const SmartInputsController = ({
       case DataTypesEnum.Text:
         return (
           <InputText
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
+      case DataTypesEnum.Birthdate:
+        return (
+          <InputBirthdate
             label={label}
             name={name}
             docValue={value}
@@ -90,6 +104,22 @@ const SmartInputsController = ({
             docValue={docFileValue}
             assetId={assetId}
             docStatus={docStatus}
+            acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
+            onChangeUploadProgess={onChangeUploadProgess}
+          />
+        );
+
+      case DataTypesEnum.MultifaceSelfie:
+        return (
+          <InputFile
+            label={label}
+            name={name}
+            docValue={docFileValue}
+            assetId={assetId}
+            docStatus={docStatus}
+            subtitle={translate('auth>smartInputsController>subtitleInputFile')}
+            acceptTypesDocs={['.png', '.jpeg', '.jpg']}
+            onChangeUploadProgess={onChangeUploadProgess}
           />
         );
     }

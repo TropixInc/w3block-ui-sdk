@@ -46,7 +46,7 @@ export const ProductInfo = ({
       case CheckoutStatus.FINISHED:
         return (
           <div className="pw-flex pw-items-center pw-justify-end pw-gap-x-2 -pw-mb-[2px]">
-            <p className="pw-text-sm pw-text-[#295BA6] pw-font-[600]">
+            <p className="pw-text-xs sm:pw-text-sm pw-text-[#295BA6] pw-font-[600]">
               {translate('shared>processing')}
             </p>
           </div>
@@ -121,15 +121,15 @@ export const ProductInfo = ({
         {loading ? (
           <Shimmer className="!pw-w-[48px] !pw-h-[48px] pw-rounded-lg " />
         ) : (
-          <div className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-overflow-hidden">
+          <div className="pw-w-[36px] pw-h-[36px] sm:pw-w-[48px] sm:pw-h-[48px] pw-rounded-md sm:pw-rounded-lg pw-overflow-hidden">
             <ImageSDK
               src={image}
-              className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
+              className="pw-w-[36px] pw-h-[36px] sm:pw-w-[48px] sm:pw-h-[48px] pw-rounded-md sm:pw-rounded-lg pw-object-cover"
             />
           </div>
         )}
       </div>
-      <div className="pw-flex-1 pw-ml-3">
+      <div className="pw-flex-1 pw-ml-1 sm:pw-ml-3">
         {loading ? (
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
         ) : (

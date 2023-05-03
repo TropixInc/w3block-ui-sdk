@@ -37,6 +37,11 @@ export interface NFTByWalletDTO {
     image?: string;
     atributes?: Array<MetadataAtribute>;
     timeLastUpdated?: string;
+    collectionData: {
+      id: string;
+      name: string;
+      pass: boolean;
+    };
   };
 }
 

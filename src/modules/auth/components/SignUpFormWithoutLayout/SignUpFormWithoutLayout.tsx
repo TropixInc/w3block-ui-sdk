@@ -224,7 +224,7 @@ export const SignUpFormWithoutLayout = ({
           >
             {translate('components>advanceButton>continue')}
           </AuthButton>
-          <p className="pw-font-poppins pw-text-[13px] pw-leading-[19.5px] pw-text-center pw-mb-[27px]">
+          <p className="pw-font-poppins pw-text-[13px] pw-leading-[19.5px] pw-text-center pw-mb-[27px] pw-text-[#353945]">
             <Trans i18nKey={'auth>signUpForm>alreadyHaveAccount'}>
               Já possui uma conta?
               <a

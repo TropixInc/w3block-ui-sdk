@@ -5,6 +5,7 @@ import { useCart } from '../../checkout/hooks/useCart';
 import { useRouterConnect } from '../../shared';
 import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
 import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
+import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
@@ -19,9 +20,14 @@ import { ProductPageData } from '../interfaces';
 interface ProductPageProps {
   data: ProductPageData;
   params?: string[];
+  hasCart?: boolean;
 }
 
-export const ProductPage = ({ data, params }: ProductPageProps) => {
+export const ProductPage = ({
+  data,
+  params,
+  hasCart = true,
+}: ProductPageProps) => {
   const { styleData, mobileStyleData } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
@@ -154,8 +160,8 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
           <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-12 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <ImageSDK
-              className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] xl:pw-h-[437px] sm:pw-h-[337px] pw-h-[283px] pw-rounded-[14px] pw-object-cover pw-object-center"
-              src={product?.images[0].original}
+              className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+              src={product?.images?.[0]?.original}
             />
             <div className="pw-w-full">
               {showProductName && (
@@ -187,7 +193,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                           Pagar em:
                         </p>
                         <form className="pw-flex pw-gap-4" action="submit">
-                          {product?.prices.map((price) => (
+                          {product?.prices.map((price: any) => (
                             <div
                               key={price.currencyId}
                               className="pw-flex pw-gap-2"
@@ -214,19 +220,31 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     style={{ color: priceTextColor ?? 'black' }}
                     className="pw-text-2xl pw-mt-4 pw-font-[700]"
                   >
-                    {product?.stockAmount == 0
-                      ? 'Esgotado'
-                      : product
-                      ? `${
+                    {product?.stockAmount == 0 ? (
+                      'Esgotado'
+                    ) : product ? (
+                      <CriptoValueComponent
+                        size={24}
+                        fontClass="pw-ml-1"
+                        crypto={
                           product?.prices.find(
-                            (price) => price.currencyId == currencyId?.id
-                          )?.currency.symbol
-                        } ${
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.currency.crypto
+                        }
+                        code={
                           product?.prices.find(
-                            (price) => price.currencyId == currencyId?.id
-                          )?.amount
-                        }`
-                      : ''}
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.currency.name
+                        }
+                        value={
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.amount ?? '0'
+                        }
+                      ></CriptoValueComponent>
+                    ) : (
+                      ''
+                    )}
                   </p>
                 </>
               )}
@@ -304,7 +322,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
               ) : null}
               {actionButton && (
                 <div className="pw-flex pw-flex-col">
-                  {!currencyId?.crypto && (
+                  {!currencyId?.crypto && hasCart ? (
                     <button
                       disabled={
                         product?.stockAmount == 0 ||
@@ -335,7 +353,7 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                         ? 'Remover do carrinho'
                         : 'Adicionar ao carrinho'}
                     </button>
-                  )}
+                  ) : null}
                   <button
                     disabled={
                       product?.stockAmount == 0 ||
@@ -372,6 +390,29 @@ export const ProductPage = ({ data, params }: ProductPageProps) => {
                     {buttonText ?? 'Comprar agora'}
                   </button>
                 </div>
+              )}
+              {product?.prices.find(
+                (price: any) => price.currencyId == currencyId?.id
+              )?.anchorCurrencyId && (
+                <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
+                  *O valor do produto em{' '}
+                  {
+                    product?.prices.find(
+                      (price: any) => price.currencyId == currencyId?.id
+                    )?.currency.symbol
+                  }{' '}
+                  pode variar de acordo com a cotação desta moeda em{' '}
+                  {
+                    product.prices.find(
+                      (priceF) =>
+                        priceF.currencyId ==
+                        product?.prices.find(
+                          (price: any) => price.currencyId == currencyId?.id
+                        )?.anchorCurrencyId
+                    )?.currency.symbol
+                  }
+                  .
+                </p>
               )}
             </div>
           </div>

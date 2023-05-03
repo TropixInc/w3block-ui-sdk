@@ -9,6 +9,7 @@ export type ProductPrice = {
   amount: string;
   currency: CurrencyResponse;
   currencyId?: string;
+  anchorCurrencyId?: string;
 };
 
 export interface CurrencyResponse {

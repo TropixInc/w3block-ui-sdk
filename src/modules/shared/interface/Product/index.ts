@@ -9,7 +9,12 @@ export interface Product {
   name: string;
   description: string;
   images: Images[];
-  prices: { amount?: string; currency: CurrencyResponse; currencyId: string }[];
+  prices: {
+    amount?: string;
+    currency: CurrencyResponse;
+    currencyId: string;
+    anchorCurrencyId?: string;
+  }[];
   distributionType: string;
   pricingType: string;
   contractAddress: string;

@@ -29,7 +29,6 @@ export const VerifySignUpWithCodeWithoutLayout = ({
   const { mutate: mutateVerify, isLoading: isLoadingVerify } =
     useVerifySignUp();
   const { companyId } = useCompanyConfig();
-  const email = (query.email as string) ?? '';
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
@@ -76,7 +75,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
       mutateVerify(
         { email: emailLocal, token: code },
         {
-          onSuccess(data) {
+          onSuccess(data: any) {
             if (data.data.verified && password) {
               signIn({ email: emailLocal, password, companyId }).then(
                 (data) => {
@@ -145,7 +144,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
           mutate({
-            email: email,
+            email: emailLocal ?? '',
             verificationType: 'numeric',
           })
         }
@@ -161,14 +160,14 @@ export const VerifySignUpWithCodeWithoutLayout = ({
         </p>
       ) : null}
       <p className="pw-text-[#353945] pw-text-center pw-text-[13px] pw-leading-[15.85px] pw-mt-[23px] pw-mb-[18px]">
-        <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
-          O link expira em 15 minutos
+        <Trans i18nKey="auth>setCode>linkExpiresMessage">
+          O código expira em 15 minutos
           <button
             disabled={isLoading || isActive}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({
-                email: email,
+                email: emailLocal ?? '',
                 verificationType: 'numeric',
               })
             }

@@ -16,20 +16,37 @@ export interface ValidationsValues {
 
 const validates: Array<ValidationsValues> = [];
 
+const validateBirthdate = (date: string | undefined): boolean => {
+  const today = new Date();
+  if (date) {
+    const birthdate = new Date(date);
+    let age = today.getFullYear() - birthdate.getFullYear();
+    const month = today.getMonth() - birthdate.getMonth();
+
+    if (month < 0 || (month === 0 && today.getDate() < birthdate.getDate())) {
+      age--;
+    }
+
+    return age >= 18;
+  } else return false;
+};
+
 export const useGetValidationsTypesForSignup = (
   values: Array<TenantInputEntityDto>
 ) => {
   const [translate] = useTranslation();
-  values.forEach(({ type, id }) => {
+  values.forEach(({ type, id, mandatory }) => {
     switch (type) {
-      case DataTypesEnum.File:
+      case DataTypesEnum.File || DataTypesEnum.MultifaceSelfie:
         validates.push({
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            assetId: string().required(
-              translate('auth>getValidationsTypesForSignup>insertFile')
-            ),
+            assetId: mandatory
+              ? string().required(
+                  translate('auth>getValidationsTypesForSignup>insertFile')
+                )
+              : string(),
           }),
         });
         break;
@@ -38,15 +55,23 @@ export const useGetValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string()
-              .email(
-                translate('auth>getValidationsTypesForSignup>insertValidEmail')
-              )
-              .required(
-                translate(
-                  'companyAuth>requestPasswordChange>emailFieldPlaceholder'
-                )
-              ),
+            value: mandatory
+              ? string()
+                  .email(
+                    translate(
+                      'auth>getValidationsTypesForSignup>insertValidEmail'
+                    )
+                  )
+                  .required(
+                    translate(
+                      'companyAuth>requestPasswordChange>emailFieldPlaceholder'
+                    )
+                  )
+              : string().email(
+                  translate(
+                    'auth>getValidationsTypesForSignup>insertValidEmail'
+                  )
+                ),
           }),
         });
         break;
@@ -55,17 +80,27 @@ export const useGetValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string()
-              .required(
-                translate('auth>getValidationsTypesForSignup>insertYourCPF')
-              )
-              .test(
-                'cpf',
-                translate('auth>getValidationsTypesForSignup>insertValidCPF'),
-                (value) => {
-                  return value ? cpf.isValid(value) : true;
-                }
-              ),
+            value: mandatory
+              ? string()
+                  .required(
+                    translate('auth>getValidationsTypesForSignup>insertYourCPF')
+                  )
+                  .test(
+                    'cpf',
+                    translate(
+                      'auth>getValidationsTypesForSignup>insertValidCPF'
+                    ),
+                    (value) => {
+                      return value ? cpf.isValid(value) : true;
+                    }
+                  )
+              : string().test(
+                  'cpf',
+                  translate('auth>getValidationsTypesForSignup>insertValidCPF'),
+                  (value) => {
+                    return value ? cpf.isValid(value) : true;
+                  }
+                ),
           }),
         });
         break;
@@ -74,18 +109,34 @@ export const useGetValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: yup
-              .string()
-              .test(
-                'phone',
-                translate('auth>getValidationsTypesForSignup>insertValidPhone'),
-                (value) => {
-                  return value ? isValidPhoneNumber(value) : true;
-                }
-              )
-              .required(
-                translate('auth>getValidationsTypesForSignup>insertYourPhone')
-              ),
+            value: mandatory
+              ? yup
+                  .string()
+                  .test(
+                    'phone',
+                    translate(
+                      'auth>getValidationsTypesForSignup>insertValidPhone'
+                    ),
+                    (value) => {
+                      return value ? isValidPhoneNumber(value) : true;
+                    }
+                  )
+                  .required(
+                    translate(
+                      'auth>getValidationsTypesForSignup>insertYourPhone'
+                    )
+                  )
+              : yup
+                  .string()
+                  .test(
+                    'phone',
+                    translate(
+                      'auth>getValidationsTypesForSignup>insertValidPhone'
+                    ),
+                    (value) => {
+                      return value ? isValidPhoneNumber(value) : true;
+                    }
+                  ),
           }),
         });
         break;
@@ -94,17 +145,25 @@ export const useGetValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string()
-              .test(
-                'url',
-                translate('auth>getValidationsTypesForSignup>insertUrl'),
-                (value) => {
-                  return value ? isURL(value) : true;
-                }
-              )
-              .required(
-                translate('auth>getValidationsTypesForSignup>insertUrl')
-              ),
+            value: mandatory
+              ? string()
+                  .test(
+                    'url',
+                    translate('auth>getValidationsTypesForSignup>insertUrl'),
+                    (value) => {
+                      return value ? isURL(value) : true;
+                    }
+                  )
+                  .required(
+                    translate('auth>getValidationsTypesForSignup>insertUrl')
+                  )
+              : string().test(
+                  'url',
+                  translate('auth>getValidationsTypesForSignup>insertUrl'),
+                  (value) => {
+                    return value ? isURL(value) : true;
+                  }
+                ),
           }),
         });
         break;
@@ -113,9 +172,34 @@ export const useGetValidationsTypesForSignup = (
           yupKey: id,
           validations: object().shape({
             inputId: string(),
-            value: string().required(
-              translate('auth>getValidationsTypesForSignup>insertText')
-            ),
+            value: mandatory
+              ? string().required(
+                  translate('auth>getValidationsTypesForSignup>insertText')
+                )
+              : string(),
+          }),
+        });
+        break;
+      case DataTypesEnum.Birthdate:
+        validates.push({
+          yupKey: id,
+          validations: object().shape({
+            inputId: string(),
+            value: mandatory
+              ? string()
+                  .required(
+                    translate('auth>getValidationsTypesForSignup>insertText')
+                  )
+                  .test(
+                    'birthdate',
+                    'Você precisa ter 18 anos ou mais.',
+                    (value) => validateBirthdate(value)
+                  )
+              : string().test(
+                  'birthdate',
+                  'Você precisa ter 18 anos ou mais.',
+                  (value) => validateBirthdate(value)
+                ),
           }),
         });
         break;

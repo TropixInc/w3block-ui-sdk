@@ -2,43 +2,37 @@ import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import classNames from 'classnames';
-import isURL from 'validator/lib/isURL';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
-interface InputUrlProps {
+interface InputBirthdate {
   label: string;
   name: string;
   docValue?: string;
   docStatus?: UserDocumentStatus;
 }
 
-const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
+const InputBirthdate = ({
+  label,
+  name,
+  docValue,
+  docStatus,
+}: InputBirthdate) => {
   const { field, fieldState } = useController({ name });
+  const [inputValue, setInputValue] = useState<string | undefined>();
   const error = fieldState?.error as unknown as InputError;
-  const [url, setUrl] = useState('');
 
-  const onChangeUrl = (value: string) => {
-    if (value) {
-      setUrl(value);
-      field.onChange({ inputId: name, value: value });
-    } else {
-      setUrl('');
-      field.onChange({ inputId: undefined, value: undefined });
-    }
+  const handleTextChange = (value: string) => {
+    setInputValue(value);
+    field.onChange({ inputId: name, value: value });
   };
 
   useEffect(() => {
-    if (
-      docValue &&
-      isURL(docValue) &&
-      docStatus !== UserDocumentStatus.RequiredReview
-    ) {
-      setUrl(docValue);
+    if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
+      setInputValue(docValue);
       field.onChange({ inputId: name, value: docValue });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,16 +43,13 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
+      <FormItemContainer invalid={fieldState.invalid}>
         <input
-          name={name}
+          type="date"
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
-          type="text"
-          value={url}
-          onChange={(e) => onChangeUrl(e.target.value)}
-          className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
-          )}
+          onChange={(e) => handleTextChange(e.target.value)}
+          value={inputValue}
+          className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
         />
       </FormItemContainer>
       <p className="mt-5">
@@ -73,4 +64,4 @@ const InputUrl = ({ label, name, docValue, docStatus }: InputUrlProps) => {
   );
 };
 
-export default InputUrl;
+export default InputBirthdate;

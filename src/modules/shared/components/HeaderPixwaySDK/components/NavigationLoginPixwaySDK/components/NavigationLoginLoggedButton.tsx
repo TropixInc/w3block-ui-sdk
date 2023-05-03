@@ -39,6 +39,7 @@ interface NavigationLoginLoggedButtonProps {
   menuTabs?: NavigationMenuTabs[];
   textColor?: string;
   fontFamily?: string;
+  backgroundColor?: string;
 }
 
 export const NavigationLoginLoggedButton = ({
@@ -46,6 +47,7 @@ export const NavigationLoginLoggedButton = ({
   menuTabs,
   textColor = 'black',
   fontFamily,
+  backgroundColor,
 }: NavigationLoginLoggedButtonProps) => {
   //const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
@@ -74,11 +76,11 @@ export const NavigationLoginLoggedButton = ({
         </div>
       </div>
 
-      {menu && <NavigationMenu menuTabs={menuTabs} logo={logo} fontFamily={fontFamily} />}
+      {menu && <NavigationMenu textColor={textColor} backgroundColor={backgroundColor} menuTabs={menuTabs} logo={logo} fontFamily={fontFamily} />}
     </div>
   );
 };
-export const useDefaultMenuTabs = () => {
+export const useDefaultMenuTabs = (textColor: string) => {
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
   const router = useRouterConnect();
@@ -98,32 +100,32 @@ export const useDefaultMenuTabs = () => {
     {
       name: translate('header>components>defaultTab>myAccount'),
       route: PixwayAppRoutes.MY_PROFILE,
-      icon: <UserIcon />,
+      icon: <UserIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: true,
     },
     {
       name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
-      icon: <WalletIcon />,
+      icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: true,
     },
     {
       name: translate('header>components>defaultTab>myOrders'),
       route: PixwayAppRoutes.MY_ORDERS,
-      icon: <MyOrdersIcon />,
+      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: true,
     },
     {
       name: translate('header>components>defaultTab>tokenPass'),
       route: PixwayAppRoutes.TOKENPASS,
-      icon: <TicketIcon width={17} height={17} />,
+      icon: <TicketIcon style={{color: textColor, stroke: textColor}} width={17} height={17} />,
       isVisible: pass && isAdmin && hasPassAssociated,
 
     },
     {
       name: translate('components>menu>integration'),
       route: PixwayAppRoutes.CONNECTION,
-      icon: <IntegrationIcon />,
+      icon: <IntegrationIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: true,
     },
     // {
@@ -138,7 +140,7 @@ export const useDefaultMenuTabs = () => {
     // },
     {
       name: 'Logout',
-      icon: <LogoutIcon />,
+      icon: <LogoutIcon style={{color: textColor, stroke: textColor}} />,
       action: () => {
         signOut().then(() => {
           router.push(PixwayAppRoutes.SIGN_IN);
@@ -159,8 +161,10 @@ export const useDefaultMenuTabs = () => {
 const NavigationMenu = ({
   menuTabs: _menuTabs,
   fontFamily,
+  backgroundColor,
+  textColor,
 }: NavigationLoginLoggedButtonProps) => {
-  const defaultTabs = useDefaultMenuTabs();
+  const defaultTabs = useDefaultMenuTabs(textColor ?? "black");
   const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
@@ -181,7 +185,7 @@ const NavigationMenu = ({
 
   const WithWallet = () => {
     return (
-      <div className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
+      <div style={{color: textColor}} className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
         <div className="pw-flex">
           <p className="pw-text-[10px] pw-font-[500]">
             {wallet?.type === WalletTypes.Vault
@@ -224,6 +228,7 @@ const NavigationMenu = ({
   return (
     <div className="pw-relative">
       <div
+        style={{backgroundColor, color: textColor}}
         className={`pw-absolute pw-mt-[1.68rem] ${hasMainWallet ? 'pw-ml-[50px]' : ''
           } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
       >

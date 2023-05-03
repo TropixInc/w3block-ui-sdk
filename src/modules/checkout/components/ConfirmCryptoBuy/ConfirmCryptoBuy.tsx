@@ -109,8 +109,9 @@ export const ConfirmCryptoBuy = ({
 
   const buyWithVault = () => {
     if (
-      (window as any).ethereum.selectedAddress.toLowerCase() !=
-      wallet?.address.toLowerCase()
+      wallet?.type == 'metamask' &&
+      (window as any).ethereum?.selectedAddress?.toLowerCase() !=
+        wallet?.address.toLowerCase()
     ) {
       setErr('Conta selecionada não é a mesma da carteira');
       setErrMessage(
@@ -119,7 +120,12 @@ export const ConfirmCryptoBuy = ({
       return;
     }
 
-    if (productChainId && chainId && productChainId != chainId) {
+    if (
+      wallet?.type == 'metamask' &&
+      productChainId &&
+      chainId &&
+      productChainId != chainId
+    ) {
       setErr(
         'A sua carteira MetaMask não está utilizando a rede do produto à venda.'
       );
@@ -219,8 +225,9 @@ export const ConfirmCryptoBuy = ({
                 <CriptoValueComponent
                   fontClass="pw-text-sm"
                   size={13}
-                  value={wallet?.balance}
+                  value={wallet?.balance ?? '0'}
                   code={code}
+                  crypto={true}
                 />
               </div>
               {(!sameAccount || !sameChainId) && wallet?.type == 'metamask' && (
@@ -258,8 +265,9 @@ export const ConfirmCryptoBuy = ({
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
-                    value={gasPrice}
+                    value={gasPrice ?? '0'}
                     code={code}
+                    crypto={true}
                   />
                 </div>
                 <div className="pw-flex pw-justify-between pw-mt-1">
@@ -267,8 +275,9 @@ export const ConfirmCryptoBuy = ({
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
-                    value={serviceFee}
+                    value={serviceFee ?? '0'}
                     code={code}
+                    crypto={true}
                   />
                 </div>
                 <div className="pw-flex pw-justify-between pw-mt-1">
@@ -276,8 +285,9 @@ export const ConfirmCryptoBuy = ({
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
-                    value={totalPrice}
+                    value={totalPrice ?? '0'}
                     code={code}
+                    crypto={true}
                   />
                 </div>
               </>

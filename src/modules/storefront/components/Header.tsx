@@ -22,10 +22,14 @@ export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
     margin,
     padding,
     fontFamily,
+    hasCart,
+    logoLink,
   } = mergedStyleData;
 
   return (
     <HeaderPixwaySDK
+      logoLink={logoLink}
+      hasCart={hasCart}
       logoSrc={logoSrc?.assetUrl}
       bgColor={backgroundColor}
       textColor={textColor}

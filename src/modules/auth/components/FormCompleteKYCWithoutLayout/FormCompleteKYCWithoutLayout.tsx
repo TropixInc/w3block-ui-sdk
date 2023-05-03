@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -37,6 +37,8 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   const [translate] = useTranslation();
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
+
+  const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
 
   const { data: tenantInputs } = useGetTenantInputsBySlug();
@@ -67,6 +69,11 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
 
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
+
+    const documents = Object.values(dynamicValues);
+
+    const validDocs = documents.filter((item) => item);
+
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
       mutate({
@@ -74,7 +81,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
         contextId,
         userId,
         documents: {
-          documents: Object.values(dynamicValues),
+          documents: validDocs,
         },
       });
     }
@@ -95,53 +102,59 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
   }
 
   return (
-    <div>
-      <FormProvider {...dynamicMethods}>
+    <FormProvider {...dynamicMethods}>
+      {reasons?.data?.items[0]?.logs?.at(-1)?.reason ? (
+        <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
+          <p className="pw-mt-2 pw-text-[#FF0505]">
+            {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+          </p>
+        </div>
+      ) : null}
+      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
+        {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
+      </p>
+      <form onSubmit={dynamicMethods.handleSubmit(onSubmit)}>
+        {tenantInputs?.data &&
+          tenantInputs?.data?.map((item) => (
+            <SmartInputsController
+              key={item.id}
+              label={item.label}
+              name={item.id}
+              type={item.type}
+              assetId={getDocumentByInputId(item?.id)?.assetId}
+              value={getDocumentByInputId(item?.id)?.value}
+              docStatus={getDocumentByInputId(item?.id)?.status}
+              docFileValue={
+                getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
+              }
+              onChangeUploadProgess={setUploadProgress}
+            />
+          ))}
         {isError && (
-          <Alert variant="error" className="pw-flex pw-gap-x-3 pw-mb-5">
+          <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
             <Alert.Icon />
             <p>{errorMessage?.message}</p>
           </Alert>
         )}
-        {reasons?.data?.items[0]?.logs?.at(-1)?.reason ? (
-          <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
-            <p className="pw-mt-2 pw-text-[#FF0505]">
-              {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
-            </p>
-          </div>
-        ) : null}
-        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
-          {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
-        </p>
-        <form onSubmit={dynamicMethods.handleSubmit(onSubmit)}>
-          {tenantInputs?.data &&
-            tenantInputs?.data?.map((item) => (
-              <SmartInputsController
-                key={item.id}
-                label={item.label}
-                name={item.id}
-                type={item.type}
-                assetId={getDocumentByInputId(item?.id)?.assetId}
-                value={getDocumentByInputId(item?.id)?.value}
-                docStatus={getDocumentByInputId(item?.id)?.status}
-                docFileValue={
-                  getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
-                }
-              />
-            ))}
-          <AuthButton
-            type="submit"
-            className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-            disabled={!dynamicMethods.formState.isValid || isLoading}
-          >
-            {isLoading ? (
-              <Spinner className="pw-w-4 pw-h-4" />
-            ) : (
-              translate('components>advanceButton>continue')
-            )}
-          </AuthButton>
-        </form>
-      </FormProvider>
+        {uploadProgress && (
+          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+            {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
+          </p>
+        )}
+        <AuthButton
+          type="submit"
+          className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
+          disabled={
+            !dynamicMethods.formState.isValid || isLoading || uploadProgress
+          }
+        >
+          {isLoading ? (
+            <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
+          ) : (
+            translate('components>advanceButton>continue')
+          )}
+        </AuthButton>
+      </form>
       <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
         <button
           onClick={() =>
@@ -155,7 +168,7 @@ const _FormCompleteKYCWithoutLayout = ({ userId }: Props) => {
         </button>{' '}
         {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
       </p>
-    </div>
+    </FormProvider>
   );
 };
 

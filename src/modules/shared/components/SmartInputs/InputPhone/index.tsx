@@ -5,6 +5,7 @@ import Input from 'react-phone-number-input/input';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
+import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -50,9 +51,7 @@ const InputPhone = ({ label, name, docValue, docStatus }: InputPhoneProps) => {
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <Input
-          readOnly={Boolean(
-            docValue && docStatus !== UserDocumentStatus.RequiredReview
-          )}
+          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           name={name}
           value={inputValue}
           onChange={handleChange}
