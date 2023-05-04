@@ -1,11 +1,15 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
 import { Provider } from '@w3block/pixchain-react-metamask';
+import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { ThemeContext, ThemeProvider } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { useProfile } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
+import useRouter from '../../hooks/useRouter';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import { CartButton } from '../CartButton/CartButton';
 import TranslatableComponent from '../TranslatableComponent';
@@ -59,6 +63,9 @@ const _HeaderPixwaySDK = ({
   logoLink,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
+  const router = useRouter();
+  const { data: profile } = useProfile();
+  const { data: contexts } = useGetTenantContext();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
   const { logoUrl } = useCompanyConfig();
@@ -73,6 +80,14 @@ const _HeaderPixwaySDK = ({
 
   const validatorMenuOpened = openedLogin ? openedLogin : openedloginState;
 
+  const signupContext = useMemo(() => {
+    if (contexts) {
+      return contexts?.data?.items?.find(
+        ({ context }) => context?.slug === 'signup'
+      );
+    }
+  }, [contexts]);
+
   const toggleTabsMemo = () => {
     if (openedLogin || openedloginState) {
       toggleMenuMemo();
@@ -81,6 +96,20 @@ const _HeaderPixwaySDK = ({
       toogleOpenedTabs();
     } else setOpenedTabs(!openedTabs);
   };
+
+  useEffect(() => {
+    if (profile) {
+      if (signupContext) {
+        if (
+          profile?.data?.kycStatus === KycStatus.Pending ||
+          signupContext.active
+        ) {
+          router.push(PixwayAppRoutes.COMPLETE_KYC);
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile, signupContext]);
 
   const defaultTabs = context?.defaultTheme?.header?.styleData?.tabs;
   const tabsToPass = tabs ? tabs : defaultTabs;
