@@ -319,7 +319,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
         margin: convertSpacingToCSS(margin),
         padding: padding ? convertSpacingToCSS(padding) : '16px',
       }}
-      className="pw-container pw-mx-auto"
     >
       <div className="pw-container pw-mx-auto pw-pb-10 sm:!pw-px-0">
         {moduleTitle && moduleTitle != '' && (
