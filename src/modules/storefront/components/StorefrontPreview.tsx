@@ -94,29 +94,6 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
 
-  useEffect(() => {
-    if (themeContext?.configurations.styleData.favicon) {
-      let link = document.querySelector('link[rel~="icon"]') as HTMLLinkElement;
-      if (!link) {
-        link = document.createElement('link');
-        link.rel = 'icon';
-        document.getElementsByTagName('head')[0].appendChild(link);
-      }
-      link.href = themeContext?.configurations.styleData.favicon;
-    }
-  }, [themeContext]);
-
-  useEffect(() => {
-    if (themeContext?.configurations.styleData.siteTitle) {
-      let title = document.querySelector('title');
-      if (!title) {
-        title = document.createElement('title');
-        document.getElementsByTagName('head')[0].appendChild(title);
-      }
-      title.text = themeContext?.configurations.styleData.siteTitle;
-    }
-  }, [themeContext]);
-
   const breakpoint = useBreakpoints();
   const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
 
