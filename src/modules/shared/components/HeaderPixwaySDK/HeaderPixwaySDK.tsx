@@ -101,7 +101,7 @@ const _HeaderPixwaySDK = ({
     if (profile) {
       if (signupContext) {
         if (
-          profile?.data?.kycStatus === KycStatus.Pending ||
+          profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active
         ) {
           router.push(PixwayAppRoutes.COMPLETE_KYC);
@@ -254,9 +254,7 @@ const _HeaderPixwaySDK = ({
   ) : null;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MetamaskProvider = Provider as any;
-
 export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
   <TranslatableComponent>
     <MetamaskProvider

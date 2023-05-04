@@ -55,6 +55,7 @@ const InputText = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid}>
         <input
+          {...field}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}

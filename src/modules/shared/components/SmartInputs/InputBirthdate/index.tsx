@@ -45,6 +45,7 @@ const InputBirthdate = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid}>
         <input
+          {...field}
           type="date"
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleTextChange(e.target.value)}

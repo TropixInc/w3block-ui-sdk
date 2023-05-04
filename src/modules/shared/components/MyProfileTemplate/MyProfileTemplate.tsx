@@ -135,6 +135,7 @@ const _MyProfileTemplate = () => {
 
                         <div className="pw-w-full">
                           <FormCompleteKYCWithoutLayout
+                            key={contextId}
                             renderSubtitle={false}
                             userId={profile?.data.id}
                             contextId={contextId}

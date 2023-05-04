@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useController } from 'react-hook-form';
+import { useController, UseFormRegisterReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
@@ -12,6 +12,7 @@ import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
 interface InputCPFProps {
+  refer: UseFormRegisterReturn<'inputId'>;
   label: string;
   name: string;
   hidenValidations?: boolean;
@@ -72,6 +73,7 @@ const InputCpf = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
+          {...field}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           name={name}
           onChange={(e) => handleChange(e.target.value)}

@@ -155,7 +155,9 @@ const InputFile = ({
           {...getRootProps()}
         >
           <input
+            {...field}
             {...getInputProps()}
+            value={file?.name}
             readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           />
           <FileIcon className="pw-w-4" />

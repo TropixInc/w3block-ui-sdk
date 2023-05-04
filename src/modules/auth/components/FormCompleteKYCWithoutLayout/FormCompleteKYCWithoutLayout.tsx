@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -80,6 +80,8 @@ const _FormCompleteKYCWithoutLayout = ({
     resolver: yupResolver(dynamicSchema),
   });
 
+  console.log(dynamicMethods.register);
+
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
 
@@ -112,6 +114,8 @@ const _FormCompleteKYCWithoutLayout = ({
     }
   }, [isSuccess, profilePage, router]);
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
@@ -132,10 +136,11 @@ const _FormCompleteKYCWithoutLayout = ({
         </p>
       )}
 
-      <form onSubmit={dynamicMethods.handleSubmit(onSubmit)}>
+      <form onSubmit={dynamicMethods.handleSubmit(onSubmit)} ref={formRef}>
         {tenantInputs?.data &&
           tenantInputs?.data?.map((item) => (
             <SmartInputsController
+              refer={dynamicMethods.register('inputId')}
               key={item.id}
               label={item.label}
               name={item.id}
@@ -171,8 +176,9 @@ const _FormCompleteKYCWithoutLayout = ({
             {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
           </p>
         )}
-        {userKycStatus === KycStatus.Approved ||
-        userKycStatus === KycStatus.Denied ? (
+        {contextSlug === 'signup' &&
+        (userKycStatus === KycStatus.Approved ||
+          userKycStatus === KycStatus.Denied) ? (
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
             {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
           </p>
@@ -183,8 +189,11 @@ const _FormCompleteKYCWithoutLayout = ({
           disabled={
             !dynamicMethods.formState.isValid ||
             isLoading ||
-            userKycStatus === KycStatus.Approved ||
-            userKycStatus === KycStatus.Denied
+            Boolean(
+              contextSlug === 'signup' &&
+                (userKycStatus === KycStatus.Approved ||
+                  userKycStatus === KycStatus.Denied)
+            )
           }
         >
           {isLoading ? (

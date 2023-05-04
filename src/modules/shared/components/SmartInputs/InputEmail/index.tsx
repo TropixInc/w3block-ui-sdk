@@ -56,6 +56,7 @@ const InputEmail = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
+          {...field}
           name={name}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleChange(e.target.value)}
