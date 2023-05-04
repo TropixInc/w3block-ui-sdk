@@ -317,10 +317,11 @@ export const Products = ({ data }: { data: ProductsData }) => {
           : 'transparent',
         backgroundColor: backgroundColor ?? 'transparent',
         margin: convertSpacingToCSS(margin),
-        padding: convertSpacingToCSS(padding),
+        padding: padding ? convertSpacingToCSS(padding) : '16px',
       }}
+      className="pw-container pw-mx-auto"
     >
-      <div className="pw-container pw-mx-auto pw-pb-10 pw-px-4 sm:pw-px-0">
+      <div className="pw-container pw-mx-auto pw-pb-10 sm:!pw-px-0">
         {moduleTitle && moduleTitle != '' && (
           <h2
             style={{

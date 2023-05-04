@@ -2,12 +2,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 
 import { WalletTypes } from '@w3block/sdk-id';
 
-import { ReactComponent as MetamaskThirdIMG } from '../../assets/images/metamaskThird.svg';
-import { ReactComponent as VaultFifthIMG } from '../../assets/images/vaultFifth.svg';
-import { ReactComponent as VaultFirstIMG } from '../../assets/images/vaultFirst.svg';
-import { ReactComponent as VaultFourthIMG } from '../../assets/images/vaultFourth.svg';
-import { ReactComponent as VaultSecondIMG } from '../../assets/images/vaultSecond.svg';
-import { ReactComponent as VaultThirdIMG } from '../../assets/images/vaultThird.svg';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { useRequestWalletConnect } from '../../hooks/useRequestWalletConnect';
 import useTranslation from '../../hooks/useTranslation';
@@ -67,10 +61,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.FIRST:
           return (
             <>
-              <VaultFirstIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFirst_zovsup.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Entre no canal do PrimeSea no Discord
@@ -91,10 +86,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.SECOND:
           return (
             <>
-              <VaultSecondIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultSecond_ytyhpn.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Ainda no discord do PrimeSea
@@ -116,10 +112,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.THIRD:
           return (
             <>
-              <VaultThirdIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultThird_bi4red.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Você será redirecionado para o Collab.Land
@@ -140,10 +137,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.FOURTH:
           return (
             <>
-              <VaultFourthIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFourth_mno4mx.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Irá abrir uma janela
@@ -163,10 +161,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.FIFTH:
           return (
             <>
-              <VaultFifthIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFifth_fjvwjj.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Agora é hora de sincronizar com a WalletConnect
@@ -298,10 +297,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.FIRST:
           return (
             <>
-              <VaultFirstIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFirst_zovsup.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Entre no canal do PrimeSea no Discord
@@ -321,10 +321,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.SECOND:
           return (
             <>
-              <VaultSecondIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultSecond_ytyhpn.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Ainda no discord do PrimeSea
@@ -345,10 +346,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.THIRD:
           return (
             <>
-              <MetamaskThirdIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/metamaskThird_knp4h3.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Você será redirecionado para o Collab.Land
@@ -367,10 +369,11 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
         case StepsVault.LAST:
           return (
             <>
-              <VaultFourthIMG
+              <img
                 className="pw-mx-auto"
                 width={isMobile ? 330 : 580}
                 height={isMobile ? 221 : 392}
+                src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFourth_mno4mx.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
                 Siga os passos da sua MetaMask
