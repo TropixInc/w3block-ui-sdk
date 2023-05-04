@@ -1,3 +1,4 @@
+import { UtmContextInterface } from '../../core/context/UtmContext';
 import { Status } from '../../core/metamask/interface';
 import { Product } from '../../shared';
 import { GasFee } from '../../shared/interface/GasFee';
@@ -85,6 +86,7 @@ export interface CreateOrder {
   successUrl?: string;
   paymentMethod?: string;
   providerInputs?: unknown;
+  utmParams?: UtmContextInterface;
 }
 
 export interface CreateOrderProduct {
