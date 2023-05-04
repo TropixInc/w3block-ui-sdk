@@ -101,7 +101,7 @@ const _HeaderPixwaySDK = ({
     if (profile) {
       if (signupContext) {
         if (
-          profile?.data?.kycStatus === KycStatus.Pending ||
+          profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active
         ) {
           router.push(PixwayAppRoutes.COMPLETE_KYC);
