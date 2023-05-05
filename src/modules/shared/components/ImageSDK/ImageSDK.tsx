@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 
+import { threathUrlCloudinary } from '../../utils/threathUrlCloudinary';
 import { isCloudinary, isVideo } from '../../utils/validators';
 
 interface ImageSDKProps extends ImageSDKInternalProps {
@@ -10,9 +11,9 @@ interface ImageSDKProps extends ImageSDKInternalProps {
 }
 
 interface ImageSDKInternalProps {
-  width?: string;
-  height?: string;
-  quality?: 'auto' | 'best' | 'good' | 'eco' | 'low';
+  width?: number;
+  height?: number;
+  quality?: 'best' | 'good' | 'eco' | 'low';
   fit?: 'fill' | 'fit';
 }
 
@@ -36,36 +37,6 @@ export const ImageSDK = ({
   const isVid = isVideo(src ?? '');
   const [isError, setError] = useState(false);
 
-  const threathUrlCloudinary = (
-    s: string,
-    { height: h, width: w, quality: q, fit: f }: ImageSDKInternalProps
-  ) => {
-    let url;
-    const regexp = new RegExp('(.+/upload/)(.+)', 'g');
-    const groups = regexp.exec(s ?? src);
-    if (isVid) {
-      if (groups) {
-        url =
-          groups[1] +
-          `${w ? 'w_' + w : ''},${h ? 'h_' + h : ''},c_${f}/q_auto:${q}/` +
-          groups[2];
-      } else {
-        url = src;
-      }
-    } else {
-      if (groups) {
-        url =
-          groups[1] +
-          `${w ? 'w_' + w : ''},${h ? 'h_' + h : ''},c_${f}/q_auto:${q}/` +
-          groups[2];
-      } else {
-        url = src;
-      }
-    }
-
-    return url;
-  };
-
   const VideoThreath = () => {
     return (
       <>
@@ -73,7 +44,10 @@ export const ImageSDK = ({
           alt={alt}
           className={className}
           ref={preImageRef}
-          src={src?.replace('.mp4', '.png')}
+          src={threathUrlCloudinary({
+            src: src?.replace('.mp4', '.png') ?? '',
+            InternalProps: { width, height, quality, fit },
+          })}
         ></img>
         <video
           className={className}
@@ -92,7 +66,10 @@ export const ImageSDK = ({
             }
           }}
           style={{ display: 'none' }}
-          src={threathUrlCloudinary(src ?? '', { width, height, quality, fit })}
+          src={threathUrlCloudinary({
+            src: src ?? '',
+            InternalProps: { width, height, quality, fit },
+          })}
         ></video>
       </>
     );
@@ -109,11 +86,9 @@ export const ImageSDK = ({
           src={
             isError
               ? imagePlaceholder
-              : threathUrlCloudinary(src ?? '', {
-                  width,
-                  height,
-                  fit,
-                  quality: 'low',
+              : threathUrlCloudinary({
+                  src: src ?? '',
+                  InternalProps: { width, height, quality, fit },
                 })
           }
         ></img>
@@ -132,11 +107,9 @@ export const ImageSDK = ({
           src={
             isError
               ? imagePlaceholder
-              : threathUrlCloudinary(src ?? '', {
-                  width,
-                  height,
-                  quality: 'good',
-                  fit,
+              : threathUrlCloudinary({
+                  src: src ?? '',
+                  InternalProps: { width, height, quality, fit },
                 })
           }
         ></img>
@@ -145,7 +118,7 @@ export const ImageSDK = ({
   };
 
   return useMemo(() => {
-    if (isCloud && src?.includes('https://')) {
+    if (isCloud) {
       return isVid ? <VideoThreath /> : <ImageThreath />;
     } else {
       return isVid ? (

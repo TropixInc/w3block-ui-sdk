@@ -110,6 +110,8 @@ export const WalletTokenCard = ({
                 <ImageSDK
                   src={image}
                   className="pw-w-full pw-h-[300px] pw-object-cover pw-rounded-[20px]"
+                  width={500}
+                  quality="eco"
                 />
               ) : (
                 <FallbackImage className="pw-h-full pw-max-h-[300px] pw-w-full pw-min-h-[300px] pw-rounded-[20px]" />
