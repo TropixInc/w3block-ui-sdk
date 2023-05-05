@@ -4,7 +4,7 @@ import { useClickAway } from 'react-use';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useRouterConnect } from '../../shared';
 import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
-import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
+// import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
@@ -38,7 +38,7 @@ export const ProductPage = ({
   const {
     actionButton,
     backBackgroundColor,
-    backTextColor,
+    // backTextColor,
     backgroundColor,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     blockchainInfoBackgroundColor,
@@ -64,7 +64,7 @@ export const ProductPage = ({
   } = mergedStyleData;
 
   const [translate] = useTranslation();
-  const { back, pushConnect } = useRouterConnect();
+  const { pushConnect } = useRouterConnect();
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
   const refToClickAway = useRef<HTMLDivElement>(null);
@@ -134,7 +134,7 @@ export const ProductPage = ({
           backgroundColor: backBackgroundColor ?? 'white',
         }}
       >
-        <div
+        {/* <div
           onClick={() => back()}
           className="pw-container pw-mx-auto pw-flex pw-items-center pw-gap-6 pw-py-4 pw-cursor-pointer pw-px-4 sm:pw-px-0"
         >
@@ -151,7 +151,7 @@ export const ProductPage = ({
           >
             Voltar
           </p>
-        </div>
+        </div> */}
       </div>
       <div
         className="pw-min-h-[95vh]"

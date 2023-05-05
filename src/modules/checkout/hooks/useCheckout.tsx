@@ -6,6 +6,7 @@ import { AxiosResponse } from 'axios';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
+import { useUtms } from '../../shared/hooks/useUtms/useUtms';
 import {
   CreateOrder,
   CreateOrderPayload,
@@ -32,7 +33,7 @@ interface OrderPreviewPayload {
 
 export const useCheckout = () => {
   const axios = useAxios(W3blockAPI.COMMERCE);
-
+  const utms = useUtms();
   const getOrderPreview = useMutation(
     async ({ productIds, currencyId, companyId }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
@@ -60,6 +61,12 @@ export const useCheckout = () => {
       companyId,
       createOrder,
     }: CreateOrderPayload): Promise<CreateOrderResponse> => {
+      const cOrder = createOrder;
+      const ut = utms;
+      if (utms.expires && utms?.expires > new Date().getTime()) {
+        delete ut.expires;
+        cOrder.utmParams = ut;
+      }
       return axios
         .post<
           CreateOrderResponse,
@@ -67,7 +74,7 @@ export const useCheckout = () => {
           CreateOrder
         >(
           PixwayAPIRoutes.CREATE_ORDER.replace('{companyId}', companyId),
-          createOrder
+          cOrder
         )
         .then((res): CreateOrderResponse => {
           return res.data as CreateOrderResponse;

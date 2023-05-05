@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.260](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.259...v0.1.1-alpha.260) (2023-05-04)
+
+### [0.1.1-alpha.259](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.258...v0.1.1-alpha.259) (2023-05-04)
+
+### [0.1.1-alpha.258](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.257...v0.1.1-alpha.258) (2023-05-04)
+
+### [0.1.1-alpha.257](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.256...v0.1.1-alpha.257) (2023-05-04)
+
+### [0.1.1-alpha.256](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.255...v0.1.1-alpha.256) (2023-05-04)
+
+
+### Bug Fixes
+
+* adjusts on constructor ([#191](https://github.com/TropixInc/w3block-ui-sdk/issues/191)) ([1844ece](https://github.com/TropixInc/w3block-ui-sdk/commit/1844ece044dba758f5a0ad3e2888e1376db624f9))
+
 ### [0.1.1-alpha.255](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.254...v0.1.1-alpha.255) (2023-05-03)
 
 ### [0.1.1-alpha.254](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.253...v0.1.1-alpha.254) (2023-05-03)

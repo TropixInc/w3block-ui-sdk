@@ -147,73 +147,75 @@ const Slide = ({
   } url("${bgUrl?.assetUrl}") no-repeat center`;
 
   return (
-    <div
-      style={{
-        backgroundSize: 'cover',
-        backgroundColor: backgroundColor,
-        background: bg,
-        padding: convertSpacingToCSS(padding),
-      }}
-      className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full  pw-flex ${rowAlignmentClass} pw-items-center`}
+    <a
+      href={
+        actionButton && buttonLink && buttonLink != '' ? buttonLink : undefined
+      }
     >
-      {isVideo(bgUrl?.assetUrl ?? '') && (
-        <ImageSDK
-          src={bgUrl?.assetUrl}
-          className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
-        />
-      )}
       <div
-        className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8`}
+        style={{
+          backgroundSize: 'cover',
+          backgroundColor: backgroundColor,
+          background: bg,
+          padding: convertSpacingToCSS(padding),
+        }}
+        className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full  pw-flex ${rowAlignmentClass} pw-items-center`}
       >
-        <h2
-          style={{ color: titleColor ?? 'white' }}
-          className={`${alignmentTextClass} pw-font-semibold pw-text-4xl pw-max-w-[550px]`}
+        {isVideo(bgUrl?.assetUrl ?? '') && (
+          <ImageSDK
+            src={bgUrl?.assetUrl}
+            className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
+          />
+        )}
+        <div
+          className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8`}
         >
-          {title}
-        </h2>
-        <p
-          style={{ color: subtitleColor ?? 'white' }}
-          className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
-        >
-          {subtitle}
-        </p>
+          <h2
+            style={{ color: titleColor ?? 'white' }}
+            className={`${alignmentTextClass} pw-font-semibold pw-text-4xl pw-max-w-[550px]`}
+          >
+            {title}
+          </h2>
+          <p
+            style={{ color: subtitleColor ?? 'white' }}
+            className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
+          >
+            {subtitle}
+          </p>
 
-        <div className="pw-flex pw-gap-4">
-          {actionButton && (
-            <a
-              style={{
-                backgroundColor: buttonColor ?? 'white',
-                color: buttonTextColor,
-                borderColor: buttonBorderColor ?? 'transparent',
-                borderWidth: buttonBorderColor ? '2px' : '0',
-              }}
-              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
-              href={buttonLink}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {buttonText ?? 'Saiba mais'}
-            </a>
-          )}
-          {secondaryActionButton && (
-            <a
-              style={{
-                backgroundColor: secondaryButtonColor ?? 'white',
-                color: secondaryButtonTextColor,
-                borderColor: secondaryButtonBorderColor ?? 'transparent',
-                borderWidth: secondaryButtonBorderColor ? '2px' : '0',
-              }}
-              className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
-              href={secondaryButtonLink}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {secondaryButtonText ?? 'Saiba mais'}
-            </a>
-          )}
+          <div className="pw-flex pw-gap-4">
+            {actionButton && (
+              <a
+                style={{
+                  backgroundColor: buttonColor ?? 'white',
+                  color: buttonTextColor,
+                  borderColor: buttonBorderColor ?? 'transparent',
+                  borderWidth: buttonBorderColor ? '2px' : '0',
+                }}
+                className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
+                href={buttonLink}
+              >
+                {buttonText ?? 'Saiba mais'}
+              </a>
+            )}
+            {secondaryActionButton && (
+              <a
+                style={{
+                  backgroundColor: secondaryButtonColor ?? 'white',
+                  color: secondaryButtonTextColor,
+                  borderColor: secondaryButtonBorderColor ?? 'transparent',
+                  borderWidth: secondaryButtonBorderColor ? '2px' : '0',
+                }}
+                className="pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer pw-z-20"
+                href={secondaryButtonLink}
+              >
+                {secondaryButtonText ?? 'Saiba mais'}
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 
