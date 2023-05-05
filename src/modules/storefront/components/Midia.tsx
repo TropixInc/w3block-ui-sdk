@@ -73,8 +73,8 @@ export const Midia = ({ data }: { data: MidiaData }) => {
               '!pw-object-center pw-object-cover pw-w-full pw-h-full'
             )}
             src={bgUrl?.assetUrl}
-            width={1200}
-            quality="good"
+            width={1440}
+            quality="best"
           />
         </a>
       </div>

@@ -144,7 +144,7 @@ const Slide = ({
 
   const bgUrlThreath = threathUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
-    InternalProps: { width: 1200 },
+    InternalProps: { width: 1440, quality: 'best' },
   });
   const bg = `${
     overlay && overlayColor
@@ -171,7 +171,8 @@ const Slide = ({
           <ImageSDK
             src={bgUrl?.assetUrl}
             className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
-            width={1200}
+            width={1440}
+            quality="best"
           />
         )}
         <div
