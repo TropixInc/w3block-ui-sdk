@@ -67,6 +67,8 @@ export const ProductInfo = ({
             <ImageSDK
               src={image}
               className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
+              width={500}
+              quality="good"
             />
           </div>
         )}
@@ -125,6 +127,8 @@ export const ProductInfo = ({
             <ImageSDK
               src={image}
               className="pw-w-[36px] pw-h-[36px] sm:pw-w-[48px] sm:pw-h-[48px] pw-rounded-md sm:pw-rounded-lg pw-object-cover"
+              width={500}
+              quality="good"
             />
           </div>
         )}

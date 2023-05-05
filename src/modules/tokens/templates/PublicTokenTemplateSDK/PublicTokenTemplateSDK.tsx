@@ -91,6 +91,8 @@ const _PublicTokenTemplateSDK = ({
               controls={true}
               src={publicTokenResponse?.data?.information?.mainImage ?? ''}
               className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
+              width={800}
+              quality="eco"
             />
           </div>
           <div className="pw-flex-1">
