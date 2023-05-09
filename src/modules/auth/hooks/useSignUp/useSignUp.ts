@@ -30,7 +30,6 @@ export const useSignUp = () => {
     const signUpPayload = payload;
     const ut = utms;
     if (utms.expires && utms?.expires > new Date().getTime()) {
-      delete ut.expires;
       signUpPayload.utmParams = ut;
     }
     const sdk = await getSDK();
