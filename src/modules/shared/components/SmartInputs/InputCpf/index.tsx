@@ -73,7 +73,6 @@ const InputCpf = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
-          {...field}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           name={name}
           onChange={(e) => handleChange(e.target.value)}

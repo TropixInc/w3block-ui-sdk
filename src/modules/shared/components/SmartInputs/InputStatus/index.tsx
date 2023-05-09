@@ -12,14 +12,14 @@ const InputStatus = ({ invalid, errorMessage }: PropsInputStatus) => {
       return (
         <p className="pw-flex pw-items-center pw-gap-x-1">
           <ErrorIcon className="pw-stroke-[#ED4971] pw-w-3 pw-h-3" />
-          <p className="pw-text-[#ED4971] pw-text-xs">{errorMessage}</p>
+          <span className="pw-text-[#ED4971] pw-text-xs">{errorMessage}</span>
         </p>
       );
     } else {
       return (
         <p className="pw-flex pw-items-center pw-gap-x-1">
           <CheckIcon className="pw-stroke-[#18ee4d] pw-w-3 pw-h-3" />
-          <p className="pw-text-xs pw-text-[#18ee4d]">Ok</p>
+          <span className="pw-text-xs pw-text-[#18ee4d]">Ok</span>
         </p>
       );
     }

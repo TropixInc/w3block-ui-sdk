@@ -70,17 +70,19 @@ const _FormCompleteKYCWithoutLayout = ({
     tenantInputs?.data[0].contextId ?? ''
   );
 
-  const validations = useGetValidationsTypesForSignup(tenantInputs?.data ?? []);
+  const validations = useGetValidationsTypesForSignup(
+    tenantInputs?.data ?? [],
+    tenantInputs?.data[0].contextId ?? ''
+  );
   const yupSchema = createSchemaSignupForm(validations);
 
   const dynamicSchema = object().shape(yupSchema);
 
   const dynamicMethods = useForm<DocumentDto>({
+    shouldUnregister: false,
     mode: 'onChange',
     resolver: yupResolver(dynamicSchema),
   });
-
-  console.log(dynamicMethods.register);
 
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
@@ -187,6 +189,7 @@ const _FormCompleteKYCWithoutLayout = ({
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
           disabled={
+            !Object.keys(dynamicMethods.formState.dirtyFields).length ||
             !dynamicMethods.formState.isValid ||
             isLoading ||
             Boolean(

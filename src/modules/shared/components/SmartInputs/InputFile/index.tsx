@@ -155,9 +155,7 @@ const InputFile = ({
           {...getRootProps()}
         >
           <input
-            {...field}
             {...getInputProps()}
-            value={file?.name}
             readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           />
           <FileIcon className="pw-w-4" />
@@ -179,7 +177,7 @@ const InputFile = ({
         </div>
       </FormItemContainer>
       {!hidenValidations && (
-        <p className="mt-5">
+        <div className="mt-5">
           {field.value || Boolean(fileRejections.length) ? (
             <InputStatus
               invalid={isError || mutateError || Boolean(fileRejections.length)}
@@ -190,7 +188,7 @@ const InputFile = ({
               }
             />
           ) : null}
-        </p>
+        </div>
       )}
     </div>
   );

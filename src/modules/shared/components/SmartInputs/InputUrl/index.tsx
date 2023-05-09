@@ -61,7 +61,6 @@ const InputUrl = ({
         className="pw-w-full"
       >
         <input
-          {...field}
           name={name}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           type="text"

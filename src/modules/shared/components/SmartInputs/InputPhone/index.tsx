@@ -58,7 +58,6 @@ const InputPhone = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <Input
-          {...field}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           name={name}
           value={inputValue}
