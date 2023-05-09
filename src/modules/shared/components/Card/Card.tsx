@@ -41,8 +41,8 @@ export const Card = ({
         <ImageSDK
           src={product.images.length ? product.images[0]?.thumb : undefined}
           className="pw-w-full pw-min-h-[230px] pw-h-full pw-object-cover pw-rounded-md"
-          quality="eco"
-          width={500}
+          quality="best"
+          width={600}
         />
       </div>
       {styleData.showCardTitle && (

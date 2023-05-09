@@ -39,7 +39,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                 product.image?.assetUrl && showCardImage
                   ? `url('${threathUrlCloudinary({
                       src: product.image.assetUrl ?? '',
-                      InternalProps: { width: 500, quality: 'eco' },
+                      InternalProps: { width: 600, quality: 'best' },
                     })}') `
                   : 'white',
               backgroundPosition: 'center',

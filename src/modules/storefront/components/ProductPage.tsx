@@ -163,7 +163,7 @@ export const ProductPage = ({
               className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
               src={product?.images?.[0]?.original}
               width={1200}
-              quality="good"
+              quality="best"
             />
             <div className="pw-w-full">
               {showProductName && (
