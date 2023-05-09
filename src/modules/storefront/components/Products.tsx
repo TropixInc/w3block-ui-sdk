@@ -27,6 +27,7 @@ import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
@@ -311,7 +312,10 @@ export const Products = ({ data }: { data: ProductsData }) => {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundImage: backgroundUrl?.assetUrl
-          ? `url('${backgroundUrl.assetUrl}')`
+          ? `url('${threathUrlCloudinary({
+              src: backgroundUrl?.assetUrl ?? '',
+              InternalProps: { width: 1440, quality: 'best' },
+            })}')`
           : backgroundColor
           ? backgroundColor
           : 'transparent',
@@ -319,7 +323,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
         margin: convertSpacingToCSS(margin),
         padding: padding ? convertSpacingToCSS(padding) : '16px',
       }}
-      className="pw-container pw-mx-auto"
     >
       <div className="pw-container pw-mx-auto pw-pb-10 sm:!pw-px-0">
         {moduleTitle && moduleTitle != '' && (
