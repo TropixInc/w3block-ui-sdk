@@ -125,7 +125,7 @@ export const CompleteKYCTemplateSDK = ({
     >
       <Spinner />
     </div>
-  ) : profile ? (
+  ) : profile && profile?.data?.kycStatus !== KycStatus.NoRequired ? (
     <TranslatableComponent>
       <div
         style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}

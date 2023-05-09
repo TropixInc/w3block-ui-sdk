@@ -52,9 +52,10 @@ const _FormCompleteKYCWithoutLayout = ({
   const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
 
-  const { data: tenantInputs } = useGetTenantInputsBySlug({
-    slug: contextSlug ? contextSlug : 'signup',
-  });
+  const { data: tenantInputs, isLoading: isLoadingKyc } =
+    useGetTenantInputsBySlug({
+      slug: contextSlug ? contextSlug : 'signup',
+    });
 
   const { data: documents } = useGetUsersDocuments({
     userId: userId ?? '',
@@ -122,7 +123,11 @@ const _FormCompleteKYCWithoutLayout = ({
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
 
-  return (
+  return isLoadingKyc ? (
+    <div className="pw-w-full pw-flex pw-items-center">
+      <Spinner />
+    </div>
+  ) : (
     <FormProvider {...dynamicMethods}>
       {reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
       reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
