@@ -1028,22 +1028,22 @@
   dependencies:
     lodash "^4.17.21"
 
-"@microsoft/api-extractor-model@7.26.8":
-  version "7.26.8"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor-model/-/api-extractor-model-7.26.8.tgz#1bff2e53ff787525afd09d7c8da0031c82407948"
+"@microsoft/api-extractor-model@7.26.9":
+  version "7.26.9"
+  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor-model/-/api-extractor-model-7.26.9.tgz#22b4e86ab654488b06c9fb240ec440a446846828"
   dependencies:
     "@microsoft/tsdoc" "0.14.2"
     "@microsoft/tsdoc-config" "~0.16.1"
-    "@rushstack/node-core-library" "3.58.0"
+    "@rushstack/node-core-library" "3.59.0"
 
 "@microsoft/api-extractor@^7.33.5":
-  version "7.34.8"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.34.8.tgz#c39a15d5edde13d6613d192eaadec160d1e362ca"
+  version "7.34.9"
+  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.34.9.tgz#ff92cd6939aa5c1674085494c101e0b614512bfd"
   dependencies:
-    "@microsoft/api-extractor-model" "7.26.8"
+    "@microsoft/api-extractor-model" "7.26.9"
     "@microsoft/tsdoc" "0.14.2"
     "@microsoft/tsdoc-config" "~0.16.1"
-    "@rushstack/node-core-library" "3.58.0"
+    "@rushstack/node-core-library" "3.59.0"
     "@rushstack/rig-package" "0.3.18"
     "@rushstack/ts-command-line" "4.13.2"
     colors "~1.2.1"
@@ -1167,9 +1167,9 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-"@rushstack/node-core-library@3.58.0", "@rushstack/node-core-library@^3.53.2":
-  version "3.58.0"
-  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.58.0.tgz#d40c393bfa47949a8b0ca60b0bbbc5c8d1af00c3"
+"@rushstack/node-core-library@3.59.0", "@rushstack/node-core-library@^3.53.2":
+  version "3.59.0"
+  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.59.0.tgz#f04db22575a242c30114b4723ba0580b6f2d8c85"
   dependencies:
     colors "~1.2.1"
     fs-extra "~7.0.1"
@@ -1390,8 +1390,8 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.0.tgz#591c1ce3a702c45ee15f47a42ade72c2fd78978a"
 
 "@types/validator@^13.7.11":
-  version "13.7.16"
-  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.16.tgz#096c7951189e93ec49fd5df5bfbf088f0d95ea85"
+  version "13.7.17"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.17.tgz#0a6d1510395065171e3378a4afc587a3aefa7cc1"
 
 "@typescript-eslint/eslint-plugin@^5.30.6":
   version "5.59.5"
@@ -1509,8 +1509,8 @@
     swr "1.1.2"
 
 "@w3block/sdk-id@^0.1.51":
-  version "0.1.52"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.52.tgz#2cdb5d31647caa5c4d1bb7738bd6b29623b8d544"
+  version "0.1.53"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.53.tgz#4bd44365fb311dc2a1d7ba6f6ce8cd56e1fa3f0b"
   dependencies:
     axios "^0.24.0"
     date-fns "2.29.1"
@@ -2515,8 +2515,8 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
 
 electron-to-chromium@^1.4.284:
-  version "1.4.387"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.387.tgz#9a93ef1bd01b5898436026401ea3cabb1dd17d7a"
+  version "1.4.393"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.393.tgz#82a2dcd50dc7ea392d5875e10be81c3667ff8133"
 
 elliptic@6.5.4, elliptic@^6.5.3:
   version "6.5.4"
@@ -4814,8 +4814,8 @@ react-pdf@^5.7.2:
     tiny-warning "^1.0.0"
 
 react-phone-number-input@^3.2.19:
-  version "3.2.22"
-  resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.2.22.tgz#fd572485b1686a9c7bf34206a3d5908841e44839"
+  version "3.2.23"
+  resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.2.23.tgz#e8c02587bb80804c4044255875c2ec326ee82370"
   dependencies:
     classnames "^2.3.1"
     country-flag-icons "^1.5.4"
@@ -5019,8 +5019,8 @@ rollup-plugin-peer-deps-external@^2.2.4:
   resolved "https://registry.yarnpkg.com/rollup-plugin-peer-deps-external/-/rollup-plugin-peer-deps-external-2.2.4.tgz#8a420bbfd6dccc30aeb68c9bf57011f2f109570d"
 
 rollup@^3.21.0:
-  version "3.21.5"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.21.5.tgz#1fbae43dc1079497b04604707f1cf979e51bfe49"
+  version "3.21.6"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.21.6.tgz#f5649ccdf8fcc7729254faa457cbea9547eb86db"
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -5093,8 +5093,8 @@ semver@^6.0.0, semver@^6.3.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.0.tgz#ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
 
 semver@^7.1.1, semver@^7.3.4, semver@^7.3.7:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.0.tgz#ed8c5dc8efb6c629c88b23d41dc9bf40c1d96cd0"
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.1.tgz#c90c4d631cf74720e46b21c1d37ea07edfab91ec"
   dependencies:
     lru-cache "^6.0.0"
 

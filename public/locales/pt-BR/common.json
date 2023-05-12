@@ -402,5 +402,6 @@
   "auth>formCompletKYCWithoutLayout>sendInforms": "Aguarde, enviando arquivos",
   "shared>KYCStatys>approved": "Aprovado",
   "shared>KYCStatys>denied": "Reprovado",
-  "auth>formCompletKYCWithoutLayout>notEditInfos": "Não é possivel editar as informações, pois, este usuário já foi revisado"
+  "auth>formCompletKYCWithoutLayout>notEditInfos": "Seus dados já foram revisados e aprovados. Por favor, contate o suporte técnico se você precisa atualizar suas informações.",
+  "auth>myProfileTemplate>moreInfos": "Informações Complementares"
 }

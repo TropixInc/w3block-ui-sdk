@@ -12,7 +12,6 @@ import {
   useProfile,
   useRouterConnect,
 } from '../../../shared';
-import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -142,9 +141,7 @@ export const CompleteKYCTemplateSDK = ({
           bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           extraBy={extraBy}
           infoComponent={
-            <Box>
-              <FormCompleteKYCWithoutLayout userId={profile?.data?.id} />
-            </Box>
+            <FormCompleteKYCWithoutLayout userId={profile?.data?.id} />
           }
         />
       </div>

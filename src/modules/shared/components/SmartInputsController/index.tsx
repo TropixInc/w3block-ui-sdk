@@ -1,4 +1,3 @@
-import { UseFormRegisterReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
@@ -12,7 +11,6 @@ import InputText from '../SmartInputs/InputText';
 import InputUrl from '../SmartInputs/InputUrl';
 
 interface SmartProps {
-  refer: UseFormRegisterReturn<'inputId'>;
   type: DataTypesEnum;
   label: string;
   name: string;
@@ -32,7 +30,6 @@ export interface InputError {
 }
 
 const SmartInputsController = ({
-  refer,
   label,
   name,
   type,
@@ -49,7 +46,6 @@ const SmartInputsController = ({
       case DataTypesEnum.Cpf:
         return (
           <InputCpf
-            refer={refer}
             label={label}
             name={name}
             docValue={value}

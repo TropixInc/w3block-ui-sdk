@@ -227,5 +227,6 @@
   "auth>formCompletKYCWithoutLayout>sendInforms": "Please wait, sending files",
   "shared>KYCStatys>approved": "Approved",
   "shared>KYCStatys>denied": "Denied",
-  "auth>formCompletKYCWithoutLayout>notEditInfos": "It is not possible to edit the information as this user has already been reviewed"
+  "auth>formCompletKYCWithoutLayout>notEditInfos": "Your data has already been reviewed and approved. Please contact support if you need to update your information.",
+  "auth>myProfileTemplate>moreInfos": "Additional information"
 }

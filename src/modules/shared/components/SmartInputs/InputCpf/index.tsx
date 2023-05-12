@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useController, UseFormRegisterReturn } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
@@ -12,7 +12,6 @@ import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
 interface InputCPFProps {
-  refer: UseFormRegisterReturn<'inputId'>;
   label: string;
   name: string;
   hidenValidations?: boolean;
