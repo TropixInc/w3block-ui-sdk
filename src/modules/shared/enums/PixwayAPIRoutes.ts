@@ -56,4 +56,9 @@ export enum PixwayAPIRoutes {
   GET_SPECIFIC_ORDER = '/companies/{companyId}/orders/{orderId}',
   VERIFY_BENEFIT = '/token-pass-benefits/tenants/{tenantId}/{benefitId}/verify',
   PASS_BENEFIT_SELF_USE = '/token-pass-benefits/tenants/{tenantId}/{id}/use',
+  GET_AVAILABLE_INTEGRATIONS = '/tenant-integration/{tenantId}/available',
+  TENANT_INFO_BY_ID = '/public-tenant/by-id',
+  CREATE_INTEGRATION_TOKEN = '/tenant-user-integration/{tenantId}/create-token',
+  ACCEPT_INTEGRATION_TOKEN = '/tenant-user-integration/{tenantId}/create-from-token',
+  USER_INTEGRATIONS = '/tenant-user-integration/{tenantId}/accepted',
 }
