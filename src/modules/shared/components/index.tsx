@@ -11,3 +11,4 @@ export * from './PoweredBy';
 export * from './MyProfileTemplate';
 export * from './ContainerControllerSDK';
 export * from './WalletConnectIntegration';
+export * from './LinkAccountTemplate';

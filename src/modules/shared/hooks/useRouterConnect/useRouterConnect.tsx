@@ -9,10 +9,11 @@ export const useRouterConnect = () => {
   const { connectProxyPass } = useCompanyConfig();
   const location = useLocation();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pushConnect = (path: string, query?: any) => {
     if (window.self !== window.top) return;
     const queryString = new URLSearchParams(query).toString();
-    router.push(
+    const url =
       removeDoubleSlashesOnUrl(
         (location.hostname?.includes('localhost') ||
         location.href?.includes('/connect/') ||
@@ -20,9 +21,9 @@ export const useRouterConnect = () => {
           ? '/'
           : connectProxyPass) + path
       ) +
-        (queryString && queryString != '' ? '?' : '') +
-        queryString
-    );
+      (queryString && queryString != '' ? '?' : '') +
+      queryString;
+    router.push(url);
   };
   const routerToHref = (path: string) => {
     return removeDoubleSlashesOnUrl((connectProxyPass ?? '') + path);
