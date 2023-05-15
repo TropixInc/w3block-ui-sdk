@@ -164,7 +164,7 @@ const InputFile = ({
               <Spinner className="pw-w-4 pw-h-4 !pw-border-2" />
             </div>
           ) : (
-            <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
+            <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1 sm:pw-text-base">
               {openDocs ? (
                 <a href={docValue} target="_blank" rel="noreferrer">
                   {docValue}
