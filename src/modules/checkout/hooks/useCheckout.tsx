@@ -64,7 +64,6 @@ export const useCheckout = () => {
       const cOrder = createOrder;
       const ut = utms;
       if (utms.expires && utms?.expires > new Date().getTime()) {
-        delete ut.expires;
         cOrder.utmParams = ut;
       }
       return axios

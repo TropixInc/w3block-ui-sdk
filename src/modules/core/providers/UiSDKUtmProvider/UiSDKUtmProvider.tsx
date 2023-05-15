@@ -1,8 +1,8 @@
 import { ReactNode, useEffect } from 'react';
-import { useSessionStorage } from 'react-use';
+import { useCookie } from 'react-use';
 
 import { useRouterConnect } from '../../../shared';
-import { UtmContext, UtmContextInterface } from '../../context/UtmContext';
+import { UtmContext } from '../../context/UtmContext';
 
 export const UiSDKUtmProvider = ({
   children,
@@ -11,7 +11,7 @@ export const UiSDKUtmProvider = ({
   children: ReactNode;
   expiration?: number;
 }) => {
-  const [utm, setUtm] = useSessionStorage<UtmContextInterface>('utm', {});
+  const [utm, setUtm] = useCookie('utm');
   const router = useRouterConnect();
   useEffect(() => {
     if (router.query.utm_source && router.query.utm_campaign) {
@@ -24,10 +24,17 @@ export const UiSDKUtmProvider = ({
         expires:
           new Date().getTime() + (expiration ? expiration : 1000 * 60 * 60),
       };
-      setUtm(newUtm);
+      setUtm(JSON.stringify(newUtm), {
+        expires:
+          new Date().getTime() + (expiration ? expiration : 1000 * 60 * 60),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
 
-  return <UtmContext.Provider value={utm}>{children}</UtmContext.Provider>;
+  return (
+    <UtmContext.Provider value={JSON.parse(utm ?? '{}')}>
+      {children}
+    </UtmContext.Provider>
+  );
 };

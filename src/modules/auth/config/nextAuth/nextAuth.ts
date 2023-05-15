@@ -11,7 +11,11 @@ import { SignInResponse } from '../../api/signIn';
 import { CredentialProviderName } from '../../enums/CredentialsProviderName';
 
 const tokenMaxAgeInSeconds =
-  process.env.NEXT_PUBLIC_ENVIRONMENT != 'development' ? 3600 * 2 : 15 * 60;
+  process.env.NEXT_PUBLIC_ENVIRONMENT != 'development'
+    ? process.env.NEXT_PUBLIC_SESSION_EXPIRES_IN_SECONDS
+      ? parseInt(process.env.NEXT_PUBLIC_SESSION_EXPIRES_IN_SECONDS)
+      : 120 * 60
+    : 120 * 60;
 const BEFORE_TOKEN_EXPIRES = tokenMaxAgeInSeconds / 2;
 
 async function refreshAccessToken(
