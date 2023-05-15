@@ -1,10 +1,8 @@
 import { getPublicAPI } from '../config/api';
 import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
-import { W3blockAPI } from '../enums/W3blockAPI';
-import { useGetApiUrl } from '../hooks/useGetApiUrl/useGetApiUrl';
 
 export async function GetTenantInfoById(tenantId: string) {
-  const baseUrl = useGetApiUrl(W3blockAPI.ID);
+  const baseUrl = process.env.NEXT_PUBLIC_PIXWAY_ID_API_URL ?? '';
 
   return await getPublicAPI(baseUrl)
     .get(PixwayAPIRoutes.TENANT_INFO_BY_ID + `?tenantId=${tenantId}`)

@@ -100,10 +100,10 @@ const _LinkAccountTemplate = () => {
       { token, tenantId: toTenantId },
       {
         onError() {
-          setSteps('error');
+          setSteps(Steps.ERROR);
         },
         onSuccess() {
-          setSteps('success');
+          setSteps(Steps.SUCCESS);
         },
       }
     );
