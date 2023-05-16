@@ -1,3 +1,4 @@
+import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { ProductsDataStyleData, SpecificContentCard } from '../interfaces';
 
 interface ContentCardProps {
@@ -36,7 +37,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
             style={{
               backgroundImage:
                 product.image?.assetUrl && showCardImage
-                  ? `url('${product.image.assetUrl}') `
+                  ? `url('${threathUrlCloudinary({
+                      src: product.image.assetUrl ?? '',
+                      InternalProps: { width: 600, quality: 'best' },
+                    })}') `
                   : 'white',
               backgroundPosition: 'center',
               backgroundSize: 'cover',

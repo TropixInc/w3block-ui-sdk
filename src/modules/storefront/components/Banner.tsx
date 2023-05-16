@@ -11,6 +11,7 @@ import {
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
@@ -140,11 +141,16 @@ const Slide = ({
     (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
       ? backgroundUrlMobile
       : backgroundUrl;
+
+  const bgUrlThreath = threathUrlCloudinary({
+    src: bgUrl?.assetUrl ?? '',
+    InternalProps: { width: 1440, quality: 'best' },
+  });
   const bg = `${
     overlay && overlayColor
       ? `linear-gradient(${overlayColor},${overlayColor}),`
       : ''
-  } url("${bgUrl?.assetUrl}") no-repeat center`;
+  } url("${bgUrlThreath}") no-repeat center`;
 
   return (
     <a
@@ -165,6 +171,8 @@ const Slide = ({
           <ImageSDK
             src={bgUrl?.assetUrl}
             className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
+            width={1440}
+            quality="best"
           />
         )}
         <div

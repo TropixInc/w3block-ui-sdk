@@ -76,6 +76,8 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
             <ImageSDK
               src={image?.assetUrl}
               className="pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg"
+              width={500}
+              quality="eco"
             />
           </div>
 

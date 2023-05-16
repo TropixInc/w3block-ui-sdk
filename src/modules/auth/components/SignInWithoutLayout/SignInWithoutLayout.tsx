@@ -60,6 +60,7 @@ export const SigInWithoutLayout = ({
     ''
   );
   const queryString = new URLSearchParams(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (router.query as any) ?? {}
   ).toString();
 
@@ -80,12 +81,14 @@ export const SigInWithoutLayout = ({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
-
-  useEffect(() => {
-    if (session && profile) router.pushConnect(getRedirectUrl(), router.query);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, router, profile]);
+  const queryParams = () => {
+    if (
+      profile?.data.kycStatus === KycStatus.Pending ||
+      !profile?.data.mainWallet
+    )
+      return router.query;
+    else '';
+  };
 
   const { fieldState } = useController({
     control: methods.control,
@@ -109,6 +112,14 @@ export const SigInWithoutLayout = ({
   };
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
+
+  useEffect(() => {
+    if (session && profile) {
+      router.pushConnect(getRedirectUrl(), queryParams());
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, router, profile]);
 
   const onSubmit = async ({ email, password }: Form) => {
     try {

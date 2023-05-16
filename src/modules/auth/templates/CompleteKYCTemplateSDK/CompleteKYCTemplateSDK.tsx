@@ -78,15 +78,8 @@ export const CompleteKYCTemplateSDK = ({
     if (status === 'unauthenticated') {
       router.pushConnect(PixwayAppRoutes.SIGN_IN);
     }
-
-    if (profile) {
-      const { data: user } = profile;
-      if (user.kycStatus !== KycStatus.Pending) {
-        router.pushConnect(defaultRedirectRoute);
-      }
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, status]);
+  }, [status]);
 
   const checkForCallbackUrl = () => {
     if (!profile?.data.mainWallet) {

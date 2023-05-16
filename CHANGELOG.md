@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.269](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.268...v0.1.1-alpha.269) (2023-05-16)
+
+
+### Bug Fixes
+
+* fix tenant integration ([#198](https://github.com/TropixInc/w3block-ui-sdk/issues/198)) ([0afad3c](https://github.com/TropixInc/w3block-ui-sdk/commit/0afad3c832c60741d0c62bf2f5ccbc49647ce2b0))
+
+### [0.1.1-alpha.268](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.267...v0.1.1-alpha.268) (2023-05-15)
+
+
+### Features
+
+* added tenant integration feat ([#195](https://github.com/TropixInc/w3block-ui-sdk/issues/195)) ([872d482](https://github.com/TropixInc/w3block-ui-sdk/commit/872d482b07773d0820ad6948f304a8e242a53d0b))
+
+### [0.1.1-alpha.267](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.266...v0.1.1-alpha.267) (2023-05-12)
+
+### [0.1.1-alpha.266](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.265...v0.1.1-alpha.266) (2023-05-09)
+
+### [0.1.1-alpha.265](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.264...v0.1.1-alpha.265) (2023-05-09)
+
+### [0.1.1-alpha.264](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.263...v0.1.1-alpha.264) (2023-05-09)
+
+### [0.1.1-alpha.263](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.262...v0.1.1-alpha.263) (2023-05-06)
+
+### [0.1.1-alpha.262](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.261...v0.1.1-alpha.262) (2023-05-05)
+
+### [0.1.1-alpha.261](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.260...v0.1.1-alpha.261) (2023-05-05)
+
 ### [0.1.1-alpha.260](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.259...v0.1.1-alpha.260) (2023-05-04)
 
 ### [0.1.1-alpha.259](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.258...v0.1.1-alpha.259) (2023-05-04)

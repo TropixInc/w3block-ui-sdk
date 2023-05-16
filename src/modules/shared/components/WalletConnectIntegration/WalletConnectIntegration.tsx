@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useToggle } from 'react-use';
 
@@ -11,7 +11,13 @@ import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/e
 import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
 import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { GetTenantInfoById } from '../../functions/GetTenantInfoById';
 import { useHasWallet, useRouterConnect } from '../../hooks';
+import { useCreateIntegrationToken } from '../../hooks/useCreateIntegrationToken';
+import { useGetAvailableIntegrations } from '../../hooks/useGetAvailableIntegrations';
+import { useGetCurrentTenantInfo } from '../../hooks/useGetCurrentTenantInfo';
+import { IcompanyInfo } from '../../hooks/useGetTenantInfoById';
+import { useGetUserIntegrations } from '../../hooks/useGetUserIntegrations';
 import { useIntegrations } from '../../hooks/useIntegrations';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { useProfile } from '../../hooks/useProfile';
@@ -26,6 +32,9 @@ import { WalletConnectModal } from './WalletConnectModal';
 const _WalletConnectIntegration = () => {
   const { data: profile } = useProfile();
   const { data: integrations } = useIntegrations();
+  const { data: tenantIntegrations } = useGetAvailableIntegrations();
+  const { data: userIntegrations } = useGetUserIntegrations();
+  const { data: currentTenant } = useGetCurrentTenantInfo();
   const router = useRouterConnect();
   const [showValue, toggleShowValue] = useToggle(false);
   const [translate] = useTranslation();
@@ -33,8 +42,48 @@ const _WalletConnectIntegration = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDesincOpen, setIsDesincOpen] = useState(false);
   const isLoading = wallet == undefined;
-
   const hasWalletConnect = integrations ? integrations.data[0]?.active : false;
+  const tenantsAvailable = useMemo(() => {
+    const tenants = tenantIntegrations?.data.map(
+      ({ toTenantId }) => toTenantId
+    );
+    return tenants;
+  }, [tenantIntegrations?.data]);
+
+  const tenantsData = useMemo(() => {
+    const tenantData: IcompanyInfo[] = [];
+    tenantsAvailable?.forEach(async (value) => {
+      if (!tenantData.some(({ id }) => id === value)) {
+        const res = await GetTenantInfoById(value);
+        if (res !== undefined) {
+          tenantData.push(res);
+        }
+      }
+    });
+    return tenantData;
+  }, [tenantsAvailable]);
+
+  const integrationsAccepted = useMemo(() => {
+    const integrations = userIntegrations?.data?.items.map(
+      ({ toTenantId }) => toTenantId
+    );
+    return integrations;
+  }, [userIntegrations?.data?.items]);
+
+  const integrationData = useMemo(() => {
+    const tenantData: IcompanyInfo[] = [];
+    integrationsAccepted?.forEach(async (value) => {
+      if (!tenantData.some(({ id }) => id === value)) {
+        const res = await GetTenantInfoById(value);
+        if (res !== undefined) {
+          tenantData.push(res);
+        }
+      }
+    });
+    return tenantData;
+  }, [integrationsAccepted]);
+
+  const { mutate: createIntegrationToken } = useCreateIntegrationToken();
 
   const sincDate = integrations
     ? new Date(integrations.data[0]?.createdAt)
@@ -44,6 +93,36 @@ const _WalletConnectIntegration = () => {
     if (hasWalletConnect) setIsDesincOpen(true);
     else setIsOpen(true);
   };
+
+  const openNewWindow = (path: string) => {
+    window.open(
+      path,
+      '_blank',
+      'toolbar=no,status=no,menubar,location=center,scrollbars,resizable'
+    );
+  };
+
+  const handleTenantIntegration = ({
+    toTenantName,
+    toTenantId,
+    host,
+  }: {
+    toTenantName: string;
+    toTenantId: string;
+    host: string;
+  }) => {
+    createIntegrationToken(toTenantId ?? '', {
+      onSuccess(data) {
+        openNewWindow(
+          `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`
+        );
+      },
+    });
+  };
+
+  const tenantsDataFiltered = tenantsData.filter(
+    (value) => !integrationData.some((res) => res.id === value.id)
+  );
 
   return (
     <>
@@ -137,7 +216,7 @@ const _WalletConnectIntegration = () => {
           </div>
           <button
             onClick={handleClick}
-            className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+            className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-text-black pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
           >
             {hasWalletConnect
               ? 'Dessincronizar'
@@ -148,6 +227,50 @@ const _WalletConnectIntegration = () => {
               : translate('components>walletIntegration>connect')}
           </button>
         </div>
+        {tenantsDataFiltered.length > 0 && (
+          <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full">
+            <p className="pw-text-base pw-font-poppins pw-font-medium">
+              Integrações disponíveis
+            </p>
+            <div className="pw-flex pw-gap-3">
+              {tenantsDataFiltered.map(({ name, hosts, id }) => (
+                <button
+                  key={name}
+                  onClick={() =>
+                    handleTenantIntegration({
+                      host:
+                        hosts.find((value) => value.isMain === true)
+                          ?.hostname ?? '',
+                      toTenantName: name,
+                      toTenantId: id,
+                    })
+                  }
+                  className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {integrationData.length > 0 && (
+          <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full">
+            <p className="pw-text-base pw-font-poppins pw-font-medium">
+              Integrações ativas
+            </p>
+            <div className="pw-flex pw-gap-3">
+              {integrationData.map(({ name }) => (
+                <button
+                  key={name}
+                  disabled
+                  className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#00000042] pw-border-[#295BA6] disabled:pw-border-gray-500 disabled:pw-text-gray-700 pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <WalletConnectModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <WalletConnectDesinModal
