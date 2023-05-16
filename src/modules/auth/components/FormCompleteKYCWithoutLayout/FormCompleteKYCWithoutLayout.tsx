@@ -109,7 +109,7 @@ const _FormCompleteKYCWithoutLayout = ({
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if ((tenantInputs?.data && tenantInputs?.data?.length < 1) || isSuccess) {
       if (!profilePage) {
         router.pushConnect(
           PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
@@ -118,19 +118,13 @@ const _FormCompleteKYCWithoutLayout = ({
         );
       }
     }
-  }, [isSuccess, profilePage, router]);
-
-  useEffect(() => {
-    if (tenantInputs?.data && tenantInputs?.data?.length < 1) {
-      if (!profilePage) {
-        router.pushConnect(
-          PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          router.query as any
-        );
-      }
-    }
-  }, [profilePage, router, tenantInputs?.data, tenantInputs?.data?.length]);
+  }, [
+    tenantInputs?.data,
+    tenantInputs?.data?.length,
+    isSuccess,
+    profilePage,
+    router,
+  ]);
 
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);
@@ -183,7 +177,6 @@ const _FormCompleteKYCWithoutLayout = ({
 
           {isSuccess && (
             <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
-              <Alert.Icon />
               <div className="pw-p-3 pw-w-full pw-rounded-lg">
                 <p className="pw-text-green-300">
                   {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
@@ -193,8 +186,7 @@ const _FormCompleteKYCWithoutLayout = ({
           )}
           {isError && (
             <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
-              <Alert.Icon />
-              <p>{errorMessage?.message}</p>
+              <p className="pw-text-sm">{errorMessage?.message}</p>
             </Alert>
           )}
           {uploadProgress && (
