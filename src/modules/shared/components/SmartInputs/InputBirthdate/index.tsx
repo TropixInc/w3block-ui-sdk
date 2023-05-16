@@ -43,7 +43,7 @@ const InputBirthdate = ({
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid}>
+      <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           type="date"
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}

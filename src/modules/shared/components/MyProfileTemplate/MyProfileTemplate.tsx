@@ -3,28 +3,44 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
+import { FormCompleteKYCWithoutLayout } from '../../../auth/components/FormCompleteKYCWithoutLayout';
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
+import KYCStatus from '../KYCStatus';
 import { Menu } from '../Menu';
 import { ModalBase } from '../ModalBase';
 import { MyProfile } from '../MyProfile/MyProfile';
 import { PixwayButton } from '../PixwayButton';
+import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {
   const { mutate } = useRequestConfirmationMail();
   useHasWallet({});
+  const [translate] = useTranslation();
   const { data: profile } = useProfile();
   const { connectProxyPass } = useCompanyConfig();
   const { status } = usePixwaySession();
   const email = profile?.data?.email ?? '';
   const callbackPath = connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP;
   const [isOpen, setIsOpen] = useState(false);
+  const { data: tenantContext, isLoading: isLoadingTenantContext } =
+    useGetTenantContext();
+
+  const contextsActivated = useMemo(() => {
+    if (!isLoadingTenantContext && tenantContext) {
+      const contexts = tenantContext?.data?.items?.filter(
+        ({ active }) => active
+      );
+      return contexts;
+    }
+  }, [isLoadingTenantContext, tenantContext]);
 
   const formattedEmail = useMemo(() => {
     const emailSplitted = email.split('@');
@@ -41,7 +57,6 @@ const _MyProfileTemplate = () => {
   };
 
   const UnsignedUserAlert = () => {
-    const [translate] = useTranslation();
     return (
       <>
         <ModalBase isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -87,12 +102,52 @@ const _MyProfileTemplate = () => {
           )}
         >
           {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
-          <div className="pw-flex pw-w-full pw-justify-between pw-my-[25px]">
+          <div className="pw-flex pw-w-full pw-gap-x-6 pw-my-[25px]">
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
-            <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-              <MyProfile />
+            <div className="pw-w-full">
+              <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
+                <MyProfile />
+              </div>
+              <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
+                {isLoadingTenantContext ? (
+                  <div className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-center pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
+                    <Spinner />
+                  </div>
+                ) : (
+                  profile &&
+                  contextsActivated?.length &&
+                  contextsActivated.map(({ contextId, context }) => (
+                    <div
+                      key={contextId}
+                      className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]"
+                    >
+                      <div className="pw-w-full pw-flex pw-justify-between">
+                        <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
+                          {translate('auth>myProfileTemplate>moreInfos')} -{' '}
+                          {context?.description}
+                        </p>
+                        {context?.slug === 'signup' && (
+                          <KYCStatus status={profile?.data?.kycStatus} />
+                        )}
+                      </div>
+
+                      <div className="pw-w-full">
+                        <FormCompleteKYCWithoutLayout
+                          key={contextId}
+                          renderSubtitle={false}
+                          userId={profile?.data.id}
+                          contextId={contextId}
+                          contextSlug={context?.slug}
+                          userKycStatus={profile?.data?.kycStatus}
+                          profilePage
+                        />
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>

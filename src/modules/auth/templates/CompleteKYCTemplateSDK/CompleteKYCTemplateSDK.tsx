@@ -12,7 +12,6 @@ import {
   useProfile,
   useRouterConnect,
 } from '../../../shared';
-import { Box } from '../../../shared/components/Box/Box';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -118,7 +117,7 @@ export const CompleteKYCTemplateSDK = ({
     >
       <Spinner />
     </div>
-  ) : profile ? (
+  ) : profile && profile?.data?.kycStatus !== KycStatus.NoRequired ? (
     <TranslatableComponent>
       <div
         style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
@@ -135,9 +134,7 @@ export const CompleteKYCTemplateSDK = ({
           bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           extraBy={extraBy}
           infoComponent={
-            <Box>
-              <FormCompleteKYCWithoutLayout userId={profile?.data?.id} />
-            </Box>
+            <FormCompleteKYCWithoutLayout userId={profile?.data?.id} />
           }
         />
       </div>
