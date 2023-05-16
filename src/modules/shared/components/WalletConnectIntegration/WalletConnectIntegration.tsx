@@ -120,6 +120,10 @@ const _WalletConnectIntegration = () => {
     });
   };
 
+  const tenantsDataFiltered = tenantsData.filter(
+    (value) => !integrationData.some((res) => res.id === value.id)
+  );
+
   return (
     <>
       <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
@@ -223,33 +227,29 @@ const _WalletConnectIntegration = () => {
               : translate('components>walletIntegration>connect')}
           </button>
         </div>
-        {tenantsData.length > 0 && (
+        {tenantsDataFiltered.length > 0 && (
           <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full">
             <p className="pw-text-base pw-font-poppins pw-font-medium">
               Integrações disponíveis
             </p>
             <div className="pw-flex pw-gap-3">
-              {tenantsData
-                .filter(
-                  (value) => !integrationData.some((res) => res.id === value.id)
-                )
-                .map(({ name, hosts, id }) => (
-                  <button
-                    key={name}
-                    onClick={() =>
-                      handleTenantIntegration({
-                        host:
-                          hosts.find((value) => value.isMain === true)
-                            ?.hostname ?? '',
-                        toTenantName: name,
-                        toTenantId: id,
-                      })
-                    }
-                    className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-                  >
-                    {name}
-                  </button>
-                ))}
+              {tenantsDataFiltered.map(({ name, hosts, id }) => (
+                <button
+                  key={name}
+                  onClick={() =>
+                    handleTenantIntegration({
+                      host:
+                        hosts.find((value) => value.isMain === true)
+                          ?.hostname ?? '',
+                      toTenantName: name,
+                      toTenantId: id,
+                    })
+                  }
+                  className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                >
+                  {name}
+                </button>
+              ))}
             </div>
           </div>
         )}
