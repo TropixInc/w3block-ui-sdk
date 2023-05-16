@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1-alpha.269](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.268...v0.1.1-alpha.269) (2023-05-16)
+
+
+### Bug Fixes
+
+* fix tenant integration ([#198](https://github.com/TropixInc/w3block-ui-sdk/issues/198)) ([0afad3c](https://github.com/TropixInc/w3block-ui-sdk/commit/0afad3c832c60741d0c62bf2f5ccbc49647ce2b0))
+
 ### [0.1.1-alpha.268](https://github.com/TropixInc/w3block-ui-sdk/compare/v0.1.1-alpha.267...v0.1.1-alpha.268) (2023-05-15)
 
 
