@@ -6,6 +6,7 @@ import InputBirthdate from '../SmartInputs/InputBirthdate';
 import InputCpf from '../SmartInputs/InputCpf';
 import InputEmail from '../SmartInputs/InputEmail';
 import InputFile from '../SmartInputs/InputFile';
+import { InputMultiFace } from '../SmartInputs/InputMultiFace/InputMultiFace';
 import InputPhone from '../SmartInputs/InputPhone';
 import InputText from '../SmartInputs/InputText';
 import InputUrl from '../SmartInputs/InputUrl';
@@ -16,7 +17,6 @@ interface SmartProps {
   name: string;
   value?: string;
   assetId?: string | null;
-
   docStatus?: UserDocumentStatus;
   onChangeUploadProgess: (value: boolean) => void;
   docFileValue?: string;
@@ -111,7 +111,7 @@ const SmartInputsController = ({
 
       case DataTypesEnum.MultifaceSelfie:
         return (
-          <InputFile
+          <InputMultiFace
             label={label}
             name={name}
             docValue={docFileValue}
