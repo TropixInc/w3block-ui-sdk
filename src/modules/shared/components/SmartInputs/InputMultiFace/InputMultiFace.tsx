@@ -139,7 +139,6 @@ export const InputMultiFace = ({
           if (!imgSrc) {
             setLoading(true);
           }
-
           setOpenWebcam(false);
         }}
       >
@@ -189,11 +188,12 @@ export const InputMultiFace = ({
                   minScreenshotHeight={650}
                   minScreenshotWidth={350}
                   ref={webcamRef}
+                  audio={false}
                   screenshotQuality={0.8}
                   videoConstraints={{
                     width: userMediaError != '' ? 0 : 400,
                     height: userMediaError != '' ? 0 : 650,
-                    aspectRatio: 0.615,
+                    aspectRatio: 1.625,
                     facingMode: 'user',
                   }}
                   width={userMediaError != '' ? 0 : 400}
