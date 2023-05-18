@@ -14,12 +14,19 @@ import InputStatus from '../InputStatus';
 interface InputCPFProps {
   label: string;
   name: string;
+  hidenValidations?: boolean;
 
   docValue?: string;
   docStatus?: UserDocumentStatus;
 }
 
-const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
+const InputCpf = ({
+  label,
+  name,
+  docValue,
+  docStatus,
+  hidenValidations,
+}: InputCPFProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [translate] = useTranslation();
@@ -59,7 +66,7 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3">
+    <div className="pw-mb-3 pw-w-full">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
@@ -77,14 +84,16 @@ const InputCpf = ({ label, name, docValue, docStatus }: InputCPFProps) => {
           )}
         />
       </FormItemContainer>
-      <p className="mt-5">
-        {field.value && (
-          <InputStatus
-            invalid={fieldState.invalid}
-            errorMessage={error?.value?.message}
-          />
-        )}
-      </p>
+      {!hidenValidations && (
+        <p className="mt-5">
+          {field.value && (
+            <InputStatus
+              invalid={fieldState.invalid}
+              errorMessage={error?.value?.message}
+            />
+          )}
+        </p>
+      )}
     </div>
   );
 };

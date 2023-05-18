@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from 'react';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 
 import { DataTypesEnum, TenantInputEntityDto } from '@w3block/sdk-id';
@@ -10,6 +11,7 @@ import useTranslation from '../hooks/useTranslation';
 
 export interface ValidationsValues {
   yupKey: string;
+  contextId: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validations: AnySchema<any, any, any>;
 }
@@ -32,60 +34,78 @@ const validateBirthdate = (date: string | undefined): boolean => {
 };
 
 export const useGetValidationsTypesForSignup = (
-  values: Array<TenantInputEntityDto>
+  values: Array<TenantInputEntityDto>,
+  valueContextId?: string
 ) => {
   const [translate] = useTranslation();
-  values.forEach(({ type, id, mandatory }) => {
-    switch (type) {
-      case DataTypesEnum.File || DataTypesEnum.MultifaceSelfie:
-        validates.push({
-          yupKey: id,
-          validations: object().shape({
-            inputId: string(),
-            assetId: mandatory
-              ? string().required(
-                  translate('auth>getValidationsTypesForSignup>insertFile')
-                )
-              : string(),
-          }),
-        });
-        break;
-      case DataTypesEnum.Email:
-        validates.push({
-          yupKey: id,
-          validations: object().shape({
-            inputId: string(),
-            value: mandatory
-              ? string()
-                  .email(
+
+  const getValidations = useCallback(() => {
+    const arrayValid: Array<ValidationsValues> = [];
+    values.forEach(({ id, contextId, type, mandatory }) => {
+      switch (type) {
+        case DataTypesEnum.File || DataTypesEnum.MultifaceSelfie:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              assetId: mandatory
+                ? string().required(
+                    translate('auth>getValidationsTypesForSignup>insertFile')
+                  )
+                : string(),
+            }),
+          });
+          break;
+        case DataTypesEnum.Email:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? string()
+                    .email(
+                      translate(
+                        'auth>getValidationsTypesForSignup>insertValidEmail'
+                      )
+                    )
+                    .required(
+                      translate(
+                        'companyAuth>requestPasswordChange>emailFieldPlaceholder'
+                      )
+                    )
+                : string().email(
                     translate(
                       'auth>getValidationsTypesForSignup>insertValidEmail'
                     )
-                  )
-                  .required(
-                    translate(
-                      'companyAuth>requestPasswordChange>emailFieldPlaceholder'
+                  ),
+            }),
+          });
+          break;
+        case DataTypesEnum.Cpf:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? string()
+                    .required(
+                      translate(
+                        'auth>getValidationsTypesForSignup>insertYourCPF'
+                      )
                     )
-                  )
-              : string().email(
-                  translate(
-                    'auth>getValidationsTypesForSignup>insertValidEmail'
-                  )
-                ),
-          }),
-        });
-        break;
-      case DataTypesEnum.Cpf:
-        validates.push({
-          yupKey: id,
-          validations: object().shape({
-            inputId: string(),
-            value: mandatory
-              ? string()
-                  .required(
-                    translate('auth>getValidationsTypesForSignup>insertYourCPF')
-                  )
-                  .test(
+                    .test(
+                      'cpf',
+                      translate(
+                        'auth>getValidationsTypesForSignup>insertValidCPF'
+                      ),
+                      (value) => {
+                        return value ? cpf.isValid(value) : true;
+                      }
+                    )
+                : string().test(
                     'cpf',
                     translate(
                       'auth>getValidationsTypesForSignup>insertValidCPF'
@@ -93,118 +113,125 @@ export const useGetValidationsTypesForSignup = (
                     (value) => {
                       return value ? cpf.isValid(value) : true;
                     }
-                  )
-              : string().test(
-                  'cpf',
-                  translate('auth>getValidationsTypesForSignup>insertValidCPF'),
-                  (value) => {
-                    return value ? cpf.isValid(value) : true;
-                  }
-                ),
-          }),
-        });
-        break;
-      case DataTypesEnum.Phone:
-        validates.push({
-          yupKey: id,
-          validations: object().shape({
-            inputId: string(),
-            value: mandatory
-              ? yup
-                  .string()
-                  .test(
-                    'phone',
-                    translate(
-                      'auth>getValidationsTypesForSignup>insertValidPhone'
-                    ),
-                    (value) => {
-                      return value ? isValidPhoneNumber(value) : true;
-                    }
-                  )
-                  .required(
-                    translate(
-                      'auth>getValidationsTypesForSignup>insertYourPhone'
-                    )
-                  )
-              : yup
-                  .string()
-                  .test(
-                    'phone',
-                    translate(
-                      'auth>getValidationsTypesForSignup>insertValidPhone'
-                    ),
-                    (value) => {
-                      return value ? isValidPhoneNumber(value) : true;
-                    }
                   ),
-          }),
-        });
-        break;
-      case DataTypesEnum.Url:
-        validates.push({
-          yupKey: id,
-          validations: object().shape({
-            inputId: string(),
-            value: mandatory
-              ? string()
-                  .test(
+            }),
+          });
+          break;
+        case DataTypesEnum.Phone:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? yup
+                    .string()
+                    .test(
+                      'phone',
+                      translate(
+                        'auth>getValidationsTypesForSignup>insertValidPhone'
+                      ),
+                      (value) => {
+                        return value ? isValidPhoneNumber(value) : true;
+                      }
+                    )
+                    .required(
+                      translate(
+                        'auth>getValidationsTypesForSignup>insertYourPhone'
+                      )
+                    )
+                : yup
+                    .string()
+                    .test(
+                      'phone',
+                      translate(
+                        'auth>getValidationsTypesForSignup>insertValidPhone'
+                      ),
+                      (value) => {
+                        return value ? isValidPhoneNumber(value) : true;
+                      }
+                    ),
+            }),
+          });
+          break;
+        case DataTypesEnum.Url:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? string()
+                    .test(
+                      'url',
+                      translate('auth>getValidationsTypesForSignup>insertUrl'),
+                      (value) => {
+                        return value ? isURL(value) : true;
+                      }
+                    )
+                    .required(
+                      translate('auth>getValidationsTypesForSignup>insertUrl')
+                    )
+                : string().test(
                     'url',
                     translate('auth>getValidationsTypesForSignup>insertUrl'),
                     (value) => {
                       return value ? isURL(value) : true;
                     }
-                  )
-                  .required(
-                    translate('auth>getValidationsTypesForSignup>insertUrl')
-                  )
-              : string().test(
-                  'url',
-                  translate('auth>getValidationsTypesForSignup>insertUrl'),
-                  (value) => {
-                    return value ? isURL(value) : true;
-                  }
-                ),
-          }),
-        });
-        break;
-      case DataTypesEnum.Text:
-        validates.push({
-          yupKey: id,
-          validations: object().shape({
-            inputId: string(),
-            value: mandatory
-              ? string().required(
-                  translate('auth>getValidationsTypesForSignup>insertText')
-                )
-              : string(),
-          }),
-        });
-        break;
-      case DataTypesEnum.Birthdate:
-        validates.push({
-          yupKey: id,
-          validations: object().shape({
-            inputId: string(),
-            value: mandatory
-              ? string()
-                  .required(
+                  ),
+            }),
+          });
+          break;
+        case DataTypesEnum.Text:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? string().required(
                     translate('auth>getValidationsTypesForSignup>insertText')
                   )
-                  .test(
+                : string(),
+            }),
+          });
+          break;
+        case DataTypesEnum.Birthdate:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? string()
+                    .required(
+                      translate('auth>getValidationsTypesForSignup>insertText')
+                    )
+                    .test(
+                      'birthdate',
+                      'Você precisa ter 18 anos ou mais.',
+                      (value) => validateBirthdate(value)
+                    )
+                : string().test(
                     'birthdate',
                     'Você precisa ter 18 anos ou mais.',
                     (value) => validateBirthdate(value)
-                  )
-              : string().test(
-                  'birthdate',
-                  'Você precisa ter 18 anos ou mais.',
-                  (value) => validateBirthdate(value)
-                ),
-          }),
-        });
-        break;
-    }
-  });
+                  ),
+            }),
+          });
+          break;
+      }
+    });
 
-  return validates;
+    validates.push(...arrayValid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values]);
+
+  useEffect(() => {
+    if (values) {
+      getValidations();
+    }
+  }, [getValidations, values]);
+
+  return validates.filter(({ contextId }) => contextId === valueContextId);
 };

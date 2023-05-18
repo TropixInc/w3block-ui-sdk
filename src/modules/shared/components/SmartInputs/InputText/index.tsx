@@ -13,9 +13,16 @@ interface InputText {
   name: string;
   docValue?: string;
   docStatus?: UserDocumentStatus;
+  hidenValidations?: boolean;
 }
 
-const InputText = ({ label, name, docValue, docStatus }: InputText) => {
+const InputText = ({
+  label,
+  name,
+  docValue,
+  docStatus,
+  hidenValidations = false,
+}: InputText) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
   const error = fieldState?.error as unknown as InputError;
@@ -42,11 +49,11 @@ const InputText = ({ label, name, docValue, docStatus }: InputText) => {
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3">
+    <div className="pw-mb-3 pw-w-full">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid}>
+      <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleTextChange(e.target.value)}
@@ -54,14 +61,16 @@ const InputText = ({ label, name, docValue, docStatus }: InputText) => {
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
         />
       </FormItemContainer>
-      <p className="mt-5">
-        {field.value && (
-          <InputStatus
-            invalid={fieldState.invalid}
-            errorMessage={error?.value?.message}
-          />
-        )}
-      </p>
+      {!hidenValidations && (
+        <p className="mt-5">
+          {field.value && (
+            <InputStatus
+              invalid={fieldState.invalid}
+              errorMessage={error?.value?.message}
+            />
+          )}
+        </p>
+      )}
     </div>
   );
 };

@@ -254,9 +254,7 @@ const _HeaderPixwaySDK = ({
   ) : null;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MetamaskProvider = Provider as any;
-
 export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
   <TranslatableComponent>
     <MetamaskProvider

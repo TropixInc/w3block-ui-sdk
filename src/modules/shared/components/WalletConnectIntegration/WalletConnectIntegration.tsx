@@ -98,7 +98,7 @@ const _WalletConnectIntegration = () => {
     window.open(
       path,
       '_blank',
-      'toolbar=no,status=no,menubar,location=center,scrollbars,resizable'
+      'noreferrer,left=600,resizable,width=600,height=900'
     );
   };
 
@@ -116,6 +116,13 @@ const _WalletConnectIntegration = () => {
         openNewWindow(
           `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`
         );
+        if (!openNewWindow) {
+          window.open(
+            `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`,
+            '_blank',
+            'noreferrer'
+          );
+        }
       },
     });
   };
