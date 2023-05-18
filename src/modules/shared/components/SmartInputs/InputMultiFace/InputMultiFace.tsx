@@ -202,7 +202,7 @@ export const InputMultiFace = ({
                       max: userMediaError != '' ? 0 : 650,
                     },
                     aspectRatio:
-                      getMobileOperatingSystem() == 'iOS' ? 1.625 : 0.615,
+                      getMobileOperatingSystem() == 'Android' ? 0.615 : 1.625,
                     facingMode: 'user',
                   }}
                   width={userMediaError != '' ? 0 : 400}
