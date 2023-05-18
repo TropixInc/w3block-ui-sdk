@@ -38,7 +38,7 @@ export const InputMultiFace = ({
   const [loading, setLoading] = useState(true);
   const [openWebcam, setOpenWebcam] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>();
-  const [fileT, setFile] = useState<Blob>();
+  const [fileT, setFile] = useState<File>();
   const [userMediaError, setUserMediaError] = useState('');
   const webcamRef = useRef(null);
   const capture = useCallback(() => {
