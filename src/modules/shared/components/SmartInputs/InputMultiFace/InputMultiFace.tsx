@@ -195,7 +195,7 @@ export const InputMultiFace = ({
                     height: {
                       min: 600,
                     },
-                    aspectRatio: 0.615,
+                    aspectRatio: 1.625,
                     facingMode: 'user',
                   }}
                   width={userMediaError != '' ? 0 : 400}
