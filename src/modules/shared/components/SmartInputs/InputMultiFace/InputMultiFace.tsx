@@ -185,24 +185,17 @@ export const InputMultiFace = ({
                     setUserMediaError('');
                     setLoading(false);
                   }}
-                  minScreenshotHeight={650}
-                  minScreenshotWidth={350}
                   ref={webcamRef}
                   audio={false}
-                  screenshotQuality={0.8}
+                  screenshotQuality={0.9}
                   videoConstraints={{
                     width: {
-                      min: userMediaError != '' ? 0 : 400,
-                      ideal: userMediaError != '' ? 0 : 400,
-                      max: userMediaError != '' ? 0 : 400,
+                      min: 800,
                     },
                     height: {
-                      min: userMediaError != '' ? 0 : 650,
-                      ideal: userMediaError != '' ? 0 : 650,
-                      max: userMediaError != '' ? 0 : 650,
+                      min: 600,
                     },
-                    aspectRatio:
-                      getMobileOperatingSystem() == 'Android' ? 0.615 : 1.625,
+                    aspectRatio: 0.615,
                     facingMode: 'user',
                   }}
                   width={userMediaError != '' ? 0 : 400}
@@ -260,23 +253,23 @@ function urltoFile(
     });
 }
 
-function getMobileOperatingSystem() {
-  const userAgent =
-    navigator.userAgent || navigator.vendor || (window as any)?.opera;
+// function getMobileOperatingSystem() {
+//   const userAgent =
+//     navigator.userAgent || navigator.vendor || (window as any)?.opera;
 
-  // Windows Phone must come first because its UA also contains "Android"
-  if (/windows phone/i.test(userAgent)) {
-    return 'Windows Phone';
-  }
+//   // Windows Phone must come first because its UA also contains "Android"
+//   if (/windows phone/i.test(userAgent)) {
+//     return 'Windows Phone';
+//   }
 
-  if (/android/i.test(userAgent)) {
-    return 'Android';
-  }
+//   if (/android/i.test(userAgent)) {
+//     return 'Android';
+//   }
 
-  // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any)?.MSStream) {
-    return 'iOS';
-  }
+//   // iOS detection from: http://stackoverflow.com/a/9039885/177710
+//   if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any)?.MSStream) {
+//     return 'iOS';
+//   }
 
-  return 'unknown';
-}
+//   return 'unknown';
+// }
