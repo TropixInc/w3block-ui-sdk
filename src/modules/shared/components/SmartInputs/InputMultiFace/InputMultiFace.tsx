@@ -182,29 +182,56 @@ export const InputMultiFace = ({
               </div>
             ) : (
               <div className="pw-rounded-xl pw-overflow-hidden">
-                <WebCam
-                  onUserMediaError={onUserMediaError}
-                  screenshotFormat="image/jpeg"
-                  onUserMedia={() => {
-                    setUserMediaError('');
-                    setLoading(false);
-                  }}
-                  ref={webcamRef}
-                  audio={false}
-                  screenshotQuality={0.9}
-                  videoConstraints={{
-                    width: {
-                      min: 800,
-                    },
-                    height: {
-                      min: 600,
-                    },
-                    aspectRatio: !mobileAndTabletCheck() ? 0.615 : 1.625,
-                    facingMode: 'user',
-                  }}
-                  width={userMediaError != '' ? 0 : 400}
-                  height={userMediaError != '' ? 0 : 650}
-                />
+                {mobileAndTabletCheck() ? (
+                  <WebCam
+                    onUserMediaError={onUserMediaError}
+                    screenshotFormat="image/jpeg"
+                    onUserMedia={() => {
+                      setUserMediaError('');
+                      setLoading(false);
+                    }}
+                    ref={webcamRef}
+                    audio={false}
+                    screenshotQuality={0.9}
+                    videoConstraints={{
+                      width: {
+                        min: 800,
+                      },
+                      height: {
+                        min: 600,
+                      },
+                      aspectRatio: 1.625,
+                      facingMode: 'user',
+                    }}
+                    width={userMediaError != '' ? 0 : 400}
+                    height={userMediaError != '' ? 0 : 650}
+                  />
+                ) : (
+                  <WebCam
+                    onUserMediaError={onUserMediaError}
+                    screenshotFormat="image/jpeg"
+                    onUserMedia={() => {
+                      setUserMediaError('');
+                      setLoading(false);
+                    }}
+                    ref={webcamRef}
+                    audio={false}
+                    screenshotQuality={0.9}
+                    videoConstraints={{
+                      width: {
+                        min: 800,
+                      },
+                      height: {
+                        min: 600,
+                      },
+                      aspectRatio: 0.615,
+                      facingMode: 'user',
+                    }}
+                    width={userMediaError != '' ? 0 : 400}
+                    height={userMediaError != '' ? 0 : 650}
+                  />
+                )}
+
                 {!loading && (
                   <div className="pw-relative">
                     <div className="pw-w-[220px] pw-h-[310px] pw-border-dashed pw-border-separate pw-border-spacing-4 pw-border-[3px] pw-border-white pw-opacity-[0.4] pw-absolute pw-left-[65px] pw-bottom-[150px] pw-rounded-[100000000px]"></div>
