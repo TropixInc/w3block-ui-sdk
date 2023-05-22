@@ -95,11 +95,13 @@ const _WalletConnectIntegration = () => {
   };
 
   const openNewWindow = (path: string) => {
-    window.open(
-      path,
-      '_blank',
-      'noreferrer,left=600,resizable,width=600,height=900'
-    );
+    setTimeout(() => {
+      window.open(
+        path,
+        '_blank',
+        'noreferrer,left=600,resizable,width=600,height=900'
+      );
+    });
   };
 
   const handleTenantIntegration = ({
@@ -117,11 +119,13 @@ const _WalletConnectIntegration = () => {
           `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`
         );
         if (!openNewWindow) {
-          window.open(
-            `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`,
-            '_blank',
-            'noreferrer'
-          );
+          setTimeout(() => {
+            window.open(
+              `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`,
+              '_blank',
+              'noreferrer'
+            );
+          });
         }
       },
     });
