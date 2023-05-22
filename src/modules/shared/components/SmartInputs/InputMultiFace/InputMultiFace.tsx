@@ -105,13 +105,11 @@ export const InputMultiFace = ({
         <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
           {label}
         </p>
-        <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
-          {subtitle}
-        </p>
-        <div className="pw-flex pw-gap-x-6 pw-items-center">
+
+        <div className="pw-flex pw-gap-x-6 ">
           <div
             onClick={() => setOpenWebcam(true)}
-            className="pw-w-[120px] pw-h-[180px] pw-rounded-2xl pw-overflow-hidden pw-cursor-pointer"
+            className="pw-min-w-[120px] pw-h-[180px] pw-rounded-2xl pw-overflow-hidden pw-cursor-pointer"
           >
             {imgSrc ? (
               <img className="" src={imgSrc} alt="Selfie photo" />
@@ -121,13 +119,18 @@ export const InputMultiFace = ({
               </div>
             )}
           </div>
+          <div>
+            <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
+              {subtitle}
+            </p>
+            <WeblockButton
+              className="pw-mt-4 pw-text-white"
+              onClick={() => retakeOrTake()}
+            >
+              {imgSrc ? 'Tirar outra ' + label : 'Tirar ' + label}
+            </WeblockButton>
+          </div>
         </div>
-        <WeblockButton
-          className="pw-mt-2 pw-text-white"
-          onClick={() => retakeOrTake()}
-        >
-          {imgSrc ? 'Tirar outra ' + label : 'Tirar ' + label}
-        </WeblockButton>
       </div>
       <ModalBase
         classes={{
@@ -195,7 +198,8 @@ export const InputMultiFace = ({
                     height: {
                       min: 600,
                     },
-                    aspectRatio: 1.625,
+                    aspectRatio:
+                      getMobileOperatingSystem() == 'unknown' ? 0.615 : 1.625,
                     facingMode: 'user',
                   }}
                   width={userMediaError != '' ? 0 : 400}
@@ -253,23 +257,23 @@ function urltoFile(
     });
 }
 
-// function getMobileOperatingSystem() {
-//   const userAgent =
-//     navigator.userAgent || navigator.vendor || (window as any)?.opera;
+function getMobileOperatingSystem() {
+  const userAgent =
+    navigator.userAgent || navigator.vendor || (window as any)?.opera;
 
-//   // Windows Phone must come first because its UA also contains "Android"
-//   if (/windows phone/i.test(userAgent)) {
-//     return 'Windows Phone';
-//   }
+  // Windows Phone must come first because its UA also contains "Android"
+  if (/windows phone/i.test(userAgent)) {
+    return 'Windows Phone';
+  }
 
-//   if (/android/i.test(userAgent)) {
-//     return 'Android';
-//   }
+  if (/android/i.test(userAgent)) {
+    return 'Android';
+  }
 
-//   // iOS detection from: http://stackoverflow.com/a/9039885/177710
-//   if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any)?.MSStream) {
-//     return 'iOS';
-//   }
+  // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any)?.MSStream) {
+    return 'iOS';
+  }
 
-//   return 'unknown';
-// }
+  return 'unknown';
+}
