@@ -137,7 +137,7 @@ export const InputMultiFace = ({
               className="pw-mt-4 pw-text-white"
               onClick={() => retakeOrTake()}
             >
-              {imgSrc ? 'Tirar outra ' + label : 'Tirar ' + label}
+              {imgSrc ? 'Modificar' + label : 'Tirar ' + label}
             </WeblockButton>
           </div>
         </div>
