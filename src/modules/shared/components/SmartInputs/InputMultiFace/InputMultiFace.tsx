@@ -16,6 +16,7 @@ import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import { ModalBase } from '../../ModalBase';
+import { Selectinput } from '../../SelectInput/SelectInput';
 import { Spinner } from '../../Spinner';
 import { WeblockButton } from '../../WeblockButton/WeblockButton';
 
@@ -109,6 +110,26 @@ export const InputMultiFace = ({
     return false;
   }, [height, width]);
 
+  const [deviceId, setDeviceId] = useState('');
+  const [devices, setDevices] = useState<InputDeviceInfo[]>([]);
+
+  const handleDevices = useCallback(
+    (mediaDevices: InputDeviceInfo[]) => {
+      setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput'));
+      if (mediaDevices.filter(({ kind }) => kind === 'videoinput').length) {
+        setDeviceId(
+          mediaDevices.filter(({ kind }) => kind === 'videoinput')?.[0]
+            ?.deviceId
+        );
+      }
+    },
+    [setDevices]
+  );
+
+  useEffect(() => {
+    navigator.mediaDevices.enumerateDevices().then(handleDevices);
+  }, [handleDevices]);
+
   return (
     <>
       <div className="">
@@ -122,7 +143,11 @@ export const InputMultiFace = ({
             className="pw-min-w-[120px] pw-h-[180px] pw-rounded-2xl pw-overflow-hidden pw-cursor-pointer"
           >
             {imgSrc ? (
-              <img className="" src={imgSrc} alt="Selfie photo" />
+              <img
+                className="pw-object-center pw-object-cover pw-w-full pw-h-full"
+                src={imgSrc}
+                alt="Selfie photo"
+              />
             ) : (
               <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center pw-bg-slate-200">
                 <UserIcon className="pw-w-[40px] pw-h-[40px] pw-stroke-white" />
@@ -133,12 +158,37 @@ export const InputMultiFace = ({
             <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
               {subtitle}
             </p>
-            <WeblockButton
-              className="pw-mt-4 pw-text-white"
-              onClick={() => retakeOrTake()}
-            >
-              {imgSrc ? 'Modificar' + label : 'Tirar ' + label}
-            </WeblockButton>
+            {devices.length == 0 ? (
+              <ErrorMessage
+                title="Não foi possivel identificar uma camêra"
+                message="Para continuar com o processo de KYC utilize um aparelho com camêra"
+              />
+            ) : devices.length == 1 ? (
+              <WeblockButton
+                className="pw-mt-2 pw-text-white"
+                onClick={() => retakeOrTake()}
+              >
+                {imgSrc ? 'Modificar ' + label : 'Tirar ' + label}
+              </WeblockButton>
+            ) : (
+              <>
+                <Selectinput
+                  className="pw-mt-2"
+                  onChange={(e) => setDeviceId(e)}
+                  selected={deviceId == '' ? devices[0]?.deviceId : deviceId}
+                  options={devices.map((device) => ({
+                    value: device.deviceId,
+                    label: device.label,
+                  }))}
+                />
+                <WeblockButton
+                  className="pw-mt-2 pw-text-white"
+                  onClick={() => retakeOrTake()}
+                >
+                  {imgSrc ? 'Modificar' + label : 'Tirar ' + label}
+                </WeblockButton>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -203,6 +253,7 @@ export const InputMultiFace = ({
                     audio={false}
                     screenshotQuality={0.9}
                     videoConstraints={{
+                      deviceId,
                       width: {
                         min: 400,
                       },
@@ -227,6 +278,7 @@ export const InputMultiFace = ({
                     audio={false}
                     screenshotQuality={0.9}
                     videoConstraints={{
+                      deviceId,
                       width: {
                         min: 400,
                       },
