@@ -204,10 +204,10 @@ export const InputMultiFace = ({
                     screenshotQuality={0.9}
                     videoConstraints={{
                       width: {
-                        min: 800,
+                        min: 400,
                       },
                       height: {
-                        min: 600,
+                        min: 650,
                       },
                       aspectRatio: 1.625,
                       facingMode: 'user',
@@ -228,10 +228,10 @@ export const InputMultiFace = ({
                     screenshotQuality={0.9}
                     videoConstraints={{
                       width: {
-                        min: 800,
+                        min: 400,
                       },
                       height: {
-                        min: 600,
+                        min: 650,
                       },
                       aspectRatio: 0.615,
                       facingMode: 'user',
