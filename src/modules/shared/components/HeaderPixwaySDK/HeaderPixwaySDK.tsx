@@ -6,10 +6,9 @@ import classNames from 'classnames';
 
 import { ThemeContext, ThemeProvider } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useProfile } from '../../hooks';
+import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
-import useRouter from '../../hooks/useRouter';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import { CartButton } from '../CartButton/CartButton';
 import TranslatableComponent from '../TranslatableComponent';
@@ -63,7 +62,7 @@ const _HeaderPixwaySDK = ({
   logoLink,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
-  const router = useRouter();
+  const router = useRouterConnect();
   const { data: profile } = useProfile();
   const { data: contexts } = useGetTenantContext();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -97,6 +96,8 @@ const _HeaderPixwaySDK = ({
     } else setOpenedTabs(!openedTabs);
   };
 
+  const query = Object.keys(router.query).length > 0 ? router.query : '';
+
   useEffect(() => {
     if (profile) {
       if (signupContext) {
@@ -104,7 +105,7 @@ const _HeaderPixwaySDK = ({
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active
         ) {
-          router.push(PixwayAppRoutes.COMPLETE_KYC);
+          router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
         }
       }
     }
@@ -254,6 +255,7 @@ const _HeaderPixwaySDK = ({
   ) : null;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MetamaskProvider = Provider as any;
 export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
   <TranslatableComponent>
