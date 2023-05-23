@@ -64,11 +64,13 @@ export const CompleteKYCTemplateSDK = ({
     ''
   );
 
+  const query = Object.keys(router.query).length > 0 ? router.query : '';
+
   useEffect(() => {
     if (session && profile?.data) {
       const { data: user } = profile;
       if (user.kycStatus !== KycStatus.Pending) {
-        router.pushConnect(getRedirectUrl(), router.query);
+        router.pushConnect(getRedirectUrl(), query);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,7 +78,7 @@ export const CompleteKYCTemplateSDK = ({
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.pushConnect(PixwayAppRoutes.SIGN_IN);
+      router.pushConnect(PixwayAppRoutes.SIGN_IN, query);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);

@@ -65,6 +65,8 @@ const _FormCompleteKYCWithoutLayout = ({
       : '',
   });
 
+  const query = Object.keys(router.query).length > 0 ? router.query : '';
+
   const errorPost = error as AxiosError;
   const errorMessage = errorPost?.response?.data as ErrorProps;
 
@@ -111,20 +113,11 @@ const _FormCompleteKYCWithoutLayout = ({
   useEffect(() => {
     if ((tenantInputs?.data && tenantInputs?.data?.length < 1) || isSuccess) {
       if (!profilePage) {
-        router.pushConnect(
-          PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          router.query as any
-        );
+        router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, query);
       }
     }
-  }, [
-    tenantInputs?.data,
-    tenantInputs?.data?.length,
-    isSuccess,
-    profilePage,
-    router,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tenantInputs?.data, tenantInputs?.data?.length, isSuccess, profilePage]);
 
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);

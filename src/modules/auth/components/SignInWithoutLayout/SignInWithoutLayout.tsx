@@ -81,14 +81,6 @@ export const SigInWithoutLayout = ({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
-  const queryParams = () => {
-    if (
-      profile?.data.kycStatus === KycStatus.Pending ||
-      !profile?.data.mainWallet
-    )
-      return router.query;
-    else '';
-  };
 
   const { fieldState } = useController({
     control: methods.control,
@@ -113,9 +105,11 @@ export const SigInWithoutLayout = ({
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
+  const query = Object.keys(router.query).length > 0 ? router.query : '';
+
   useEffect(() => {
     if (session && profile) {
-      router.pushConnect(getRedirectUrl(), queryParams());
+      router.pushConnect(getRedirectUrl(), query);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
