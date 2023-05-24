@@ -15,6 +15,7 @@ interface InputCPFProps {
   label: string;
   name: string;
   hidenValidations?: boolean;
+  profilePage?: boolean;
 
   docValue?: string;
   docStatus?: UserDocumentStatus;
@@ -26,6 +27,7 @@ const InputCpf = ({
   docValue,
   docStatus,
   hidenValidations,
+  profilePage,
 }: InputCPFProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -72,7 +74,10 @@ const InputCpf = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
-          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+          readOnly={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+            profilePage
+          }
           name={name}
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}
