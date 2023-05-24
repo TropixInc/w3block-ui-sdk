@@ -168,7 +168,7 @@ export const InputMultiFace = ({
                 className="pw-mt-2 pw-text-white"
                 onClick={() => retakeOrTake()}
               >
-                {imgSrc ? 'Modificar ' + label : 'Tirar ' + label}
+                {imgSrc ? 'Modificar selfie' : 'Tirar selfie'}
               </WeblockButton>
             ) : (
               <>
@@ -185,7 +185,7 @@ export const InputMultiFace = ({
                   className="pw-mt-2 pw-text-white"
                   onClick={() => retakeOrTake()}
                 >
-                  {imgSrc ? 'Modificar' + label : 'Tirar ' + label}
+                  {imgSrc ? 'Modificar selfie' : 'Tirar selfie'}
                 </WeblockButton>
               </>
             )}
@@ -234,7 +234,7 @@ export const InputMultiFace = ({
                       className="!pw-text-white"
                       onClick={() => setOpenWebcam(false)}
                     >
-                      Usar {label}
+                      Usar selfie
                     </WeblockButton>
                   </div>
                 </div>
@@ -314,7 +314,7 @@ export const InputMultiFace = ({
                               capture();
                             }}
                           >
-                            Tirar {label}
+                            Tirar selfie
                           </WeblockButton>
                         </div>
                       )}
