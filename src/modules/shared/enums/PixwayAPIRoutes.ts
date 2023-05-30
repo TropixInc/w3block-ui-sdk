@@ -61,4 +61,6 @@ export enum PixwayAPIRoutes {
   CREATE_INTEGRATION_TOKEN = '/tenant-user-integration/{tenantId}/create-token',
   ACCEPT_INTEGRATION_TOKEN = '/tenant-user-integration/{tenantId}/create-from-token',
   USER_INTEGRATIONS = '/tenant-user-integration/{tenantId}/accepted',
+  TENANT_BY_HOSTNAME = 'public-tenant/by-hostname',
+  PRODUCT_BY_ID = '/companies/{companyId}/products/{productId}',
 }

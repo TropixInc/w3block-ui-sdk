@@ -45,4 +45,5 @@ export enum PixwayAppRoutes {
   BENEFIT_DETAILS = '/tokens/benefit-details/{benefitId}',
   COMPLETE_KYC = '/auth/complete-kyc',
   MY_ORDERS = '/profile/orders',
+  PRODUCT_PAGE = '/product/slug/{slug}',
 }
