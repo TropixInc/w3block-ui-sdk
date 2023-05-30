@@ -53,6 +53,11 @@ export interface Product {
   tags?: any[];
   tokensAmount?: number;
   updatedAt?: string;
+  requirements?: {
+    companyId: string;
+    keyCollectionId: string;
+    productId: string;
+  };
 }
 
 export interface ProductsResponse {

@@ -1,9 +1,13 @@
 import { useState } from 'react';
 
-import { useHasWallet, useProfile } from '../../hooks';
+import useGetProductById from '../../../storefront/hooks/useGetProductById/useGetProductById';
+import { useGetNFTSByWallet } from '../../../tokens/hooks/useGetNFTsByWallet';
+import { mapNFTToToken } from '../../../tokens/utils/mapNFTToToken';
+import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { useHasWallet, useProfile, useRouterConnect } from '../../hooks';
 import { useAcceptIntegrationToken } from '../../hooks/useAcceptIntegrationToken/useAcceptIntegrationToken';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
-import useRouter from '../../hooks/useRouter';
+import { useUserWallet } from '../../hooks/useUserWallet';
 import { Alert } from '../Alert';
 import { Box } from '../Box/Box';
 import { Spinner } from '../Spinner';
@@ -16,15 +20,32 @@ enum Steps {
 }
 
 const _LinkAccountTemplate = () => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const fromTenantName = (router.query.fromTentant as string) ?? '';
   const toTenantName = (router.query.toTenant as string) ?? '';
   const toTenantId = (router.query.toTenantId as string) ?? '';
   const token = (router.query.token as string) ?? '';
   const fromEmail = (router.query.fromEmail as string) ?? '';
+  const productId = (router.query.productId as string) ?? '';
+  const productCollectionId = (router.query.collectionId as string) ?? '';
   const { data: profile } = useProfile();
   const { mutate: acceptIntegration, isLoading } = useAcceptIntegrationToken();
   const [step, setSteps] = useState('');
+
+  const { wallet } = useUserWallet();
+  const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(
+    wallet?.chainId || 80001
+  );
+  const tokens =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ethNFTsResponse?.data.items.map((nft: any) =>
+      mapNFTToToken(nft, wallet?.chainId || 80001)
+    ) || [];
+  const userHasProduct = tokens.some(
+    (data) => data.collectionData.id === productCollectionId
+  );
+
+  const { data: product } = useGetProductById(productId);
 
   const handleClose = () => {
     window.close();
@@ -54,9 +75,27 @@ const _LinkAccountTemplate = () => {
           <>
             <p className="pw-text-black pw-font-medium pw-text-xl">
               Pronto, agora sua conta está vinculada! Agora tokens adquiridos na
-              sua conta <b>{fromTenantName}</b> lhe darão acesso a ofertas
-              exclusivas na sua conta <b>{toTenantName}</b>.
+              sua conta <b>{toTenantName}</b> lhe darão acesso a ofertas
+              exclusivas na sua conta <b>{fromTenantName}</b>.
             </p>
+            {productId != '' ? (
+              userHasProduct ? (
+                <p className="pw-text-black pw-font-medium pw-text-xl">
+                  Você já possui o token necessário para realizar a compra em{' '}
+                  <b>{fromTenantName}</b>, já pode retornar a janela anterior e
+                  continuar com a sua compra!
+                </p>
+              ) : (
+                <p className="pw-text-black pw-font-medium pw-text-xl">
+                  Você ainda não possui o token necessário para finalizar a
+                  compra em <b>{fromTenantName}</b>, em alguns segundos você
+                  será redirecionado para a página do produto para que possa
+                  adquiri-lo!
+                </p>
+              )
+            ) : (
+              ''
+            )}
             <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
               <button
                 onClick={handleClose}
@@ -104,6 +143,16 @@ const _LinkAccountTemplate = () => {
         },
         onSuccess() {
           setSteps(Steps.SUCCESS);
+          if (!userHasProduct) {
+            setTimeout(() => {
+              router.pushConnect(
+                PixwayAppRoutes.PRODUCT_PAGE.replace(
+                  '{slug}',
+                  product?.slug ?? ''
+                )
+              );
+            }, 5000);
+          }
         },
       }
     );
