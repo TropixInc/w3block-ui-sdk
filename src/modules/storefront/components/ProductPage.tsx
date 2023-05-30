@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
@@ -132,8 +133,6 @@ export const ProductPage = ({
   const { data: toTenant } = useGetTenantInfoById(
     product?.requirements?.companyId ?? ''
   );
-
-  console.log(user);
 
   const openNewWindow = (path: string) => {
     setTimeout(() => {
