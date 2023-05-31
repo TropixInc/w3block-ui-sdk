@@ -81,26 +81,32 @@ export const useCheckout = () => {
     }
   );
 
-  // const createOrder = ({
-  //   companyId,
-  //   createOrder,
-  // }: CreateOrderPayload): Promise<CreateOrderResponse> => {
-  //   return axios
-  //     .post<
-  //       CreateOrderResponse,
-  //       AxiosResponse<CreateOrderResponse>,
-  //       CreateOrder
-  //     >(
-  //       PixwayAPIRoutes.CREATE_ORDER.replace('{companyId}', companyId),
-  //       createOrder
-  //     )
-  //     .then((res) => {
-  //       return res.data;
-  //     });
-  // };
+  const getStatus = useMutation(
+    ({
+      companyId,
+      orderId,
+    }: {
+      companyId: string;
+      orderId: string;
+    }): Promise<CreateOrderResponse> => {
+      return axios
+        .get(
+          PixwayAPIRoutes.ORDER_BY_ID.replace('{orderId}', orderId).replace(
+            '{companyId}',
+            companyId
+          )
+        )
+        .then((res): CreateOrderResponse => {
+          return res.data as CreateOrderResponse;
+        });
+    },
+    {
+      retry: 0,
+    }
+  );
 
   return useMemo(() => {
-    return { getOrderPreview, createOrder };
+    return { getOrderPreview, createOrder, getStatus };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };

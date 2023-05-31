@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "0.1.1-alpha.291",
+  "version": "0.1.1-alpha.293",
   "type": "module",
   "files": [
     "dist"
@@ -46,9 +46,11 @@
     "jwt-decode": "^3.1.2",
     "launchdarkly-react-client-sdk": "^2.29.2",
     "qrcode.react": "^3.1.0",
+    "react-credit-cards-2": "^1.0.1",
     "react-dropzone": "^12.0.4",
     "react-hook-form": "^7.33.1",
     "react-i18next": "^11.18.1",
+    "react-input-mask": "^2.0.4",
     "react-pdf": "^5.7.2",
     "react-phone-number-input": "^3.2.19",
     "react-use": "^17.4.0",
@@ -64,6 +66,7 @@
     "@tailwindcss/line-clamp": "^0.4.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "@types/react-input-mask": "^3.0.2",
     "@types/react-query": "^1.2.9",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
