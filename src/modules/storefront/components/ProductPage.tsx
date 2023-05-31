@@ -13,6 +13,7 @@ import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
+import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
@@ -129,9 +130,14 @@ export const ProductPage = ({
 
   const { mutate: createIntegrationToken } = useCreateIntegrationToken();
   const { data: currentTenant } = useGetTenantInfoByHostname();
+  const { data: userIntegrations } = useGetUserIntegrations();
   const user = useSessionUser();
   const { data: toTenant } = useGetTenantInfoById(
     product?.requirements?.companyId ?? ''
+  );
+
+  const userHasIntegration = userIntegrations?.data?.items?.some(
+    (val) => val.toTenantId === product?.requirements?.companyId
   );
 
   const openNewWindow = (path: string) => {
@@ -157,12 +163,12 @@ export const ProductPage = ({
       createIntegrationToken(toTenantId ?? '', {
         onSuccess(data) {
           openNewWindow(
-            `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}$collectionId=${product?.requirements?.keyCollectionId}`
+            `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
           );
           if (!openNewWindow) {
             setTimeout(() => {
               window.open(
-                `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}$collectionId=${product?.requirements?.keyCollectionId}`,
+                `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
                 '_blank',
                 'noreferrer'
               );
@@ -474,7 +480,7 @@ export const ProductPage = ({
                 )}
               </div>
             </div>
-            {product?.requirements && (
+            {product?.requirements && !userHasIntegration && (
               <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full pw-mt-5">
                 <p className="pw-text-base pw-font-poppins pw-font-medium">
                   Integração necessária com:
@@ -491,7 +497,8 @@ export const ProductPage = ({
                         toTenantId: toTenant?.id ?? '',
                       })
                     }
-                    className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                    disabled={userHasIntegration}
+                    className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black disabled:pw-border-gray-500 disabled:pw-text-gray-700 disabled:pw-shadow-[0_2px_4px_rgb(107,114,128)] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
                   >
                     {toTenant?.name}
                   </button>

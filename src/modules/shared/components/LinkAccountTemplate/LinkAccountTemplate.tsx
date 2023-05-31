@@ -143,7 +143,7 @@ const _LinkAccountTemplate = () => {
         },
         onSuccess() {
           setSteps(Steps.SUCCESS);
-          if (!userHasProduct) {
+          if (productId != '' && !userHasProduct) {
             setTimeout(() => {
               router.pushConnect(
                 PixwayAppRoutes.PRODUCT_PAGE.replace(
