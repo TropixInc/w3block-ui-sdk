@@ -13,6 +13,7 @@ interface InputBirthdate {
   name: string;
   docValue?: string;
   docStatus?: UserDocumentStatus;
+  profilePage?: boolean;
 }
 
 const InputBirthdate = ({
@@ -20,6 +21,7 @@ const InputBirthdate = ({
   name,
   docValue,
   docStatus,
+  profilePage,
 }: InputBirthdate) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -46,7 +48,10 @@ const InputBirthdate = ({
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
           type="date"
-          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+          readOnly={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+            profilePage
+          }
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"

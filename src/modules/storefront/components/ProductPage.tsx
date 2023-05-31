@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
@@ -9,6 +10,11 @@ import { CriptoValueComponent } from '../../shared/components/CriptoValueCompone
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
+import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
+import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
+import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
+import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import useGetProductBySlug, {
@@ -122,6 +128,61 @@ export const ProductPage = ({
     }
   };
 
+  const { mutate: createIntegrationToken } = useCreateIntegrationToken();
+  const { data: currentTenant } = useGetTenantInfoByHostname();
+  const { data: userIntegrations } = useGetUserIntegrations();
+  const user = useSessionUser();
+  const { data: toTenant } = useGetTenantInfoById(
+    product?.requirements?.companyId ?? ''
+  );
+
+  const userHasIntegration = userIntegrations?.data?.items?.some(
+    (val) => val.toTenantId === product?.requirements?.companyId
+  );
+
+  const openNewWindow = (path: string) => {
+    setTimeout(() => {
+      window.open(
+        path,
+        '_blank',
+        'noreferrer,left=600,resizable,width=1440,height=900'
+      );
+    });
+  };
+
+  const handleTenantIntegration = ({
+    toTenantName,
+    toTenantId,
+    host,
+  }: {
+    toTenantName: string;
+    toTenantId: string;
+    host: string;
+  }) => {
+    if (user) {
+      createIntegrationToken(toTenantId ?? '', {
+        onSuccess(data) {
+          openNewWindow(
+            `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
+          );
+          if (!openNewWindow) {
+            setTimeout(() => {
+              window.open(
+                `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
+                '_blank',
+                'noreferrer'
+              );
+            });
+          }
+        },
+      });
+    } else {
+      pushConnect(PixwayAppRoutes.SIGN_IN, {
+        callbackPath: window.location.href,
+      });
+    }
+  };
+
   return (
     <div
       style={{
@@ -158,185 +219,224 @@ export const ProductPage = ({
         style={{ backgroundColor: backgroundColor ?? '#EFEFEF' }}
       >
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
-          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-w-full pw-gap-12 pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
-            <ImageSDK
-              className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
-              src={product?.images?.[0]?.original}
-              width={1200}
-              quality="best"
-            />
-            <div className="pw-w-full">
-              {showProductName && (
-                <>
+          <div className="pw-w-full pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
+            <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-12">
+              <ImageSDK
+                className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+                src={product?.images?.[0]?.original}
+                width={1200}
+                quality="best"
+              />
+              <div className="pw-w-full">
+                {showProductName && (
+                  <>
+                    <p
+                      style={{ color: nameTextColor ?? 'black' }}
+                      className="sm:pw-text-[36px] pw-text-2xl pw-font-[600]"
+                    >
+                      {product?.name}
+                    </p>
+                  </>
+                )}
+                {showCategory && (
                   <p
-                    style={{ color: nameTextColor ?? 'black' }}
-                    className="sm:pw-text-[36px] pw-text-2xl pw-font-[600]"
+                    style={{
+                      color: categoriesTextColor ?? '#C63535',
+                    }}
+                    className="pw-mt-4 pw-font-[700] pw-text-lg"
                   >
-                    {product?.name}
+                    {product?.tags?.join('/')}
                   </p>
-                </>
-              )}
-              {showCategory && (
-                <p
-                  style={{
-                    color: categoriesTextColor ?? '#C63535',
-                  }}
-                  className="pw-mt-4 pw-font-[700] pw-text-lg"
-                >
-                  {product?.tags?.join('/')}
-                </p>
-              )}
-              {showValue && (
-                <>
-                  {product?.prices != undefined &&
-                    product?.prices?.length > 1 && (
-                      <div className="">
-                        <p className="pw-text-sm pw-text-black pw-font-[700] pw-mb-2">
-                          Pagar em:
-                        </p>
-                        <form className="pw-flex pw-gap-4" action="submit">
-                          {product?.prices.map((price: any) => (
-                            <div
-                              key={price.currencyId}
-                              className="pw-flex pw-gap-2"
-                            >
-                              <input
-                                onChange={() =>
-                                  setCurrencyId?.(price?.currency)
-                                }
-                                checked={price.currencyId === currencyId?.id}
-                                name="currency"
-                                value={price.currencyId}
-                                type="radio"
-                              />
-                              <p className="pw-text-xs pw-text-slate-600 pw-font-[600]">
-                                {price.currency.symbol}
-                              </p>
-                            </div>
-                          ))}
-                        </form>
-                      </div>
-                    )}
-
-                  <p
-                    style={{ color: priceTextColor ?? 'black' }}
-                    className="pw-text-2xl pw-mt-4 pw-font-[700]"
-                  >
-                    {product?.stockAmount == 0 ? (
-                      'Esgotado'
-                    ) : product ? (
-                      <CriptoValueComponent
-                        size={24}
-                        fontClass="pw-ml-1"
-                        crypto={
-                          product?.prices.find(
-                            (price: any) => price.currencyId == currencyId?.id
-                          )?.currency.crypto
-                        }
-                        code={
-                          product?.prices.find(
-                            (price: any) => price.currencyId == currencyId?.id
-                          )?.currency.name
-                        }
-                        value={
-                          product?.prices.find(
-                            (price: any) => price.currencyId == currencyId?.id
-                          )?.amount ?? '0'
-                        }
-                      ></CriptoValueComponent>
-                    ) : (
-                      ''
-                    )}
-                  </p>
-                </>
-              )}
-              {actionButton &&
-                product?.stockAmount &&
-                product?.stockAmount > 0 &&
-                !currencyId?.crypto && (
-                  <div>
-                    <div ref={refToClickAway} className="pw-mt-4">
-                      <p className="pw-text-sm pw-text-black pw-mb-1">
-                        Quantidade
-                      </p>
-                      <div
-                        onClick={() => setQuantityOpen(!quantityOpen)}
-                        className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
-                          quantityOpen
-                            ? 'pw-border-none pw-bg-white'
-                            : 'pw-border pw-border-black'
-                        }`}
-                      >
-                        <p className="pw-text-xs pw-font-[600] pw-text-black">
-                          {quantity}
-                        </p>
-                        <ArrowDown className="pw-stroke-black" />
-                      </div>
-                      {quantityOpen && (
-                        <div className="pw-relative">
-                          <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
-                            <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
-                            <div className=""></div>
-                            {Array(limit && limit > 5 ? 5 : limit)
-                              .fill(0)
-                              .map((val, index) => (
-                                <p
-                                  onClick={() => {
-                                    setQuantity(index + 1);
-                                    setQuantityOpen(false);
-                                  }}
-                                  key={index}
-                                  className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
-                                >
-                                  {index + 1}
+                )}
+                {showValue && (
+                  <>
+                    {product?.prices != undefined &&
+                      product?.prices?.length > 1 && (
+                        <div className="">
+                          <p className="pw-text-sm pw-text-black pw-font-[700] pw-mb-2">
+                            Pagar em:
+                          </p>
+                          <form className="pw-flex pw-gap-4" action="submit">
+                            {product?.prices.map((price: any) => (
+                              <div
+                                key={price.currencyId}
+                                className="pw-flex pw-gap-2"
+                              >
+                                <input
+                                  onChange={() =>
+                                    setCurrencyId?.(price?.currency)
+                                  }
+                                  checked={price.currencyId === currencyId?.id}
+                                  name="currency"
+                                  value={price.currencyId}
+                                  type="radio"
+                                />
+                                <p className="pw-text-xs pw-text-slate-600 pw-font-[600]">
+                                  {price.currency.symbol}
                                 </p>
-                              ))}
-                          </div>
+                              </div>
+                            ))}
+                          </form>
                         </div>
                       )}
-                    </div>
-                  </div>
+
+                    <p
+                      style={{ color: priceTextColor ?? 'black' }}
+                      className="pw-text-2xl pw-mt-4 pw-font-[700]"
+                    >
+                      {product?.stockAmount == 0 ? (
+                        'Esgotado'
+                      ) : product ? (
+                        <CriptoValueComponent
+                          size={24}
+                          fontClass="pw-ml-1"
+                          crypto={
+                            product?.prices.find(
+                              (price: any) => price.currencyId == currencyId?.id
+                            )?.currency.crypto
+                          }
+                          code={
+                            product?.prices.find(
+                              (price: any) => price.currencyId == currencyId?.id
+                            )?.currency.name
+                          }
+                          value={
+                            product?.prices.find(
+                              (price: any) => price.currencyId == currencyId?.id
+                            )?.amount ?? '0'
+                          }
+                        ></CriptoValueComponent>
+                      ) : (
+                        ''
+                      )}
+                    </p>
+                  </>
                 )}
-              {showCategory && product?.tags?.length ? (
-                <>
-                  <p
-                    style={{ color: textColor ?? 'black' }}
-                    className="pw-mt-4 pw-text-sm"
-                  >
-                    Categoria/subcategoria:
-                  </p>
-                  <div className="pw-flex pw-items-center pw-gap-4 pw-mt-6">
-                    {categories.map((cat) => (
-                      <div
-                        key={cat.name}
-                        style={{
-                          backgroundColor:
-                            categoriesTagBackgroundColor ?? 'white',
-                          color: categoriesTagTextColor ?? 'black',
-                        }}
-                        className="pw-py-2 pw-px-6 pw-text-sm pw-font-[600] pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-                      >
-                        {cat.name}
+                {actionButton &&
+                  product?.stockAmount &&
+                  product?.stockAmount > 0 &&
+                  !currencyId?.crypto && (
+                    <div>
+                      <div ref={refToClickAway} className="pw-mt-4">
+                        <p className="pw-text-sm pw-text-black pw-mb-1">
+                          Quantidade
+                        </p>
+                        <div
+                          onClick={() => setQuantityOpen(!quantityOpen)}
+                          className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
+                            quantityOpen
+                              ? 'pw-border-none pw-bg-white'
+                              : 'pw-border pw-border-black'
+                          }`}
+                        >
+                          <p className="pw-text-xs pw-font-[600] pw-text-black">
+                            {quantity}
+                          </p>
+                          <ArrowDown className="pw-stroke-black" />
+                        </div>
+                        {quantityOpen && (
+                          <div className="pw-relative">
+                            <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
+                              <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
+                              <div className=""></div>
+                              {Array(limit && limit > 5 ? 5 : limit)
+                                .fill(0)
+                                .map((val, index) => (
+                                  <p
+                                    onClick={() => {
+                                      setQuantity(index + 1);
+                                      setQuantityOpen(false);
+                                    }}
+                                    key={index}
+                                    className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
+                                  >
+                                    {index + 1}
+                                  </p>
+                                ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    ))}
-                  </div>
-                </>
-              ) : null}
-              {actionButton && (
-                <div className="pw-flex pw-flex-col">
-                  {!currencyId?.crypto && hasCart ? (
+                    </div>
+                  )}
+                {showCategory && product?.tags?.length ? (
+                  <>
+                    <p
+                      style={{ color: textColor ?? 'black' }}
+                      className="pw-mt-4 pw-text-sm"
+                    >
+                      Categoria/subcategoria:
+                    </p>
+                    <div className="pw-flex pw-items-center pw-gap-4 pw-mt-6">
+                      {categories.map((cat) => (
+                        <div
+                          key={cat.name}
+                          style={{
+                            backgroundColor:
+                              categoriesTagBackgroundColor ?? 'white',
+                            color: categoriesTagTextColor ?? 'black',
+                          }}
+                          className="pw-py-2 pw-px-6 pw-text-sm pw-font-[600] pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                        >
+                          {cat.name}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : null}
+                {actionButton && (
+                  <div className="pw-flex pw-flex-col">
+                    {!currencyId?.crypto && hasCart ? (
+                      <button
+                        disabled={
+                          product?.stockAmount == 0 ||
+                          product?.canPurchaseAmount == 0 ||
+                          currencyId?.crypto
+                        }
+                        onClick={addToCart}
+                        style={{
+                          backgroundColor: 'none',
+                          borderColor:
+                            product &&
+                            (product?.stockAmount == 0 ||
+                              product?.canPurchaseAmount == 0)
+                              ? '#DCDCDC'
+                              : buttonColor
+                              ? buttonColor
+                              : '#0050FF',
+                          color:
+                            product &&
+                            (product?.stockAmount == 0 ||
+                              product?.canPurchaseAmount == 0)
+                              ? '#777E8F'
+                              : buttonColor ?? '#0050FF',
+                        }}
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                      >
+                        {cart.some((p) => p.id == product?.id)
+                          ? 'Remover do carrinho'
+                          : 'Adicionar ao carrinho'}
+                      </button>
+                    ) : null}
                     <button
                       disabled={
                         product?.stockAmount == 0 ||
-                        product?.canPurchaseAmount == 0 ||
-                        currencyId?.crypto
+                        product?.canPurchaseAmount == 0
                       }
-                      onClick={addToCart}
+                      onClick={() => {
+                        if (product?.id && product.prices) {
+                          pushConnect(
+                            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                              `?productIds=${Array(quantity)
+                                .fill(product.id)
+                                .join(',')}&currencyId=${currencyId?.id}`
+                          );
+                        }
+                      }}
                       style={{
-                        backgroundColor: 'none',
-                        borderColor:
+                        backgroundColor:
                           product &&
-                          (product?.stockAmount == 0 ||
+                          (product.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0)
                             ? '#DCDCDC'
                             : buttonColor
@@ -344,79 +444,67 @@ export const ProductPage = ({
                             : '#0050FF',
                         color:
                           product &&
-                          (product?.stockAmount == 0 ||
+                          (product.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0)
                             ? '#777E8F'
-                            : buttonColor ?? '#0050FF',
+                            : buttonTextColor ?? 'white',
                       }}
-                      className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                      className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                     >
-                      {cart.some((p) => p.id == product?.id)
-                        ? 'Remover do carrinho'
-                        : 'Adicionar ao carrinho'}
+                      {buttonText ?? 'Comprar agora'}
                     </button>
-                  ) : null}
-                  <button
-                    disabled={
-                      product?.stockAmount == 0 ||
-                      product?.canPurchaseAmount == 0
+                  </div>
+                )}
+                {product?.prices.find(
+                  (price: any) => price.currencyId == currencyId?.id
+                )?.anchorCurrencyId && (
+                  <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
+                    *O valor do produto em{' '}
+                    {
+                      product?.prices.find(
+                        (price: any) => price.currencyId == currencyId?.id
+                      )?.currency.symbol
+                    }{' '}
+                    pode variar de acordo com a cotação desta moeda em{' '}
+                    {
+                      product.prices.find(
+                        (priceF) =>
+                          priceF.currencyId ==
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.anchorCurrencyId
+                      )?.currency.symbol
                     }
-                    onClick={() => {
-                      if (product?.id && product.prices) {
-                        pushConnect(
-                          PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                            `?productIds=${Array(quantity)
-                              .fill(product.id)
-                              .join(',')}&currencyId=${currencyId?.id}`
-                        );
-                      }
-                    }}
-                    style={{
-                      backgroundColor:
-                        product &&
-                        (product.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0)
-                          ? '#DCDCDC'
-                          : buttonColor
-                          ? buttonColor
-                          : '#0050FF',
-                      color:
-                        product &&
-                        (product.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0)
-                          ? '#777E8F'
-                          : buttonTextColor ?? 'white',
-                    }}
-                    className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                    .
+                  </p>
+                )}
+              </div>
+            </div>
+            {product?.requirements && !userHasIntegration && (
+              <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full pw-mt-5">
+                <p className="pw-text-base pw-font-poppins pw-font-medium">
+                  Integração necessária com:
+                </p>
+                <div className="pw-flex pw-gap-3">
+                  <button
+                    key={toTenant?.name}
+                    onClick={() =>
+                      handleTenantIntegration({
+                        host:
+                          toTenant?.hosts.find((value) => value.isMain === true)
+                            ?.hostname ?? '',
+                        toTenantName: toTenant?.name ?? '',
+                        toTenantId: toTenant?.id ?? '',
+                      })
+                    }
+                    disabled={userHasIntegration}
+                    className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black disabled:pw-border-gray-500 disabled:pw-text-gray-700 disabled:pw-shadow-[0_2px_4px_rgb(107,114,128)] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
                   >
-                    {buttonText ?? 'Comprar agora'}
+                    {toTenant?.name}
                   </button>
                 </div>
-              )}
-              {product?.prices.find(
-                (price: any) => price.currencyId == currencyId?.id
-              )?.anchorCurrencyId && (
-                <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
-                  *O valor do produto em{' '}
-                  {
-                    product?.prices.find(
-                      (price: any) => price.currencyId == currencyId?.id
-                    )?.currency.symbol
-                  }{' '}
-                  pode variar de acordo com a cotação desta moeda em{' '}
-                  {
-                    product.prices.find(
-                      (priceF) =>
-                        priceF.currencyId ==
-                        product?.prices.find(
-                          (price: any) => price.currencyId == currencyId?.id
-                        )?.anchorCurrencyId
-                    )?.currency.symbol
-                  }
-                  .
-                </p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-11 pw-w-full pw-mt-6">
             {showDescription && (

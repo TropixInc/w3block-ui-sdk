@@ -21,6 +21,7 @@ interface SmartProps {
   openDocs?: boolean;
   onChangeUploadProgess: (value: boolean) => void;
   docFileValue?: string;
+  profilePage?: boolean;
 }
 
 export interface InputError {
@@ -40,6 +41,7 @@ const SmartInputsController = ({
   docFileValue,
   openDocs,
   onChangeUploadProgess,
+  profilePage,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -51,6 +53,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            profilePage={profilePage}
           />
         );
       case DataTypesEnum.Text:
@@ -69,6 +72,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            profilePage={profilePage}
           />
         );
       case DataTypesEnum.Phone:
