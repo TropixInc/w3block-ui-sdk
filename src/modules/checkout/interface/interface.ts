@@ -119,10 +119,16 @@ export interface CreateOrderResponse {
 
 export interface PaymentInfoInterface {
   paymentUrl?: string;
+  pix?: PixInterface;
   clientSecret?: string;
   publicKey?: string;
 }
 
+export interface PixInterface {
+  encodedImage: string;
+  expirationDate: string;
+  payload: string;
+}
 export interface CreateOrderPayload {
   companyId: string;
   createOrder: CreateOrder;

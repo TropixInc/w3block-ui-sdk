@@ -15,7 +15,6 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-import { isValidCNPJ, isValidCPF } from '../../../shared/utils/validators';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
@@ -26,8 +25,8 @@ import {
   ProductErrorInterface,
 } from '../../interface/interface';
 import { ConfirmCryptoBuy } from '../ConfirmCryptoBuy/ConfirmCryptoBuy';
-import CpfCnpj from '../CpfCnpjInput/CpfCnpjInput';
 import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
+import { PaymentMethodsComponent } from '../PaymentMethodsComponent/PaymentMethodsComponent';
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',
@@ -54,7 +53,6 @@ const _CheckoutInfo = ({
   const router = useRouterConnect();
   const { isOpen, openModal, closeModal } = useModalController();
   const [requestError, setRequestError] = useState(false);
-  const [cpfError, setCpfError] = useState(false);
   const { getOrderPreview } = useCheckout();
   const [translate] = useTranslation();
   const { setCart, cart } = useCart();
@@ -64,7 +62,6 @@ const _CheckoutInfo = ({
   const [choosedPayment, setChoosedPayment] = useState<
     PaymentMethodsAvaiable | undefined
   >();
-  const [cnpfCpfVal, setCnpjCpfVal] = useState('');
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -195,17 +192,6 @@ const _CheckoutInfo = ({
   const isLoading = orderPreview == null;
 
   const beforeProcced = () => {
-    if (
-      choosedPayment?.inputs &&
-      choosedPayment.inputs.length &&
-      !isValidCPF(cnpfCpfVal.replaceAll('.', '').replaceAll('-', '')) &&
-      !isValidCNPJ(
-        cnpfCpfVal.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
-      )
-    ) {
-      setCpfError(true);
-      return;
-    }
     if (checkoutStatus == CheckoutStatus.CONFIRMATION && orderPreview) {
       const orderProducts = orderPreview.products?.map((pID) => {
         return {
@@ -226,7 +212,6 @@ const _CheckoutInfo = ({
           parseFloat(orderPreview?.gasFee?.amount || '0').toString() || '0',
         cartPrice: parseFloat(orderPreview?.cartPrice || '0').toString() || '0',
         choosedPayment: choosedPayment,
-        cpfCnpj: cnpfCpfVal,
       });
     }
     if (proccedAction) {
@@ -349,6 +334,11 @@ const _CheckoutInfo = ({
                 '0'
               }
             />
+            <PaymentMethodsComponent
+              methodSelected={choosedPayment ?? ({} as PaymentMethodsAvaiable)}
+              methods={orderPreview?.providersForSelection ?? []}
+              onSelectedPayemnt={setChoosedPayment}
+            />
             <div className="pw-flex pw-mt-4 pw-gap-x-4">
               <PixwayButton
                 onClick={
@@ -421,7 +411,7 @@ const _CheckoutInfo = ({
         );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderPreview, cnpfCpfVal, choosedPayment, currencyIdState]);
+  }, [orderPreview, choosedPayment, currencyIdState]);
 
   const anchorCurrencyId = useMemo(() => {
     return orderPreview?.products
@@ -447,58 +437,7 @@ const _CheckoutInfo = ({
   ) : (
     <>
       <div className="pw-flex pw-flex-col sm:pw-flex-row">
-        {orderPreview?.providersForSelection?.length && (
-          <div className=" pw-w-full sm:pw-w-auto">
-            <p className="pw-text-[18px] pw-w-[200px] pw-font-[700]">
-              Forma de pagamento
-            </p>
-            {orderPreview.providersForSelection?.map((prov) => {
-              return (
-                <WeblockButton
-                  onClick={() => setChoosedPayment(prov)}
-                  tailwindBgColor={`${
-                    prov.paymentMethod == choosedPayment?.paymentMethod
-                      ? 'pw-bg-brand-primary'
-                      : 'pw-bg-slate-300'
-                  } `}
-                  className={`pw-cursor-pointer pw-mt-4 hover:pw-bg-[#295BA6] pw-w-full ${
-                    prov.paymentMethod == choosedPayment?.paymentMethod
-                      ? 'pw-text-white'
-                      : 'pw-text-[#777E8F]'
-                  }`}
-                  key={prov.paymentMethod}
-                >
-                  {prov.paymentMethod == 'credit_card'
-                    ? 'Cartão de Crédito'
-                    : 'PIX'}
-                </WeblockButton>
-              );
-            })}
-          </div>
-        )}
-
-        <div className="pw-w-full xl:pw-max-w-[80%] lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
-          {choosedPayment?.inputs && choosedPayment.inputs.length ? (
-            <>
-              <p className="pw-text-[18px] pw-font-[700]">
-                Por favor, digite seu CPF ou CNPJ
-              </p>
-              <CpfCnpj
-                maxLength={18}
-                onChange={(e: any) => {
-                  setCpfError(false);
-                  setCnpjCpfVal(e.target.value);
-                }}
-                placeholder="Somente números"
-                className="pw-mt-4 pw-border pw-border-brand-primary pw-rounded-lg pw-w-full pw-p-[10px] focus-visible:pw-outline-none "
-              />
-
-              <p className="pw-mt-1 pw-text-sm pw-text-red-500 pw-mb-4">
-                {cpfError ? 'CPF ou CNPJ inválido' : ''}
-              </p>
-            </>
-          ) : null}
-
+        <div className="pw-w-full lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
           <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
             Resumo da compra
           </p>
