@@ -124,6 +124,7 @@ const _CheckoutInfo = ({
       }
     } else {
       const preview = productCache;
+      setCurrencyIdState(preview?.currencyId);
       if (preview) {
         setOrderPreview({
           products: [...preview.products],

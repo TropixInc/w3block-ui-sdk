@@ -54,15 +54,15 @@ const getPlaceholder = (type: INPUTS_POSSIBLE) => {
     case INPUTS_POSSIBLE.credit_card_ccv:
       return 'CCV';
     case INPUTS_POSSIBLE.credit_card_holder_name:
-      return 'Nome do titular';
+      return 'Nome do titular do cartão';
     case INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj:
-      return 'CPF/CNPJ do titular';
+      return 'CPF/CNPJ do titular do cartão';
     case INPUTS_POSSIBLE.credit_card_holder_phone:
-      return 'Telefone do titular';
+      return 'Telefone do titular do cartão';
     case INPUTS_POSSIBLE.credit_card_holder_postal_code:
-      return 'CEP do titular';
+      return 'CEP do titular do cartão';
     case INPUTS_POSSIBLE.cpf_cnpj:
-      return 'CPF/CNPJ';
+      return 'CPF/CNPJ do usuário';
     default:
       return '';
   }

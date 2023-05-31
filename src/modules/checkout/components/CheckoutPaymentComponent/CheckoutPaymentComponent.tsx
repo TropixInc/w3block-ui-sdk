@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Cards from 'react-credit-cards-2';
 
+import { cpf, cnpj } from 'cpf-cnpj-validator';
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
@@ -11,7 +12,7 @@ interface CheckoutPaymentComponentProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (value: any) => void;
   title?: string;
-  onConcluded?: () => void;
+  onConcluded?: (val: any) => void;
   buttonText?: string;
   loading?: boolean;
 }
@@ -38,6 +39,7 @@ export const CheckoutPaymentComponent = ({
 }: CheckoutPaymentComponentProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [value, setValue] = useState<any>({});
+  const [sameCpf, setSameCpf] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [errors, setErrors] = useState<any>({});
   const inputsObj = useMemo(
@@ -49,6 +51,13 @@ export const CheckoutPaymentComponent = ({
       }, {} as any),
     [inputs]
   );
+
+  const includeTwoCpfs = useMemo(() => {
+    return (
+      inputs.includes(INPUTS_POSSIBLE.cpf_cnpj) &&
+      inputs.includes(INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj)
+    );
+  }, [inputs]);
 
   const validateBeforeProcced = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,7 +109,8 @@ export const CheckoutPaymentComponent = ({
         return false;
       } else if (
         input == INPUTS_POSSIBLE.cpf_cnpj &&
-        !isValidCpfOrCnpj(value[input] ?? '')
+        !isValidCpfOrCnpj(value[input] ?? '') &&
+        !sameCpf
       ) {
         validatedErrors[input] = 'Cpf ou CNPJ inválido';
         return false;
@@ -110,7 +120,25 @@ export const CheckoutPaymentComponent = ({
       setErrors(validatedErrors);
     } else {
       setErrors({});
-      onConcluded?.();
+      if (includeTwoCpfs && sameCpf) {
+        setValue({
+          ...value,
+          [INPUTS_POSSIBLE.cpf_cnpj]:
+            value[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj],
+        });
+        onChange?.({
+          ...value,
+          [INPUTS_POSSIBLE.cpf_cnpj]:
+            value[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj],
+        });
+        onConcluded?.({
+          ...value,
+          [INPUTS_POSSIBLE.cpf_cnpj]:
+            value[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj],
+        });
+      } else {
+        onConcluded?.(value);
+      }
     }
   };
 
@@ -154,11 +182,20 @@ export const CheckoutPaymentComponent = ({
         input !== INPUTS_POSSIBLE.credit_card_ccv &&
         input !== INPUTS_POSSIBLE.credit_card_holder_name
       ) {
-        acc[input] = inputsObj[input];
+        if (
+          includeTwoCpfs &&
+          input !== INPUTS_POSSIBLE.cpf_cnpj &&
+          input !== INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj
+        ) {
+          acc[input] = inputsObj[input];
+        } else if (!includeTwoCpfs) {
+          acc[input] = inputsObj[input];
+        }
       }
       return acc;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }, {} as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputsObj]);
 
   return (
@@ -244,7 +281,7 @@ export const CheckoutPaymentComponent = ({
           </div>
         </div>
       )}
-      <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-6">
+      <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
         {Object.keys(otherInputs).map((input) => {
           return input != INPUTS_POSSIBLE.transparent_checkout ? (
             <CheckoutCustomizableInput
@@ -264,6 +301,59 @@ export const CheckoutPaymentComponent = ({
           ) : null;
         })}
       </div>
+      {includeTwoCpfs && (
+        <div className="pw-flex pw-flex-col  pw-gap-4 pw-mt-4">
+          <CheckoutCustomizableInput
+            readonly={loading}
+            errors={errors[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]}
+            key={INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj}
+            onChange={(val) => {
+              setErrors({
+                ...errors,
+                [INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]: '',
+              });
+              setValue({
+                ...value,
+                [INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]: val,
+              });
+            }}
+            value={value[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj] ?? ''}
+            type={INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj}
+          />
+          <div className="pw-flex pw-gap-3 pw-items-center">
+            <div
+              onClick={() => setSameCpf(!sameCpf)}
+              className="pw-flex pw-w-[15px] pw-h-[15px] pw-rounded-sm pw-border-slate-400 pw-border pw-justify-center pw-items-center"
+            >
+              {sameCpf && (
+                <div className="pw-w-[10px] pw-h-[10px] pw-bg-blue-600 pw-rounded-sm"></div>
+              )}
+            </div>
+            <p className="pw-text-sm pw-text-slate-600">
+              O cpf do comprador é o mesmo do titular do cartão
+            </p>
+          </div>
+          {!sameCpf && (
+            <CheckoutCustomizableInput
+              readonly={loading}
+              errors={errors[INPUTS_POSSIBLE.cpf_cnpj]}
+              key={INPUTS_POSSIBLE.cpf_cnpj}
+              onChange={(val) => {
+                setErrors({
+                  ...errors,
+                  [INPUTS_POSSIBLE.cpf_cnpj]: '',
+                });
+                setValue({
+                  ...value,
+                  [INPUTS_POSSIBLE.cpf_cnpj]: val,
+                });
+              }}
+              value={value[INPUTS_POSSIBLE.cpf_cnpj] ?? ''}
+              type={INPUTS_POSSIBLE.cpf_cnpj}
+            />
+          )}
+        </div>
+      )}
       <div className="pw-flex pw-justify-end pw-mt-6">
         <WeblockButton
           disabled={loading}
@@ -322,7 +412,12 @@ function isValidCCV(ccv: string): boolean {
 function isValidCpfOrCnpj(cpfOrCnpj: string): boolean {
   const cpfRegEx = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
   const cnpjRegEx = /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/;
-  return cpfRegEx.test(cpfOrCnpj) || cnpjRegEx.test(cpfOrCnpj);
+  const isValidCPF = cpf.isValid(cpfOrCnpj);
+  const isValidCNPJ = cnpj.isValid(cpfOrCnpj);
+  return (
+    (cpfRegEx.test(cpfOrCnpj) && isValidCPF) ||
+    (cnpjRegEx.test(cpfOrCnpj) && isValidCNPJ)
+  );
 }
 
 function isValidPostalCode(postalCode: string): boolean {

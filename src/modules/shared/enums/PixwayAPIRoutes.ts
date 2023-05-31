@@ -63,4 +63,5 @@ export enum PixwayAPIRoutes {
   USER_INTEGRATIONS = '/tenant-user-integration/{tenantId}/accepted',
   TENANT_BY_HOSTNAME = 'public-tenant/by-hostname',
   PRODUCT_BY_ID = '/companies/{companyId}/products/{productId}',
+  ORDER_BY_ID = '/companies/{companyId}/orders/{orderId}',
 }

@@ -29,13 +29,20 @@ import { CheckouResume } from '../CheckoutResume/CheckoutResume';
 import { CheckoutStripeForm } from '../CheckoutStripeForm/CheckoutStripeForm';
 
 export const CheckoutPayment = () => {
-  const { createOrder: createOrderHook, getOrderPreview } = useCheckout();
-  const [inputsValue, setInputsValue] = useState<any>({});
+  const {
+    createOrder: createOrderHook,
+    getOrderPreview,
+    getStatus,
+  } = useCheckout();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [, setInputsValue] = useState<any>({});
   const [pixImage, setPixImage] = useState<string>();
   const [pixPayload, setPixPayload] = useState<string>();
+  const [poolStatus, setPoolStatus] = useState<boolean>(false);
   const [myOrderPreview, setMyOrderPreview] =
     useState<OrderPreviewResponse | null>();
   const [stayPooling, setStayPooling] = useState<boolean>(true);
+  const [orderId, setOrderId] = useState<string>();
   const [isStripe, setIsStripe] = useState('');
   const [stripeKey, setStripeKey] = useState('');
   const iframeRef = useRef(null);
@@ -62,11 +69,37 @@ export const CheckoutPayment = () => {
         setLoading(false);
       } else {
         setStayPooling(false);
-        createOrder();
+        createOrder({});
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myOrderPreview, productCache]);
+
+  useEffect(() => {
+    if (poolStatus && orderId) {
+      validatePixStatus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolStatus]);
+
+  const validatePixStatus = async () => {
+    if (poolStatus && orderId) {
+      const interval = setInterval(() => {
+        getStatus.mutate(
+          { companyId, orderId },
+          {
+            onSuccess: (data: CreateOrderResponse) => {
+              if (data.status != 'pending') {
+                clearInterval(interval);
+                setPoolStatus(false);
+                router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
+              }
+            },
+          }
+        );
+      }, 3000);
+    }
+  };
 
   useEffect(() => {
     if (productCache) {
@@ -84,7 +117,8 @@ export const CheckoutPayment = () => {
           companyId,
         },
         {
-          onSuccess(data, _, __) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onSuccess(data: any) {
             setMyOrderPreview(data);
           },
         }
@@ -96,7 +130,8 @@ export const CheckoutPayment = () => {
     orderPreview();
   }, 20000);
 
-  const createOrder = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const createOrder = (val: any) => {
     setLoading(true);
     const orderInfo = productCache;
     if (orderInfo && !iframeLink && !sending && session && profile) {
@@ -111,7 +146,7 @@ export const CheckoutPayment = () => {
             paymentMethod: orderInfo.choosedPayment?.paymentMethod,
             providerInputs: orderInfo.choosedPayment?.inputs
               ? {
-                  ...inputsValue,
+                  ...val,
                   transparent_checkout:
                     orderInfo.choosedPayment?.inputs?.includes(
                       'transparent_checkout'
@@ -140,6 +175,8 @@ export const CheckoutPayment = () => {
                 if ('pix' in data.paymentInfo) {
                   setPixImage(data.paymentInfo.pix?.encodedImage ?? '');
                   setPixPayload(data.paymentInfo.pix?.payload ?? '');
+                  setPoolStatus(true);
+                  setOrderId(data.id);
                 }
 
                 setIframeLink(data.paymentInfo.paymentUrl ?? '');
@@ -166,8 +203,9 @@ export const CheckoutPayment = () => {
     } else return null;
   }, [isStripe, stripeKey]);
 
-  const concluded = () => {
-    createOrder();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const concluded = (val: any) => {
+    createOrder(val);
   };
 
   const WichPaymentMethod = () => {
@@ -183,7 +221,11 @@ export const CheckoutPayment = () => {
                   : 'Finalizar compra'
               }
               onChange={setInputsValue}
-              onConcluded={() => concluded()}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              onConcluded={(val: any) => {
+                setInputsValue(val);
+                concluded(val);
+              }}
               title="Informações para pagamento"
               inputs={productCache.choosedPayment.inputs as INPUTS_POSSIBLE[]}
             />
