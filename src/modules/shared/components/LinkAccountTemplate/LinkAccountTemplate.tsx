@@ -73,28 +73,23 @@ const _LinkAccountTemplate = () => {
       case Steps.SUCCESS:
         return (
           <>
-            <p className="pw-text-black pw-font-medium pw-text-xl">
-              Pronto, agora sua conta está vinculada! Agora tokens adquiridos na
-              sua conta <b>{toTenantName}</b> lhe darão acesso a ofertas
-              exclusivas na sua conta <b>{fromTenantName}</b>.
-            </p>
             {productId != '' ? (
               userHasProduct ? (
                 <p className="pw-text-black pw-font-medium pw-text-xl">
-                  Você já possui o token necessário para realizar a compra em{' '}
-                  <b>{fromTenantName}</b>, já pode retornar a janela anterior e
-                  continuar com a sua compra!
+                  Pronto, agora sua conta está vinculada! Você já possui o token
+                  necessário para realizar a compra em <b>{fromTenantName}</b>,
+                  já pode retornar a janela anterior e continuar com a sua
+                  compra!
                 </p>
               ) : (
-                <p className="pw-text-black pw-font-medium pw-text-xl">
-                  Você ainda não possui o token necessário para finalizar a
-                  compra em <b>{fromTenantName}</b>, em alguns segundos você
-                  será redirecionado para a página do produto para que possa
-                  adquiri-lo!
-                </p>
+                <Spinner className="pw-mx-auto" />
               )
             ) : (
-              ''
+              <p className="pw-text-black pw-font-medium pw-text-xl">
+                Pronto, agora sua conta está vinculada! Agora tokens adquiridos
+                na sua conta <b>{toTenantName}</b> lhe darão acesso a ofertas
+                exclusivas na sua conta <b>{fromTenantName}</b>.
+              </p>
             )}
             <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
               <button
@@ -111,7 +106,7 @@ const _LinkAccountTemplate = () => {
           <>
             <p className="pw-text-black pw-font-medium pw-text-xl pw-text-center">
               Tem certeza que deseja vincular sua conta <b>{fromTenantName}</b>{' '}
-              (email: {fromEmail}) a sua conta <b>{toTenantName}</b> (email:{' '}
+              (email: {fromEmail}) à sua conta <b>{toTenantName}</b> (email:{' '}
               {profile?.data?.email}
               )?
             </p>
@@ -142,16 +137,15 @@ const _LinkAccountTemplate = () => {
           setSteps(Steps.ERROR);
         },
         onSuccess() {
-          setSteps(Steps.SUCCESS);
           if (productId != '' && !userHasProduct) {
-            setTimeout(() => {
-              router.pushConnect(
-                PixwayAppRoutes.PRODUCT_PAGE.replace(
-                  '{slug}',
-                  product?.slug ?? ''
-                )
-              );
-            }, 5000);
+            router.pushConnect(
+              PixwayAppRoutes.PRODUCT_PAGE.replace(
+                '{slug}',
+                product?.slug ?? ''
+              )
+            );
+          } else {
+            setSteps(Steps.SUCCESS);
           }
         },
       }
