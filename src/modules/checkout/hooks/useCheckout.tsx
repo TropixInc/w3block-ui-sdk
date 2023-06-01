@@ -96,7 +96,7 @@ export const useCheckout = () => {
         .get(
           PixwayAPIRoutes.ORDER_BY_ID.replace('{orderId}', orderId).replace(
             '{companyId}',
-            companyId
+            companyId + '?fetchNewestStatus=true'
           )
         )
         .then((res): CreateOrderResponse => {

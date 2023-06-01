@@ -248,7 +248,7 @@ export const CheckoutPayment = () => {
                   {pixPayload && (
                     <>
                       <p className="pw-text-center pw-text-xs pw-text-slate-600">
-                        caso prefira copie o código abaixo
+                        Caso prefira copie o código abaixo
                       </p>
                       <p
                         onClick={() => copyClp(pixPayload)}
