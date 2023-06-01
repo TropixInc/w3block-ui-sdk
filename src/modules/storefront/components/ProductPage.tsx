@@ -160,22 +160,37 @@ export const ProductPage = ({
     host: string;
   }) => {
     if (user) {
-      createIntegrationToken(toTenantId ?? '', {
-        onSuccess(data) {
-          openNewWindow(
-            `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
-          );
-          if (!openNewWindow) {
-            setTimeout(() => {
-              window.open(
-                `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
-                '_blank',
-                'noreferrer'
-              );
-            });
-          }
-        },
-      });
+      if (userHasIntegration) {
+        openNewWindow(
+          `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
+        );
+        if (!openNewWindow) {
+          setTimeout(() => {
+            window.open(
+              `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
+              '_blank',
+              'noreferrer'
+            );
+          });
+        }
+      } else {
+        createIntegrationToken(toTenantId ?? '', {
+          onSuccess(data) {
+            openNewWindow(
+              `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
+            );
+            if (!openNewWindow) {
+              setTimeout(() => {
+                window.open(
+                  `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
+                  '_blank',
+                  'noreferrer'
+                );
+              });
+            }
+          },
+        });
+      }
     } else {
       pushConnect(PixwayAppRoutes.SIGN_IN, {
         callbackPath: window.location.href,
@@ -384,21 +399,87 @@ export const ProductPage = ({
                     </div>
                   </>
                 ) : null}
-                {actionButton && (
-                  <div className="pw-flex pw-flex-col">
-                    {!currencyId?.crypto && hasCart ? (
+                {product?.requirements &&
+                !product?.canPurchase &&
+                product?.stockAmount != 0 ? (
+                  <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-w-full pw-mt-5">
+                    <p className="pw-text-base pw-font-poppins pw-font-medium pw-text-black">
+                      {product.requirements.requirementDescription}
+                    </p>
+                    <button
+                      onClick={() =>
+                        handleTenantIntegration({
+                          host:
+                            toTenant?.hosts.find(
+                              (value) => value.isMain === true
+                            )?.hostname ?? '',
+                          toTenantName: toTenant?.name ?? '',
+                          toTenantId: toTenant?.id ?? '',
+                        })
+                      }
+                      style={{
+                        backgroundColor: '#0050FF',
+                        color: 'white',
+                      }}
+                      className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                    >
+                      {product?.requirements?.requirementCTALabel}
+                    </button>
+                  </div>
+                ) : (
+                  actionButton && (
+                    <div className="pw-flex pw-flex-col">
+                      {!currencyId?.crypto && hasCart ? (
+                        <button
+                          disabled={
+                            product?.stockAmount == 0 ||
+                            product?.canPurchaseAmount == 0 ||
+                            currencyId?.crypto
+                          }
+                          onClick={addToCart}
+                          style={{
+                            backgroundColor: 'none',
+                            borderColor:
+                              product &&
+                              (product?.stockAmount == 0 ||
+                                product?.canPurchaseAmount == 0)
+                                ? '#DCDCDC'
+                                : buttonColor
+                                ? buttonColor
+                                : '#0050FF',
+                            color:
+                              product &&
+                              (product?.stockAmount == 0 ||
+                                product?.canPurchaseAmount == 0)
+                                ? '#777E8F'
+                                : buttonColor ?? '#0050FF',
+                          }}
+                          className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                        >
+                          {cart.some((p) => p.id == product?.id)
+                            ? 'Remover do carrinho'
+                            : 'Adicionar ao carrinho'}
+                        </button>
+                      ) : null}
                       <button
                         disabled={
                           product?.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0 ||
-                          currencyId?.crypto
+                          product?.canPurchaseAmount == 0
                         }
-                        onClick={addToCart}
+                        onClick={() => {
+                          if (product?.id && product.prices) {
+                            pushConnect(
+                              PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                                `?productIds=${Array(quantity)
+                                  .fill(product.id)
+                                  .join(',')}&currencyId=${currencyId?.id}`
+                            );
+                          }
+                        }}
                         style={{
-                          backgroundColor: 'none',
-                          borderColor:
+                          backgroundColor:
                             product &&
-                            (product?.stockAmount == 0 ||
+                            (product.stockAmount == 0 ||
                               product?.canPurchaseAmount == 0)
                               ? '#DCDCDC'
                               : buttonColor
@@ -406,54 +487,17 @@ export const ProductPage = ({
                               : '#0050FF',
                           color:
                             product &&
-                            (product?.stockAmount == 0 ||
+                            (product.stockAmount == 0 ||
                               product?.canPurchaseAmount == 0)
                               ? '#777E8F'
-                              : buttonColor ?? '#0050FF',
+                              : buttonTextColor ?? 'white',
                         }}
-                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
-                        {cart.some((p) => p.id == product?.id)
-                          ? 'Remover do carrinho'
-                          : 'Adicionar ao carrinho'}
+                        {buttonText ?? 'Comprar agora'}
                       </button>
-                    ) : null}
-                    <button
-                      disabled={
-                        product?.stockAmount == 0 ||
-                        product?.canPurchaseAmount == 0
-                      }
-                      onClick={() => {
-                        if (product?.id && product.prices) {
-                          pushConnect(
-                            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                              `?productIds=${Array(quantity)
-                                .fill(product.id)
-                                .join(',')}&currencyId=${currencyId?.id}`
-                          );
-                        }
-                      }}
-                      style={{
-                        backgroundColor:
-                          product &&
-                          (product.stockAmount == 0 ||
-                            product?.canPurchaseAmount == 0)
-                            ? '#DCDCDC'
-                            : buttonColor
-                            ? buttonColor
-                            : '#0050FF',
-                        color:
-                          product &&
-                          (product.stockAmount == 0 ||
-                            product?.canPurchaseAmount == 0)
-                            ? '#777E8F'
-                            : buttonTextColor ?? 'white',
-                      }}
-                      className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-                    >
-                      {buttonText ?? 'Comprar agora'}
-                    </button>
-                  </div>
+                    </div>
+                  )
                 )}
                 {product?.prices.find(
                   (price: any) => price.currencyId == currencyId?.id
@@ -480,31 +524,6 @@ export const ProductPage = ({
                 )}
               </div>
             </div>
-            {product?.requirements && !userHasIntegration && (
-              <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full pw-mt-5">
-                <p className="pw-text-base pw-font-poppins pw-font-medium">
-                  Integração necessária com:
-                </p>
-                <div className="pw-flex pw-gap-3">
-                  <button
-                    key={toTenant?.name}
-                    onClick={() =>
-                      handleTenantIntegration({
-                        host:
-                          toTenant?.hosts.find((value) => value.isMain === true)
-                            ?.hostname ?? '',
-                        toTenantName: toTenant?.name ?? '',
-                        toTenantId: toTenant?.id ?? '',
-                      })
-                    }
-                    disabled={userHasIntegration}
-                    className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black disabled:pw-border-gray-500 disabled:pw-text-gray-700 disabled:pw-shadow-[0_2px_4px_rgb(107,114,128)] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-                  >
-                    {toTenant?.name}
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
           <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-11 pw-w-full pw-mt-6">
             {showDescription && (

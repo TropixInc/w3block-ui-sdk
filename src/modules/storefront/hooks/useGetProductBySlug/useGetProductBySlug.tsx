@@ -57,6 +57,8 @@ export interface Product {
     companyId: string;
     keyCollectionId: string;
     productId: string;
+    requirementCTALabel: string;
+    requirementDescription: string;
   };
 }
 
