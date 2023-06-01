@@ -18,6 +18,7 @@ export enum OrderStatusEnum {
   CONCLUDED = 'concluded',
   FAILED = 'failed',
   DELIVERING = 'delivering',
+  WAITING_DELIERY = 'waiting_delivery',
   CANCELLED = 'cancelled',
 }
 
@@ -49,7 +50,8 @@ export const OrderCardComponentSDK = ({
             style={{ color: statusObj?.color }}
             className="pw-text-sm pw-font-bold pw-flex pw-gap-1"
           >
-            <span>{statusObj?.icon}</span>
+            {statusObj?.icon && <span>{statusObj?.icon}</span>}
+
             {statusObj?.title}
             {paymentProvider == 'crypto' &&
               status == OrderStatusEnum.PENDING && (
@@ -183,6 +185,8 @@ const getStatusText = (status: OrderStatusEnum) => {
     case OrderStatusEnum.CONFIRMING_PAYMENT:
       return { title: 'Confirmando o pagamento', color: '#295BA6' };
     case OrderStatusEnum.DELIVERING:
+      return { title: 'Entregando', color: '#295BA6' };
+    case OrderStatusEnum.WAITING_DELIERY:
       return { title: 'Entregando', color: '#295BA6' };
     case OrderStatusEnum.EXPIRED:
       return {

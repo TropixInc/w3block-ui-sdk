@@ -30,8 +30,15 @@ export const CheckoutCustomizableInput = ({
       ) : (
         <InputMask
           readOnly={readonly}
-          maskChar={' '}
-          mask={getMask(type)}
+          maskChar={''}
+          mask={
+            type == INPUTS_POSSIBLE.cpf_cnpj ||
+            type == INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj
+              ? value.length < 15
+                ? '999.999.999-999'
+                : '99.999.999/9999-99'
+              : getMask(type)
+          }
           placeholder={getPlaceholder(type)}
           className="pw-full pw-border pw-border-slate-300 pw-rounded-lg pw-p-3 pw-text-sm pw-text-slate-700 pw-w-full"
           value={value}

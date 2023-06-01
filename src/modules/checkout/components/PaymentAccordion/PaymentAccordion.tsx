@@ -83,7 +83,7 @@ const mapPaymentMethodToTextAndDescription = (method: string) => {
       return {
         text: 'Pix',
         description:
-          'O código Pix gerado para o pagamento é válido por 30 minutos após a finalização do pedido.',
+          'O código Pix gerado para o pagamento é válido por 15 minutos após a finalização do pedido.',
       };
     default:
       return {

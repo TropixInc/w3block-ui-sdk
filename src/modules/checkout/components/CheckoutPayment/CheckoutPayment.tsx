@@ -4,7 +4,7 @@ import { useCopyToClipboard, useInterval, useLocalStorage } from 'react-use';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import { ErrorMessage, useProfile } from '../../../shared';
+import { useProfile } from '../../../shared';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -27,6 +27,7 @@ import {
 } from '../CheckoutPaymentComponent/CheckoutPaymentComponent';
 import { CheckouResume } from '../CheckoutResume/CheckoutResume';
 import { CheckoutStripeForm } from '../CheckoutStripeForm/CheckoutStripeForm';
+import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
 
 export const CheckoutPayment = () => {
   const {
@@ -49,7 +50,7 @@ export const CheckoutPayment = () => {
   const router = useRouterConnect();
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
-  const [requestError, setRequestError] = useState(false);
+  const [requestError, setRequestError] = useState<string>();
   const profile = useProfile();
   const [sending, setSending] = useState<boolean>(false);
   const { companyId, appBaseUrl } = useCompanyConfig();
@@ -187,12 +188,12 @@ export const CheckoutPayment = () => {
               setCart([]);
             }
           },
-          onError: () => {
-            setRequestError(true);
+          onError: (err: any) => {
+            setRequestError(err.message.toString());
           },
         }
       );
-    } else setRequestError(true);
+    } else setRequestError('Token inválido ou expirado.');
   };
 
   const [_, copyClp] = useCopyToClipboard();
@@ -245,25 +246,18 @@ export const CheckoutPayment = () => {
                     <img src={`data:image/png;base64, ${pixImage}`} />
                   )}
                   {pixPayload && (
-                    <p
-                      onClick={() => copyClp(pixPayload)}
-                      className="pw-text-center pw-text-brand-primary pw-text-xs pw-cursor-pointer pw-px-6 pw-mb-8 hover:pw-font-[900] pw-break-all"
-                    >
-                      {pixPayload}
-                    </p>
+                    <>
+                      <p className="pw-text-center pw-text-xs pw-text-slate-600">
+                        caso prefira copie o código abaixo
+                      </p>
+                      <p
+                        onClick={() => copyClp(pixPayload)}
+                        className="pw-text-center pw-text-brand-primary pw-text-xs pw-cursor-pointer pw-px-6 pw-mb-8 hover:pw-font-[900] pw-break-all"
+                      >
+                        {pixPayload}
+                      </p>
+                    </>
                   )}
-                  <p className="pw-text-center pw-text-xs pw-text-slate-600">
-                    Caso não consiga visualizar o QR code acima acesse o link
-                    abaixo para finalizar o pagamento
-                  </p>
-                  <a
-                    className="pw-mt-2 pw-text-xs pw-text-center pw-font-bold pw-text-brand-primary pw-underline"
-                    target="_blank"
-                    href={iframeLink}
-                    rel="noreferrer"
-                  >
-                    {iframeLink}
-                  </a>
                 </div>
               </div>
             </div>
@@ -338,15 +332,19 @@ export const CheckoutPayment = () => {
             />
           </div>
           <div className="pw-order-2 sm:pw-order-1 pw-flex-1">
-            {requestError ? (
+            {requestError && requestError != '' ? (
               <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
                 <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center pw-mx-auto">
                   <p className="pw-font-bold pw-text-black pw-text-center pw-mb-6">
                     Houve um erro de comunicação com o servidor, entre em
                     contato com nosso suporte.
                   </p>
+                  <ErrorMessage
+                    title={requestError.toString()}
+                    message="Caso o problema persista entre em contato com o suporte"
+                  />
                   <WeblockButton
-                    className="pw-text-white"
+                    className="pw-text-white pw-mt-4"
                     onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
                   >
                     Voltar para a home

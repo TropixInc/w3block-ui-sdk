@@ -39,7 +39,7 @@ export const CheckoutPaymentComponent = ({
 }: CheckoutPaymentComponentProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [value, setValue] = useState<any>({});
-  const [sameCpf, setSameCpf] = useState(false);
+  const [sameCpf, setSameCpf] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [errors, setErrors] = useState<any>({});
   const inputsObj = useMemo(
@@ -325,12 +325,12 @@ export const CheckoutPaymentComponent = ({
               onClick={() => setSameCpf(!sameCpf)}
               className="pw-flex pw-w-[15px] pw-h-[15px] pw-rounded-sm pw-border-slate-400 pw-border pw-justify-center pw-items-center"
             >
-              {sameCpf && (
+              {!sameCpf && (
                 <div className="pw-w-[10px] pw-h-[10px] pw-bg-blue-600 pw-rounded-sm"></div>
               )}
             </div>
             <p className="pw-text-sm pw-text-slate-600">
-              O cpf do comprador é o mesmo do titular do cartão
+              O CPF do comprador é diferente do titular do cartão
             </p>
           </div>
           {!sameCpf && (
