@@ -17,17 +17,6 @@ export const CriptoValueComponent = ({
   fontClass?: string;
   crypto?: boolean;
 }) => {
-  const currencyLocales: CurrencyObjectType = {
-    BRL: 'pt-BR',
-    USD: 'en-US',
-  };
-
-  const formatterCurrency = (): Intl.NumberFormat => {
-    return Intl.NumberFormat(currencyLocales[code ?? 'BRL'], {
-      style: 'currency',
-      currency: code || 'BRL',
-    });
-  };
   const getIcon = () => {
     switch (code) {
       case CurrencyEnum.ETHEREUM:
@@ -53,8 +42,20 @@ export const CriptoValueComponent = ({
       <p className={`pw-font-semibold pw-text-black ${fontClass}`}>
         {crypto
           ? getCryptoValueByCode()
-          : formatterCurrency().format(Number(value))}
+          : formatterCurrency(code ?? 'BRL').format(Number(value))}
       </p>
     </div>
   );
+};
+
+export const formatterCurrency = (code: string): Intl.NumberFormat => {
+  return Intl.NumberFormat(currencyLocales[code ?? 'BRL'], {
+    style: 'currency',
+    currency: code || 'BRL',
+  });
+};
+
+export const currencyLocales: CurrencyObjectType = {
+  BRL: 'pt-BR',
+  USD: 'en-US',
 };

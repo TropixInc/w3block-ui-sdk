@@ -3,18 +3,26 @@ import { useEffect, useMemo, useState } from 'react';
 import Cards from 'react-credit-cards-2';
 
 import { cpf, cnpj } from 'cpf-cnpj-validator';
-import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
+import 'react-credit-cards-2/dist/es/styles-compiled.css';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+import { AvailableInstallmentInfo } from '../../interface/interface';
 import { CheckoutCustomizableInput } from '../CheckoutCustomizableInput/CheckoutCustomizableInput';
+import { CheckoutInstalments } from '../CheckoutInstallments/CheckoutInstalments';
+import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
 interface CheckoutPaymentComponentProps {
   inputs: INPUTS_POSSIBLE[];
+  installments?: AvailableInstallmentInfo[];
+  setInstallment?: (installments: AvailableInstallmentInfo) => void;
+  instalment?: AvailableInstallmentInfo;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (value: any) => void;
   title?: string;
   onConcluded?: (val: any) => void;
   buttonText?: string;
   loading?: boolean;
+  error?: string;
+  currency?: string;
 }
 
 export enum INPUTS_POSSIBLE {
@@ -27,15 +35,21 @@ export enum INPUTS_POSSIBLE {
   credit_card_holder_cpf_cnpj = 'credit_card_holder_cpf_cnpj',
   credit_card_holder_postal_code = 'credit_card_holder_postal_code',
   credit_card_holder_phone = 'credit_card_holder_phone',
+  installments = 'installments',
 }
 
 export const CheckoutPaymentComponent = ({
   inputs,
   onChange,
   onConcluded,
+  currency,
   title,
+  error,
   buttonText = 'Finalizar compra',
   loading = false,
+  setInstallment,
+  installments,
+  instalment,
 }: CheckoutPaymentComponentProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [value, setValue] = useState<any>({});
@@ -180,7 +194,8 @@ export const CheckoutPaymentComponent = ({
         input !== INPUTS_POSSIBLE.credit_card_number &&
         input !== INPUTS_POSSIBLE.credit_card_expiry &&
         input !== INPUTS_POSSIBLE.credit_card_ccv &&
-        input !== INPUTS_POSSIBLE.credit_card_holder_name
+        input !== INPUTS_POSSIBLE.credit_card_holder_name &&
+        input !== INPUTS_POSSIBLE.installments
       ) {
         if (
           includeTwoCpfs &&
@@ -282,6 +297,21 @@ export const CheckoutPaymentComponent = ({
         </div>
       )}
       <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
+        {installments && installments.length > 0 && (
+          <CheckoutInstalments
+            installments={installments}
+            value={instalment}
+            currency={currency}
+            setInstallment={(install) => {
+              setValue({
+                ...value,
+                [INPUTS_POSSIBLE.installments]: install?.amount ?? 1,
+              });
+              setInstallment?.(install);
+            }}
+          />
+        )}
+
         {Object.keys(otherInputs).map((input) => {
           return input != INPUTS_POSSIBLE.transparent_checkout ? (
             <CheckoutCustomizableInput
@@ -354,6 +384,9 @@ export const CheckoutPaymentComponent = ({
           )}
         </div>
       )}
+      {error && error != '' ? (
+        <ErrorMessage className="pw-mt-4" title={error} />
+      ) : null}
       <div className="pw-flex pw-justify-end pw-mt-6">
         <WeblockButton
           disabled={loading}

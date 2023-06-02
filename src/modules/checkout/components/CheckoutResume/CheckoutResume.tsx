@@ -26,6 +26,10 @@ export const CheckouResume = ({
           image={product.images[0].thumb}
           name={product.name}
           id={product.id}
+          currency={
+            product.prices.find((price) => price.currencyId == currencyId)
+              ?.currency.symbol ?? 'R$'
+          }
           price={
             product.prices.find((price) => price.currencyId == currencyId)
               ?.amount ?? '0'

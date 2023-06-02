@@ -17,6 +17,7 @@ import { PaymentMethod } from '../../enum';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
+  AvailableInstallmentInfo,
   CreateOrderResponse,
   OrderPreviewCache,
   OrderPreviewResponse,
@@ -61,12 +62,18 @@ export const CheckoutPayment = () => {
   const { setCart } = useCart();
   const { data: session } = usePixwaySession();
   const [query] = useState('');
-
+  const [installment, setInstallment] = useState<AvailableInstallmentInfo>();
   useEffect(() => {
     if (myOrderPreview && productCache) {
       if (
         productCache?.choosedPayment?.paymentProvider == PaymentMethod.ASAAS
       ) {
+        if (!installment) {
+          setInstallment(
+            productCache.choosedPayment?.availableInstallments?.[0]
+          );
+        }
+
         setLoading(false);
       } else {
         setStayPooling(false);
@@ -137,6 +144,16 @@ export const CheckoutPayment = () => {
     const orderInfo = productCache;
     if (orderInfo && !iframeLink && !sending && session && profile) {
       setSending(true);
+      const inputs = { ...val };
+      if (
+        !(INPUTS_POSSIBLE.installments in val) &&
+        productCache.choosedPayment?.inputs.includes(
+          INPUTS_POSSIBLE.installments
+        )
+      ) {
+        inputs[INPUTS_POSSIBLE.installments] = installment?.amount ?? 1;
+      }
+
       createOrderHook.mutate(
         {
           companyId,
@@ -147,7 +164,7 @@ export const CheckoutPayment = () => {
             paymentMethod: orderInfo.choosedPayment?.paymentMethod,
             providerInputs: orderInfo.choosedPayment?.inputs
               ? {
-                  ...val,
+                  ...inputs,
                   transparent_checkout:
                     orderInfo.choosedPayment?.inputs?.includes(
                       'transparent_checkout'
@@ -189,6 +206,8 @@ export const CheckoutPayment = () => {
             }
           },
           onError: (err: any) => {
+            setSending(false);
+            setLoading(false);
             setRequestError(err.message.toString());
           },
         }
@@ -215,13 +234,25 @@ export const CheckoutPayment = () => {
         <div className="pw-container pw-mx-auto pw-h-full pw-px-0 sm:pw-px-4">
           {!iframeLink ? (
             <CheckoutPaymentComponent
+              currency={
+                productCache.products[0].prices.find(
+                  (price) => price.currencyId == productCache.currencyId
+                )?.currency.name ?? 'BRL'
+              }
+              installments={productCache.choosedPayment?.availableInstallments}
+              instalment={installment}
+              setInstallment={(val) => setInstallment(val)}
               loading={loading}
+              error={requestError?.replaceAll(';', '\n')}
               buttonText={
                 productCache.choosedPayment.paymentMethod == 'pix'
                   ? 'Gerar link'
                   : 'Finalizar compra'
               }
-              onChange={setInputsValue}
+              onChange={(val) => {
+                setInputsValue(val);
+                setRequestError('');
+              }}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               onConcluded={(val: any) => {
                 setInputsValue(val);
@@ -332,7 +363,10 @@ export const CheckoutPayment = () => {
             />
           </div>
           <div className="pw-order-2 sm:pw-order-1 pw-flex-1">
-            {requestError && requestError != '' ? (
+            {productCache?.choosedPayment?.paymentProvider !=
+              PaymentMethod.ASAAS &&
+            requestError &&
+            requestError != '' ? (
               <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
                 <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center pw-mx-auto">
                   <p className="pw-font-bold pw-text-black pw-text-center pw-mb-6">

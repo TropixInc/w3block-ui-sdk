@@ -15,7 +15,8 @@ export const PaymentAccordion = ({
   setSelected,
 }: PaymentAccordionProps) => {
   const { text, description } = mapPaymentMethodToTextAndDescription(
-    method.paymentMethod
+    method.paymentMethod,
+    method.availableInstallments?.length ?? 0
   );
 
   const MapPayementToIcon = () => {
@@ -61,12 +62,18 @@ export const PaymentAccordion = ({
   );
 };
 
-const mapPaymentMethodToTextAndDescription = (method: string) => {
+const mapPaymentMethodToTextAndDescription = (
+  method: string,
+  installments?: number
+) => {
   switch (method) {
     case 'credit_card':
       return {
         text: 'Cartão de crédito',
-        description: 'Nós acetamos diferentes bandeiras de cartão',
+        description:
+          'Nós acetamos diferentes bandeiras de cartão' +
+          (installments && installments > 0 ? ` em até ${installments}x` : '') +
+          '.',
       };
     case 'crypto':
       return {

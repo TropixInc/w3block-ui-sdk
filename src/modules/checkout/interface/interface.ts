@@ -54,10 +54,17 @@ export interface createOrderResponse {
   totalAmount: string;
 }
 
+export interface AvailableInstallmentInfo {
+  amount: number;
+  finalPrice: string;
+  interest?: number;
+  installmentPrice: number;
+}
 export interface PaymentMethodsAvaiable {
   paymentMethod: string;
   paymentProvider: string;
   inputs: string[];
+  availableInstallments?: AvailableInstallmentInfo[];
 }
 export interface OrderPreviewCache {
   currencyId: string;
