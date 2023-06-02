@@ -330,6 +330,7 @@ export const ProductPage = ({
                 {actionButton &&
                   product?.stockAmount &&
                   product?.stockAmount > 0 &&
+                  product?.canPurchase &&
                   !currencyId?.crypto && (
                     <div>
                       <div ref={refToClickAway} className="pw-mt-4">
@@ -400,10 +401,10 @@ export const ProductPage = ({
                   </>
                 ) : null}
                 {product?.requirements &&
-                !product?.canPurchase &&
+                product?.hasWhitelistBlocker &&
                 product?.stockAmount != 0 ? (
                   <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-w-full pw-mt-5">
-                    <p className="pw-text-base pw-font-poppins pw-font-medium pw-text-black">
+                    <p className="pw-text-sm pw-font-poppins pw-font-medium pw-text-black">
                       {product.requirements.requirementDescription}
                     </p>
                     <button
