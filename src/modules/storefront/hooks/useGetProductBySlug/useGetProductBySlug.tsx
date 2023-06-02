@@ -60,6 +60,7 @@ export interface Product {
     requirementCTALabel: string;
     requirementDescription: string;
   };
+  hasWhitelistBlocker: boolean;
 }
 
 export interface ProductsResponse {
