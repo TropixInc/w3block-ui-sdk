@@ -53,8 +53,8 @@ export const ProductPage = ({
     buttonColor,
     buttonText,
     buttonTextColor,
-    categoriesTagBackgroundColor,
-    categoriesTagTextColor,
+    // categoriesTagBackgroundColor,
+    // categoriesTagTextColor,
     categoriesTextColor,
     descriptionTextColor,
     margin,
@@ -66,7 +66,7 @@ export const ProductPage = ({
     showDescription,
     showProductName,
     showValue,
-    textColor,
+    // textColor,
   } = mergedStyleData;
 
   const [translate] = useTranslation();
@@ -86,7 +86,7 @@ export const ProductPage = ({
     params?.[params.length - 1]
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const categories: any[] = [];
+  // const categories: any[] = [];
   const limit =
     product?.stockAmount &&
     product.canPurchaseAmount &&
@@ -260,7 +260,7 @@ export const ProductPage = ({
                     }}
                     className="pw-mt-4 pw-font-[700] pw-text-lg"
                   >
-                    {product?.tags?.join('/')}
+                    {product?.tags?.map((tag) => tag.name).join('/')}
                   </p>
                 )}
                 {showValue && (
@@ -328,54 +328,54 @@ export const ProductPage = ({
                   </>
                 )}
                 {actionButton &&
-                  product?.stockAmount &&
-                  product?.stockAmount > 0 &&
-                  product?.canPurchase &&
-                  !currencyId?.crypto && (
-                    <div>
-                      <div ref={refToClickAway} className="pw-mt-4">
-                        <p className="pw-text-sm pw-text-black pw-mb-1">
-                          Quantidade
+                product?.stockAmount &&
+                product?.stockAmount > 0 &&
+                product?.canPurchase &&
+                !currencyId?.crypto ? (
+                  <div>
+                    <div ref={refToClickAway} className="pw-mt-4">
+                      <p className="pw-text-sm pw-text-black pw-mb-1">
+                        Quantidade
+                      </p>
+                      <div
+                        onClick={() => setQuantityOpen(!quantityOpen)}
+                        className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
+                          quantityOpen
+                            ? 'pw-border-none pw-bg-white'
+                            : 'pw-border pw-border-black'
+                        }`}
+                      >
+                        <p className="pw-text-xs pw-font-[600] pw-text-black">
+                          {quantity}
                         </p>
-                        <div
-                          onClick={() => setQuantityOpen(!quantityOpen)}
-                          className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
-                            quantityOpen
-                              ? 'pw-border-none pw-bg-white'
-                              : 'pw-border pw-border-black'
-                          }`}
-                        >
-                          <p className="pw-text-xs pw-font-[600] pw-text-black">
-                            {quantity}
-                          </p>
-                          <ArrowDown className="pw-stroke-black" />
-                        </div>
-                        {quantityOpen && (
-                          <div className="pw-relative">
-                            <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
-                              <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
-                              <div className=""></div>
-                              {Array(limit && limit > 5 ? 5 : limit)
-                                .fill(0)
-                                .map((val, index) => (
-                                  <p
-                                    onClick={() => {
-                                      setQuantity(index + 1);
-                                      setQuantityOpen(false);
-                                    }}
-                                    key={index}
-                                    className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
-                                  >
-                                    {index + 1}
-                                  </p>
-                                ))}
-                            </div>
-                          </div>
-                        )}
+                        <ArrowDown className="pw-stroke-black" />
                       </div>
+                      {quantityOpen && (
+                        <div className="pw-relative">
+                          <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
+                            <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
+                            <div className=""></div>
+                            {Array(limit && limit > 5 ? 5 : limit)
+                              .fill(0)
+                              .map((val, index) => (
+                                <p
+                                  onClick={() => {
+                                    setQuantity(index + 1);
+                                    setQuantityOpen(false);
+                                  }}
+                                  key={index}
+                                  className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
+                                >
+                                  {index + 1}
+                                </p>
+                              ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                {showCategory && product?.tags?.length ? (
+                  </div>
+                ) : null}
+                {/* {showCategory && product?.tags?.length ? (
                   <>
                     <p
                       style={{ color: textColor ?? 'black' }}
@@ -399,7 +399,7 @@ export const ProductPage = ({
                       ))}
                     </div>
                   </>
-                ) : null}
+                ) : null} */}
                 {product?.requirements &&
                 product?.hasWhitelistBlocker &&
                 product?.stockAmount != 0 ? (

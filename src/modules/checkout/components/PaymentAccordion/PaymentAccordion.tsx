@@ -71,9 +71,9 @@ const mapPaymentMethodToTextAndDescription = (
       return {
         text: 'Cartão de crédito',
         description:
-          'Nós acetamos diferentes bandeiras de cartão' +
-          (installments && installments > 0 ? ` em até ${installments}x` : '') +
-          '.',
+          (installments && installments > 0
+            ? `Pagamento em até ${installments} parcelas`
+            : 'Aceitamos as principais bandeiras do mercado') + '.',
       };
     case 'crypto':
       return {
