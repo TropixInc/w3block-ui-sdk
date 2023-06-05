@@ -246,7 +246,7 @@ export const CheckoutPayment = () => {
               error={requestError?.replaceAll(';', '\n')}
               buttonText={
                 productCache.choosedPayment.paymentMethod == 'pix'
-                  ? 'Gerar link'
+                  ? 'Avançar'
                   : 'Finalizar compra'
               }
               onChange={(val) => {
