@@ -12,6 +12,7 @@ export const useGetPageModules = () => {
     if (window) {
       if (!window.location.href.includes('/product/slug')) {
         //setHref('https://foodbusters.stg.w3block.io/');
+        //setHref('https://hashdex.stg.w3block.io/');
         setHref(window.location.href);
       }
     }

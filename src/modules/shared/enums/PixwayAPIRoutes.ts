@@ -19,6 +19,7 @@ export enum PixwayAPIRoutes {
   CREATE_ORDER = '/companies/{companyId}/orders',
   METADATA_BY_RFID = 'metadata/rfid/{rfid}',
   METADATA_BY_CHAINADDRESS_AND_TOKENID = 'metadata/address/{contractAddress}/{chainId}/{tokenId}',
+  METADATA_BY_COLLECTION_ID = 'metadata/{companyId}/{collectionId}',
   TOKEN_COLLECTIONS = '{companyId}/token-collections',
   CATEGORIES = 'categories',
   USERS = 'users/',
