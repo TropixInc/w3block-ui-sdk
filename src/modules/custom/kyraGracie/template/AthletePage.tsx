@@ -1,3 +1,4 @@
+import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';
 import brownBelt from '../assets/brown_belt.png';
@@ -15,6 +16,7 @@ interface AthletePageProps {
 }
 export const AthletePage = ({ id }: AthletePageProps) => {
   const { data } = useGetAthlete(id);
+  const isProduction = useIsProduction();
   const belts = [
     BeltColor.BLUE,
     BeltColor.PURPLE,
@@ -86,16 +88,29 @@ export const AthletePage = ({ id }: AthletePageProps) => {
   };
 
   return (
-    <div className="pw-bg-[#fffefb]">
+    <div
+      style={{
+        backgroundImage: `url('https://res.cloudinary.com/tropix/image/upload/v1686157813/assets/certificate/kyra/bg-papiro2_niym17.png')`,
+        backgroundSize: '70px',
+        backgroundRepeat: 'repeat',
+      }}
+      className="pw-bg-[#fffefb]"
+    >
       <div className="pw-container pw-mx-auto">
         <div className="pw-px-4 pw-flex pw-justify-center pw-items-center pw-flex-col pw-pt-[30px] pw-pb-[60px]">
           <img className="pw-object-contain" src={Logo} alt="WJJC Logo" />
-          <div className="pw-flex pw-justify-center pw-gap-2 pw-items-center">
-            <div className="pw-w-[120px] pw-h-[2px] pw-bg-black pw-mt-2"></div>
+          <div className="pw-flex pw-justify-center pw-gap-4 pw-items-center">
+            <img
+              src="https://res.cloudinary.com/tropix/image/upload/v1686059209/assets/certificate/kyra/effect-esquerda_h6sxir.png"
+              className=" pw-object-contain  pw-h-3"
+            ></img>
             <p className="pw-text-[40px] pw-font-[700] pw-font-['EB_Garamond'] pw-text-black">
               Certificate
             </p>
-            <div className="pw-w-[120px] pw-h-[2px] pw-bg-black"></div>
+            <img
+              src="http://res.cloudinary.com/tropix/image/upload/v1686059209/assets/certificate/kyra/effect-esquerda_h6sxir.png"
+              className=" pw-object-contain pw-h-3 pw-rotate-180"
+            ></img>
           </div>
           <img
             className=" pw-w-full sm:pw-w-[350px] sm:pw-h-[350px] pw-rounded-lg pw-object-cover pw-object-center pw-mt-[45px]"
@@ -133,11 +148,36 @@ export const AthletePage = ({ id }: AthletePageProps) => {
                   className="pw-flex pw-items-start pw-gap-8 pw-relative"
                 >
                   <div className="pw-flex-1 pw-justify-end">
-                    <img
-                      className=" pw-w-[150px] sm:pw-w-[200px] pw-object-contain"
-                      src={getBeltImage(belt)}
-                      alt={respectiveToken?.name ?? belt}
-                    />
+                    {respectiveToken != null ? (
+                      <a
+                        target={`${respectiveToken ? '_blank' : ''}`}
+                        href={
+                          respectiveToken
+                            ? `https://pdf${
+                                !isProduction ? '.stg' : ''
+                              }.w3block.io/certification/${
+                                respectiveToken?.contractAddress
+                              }/${respectiveToken?.chainId}/${
+                                respectiveToken?.tokenId
+                              }?preview`
+                            : '#'
+                        }
+                        onClick={() => false}
+                        rel="noreferrer"
+                      >
+                        <img
+                          className=" pw-w-[150px] sm:pw-w-[200px] pw-object-contain"
+                          src={getBeltImage(belt)}
+                          alt={respectiveToken?.name ?? belt}
+                        />
+                      </a>
+                    ) : (
+                      <img
+                        className=" pw-w-[150px] sm:pw-w-[200px] pw-object-contain"
+                        src={getBeltImage(belt)}
+                        alt={''}
+                      />
+                    )}
                   </div>
 
                   <div className="pw-flex pw-flex-col pw-items-center pw-justify-center">
@@ -148,16 +188,30 @@ export const AthletePage = ({ id }: AthletePageProps) => {
                     </div>
                     {index < belts.length - 1 && (
                       <div className="pw-h-[200px] pw-w-[8px] pw-flex pw-items-center pw-justify-center pw-border pw-bg-white">
-                        {hasNextBelt != null && (
+                        {hasNextBelt != null && respectiveToken != null ? (
                           <div className="pw-h-[230px] pw-w-[6px] pw-rounded-full pw-bg-[#01C458]"></div>
-                        )}
+                        ) : null}
                       </div>
                     )}
                   </div>
 
                   <div className="pw-flex-1">
                     {respectiveToken != null && (
-                      <>
+                      <a
+                        target="_blank"
+                        href={
+                          respectiveToken
+                            ? `https://pdf${
+                                !isProduction ? '.stg' : ''
+                              }.w3block.io/certification/${
+                                respectiveToken?.contractAddress
+                              }/${respectiveToken?.chainId}/${
+                                respectiveToken?.tokenId
+                              }?preview`
+                            : '#'
+                        }
+                        rel="noreferrer"
+                      >
                         <p className="pw-text-[16px] pw-font-[700] pw-text-black ">
                           {respectiveToken.tokenData.graduationTeacher}
                         </p>
@@ -167,7 +221,7 @@ export const AthletePage = ({ id }: AthletePageProps) => {
                         <p className="pw-text-[12px] pw-font-[500] pw-text-black ">
                           {respectiveToken.tokenData.graduationDate}
                         </p>
-                      </>
+                      </a>
                     )}
                   </div>
                 </div>
