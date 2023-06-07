@@ -152,7 +152,7 @@ const _LinkAccountTemplate = () => {
     );
   };
   return (
-    <div className="pw-w-screen pw-min-h-screen pw-bg-brand-primary">
+    <div className="pw-w-screen pw-min-h-screen pw-bg-[#EFEFEF]">
       <div className="pw-w-full pw-pt-32 pw-px-5">
         <Box className="pw-mx-auto">
           {isLoading ? <Spinner className="pw-mx-auto" /> : renderInternal()}
