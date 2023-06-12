@@ -1,3 +1,4 @@
+import { Shimmer } from '../../../shared/components/Shimmer';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';
@@ -15,7 +16,7 @@ interface AthletePageProps {
   id: string;
 }
 export const AthletePage = ({ id }: AthletePageProps) => {
-  const { data } = useGetAthlete(id);
+  const { data, isLoading } = useGetAthlete(id);
   const isProduction = useIsProduction();
   const belts = [
     BeltColor.BLUE,
@@ -87,7 +88,7 @@ export const AthletePage = ({ id }: AthletePageProps) => {
     }
   };
 
-  return (
+  return isLoading || data?.items.length ? (
     <div
       style={{
         backgroundImage: `url('https://res.cloudinary.com/tropix/image/upload/v1686157813/assets/certificate/kyra/bg-papiro2_niym17.png')`,
@@ -104,35 +105,61 @@ export const AthletePage = ({ id }: AthletePageProps) => {
               src="https://res.cloudinary.com/tropix/image/upload/v1686059209/assets/certificate/kyra/effect-esquerda_h6sxir.png"
               className=" pw-object-contain  pw-h-3"
             ></img>
-            <p className="pw-text-[40px] pw-font-[700] pw-font-['EB_Garamond'] pw-text-black">
-              Certificate
-            </p>
+            {isLoading ? (
+              <Shimmer className="pw-min-h-[42px] pw-min-w-[200px]" />
+            ) : (
+              <p className="pw-text-[40px] pw-font-[700] pw-font-['EB_Garamond'] pw-text-black">
+                Certificate
+              </p>
+            )}
+
             <img
               src="http://res.cloudinary.com/tropix/image/upload/v1686059209/assets/certificate/kyra/effect-esquerda_h6sxir.png"
               className=" pw-object-contain pw-h-3 pw-rotate-180"
             ></img>
           </div>
-          <img
-            className=" pw-w-full sm:pw-w-[350px] sm:pw-h-[350px] pw-rounded-lg pw-object-cover pw-object-center pw-mt-[45px]"
-            src={data?.items[0]?.mainImage ?? 'https://placehold.co/600x400'}
-            alt={data?.items[0]?.name}
-          />
-          <p className="pw-text-center pw-text-black pw-font-[700] pw-mt-3 pw-text-[20px]">
-            {data?.items[0]?.tokenData?.athleteName ??
-              getPlaceholder().athleteName}
-          </p>
-          <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-            {data?.items[0]?.tokenData?.athleteBirthdate ??
-              getPlaceholder().athleteBirthdate}
-          </p>
-          <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-            {data?.items[0]?.tokenData?.athleteGender ??
-              getPlaceholder().athleteGender}
-          </p>
-          <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-            {data?.items[0]?.tokenData?.athleteNationality ??
-              getPlaceholder().athleteNationality}
-          </p>
+          {isLoading ? (
+            <Shimmer className="pw-min-h-[350px] pw-min-w-[350px] pw-rounded-lg pw-mt-[45px]" />
+          ) : (
+            <img
+              className=" pw-w-full sm:pw-w-[350px] sm:pw-h-[350px] pw-rounded-lg pw-object-cover pw-object-center pw-mt-[45px]"
+              src={data?.items[0]?.mainImage ?? 'https://placehold.co/600x400'}
+              alt={data?.items[0]?.name}
+            />
+          )}
+
+          {isLoading ? (
+            <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
+          ) : (
+            <p className="pw-text-center pw-text-black pw-font-[700] pw-mt-3 pw-text-[20px]">
+              {data?.items[0]?.tokenData?.athleteName ??
+                getPlaceholder().athleteName}
+            </p>
+          )}
+          {isLoading ? (
+            <Shimmer className="pw-min-h-[17px] pw-min-w-[150px] pw-mt-2" />
+          ) : (
+            <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
+              {data?.items[0]?.tokenData?.athleteBirthdate ??
+                getPlaceholder().athleteBirthdate}
+            </p>
+          )}
+          {isLoading ? (
+            <Shimmer className="pw-min-h-[17px] pw-min-w-[130px] pw-mt-2" />
+          ) : (
+            <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
+              {data?.items[0]?.tokenData?.athleteGender ??
+                getPlaceholder().athleteGender}
+            </p>
+          )}
+          {isLoading ? (
+            <Shimmer className="pw-min-h-[17px] pw-min-w-[170px] pw-mt-2" />
+          ) : (
+            <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
+              {data?.items[0]?.tokenData?.athleteNationality ??
+                getPlaceholder().athleteNationality}
+            </p>
+          )}
           <div className="pw-mt-[60px]">
             {belts.map((belt, index) => {
               const respectiveToken = data?.items.find(
@@ -227,6 +254,23 @@ export const AthletePage = ({ id }: AthletePageProps) => {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="pw-min-w-screen pw-min-h-[80vh]">
+      <div className="pw-container pw-mx-auto">
+        <div className="pw-flex pw-justify-center pw-items-center pw-h-full pw-flex-col pw-min-h-[80vh] ">
+          <div className="pw-max-w-[500px]">
+            <h3 className="pw-text-[24px] pw-font-bold pw-text-center pw-text-slate-900">
+              Opps! não foi encontrado
+            </h3>
+            <p className="pw-text-[14px] pw-text-slate-600 pw-text-center">
+              Não conseguimos encontrar nenhum NFT relacionado ao identificador
+              do atleta, verifique novamente o número. Caso o erro persista,
+              entre em contato com o suporte.
+            </p>
           </div>
         </div>
       </div>
