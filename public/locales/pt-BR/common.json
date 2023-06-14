@@ -393,7 +393,7 @@
   "token>pass>invalidFormat": "QRCode em formato inválido. Por favor verifique se o QR Code escaneado é correspondente ao benefício que deseja utilizar.",
   "auth>formCompleteKYCWithoutLayout>continueLater": "e continuar depois",
   "commerce>productPage>tokenDetails": "Detalhes do token",
-  "commerce>productPage>totalTokens": "Número de tokens",
+  "commerce>productPage>totalTokens": "Total de tokens",
   "commerce>productPage>soldTokens": "Tokens vendidos",
   "commerce>productPage>description": "Descrição",
   "shared>InfosKYC>errorRequest": "Houve um erro ao buscar os dados, tente novamente mais tarde.",
@@ -403,5 +403,6 @@
   "shared>KYCStatys>approved": "Aprovado",
   "shared>KYCStatys>denied": "Reprovado",
   "auth>formCompletKYCWithoutLayout>notEditInfos": "Seus dados já foram revisados e aprovados. Por favor, contate o suporte técnico se você precisa atualizar suas informações.",
-  "auth>myProfileTemplate>moreInfos": "Informações Complementares"
+  "auth>myProfileTemplate>moreInfos": "Informações Complementares",
+  "commerce>productPage>totalAvailable": "Tokens disponíveis"
 }
