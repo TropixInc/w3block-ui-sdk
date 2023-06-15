@@ -17,6 +17,7 @@ import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegration
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
 import useGetProductBySlug, {
   CurrencyResponse,
 } from '../hooks/useGetProductBySlug/useGetProductBySlug';
@@ -113,6 +114,11 @@ export const ProductPage = ({
   const addresBlockchainLink = useAdressBlockchainLink(
     product?.chainId,
     product?.contractAddress
+  );
+
+  const { data: tokenData } = useGetCollectionMetadata(
+    product?.draftData?.keyCollectionId ?? '',
+    { limit: 1 }
   );
 
   const chain = () => {
@@ -569,7 +575,7 @@ export const ProductPage = ({
                   showDescription
                     ? 'pw-flex-[1.5] lg:pw-flex-[1.3]'
                     : 'pw-w-full'
-                } pw-max-h-[265px] pw-text-black pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
+                } pw-max-h-[295px] pw-text-black pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
               >
                 <p className="pw-text-[15px] pw-font-[600] pw-mb-4">
                   {translate('commerce>productPage>tokenDetails')}
@@ -578,8 +584,13 @@ export const ProductPage = ({
                 <div className="pw-mt-7 pw-text-[13px] pw-flex pw-justify-between">
                   <div>
                     <p>Contract Address</p>
+                    {tokenData?.items?.[0]?.tokenCollection?.quantity && (
+                      <p className="pw-mt-[10px]">
+                        {translate('commerce>productPage>totalTokens')}
+                      </p>
+                    )}
                     <p className="pw-mt-[10px]">
-                      {translate('commerce>productPage>totalTokens')}
+                      {translate('commerce>productPage>totalAvailable')}
                     </p>
                     <p className="pw-mt-[10px]">
                       {translate('commerce>productPage>soldTokens')}
@@ -603,7 +614,12 @@ export const ProductPage = ({
                         {product?.contractAddress}
                       </a>
                     </p>
-                    <p className="pw-mt-[10px]">{product?.tokensAmount}</p>
+                    {tokenData?.items?.[0]?.tokenCollection?.quantity && (
+                      <p className="pw-mt-[10px]">
+                        {tokenData?.items?.[0]?.tokenCollection?.quantity}
+                      </p>
+                    )}
+                    <p className="pw-mt-[10px]">{product?.stockAmount}</p>
                     <p className="pw-mt-[10px]">{tokensSold}</p>
                     <p className="pw-mt-[10px]">ERC-721</p>
                     <p className="pw-mt-[10px]">{chain()}</p>

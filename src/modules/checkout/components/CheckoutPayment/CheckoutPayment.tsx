@@ -56,7 +56,7 @@ export const CheckoutPayment = () => {
   const [sending, setSending] = useState<boolean>(false);
   const { companyId, appBaseUrl } = useCompanyConfig();
   const [iframeLink, setIframeLink] = useState('');
-  const [productCache] = useLocalStorage<OrderPreviewCache>(
+  const [productCache, setProductCache] = useLocalStorage<OrderPreviewCache>(
     PRODUCT_CART_INFO_KEY
   );
   const { setCart } = useCart();
@@ -127,6 +127,12 @@ export const CheckoutPayment = () => {
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess(data: any) {
+            setProductCache({
+              ...productCache,
+              gasFee: data.gasFee,
+              clientServiceFee: data.clientServiceFee,
+              cartPrice: data.cartPrice,
+            });
             setMyOrderPreview(data);
           },
         }
@@ -208,7 +214,13 @@ export const CheckoutPayment = () => {
           onError: (err: any) => {
             setSending(false);
             setLoading(false);
-            setRequestError(err.message.toString());
+            setRequestError(
+              err.message
+                .toString()
+                .includes('Informe o endereço do titular do cartão.')
+                ? 'Por favor, insira um CEP válido.'
+                : err.message.toString()
+            );
           },
         }
       );

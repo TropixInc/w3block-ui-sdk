@@ -75,7 +75,7 @@ export interface OrderPreviewCache {
   choosedPayment?: PaymentMethodsAvaiable;
   cpfCnpj?: string;
   clientServiceFee?: string;
-  gasFee?: string;
+  gasFee?: GasFee;
   cartPrice?: string;
 }
 

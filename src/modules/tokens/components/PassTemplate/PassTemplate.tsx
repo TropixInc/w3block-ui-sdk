@@ -362,7 +362,7 @@ const _PassTemplate = ({
                   <>
                     <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
                       <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
-                        {shortDay[(getDay(eventDate), locale)]}
+                        {shortDay[locale][getDay(eventDate)]}
                       </div>
                       <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
                         {format(eventDate, 'dd MMM yyyy')}
