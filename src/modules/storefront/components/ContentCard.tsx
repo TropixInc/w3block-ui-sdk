@@ -19,6 +19,26 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
     cardCategoryColor,
     cardValueColor,
     textOverImage,
+    titleFontFamily,
+    titleFontSize,
+    titleFontBold,
+    titleFontItalic,
+    titleFontSizeType,
+    descriptionFontFamily,
+    descriptionFontSize,
+    descriptionFontBold,
+    descriptionFontItalic,
+    descriptionFontSizeType,
+    categoryFontFamily,
+    categoryFontSize,
+    categoryFontBold,
+    categoryFontItalic,
+    categoryFontSizeType,
+    valueFontFamily,
+    valueFontSize,
+    valueFontBold,
+    valueFontItalic,
+    valueFontSizeType,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
   return (
@@ -77,7 +97,27 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                 <div className="pw-flex pw-flex-col pw-justify-end pw-w-full pw-h-full pw-p-[24px]">
                   {showCardTitle && (
                     <p
-                      style={{ color: cardProductNameColor ?? 'black' }}
+                      style={{
+                        color: cardProductNameColor ?? 'black',
+                        fontFamily: titleFontFamily ?? '',
+                        fontSize:
+                          (titleFontSize &&
+                          titleFontSize != '' &&
+                          titleFontSize != '0'
+                            ? titleFontSize
+                            : 14) + (titleFontSizeType == 'rem' ? 'rem' : 'px'),
+                        fontWeight: titleFontBold ? 'bold' : 'normal',
+                        fontStyle: titleFontItalic ? 'italic' : 'normal',
+                        lineHeight:
+                          titleFontSize &&
+                          titleFontSize != '' &&
+                          titleFontSize != '0' &&
+                          titleFontSizeType != 'rem'
+                            ? parseInt(titleFontSize) -
+                              parseInt(titleFontSize) * 0.1 +
+                              'px'
+                            : 'auto',
+                      }}
                       className="pw-line-clamp-2 pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
                     >
                       {product.title}
@@ -85,7 +125,28 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                   )}
                   {showCardDescription && (
                     <p
-                      style={{ color: cardDescriptionColor ?? '#7E7E7E' }}
+                      style={{
+                        color: cardDescriptionColor ?? '#7E7E7E',
+                        fontFamily: descriptionFontFamily ?? '',
+                        fontSize:
+                          (descriptionFontSize &&
+                          descriptionFontSize != '' &&
+                          descriptionFontSize != '0'
+                            ? descriptionFontSize
+                            : 14) +
+                          (descriptionFontSizeType == 'rem' ? 'rem' : 'px'),
+                        fontWeight: descriptionFontBold ? 'bold' : 'normal',
+                        fontStyle: descriptionFontItalic ? 'italic' : 'normal',
+                        lineHeight:
+                          descriptionFontSize &&
+                          descriptionFontSize != '' &&
+                          descriptionFontSize != '0' &&
+                          descriptionFontSizeType != 'rem'
+                            ? parseInt(descriptionFontSize) -
+                              parseInt(descriptionFontSize) * 0.1 +
+                              'px'
+                            : 'auto',
+                      }}
                       className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
                     >
                       {product.description}
@@ -93,7 +154,28 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                   )}
                   {showCardCategory && (
                     <p
-                      style={{ color: cardCategoryColor ?? '#C63535' }}
+                      style={{
+                        color: cardCategoryColor ?? '#C63535',
+                        fontFamily: categoryFontFamily ?? '',
+                        fontSize:
+                          (categoryFontSize &&
+                          categoryFontSize != '' &&
+                          categoryFontSize != '0'
+                            ? categoryFontSize
+                            : 14) +
+                          (categoryFontSizeType == 'rem' ? 'rem' : 'px'),
+                        fontWeight: categoryFontBold ? 'bold' : 'normal',
+                        fontStyle: categoryFontItalic ? 'italic' : 'normal',
+                        lineHeight:
+                          categoryFontSize &&
+                          categoryFontSize != '' &&
+                          categoryFontSize != '0' &&
+                          categoryFontSizeType != 'rem'
+                            ? parseInt(categoryFontSize) -
+                              parseInt(categoryFontSize) * 0.1 +
+                              'px'
+                            : 'auto',
+                      }}
                       className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
                     >
                       {product.category?.map((cat: any) => cat.label).join('/')}
@@ -101,7 +183,27 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                   )}
                   {showCardValue && (
                     <p
-                      style={{ color: cardValueColor ?? 'black' }}
+                      style={{
+                        color: cardValueColor ?? 'black',
+                        fontFamily: valueFontFamily ?? '',
+                        fontSize:
+                          (valueFontSize &&
+                          valueFontSize != '' &&
+                          valueFontSize != '0'
+                            ? valueFontSize
+                            : 14) + (valueFontSizeType == 'rem' ? 'rem' : 'px'),
+                        fontWeight: valueFontBold ? 'bold' : 'normal',
+                        fontStyle: valueFontItalic ? 'italic' : 'normal',
+                        lineHeight:
+                          valueFontSize &&
+                          valueFontSize != '' &&
+                          valueFontSize != '0' &&
+                          valueFontSizeType != 'rem'
+                            ? parseInt(valueFontSize) -
+                              parseInt(valueFontSize) * 0.1 +
+                              'px'
+                            : 'auto',
+                      }}
                       className="pw-font-bold pw-text-lg pw-mt-2"
                     >
                       <span className="pw-text-sm pw-pr-2">R$</span>
@@ -120,8 +222,26 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                 style={{
                   color: cardProductNameColor ?? 'black',
                   textAlign: format == 'rounded' ? 'center' : 'left',
+                  fontFamily: titleFontFamily ?? '',
+                  fontSize:
+                    (titleFontSize &&
+                    titleFontSize != '' &&
+                    titleFontSize != '0'
+                      ? titleFontSize
+                      : 14) + (titleFontSizeType == 'rem' ? 'rem' : 'px'),
+                  fontWeight: titleFontBold ? 'bold' : 'normal',
+                  fontStyle: titleFontItalic ? 'italic' : 'normal',
+                  lineHeight:
+                    titleFontSize &&
+                    titleFontSize != '' &&
+                    titleFontSize != '0' &&
+                    titleFontSizeType != 'rem'
+                      ? parseInt(titleFontSize) -
+                        parseInt(titleFontSize) * 0.1 +
+                        'px'
+                      : 'auto',
                 }}
-                className="pw-line-clamp-2 pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
+                className="pw-line-clamp-2 pw-font-[400] pw-mt-2 "
               >
                 {product.title}
               </p>
@@ -131,6 +251,24 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                 style={{
                   color: cardDescriptionColor ?? '#7E7E7E',
                   textAlign: format == 'rounded' ? 'center' : 'left',
+                  fontFamily: descriptionFontFamily ?? '',
+                  fontSize:
+                    (descriptionFontSize &&
+                    descriptionFontSize != '' &&
+                    descriptionFontSize != '0'
+                      ? descriptionFontSize
+                      : 14) + (descriptionFontSizeType == 'rem' ? 'rem' : 'px'),
+                  fontWeight: descriptionFontBold ? 'bold' : 'normal',
+                  fontStyle: descriptionFontItalic ? 'italic' : 'normal',
+                  lineHeight:
+                    descriptionFontSize &&
+                    descriptionFontSize != '' &&
+                    descriptionFontSize != '0' &&
+                    descriptionFontSizeType != 'rem'
+                      ? parseInt(descriptionFontSize) -
+                        parseInt(descriptionFontSize) * 0.1 +
+                        'px'
+                      : 'auto',
                 }}
                 className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
               >
@@ -142,6 +280,24 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                 style={{
                   color: cardCategoryColor ?? '#C63535',
                   textAlign: format == 'rounded' ? 'center' : 'left',
+                  fontFamily: categoryFontFamily ?? '',
+                  fontSize:
+                    (categoryFontSize &&
+                    categoryFontSize != '' &&
+                    categoryFontSize != '0'
+                      ? categoryFontSize
+                      : 14) + (categoryFontSizeType == 'rem' ? 'rem' : 'px'),
+                  fontWeight: categoryFontBold ? 'bold' : 'normal',
+                  fontStyle: categoryFontItalic ? 'italic' : 'normal',
+                  lineHeight:
+                    categoryFontSize &&
+                    categoryFontSize != '' &&
+                    categoryFontSize != '0' &&
+                    categoryFontSizeType != 'rem'
+                      ? parseInt(categoryFontSize) -
+                        parseInt(categoryFontSize) * 0.1 +
+                        'px'
+                      : 'auto',
                 }}
                 className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
               >
@@ -153,6 +309,24 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                 style={{
                   color: cardValueColor ?? 'black',
                   textAlign: format == 'rounded' ? 'center' : 'left',
+                  fontFamily: valueFontFamily ?? '',
+                  fontSize:
+                    (valueFontSize &&
+                    valueFontSize != '' &&
+                    valueFontSize != '0'
+                      ? valueFontSize
+                      : 14) + (valueFontSizeType == 'rem' ? 'rem' : 'px'),
+                  fontWeight: valueFontBold ? 'bold' : 'normal',
+                  fontStyle: valueFontItalic ? 'italic' : 'normal',
+                  lineHeight:
+                    valueFontSize &&
+                    valueFontSize != '' &&
+                    valueFontSize != '0' &&
+                    valueFontSizeType != 'rem'
+                      ? parseInt(valueFontSize) -
+                        parseInt(valueFontSize) * 0.1 +
+                        'px'
+                      : 'auto',
                 }}
                 className="pw-font-bold pw-text-lg pw-mt-2"
               >

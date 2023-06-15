@@ -69,6 +69,11 @@ export const Products = ({ data }: { data: ProductsData }) => {
     moduleTitleColor,
     cardSearch,
     titleAlignment,
+    moduleFontSize,
+    moduleFontBold,
+    moduleFontItalic,
+    moduleFontSizeType,
+    moduleFontFamily,
   } = mergedContentData;
 
   const { companyId } = useCompanyConfig();
@@ -329,6 +334,22 @@ export const Products = ({ data }: { data: ProductsData }) => {
           <h2
             style={{
               color: moduleTitleColor ?? 'black',
+              fontFamily: moduleFontFamily ?? '',
+              fontSize:
+                (moduleFontSize && moduleFontSize != '' && moduleFontSize != '0'
+                  ? moduleFontSize
+                  : 36) + (moduleFontSizeType == 'rem' ? 'rem' : 'px'),
+              fontWeight: moduleFontBold ? 'bold' : 'normal',
+              fontStyle: moduleFontItalic ? 'italic' : 'normal',
+              lineHeight:
+                moduleFontSize &&
+                moduleFontSize != '' &&
+                moduleFontSize != '0' &&
+                moduleFontSizeType != 'rem'
+                  ? parseInt(moduleFontSize) -
+                    parseInt(moduleFontSize) * 0.1 +
+                    'px'
+                  : 'auto',
             }}
             className={classNames(
               'pw-font-semibold pw-text-lg pw-pt-10 pw-w-full',

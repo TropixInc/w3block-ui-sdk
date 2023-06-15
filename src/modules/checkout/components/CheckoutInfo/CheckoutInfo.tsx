@@ -125,7 +125,7 @@ const _CheckoutInfo = ({
     } else {
       const preview = productCache;
       setCurrencyIdState(preview?.currencyId);
-      if (preview) {
+      if (preview && preview.products.length > 0) {
         setOrderPreview({
           products: [...preview.products],
           totalPrice: preview.totalPrice,
@@ -133,6 +133,8 @@ const _CheckoutInfo = ({
           gasFee: { amount: preview.gasFee ?? '0', signature: '' },
           cartPrice: preview.cartPrice,
         });
+      } else if (preview && preview.products.length == 0 && isCart) {
+        setCart([]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -314,14 +316,18 @@ const _CheckoutInfo = ({
           <>
             <PriceAndGasInfo
               name={
-                orderPreview?.products[0].prices.find(
-                  (price) => price.currency.id == currencyIdState
-                )?.currency.name
+                orderPreview?.products && orderPreview?.products.length
+                  ? orderPreview?.products[0]?.prices.find(
+                      (price) => price.currency.id == currencyIdState
+                    )?.currency.name
+                  : 'BRL'
               }
               currency={
-                orderPreview?.products[0].prices.find(
-                  (price) => price.currency.id == currencyIdState
-                )?.currency.symbol
+                orderPreview?.products && orderPreview?.products.length
+                  ? orderPreview?.products[0]?.prices.find(
+                      (price) => price.currency.id == currencyIdState
+                    )?.currency.symbol
+                  : 'R$'
               }
               totalPrice={orderPreview?.totalPrice || '0'}
               service={orderPreview?.clientServiceFee || '0'}
@@ -373,16 +379,20 @@ const _CheckoutInfo = ({
             </p>
             <PriceAndGasInfo
               name={
-                productCache?.products[0].prices.find(
-                  (price) =>
-                    price.currencyId == (router.query.currencyId as string)
-                )?.currency.name
+                productCache?.products && productCache?.products.length
+                  ? productCache?.products[0].prices.find(
+                      (price) =>
+                        price.currencyId == (router.query.currencyId as string)
+                    )?.currency.name
+                  : 'BRL'
               }
               currency={
-                productCache?.products[0].prices.find(
-                  (price) =>
-                    price.currencyId == (router.query.currencyId as string)
-                )?.currency.symbol
+                productCache?.products && productCache?.products.length
+                  ? productCache?.products[0].prices.find(
+                      (price) =>
+                        price.currencyId == (router.query.currencyId as string)
+                    )?.currency.symbol
+                  : 'R$'
               }
               totalPrice={orderPreview?.totalPrice || '0'}
               service={orderPreview?.clientServiceFee || '0'}
@@ -415,9 +425,11 @@ const _CheckoutInfo = ({
   }, [orderPreview, choosedPayment, currencyIdState]);
 
   const anchorCurrencyId = useMemo(() => {
-    return orderPreview?.products
-      .find((prod) => prod.prices.some((price) => price.anchorCurrencyId))
-      ?.prices.find((price) => price.anchorCurrencyId)?.anchorCurrencyId;
+    return orderPreview?.products && orderPreview.products.length
+      ? orderPreview?.products
+          .find((prod) => prod.prices.some((price) => price.anchorCurrencyId))
+          ?.prices.find((price) => price.anchorCurrencyId)?.anchorCurrencyId
+      : '';
   }, [orderPreview]);
 
   return requestError ? (
@@ -549,9 +561,11 @@ const _CheckoutInfo = ({
           gasPrice={orderPreview?.gasFee?.amount ?? '0'}
           serviceFee={orderPreview?.clientServiceFee ?? ''}
           code={
-            orderPreview?.products[0].prices.find(
-              (price) => price.currencyId == currencyIdState
-            )?.currency.code as CurrencyEnum
+            orderPreview?.products && orderPreview?.products.length
+              ? (orderPreview?.products[0].prices.find(
+                  (price) => price.currencyId == currencyIdState
+                )?.currency.code as CurrencyEnum)
+              : CurrencyEnum.BRL
           }
         />
       </ModalBase>

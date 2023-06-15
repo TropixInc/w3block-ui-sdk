@@ -10,4 +10,24 @@ export interface CardConfig {
   buttonTextColor: string;
   buttonBgColor: string;
   buttonHoverColor: string;
+  titleFontFamily?: string;
+  titleFontSize?: string;
+  titleFontBold?: boolean;
+  titleFontItalic?: boolean;
+  titleFontSizeType?: string;
+  descriptionFontFamily?: string;
+  descriptionFontSize?: string;
+  descriptionFontBold?: boolean;
+  descriptionFontItalic?: boolean;
+  descriptionFontSizeType?: string;
+  categoryFontFamily?: string;
+  categoryFontSize?: string;
+  categoryFontBold?: boolean;
+  categoryFontItalic?: boolean;
+  categoryFontSizeType?: string;
+  valueFontFamily?: string;
+  valueFontSize?: string;
+  valueFontBold?: boolean;
+  valueFontItalic?: boolean;
+  valueFontSizeType?: string;
 }

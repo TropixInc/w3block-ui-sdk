@@ -130,6 +130,16 @@ const Slide = ({
     secondaryButtonColor,
     buttonBorderColor,
     secondaryButtonBorderColor,
+    titleFontFamily,
+    titleFontSize,
+    titleFontBold,
+    titleFontItalic,
+    titleFontSizeType,
+    subtitleFontFamily,
+    subtitleFontSize,
+    subtitleFontBold,
+    subtitleFontItalic,
+    subtitleFontSizeType,
   } = data;
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
@@ -179,13 +189,51 @@ const Slide = ({
           className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8`}
         >
           <h2
-            style={{ color: titleColor ?? 'white' }}
-            className={`${alignmentTextClass} pw-font-semibold pw-text-4xl pw-max-w-[550px]`}
+            style={{
+              color: titleColor ?? 'white',
+              fontFamily: titleFontFamily ?? '',
+              fontSize:
+                (titleFontSize && titleFontSize != '' && titleFontSize != '0'
+                  ? titleFontSize
+                  : 36) + (titleFontSizeType == 'rem' ? 'rem' : 'px'),
+              fontWeight: titleFontBold ? 'bold' : 'normal',
+              fontStyle: titleFontItalic ? 'italic' : 'normal',
+              lineHeight:
+                titleFontSize &&
+                titleFontSize != '' &&
+                titleFontSize != '0' &&
+                titleFontSizeType != 'rem'
+                  ? parseInt(titleFontSize) -
+                    parseInt(titleFontSize) * 0.1 +
+                    'px'
+                  : 'auto',
+            }}
+            className={`${alignmentTextClass} pw-font-semibold pw-max-w-[550px]`}
           >
             {title}
           </h2>
           <p
-            style={{ color: subtitleColor ?? 'white' }}
+            style={{
+              color: subtitleColor ?? 'white',
+              fontFamily: subtitleFontFamily ?? '',
+              fontSize:
+                (subtitleFontSize &&
+                subtitleFontSize != '' &&
+                subtitleFontSize != '0'
+                  ? subtitleFontSize
+                  : 36) + (subtitleFontSizeType == 'rem' ? 'rem' : 'px'),
+              fontWeight: subtitleFontBold ? 'bold' : 'normal',
+              fontStyle: subtitleFontItalic ? 'italic' : 'normal',
+              lineHeight:
+                subtitleFontSize &&
+                subtitleFontSize != '' &&
+                subtitleFontSize != '0' &&
+                subtitleFontSizeType != 'rem'
+                  ? parseInt(subtitleFontSize) -
+                    parseInt(subtitleFontSize) * 0.1 +
+                    'px'
+                  : 'auto',
+            }}
             className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
           >
             {subtitle}

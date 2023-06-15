@@ -178,6 +178,16 @@ export interface SpecificBannerInfo {
   secondaryButtonTextColor?: string;
   secondaryButtonColor?: string;
   secondaryButtonBorderColor?: string;
+  titleFontFamily?: string;
+  titleFontSize?: string;
+  titleFontBold?: boolean;
+  titleFontItalic?: boolean;
+  titleFontSizeType?: string;
+  subtitleFontFamily?: string;
+  subtitleFontSize?: string;
+  subtitleFontBold?: boolean;
+  subtitleFontItalic?: boolean;
+  subtitleFontSizeType?: string;
 }
 
 type CategoryItem = { name: string; slug: string };
@@ -255,6 +265,11 @@ export interface ProductsData extends MainModuleThemeInterface {
     cardSearch?: ComboBoxReturnInterface[];
     contentCards?: SpecificContentCard[];
     moduleTitleColor?: string;
+    moduleFontFamily?: string;
+    moduleFontSize?: string;
+    moduleFontBold?: boolean;
+    moduleFontItalic?: boolean;
+    moduleFontSizeType?: string;
   };
   mobileStyleData: ProductsDataStyleData;
   mobileContentData: ProductsData['contentData'];
@@ -299,6 +314,26 @@ export interface ProductsDataStyleData {
   overlay?: boolean;
   overlayColor?: string;
   textOverImage?: boolean;
+  titleFontFamily?: string;
+  titleFontSize?: string;
+  titleFontBold?: boolean;
+  titleFontItalic?: boolean;
+  titleFontSizeType?: string;
+  descriptionFontFamily?: string;
+  descriptionFontSize?: string;
+  descriptionFontBold?: boolean;
+  descriptionFontItalic?: boolean;
+  descriptionFontSizeType?: string;
+  categoryFontFamily?: string;
+  categoryFontSize?: string;
+  categoryFontBold?: boolean;
+  categoryFontItalic?: boolean;
+  categoryFontSizeType?: string;
+  valueFontFamily?: string;
+  valueFontSize?: string;
+  valueFontBold?: boolean;
+  valueFontItalic?: boolean;
+  valueFontSizeType?: string;
 }
 
 interface ComboBoxReturnInterface {
