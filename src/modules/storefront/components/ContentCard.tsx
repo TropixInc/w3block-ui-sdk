@@ -114,7 +114,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           titleFontSize != '0' &&
                           titleFontSizeType != 'rem'
                             ? parseInt(titleFontSize) -
-                              parseInt(titleFontSize) * 0.1 +
+                              parseInt(titleFontSize) * 0.05 +
                               'px'
                             : 'auto',
                       }}
@@ -143,7 +143,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           descriptionFontSize != '0' &&
                           descriptionFontSizeType != 'rem'
                             ? parseInt(descriptionFontSize) -
-                              parseInt(descriptionFontSize) * 0.1 +
+                              parseInt(descriptionFontSize) * 0.05 +
                               'px'
                             : 'auto',
                       }}
@@ -172,7 +172,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           categoryFontSize != '0' &&
                           categoryFontSizeType != 'rem'
                             ? parseInt(categoryFontSize) -
-                              parseInt(categoryFontSize) * 0.1 +
+                              parseInt(categoryFontSize) * 0.05 +
                               'px'
                             : 'auto',
                       }}
@@ -200,7 +200,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           valueFontSize != '0' &&
                           valueFontSizeType != 'rem'
                             ? parseInt(valueFontSize) -
-                              parseInt(valueFontSize) * 0.1 +
+                              parseInt(valueFontSize) * 0.05 +
                               'px'
                             : 'auto',
                       }}
@@ -237,7 +237,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     titleFontSize != '0' &&
                     titleFontSizeType != 'rem'
                       ? parseInt(titleFontSize) -
-                        parseInt(titleFontSize) * 0.1 +
+                        parseInt(titleFontSize) * 0.05 +
                         'px'
                       : 'auto',
                 }}
@@ -266,7 +266,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     descriptionFontSize != '0' &&
                     descriptionFontSizeType != 'rem'
                       ? parseInt(descriptionFontSize) -
-                        parseInt(descriptionFontSize) * 0.1 +
+                        parseInt(descriptionFontSize) * 0.05 +
                         'px'
                       : 'auto',
                 }}
@@ -295,7 +295,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     categoryFontSize != '0' &&
                     categoryFontSizeType != 'rem'
                       ? parseInt(categoryFontSize) -
-                        parseInt(categoryFontSize) * 0.1 +
+                        parseInt(categoryFontSize) * 0.05 +
                         'px'
                       : 'auto',
                 }}
@@ -324,7 +324,7 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     valueFontSize != '0' &&
                     valueFontSizeType != 'rem'
                       ? parseInt(valueFontSize) -
-                        parseInt(valueFontSize) * 0.1 +
+                        parseInt(valueFontSize) * 0.05 +
                         'px'
                       : 'auto',
                 }}

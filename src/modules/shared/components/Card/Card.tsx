@@ -64,7 +64,7 @@ export const Card = ({
               styleData.titleFontSize != '0' &&
               styleData.titleFontSizeType != 'rem'
                 ? parseInt(styleData.titleFontSize) -
-                  parseInt(styleData.titleFontSize) * 0.1 +
+                  parseInt(styleData.titleFontSize) * 0.05 +
                   'px'
                 : 'auto',
           }}
@@ -93,7 +93,7 @@ export const Card = ({
               styleData.descriptionFontSize != '0' &&
               styleData.descriptionFontSizeType != 'rem'
                 ? parseInt(styleData.descriptionFontSize) -
-                  parseInt(styleData.descriptionFontSize) * 0.1 +
+                  parseInt(styleData.descriptionFontSize) * 0.05 +
                   'px'
                 : 'auto',
           }}
@@ -122,7 +122,7 @@ export const Card = ({
               styleData.categoryFontSize != '0' &&
               styleData.categoryFontSizeType != 'rem'
                 ? parseInt(styleData.categoryFontSize) -
-                  parseInt(styleData.categoryFontSize) * 0.1 +
+                  parseInt(styleData.categoryFontSize) * 0.05 +
                   'px'
                 : 'auto',
           }}
@@ -150,7 +150,7 @@ export const Card = ({
               styleData.valueFontSize != '0' &&
               styleData.valueFontSizeType != 'rem'
                 ? parseInt(styleData.valueFontSize) -
-                  parseInt(styleData.valueFontSize) * 0.1 +
+                  parseInt(styleData.valueFontSize) * 0.05 +
                   'px'
                 : 'auto',
           }}

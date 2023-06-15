@@ -347,7 +347,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 moduleFontSize != '0' &&
                 moduleFontSizeType != 'rem'
                   ? parseInt(moduleFontSize) -
-                    parseInt(moduleFontSize) * 0.1 +
+                    parseInt(moduleFontSize) * 0.05 +
                     'px'
                   : 'auto',
             }}

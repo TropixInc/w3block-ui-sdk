@@ -204,7 +204,7 @@ const Slide = ({
                 titleFontSize != '0' &&
                 titleFontSizeType != 'rem'
                   ? parseInt(titleFontSize) -
-                    parseInt(titleFontSize) * 0.1 +
+                    parseInt(titleFontSize) * 0.05 +
                     'px'
                   : 'auto',
             }}
@@ -230,7 +230,7 @@ const Slide = ({
                 subtitleFontSize != '0' &&
                 subtitleFontSizeType != 'rem'
                   ? parseInt(subtitleFontSize) -
-                    parseInt(subtitleFontSize) * 0.1 +
+                    parseInt(subtitleFontSize) * 0.05 +
                     'px'
                   : 'auto',
             }}
