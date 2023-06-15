@@ -130,7 +130,10 @@ const _CheckoutInfo = ({
           products: [...preview.products],
           totalPrice: preview.totalPrice,
           clientServiceFee: preview.clientServiceFee,
-          gasFee: { amount: preview.gasFee ?? '0', signature: '' },
+          gasFee: {
+            amount: preview.gasFee?.amount ?? '0',
+            signature: preview.gasFee?.signature ?? '',
+          },
           cartPrice: preview.cartPrice,
         });
       }
@@ -209,8 +212,11 @@ const _CheckoutInfo = ({
         signedGasFee: orderPreview?.gasFee?.signature || '',
         totalPrice: orderPreview?.totalPrice ?? '',
         clientServiceFee: orderPreview?.clientServiceFee || '0',
-        gasFee:
-          parseFloat(orderPreview?.gasFee?.amount || '0').toString() || '0',
+        gasFee: {
+          amount:
+            parseFloat(orderPreview?.gasFee?.amount || '0').toString() || '0',
+          signature: orderPreview.gasFee?.signature ?? '',
+        },
         cartPrice: parseFloat(orderPreview?.cartPrice || '0').toString() || '0',
         choosedPayment: choosedPayment,
       });

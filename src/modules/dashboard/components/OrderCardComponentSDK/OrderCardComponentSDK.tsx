@@ -163,7 +163,7 @@ export const OrderCardComponentSDK = ({
             className="pw-mt-6"
             gasFee={order.data.gasFee}
             service={order.data.clientServiceFee}
-            price={order.data.totalAmount}
+            price={order.data.currencyAmount}
             totalPrice={parseFloat(order.data.totalAmount).toFixed(2)}
           />
         </div>

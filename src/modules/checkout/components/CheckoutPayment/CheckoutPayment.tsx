@@ -129,7 +129,7 @@ export const CheckoutPayment = () => {
           onSuccess(data: any) {
             setProductCache({
               ...productCache,
-              gasFee: data.gasFee.amount,
+              gasFee: data.gasFee,
               clientServiceFee: data.clientServiceFee,
               cartPrice: data.cartPrice,
             });
