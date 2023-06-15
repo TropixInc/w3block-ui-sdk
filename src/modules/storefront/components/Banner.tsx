@@ -203,9 +203,10 @@ const Slide = ({
                 titleFontSize != '' &&
                 titleFontSize != '0' &&
                 titleFontSizeType != 'rem'
-                  ? parseInt(titleFontSize) -
-                    parseInt(titleFontSize) * 0.05 +
-                    'px'
+                  ? (
+                      parseInt(titleFontSize) -
+                      parseInt(titleFontSize) * 0.05
+                    ).toFixed(0) + 'px'
                   : 'auto',
             }}
             className={`${alignmentTextClass} pw-font-semibold pw-max-w-[550px]`}
@@ -229,9 +230,10 @@ const Slide = ({
                 subtitleFontSize != '' &&
                 subtitleFontSize != '0' &&
                 subtitleFontSizeType != 'rem'
-                  ? parseInt(subtitleFontSize) -
-                    parseInt(subtitleFontSize) * 0.05 +
-                    'px'
+                  ? (
+                      parseInt(subtitleFontSize) -
+                      parseInt(subtitleFontSize) * 0.05
+                    ).toFixed(0) + 'px'
                   : 'auto',
             }}
             className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}

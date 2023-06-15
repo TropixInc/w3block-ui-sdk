@@ -113,9 +113,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           titleFontSize != '' &&
                           titleFontSize != '0' &&
                           titleFontSizeType != 'rem'
-                            ? parseInt(titleFontSize) -
-                              parseInt(titleFontSize) * 0.05 +
-                              'px'
+                            ? (
+                                parseInt(titleFontSize) -
+                                parseInt(titleFontSize) * 0.05
+                              ).toFixed(0) + 'px'
                             : 'auto',
                       }}
                       className="pw-line-clamp-2 pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
@@ -142,9 +143,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           descriptionFontSize != '' &&
                           descriptionFontSize != '0' &&
                           descriptionFontSizeType != 'rem'
-                            ? parseInt(descriptionFontSize) -
-                              parseInt(descriptionFontSize) * 0.05 +
-                              'px'
+                            ? (
+                                parseInt(descriptionFontSize) -
+                                parseInt(descriptionFontSize) * 0.05
+                              ).toFixed(0) + 'px'
                             : 'auto',
                       }}
                       className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
@@ -171,9 +173,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           categoryFontSize != '' &&
                           categoryFontSize != '0' &&
                           categoryFontSizeType != 'rem'
-                            ? parseInt(categoryFontSize) -
-                              parseInt(categoryFontSize) * 0.05 +
-                              'px'
+                            ? (
+                                parseInt(categoryFontSize) -
+                                parseInt(categoryFontSize) * 0.05
+                              ).toFixed(0) + 'px'
                             : 'auto',
                       }}
                       className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
@@ -199,9 +202,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                           valueFontSize != '' &&
                           valueFontSize != '0' &&
                           valueFontSizeType != 'rem'
-                            ? parseInt(valueFontSize) -
-                              parseInt(valueFontSize) * 0.05 +
-                              'px'
+                            ? (
+                                parseInt(valueFontSize) -
+                                parseInt(valueFontSize) * 0.05
+                              ).toFixed(0) + 'px'
                             : 'auto',
                       }}
                       className="pw-font-bold pw-text-lg pw-mt-2"
@@ -236,9 +240,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     titleFontSize != '' &&
                     titleFontSize != '0' &&
                     titleFontSizeType != 'rem'
-                      ? parseInt(titleFontSize) -
-                        parseInt(titleFontSize) * 0.05 +
-                        'px'
+                      ? (
+                          parseInt(titleFontSize) -
+                          parseInt(titleFontSize) * 0.05
+                        ).toFixed(0) + 'px'
                       : 'auto',
                 }}
                 className="pw-line-clamp-2 pw-font-[400] pw-mt-2 "
@@ -265,9 +270,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     descriptionFontSize != '' &&
                     descriptionFontSize != '0' &&
                     descriptionFontSizeType != 'rem'
-                      ? parseInt(descriptionFontSize) -
-                        parseInt(descriptionFontSize) * 0.05 +
-                        'px'
+                      ? (
+                          parseInt(descriptionFontSize) -
+                          parseInt(descriptionFontSize) * 0.05
+                        ).toFixed(0) + 'px'
                       : 'auto',
                 }}
                 className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
@@ -294,9 +300,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     categoryFontSize != '' &&
                     categoryFontSize != '0' &&
                     categoryFontSizeType != 'rem'
-                      ? parseInt(categoryFontSize) -
-                        parseInt(categoryFontSize) * 0.05 +
-                        'px'
+                      ? (
+                          parseInt(categoryFontSize) -
+                          parseInt(categoryFontSize) * 0.05
+                        ).toFixed(0) + 'px'
                       : 'auto',
                 }}
                 className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
@@ -323,9 +330,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                     valueFontSize != '' &&
                     valueFontSize != '0' &&
                     valueFontSizeType != 'rem'
-                      ? parseInt(valueFontSize) -
-                        parseInt(valueFontSize) * 0.05 +
-                        'px'
+                      ? (
+                          parseInt(valueFontSize) -
+                          parseInt(valueFontSize) * 0.05
+                        ).toFixed(0) + 'px'
                       : 'auto',
                 }}
                 className="pw-font-bold pw-text-lg pw-mt-2"

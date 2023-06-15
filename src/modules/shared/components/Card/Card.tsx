@@ -63,9 +63,10 @@ export const Card = ({
               styleData.titleFontSize != '' &&
               styleData.titleFontSize != '0' &&
               styleData.titleFontSizeType != 'rem'
-                ? parseInt(styleData.titleFontSize) -
-                  parseInt(styleData.titleFontSize) * 0.05 +
-                  'px'
+                ? (
+                    parseInt(styleData.titleFontSize) -
+                    parseInt(styleData.titleFontSize) * 0.05
+                  ).toFixed(0) + 'px'
                 : 'auto',
           }}
           className="pw-line-clamp-2 pw-min-h-[36px] pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
@@ -92,9 +93,10 @@ export const Card = ({
               styleData.descriptionFontSize != '' &&
               styleData.descriptionFontSize != '0' &&
               styleData.descriptionFontSizeType != 'rem'
-                ? parseInt(styleData.descriptionFontSize) -
-                  parseInt(styleData.descriptionFontSize) * 0.05 +
-                  'px'
+                ? (
+                    parseInt(styleData.descriptionFontSize) -
+                    parseInt(styleData.descriptionFontSize) * 0.05
+                  ).toFixed(0) + 'px'
                 : 'auto',
           }}
           className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px] pw-mt-2 pw-text-sm pw-leading-5"
@@ -121,9 +123,10 @@ export const Card = ({
               styleData.categoryFontSize != '' &&
               styleData.categoryFontSize != '0' &&
               styleData.categoryFontSizeType != 'rem'
-                ? parseInt(styleData.categoryFontSize) -
-                  parseInt(styleData.categoryFontSize) * 0.05 +
-                  'px'
+                ? (
+                    parseInt(styleData.categoryFontSize) -
+                    parseInt(styleData.categoryFontSize) * 0.05
+                  ).toFixed(0) + 'px'
                 : 'auto',
           }}
           className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
@@ -149,9 +152,10 @@ export const Card = ({
               styleData.valueFontSize != '' &&
               styleData.valueFontSize != '0' &&
               styleData.valueFontSizeType != 'rem'
-                ? parseInt(styleData.valueFontSize) -
-                  parseInt(styleData.valueFontSize) * 0.05 +
-                  'px'
+                ? (
+                    parseInt(styleData.valueFontSize) -
+                    parseInt(styleData.valueFontSize) * 0.05
+                  ).toFixed(0) + 'px'
                 : 'auto',
           }}
           className="pw-font-bold pw-text-lg pw-mt-2"
