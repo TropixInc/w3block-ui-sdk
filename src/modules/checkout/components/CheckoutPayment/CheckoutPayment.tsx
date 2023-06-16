@@ -224,7 +224,9 @@ export const CheckoutPayment = () => {
           },
         }
       );
-    } else setRequestError('Token inválido ou expirado.');
+    } else if (!session || !profile) {
+      router.pushConnect(PixwayAppRoutes.SIGN_IN + query);
+    }
   };
 
   const [_, copyClp] = useCopyToClipboard();
