@@ -64,7 +64,7 @@ export const CheckoutPayment = () => {
   const [query] = useState('');
   const [installment, setInstallment] = useState<AvailableInstallmentInfo>();
   useEffect(() => {
-    if (myOrderPreview && productCache) {
+    if (myOrderPreview) {
       if (
         productCache?.choosedPayment?.paymentProvider == PaymentMethod.ASAAS
       ) {
@@ -81,7 +81,7 @@ export const CheckoutPayment = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myOrderPreview, productCache]);
+  }, [myOrderPreview]);
 
   useEffect(() => {
     if (poolStatus && orderId) {
