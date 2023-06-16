@@ -117,11 +117,7 @@ export const CheckoutPayment = () => {
   }, [productCache]);
 
   const orderPreview = () => {
-    if (
-      productCache &&
-      stayPooling &&
-      productCache?.choosedPayment?.paymentProvider == PaymentMethod.ASAAS
-    ) {
+    if (productCache && stayPooling) {
       getOrderPreview.mutate(
         {
           productIds: productCache.orderProducts.map((p) => p.productId),
