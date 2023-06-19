@@ -101,11 +101,12 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                         color: cardProductNameColor ?? 'black',
                         fontFamily: titleFontFamily ?? '',
                         fontSize:
-                          (titleFontSize &&
+                          titleFontSize &&
                           titleFontSize != '' &&
                           titleFontSize != '0'
-                            ? titleFontSize
-                            : 14) + (titleFontSizeType == 'rem' ? 'rem' : 'px'),
+                            ? titleFontSize +
+                              (titleFontSizeType == 'rem' ? 'rem' : 'px')
+                            : '',
                         fontWeight: titleFontBold ? 'bold' : 'normal',
                         fontStyle: titleFontItalic ? 'italic' : 'normal',
                         lineHeight:
@@ -130,12 +131,12 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                         color: cardDescriptionColor ?? '#7E7E7E',
                         fontFamily: descriptionFontFamily ?? '',
                         fontSize:
-                          (descriptionFontSize &&
+                          descriptionFontSize &&
                           descriptionFontSize != '' &&
                           descriptionFontSize != '0'
-                            ? descriptionFontSize
-                            : 14) +
-                          (descriptionFontSizeType == 'rem' ? 'rem' : 'px'),
+                            ? descriptionFontSize +
+                              (descriptionFontSizeType == 'rem' ? 'rem' : 'px')
+                            : '',
                         fontWeight: descriptionFontBold ? 'bold' : 'normal',
                         fontStyle: descriptionFontItalic ? 'italic' : 'normal',
                         lineHeight:
@@ -160,12 +161,12 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                         color: cardCategoryColor ?? '#C63535',
                         fontFamily: categoryFontFamily ?? '',
                         fontSize:
-                          (categoryFontSize &&
+                          categoryFontSize &&
                           categoryFontSize != '' &&
                           categoryFontSize != '0'
-                            ? categoryFontSize
-                            : 14) +
-                          (categoryFontSizeType == 'rem' ? 'rem' : 'px'),
+                            ? categoryFontSize +
+                              (categoryFontSizeType == 'rem' ? 'rem' : 'px')
+                            : '',
                         fontWeight: categoryFontBold ? 'bold' : 'normal',
                         fontStyle: categoryFontItalic ? 'italic' : 'normal',
                         lineHeight:
@@ -190,12 +191,18 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                         color: cardValueColor ?? 'black',
                         fontFamily: valueFontFamily ?? '',
                         fontSize:
-                          (valueFontSize &&
+                          valueFontSize &&
                           valueFontSize != '' &&
                           valueFontSize != '0'
-                            ? valueFontSize
-                            : 14) + (valueFontSizeType == 'rem' ? 'rem' : 'px'),
-                        fontWeight: valueFontBold ? 'bold' : 'normal',
+                            ? valueFontSize +
+                              (valueFontSizeType == 'rem' ? 'rem' : 'px')
+                            : '',
+                        fontWeight:
+                          valueFontBold != undefined
+                            ? valueFontBold
+                              ? 'bold'
+                              : 'normal'
+                            : '',
                         fontStyle: valueFontItalic ? 'italic' : 'normal',
                         lineHeight:
                           valueFontSize &&
@@ -228,11 +235,10 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: titleFontFamily ?? '',
                   fontSize:
-                    (titleFontSize &&
-                    titleFontSize != '' &&
-                    titleFontSize != '0'
-                      ? titleFontSize
-                      : 14) + (titleFontSizeType == 'rem' ? 'rem' : 'px'),
+                    titleFontSize && titleFontSize != '' && titleFontSize != '0'
+                      ? titleFontSize +
+                        (titleFontSizeType == 'rem' ? 'rem' : 'px')
+                      : '',
                   fontWeight: titleFontBold ? 'bold' : 'normal',
                   fontStyle: titleFontItalic ? 'italic' : 'normal',
                   lineHeight:
@@ -258,11 +264,12 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: descriptionFontFamily ?? '',
                   fontSize:
-                    (descriptionFontSize &&
+                    descriptionFontSize &&
                     descriptionFontSize != '' &&
                     descriptionFontSize != '0'
-                      ? descriptionFontSize
-                      : 14) + (descriptionFontSizeType == 'rem' ? 'rem' : 'px'),
+                      ? descriptionFontSize +
+                        (descriptionFontSizeType == 'rem' ? 'rem' : 'px')
+                      : '',
                   fontWeight: descriptionFontBold ? 'bold' : 'normal',
                   fontStyle: descriptionFontItalic ? 'italic' : 'normal',
                   lineHeight:
@@ -288,11 +295,12 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: categoryFontFamily ?? '',
                   fontSize:
-                    (categoryFontSize &&
+                    categoryFontSize &&
                     categoryFontSize != '' &&
                     categoryFontSize != '0'
-                      ? categoryFontSize
-                      : 14) + (categoryFontSizeType == 'rem' ? 'rem' : 'px'),
+                      ? categoryFontSize +
+                        (categoryFontSizeType == 'rem' ? 'rem' : 'px')
+                      : '',
                   fontWeight: categoryFontBold ? 'bold' : 'normal',
                   fontStyle: categoryFontItalic ? 'italic' : 'normal',
                   lineHeight:
@@ -318,12 +326,16 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: valueFontFamily ?? '',
                   fontSize:
-                    (valueFontSize &&
-                    valueFontSize != '' &&
-                    valueFontSize != '0'
-                      ? valueFontSize
-                      : 14) + (valueFontSizeType == 'rem' ? 'rem' : 'px'),
-                  fontWeight: valueFontBold ? 'bold' : 'normal',
+                    valueFontSize && valueFontSize != '' && valueFontSize != '0'
+                      ? valueFontSize +
+                        (valueFontSizeType == 'rem' ? 'rem' : 'px')
+                      : '',
+                  fontWeight:
+                    valueFontBold != undefined
+                      ? valueFontBold
+                        ? 'bold'
+                        : 'normal'
+                      : 'bold',
                   fontStyle: valueFontItalic ? 'italic' : 'normal',
                   lineHeight:
                     valueFontSize &&

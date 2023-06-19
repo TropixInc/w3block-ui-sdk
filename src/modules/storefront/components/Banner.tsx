@@ -193,9 +193,9 @@ const Slide = ({
               color: titleColor ?? 'white',
               fontFamily: titleFontFamily ?? '',
               fontSize:
-                (titleFontSize && titleFontSize != '' && titleFontSize != '0'
-                  ? titleFontSize
-                  : 36) + (titleFontSizeType == 'rem' ? 'rem' : 'px'),
+                titleFontSize && titleFontSize != '' && titleFontSize != '0'
+                  ? titleFontSize + (titleFontSizeType == 'rem' ? 'rem' : 'px')
+                  : '',
               fontWeight: titleFontBold ? 'bold' : 'normal',
               fontStyle: titleFontItalic ? 'italic' : 'normal',
               lineHeight:
@@ -218,11 +218,12 @@ const Slide = ({
               color: subtitleColor ?? 'white',
               fontFamily: subtitleFontFamily ?? '',
               fontSize:
-                (subtitleFontSize &&
+                subtitleFontSize &&
                 subtitleFontSize != '' &&
                 subtitleFontSize != '0'
-                  ? subtitleFontSize
-                  : 36) + (subtitleFontSizeType == 'rem' ? 'rem' : 'px'),
+                  ? subtitleFontSize +
+                    (subtitleFontSizeType == 'rem' ? 'rem' : 'px')
+                  : '',
               fontWeight: subtitleFontBold ? 'bold' : 'normal',
               fontStyle: subtitleFontItalic ? 'italic' : 'normal',
               lineHeight:
