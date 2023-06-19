@@ -209,7 +209,7 @@ const Slide = ({
                     ).toFixed(0) + 'px'
                   : 'auto',
             }}
-            className={`${alignmentTextClass} pw-font-semibold pw-max-w-[550px]`}
+            className={`${alignmentTextClass} pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
           >
             {title}
           </h2>
