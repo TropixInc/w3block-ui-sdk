@@ -196,7 +196,12 @@ const Slide = ({
                 titleFontSize && titleFontSize != '' && titleFontSize != '0'
                   ? titleFontSize + (titleFontSizeType == 'rem' ? 'rem' : 'px')
                   : '',
-              fontWeight: titleFontBold ? 'bold' : 'normal',
+              fontWeight:
+                titleFontBold != undefined
+                  ? titleFontBold
+                    ? 'bold'
+                    : 'normal'
+                  : 'bold',
               fontStyle: titleFontItalic ? 'italic' : 'normal',
               lineHeight:
                 titleFontSize &&
