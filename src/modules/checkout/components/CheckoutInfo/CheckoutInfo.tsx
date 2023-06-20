@@ -347,11 +347,15 @@ const _CheckoutInfo = ({
                 '0'
               }
             />
-            <PaymentMethodsComponent
-              methodSelected={choosedPayment ?? ({} as PaymentMethodsAvaiable)}
-              methods={orderPreview?.providersForSelection ?? []}
-              onSelectedPayemnt={setChoosedPayment}
-            />
+            {parseFloat(orderPreview?.totalPrice ?? '0') !== 0 && (
+              <PaymentMethodsComponent
+                methodSelected={
+                  choosedPayment ?? ({} as PaymentMethodsAvaiable)
+                }
+                methods={orderPreview?.providersForSelection ?? []}
+                onSelectedPayemnt={setChoosedPayment}
+              />
+            )}
             <div className="pw-flex pw-mt-4 pw-gap-x-4">
               <PixwayButton
                 onClick={
@@ -370,7 +374,9 @@ const _CheckoutInfo = ({
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
-                {translate('shared>continue')}
+                {parseFloat(orderPreview?.totalPrice ?? '0') !== 0
+                  ? translate('shared>continue')
+                  : 'Finalizar pedido'}
               </PixwayButton>
             </div>
           </>

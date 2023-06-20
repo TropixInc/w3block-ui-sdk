@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useCopyToClipboard, useInterval, useLocalStorage } from 'react-use';
 
@@ -6,6 +7,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
+import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -193,7 +195,10 @@ export const CheckoutPayment = () => {
               setIsStripe(data.paymentInfo.clientSecret ?? '');
               setStripeKey(data.paymentInfo.publicKey ?? '');
             } else {
-              if (productCache.choosedPayment?.paymentMethod == 'credit_card') {
+              if (
+                productCache.choosedPayment?.paymentMethod == 'credit_card' ||
+                parseInt(productCache?.cartPrice ?? '') === 0
+              ) {
                 router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
               } else {
                 if ('pix' in data.paymentInfo) {
@@ -242,73 +247,92 @@ export const CheckoutPayment = () => {
     createOrder(val);
   };
 
+  useEffect(() => {
+    if (parseInt(productCache?.cartPrice ?? '') === 0) {
+      createOrder({});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productCache?.cartPrice]);
+
   const WichPaymentMethod = () => {
     if (productCache?.choosedPayment?.paymentProvider == 'asaas') {
-      return (
-        <div className="pw-container pw-mx-auto pw-h-full pw-px-0 sm:pw-px-4">
-          {!iframeLink ? (
-            <CheckoutPaymentComponent
-              currency={
-                productCache.products[0].prices.find(
-                  (price) => price.currencyId == productCache.currencyId
-                )?.currency.name ?? 'BRL'
-              }
-              installments={productCache.choosedPayment?.availableInstallments}
-              instalment={installment}
-              setInstallment={(val) => setInstallment(val)}
-              loading={loading}
-              error={requestError?.replaceAll(';', '\n')}
-              buttonText={
-                productCache.choosedPayment.paymentMethod == 'pix'
-                  ? 'Avançar'
-                  : 'Finalizar compra'
-              }
-              onChange={(val) => {
-                setInputsValue(val);
-                setRequestError('');
-              }}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              onConcluded={(val: any) => {
-                setInputsValue(val);
-                concluded(val);
-              }}
-              title="Informações para pagamento"
-              inputs={productCache.choosedPayment.inputs as INPUTS_POSSIBLE[]}
-            />
-          ) : (
-            <div className="pw-bg-white pw-p-4 sm:pw-p-6 pw-flex pw-justify-center pw-items-center pw-shadow-brand-shadow pw-rounded-lg">
-              <div className="pw-flex pw-justify-center pw-items-center pw-h-full">
-                <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-items-center pw-justify-center pw-mt-10 sm:pw-mt-15 sm:pw-mb-15 pw-mb-10 pw-px-4">
-                  <p className="pw-text-center pw-max-w-[450px] pw-text-slate-500 pw-text-sm pw-font-[500] pw-mx-auto pw-mt-4">
-                    Após a conclusão do pagamento, em alguns minutos você poderá
-                    visualizar os itens comprados em sua carteira.
-                  </p>
+      if (parseInt(productCache?.cartPrice ?? '') === 0) {
+        return (
+          <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
+            <Spinner className="pw-h-13 pw-w-13" />
+            <h1 className="pw-text-2xl pw-text-black pw-mt-4">
+              Finalizando Pedido
+            </h1>
+          </div>
+        );
+      } else
+        return (
+          <div className="pw-container pw-mx-auto pw-h-full pw-px-0 sm:pw-px-4">
+            {!iframeLink ? (
+              <CheckoutPaymentComponent
+                currency={
+                  productCache.products[0].prices.find(
+                    (price) => price.currencyId == productCache.currencyId
+                  )?.currency.name ?? 'BRL'
+                }
+                installments={
+                  productCache.choosedPayment?.availableInstallments
+                }
+                instalment={installment}
+                setInstallment={(val) => setInstallment(val)}
+                loading={loading}
+                error={requestError?.replaceAll(';', '\n')}
+                buttonText={
+                  productCache.choosedPayment.paymentMethod == 'pix'
+                    ? 'Avançar'
+                    : 'Finalizar compra'
+                }
+                onChange={(val) => {
+                  setInputsValue(val);
+                  setRequestError('');
+                }}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onConcluded={(val: any) => {
+                  setInputsValue(val);
+                  concluded(val);
+                }}
+                title="Informações para pagamento"
+                inputs={productCache.choosedPayment.inputs as INPUTS_POSSIBLE[]}
+              />
+            ) : (
+              <div className="pw-bg-white pw-p-4 sm:pw-p-6 pw-flex pw-justify-center pw-items-center pw-shadow-brand-shadow pw-rounded-lg">
+                <div className="pw-flex pw-justify-center pw-items-center pw-h-full">
+                  <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-items-center pw-justify-center pw-mt-10 sm:pw-mt-15 sm:pw-mb-15 pw-mb-10 pw-px-4">
+                    <p className="pw-text-center pw-max-w-[450px] pw-text-slate-500 pw-text-sm pw-font-[500] pw-mx-auto pw-mt-4">
+                      Após a conclusão do pagamento, em alguns minutos você
+                      poderá visualizar os itens comprados em sua carteira.
+                    </p>
 
-                  <p className="pw-text-center pw-font-semibold pw-text-black pw-mt-6">
-                    Escaneie o QR Code abaixo para realizar o pagamento
-                  </p>
-                  {pixImage && (
-                    <img src={`data:image/png;base64, ${pixImage}`} />
-                  )}
-                  {pixPayload && (
-                    <>
-                      <p className="pw-text-center pw-text-xs pw-text-slate-600">
-                        Caso prefira copie o código abaixo
-                      </p>
-                      <p
-                        onClick={() => copyClp(pixPayload)}
-                        className="pw-text-center pw-text-brand-primary pw-text-xs pw-cursor-pointer pw-px-6 pw-mb-8 hover:pw-font-[900] pw-break-all"
-                      >
-                        {pixPayload}
-                      </p>
-                    </>
-                  )}
+                    <p className="pw-text-center pw-font-semibold pw-text-black pw-mt-6">
+                      Escaneie o QR Code abaixo para realizar o pagamento
+                    </p>
+                    {pixImage && (
+                      <img src={`data:image/png;base64, ${pixImage}`} />
+                    )}
+                    {pixPayload && (
+                      <>
+                        <p className="pw-text-center pw-text-xs pw-text-slate-600">
+                          Caso prefira copie o código abaixo
+                        </p>
+                        <p
+                          onClick={() => copyClp(pixPayload)}
+                          className="pw-text-center pw-text-brand-primary pw-text-xs pw-cursor-pointer pw-px-6 pw-mb-8 hover:pw-font-[900] pw-break-all"
+                        >
+                          {pixPayload}
+                        </p>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      );
+            )}
+          </div>
+        );
     } else if (iframeLink) {
       return (
         <>
