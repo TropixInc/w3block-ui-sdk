@@ -1,0 +1,57 @@
+name: Release & Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Target branch of push tags'
+        required: false
+        default: 'main'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .npmrc file to install package to GitHub Packages
+        uses: actions/setup-node@v1
+        with:
+          node-version: ^16.13.2
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install modules
+        run: npm install --force
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_GITHUB_TOKEN }}
+      - name: Build
+        run: npm run build
+      - name: Setup .npmrc file to publish to npm
+        uses: actions/setup-node@v1
+        with:
+          node-version: ^16.13.2
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          scope: '@w3block'
