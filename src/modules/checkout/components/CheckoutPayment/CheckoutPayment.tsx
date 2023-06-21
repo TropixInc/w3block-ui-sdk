@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useCopyToClipboard, useInterval, useLocalStorage } from 'react-use';
 
@@ -6,6 +7,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { useProfile } from '../../../shared';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
+import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -66,7 +68,8 @@ export const CheckoutPayment = () => {
   useEffect(() => {
     if (myOrderPreview) {
       if (
-        productCache?.choosedPayment?.paymentProvider == PaymentMethod.ASAAS
+        productCache?.choosedPayment?.paymentProvider == PaymentMethod.ASAAS &&
+        parseFloat(productCache.totalPrice) !== 0
       ) {
         if (!installment) {
           setInstallment(
@@ -193,7 +196,10 @@ export const CheckoutPayment = () => {
               setIsStripe(data.paymentInfo.clientSecret ?? '');
               setStripeKey(data.paymentInfo.publicKey ?? '');
             } else {
-              if (productCache.choosedPayment?.paymentMethod == 'credit_card') {
+              if (
+                productCache.choosedPayment?.paymentMethod == 'credit_card' ||
+                parseInt(productCache?.cartPrice ?? '') === 0
+              ) {
                 router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
               } else {
                 if ('pix' in data.paymentInfo) {
@@ -243,7 +249,19 @@ export const CheckoutPayment = () => {
   };
 
   const WichPaymentMethod = () => {
-    if (productCache?.choosedPayment?.paymentProvider == 'asaas') {
+    if (
+      productCache?.choosedPayment?.paymentProvider == 'asaas' &&
+      parseInt(productCache?.cartPrice ?? '') === 0
+    ) {
+      return (
+        <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
+          <Spinner className="pw-h-13 pw-w-13" />
+          <h1 className="pw-text-2xl pw-text-black pw-mt-4">
+            Finalizando Pedido
+          </h1>
+        </div>
+      );
+    } else if (productCache?.choosedPayment?.paymentProvider == 'asaas') {
       return (
         <div className="pw-container pw-mx-auto pw-h-full pw-px-0 sm:pw-px-4">
           {!iframeLink ? (

@@ -229,5 +229,6 @@
   "shared>KYCStatys>denied": "Denied",
   "auth>formCompletKYCWithoutLayout>notEditInfos": "Your data has already been reviewed and approved. Please contact support if you need to update your information.",
   "auth>myProfileTemplate>moreInfos": "Additional information",
-  "commerce>productPage>totalAvailable": "Tokens available"
+  "commerce>productPage>totalAvailable": "Tokens available",
+  "commerce>checkout>free": "Free"
 }
