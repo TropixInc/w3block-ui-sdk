@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import Input from 'react-phone-number-input/input';
+import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
@@ -57,12 +57,18 @@ const InputPhone = ({
         {label}
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
-        <Input
+        <ReactInputMask
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           name={name}
           value={inputValue}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e.target.value)}
           placeholder="+XX XX XXXXX XXXX"
+          mask={
+            inputValue && inputValue?.length <= 16
+              ? '+99 99 9999-99999'
+              : '+99 99 99999-9999'
+          }
+          maskChar={''}
           className={classNames(
             'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
           )}
