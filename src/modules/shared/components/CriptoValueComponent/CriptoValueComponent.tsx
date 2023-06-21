@@ -1,6 +1,7 @@
 import { ReactComponent as ETHIcon } from '../../assets/icons/Eth.svg';
 import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
 import { CurrencyEnum } from '../../enums/Currency';
+import useTranslation from '../../hooks/useTranslation';
 type CurrencyObjectType = {
   [key: string]: string;
 };
@@ -17,6 +18,7 @@ export const CriptoValueComponent = ({
   fontClass?: string;
   crypto?: boolean;
 }) => {
+  const [translate] = useTranslation();
   const getIcon = () => {
     switch (code) {
       case CurrencyEnum.ETHEREUM:
@@ -40,7 +42,9 @@ export const CriptoValueComponent = ({
     <div className="pw-flex pw-gap-1 pw-items-center">
       {crypto && getIcon()}
       <p className={`pw-font-semibold pw-text-black ${fontClass}`}>
-        {crypto
+        {parseFloat(value) === 0
+          ? translate('commerce>checkout>free')
+          : crypto
           ? getCryptoValueByCode()
           : formatterCurrency(code ?? 'BRL').format(Number(value))}
       </p>
