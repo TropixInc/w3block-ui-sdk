@@ -51,12 +51,18 @@ export const Card = ({
             color: styleData.cardProductNameColor ?? 'black',
             fontFamily: styleData.titleFontFamily ?? '',
             fontSize:
-              (styleData.titleFontSize &&
+              styleData.titleFontSize &&
               styleData.titleFontSize != '' &&
               styleData.titleFontSize != '0'
-                ? styleData.titleFontSize
-                : 14) + (styleData.titleFontSizeType == 'rem' ? 'rem' : 'px'),
-            fontWeight: styleData.titleFontBold ? 'bold' : 'normal',
+                ? styleData.titleFontSize +
+                  (styleData.titleFontSizeType == 'rem' ? 'rem' : 'px')
+                : '',
+            fontWeight:
+              styleData.titleFontBold != undefined
+                ? styleData.titleFontBold
+                  ? 'bold'
+                  : 'normal'
+                : 'bold',
             fontStyle: styleData.titleFontItalic ? 'italic' : 'normal',
             lineHeight:
               styleData.titleFontSize &&
@@ -80,12 +86,12 @@ export const Card = ({
             color: styleData.cardDescriptionColor ?? '#7E7E7E',
             fontFamily: styleData.descriptionFontFamily ?? '',
             fontSize:
-              (styleData.descriptionFontSize &&
+              styleData.descriptionFontSize &&
               styleData.descriptionFontSize != '' &&
               styleData.descriptionFontSize != '0'
-                ? styleData.descriptionFontSize
-                : 14) +
-              (styleData.descriptionFontSizeType == 'rem' ? 'rem' : 'px'),
+                ? styleData.descriptionFontSize +
+                  (styleData.descriptionFontSizeType == 'rem' ? 'rem' : 'px')
+                : '',
             fontWeight: styleData.descriptionFontBold ? 'bold' : 'normal',
             fontStyle: styleData.descriptionFontItalic ? 'italic' : 'normal',
             lineHeight:
@@ -110,12 +116,12 @@ export const Card = ({
             color: styleData.cardCategoryColor ?? '#C63535',
             fontFamily: styleData.categoryFontFamily ?? '',
             fontSize:
-              (styleData.categoryFontSize &&
+              styleData.categoryFontSize &&
               styleData.categoryFontSize != '' &&
               styleData.categoryFontSize != '0'
-                ? styleData.categoryFontSize
-                : 14) +
-              (styleData.categoryFontSizeType == 'rem' ? 'rem' : 'px'),
+                ? styleData.categoryFontSize +
+                  (styleData.categoryFontSizeType == 'rem' ? 'rem' : 'px')
+                : '',
             fontWeight: styleData.categoryFontBold ? 'bold' : 'normal',
             fontStyle: styleData.categoryFontItalic ? 'italic' : 'normal',
             lineHeight:
@@ -140,11 +146,12 @@ export const Card = ({
             color: styleData.cardValueColor ?? 'black',
             fontFamily: styleData.valueFontFamily ?? '',
             fontSize:
-              (styleData.valueFontSize &&
+              styleData.valueFontSize &&
               styleData.valueFontSize != '' &&
               styleData.valueFontSize != '0'
-                ? styleData.valueFontSize
-                : 14) + (styleData.valueFontSizeType == 'rem' ? 'rem' : 'px'),
+                ? styleData.valueFontSize +
+                  (styleData.valueFontSizeType == 'rem' ? 'rem' : 'px')
+                : '',
             fontWeight: styleData.valueFontBold ? 'bold' : 'normal',
             fontStyle: styleData.valueFontItalic ? 'italic' : 'normal',
             lineHeight:

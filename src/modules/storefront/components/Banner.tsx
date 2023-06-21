@@ -193,10 +193,15 @@ const Slide = ({
               color: titleColor ?? 'white',
               fontFamily: titleFontFamily ?? '',
               fontSize:
-                (titleFontSize && titleFontSize != '' && titleFontSize != '0'
-                  ? titleFontSize
-                  : 36) + (titleFontSizeType == 'rem' ? 'rem' : 'px'),
-              fontWeight: titleFontBold ? 'bold' : 'normal',
+                titleFontSize && titleFontSize != '' && titleFontSize != '0'
+                  ? titleFontSize + (titleFontSizeType == 'rem' ? 'rem' : 'px')
+                  : '',
+              fontWeight:
+                titleFontBold != undefined
+                  ? titleFontBold
+                    ? 'bold'
+                    : 'normal'
+                  : 'bold',
               fontStyle: titleFontItalic ? 'italic' : 'normal',
               lineHeight:
                 titleFontSize &&
@@ -209,7 +214,7 @@ const Slide = ({
                     ).toFixed(0) + 'px'
                   : 'auto',
             }}
-            className={`${alignmentTextClass} pw-font-semibold pw-max-w-[550px]`}
+            className={`${alignmentTextClass} pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
           >
             {title}
           </h2>
@@ -218,11 +223,12 @@ const Slide = ({
               color: subtitleColor ?? 'white',
               fontFamily: subtitleFontFamily ?? '',
               fontSize:
-                (subtitleFontSize &&
+                subtitleFontSize &&
                 subtitleFontSize != '' &&
                 subtitleFontSize != '0'
-                  ? subtitleFontSize
-                  : 36) + (subtitleFontSizeType == 'rem' ? 'rem' : 'px'),
+                  ? subtitleFontSize +
+                    (subtitleFontSizeType == 'rem' ? 'rem' : 'px')
+                  : '',
               fontWeight: subtitleFontBold ? 'bold' : 'normal',
               fontStyle: subtitleFontItalic ? 'italic' : 'normal',
               lineHeight:
