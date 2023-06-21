@@ -8,6 +8,7 @@ import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown
 // import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import { ModalBase } from '../../shared/components/ModalBase';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
@@ -36,7 +37,7 @@ export const ProductPage = ({
   hasCart = true,
 }: ProductPageProps) => {
   const { styleData, mobileStyleData } = data;
-
+  const [isOpen, setIsOpen] = useState(false);
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
     mobileStyleData
@@ -165,38 +166,42 @@ export const ProductPage = ({
     toTenantId: string;
     host: string;
   }) => {
-    if (user) {
-      if (userHasIntegration) {
-        openNewWindow(
-          `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
-        );
-        if (!openNewWindow) {
-          setTimeout(() => {
-            window.open(
-              `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
-              '_blank',
-              'noreferrer'
-            );
-          });
-        }
-      } else {
-        createIntegrationToken(toTenantId ?? '', {
-          onSuccess(data) {
-            openNewWindow(
-              `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
-            );
-            if (!openNewWindow) {
-              setTimeout(() => {
-                window.open(
-                  `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
-                  '_blank',
-                  'noreferrer'
-                );
-              });
-            }
-          },
+    if (userHasIntegration) {
+      openNewWindow(
+        `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
+      );
+      if (!openNewWindow) {
+        setTimeout(() => {
+          window.open(
+            `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
+            '_blank',
+            'noreferrer'
+          );
         });
       }
+    } else {
+      createIntegrationToken(toTenantId ?? '', {
+        onSuccess(data) {
+          openNewWindow(
+            `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
+          );
+          if (!openNewWindow) {
+            setTimeout(() => {
+              window.open(
+                `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
+                '_blank',
+                'noreferrer'
+              );
+            });
+          }
+        },
+      });
+    }
+  };
+
+  const handleClick = () => {
+    if (user) {
+      setIsOpen(true);
     } else {
       pushConnect(PixwayAppRoutes.SIGN_IN, {
         callbackPath: window.location.href,
@@ -235,6 +240,48 @@ export const ProductPage = ({
           </p>
         </div> */}
       </div>
+      <ModalBase isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div
+          style={{
+            color: descriptionTextColor ?? 'black',
+          }}
+          className="pw-text-[13px] pw-pb-8 pw-mt-6"
+          dangerouslySetInnerHTML={{
+            __html: product?.requirements?.requirementModalContent ?? '',
+          }}
+        ></div>
+        <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-between">
+          <button
+            style={{
+              backgroundColor: 'white',
+              color: 'black',
+            }}
+            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+            onClick={() => setIsOpen(false)}
+          >
+            Fechar
+          </button>
+          <button
+            style={{
+              backgroundColor: '#0050FF',
+              color: 'white',
+            }}
+            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+            onClick={() => {
+              handleTenantIntegration({
+                host:
+                  toTenant?.hosts.find((value) => value.isMain === true)
+                    ?.hostname ?? '',
+                toTenantName: toTenant?.name ?? '',
+                toTenantId: toTenant?.id ?? '',
+              });
+              setIsOpen(false);
+            }}
+          >
+            Continuar
+          </button>
+        </div>
+      </ModalBase>
       <div
         className="pw-min-h-[95vh]"
         style={{ backgroundColor: backgroundColor ?? '#EFEFEF' }}
@@ -414,16 +461,7 @@ export const ProductPage = ({
                       {product.requirements.requirementDescription}
                     </p>
                     <button
-                      onClick={() =>
-                        handleTenantIntegration({
-                          host:
-                            toTenant?.hosts.find(
-                              (value) => value.isMain === true
-                            )?.hostname ?? '',
-                          toTenantName: toTenant?.name ?? '',
-                          toTenantId: toTenant?.id ?? '',
-                        })
-                      }
+                      onClick={handleClick}
                       style={{
                         backgroundColor: '#0050FF',
                         color: 'white',

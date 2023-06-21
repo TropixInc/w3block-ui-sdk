@@ -59,6 +59,7 @@ export interface Product {
     productId: string;
     requirementCTALabel: string;
     requirementDescription: string;
+    requirementModalContent: string;
   };
   hasWhitelistBlocker?: boolean;
 }
