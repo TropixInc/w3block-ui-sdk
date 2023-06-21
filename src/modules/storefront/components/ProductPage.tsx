@@ -253,16 +253,6 @@ export const ProductPage = ({
         <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-between">
           <button
             style={{
-              backgroundColor: 'white',
-              color: 'black',
-            }}
-            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-            onClick={() => setIsOpen(false)}
-          >
-            Fechar
-          </button>
-          <button
-            style={{
               backgroundColor: '#0050FF',
               color: 'white',
             }}
@@ -279,6 +269,16 @@ export const ProductPage = ({
             }}
           >
             Continuar
+          </button>
+          <button
+            style={{
+              backgroundColor: 'white',
+              color: 'black',
+            }}
+            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+            onClick={() => setIsOpen(false)}
+          >
+            Fechar
           </button>
         </div>
       </ModalBase>
