@@ -104,7 +104,7 @@ const _LinkAccountTemplate = () => {
       default:
         return (
           <>
-            <p className="pw-text-black pw-font-medium pw-text-xl pw-text-center">
+            <p className="pw-text-black pw-font-medium pw-text-xl pw-text-center pw-break-words">
               Tem certeza que deseja vincular sua conta <b>{fromTenantName}</b>{' '}
               (email: {fromEmail}) à sua conta <b>{toTenantName}</b> (email:{' '}
               {profile?.data?.email}

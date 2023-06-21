@@ -250,13 +250,13 @@ export const ProductPage = ({
             __html: product?.requirements?.requirementModalContent ?? '',
           }}
         ></div>
-        <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-between">
+        <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
           <button
             style={{
               backgroundColor: '#0050FF',
               color: 'white',
             }}
-            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-mr-4"
             onClick={() => {
               handleTenantIntegration({
                 host:
@@ -275,7 +275,7 @@ export const ProductPage = ({
               backgroundColor: 'white',
               color: 'black',
             }}
-            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
             onClick={() => setIsOpen(false)}
           >
             Fechar
