@@ -150,6 +150,13 @@ export const CheckoutPayment = () => {
     }
   }, 20000);
 
+  const isFree = useMemo(() => {
+    if (orderResponse !== undefined)
+      return parseFloat(orderResponse.totalAmount) === 0;
+    else return parseFloat(productCache?.totalPrice ?? '') === 0;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderResponse]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createOrder = (val: any) => {
     setLoading(true);
@@ -252,13 +259,6 @@ export const CheckoutPayment = () => {
   const concluded = (val: any) => {
     createOrder(val);
   };
-
-  const isFree = useMemo(() => {
-    if (orderResponse !== undefined)
-      return parseFloat(orderResponse.totalAmount) === 0;
-    else return parseFloat(productCache?.totalPrice ?? '') === 0;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderResponse]);
 
   const WichPaymentMethod = () => {
     if (productCache?.choosedPayment?.paymentProvider == 'asaas' && isFree) {
