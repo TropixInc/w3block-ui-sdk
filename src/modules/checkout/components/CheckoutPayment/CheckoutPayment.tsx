@@ -65,6 +65,7 @@ export const CheckoutPayment = () => {
   const { data: session } = usePixwaySession();
   const [query] = useState('');
   const [installment, setInstallment] = useState<AvailableInstallmentInfo>();
+  const [orderResponse, setOrderResponse] = useState<CreateOrderResponse>();
   useEffect(() => {
     if (myOrderPreview) {
       if (
@@ -113,7 +114,7 @@ export const CheckoutPayment = () => {
   };
 
   useEffect(() => {
-    if (productCache) {
+    if (productCache && stayPooling) {
       orderPreview();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,7 +145,9 @@ export const CheckoutPayment = () => {
   };
 
   useInterval(() => {
-    orderPreview();
+    if (stayPooling) {
+      orderPreview();
+    }
   }, 20000);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -191,6 +194,8 @@ export const CheckoutPayment = () => {
         },
         {
           onSuccess: (data: CreateOrderResponse) => {
+            setOrderResponse(data);
+            setStayPooling(false);
             setLoading(false);
             if (data.paymentProvider == PaymentMethod.STRIPE) {
               setIsStripe(data.paymentInfo.clientSecret ?? '');
@@ -198,7 +203,7 @@ export const CheckoutPayment = () => {
             } else {
               if (
                 productCache.choosedPayment?.paymentMethod == 'credit_card' ||
-                parseInt(productCache?.cartPrice ?? '') === 0
+                isFree
               ) {
                 router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
               } else {
@@ -248,11 +253,15 @@ export const CheckoutPayment = () => {
     createOrder(val);
   };
 
+  const isFree = useMemo(() => {
+    if (orderResponse !== undefined)
+      return parseFloat(orderResponse.totalAmount) === 0;
+    else return parseFloat(productCache?.totalPrice ?? '') === 0;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderResponse]);
+
   const WichPaymentMethod = () => {
-    if (
-      productCache?.choosedPayment?.paymentProvider == 'asaas' &&
-      parseInt(productCache?.cartPrice ?? '') === 0
-    ) {
+    if (productCache?.choosedPayment?.paymentProvider == 'asaas' && isFree) {
       return (
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
           <Spinner className="pw-h-13 pw-w-13" />
@@ -386,12 +395,33 @@ export const CheckoutPayment = () => {
         <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-6 pw-px-4 sm:pw-px-0">
           <div className="pw-order-1 sm:pw-order-2 pw-w-full sm:pw-w-[40%]">
             <CheckouResume
-              price={productCache?.cartPrice ?? '0'}
-              currencyId={productCache?.currencyId ?? ''}
+              price={
+                orderResponse !== undefined
+                  ? orderResponse.currencyAmount
+                  : productCache?.cartPrice ?? '0'
+              }
+              currencyId={
+                orderResponse !== undefined
+                  ? orderResponse.currencyId
+                  : productCache?.currencyId ?? ''
+              }
               products={productCache?.products ?? []}
-              gasFee={myOrderPreview?.gasFee?.amount ?? '0'}
-              service={myOrderPreview?.clientServiceFee ?? '0'}
-              totalPrice={myOrderPreview?.totalPrice ?? '0'}
+              gasFee={
+                orderResponse !== undefined
+                  ? orderResponse.gasFee
+                  : myOrderPreview?.gasFee?.amount ?? '0'
+              }
+              service={
+                orderResponse !== undefined
+                  ? orderResponse.clientServiceFee
+                  : myOrderPreview?.clientServiceFee ?? '0'
+              }
+              totalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.totalAmount
+                  : myOrderPreview?.totalPrice ?? '0'
+              }
+              loading={loading}
             />
           </div>
           <div className="pw-order-2 sm:pw-order-1 pw-flex-1">

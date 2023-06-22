@@ -35,7 +35,11 @@ const _PriceAndGasInfo = ({
         ) : (
           <CriptoValueComponent
             code={name}
-            value={price}
+            value={
+              parseFloat(price) === 0 && parseFloat(totalPrice) !== 0
+                ? totalPrice
+                : price
+            }
             crypto={currency == 'MATIC' || currency == 'ETH'}
             fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
           />
