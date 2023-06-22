@@ -122,6 +122,7 @@ export interface CreateOrderResponse {
   status: OrderStatus;
   updatedAt: string;
   userId: string;
+  totalAmount: string;
 }
 
 export interface PaymentInfoInterface {
