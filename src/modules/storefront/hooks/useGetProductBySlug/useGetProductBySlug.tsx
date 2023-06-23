@@ -60,6 +60,10 @@ export interface Product {
     requirementCTALabel: string;
     requirementDescription: string;
     requirementModalContent: string;
+    autoCloseOnSuccess: boolean;
+    linkMessage: string;
+    purchaseRequiredModalContent: string;
+    requirementModalPendingContent: string;
   };
   hasWhitelistBlocker?: boolean;
 }

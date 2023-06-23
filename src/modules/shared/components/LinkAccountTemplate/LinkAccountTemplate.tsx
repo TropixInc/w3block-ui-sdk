@@ -28,6 +28,12 @@ const _LinkAccountTemplate = () => {
   const fromEmail = (router.query.fromEmail as string) ?? '';
   const productId = (router.query.productId as string) ?? '';
   const productCollectionId = (router.query.collectionId as string) ?? '';
+  const autoCloseOnSuccess = router.query.autoCloseOnSuccess?.includes('true')
+    ? true
+    : false;
+  const linkMessage = (router.query.linkMessage as string) ?? '';
+  const purchaseRequiredModalContent =
+    (router.query.purchaseRequiredModalContent as string) ?? '';
   const { data: profile } = useProfile();
   const { mutate: acceptIntegration, isLoading } = useAcceptIntegrationToken();
   const [step, setSteps] = useState('');
@@ -73,7 +79,7 @@ const _LinkAccountTemplate = () => {
       case Steps.SUCCESS:
         return (
           <>
-            {productId != '' ? (
+            {productId !== '' ? (
               userHasProduct ? (
                 <p className="pw-text-black pw-font-medium pw-text-xl">
                   Pronto, agora sua conta está vinculada! Você já possui o token
@@ -81,9 +87,29 @@ const _LinkAccountTemplate = () => {
                   já pode retornar a janela anterior e continuar com a sua
                   compra!
                 </p>
+              ) : purchaseRequiredModalContent !== '' ? (
+                <div
+                  className="pw-text-black pw-font-medium pw-text-xl"
+                  dangerouslySetInnerHTML={{
+                    __html: purchaseRequiredModalContent,
+                  }}
+                ></div>
               ) : (
                 <Spinner className="pw-mx-auto" />
               )
+            ) : userHasProduct ? (
+              <p className="pw-text-black pw-font-medium pw-text-xl">
+                Pronto, agora sua conta está vinculada! Você já possui o token
+                necessário para realizar a compra em <b>{fromTenantName}</b>, já
+                pode retornar a janela anterior e continuar com a sua compra!
+              </p>
+            ) : purchaseRequiredModalContent !== '' ? (
+              <div
+                className="pw-text-black pw-font-medium pw-text-xl"
+                dangerouslySetInnerHTML={{
+                  __html: purchaseRequiredModalContent,
+                }}
+              ></div>
             ) : (
               <p className="pw-text-black pw-font-medium pw-text-xl">
                 Pronto, agora sua conta está vinculada! Agora tokens adquiridos
@@ -91,25 +117,55 @@ const _LinkAccountTemplate = () => {
                 exclusivas na sua conta <b>{fromTenantName}</b>.
               </p>
             )}
-            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
+            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-around pw-items-center">
               <button
                 onClick={handleClose}
                 className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
               >
                 Fechar
               </button>
+              {purchaseRequiredModalContent !== '' &&
+              productId !== '' &&
+              !userHasProduct ? (
+                <button
+                  onClick={() =>
+                    router.pushConnect(
+                      PixwayAppRoutes.PRODUCT_PAGE.replace(
+                        '{slug}',
+                        product?.slug ?? ''
+                      )
+                    )
+                  }
+                  className="pw-px-[24px] pw-h-[33px] pw-bg-[#0050FF] pw-text-white pw-border-[#0050FF] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                >
+                  Continuar
+                </button>
+              ) : null}
             </div>
           </>
         );
       default:
         return (
           <>
-            <p className="pw-text-black pw-font-medium pw-text-xl pw-text-center pw-break-words">
-              Tem certeza que deseja vincular sua conta <b>{fromTenantName}</b>{' '}
-              (email: {fromEmail}) à sua conta <b>{toTenantName}</b> (email:{' '}
-              {profile?.data?.email}
-              )?
-            </p>
+            {linkMessage !== '' ? (
+              <div
+                className="pw-text-black pw-font-medium pw-text-xl pw-break-words"
+                dangerouslySetInnerHTML={{
+                  __html: linkMessage
+                    .replace('{{:toTenant}}', toTenantName)
+                    .replace('{{:toEmail}}', profile?.data?.email ?? '')
+                    .replace('{{:fromTenant}}', fromTenantName)
+                    .replace('{{:fromEmail}}', fromEmail),
+                }}
+              ></div>
+            ) : (
+              <p className="pw-text-black pw-font-medium pw-text-xl pw-text-center pw-break-words">
+                Tem certeza que deseja vincular sua conta{' '}
+                <b>{fromTenantName}</b> (email: {fromEmail}) à sua conta{' '}
+                <b>{toTenantName}</b> (email: {profile?.data?.email}
+                )?
+              </p>
+            )}
             <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
               <button
                 onClick={handleClose}
@@ -137,7 +193,13 @@ const _LinkAccountTemplate = () => {
           setSteps(Steps.ERROR);
         },
         onSuccess() {
-          if (productId != '' && !userHasProduct) {
+          if (autoCloseOnSuccess && userHasProduct) {
+            window.close();
+          } else if (
+            productId !== '' &&
+            !userHasProduct &&
+            purchaseRequiredModalContent === ''
+          ) {
             router.pushConnect(
               PixwayAppRoutes.PRODUCT_PAGE.replace(
                 '{slug}',
