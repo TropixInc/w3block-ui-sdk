@@ -290,7 +290,7 @@ export const ProductPage = ({
   }, [product]);
 
   useInterval(() => {
-    if (requiredModalPending) {
+    if (isOpenRefresh) {
       refetch();
     }
   }, 3000);
