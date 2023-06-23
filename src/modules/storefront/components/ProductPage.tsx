@@ -180,12 +180,26 @@ export const ProductPage = ({
   }) => {
     if (userHasIntegration) {
       openNewWindow(
-        `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
+        `https://${host}/redirectPage?productId=${
+          product?.requirements?.productId
+        }${
+          product?.requirements?.purchaseRequiredModalContent
+            ? '&purchaseRequiredModalContent=' +
+              product?.requirements?.purchaseRequiredModalContent
+            : ''
+        }`
       );
       if (!openNewWindow) {
         setTimeout(() => {
           window.open(
-            `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
+            `https://${host}/redirectPage?productId=${
+              product?.requirements?.productId
+            }${
+              product?.requirements?.purchaseRequiredModalContent
+                ? '&purchaseRequiredModalContent=' +
+                  product?.requirements?.purchaseRequiredModalContent
+                : ''
+            }`,
             '_blank',
             'noreferrer'
           );
@@ -569,12 +583,7 @@ export const ProductPage = ({
                           style={{
                             backgroundColor: 'none',
                             borderColor: buttonColor ?? '#0050FF',
-                            color:
-                              product &&
-                              (product?.stockAmount == 0 ||
-                                product?.canPurchaseAmount == 0)
-                                ? '#777E8F'
-                                : buttonColor ?? '#0050FF',
+                            color: buttonColor ?? '#0050FF',
                           }}
                           className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
                         >
