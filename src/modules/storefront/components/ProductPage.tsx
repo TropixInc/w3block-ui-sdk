@@ -178,36 +178,17 @@ export const ProductPage = ({
     toTenantId: string;
     host: string;
   }) => {
-    if (user) {
-      if (userHasIntegration) {
-        openNewWindow(
-          `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
-        );
-        if (!openNewWindow) {
-          setTimeout(() => {
-            window.open(
-              `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
-              '_blank',
-              'noreferrer'
-            );
-          });
-        }
-      } else {
-        createIntegrationToken(toTenantId ?? '', {
-          onSuccess(data) {
-            openNewWindow(
-              `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
-            );
-            if (!openNewWindow) {
-              setTimeout(() => {
-                window.open(
-                  `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
-                  '_blank',
-                  'noreferrer'
-                );
-              });
-            }
-          },
+    if (userHasIntegration) {
+      openNewWindow(
+        `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
+      );
+      if (!openNewWindow) {
+        setTimeout(() => {
+          window.open(
+            `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
+            '_blank',
+            'noreferrer'
+          );
         });
       }
     } else {
