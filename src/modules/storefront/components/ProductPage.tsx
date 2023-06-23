@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
-import { useClickAway } from 'react-use';
+import { useClickAway, useInterval } from 'react-use';
 
 import { useCart } from '../../checkout/hooks/useCart';
 import { useRouterConnect } from '../../shared';
@@ -8,12 +8,15 @@ import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown
 // import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import { ModalBase } from '../../shared/components/ModalBase';
+import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
+import useRouter from '../../shared/hooks/useRouter';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
@@ -36,7 +39,15 @@ export const ProductPage = ({
   hasCart = true,
 }: ProductPageProps) => {
   const { styleData, mobileStyleData } = data;
-
+  const router = useRouter();
+  const requiredModalPending = router.query.requiredModalPending?.includes(
+    'true'
+  )
+    ? true
+    : false;
+  const openModal = router.query.openModal?.includes('true') ? true : false;
+  const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
+  const [isOpen, setIsOpen] = useState(openModal);
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
     mobileStyleData
@@ -83,9 +94,11 @@ export const ProductPage = ({
 
   const [quantity, setQuantity] = useState(1);
   const [quantityOpen, setQuantityOpen] = useState(false);
-  const { data: product, isSuccess } = useGetProductBySlug(
-    params?.[params.length - 1]
-  );
+  const {
+    data: product,
+    isSuccess,
+    refetch,
+  } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
   const limit =
@@ -165,44 +178,108 @@ export const ProductPage = ({
     toTenantId: string;
     host: string;
   }) => {
-    if (user) {
-      if (userHasIntegration) {
-        openNewWindow(
-          `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
-        );
-        if (!openNewWindow) {
-          setTimeout(() => {
-            window.open(
-              `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
-              '_blank',
-              'noreferrer'
-            );
-          });
-        }
-      } else {
-        createIntegrationToken(toTenantId ?? '', {
-          onSuccess(data) {
-            openNewWindow(
-              `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`
-            );
-            if (!openNewWindow) {
-              setTimeout(() => {
-                window.open(
-                  `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId}&collectionId=${product?.requirements?.keyCollectionId}`,
-                  '_blank',
-                  'noreferrer'
-                );
-              });
-            }
-          },
+    if (userHasIntegration) {
+      openNewWindow(
+        `https://${host}/redirectPage?productId=${product?.requirements?.productId}`
+      );
+      if (!openNewWindow) {
+        setTimeout(() => {
+          window.open(
+            `https://${host}/redirectPage?productId=${product?.requirements?.productId}`,
+            '_blank',
+            'noreferrer'
+          );
         });
       }
     } else {
-      pushConnect(PixwayAppRoutes.SIGN_IN, {
-        callbackPath: window.location.href,
+      createIntegrationToken(toTenantId ?? '', {
+        onSuccess(data) {
+          openNewWindow(
+            `https://${host}/linkAccount?token=${data.token}&fromEmail=${
+              user?.email
+            }&fromTentant=${
+              currentTenant?.name
+            }&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${
+              product?.requirements?.productId
+            }&collectionId=${product?.requirements?.keyCollectionId}${
+              product?.requirements?.autoCloseOnSuccess
+                ? '&autoCloseOnSuccess=' +
+                  product?.requirements?.autoCloseOnSuccess
+                : ''
+            }${
+              product?.requirements?.linkMessage
+                ? '&linkMessage=' + product?.requirements?.linkMessage
+                : ''
+            }${
+              product?.requirements?.purchaseRequiredModalContent
+                ? '&purchaseRequiredModalContent=' +
+                  product?.requirements?.purchaseRequiredModalContent
+                : ''
+            }`
+          );
+          if (!openNewWindow) {
+            setTimeout(() => {
+              window.open(
+                `https://${host}/linkAccount?token=${data.token}&fromEmail=${
+                  user?.email
+                }&fromTentant=${
+                  currentTenant?.name
+                }&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${
+                  product?.requirements?.productId
+                }&collectionId=${product?.requirements?.keyCollectionId}${
+                  product?.requirements?.autoCloseOnSuccess
+                    ? '&autoCloseOnSuccess=' +
+                      product?.requirements?.autoCloseOnSuccess
+                    : ''
+                }${
+                  product?.requirements?.linkMessage
+                    ? '&linkMessage=' + product?.requirements?.linkMessage
+                    : ''
+                }${
+                  product?.requirements?.purchaseRequiredModalContent
+                    ? '&purchaseRequiredModalContent=' +
+                      product?.requirements?.purchaseRequiredModalContent
+                    : ''
+                }`,
+                '_blank',
+                'noreferrer'
+              );
+            });
+          }
+        },
       });
     }
   };
+
+  const handleClick = () => {
+    if (user) {
+      setIsOpen(true);
+    } else {
+      pushConnect(PixwayAppRoutes.SIGN_IN, {
+        callbackPath: window.location.href + '?openModal=true',
+      });
+    }
+  };
+
+  const handleRefresh = () => {
+    setIsOpenRefresh(true);
+    pushConnect(
+      PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
+      {
+        requiredModalPending: 'true',
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (product?.canPurchase === true) setIsOpenRefresh(false);
+  }, [product]);
+
+  useInterval(() => {
+    if (requiredModalPending) {
+      refetch();
+    }
+  }, 3000);
 
   return (
     <div
@@ -235,6 +312,65 @@ export const ProductPage = ({
           </p>
         </div> */}
       </div>
+      <ModalBase isOpen={isOpenRefresh} onClose={() => setIsOpenRefresh(false)}>
+        <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
+          <Spinner className="pw-mb-4" />
+          <div
+            style={{
+              color: descriptionTextColor ?? 'black',
+            }}
+            className="pw-text-[13px] pw-mt-6"
+            dangerouslySetInnerHTML={{
+              __html:
+                product?.requirements?.requirementModalPendingContent ??
+                'Estamos aguardando a confirmação do vinculo. <br/><br/> Esse processo pode levar até 5 minutos após a compra do título.',
+            }}
+          ></div>
+        </div>
+      </ModalBase>
+      <ModalBase isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div
+          style={{
+            color: descriptionTextColor ?? 'black',
+          }}
+          className="pw-text-[13px] pw-pb-8 pw-mt-6"
+          dangerouslySetInnerHTML={{
+            __html: product?.requirements?.requirementModalContent ?? '',
+          }}
+        ></div>
+        <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
+          <button
+            style={{
+              backgroundColor: '#0050FF',
+              color: 'white',
+            }}
+            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-mr-4"
+            onClick={() => {
+              handleRefresh();
+              handleTenantIntegration({
+                host:
+                  toTenant?.hosts.find((value) => value.isMain === true)
+                    ?.hostname ?? '',
+                toTenantName: toTenant?.name ?? '',
+                toTenantId: toTenant?.id ?? '',
+              });
+              setIsOpen(false);
+            }}
+          >
+            Continuar
+          </button>
+          <button
+            style={{
+              backgroundColor: 'white',
+              color: 'black',
+            }}
+            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+            onClick={() => setIsOpen(false)}
+          >
+            Fechar
+          </button>
+        </div>
+      </ModalBase>
       <div
         className="pw-min-h-[95vh]"
         style={{ backgroundColor: backgroundColor ?? '#EFEFEF' }}
@@ -409,30 +545,54 @@ export const ProductPage = ({
                 {product?.requirements &&
                 product?.hasWhitelistBlocker &&
                 product?.stockAmount != 0 ? (
-                  <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-w-full pw-mt-5">
-                    <p className="pw-text-sm pw-font-poppins pw-font-medium pw-text-black">
-                      {product.requirements.requirementDescription}
-                    </p>
-                    <button
-                      onClick={() =>
-                        handleTenantIntegration({
-                          host:
-                            toTenant?.hosts.find(
-                              (value) => value.isMain === true
-                            )?.hostname ?? '',
-                          toTenantName: toTenant?.name ?? '',
-                          toTenantId: toTenant?.id ?? '',
-                        })
-                      }
-                      style={{
-                        backgroundColor: '#0050FF',
-                        color: 'white',
-                      }}
-                      className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-                    >
-                      {product?.requirements?.requirementCTALabel}
-                    </button>
-                  </div>
+                  product?.requirements?.requirementCTALabel ? (
+                    <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-w-full pw-mt-5">
+                      <p className="pw-text-sm pw-font-poppins pw-font-medium pw-text-black">
+                        {product.requirements.requirementDescription}
+                      </p>
+                      <button
+                        onClick={handleClick}
+                        style={{
+                          backgroundColor: '#0050FF',
+                          color: 'white',
+                        }}
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                      >
+                        {product?.requirements?.requirementCTALabel}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="pw-flex pw-flex-col">
+                      {!currencyId?.crypto && hasCart ? (
+                        <button
+                          onClick={handleClick}
+                          style={{
+                            backgroundColor: 'none',
+                            borderColor: buttonColor ?? '#0050FF',
+                            color:
+                              product &&
+                              (product?.stockAmount == 0 ||
+                                product?.canPurchaseAmount == 0)
+                                ? '#777E8F'
+                                : buttonColor ?? '#0050FF',
+                          }}
+                          className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
+                        >
+                          Adicionar ao carrinho
+                        </button>
+                      ) : null}
+                      <button
+                        onClick={handleClick}
+                        style={{
+                          backgroundColor: buttonColor ?? '#0050FF',
+                          color: buttonTextColor ?? 'white',
+                        }}
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                      >
+                        {buttonText ?? 'Comprar agora'}
+                      </button>
+                    </div>
+                  )
                 ) : (
                   actionButton && (
                     <div className="pw-flex pw-flex-col">
@@ -503,6 +663,11 @@ export const ProductPage = ({
                       >
                         {buttonText ?? 'Comprar agora'}
                       </button>
+                      {product?.canPurchaseAmount === 0 && (
+                        <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">
+                          * Limite de compra por usuário atingido
+                        </p>
+                      )}
                     </div>
                   )
                 )}
