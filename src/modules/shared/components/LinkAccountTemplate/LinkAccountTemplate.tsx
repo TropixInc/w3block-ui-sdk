@@ -89,10 +89,7 @@ const _LinkAccountTemplate = () => {
                 </p>
               ) : purchaseRequiredModalContent !== '' ? (
                 <div
-                  style={{
-                    color: 'black',
-                  }}
-                  className="pw-text-[13px] pw-mt-6"
+                  className="pw-text-black pw-font-medium pw-text-xl"
                   dangerouslySetInnerHTML={{
                     __html: purchaseRequiredModalContent,
                   }}
@@ -102,10 +99,7 @@ const _LinkAccountTemplate = () => {
               )
             ) : purchaseRequiredModalContent !== '' ? (
               <div
-                style={{
-                  color: 'black',
-                }}
-                className="pw-text-[13px] pw-mt-6"
+                className="pw-text-black pw-font-medium pw-text-xl"
                 dangerouslySetInnerHTML={{
                   __html: purchaseRequiredModalContent,
                 }}
@@ -117,7 +111,7 @@ const _LinkAccountTemplate = () => {
                 exclusivas na sua conta <b>{fromTenantName}</b>.
               </p>
             )}
-            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-between pw-items-center">
+            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-around pw-items-center">
               <button
                 onClick={handleClose}
                 className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
@@ -134,7 +128,7 @@ const _LinkAccountTemplate = () => {
                       )
                     )
                   }
-                  className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                  className="pw-px-[24px] pw-h-[33px] pw-bg-[#0050FF] pw-text-white pw-border-[#0050FF] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
                 >
                   Continuar
                 </button>
@@ -147,7 +141,7 @@ const _LinkAccountTemplate = () => {
           <>
             {linkMessage !== '' ? (
               <div
-                className="pw-text-black pw-font-medium pw-text-xl pw-mt-6 pw-break-words"
+                className="pw-text-black pw-font-medium pw-text-xl pw-break-words"
                 dangerouslySetInnerHTML={{
                   __html: linkMessage
                     .replace('{{:toTenant}}', toTenantName)
