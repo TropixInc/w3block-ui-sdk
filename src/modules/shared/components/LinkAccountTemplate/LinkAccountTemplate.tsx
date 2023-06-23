@@ -97,6 +97,12 @@ const _LinkAccountTemplate = () => {
               ) : (
                 <Spinner className="pw-mx-auto" />
               )
+            ) : userHasProduct ? (
+              <p className="pw-text-black pw-font-medium pw-text-xl">
+                Pronto, agora sua conta está vinculada! Você já possui o token
+                necessário para realizar a compra em <b>{fromTenantName}</b>, já
+                pode retornar a janela anterior e continuar com a sua compra!
+              </p>
             ) : purchaseRequiredModalContent !== '' ? (
               <div
                 className="pw-text-black pw-font-medium pw-text-xl"
@@ -118,7 +124,9 @@ const _LinkAccountTemplate = () => {
               >
                 Fechar
               </button>
-              {purchaseRequiredModalContent !== '' && productId !== '' ? (
+              {purchaseRequiredModalContent !== '' &&
+              productId !== '' &&
+              !userHasProduct ? (
                 <button
                   onClick={() =>
                     router.pushConnect(
@@ -185,7 +193,7 @@ const _LinkAccountTemplate = () => {
           setSteps(Steps.ERROR);
         },
         onSuccess() {
-          if (autoCloseOnSuccess && productId !== '' && userHasProduct) {
+          if (autoCloseOnSuccess && userHasProduct) {
             window.close();
           } else if (
             productId !== '' &&
