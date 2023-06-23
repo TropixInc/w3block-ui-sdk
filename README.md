@@ -42,3 +42,36 @@ npm dev:watch
 //YARN
 yarn dev:watch
 ```
+
+## Processo de release
+
+A release hoje em dia pode ser feita para staging em formato beta ou para produção.
+Caso seja feita para staging verificar sempre o publish.yml para ver se o nome da branch está correto, no caso staging, 
+
+```yml
+ target_branch:
+        description: 'Target branch of push tags'
+        required: false
+        default: 'staging'
+```
+
+Estando correto a crição de release é feito como sempre foi 
+
+```bash 
+yarn pre-release
+```
+
+No caso de produçao o processo é o mesmo, porem o nome da branch é main.
+
+```yml
+ target_branch:
+        description: 'Target branch of push tags'
+        required: false
+        default: 'main'
+```
+
+E o comando para o release ja altera um pouco pois é necessário dizer para qual versão o release vai ser feito.
+
+```bash 
+yarn pre-release --release-as v*.*.*
+```
