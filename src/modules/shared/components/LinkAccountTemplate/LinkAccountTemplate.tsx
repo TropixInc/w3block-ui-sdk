@@ -38,8 +38,6 @@ const _LinkAccountTemplate = () => {
   const { mutate: acceptIntegration, isLoading } = useAcceptIntegrationToken();
   const [step, setSteps] = useState('');
 
-  console.log(linkMessage);
-
   const { wallet } = useUserWallet();
   const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(
     wallet?.chainId || 80001
