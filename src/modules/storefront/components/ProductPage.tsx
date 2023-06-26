@@ -299,6 +299,8 @@ export const ProductPage = ({
   const handleMessage = useCallback(
     (e: MessageEvent<any>) => {
       if (e.data === 'user_linked_no_required_product_found') {
+        setIsOpenRefresh(false);
+        setIsOpen(true);
         pushConnect(
           PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
           {
