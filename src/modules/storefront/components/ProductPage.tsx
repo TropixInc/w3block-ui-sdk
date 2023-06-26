@@ -165,11 +165,7 @@ export const ProductPage = ({
 
   const openNewWindow = (path: string) => {
     setTimeout(() => {
-      window.open(
-        path,
-        '_blank',
-        'noreferrer,left=600,resizable,width=1440,height=900'
-      );
+      window.open(path, '_blank', 'left=600,resizable,width=1440,height=900');
     });
   };
 
@@ -204,8 +200,7 @@ export const ProductPage = ({
                   product?.requirements?.purchaseRequiredModalContent
                 : ''
             }`,
-            '_blank',
-            'noreferrer'
+            '_blank'
           );
         });
       }
@@ -259,8 +254,7 @@ export const ProductPage = ({
                       product?.requirements?.purchaseRequiredModalContent
                     : ''
                 }`,
-                '_blank',
-                'noreferrer'
+                '_blank'
               );
             });
           }

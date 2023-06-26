@@ -186,8 +186,9 @@ const _LinkAccountTemplate = () => {
   };
 
   const sendMessage = () => {
-    if (!userHasProduct) {
-      window.opener.postMessage('user_linked_no_required_product_found', '*');
+    const targetWindow = window.opener;
+    if (!userHasProduct && targetWindow) {
+      targetWindow.postMessage('user_linked_no_required_product_found', '*');
     }
   };
 
