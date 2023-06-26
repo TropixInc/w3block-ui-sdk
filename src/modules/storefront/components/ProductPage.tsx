@@ -302,6 +302,17 @@ export const ProductPage = ({
     }
   }, 3000);
 
+  window.onmessage = function (e) {
+    if (e.data === 'user_linked_no_required_product_found') {
+      pushConnect(
+        PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
+        {
+          openModal: 'true',
+        }
+      );
+    }
+  };
+
   return (
     <div
       style={{
