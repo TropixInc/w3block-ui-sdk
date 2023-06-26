@@ -45,9 +45,6 @@ export const ProductPage = ({
   )
     ? true
     : false;
-  const openModal = router.query.openModal?.includes('true') ? true : false;
-  const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
-  const [isOpen, setIsOpen] = useState(openModal);
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
     mobileStyleData
@@ -98,6 +95,7 @@ export const ProductPage = ({
     data: product,
     isSuccess,
     refetch,
+    isLoading,
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
@@ -108,6 +106,12 @@ export const ProductPage = ({
       ? product.canPurchaseAmount
       : product?.stockAmount;
 
+  const openModal =
+    router.query.openModal?.includes('true') && !product?.canPurchase
+      ? true
+      : false;
+  const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
+  const [isOpen, setIsOpen] = useState(openModal);
   const addToCart = () => {
     setCartCurrencyId?.(currencyId);
     cart.some((p) => p.id == product?.id)
@@ -286,7 +290,10 @@ export const ProductPage = ({
   };
 
   useEffect(() => {
-    if (product?.canPurchase === true) setIsOpenRefresh(false);
+    if (product?.canPurchase === true) {
+      setIsOpen(false);
+      setIsOpenRefresh(false);
+    }
   }, [product]);
 
   useInterval(() => {
@@ -343,47 +350,70 @@ export const ProductPage = ({
         </div>
       </ModalBase>
       <ModalBase isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div
-          style={{
-            color: descriptionTextColor ?? 'black',
-          }}
-          className="pw-text-[13px] pw-pb-8 pw-mt-6"
-          dangerouslySetInnerHTML={{
-            __html: product?.requirements?.requirementModalContent ?? '',
-          }}
-        ></div>
-        <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
-          <button
-            style={{
-              backgroundColor: '#0050FF',
-              color: 'white',
-            }}
-            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-mr-4"
-            onClick={() => {
-              handleRefresh();
-              handleTenantIntegration({
-                host:
-                  toTenant?.hosts.find((value) => value.isMain === true)
-                    ?.hostname ?? '',
-                toTenantName: toTenant?.name ?? '',
-                toTenantId: toTenant?.id ?? '',
-              });
-              setIsOpen(false);
-            }}
-          >
-            Continuar
-          </button>
-          <button
-            style={{
-              backgroundColor: 'white',
-              color: 'black',
-            }}
-            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-            onClick={() => setIsOpen(false)}
-          >
-            Fechar
-          </button>
-        </div>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            {product?.requirements?.productId === '' && userHasIntegration ? (
+              <div
+                style={{
+                  color: descriptionTextColor ?? 'black',
+                }}
+                className="pw-text-[13px] pw-pb-8 pw-mt-10"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    product?.requirements
+                      ?.requirementModalNoPurchaseAvailable ?? '',
+                }}
+              ></div>
+            ) : (
+              <div
+                style={{
+                  color: descriptionTextColor ?? 'black',
+                }}
+                className="pw-text-[13px] pw-pb-8 pw-mt-10"
+                dangerouslySetInnerHTML={{
+                  __html: product?.requirements?.requirementModalContent ?? '',
+                }}
+              ></div>
+            )}
+            <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
+              {product?.requirements?.productId === '' &&
+              userHasIntegration ? null : (
+                <button
+                  style={{
+                    backgroundColor: '#0050FF',
+                    color: 'white',
+                  }}
+                  className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-mr-4"
+                  onClick={() => {
+                    handleRefresh();
+                    handleTenantIntegration({
+                      host:
+                        toTenant?.hosts.find((value) => value.isMain === true)
+                          ?.hostname ?? '',
+                      toTenantName: toTenant?.name ?? '',
+                      toTenantId: toTenant?.id ?? '',
+                    });
+                    setIsOpen(false);
+                  }}
+                >
+                  Continuar
+                </button>
+              )}
+              <button
+                style={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                }}
+                className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                onClick={() => setIsOpen(false)}
+              >
+                Fechar
+              </button>
+            </div>
+          </>
+        )}
       </ModalBase>
       <div
         className="pw-min-h-[95vh]"
