@@ -193,14 +193,14 @@ const _LinkAccountTemplate = () => {
           setSteps(Steps.ERROR);
         },
         onSuccess() {
-          // eslint-disable-next-line no-console
-          console.log(autoCloseOnSuccess, userHasProduct);
-          if (!userHasProduct) {
-            window.opener.postMessage(
-              'user_linked_no_required_product_found',
-              '*'
-            );
-          }
+          // // eslint-disable-next-line no-console
+          // console.log(autoCloseOnSuccess, userHasProduct);
+          // if (!userHasProduct) {
+          //   window.opener.postMessage(
+          //     'user_linked_no_required_product_found',
+          //     '*'
+          //   );
+          // }
           if (autoCloseOnSuccess && userHasProduct) {
             window.close();
           } else if (
