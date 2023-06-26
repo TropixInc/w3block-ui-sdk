@@ -302,7 +302,7 @@ export const ProductPage = ({
     }
   }, 3000);
 
-  const handleMessage = useCallback((e: any) => {
+  const handleMessage = useCallback((e: MessageEvent<any>) => {
     if (e.data === 'user_linked_no_required_product_found') {
       pushConnect(
         PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
@@ -315,15 +315,9 @@ export const ProductPage = ({
   }, []);
 
   useEffect(() => {
-    window.addEventListener(
-      'user_linked_no_required_product_found',
-      handleMessage
-    );
+    window.addEventListener('message', handleMessage);
     return () => {
-      window.removeEventListener(
-        'user_linked_no_required_product_found',
-        handleMessage
-      );
+      window.removeEventListener('message', handleMessage);
     };
   }, [handleMessage]);
 
