@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useClickAway, useInterval } from 'react-use';
 
 import { useCart } from '../../checkout/hooks/useCart';
@@ -302,7 +302,7 @@ export const ProductPage = ({
     }
   }, 3000);
 
-  window.onmessage = function (e) {
+  const handleMessage = useCallback((e: any) => {
     if (e.data === 'user_linked_no_required_product_found') {
       pushConnect(
         PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
@@ -311,7 +311,21 @@ export const ProductPage = ({
         }
       );
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener(
+      'user_linked_no_required_product_found',
+      handleMessage
+    );
+    return () => {
+      window.removeEventListener(
+        'user_linked_no_required_product_found',
+        handleMessage
+      );
+    };
+  }, [handleMessage]);
 
   return (
     <div
