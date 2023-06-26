@@ -296,17 +296,20 @@ export const ProductPage = ({
     }
   }, 3000);
 
-  const handleMessage = useCallback((e: MessageEvent<any>) => {
-    if (e.data === 'user_linked_no_required_product_found') {
-      pushConnect(
-        PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
-        {
-          openModal: 'true',
-        }
-      );
-    }
+  const handleMessage = useCallback(
+    (e: MessageEvent<any>) => {
+      if (e.data === 'user_linked_no_required_product_found') {
+        pushConnect(
+          PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
+          {
+            openModal: 'true',
+          }
+        );
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [product]
+  );
 
   useEffect(() => {
     window.addEventListener('message', handleMessage);
