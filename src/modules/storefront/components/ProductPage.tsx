@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useClickAway, useInterval } from 'react-use';
 
 import { useCart } from '../../checkout/hooks/useCart';
@@ -302,24 +302,24 @@ export const ProductPage = ({
     }
   }, 3000);
 
-  // const handleMessage = useCallback((e: MessageEvent<any>) => {
-  //   if (e.data === 'user_linked_no_required_product_found') {
-  //     pushConnect(
-  //       PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
-  //       {
-  //         openModal: 'true',
-  //       }
-  //     );
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const handleMessage = useCallback((e: MessageEvent<any>) => {
+    if (e.data === 'user_linked_no_required_product_found') {
+      pushConnect(
+        PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
+        {
+          openModal: 'true',
+        }
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // useEffect(() => {
-  //   window.addEventListener('message', handleMessage);
-  //   return () => {
-  //     window.removeEventListener('message', handleMessage);
-  //   };
-  // }, [handleMessage]);
+  useEffect(() => {
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [handleMessage]);
 
   return (
     <div
