@@ -8,6 +8,9 @@ interface CheckoutResumeProps {
   service: string;
   totalPrice: string;
   loading?: boolean;
+  originalPrice?: string;
+  originalService?: string;
+  originalTotalPrice?: string;
 }
 
 export const CheckouResume = ({
@@ -18,6 +21,9 @@ export const CheckouResume = ({
   service,
   totalPrice,
   loading,
+  originalPrice,
+  originalService,
+  originalTotalPrice,
 }: CheckoutResumeProps) => {
   return (
     <div>
@@ -46,6 +52,9 @@ export const CheckouResume = ({
         service={service}
         totalPrice={totalPrice}
         loading={loading}
+        originalPrice={originalPrice}
+        originalService={originalService}
+        originalTotalPrice={originalTotalPrice}
       />
     </div>
   );

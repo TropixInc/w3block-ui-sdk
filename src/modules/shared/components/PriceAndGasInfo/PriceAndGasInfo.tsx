@@ -13,6 +13,9 @@ interface PriceAndGasInfo {
   loading?: boolean;
   currency?: string;
   name?: string;
+  originalPrice?: string;
+  originalTotalPrice?: string;
+  originalService?: string;
 }
 
 const _PriceAndGasInfo = ({
@@ -24,6 +27,9 @@ const _PriceAndGasInfo = ({
   totalPrice,
   currency = 'R$',
   name = 'BRL',
+  originalPrice,
+  originalService,
+  originalTotalPrice,
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
   return (
@@ -33,16 +39,26 @@ const _PriceAndGasInfo = ({
         {loading ? (
           <Shimmer />
         ) : (
-          <CriptoValueComponent
-            code={name}
-            value={
-              parseFloat(price) === 0 && parseFloat(totalPrice) !== 0
-                ? totalPrice
-                : price
-            }
-            crypto={currency == 'MATIC' || currency == 'ETH'}
-            fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
-          />
+          <div className="pw-flex pw-gap-2">
+            {originalPrice && parseFloat(originalPrice) > parseFloat(price) && (
+              <CriptoValueComponent
+                code={name}
+                value={originalPrice ?? ''}
+                crypto={currency == 'MATIC' || currency == 'ETH'}
+                fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C] pw-line-through"
+              />
+            )}
+            <CriptoValueComponent
+              code={name}
+              value={
+                parseFloat(price) === 0 && parseFloat(totalPrice) !== 0
+                  ? totalPrice
+                  : price
+              }
+              crypto={currency == 'MATIC' || currency == 'ETH'}
+              fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+            />
+          </div>
         )}
       </div>
       {service && parseFloat(service) > 0 && (
@@ -57,12 +73,23 @@ const _PriceAndGasInfo = ({
             loading ? (
               <Shimmer />
             ) : (
-              <CriptoValueComponent
-                code={name}
-                value={service}
-                crypto={currency == 'MATIC' || currency == 'ETH'}
-                fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
-              />
+              <div className="pw-flex pw-gap-2">
+                {originalService &&
+                  parseFloat(originalService) > parseFloat(service) && (
+                    <CriptoValueComponent
+                      code={name}
+                      value={originalService ?? ''}
+                      crypto={currency == 'MATIC' || currency == 'ETH'}
+                      fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C] pw-line-through"
+                    />
+                  )}
+                <CriptoValueComponent
+                  code={name}
+                  value={service}
+                  crypto={currency == 'MATIC' || currency == 'ETH'}
+                  fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+                />
+              </div>
             )
           ) : null}
         </div>
@@ -96,14 +123,24 @@ const _PriceAndGasInfo = ({
         {loading ? (
           <Shimmer className="pw-h-6 pw-w-17" />
         ) : (
-          <>
+          <div className="pw-flex pw-gap-2">
+            {originalTotalPrice &&
+              parseFloat(originalTotalPrice) > parseFloat(totalPrice) && (
+                <CriptoValueComponent
+                  code={name}
+                  value={originalTotalPrice}
+                  crypto={currency == 'MATIC' || currency == 'ETH'}
+                  fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C] pw-line-through"
+                />
+              )}
             <CriptoValueComponent
               code={name}
               value={totalPrice}
+              showFree
               crypto={currency == 'MATIC' || currency == 'ETH'}
               fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
             />
-          </>
+          </div>
         )}
       </div>
     </div>
@@ -119,6 +156,9 @@ export const PriceAndGasInfo = ({
   totalPrice,
   currency,
   name = 'BRL',
+  originalPrice,
+  originalService,
+  originalTotalPrice,
 }: PriceAndGasInfo) => {
   return (
     <TranslatableComponent>
@@ -131,6 +171,9 @@ export const PriceAndGasInfo = ({
         totalPrice={totalPrice}
         currency={currency}
         name={name}
+        originalPrice={originalPrice}
+        originalService={originalService}
+        originalTotalPrice={originalTotalPrice}
       />
     </TranslatableComponent>
   );
