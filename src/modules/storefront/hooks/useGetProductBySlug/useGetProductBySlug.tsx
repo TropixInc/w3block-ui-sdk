@@ -4,6 +4,7 @@ import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 
 export type ProductPrice = {
   amount: string;
@@ -81,6 +82,7 @@ export interface ProductsResponse {
 
 const useGetProductBySlug = (slug?: string) => {
   const axios = useAxios(W3blockAPI.COMMERCE);
+  const { status } = usePixwaySession();
   const { companyId } = useCompanyConfig();
 
   return useQuery<Product>(
@@ -96,7 +98,8 @@ const useGetProductBySlug = (slug?: string) => {
         )
         .then((data) => data.data),
     {
-      enabled: Boolean(slug) && slug != '' && slug != undefined,
+      enabled:
+        Boolean(slug) && slug != '' && slug != undefined && status != 'loading',
       refetchOnWindowFocus: false,
     }
   );

@@ -15,7 +15,7 @@ interface ProductInfoProps {
   loading?: boolean;
   currency?: string;
   quantity?: number;
-  changeQuantity?: (n: number, id: string) => void;
+  changeQuantity?: (n: boolean | null, id: string) => void;
   stockAmount: number;
   canPurchaseAmount?: number;
   deleteProduct?: (id: string) => void;
@@ -177,10 +177,7 @@ export const ProductInfo = ({
             {status == CheckoutStatus.CONFIRMATION && (
               <p
                 onClick={() =>
-                  changeQuantity?.(
-                    quantity && quantity > 1 ? quantity - 1 : 1,
-                    id
-                  )
+                  changeQuantity?.(quantity && quantity > 1 ? false : null, id)
                 }
                 className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                   quantity && quantity > 1
@@ -219,7 +216,7 @@ export const ProductInfo = ({
                     quantity < stockAmount
                   ) {
                     changeQuantity?.(
-                      quantity && quantity < maxUp ? quantity + 1 : maxUp,
+                      quantity && quantity < maxUp ? true : null,
                       id
                     );
                   }

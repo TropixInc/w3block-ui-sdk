@@ -25,8 +25,8 @@ import {
   ProductErrorInterface,
 } from '../../interface/interface';
 import { ConfirmCryptoBuy } from '../ConfirmCryptoBuy/ConfirmCryptoBuy';
-import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
 import { PaymentMethodsComponent } from '../PaymentMethodsComponent/PaymentMethodsComponent';
+import { ProductError } from '../ProductError/ProductError';
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',
@@ -75,30 +75,6 @@ const _CheckoutInfo = ({
   const { data: session } = usePixwaySession();
 
   const token = session ? (session.accessToken as string) : null;
-
-  const getErrorMessage = (error: ProductErrorInterface) => {
-    const product = orderPreview?.products.find(
-      (p) => p.id === error.productId
-    );
-
-    switch (error.error.code) {
-      case 'insufficient-stock':
-        return {
-          title: `Estoque insuficiente`,
-          message: `O item ${product?.name} não possui estoque suficiente para a quantidade solicitada. Quantidade disponível: ${product?.stockAmount}`,
-        };
-      case 'purchase-limit':
-        return {
-          title: `Limite de compra excedido`,
-          message: `O item ${product?.name} possui limite de compra de ${error.error.limit} unidades por CPF/CNPJ.`,
-        };
-      default:
-        return {
-          title: `Erro ao processar o item ${product?.name}`,
-          message: `Ocorreu um erro ao processar o item ${product?.name}. Por favor, tente novamente mais tarde.`,
-        };
-    }
-  };
 
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
@@ -170,6 +146,7 @@ const _CheckoutInfo = ({
             if (data && data.providersForSelection?.length && !choosedPayment) {
               setChoosedPayment(data.providersForSelection[0]);
             }
+            setCart([...data.products]);
             if (data.productsErrors && data.productsErrors?.length > 0) {
               setProductErros(data.productsErrors ?? []);
             }
@@ -244,50 +221,76 @@ const _CheckoutInfo = ({
     }
   };
 
-  const changeQuantity = (n: number, id: string) => {
-    let newArray: Array<string> = [];
-    if (
-      productIds &&
-      productIds?.filter((filteredId) => filteredId == id).length < n
-    ) {
-      newArray = [...productIds, id];
-    } else {
-      productIds?.forEach((idProd) => {
-        if (
-          id != idProd ||
-          newArray.filter((idNew) => idNew == idProd).length < n
-        ) {
-          newArray.push(idProd);
+  const changeQuantity = (add: boolean | null, id: string) => {
+    if (add != null) {
+      let newArray: Array<string> = [];
+      if (
+        productIds &&
+        productIds?.filter((filteredId) => filteredId == id).length <
+          productIds?.filter((filteredId) => filteredId == id).length +
+            (add ? 1 : -1)
+      ) {
+        newArray = [...productIds, id];
+      } else {
+        productIds?.forEach((idProd) => {
+          if (
+            id != idProd ||
+            newArray.filter((idNew) => idNew == idProd).length <
+              productIds?.filter((filteredId) => filteredId == idProd).length +
+                (add ? 1 : -1)
+          ) {
+            newArray.push(idProd);
+          }
+        });
+      }
+      router.push(
+        isCart
+          ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
+          : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
+        {
+          query: {
+            productIds: newArray.join(','),
+            currencyId: orderPreview?.products[0].prices.find(
+              (price) => price.currencyId == currencyIdState
+            )?.currencyId,
+          },
         }
-      });
-    }
-    router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
-      query: {
-        productIds: newArray.join(','),
-        currencyId: orderPreview?.products[0].prices.find(
-          (price) => price.currencyId == currencyIdState
-        )?.currencyId,
-      },
-    });
-    if (isCart) {
-      const newCart = newArray.map((id) =>
-        cart.find((prodCart) => prodCart.id == id)
       );
+      if (isCart) {
+        const newCart = newArray.map((id) =>
+          cart.find((prodCart) => prodCart.id == id)
+        );
 
-      setCart(newCart);
+        setCart(newCart);
+      }
+
+      setProductIds(newArray);
     }
-
-    setProductIds(newArray);
   };
 
-  const deleteProduct = (id: string) => {
+  const deleteProduct = (id: string, amount: string) => {
+    const filteredProds = cart.filter((prod) => {
+      if (prod.id == id) {
+        if (
+          prod.prices.find((price) => price.currencyId == currencyIdState)
+            ?.amount != amount
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
+
     router.push(
       isCart
         ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
         : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
       {
         query: {
-          productIds: productIds?.filter((p) => p != id).join(','),
+          productIds: filteredProds?.map((p) => p.id).join(','),
           currencyId: orderPreview?.products[0].prices.find(
             (price) => price.currencyId == currencyIdState
           )?.currencyId,
@@ -295,17 +298,26 @@ const _CheckoutInfo = ({
       }
     );
     if (isCart) {
-      setCart(cart.filter((prod) => prod.id != id));
+      setCart(filteredProds);
     }
 
-    setProductIds(productIds?.filter((p) => p != id));
+    setProductIds(filteredProds?.map((p) => p.id));
   };
 
   const differentProducts = useMemo<Array<Product>>(() => {
     if (orderPreview && orderPreview.products.length) {
       const uniqueProduct: Product[] = [];
       orderPreview.products.forEach((p) => {
-        if (!uniqueProduct.some((prod) => p.id == prod.id)) {
+        if (
+          !uniqueProduct.some(
+            (prod) =>
+              p?.id == prod?.id &&
+              prod.prices.find((price) => price.currencyId == currencyIdState)
+                ?.amount ==
+                p.prices.find((price) => price.currencyId == currencyIdState)
+                  ?.amount
+          )
+        ) {
           uniqueProduct.push(p);
         }
       });
@@ -484,16 +496,30 @@ const _CheckoutInfo = ({
                   )?.currency.symbol
                 }
                 quantity={
-                  productIds
-                    ? productIds?.filter((p) => p == prod.id).length
-                    : 1
+                  orderPreview?.products.filter(
+                    (p) =>
+                      p.id == prod.id &&
+                      prod.prices.find(
+                        (price) => price.currencyId == currencyIdState
+                      )?.amount ==
+                        p.prices.find(
+                          (price) => price.currencyId == currencyIdState
+                        )?.amount
+                  ).length ?? 1
                 }
                 stockAmount={prod.stockAmount}
                 canPurchaseAmount={prod.canPurchaseAmount}
                 changeQuantity={changeQuantity}
                 loading={isLoading}
                 status={checkoutStatus}
-                deleteProduct={deleteProduct}
+                deleteProduct={(id) =>
+                  deleteProduct(
+                    id,
+                    prod.prices.find(
+                      (price) => price.currencyId == currencyIdState
+                    )?.amount ?? '0'
+                  )
+                }
                 id={prod.id}
                 key={prod.id}
                 image={prod.images[0].thumb}
@@ -507,7 +533,23 @@ const _CheckoutInfo = ({
             ))}
           </div>
           <div>
-            {productErros
+            {productErros.length > 0 && (
+              <ProductError
+                className="pw-mt-4"
+                productsErrors={productErros.reduce(
+                  (
+                    acc: ProductErrorInterface[],
+                    prod: ProductErrorInterface
+                  ) => {
+                    if (acc.some((p) => p.productId == prod.productId))
+                      return acc;
+                    else return [...acc, prod];
+                  },
+                  []
+                )}
+              />
+            )}
+            {/* {productErros
               .reduce(
                 (acc: ProductErrorInterface[], prod: ProductErrorInterface) => {
                   if (acc.some((p) => p.productId == prod.productId))
@@ -522,7 +564,7 @@ const _CheckoutInfo = ({
                   {...getErrorMessage(prod)}
                   key={prod.productId}
                 />
-              ))}
+              ))} */}
           </div>
           {_ButtonsToShow}
           <div>

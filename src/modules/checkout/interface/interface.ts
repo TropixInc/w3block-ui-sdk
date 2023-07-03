@@ -15,6 +15,7 @@ export interface OrderPreviewResponse {
 
 export interface ProductErrorInterface {
   productId: string;
+  product: Product;
   error: {
     code: string;
     limit: number;

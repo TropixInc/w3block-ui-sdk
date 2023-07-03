@@ -21,7 +21,7 @@ export const CartButton = ({
   const quantity = useMemo(() => {
     const unique: Array<Product> = [];
     cart.forEach((p) => {
-      if (!unique.some((prod) => prod.id == p.id)) {
+      if (p && !unique.some((prod) => prod.id == p.id)) {
         unique.push(p);
       }
     });

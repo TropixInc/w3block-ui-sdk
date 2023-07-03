@@ -262,12 +262,19 @@ export const CheckoutPayment = () => {
 
   const WichPaymentMethod = () => {
     if (productCache?.choosedPayment?.paymentProvider == 'asaas' && isFree) {
-      return (
+      return !requestError ? (
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
           <Spinner className="pw-h-13 pw-w-13" />
           <h1 className="pw-text-2xl pw-text-black pw-mt-4">
             Finalizando Pedido
           </h1>
+        </div>
+      ) : (
+        <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
+          <ErrorMessage
+            title={requestError.toString()}
+            message="Caso o problema persista entre em contato com o suporte"
+          />
         </div>
       );
     } else if (productCache?.choosedPayment?.paymentProvider == 'asaas') {
