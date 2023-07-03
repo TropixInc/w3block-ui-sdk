@@ -18,6 +18,7 @@ interface GetOrderPreviewPayload {
   productIds: string[];
   currencyId: string;
   companyId: string;
+  couponCode?: string;
 }
 
 interface ProductToSendPayload {
@@ -29,13 +30,19 @@ interface OrderPreviewPayload {
   orderProducts: ProductToSendPayload[];
   currencyId: string;
   acceptIncompleteCart?: boolean;
+  couponCode?: string;
 }
 
 export const useCheckout = () => {
   const axios = useAxios(W3blockAPI.COMMERCE);
   const utms = useUtms();
   const getOrderPreview = useMutation(
-    async ({ productIds, currencyId, companyId }: GetOrderPreviewPayload) => {
+    async ({
+      productIds,
+      currencyId,
+      companyId,
+      couponCode,
+    }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
         (pId: string): ProductToSendPayload => {
           return {
@@ -51,6 +58,7 @@ export const useCheckout = () => {
         orderProducts: products,
         currencyId,
         acceptIncompleteCart: true,
+        couponCode,
       });
       return preview.data;
     }

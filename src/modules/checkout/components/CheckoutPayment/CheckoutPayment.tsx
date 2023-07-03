@@ -127,6 +127,7 @@ export const CheckoutPayment = () => {
           productIds: productCache.orderProducts.map((p) => p.productId),
           currencyId: productCache.currencyId,
           companyId,
+          couponCode: productCache.couponCode,
         },
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -197,6 +198,7 @@ export const CheckoutPayment = () => {
               PixwayAppRoutes.MY_TOKENS +
               '?' +
               query.split('?')[0],
+            couponCode: orderInfo.couponCode,
           },
         },
         {
@@ -261,7 +263,7 @@ export const CheckoutPayment = () => {
   };
 
   const WichPaymentMethod = () => {
-    if (productCache?.choosedPayment?.paymentProvider == 'asaas' && isFree) {
+    if (isFree) {
       return (
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
           <Spinner className="pw-h-13 pw-w-13" />
@@ -422,6 +424,9 @@ export const CheckoutPayment = () => {
                   : myOrderPreview?.totalPrice ?? '0'
               }
               loading={loading}
+              originalPrice={myOrderPreview?.originalCartPrice}
+              originalService={myOrderPreview?.originalClientServiceFee}
+              originalTotalPrice={myOrderPreview?.originalTotalPrice}
             />
           </div>
           <div className="pw-order-2 sm:pw-order-1 pw-flex-1">
