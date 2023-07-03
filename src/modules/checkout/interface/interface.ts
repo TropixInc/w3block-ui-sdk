@@ -11,6 +11,10 @@ export interface OrderPreviewResponse {
   totalPrice?: string;
   productsErrors?: ProductErrorInterface[];
   providersForSelection?: PaymentMethodsAvaiable[];
+  appliedCoupon?: string;
+  originalCartPrice?: string;
+  originalClientServiceFee?: string;
+  originalTotalPrice?: string;
 }
 
 export interface ProductErrorInterface {
@@ -78,6 +82,10 @@ export interface OrderPreviewCache {
   clientServiceFee?: string;
   gasFee?: GasFee;
   cartPrice?: string;
+  couponCode?: string;
+  originalCartPrice?: string;
+  originalClientServiceFee?: string;
+  originalTotalPrice?: string;
 }
 
 interface OrderProductsInterface {
@@ -95,6 +103,7 @@ export interface CreateOrder {
   paymentMethod?: string;
   providerInputs?: unknown;
   utmParams?: UtmContextInterface;
+  couponCode?: string;
 }
 
 export interface CreateOrderProduct {

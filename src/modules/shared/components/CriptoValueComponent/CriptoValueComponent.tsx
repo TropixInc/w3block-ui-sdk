@@ -11,12 +11,14 @@ export const CriptoValueComponent = ({
   size = 15,
   fontClass = '',
   crypto,
+  showFree = false,
 }: {
   code?: string;
   value: string;
   size?: string | number;
   fontClass?: string;
   crypto?: boolean;
+  showFree?: boolean;
 }) => {
   const [translate] = useTranslation();
   const getIcon = () => {
@@ -42,7 +44,7 @@ export const CriptoValueComponent = ({
     <div className="pw-flex pw-gap-1 pw-items-center">
       {crypto && getIcon()}
       <p className={`pw-font-semibold pw-text-black ${fontClass}`}>
-        {parseFloat(value) === 0
+        {parseFloat(value) === 0 && showFree
           ? translate('commerce>checkout>free')
           : crypto
           ? getCryptoValueByCode()

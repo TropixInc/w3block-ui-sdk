@@ -15,6 +15,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
@@ -69,6 +70,15 @@ const _CheckoutInfo = ({
   );
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
+  );
+  const utms = useUtms();
+  const [couponCodeInput, setCouponCodeInput] = useState<string | undefined>(
+    utms.utm_campaign &&
+      utms?.expires &&
+      new Date().getTime() < utms?.expires &&
+      orderPreview?.appliedCoupon !== null
+      ? utms.utm_campaign
+      : ''
   );
   const { companyId } = useCompanyConfig();
 
@@ -127,7 +137,20 @@ const _CheckoutInfo = ({
     }
   }, [query]);
 
-  const getOrderPreviewFn = () => {
+  const getOrderPreviewFn = (couponCode?: string) => {
+    const coupon = () => {
+      if (couponCode) {
+        return couponCode;
+      } else if (
+        utms.utm_campaign &&
+        utms?.expires &&
+        new Date().getTime() < utms?.expires &&
+        couponCodeInput === ''
+      ) {
+        return utms.utm_campaign;
+      } else return '';
+    };
+
     if (
       productIds &&
       currencyIdState &&
@@ -139,6 +162,7 @@ const _CheckoutInfo = ({
           productIds,
           currencyId: currencyIdState,
           companyId,
+          couponCode: coupon(),
         },
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -164,12 +188,12 @@ const _CheckoutInfo = ({
   };
 
   useEffect(() => {
-    getOrderPreviewFn();
+    getOrderPreviewFn(couponCodeInput);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds, currencyIdState, token]);
 
   useInterval(() => {
-    getOrderPreviewFn();
+    getOrderPreviewFn(couponCodeInput);
   }, 30000);
 
   const isLoading = orderPreview == null;
@@ -198,6 +222,10 @@ const _CheckoutInfo = ({
         },
         cartPrice: parseFloat(orderPreview?.cartPrice || '0').toString() || '0',
         choosedPayment: choosedPayment,
+        couponCode: orderPreview.appliedCoupon,
+        originalCartPrice: orderPreview?.originalCartPrice ?? '',
+        originalClientServiceFee: orderPreview?.originalClientServiceFee ?? '',
+        originalTotalPrice: orderPreview?.originalTotalPrice ?? '',
       });
     }
     if (proccedAction) {
@@ -327,6 +355,12 @@ const _CheckoutInfo = ({
     }
   }, [orderPreview]);
 
+  const onSubmitCupom = () => {
+    const val = document.getElementById('couponCode') as HTMLInputElement;
+    setCouponCodeInput(val.value !== '' ? val.value : undefined);
+    getOrderPreviewFn(val.value);
+  };
+
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
@@ -358,7 +392,49 @@ const _CheckoutInfo = ({
                 parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
                 '0'
               }
+              originalPrice={orderPreview?.originalCartPrice ?? ''}
+              originalService={orderPreview?.originalClientServiceFee ?? ''}
+              originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
             />
+            <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
+              Cupom
+            </p>
+            <div className="pw-mb-8">
+              <div className="pw-flex pw-gap-3">
+                <input
+                  name="couponCode"
+                  id="couponCode"
+                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
+                  defaultValue={
+                    utms.utm_campaign &&
+                    utms?.expires &&
+                    new Date().getTime() < utms?.expires &&
+                    orderPreview?.appliedCoupon !== null
+                      ? utms.utm_campaign
+                      : ''
+                  }
+                />
+                <PixwayButton
+                  onClick={onSubmitCupom}
+                  className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
+                >
+                  Aplicar cupom
+                </PixwayButton>
+              </div>
+              {orderPreview?.appliedCoupon ? (
+                <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
+                  Cupom <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
+                  aplicado com sucesso!
+                </p>
+              ) : null}
+              {orderPreview?.appliedCoupon === null &&
+              couponCodeInput !== '' &&
+              couponCodeInput !== undefined ? (
+                <p className="pw-text-red-500 pw-text-xs pw-mt-2">
+                  Cupom inválido ou expirado.
+                </p>
+              ) : null}
+            </div>
             {parseFloat(orderPreview?.totalPrice ?? '0') !== 0 && (
               <PaymentMethodsComponent
                 methodSelected={
@@ -429,6 +505,9 @@ const _CheckoutInfo = ({
                 parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
                 '0'
               }
+              originalPrice={orderPreview?.originalCartPrice ?? ''}
+              originalService={orderPreview?.originalClientServiceFee ?? ''}
+              originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
             />
             <PixwayButton
               onClick={
@@ -549,22 +628,6 @@ const _CheckoutInfo = ({
                 )}
               />
             )}
-            {/* {productErros
-              .reduce(
-                (acc: ProductErrorInterface[], prod: ProductErrorInterface) => {
-                  if (acc.some((p) => p.productId == prod.productId))
-                    return acc;
-                  else return [...acc, prod];
-                },
-                []
-              )
-              .map((prod: ProductErrorInterface) => (
-                <ErrorMessage
-                  className="pw-mt-2"
-                  {...getErrorMessage(prod)}
-                  key={prod.productId}
-                />
-              ))} */}
           </div>
           {_ButtonsToShow}
           <div>

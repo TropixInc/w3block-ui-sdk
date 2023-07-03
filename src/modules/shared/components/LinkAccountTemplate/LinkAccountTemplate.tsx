@@ -185,6 +185,13 @@ const _LinkAccountTemplate = () => {
     }
   };
 
+  const sendMessage = () => {
+    const targetWindow = window.opener;
+    if (!userHasProduct && targetWindow) {
+      targetWindow.postMessage('user_linked_no_required_product_found', '*');
+    }
+  };
+
   const handleAccept = () => {
     acceptIntegration(
       { token, tenantId: toTenantId },
@@ -193,6 +200,9 @@ const _LinkAccountTemplate = () => {
           setSteps(Steps.ERROR);
         },
         onSuccess() {
+          // eslint-disable-next-line no-console
+          console.log(autoCloseOnSuccess, userHasProduct);
+          sendMessage();
           if (autoCloseOnSuccess && userHasProduct) {
             window.close();
           } else if (

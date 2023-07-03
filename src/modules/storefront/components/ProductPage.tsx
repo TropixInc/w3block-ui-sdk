@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useClickAway, useInterval } from 'react-use';
 
 import { useCart } from '../../checkout/hooks/useCart';
@@ -45,9 +45,6 @@ export const ProductPage = ({
   )
     ? true
     : false;
-  const openModal = router.query.openModal?.includes('true') ? true : false;
-  const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
-  const [isOpen, setIsOpen] = useState(openModal);
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
     mobileStyleData
@@ -98,6 +95,7 @@ export const ProductPage = ({
     data: product,
     isSuccess,
     refetch,
+    isLoading,
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
@@ -108,6 +106,12 @@ export const ProductPage = ({
       ? product.canPurchaseAmount
       : product?.stockAmount;
 
+  const openModal =
+    router.query.openModal?.includes('true') && !product?.canPurchase
+      ? true
+      : false;
+  const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
+  const [isOpen, setIsOpen] = useState(openModal);
   const addToCart = () => {
     setCartCurrencyId?.(currencyId);
     cart.some((p) => p.id == product?.id)
@@ -161,11 +165,7 @@ export const ProductPage = ({
 
   const openNewWindow = (path: string) => {
     setTimeout(() => {
-      window.open(
-        path,
-        '_blank',
-        'noreferrer,left=600,resizable,width=1440,height=900'
-      );
+      window.open(path, '_blank', 'left=600,resizable,width=1440,height=900');
     });
   };
 
@@ -200,8 +200,7 @@ export const ProductPage = ({
                   product?.requirements?.purchaseRequiredModalContent
                 : ''
             }`,
-            '_blank',
-            'noreferrer'
+            '_blank'
           );
         });
       }
@@ -255,8 +254,7 @@ export const ProductPage = ({
                       product?.requirements?.purchaseRequiredModalContent
                     : ''
                 }`,
-                '_blank',
-                'noreferrer'
+                '_blank'
               );
             });
           }
@@ -286,7 +284,10 @@ export const ProductPage = ({
   };
 
   useEffect(() => {
-    if (product?.canPurchase === true) setIsOpenRefresh(false);
+    if (product?.canPurchase === true) {
+      setIsOpen(false);
+      setIsOpenRefresh(false);
+    }
   }, [product]);
 
   useInterval(() => {
@@ -294,6 +295,30 @@ export const ProductPage = ({
       refetch();
     }
   }, 3000);
+
+  const handleMessage = useCallback(
+    (e: MessageEvent<any>) => {
+      if (e.data === 'user_linked_no_required_product_found') {
+        setIsOpenRefresh(false);
+        setIsOpen(true);
+        pushConnect(
+          PixwayAppRoutes.PRODUCT_PAGE.replace('{slug}', product?.slug ?? ''),
+          {
+            openModal: 'true',
+          }
+        );
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [product]
+  );
+
+  useEffect(() => {
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [handleMessage]);
 
   return (
     <div
@@ -343,47 +368,70 @@ export const ProductPage = ({
         </div>
       </ModalBase>
       <ModalBase isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div
-          style={{
-            color: descriptionTextColor ?? 'black',
-          }}
-          className="pw-text-[13px] pw-pb-8 pw-mt-6"
-          dangerouslySetInnerHTML={{
-            __html: product?.requirements?.requirementModalContent ?? '',
-          }}
-        ></div>
-        <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
-          <button
-            style={{
-              backgroundColor: '#0050FF',
-              color: 'white',
-            }}
-            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-mr-4"
-            onClick={() => {
-              handleRefresh();
-              handleTenantIntegration({
-                host:
-                  toTenant?.hosts.find((value) => value.isMain === true)
-                    ?.hostname ?? '',
-                toTenantName: toTenant?.name ?? '',
-                toTenantId: toTenant?.id ?? '',
-              });
-              setIsOpen(false);
-            }}
-          >
-            Continuar
-          </button>
-          <button
-            style={{
-              backgroundColor: 'white',
-              color: 'black',
-            }}
-            className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
-            onClick={() => setIsOpen(false)}
-          >
-            Fechar
-          </button>
-        </div>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            {product?.requirements?.productId === '' && userHasIntegration ? (
+              <div
+                style={{
+                  color: descriptionTextColor ?? 'black',
+                }}
+                className="pw-text-[13px] pw-pb-8 pw-mt-10"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    product?.requirements
+                      ?.requirementModalNoPurchaseAvailable ?? '',
+                }}
+              ></div>
+            ) : (
+              <div
+                style={{
+                  color: descriptionTextColor ?? 'black',
+                }}
+                className="pw-text-[13px] pw-pb-8 pw-mt-10"
+                dangerouslySetInnerHTML={{
+                  __html: product?.requirements?.requirementModalContent ?? '',
+                }}
+              ></div>
+            )}
+            <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
+              {product?.requirements?.productId === '' &&
+              userHasIntegration ? null : (
+                <button
+                  style={{
+                    backgroundColor: '#0050FF',
+                    color: 'white',
+                  }}
+                  className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-mr-4"
+                  onClick={() => {
+                    handleRefresh();
+                    handleTenantIntegration({
+                      host:
+                        toTenant?.hosts.find((value) => value.isMain === true)
+                          ?.hostname ?? '',
+                      toTenantName: toTenant?.name ?? '',
+                      toTenantId: toTenant?.id ?? '',
+                    });
+                    setIsOpen(false);
+                  }}
+                >
+                  Continuar
+                </button>
+              )}
+              <button
+                style={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                }}
+                className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                onClick={() => setIsOpen(false)}
+              >
+                Fechar
+              </button>
+            </div>
+          </>
+        )}
       </ModalBase>
       <div
         className="pw-min-h-[95vh]"
