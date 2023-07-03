@@ -64,6 +64,7 @@ export interface Product {
     linkMessage: string;
     purchaseRequiredModalContent: string;
     requirementModalPendingContent: string;
+    requirementModalNoPurchaseAvailable: string;
   };
   hasWhitelistBlocker?: boolean;
 }
