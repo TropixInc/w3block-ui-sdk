@@ -45,7 +45,7 @@ const _PriceAndGasInfo = ({
                 code={name}
                 value={originalPrice ?? ''}
                 crypto={currency == 'MATIC' || currency == 'ETH'}
-                fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C] pw-line-through"
+                fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
               />
             )}
             <CriptoValueComponent
@@ -80,7 +80,7 @@ const _PriceAndGasInfo = ({
                       code={name}
                       value={originalService ?? ''}
                       crypto={currency == 'MATIC' || currency == 'ETH'}
-                      fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C] pw-line-through"
+                      fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                     />
                   )}
                 <CriptoValueComponent
@@ -130,7 +130,7 @@ const _PriceAndGasInfo = ({
                   code={name}
                   value={originalTotalPrice}
                   crypto={currency == 'MATIC' || currency == 'ETH'}
-                  fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C] pw-line-through"
+                  fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                 />
               )}
             <CriptoValueComponent
