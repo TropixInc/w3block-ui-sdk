@@ -559,7 +559,7 @@ export const ProductPage = ({
                           <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
                             <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
                             <div className=""></div>
-                            {Array(limit && limit > 5 ? 5 : limit)
+                            {Array(limit)
                               .fill(0)
                               .map((val, index) => (
                                 <p
