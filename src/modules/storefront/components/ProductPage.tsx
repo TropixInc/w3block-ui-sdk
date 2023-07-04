@@ -559,20 +559,22 @@ export const ProductPage = ({
                           <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
                             <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
                             <div className=""></div>
-                            {Array(limit)
-                              .fill(0)
-                              .map((val, index) => (
-                                <p
-                                  onClick={() => {
-                                    setQuantity(index + 1);
-                                    setQuantityOpen(false);
-                                  }}
-                                  key={index}
-                                  className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
-                                >
-                                  {index + 1}
-                                </p>
-                              ))}
+                            <div className="pw-max-h-[180px] pw-overflow-y-auto">
+                              {Array(limit)
+                                .fill(0)
+                                .map((val, index) => (
+                                  <p
+                                    onClick={() => {
+                                      setQuantity(index + 1);
+                                      setQuantityOpen(false);
+                                    }}
+                                    key={index}
+                                    className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
+                                  >
+                                    {index + 1}
+                                  </p>
+                                ))}
+                            </div>
                           </div>
                         </div>
                       )}
