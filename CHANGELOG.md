@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.3...v1.3.4) (2023-07-05)
+
+
+### Bug Fixes
+
+* adjusts on coupons and discounts ([#214](https://github.com/TropixInc/w3block-ui-sdk/issues/214)) ([4d9c8cc](https://github.com/TropixInc/w3block-ui-sdk/commit/4d9c8cc8ea42ab326310325e2bbcb7ea9fe334d5))
+
 ### [1.3.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.2...v1.3.3) (2023-07-04)
 
 ### [1.3.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.2-alpha.0...v1.3.2) (2023-07-04)
