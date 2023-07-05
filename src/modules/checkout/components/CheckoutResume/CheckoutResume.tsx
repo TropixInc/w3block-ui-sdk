@@ -43,6 +43,10 @@ export const CheckouResume = ({
               ?.amount ?? '0'
           }
           stockAmount={0}
+          originalPrice={
+            product.prices.find((price) => price.currencyId == currencyId)
+              ?.originalAmount ?? '0'
+          }
         />
       ))}
       <PriceAndGasInfo

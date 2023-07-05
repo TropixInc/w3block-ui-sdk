@@ -16,10 +16,14 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
-import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import {
+  ORDER_COMPLETED_INFO_KEY,
+  PRODUCT_CART_INFO_KEY,
+} from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
+  CreateOrderResponse,
   OrderPreviewCache,
   OrderPreviewResponse,
   PaymentMethodsAvaiable,
@@ -63,6 +67,9 @@ const _CheckoutInfo = ({
   const [choosedPayment, setChoosedPayment] = useState<
     PaymentMethodsAvaiable | undefined
   >();
+  const [orderResponse] = useLocalStorage<CreateOrderResponse>(
+    ORDER_COMPLETED_INFO_KEY
+  );
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -492,9 +499,17 @@ const _CheckoutInfo = ({
                 parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
                 '0'
               }
-              originalPrice={orderPreview?.originalCartPrice ?? ''}
+              originalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalCurrencyAmount
+                  : orderPreview?.originalCartPrice ?? ''
+              }
               originalService={orderPreview?.originalClientServiceFee ?? ''}
-              originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
+              originalTotalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalTotalAmount
+                  : orderPreview?.originalTotalPrice ?? ''
+              }
             />
             <PixwayButton
               onClick={
@@ -580,6 +595,11 @@ const _CheckoutInfo = ({
                   prod.prices.find(
                     (price) => price.currencyId == currencyIdState
                   )?.amount ?? '0'
+                ).toString()}
+                originalPrice={parseFloat(
+                  prod.prices.find(
+                    (price) => price.currencyId == currencyIdState
+                  )?.originalAmount ?? '0'
                 ).toString()}
               />
             ))}

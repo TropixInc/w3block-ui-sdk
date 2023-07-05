@@ -153,6 +153,7 @@ export const OrderCardComponentSDK = ({
                       }
                       stockAmount={1}
                       key={prod.id + index}
+                      originalPrice={prod.originalCurrencyAmount}
                     />
                   ))
               : null}
@@ -165,6 +166,8 @@ export const OrderCardComponentSDK = ({
             service={order.data.clientServiceFee}
             price={order.data.currencyAmount}
             totalPrice={parseFloat(order.data.totalAmount).toFixed(2)}
+            originalPrice={order.data.originalCurrencyAmount}
+            originalTotalPrice={order.data.originalTotalAmount}
           />
         </div>
       )}

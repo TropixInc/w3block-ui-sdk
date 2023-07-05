@@ -14,7 +14,10 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import {
+  ORDER_COMPLETED_INFO_KEY,
+  PRODUCT_CART_INFO_KEY,
+} from '../../config/keys/localStorageKey';
 import { PaymentMethod } from '../../enum';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
@@ -65,7 +68,8 @@ export const CheckoutPayment = () => {
   const { data: session } = usePixwaySession();
   const [query] = useState('');
   const [installment, setInstallment] = useState<AvailableInstallmentInfo>();
-  const [orderResponse, setOrderResponse] = useState<CreateOrderResponse>();
+  const [orderResponse, setOrderResponse] =
+    useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   useEffect(() => {
     if (myOrderPreview) {
       if (
@@ -424,9 +428,17 @@ export const CheckoutPayment = () => {
                   : myOrderPreview?.totalPrice ?? '0'
               }
               loading={loading}
-              originalPrice={myOrderPreview?.originalCartPrice}
+              originalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalCurrencyAmount
+                  : myOrderPreview?.originalCartPrice
+              }
               originalService={myOrderPreview?.originalClientServiceFee}
-              originalTotalPrice={myOrderPreview?.originalTotalPrice}
+              originalTotalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalTotalAmount
+                  : myOrderPreview?.originalTotalPrice
+              }
             />
           </div>
           <div className="pw-order-2 sm:pw-order-1 pw-flex-1">
