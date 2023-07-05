@@ -545,13 +545,8 @@ export const ProductPage = ({
                       ) : product ? (
                         <>
                           {orderPreview &&
-                          parseFloat(orderPreview.originalTotalPrice ?? '0') >
-                            parseFloat(
-                              product?.prices.find(
-                                (price: any) =>
-                                  price.currencyId == currencyId?.id
-                              )?.amount ?? '0'
-                            ) ? (
+                          parseFloat(orderPreview.originalCartPrice ?? '0') >
+                            parseFloat(orderPreview.cartPrice ?? '0') ? (
                             <CriptoValueComponent
                               size={12}
                               fontClass="pw-ml-1 pw-text-sm pw-line-through pw-opacity-50"
@@ -567,7 +562,7 @@ export const ProductPage = ({
                                     price.currencyId == currencyId?.id
                                 )?.currency.name
                               }
-                              value={orderPreview?.originalTotalPrice ?? '0'}
+                              value={orderPreview?.originalCartPrice ?? '0'}
                             ></CriptoValueComponent>
                           ) : null}
                           <CriptoValueComponent
@@ -586,10 +581,15 @@ export const ProductPage = ({
                               )?.currency.name
                             }
                             value={
-                              product?.prices.find(
-                                (price: any) =>
-                                  price.currencyId == currencyId?.id
-                              )?.amount ?? '0'
+                              orderPreview &&
+                              parseFloat(
+                                orderPreview.originalCartPrice ?? '0'
+                              ) > parseFloat(orderPreview.cartPrice ?? '0')
+                                ? orderPreview.cartPrice ?? '0'
+                                : product?.prices.find(
+                                    (price: any) =>
+                                      price.currencyId == currencyId?.id
+                                  )?.amount ?? '0'
                             }
                           ></CriptoValueComponent>
                         </>
