@@ -16,10 +16,14 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
-import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import {
+  ORDER_COMPLETED_INFO_KEY,
+  PRODUCT_CART_INFO_KEY,
+} from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
+  CreateOrderResponse,
   OrderPreviewCache,
   OrderPreviewResponse,
   PaymentMethodsAvaiable,
@@ -63,6 +67,9 @@ const _CheckoutInfo = ({
   const [choosedPayment, setChoosedPayment] = useState<
     PaymentMethodsAvaiable | undefined
   >();
+  const [orderResponse] = useLocalStorage<CreateOrderResponse>(
+    ORDER_COMPLETED_INFO_KEY
+  );
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -391,7 +398,8 @@ const _CheckoutInfo = ({
                 <input
                   name="couponCode"
                   id="couponCode"
-                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
+                  placeholder="Código do cupom"
+                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3]"
                   defaultValue={
                     utms.utm_campaign &&
                     utms?.expires &&
@@ -403,7 +411,7 @@ const _CheckoutInfo = ({
                 />
                 <PixwayButton
                   onClick={onSubmitCupom}
-                  className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
+                  className="!pw-py-3 sm:!pw-px-[42px] !pw-px-0 sm:pw-flex-[0.1] pw-flex-[1] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
                 >
                   Aplicar cupom
                 </PixwayButton>
@@ -492,9 +500,17 @@ const _CheckoutInfo = ({
                 parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
                 '0'
               }
-              originalPrice={orderPreview?.originalCartPrice ?? ''}
+              originalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalCurrencyAmount
+                  : orderPreview?.originalCartPrice ?? ''
+              }
               originalService={orderPreview?.originalClientServiceFee ?? ''}
-              originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
+              originalTotalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalTotalAmount
+                  : orderPreview?.originalTotalPrice ?? ''
+              }
             />
             <PixwayButton
               onClick={
@@ -580,6 +596,11 @@ const _CheckoutInfo = ({
                   prod.prices.find(
                     (price) => price.currencyId == currencyIdState
                   )?.amount ?? '0'
+                ).toString()}
+                originalPrice={parseFloat(
+                  prod.prices.find(
+                    (price) => price.currencyId == currencyIdState
+                  )?.originalAmount ?? '0'
                 ).toString()}
               />
             ))}

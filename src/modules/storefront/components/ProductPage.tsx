@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useClickAway, useInterval } from 'react-use';
 
 import { useCart } from '../../checkout/hooks/useCart';
+import { useCheckout } from '../../checkout/hooks/useCheckout';
+import { OrderPreviewResponse } from '../../checkout/interface/interface';
 import { useRouterConnect } from '../../shared';
 import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
 // import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
@@ -12,6 +14,7 @@ import { ModalBase } from '../../shared/components/ModalBase';
 import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
@@ -19,6 +22,7 @@ import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegration
 import useRouter from '../../shared/hooks/useRouter';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useUtms } from '../../shared/hooks/useUtms/useUtms';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
 import useGetProductBySlug, {
@@ -90,6 +94,9 @@ export const ProductPage = ({
   });
 
   const [quantity, setQuantity] = useState(1);
+  const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
+    null
+  );
   const [quantityOpen, setQuantityOpen] = useState(false);
   const {
     data: product,
@@ -320,6 +327,36 @@ export const ProductPage = ({
     };
   }, [handleMessage]);
 
+  const utms = useUtms();
+  const { companyId } = useCompanyConfig();
+  const { getOrderPreview } = useCheckout();
+
+  useEffect(() => {
+    if (
+      product?.id &&
+      currencyId &&
+      utms.utm_campaign &&
+      utms?.expires &&
+      new Date().getTime() < utms?.expires
+    ) {
+      getOrderPreview.mutate(
+        {
+          productIds: [product.id],
+          currencyId: currencyId.id ?? '',
+          companyId,
+          couponCode: utms.utm_campaign,
+        },
+        {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onSuccess: (data: OrderPreviewResponse) => {
+            setOrderPreview(data);
+          },
+        }
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyId, product?.id, utms?.expires, utms.utm_campaign]);
+
   return (
     <div
       style={{
@@ -506,25 +543,56 @@ export const ProductPage = ({
                       {product?.stockAmount == 0 ? (
                         'Esgotado'
                       ) : product ? (
-                        <CriptoValueComponent
-                          size={24}
-                          fontClass="pw-ml-1"
-                          crypto={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.crypto
-                          }
-                          code={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.name
-                          }
-                          value={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.amount ?? '0'
-                          }
-                        ></CriptoValueComponent>
+                        <>
+                          {orderPreview &&
+                          parseFloat(orderPreview.originalTotalPrice ?? '0') >
+                            parseFloat(
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.amount ?? '0'
+                            ) ? (
+                            <CriptoValueComponent
+                              size={12}
+                              fontClass="pw-ml-1 pw-text-sm pw-line-through pw-opacity-50"
+                              crypto={
+                                product?.prices.find(
+                                  (price: any) =>
+                                    price.currencyId == currencyId?.id
+                                )?.currency.crypto
+                              }
+                              code={
+                                product?.prices.find(
+                                  (price: any) =>
+                                    price.currencyId == currencyId?.id
+                                )?.currency.name
+                              }
+                              value={orderPreview?.originalTotalPrice ?? '0'}
+                            ></CriptoValueComponent>
+                          ) : null}
+                          <CriptoValueComponent
+                            size={24}
+                            fontClass="pw-ml-1"
+                            crypto={
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.currency.crypto
+                            }
+                            code={
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.currency.name
+                            }
+                            value={
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.amount ?? '0'
+                            }
+                          ></CriptoValueComponent>
+                        </>
                       ) : (
                         ''
                       )}
