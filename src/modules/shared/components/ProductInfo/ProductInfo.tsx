@@ -78,7 +78,7 @@ export const ProductInfo = ({
         {loading ? (
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
         ) : (
-          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate">
+          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
             {name}
           </p>
         )}
@@ -150,7 +150,7 @@ export const ProductInfo = ({
         {loading ? (
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
         ) : (
-          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate">
+          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
             {name}
           </p>
         )}

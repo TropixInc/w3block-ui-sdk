@@ -398,7 +398,8 @@ const _CheckoutInfo = ({
                 <input
                   name="couponCode"
                   id="couponCode"
-                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
+                  placeholder="Código do cupom"
+                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3]"
                   defaultValue={
                     utms.utm_campaign &&
                     utms?.expires &&
@@ -410,7 +411,7 @@ const _CheckoutInfo = ({
                 />
                 <PixwayButton
                   onClick={onSubmitCupom}
-                  className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
+                  className="!pw-py-3 sm:!pw-px-[42px] !pw-px-0 sm:pw-flex-[0.1] pw-flex-[1] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
                 >
                   Aplicar cupom
                 </PixwayButton>
