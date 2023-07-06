@@ -79,6 +79,7 @@ const _CheckoutInfo = ({
     null
   );
   const utms = useUtms();
+  const [checkUtm, setCheckUtm] = useState(true);
   const [couponCodeInput, setCouponCodeInput] = useState<string | undefined>(
     utms.utm_campaign &&
       utms?.expires &&
@@ -88,6 +89,22 @@ const _CheckoutInfo = ({
       : ''
   );
   const { companyId } = useCompanyConfig();
+  useEffect(() => {
+    if (
+      checkUtm &&
+      utms.utm_campaign &&
+      utms?.expires &&
+      new Date().getTime() < utms?.expires &&
+      orderPreview?.appliedCoupon === null
+    ) {
+      const val = document.getElementById('couponCode') as HTMLInputElement;
+      val.value = '';
+      setCheckUtm(false);
+      setCouponCodeInput('');
+      getOrderPreviewFn(couponCodeInput);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderPreview?.appliedCoupon, utms?.expires, utms.utm_campaign]);
 
   const { data: session } = usePixwaySession();
 
@@ -355,6 +372,12 @@ const _CheckoutInfo = ({
     getOrderPreviewFn(val.value);
   };
 
+  console.log(
+    orderPreview?.appliedCoupon === null &&
+      couponCodeInput !== '' &&
+      couponCodeInput !== undefined
+  );
+
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
@@ -400,14 +423,7 @@ const _CheckoutInfo = ({
                   id="couponCode"
                   placeholder="Código do cupom"
                   className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3]"
-                  defaultValue={
-                    utms.utm_campaign &&
-                    utms?.expires &&
-                    new Date().getTime() < utms?.expires &&
-                    orderPreview?.appliedCoupon !== null
-                      ? utms.utm_campaign
-                      : ''
-                  }
+                  defaultValue={couponCodeInput}
                 />
                 <PixwayButton
                   onClick={onSubmitCupom}
@@ -416,19 +432,19 @@ const _CheckoutInfo = ({
                   Aplicar cupom
                 </PixwayButton>
               </div>
-              {orderPreview?.appliedCoupon ? (
+              {orderPreview?.appliedCoupon && (
                 <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
                   Cupom <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
                   aplicado com sucesso!
                 </p>
-              ) : null}
+              )}
               {orderPreview?.appliedCoupon === null &&
-              couponCodeInput !== '' &&
-              couponCodeInput !== undefined ? (
-                <p className="pw-text-red-500 pw-text-xs pw-mt-2">
-                  Cupom inválido ou expirado.
-                </p>
-              ) : null}
+                couponCodeInput !== '' &&
+                couponCodeInput !== undefined && (
+                  <p className="pw-text-red-500 pw-text-xs pw-mt-2">
+                    Cupom inválido ou expirado.
+                  </p>
+                )}
             </div>
             {parseFloat(orderPreview?.totalPrice ?? '0') !== 0 && (
               <PaymentMethodsComponent
