@@ -372,12 +372,6 @@ const _CheckoutInfo = ({
     getOrderPreviewFn(val.value);
   };
 
-  console.log(
-    orderPreview?.appliedCoupon === null &&
-      couponCodeInput !== '' &&
-      couponCodeInput !== undefined
-  );
-
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
