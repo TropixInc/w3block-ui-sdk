@@ -49,6 +49,7 @@ export const CheckoutPayment = () => {
   const [myOrderPreview, setMyOrderPreview] =
     useState<OrderPreviewResponse | null>();
   const [stayPooling, setStayPooling] = useState<boolean>(true);
+  const [firstPreview, setFirstPreview] = useState(true);
   const [orderId, setOrderId] = useState<string>();
   const [isStripe, setIsStripe] = useState('');
   const [stripeKey, setStripeKey] = useState('');
@@ -118,8 +119,9 @@ export const CheckoutPayment = () => {
   };
 
   useEffect(() => {
-    if (productCache && stayPooling) {
+    if (productCache && stayPooling && firstPreview) {
       orderPreview();
+      setFirstPreview(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productCache]);
