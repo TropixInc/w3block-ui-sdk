@@ -1,4 +1,4 @@
-import { isVideo } from './validators';
+import { isGif, isVideo } from './validators';
 
 interface Props {
   src: string;
@@ -25,6 +25,15 @@ export const threathUrlCloudinary = ({
         `${width ? 'w_' + width : ''},${height ? 'h_' + height : ''},c_${fit}/${
           quality ? 'q_auto:' + quality : 'q_auto'
         },f_auto/` +
+        groups[2];
+    } else {
+      url = src;
+    }
+  } else if (isGif(src)) {
+    if (groups) {
+      url =
+        groups[1] +
+        `c_${fit}/${quality ? 'q_auto:' + quality : 'q_auto'},f_auto/` +
         groups[2];
     } else {
       url = src;

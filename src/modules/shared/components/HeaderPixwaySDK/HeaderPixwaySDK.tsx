@@ -4,7 +4,7 @@ import { Provider } from '@w3block/pixchain-react-metamask';
 import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import { ThemeContext, ThemeProvider } from '../../../storefront/contexts';
+import { ThemeContext } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
@@ -159,7 +159,7 @@ const _HeaderPixwaySDK = ({
     context?.defaultTheme?.header?.styleData?.backgroundColor;
   const headerBgColor = bgColor ?? defaultBgColor;
 
-  return context?.isThemeError || context?.isThemeSuccess ? (
+  return context?.defaultTheme ? (
     <div
       style={{
         backgroundColor: headerBgColor,
@@ -264,11 +264,9 @@ export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
         autoConnect: true,
       }}
     >
-      <ThemeProvider>
-        <AttachWalletProvider>
-          <_HeaderPixwaySDK {...props} />
-        </AttachWalletProvider>
-      </ThemeProvider>
+      <AttachWalletProvider>
+        <_HeaderPixwaySDK {...props} />
+      </AttachWalletProvider>
     </MetamaskProvider>
   </TranslatableComponent>
 );

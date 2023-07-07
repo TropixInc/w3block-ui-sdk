@@ -20,6 +20,7 @@ interface IThemeContext {
   isError: boolean;
   isThemeError: boolean;
   isThemeSuccess: boolean;
+  setPageTheme: (TemplateData: TemplateData) => void;
 }
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
@@ -54,6 +55,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         isError,
         isThemeError,
         isThemeSuccess,
+        setPageTheme,
       }}
     >
       {children}

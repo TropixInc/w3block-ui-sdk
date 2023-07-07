@@ -9,7 +9,12 @@ import {
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext, ThemeProvider } from '../contexts';
-import { ModulesType, TemplateData, Theme } from '../interfaces';
+import {
+  MainModuleThemeInterface,
+  ModulesType,
+  TemplateData,
+  Theme,
+} from '../interfaces';
 import { Page404 } from './404';
 import { Accordions } from './Accordions';
 import { Banner } from './Banner';
@@ -56,12 +61,16 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   }: MessageEvent<{ update: string; theme: Theme; page: TemplateData }>) => {
     if (data && data.theme) {
       setThemeListener(data.theme);
+      context?.setDefaultTheme?.(data.theme);
     }
     if (data && data.page) {
       setCurrentPage(data.page);
+      context?.setPageTheme?.(data.page);
     }
     //setCurrentPage(data);
   };
+
+  console.log(context);
 
   useEffect(() => {
     if (context?.isThemeError && !children) {
@@ -92,6 +101,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   });
 
   const data = { ...context?.pageTheme, ...currentPage };
+  console.log(data, 'data');
   const themeContext = context?.defaultTheme;
 
   const breakpoint = useBreakpoints();
@@ -101,7 +111,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const isProductPage =
     (asPath || '').includes('/product/slug') &&
     params?.[params?.length - 1] != 'slug';
-  const theme = { ...context.defaultTheme, ...themeListener };
+  const theme = { ...context?.defaultTheme, ...themeListener };
 
   const configStyleData = theme.configurations?.styleData;
   const configMobileStyleData = theme.configurations?.mobileStyleData;
@@ -110,7 +120,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     ? { ...configStyleData, ...configMobileStyleData }
     : configStyleData;
 
-  const fontName = mergedConfigStyleData.fontFamily;
+  const fontName = mergedConfigStyleData?.fontFamily ?? 'Roboto';
   const fontFamily = fontName
     ? `"${fontName}", ${fontName === 'Aref Ruqaa' ? 'serif' : 'sans-serif'}`
     : 'sans-serif';
@@ -122,7 +132,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     ? { ...headerStyleData, ...headerMobileStyleData }
     : headerStyleData;
 
-  const headerData = theme.header
+  const headerData = context.defaultTheme?.header
     ? {
         ...theme.header,
         styleData: { ...mergedHeaderStyleData, fontFamily },
@@ -144,6 +154,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     (asPath || '').includes('/auth/')
       ? mergedConfigStyleData.hasFooter
       : true;
+  console.log(headerData, 'hasHeaderDefault');
   return (
     <div
       style={{
@@ -153,7 +164,9 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
         fontFamily,
       }}
     >
-      {hasHeaderDefault && <Header data={headerData} />}
+      {hasHeaderDefault && headerData ? (
+        <Header data={headerData as MainModuleThemeInterface} />
+      ) : null}
 
       <Cookies
         data={
@@ -168,7 +181,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
           }
         }
       />
-      {context.isError && !children ? (
+      {context?.isError && !children ? (
         <Page404 />
       ) : (
         <>
