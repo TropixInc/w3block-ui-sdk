@@ -101,6 +101,8 @@ const _SignInTemplate = ({
       return appBaseUrl + routeToAttachKYC;
     } else if (!profile?.data?.mainWallet) {
       return routeToAttachWallet;
+    } else if (router.query.callbackPath) {
+      return router.query.callbackPath as string;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');
