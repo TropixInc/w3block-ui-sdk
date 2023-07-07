@@ -48,13 +48,12 @@ const _LinkAccountTemplate = () => {
       mapNFTToToken(nft, wallet?.chainId || 80001)
     ) || [];
 
-  const [collection1, collection2] = productCollectionId.split('|');
+  const collections = productCollectionId.split('|');
 
   const userHasProduct = tokens.some((data) => {
-    if (productCollectionId.includes('|')) {
-      data.collectionData.id === collection1 ||
-        data.collectionData.id === collection2;
-    } else data.collectionData.id === productCollectionId;
+    return collections.some((col) => {
+      data?.collectionData?.id === col;
+    });
   });
 
   const { data: product } = useGetProductById(productId);
