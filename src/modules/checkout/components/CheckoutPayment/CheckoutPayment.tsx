@@ -49,6 +49,7 @@ export const CheckoutPayment = () => {
   const [myOrderPreview, setMyOrderPreview] =
     useState<OrderPreviewResponse | null>();
   const [stayPooling, setStayPooling] = useState<boolean>(true);
+  const [firstPreview, setFirstPreview] = useState(true);
   const [orderId, setOrderId] = useState<string>();
   const [isStripe, setIsStripe] = useState('');
   const [stripeKey, setStripeKey] = useState('');
@@ -118,8 +119,9 @@ export const CheckoutPayment = () => {
   };
 
   useEffect(() => {
-    if (productCache && stayPooling) {
+    if (productCache && stayPooling && firstPreview) {
       orderPreview();
+      setFirstPreview(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productCache]);
@@ -307,6 +309,11 @@ export const CheckoutPayment = () => {
               }}
               title="Informações para pagamento"
               inputs={productCache.choosedPayment.inputs as INPUTS_POSSIBLE[]}
+              buttonLoadingText={
+                productCache.choosedPayment.paymentMethod == 'pix'
+                  ? 'Gerando pagamento'
+                  : 'Finalizando compra'
+              }
             />
           ) : (
             <div className="pw-bg-white pw-p-4 sm:pw-p-6 pw-flex pw-justify-center pw-items-center pw-shadow-brand-shadow pw-rounded-lg">

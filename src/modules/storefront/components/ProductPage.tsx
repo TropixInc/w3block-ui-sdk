@@ -332,19 +332,18 @@ export const ProductPage = ({
   const { getOrderPreview } = useCheckout();
 
   useEffect(() => {
-    if (
-      product?.id &&
-      currencyId &&
-      utms.utm_campaign &&
-      utms?.expires &&
-      new Date().getTime() < utms?.expires
-    ) {
+    if (product?.id && currencyId) {
       getOrderPreview.mutate(
         {
           productIds: [product.id],
           currencyId: currencyId.id ?? '',
           companyId,
-          couponCode: utms.utm_campaign,
+          couponCode:
+            utms.utm_campaign &&
+            utms?.expires &&
+            new Date().getTime() < utms?.expires
+              ? utms.utm_campaign
+              : '',
         },
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -355,7 +354,7 @@ export const ProductPage = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currencyId, product?.id, utms?.expires, utms.utm_campaign]);
+  }, [currencyId, product?.id]);
 
   return (
     <div

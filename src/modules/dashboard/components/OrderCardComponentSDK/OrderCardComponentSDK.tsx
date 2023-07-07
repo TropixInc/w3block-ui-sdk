@@ -136,9 +136,9 @@ export const OrderCardComponentSDK = ({
                       currency={order.data.currency.symbol ?? CurrencyEnum.BRL}
                       image={
                         prod?.productToken?.product?.images?.length
-                          ? prod?.productToken?.product?.images[0].thumb
-                          : prod.productToken.metadata.media[0].cached
-                              .smallSizeUrl
+                          ? prod?.productToken?.product?.images?.[0]?.thumb
+                          : prod?.productToken?.metadata?.media?.[0]?.cached
+                              .smallSizeUrl ?? ''
                       }
                       name={prod?.productToken?.product?.name ?? ''}
                       id={prod?.productToken?.product.id ?? ''}
