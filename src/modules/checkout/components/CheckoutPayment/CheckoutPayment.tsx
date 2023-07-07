@@ -309,6 +309,11 @@ export const CheckoutPayment = () => {
               }}
               title="Informações para pagamento"
               inputs={productCache.choosedPayment.inputs as INPUTS_POSSIBLE[]}
+              buttonLoadingText={
+                productCache.choosedPayment.paymentMethod == 'pix'
+                  ? 'Gerando pagamento'
+                  : 'Finalizando compra'
+              }
             />
           ) : (
             <div className="pw-bg-white pw-p-4 sm:pw-p-6 pw-flex pw-justify-center pw-items-center pw-shadow-brand-shadow pw-rounded-lg">

@@ -5,6 +5,7 @@ import Cards from 'react-credit-cards-2';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
+import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { AvailableInstallmentInfo } from '../../interface/interface';
 import { CheckoutCustomizableInput } from '../CheckoutCustomizableInput/CheckoutCustomizableInput';
@@ -23,6 +24,7 @@ interface CheckoutPaymentComponentProps {
   loading?: boolean;
   error?: string;
   currency?: string;
+  buttonLoadingText?: string;
 }
 
 export enum INPUTS_POSSIBLE {
@@ -50,6 +52,7 @@ export const CheckoutPaymentComponent = ({
   setInstallment,
   installments,
   instalment,
+  buttonLoadingText,
 }: CheckoutPaymentComponentProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [value, setValue] = useState<any>({});
@@ -394,7 +397,14 @@ export const CheckoutPaymentComponent = ({
           tailwindBgColor=""
           className="!pw-text-white !pw-bg-[#295BA6]"
         >
-          {buttonText}
+          {loading ? (
+            <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
+              <Spinner className="pw-h-5 pw-w-5" />
+              {buttonLoadingText}
+            </div>
+          ) : (
+            buttonText
+          )}
         </WeblockButton>
       </div>
     </div>

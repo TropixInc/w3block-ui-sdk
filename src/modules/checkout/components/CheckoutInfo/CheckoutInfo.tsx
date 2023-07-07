@@ -67,9 +67,8 @@ const _CheckoutInfo = ({
   const [choosedPayment, setChoosedPayment] = useState<
     PaymentMethodsAvaiable | undefined
   >();
-  const [orderResponse] = useLocalStorage<CreateOrderResponse>(
-    ORDER_COMPLETED_INFO_KEY
-  );
+  const [orderResponse, _, deleteOrderKey] =
+    useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -136,6 +135,7 @@ const _CheckoutInfo = ({
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
       deleteKey();
+      deleteOrderKey();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.localStorage]);
