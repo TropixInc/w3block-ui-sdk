@@ -47,9 +47,15 @@ const _LinkAccountTemplate = () => {
     ethNFTsResponse?.data.items.map((nft: any) =>
       mapNFTToToken(nft, wallet?.chainId || 80001)
     ) || [];
-  const userHasProduct = tokens.some(
-    (data) => data.collectionData.id === productCollectionId
-  );
+
+  const [collection1, collection2] = productCollectionId.split('|');
+
+  const userHasProduct = tokens.some((data) => {
+    if (productCollectionId.includes('|')) {
+      data.collectionData.id === collection1 ||
+        data.collectionData.id === collection2;
+    } else data.collectionData.id === productCollectionId;
+  });
 
   const { data: product } = useGetProductById(productId);
 
