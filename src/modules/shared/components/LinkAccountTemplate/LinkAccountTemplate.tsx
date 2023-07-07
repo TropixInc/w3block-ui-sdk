@@ -52,7 +52,7 @@ const _LinkAccountTemplate = () => {
 
   const userHasProduct = tokens.some((data) => {
     return collections.some((col) => {
-      data?.collectionData?.id === col;
+      return data?.collectionData?.id === col;
     });
   });
 
