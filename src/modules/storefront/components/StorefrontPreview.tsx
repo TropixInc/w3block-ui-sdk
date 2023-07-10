@@ -67,10 +67,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
       setCurrentPage(data.page);
       context?.setPageTheme?.(data.page);
     }
-    //setCurrentPage(data);
   };
-
-  console.log(context);
 
   useEffect(() => {
     if (context?.isThemeError && !children) {
@@ -101,7 +98,6 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   });
 
   const data = { ...context?.pageTheme, ...currentPage };
-  console.log(data, 'data');
   const themeContext = context?.defaultTheme;
 
   const breakpoint = useBreakpoints();
@@ -154,7 +150,6 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     (asPath || '').includes('/auth/')
       ? mergedConfigStyleData.hasFooter
       : true;
-  console.log(headerData, 'hasHeaderDefault');
   return (
     <div
       style={{
