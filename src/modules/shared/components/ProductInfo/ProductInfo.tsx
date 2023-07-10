@@ -20,6 +20,7 @@ interface ProductInfoProps {
   canPurchaseAmount?: number;
   deleteProduct?: (id: string) => void;
   isCart?: boolean;
+  originalPrice?: string;
 }
 
 export const ProductInfo = ({
@@ -37,10 +38,10 @@ export const ProductInfo = ({
   canPurchaseAmount = 5,
   deleteProduct,
   isCart,
+  originalPrice,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const maxUp = stockAmount > 5 ? 5 : stockAmount;
-
   const StatusToShow = () => {
     switch (status) {
       case CheckoutStatus.FINISHED:
@@ -77,14 +78,26 @@ export const ProductInfo = ({
         {loading ? (
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
         ) : (
-          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate">
+          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
             {name}
           </p>
         )}
         {loading ? (
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
-          <div className="pw-flex pw-flex-col">
+          <div className="pw-flex pw-gap-1">
+            {parseFloat(originalPrice ?? '0') > parseFloat(price) && (
+              <p className="pw-font-[400] pw-text-[#35394C] pw-opacity-50 pw-text-sm pw-flex pw-items-center pw-line-through">
+                {currency == 'MATIC' ? (
+                  <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                ) : currency == 'ETH' ? (
+                  <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                ) : (
+                  currency
+                )}
+                {originalPrice}
+              </p>
+            )}
             <p className="pw-font-[400] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
               {currency == 'MATIC' ? (
                 <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
@@ -137,14 +150,26 @@ export const ProductInfo = ({
         {loading ? (
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
         ) : (
-          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate">
+          <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
             {name}
           </p>
         )}
         {loading ? (
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
-          <div className="pw-fle pw-flex-col">
+          <div className="pw-flex pw-gap-1">
+            {parseFloat(originalPrice ?? '0') > parseFloat(price) && (
+              <p className="pw-font-[400] pw-text-[#35394C] pw-opacity-50 pw-text-sm pw-flex pw-items-center pw-line-through">
+                {currency == 'MATIC' ? (
+                  <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                ) : currency == 'ETH' ? (
+                  <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                ) : (
+                  currency
+                )}
+                {originalPrice}
+              </p>
+            )}
             <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
               {currency == 'MATIC' ? (
                 <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />

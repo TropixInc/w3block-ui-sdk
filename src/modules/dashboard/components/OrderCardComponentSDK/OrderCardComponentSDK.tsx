@@ -136,9 +136,9 @@ export const OrderCardComponentSDK = ({
                       currency={order.data.currency.symbol ?? CurrencyEnum.BRL}
                       image={
                         prod?.productToken?.product?.images?.length
-                          ? prod?.productToken?.product?.images[0].thumb
-                          : prod.productToken.metadata.media[0].cached
-                              .smallSizeUrl
+                          ? prod?.productToken?.product?.images?.[0]?.thumb
+                          : prod?.productToken?.metadata?.media?.[0]?.cached
+                              .smallSizeUrl ?? ''
                       }
                       name={prod?.productToken?.product?.name ?? ''}
                       id={prod?.productToken?.product.id ?? ''}
@@ -153,6 +153,7 @@ export const OrderCardComponentSDK = ({
                       }
                       stockAmount={1}
                       key={prod.id + index}
+                      originalPrice={prod.originalCurrencyAmount}
                     />
                   ))
               : null}
@@ -165,6 +166,8 @@ export const OrderCardComponentSDK = ({
             service={order.data.clientServiceFee}
             price={order.data.currencyAmount}
             totalPrice={parseFloat(order.data.totalAmount).toFixed(2)}
+            originalPrice={order.data.originalCurrencyAmount}
+            originalTotalPrice={order.data.originalTotalAmount}
           />
         </div>
       )}

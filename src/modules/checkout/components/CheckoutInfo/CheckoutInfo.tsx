@@ -16,10 +16,14 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
-import { PRODUCT_CART_INFO_KEY } from '../../config/keys/localStorageKey';
+import {
+  ORDER_COMPLETED_INFO_KEY,
+  PRODUCT_CART_INFO_KEY,
+} from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
+  CreateOrderResponse,
   OrderPreviewCache,
   OrderPreviewResponse,
   PaymentMethodsAvaiable,
@@ -63,6 +67,8 @@ const _CheckoutInfo = ({
   const [choosedPayment, setChoosedPayment] = useState<
     PaymentMethodsAvaiable | undefined
   >();
+  const [orderResponse, _, deleteOrderKey] =
+    useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -72,6 +78,7 @@ const _CheckoutInfo = ({
     null
   );
   const utms = useUtms();
+  const [checkUtm, setCheckUtm] = useState(true);
   const [couponCodeInput, setCouponCodeInput] = useState<string | undefined>(
     utms.utm_campaign &&
       utms?.expires &&
@@ -81,6 +88,22 @@ const _CheckoutInfo = ({
       : ''
   );
   const { companyId } = useCompanyConfig();
+  useEffect(() => {
+    if (
+      checkUtm &&
+      utms.utm_campaign &&
+      utms?.expires &&
+      new Date().getTime() < utms?.expires &&
+      orderPreview?.appliedCoupon === null
+    ) {
+      const val = document.getElementById('couponCode') as HTMLInputElement;
+      val.value = '';
+      setCheckUtm(false);
+      setCouponCodeInput('');
+      getOrderPreviewFn(couponCodeInput);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderPreview?.appliedCoupon, utms?.expires, utms.utm_campaign]);
 
   const { data: session } = usePixwaySession();
 
@@ -89,6 +112,7 @@ const _CheckoutInfo = ({
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
       deleteKey();
+      deleteOrderKey();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.localStorage]);
@@ -404,36 +428,30 @@ const _CheckoutInfo = ({
                 <input
                   name="couponCode"
                   id="couponCode"
-                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
-                  defaultValue={
-                    utms.utm_campaign &&
-                    utms?.expires &&
-                    new Date().getTime() < utms?.expires &&
-                    orderPreview?.appliedCoupon !== null
-                      ? utms.utm_campaign
-                      : ''
-                  }
+                  placeholder="Código do cupom"
+                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3]"
+                  defaultValue={couponCodeInput}
                 />
                 <PixwayButton
                   onClick={onSubmitCupom}
-                  className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
+                  className="!pw-py-3 sm:!pw-px-[42px] !pw-px-0 sm:pw-flex-[0.1] pw-flex-[1] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
                 >
                   Aplicar cupom
                 </PixwayButton>
               </div>
-              {orderPreview?.appliedCoupon ? (
+              {orderPreview?.appliedCoupon && (
                 <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
                   Cupom <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
                   aplicado com sucesso!
                 </p>
-              ) : null}
+              )}
               {orderPreview?.appliedCoupon === null &&
-              couponCodeInput !== '' &&
-              couponCodeInput !== undefined ? (
-                <p className="pw-text-red-500 pw-text-xs pw-mt-2">
-                  Cupom inválido ou expirado.
-                </p>
-              ) : null}
+                couponCodeInput !== '' &&
+                couponCodeInput !== undefined && (
+                  <p className="pw-text-red-500 pw-text-xs pw-mt-2">
+                    Cupom inválido ou expirado.
+                  </p>
+                )}
             </div>
             {parseFloat(orderPreview?.totalPrice ?? '0') !== 0 && (
               <PaymentMethodsComponent
@@ -505,9 +523,17 @@ const _CheckoutInfo = ({
                 parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
                 '0'
               }
-              originalPrice={orderPreview?.originalCartPrice ?? ''}
+              originalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalCurrencyAmount
+                  : orderPreview?.originalCartPrice ?? ''
+              }
               originalService={orderPreview?.originalClientServiceFee ?? ''}
-              originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
+              originalTotalPrice={
+                orderResponse !== undefined
+                  ? orderResponse.originalTotalAmount
+                  : orderPreview?.originalTotalPrice ?? ''
+              }
             />
             <PixwayButton
               onClick={
@@ -607,6 +633,11 @@ const _CheckoutInfo = ({
                   prod.prices.find(
                     (price) => price.currencyId == currencyIdState
                   )?.amount ?? '0'
+                ).toString()}
+                originalPrice={parseFloat(
+                  prod.prices.find(
+                    (price) => price.currencyId == currencyIdState
+                  )?.originalAmount ?? '0'
                 ).toString()}
               />
             ))}

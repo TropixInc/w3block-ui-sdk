@@ -2,15 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [1.3.4-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.0-alpha.2...v1.3.4-alpha.0) (2023-07-05)
+### [1.3.12](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.11...v1.3.12) (2023-07-07)
 
-### [1.3.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.2...v1.3.3) (2023-07-04)
+### [1.3.11](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.10...v1.3.11) (2023-07-07)
 
-### [1.3.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.2-alpha.0...v1.3.2) (2023-07-04)
+### [1.3.10](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.9...v1.3.10) (2023-07-07)
 
-### [1.3.2-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.1...v1.3.2-alpha.0) (2023-07-04)
+### [1.3.9](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.8...v1.3.9) (2023-07-07)
 
-### [1.3.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.0-alpha.1...v1.3.1) (2023-07-03)
+### [1.3.8](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.7...v1.3.8) (2023-07-07)
+
+### [1.3.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.6...v1.3.7) (2023-07-07)
+
+### [1.3.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.5...v1.3.6) (2023-07-07)
+
+
+### Bug Fixes
+
+* fixes on discount ([#215](https://github.com/TropixInc/w3block-ui-sdk/issues/215)) ([651540d](https://github.com/TropixInc/w3block-ui-sdk/commit/651540d900bec53ce1b9e4e684615d0193c6d6be))
+
+### [1.3.5](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.4...v1.3.5) (2023-07-05)
+
+
+### Bug Fixes
+
+* discount on product page ([557ef0a](https://github.com/TropixInc/w3block-ui-sdk/commit/557ef0a30424a5938e6e887ba19319eab93951d6))
+
+### [1.3.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.3...v1.3.4) (2023-07-05)
+
+
+### Bug Fixes
+
+* adjusts on coupons and discounts ([#214](https://github.com/TropixInc/w3block-ui-sdk/issues/214)) ([4d9c8cc](https://github.com/TropixInc/w3block-ui-sdk/commit/4d9c8cc8ea42ab326310325e2bbcb7ea9fe334d5))
 
 ### [1.3.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.3.2...v1.3.3) (2023-07-04)
 

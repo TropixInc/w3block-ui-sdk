@@ -14,6 +14,7 @@ export interface Product {
     currency: CurrencyResponse;
     currencyId: string;
     anchorCurrencyId?: string;
+    originalAmount?: string;
   }[];
   distributionType: string;
   pricingType: string;

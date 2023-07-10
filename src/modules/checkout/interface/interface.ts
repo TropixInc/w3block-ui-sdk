@@ -133,6 +133,8 @@ export interface CreateOrderResponse {
   updatedAt: string;
   userId: string;
   totalAmount: string;
+  originalCurrencyAmount?: string;
+  originalTotalAmount?: string;
 }
 
 export interface PaymentInfoInterface {

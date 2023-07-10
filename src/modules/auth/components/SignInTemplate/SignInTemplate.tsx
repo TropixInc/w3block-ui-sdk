@@ -86,8 +86,14 @@ const _SignInTemplate = ({
     resolver: yupResolver(schema),
   });
 
+  const query =
+    Object.keys(router.query).length > 0 &&
+    (profile?.data.kycStatus === KycStatus.Pending || !profile?.data.mainWallet)
+      ? router.query
+      : '';
+
   useEffect(() => {
-    if (session) router.pushConnect(getRedirectUrl());
+    if (session) router.pushConnect(getRedirectUrl(), query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
 
@@ -101,6 +107,8 @@ const _SignInTemplate = ({
       return appBaseUrl + routeToAttachKYC;
     } else if (!profile?.data?.mainWallet) {
       return routeToAttachWallet;
+    } else if (router.query.callbackPath) {
+      return router.query.callbackPath as string;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');
