@@ -117,7 +117,6 @@ export const ImageSDK = ({
     );
   };
 
-  console.log(isCloud, src, isError);
   if (src === '') {
     return (
       <img alt={alt} className={`${className}`} src={imagePlaceholder}></img>
