@@ -87,13 +87,21 @@ const _PublicTokenTemplateSDK = ({
         <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4">
           <div className="pw-flex-1 pw-mr-6">
             <Title title="Imagem principal:" />
-            <ImageSDK
-              controls={true}
-              src={publicTokenResponse?.data?.information?.mainImage ?? ''}
-              className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
-              width={800}
-              quality="eco"
-            />
+            <a
+              target="_blank"
+              href={
+                publicTokenResponse?.data?.information?.mainImage ?? undefined
+              }
+              rel="noreferrer"
+            >
+              <ImageSDK
+                controls={true}
+                src={publicTokenResponse?.data?.information?.mainImage ?? ''}
+                className="pw-w-full pw-object-contain pw-mt-4 pw-max-h-[500px] pw-object-left-top"
+                width={800}
+                quality="eco"
+              />
+            </a>
           </div>
           <div className="pw-flex-1">
             <Title title="Título ou nome do item:" />
