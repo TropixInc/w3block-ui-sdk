@@ -33,7 +33,7 @@ export const threathUrlCloudinary = ({
     if (groups) {
       url =
         groups[1] +
-        `c_${fit}/${quality ? 'q_auto:' + quality : 'q_auto'},f_auto/` +
+        `c_scale/${quality ? 'q_auto:' + quality : 'q_auto'}/` +
         groups[2];
     } else {
       url = src;
