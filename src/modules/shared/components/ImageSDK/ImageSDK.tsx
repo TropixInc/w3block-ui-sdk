@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { threathUrlCloudinary } from '../../utils/threathUrlCloudinary';
 import { isCloudinary, isVideo } from '../../utils/validators';
@@ -117,33 +117,36 @@ export const ImageSDK = ({
     );
   };
 
-  if (src === '') {
-    return (
-      <img alt={alt} className={`${className}`} src={imagePlaceholder}></img>
-    );
-  } else if (isCloud) {
-    return isVid ? <VideoThreath /> : <ImageThreath />;
-  } else {
-    return isVid ? (
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        controlsList="nodownload noplaybackrate"
-        disablePictureInPicture
-        controls={controls}
-        playsInline
-        className={`${className}`}
-        src={src ?? ''}
-      ></video>
-    ) : (
-      <img
-        alt={alt}
-        onError={() => setError(true)}
-        className={`${className}`}
-        src={isError ? imagePlaceholder : src ?? ''}
-      ></img>
-    );
-  }
+  return useMemo(() => {
+    if (src === '') {
+      return (
+        <img alt={alt} className={`${className}`} src={imagePlaceholder}></img>
+      );
+    } else if (isCloud) {
+      return isVid ? <VideoThreath /> : <ImageThreath />;
+    } else {
+      return isVid ? (
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          controlsList="nodownload noplaybackrate"
+          disablePictureInPicture
+          controls={controls}
+          playsInline
+          className={`${className}`}
+          src={src ?? ''}
+        ></video>
+      ) : (
+        <img
+          alt={alt}
+          onError={() => setError(true)}
+          className={`${className}`}
+          src={isError ? imagePlaceholder : src ?? ''}
+        ></img>
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [src, isError, className]);
 };
