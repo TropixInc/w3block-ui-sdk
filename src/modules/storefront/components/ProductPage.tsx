@@ -478,7 +478,7 @@ export const ProductPage = ({
             <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-12">
               <ImageSDK
                 className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
-                src={product?.images?.[0]?.original}
+                src={product?.images?.[0]?.original ?? ''}
                 width={1200}
                 quality="best"
               />
