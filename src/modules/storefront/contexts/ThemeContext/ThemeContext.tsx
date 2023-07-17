@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { useSessionStorage } from 'react-use';
 
 import { useGetPageModules } from '../../hooks/useGetPageModules/useGetPageModules';
 import { useGetTheme } from '../../hooks/useGetTheme';
@@ -23,9 +24,13 @@ interface IThemeContext {
   setPageTheme: (TemplateData: TemplateData) => void;
 }
 
+const BASE_THEME_KEY = 'baseThem_key';
+
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [defaultTheme, setDefaultTheme] = useState<Theme | null>(null);
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
+  const [pageThemeSession, setPageThemeSession] =
+    useSessionStorage<TemplateData | null>(BASE_THEME_KEY);
   const [_, setPageName] = useState('');
   const {
     data: theme,
@@ -36,8 +41,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (theme) {
       setDefaultTheme(theme.data);
+      setPageThemeSession(theme.data);
+    } else if (isThemeError) {
+      setPageTheme(pageThemeSession);
     }
-  }, [theme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme, isThemeError]);
 
   useEffect(() => {
     if (pageModules) {
