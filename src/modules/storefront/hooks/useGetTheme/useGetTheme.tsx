@@ -27,7 +27,7 @@ export const useGetTheme = () => {
     {
       enabled: href != undefined && href != '' && !query.preview,
       refetchOnWindowFocus: false,
-      retry: 0,
+      retry: 1,
     }
   );
 };
