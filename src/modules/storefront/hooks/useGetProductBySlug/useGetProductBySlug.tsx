@@ -22,6 +22,25 @@ export interface CurrencyResponse {
   symbol: string;
   updatedAt?: string;
 }
+
+export interface VariantValues {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  companyId: string;
+  name: string;
+  extraAmount: string;
+  keyValue: string;
+}
+export interface Variants {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  companyId: string;
+  name: string;
+  keyLabel: string;
+  values: VariantValues[];
+}
 export interface Product {
   canPurchase?: boolean;
   chainId?: number;
@@ -68,6 +87,7 @@ export interface Product {
     requirementModalNoPurchaseAvailable: string;
   };
   hasWhitelistBlocker?: boolean;
+  variants?: Variants[];
 }
 
 export interface ProductsResponse {

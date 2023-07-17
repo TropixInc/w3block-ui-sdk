@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { CheckoutStatus } from '../../../checkout';
+import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { ReactComponent as EthIcon } from '../../assets/icons/Eth.svg';
 import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
 import { ReactComponent as TrashIcon } from '../../assets/icons/trash.svg';
@@ -15,12 +18,17 @@ interface ProductInfoProps {
   loading?: boolean;
   currency?: string;
   quantity?: number;
-  changeQuantity?: (n: boolean | null, id: string) => void;
+  changeQuantity?: (
+    n: boolean | null,
+    id: string,
+    variants?: Variants[]
+  ) => void;
   stockAmount: number;
   canPurchaseAmount?: number;
   deleteProduct?: (id: string) => void;
   isCart?: boolean;
   originalPrice?: string;
+  variants?: Variants[];
 }
 
 export const ProductInfo = ({
@@ -39,6 +47,7 @@ export const ProductInfo = ({
   deleteProduct,
   isCart,
   originalPrice,
+  variants,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const maxUp = stockAmount > 5 ? 5 : stockAmount;
@@ -56,6 +65,7 @@ export const ProductInfo = ({
         return null;
     }
   };
+
   return status == CheckoutStatus.MY_ORDER ? (
     <div
       className={`pw-w-full pw-px-4 pw-py-5 pw-flex pw-justify-between pw-items-center  pw-gap-x-3 pw-overflow-auto ${className}`}
@@ -74,6 +84,7 @@ export const ProductInfo = ({
           </div>
         )}
       </div>
+
       <div className="pw-flex-1 pw-ml-3">
         {loading ? (
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
@@ -82,6 +93,21 @@ export const ProductInfo = ({
             {name}
           </p>
         )}
+        <div className="pw-flex pw-flex-col pw-gap-1 -pw-mt-2 pw-mb-2 pw-opacity-50">
+          {variants &&
+            variants.map((value) => {
+              return (
+                <div key={value.id} className="pw-flex pw-gap-1">
+                  <p className="pw-text-xs pw-text-black pw-font-semibold">
+                    {value.name}:{' '}
+                  </p>
+                  <p className="pw-text-xs pw-text-black">
+                    {value.values[0].name}
+                  </p>
+                </div>
+              );
+            })}
+        </div>
         {loading ? (
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
@@ -154,6 +180,21 @@ export const ProductInfo = ({
             {name}
           </p>
         )}
+        <div className="pw-flex pw-flex-col pw-gap-1 -pw-mt-2 pw-mb-2 pw-opacity-50">
+          {variants &&
+            variants.map((value) => {
+              return (
+                <div key={value.id} className="pw-flex pw-gap-1">
+                  <p className="pw-text-xs pw-text-black pw-font-semibold">
+                    {value.name}:{' '}
+                  </p>
+                  <p className="pw-text-xs pw-text-black">
+                    {value.values[0].name}
+                  </p>
+                </div>
+              );
+            })}
+        </div>
         {loading ? (
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
@@ -202,7 +243,11 @@ export const ProductInfo = ({
             {status == CheckoutStatus.CONFIRMATION && (
               <p
                 onClick={() =>
-                  changeQuantity?.(quantity && quantity > 1 ? false : null, id)
+                  changeQuantity?.(
+                    quantity && quantity > 1 ? false : null,
+                    id,
+                    variants ?? []
+                  )
                 }
                 className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                   quantity && quantity > 1
@@ -242,7 +287,8 @@ export const ProductInfo = ({
                   ) {
                     changeQuantity?.(
                       quantity && quantity < maxUp ? true : null,
-                      id
+                      id,
+                      variants ?? []
                     );
                   }
                 }}

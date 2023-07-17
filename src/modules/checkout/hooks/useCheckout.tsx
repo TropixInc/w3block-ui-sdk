@@ -15,7 +15,7 @@ import {
 } from '../interface/interface';
 
 interface GetOrderPreviewPayload {
-  productIds: string[];
+  productIds: ProductToSendPayload[];
   currencyId: string;
   companyId: string;
   couponCode?: string;
@@ -24,6 +24,7 @@ interface GetOrderPreviewPayload {
 interface ProductToSendPayload {
   productId: string;
   productTokenId?: string;
+  variantIds?: string[];
 }
 
 interface OrderPreviewPayload {
@@ -44,9 +45,10 @@ export const useCheckout = () => {
       couponCode,
     }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
-        (pId: string): ProductToSendPayload => {
+        (pId): ProductToSendPayload => {
           return {
-            productId: pId,
+            productId: pId.productId,
+            variantIds: pId.variantIds,
           };
         }
       );

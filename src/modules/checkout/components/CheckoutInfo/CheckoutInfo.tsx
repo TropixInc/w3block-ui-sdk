@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInterval, useLocalStorage } from 'react-use';
@@ -16,9 +17,11 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
+import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import {
   ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
+  PRODUCT_VARIANTS_INFO_KEY,
 } from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
@@ -69,6 +72,7 @@ const _CheckoutInfo = ({
   >();
   const [orderResponse, _, deleteOrderKey] =
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
+  const [productVariants] = useLocalStorage<any>(PRODUCT_VARIANTS_INFO_KEY);
   const query = useQuery();
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -183,7 +187,26 @@ const _CheckoutInfo = ({
     ) {
       getOrderPreview.mutate(
         {
-          productIds,
+          productIds: isCart
+            ? cart.map((p) => {
+                const payload = {
+                  productId: p.id,
+                  variantIds: p.variantIds,
+                };
+                return payload;
+              })
+            : productIds.map((p) => {
+                const payload = {
+                  productId: p,
+                  variantIds: productVariants
+                    ? Object.values(productVariants).map((value) => {
+                        if ((value as any).productId === p)
+                          return (value as any).id;
+                      })
+                    : [],
+                };
+                return payload;
+              }),
           currencyId: currencyIdState,
           companyId,
           couponCode: coupon(),
@@ -194,7 +217,6 @@ const _CheckoutInfo = ({
             if (data && data.providersForSelection?.length && !choosedPayment) {
               setChoosedPayment(data.providersForSelection[0]);
             }
-            setCart([...data.products]);
             if (data.productsErrors && data.productsErrors?.length > 0) {
               setProductErros(data.productsErrors ?? []);
             }
@@ -224,14 +246,30 @@ const _CheckoutInfo = ({
 
   const beforeProcced = () => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION && orderPreview) {
-      const orderProducts = orderPreview.products?.map((pID) => {
-        return {
-          productId: pID.id,
-          expectedPrice:
-            pID.prices.find((price) => price.currencyId == currencyIdState)
-              ?.amount ?? '0',
-        };
-      });
+      const orderProducts = isCart
+        ? cart.map((p) => {
+            return {
+              productId: p.id,
+              variantIds: p.variantIds,
+              expectedPrice:
+                p.prices.find((price) => price.currencyId == currencyIdState)
+                  ?.amount ?? '0',
+            };
+          })
+        : orderPreview.products?.map((pID) => {
+            return {
+              productId: pID.id,
+              expectedPrice:
+                pID.prices.find((price) => price.currencyId == currencyIdState)
+                  ?.amount ?? '0',
+              variantIds: productVariants
+                ? Object.values(productVariants).map((value) => {
+                    if ((value as any).productId === pID.id)
+                      return (value as any).id;
+                  })
+                : [],
+            };
+          });
       setProductCache({
         products: orderPreview.products,
         orderProducts,
@@ -273,7 +311,11 @@ const _CheckoutInfo = ({
     }
   };
 
-  const changeQuantity = (add: boolean | null, id: string) => {
+  const changeQuantity = (
+    add: boolean | null,
+    id: string,
+    variants?: Variants[]
+  ) => {
     if (add != null) {
       let newArray: Array<string> = [];
       if (
@@ -309,9 +351,26 @@ const _CheckoutInfo = ({
         }
       );
       if (isCart) {
-        const newCart = newArray.map((id) =>
-          cart.find((prodCart) => prodCart.id == id)
-        );
+        const newCart = newArray.map((id) => {
+          return {
+            id,
+            variants:
+              cart
+                .map((res) => {
+                  if (res.id === id) {
+                    return res.variantIds;
+                  }
+                })
+                .toString() ===
+              variants?.map((res) => res.values.map((res) => res.id)).toString()
+                ? cart.map((res) => {
+                    if (res.id === id) {
+                      return res.variantIds;
+                    }
+                  })
+                : [],
+          };
+        });
 
         setCart(newCart);
       }
@@ -367,7 +426,21 @@ const _CheckoutInfo = ({
               prod.prices.find((price) => price.currencyId == currencyIdState)
                 ?.amount ==
                 p.prices.find((price) => price.currencyId == currencyIdState)
-                  ?.amount
+                  ?.amount &&
+              p?.variants
+                ?.map((res) => {
+                  return res.values.map((res) => {
+                    return res.id;
+                  });
+                })
+                .toString() ==
+                prod?.variants
+                  ?.map((res) => {
+                    return res.values.map((res) => {
+                      return res.id;
+                    });
+                  })
+                  .toString()
           )
         ) {
           uniqueProduct.push(p);
@@ -377,8 +450,8 @@ const _CheckoutInfo = ({
     } else {
       return [];
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview]);
-
   const onSubmitCupom = () => {
     const val = document.getElementById('couponCode') as HTMLInputElement;
     setCouponCodeInput(val.value !== '' ? val.value : undefined);
@@ -609,7 +682,21 @@ const _CheckoutInfo = ({
                       )?.amount ==
                         p.prices.find(
                           (price) => price.currencyId == currencyIdState
-                        )?.amount
+                        )?.amount &&
+                      p.variants
+                        ?.map((res) => {
+                          return res.values.map((res) => {
+                            return res.id;
+                          });
+                        })
+                        .toString() ==
+                        prod.variants
+                          ?.map((res) => {
+                            return res.values.map((res) => {
+                              return res.id;
+                            });
+                          })
+                          .toString()
                   ).length ?? 1
                 }
                 stockAmount={prod.stockAmount}
@@ -639,6 +726,7 @@ const _CheckoutInfo = ({
                     (price) => price.currencyId == currencyIdState
                   )?.originalAmount ?? '0'
                 ).toString()}
+                variants={prod.variants}
               />
             ))}
           </div>
