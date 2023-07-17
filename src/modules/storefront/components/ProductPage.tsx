@@ -130,7 +130,9 @@ export const ProductPage = ({
           if ((value as any).productId === product?.id)
             return (value as any).id;
         }),
-        prices: orderPreview?.products?.[0]?.prices,
+        prices: orderPreview
+          ? orderPreview?.products?.[0]?.prices
+          : product?.prices,
       }),
     ]);
   };
@@ -657,7 +659,7 @@ export const ProductPage = ({
                     </p>
                   </>
                 )}
-                <div className="pw-flex sm:pw-flex-row pw-flex-col sm:pw-gap-3 pw-gap-1">
+                <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[250px] pw-w-full">
                   {product?.variants
                     ? product?.variants.map((val) => (
                         <ProductVariants
@@ -680,11 +682,11 @@ export const ProductPage = ({
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
                 !currencyId?.crypto ? (
-                  <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center pw-mt-4">
+                  <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center pw-my-6">
                     <p className="pw-text-sm pw-text-black pw-mb-1">
                       Quantidade
                     </p>
-                    <div className="pw-flex pw-gap-2 pw-justify-center pw-items-center">
+                    <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
                       <p
                         onClick={() => {
                           if (quantity > 1) setQuantity(quantity - 1);

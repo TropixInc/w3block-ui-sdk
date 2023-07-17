@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
 import { format } from 'date-fns';
@@ -28,6 +29,7 @@ interface OrderCardComponentSDKProps {
   createdAt: string;
   expiresIn?: string;
   paymentProvider?: string;
+  productsRes?: any[];
 }
 
 export const OrderCardComponentSDK = ({
@@ -36,6 +38,7 @@ export const OrderCardComponentSDK = ({
   createdAt,
   expiresIn,
   paymentProvider,
+  productsRes,
 }: OrderCardComponentSDKProps) => {
   const [opened, setOpened] = useState(false);
   const { data: order } = useGetEspecificOrder(id, opened);
@@ -123,7 +126,9 @@ export const OrderCardComponentSDK = ({
                     const x = acc.some(
                       (item: any) =>
                         item.productToken.product.id ==
-                        current.productToken.product.id
+                          current.productToken.product.id &&
+                        item.variantIds.toString() ==
+                          current.variantIds.toString()
                     );
                     if (!x) {
                       return acc.concat([current]);
@@ -148,12 +153,19 @@ export const OrderCardComponentSDK = ({
                         products.filter(
                           (pr: any) =>
                             pr.productToken.product.id ==
-                            prod.productToken.product.id
+                              prod.productToken.product.id &&
+                            pr.variantIds.toString() ==
+                              prod.variantIds.toString()
                         ).length
                       }
                       stockAmount={1}
-                      key={prod.id + index}
+                      key={prod.productToken.id + index}
                       originalPrice={prod.originalCurrencyAmount}
+                      variants={
+                        productsRes?.find(
+                          (val) => val.productToken.id == prod.productToken.id
+                        ).variants
+                      }
                     />
                   ))
               : null}

@@ -98,10 +98,8 @@ export const ProductInfo = ({
             variants.map((value) => {
               return (
                 <div key={value.id} className="pw-flex pw-gap-1">
-                  <p className="pw-text-xs pw-text-black pw-font-semibold">
-                    {value.name}:{' '}
-                  </p>
                   <p className="pw-text-xs pw-text-black">
+                    <span className="pw-font-semibold">{value.name}: </span>
                     {value.values[0].name}
                   </p>
                 </div>
@@ -185,10 +183,8 @@ export const ProductInfo = ({
             variants.map((value) => {
               return (
                 <div key={value.id} className="pw-flex pw-gap-1">
-                  <p className="pw-text-xs pw-text-black pw-font-semibold">
-                    {value.name}:{' '}
-                  </p>
                   <p className="pw-text-xs pw-text-black">
+                    <span className="pw-font-semibold">{value.name}: </span>
                     {value.values[0].name}
                   </p>
                 </div>

@@ -351,28 +351,32 @@ const _CheckoutInfo = ({
         }
       );
       if (isCart) {
-        const newCart = newArray.map((id) => {
-          return {
-            id,
-            variants:
-              cart
-                .map((res) => {
-                  if (res.id === id) {
-                    return res.variantIds;
-                  }
-                })
-                .toString() ===
-              variants?.map((res) => res.values.map((res) => res.id)).toString()
-                ? cart.map((res) => {
-                    if (res.id === id) {
-                      return res.variantIds;
-                    }
-                  })
-                : [],
-          };
-        });
-
-        setCart(newCart);
+        if (add) {
+          const newCart = cart.filter(
+            (val) =>
+              val.id === id &&
+              val.variantIds.toString() ===
+                variants
+                  ?.map((res) => res.values.map((res) => res.id))
+                  .toString()
+          );
+          setCart([...cart, newCart[0]]);
+        } else {
+          const newCart = cart.find(
+            (val) =>
+              val.id === id &&
+              val.variantIds.toString() ===
+                variants
+                  ?.map((res) => res.values.map((res) => res.id))
+                  .toString()
+          );
+          if (newCart) {
+            const ind = cart.indexOf(newCart);
+            const newValue = [...cart];
+            newValue.splice(ind, 1);
+            setCart(newValue);
+          }
+        }
       }
 
       setProductIds(newArray);
@@ -446,12 +450,14 @@ const _CheckoutInfo = ({
           uniqueProduct.push(p);
         }
       });
+      uniqueProduct.sort();
       return uniqueProduct;
     } else {
       return [];
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview]);
+
   const onSubmitCupom = () => {
     const val = document.getElementById('couponCode') as HTMLInputElement;
     setCouponCodeInput(val.value !== '' ? val.value : undefined);
@@ -664,7 +670,7 @@ const _CheckoutInfo = ({
             </p>
           )}
           <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
-            {differentProducts.map((prod) => (
+            {differentProducts.map((prod, index) => (
               <ProductInfo
                 isCart={isCart}
                 className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
@@ -713,7 +719,7 @@ const _CheckoutInfo = ({
                   )
                 }
                 id={prod.id}
-                key={prod.id}
+                key={index}
                 image={prod.images[0].thumb}
                 name={prod.name}
                 price={parseFloat(

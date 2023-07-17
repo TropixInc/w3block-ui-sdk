@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 
 import { useGetOrders } from '../../../checkout/hooks/useGetOrders';
@@ -23,6 +24,7 @@ export const OrderListComponentSDK = () => {
             createdAt={order.createdAt}
             expiresIn={order.expiresIn}
             paymentProvider={order.paymentProvider}
+            productsRes={order.products}
           />
         ))}
         <Pagination
