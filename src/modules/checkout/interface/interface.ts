@@ -2,6 +2,7 @@ import { UtmContextInterface } from '../../core/context/UtmContext';
 import { Status } from '../../core/metamask/interface';
 import { Product } from '../../shared';
 import { GasFee } from '../../shared/interface/GasFee';
+import { Variants } from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { OrderStatus, PaymentMethod } from '../enum';
 export interface OrderPreviewResponse {
   products: Product[];
@@ -15,6 +16,7 @@ export interface OrderPreviewResponse {
   originalCartPrice?: string;
   originalClientServiceFee?: string;
   originalTotalPrice?: string;
+  variants?: Variants[];
 }
 
 export interface ProductErrorInterface {
@@ -88,9 +90,10 @@ export interface OrderPreviewCache {
   originalTotalPrice?: string;
 }
 
-interface OrderProductsInterface {
+export interface OrderProductsInterface {
   expectedPrice: string;
   productId: string;
+  variantIds?: string[];
 }
 
 export interface CreateOrder {

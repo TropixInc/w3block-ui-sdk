@@ -1,4 +1,7 @@
-import { CurrencyResponse } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+import {
+  CurrencyResponse,
+  Variants,
+} from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 
 export interface Product {
   id: string;
@@ -25,6 +28,7 @@ export interface Product {
   stockAmount: number;
   canPurchaseAmount: number;
   tokensAmount: number;
+  variants?: Variants[];
 }
 
 export interface Images {

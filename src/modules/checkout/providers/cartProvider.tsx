@@ -1,11 +1,18 @@
 import { ReactNode, createContext, useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
 
-import { Product } from '../../shared';
-import { CurrencyResponse } from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+import {
+  CurrencyResponse,
+  ProductPrice,
+} from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 
+export interface Cart {
+  id: string;
+  variantIds: string[];
+  prices: ProductPrice[];
+}
 export interface CartContext {
-  cart: Product[];
+  cart: Cart[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setCart?: any;
   cartCurrencyId?: CurrencyResponse | undefined;
@@ -21,10 +28,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartCurrencyId, setCartCurrencyId] = useLocalStorage<
     CurrencyResponse | undefined
   >(CURRENCY_ID_CACHE);
-  const [cartCache, setCartCache] = useLocalStorage<Product[]>(
-    CART_KEY_CACHE,
-    []
-  );
+  const [cartCache, setCartCache] = useLocalStorage<Cart[]>(CART_KEY_CACHE, []);
   const contextValue = useMemo<CartContext>(() => {
     return {
       cart: cartCache ?? [],

@@ -1,10 +1,7 @@
-import { useMemo } from 'react';
-
 import { useCart } from '../../../checkout/hooks/useCart';
 import { ReactComponent as CartIcon } from '../../assets/icons/shoppingCart.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
-import { Product } from '../../interface';
 interface CartButtonProps {
   iconColor?: string;
   className?: string;
@@ -18,15 +15,7 @@ export const CartButton = ({
 }: CartButtonProps) => {
   const { cart, cartCurrencyId } = useCart();
   const { pushConnect } = useRouterConnect();
-  const quantity = useMemo(() => {
-    const unique: Array<Product> = [];
-    cart.forEach((p) => {
-      if (p && !unique.some((prod) => prod.id == p.id)) {
-        unique.push(p);
-      }
-    });
-    return unique;
-  }, [cart]);
+  const quantity = cart.length;
   const currencyId = cart.length
     ? cartCurrencyId?.id ?? cart[0].prices[0].currencyId
     : '';
@@ -48,11 +37,11 @@ export const CartButton = ({
           stroke: iconColor ?? 'black',
         }}
       />
-      {quantity.length > 0 && (
+      {quantity > 0 && (
         <div className="pw-relative">
           <div className="pw-absolute -pw-top-1 -pw-left-2">
             <div className="pw-p-1 pw-bg-brand-primary pw-rounded-full pw-text-white pw-flex pw-justify-center pw-items-center pw-w-[15px] pw-h-[15px] pw-text-[12px]">
-              {quantity.length}
+              {quantity}
             </div>
           </div>
         </div>

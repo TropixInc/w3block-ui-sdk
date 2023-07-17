@@ -47,6 +47,7 @@ export const CheckouResume = ({
             product.prices.find((price) => price.currencyId == currencyId)
               ?.originalAmount ?? '0'
           }
+          variants={product.variants}
         />
       ))}
       <PriceAndGasInfo

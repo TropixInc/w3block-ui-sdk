@@ -1,16 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useClickAway, useInterval } from 'react-use';
+import { useClickAway, useInterval, useLocalStorage } from 'react-use';
 
+import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
 import { useRouterConnect } from '../../shared';
-import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
 // import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { ModalBase } from '../../shared/components/ModalBase';
+import { Shimmer } from '../../shared/components/Shimmer';
 import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
@@ -30,6 +32,7 @@ import useGetProductBySlug, {
 } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ProductPageData } from '../interfaces';
+import { ProductVariants } from './ProductVariants';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -92,7 +95,10 @@ export const ProductPage = ({
       setQuantityOpen(false);
     }
   });
-
+  const [variants, setVariants] = useState<any>();
+  const [_, setProductVariants] = useLocalStorage<any>(
+    PRODUCT_VARIANTS_INFO_KEY
+  );
   const [quantity, setQuantity] = useState(1);
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
@@ -106,12 +112,6 @@ export const ProductPage = ({
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
-  const limit =
-    product?.stockAmount &&
-    product.canPurchaseAmount &&
-    product?.stockAmount > product.canPurchaseAmount
-      ? product.canPurchaseAmount
-      : product?.stockAmount;
 
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
@@ -120,10 +120,21 @@ export const ProductPage = ({
   const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
   const [isOpen, setIsOpen] = useState(openModal);
   const addToCart = () => {
+    setProductVariants({ ...variants });
     setCartCurrencyId?.(currencyId);
-    cart.some((p) => p.id == product?.id)
-      ? setCart(cart.filter((p) => p.id != product?.id))
-      : setCart([...cart, ...Array(quantity).fill(product)]);
+    setCart([
+      ...cart,
+      ...Array(quantity).fill({
+        id: product?.id,
+        variantIds: Object.values(variants).map((value) => {
+          if ((value as any).productId === product?.id)
+            return (value as any).id;
+        }),
+        prices: orderPreview
+          ? orderPreview?.products?.[0]?.prices
+          : product?.prices,
+      }),
+    ]);
   };
 
   useEffect(() => {
@@ -316,7 +327,6 @@ export const ProductPage = ({
         );
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [product]
   );
 
@@ -330,12 +340,23 @@ export const ProductPage = ({
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
   const { getOrderPreview } = useCheckout();
-
-  useEffect(() => {
+  const [isLoadingValue, setIsLoading] = useState(false);
+  const getOrderPreviewFn = () => {
     if (product?.id && currencyId) {
+      setIsLoading(true);
       getOrderPreview.mutate(
         {
-          productIds: [product.id],
+          productIds: [
+            {
+              productId: product.id,
+              variantIds: variants
+                ? Object.values(variants).map((value) => {
+                    if ((value as any).productId === product.id)
+                      return (value as any).id;
+                  })
+                : [],
+            },
+          ],
           currencyId: currencyId.id ?? '',
           companyId,
           couponCode:
@@ -348,13 +369,35 @@ export const ProductPage = ({
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess: (data: OrderPreviewResponse) => {
+            setIsLoading(false);
             setOrderPreview(data);
           },
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currencyId, product?.id]);
+  };
+
+  useEffect(() => {
+    if (product?.id) {
+      const variant = {} as any;
+      product.variants?.map((val) => {
+        variant[val.id as any] = {
+          name: val.values[0].name,
+          label: val.name,
+          id: val.values[0].id,
+          productId: product?.id,
+          variantId: val.id,
+        };
+      });
+      setVariants({ ...variant });
+    }
+  }, [product?.id]);
+
+  useEffect(() => {
+    if (product?.id && currencyId) {
+      getOrderPreviewFn();
+    }
+  }, [currencyId, product?.id, variants]);
 
   return (
     <div
@@ -542,13 +585,34 @@ export const ProductPage = ({
                       {product?.stockAmount == 0 ? (
                         'Esgotado'
                       ) : product ? (
-                        <>
-                          {orderPreview &&
-                          parseFloat(orderPreview.originalCartPrice ?? '0') >
-                            parseFloat(orderPreview.cartPrice ?? '0') ? (
+                        isLoadingValue ? (
+                          <Shimmer className="!pw-w-[100px] !pw-h-[32px]" />
+                        ) : (
+                          <>
+                            {orderPreview &&
+                            parseFloat(orderPreview.originalCartPrice ?? '0') >
+                              parseFloat(orderPreview.cartPrice ?? '0') ? (
+                              <CriptoValueComponent
+                                size={12}
+                                fontClass="pw-ml-1 pw-text-sm pw-line-through pw-opacity-50"
+                                crypto={
+                                  product?.prices.find(
+                                    (price: any) =>
+                                      price.currencyId == currencyId?.id
+                                  )?.currency.crypto
+                                }
+                                code={
+                                  product?.prices.find(
+                                    (price: any) =>
+                                      price.currencyId == currencyId?.id
+                                  )?.currency.name
+                                }
+                                value={orderPreview?.originalCartPrice ?? '0'}
+                              ></CriptoValueComponent>
+                            ) : null}
                             <CriptoValueComponent
-                              size={12}
-                              fontClass="pw-ml-1 pw-text-sm pw-line-through pw-opacity-50"
+                              size={24}
+                              fontClass="pw-ml-1"
                               crypto={
                                 product?.prices.find(
                                   (price: any) =>
@@ -561,93 +625,111 @@ export const ProductPage = ({
                                     price.currencyId == currencyId?.id
                                 )?.currency.name
                               }
-                              value={orderPreview?.originalCartPrice ?? '0'}
+                              value={
+                                orderPreview &&
+                                (parseFloat(
+                                  orderPreview.originalCartPrice ?? '0'
+                                ) > parseFloat(orderPreview.cartPrice ?? '0') ||
+                                  parseFloat(orderPreview.cartPrice ?? '0') >
+                                    parseFloat(
+                                      product?.prices.find(
+                                        (price: any) =>
+                                          price.currencyId == currencyId?.id
+                                      )?.amount ?? '0'
+                                    ) ||
+                                  parseFloat(orderPreview.cartPrice ?? '0') <
+                                    parseFloat(
+                                      product?.prices.find(
+                                        (price: any) =>
+                                          price.currencyId == currencyId?.id
+                                      )?.amount ?? '0'
+                                    ))
+                                  ? orderPreview.cartPrice ?? '0'
+                                  : product?.prices.find(
+                                      (price: any) =>
+                                        price.currencyId == currencyId?.id
+                                    )?.amount ?? '0'
+                              }
                             ></CriptoValueComponent>
-                          ) : null}
-                          <CriptoValueComponent
-                            size={24}
-                            fontClass="pw-ml-1"
-                            crypto={
-                              product?.prices.find(
-                                (price: any) =>
-                                  price.currencyId == currencyId?.id
-                              )?.currency.crypto
-                            }
-                            code={
-                              product?.prices.find(
-                                (price: any) =>
-                                  price.currencyId == currencyId?.id
-                              )?.currency.name
-                            }
-                            value={
-                              orderPreview &&
-                              parseFloat(
-                                orderPreview.originalCartPrice ?? '0'
-                              ) > parseFloat(orderPreview.cartPrice ?? '0')
-                                ? orderPreview.cartPrice ?? '0'
-                                : product?.prices.find(
-                                    (price: any) =>
-                                      price.currencyId == currencyId?.id
-                                  )?.amount ?? '0'
-                            }
-                          ></CriptoValueComponent>
-                        </>
+                          </>
+                        )
                       ) : (
                         ''
                       )}
                     </p>
                   </>
                 )}
+                <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[250px] pw-w-full">
+                  {product?.variants
+                    ? product?.variants.map((val) => (
+                        <ProductVariants
+                          key={val.id}
+                          variants={val}
+                          onClick={(e) => {
+                            setVariants({
+                              ...variants,
+                              [val.id]: Object.values(e)[0],
+                            });
+                          }}
+                          productId={product?.id}
+                        />
+                      ))
+                    : null}
+                </div>
+
                 {actionButton &&
                 product?.stockAmount &&
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
                 !currencyId?.crypto ? (
-                  <div>
-                    <div ref={refToClickAway} className="pw-mt-4">
-                      <p className="pw-text-sm pw-text-black pw-mb-1">
-                        Quantidade
-                      </p>
-                      <div
-                        onClick={() => setQuantityOpen(!quantityOpen)}
-                        className={`pw-w-[120px]  pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
-                          quantityOpen
-                            ? 'pw-border-none pw-bg-white'
-                            : 'pw-border pw-border-black'
+                  <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center pw-my-6">
+                    <p className="pw-text-sm pw-text-black pw-mb-1">
+                      Quantidade
+                    </p>
+                    <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
+                      <p
+                        onClick={() => {
+                          if (quantity > 1) setQuantity(quantity - 1);
+                        }}
+                        className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                          quantity && quantity > 1
+                            ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
+                            : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
                         }`}
                       >
-                        <p className="pw-text-xs pw-font-[600] pw-text-black">
+                        -
+                      </p>
+                      <div>
+                        <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
                           {quantity}
                         </p>
-                        <ArrowDown className="pw-stroke-black" />
                       </div>
-                      {quantityOpen && (
-                        <div className="pw-relative">
-                          <div className="pw-absolute pw-bg-white -pw-mt-1 pw-w-[120px] pw-flex pw-flex-col pw-py-1 pw-rounded-b-l ">
-                            <div className="pw-border-t pw-bg-slate-400 pw-mx-3 pw-h-px"></div>
-                            <div className=""></div>
-                            <div className="pw-max-h-[180px] pw-overflow-y-auto">
-                              {Array(limit)
-                                .fill(0)
-                                .map((val, index) => (
-                                  <p
-                                    onClick={() => {
-                                      setQuantity(index + 1);
-                                      setQuantityOpen(false);
-                                    }}
-                                    key={index}
-                                    className="pw-px-3 pw-py-2 pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
-                                  >
-                                    {index + 1}
-                                  </p>
-                                ))}
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      <p
+                        className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                          product?.canPurchaseAmount &&
+                          product?.stockAmount &&
+                          quantity < product?.canPurchaseAmount &&
+                          quantity < product?.stockAmount
+                            ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
+                            : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
+                        }`}
+                        onClick={() => {
+                          if (
+                            product?.canPurchaseAmount &&
+                            product?.stockAmount &&
+                            quantity < product?.canPurchaseAmount &&
+                            quantity < product?.stockAmount
+                          ) {
+                            setQuantity(quantity + 1);
+                          }
+                        }}
+                      >
+                        +
+                      </p>
                     </div>
                   </div>
                 ) : null}
+
                 {/* {showCategory && product?.tags?.length ? (
                   <>
                     <p
@@ -673,6 +755,7 @@ export const ProductPage = ({
                     </div>
                   </>
                 ) : null} */}
+
                 {product?.requirements &&
                 product?.hasWhitelistBlocker &&
                 product?.stockAmount != 0 ? (
@@ -749,9 +832,7 @@ export const ProductPage = ({
                           }}
                           className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
                         >
-                          {cart.some((p) => p.id == product?.id)
-                            ? 'Remover do carrinho'
-                            : 'Adicionar ao carrinho'}
+                          {'Adicionar ao carrinho'}
                         </button>
                       ) : null}
                       <button
@@ -761,6 +842,7 @@ export const ProductPage = ({
                         }
                         onClick={() => {
                           if (product?.id && product.prices) {
+                            setProductVariants({ ...variants });
                             pushConnect(
                               PixwayAppRoutes.CHECKOUT_CONFIRMATION +
                                 `?productIds=${Array(quantity)

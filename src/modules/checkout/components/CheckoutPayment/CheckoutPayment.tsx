@@ -130,7 +130,13 @@ export const CheckoutPayment = () => {
     if (productCache && stayPooling) {
       getOrderPreview.mutate(
         {
-          productIds: productCache.orderProducts.map((p) => p.productId),
+          productIds: productCache.orderProducts.map((p) => {
+            const payload = {
+              productId: p.productId,
+              variantIds: p.variantIds,
+            };
+            return payload;
+          }),
           currencyId: productCache.currencyId,
           companyId,
           couponCode: productCache.couponCode,
