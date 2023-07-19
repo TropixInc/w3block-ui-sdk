@@ -601,6 +601,7 @@ export const ProductPage = ({
                         ) : (
                           <>
                             {orderPreview &&
+                            !orderPreview.productsErrors &&
                             parseFloat(orderPreview.originalCartPrice ?? '0') >
                               parseFloat(orderPreview.cartPrice ?? '0') ? (
                               <CriptoValueComponent
@@ -638,6 +639,7 @@ export const ProductPage = ({
                               }
                               value={
                                 orderPreview &&
+                                !orderPreview.productsErrors &&
                                 (parseFloat(
                                   orderPreview.originalCartPrice ?? '0'
                                 ) > parseFloat(orderPreview.cartPrice ?? '0') ||
