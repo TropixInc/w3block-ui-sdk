@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.0...v1.5.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* delete product on cart ([95701e4](https://github.com/TropixInc/w3block-ui-sdk/commit/95701e43b55cd7a6d6301f7ad66ef773eac3fffe))
+
 ## [1.5.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.4.2-alpha.1...v1.5.0) (2023-07-17)
 
 
