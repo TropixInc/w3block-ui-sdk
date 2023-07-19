@@ -383,12 +383,14 @@ const _CheckoutInfo = ({
     }
   };
 
-  const deleteProduct = (id: string, amount: string) => {
+  const deleteProduct = (id: string, amount: string, variants?: Variants[]) => {
     const filteredProds = cart.filter((prod) => {
       if (prod.id == id) {
         if (
           prod.prices.find((price) => price.currencyId == currencyIdState)
-            ?.amount != amount
+            ?.amount != amount ||
+          prod.variantIds.toString() !==
+            variants?.map((res) => res.values.map((res) => res.id)).toString()
         ) {
           return true;
         } else {
@@ -710,12 +712,13 @@ const _CheckoutInfo = ({
                 changeQuantity={changeQuantity}
                 loading={isLoading}
                 status={checkoutStatus}
-                deleteProduct={(id) =>
+                deleteProduct={(id, variants) =>
                   deleteProduct(
                     id,
                     prod.prices.find(
                       (price) => price.currencyId == currencyIdState
-                    )?.amount ?? '0'
+                    )?.amount ?? '0',
+                    variants
                   )
                 }
                 id={prod.id}
