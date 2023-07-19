@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.2...v1.5.3) (2023-07-19)
+
+
+### Bug Fixes
+
+* adjusts on pix payment ([ba26e71](https://github.com/TropixInc/w3block-ui-sdk/commit/ba26e71cb9a4966f9a565bb283da9ececf084963))
+
 ### [1.5.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.1...v1.5.2) (2023-07-19)
 
 ### [1.5.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.0...v1.5.1) (2023-07-19)
