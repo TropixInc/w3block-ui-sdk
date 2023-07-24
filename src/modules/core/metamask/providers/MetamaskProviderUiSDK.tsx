@@ -67,9 +67,13 @@ export const MetamaskProviderUiSDK = ({
       : null;
 
   const isConnected = useMemo(() => {
-    if (eth && eth?.isConnected()) {
-      return true;
-    } else {
+    try {
+      if (eth && eth?.isConnected()) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
       return false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
