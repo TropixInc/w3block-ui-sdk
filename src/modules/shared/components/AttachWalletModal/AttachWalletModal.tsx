@@ -15,7 +15,7 @@ import { usePixwayAPIURL } from '../../hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { useSessionUser } from '../../hooks/useSessionUser';
 import { useToken } from '../../hooks/useToken';
 import useTranslation from '../../hooks/useTranslation';
-import { useUserWallet } from '../../hooks/useUserWallet';
+import { useWallets } from '../../hooks/useWallets/useWallets';
 import { AttachWalletContext } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import { Alert } from '../Alert';
 import { ModalBase } from '../ModalBase';
@@ -31,7 +31,7 @@ export const AttachWalletModal = () => {
   const { attachModal, setAttachModal } = useContext(AttachWalletContext);
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
   const [translate] = useTranslation();
-  const { connect, claim, connected } = useUserWallet();
+  const { connectMetamask, claim, isConnected } = useWallets();
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
   const [isConnecting, setIsConnecting] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -52,7 +52,7 @@ export const AttachWalletModal = () => {
     setIsConnecting(true);
 
     try {
-      await connect();
+      await connectMetamask?.();
       setIsConnecting(false);
     } catch (error: any) {
       console.error(error);
@@ -65,7 +65,7 @@ export const AttachWalletModal = () => {
     setIsConnecting(true);
 
     try {
-      await claim();
+      await claim?.();
       onCreateWalletSuccessfully();
     } catch (error: any) {
       console.error(error);
@@ -118,7 +118,7 @@ export const AttachWalletModal = () => {
         <div className="pw-mt-6">
           <ConnectToMetamaskButton
             onClick={
-              connected
+              isConnected
                 ? onClickConnectMetamaskWallet
                 : onClickConnectToMetamaskExtension
             }
@@ -166,7 +166,7 @@ export const AttachWalletModal = () => {
             </h2>
             <ConnectToMetamaskButton
               onClick={
-                connected
+                isConnected
                   ? onClickConnectMetamaskWallet
                   : onClickConnectToMetamaskExtension
               }

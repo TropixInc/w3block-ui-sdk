@@ -1,6 +1,7 @@
 import { ChainScan } from '../../enums/ChainId';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
+import { WalletSimple } from '../../providers';
 import { useAxios } from '../useAxios';
 import { usePrivateQuery } from '../usePrivateQuery';
 
@@ -31,4 +32,33 @@ export const useBalance = ({ chainId, address }: useBalanceParams) => {
     { enabled: address != undefined && address != '' }
   );
   return chainId && address && address != '' ? balance : null;
+};
+
+export const useGetBalancesForWallets = () => {
+  const axios = useAxios(W3blockAPI.KEY);
+  const getWalletsBalances = async (
+    wallets: WalletSimple[]
+  ): Promise<WalletSimple[]> => {
+    return Promise.all(
+      wallets.map((wallet) => {
+        return axios
+          .get<GetBalanceAPIResponse>(
+            PixwayAPIRoutes.BALANCE.replace(
+              '{address}',
+              wallet.address
+            ).replace('{chainId}', String(wallet.chainId))
+          )
+          .then((response) => {
+            return {
+              ...wallet,
+              balance: response.data.balance,
+            };
+          })
+          .catch(() => {
+            return wallet;
+          });
+      })
+    );
+  };
+  return getWalletsBalances;
 };

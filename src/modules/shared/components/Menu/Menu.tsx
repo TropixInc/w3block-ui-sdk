@@ -18,6 +18,7 @@ import { ReactComponent as IntegrationIcon } from '../../assets/icons/integratio
 // import { ReactComponent as HelpIcon } from '../../assets/icons/helpCircleOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/logoutOutlined.svg';
 import { ReactComponent as MyOrdersIcon } from '../../assets/icons/myOrders.svg';
+import { ReactComponent as ReceiptIcon } from '../../assets/icons/receipt.svg';
 import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.svg';
 // import { ReactComponent as SettingsIcon } from '../../assets/icons/settingsOutlined.svg';
 import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
@@ -89,6 +90,15 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WALLET,
         isVisible: true,
+      },
+      {
+        title: translate('wallet>page>extract'),
+        icon: (
+          <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
+        ),
+        link: PixwayAppRoutes.WALLET_RECEIPT,
+        isVisible: true,
+        sub: true,
       },
       {
         title: translate('header>components>defaultTab>myOrders'),

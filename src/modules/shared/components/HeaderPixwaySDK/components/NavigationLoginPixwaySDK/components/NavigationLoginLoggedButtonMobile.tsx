@@ -37,7 +37,7 @@ export const NavigationLoginLoggedButtonMobile = ({
   const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
   const toggleTabsMemo = () => {

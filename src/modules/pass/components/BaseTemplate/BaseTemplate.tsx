@@ -31,7 +31,7 @@ export const BaseTemplate = ({
   const [translate] = useTranslation();
   const [showValue, toggleShowValue] = useToggle(false);
   const { data: profile } = useProfile();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const walletBalance = wallet?.balance ?? '0';
   const isLoading = wallet == undefined;
 

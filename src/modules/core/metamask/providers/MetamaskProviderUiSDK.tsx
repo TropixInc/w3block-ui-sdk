@@ -4,23 +4,35 @@ import {
   createContext,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 
-import { EtherUnitsEnum } from '@w3block/pixchain-react-metamask';
+import detectEthereumProvider from '@metamask/detect-provider';
 import { ContractTransaction, ethers } from 'ethers';
 
+import {
+  claimWalletMetamask,
+  requestWalletMetamask,
+} from '../../../auth/api/wallet';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { ContractTransactionCallable, Transaction } from '../interface';
-import { Format } from '../utils/format';
+import { Format, formatBalance } from '../utils/format';
 
 interface MetamaskContextInterface {
-  hasMetamask: boolean;
-  connectMetamask?: () => void;
+  wallet: WalletState;
+  hasProvider?: boolean;
+  error: boolean;
+  errorMessage?: string;
+  isConnecting: boolean;
+  clearError?: () => void;
+  connectMetamask?: () => Promise<void>;
   isConnected?: boolean;
   accounts?: string;
   chainId?: number;
   sendSignedRequest?: (transaction: Transaction) => Promise<any>;
+  claim?: () => Promise<void>;
   signTransaction?: (
     param: Record<string, any>
   ) => Promise<ERROR_STATUS | string>;
@@ -34,12 +46,24 @@ export enum ERROR_STATUS {
   NO_MAPPED_ERROR = 'Erro não mapeado',
 }
 
+interface WalletState {
+  accounts: any[];
+  balance: string;
+  chainId: string;
+}
+
 enum ETH_METHODS {
   CONNECT_ACCOUNT = 'eth_requestAccounts',
   SEND_TRANSACTION = 'eth_sendTransaction',
   GET_CHAIN_ID = 'eth_chainId',
   GET_ACCOUNT = 'eth_accounts',
 }
+
+const disconnectedState: WalletState = {
+  accounts: [],
+  balance: '',
+  chainId: '',
+};
 
 export const metamaskErrors = new Map<number, ERROR_STATUS>([
   [4001, ERROR_STATUS.REFUSE_METAMASK],
@@ -48,7 +72,10 @@ export const metamaskErrors = new Map<number, ERROR_STATUS>([
 ]);
 
 export const MetamaskProviderContext = createContext<MetamaskContextInterface>({
-  hasMetamask: false,
+  wallet: disconnectedState,
+  error: false,
+  isConnecting: false,
+  hasProvider: false,
 });
 
 export const MetamaskProviderUiSDK = ({
@@ -58,53 +85,81 @@ export const MetamaskProviderUiSDK = ({
 }) => {
   const [providerState, setProvider] =
     useState<ethers.providers.Web3Provider>();
-  const [chainId, setChainId] = useState<number>();
-  const [accounts, setAccounts] = useState<string>();
-  const eth =
-    typeof globalThis.window !== 'undefined' &&
-    (globalThis.window as any).ethereum
-      ? (globalThis.window as any).ethereum
-      : null;
+  const user = useSessionUser();
+  const { companyId } = useCompanyConfig();
+  const { w3blockIdAPIUrl } = usePixwayAPIURL();
+  const [hasProvider, setHasProvider] = useState<boolean | undefined>(false);
+  const [isConnecting, setIsConnecting] = useState(false);
 
-  const isConnected = useMemo(() => {
-    if (eth && eth?.isConnected()) {
-      return true;
-    } else {
-      return false;
+  const [errorMessage, setErrorMessage] = useState('');
+  const clearError = () => setErrorMessage('');
+  const [wallet, setWallet] = useState(disconnectedState);
+  const _updateWallet = useCallback(async (providedAccounts?: any) => {
+    const accounts =
+      providedAccounts ||
+      (await window.ethereum.request({ method: 'eth_accounts' }));
+    if (accounts.length === 0) {
+      // If there are no accounts, then the user is disconnected
+      setWallet(disconnectedState);
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eth]);
 
-  const hasMetamask = useMemo(() => {
-    if (eth) {
-      return true;
-    } else {
-      return false;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eth]);
+    const balance = formatBalance(
+      await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [accounts[0], 'latest'],
+      })
+    );
+    const chainId = await window.ethereum.request({
+      method: 'eth_chainId',
+    });
+
+    setWallet({ accounts, balance, chainId });
+  }, []);
+
+  const updateWalletAndAccounts = useCallback(
+    () => _updateWallet(),
+    [_updateWallet]
+  );
+  const updateWallet = useCallback(
+    (accounts: any) => _updateWallet(accounts),
+    [_updateWallet]
+  );
 
   useEffect(() => {
-    if (eth) {
-      const provider = new ethers.providers.Web3Provider(eth);
-      setProvider(provider);
+    const getProvider = async () => {
+      const provider = await detectEthereumProvider({ silent: true });
+      setHasProvider(Boolean(provider));
+      const provider2 = new ethers.providers.Web3Provider(window.ethereum);
+      setProvider(provider2);
+
+      if (provider) {
+        updateWalletAndAccounts();
+        window.ethereum.on('accountsChanged', updateWallet);
+        window.ethereum.on('chainChanged', updateWalletAndAccounts);
+      }
+    };
+
+    getProvider();
+
+    return () => {
+      window.ethereum?.removeListener('accountsChanged', updateWallet);
+      window.ethereum?.removeListener('chainChanged', updateWalletAndAccounts);
+    };
+  }, [updateWallet, updateWalletAndAccounts]);
+
+  const connectMetamask = async () => {
+    setIsConnecting(true);
+    try {
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+      clearError();
+      updateWallet(accounts);
+    } catch (err: any) {
+      setErrorMessage(err.message);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eth]);
-
-  const handleAccountChange = (data: Array<string>) => {
-    console.log('handleAccountChange', data);
-    if (data.length) {
-      setAccounts(data[0]);
-    }
-  };
-
-  const handleChainChanged = (data: string) => {
-    setChainId(convertBigNumber(data));
-  };
-
-  const convertBigNumber = (big: string): number => {
-    return ethers.BigNumber.from(big).toNumber();
+    setIsConnecting(false);
   };
 
   const sendTransaction = async (
@@ -120,7 +175,7 @@ export const MetamaskProviderUiSDK = ({
     const contractArgs = params.argumentValues;
     const overrides = {
       value: params.ether
-        ? ethers.utils.parseUnits(params.ether, EtherUnitsEnum.ETHER)
+        ? ethers.utils.parseUnits(params.ether, 'ether')
         : undefined,
     };
     const result: ContractTransaction = await contract.functions[
@@ -141,10 +196,10 @@ export const MetamaskProviderUiSDK = ({
     [providerState]
   );
 
-  const signTransaction = (
+  const signTransaction = async (
     param: Record<string, any>
   ): Promise<ERROR_STATUS | string> => {
-    return eth
+    return await window.ethereum
       .request({
         method: ETH_METHODS.SEND_TRANSACTION,
         params: [param],
@@ -157,58 +212,75 @@ export const MetamaskProviderUiSDK = ({
       });
   };
 
-  useEffect(() => {
-    if (hasMetamask) {
-      eth.on('accountsChanged', handleAccountChange);
-      eth.on('chainChanged', handleChainChanged);
-      eth
-        .request({ method: ETH_METHODS.GET_CHAIN_ID })
-        .then((data: string) => setChainId(convertBigNumber(data)));
-      eth
-        .request({ method: ETH_METHODS.GET_ACCOUNT })
-        .then((data: Array<string>) => {
-          if (data.length) setAccounts(data[0]);
-        });
+  const claim = useCallback(async () => {
+    if (!user?.accessToken) {
+      throw new Error('No API token provided');
     }
 
-    return () => {
-      if (eth) {
-        eth.removeListener('accountsChanged', handleAccountChange);
-        eth.removeListener('chainChanged', handleChainChanged);
+    if (!companyId) {
+      throw new Error('No company ID provided');
+    }
+
+    if (wallet.accounts.length === 0) {
+      throw new Error('No wallet connected');
+    }
+
+    const { data } = await requestWalletMetamask(
+      user?.accessToken ?? '',
+      companyId,
+      w3blockIdAPIUrl,
+      user?.refreshToken ?? '',
+      {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        address: wallet.accounts[0],
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        chainId: parseInt(wallet.chainId),
       }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eth, isConnected, hasMetamask]);
+    );
 
-  const connectMetamask = (): Promise<ERROR_STATUS | null> => {
-    if (hasMetamask && providerState) {
-      return providerState
-        .send(ETH_METHODS.CONNECT_ACCOUNT, [])
-        .then((data) => {
-          if (data.length) {
-            setAccounts(data);
-          }
-
-          return null;
-        })
-        .catch((e) => {
-          return metamaskErrors.get(e.code) ?? ERROR_STATUS.NO_MAPPED_ERROR;
-        });
-    } else {
-      return new Promise(() => ERROR_STATUS.NO_METAMASK);
+    const from = data.address;
+    let signature;
+    try {
+      signature = await window.ethereum.request({
+        method: 'eth_signTypedData_v4',
+        params: [from, data?.message],
+      });
+    } catch (e) {
+      console.log(e);
     }
-  };
+    /* Request browser wallet provider to sign the association message. */
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
+    await claimWalletMetamask(
+      user.accessToken ?? '',
+      companyId,
+      w3blockIdAPIUrl,
+      user?.refreshToken ?? '',
+      {
+        signature,
+      }
+    ).then((resp) => {
+      if (resp.data.statusCode < 200 || resp.data.statusCode > 300) {
+        throw new Error(resp.data.message);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet, user]);
 
   return (
     <MetamaskProviderContext.Provider
       value={{
-        hasMetamask,
+        wallet,
+        hasProvider,
+        error: Boolean(errorMessage),
+        errorMessage,
+        isConnecting,
+        clearError,
         connectMetamask,
-        isConnected,
-        accounts,
-        chainId,
         signTransaction,
         sendSignedRequest,
+        claim,
+        isConnected: wallet.accounts.length > 0,
       }}
     >
       {children}

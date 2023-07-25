@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
-import { Provider } from '@w3block/pixchain-react-metamask';
-
 import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
 import { useProfile } from '../../../shared';
 import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
@@ -22,7 +20,7 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet';
+import { useWallets } from '../../../shared/hooks/useWallets/useWallets';
 import { claimWalletVault } from '../../api/wallet';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
@@ -94,6 +92,7 @@ const _ConnectWalletTemplate = ({
         setIsLoading(false);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile, router, sessionUser]);
 
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
@@ -101,7 +100,7 @@ const _ConnectWalletTemplate = ({
 
   const conn = !companyId && !token;
 
-  const { connect, claim, connected } = useUserWallet();
+  const { connectMetamask, claim, isConnected } = useWallets();
 
   const onClickConnectToMetamaskExtension = async () => {
     if (!(globalThis.window as any)?.ethereum) {
@@ -113,7 +112,7 @@ const _ConnectWalletTemplate = ({
     setIsConnecting(true);
 
     try {
-      await connect();
+      await connectMetamask?.();
       setIsConnecting(false);
     } catch (error: any) {
       console.error(error);
@@ -126,7 +125,7 @@ const _ConnectWalletTemplate = ({
     setIsConnecting(true);
 
     try {
-      await claim();
+      await claim?.();
       onCreateWalletSuccessfully();
     } catch (error: any) {
       console.error(error);
@@ -187,7 +186,7 @@ const _ConnectWalletTemplate = ({
         <div className="pw-mt-6">
           <ConnectToMetamaskButton
             onClick={
-              connected
+              isConnected
                 ? onClickConnectMetamaskWallet
                 : onClickConnectToMetamaskExtension
             }
@@ -238,7 +237,7 @@ const _ConnectWalletTemplate = ({
             </h2>
             <ConnectToMetamaskButton
               onClick={
-                connected
+                isConnected
                   ? () => mailInterceptor(onClickConnectMetamaskWallet)
                   : () => mailInterceptor(onClickConnectToMetamaskExtension)
               }
@@ -268,17 +267,10 @@ const _ConnectWalletTemplate = ({
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const MetamaskProvider = Provider as any;
 export const ConnectWalletTemplate = ({ redirectLink }: ConnectWalletProps) => (
   <TranslatableComponent>
-    <MetamaskProvider
-      dappConfig={{
-        autoConnect: true,
-      }}
-    >
-      <MailVerifiedInterceptorProvider>
-        <_ConnectWalletTemplate redirectLink={redirectLink} />
-      </MailVerifiedInterceptorProvider>
-    </MetamaskProvider>
+    <MailVerifiedInterceptorProvider>
+      <_ConnectWalletTemplate redirectLink={redirectLink} />
+    </MailVerifiedInterceptorProvider>
   </TranslatableComponent>
 );

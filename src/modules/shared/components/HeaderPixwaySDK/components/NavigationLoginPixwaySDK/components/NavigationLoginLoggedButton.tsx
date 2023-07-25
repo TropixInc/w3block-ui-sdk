@@ -171,7 +171,7 @@ const NavigationMenu = ({
   const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
 
   const renderIcon = () => {
     return wallet?.chainId === ChainId.Polygon ||

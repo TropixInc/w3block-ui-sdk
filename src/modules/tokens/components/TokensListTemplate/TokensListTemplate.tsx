@@ -24,7 +24,7 @@ interface Props {
 const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
   useHasWallet({});
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const { data } = useProcessingTokens();
@@ -107,7 +107,7 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
 
   const { isLoading: isLoadingProfile } = useProfile();
 
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
 
   const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
     useGetNFTSByWallet(wallet?.chainId || 80001);

@@ -38,7 +38,7 @@ const _WalletConnectIntegration = () => {
   const router = useRouterConnect();
   const [showValue, toggleShowValue] = useToggle(false);
   const [translate] = useTranslation();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const [isOpen, setIsOpen] = useState(false);
   const [isDesincOpen, setIsDesincOpen] = useState(false);
   const isLoading = wallet == undefined;

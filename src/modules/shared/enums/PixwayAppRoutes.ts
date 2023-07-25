@@ -27,6 +27,7 @@ export enum PixwayAppRoutes {
   PROFILE = '/profile',
   MY_TOKENS = '/wallet',
   WALLET = '/wallet',
+  WALLET_RECEIPT = '/wallet/statement',
   SETTINGS = '/settings',
   HELP = '/help',
   TOKEN_PUBLIC = '/token/{contractAddress}/{chainId}/{tokenId}',

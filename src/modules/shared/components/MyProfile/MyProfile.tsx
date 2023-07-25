@@ -27,7 +27,7 @@ export const MyProfile = () => {
   const [showValue, toggleShowValue] = useToggle(false);
   const [nameVal, setNameVal] = useState('');
   const [translate] = useTranslation();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const isLoading = wallet == undefined;
 
   useEffect(() => {

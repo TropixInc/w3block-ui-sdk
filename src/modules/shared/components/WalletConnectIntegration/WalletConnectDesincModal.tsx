@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const WalletConnectDesinModal = ({ isOpen, onClose }: Props) => {
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const isMobile = useIsMobile();
   const [translate] = useTranslation();
 
