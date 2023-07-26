@@ -49,11 +49,14 @@ export const AuthCheckbox = ({
       />
       {redirectLink ? (
         <Trans i18nKey={keyTrans}>
-          <p className="pw-text-[13px] pw-leading-[15.85px] pw-text-[#353945]">
+          <p
+            onClick={() => checkboxRef.current?.click()}
+            className="pw-leading-[15.85px] pw-text-[#353945]"
+          >
             {label}
           </p>
           <a
-            className="pw-text-[13px] pw-leading-[15.85px] pw-underline pw-text-[#353945]"
+            className="pw-leading-[15.85px] pw-underline pw-text-[#353945]"
             href={redirectLink}
             target="_blank"
             rel="noreferrer"
@@ -63,7 +66,7 @@ export const AuthCheckbox = ({
         </Trans>
       ) : (
         <label
-          className="pw-text-[13px] pw-leading-[15.85px] pw-text-[#353945]"
+          className="pw-leading-[15.85px] pw-text-[#353945]"
           onClick={() => checkboxRef.current?.click()}
         >
           {label}
