@@ -224,10 +224,10 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     "to-fast-properties" "^2.0.0"
 
-"@esbuild/darwin-arm64@0.18.16":
-  "integrity" "sha512-aBxruWCII+OtluORR/KvisEw0ALuw/qDQWvkoosA+c/ngC/Kwk0lLaZ+B++LLS481/VdydB2u6tYpWxUfnLAIw=="
-  "resolved" "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.18.16.tgz"
-  "version" "0.18.16"
+"@esbuild/darwin-arm64@0.18.17":
+  "integrity" "sha512-M9uJ9VSB1oli2BE/dJs3zVr9kcCBBsE883prage1NWz6pBS++1oNn/7soPNS3+1DGj0FrkSvnED4Bmlu1VAE9g=="
+  "resolved" "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.18.17.tgz"
+  "version" "0.18.17"
 
 "@eslint-community/eslint-utils@^4.2.0":
   "integrity" "sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA=="
@@ -237,9 +237,9 @@
     "eslint-visitor-keys" "^3.3.0"
 
 "@eslint-community/regexpp@^4.4.0":
-  "integrity" "sha512-O7x6dMstWLn2ktjcoiNLDkAGG2EjveHL+Vvc+n0fXumkJYAcSqcVYKtwDU+hDZ0uDUsnUagSYaZrOLAYE8un1A=="
-  "resolved" "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.6.1.tgz"
-  "version" "4.6.1"
+  "integrity" "sha512-pPTNuaAG3QMH+buKyBIGJs3g/S5y0caxw0ygM3YyE6yJFySwiGGSzA+mM3KJ8QQvzeLh3blwgSonkFjgQdxzMw=="
+  "resolved" "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.6.2.tgz"
+  "version" "4.6.2"
 
 "@eslint/eslintrc@^2.1.0":
   "integrity" "sha512-Lj7DECXqIVCqnqjjHMPna4vn6GJcMgul/wuS0je9OZ9gsL0zzDpKPVtcG1HaDVc+9y+qgXneTeUMbCqXJNpH1A=="
@@ -1033,9 +1033,9 @@
   "version" "0.0.29"
 
 "@types/lodash@^4.14.175":
-  "integrity" "sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg=="
-  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.195.tgz"
-  "version" "4.14.195"
+  "integrity" "sha512-22y3o88f4a94mKljsZcanlNWPzO0uBsBdzLAngf2tp533LzZcQzb6+eZPJ+vCTt+bqF2XnvT9gejTLsAcJAJyQ=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.196.tgz"
+  "version" "4.14.196"
 
 "@types/minimist@^1.2.0":
   "integrity" "sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ=="
@@ -1092,9 +1092,9 @@
     "react-query" "*"
 
 "@types/react@*", "@types/react@^18.0.15":
-  "integrity" "sha512-LLFWr12ZhBJ4YVw7neWLe6Pk7Ey5R9OCydfuMsz1L8bZxzaawJj2p06Q8/EFEHDeTBQNFLF62X+CG7B2zIyu0Q=="
-  "resolved" "https://registry.npmjs.org/@types/react/-/react-18.2.16.tgz"
-  "version" "18.2.16"
+  "integrity" "sha512-u+e7OlgPPh+aryjOm5UJMX32OvB2E3QASOAqVMY6Ahs90djagxwv2ya0IctglNbNTexC12qCSMZG47KPfy1hAA=="
+  "resolved" "https://registry.npmjs.org/@types/react/-/react-18.2.17.tgz"
+  "version" "18.2.17"
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1210,9 +1210,9 @@
     "react-refresh" "^0.14.0"
 
 "@w3block/sdk-id@^0.1.53":
-  "integrity" "sha512-BrImT6bEPiqPrtzRzEKbtrHXo23qF5IeyY78jiBFQlWhE99ZvuUkOq1Pr7j2m9vxR1ZbQRCR9lbXsm77w23OcA=="
-  "resolved" "https://registry.npmjs.org/@w3block/sdk-id/-/sdk-id-0.1.57.tgz"
-  "version" "0.1.57"
+  "integrity" "sha512-/B27BlvbfUtxb0qTNu2AyfT+bmvC+gARg4iv86zoEAkpN4aaWS6BeSxMo0YeAtYDIVMSW2GyJ43mCZbA0BaEsg=="
+  "resolved" "https://registry.npmjs.org/@w3block/sdk-id/-/sdk-id-0.1.58.tgz"
+  "version" "0.1.58"
   dependencies:
     "axios" "^0.24.0"
     "date-fns" "2.29.1"
@@ -2473,9 +2473,9 @@
   "version" "0.2.0"
 
 "electron-to-chromium@^1.4.431":
-  "integrity" "sha512-zZM48Lmy2FKWgqyvsX9XK+J6FfP7aCDUFLmgooLJzA7v1agCs/sxSoBpTIwDLhmbhpx9yJIxj2INig/ncjJRqg=="
-  "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.470.tgz"
-  "version" "1.4.470"
+  "integrity" "sha512-aVfC8+440vGfl06l8HKKn8/PD5jRfSnLkTTD65EFvU46igbpQRri1gxSzW9/+TeUlwYzrXk1sw867T96zlyECA=="
+  "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.473.tgz"
+  "version" "1.4.473"
 
 "elliptic@^6.5.3", "elliptic@6.5.4":
   "integrity" "sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ=="
@@ -2629,32 +2629,32 @@
   "version" "1.1.0"
 
 "esbuild@^0.18.10":
-  "integrity" "sha512-1xLsOXrDqwdHxyXb/x/SOyg59jpf/SH7YMvU5RNSU7z3TInaASNJWNFJ6iRvLvLETZMasF3d1DdZLg7sgRimRQ=="
-  "resolved" "https://registry.npmjs.org/esbuild/-/esbuild-0.18.16.tgz"
-  "version" "0.18.16"
+  "integrity" "sha512-1GJtYnUxsJreHYA0Y+iQz2UEykonY66HNWOb0yXYZi9/kNrORUEHVg87eQsCtqh59PEJ5YVZJO98JHznMJSWjg=="
+  "resolved" "https://registry.npmjs.org/esbuild/-/esbuild-0.18.17.tgz"
+  "version" "0.18.17"
   optionalDependencies:
-    "@esbuild/android-arm" "0.18.16"
-    "@esbuild/android-arm64" "0.18.16"
-    "@esbuild/android-x64" "0.18.16"
-    "@esbuild/darwin-arm64" "0.18.16"
-    "@esbuild/darwin-x64" "0.18.16"
-    "@esbuild/freebsd-arm64" "0.18.16"
-    "@esbuild/freebsd-x64" "0.18.16"
-    "@esbuild/linux-arm" "0.18.16"
-    "@esbuild/linux-arm64" "0.18.16"
-    "@esbuild/linux-ia32" "0.18.16"
-    "@esbuild/linux-loong64" "0.18.16"
-    "@esbuild/linux-mips64el" "0.18.16"
-    "@esbuild/linux-ppc64" "0.18.16"
-    "@esbuild/linux-riscv64" "0.18.16"
-    "@esbuild/linux-s390x" "0.18.16"
-    "@esbuild/linux-x64" "0.18.16"
-    "@esbuild/netbsd-x64" "0.18.16"
-    "@esbuild/openbsd-x64" "0.18.16"
-    "@esbuild/sunos-x64" "0.18.16"
-    "@esbuild/win32-arm64" "0.18.16"
-    "@esbuild/win32-ia32" "0.18.16"
-    "@esbuild/win32-x64" "0.18.16"
+    "@esbuild/android-arm" "0.18.17"
+    "@esbuild/android-arm64" "0.18.17"
+    "@esbuild/android-x64" "0.18.17"
+    "@esbuild/darwin-arm64" "0.18.17"
+    "@esbuild/darwin-x64" "0.18.17"
+    "@esbuild/freebsd-arm64" "0.18.17"
+    "@esbuild/freebsd-x64" "0.18.17"
+    "@esbuild/linux-arm" "0.18.17"
+    "@esbuild/linux-arm64" "0.18.17"
+    "@esbuild/linux-ia32" "0.18.17"
+    "@esbuild/linux-loong64" "0.18.17"
+    "@esbuild/linux-mips64el" "0.18.17"
+    "@esbuild/linux-ppc64" "0.18.17"
+    "@esbuild/linux-riscv64" "0.18.17"
+    "@esbuild/linux-s390x" "0.18.17"
+    "@esbuild/linux-x64" "0.18.17"
+    "@esbuild/netbsd-x64" "0.18.17"
+    "@esbuild/openbsd-x64" "0.18.17"
+    "@esbuild/sunos-x64" "0.18.17"
+    "@esbuild/win32-arm64" "0.18.17"
+    "@esbuild/win32-ia32" "0.18.17"
+    "@esbuild/win32-x64" "0.18.17"
 
 "escalade@^3.1.1":
   "integrity" "sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw=="
@@ -2672,9 +2672,9 @@
   "version" "4.0.0"
 
 "eslint-config-prettier@^8.5.0":
-  "integrity" "sha512-wLbQiFre3tdGgpDv67NQKnJuTlcUVYHas3k+DZCc2U2BadthoEY4B7hLPvAxaqdyOGCzuLfii2fqGph10va7oA=="
-  "resolved" "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-8.8.0.tgz"
-  "version" "8.8.0"
+  "integrity" "sha512-+sbni7NfVXnOpnRadUA8S28AUlsZt9GjgFvABIRL9Hkn8KqNzOp+7Lw4QWtrwn20KzU3wqu1QoOj2m+7rKRqkA=="
+  "resolved" "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-8.9.0.tgz"
+  "version" "8.9.0"
 
 "eslint-import-resolver-node@^0.3.7":
   "integrity" "sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA=="
@@ -2928,9 +2928,9 @@
     "merge" "^1.2.0"
 
 "execa@^7.0.0":
-  "integrity" "sha512-wH0eMf/UXckdUYnO21+HDztteVv05rq2GXksxT4fCGeHkBhw1DROXh40wcjMcRqDOWE7iPJ4n3M7e2+YFP+76Q=="
-  "resolved" "https://registry.npmjs.org/execa/-/execa-7.1.1.tgz"
-  "version" "7.1.1"
+  "integrity" "sha512-UduyVP7TLB5IcAQl+OzLyLcS/l32W/GLg+AhHJ+ow40FOk2U3SAllPwR44v4vmdFwIWqpdwxxpQbF1n5ta9seA=="
+  "resolved" "https://registry.npmjs.org/execa/-/execa-7.2.0.tgz"
+  "version" "7.2.0"
   dependencies:
     "cross-spawn" "^7.0.3"
     "get-stream" "^6.0.1"
@@ -3956,9 +3956,9 @@
     "type-check" "~0.4.0"
 
 "libphonenumber-js@^1.10.37":
-  "integrity" "sha512-Z10PCaOCiAxbUxLyR31DNeeNugSVP6iv/m7UrSKS5JHziEMApJtgku4e9Q69pzzSC9LnQiM09sqsGf2ticZnMw=="
-  "resolved" "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.37.tgz"
-  "version" "1.10.37"
+  "integrity" "sha512-4NjVXVUmpZ9Zsqq6FXa2+MKI+KAI3tOqA0pxXgXGluhpj4ge5didmbWJpMBqGB3AVGv1SnEtKdGTbxjSEG1kCQ=="
+  "resolved" "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.38.tgz"
+  "version" "1.10.38"
 
 "lilconfig@^2.0.5", "lilconfig@^2.1.0", "lilconfig@2.1.0":
   "integrity" "sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ=="

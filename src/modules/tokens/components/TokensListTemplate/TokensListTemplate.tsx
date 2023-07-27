@@ -44,7 +44,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   return tokensDisplaying?.length || data?.length ? (
     <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between pw-px-4 sm:pw-px-0">
       <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
-        {data?.map((token) => (
+        {data?.map((token: any) => (
           <li className="w-full pw-opacity-60" key={token.id.tokenId}>
             <WalletTokenCard
               category={''}
