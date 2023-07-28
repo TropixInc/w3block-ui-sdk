@@ -623,6 +623,15 @@ export const ProductPage = ({
                               ></CriptoValueComponent>
                             ) : null}
                             <CriptoValueComponent
+                              dontShow={
+                                parseFloat(
+                                  product?.prices.find(
+                                    (price: any) =>
+                                      price.currencyId == currencyId?.id
+                                  )?.amount ?? '0'
+                                ) === 0
+                              }
+                              showFree
                               size={24}
                               fontClass="pw-ml-1"
                               crypto={
@@ -809,9 +818,17 @@ export const ProductPage = ({
                           backgroundColor: buttonColor ?? '#0050FF',
                           color: buttonTextColor ?? 'white',
                         }}
-                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
-                        {buttonText ?? 'Comprar agora'}
+                        {parseFloat(
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.amount ?? '0'
+                        ) === 0
+                          ? 'Quero!'
+                          : buttonText
+                          ? buttonText
+                          : 'Comprar agora'}
                       </button>
                     </div>
                   )
@@ -880,9 +897,17 @@ export const ProductPage = ({
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}
-                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
-                        {buttonText ?? 'Comprar agora'}
+                        {parseFloat(
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.amount ?? '0'
+                        ) === 0
+                          ? 'Quero!'
+                          : buttonText
+                          ? buttonText
+                          : 'Comprar agora'}
                       </button>
                       {product?.canPurchaseAmount === 0 && (
                         <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">

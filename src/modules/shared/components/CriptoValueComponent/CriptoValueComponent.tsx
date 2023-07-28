@@ -12,6 +12,7 @@ export const CriptoValueComponent = ({
   fontClass = '',
   crypto,
   showFree = false,
+  dontShow = false,
 }: {
   code?: string;
   value: string;
@@ -19,6 +20,7 @@ export const CriptoValueComponent = ({
   fontClass?: string;
   crypto?: boolean;
   showFree?: boolean;
+  dontShow?: boolean;
 }) => {
   const [translate] = useTranslation();
   const getIcon = () => {
@@ -40,7 +42,7 @@ export const CriptoValueComponent = ({
     }
   };
 
-  return (
+  return dontShow ? null : (
     <div className="pw-flex pw-gap-1 pw-items-center">
       {crypto && getIcon()}
       <p className={`pw-font-semibold pw-text-black ${fontClass}`}>
