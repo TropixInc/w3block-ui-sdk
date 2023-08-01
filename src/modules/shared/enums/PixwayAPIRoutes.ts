@@ -65,4 +65,5 @@ export enum PixwayAPIRoutes {
   TENANT_BY_HOSTNAME = 'public-tenant/by-hostname',
   PRODUCT_BY_ID = '/companies/{companyId}/products/{productId}',
   ORDER_BY_ID = '/companies/{companyId}/orders/{orderId}',
+  TRANSFER_TOKEN_EMAIL = '{companyId}/token-editions/{id}/transfer-token/email',
 }
