@@ -17,3 +17,4 @@ export * from './modules/addFunds';
 export * from './modules/poll';
 export * from './modules/storefront';
 export * from './modules/custom';
+export * from './modules/business';
