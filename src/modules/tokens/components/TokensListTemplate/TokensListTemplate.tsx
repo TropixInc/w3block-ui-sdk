@@ -54,6 +54,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               chainId={wallet?.chainId ?? 80001}
               contractAddress={''}
               proccessing={true}
+              editionId={''}
             />
           </li>
         ))}
@@ -67,6 +68,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               id={token.id}
               chainId={token.chainId}
               contractAddress={token.contractAddress}
+              editionId={token.editionId}
             />
           </li>
         ))}

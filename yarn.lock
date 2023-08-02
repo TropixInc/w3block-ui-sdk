@@ -1725,10 +1725,10 @@
     p-memoize "4.0.3"
     swr "1.1.2"
 
-"@w3block/sdk-id@^0.1.53":
-  version "0.1.57"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.57.tgz#2bb60fe5e29ec99a4b2a2b2c48173117bf2d31c7"
-  integrity sha512-BrImT6bEPiqPrtzRzEKbtrHXo23qF5IeyY78jiBFQlWhE99ZvuUkOq1Pr7j2m9vxR1ZbQRCR9lbXsm77w23OcA==
+"@w3block/sdk-id@^0.1.61":
+  version "0.1.61"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.61.tgz#d352e7f43da6bca2cdbc28c848d31a81af1e23f8"
+  integrity sha512-eUsZlLDaYV25dL8ONlaxYVXftTssms6DE/tG7KyBjvUJ4PZEb5fgQWwTxQWLGmjdttux5GHrFVZZcB0fr8YWPQ==
   dependencies:
     axios "^0.24.0"
     date-fns "2.29.1"

@@ -30,6 +30,7 @@ interface Props {
     name: string;
     pass: boolean;
   };
+  editionId: string;
 }
 
 const cardClassName =
@@ -48,6 +49,7 @@ export const WalletTokenCard = ({
   contractAddress,
   proccessing = false,
   collectionData,
+  editionId,
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
   const router = useRouterConnect();
@@ -79,6 +81,7 @@ export const WalletTokenCard = ({
       chainId={chainId}
       tokenId={id}
       isInternalToken={isInternalToken}
+      editionId={editionId}
     >
       <div
         className={classNames(
