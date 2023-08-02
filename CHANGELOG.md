@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.6.0...v1.7.0-alpha.0) (2023-08-02)
+
+
+### Features
+
+* transfer token and new kyc input ([#219](https://github.com/TropixInc/w3block-ui-sdk/issues/219)) ([5805237](https://github.com/TropixInc/w3block-ui-sdk/commit/580523711b86412473df5bea6e7ae064fb0eac82))
+
 ## [1.6.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.8...v1.6.0) (2023-07-31)
 
 ### [1.5.8](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.7...v1.5.8) (2023-07-28)
