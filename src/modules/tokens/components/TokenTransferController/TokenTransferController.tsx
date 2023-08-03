@@ -21,7 +21,10 @@ import { useChainScanLink } from '../../../shared/hooks/useChainScanLink/useChai
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { useGetStatusOfTokenTransfers } from '../../hooks/useGetStatusOfTokenTransfers';
+import {
+  GetLastTransferAPIResponse,
+  useGetTransferToken,
+} from '../../hooks/useGetTransferToken/useGetTransferToken';
 import useTransferToken from '../../hooks/useTransferTokens/useTransferToken';
 import useTransferTokenWithEmail from '../../hooks/useTransferTokenWithEmail/useTransferTokenWithEmail';
 import { ProcessingStepModal } from '../ProcessingStepModal';
@@ -44,33 +47,24 @@ interface Form {
   wallet: string;
 }
 
-interface TokenList {
-  [token: string]: {
-    id: string;
-    number: string;
-    status: string;
-    hash: string;
-    chainId: number;
-  };
-}
 interface TransferredItemProps {
-  editionNumber: string;
-  type: 'single' | 'multiple';
-  wallet: string;
-  status: string;
-  chainId: number;
-  hash: string;
+  editionNumber?: string;
+  type?: 'single' | 'multiple';
+  wallet?: string;
+  status?: string;
+  chainId?: number;
+  hash?: string;
 }
 
 interface ContentProcessProps {
   startProcess: boolean;
   wallet: string;
-  tokenList: TokenList;
+  tokenList?: GetLastTransferAPIResponse;
   isSuccess: boolean;
 }
 
 interface SuccessMessageProps {
-  wallet: string;
+  wallet?: string;
 }
 
 const SuccessMessage = ({ wallet }: SuccessMessageProps) => {
@@ -107,43 +101,21 @@ const ContentProcess = ({
 
   return (
     <>
-      {Object.keys(tokenList).length > 1 ? (
-        <>
-          {showSpinner && (
-            <Spinner className="!pw-border-t-[#5682C3] !pw-border-[#D1D1D1] pw-mx-auto pw-mb-6" />
-          )}
-
-          <div className="pw-flex pw-items-center pw-flex-wrap pw-justify-start pw-gap-x-[21px]">
-            {Object.keys(tokenList).map((token) => (
-              <TransferredItem
-                key={tokenList[token].id}
-                editionNumber={tokenList[token].number}
-                type="multiple"
-                wallet={wallet}
-                status={tokenList[token].status}
-                chainId={tokenList[token].chainId}
-                hash={tokenList[token].hash}
-              />
-            ))}
-          </div>
-
-          {isSuccess && <SuccessMessage wallet={wallet} />}
-        </>
-      ) : (
-        <>
-          {Object.keys(tokenList).map((token) => (
-            <TransferredItem
-              key={tokenList[token].id}
-              editionNumber={tokenList[token].number}
-              type="single"
-              wallet={wallet}
-              status={tokenList[token].status}
-              chainId={tokenList[token].chainId}
-              hash={tokenList[token].hash}
-            />
-          ))}
-        </>
+      {showSpinner && (
+        <Spinner className="!pw-border-t-[#5682C3] !pw-border-[#D1D1D1] pw-mx-auto pw-mb-6" />
       )}
+
+      <div className="pw-flex pw-items-center pw-flex-wrap pw-justify-start pw-gap-x-[21px]">
+        <TransferredItem
+          type="single"
+          wallet={wallet}
+          status={tokenList?.status}
+          chainId={tokenList?.chainId}
+          hash={tokenList?.txHash}
+        />
+      </div>
+
+      {isSuccess && <SuccessMessage wallet={wallet} />}
     </>
   );
 };
@@ -233,14 +205,21 @@ export const TokenTransferController = ({
   );
 
   const [currentStep, setCurrentStep] = useState<Steps | null>(null);
-  const { mutate: transferToken, isError: isErrorTransferToken } =
-    useTransferToken();
-  const { mutate: transferTokenEmail, isError: isErrorTransferTokenEmail } =
-    useTransferTokenWithEmail();
+  const {
+    mutate: transferToken,
+    isError: isErrorTransferToken,
+    isSuccess: isSuccessTransferToken,
+  } = useTransferToken();
+  const {
+    mutate: transferTokenEmail,
+    isError: isErrorTransferTokenEmail,
+    isSuccess: isSuccessTransferTokenEmail,
+  } = useTransferTokenWithEmail();
 
-  const { successfulTransfers, tokenList } = useGetStatusOfTokenTransfers(
-    tokens,
-    currentStep === Steps.PROCESSING_STEP_MODAL
+  const { data: successfulTransfers } = useGetTransferToken(
+    tokens[0].editionId,
+    currentStep === Steps.PROCESSING_STEP_MODAL &&
+      (isSuccessTransferToken || isSuccessTransferTokenEmail)
   );
 
   useEffect(() => {
@@ -395,7 +374,7 @@ export const TokenTransferController = ({
                 'tokens>tokenTransferController>goToMyTokens'
               )}
               onClose={handleClose}
-              isSuccess={successfulTransfers}
+              isSuccess={successfulTransfers?.data?.status === 'success'}
               error={isShowingErrorMessage}
             >
               <GasModalHeader
@@ -422,12 +401,12 @@ export const TokenTransferController = ({
                   {translate('tokens>tokenTransferController>error')}
                 </Alert>
               ) : (
-                tokenList && (
+                successfulTransfers?.data && (
                   <ContentProcess
                     startProcess={currentStep === Steps.PROCESSING_STEP_MODAL}
                     wallet={toAddress.value}
-                    tokenList={tokenList}
-                    isSuccess={successfulTransfers}
+                    tokenList={successfulTransfers.data}
+                    isSuccess={successfulTransfers.data.status === 'success'}
                   />
                 )
               )}

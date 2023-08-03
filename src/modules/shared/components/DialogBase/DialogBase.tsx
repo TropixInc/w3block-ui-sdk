@@ -68,6 +68,7 @@ export const DialogBase = ({
         <WeblockButton
           onClick={onConfirm}
           fullWidth
+          className="disabled:!pw-text-black pw-text-white"
           disabled={isConfirmButtonDisabled}
         >
           {confirmButtonText}
