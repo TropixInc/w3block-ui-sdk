@@ -1725,7 +1725,7 @@
     p-memoize "4.0.3"
     swr "1.1.2"
 
-"@w3block/sdk-id@^0.1.53":
+"@w3block/sdk-id@^0.1.61":
   version "0.1.61"
   resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.61.tgz#d352e7f43da6bca2cdbc28c848d31a81af1e23f8"
   integrity sha512-eUsZlLDaYV25dL8ONlaxYVXftTssms6DE/tG7KyBjvUJ4PZEb5fgQWwTxQWLGmjdttux5GHrFVZZcB0fr8YWPQ==

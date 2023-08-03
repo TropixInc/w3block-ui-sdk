@@ -42,6 +42,11 @@ export interface NFTByWalletDTO {
       name: string;
       pass: boolean;
     };
+    tokenEditionData: {
+      editionNumber: number;
+      id: string;
+      rfid: string;
+    };
   };
 }
 

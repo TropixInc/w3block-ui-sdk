@@ -129,6 +129,15 @@ const SmartInputsController = ({
             onChangeUploadProgess={onChangeUploadProgess}
           />
         );
+      case DataTypesEnum.UserName:
+        return (
+          <InputText
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
     }
   };
   return <div>{renderInput()}</div>;

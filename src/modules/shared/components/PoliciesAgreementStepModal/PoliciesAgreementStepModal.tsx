@@ -49,7 +49,7 @@ export const PoliciesAgreementStepModal = ({
       isOpen={isOpen}
       classes={{
         dialogCard: '!pw-px-20 !pw-py-12',
-        actionContainer: '!pw-justify-between !pw-gap-x-13',
+        actionContainer: '!pw-justify-between !pw-gap-x-13 !pw-text-black',
       }}
       onConfirm={onConfirm}
       onCancel={onCancel}
