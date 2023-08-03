@@ -13,5 +13,5 @@ export const mapNFTToToken = (nft: NFTByWalletDTO, chainId: number): Token => ({
   contractAddress: nft.contract?.address ?? '',
   chainId,
   collectionData: nft.metadata?.collectionData || undefined,
-  editionId: nft.metadata.tokenEditionData.id ?? '',
+  editionId: nft.metadata?.tokenEditionData?.id ?? '',
 });

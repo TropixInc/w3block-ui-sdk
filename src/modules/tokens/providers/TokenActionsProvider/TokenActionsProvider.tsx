@@ -59,7 +59,7 @@ export const TokenActionsProvider = ({
       {
         id: 'Transferir',
         label: translate('tokens>tokenTransferController>transfer'),
-        disabled: false,
+        disabled: !isInternalToken,
         onClick: () => {
           openTransferModal();
         },
@@ -67,13 +67,13 @@ export const TokenActionsProvider = ({
       {
         id: 'Certificado',
         label: translate('tokens>tokenCardActions>certificate'),
-        disabled: false,
+        disabled: !isInternalToken,
         onClick: () => {
           openCertificateModal();
         },
       },
     ],
-    [openTransferModal, openCertificateModal, translate]
+    [translate, isInternalToken, openTransferModal, openCertificateModal]
   );
   return (
     <TokenActionsContext.Provider value={value}>

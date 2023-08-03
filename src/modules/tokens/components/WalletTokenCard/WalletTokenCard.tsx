@@ -59,7 +59,7 @@ export const WalletTokenCard = ({
   });
   const [translate] = useTranslation();
   const { pass } = useFlags();
-  const isInternalToken = collectionData !== undefined ? true : false;
+  const isInternalToken = collectionData !== undefined;
 
   const hasPass = collectionData?.pass && pass;
 
