@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.3...v1.5.4) (2023-07-20)
+
+### [1.5.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.2...v1.5.3) (2023-07-19)
+
+
+### Bug Fixes
+
+* adjusts on pix payment ([ba26e71](https://github.com/TropixInc/w3block-ui-sdk/commit/ba26e71cb9a4966f9a565bb283da9ececf084963))
+
+### [1.5.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.1...v1.5.2) (2023-07-19)
+
+### [1.5.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.0...v1.5.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* delete product on cart ([95701e4](https://github.com/TropixInc/w3block-ui-sdk/commit/95701e43b55cd7a6d6301f7ad66ef773eac3fffe))
+
+## [1.5.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.4.2-alpha.1...v1.5.0) (2023-07-17)
+
+
+### Features
+
+* product variants ([#217](https://github.com/TropixInc/w3block-ui-sdk/issues/217)) ([3d8ada5](https://github.com/TropixInc/w3block-ui-sdk/commit/3d8ada5f7603830f5693ef8f5cb452d08338ae83))
+
 ### [1.4.2-alpha.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.4.2-alpha.0...v1.4.2-alpha.1) (2023-07-17)
 
 ### [1.4.2-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.4.1...v1.4.2-alpha.0) (2023-07-17)

@@ -6,11 +6,15 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 import { useProfile } from '../../../shared';
+import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copyIcon.svg';
 import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
+import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -62,6 +66,11 @@ export const CheckoutPayment = () => {
   const [sending, setSending] = useState<boolean>(false);
   const { companyId, appBaseUrl } = useCompanyConfig();
   const [iframeLink, setIframeLink] = useState('');
+  const [errorPix, setErrorPix] = useState('');
+  const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
+  const [countdown, setCountdown] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const isMobile = useIsMobile();
   const [productCache, setProductCache] = useLocalStorage<OrderPreviewCache>(
     PRODUCT_CART_INFO_KEY
   );
@@ -98,7 +107,6 @@ export const CheckoutPayment = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolStatus]);
-
   const validatePixStatus = async () => {
     if (poolStatus && orderId) {
       const interval = setInterval(() => {
@@ -106,10 +114,32 @@ export const CheckoutPayment = () => {
           { companyId, orderId },
           {
             onSuccess: (data: CreateOrderResponse) => {
-              if (data.status != 'pending') {
+              if (data.status === 'pending' && countdown) {
+                setCountdown(false);
+                setNewCountdown(new Date(data.expiresIn));
+              } else if (
+                data.status == 'concluded' ||
+                data.status == 'delivering' ||
+                data.status == 'waiting_delivery'
+              ) {
                 clearInterval(interval);
                 setPoolStatus(false);
                 router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
+              } else if (
+                data.status === 'failed' ||
+                data.status === 'cancelled'
+              ) {
+                clearInterval(interval);
+                setPoolStatus(false);
+                setErrorPix(
+                  'Ocorreu um erro inesperado ao confirmar o seu pagamento. Caso já tenha efetuado o pagamento, por favor entre em contato com o suporte.'
+                );
+              } else if (data.status === 'expired') {
+                clearInterval(interval);
+                setPoolStatus(false);
+                setErrorPix(
+                  'Código PIX expirado. Por favor, refaça sua compra.'
+                );
               }
             },
           }
@@ -332,28 +362,55 @@ export const CheckoutPayment = () => {
             <div className="pw-bg-white pw-p-4 sm:pw-p-6 pw-flex pw-justify-center pw-items-center pw-shadow-brand-shadow pw-rounded-lg">
               <div className="pw-flex pw-justify-center pw-items-center pw-h-full">
                 <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-items-center pw-justify-center pw-mt-10 sm:pw-mt-15 sm:pw-mb-15 pw-mb-10 pw-px-4">
-                  <p className="pw-text-center pw-max-w-[450px] pw-text-slate-500 pw-text-sm pw-font-[500] pw-mx-auto pw-mt-4">
-                    Após a conclusão do pagamento, em alguns minutos você poderá
-                    visualizar os itens comprados em sua carteira.
-                  </p>
-
-                  <p className="pw-text-center pw-font-semibold pw-text-black pw-mt-6">
-                    Escaneie o QR Code abaixo para realizar o pagamento
-                  </p>
-                  {pixImage && (
-                    <img src={`data:image/png;base64, ${pixImage}`} />
-                  )}
-                  {pixPayload && (
+                  {errorPix !== '' ? (
+                    <Alert variant="error" className="!pw-gap-3">
+                      <Alert.Icon />
+                      {errorPix}
+                    </Alert>
+                  ) : (
                     <>
-                      <p className="pw-text-center pw-text-xs pw-text-slate-600">
-                        Caso prefira copie o código abaixo
+                      <p className="pw-text-center pw-max-w-[450px] pw-text-slate-500 pw-text-sm pw-font-[500] pw-mx-auto pw-mt-4">
+                        Após a conclusão do pagamento, em alguns minutos você
+                        poderá visualizar os itens comprados em sua carteira.
                       </p>
-                      <p
-                        onClick={() => copyClp(pixPayload)}
-                        className="pw-text-center pw-text-brand-primary pw-text-xs pw-cursor-pointer pw-px-6 pw-mb-8 hover:pw-font-[900] pw-break-all"
-                      >
-                        {pixPayload}
+                      {isActive && (
+                        <div className="pw-flex pw-gap-2 pw-text-black pw-font-bold pw-mt-6">
+                          <p>Essa compra expira em:</p>
+                          {minutes}:{seconds < 10 ? '0' + seconds : seconds}
+                        </div>
+                      )}
+                      <p className="pw-text-center pw-font-normal pw-text-black pw-mt-6">
+                        Escaneie o QR Code abaixo para realizar o pagamento
                       </p>
+                      {pixImage && (
+                        <img src={`data:image/png;base64, ${pixImage}`} />
+                      )}
+                      {pixPayload && (
+                        <>
+                          <p className="pw-text-center pw-text-xs pw-text-slate-600">
+                            Caso prefira copie o código abaixo
+                          </p>
+                          <p
+                            onClick={() => {
+                              setCopied(true);
+                              copyClp(pixPayload);
+                            }}
+                            className="pw-flex pw-gap-2 pw-text-center pw-text-brand-primary pw-text-xs pw-cursor-pointer pw-px-6 pw-mb-8 hover:pw-font-[900] pw-break-all"
+                          >
+                            {pixPayload}
+                            <CopyIcon
+                              width={isMobile ? 60 : 35}
+                              height={isMobile ? 60 : 35}
+                            />
+                          </p>
+                          {copied && (
+                            <Alert variant="success" className="!pw-gap-3">
+                              <Alert.Icon />
+                              Código copiado!
+                            </Alert>
+                          )}
+                        </>
+                      )}
                     </>
                   )}
                 </div>
@@ -365,26 +422,44 @@ export const CheckoutPayment = () => {
     } else if (iframeLink) {
       return (
         <>
-          {productCache?.choosedPayment?.paymentMethod === 'pix' && (
-            <p className="pw-text-center pw-max-w-[450px] pw-text-sm pw-mx-auto pw-mt-4">
-              Após a conclusão do pagamento, em alguns minutos você poderá
-              visualizar os itens comprados em sua carteira.
-            </p>
-          )}
+          {productCache?.choosedPayment?.paymentMethod === 'pix' &&
+          errorPix !== '' ? (
+            <Alert variant="error" className="!pw-gap-3">
+              <Alert.Icon />
+              {errorPix}
+            </Alert>
+          ) : (
+            <>
+              {productCache?.choosedPayment?.paymentMethod === 'pix' && (
+                <p className="pw-text-center pw-max-w-[450px] pw-text-sm pw-mx-auto pw-mt-4">
+                  Após a conclusão do pagamento, em alguns minutos você poderá
+                  visualizar os itens comprados em sua carteira.
+                </p>
+              )}
 
-          <iframe
-            onLoad={(e: SyntheticEvent<HTMLIFrameElement>) => {
-              if (
-                e.currentTarget.contentWindow?.location.hostname ===
-                window?.location.hostname
-              ) {
-                router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
-              }
-            }}
-            ref={iframeRef}
-            className="pw-w-full pw-min-h-screen"
-            src={iframeLink}
-          />
+              <iframe
+                onLoad={(e: SyntheticEvent<HTMLIFrameElement>) => {
+                  if (
+                    e.currentTarget.contentWindow?.location.hostname ===
+                    window?.location.hostname
+                  ) {
+                    router.pushConnect(
+                      PixwayAppRoutes.CHECKOUT_COMPLETED + query
+                    );
+                  }
+                }}
+                ref={iframeRef}
+                className="pw-w-full pw-min-h-screen"
+                src={iframeLink}
+              />
+              {isActive && (
+                <div className="pw-flex pw-gap-2 pw-text-black pw-font-bold pw-mt-6">
+                  <p>Essa compra expira em:</p>
+                  {minutes}:{seconds < 10 ? '0' + seconds : seconds}
+                </div>
+              )}
+            </>
+          )}
         </>
       );
     } else if (isStripe && stripePromise) {

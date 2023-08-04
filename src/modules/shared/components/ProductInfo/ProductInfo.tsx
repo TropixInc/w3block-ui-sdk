@@ -25,7 +25,7 @@ interface ProductInfoProps {
   ) => void;
   stockAmount: number;
   canPurchaseAmount?: number;
-  deleteProduct?: (id: string) => void;
+  deleteProduct?: (id: string, variants?: Variants[]) => void;
   isCart?: boolean;
   originalPrice?: string;
   variants?: Variants[];
@@ -227,7 +227,7 @@ export const ProductInfo = ({
       >
         {status == CheckoutStatus.CONFIRMATION && isCart ? (
           <TrashIcon
-            onClick={() => deleteProduct?.(id)}
+            onClick={() => deleteProduct?.(id, variants)}
             className="pw-cursor-pointer"
           />
         ) : (

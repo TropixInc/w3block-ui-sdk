@@ -9,6 +9,7 @@ import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
 import { useRouterConnect } from '../../shared';
 // import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
+import { Alert } from '../../shared/components/Alert';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { ModalBase } from '../../shared/components/ModalBase';
@@ -119,7 +120,9 @@ export const ProductPage = ({
       : false;
   const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
   const [isOpen, setIsOpen] = useState(openModal);
+  const [cartOpen, setCartOpen] = useState(false);
   const addToCart = () => {
+    setCartOpen(true);
     setProductVariants({ ...variants });
     setCartCurrencyId?.(currencyId);
     setCart([
@@ -399,6 +402,8 @@ export const ProductPage = ({
     }
   }, [currencyId, product?.id, variants]);
 
+  useInterval(() => setCartOpen(false), 5000);
+
   return (
     <div
       style={{
@@ -430,6 +435,12 @@ export const ProductPage = ({
           </p>
         </div> */}
       </div>
+      {cartOpen && (
+        <Alert variant="success" className="!pw-gap-3 pw-sticky pw-top-0">
+          <Alert.Icon />
+          Produto adicionado ao carrinho!
+        </Alert>
+      )}
       <ModalBase isOpen={isOpenRefresh} onClose={() => setIsOpenRefresh(false)}>
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
           <Spinner className="pw-mb-4" />
@@ -590,6 +601,7 @@ export const ProductPage = ({
                         ) : (
                           <>
                             {orderPreview &&
+                            orderPreview?.productsErrors?.length === 0 &&
                             parseFloat(orderPreview.originalCartPrice ?? '0') >
                               parseFloat(orderPreview.cartPrice ?? '0') ? (
                               <CriptoValueComponent
@@ -627,6 +639,7 @@ export const ProductPage = ({
                               }
                               value={
                                 orderPreview &&
+                                orderPreview?.productsErrors?.length === 0 &&
                                 (parseFloat(
                                   orderPreview.originalCartPrice ?? '0'
                                 ) > parseFloat(orderPreview.cartPrice ?? '0') ||
