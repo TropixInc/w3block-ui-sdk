@@ -3,14 +3,17 @@ import { ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 
 import { useGetWallets } from '../../../dashboard/hooks/useGetWallets';
 import { CoinsType } from '../../../storefront/interfaces';
+import { AuthenticateModal } from '../../components/AuthenticateModal/AuthenticateModal';
 import { useGetBalancesForWallets } from '../../hooks/useBalance';
 import { useIsProduction } from '../../hooks/useIsProduction';
+import { UserProvider } from '../UserProvider/userProvider';
 
 interface UserWalletsContextInterface {
   wallets: WalletSimple[];
   hasWallet?: boolean;
   setMainCoin?: (coin: CoinsType) => void;
   mainWallet?: WalletSimple;
+  setAuthenticatePayemntModal?: (value: boolean) => void;
 }
 
 export interface WalletSimple {
@@ -32,6 +35,8 @@ export const UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [coinType, setCoinType] = useState<CoinsType>(CoinsType.MATIC);
   const isProduction = useIsProduction();
+  const [authenticatePayemntModal, setAuthenticatePayemntModal] =
+    useState<boolean>(false);
   const getWalletsbalance = useGetBalancesForWallets();
   const { data, isSuccess } = useGetWallets();
   useEffect(() => {
@@ -64,16 +69,23 @@ export const UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   }, [coinType, wallets]);
 
   return (
-    <UserWalletsContext.Provider
-      value={{
-        wallets: wallets,
-        hasWallet: wallets.length > 0,
-        setMainCoin: setCoinType,
-        mainWallet: mainWallet,
-      }}
-    >
-      {children}
-    </UserWalletsContext.Provider>
+    <UserProvider>
+      <UserWalletsContext.Provider
+        value={{
+          wallets: wallets,
+          hasWallet: wallets.length > 0,
+          setMainCoin: setCoinType,
+          mainWallet: mainWallet,
+          setAuthenticatePayemntModal,
+        }}
+      >
+        {children}
+        <AuthenticateModal
+          isOpen={authenticatePayemntModal}
+          onClose={() => setAuthenticatePayemntModal(false)}
+        />
+      </UserWalletsContext.Provider>
+    </UserProvider>
   );
 };
 

@@ -33,6 +33,7 @@ export const NavigationLoginLoggedButtonMobile = ({
   textColor,
 }: NavigationLoginLoggedButtonMobileProps) => {
   const { setAttachModal } = useContext(AttachWalletContext);
+  const { setAuthenticatePayemntModal } = useUserWallet();
   const defaultTabs = useDefaultMenuTabs(textColor ?? 'black');
   const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
@@ -133,6 +134,14 @@ export const NavigationLoginLoggedButtonMobile = ({
                 </div>
               </div>
             ) : null}
+          </div>
+          <div className="pw-flex pw-justify-center ">
+            <button
+              onClick={() => setAuthenticatePayemntModal?.(true)}
+              className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
+            >
+              Pagamento
+            </button>
           </div>
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
           {wallet ? <WithWallet /> : <WithoutWallet />}

@@ -53,6 +53,7 @@ export enum PixwayAPIRoutes {
   TENANT_CONTEXT = '/tenant-context/{tenantId}',
   TENANT_INPUTS_BY_SLUG = '/tenant-input/{tenantId}/slug/{slug}',
   DOCUMENTS_BY_USER_BY_CONTEXT = '/users/{tenantId}/documents/{userId}/context/{contextId}',
+  GET_DOCUMENTS_BY_USER = '/users/{tenantId}/documents/{userId}',
   SAVE_DOCUMENTS_BY_USER = '/users/{tenantId}/documents/{userId}/context/{contextId}',
   GET_SPECIFIC_ORDER = '/companies/{companyId}/orders/{orderId}',
   VERIFY_BENEFIT = '/token-pass-benefits/tenants/{tenantId}/{benefitId}/verify',
@@ -66,4 +67,5 @@ export enum PixwayAPIRoutes {
   PRODUCT_BY_ID = '/companies/{companyId}/products/{productId}',
   ORDER_BY_ID = '/companies/{companyId}/orders/{orderId}',
   GET_WALLETS = '/users/{companyId}/wallets/{userId}',
+  GET_TEMPORARY_CODE = '/users/{companyId}/code/{userId}',
 }

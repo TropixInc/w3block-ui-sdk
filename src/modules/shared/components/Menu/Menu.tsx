@@ -25,8 +25,11 @@ import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg'
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useIsProduction } from '../../hooks/useIsProduction';
+import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
 import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
+import { useUserWallet } from '../../hooks/useUserWallet';
+import { ImageSDK } from '../ImageSDK';
 import TranslatableComponent from '../TranslatableComponent';
 
 interface MenuProps {
@@ -47,7 +50,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const router = useRouterConnect();
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
+  const { setAuthenticatePayemntModal } = useUserWallet();
   const [state, copyToClipboard] = useCopyToClipboard();
+  const { profile: profileWithKYC } = useProfileWithKYC();
   const [isCopied, setIsCopied] = useState(false);
   const createdAt = new Date((profile?.data.createdAt as string) || 0);
   const { signOut } = usePixwayAuthentication();
@@ -188,38 +193,57 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   return (
     <div
       className={classNames(
-        'pw-flex pw-flex-col pw-justify-between pw-bg-white pw-py-7 pw-px-[23px] pw-w-[295px] pw-max-h-[595px] pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014]',
+        'pw-flex pw-flex-col pw-justify-between pw-bg-white pw-py-7 pw-px-[23px] pw-w-[295px] pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014]',
         className
       )}
     >
       <div>
-        <p className="pw-text-center pw-font-poppins pw-text-2xl pw-font-semibold pw-text-[#35394C] pw-mx-auto pw-mb-2 pw-truncate">
-          {profile?.data.name}
-        </p>
-        <div className="pw-flex pw-items-center pw-justify-center pw-mb-10">
-          {profile?.data.mainWallet?.address ? (
-            <>
-              <p className="pw-font-poppins pw-text-sm pw-font-semibold pw-text-[#777E8F] pw-mr-2 pw-mt-[1px]">
-                {profile?.data.mainWallet?.address?.substring(0, 8)}
-                {'...'}
-                {profile?.data.mainWallet?.address?.substring(
-                  profile?.data.mainWallet.address.length - 6,
-                  profile?.data.mainWallet.address.length
+        <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-10">
+          <ImageSDK
+            className="pw-rounded-full pw-w-[180px] pw-h-[180px] pw-mb-[20px] pw-object-cover"
+            height={180}
+            width={180}
+            fit="fill"
+            src={profileWithKYC?.avatarSrc ?? ''}
+          />
+          <p className="pw-text-center pw-font-poppins pw-text-2xl pw-font-semibold pw-text-[#35394C] pw-mx-auto pw-mb-2 pw-truncate">
+            {profile?.data.name}
+          </p>
+
+          <div className="pw-flex pw-items-center pw-justify-center ">
+            {profile?.data.mainWallet?.address ? (
+              <>
+                <p className="pw-font-poppins pw-text-sm pw-font-semibold pw-text-[#777E8F] pw-mr-2 pw-mt-[1px]">
+                  {profile?.data.mainWallet?.address?.substring(0, 8)}
+                  {'...'}
+                  {profile?.data.mainWallet?.address?.substring(
+                    profile?.data.mainWallet.address.length - 6,
+                    profile?.data.mainWallet.address.length
+                  )}
+                </p>
+                <button onClick={handleCopy}>
+                  <CopyIcon width={17} height={17} />
+                </button>
+                {isCopied && (
+                  <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
+                    {translate('components>menu>copied')}
+                  </span>
                 )}
-              </p>
-              <button onClick={handleCopy}>
-                <CopyIcon width={17} height={17} />
-              </button>
-              {isCopied && (
-                <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
-                  {translate('components>menu>copied')}
-                </span>
-              )}
-            </>
-          ) : (
-            '-'
-          )}
+              </>
+            ) : (
+              '-'
+            )}
+          </div>
+          <div className="pw-flex pw-justify-center ">
+            <button
+              onClick={() => setAuthenticatePayemntModal?.(true)}
+              className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
+            >
+              Autenticar
+            </button>
+          </div>
         </div>
+
         <ul className="pw-mx-auto pw-w-[248px]">
           {tabsToShow?.map((e) => e.isVisible && RenderTab(e))}
           <button
