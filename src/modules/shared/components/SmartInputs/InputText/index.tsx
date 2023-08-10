@@ -62,14 +62,14 @@ const InputText = ({
         />
       </FormItemContainer>
       {!hidenValidations && (
-        <p className="mt-5">
+        <div className="mt-5">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}
               errorMessage={error?.value?.message}
             />
           )}
-        </p>
+        </div>
       )}
     </div>
   );

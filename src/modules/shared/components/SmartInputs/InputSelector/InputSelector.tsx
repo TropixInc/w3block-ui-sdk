@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
-// import { useController } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useController } from 'react-hook-form';
 
-interface Options {
+import { FormItemContainer } from '../../Form/FormItemContainer';
+
+export interface Options {
   label: string;
   value: string;
 }
@@ -10,38 +11,49 @@ interface Options {
 interface Props {
   options: Options[];
   name: string;
-  onClick: (value: any) => void;
-  productId: string;
+  label: string;
 }
 
-export const ProductVariants = ({ options, name }: Props) => {
-  const [isOpened, setIsOpened] = useState(false);
-  // const { field, fieldState } = useController({ name });
+export const InputSelector = ({ options, name, label }: Props) => {
+  const { field } = useController({ name });
+  const [firstInput, setFirstInput] = useState(true);
+  const handleTextChange = (value: string) => {
+    if (value) {
+      field.onChange({ inputId: name, value: value });
+    } else {
+      field.onChange({
+        inputId: undefined,
+        value: undefined,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (firstInput) {
+      field.onChange({ inputId: name, value: options[0].value });
+      setFirstInput(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="pw-mt-4">
-      <p className="pw-text-sm pw-text-black pw-mb-1">{name}</p>
-      <div
-        onClick={() => setIsOpened(!isOpened)}
-        className={`pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
-          isOpened ? 'pw-border-none pw-bg-white' : 'pw-border pw-border-black'
-        }`}
-      >
-        <label className="pw-text-xs pw-font-[600] pw-text-black pw-truncate">
-          {name}
-        </label>
-        <select name={name} className="pw-max-h-[180px] pw-overflow-y-auto">
+    <div className="pw-mt-4 pw-mb-3">
+      <label className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        {label}
+      </label>
+      <FormItemContainer className="pw-p-[0.6rem]">
+        <select
+          name={name}
+          onChange={(e) => handleTextChange(e.target.value)}
+          className="pw-max-h-[180px] pw-w-full pw-overflow-y-auto"
+        >
           {options.map((val) => (
-            <option
-              key={val.value}
-              value={val.value}
-              onClick={() => setIsOpened(false)}
-              className="pw-px-3 pw-py-2 pw-truncate pw-text-sm pw-cursor-pointer hover:pw-bg-slate-100 pw-text-black"
-            >
+            <option key={val.value} value={val.value}>
               {val.label}
             </option>
           ))}
         </select>
-      </div>
+      </FormItemContainer>
     </div>
   );
 };

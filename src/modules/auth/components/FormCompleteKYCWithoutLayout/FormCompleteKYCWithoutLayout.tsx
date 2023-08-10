@@ -158,6 +158,7 @@ const _FormCompleteKYCWithoutLayout = ({
                 label={item.label}
                 name={item.id}
                 type={item.type}
+                options={item.options}
                 assetId={getDocumentByInputId(item?.id)?.assetId}
                 value={getDocumentByInputId(item?.id)?.value}
                 docStatus={getDocumentByInputId(item?.id)?.status}
