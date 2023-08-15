@@ -152,7 +152,7 @@ const _FormCompleteKYCWithoutLayout = ({
 
         <form onSubmit={dynamicMethods.handleSubmit(onSubmit)}>
           {tenantInputs?.data &&
-            tenantInputs?.data?.map((item) => (
+            tenantInputs?.data?.map((item: any) => (
               <SmartInputsController
                 key={item.id}
                 label={item.label}

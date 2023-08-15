@@ -39,9 +39,7 @@ const _LinkAccountTemplate = () => {
   const [step, setSteps] = useState('');
 
   const { mainWallet: wallet } = useUserWallet();
-  const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(
-    wallet?.chainId || 80001
-  );
+  const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(wallet?.chainId);
   const tokens =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ethNFTsResponse?.data.items.map((nft: any) =>

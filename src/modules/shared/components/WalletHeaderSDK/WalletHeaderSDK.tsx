@@ -6,14 +6,15 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { ReactComponent as EyeIcon } from '../../../shared/assets/icons/eyeIcon.svg';
 import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/eyeIconCrossed.svg';
 import { useUserWallet } from '../../hooks/useUserWallet';
+import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 import { WalletCard } from '../WalletCard/WalletCard';
 export const WalletHeaderSDK = () => {
-  const { mainWallet, wallets } = useUserWallet();
+  const { mainWallet, wallets, loyaltyWallet } = useUserWallet();
   const [showValue, setShowValue] = useState(true);
   const toggleShowValue = () => setShowValue(!showValue);
   const slicedBreakPoints = [
     { key: 0, value: { slidesPerView: 1, spaceBetween: 20 } },
-    { key: 768, value: { slidesPerView: 2, spaceBetween: 20 } },
+    { key: 768, value: { slidesPerView: 3, spaceBetween: 20 } },
     { key: 1024, value: { slidesPerView: 3, spaceBetween: 20 } },
     {
       key: 1280,
@@ -23,7 +24,7 @@ export const WalletHeaderSDK = () => {
     .slice(0, 10)
     .reduce((obj, item) => Object.assign(obj, { [item.key]: item.value }), {});
   return (
-    <div className="pw-p-[20px] pw-mx-[22px] sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
+    <div className="pw-p-[20px] pw-mx-[22px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
       <div className="pw-flex pw-justify-between">
         <div>
           <p className="pw-text-[23px] pw-font-[600]">Carteira</p>
@@ -58,13 +59,28 @@ export const WalletHeaderSDK = () => {
               // '--swiper-pagination-bullet-inactive-color': '#F5F9FF4D',
 
               height: '100%',
+              maxWidth: '100%',
+              overflowX: 'hidden',
               overflow: 'visible',
             } as CSSProperties
           }
         >
-          {wallets?.map((wallet, index) => (
-            <SwiperSlide key={index}>
-              <WalletCard wallet={wallet} />
+          {loyaltyWallet?.map((wallet) => (
+            <SwiperSlide key={generateRandomUUID()}>
+              <WalletCard
+                balance={wallet.balance}
+                type="loyalty"
+                currency={wallet.currency}
+              />
+            </SwiperSlide>
+          ))}
+          {wallets?.map((wallet) => (
+            <SwiperSlide key={generateRandomUUID()}>
+              <WalletCard
+                chainId={wallet.chainId}
+                balance={wallet.balance}
+                type={wallet.type}
+              />
             </SwiperSlide>
           ))}
         </Swiper>

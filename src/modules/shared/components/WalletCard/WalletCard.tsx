@@ -3,19 +3,26 @@ import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg'
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
-import { WalletSimple } from '../../providers';
 import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
 import { WeblockButton } from '../WeblockButton/WeblockButton';
 interface WalletCardProps {
-  wallet: WalletSimple;
+  type: 'metamask' | 'vault' | 'loyalty';
+  chainId?: number;
   showValue?: boolean;
+  currency?: string;
+  balance?: string;
 }
 
-export const WalletCard = ({ wallet }: WalletCardProps) => {
+export const WalletCard = ({
+  type,
+  chainId,
+  currency = '',
+  balance,
+}: WalletCardProps) => {
   const { name } = useCompanyConfig();
   const { push } = useRouterConnect();
   const getIcon = () => {
-    switch (wallet.type) {
+    switch (type) {
       case 'vault':
         return <DollarIcon />;
       case 'metamask':
@@ -26,17 +33,17 @@ export const WalletCard = ({ wallet }: WalletCardProps) => {
   };
 
   const chainIdToCode = () => {
-    if (wallet.chainId === 137 || wallet.chainId === 80001) {
+    if (chainId === 137 || chainId === 80001) {
       return 'MATIC';
-    } else if (wallet.chainId === 1 || wallet.chainId === 4) {
+    } else if (chainId === 1 || chainId === 4) {
       return 'ETH';
     } else {
-      return '';
+      return currency;
     }
   };
 
   const getName = () => {
-    switch (wallet.type) {
+    switch (type) {
       case 'vault':
         return name;
       case 'metamask':
@@ -55,10 +62,10 @@ export const WalletCard = ({ wallet }: WalletCardProps) => {
         <CriptoValueComponent
           code={chainIdToCode()}
           crypto={true}
-          value={wallet.balance ?? '0'}
+          value={balance ?? '0'}
         />
       </div>
-      {wallet.type === 'vault' && (
+      {type === 'vault' && (
         <WeblockButton
           onClick={() => push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
           className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4"
