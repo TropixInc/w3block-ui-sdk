@@ -70,19 +70,33 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     )
   );
 
+  const isUser = Boolean(userRoles.find((e: string) => e === 'user'));
+
+  const isLoayaltyOperator = Boolean(
+    userRoles.find((e: string) => e === 'loyaltyOperator')
+  );
+
   useEffect(() => {
     const tabsDefault: TabsConfig[] = [
       {
         title: translate('components>menu>dashboard'),
         icon: <DashboardIcon width={17} height={17} />,
-        link: PixwayAppRoutes.DASHBOARD,
-        isVisible: !isProduction,
+        link: isLoayaltyOperator
+          ? PixwayAppRoutes.LOYALTY_REPORT
+          : PixwayAppRoutes.DASHBOARD,
+        isVisible: !isProduction || isLoayaltyOperator,
       },
       {
         title: translate('components>menu>myProfile'),
         icon: <UserIcon width={17} height={17} />,
         link: PixwayAppRoutes.PROFILE,
-        isVisible: true,
+        isVisible: isUser || isAdmin,
+      },
+      {
+        title: 'Pagamento',
+        icon: <CardIcon width={17} height={17} />,
+        link: PixwayAppRoutes.LOYALTY_PAYMENT,
+        isVisible: isLoayaltyOperator || isAdmin,
       },
       // {
       //   title: translate('components>menu>myTokens'),
@@ -94,7 +108,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         title: translate('components>menu>wallet'),
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WALLET,
-        isVisible: true,
+        isVisible: isUser || isAdmin,
       },
       {
         title: translate('wallet>page>extract'),
@@ -102,14 +116,14 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
         ),
         link: PixwayAppRoutes.WALLET_RECEIPT,
-        isVisible: true,
+        isVisible: isUser || isAdmin,
         sub: true,
       },
       {
         title: translate('header>components>defaultTab>myOrders'),
         link: PixwayAppRoutes.MY_ORDERS,
         icon: <MyOrdersIcon />,
-        isVisible: true,
+        isVisible: isUser || isAdmin,
       },
       {
         title: translate('components>menu>tokenPass'),
@@ -128,7 +142,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         title: translate('components>menu>integration'),
         icon: <IntegrationIcon width={17} height={17} />,
         link: PixwayAppRoutes.CONNECTION,
-        isVisible: true,
+        isVisible: isUser || isAdmin,
       },
       // {
       //   title: translate('components>menu>settings'),
@@ -168,7 +182,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           key={tab.title}
           className={classNames(
             'group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 hover:pw-stroke-brand-primary',
-            tab.sub ? 'pw-ml-6' : '',
+            tab.sub ? 'pw-pl-6' : '',
             isActive
               ? 'pw-bg-brand-primary pw-bg-opacity-[0.4] pw-stroke-brand-primary'
               : 'pw-stroke-[#383857]'
@@ -236,10 +250,15 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           </div>
           <div className="pw-flex pw-justify-center ">
             <button
-              onClick={() => setAuthenticatePayemntModal?.(true)}
+              onClick={() =>
+                // isLoayaltyOperator
+                //   ? router.pushConnect(PixwayAppRoutes.LOYALTY_PAYMENT)
+                //   : setAuthenticatePayemntModal?.(true)
+                setAuthenticatePayemntModal?.(true)
+              }
               className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
             >
-              Autenticar
+              {isLoayaltyOperator ? 'Pagamento' : 'Autenticar'}
             </button>
           </div>
         </div>

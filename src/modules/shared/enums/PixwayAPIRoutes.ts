@@ -68,4 +68,8 @@ export enum PixwayAPIRoutes {
   ORDER_BY_ID = '/companies/{companyId}/orders/{orderId}',
   GET_WALLETS = '/users/{companyId}/wallets/{userId}',
   GET_TEMPORARY_CODE = '/users/{companyId}/code/{userId}',
+  GET_LOYALTY_USER_BALANCE = '/{companyId}/loyalties/users/balance/{userId}',
+  GET_COMPANY_LOYALTIES = '/{companyId}/loyalties/admin',
+  GET_LOYALTY_PREVIEW = '/{companyId}/loyalties/rewards/payment/preview',
+  CREATE_LOYALTY_PAYMENT = '/{companyId}/loyalties/rewards/payment',
 }

@@ -95,25 +95,39 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const isAdmin = Boolean(
     userRoles?.includes('admin') || userRoles?.includes('superAdmin') || userRoles?.includes('operator')
   );
+  const isUser = Boolean(userRoles?.includes('user')); 
+  const isLoayaltyOperator = Boolean(userRoles?.includes('operator'));
 
   const items: NavigationMenuTabs[] = [
     {
       name: translate('header>components>defaultTab>myAccount'),
       route: PixwayAppRoutes.MY_PROFILE,
       icon: <UserIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
     },
     {
       name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
     },
     {
       name: translate('header>components>defaultTab>myOrders'),
       route: PixwayAppRoutes.MY_ORDERS,
       icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
+    },
+    {
+      name: "Pagamento",
+      route: PixwayAppRoutes.LOYALTY_PAYMENT,
+      icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
+      isVisible: isLoayaltyOperator,
+    },
+    {
+      name: "Extrato",
+      route: PixwayAppRoutes.LOYALTY_REPORT,
+      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
+      isVisible: isLoayaltyOperator,
     },
     {
       name: translate('header>components>defaultTab>tokenPass'),
@@ -126,7 +140,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
       name: translate('components>menu>integration'),
       route: PixwayAppRoutes.CONNECTION,
       icon: <IntegrationIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
     },
     // {
     //   name: translate('header>components>defaultTab>settings'),

@@ -4,9 +4,11 @@ import {
   TableDefault,
   TableHeaderItem,
 } from '../../../shared/components/TableDefault/TableDefault';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { ActionBusinessCardSDK } from '../../components/actionBusinessCardSDK';
 
 export const UserReportTemplate = () => {
+  useGuardPagesWithOptions({ needBusiness: true });
   const header: TableHeaderItem[] = [
     {
       key: 'status',

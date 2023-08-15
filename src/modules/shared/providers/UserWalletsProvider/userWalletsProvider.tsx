@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 
+import { BusinessProviderSDK } from '../../../business/providers/businessProvider/businessProviderSDK';
 import { useGetWallets } from '../../../dashboard/hooks/useGetWallets';
 import { CoinsType } from '../../../storefront/interfaces';
 import { AuthenticateModal } from '../../components/AuthenticateModal/AuthenticateModal';
@@ -79,7 +80,7 @@ export const UserWalletsProvider = ({ children }: { children: ReactNode }) => {
           setAuthenticatePayemntModal,
         }}
       >
-        {children}
+        <BusinessProviderSDK>{children}</BusinessProviderSDK>
         <AuthenticateModal
           isOpen={authenticatePayemntModal}
           onClose={() => setAuthenticatePayemntModal(false)}
