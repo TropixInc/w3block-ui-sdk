@@ -10,6 +10,7 @@ import { OrderPreviewResponse } from '../../checkout/interface/interface';
 import { useRouterConnect } from '../../shared';
 // import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { Alert } from '../../shared/components/Alert';
+import { CheckboxAlt } from '../../shared/components/CheckboxAlt/CheckboxAlt';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { ModalBase } from '../../shared/components/ModalBase';
@@ -403,6 +404,22 @@ export const ProductPage = ({
   }, [currencyId, product?.id, variants]);
 
   useInterval(() => setCartOpen(false), 5000);
+  const [termsChecked, setTermsChecked] = useState(true);
+  useEffect(() => {
+    if (product?.terms) {
+      setTermsChecked(false);
+    }
+  }, [product]);
+
+  const onChangeCheckbox = () => {
+    const termsAria = product?.terms
+      ?.map(
+        (val) =>
+          (document.getElementById(val.title) as HTMLInputElement)?.checked
+      )
+      .every((val) => val);
+    setTermsChecked(termsAria ?? true);
+  };
 
   return (
     <div
@@ -623,6 +640,15 @@ export const ProductPage = ({
                               ></CriptoValueComponent>
                             ) : null}
                             <CriptoValueComponent
+                              dontShow={
+                                parseFloat(
+                                  product?.prices.find(
+                                    (price: any) =>
+                                      price.currencyId == currencyId?.id
+                                  )?.amount ?? '0'
+                                ) === 0
+                              }
+                              showFree
                               size={24}
                               fontClass="pw-ml-1"
                               crypto={
@@ -695,7 +721,7 @@ export const ProductPage = ({
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
                 !currencyId?.crypto ? (
-                  <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center pw-my-6">
+                  <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center pw-mt-6">
                     <p className="pw-text-sm pw-text-black pw-mb-1">
                       Quantidade
                     </p>
@@ -809,9 +835,17 @@ export const ProductPage = ({
                           backgroundColor: buttonColor ?? '#0050FF',
                           color: buttonTextColor ?? 'white',
                         }}
-                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
-                        {buttonText ?? 'Comprar agora'}
+                        {parseFloat(
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.amount ?? '0'
+                        ) === 0
+                          ? 'Quero!'
+                          : buttonText
+                          ? buttonText
+                          : 'Comprar agora'}
                       </button>
                     </div>
                   )
@@ -823,7 +857,8 @@ export const ProductPage = ({
                           disabled={
                             product?.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0 ||
-                            currencyId?.crypto
+                            currencyId?.crypto ||
+                            !termsChecked
                           }
                           onClick={addToCart}
                           style={{
@@ -831,7 +866,8 @@ export const ProductPage = ({
                             borderColor:
                               product &&
                               (product?.stockAmount == 0 ||
-                                product?.canPurchaseAmount == 0)
+                                product?.canPurchaseAmount == 0 ||
+                                !termsChecked)
                                 ? '#DCDCDC'
                                 : buttonColor
                                 ? buttonColor
@@ -839,7 +875,8 @@ export const ProductPage = ({
                             color:
                               product &&
                               (product?.stockAmount == 0 ||
-                                product?.canPurchaseAmount == 0)
+                                product?.canPurchaseAmount == 0 ||
+                                !termsChecked)
                                 ? '#777E8F'
                                 : buttonColor ?? '#0050FF',
                           }}
@@ -851,7 +888,8 @@ export const ProductPage = ({
                       <button
                         disabled={
                           product?.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0
+                          product?.canPurchaseAmount == 0 ||
+                          !termsChecked
                         }
                         onClick={() => {
                           if (product?.id && product.prices) {
@@ -868,7 +906,8 @@ export const ProductPage = ({
                           backgroundColor:
                             product &&
                             (product.stockAmount == 0 ||
-                              product?.canPurchaseAmount == 0)
+                              product?.canPurchaseAmount == 0 ||
+                              !termsChecked)
                               ? '#DCDCDC'
                               : buttonColor
                               ? buttonColor
@@ -876,13 +915,22 @@ export const ProductPage = ({
                           color:
                             product &&
                             (product.stockAmount == 0 ||
-                              product?.canPurchaseAmount == 0)
+                              product?.canPurchaseAmount == 0 ||
+                              !termsChecked)
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}
-                        className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
+                        className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
-                        {buttonText ?? 'Comprar agora'}
+                        {parseFloat(
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.amount ?? '0'
+                        ) === 0
+                          ? 'Quero!'
+                          : buttonText
+                          ? buttonText
+                          : 'Comprar agora'}
                       </button>
                       {product?.canPurchaseAmount === 0 && (
                         <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">
@@ -915,6 +963,20 @@ export const ProductPage = ({
                     .
                   </p>
                 )}
+                <div className="pw-mt-8">
+                  {product?.terms
+                    ? product.terms.map((val) => (
+                        <CheckboxAlt
+                          id={val.title}
+                          onChange={() => onChangeCheckbox()}
+                          key={val.title}
+                          label={val.title}
+                          description={val.description}
+                          className="pw-mt-3"
+                        />
+                      ))
+                    : null}
+                </div>
               </div>
             </div>
           </div>

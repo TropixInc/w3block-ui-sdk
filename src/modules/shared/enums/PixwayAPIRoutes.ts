@@ -72,4 +72,5 @@ export enum PixwayAPIRoutes {
   GET_COMPANY_LOYALTIES = '/{companyId}/loyalties/admin',
   GET_LOYALTY_PREVIEW = '/{companyId}/loyalties/rewards/payment/preview',
   CREATE_LOYALTY_PAYMENT = '/{companyId}/loyalties/rewards/payment',
+  TRANSFER_TOKEN_EMAIL = '{companyId}/token-editions/{id}/transfer-token/email',
 }

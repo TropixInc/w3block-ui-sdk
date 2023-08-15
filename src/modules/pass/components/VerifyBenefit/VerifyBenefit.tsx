@@ -32,7 +32,7 @@ export const VerifyBenefit = ({
 
   if (hasOpen) {
     return (
-      <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
+      <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8 pw-overflow-scroll">
         {(isLoading || isLoadingInfo) ?
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
@@ -46,6 +46,21 @@ export const VerifyBenefit = ({
                   {translate('token>pass>benefit')}{' '}
                   {data?.tokenPassBenefit?.name}
                 </p>
+              </div>
+              <div className='pw-flex pw-flex-col'>
+                <Button
+                  className='pw-mt-5'
+                  onClick={useBenefit}
+                >
+                  {translate('token>pass>selfUse')}
+                </Button>
+                <Button
+                  className='pw-mt-5'
+                  variant='secondary'
+                  onClick={onClose}
+                >
+                  {translate('token>pass>cancel')}
+                </Button>
               </div>
               {data?.tokenPassBenefit?.description &&
                 <>
@@ -105,20 +120,6 @@ export const VerifyBenefit = ({
                   </>
                 ))
               ) : null}
-            </div>
-            <div className='pw-flex pw-flex-col'>
-              <Button
-                onClick={useBenefit}
-              >
-                {translate('token>pass>selfUse')}
-              </Button>
-              <Button
-                className='pw-mt-5'
-                variant='secondary'
-                onClick={onClose}
-              >
-                {translate('token>pass>cancel')}
-              </Button>
             </div>
           </>
         }

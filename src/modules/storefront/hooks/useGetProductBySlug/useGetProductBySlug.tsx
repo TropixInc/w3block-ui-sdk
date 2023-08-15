@@ -41,6 +41,11 @@ export interface Variants {
   keyLabel: string;
   values: VariantValues[];
 }
+
+interface Terms {
+  title: string;
+  description?: string;
+}
 export interface Product {
   canPurchase?: boolean;
   chainId?: number;
@@ -88,6 +93,7 @@ export interface Product {
   };
   hasWhitelistBlocker?: boolean;
   variants?: Variants[];
+  terms?: Terms[];
 }
 
 export interface ProductsResponse {

@@ -37,6 +37,7 @@ interface HeaderPixwaySDKProps {
   fontFamily?: string;
   hasCart?: boolean;
   logoLink?: string;
+  standalone?: boolean;
 }
 
 const _HeaderPixwaySDK = ({
@@ -59,6 +60,7 @@ const _HeaderPixwaySDK = ({
   fontFamily,
   hasCart = true,
   logoLink,
+  standalone = false,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
   const router = useRouterConnect();
@@ -158,7 +160,7 @@ const _HeaderPixwaySDK = ({
     context?.defaultTheme?.header?.styleData?.backgroundColor;
   const headerBgColor = bgColor ?? defaultBgColor;
 
-  return context?.defaultTheme ? (
+  return context?.defaultTheme || standalone ? (
     <div
       style={{
         backgroundColor: headerBgColor,

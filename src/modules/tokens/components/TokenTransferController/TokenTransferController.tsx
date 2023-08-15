@@ -5,14 +5,13 @@ import { useQueryClient } from 'react-query';
 import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import Image from 'next/image';
 import { object, string } from 'yup';
 
 import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
 import { Alert } from '../../../shared/components/Alert';
-import { BlockchainGasTaxStepModal } from '../../../shared/components/BlockchainGasTaxStepModal';
 import { TextField } from '../../../shared/components/Form/TextField';
 import { GasModalHeader } from '../../../shared/components/GasModalHeader';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import { PoliciesAgreementStepModal } from '../../../shared/components/PoliciesAgreementStepModal';
 import { Spinner } from '../../../shared/components/Spinner';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
@@ -22,16 +21,19 @@ import { useChainScanLink } from '../../../shared/hooks/useChainScanLink/useChai
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { useEstimateTransferGas } from '../../hooks/useEstimateTransferGas';
-import { useGetStatusOfTokenTransfers } from '../../hooks/useGetStatusOfTokenTransfers';
-import useTransferMultipleTokens from '../../hooks/useTransferMultipleTokens/useTransferMultipleTokens';
+import {
+  GetLastTransferAPIResponse,
+  useGetTransferToken,
+} from '../../hooks/useGetTransferToken/useGetTransferToken';
 import useTransferToken from '../../hooks/useTransferTokens/useTransferToken';
+import useTransferTokenWithEmail from '../../hooks/useTransferTokenWithEmail/useTransferTokenWithEmail';
 import { ProcessingStepModal } from '../ProcessingStepModal';
 import { TokenTransferProcessModal } from '../TokenTransferProcessModal';
 
 interface Tokens {
   id: string;
   number: string;
+  editionId: string;
 }
 interface Props {
   tokens: Array<Tokens>;
@@ -45,33 +47,24 @@ interface Form {
   wallet: string;
 }
 
-interface TokenList {
-  [token: string]: {
-    id: string;
-    number: string;
-    status: string;
-    hash: string;
-    chainId: number;
-  };
-}
 interface TransferredItemProps {
-  editionNumber: string;
-  type: 'single' | 'multiple';
-  wallet: string;
-  status: string;
-  chainId: number;
-  hash: string;
+  editionNumber?: string;
+  type?: 'single' | 'multiple';
+  wallet?: string;
+  status?: string;
+  chainId?: number;
+  hash?: string;
 }
 
 interface ContentProcessProps {
   startProcess: boolean;
   wallet: string;
-  tokenList: TokenList;
+  tokenList?: GetLastTransferAPIResponse;
   isSuccess: boolean;
 }
 
 interface SuccessMessageProps {
-  wallet: string;
+  wallet?: string;
 }
 
 const SuccessMessage = ({ wallet }: SuccessMessageProps) => {
@@ -108,43 +101,21 @@ const ContentProcess = ({
 
   return (
     <>
-      {Object.keys(tokenList).length > 1 ? (
-        <>
-          {showSpinner && (
-            <Spinner className="!pw-border-t-[#5682C3] !pw-border-[#D1D1D1] pw-mx-auto pw-mb-6" />
-          )}
-
-          <div className="pw-flex pw-items-center pw-flex-wrap pw-justify-start pw-gap-x-[21px]">
-            {Object.keys(tokenList).map((token) => (
-              <TransferredItem
-                key={tokenList[token].id}
-                editionNumber={tokenList[token].number}
-                type="multiple"
-                wallet={wallet}
-                status={tokenList[token].status}
-                chainId={tokenList[token].chainId}
-                hash={tokenList[token].hash}
-              />
-            ))}
-          </div>
-
-          {isSuccess && <SuccessMessage wallet={wallet} />}
-        </>
-      ) : (
-        <>
-          {Object.keys(tokenList).map((token) => (
-            <TransferredItem
-              key={tokenList[token].id}
-              editionNumber={tokenList[token].number}
-              type="single"
-              wallet={wallet}
-              status={tokenList[token].status}
-              chainId={tokenList[token].chainId}
-              hash={tokenList[token].hash}
-            />
-          ))}
-        </>
+      {showSpinner && (
+        <Spinner className="!pw-border-t-[#5682C3] !pw-border-[#D1D1D1] pw-mx-auto pw-mb-6" />
       )}
+
+      <div className="pw-flex pw-items-center pw-flex-wrap pw-justify-start pw-gap-x-[21px]">
+        <TransferredItem
+          type="single"
+          wallet={wallet}
+          status={tokenList?.status}
+          chainId={tokenList?.chainId}
+          hash={tokenList?.txHash}
+        />
+      </div>
+
+      {isSuccess && <SuccessMessage wallet={wallet} />}
     </>
   );
 };
@@ -208,14 +179,12 @@ const TransferredItem = ({
 enum Steps {
   TOKEN_TRANSFER_PROCESS_MODAL = 'TokenTransferProcessModal',
   POLICIES_AGREEMENT_STEP_MODAL = 'PoliciesAgreementStepModal',
-  BLOCKCHAIN_GAS_TAX_STEP_MODAL = 'BlockchainGasTaxStepModal',
   PROCESSING_STEP_MODAL = 'ProcessingStepModal',
 }
 
 const stepOrder = [
   Steps.TOKEN_TRANSFER_PROCESS_MODAL,
   Steps.POLICIES_AGREEMENT_STEP_MODAL,
-  Steps.BLOCKCHAIN_GAS_TAX_STEP_MODAL,
   Steps.PROCESSING_STEP_MODAL,
 ];
 
@@ -227,7 +196,7 @@ export const TokenTransferController = ({
   onClose,
 }: Props) => {
   const [translate] = useTranslation();
-  const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
+  const [isShowingErrorMessage, setShowErrorMessage] = useState(false);
   const [
     dontShowTokenTransferProcessModal,
     setDontShowTokenTransferProcessModal,
@@ -235,26 +204,35 @@ export const TokenTransferController = ({
     LocalStorageFields.DONT_SHOW_TOKEN_TRANSFER_PROCESS_MODAL
   );
 
-  const [gasPricePaid, setGasPricePaid] = useState<number>(0);
   const [currentStep, setCurrentStep] = useState<Steps | null>(null);
   const {
-    mutate: transferMultipleTokens,
-    isError: isErrorTransferMultipleTokens,
-  } = useTransferMultipleTokens();
-  const { mutate: transferToken, isError: isErrorTransferToken } =
-    useTransferToken();
+    mutate: transferToken,
+    isError: isErrorTransferToken,
+    isSuccess: isSuccessTransferToken,
+  } = useTransferToken();
+  const {
+    mutate: transferTokenEmail,
+    isError: isErrorTransferTokenEmail,
+    isSuccess: isSuccessTransferTokenEmail,
+  } = useTransferTokenWithEmail();
 
-  const { successfulTransfers, tokenList } = useGetStatusOfTokenTransfers(
-    tokens,
-    currentStep === Steps.PROCESSING_STEP_MODAL
+  const { data: successfulTransfers } = useGetTransferToken(
+    tokens[0].editionId,
+    currentStep === Steps.PROCESSING_STEP_MODAL &&
+      (isSuccessTransferToken || isSuccessTransferTokenEmail)
   );
 
   useEffect(() => {
-    if (isErrorTransferMultipleTokens || isErrorTransferToken) {
-      showErrorMessage();
+    if (isErrorTransferToken || isErrorTransferTokenEmail) {
+      setShowErrorMessage(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isErrorTransferMultipleTokens, isErrorTransferToken]);
+  }, [isErrorTransferToken, isErrorTransferTokenEmail]);
+
+  const handleClose = () => {
+    setShowErrorMessage(false);
+    onClose();
+  };
 
   const nextStep = () => {
     if (currentStep === null) {
@@ -285,11 +263,7 @@ export const TokenTransferController = ({
   const schema = object().shape({
     wallet: string()
       .matches(
-        /^(0x)[0-9a-f]{40}$/i,
-        translate('tokens>tokenTransferController>incorrectWallet')
-      )
-      .not(
-        ['0x0000000000000000000000000000000000000000'],
+        /^(0x)[0-9a-f]{40}$|^[\w-.+]+@([\w-]+\.)+[\w-]{2,4}$/,
         translate('tokens>tokenTransferController>incorrectWallet')
       )
       .required(translate('components>form>requiredFieldValidation')),
@@ -308,16 +282,6 @@ export const TokenTransferController = ({
     name: 'wallet',
   });
 
-  const {
-    data: estimateTransferGas,
-    isSuccess: isSuccessEstimateTransferGas,
-    refetch: refetchEstimateTransferGas,
-    isError: isErrorEstimateTransferGas,
-  } = useEstimateTransferGas(tokens[0].id, toAddress.value, {
-    enabled: isOpen && toAddress.value !== '',
-  });
-
-  const gasPrice = Number(estimateTransferGas?.data.totalGasPrice?.proposed);
   const { connectProxyPass } = useCompanyConfig();
   const handleConfirmTokenTransferProcessModal = (dontShowAgain: boolean) => {
     setDontShowTokenTransferProcessModal(dontShowAgain);
@@ -325,23 +289,16 @@ export const TokenTransferController = ({
   };
 
   const handleConfirmPoliciesAgreementStep = () => {
-    refetchEstimateTransferGas();
-    nextStep();
-  };
-
-  const handleGasTaxConfirm = (gasPrice: number) => {
-    setGasPricePaid(gasPrice);
-
-    if (tokens.length > 1) {
-      const tokenIds = tokens.map((token) => token.id);
-      transferMultipleTokens({
-        toAddress: toAddress.value,
-        editionId: tokenIds,
+    const emailRegex = /^[\w-.+]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if (emailRegex.test(toAddress.value)) {
+      transferTokenEmail({
+        email: toAddress.value,
+        editionId: tokens[0].editionId,
       });
     } else {
       transferToken({
         toAddress: toAddress.value,
-        editionId: tokens[0].id,
+        editionId: tokens[0].editionId,
       });
     }
     nextStep();
@@ -358,7 +315,7 @@ export const TokenTransferController = ({
           {currentStep === Steps.TOKEN_TRANSFER_PROCESS_MODAL ? (
             <TokenTransferProcessModal
               isOpen={currentStep === Steps.TOKEN_TRANSFER_PROCESS_MODAL}
-              onClose={onClose}
+              onClose={handleClose}
               onConfirm={handleConfirmTokenTransferProcessModal}
               tokens={tokens}
               collectionName={collectionName}
@@ -383,8 +340,8 @@ export const TokenTransferController = ({
               )}
               buttonDisabled={!methods.formState.isValid}
               onConfirm={handleConfirmPoliciesAgreementStep}
-              onCancel={onClose}
-              onClose={onClose}
+              onCancel={handleClose}
+              onClose={handleClose}
             >
               <FormProvider {...methods}>
                 <TextField
@@ -408,44 +365,6 @@ export const TokenTransferController = ({
             </PoliciesAgreementStepModal>
           ) : null}
 
-          {currentStep === Steps.BLOCKCHAIN_GAS_TAX_STEP_MODAL ? (
-            <BlockchainGasTaxStepModal
-              isOpen={currentStep === Steps.BLOCKCHAIN_GAS_TAX_STEP_MODAL}
-              gasPrice={gasPrice * tokens.length}
-              refetch={refetchEstimateTransferGas}
-              gasPriceFound={isSuccessEstimateTransferGas}
-              gasPriceError={isErrorEstimateTransferGas}
-              onCancel={onClose}
-              onClose={onClose}
-              onConfirm={handleGasTaxConfirm}
-              cancelButtonLabel={translate(
-                'tokens>tokenTransferController>cancel'
-              )}
-              confirmButtonLabel={translate(
-                'dash>tokenEditionActionsProvider>transfer'
-              )}
-              subtitle={translate(
-                'tokens>tokenTransferController>confirmInformationToTransfer'
-              )}
-              title={translate('tokens>tokenTransferController>tokenTransfer')}
-            >
-              <GasModalHeader
-                imageBox={
-                  <Image
-                    src={imageSrc}
-                    height={50}
-                    width={50}
-                    alt={collectionName}
-                    className="pw-shrink-0 pw-object-cover"
-                  />
-                }
-                title={collectionName}
-                subTitle={subTitle}
-                classes={{ box: 'pw-mb-6' }}
-              />
-            </BlockchainGasTaxStepModal>
-          ) : null}
-
           {currentStep === Steps.PROCESSING_STEP_MODAL ? (
             <ProcessingStepModal
               isOpen={currentStep === Steps.PROCESSING_STEP_MODAL}
@@ -454,12 +373,13 @@ export const TokenTransferController = ({
               linkText={translate(
                 'tokens>tokenTransferController>goToMyTokens'
               )}
-              onClose={onClose}
-              isSuccess={successfulTransfers}
+              onClose={handleClose}
+              isSuccess={successfulTransfers?.data?.status === 'success'}
+              error={isShowingErrorMessage}
             >
               <GasModalHeader
                 imageBox={
-                  <Image
+                  <ImageSDK
                     src={imageSrc}
                     height={50}
                     width={50}
@@ -469,29 +389,28 @@ export const TokenTransferController = ({
                 }
                 title={collectionName}
                 subTitle={subTitle}
-                gasPrice={gasPricePaid}
+                gasPrice={0}
                 classes={{ box: 'pw-my-6' }}
               />
-
-              {tokenList && (
-                <ContentProcess
-                  startProcess={currentStep === Steps.PROCESSING_STEP_MODAL}
-                  wallet={toAddress.value}
-                  tokenList={tokenList}
-                  isSuccess={successfulTransfers}
-                />
+              {isShowingErrorMessage ? (
+                <Alert
+                  variant="error"
+                  className="pw-flex pw-justify-center pw-max-w-[400px] pw-mx-auto !pw-p-[22px]"
+                >
+                  <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
+                  {translate('tokens>tokenTransferController>error')}
+                </Alert>
+              ) : (
+                successfulTransfers?.data && (
+                  <ContentProcess
+                    startProcess={currentStep === Steps.PROCESSING_STEP_MODAL}
+                    wallet={toAddress.value}
+                    tokenList={successfulTransfers.data}
+                    isSuccess={successfulTransfers.data.status === 'success'}
+                  />
+                )
               )}
             </ProcessingStepModal>
-          ) : null}
-
-          {isShowingErrorMessage ? (
-            <Alert
-              variant="error"
-              className="pw-flex pw-justify-center pw-absolute pw-top-3 pw-right-3 pw-max-w-[400px] !pw-p-[22px]"
-            >
-              <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
-              {translate('tokens>tokenTransferController>error')}
-            </Alert>
           ) : null}
         </>
       ) : null}

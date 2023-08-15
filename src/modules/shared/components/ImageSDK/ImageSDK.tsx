@@ -118,7 +118,7 @@ export const ImageSDK = ({
   };
 
   return useMemo(() => {
-    if (src === '') {
+    if (!src) {
       return (
         <img alt={alt} className={`${className}`} src={imagePlaceholder}></img>
       );
@@ -148,5 +148,5 @@ export const ImageSDK = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src, isError, className]);
+  }, [src, isError, className, isVid, isCloud]);
 };

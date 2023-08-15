@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "1.5.4",
+  "version": "1.7.1",
   "type": "module",
   "files": [
     "dist"
@@ -34,7 +34,7 @@
     "@types/node": "18.11.18",
     "@types/react-pdf": "^5.7.2",
     "@types/validator": "^13.7.11",
-    "@w3block/sdk-id": "^0.1.53",
+    "@w3block/sdk-id": "^0.1.63",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
     "cpf-cnpj-validator": "^1.0.3",

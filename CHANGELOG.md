@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.0...v1.7.1) (2023-08-03)
+
+## [1.7.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.0-alpha.2...v1.7.0) (2023-08-03)
+
+### [1.6.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.0-alpha.0...v1.6.1) (2023-08-03)
+
+## [1.7.0-alpha.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.0-alpha.1...v1.7.0-alpha.2) (2023-08-03)
+
+## [1.7.0-alpha.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.0-alpha.0...v1.7.0-alpha.1) (2023-08-03)
+
+## [1.7.0-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.6.0...v1.7.0-alpha.0) (2023-08-02)
+
+
+### Features
+
+* transfer token and new kyc input ([#219](https://github.com/TropixInc/w3block-ui-sdk/issues/219)) ([5805237](https://github.com/TropixInc/w3block-ui-sdk/commit/580523711b86412473df5bea6e7ae064fb0eac82))
+
+### [1.6.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.6.0...v1.6.1) (2023-08-03)
+
+## [1.6.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.8...v1.6.0) (2023-07-31)
+
+### [1.5.8](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.7...v1.5.8) (2023-07-28)
+
+### [1.5.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.5...v1.5.7) (2023-07-26)
+
+### [1.5.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.5...v1.5.6) (2023-07-26)
+
+### [1.5.5](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.4...v1.5.5) (2023-07-24)
+
 ### [1.5.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.3...v1.5.4) (2023-07-20)
 
 ### [1.5.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.5.2...v1.5.3) (2023-07-19)

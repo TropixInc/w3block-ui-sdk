@@ -16,6 +16,7 @@ interface Props {
   isSuccess: boolean;
   subTitle: string;
   alternateMessage?: ReactNode;
+  error?: boolean;
 }
 
 export const ProcessingStepModal = ({
@@ -27,6 +28,7 @@ export const ProcessingStepModal = ({
   isSuccess,
   subTitle,
   alternateMessage = null,
+  error = false,
 }: Props) => {
   const [translate] = useTranslation();
   const [messageIsHidden, hideMessage] = useTimedBoolean(3000);
@@ -58,8 +60,7 @@ export const ProcessingStepModal = ({
           </h2>
           {children}
         </div>
-
-        {isSuccess ? (
+        {error ? null : isSuccess ? (
           <PixwayButton
             type="button"
             className="!pw-text-[14px] pw-leading-4 pw-py-[6px]"

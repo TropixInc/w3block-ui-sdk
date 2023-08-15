@@ -54,6 +54,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               chainId={wallet?.chainId ?? 80001}
               contractAddress={''}
               proccessing={true}
+              editionId={''}
             />
           </li>
         ))}
@@ -67,6 +68,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               id={token.id}
               chainId={token.chainId}
               contractAddress={token.contractAddress}
+              editionId={token.editionId}
             />
           </li>
         ))}
@@ -89,14 +91,14 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
         <WalletImage className="pw-fill-brand-primary pw-max-w-[82px] sm:pw-max-w-[113px]  pw-max-h-[76px] sm:pw-max-h-[106px]" />
       </div>
 
-      <h1 className="pw-font-bold sm:pw-font-semibold pw-text-lg sm:pw-text-4xl pw-leading-[23px] sm:pw-leading-[64px] pw-text-black pw-mb-[31px] sm:pw-mb-7 pw-text-center">
+      <h1 className="pw-font-bold sm:pw-font-semibold pw-text-lg sm:pw-text-4xl pw-leading-[23px] sm:pw-leading-[64px] pw-mb-[31px] sm:pw-mb-6 pw-text-black pw-text-center">
         {translate('connectTokens>tokensList>welcomeToWallet')}
       </h1>
+      <h2 className="pw-font-normal sm:pw-font-medium pw-text-sm sm:pw-text-lg pw-leading-[21px] sm:pw-leading-[23px] pw-text-center pw-max-w-[595px] pw-mb-6">
+        {translate('connectTokens>tokensList>welcomeToWallet2')}
+      </h2>
       <p className="pw-font-normal sm:pw-font-medium pw-text-sm sm:pw-text-lg pw-leading-[21px] sm:pw-leading-[23px] pw-text-center pw-max-w-[595px] pw-mb-6">
         {translate('connectTokens>tokensList>tokensAlreadyProcessing')}
-      </p>
-      <p className="pw-font-normal sm:pw-font-medium pw-text-sm sm:pw-text-lg pw-leading-[21px] sm:pw-leading-[23px] pw-text-center pw-max-w-[595px]">
-        {translate('connectTokens>tokensList>tokensAlreadyProcessing2')}
       </p>
     </div>
   );

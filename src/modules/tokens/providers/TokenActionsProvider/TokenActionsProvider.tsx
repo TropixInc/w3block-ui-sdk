@@ -20,6 +20,7 @@ interface Props {
   chainId: number;
   tokenId: string;
   isInternalToken: boolean;
+  editionId: string;
 }
 
 export const TokenActionsProvider = ({
@@ -32,6 +33,7 @@ export const TokenActionsProvider = ({
   chainId,
   tokenId,
   isInternalToken,
+  editionId,
 }: Props) => {
   const [translate] = useTranslation();
   const { data: publicTokenResponse } = usePublicTokenData({
@@ -57,7 +59,7 @@ export const TokenActionsProvider = ({
       {
         id: 'Transferir',
         label: translate('tokens>tokenTransferController>transfer'),
-        disabled: true,
+        disabled: !isInternalToken,
         onClick: () => {
           openTransferModal();
         },
@@ -65,13 +67,13 @@ export const TokenActionsProvider = ({
       {
         id: 'Certificado',
         label: translate('tokens>tokenCardActions>certificate'),
-        disabled: false,
+        disabled: !isInternalToken,
         onClick: () => {
           openCertificateModal();
         },
       },
     ],
-    [openTransferModal, openCertificateModal, translate]
+    [translate, isInternalToken, openTransferModal, openCertificateModal]
   );
   return (
     <TokenActionsContext.Provider value={value}>
@@ -84,7 +86,8 @@ export const TokenActionsProvider = ({
         tokens={[
           {
             id: collectionId,
-            number: '1',
+            number: tokenId,
+            editionId: editionId,
           },
         ]}
       />
