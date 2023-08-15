@@ -112,13 +112,13 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
   const { wallet } = useUserWallet();
 
   const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
-    useGetNFTSByWallet(wallet?.chainId || 80001);
+    useGetNFTSByWallet(wallet?.chainId);
 
-  const tokens =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ethNFTsResponse?.data.items.map((nft: any) =>
-      mapNFTToToken(nft, wallet?.chainId || 80001)
-    ) || [];
+  const tokens = ethNFTsResponse?.data?.items
+    ? ethNFTsResponse?.data.items.map((nft: any) =>
+        mapNFTToToken(nft, wallet?.chainId || 80001)
+      )
+    : [];
 
   return isLoading || !isAuthorized ? null : (
     <TranslatableComponent>

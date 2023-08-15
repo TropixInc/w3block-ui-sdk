@@ -39,18 +39,16 @@ const _LinkAccountTemplate = () => {
   const [step, setSteps] = useState('');
 
   const { wallet } = useUserWallet();
-  const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(
-    wallet?.chainId || 80001
-  );
-  const tokens =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ethNFTsResponse?.data.items.map((nft: any) =>
-      mapNFTToToken(nft, wallet?.chainId || 80001)
-    ) || [];
+  const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(wallet?.chainId);
+  const tokens = ethNFTsResponse?.data.items
+    ? ethNFTsResponse?.data.items.map((nft: any) =>
+        mapNFTToToken(nft, wallet?.chainId || 80001)
+      )
+    : [];
 
   const collections = productCollectionId.split('|');
 
-  const userHasProduct = tokens.some((data) => {
+  const userHasProduct = tokens.some((data: any) => {
     return collections.some((col) => {
       return data?.collectionData?.id === col;
     });

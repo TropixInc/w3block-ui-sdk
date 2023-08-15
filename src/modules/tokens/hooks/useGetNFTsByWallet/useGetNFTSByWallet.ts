@@ -50,24 +50,24 @@ export interface NFTByWalletDTO {
   };
 }
 
-export const useGetNFTSByWallet = (chainId: number) => {
+export const useGetNFTSByWallet = (chainId: number | undefined) => {
   const axios = useAxios(W3blockAPI.KEY);
   const { data: profile } = useProfile();
 
   const address = profile?.data?.mainWallet?.address;
 
   return usePaginatedPrivateQuery<NFTByWalletDTO>(
-    [PixwayAPIRoutes.NFTS_BY_WALLET, address as string, chainId],
+    [PixwayAPIRoutes.NFTS_BY_WALLET, address as string, chainId!],
     () => {
       return axios.get(
         PixwayAPIRoutes.NFTS_BY_WALLET.replace(
           '{chainId}',
-          chainId.toString()
+          chainId!.toString()
         ).replace('{address}', address as string)
       );
     },
     {
-      enabled: address != undefined,
+      enabled: address != undefined && chainId != undefined,
     }
   );
 };
