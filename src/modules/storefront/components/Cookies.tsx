@@ -33,7 +33,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
     privacyPolicyLinkColor,
     privacyPolicyLink,
     margin,
-    padding,
+    //padding,
   } = mergedStyleData;
 
   const { disclaimer } = mergedContentData;
@@ -49,7 +49,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
         style={{
           backgroundColor,
           margin: convertSpacingToCSS(margin),
-          padding: convertSpacingToCSS(padding),
+          padding: '32px 16px',
         }}
         className="pw-box-border lg:pw-max-h-[89px] pw-py-3 lg:pw-py-[23.5px] pw-px-14 lg:pw-px-[114px] pw-flex pw-justify-center pw-items-center pw-bottom-0 pw-left-0 pw-right-0 pw-z-50 pw-fixed"
       >
@@ -67,6 +67,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
                 rel="noreferrer"
                 className="pw-font-bold"
               >
+                {' '}
                 {translate('storefront>cookies>privacyPolicy')}
               </a>
             )}

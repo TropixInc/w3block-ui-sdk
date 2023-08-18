@@ -40,23 +40,6 @@ export const UserCard = ({
       ) : (
         <Shimmer className="pw-h-5 !pw-w-[150px] pw-rounded-full" />
       )}
-
-      <div>
-        {currency ? (
-          <p className="pw-text-center pw-text-zinc-700 pw-text-sm">
-            total de {currency}
-          </p>
-        ) : (
-          <Shimmer className="pw-h-5 !pw-w-[150px] pw-rounded-full" />
-        )}
-        {balance ? (
-          <p className="pw-text-center pw-text-zinc-700 pw-font-semibold pw-text-sm">
-            {parseInt(balance)}
-          </p>
-        ) : (
-          <Shimmer className="pw-h-5 !pw-w-[150px] pw-rounded-full pw-mt-1" />
-        )}
-      </div>
       <div className="pw-w-full pw-rounded-full pw-h-px pw-bg-zinc-200"></div>
       {balance && parseFloat(balance) == 0 ? (
         <p className="pw-text-center pw-text-red-600 pw-font-semibold pw-text-sm">
@@ -66,7 +49,7 @@ export const UserCard = ({
         <div>
           {balance ? (
             <p className="pw-text-center pw-text-zinc-700 pw-font-semibold pw-text-sm">
-              Valor a ser utilizado
+              {currency} a ser utilizado
             </p>
           ) : (
             <Shimmer className="pw-h-5 !pw-w-[150px] pw-rounded-full" />

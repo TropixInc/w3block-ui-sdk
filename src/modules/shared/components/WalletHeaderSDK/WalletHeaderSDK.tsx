@@ -12,17 +12,7 @@ export const WalletHeaderSDK = () => {
   const { mainWallet, wallets, loyaltyWallet } = useUserWallet();
   const [showValue, setShowValue] = useState(true);
   const toggleShowValue = () => setShowValue(!showValue);
-  const slicedBreakPoints = [
-    { key: 0, value: { slidesPerView: 1, spaceBetween: 20 } },
-    { key: 768, value: { slidesPerView: 3, spaceBetween: 20 } },
-    { key: 1024, value: { slidesPerView: 3, spaceBetween: 20 } },
-    {
-      key: 1280,
-      value: { slidesPerView: 3, spaceBetween: 20 },
-    },
-  ]
-    .slice(0, 10)
-    .reduce((obj, item) => Object.assign(obj, { [item.key]: item.value }), {});
+
   return (
     <div className="pw-p-[20px] pw-mx-[22px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
       <div className="pw-flex pw-justify-between">
@@ -42,15 +32,17 @@ export const WalletHeaderSDK = () => {
           )}
         </div>
       </div>
-      <div className="pw-mt-[24px]">
+      <div className="pw-mt-[24px] pw-max-w-[98%]">
         <Swiper
+          slidesPerView={'auto'}
           pagination={{
             clickable: true,
             dynamicBullets: true,
             horizontalClass: '!-pw-bottom-[20px]',
           }}
+          spaceBetween={16}
           autoplay={false}
-          breakpoints={{ ...slicedBreakPoints }}
+          //breakpoints={{ ...slicedBreakPoints }}
           modules={[Pagination]}
           style={
             {
@@ -62,11 +54,15 @@ export const WalletHeaderSDK = () => {
               maxWidth: '100%',
               overflowX: 'hidden',
               overflow: 'visible',
+              justifyContent: 'flex-start',
+              '&.swiper-slide': {
+                width: 'auto',
+              },
             } as CSSProperties
           }
         >
           {loyaltyWallet?.map((wallet) => (
-            <SwiperSlide key={generateRandomUUID()}>
+            <SwiperSlide style={{ width: 'auto' }} key={generateRandomUUID()}>
               <WalletCard
                 balance={wallet.balance}
                 type="loyalty"
@@ -75,7 +71,7 @@ export const WalletHeaderSDK = () => {
             </SwiperSlide>
           ))}
           {wallets?.map((wallet) => (
-            <SwiperSlide key={generateRandomUUID()}>
+            <SwiperSlide style={{ width: 'auto' }} key={generateRandomUUID()}>
               <WalletCard
                 chainId={wallet.chainId}
                 balance={wallet.balance}

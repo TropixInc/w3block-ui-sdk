@@ -54,7 +54,7 @@ export const WalletCard = ({
   };
 
   return (
-    <div className="pw-bg-white pw-rounded-[20px] pw-shadow-md pw-p-[20px] pw-w-full">
+    <div className="pw-bg-white pw-rounded-[20px] pw-border pw-border-zinc-300 pw-p-[20px] pw-w-[200px]">
       <div>{getIcon()}</div>
       <p className=" pw-text-slate-900 pw-mt-3">Saldo</p>
       <p className="pw-text-sm pw-text-slate-800 pw-font-[400]">{getName()}</p>
@@ -65,14 +65,14 @@ export const WalletCard = ({
           value={balance ?? '0'}
         />
       </div>
-      {type === 'vault' && (
-        <WeblockButton
-          onClick={() => push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
-          className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4"
-        >
-          Adicionar
-        </WeblockButton>
-      )}
+
+      <WeblockButton
+        disabled={type === 'metamask' || type === 'loyalty'}
+        onClick={() => push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
+        className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4"
+      >
+        {type === 'metamask' || type === 'loyalty' ? 'Ações' : 'Adicionar'}
+      </WeblockButton>
     </div>
   );
 };

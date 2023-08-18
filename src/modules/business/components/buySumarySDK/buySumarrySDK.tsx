@@ -37,7 +37,7 @@ export const BuySummarySDK = ({
         <BuySumarryEntries
           fontClass={'pw-text-gray-700 pw-text-sm pw-font-semibold'}
           className="pw-mt-[6px]"
-          text={`Descoonto em ${currencyToUse}`}
+          text={`Desconto em ${currencyToUse}`}
           currency={currencyToPay ?? CurrencyEnum.BRL}
           val={discountValue ?? '0'}
         />

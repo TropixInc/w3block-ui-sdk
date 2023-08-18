@@ -34,6 +34,7 @@ export interface WalletLoyalty {
   balance: string;
   currency: string;
   loyaltyId: string;
+  contractId: string;
 }
 
 export const UserWalletsContext = createContext<UserWalletsContextInterface>({

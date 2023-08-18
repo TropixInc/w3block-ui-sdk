@@ -6,6 +6,7 @@ import { InternalPagesLayoutBase } from '../../../shared';
 import './index.css';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { BuySummarySDK } from '../../components/buySumarySDK/buySumarrySDK';
+import { PayementCompletedModal } from '../../components/paymentCompletedModal/PayementCompletedModal';
 import { UserCard } from '../../components/userCard/userCard';
 import { useCreatePayment } from '../../hooks/useCreatePayment';
 import { useGetPaymentPreview } from '../../hooks/useGetPaymentPreview';
@@ -17,9 +18,12 @@ import { UserInfoInterface } from '../../interface/userInfo';
 export const PaymentTemplateSDK = () => {
   const [valueToPay, setValueToPay] = useState('0');
   const [valueToUse, setValueToUse] = useState('');
-  const [totalValue, setTotalValue] = useState();
+  const [totalValue, setTotalValue] = useState('');
   const [cahsbackPoints, setCashbackPoints] = useState<string>('');
+  const [totalDiscount, setTotalDiscount] = useState<string>('');
   const [code, setCode] = useState(['', '', '', '']);
+  const [paymentCompletedModal, setPaymentCompletedModal] =
+    useState<boolean>(false);
   const { loyalties } = useLoyaltiesInfo();
   const [codeError, setCodeError] = useState<string>('');
   const [userInfo, setUserInfo] = useState<UserInfoInterface>({});
@@ -45,6 +49,21 @@ export const PaymentTemplateSDK = () => {
         getUserBalance(data.id as string, {
           onSuccess: (balance) => {
             setUserInfo({ ...data, ...balance });
+            const pointsValue =
+              loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
+            // const currencyValue =
+            //   loyalties[0].paymentViewSettings.pointsEquivalent.currencyValue;
+            const totalMoney = parseFloat(balance.balance ?? '0') * pointsValue;
+
+            console.log(totalMoney);
+
+            if (totalMoney <= parseFloat(valueToPay)) {
+              setValueToUse(balance.balance);
+            } else {
+              console.log(parseFloat(valueToPay) / pointsValue);
+              console.log(parseFloat(valueToPay) * pointsValue);
+              setValueToUse((parseFloat(valueToPay) / pointsValue).toString());
+            }
           },
         });
       },
@@ -74,8 +93,9 @@ export const PaymentTemplateSDK = () => {
         {
           onSuccess: (data) => {
             setCashbackPoints(data.pointsCashback);
-            setValueToPay(data.amount);
-            setValueToUse(data.discount);
+            //setValueToPay(data.amount);
+            setTotalDiscount(data.discount);
+            //setValueToUse(data.discount);
             setTotalValue(data.total);
           },
         }
@@ -95,8 +115,15 @@ export const PaymentTemplateSDK = () => {
           description: '',
         },
         {
-          onSuccess: (data) => {
-            console.log(data);
+          onSuccess: (_) => {
+            setPaymentCompletedModal(true);
+            setCode(['', '', '', '']);
+            setValueToPay('0');
+            setValueToUse('');
+            setUserInfo({});
+            setCashbackPoints('');
+            setTotalDiscount('');
+            setTotalValue('');
           },
           onError(error) {
             console.log(error);
@@ -118,10 +145,73 @@ export const PaymentTemplateSDK = () => {
     const inputsToChange = code;
     inputsToChange[index] = e.target.value;
     setCode([...inputsToChange]);
+    setCodeError('');
+    setUserInfo({});
+    setCashbackPoints('');
+    setTotalDiscount('');
+    setTotalValue('');
+
     if (e.nativeEvent.inputType !== 'deleteContentBackward') {
       const next = document.getElementById(`input-${index + 1}`);
       next?.focus();
     }
+  };
+
+  const handleValueToUse = () => {
+    if (loyalties.length) {
+      const pointsValue =
+        loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
+      const amountTotalPoints = parseFloat(valueToPay) / pointsValue;
+      if (parseFloat(valueToUse) > amountTotalPoints) {
+        setValueToUse(amountTotalPoints.toString());
+      }
+    }
+
+    if (
+      userInfo.balance &&
+      parseFloat(valueToUse) > parseFloat(userInfo.balance)
+    ) {
+      setValueToUse(userInfo.balance);
+      return;
+    } else if (parseFloat(valueToUse) < 0) {
+      setValueToUse('0');
+      return;
+    }
+  };
+
+  const handleChangeValueTopay = () => {
+    if (loyalties.length > 0) {
+      const pointsValue =
+        loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
+      const totalMoney = parseFloat(userInfo.balance ?? '0') * pointsValue;
+
+      if (totalMoney <= parseFloat(valueToPay) && userInfo.balance) {
+        setValueToUse(userInfo.balance);
+      } else {
+        setValueToUse((parseFloat(valueToPay) / pointsValue).toString());
+      }
+    }
+  };
+
+  useDebounce(
+    () => {
+      handleChangeValueTopay();
+    },
+    600,
+    [valueToPay]
+  );
+
+  useDebounce(
+    () => {
+      handleValueToUse();
+    },
+    500,
+    [valueToUse]
+  );
+
+  const handleCancelUserCard = () => {
+    setCode(['', '', '', '']);
+    setUserInfo({});
   };
 
   return (
@@ -138,7 +228,10 @@ export const PaymentTemplateSDK = () => {
             placeholder="Apenas numeros"
             type="number"
             value={valueToPay}
-            onChange={(e) => setValueToPay(e.target.value)}
+            onChange={(e) => {
+              setValueToPay(e.target.value);
+              setTotalValue(e.target.value);
+            }}
             className="pw-text-[13px] pw-text-black pw-p-[10px] pw-border pw-border-blue-600 pw-rounded-lg pw-w-full"
           />
         </div>
@@ -155,6 +248,7 @@ export const PaymentTemplateSDK = () => {
                     onKeyUp={(e) => keyUp(e, index)}
                     type="tel"
                     maxLength={1}
+                    value={code[index]}
                     id={`input-${index}`}
                     onChange={(e) => changeInput(index, e)}
                     style={{
@@ -182,7 +276,7 @@ export const PaymentTemplateSDK = () => {
           <UserCard
             onChangeValue={setValueToUse}
             valueToUse={valueToUse}
-            onCancel={() => setUserInfo({})}
+            onCancel={handleCancelUserCard}
             name={userInfo.name}
             avatarSrc={userInfo.avatarUrl}
             balance={userInfo.balance}
@@ -191,8 +285,9 @@ export const PaymentTemplateSDK = () => {
         </div>
         <BuySummarySDK
           className="pw-mt-[32px]"
-          totalValue={totalValue ?? valueToPay}
-          discountValue={valueToUse}
+          totalValue={totalValue}
+          currencyToUse={userInfo.currency}
+          discountValue={totalDiscount}
           valueToPay={valueToPay}
         />
         {cahsbackPoints && parseInt(cahsbackPoints) != 0 ? (
@@ -214,6 +309,10 @@ export const PaymentTemplateSDK = () => {
           </button>
         </div>
       </div>
+      <PayementCompletedModal
+        isOpen={paymentCompletedModal}
+        onClose={() => setPaymentCompletedModal(false)}
+      />
     </InternalPagesLayoutBase>
   );
 };

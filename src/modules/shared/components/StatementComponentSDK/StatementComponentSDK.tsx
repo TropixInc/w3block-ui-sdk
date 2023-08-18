@@ -3,9 +3,10 @@ import { ReactComponent as CopyIcon } from '../../assets/icons/copy.svg';
 import { ReactComponent as RejectIcon } from '../../assets/icons/minusCircle.svg';
 import { ReactComponent as ApprovedIcon } from '../../assets/icons/plusCircle.svg';
 import {
+  Erc20ActionStatus,
   Statement,
-  StatementStatusType,
 } from '../../interface/Statement/Statement';
+import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 
 interface StatementComponentSDKProps {
   statement: Statement;
@@ -15,8 +16,8 @@ export const StatementComponentSDK = ({
   statement,
 }: StatementComponentSDKProps) => {
   const getStatementColorAndIcon = () => {
-    switch (statement.type) {
-      case StatementStatusType.APPROVED:
+    if (statement.transactionType == 'receiving') {
+      if (statement.status == Erc20ActionStatus.SUCCESS) {
         return {
           color: 'pw-text-blue-800',
           icon: (
@@ -24,7 +25,7 @@ export const StatementComponentSDK = ({
           ),
           text: 'Crédito',
         };
-      case StatementStatusType.PENDING:
+      } else {
         return {
           color: 'pw-text-orange-600',
           icon: (
@@ -32,18 +33,29 @@ export const StatementComponentSDK = ({
           ),
           text: 'Crédito',
         };
-      default:
+      }
+    } else {
+      if (statement.status == Erc20ActionStatus.SUCCESS) {
         return {
-          color: 'pw-text-rose-500',
+          color: 'pw-stroke-rose-500',
           icon: (
             <RejectIcon className="pw-stroke-rose-500 pw-w-[16px] pw-h-[16px]" />
           ),
           text: 'Débito',
         };
+      } else {
+        return {
+          color: 'pw-text-orange-600',
+          icon: (
+            <RejectIcon className="pw-stroke-orange-600 pw-w-[16px] pw-h-[16px]" />
+          ),
+          text: 'Débito',
+        };
+      }
     }
   };
   return (
-    <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-items- pw-justify-between">
+    <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
       <div className="pw-flex pw-flex-col pw-items-start">
         <div className="pw-flex pw-items-center pw-gap-2">
           {getStatementColorAndIcon().icon}
@@ -63,10 +75,11 @@ export const StatementComponentSDK = ({
         </div>
         <div>
           <span className="pw-text-black pw-text-sm pw-font-semibold">
-            {statement.type == StatementStatusType.REJECTED ? '-' : '+'} 10{' '}
+            {statement.transactionType == 'sending' ? '-' : '+'}{' '}
+            {statement.amount}{' '}
           </span>
           <span className="pw-text-black pw-text-[13px] pw-font-normal">
-            coins
+            {statement.currency}
           </span>
         </div>
       </div>
@@ -75,9 +88,18 @@ export const StatementComponentSDK = ({
           {' '}
           {new Date(statement.createdAt).toDateString()}
         </div>
-        <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2">
-          {statement.description}
-        </div>
+        <div className="pw-mt-2"></div>
+        {statement.loyaltieTransactions?.map((loyaltieTransaction) => (
+          <div
+            key={generateRandomUUID()}
+            className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mb-1"
+          >
+            {statement.transactionType == 'receiving'
+              ? `Crédito de ${loyaltieTransaction.amount} ${statement.currency} por ${loyaltieTransaction.metadata.description}`
+              : `Débito de ${loyaltieTransaction.amount} ${statement.currency}`}
+          </div>
+        ))}
+        <div></div>
       </div>
     </div>
   );
