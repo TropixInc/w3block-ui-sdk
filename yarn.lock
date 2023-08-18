@@ -5174,9 +5174,9 @@ react-pdf@^5.7.2:
     tiny-warning "^1.0.0"
 
 react-phone-number-input@^3.2.19:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.3.2.tgz#2164e58484ddd08786636b75989f0cace75b9c12"
-  integrity sha512-h/XdyBlmy9DApKqSbmXvvvJYL1nxA3omUsCc1aeeXkt63k2QJs971jE8T/ItV9vgljBLL36BEuKs0pZlJflGew==
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.3.3.tgz#b242dfd052c3d8a3e4aaa26a0ea4420f100ec82f"
+  integrity sha512-mxaoQaTE2TOcFUH8PQVGi5eXCHrXzRgow8t5Nm6zh9867Xpa9T00IuncP+cJLW2BCH++jwaKuym58ju58md5XQ==
   dependencies:
     classnames "^2.3.1"
     country-flag-icons "^1.5.4"
