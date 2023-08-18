@@ -25,7 +25,7 @@ export const WalletStatementTemplateSDK = () => {
   return (
     <InternalPagesLayoutBase>
       <WalletHeaderSDK />
-      <WalletFilterSDK className="pw-mt-4" wallets={wallets ?? []} />
+      <WalletFilterSDK className="pw-mt-4" wallets={loyaltyWallet ?? []} />
       <div className="pw-mt-[20px] pw-flex pw-flex-col pw-gap-[20px]">
         {data?.items.map((item) => (
           <StatementComponentSDK

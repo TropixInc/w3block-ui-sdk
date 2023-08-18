@@ -94,9 +94,7 @@ export const StatementComponentSDK = ({
             key={generateRandomUUID()}
             className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mb-1"
           >
-            {statement.transactionType == 'receiving'
-              ? `Crédito de ${loyaltieTransaction.amount} ${statement.currency} por ${loyaltieTransaction.metadata.description}`
-              : `Débito de ${loyaltieTransaction.amount} ${statement.currency}`}
+            {loyaltieTransaction.metadata.description}
           </div>
         ))}
         <div></div>

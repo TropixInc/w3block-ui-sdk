@@ -1,9 +1,9 @@
-import { WalletSimple } from '../../providers';
+import { WalletLoyalty } from '../../providers';
 import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 
 interface WalletFilterSDKProps {
-  wallets: WalletSimple[];
-  onSelectWallet?: (wallet: WalletSimple) => void;
+  wallets: WalletLoyalty[];
+  onSelectWallet?: (wallet: WalletLoyalty) => void;
   className?: string;
 }
 
@@ -22,7 +22,7 @@ export const WalletFilterSDK = ({
           key={generateRandomUUID()}
           onClick={() => onSelectWallet?.(wallet)}
         >
-          {wallet.type}
+          {wallet.currency}
         </button>
       ))}
     </div>

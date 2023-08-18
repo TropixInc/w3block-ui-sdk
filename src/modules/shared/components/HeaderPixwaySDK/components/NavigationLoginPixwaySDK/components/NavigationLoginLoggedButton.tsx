@@ -96,9 +96,21 @@ export const useDefaultMenuTabs = (textColor: string) => {
     userRoles?.includes('admin') || userRoles?.includes('superAdmin') || userRoles?.includes('operator')
   );
   const isUser = Boolean(userRoles?.includes('user')); 
-  const isLoayaltyOperator = Boolean(userRoles?.includes('operator'));
+  const isLoayaltyOperator = Boolean(userRoles?.includes('loyaltyOperator'));
 
   const items: NavigationMenuTabs[] = [
+    {
+      name: "Dashboard",
+      route: PixwayAppRoutes.LOYALTY_REPORT,
+      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
+      isVisible: isLoayaltyOperator,
+    },
+    {
+      name: "Pagamento",
+      route: PixwayAppRoutes.LOYALTY_PAYMENT,
+      icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
+      isVisible: isLoayaltyOperator,
+    },
     {
       name: translate('header>components>defaultTab>myAccount'),
       route: PixwayAppRoutes.MY_PROFILE,
@@ -118,23 +130,10 @@ export const useDefaultMenuTabs = (textColor: string) => {
       isVisible: isUser || isAdmin,
     },
     {
-      name: "Pagamento",
-      route: PixwayAppRoutes.LOYALTY_PAYMENT,
-      icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: isLoayaltyOperator,
-    },
-    {
-      name: "Extrato",
-      route: PixwayAppRoutes.LOYALTY_REPORT,
-      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: isLoayaltyOperator,
-    },
-    {
       name: translate('header>components>defaultTab>tokenPass'),
       route: PixwayAppRoutes.TOKENPASS,
       icon: <TicketIcon style={{color: textColor, stroke: textColor}} width={17} height={17} />,
       isVisible: pass && isAdmin && hasPassAssociated,
-
     },
     {
       name: translate('components>menu>integration'),

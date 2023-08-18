@@ -248,19 +248,21 @@ const _Menu = ({ tabs, className }: MenuProps) => {
               '-'
             )}
           </div>
-          <div className="pw-flex pw-justify-center ">
-            <button
-              onClick={() =>
-                // isLoayaltyOperator
-                //   ? router.pushConnect(PixwayAppRoutes.LOYALTY_PAYMENT)
-                //   : setAuthenticatePayemntModal?.(true)
-                setAuthenticatePayemntModal?.(true)
-              }
-              className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
-            >
-              {isLoayaltyOperator ? 'Pagamento' : 'Autenticar'}
-            </button>
-          </div>
+          {!isLoayaltyOperator && (
+            <div className="pw-flex pw-justify-center ">
+              <button
+                onClick={() =>
+                  // isLoayaltyOperator
+                  //   ? router.pushConnect(PixwayAppRoutes.LOYALTY_PAYMENT)
+                  //   : setAuthenticatePayemntModal?.(true)
+                  setAuthenticatePayemntModal?.(true)
+                }
+                className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
+              >
+                Autenticar
+              </button>
+            </div>
+          )}
         </div>
 
         <ul className="pw-mx-auto pw-w-[248px]">
