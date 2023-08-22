@@ -358,7 +358,7 @@
   "components>walletIntegration>walletConnected": "Carteira sincronizada",
   "components>walletIntegration>syncDate": "Sincronizado em: {{date}}",
   "token>pass>passOutsideCheckin": "Esse token está fora do período de check-in.",
-  "token>pass>checkinAvaibleAt": "Check-in disponível às:",
+  "token>pass>checkinAvaibleAt": "Check-in disponível:",
   "token>pass>typePhysical": "Físico",
   "token>pass>typeDigital": "Digital",
   "token>benefits>useLimit": "Limites de uso:",

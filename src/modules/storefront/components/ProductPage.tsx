@@ -155,10 +155,10 @@ export const ProductPage = ({
     product?.contractAddress
   );
 
-  const { data: tokenData } = useGetCollectionMetadata(
-    product?.draftData?.keyCollectionId ?? '',
-    { limit: 1 }
-  );
+  const { data: tokenData } = useGetCollectionMetadata({
+    id: product?.draftData?.keyCollectionId ?? '',
+    query: { limit: 1 },
+  });
 
   const chain = () => {
     switch (product?.chainId) {
