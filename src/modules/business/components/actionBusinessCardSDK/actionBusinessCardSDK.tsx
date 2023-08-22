@@ -13,6 +13,7 @@ export const ActionBusinessCardSDK = ({
   title,
   description,
   buttonText = 'Default',
+  onClick,
 }: // onClick,
 ActionBusinessCardSDKProps) => {
   return (
@@ -24,7 +25,10 @@ ActionBusinessCardSDKProps) => {
       <div className=" pw-max-h-[65px] pw-text-black pw-text-sm pw-font-normal">
         {description}
       </div>
-      <button className=" pw-px-6 pw-py-[5px] pw-bg-blue-800 pw-rounded-[48px] pw-shadow pw-border-b pw-border-white pw-justify-center pw-tems-center pw-gap-2.5 ">
+      <button
+        onClick={onClick}
+        className=" pw-px-6 pw-py-[5px] pw-bg-blue-800 pw-rounded-[48px] pw-shadow pw-border-b pw-border-white pw-justify-center pw-tems-center pw-gap-2.5 "
+      >
         <div className="pw-text-center pw-text-white pw-text-xs pw-font-medium">
           {buttonText}
         </div>

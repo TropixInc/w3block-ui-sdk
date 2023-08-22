@@ -55,13 +55,9 @@ export const PaymentTemplateSDK = () => {
             //   loyalties[0].paymentViewSettings.pointsEquivalent.currencyValue;
             const totalMoney = parseFloat(balance.balance ?? '0') * pointsValue;
 
-            console.log(totalMoney);
-
             if (totalMoney <= parseFloat(valueToPay)) {
               setValueToUse(balance.balance);
             } else {
-              console.log(parseFloat(valueToPay) / pointsValue);
-              console.log(parseFloat(valueToPay) * pointsValue);
               setValueToUse((parseFloat(valueToPay) / pointsValue).toString());
             }
           },
@@ -285,10 +281,10 @@ export const PaymentTemplateSDK = () => {
         </div>
         <BuySummarySDK
           className="pw-mt-[32px]"
-          totalValue={totalValue}
+          totalValue={valueToPay}
           currencyToUse={userInfo.currency}
           discountValue={totalDiscount}
-          valueToPay={valueToPay}
+          valueToPay={totalValue}
         />
         {cahsbackPoints && parseInt(cahsbackPoints) != 0 ? (
           <div className="pw-flex pw-justify-between pw-items-center pw-p-6 pw-bg-green-100 pw-rounded-2xl pw-mt-8">

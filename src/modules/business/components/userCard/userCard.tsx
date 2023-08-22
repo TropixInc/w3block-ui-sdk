@@ -60,7 +60,7 @@ export const UserCard = ({
               value={valueToUse}
               type="numbers"
               placeholder="Valor a ser utilizado"
-              className="pw-p-2.5 pw-rounded-lg pw-border pw-border-blue-800 pw-flex-col pw-mt-1"
+              className="pw-p-2.5 pw-rounded-lg pw-border pw-border-blue-800 pw-flex-col pw-mt-1 pw-color-black"
             ></input>
           ) : (
             <Shimmer className="pw-h-5 !pw-w-[150px] pw-rounded-full pw-mt-1" />
