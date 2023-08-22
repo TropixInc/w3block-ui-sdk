@@ -14,7 +14,7 @@ import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 export const AddFundsManualContainer = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [translate] = useTranslation();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const router = useRouterConnect();
   const [_, setCopy] = useCopyToClipboard();
 

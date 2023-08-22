@@ -27,6 +27,7 @@ export enum PixwayAppRoutes {
   PROFILE = '/profile',
   MY_TOKENS = '/wallet',
   WALLET = '/wallet',
+  WALLET_RECEIPT = '/wallet/statement',
   SETTINGS = '/settings',
   HELP = '/help',
   TOKEN_PUBLIC = '/token/{contractAddress}/{chainId}/{tokenId}',
@@ -46,4 +47,6 @@ export enum PixwayAppRoutes {
   COMPLETE_KYC = '/auth/complete-kyc',
   MY_ORDERS = '/profile/orders',
   PRODUCT_PAGE = '/product/slug/{slug}',
+  LOYALTY_PAYMENT = '/business/loyalty/payment',
+  LOYALTY_REPORT = '/business/loyalty/report',
 }

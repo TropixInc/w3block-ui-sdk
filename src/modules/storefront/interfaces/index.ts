@@ -74,6 +74,11 @@ export interface GridItemAreaData extends MainModuleThemeInterface {
   mobileStyleData: GridItemAreaData['styleData'];
 }
 
+export enum CoinsType {
+  ETH = 'ETH',
+  MATIC = 'MATIC',
+  LOYALTY = 'LOYALTY',
+}
 export interface PageData extends MainModuleThemeInterface {
   type: ModulesType.CONFIGURATION;
   styleData: {
@@ -84,6 +89,7 @@ export interface PageData extends MainModuleThemeInterface {
     backgroundImage?: string;
     overlay?: boolean;
     overlayColor?: string;
+    mainCoin?: CoinsType;
   };
 }
 

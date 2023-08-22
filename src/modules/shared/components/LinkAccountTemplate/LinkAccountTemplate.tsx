@@ -38,13 +38,13 @@ const _LinkAccountTemplate = () => {
   const { mutate: acceptIntegration, isLoading } = useAcceptIntegrationToken();
   const [step, setSteps] = useState('');
 
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(wallet?.chainId);
-  const tokens = ethNFTsResponse?.data.items
-    ? ethNFTsResponse?.data.items.map((nft: any) =>
-        mapNFTToToken(nft, wallet?.chainId || 80001)
-      )
-    : [];
+  const tokens =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ethNFTsResponse?.data.items.map((nft: any) =>
+      mapNFTToToken(nft, wallet?.chainId || 80001)
+    ) || [];
 
   const collections = productCollectionId.split('|');
 

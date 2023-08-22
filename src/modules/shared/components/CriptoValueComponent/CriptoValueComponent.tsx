@@ -27,10 +27,12 @@ export const CriptoValueComponent = ({
     switch (code) {
       case CurrencyEnum.ETHEREUM:
         return <ETHIcon style={{ width: size + 'px', height: size + 'px' }} />;
-      default:
+      case CurrencyEnum.MATIC:
         return (
           <MaticIcon style={{ width: size + 'px', height: size + 'px' }} />
         );
+      default:
+        return <p className="pw-text-sm pw-text-gray-700">{code}</p>;
     }
   };
 

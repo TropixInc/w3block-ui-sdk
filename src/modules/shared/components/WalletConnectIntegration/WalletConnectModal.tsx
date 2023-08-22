@@ -27,7 +27,7 @@ enum StepsVault {
 }
 
 export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const isMobile = useIsMobile();
   const [translate] = useTranslation();
   const [steps, setSteps] = useState(

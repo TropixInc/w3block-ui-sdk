@@ -7,6 +7,7 @@ import {
   breakpointsEnum,
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import { useUserWallet } from '../../shared/hooks/useUserWallet';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import {
@@ -53,6 +54,7 @@ export const StorefrontPreview = ({
 
 const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const context = useContext(ThemeContext);
+  const { setMainCoin } = useUserWallet();
   const { asPath, pushConnect } = useRouterConnect();
   const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
   const [themeListener, setThemeListener] = useState<Theme | null>();
@@ -96,6 +98,25 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
       return () => removeEventListener('click', preventOutsideLinkClick);
     }
   });
+
+  useEffect(() => {
+    const theme = { ...context?.defaultTheme, ...themeListener };
+
+    const configStyleData = theme.configurations?.styleData;
+    const configMobileStyleData = theme.configurations?.mobileStyleData;
+
+    const mergedConfigStyleData = mobileBreakpoints.includes(breakpoint)
+      ? { ...configStyleData, ...configMobileStyleData }
+      : configStyleData;
+
+    if (
+      mergedConfigStyleData?.mainCoin &&
+      mergedConfigStyleData?.mainCoin != ''
+    ) {
+      setMainCoin?.(mergedConfigStyleData.mainCoin);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context?.defaultTheme, themeListener]);
 
   const data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;

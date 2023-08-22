@@ -21,7 +21,7 @@ export const MyProfile = () => {
   const router = useRouterConnect();
   const [showValue, toggleShowValue] = useToggle(false);
   const [translate] = useTranslation();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const isLoading = wallet == undefined;
 
   return (

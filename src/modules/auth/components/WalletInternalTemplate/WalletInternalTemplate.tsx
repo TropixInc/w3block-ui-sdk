@@ -30,7 +30,7 @@ const _WalletInternalTemplate = () => {
   useHasWallet({});
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const router = useRouterConnect();
 
   const isLoading = wallet == undefined;

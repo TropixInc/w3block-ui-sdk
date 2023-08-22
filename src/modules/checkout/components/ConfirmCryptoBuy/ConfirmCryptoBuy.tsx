@@ -40,7 +40,7 @@ export const ConfirmCryptoBuy = ({
   orderInfo,
 }: ConfirmCryptoBuyInterface) => {
   const [status, setStatus] = useState<BuyStatus>(BuyStatus.INITIAL);
-  const { wallet, hasWallet } = useUserWallet();
+  const { mainWallet: wallet, hasWallet } = useUserWallet();
   const [err, setErr] = useState<any>();
   const [tryAgain, setTryAgain] = useState<boolean>(false);
   const [errMessage, setErrMessage] = useState<any>();

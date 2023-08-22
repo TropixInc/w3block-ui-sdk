@@ -37,6 +37,19 @@ export const useProfile = () => {
   );
 };
 
+export const useProfileWithouRedirect = () => {
+  const getW3blockIdSDK = useGetW3blockIdSDK();
+  return usePrivateQuery(
+    [PixwayAPIRoutes.GET_PROFILE],
+    async () => {
+      return (await getW3blockIdSDK()).api.users.getProfileByUserLogged();
+    },
+    {
+      retry: 1,
+    }
+  );
+};
+
 export const usePatchProfile = () => {
   const axios = useAxios(W3blockAPI.ID);
   const { companyId } = useCompanyConfig();

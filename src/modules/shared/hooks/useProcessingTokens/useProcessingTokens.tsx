@@ -20,7 +20,7 @@ interface TokensProccessingInterface {
 }
 
 export const useProcessingTokens = () => {
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const axios = useAxios(W3blockAPI.KEY);
   return useQuery(
     [

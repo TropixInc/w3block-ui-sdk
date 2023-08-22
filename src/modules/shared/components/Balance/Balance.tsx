@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const Balance = ({ showValue = true, classes }: Props) => {
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
 
   const renderIcon = () => {
     return wallet?.chainId === ChainId.Polygon ||

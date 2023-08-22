@@ -26,7 +26,7 @@ export const InternalpageHeaderWithFunds = ({
   const [showValue, toggleShowValue] = useToggle(false);
   useHasWallet({});
   const { data: profile } = useProfile();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
   const router = useRouterConnect();
   const isLoading = wallet == undefined;
 

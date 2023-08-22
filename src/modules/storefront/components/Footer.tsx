@@ -42,7 +42,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
     socialNetworks,
     w3blockSignature,
     margin,
-    padding,
+    // padding,
   } = mergedStyleData;
 
   const { description } = mergedContentData;
@@ -78,7 +78,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
     <div
       style={{
         margin: convertSpacingToCSS(margin),
-        padding: convertSpacingToCSS(padding),
+        // padding: convertSpacingToCSS(padding),
       }}
     >
       <div

@@ -131,3 +131,12 @@ export const isValidCNPJ = (number: string, strict?: boolean): boolean => {
 
   return numbers.substr(-2) === stripped.substr(-2);
 };
+
+export const cleanObject = (obj: any): any => {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] && typeof obj[key] === 'object') cleanObject(obj[key]);
+    else if (obj[key] == null || obj[key] == '') delete obj[key];
+    else if (typeof obj[key] === 'boolean') obj[key] = obj[key] ? 1 : 0;
+  });
+  return obj;
+};

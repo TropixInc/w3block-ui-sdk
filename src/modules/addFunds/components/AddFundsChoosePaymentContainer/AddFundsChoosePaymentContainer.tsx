@@ -7,7 +7,8 @@ import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { BalanceWalletArea } from '../BalanceWalletArea/BalanceWalletArea';
 
 export const AddFundsChoosePaymentContainer = () => {
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
+
   const [translate] = useTranslation();
   const router = useRouterConnect();
   return (
@@ -27,7 +28,7 @@ export const AddFundsChoosePaymentContainer = () => {
         <BalanceWalletArea>
           <p className="pw-text-xs font-montserrat pw-text-[#383857] pw-font-[500]">
             {translate('addFunds>type>totalBalance')}:{' '}
-            <span className="font-bold">R${wallet?.balance ?? 0}</span>
+            <span className="font-bold">{wallet?.balance ?? 0}</span>
           </p>
         </BalanceWalletArea>
       </div>

@@ -95,38 +95,51 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const isAdmin = Boolean(
     userRoles?.includes('admin') || userRoles?.includes('superAdmin') || userRoles?.includes('operator')
   );
+  const isUser = Boolean(userRoles?.includes('user')); 
+  const isLoayaltyOperator = Boolean(userRoles?.includes('loyaltyOperator'));
 
   const items: NavigationMenuTabs[] = [
+    {
+      name: "Dashboard",
+      route: PixwayAppRoutes.LOYALTY_REPORT,
+      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
+      isVisible: isLoayaltyOperator,
+    },
+    {
+      name: "Pagamento",
+      route: PixwayAppRoutes.LOYALTY_PAYMENT,
+      icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
+      isVisible: isLoayaltyOperator,
+    },
     {
       name: translate('header>components>defaultTab>myAccount'),
       route: PixwayAppRoutes.MY_PROFILE,
       icon: <UserIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
     },
     {
       name: translate('header>components>defaultTab>wallet'),
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
     },
     {
       name: translate('header>components>defaultTab>myOrders'),
       route: PixwayAppRoutes.MY_ORDERS,
       icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
     },
     {
       name: translate('header>components>defaultTab>tokenPass'),
       route: PixwayAppRoutes.TOKENPASS,
       icon: <TicketIcon style={{color: textColor, stroke: textColor}} width={17} height={17} />,
       isVisible: pass && isAdmin && hasPassAssociated,
-
     },
     {
       name: translate('components>menu>integration'),
       route: PixwayAppRoutes.CONNECTION,
       icon: <IntegrationIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: true,
+      isVisible: isUser || isAdmin,
     },
     // {
     //   name: translate('header>components>defaultTab>settings'),
@@ -171,7 +184,7 @@ const NavigationMenu = ({
   const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { data: profile } = useProfile();
-  const { wallet } = useUserWallet();
+  const { mainWallet: wallet } = useUserWallet();
 
   const renderIcon = () => {
     return wallet?.chainId === ChainId.Polygon ||

@@ -3,8 +3,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 // import { useQueryClient } from 'react-query';
 
-import { Provider } from '@w3block/pixchain-react-metamask';
-
 import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
 import { useProfile } from '../../../shared';
 import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
@@ -21,7 +19,7 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet';
+import { useWallets } from '../../../shared/hooks/useWallets/useWallets';
 import { claimWalletVault } from '../../api/wallet';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
@@ -98,7 +96,7 @@ const _ConnectExternalWalletWithoutLayout = ({
 
   const conn = !companyId && !token;
 
-  const { connect, claim, connected } = useUserWallet();
+  const { connectMetamask, claim, isConnected } = useWallets();
 
   const onClickConnectToMetamaskExtension = async () => {
     const agent = window.navigator.userAgent ?? '';
@@ -119,7 +117,7 @@ const _ConnectExternalWalletWithoutLayout = ({
     setIsConnecting(true);
 
     try {
-      await connect();
+      await connectMetamask?.();
       setIsConnecting(false);
     } catch (error: any) {
       console.error(error);
@@ -132,7 +130,7 @@ const _ConnectExternalWalletWithoutLayout = ({
     setIsConnecting(true);
 
     try {
-      await claim();
+      await claim?.();
       onCreateWalletSuccessfully();
     } catch (error: any) {
       if (!error?.message || error.message == '') {
@@ -223,7 +221,7 @@ const _ConnectExternalWalletWithoutLayout = ({
         <div className="pw-mt-6">
           <ConnectToMetamaskButton
             onClick={
-              connected
+              isConnected
                 ? onClickConnectMetamaskWallet
                 : onClickConnectToMetamaskExtension
             }
@@ -294,7 +292,7 @@ const _ConnectExternalWalletWithoutLayout = ({
             <AuthButton
               disabled={isConnecting}
               onClick={
-                connected
+                isConnected
                   ? () => mailInterceptor(onClickConnectMetamaskWallet)
                   : () => mailInterceptor(onClickConnectToMetamaskExtension)
               }
@@ -319,7 +317,6 @@ const _ConnectExternalWalletWithoutLayout = ({
   );
 };
 
-const MetamaskProvider = Provider as any;
 export const ConnectExternalWalletWithoutLayout = ({
   redirectRoute = PixwayAppRoutes.HOME,
   redirectLink,
@@ -328,20 +325,14 @@ export const ConnectExternalWalletWithoutLayout = ({
 }: ConnectExternalWalletWithoutLayoutProps) => {
   return (
     <TranslatableComponent>
-      <MetamaskProvider
-        dappConfig={{
-          autoConnect: true,
-        }}
-      >
-        <MailVerifiedInterceptorProvider code={true}>
-          <_ConnectExternalWalletWithoutLayout
-            forceVault={forceVault}
-            redirectRoute={redirectRoute}
-            tenantName={tenantName}
-            redirectLink={redirectLink}
-          />
-        </MailVerifiedInterceptorProvider>
-      </MetamaskProvider>
+      <MailVerifiedInterceptorProvider code={true}>
+        <_ConnectExternalWalletWithoutLayout
+          forceVault={forceVault}
+          redirectRoute={redirectRoute}
+          tenantName={tenantName}
+          redirectLink={redirectLink}
+        />
+      </MailVerifiedInterceptorProvider>
     </TranslatableComponent>
   );
 };

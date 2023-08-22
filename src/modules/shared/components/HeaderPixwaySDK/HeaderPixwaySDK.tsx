@@ -1,6 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 
-import { Provider } from '@w3block/pixchain-react-metamask';
 import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
@@ -258,17 +257,10 @@ const _HeaderPixwaySDK = ({
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const MetamaskProvider = Provider as any;
 export const HeaderPixwaySDK = (props: HeaderPixwaySDKProps) => (
   <TranslatableComponent>
-    <MetamaskProvider
-      dappConfig={{
-        autoConnect: true,
-      }}
-    >
-      <AttachWalletProvider>
-        <_HeaderPixwaySDK {...props} />
-      </AttachWalletProvider>
-    </MetamaskProvider>
+    <AttachWalletProvider>
+      <_HeaderPixwaySDK {...props} />
+    </AttachWalletProvider>
   </TranslatableComponent>
 );
