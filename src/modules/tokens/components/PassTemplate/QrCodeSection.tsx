@@ -4,29 +4,23 @@ import { Trans } from 'react-i18next';
 import { add } from 'date-fns';
 import { QRCodeSVG } from 'qrcode.react';
 
-import { PassDates } from '../../../pass/interfaces/PassDates';
 import { useProfile } from '../../../shared';
 import { Spinner } from '../../../shared/components/Spinner';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { TokenUsageTime } from './TokenUsageTime';
 interface iQrCodeSection {
-  eventDate?: PassDates;
   hasExpired?: boolean;
   editionNumber: string;
   secret: string;
   isDynamic: boolean;
-  hasExpiration: boolean;
   benefitId: string;
 }
 
 export const QrCodeSection = ({
-  eventDate,
   editionNumber,
   hasExpired,
   secret,
   isDynamic,
-  hasExpiration,
   benefitId,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState('');
@@ -46,7 +40,7 @@ export const QrCodeSection = ({
   return hasExpired ? (
     <></>
   ) : (
-    <div className="pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px] pw-max-w-full">
+    <div className="pw-border-y pw-border-[#EFEFEF] pw-mt-2 pw-py-[16px] pw-max-w-full">
       <div className="pw-flex pw-flex-col pw-gap-[12px] sm:pw-gap-[16px] pw-p-[16px] sm:pw-px-[24px]">
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
           {codeQr === '' ? (
@@ -79,9 +73,6 @@ export const QrCodeSection = ({
           )}
         </div>
       </div>
-      {eventDate && (
-        <TokenUsageTime hasExpiration={hasExpiration} date={eventDate} />
-      )}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BenefitStatus } from '../enums/BenefitStatus';
 
 export interface BenefitAddress {
@@ -21,8 +22,7 @@ export interface PassBenefitDTO {
   useLimit: number;
   eventStartsAt: string;
   eventEndsAt?: string;
-  checkInStartsAt?: string;
-  checkInEndsAt?: string;
+  checkIn?: any;
   linkUrl: string;
   tokenPass: TokenPassEntity;
   tokenPassId: string;

@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { JSX } from 'react/jsx-runtime';
 
 import classNames from 'classnames';
 import { format, getDay, isSameDay } from 'date-fns';
@@ -17,6 +18,7 @@ import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/ar
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import { Alert } from '../../../shared/components/Alert';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
 import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -26,6 +28,7 @@ import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { Button } from '../Button';
 import { DetailPass } from './DetailPass';
@@ -116,6 +119,12 @@ const _PassTemplate = ({
     isLoading: isLoadingBenefit,
   } = useGetPassBenefitById(benefitId);
 
+  const { data: collectionData, isLoading: collectionLoading } =
+    useGetCollectionMetadata({
+      id: benefit?.data.tokenPassId ?? '',
+      query: { limit: 50 },
+    });
+
   const {
     data: publicTokenResponse,
     isSuccess: isTokenSucceed,
@@ -123,7 +132,11 @@ const _PassTemplate = ({
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
     chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
-    tokenId,
+    tokenId:
+      tokenId ??
+      collectionData?.items.filter(
+        (val) => val.ownerAddress === profile?.data.mainWallet?.address
+      )[0]?.tokenId,
   });
 
   const editionNumber = useMemo(() => {
@@ -164,7 +177,7 @@ const _PassTemplate = ({
     secret: secret?.data?.secret,
     userId: profile?.data?.id || '',
     editionNumber: editionNumber,
-    enabled: secret?.data?.secret !== '',
+    enabled: secret?.data?.secret !== '' && benefit?.data?.allowSelfUse,
   });
 
   useEffect(() => {
@@ -192,7 +205,7 @@ const _PassTemplate = ({
 
   const waitCheckin =
     secret?.data?.statusCode === 400 &&
-    secret?.data?.message?.includes('has check-in');
+    secret?.data?.message?.includes('check-in');
 
   const reachedUsageLimit =
     secret?.data?.statusCode === 400 &&
@@ -255,8 +268,6 @@ const _PassTemplate = ({
     },
   ];
 
-  const hasExpiration = benefit?.data?.eventEndsAt ? true : false;
-
   const isSingleDate =
     benefit &&
     benefit?.data?.eventEndsAt &&
@@ -284,6 +295,139 @@ const _PassTemplate = ({
 
   const isSecretError = secret?.data?.error;
 
+  const renderCheckInTime = () => {
+    const weekDay = {
+      'pt-BR': {
+        sun: 'Domingo',
+        mon: 'Segunda-feira',
+        tue: 'Terça-feira',
+        wed: 'Quarta-feira',
+        thu: 'Quinta-feira',
+        fri: 'Sexta-feira',
+        sat: 'Sábado',
+        all: 'Todos os dias',
+      },
+      en: {
+        sun: 'Sunday',
+        mon: 'Monday',
+        tue: 'Tuesday',
+        wed: 'Wednesday',
+        thu: 'Thursday',
+        fri: 'Friday',
+        sat: 'Saturday',
+        all: 'All days',
+      },
+    };
+
+    const weekDay1 = {
+      'pt-BR': [
+        'domingo',
+        'segunda-feira',
+        'terça-feira',
+        'quarta-feira',
+        'quinta-feira',
+        'sexta-feira',
+        'sábado',
+      ],
+      en: [
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+      ],
+    };
+
+    const ordinal = {
+      'pt-BR': ['primeira', 'segunda', 'terceira', 'quarta'],
+      en: ['first', 'second', 'third', 'fourth'],
+    };
+
+    type Week = 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'all';
+    const response: JSX.Element[] = [];
+    Object.keys(benefit?.data?.checkIn ?? {}).forEach((val) => {
+      response.push(
+        val !== 'special' ? (
+          <div className="pw-flex">
+            <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+              {weekDay[locale][val as Week]}
+            </p>
+            <div>
+              {benefit?.data?.checkIn?.[val]?.map(
+                (val: { start: string; end: string }) => {
+                  return (
+                    <p
+                      key={val.start}
+                      className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]"
+                    >
+                      {val?.start && ': ' + val.start}
+                      {val?.end && ' - ' + val.end}
+                    </p>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        ) : (
+          benefit?.data?.checkIn?.[val]?.map(
+            (val: {
+              start: string;
+              end: string;
+              data: { nthWeek: number; weekday: number };
+            }) => {
+              return (
+                <div key={val.start} className="pw-flex">
+                  <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                    {locale == 'en' ? (
+                      <>
+                        Every {ordinal[locale][val.data.nthWeek]}{' '}
+                        {weekDay1[locale][val.data.weekday]} of the month
+                      </>
+                    ) : (
+                      <>
+                        Toda {ordinal[locale][val.data.nthWeek]} semana do mês
+                        na {weekDay1[locale][val.data.weekday]}
+                      </>
+                    )}
+                  </p>
+                  <div>
+                    <p className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]">
+                      {val?.start && ': ' + val.start}
+                      {val?.end && ' - ' + val.end}
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+          )
+        )
+      );
+    });
+
+    return response;
+  };
+
+  useEffect(() => {
+    if (
+      collectionData?.items.filter(
+        (val) => val.ownerAddress === profile?.data.mainWallet?.address
+      ).length === 1
+    ) {
+      router.pushConnect(
+        PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', benefitId).concat(
+          `?tokenId=${
+            collectionData?.items.filter(
+              (val) => val.ownerAddress === profile?.data.mainWallet?.address
+            )[0].tokenId
+          }`
+        )
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collectionData?.items]);
+
   if (
     isLoadingBenefit ||
     isLoadingBenefitsResponse ||
@@ -296,7 +440,7 @@ const _PassTemplate = ({
       </div>
     );
   }
-  if (pass) {
+  if (tokenId) {
     return (
       <div className="pw-mx-[22px] sm:pw-mx-0">
         <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
@@ -416,60 +560,49 @@ const _PassTemplate = ({
                     )}
                 </div>
               </div>
-              {(isInactive || isUnavaible) && !reachedUsageLimit && (
-                <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-[16px] pw-pt-[16px] pw-px-[24px] pw-border-t pw-border-[#EFEFEF]">
-                  <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
-                    {benefit?.data?.eventEndsAt
-                      ? translate('token>pass>useThisTokenUntil')
-                      : translate('token>pass>useThisTokenFrom')}
-                    <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                      {format(
-                        new Date(benefit?.data?.eventStartsAt || ''),
+              {!isSecretError &&
+                !isInactive &&
+                !isUnavaible &&
+                isBenefitSucceed &&
+                isTokenSucceed && (
+                  <QrCodeSection
+                    hasExpired={hasExpired}
+                    editionNumber={
+                      publicTokenResponse?.data?.edition
+                        ?.currentNumber as string
+                    }
+                    benefitId={benefitId}
+                    secret={secret?.data?.secret}
+                    isDynamic={isDynamic ?? false}
+                  />
+                )}
+              <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-pt-[16px] pw-px-[24px]">
+                <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
+                  {benefit?.data?.eventEndsAt
+                    ? translate('token>pass>useThisTokenUntil')
+                    : translate('token>pass>useThisTokenFrom')}
+                  <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                    {benefit?.data?.eventStartsAt &&
+                      format(
+                        new Date(benefit?.data?.eventStartsAt),
                         'dd/MM/yyyy'
                       )}
-                      {benefit?.data?.eventEndsAt &&
-                        translate('token>pass>until') +
-                          format(
-                            new Date(benefit?.data?.eventEndsAt || ''),
-                            'dd/MM/yyyy'
-                          )}
-                    </span>
-                  </div>
-                  {benefit?.data?.checkInStartsAt && (
-                    <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center pw-mt-5">
-                      {translate('token>pass>checkinAvaibleAt')}
-                      <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                        {benefit?.data?.checkInStartsAt?.slice(0, 5)}
-                        {benefit?.data?.checkInEndsAt &&
-                          ' - ' + benefit?.data?.checkInEndsAt?.slice(0, 5)}
-                      </span>
-                    </div>
-                  )}
+                    {benefit?.data?.eventEndsAt &&
+                      translate('token>pass>until') +
+                        format(
+                          new Date(benefit?.data?.eventEndsAt),
+                          'dd/MM/yyyy'
+                        )}
+                  </span>
                 </div>
-              )}
+                {benefit?.data?.checkIn && (
+                  <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center pw-mt-5">
+                    {translate('token>pass>checkinAvaibleAt')}
+                    {renderCheckInTime()}
+                  </div>
+                )}
+              </div>
             </div>
-            {!isSecretError &&
-              !isInactive &&
-              !isUnavaible &&
-              isBenefitSucceed &&
-              isTokenSucceed && (
-                <QrCodeSection
-                  eventDate={{
-                    startDate: new Date(benefit?.data?.eventStartsAt),
-                    endDate: new Date(benefit?.data?.eventEndsAt ?? ''),
-                    checkInEnd: benefit?.data?.checkInEndsAt,
-                    checkInStart: benefit?.data?.checkInStartsAt,
-                  }}
-                  hasExpiration={hasExpiration}
-                  hasExpired={hasExpired}
-                  editionNumber={
-                    publicTokenResponse?.data?.edition?.currentNumber as string
-                  }
-                  benefitId={benefitId}
-                  secret={secret?.data?.secret}
-                  isDynamic={isDynamic ?? false}
-                />
-              )}
           </div>
 
           {benefit?.data?.allowSelfUse && (
@@ -588,7 +721,162 @@ const _PassTemplate = ({
       </div>
     );
   } else {
-    return null;
+    return (
+      <div className="pw-px-4 sm:pw-px-0">
+        {collectionLoading ||
+        collectionData?.items.filter(
+          (val) => val.ownerAddress === profile?.data.mainWallet?.address
+        ).length === 1 ? (
+          <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+            <Spinner />
+          </div>
+        ) : (
+          <>
+            <div className="pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
+              <div
+                className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
+                onClick={() => router.back()}
+              >
+                <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
+
+                <p className="sm:pw-hidden pw-block">
+                  {translate('token>pass>title')}
+                </p>
+                <p className="pw-hidden sm:pw-block">
+                  {translate('token>pass>back')}
+                </p>
+              </div>
+              <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
+                {translate('token>pass>title')}
+              </div>
+              <div className="pw-flex pw-flex-col">
+                <div className="pw-flex pw-flex-col pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
+                  <div className="pw-flex pw-gap-[16px] pw-px-[16px]">
+                    {eventDate !== undefined && (
+                      <>
+                        <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
+                          <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
+                            {shortDay[locale][getDay(eventDate)]}
+                          </div>
+                          <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
+                            {format(eventDate, 'dd MMM yyyy')}
+                          </div>
+                          <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945] pw-text-center">
+                            {format(eventDate, "HH'h'mm")}
+                          </div>
+                        </div>
+                        <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
+                      </>
+                    )}
+                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                      {benefit?.data.tokenPass.tokenName} - {benefit?.data.name}
+                    </div>
+                  </div>
+                  <div className="pw-p-4">
+                    {collectionData?.items.filter(
+                      (val) =>
+                        val.ownerAddress === profile?.data.mainWallet?.address
+                    ).length === 0 ? (
+                      <p className="pw-text-black pw-text-base pw-font-semibold">
+                        Você não possui nenhum token com este benefício.
+                      </p>
+                    ) : (
+                      <>
+                        <p className="pw-text-black pw-text-base pw-font-medium">
+                          Você possui mais de um token com{' '}
+                          <b>{benefit?.data.name}</b> disponível:{' '}
+                        </p>
+                        {collectionData?.items
+                          .filter(
+                            (val) =>
+                              val.ownerAddress ===
+                              profile?.data.mainWallet?.address
+                          )
+                          .map((val) => {
+                            return (
+                              <div
+                                key={val.id}
+                                className="pw-flex pw-flex-row pw-items-center pw-gap-5 pw-border-b pw-border-[#EFEFEF] pw-p-3"
+                              >
+                                <ImageSDK
+                                  src={val.mainImage}
+                                  className="pw-h-[120px]"
+                                />
+                                <div className="pw-flex pw-flex-col">
+                                  <p className="pw-text-black pw-text-base pw-mb-2">
+                                    Edição: #{val.editionNumber}
+                                  </p>
+                                  <Button
+                                    className="pw-w-full"
+                                    onClick={() =>
+                                      router.pushConnect(
+                                        PixwayAppRoutes.USE_BENEFIT.replace(
+                                          '{benefitId}',
+                                          benefitId
+                                        ).concat(`?tokenId=${val.tokenId}`)
+                                      )
+                                    }
+                                  >
+                                    {translate(
+                                      'token>pass>benefits>useBenefit'
+                                    )}
+                                  </Button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </>
+                    )}
+                  </div>
+                  <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-px-[24px]">
+                    <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
+                      {benefit?.data?.eventEndsAt
+                        ? translate('token>pass>useThisTokenUntil')
+                        : translate('token>pass>useThisTokenFrom')}
+                      <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                        {benefit?.data?.eventStartsAt &&
+                          format(
+                            new Date(benefit?.data?.eventStartsAt),
+                            'dd/MM/yyyy'
+                          )}
+                        {benefit?.data?.eventEndsAt &&
+                          translate('token>pass>until') +
+                            format(
+                              new Date(benefit?.data?.eventEndsAt),
+                              'dd/MM/yyyy'
+                            )}
+                      </span>
+                    </div>
+                    {benefit?.data?.checkIn && (
+                      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center pw-mt-5">
+                        {translate('token>pass>checkinAvaibleAt')}
+                        {renderCheckInTime()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <>
+                <DetailsTemplate
+                  title={translate('token>pass>detailsPass')}
+                  autoExpand={true}
+                >
+                  <DetailPass
+                    title={translate('token>pass>description')}
+                    description={benefit?.data?.description ?? ''}
+                  />
+
+                  <DetailPass
+                    title={translate('token>pass>rules')}
+                    description={benefit?.data?.rules ?? ''}
+                  />
+                </DetailsTemplate>
+              </>
+            </div>
+          </>
+        )}
+      </div>
+    );
   }
 };
 
