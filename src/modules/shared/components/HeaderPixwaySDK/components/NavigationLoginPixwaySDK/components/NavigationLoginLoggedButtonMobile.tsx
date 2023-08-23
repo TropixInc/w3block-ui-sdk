@@ -3,7 +3,6 @@ import { useCopyToClipboard } from 'react-use';
 
 import { ChainId, WalletTypes } from '@w3block/sdk-id';
 
-import { useLoyaltiesInfo } from '../../../../../../business/hooks/useLoyaltiesInfo';
 import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
 import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
@@ -57,7 +56,6 @@ export const NavigationLoginLoggedButtonMobile = ({
   };
   const menuTabs = _menuTabs ?? defaultTabs;
   const validatorOpened = menuOpened ? menuOpened : userMenu;
-  const { loyalties } = useLoyaltiesInfo();
   const isUser =
     (profile?.roles?.includes('user') ||
       profile?.roles?.includes('admin') ||
@@ -72,6 +70,8 @@ export const NavigationLoginLoggedButtonMobile = ({
       <ETHIcon className="pw-fill-black" />
     );
   };
+
+  const { loyaltyWallet } = useUserWallet();
 
   const WithWallet = () => {
     return (
@@ -142,7 +142,7 @@ export const NavigationLoginLoggedButtonMobile = ({
             ) : null}
           </div>
           <div className="pw-flex pw-justify-center ">
-            {isUser && loyalties && loyalties.length > 0 ? (
+            {isUser && loyaltyWallet && loyaltyWallet.length ? (
               <button
                 onClick={() => setAuthenticatePayemntModal?.(true)}
                 className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"

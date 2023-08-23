@@ -7,7 +7,6 @@ import { format } from 'date-fns/esm';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
-import { useLoyaltiesInfo } from '../../../business/hooks/useLoyaltiesInfo';
 import useGetPassByUser from '../../../pass/hooks/useGetPassByUser';
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
@@ -50,7 +49,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
   const router = useRouterConnect();
   const isProduction = useIsProduction();
-  const { loyalties } = useLoyaltiesInfo();
   const [translate] = useTranslation();
   const { setAuthenticatePayemntModal } = useUserWallet();
   const [state, copyToClipboard] = useCopyToClipboard();
@@ -62,6 +60,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const [tabsToShow, setTabsToShow] = useState(tabs);
   const { pass } = useFlags();
   const { data: passData } = useGetPassByUser();
+  const { loyaltyWallet } = useUserWallet();
   const hasPassAssociated =
     passData?.data.items !== undefined && passData?.data?.items?.length > 0;
 
@@ -118,7 +117,8 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
         ),
         link: PixwayAppRoutes.WALLET_RECEIPT,
-        isVisible: (isUser || isAdmin) && loyalties && loyalties.length > 0,
+        isVisible:
+          (isUser || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0,
         sub: true,
       },
       {
@@ -250,7 +250,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
               '-'
             )}
           </div>
-          {!isLoayaltyOperator && loyalties && loyalties.length > 0 ? (
+          {!isLoayaltyOperator && loyaltyWallet && loyaltyWallet.length > 0 ? (
             <div className="pw-flex pw-justify-center ">
               <button
                 onClick={() =>
