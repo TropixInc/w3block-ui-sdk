@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Cards from 'react-credit-cards-2';
 
+import cardValidator from 'card-validator';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
@@ -413,18 +414,7 @@ export const CheckoutPaymentComponent = ({
 };
 
 function isValidCreditCard(number: string): boolean {
-  //const { isValid } = cardValidator.number(number);
-  const visaRegEx = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
-  const mastercardRegEx = /^(?:5[1-5][0-9]{14})$/;
-  const amexpRegEx = /^(?:3[47][0-9]{13})$/;
-  const discovRegEx = /^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/;
-  let isValid = false;
-
-  if (visaRegEx.test(number)) isValid = true;
-  else if (mastercardRegEx.test(number)) isValid = true;
-  else if (amexpRegEx.test(number)) isValid = true;
-  else if (discovRegEx.test(number)) isValid = true;
-  else isValid = false;
+  const { isValid } = cardValidator.number(number);
 
   return isValid;
 }
