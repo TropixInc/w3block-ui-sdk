@@ -36,6 +36,7 @@
     "@types/validator": "^13.7.11",
     "@w3block/sdk-id": "^0.1.63",
     "axios": "^0.27.2",
+    "card-validator": "^8.1.1",
     "classnames": "^2.3.1",
     "cpf-cnpj-validator": "^1.0.3",
     "date-fns": "2.29.1",

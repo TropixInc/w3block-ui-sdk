@@ -11,6 +11,8 @@ import { AvailableInstallmentInfo } from '../../interface/interface';
 import { CheckoutCustomizableInput } from '../CheckoutCustomizableInput/CheckoutCustomizableInput';
 import { CheckoutInstalments } from '../CheckoutInstallments/CheckoutInstalments';
 import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
+
+import cardValidator from 'card-validator';
 interface CheckoutPaymentComponentProps {
   inputs: INPUTS_POSSIBLE[];
   installments?: AvailableInstallmentInfo[];
@@ -412,17 +414,18 @@ export const CheckoutPaymentComponent = ({
 };
 
 function isValidCreditCard(number: string): boolean {
-  const visaRegEx = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
-  const mastercardRegEx = /^(?:5[1-5][0-9]{14})$/;
-  const amexpRegEx = /^(?:3[47][0-9]{13})$/;
-  const discovRegEx = /^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/;
-  let isValid = false;
+  const { isValid } = cardValidator.number(number);
+  // const visaRegEx = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
+  // const mastercardRegEx = /^(?:5[1-5][0-9]{14})$/;
+  // const amexpRegEx = /^(?:3[47][0-9]{13})$/;
+  // const discovRegEx = /^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/;
+  // let isValid = false;
 
-  if (visaRegEx.test(number)) isValid = true;
-  else if (mastercardRegEx.test(number)) isValid = true;
-  else if (amexpRegEx.test(number)) isValid = true;
-  else if (discovRegEx.test(number)) isValid = true;
-  else isValid = false;
+  // if (visaRegEx.test(number)) isValid = true;
+  // else if (mastercardRegEx.test(number)) isValid = true;
+  // else if (amexpRegEx.test(number)) isValid = true;
+  // else if (discovRegEx.test(number)) isValid = true;
+  // else isValid = false;
 
   return isValid;
 }
