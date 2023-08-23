@@ -161,7 +161,14 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     if (!tabs) setTabsToShow(tabsDefault);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pass, profile]);
+  }, [
+    pass,
+    profile,
+    loyaltyWallet,
+    isAdmin,
+    hasPassAssociated,
+    isLoayaltyOperator,
+  ]);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);
