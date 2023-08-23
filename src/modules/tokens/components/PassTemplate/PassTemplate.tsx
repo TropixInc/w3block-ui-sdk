@@ -13,7 +13,11 @@ import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
 import usePostSelfUseBenefit from '../../../pass/hooks/usePostSelfUseBenefit';
 import useVerifyBenefit from '../../../pass/hooks/useVerifyBenefit';
 import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
-import { InternalPagesLayoutBase, useProfile } from '../../../shared';
+import {
+  InternalPagesLayoutBase,
+  useHasWallet,
+  useProfile,
+} from '../../../shared';
 import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
@@ -26,6 +30,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
@@ -350,19 +355,20 @@ const _PassTemplate = ({
     Object.keys(benefit?.data?.checkIn ?? {}).forEach((val) => {
       response.push(
         val !== 'special' ? (
-          <div className="pw-flex">
+          <div key={val} className="pw-flex sm:pw-flex-row pw-flex-col">
             <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
               {weekDay[locale][val as Week]}
             </p>
-            <div>
+            <div className="pw-flex">
               {benefit?.data?.checkIn?.[val]?.map(
-                (val: { start: string; end: string }) => {
+                (val: { start: string; end: string }, index: number) => {
                   return (
                     <p
                       key={val.start}
                       className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]"
                     >
-                      {val?.start && ': ' + val.start}
+                      {index > 0 ? ', ' : ': '}
+                      {val.start}
                       {val?.end && ' - ' + val.end}
                     </p>
                   );
@@ -372,30 +378,30 @@ const _PassTemplate = ({
           </div>
         ) : (
           benefit?.data?.checkIn?.[val]?.map(
-            (val: {
+            (value: {
               start: string;
               end: string;
               data: { nthWeek: number; weekday: number };
             }) => {
               return (
-                <div key={val.start} className="pw-flex">
+                <div key={val} className="pw-flex sm:pw-flex-row pw-flex-col">
                   <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
                     {locale == 'en' ? (
                       <>
-                        Every {ordinal[locale][val.data.nthWeek]}{' '}
-                        {weekDay1[locale][val.data.weekday]} of the month
+                        Every {ordinal[locale][value.data.nthWeek]}{' '}
+                        {weekDay1[locale][value.data.weekday]} of the month
                       </>
                     ) : (
                       <>
-                        Toda {ordinal[locale][val.data.nthWeek]} semana do mês
-                        na {weekDay1[locale][val.data.weekday]}
+                        Toda {ordinal[locale][value.data.nthWeek]} semana do mês
+                        na {weekDay1[locale][value.data.weekday]}
                       </>
                     )}
                   </p>
                   <div>
                     <p className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]">
-                      {val?.start && ': ' + val.start}
-                      {val?.end && ' - ' + val.end}
+                      {value?.start && ': ' + value.start}
+                      {value?.end && ' - ' + value.end}
                     </p>
                   </div>
                 </div>
@@ -406,6 +412,22 @@ const _PassTemplate = ({
       );
     });
 
+    const sorter = {
+      sun: 0,
+      mon: 1,
+      tue: 2,
+      wed: 3,
+      thu: 4,
+      fri: 5,
+      sat: 6,
+      all: 7,
+      special: 8,
+    };
+    response.sort((a, b) => {
+      const day1 = a.key as Week;
+      const day2 = b.key as Week;
+      return sorter[day1] - sorter[day2];
+    });
     return response;
   };
 
@@ -576,8 +598,8 @@ const _PassTemplate = ({
                     isDynamic={isDynamic ?? false}
                   />
                 )}
-              <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-pt-[16px] pw-px-[24px]">
-                <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
+              <div className="pw-w-full pw-flex pw-flex-col pw-pt-[16px] pw-px-[16px]">
+                <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px]">
                   {benefit?.data?.eventEndsAt
                     ? translate('token>pass>useThisTokenUntil')
                     : translate('token>pass>useThisTokenFrom')}
@@ -596,7 +618,7 @@ const _PassTemplate = ({
                   </span>
                 </div>
                 {benefit?.data?.checkIn && (
-                  <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center pw-mt-5">
+                  <div className="pw-flex pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
                     {translate('token>pass>checkinAvaibleAt')}
                     {renderCheckInTime()}
                   </div>
@@ -828,8 +850,8 @@ const _PassTemplate = ({
                       </>
                     )}
                   </div>
-                  <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-px-[24px]">
-                    <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center">
+                  <div className="pw-w-full pw-flex pw-flex-col pw-px-[16px]">
+                    <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px]">
                       {benefit?.data?.eventEndsAt
                         ? translate('token>pass>useThisTokenUntil')
                         : translate('token>pass>useThisTokenFrom')}
@@ -848,7 +870,7 @@ const _PassTemplate = ({
                       </span>
                     </div>
                     {benefit?.data?.checkIn && (
-                      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-text-center pw-mt-5">
+                      <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
                         {translate('token>pass>checkinAvaibleAt')}
                         {renderCheckInTime()}
                       </div>
@@ -880,10 +902,17 @@ const _PassTemplate = ({
   }
 };
 
-export const PassTemplate = () => (
-  <TranslatableComponent>
-    <InternalPagesLayoutBase>
-      <_PassTemplate />
-    </InternalPagesLayoutBase>
-  </TranslatableComponent>
-);
+export const PassTemplate = () => {
+  const { isAuthorized, isLoading } = usePrivateRoute();
+  useHasWallet({});
+  if (!isAuthorized || isLoading) {
+    return null;
+  }
+  return (
+    <TranslatableComponent>
+      <InternalPagesLayoutBase>
+        <_PassTemplate />
+      </InternalPagesLayoutBase>
+    </TranslatableComponent>
+  );
+};

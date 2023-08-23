@@ -22,7 +22,7 @@ export const TableDefault = ({
   headerTextColor = 'white',
 }: TableDefaultProps) => {
   return (
-    <div className={`pw-w-full pw-rounded-lg pw-overflow-hidden ${className}`}>
+    <div className={`pw-w-full pw-rounded-lg pw-overflow-auto ${className}`}>
       <table className={`pw-w-full`}>
         <tr
           style={{

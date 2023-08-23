@@ -7,6 +7,7 @@ import { format } from 'date-fns/esm';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
+import { useLoyaltiesInfo } from '../../../business/hooks/useLoyaltiesInfo';
 import useGetPassByUser from '../../../pass/hooks/useGetPassByUser';
 import { ReactComponent as CopyIcon } from '../../assets/icons/copyIconOutlined.svg';
 import { ReactComponent as CardIcon } from '../../assets/icons/creditCardOutlined.svg';
@@ -49,6 +50,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
   const router = useRouterConnect();
   const isProduction = useIsProduction();
+  const { loyalties } = useLoyaltiesInfo();
   const [translate] = useTranslation();
   const { setAuthenticatePayemntModal } = useUserWallet();
   const [state, copyToClipboard] = useCopyToClipboard();
@@ -116,7 +118,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
         ),
         link: PixwayAppRoutes.WALLET_RECEIPT,
-        isVisible: isUser || isAdmin,
+        isVisible: (isUser || isAdmin) && loyalties && loyalties.length > 0,
         sub: true,
       },
       {
@@ -211,7 +213,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         className
       )}
     >
-      <div>
+      <div className="pw-w-full">
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-10">
           <ImageSDK
             className="pw-rounded-full pw-w-[180px] pw-h-[180px] pw-mb-[20px] pw-object-cover"
@@ -220,7 +222,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
             fit="fill"
             src={profileWithKYC?.avatarSrc ?? ''}
           />
-          <p className="pw-text-center pw-font-poppins pw-text-2xl pw-font-semibold pw-text-[#35394C] pw-mx-auto pw-mb-2 pw-truncate">
+          <p className="pw-text-center pw-font-poppins pw-text-2xl pw-font-semibold pw-text-[#35394C] pw-mx-auto pw-mb-2 pw-truncate pw-w-full">
             {profile?.data.name}
           </p>
 
@@ -248,7 +250,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
               '-'
             )}
           </div>
-          {!isLoayaltyOperator && (
+          {!isLoayaltyOperator && loyalties && loyalties.length > 0 ? (
             <div className="pw-flex pw-justify-center ">
               <button
                 onClick={() =>
@@ -262,7 +264,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
                 Autenticar
               </button>
             </div>
-          )}
+          ) : null}
         </div>
 
         <ul className="pw-mx-auto pw-w-[248px]">

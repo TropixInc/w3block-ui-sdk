@@ -48,7 +48,7 @@ const _LinkAccountTemplate = () => {
 
   const collections = productCollectionId.split('|');
 
-  const userHasProduct = tokens.some((data) => {
+  const userHasProduct = tokens.some((data: any) => {
     return collections.some((col) => {
       return data?.collectionData?.id === col;
     });

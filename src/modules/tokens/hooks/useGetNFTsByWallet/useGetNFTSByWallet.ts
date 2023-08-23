@@ -57,7 +57,7 @@ export const useGetNFTSByWallet = (chainId: number | undefined) => {
   const address = profile?.data?.mainWallet?.address;
 
   return usePaginatedPrivateQuery<NFTByWalletDTO>(
-    [PixwayAPIRoutes.NFTS_BY_WALLET, address as string, chainId ?? ''],
+    [PixwayAPIRoutes.NFTS_BY_WALLET, address as string, chainId!],
     () => {
       return axios.get(
         PixwayAPIRoutes.NFTS_BY_WALLET.replace(
