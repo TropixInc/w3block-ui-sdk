@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.2-alpha.1...v1.8.0-alpha.0) (2023-08-23)
+
+
+### Features
+
+* changes on checkIn and listing benefits ([#221](https://github.com/TropixInc/w3block-ui-sdk/issues/221)) ([b651e4b](https://github.com/TropixInc/w3block-ui-sdk/commit/b651e4bafd09dceec2553d2ba191e621fd473b57))
+
 ### [1.7.2-alpha.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.2-alpha.0...v1.7.2-alpha.1) (2023-08-18)
 
 ### [1.7.2-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.7.1...v1.7.2-alpha.0) (2023-08-18)
