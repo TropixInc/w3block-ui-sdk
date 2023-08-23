@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "1.8.3-alpha.0",
+  "version": "1.8.3",
   "type": "module",
   "files": [
     "dist"
