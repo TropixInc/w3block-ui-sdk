@@ -47,13 +47,15 @@ export const WalletStatementTemplateSDK = () => {
             }}
           />
         ))}
-        <div className="pw-mt-4">
-          <Pagination
-            pagesQuantity={data?.meta.totalPages ?? 0}
-            currentPage={actualPage}
-            onChangePage={setActualPage}
-          />
-        </div>
+        {data?.meta && data?.meta?.totalPages > 1 ? (
+          <div className="pw-mt-4">
+            <Pagination
+              pagesQuantity={data?.meta.totalPages ?? 0}
+              currentPage={actualPage}
+              onChangePage={setActualPage}
+            />
+          </div>
+        ) : null}
       </div>
     </InternalPagesLayoutBase>
   );

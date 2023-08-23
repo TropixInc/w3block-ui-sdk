@@ -3,12 +3,13 @@ import { useCopyToClipboard } from 'react-use';
 
 import { ChainId, WalletTypes } from '@w3block/sdk-id';
 
+import { useLoyaltiesInfo } from '../../../../../../business/hooks/useLoyaltiesInfo';
 import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
 import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
-import { useProfile } from '../../../../../hooks/useProfile/useProfile';
+import { useProfileWithKYC } from '../../../../../hooks/useProfileWithKYC/useProfileWithKYC';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
@@ -38,6 +39,7 @@ export const NavigationLoginLoggedButtonMobile = ({
   const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
   const router = useRouterConnect();
+  const { profile } = useProfileWithKYC();
   const { mainWallet: wallet } = useUserWallet();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
@@ -55,8 +57,12 @@ export const NavigationLoginLoggedButtonMobile = ({
   };
   const menuTabs = _menuTabs ?? defaultTabs;
   const validatorOpened = menuOpened ? menuOpened : userMenu;
-
-  const { data: profile } = useProfile();
+  const { loyalties } = useLoyaltiesInfo();
+  const isUser =
+    (profile?.roles?.includes('user') ||
+      profile?.roles?.includes('admin') ||
+      profile?.roles?.includes('superAdmin')) &&
+    !profile?.roles?.includes('loyaltyOperator');
 
   const renderIcon = () => {
     return wallet?.chainId === ChainId.Polygon ||
@@ -115,14 +121,14 @@ export const NavigationLoginLoggedButtonMobile = ({
       {validatorOpened ? (
         <div className="pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center">
           <p className="pw-text-xs pw-font-[400]">
-            {translate('header>logged>hiWallet', { name: profile?.data?.name })}
+            {translate('header>logged>hiWallet', { name: profile?.name })}
           </p>
           <div
-            onClick={() => copyAddress(profile?.data.mainWallet?.address || '')}
+            onClick={() => copyAddress(profile?.mainWallet?.address || '')}
             className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
             <p className="pw-text-xs pw-font-[400] pw-cursor-pointer">
-              {profile?.data.mainWallet?.address || '-'}
+              {profile?.mainWallet?.address || '-'}
             </p>
             <CopyIcon />
             {copied ? (
@@ -136,12 +142,14 @@ export const NavigationLoginLoggedButtonMobile = ({
             ) : null}
           </div>
           <div className="pw-flex pw-justify-center ">
-            <button
-              onClick={() => setAuthenticatePayemntModal?.(true)}
-              className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
-            >
-              Pagamento
-            </button>
+            {isUser && loyalties && loyalties.length > 0 ? (
+              <button
+                onClick={() => setAuthenticatePayemntModal?.(true)}
+                className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
+              >
+                Pagamento
+              </button>
+            ) : null}
           </div>
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
           {wallet ? <WithWallet /> : <WithoutWallet />}

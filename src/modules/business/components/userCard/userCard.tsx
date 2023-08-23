@@ -20,7 +20,7 @@ export const UserCard = ({
   valueToUse = '',
 }: UserCardProps) => {
   return (
-    <div className="pw-w-[300px] pw-p-5 pw-bg-white pw-rounded-2xl pw-shadow pw-border pw-border-zinc-100 pw-flex-col pw-justify-center pw-items-center pw-gap-3.5 pw-flex">
+    <div className=" pw-w-full sm:pw-w-[300px] pw-p-5 pw-bg-white pw-rounded-2xl pw-shadow pw-border pw-border-zinc-100 pw-flex-col pw-justify-center pw-items-center pw-gap-3.5 pw-flex">
       {name && (
         <div
           onClick={onCancel}
