@@ -26,8 +26,8 @@ export const WalletStatementTemplateSDK = () => {
     <InternalPagesLayoutBase>
       <WalletHeaderSDK />
       <WalletFilterSDK className="pw-mt-4" wallets={loyaltyWallet ?? []} />
-      <div className="pw-mt-[20px] pw-flex pw-flex-col pw-gap-[20px]">
-        {data?.items.map((item) => (
+      <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
+        {data?.items.map((item: any) => (
           <StatementComponentSDK
             key={generateRandomUUID()}
             statement={{

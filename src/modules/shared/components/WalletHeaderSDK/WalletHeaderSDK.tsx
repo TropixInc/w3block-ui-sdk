@@ -10,7 +10,7 @@ export const WalletHeaderSDK = () => {
   const { mainWallet, wallets, loyaltyWallet } = useUserWallet();
 
   return (
-    <div className="pw-p-[20px] pw-mx-[22px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
+    <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
       <div className="pw-flex pw-justify-between">
         <div>
           <p className="pw-text-[23px] pw-font-[600]">Carteira</p>

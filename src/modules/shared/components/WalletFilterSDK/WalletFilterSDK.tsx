@@ -14,7 +14,7 @@ export const WalletFilterSDK = ({
 }: WalletFilterSDKProps) => {
   return (
     <div
-      className={`pw-bg-white pw-rounded-[14px] pw-px-[18px] pw-py-[14px] pw-shadow pw-flex pw-items-center pw-gap-2 ${className}`}
+      className={`pw-bg-white pw-rounded-[14px] pw-mx-4 sm:pw-mx-0 pw-px-[18px] pw-py-[14px] pw-shadow pw-flex pw-items-center pw-gap-2 ${className}`}
     >
       {wallets.map((wallet) => (
         <button

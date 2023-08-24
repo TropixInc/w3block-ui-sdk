@@ -17,7 +17,7 @@ export const useGetUserBalance = () => {
           companyId
         ).replace('{userId}', userId)
       )
-      .then((res) => res.data[0])
+      .then((res) => res.data)
   );
   return getUserBalance;
 };
