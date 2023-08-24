@@ -8,6 +8,10 @@ import InputEmail from '../SmartInputs/InputEmail';
 import InputFile from '../SmartInputs/InputFile';
 import { InputMultiFace } from '../SmartInputs/InputMultiFace/InputMultiFace';
 import InputPhone from '../SmartInputs/InputPhone';
+import {
+  InputSelector,
+  Options,
+} from '../SmartInputs/InputSelector/InputSelector';
 import InputText from '../SmartInputs/InputText';
 import InputUrl from '../SmartInputs/InputUrl';
 
@@ -22,6 +26,7 @@ interface SmartProps {
   onChangeUploadProgess: (value: boolean) => void;
   docFileValue?: string;
   profilePage?: boolean;
+  options?: Options[];
 }
 
 export interface InputError {
@@ -42,6 +47,7 @@ const SmartInputsController = ({
   openDocs,
   onChangeUploadProgess,
   profilePage,
+  options,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -137,6 +143,10 @@ const SmartInputsController = ({
             docValue={value}
             docStatus={docStatus}
           />
+        );
+      case DataTypesEnum.SimpleSelect:
+        return (
+          <InputSelector options={options ?? []} name={name} label={label} />
         );
     }
   };
