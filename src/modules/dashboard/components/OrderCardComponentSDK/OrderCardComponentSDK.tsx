@@ -123,13 +123,21 @@ export const OrderCardComponentSDK = ({
             {products && products.length
               ? products
                   .reduce((acc: any, current: any) => {
-                    const x = acc.some(
-                      (item: any) =>
-                        item.productToken.product.id ==
-                          current.productToken.product.id &&
-                        item.variantIds.toString() ==
-                          current.variantIds.toString()
-                    );
+                    const x = acc.some((item: any) => {
+                      if (item?.variantIds) {
+                        return (
+                          item.productToken.product.id ==
+                            current.productToken.product.id &&
+                          item?.variantIds?.toString() ==
+                            current?.variantIds?.toString()
+                        );
+                      } else {
+                        return (
+                          item.productToken.product.id ==
+                          current.productToken.product.id
+                        );
+                      }
+                    });
                     if (!x) {
                       return acc.concat([current]);
                     } else {
@@ -150,13 +158,21 @@ export const OrderCardComponentSDK = ({
                       price={prod.currencyAmount}
                       status={CheckoutStatus.MY_ORDER}
                       quantity={
-                        products.filter(
-                          (pr: any) =>
-                            pr.productToken.product.id ==
-                              prod.productToken.product.id &&
-                            pr.variantIds.toString() ==
-                              prod.variantIds.toString()
-                        ).length
+                        products.filter((pr: any) => {
+                          if (pr.variantIds) {
+                            return (
+                              pr.productToken.product.id ==
+                                prod.productToken.product.id &&
+                              pr?.variantIds?.toString() ==
+                                prod?.variantIds?.toString()
+                            );
+                          } else {
+                            return (
+                              pr.productToken.product.id ==
+                              prod.productToken.product.id
+                            );
+                          }
+                        }).length
                       }
                       stockAmount={1}
                       key={prod.productToken.id + index}
