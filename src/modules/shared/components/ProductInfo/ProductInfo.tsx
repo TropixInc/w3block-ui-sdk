@@ -248,7 +248,7 @@ export const ProductInfo = ({
                 className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                   quantity && quantity > 1
                     ? 'pw-text-[#353945] pw-border-brand-primary'
-                    : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)]'
+                    : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-invisible'
                 }`}
               >
                 -
@@ -271,9 +271,10 @@ export const ProductInfo = ({
                 className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                   quantity &&
                   quantity < canPurchaseAmount &&
-                  quantity < stockAmount
+                  quantity < stockAmount &&
+                  quantity < maxUp
                     ? 'pw-border-brand-primary pw-text-[#353945]'
-                    : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)]'
+                    : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-invisible'
                 }`}
                 onClick={() => {
                   if (
