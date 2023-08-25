@@ -60,15 +60,15 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
       getBalances(data);
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (authenticatePayemntModal) {
-      router.replace({ query: { ...router.query, authorizeLoayltie: 'true' } });
-    } else {
-      delete router.query.authorizeLoayltie;
-      router.replace({ query: router.query });
-    }
-  }, [authenticatePayemntModal]);
+  // !!ver como solucionar
+  // useEffect(() => {
+  //   if (authenticatePayemntModal) {
+  //     router.replace({ query: { ...router.query, authorizeLoayltie: 'true' } });
+  //   } else {
+  //     delete router.query.authorizeLoayltie;
+  //     router.replace({ query: router.query });
+  //   }
+  // }, [authenticatePayemntModal]);
 
   useEffect(() => {
     if (!authenticatePayemntModal && router.query.authorizeLoayltie == 'true') {
