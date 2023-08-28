@@ -1,5 +1,5 @@
 import { ReactComponent as PendingIcon } from '../../assets/icons/clock.svg';
-import { ReactComponent as CopyIcon } from '../../assets/icons/copy.svg';
+// import { ReactComponent as CopyIcon } from '../../assets/icons/copy.svg';
 import { ReactComponent as RejectIcon } from '../../assets/icons/minusCircle.svg';
 import { ReactComponent as ApprovedIcon } from '../../assets/icons/plusCircle.svg';
 import {
@@ -71,7 +71,7 @@ export const StatementComponentSDK = ({
           <p className="pw-text-black pw-text-xs pw-font-medium">
             ID: {statement.id}
           </p>
-          <CopyIcon className="pw-fill-blue-800 pw-w-[13px] pw-h-[13px]" />
+          {/* <CopyIcon className="pw-fill-blue-800 pw-w-[13px] pw-h-[13px]" /> */}
         </div>
         <div>
           <span className="pw-text-black pw-text-sm pw-font-semibold">

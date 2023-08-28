@@ -147,7 +147,7 @@ export const NavigationLoginLoggedButtonMobile = ({
                 onClick={() => setAuthenticatePayemntModal?.(true)}
                 className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
               >
-                Pagamento
+                Autenticar
               </button>
             ) : null}
           </div>

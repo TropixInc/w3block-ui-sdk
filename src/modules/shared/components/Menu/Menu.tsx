@@ -161,7 +161,14 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     if (!tabs) setTabsToShow(tabsDefault);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pass, profile]);
+  }, [
+    pass,
+    profile,
+    loyaltyWallet,
+    isAdmin,
+    hasPassAssociated,
+    isLoayaltyOperator,
+  ]);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);
@@ -238,7 +245,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
                   )}
                 </p>
                 <button onClick={handleCopy}>
-                  <CopyIcon width={17} height={17} />
+                  <CopyIcon
+                    width={17}
+                    height={17}
+                    className="pw-stroke-[#777E8F]"
+                  />
                 </button>
                 {isCopied && (
                   <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">

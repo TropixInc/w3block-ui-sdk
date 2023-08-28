@@ -176,6 +176,9 @@ export const CheckoutPayment = () => {
           onSuccess(data: any) {
             setProductCache({
               ...productCache,
+              signedGasFee: data.gasFee.signature
+                ? data.gasFee.signature
+                : undefined,
               gasFee: data.gasFee,
               clientServiceFee: data.clientServiceFee,
               cartPrice: data.cartPrice,

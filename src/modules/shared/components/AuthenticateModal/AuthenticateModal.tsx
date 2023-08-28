@@ -17,7 +17,7 @@ export const AuthenticateModal = ({
   onClose,
 }: AuthenticateModalProps) => {
   const { profile } = useProfileWithKYC();
-  const { data, refetch } = UseGetTemporaryUserCode();
+  const { data } = UseGetTemporaryUserCode();
   const isMobile = useIsMobile();
 
   return (
@@ -56,15 +56,6 @@ export const AuthenticateModal = ({
         <p className="pw-text-gray-700 pw-text-[15px] pw-font-semibold pw-mt-[2px] pw-text-center">
           {profile?.email}
         </p>
-
-        <button
-          onClick={() => refetch()}
-          className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-justify-center pw-items-center pw-mt-4"
-        >
-          <p className="pw-text-center pw-text-black pw-text-xs pw-font-medium">
-            Gerar novo
-          </p>
-        </button>
       </div>
     </ModalBase>
   );

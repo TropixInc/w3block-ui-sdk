@@ -6,6 +6,7 @@ import { BusinessProviderSDK } from '../../../business/providers/businessProvide
 import { useGetWallets } from '../../../dashboard/hooks/useGetWallets';
 import { CoinsType } from '../../../storefront/interfaces';
 import { AuthenticateModal } from '../../components/AuthenticateModal/AuthenticateModal';
+import { useRouterConnect } from '../../hooks';
 import { useGetBalancesForWallets } from '../../hooks/useBalance';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
@@ -44,6 +45,7 @@ export const UserWalletsContext = createContext<UserWalletsContextInterface>({
 });
 
 const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
+  const router = useRouterConnect();
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [loyaltyWallet, setLoyaltyWallet] = useState<WalletLoyalty[]>([]);
   const { profile } = useProfileWithKYC();
@@ -58,6 +60,21 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
       getBalances(data);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (authenticatePayemntModal) {
+      router.replace({ query: { ...router.query, authorizeLoayltie: 'true' } });
+    } else {
+      delete router.query.authorizeLoayltie;
+      router.replace({ query: router.query });
+    }
+  }, [authenticatePayemntModal]);
+
+  useEffect(() => {
+    if (!authenticatePayemntModal && router.query.authorizeLoayltie == 'true') {
+      setAuthenticatePayemntModal(true);
+    }
+  }, [router.query]);
 
   const { mutate: getBalanceFromLoyalty } = useGetUserBalance();
 
@@ -78,7 +95,9 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const handleGetLoyaltyBalances = () => {
     getBalanceFromLoyalty(profile?.id ?? '', {
       onSuccess: (res: any) => {
-        setLoyaltyWallet([res]);
+        if (res) {
+          setLoyaltyWallet([...res]);
+        }
       },
     });
   };
