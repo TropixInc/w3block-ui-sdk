@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.8.7...v1.9.0-alpha.0) (2023-08-28)
+
+
+### Features
+
+* Input selector ([#220](https://github.com/TropixInc/w3block-ui-sdk/issues/220)) ([94d11b7](https://github.com/TropixInc/w3block-ui-sdk/commit/94d11b7e443234c2922120da2438fb1aa2daea42))
+
 ### [1.8.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.8.6...v1.8.7) (2023-08-24)
 
 ### [1.8.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.8.5...v1.8.6) (2023-08-24)
