@@ -65,8 +65,10 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
     if (authenticatePayemntModal) {
       router.replace({ query: { ...router.query, authorizeLoayltie: 'true' } });
     } else {
-      delete router.query.authorizeLoayltie;
-      router.replace({ query: router.query });
+      if (router.query.authorizeLoayltie) {
+        delete router.query.authorizeLoayltie;
+        router.replace({ query: router.query });
+      }
     }
   }, [authenticatePayemntModal]);
 
