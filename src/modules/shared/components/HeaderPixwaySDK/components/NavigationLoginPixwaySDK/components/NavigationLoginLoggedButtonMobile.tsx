@@ -33,7 +33,7 @@ export const NavigationLoginLoggedButtonMobile = ({
   textColor,
 }: NavigationLoginLoggedButtonMobileProps) => {
   const { setAttachModal } = useContext(AttachWalletContext);
-  const { setAuthenticatePayemntModal } = useUserWallet();
+  const { setAuthenticatePaymentModal } = useUserWallet();
   const defaultTabs = useDefaultMenuTabs(textColor ?? 'black');
   const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
@@ -144,7 +144,7 @@ export const NavigationLoginLoggedButtonMobile = ({
           <div className="pw-flex pw-justify-center ">
             {isUser && loyaltyWallet && loyaltyWallet.length ? (
               <button
-                onClick={() => setAuthenticatePayemntModal?.(true)}
+                onClick={() => setAuthenticatePaymentModal?.(true)}
                 className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
               >
                 Autenticar

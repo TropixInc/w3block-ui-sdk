@@ -50,7 +50,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const router = useRouterConnect();
   const isProduction = useIsProduction();
   const [translate] = useTranslation();
-  const { setAuthenticatePayemntModal } = useUserWallet();
+  const { setAuthenticatePaymentModal } = useUserWallet();
   const [state, copyToClipboard] = useCopyToClipboard();
   const { profile: profileWithKYC } = useProfileWithKYC();
   const [isCopied, setIsCopied] = useState(false);
@@ -267,8 +267,8 @@ const _Menu = ({ tabs, className }: MenuProps) => {
                 onClick={() =>
                   // isLoayaltyOperator
                   //   ? router.pushConnect(PixwayAppRoutes.LOYALTY_PAYMENT)
-                  //   : setAuthenticatePayemntModal?.(true)
-                  setAuthenticatePayemntModal?.(true)
+                  //   : setAuthenticatePaymentModal?.(true)
+                  setAuthenticatePaymentModal?.(true)
                 }
                 className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
               >
