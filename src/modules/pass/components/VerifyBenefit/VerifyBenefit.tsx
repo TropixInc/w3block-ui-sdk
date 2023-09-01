@@ -37,8 +37,8 @@ export const VerifyBenefit = ({
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
           </div> :
-          <>
-            <CloseButton onClose={onClose} />
+          <div className='pw-max-w-[400px] pw-mx-auto pw-relative '>
+            <CloseButton onClose={onClose} className='!-pw-top-[17px] !pw-right-0'/>
             <div className="pw-w-full pw-rounded-[16px] pw-p-[24px] pw-mt-8 pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2">
               <div className="pw-px-[16px] pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
                 {data?.tokenPassBenefit?.tokenPass?.name}
@@ -121,7 +121,7 @@ export const VerifyBenefit = ({
                 ))
               ) : null}
             </div>
-          </>
+          </div>
         }
       </div >
     )

@@ -18,7 +18,7 @@ export const ErrorModal = (props: iProps) => {
     return (
       <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
         <CloseButton onClose={props.onClose} />
-        <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+        <div className="pw-max-w-[400px] pw-mx-auto pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
           <CloseButton onClose={props.onClose} />
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
