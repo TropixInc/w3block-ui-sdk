@@ -240,13 +240,13 @@ export const ProductInfo = ({
               <p
                 onClick={() =>
                   changeQuantity?.(
-                    quantity && quantity > 1 ? false : null,
+                    (quantity && quantity > 1) || !isCart ? false : null,
                     id,
                     variants ?? []
                   )
                 }
                 className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                  quantity && quantity > 1
+                  (quantity && quantity > 1) || !isCart
                     ? 'pw-text-[#353945] pw-border-brand-primary'
                     : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-invisible'
                 }`}

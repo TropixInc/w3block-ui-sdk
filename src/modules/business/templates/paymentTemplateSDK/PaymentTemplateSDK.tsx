@@ -48,7 +48,7 @@ export const PaymentTemplateSDK = () => {
         setUserInfo(data);
         getUserBalance(data.id as string, {
           onSuccess: (balance) => {
-            setUserInfo({ ...data, ...balance });
+            setUserInfo((prev) => ({ ...prev, ...balance[0] }));
             const pointsValue =
               loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
             // const currencyValue =
@@ -81,7 +81,7 @@ export const PaymentTemplateSDK = () => {
       getPaymentPreview(
         {
           amount: valueToPay,
-          points: valueToUse,
+          points: valueToUse == '' || valueToUse == 'NaN' ? '0' : valueToUse,
           userId: userInfo.id as string,
           userCode: code.join('') as string,
           loyaltyId: loyaltieToUse?.id as string,
@@ -154,6 +154,10 @@ export const PaymentTemplateSDK = () => {
   };
 
   const handleValueToUse = () => {
+    if (valueToUse == '') {
+      setValueToUse('0');
+      return;
+    }
     if (loyalties.length) {
       const pointsValue =
         loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
@@ -183,8 +187,10 @@ export const PaymentTemplateSDK = () => {
 
       if (totalMoney <= parseFloat(valueToPay) && userInfo.balance) {
         setValueToUse(userInfo.balance);
-      } else {
+      } else if (valueToPay != '') {
         setValueToUse((parseFloat(valueToPay) / pointsValue).toString());
+      } else {
+        setValueToUse('0');
       }
     }
   };
@@ -275,7 +281,11 @@ export const PaymentTemplateSDK = () => {
             onCancel={handleCancelUserCard}
             name={userInfo.name}
             avatarSrc={userInfo.avatarUrl}
-            balance={userInfo.balance}
+            balance={
+              userInfo.balance == 'NaN' || userInfo.balance == ''
+                ? '0'
+                : userInfo.balance
+            }
             currency={userInfo.currency}
           />
         </div>

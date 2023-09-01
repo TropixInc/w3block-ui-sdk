@@ -126,19 +126,18 @@ export const ProductPage = ({
     setCartOpen(true);
     setProductVariants({ ...variants });
     setCartCurrencyId?.(currencyId);
-    setCart([
-      ...cart,
-      ...Array(quantity).fill({
-        id: product?.id,
-        variantIds: Object.values(variants).map((value) => {
-          if ((value as any).productId === product?.id)
-            return (value as any).id;
-        }),
-        prices: orderPreview
-          ? orderPreview?.products?.[0]?.prices
-          : product?.prices,
-      }),
-    ]);
+    const cartPreview =
+      orderPreview?.products.map((val) => {
+        return {
+          id: product?.id,
+          variantIds: Object.values(variants).map((value) => {
+            if ((value as any).productId === product?.id)
+              return (value as any).id;
+          }),
+          prices: val.prices,
+        };
+      }) ?? [];
+    setCart([...cart, ...cartPreview]);
   };
 
   useEffect(() => {
@@ -351,7 +350,7 @@ export const ProductPage = ({
       getOrderPreview.mutate(
         {
           productIds: [
-            {
+            ...Array(quantity).fill({
               productId: product.id,
               variantIds: variants
                 ? Object.values(variants).map((value) => {
@@ -359,7 +358,7 @@ export const ProductPage = ({
                       return (value as any).id;
                   })
                 : [],
-            },
+            }),
           ],
           currencyId: currencyId.id ?? '',
           companyId,
@@ -402,6 +401,10 @@ export const ProductPage = ({
       getOrderPreviewFn();
     }
   }, [currencyId, product?.id, variants]);
+
+  useEffect(() => {
+    getOrderPreviewFn();
+  }, [quantity]);
 
   useInterval(() => setCartOpen(false), 5000);
   const [termsChecked, setTermsChecked] = useState(true);
@@ -636,7 +639,12 @@ export const ProductPage = ({
                                       price.currencyId == currencyId?.id
                                   )?.currency.name
                                 }
-                                value={orderPreview?.originalCartPrice ?? '0'}
+                                value={
+                                  orderPreview?.products?.length > 1
+                                    ? orderPreview?.products?.[0]?.prices?.[0]
+                                        ?.originalAmount ?? '0'
+                                    : orderPreview.originalCartPrice ?? '0'
+                                }
                               ></CriptoValueComponent>
                             ) : null}
                             <CriptoValueComponent
@@ -683,7 +691,10 @@ export const ProductPage = ({
                                           price.currencyId == currencyId?.id
                                       )?.amount ?? '0'
                                     ))
-                                  ? orderPreview.cartPrice ?? '0'
+                                  ? orderPreview?.products?.length > 1
+                                    ? orderPreview?.products?.[0]?.prices?.[0]
+                                        ?.amount ?? '0'
+                                    : orderPreview.cartPrice ?? '0'
                                   : product?.prices.find(
                                       (price: any) =>
                                         price.currencyId == currencyId?.id
@@ -721,51 +732,76 @@ export const ProductPage = ({
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
                 !currencyId?.crypto ? (
-                  <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center pw-mt-6">
-                    <p className="pw-text-sm pw-text-black pw-mb-1">
-                      Quantidade
-                    </p>
-                    <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
-                      <p
-                        onClick={() => {
-                          if (quantity > 1) setQuantity(quantity - 1);
-                        }}
-                        className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                          quantity && quantity > 1
-                            ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
-                            : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
-                        }`}
-                      >
-                        -
+                  <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
+                    <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
+                      <p className="pw-text-sm pw-text-black pw-mb-1">
+                        Quantidade
                       </p>
-                      <div>
-                        <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
-                          {quantity}
+                      <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
+                        <p
+                          onClick={() => {
+                            if (quantity > 1) {
+                              setQuantity(quantity - 1);
+                            }
+                          }}
+                          className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                            quantity && quantity > 1
+                              ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
+                              : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
+                          }`}
+                        >
+                          -
                         </p>
-                      </div>
-                      <p
-                        className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                          product?.canPurchaseAmount &&
-                          product?.stockAmount &&
-                          quantity < product?.canPurchaseAmount &&
-                          quantity < product?.stockAmount
-                            ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
-                            : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
-                        }`}
-                        onClick={() => {
-                          if (
+                        <div>
+                          <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
+                            {quantity}
+                          </p>
+                        </div>
+                        <p
+                          className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                             product?.canPurchaseAmount &&
                             product?.stockAmount &&
                             quantity < product?.canPurchaseAmount &&
                             quantity < product?.stockAmount
-                          ) {
-                            setQuantity(quantity + 1);
-                          }
-                        }}
-                      >
-                        +
-                      </p>
+                              ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
+                              : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
+                          }`}
+                          onClick={() => {
+                            if (
+                              product?.canPurchaseAmount &&
+                              product?.stockAmount &&
+                              quantity < product?.canPurchaseAmount &&
+                              quantity < product?.stockAmount
+                            ) {
+                              setQuantity(quantity + 1);
+                            }
+                          }}
+                        >
+                          +
+                        </p>
+                      </div>
                     </div>
+                    {orderPreview && orderPreview?.products?.length > 1 ? (
+                      isLoadingValue ? (
+                        <Shimmer className="!pw-w-[56px] !pw-h-[20px]" />
+                      ) : (
+                        <CriptoValueComponent
+                          size={12}
+                          fontClass="pw-text-sm pw-font-[600] pw-text-[#353945] pw-opacity-50"
+                          crypto={
+                            product?.prices.find(
+                              (price: any) => price.currencyId == currencyId?.id
+                            )?.currency.crypto
+                          }
+                          code={
+                            product?.prices.find(
+                              (price: any) => price.currencyId == currencyId?.id
+                            )?.currency.name
+                          }
+                          value={orderPreview?.cartPrice ?? '0'}
+                        ></CriptoValueComponent>
+                      )
+                    ) : null}
                   </div>
                 ) : null}
 
