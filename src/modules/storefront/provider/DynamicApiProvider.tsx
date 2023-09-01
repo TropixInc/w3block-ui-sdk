@@ -47,7 +47,6 @@ export const DynamicApiProvider = ({
         newUrlApi = newUrlApi.replaceAll(item, dynamicModule?.matches[index]);
       });
     }
-    console.log(newUrlApi);
 
     const response = await fetch(newUrlApi);
     const data = await response.json();
