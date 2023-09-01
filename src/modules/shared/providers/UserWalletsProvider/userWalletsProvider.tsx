@@ -17,7 +17,7 @@ interface UserWalletsContextInterface {
   hasWallet?: boolean;
   setMainCoin?: (coin: CoinsType) => void;
   mainWallet?: WalletSimple;
-  setAuthenticatePayemntModal?: (value: boolean) => void;
+  setAuthenticatePaymentModal?: (value: boolean) => void;
   loyaltyWallet: WalletLoyalty[];
 }
 
@@ -51,7 +51,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const { profile } = useProfileWithKYC();
   const [coinType, setCoinType] = useState<CoinsType>(CoinsType.MATIC);
   const isProduction = useIsProduction();
-  const [authenticatePayemntModal, setAuthenticatePayemntModal] =
+  const [authenticatePaymentModal, setAuthenticatePaymentModal] =
     useState<boolean>(false);
   const getWalletsbalance = useGetBalancesForWallets();
   const { data, isSuccess } = useGetWallets();
@@ -62,19 +62,19 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (authenticatePayemntModal) {
-      router.replace({ query: { ...router.query, authorizeLoayltie: 'true' } });
+    if (authenticatePaymentModal) {
+      router.replace({ query: { ...router.query, authorizeLoyalty: 'true' } });
     } else {
-      if (router.query.authorizeLoayltie) {
-        delete router.query.authorizeLoayltie;
+      if (router.query.authorizeLoyalty) {
+        delete router.query.authorizeLoyalty;
         router.replace({ query: router.query });
       }
     }
-  }, [authenticatePayemntModal]);
+  }, [authenticatePaymentModal]);
 
   useEffect(() => {
-    if (!authenticatePayemntModal && router.query.authorizeLoayltie == 'true') {
-      setAuthenticatePayemntModal(true);
+    if (!authenticatePaymentModal && router.query.authorizeLoyalty == 'true') {
+      setAuthenticatePaymentModal(true);
     }
   }, [router.query]);
 
@@ -126,14 +126,14 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
         hasWallet: wallets.length > 0,
         setMainCoin: setCoinType,
         mainWallet: mainWallet,
-        setAuthenticatePayemntModal,
+        setAuthenticatePaymentModal,
         loyaltyWallet,
       }}
     >
       {children}
       <AuthenticateModal
-        isOpen={authenticatePayemntModal}
-        onClose={() => setAuthenticatePayemntModal(false)}
+        isOpen={authenticatePaymentModal}
+        onClose={() => setAuthenticatePaymentModal(false)}
       />
     </UserWalletsContext.Provider>
   );

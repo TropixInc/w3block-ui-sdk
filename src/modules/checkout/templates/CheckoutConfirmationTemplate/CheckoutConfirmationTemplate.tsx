@@ -1,5 +1,6 @@
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
+import { useQuery } from '../../../shared/hooks/useQuery';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutEmptyCart } from '../../components/CheckoutEmptyCart/CheckoutEmptyCart';
@@ -23,11 +24,14 @@ export const CheckoutConfirmationTemplate = ({
 }: CheckoutConfirmationTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
   const { cart: productsCart } = useCart();
+  const query = useQuery();
+  const params = new URLSearchParams(query);
+  const productIdsFromQueries = params.get('productIds');
   useHasWallet({});
   if (!isAuthorized || isLoading) {
     return null;
   }
-  return cart && !productsCart.length ? (
+  return (cart && !productsCart.length) || !productIdsFromQueries ? (
     <>
       <CheckoutHeader onClick={returnTo} />
       <CheckoutEmptyCart />

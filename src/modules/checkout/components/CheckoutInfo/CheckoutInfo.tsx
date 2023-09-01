@@ -221,6 +221,15 @@ const _CheckoutInfo = ({
               setProductErros(data.productsErrors ?? []);
             }
             setOrderPreview(data);
+            setCart(
+              data.products.map((val) => {
+                return {
+                  id: val.id,
+                  variantIds: val?.variants?.map((val) => val.id),
+                  prices: val.prices,
+                };
+              })
+            );
             if (data.products.map((p) => p.id).length != productIds.length) {
               setProductIds(data.products.map((p) => p.id));
             }
