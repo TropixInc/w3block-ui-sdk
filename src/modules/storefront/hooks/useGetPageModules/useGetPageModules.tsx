@@ -14,13 +14,13 @@ export const useGetPageModules = () => {
   useEffect(() => {
     if (window) {
       if (!window.location.href.includes('/product/slug')) {
-        setHref(
-          'https://foodbusters.stg.w3block.io/athlete/123/teste' +
-            '?' +
-            Date.now()
-        );
+        // setHref(
+        //   'https://foodbusters.stg.w3block.io/athlete/123/teste' +
+        //     '?' +
+        //     Date.now()
+        // );
         //setHref('https://hashdex.stg.w3block.io/'+ '?' + Date.now());
-        //setHref(window.location.href);
+        setHref(window.location.href);
       }
     }
   }, []);
