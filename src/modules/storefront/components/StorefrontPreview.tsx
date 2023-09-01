@@ -1,6 +1,7 @@
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
+import { getPageMap } from '../../custom/utils/customMap';
 import { useRouterConnect } from '../../shared';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import {
@@ -11,11 +12,13 @@ import { useUserWallet } from '../../shared/hooks/useUserWallet';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext, ThemeProvider } from '../contexts';
 import {
+  DynamicApiModuleInterface,
   MainModuleThemeInterface,
   ModulesType,
   TemplateData,
   Theme,
 } from '../interfaces';
+import { DynamicApiProvider } from '../provider/DynamicApiProvider';
 import { Page404 } from './404';
 import { Accordions } from './Accordions';
 import { Banner } from './Banner';
@@ -118,8 +121,20 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context?.defaultTheme, themeListener]);
 
-  const data = { ...context?.pageTheme, ...currentPage };
+  let data = { ...context?.pageTheme, ...currentPage };
   const themeContext = context?.defaultTheme;
+
+  const dynamicApi = useMemo<DynamicApiModuleInterface | undefined>(() => {
+    if (context?.pageInfo && context.pageInfo.isRoutePatternRegex) {
+      return {
+        regexp: context.pageInfo.routePattern,
+        matches: RegExp(context.pageInfo.routePattern, 'g')
+          .exec(asPath || '')
+          ?.slice(1),
+        apis: data.dynamicApi?.apis ?? [],
+      };
+    } else return undefined;
+  }, [context?.pageInfo, data]);
 
   const breakpoint = useBreakpoints();
   const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
@@ -171,111 +186,30 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     (asPath || '').includes('/auth/')
       ? mergedConfigStyleData.hasFooter
       : true;
+  data = {
+    ...data,
+    dynamicApi,
+  };
   return (
-    <div
-      style={{
-        color: mergedConfigStyleData.textColor ?? 'black',
-        background: mergedConfigStyleData.backgroundColor ?? 'white',
-        padding: convertSpacingToCSS(mergedConfigStyleData.padding),
-        fontFamily,
-      }}
-    >
-      {hasHeaderDefault && headerData ? (
-        <Header data={headerData as MainModuleThemeInterface} />
-      ) : null}
+    <DynamicApiProvider dynamicModule={data.dynamicApi}>
+      <div
+        style={{
+          color: mergedConfigStyleData.textColor ?? 'black',
+          background: mergedConfigStyleData.backgroundColor ?? 'white',
+          padding: convertSpacingToCSS(mergedConfigStyleData.padding),
+          fontFamily,
+        }}
+      >
+        {hasHeaderDefault && headerData ? (
+          <Header data={headerData as MainModuleThemeInterface} />
+        ) : null}
 
-      <Cookies
-        data={
-          theme.cookies ?? {
-            id: '',
-            name: 'cookies',
-            type: ModulesType.COOKIE,
-            styleData: {},
-            contentData: {},
-            mobileStyleData: {},
-            mobileContentData: {},
-          }
-        }
-      />
-      {context?.isError && !children ? (
-        <Page404 />
-      ) : (
-        <>
-          {isProductPage && (
-            <ProductPage
-              hasCart={mergedConfigStyleData.hasCart}
-              params={params}
-              data={
-                theme.productPage ?? {
-                  id: '',
-                  name: 'productsPage',
-                  type: ModulesType.PRODUCT_PAGE,
-                  styleData: {},
-                  mobileStyleData: {},
-                }
-              }
-            />
-          )}
-          {children ? (
-            children
-          ) : (
-            <div
-              className={!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}
-            >
-              {data.modules?.map((item) => {
-                if (item.deviceType == 'none') return null;
-
-                if (
-                  item.deviceType == 'desktop' &&
-                  mobileBreakpoints.includes(breakpoint)
-                )
-                  return null;
-                if (
-                  item.deviceType == 'mobile' &&
-                  !mobileBreakpoints.includes(breakpoint)
-                )
-                  return null;
-
-                switch (item.type) {
-                  case ModulesType.CATEGORIES:
-                    return <Menu data={{ ...theme.categories, ...item }} />;
-                  case ModulesType.BANNER:
-                    return <Banner data={{ ...theme.banner, ...item }} />;
-                  case ModulesType.CARDS:
-                    return <Products data={{ ...theme.products, ...item }} />;
-                  case ModulesType.ACCORDIONS:
-                    return (
-                      <Accordions data={{ ...theme.accordions, ...item }} />
-                    );
-                  case ModulesType.IMAGE_PLUS_TEXT:
-                    return (
-                      <ImagePlusText
-                        data={{ ...theme.imagePlusText, ...item }}
-                      />
-                    );
-                  case ModulesType.PARAGRAPH:
-                    return <Paragraph data={{ ...theme.paragraph, ...item }} />;
-                  case ModulesType.GRID_ITEM_AREA:
-                    return (
-                      <GridItemArea data={{ ...theme.GridItemArea, ...item }} />
-                    );
-                  case ModulesType.MIDIA:
-                    return <Midia data={{ ...theme.midia, ...item }} />;
-                  default:
-                    break;
-                }
-              })}
-            </div>
-          )}
-        </>
-      )}
-      {hasFooterDefault && (
-        <Footer
+        <Cookies
           data={
-            theme.footer ?? {
+            theme.cookies ?? {
               id: '',
-              name: 'footer',
-              type: ModulesType.FOOTER,
+              name: 'cookies',
+              type: ModulesType.COOKIE,
               styleData: {},
               contentData: {},
               mobileStyleData: {},
@@ -283,7 +217,100 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
             }
           }
         />
-      )}
-    </div>
+        {context?.isError && !children ? (
+          <Page404 />
+        ) : (
+          <>
+            {isProductPage && (
+              <ProductPage
+                hasCart={mergedConfigStyleData.hasCart}
+                params={params}
+                data={
+                  theme.productPage ?? {
+                    id: '',
+                    name: 'productsPage',
+                    type: ModulesType.PRODUCT_PAGE,
+                    styleData: {},
+                    mobileStyleData: {},
+                  }
+                }
+              />
+            )}
+            {children ? (
+              children
+            ) : data.custom && data.custom != '' ? (
+              getPageMap(data.custom)
+            ) : (
+              <div
+                className={!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}
+              >
+                {data.modules?.map((item) => {
+                  if (item.deviceType == 'none') return null;
+
+                  if (
+                    item.deviceType == 'desktop' &&
+                    mobileBreakpoints.includes(breakpoint)
+                  )
+                    return null;
+                  if (
+                    item.deviceType == 'mobile' &&
+                    !mobileBreakpoints.includes(breakpoint)
+                  )
+                    return null;
+
+                  switch (item.type) {
+                    case ModulesType.CATEGORIES:
+                      return <Menu data={{ ...theme.categories, ...item }} />;
+                    case ModulesType.BANNER:
+                      return <Banner data={{ ...theme.banner, ...item }} />;
+                    case ModulesType.CARDS:
+                      return <Products data={{ ...theme.products, ...item }} />;
+                    case ModulesType.ACCORDIONS:
+                      return (
+                        <Accordions data={{ ...theme.accordions, ...item }} />
+                      );
+                    case ModulesType.IMAGE_PLUS_TEXT:
+                      return (
+                        <ImagePlusText
+                          data={{ ...theme.imagePlusText, ...item }}
+                        />
+                      );
+                    case ModulesType.PARAGRAPH:
+                      return (
+                        <Paragraph data={{ ...theme.paragraph, ...item }} />
+                      );
+                    case ModulesType.GRID_ITEM_AREA:
+                      return (
+                        <GridItemArea
+                          data={{ ...theme.GridItemArea, ...item }}
+                        />
+                      );
+                    case ModulesType.MIDIA:
+                      return <Midia data={{ ...theme.midia, ...item }} />;
+                    default:
+                      break;
+                  }
+                })}
+              </div>
+            )}
+          </>
+        )}
+        {hasFooterDefault && (
+          <Footer
+            data={
+              theme.footer ?? {
+                id: '',
+                name: 'footer',
+                type: ModulesType.FOOTER,
+                styleData: {},
+                contentData: {},
+                mobileStyleData: {},
+                mobileContentData: {},
+              }
+            }
+          />
+        )}
+      </div>
+    </DynamicApiProvider>
   );
 };

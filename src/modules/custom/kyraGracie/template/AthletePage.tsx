@@ -1,5 +1,6 @@
 import { Shimmer } from '../../../shared/components/Shimmer';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
+import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';
 import brownBelt from '../assets/brown_belt.png';
@@ -7,16 +8,10 @@ import coralBelt from '../assets/coral_belt.png';
 import purpleBelt from '../assets/purple_belt.png';
 import redBelt from '../assets/red_belt.png';
 import Logo from '../assets/WJJC.png';
-import {
-  AthleteInterface,
-  BeltColor,
-  useGetAthlete,
-} from '../hooks/useGetAthlete';
-interface AthletePageProps {
-  id: string;
-}
-export const AthletePage = ({ id }: AthletePageProps) => {
-  const { data, isLoading } = useGetAthlete(id);
+import { AthleteInterface, BeltColor } from '../hooks/useGetAthlete';
+
+export const AthletePage = () => {
+  const { datasource } = useDynamicApi();
   const isProduction = useIsProduction();
   const belts = [
     BeltColor.BLUE,
@@ -61,34 +56,20 @@ export const AthletePage = ({ id }: AthletePageProps) => {
   };
 
   const getPlaceholder = (): AthleteInterface => {
-    if (id == '000') {
-      return {
-        athleteIdentification: 0,
-        athleteName: 'João Neto',
-        athleteBirthdate: 'January 1, 2000',
-        athleteGender: 'male',
-        beltColor: BeltColor.BLACK,
-        graduationDate: 'January 1, 2020',
-        graduationAcademy: 'WJJC',
-        graduationTeacher: 'João Neto',
-        athleteNationality: 'Brazilian',
-      };
-    } else {
-      return {
-        athleteIdentification: 0,
-        athleteName: '',
-        athleteBirthdate: '',
-        athleteGender: '',
-        beltColor: BeltColor.BLACK,
-        graduationDate: '',
-        graduationAcademy: '',
-        graduationTeacher: '',
-        athleteNationality: '',
-      };
-    }
+    return {
+      athleteIdentification: 0,
+      athleteName: '',
+      athleteBirthdate: '',
+      athleteGender: '',
+      beltColor: BeltColor.BLACK,
+      graduationDate: '',
+      graduationAcademy: '',
+      graduationTeacher: '',
+      athleteNationality: '',
+    };
   };
 
-  return isLoading || data?.items.length ? (
+  return datasource.athlete?.items.length ? (
     <div
       style={{
         backgroundImage: `url('https://res.cloudinary.com/tropix/image/upload/v1686157813/assets/certificate/kyra/bg-papiro2_niym17.png')`,
@@ -105,7 +86,7 @@ export const AthletePage = ({ id }: AthletePageProps) => {
               src="https://res.cloudinary.com/tropix/image/upload/v1686059209/assets/certificate/kyra/effect-esquerda_h6sxir.png"
               className=" pw-object-contain  pw-h-3"
             ></img>
-            {isLoading ? (
+            {!datasource.athlete ? (
               <Shimmer className="pw-min-h-[42px] pw-min-w-[200px]" />
             ) : (
               <p className="pw-text-[40px] pw-font-[700] pw-font-['EB_Garamond'] pw-text-black">
@@ -118,55 +99,58 @@ export const AthletePage = ({ id }: AthletePageProps) => {
               className=" pw-object-contain pw-h-3 pw-rotate-180"
             ></img>
           </div>
-          {isLoading ? (
+          {!datasource.athlete ? (
             <Shimmer className="pw-min-h-[350px] pw-min-w-[350px] pw-rounded-lg pw-mt-[45px]" />
           ) : (
             <img
               className=" pw-w-full sm:pw-w-[350px] sm:pw-h-[350px] pw-rounded-lg pw-object-cover pw-object-center pw-mt-[45px]"
-              src={data?.items[0]?.mainImage ?? 'https://placehold.co/600x400'}
-              alt={data?.items[0]?.name}
+              src={
+                datasource.athlete.items[0]?.mainImage ??
+                'https://placehold.co/600x400'
+              }
+              alt={datasource.athlete.items[0]?.name}
             />
           )}
 
-          {isLoading ? (
+          {!datasource.athlete ? (
             <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
           ) : (
             <p className="pw-text-center pw-text-black pw-font-[700] pw-mt-3 pw-text-[20px]">
-              {data?.items[0]?.tokenData?.athleteName ??
+              {datasource.athlete?.items[0]?.tokenData?.athleteName ??
                 getPlaceholder().athleteName}
             </p>
           )}
-          {isLoading ? (
+          {!datasource.athlete ? (
             <Shimmer className="pw-min-h-[17px] pw-min-w-[150px] pw-mt-2" />
           ) : (
             <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-              {data?.items[0]?.tokenData?.athleteBirthdate ??
+              {datasource.athlete?.items[0]?.tokenData?.athleteBirthdate ??
                 getPlaceholder().athleteBirthdate}
             </p>
           )}
-          {isLoading ? (
+          {!datasource.athlete ? (
             <Shimmer className="pw-min-h-[17px] pw-min-w-[130px] pw-mt-2" />
           ) : (
             <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-              {data?.items[0]?.tokenData?.athleteGender ??
+              {datasource.athlete?.items[0]?.tokenData?.athleteGender ??
                 getPlaceholder().athleteGender}
             </p>
           )}
-          {isLoading ? (
+          {!datasource.athlete ? (
             <Shimmer className="pw-min-h-[17px] pw-min-w-[170px] pw-mt-2" />
           ) : (
             <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-              {data?.items[0]?.tokenData?.athleteNationality ??
+              {datasource.athlete?.items[0]?.tokenData?.athleteNationality ??
                 getPlaceholder().athleteNationality}
             </p>
           )}
           <div className="pw-mt-[60px]">
             {belts.map((belt, index) => {
-              const respectiveToken = data?.items.find(
-                (item) => item.tokenData?.beltColor === belt
+              const respectiveToken = datasource.athlete?.items.find(
+                (item: any) => item.tokenData?.beltColor === belt
               );
-              const hasNextBelt = data?.items.find(
-                (item) => item.tokenData?.beltColor === belts[index + 1]
+              const hasNextBelt = datasource.athlete?.items.find(
+                (item: any) => item.tokenData?.beltColor === belts[index + 1]
               );
               return (
                 <div

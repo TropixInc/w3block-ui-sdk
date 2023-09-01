@@ -1,6 +1,8 @@
 export type TemplateData = {
   title: string;
   slug: string;
+  dynamicApi?: DynamicApiModuleInterface;
+  custom?: string;
   modules: (
     | CategoriesData
     | BannerData
@@ -30,6 +32,15 @@ export type Theme = {
   midia?: MidiaData;
   GridItemArea?: GridItemAreaData;
 };
+
+export interface DynamicApiModuleInterface {
+  regexp: any;
+  matches: any;
+  apis: {
+    apiName: string;
+    url: string;
+  }[];
+}
 
 export interface MainModuleThemeInterface {
   name: string;
@@ -506,4 +517,29 @@ export enum ModulesType {
   PRODUCT_PAGE = 'Product_page',
   MIDIA = 'Midia',
   GRID_ITEM_AREA = 'GridItemArea',
+  DYNAMIC_API = 'DynamicApi',
+}
+
+export interface GetPageInfoInterface {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  companyId: string;
+  projectId: string;
+  routePattern: string;
+  isRoutePatternRegex: boolean;
+  data: any;
+  name: string;
+  isActive: boolean;
+  auth: Auth;
+}
+
+export interface Auth {
+  data: Data2;
+  type: string;
+  redirectUrl: string;
+}
+
+export interface Data2 {
+  whitelists: any[];
 }

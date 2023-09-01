@@ -10,7 +10,7 @@ import { useSessionStorage } from 'react-use';
 
 import { useGetPageModules } from '../../hooks/useGetPageModules/useGetPageModules';
 import { useGetTheme } from '../../hooks/useGetTheme';
-import { Theme, TemplateData } from '../../interfaces';
+import { Theme, TemplateData, GetPageInfoInterface } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
 interface IThemeContext {
@@ -22,12 +22,14 @@ interface IThemeContext {
   isThemeError: boolean;
   isThemeSuccess: boolean;
   setPageTheme: (TemplateData: TemplateData) => void;
+  pageInfo?: GetPageInfoInterface;
 }
 
 const BASE_THEME_KEY = 'baseThem_key';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [defaultTheme, setDefaultTheme] = useState<Theme | null>(null);
+  const [pageInfo, setPageInfo] = useState<GetPageInfoInterface | undefined>();
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageThemeSession, setPageThemeSession] =
     useSessionStorage<TemplateData | null>(BASE_THEME_KEY);
@@ -51,6 +53,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (pageModules) {
       setPageTheme(pageModules.data);
+      setPageInfo(pageModules);
     }
   }, [pageModules]);
 
@@ -65,6 +68,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         isThemeError,
         isThemeSuccess,
         setPageTheme,
+        pageInfo,
       }}
     >
       {children}
