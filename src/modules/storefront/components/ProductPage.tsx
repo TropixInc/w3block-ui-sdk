@@ -424,18 +424,6 @@ export const ProductPage = ({
     setTermsChecked(termsAria ?? true);
   };
 
-  const discounts = orderPreview?.products.map((val) =>
-    val.promotions.map((val) => {
-      const response = {
-        id: val.id,
-        publicDesCription: val.publicDescription,
-        type: val.type,
-      };
-      return response;
-    })
-  );
-
-  console.log(discounts);
   return (
     <div
       style={{
