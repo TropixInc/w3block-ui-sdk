@@ -100,7 +100,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
 
   const items: NavigationMenuTabs[] = [
     {
-      name: "Dashboard",
+      name: "Relatórios",
       route: PixwayAppRoutes.LOYALTY_REPORT,
       icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: isLoayaltyOperator,
