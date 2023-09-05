@@ -3,6 +3,11 @@ import {
   Variants,
 } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 
+interface PublicPromotion {
+  id: string;
+  publicDescription: string;
+  type: 'discount' | 'coupon';
+}
 export interface Product {
   id: string;
   createdAt: string;
@@ -19,6 +24,7 @@ export interface Product {
     anchorCurrencyId?: string;
     originalAmount?: string;
   }[];
+  promotions: PublicPromotion[];
   distributionType: string;
   pricingType: string;
   contractAddress: string;

@@ -61,8 +61,8 @@ export const PassesDetail = () => {
   const [qrCodeData, setQrCodeData] = useState('');
   const { pass } = useFlags();
 
-  const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(';');
-  const { data: verifyBenefit, isLoading: verifyLoading } = useVerifyBenefit({
+  const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
+  const { data: verifyBenefit, isLoading: verifyLoading, isError: verifyError } = useVerifyBenefit({
     benefitId: benefitIdQR,
     secret,
     userId,
@@ -155,10 +155,10 @@ export const PassesDetail = () => {
   ], [isMobile])
 
   const verifyBenefitUse = (qrCodeData: string) => {
-    const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(';');
+    const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
     setOpenScan(false);
 
-    if (!editionNumber || !userId || !secret || !benefitIdQR) {
+    if (!editionNumber || !userId || !secret || !benefitIdQR || verifyError) {
       setError(
         translate('token>pass>invalidFormat')
       );
@@ -175,7 +175,7 @@ export const PassesDetail = () => {
   };
 
   const validateBenefitUse = (qrCodeData: string) => {
-    const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(';');
+    const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
 
     if (benefitId === benefitIdQR) {
       registerUse(

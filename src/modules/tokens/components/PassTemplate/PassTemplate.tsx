@@ -166,7 +166,11 @@ const _PassTemplate = ({
     (e) => e.id === benefit?.data.id
   );
 
-  const { data: secret, isLoading: isLoadingSecret } = useGetQRCodeSecret({
+  const {
+    data: secret,
+    isLoading: isLoadingSecret,
+    refetch: refetchSecret,
+  } = useGetQRCodeSecret({
     benefitId,
     editionNumber: editionNumber as string,
   });
@@ -178,7 +182,11 @@ const _PassTemplate = ({
     isError: isUseError,
   } = usePostSelfUseBenefit();
 
-  const { data: verifyBenefit, isLoading: verifyLoading } = useVerifyBenefit({
+  const {
+    data: verifyBenefit,
+    isLoading: verifyLoading,
+    isError: verifyError,
+  } = useVerifyBenefit({
     benefitId: benefitId,
     secret: secret?.data?.secret,
     userId: profile?.data?.id || '',
@@ -194,11 +202,11 @@ const _PassTemplate = ({
   }, [isUseSuccess]);
 
   useEffect(() => {
-    if (isUseError) {
+    if (isUseError || verifyError) {
       setShowError(true);
       setShowVerify(false);
     }
-  }, [isUseError]);
+  }, [isUseError, verifyError]);
 
   const handleClose = () => {
     router.push(PixwayAppRoutes.WALLET);
@@ -610,6 +618,7 @@ const _PassTemplate = ({
                     benefitId={benefitId}
                     secret={secret?.data?.secret}
                     isDynamic={isDynamic ?? false}
+                    refetchSecret={refetchSecret}
                   />
                 )}
               <div className="pw-w-full pw-flex pw-flex-col pw-pt-[16px] pw-px-[16px]">
