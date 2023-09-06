@@ -2,11 +2,11 @@
 /* eslint-disable prettier/prettier */
 import { useLockBodyScroll } from 'react-use';
 
+import { ReactComponent as ErrorIcon } from '../../../shared/assets/icons/errorIconRed.svg';
 import { CloseButton } from '../../../shared/components/CloseButton'
 import { Spinner } from '../../../shared/components/Spinner';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';
-import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
 import { BenefitAddress, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
 interface iProps {
   hasOpen: boolean;
