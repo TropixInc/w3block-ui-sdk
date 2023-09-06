@@ -276,6 +276,7 @@ export const PassesDetail = () => {
           />
           <VerifyBenefit
             hasOpen={showVerify}
+            error={verifyError}
             isLoading={registerLoading}
             isLoadingInfo={verifyLoading}
             onClose={() => setShowVerify(false)}
