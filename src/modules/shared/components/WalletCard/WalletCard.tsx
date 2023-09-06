@@ -66,13 +66,14 @@ export const WalletCard = ({
         />
       </div>
 
-      <WeblockButton
-        disabled={type === 'metamask' || type === 'loyalty'}
-        onClick={() => push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
-        className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4"
-      >
-        {type === 'metamask' || type === 'loyalty' ? 'Ações' : 'Adicionar'}
-      </WeblockButton>
+      {type == 'vault' ? (
+        <WeblockButton
+          onClick={() => push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
+          className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4"
+        >
+          Adicionar
+        </WeblockButton>
+      ) : null}
     </div>
   );
 };

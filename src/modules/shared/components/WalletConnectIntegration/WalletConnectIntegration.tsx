@@ -23,6 +23,7 @@ import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { useProfile } from '../../hooks/useProfile';
 import useTranslation from '../../hooks/useTranslation';
 import { useUserWallet } from '../../hooks/useUserWallet';
+import { useGetRightWallet } from '../../utils/getRightWallet';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Link } from '../Link';
 import TranslatableComponent from '../TranslatableComponent';
@@ -104,6 +105,8 @@ const _WalletConnectIntegration = () => {
     });
   };
 
+  const organizedWallets = useGetRightWallet();
+
   const handleTenantIntegration = ({
     toTenantName,
     toTenantId,
@@ -180,20 +183,24 @@ const _WalletConnectIntegration = () => {
                 }
               )
             )}
-            <Link href={router.routerToHref(PixwayAppRoutes.ADD_FUNDS_TYPE)}>
-              <div className="pw-w-[165px] pw-bg-brand-primary pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
-                <div className="pw-rounded-full pw-border pw-bg-brand-primary pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
-                  <CashIcon className="pw-fill-white" />
+            {organizedWallets &&
+            organizedWallets.length > 0 &&
+            organizedWallets[0].type != 'loyalty' ? (
+              <Link href={router.routerToHref(PixwayAppRoutes.ADD_FUNDS_TYPE)}>
+                <div className="pw-w-[165px] pw-bg-brand-primary pw-p-[8px_16px_8px_11px] pw-border-2 pw-border-[#353945] pw-rounded-[48px] pw-flex pw-justify-start pw-items-center pw-gap-2">
+                  <div className="pw-rounded-full pw-border pw-bg-brand-primary pw-border-white pw-w-[30px] pw-h-[30px] pw-p-[5px] pw-flex pw-justify-center pw-items-center">
+                    <CashIcon className="pw-fill-white" />
+                  </div>
+                  <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
+                  <div className="pw-flex pw-flex-col pw-items-start pw-text-white pw-font-semibold pw-text-[13px] pw-leading-[13px] pw-cursor-pointer">
+                    <Trans i18nKey={'wallet>page>addFunds'}>
+                      <span>Adicionar</span>
+                      Fundos
+                    </Trans>
+                  </div>
                 </div>
-                <div className="pw-w-[1px] pw-bg-[#DCDCDC] pw-h-[32px]" />
-                <div className="pw-flex pw-flex-col pw-items-start pw-text-white pw-font-semibold pw-text-[13px] pw-leading-[13px] pw-cursor-pointer">
-                  <Trans i18nKey={'wallet>page>addFunds'}>
-                    <span>Adicionar</span>
-                    Fundos
-                  </Trans>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ) : null}
           </div>
         </div>
         <div className="pw-flex pw-flex-row sm:pw-justify-between pw-justify-center pw-items-center pw-w-full">

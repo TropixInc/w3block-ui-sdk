@@ -79,6 +79,13 @@ export enum CoinsType {
   MATIC = 'MATIC',
   LOYALTY = 'LOYALTY',
 }
+
+export enum WalletsOptions {
+  CUSTODY = 'custody',
+  METAMASK = 'metamask',
+  ALL = 'all',
+}
+
 export interface PageData extends MainModuleThemeInterface {
   type: ModulesType.CONFIGURATION;
   styleData: {
@@ -90,6 +97,8 @@ export interface PageData extends MainModuleThemeInterface {
     overlay?: boolean;
     overlayColor?: string;
     mainCoin?: CoinsType;
+    walletsAvaiable?: CoinsType[] | string[];
+    onBoardingWalletsOptions: WalletsOptions;
   };
 }
 

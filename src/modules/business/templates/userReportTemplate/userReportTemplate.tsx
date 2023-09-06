@@ -18,7 +18,7 @@ import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';
 export const UserReportTemplate = () => {
   const { pushConnect } = useRouterConnect();
   const [actualPage, setActualPage] = useState(1);
-  useGuardPagesWithOptions({ needBusiness: true });
+  useGuardPagesWithOptions({ needBusiness: true, needUser: true });
   const { loyalties } = useLoyaltiesInfo();
   const { data: adminHistory } = useGetAllReportsAdmin({ page: actualPage });
   const { data: loyaltyHistory } = useGetAllReportsByOperatorId({

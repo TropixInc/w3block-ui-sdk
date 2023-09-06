@@ -88,7 +88,7 @@
   "dashboard>dashboardInternalTemplate>twoFactorAuth": "Two factor authentication",
   "dashboard>dashboardInternalTemplate>twoFactorDescription": "Two-factor authentication has not yet been done. This setting is important to keep your tokens secure. You can perform this configuration through your account area or  ",
   "dashboard>dashboardInternalTemplate>twoFactorLink": "clicking here.",
-  "components>menu>dashboard": "Home",
+  "components>menu>dashboard": "Reports",
   "addFunds>type>manualType": "Manual",
   "addFunds>type>choosePaymentType": "Choose your payment method",
   "addFunds>type>totalBalance": "Total balance",

@@ -20,6 +20,8 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
 import { useWallets } from '../../../shared/hooks/useWallets/useWallets';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
+import { WalletsOptions } from '../../../storefront/interfaces';
 import { claimWalletVault } from '../../api/wallet';
 import { AuthButton } from '../AuthButton';
 import { AuthFooter } from '../AuthFooter';
@@ -64,7 +66,7 @@ const _ConnectExternalWalletWithoutLayout = ({
   const { status } = usePixwaySession();
   const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
-
+  const { defaultTheme } = UseThemeConfig();
   useEffect(() => {
     if (status === 'unauthenticated')
       router.pushConnect(PixwayAppRoutes.SIGN_IN);
@@ -82,7 +84,12 @@ const _ConnectExternalWalletWithoutLayout = ({
             : redirectRoute
         );
       } else {
-        if (forceVault) {
+        if (
+          forceVault ||
+          (defaultTheme?.configurations?.styleData?.onBoardingWalletsOptions &&
+            defaultTheme?.configurations.styleData.onBoardingWalletsOptions ==
+              WalletsOptions.CUSTODY)
+        ) {
           onClickContinue();
         }
         setIsLoading(false);
@@ -242,19 +249,22 @@ const _ConnectExternalWalletWithoutLayout = ({
                 <Alert.Icon />
                 {errorThreat}
               </Alert>
-              <p className="pw-font-semibold pw-leading-[18px] pw-text-center pw-mt-1">
-                <Trans i18nKey="companyAuth>externalWallet>orContinueWithInternalWallet">
-                  ou
-                  <button
-                    onClick={onClickContinue}
-                    className="pw-underline hover:pw-text-[#5682C3] pw-block pw-mt-1 pw-mx-auto"
-                  >
-                    {translate(
-                      'companyAuth>accountCreatedTemplate>continueInternalWallet'
-                    )}
-                  </button>
-                </Trans>
-              </p>
+              {defaultTheme?.configurations.styleData
+                .onBoardingWalletsOptions == WalletsOptions.METAMASK ? null : (
+                <p className="pw-font-semibold pw-leading-[18px] pw-text-center pw-mt-1">
+                  <Trans i18nKey="companyAuth>externalWallet>orContinueWithInternalWallet">
+                    ou
+                    <button
+                      onClick={onClickContinue}
+                      className="pw-underline hover:pw-text-[#5682C3] pw-block pw-mt-1 pw-mx-auto"
+                    >
+                      {translate(
+                        'companyAuth>accountCreatedTemplate>continueInternalWallet'
+                      )}
+                    </button>
+                  </Trans>
+                </p>
+              )}
             </>
           ) : null}
           <AuthFooter className="pw-mt-9" />
@@ -276,15 +286,18 @@ const _ConnectExternalWalletWithoutLayout = ({
               })}
             </p>
           </>
-          <div className="pw-mx-auto">
-            <AuthButton
-              onClick={() => mailInterceptor(onClickContinue)}
-              disabled={isConnecting}
-              className="!pw-w-[211px]"
-            >
-              {translate('signUp>connectWallet>connectButton')}
-            </AuthButton>
-          </div>
+          {defaultTheme?.configurations.styleData.onBoardingWalletsOptions ==
+          WalletsOptions.METAMASK ? null : (
+            <div className="pw-mx-auto">
+              <AuthButton
+                onClick={() => mailInterceptor(onClickContinue)}
+                disabled={isConnecting}
+                className="!pw-w-[211px]"
+              >
+                {translate('signUp>connectWallet>connectButton')}
+              </AuthButton>
+            </div>
+          )}
           <h2 className="pw-font-semibold pw-text-xl pw-leading-5 pw-text-center">
             {translate('signUp>connectWallet>connectExternal')}
           </h2>

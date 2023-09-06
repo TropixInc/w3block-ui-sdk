@@ -32,7 +32,9 @@ export const CriptoValueComponent = ({
           <MaticIcon style={{ width: size + 'px', height: size + 'px' }} />
         );
       default:
-        return <p className="pw-text-sm pw-text-gray-700">{code}</p>;
+        return (
+          <p className={`pw-text-sm pw-text-gray-700 ${fontClass}`}>{code}</p>
+        );
     }
   };
 

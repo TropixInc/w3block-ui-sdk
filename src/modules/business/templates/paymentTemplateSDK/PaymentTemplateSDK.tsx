@@ -27,7 +27,7 @@ export const PaymentTemplateSDK = () => {
   const { loyalties } = useLoyaltiesInfo();
   const [codeError, setCodeError] = useState<string>('');
   const [userInfo, setUserInfo] = useState<UserInfoInterface>({});
-  useGuardPagesWithOptions({ needBusiness: true });
+  useGuardPagesWithOptions({ needBusiness: true, needUser: true });
   const { mutate } = useGetUserByCode();
   const { mutate: getUserBalance } = useGetUserBalance();
   const { mutate: getPaymentPreview } = useGetPaymentPreview();
