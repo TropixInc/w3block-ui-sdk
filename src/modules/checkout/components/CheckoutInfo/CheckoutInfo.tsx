@@ -81,6 +81,7 @@ const _CheckoutInfo = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const utms = useUtms();
   const [checkUtm, setCheckUtm] = useState(true);
   const [couponCodeInput, setCouponCodeInput] = useState<string | undefined>(
@@ -185,6 +186,7 @@ const _CheckoutInfo = ({
       token &&
       checkoutStatus === CheckoutStatus.CONFIRMATION
     ) {
+      setIsLoadingPreview(true);
       getOrderPreview.mutate(
         {
           productIds: isCart
@@ -221,6 +223,7 @@ const _CheckoutInfo = ({
               setProductErros(data.productsErrors ?? []);
             }
             setOrderPreview(data);
+            setIsLoadingPreview(false);
             setCart(
               data.products.map((val) => {
                 return {
@@ -497,7 +500,7 @@ const _CheckoutInfo = ({
               }
               totalPrice={orderPreview?.totalPrice || '0'}
               service={orderPreview?.clientServiceFee || '0'}
-              loading={isLoading}
+              loading={isLoading || isLoadingPreview}
               className="pw-mt-4"
               price={
                 parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
@@ -545,6 +548,7 @@ const _CheckoutInfo = ({
             </div>
             {parseFloat(orderPreview?.totalPrice ?? '0') !== 0 && (
               <PaymentMethodsComponent
+                loadingPreview={isLoadingPreview}
                 methodSelected={
                   choosedPayment ?? ({} as PaymentMethodsAvaiable)
                 }
@@ -566,7 +570,7 @@ const _CheckoutInfo = ({
                 {translate('shared>cancel')}
               </PixwayButton>
               <PixwayButton
-                disabled={!orderPreview}
+                disabled={!orderPreview || isLoadingPreview}
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
@@ -641,7 +645,7 @@ const _CheckoutInfo = ({
         );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderPreview, choosedPayment, currencyIdState]);
+  }, [orderPreview, choosedPayment, currencyIdState, isLoadingPreview]);
 
   const anchorCurrencyId = useMemo(() => {
     return orderPreview?.products && orderPreview.products.length
@@ -683,6 +687,7 @@ const _CheckoutInfo = ({
           <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
             {differentProducts.map((prod, index) => (
               <ProductInfo
+                loadingPreview={isLoadingPreview}
                 isCart={isCart}
                 className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
                 currency={

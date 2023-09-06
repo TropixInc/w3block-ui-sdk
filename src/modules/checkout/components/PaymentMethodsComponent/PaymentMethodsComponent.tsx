@@ -6,6 +6,7 @@ interface PaymentMethodsComponentProps {
   className?: string;
   onSelectedPayemnt: (method: PaymentMethodsAvaiable) => void;
   methodSelected: PaymentMethodsAvaiable;
+  loadingPreview?: boolean;
 }
 
 export const PaymentMethodsComponent = ({
@@ -13,6 +14,7 @@ export const PaymentMethodsComponent = ({
   className = '',
   onSelectedPayemnt,
   methodSelected,
+  loadingPreview = false,
 }: PaymentMethodsComponentProps) => {
   return (
     <div className={`${className}`}>
@@ -26,6 +28,7 @@ export const PaymentMethodsComponent = ({
           className="pw-mt-3"
           key={method.paymentMethod}
           method={method}
+          loadingPreview={loadingPreview}
         />
       ))}
     </div>
