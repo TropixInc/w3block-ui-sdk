@@ -222,6 +222,19 @@ const _CheckoutInfo = ({
             if (data.productsErrors && data.productsErrors?.length > 0) {
               setProductErros(data.productsErrors ?? []);
             }
+            if (
+              choosedPayment &&
+              choosedPayment.paymentMethod == 'credit_card'
+            ) {
+              setChoosedPayment({
+                ...choosedPayment,
+                availableInstallments: data.providersForSelection?.find(
+                  (val) =>
+                    val.paymentMethod == choosedPayment.paymentMethod &&
+                    val.paymentProvider == choosedPayment.paymentProvider
+                )?.availableInstallments,
+              });
+            }
             setOrderPreview(data);
             setIsLoadingPreview(false);
             setCart(
