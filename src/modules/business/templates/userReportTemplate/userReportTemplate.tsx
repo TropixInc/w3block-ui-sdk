@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 
-import { Erc20TokenHistory } from '../../../dashboard/interface/ercTokenHistoryInterface';
+import {
+  Erc20TokenHistory,
+  FromToInterface,
+} from '../../../dashboard/interface/ercTokenHistoryInterface';
 import { InternalPagesLayoutBase, useRouterConnect } from '../../../shared';
 import { ReactComponent as UserIcon } from '../../../shared/assets/icons/userOutlined.svg';
 import { Pagination } from '../../../shared/components/Pagination';
@@ -30,17 +33,17 @@ export const UserReportTemplate = () => {
     }
   }, [loyalties]);
 
-  const getTransferColorAndStatus = (to: string, from?: string): any => {
+  const getTransferColorAndStatus = (from?: FromToInterface): any => {
     if (mainLoyaltie) {
-      if (to == mainLoyaltie.tokenIssuanceAddress) {
+      if (from == null) {
+        return {
+          color: 'red',
+          status: 'Débito',
+        };
+      } else if (from.type == 'user') {
         return {
           color: 'green',
           status: 'Crédito',
-        };
-      } else if (from == mainLoyaltie.tokenTransferabilityAddress) {
-        return {
-          color: 'red',
-          status: 'Debito',
         };
       } else {
         return {
@@ -48,6 +51,20 @@ export const UserReportTemplate = () => {
           status: 'Crédito',
         };
       }
+    }
+  };
+
+  const getTextToShow = (erc: Erc20TokenHistory): string => {
+    if (
+      erc.from == null &&
+      erc.request.metadata &&
+      Array.isArray(erc.request.metadata)
+    ) {
+      return `${erc.request.metadata[0].description} - Gerado pelo operador ${erc.request.metadata[0].operatorName}`;
+    } else if (erc.request.metadata && erc.from != null) {
+      return `${erc.request.metadata.description} - Feito pelo usuário ${erc.from.user_name}`;
+    } else {
+      return '';
     }
   };
 
@@ -59,18 +76,12 @@ export const UserReportTemplate = () => {
         <div className="pw-flex pw-items-center pw-gap-2 pw-py-4">
           <div
             style={{
-              backgroundColor: getTransferColorAndStatus(
-                item.request.to,
-                item.request.from
-              ).color,
+              backgroundColor: getTransferColorAndStatus(item.from).color,
             }}
             className="pw-w-2 pw-h-2 pw-rounded-full"
           ></div>
           <p className="pw-text-slate-500 pw-text-sm pw-font-semibold">
-            {
-              getTransferColorAndStatus(item.request.to, item.request.from)
-                .status
-            }
+            {getTransferColorAndStatus(item.from).status}
           </p>
         </div>
       ),
@@ -80,10 +91,8 @@ export const UserReportTemplate = () => {
       key: '',
       name: 'Endereço da carteira',
       component: (item: Erc20TokenHistory) => (
-        <p className="pw-text-slate-500 pw-text-sm pw-font-semibold">
-          {item.request.to == mainLoyaltie?.tokenIssuanceAddress
-            ? item.request.from
-            : item.request.to}
+        <p className="pw-text-slate-500 pw-text-xs pw-font-regular pw-max-w-[300px]">
+          {getTextToShow(item)}
         </p>
       ),
     },

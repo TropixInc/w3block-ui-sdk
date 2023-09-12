@@ -33,8 +33,17 @@ export interface Erc20TokenHistory {
   request: Request;
   executeAt: string;
   loyaltiesTransactions: LoyaltiesTransaction[];
+  to?: FromToInterface;
+  from?: FromToInterface;
 }
 
+export interface FromToInterface {
+  id?: string;
+  phone?: string;
+  type?: string;
+  user_name?: string;
+  wallet?: string;
+}
 export interface Metadata {
   confirmedAt: string;
   transaction: Transaction;
@@ -59,6 +68,7 @@ export interface Request {
   to: string;
   amount: string;
   from?: string;
+  metadata?: any;
 }
 
 export interface LoyaltiesTransaction {
