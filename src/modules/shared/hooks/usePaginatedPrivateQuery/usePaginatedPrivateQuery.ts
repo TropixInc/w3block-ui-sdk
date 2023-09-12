@@ -40,6 +40,7 @@ export interface QueryParams {
   search?: string;
   sortBy?: string;
   orderBy?: string;
+  walletAddresses?: Array<string>;
 }
 
 export const usePaginatedPrivateQuery = <QueryData>(

@@ -131,7 +131,10 @@ const _PassTemplate = ({
   const { data: collectionData, isLoading: collectionLoading } =
     useGetCollectionMetadata({
       id: benefit?.data.tokenPassId ?? '',
-      query: { limit: 50 },
+      query: {
+        limit: 50,
+        walletAddresses: [profile?.data.mainWallet?.address ?? ''],
+      },
     });
 
   const {
@@ -141,11 +144,7 @@ const _PassTemplate = ({
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
     chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
-    tokenId:
-      tokenId ??
-      collectionData?.items.filter(
-        (val) => val.ownerAddress === profile?.data.mainWallet?.address
-      )[0]?.tokenId,
+    tokenId: tokenId ?? collectionData?.items?.[0]?.tokenId,
   });
 
   const editionNumber = useMemo(() => {
@@ -441,18 +440,10 @@ const _PassTemplate = ({
   };
 
   useEffect(() => {
-    if (
-      collectionData?.items.filter(
-        (val) => val.ownerAddress === profile?.data.mainWallet?.address
-      ).length === 1
-    ) {
+    if (collectionData?.items.length === 1) {
       router.pushConnect(
         PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', benefitId).concat(
-          `?tokenId=${
-            collectionData?.items.filter(
-              (val) => val.ownerAddress === profile?.data.mainWallet?.address
-            )[0].tokenId
-          }`
+          `?tokenId=${collectionData?.items[0].tokenId}`
         )
       );
     }
@@ -768,10 +759,7 @@ const _PassTemplate = ({
   } else {
     return (
       <div className="pw-px-4 sm:pw-px-0">
-        {collectionLoading ||
-        collectionData?.items.filter(
-          (val) => val.ownerAddress === profile?.data.mainWallet?.address
-        ).length === 1 ? (
+        {collectionLoading || collectionData?.items.length === 1 ? (
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
           </div>
@@ -818,10 +806,7 @@ const _PassTemplate = ({
                     </div>
                   </div>
                   <div className="pw-p-4">
-                    {collectionData?.items.filter(
-                      (val) =>
-                        val.ownerAddress === profile?.data.mainWallet?.address
-                    ).length === 0 ? (
+                    {collectionData?.items.length === 0 ? (
                       <p className="pw-text-black pw-text-base pw-font-semibold">
                         Você não possui nenhum token com este benefício.
                       </p>
@@ -831,45 +816,37 @@ const _PassTemplate = ({
                           Você possui mais de um token com{' '}
                           <b>{benefit?.data.name}</b> disponível:{' '}
                         </p>
-                        {collectionData?.items
-                          .filter(
-                            (val) =>
-                              val.ownerAddress ===
-                              profile?.data.mainWallet?.address
-                          )
-                          .map((val) => {
-                            return (
-                              <div
-                                key={val.id}
-                                className="pw-flex pw-flex-row pw-items-center pw-gap-5 pw-border-b pw-border-[#EFEFEF] pw-p-3"
-                              >
-                                <ImageSDK
-                                  src={val.mainImage}
-                                  className="pw-h-[120px]"
-                                />
-                                <div className="pw-flex pw-flex-col">
-                                  <p className="pw-text-black pw-text-base pw-mb-2">
-                                    Edição: #{val.editionNumber}
-                                  </p>
-                                  <Button
-                                    className="pw-w-full"
-                                    onClick={() =>
-                                      router.pushConnect(
-                                        PixwayAppRoutes.USE_BENEFIT.replace(
-                                          '{benefitId}',
-                                          benefitId
-                                        ).concat(`?tokenId=${val.tokenId}`)
-                                      )
-                                    }
-                                  >
-                                    {translate(
-                                      'token>pass>benefits>useBenefit'
-                                    )}
-                                  </Button>
-                                </div>
+                        {collectionData?.items.map((val) => {
+                          return (
+                            <div
+                              key={val.id}
+                              className="pw-flex pw-flex-row pw-items-center pw-gap-5 pw-border-b pw-border-[#EFEFEF] pw-p-3"
+                            >
+                              <ImageSDK
+                                src={val.mainImage}
+                                className="pw-h-[120px]"
+                              />
+                              <div className="pw-flex pw-flex-col">
+                                <p className="pw-text-black pw-text-base pw-mb-2">
+                                  Edição: #{val.editionNumber}
+                                </p>
+                                <Button
+                                  className="pw-w-full"
+                                  onClick={() =>
+                                    router.pushConnect(
+                                      PixwayAppRoutes.USE_BENEFIT.replace(
+                                        '{benefitId}',
+                                        benefitId
+                                      ).concat(`?tokenId=${val.tokenId}`)
+                                    )
+                                  }
+                                >
+                                  {translate('token>pass>benefits>useBenefit')}
+                                </Button>
                               </div>
-                            );
-                          })}
+                            </div>
+                          );
+                        })}
                       </>
                     )}
                   </div>
