@@ -29,6 +29,7 @@ interface ProductInfoProps {
   isCart?: boolean;
   originalPrice?: string;
   variants?: Variants[];
+  loadingPreview?: boolean;
 }
 
 export const ProductInfo = ({
@@ -48,6 +49,7 @@ export const ProductInfo = ({
   isCart,
   originalPrice,
   variants,
+  loadingPreview = false,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const maxUp = stockAmount > 5 ? 5 : stockAmount;
@@ -106,7 +108,7 @@ export const ProductInfo = ({
               );
             })}
         </div>
-        {loading ? (
+        {loading || loadingPreview ? (
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
           <div className="pw-flex pw-gap-1">
@@ -262,7 +264,11 @@ export const ProductInfo = ({
               )}
 
               <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
-                {quantity}
+                {loadingPreview ? (
+                  <Shimmer className="!pw-w-3 pw-h-4" />
+                ) : (
+                  quantity
+                )}
               </p>
             </div>
 

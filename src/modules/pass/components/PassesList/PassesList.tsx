@@ -33,8 +33,12 @@ const _PassesList = () => {
   const [showVerify, setShowVerify] = useState(false);
   const [errorType, setErrorType] = useState<TypeError>(TypeError.read);
   const [error, setError] = useState('');
-  const [editionNumber, userId, secret, benefitId] = qrCodeData.split(';');
-  const { data: verifyBenefit, isLoading: verifyLoading } = useVerifyBenefit({
+  const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
+  const {
+    data: verifyBenefit,
+    isLoading: verifyLoading,
+    isError: verifyError,
+  } = useVerifyBenefit({
     benefitId: benefitId,
     secret: secret,
     userId: userId,
@@ -58,10 +62,12 @@ const _PassesList = () => {
     usePostBenefitRegisterUse();
 
   const verifyBenefitUse = (qrCodeData: string) => {
-    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(';');
+    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
     setOpenScan(false);
-
-    if (editionNumber && userId && secret && benefitId) {
+    if (verifyError) {
+      setError(translate('token>pass>invalidFormat'));
+      setShowError(true);
+    } else if (editionNumber && userId && secret && benefitId) {
       setQrCodeData(qrCodeData);
       setShowVerify(true);
     } else {
@@ -71,7 +77,7 @@ const _PassesList = () => {
   };
 
   const validateBenefitUse = (qrCodeData: string) => {
-    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(';');
+    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
 
     registerUse(
       {
@@ -155,6 +161,7 @@ const _PassesList = () => {
         />
         <VerifyBenefit
           hasOpen={showVerify}
+          error={verifyError}
           isLoading={registerLoading}
           isLoadingInfo={verifyLoading}
           onClose={() => setShowVerify(false)}

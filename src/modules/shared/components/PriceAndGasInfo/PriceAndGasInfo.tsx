@@ -16,6 +16,7 @@ interface PriceAndGasInfo {
   originalPrice?: string;
   originalTotalPrice?: string;
   originalService?: string;
+  loadingPreview?: boolean;
 }
 
 const _PriceAndGasInfo = ({
@@ -30,13 +31,14 @@ const _PriceAndGasInfo = ({
   originalPrice,
   originalService,
   originalTotalPrice,
+  loadingPreview = false,
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
   return (
     <div className={`pw-w-full ${className}`}>
       <div className="pw-flex pw-justify-between">
         <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">Subtotal</p>
-        {loading ? (
+        {loading || loadingPreview ? (
           <Shimmer />
         ) : (
           <div className="pw-flex pw-gap-2">
@@ -70,7 +72,7 @@ const _PriceAndGasInfo = ({
             {/* <InfoIcon className="pw-mt-[2px]" /> */}
           </div>
           {service && parseFloat(service) > 0 ? (
-            loading ? (
+            loading || loadingPreview ? (
               <Shimmer />
             ) : (
               <div className="pw-flex pw-gap-2">
@@ -120,7 +122,7 @@ const _PriceAndGasInfo = ({
         <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">
           {translate('shared>components>price&gasInfo')}
         </p>
-        {loading ? (
+        {loading || loadingPreview ? (
           <Shimmer className="pw-h-6 pw-w-17" />
         ) : (
           <div className="pw-flex pw-gap-2">

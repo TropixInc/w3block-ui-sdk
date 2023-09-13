@@ -12,7 +12,10 @@ import useGetPassBenefitById from '../../../pass/hooks/useGetPassBenefitById';
 import useGetQRCodeSecret from '../../../pass/hooks/useGetQRCodeSecret';
 import usePostSelfUseBenefit from '../../../pass/hooks/usePostSelfUseBenefit';
 import useVerifyBenefit from '../../../pass/hooks/useVerifyBenefit';
-import { TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
+import {
+  TokenPassBenefitType,
+  VerifyBenefitResponse,
+} from '../../../pass/interfaces/PassBenefitDTO';
 import {
   InternalPagesLayoutBase,
   useHasWallet,
@@ -109,6 +112,7 @@ const _PassTemplate = ({
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showVerify, setShowVerify] = useState(false);
+  const [selfUseData, setUseBenefitData] = useState<VerifyBenefitResponse>();
   const locale = useLocale();
   const router = useRouterConnect();
   const tokenId = tokenIdProp || (router?.query?.tokenId as string) || '';
@@ -127,7 +131,10 @@ const _PassTemplate = ({
   const { data: collectionData, isLoading: collectionLoading } =
     useGetCollectionMetadata({
       id: benefit?.data.tokenPassId ?? '',
-      query: { limit: 50 },
+      query: {
+        limit: 50,
+        walletAddresses: [profile?.data.mainWallet?.address ?? ''],
+      },
     });
 
   const {
@@ -137,11 +144,7 @@ const _PassTemplate = ({
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
     chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
-    tokenId:
-      tokenId ??
-      collectionData?.items.filter(
-        (val) => val.ownerAddress === profile?.data.mainWallet?.address
-      )[0]?.tokenId,
+    tokenId: tokenId ?? collectionData?.items?.[0]?.tokenId,
   });
 
   const editionNumber = useMemo(() => {
@@ -162,22 +165,27 @@ const _PassTemplate = ({
     (e) => e.id === benefit?.data.id
   );
 
-  const { data: secret, isLoading: isLoadingSecret } = useGetQRCodeSecret({
+  const {
+    data: secret,
+    isLoading: isLoadingSecret,
+    refetch: refetchSecret,
+  } = useGetQRCodeSecret({
     benefitId,
     editionNumber: editionNumber as string,
   });
 
   const {
-    mutate: useBenefit,
+    mutate: selfUseBenefit,
     isLoading: isUseLoading,
     isSuccess: isUseSuccess,
     isError: isUseError,
-  } = usePostSelfUseBenefit({
-    body: { editionNumber: editionNumber, userId: profile?.data?.id || '' },
-    benefitId,
-  });
+  } = usePostSelfUseBenefit();
 
-  const { data: verifyBenefit, isLoading: verifyLoading } = useVerifyBenefit({
+  const {
+    data: verifyBenefit,
+    isLoading: verifyLoading,
+    isError: verifyError,
+  } = useVerifyBenefit({
     benefitId: benefitId,
     secret: secret?.data?.secret,
     userId: profile?.data?.id || '',
@@ -193,11 +201,11 @@ const _PassTemplate = ({
   }, [isUseSuccess]);
 
   useEffect(() => {
-    if (isUseError) {
+    if (isUseError || verifyError) {
       setShowError(true);
       setShowVerify(false);
     }
-  }, [isUseError]);
+  }, [isUseError, verifyError]);
 
   const handleClose = () => {
     router.push(PixwayAppRoutes.WALLET);
@@ -236,7 +244,6 @@ const _PassTemplate = ({
       return 'Online';
     }
   };
-
   const chainScanLink = useChainScanLink(
     benefit && +benefit?.data?.tokenPass?.chainId,
     publicTokenResponse?.data?.edition?.mintedHash
@@ -360,20 +367,21 @@ const _PassTemplate = ({
               {weekDay[locale][val as Week]}
             </p>
             <div className="pw-flex">
-              {benefit?.data?.checkIn?.[val]?.map(
-                (val: { start: string; end: string }, index: number) => {
-                  return (
-                    <p
-                      key={val.start}
-                      className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]"
-                    >
-                      {index > 0 ? ', ' : ': '}
-                      {val.start}
-                      {val?.end && ' - ' + val.end}
-                    </p>
-                  );
-                }
-              )}
+              {val !== 'all' &&
+                benefit?.data?.checkIn?.[val]?.map(
+                  (val: { start: string; end: string }, index: number) => {
+                    return (
+                      <p
+                        key={val.start}
+                        className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]"
+                      >
+                        {index > 0 ? ', ' : ': '}
+                        {val.start}
+                        {val?.end && ' - ' + val.end}
+                      </p>
+                    );
+                  }
+                )}
             </div>
           </div>
         ) : (
@@ -432,23 +440,28 @@ const _PassTemplate = ({
   };
 
   useEffect(() => {
-    if (
-      collectionData?.items.filter(
-        (val) => val.ownerAddress === profile?.data.mainWallet?.address
-      ).length === 1
-    ) {
+    if (collectionData?.items.length === 1) {
       router.pushConnect(
         PixwayAppRoutes.USE_BENEFIT.replace('{benefitId}', benefitId).concat(
-          `?tokenId=${
-            collectionData?.items.filter(
-              (val) => val.ownerAddress === profile?.data.mainWallet?.address
-            )[0].tokenId
-          }`
+          `?tokenId=${collectionData?.items[0].tokenId}`
         )
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectionData?.items]);
+
+  const handleUseBenefit = () =>
+    selfUseBenefit(
+      {
+        body: { editionNumber: editionNumber, userId: profile?.data?.id || '' },
+        benefitId,
+      },
+      {
+        onSuccess(data) {
+          setUseBenefitData(data.data);
+        },
+      }
+    );
 
   if (
     isLoadingBenefit ||
@@ -596,6 +609,7 @@ const _PassTemplate = ({
                     benefitId={benefitId}
                     secret={secret?.data?.secret}
                     isDynamic={isDynamic ?? false}
+                    refetchSecret={refetchSecret}
                   />
                 )}
               <div className="pw-w-full pw-flex pw-flex-col pw-pt-[16px] pw-px-[16px]">
@@ -618,7 +632,7 @@ const _PassTemplate = ({
                   </span>
                 </div>
                 {benefit?.data?.checkIn && (
-                  <div className="pw-flex pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
+                  <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
                     {translate('token>pass>checkinAvaibleAt')}
                     {renderCheckInTime()}
                   </div>
@@ -636,20 +650,20 @@ const _PassTemplate = ({
               <QrCodeValidated
                 hasOpen={showSuccess}
                 onClose={handleClose}
-                name={verifyBenefit?.data?.tokenPassBenefit?.name}
-                type={verifyBenefit?.data?.tokenPassBenefit?.type}
+                name={selfUseData?.tokenPassBenefit?.name}
+                type={selfUseData?.tokenPassBenefit?.type}
                 tokenPassBenefitAddresses={
                   benefitData?.tokenPassBenefitAddresses
                 }
-                userEmail={verifyBenefit?.data?.user?.email}
-                userName={verifyBenefit?.data?.user?.name}
+                userEmail={selfUseData?.user?.email}
+                userName={selfUseData?.user?.name}
               />
               <VerifyBenefit
                 hasOpen={showVerify}
                 isLoading={isUseLoading}
                 isLoadingInfo={verifyLoading}
                 onClose={() => setShowVerify(false)}
-                useBenefit={useBenefit}
+                useBenefit={handleUseBenefit}
                 data={verifyBenefit?.data}
                 tokenPassBenefitAddresses={
                   benefitData?.tokenPassBenefitAddresses
@@ -745,10 +759,7 @@ const _PassTemplate = ({
   } else {
     return (
       <div className="pw-px-4 sm:pw-px-0">
-        {collectionLoading ||
-        collectionData?.items.filter(
-          (val) => val.ownerAddress === profile?.data.mainWallet?.address
-        ).length === 1 ? (
+        {collectionLoading || collectionData?.items.length === 1 ? (
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
           </div>
@@ -795,10 +806,7 @@ const _PassTemplate = ({
                     </div>
                   </div>
                   <div className="pw-p-4">
-                    {collectionData?.items.filter(
-                      (val) =>
-                        val.ownerAddress === profile?.data.mainWallet?.address
-                    ).length === 0 ? (
+                    {collectionData?.items.length === 0 ? (
                       <p className="pw-text-black pw-text-base pw-font-semibold">
                         Você não possui nenhum token com este benefício.
                       </p>
@@ -808,45 +816,37 @@ const _PassTemplate = ({
                           Você possui mais de um token com{' '}
                           <b>{benefit?.data.name}</b> disponível:{' '}
                         </p>
-                        {collectionData?.items
-                          .filter(
-                            (val) =>
-                              val.ownerAddress ===
-                              profile?.data.mainWallet?.address
-                          )
-                          .map((val) => {
-                            return (
-                              <div
-                                key={val.id}
-                                className="pw-flex pw-flex-row pw-items-center pw-gap-5 pw-border-b pw-border-[#EFEFEF] pw-p-3"
-                              >
-                                <ImageSDK
-                                  src={val.mainImage}
-                                  className="pw-h-[120px]"
-                                />
-                                <div className="pw-flex pw-flex-col">
-                                  <p className="pw-text-black pw-text-base pw-mb-2">
-                                    Edição: #{val.editionNumber}
-                                  </p>
-                                  <Button
-                                    className="pw-w-full"
-                                    onClick={() =>
-                                      router.pushConnect(
-                                        PixwayAppRoutes.USE_BENEFIT.replace(
-                                          '{benefitId}',
-                                          benefitId
-                                        ).concat(`?tokenId=${val.tokenId}`)
-                                      )
-                                    }
-                                  >
-                                    {translate(
-                                      'token>pass>benefits>useBenefit'
-                                    )}
-                                  </Button>
-                                </div>
+                        {collectionData?.items.map((val) => {
+                          return (
+                            <div
+                              key={val.id}
+                              className="pw-flex pw-flex-row pw-items-center pw-gap-5 pw-border-b pw-border-[#EFEFEF] pw-p-3"
+                            >
+                              <ImageSDK
+                                src={val.mainImage}
+                                className="pw-h-[120px]"
+                              />
+                              <div className="pw-flex pw-flex-col">
+                                <p className="pw-text-black pw-text-base pw-mb-2">
+                                  Edição: #{val.editionNumber}
+                                </p>
+                                <Button
+                                  className="pw-w-full"
+                                  onClick={() =>
+                                    router.pushConnect(
+                                      PixwayAppRoutes.USE_BENEFIT.replace(
+                                        '{benefitId}',
+                                        benefitId
+                                      ).concat(`?tokenId=${val.tokenId}`)
+                                    )
+                                  }
+                                >
+                                  {translate('token>pass>benefits>useBenefit')}
+                                </Button>
                               </div>
-                            );
-                          })}
+                            </div>
+                          );
+                        })}
                       </>
                     )}
                   </div>

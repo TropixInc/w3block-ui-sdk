@@ -6,6 +6,7 @@ interface PaymentAccordionProps {
   className?: string;
   selected: boolean;
   setSelected: (method: PaymentMethodsAvaiable) => void;
+  loadingPreview?: boolean;
 }
 
 export const PaymentAccordion = ({
@@ -13,6 +14,7 @@ export const PaymentAccordion = ({
   className = '',
   selected,
   setSelected,
+  loadingPreview = false,
 }: PaymentAccordionProps) => {
   const { text, description } = mapPaymentMethodToTextAndDescription(
     method.paymentMethod,
@@ -39,7 +41,8 @@ export const PaymentAccordion = ({
   };
 
   return (
-    <div
+    <button
+      disabled={loadingPreview}
       onClick={() => setSelected(method)}
       className={`pw-w-full pw-flex pw-items-center pw-px-4 pw-py-3 pw-bg-white pw-shadow-brand-shadow pw-rounded-lg pw-cursor-pointer pw-gap-x-5   ${className}`}
     >
@@ -52,13 +55,13 @@ export const PaymentAccordion = ({
       </div>
 
       <MapPayementToIcon />
-      <div>
+      <div className="pw-text-left">
         <p className="pw-text-[14px] pw-font-[600] pw-text-[#35394C]">{text}</p>
         <p className="pw-text-[12px] pw-font-[400] pw-text-slate-500">
           {description}
         </p>
       </div>
-    </div>
+    </button>
   );
 };
 
