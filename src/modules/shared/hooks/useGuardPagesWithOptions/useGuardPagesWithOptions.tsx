@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useIsProduction } from '../useIsProduction';
 import { usePixwaySession } from '../usePixwaySession';
@@ -35,11 +37,22 @@ export const useGuardPagesWithOptions = ({
   const hasWallets = wallets?.length > 0;
   const { data: session, status } = usePixwaySession();
 
+  useEffect(() => {
+    if (needUser && (!session || !session.user) && status != 'loading') {
+      pushConnect(redirectPage ?? PixwayAppRoutes.SIGN_IN, {
+        callbackPath: window.location.href,
+      });
+      return;
+    }
+  }, [session]);
+
   if (status == 'loading') {
     return;
   }
   if (needUser && (!session || !session.user)) {
-    pushConnect(redirectPage ?? PixwayAppRoutes.SIGN_IN);
+    pushConnect(redirectPage ?? PixwayAppRoutes.SIGN_IN, {
+      callbackPath: window.location.href,
+    });
     return;
   }
   if (needAdmin && !isAdmin && profile) {
