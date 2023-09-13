@@ -1,18 +1,21 @@
 import { useContext, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
-import { ChainId, WalletTypes } from '@w3block/sdk-id';
+import { WalletTypes } from '@w3block/sdk-id';
 
 import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
-import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
-import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfileWithKYC } from '../../../../../hooks/useProfileWithKYC/useProfileWithKYC';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
+import {
+  chainIdToCode,
+  useGetRightWallet,
+} from '../../../../../utils/getRightWallet';
+import { CriptoValueComponent } from '../../../../CriptoValueComponent/CriptoValueComponent';
 import { PixwayButton } from '../../../../PixwayButton';
 import { UserTag } from '../../../../UserTag/UserTag';
 import { NavigationMenuTabs } from '../interfaces/menu';
@@ -62,14 +65,7 @@ export const NavigationLoginLoggedButtonMobile = ({
       profile?.roles?.includes('superAdmin')) &&
     !profile?.roles?.includes('loyaltyOperator');
 
-  const renderIcon = () => {
-    return wallet?.chainId === ChainId.Polygon ||
-      wallet?.chainId === ChainId.Mumbai ? (
-      <MaticIcon className="pw-fill-[#8247E5]" />
-    ) : (
-      <ETHIcon className="pw-fill-black" />
-    );
-  };
+  const organizedWallets = useGetRightWallet();
 
   const { loyaltyWallet } = useUserWallet();
 
@@ -89,12 +85,15 @@ export const NavigationLoginLoggedButtonMobile = ({
             <EyeIcon />
           </div>
           {hideBalance ? (
-            <div className="pw-flex pw-gap-x-2">
-              {renderIcon()}
-              <p className="pw-font-[700] pw-text-xs pw-ml-1">
-                {parseFloat(wallet?.balance ?? '').toFixed(2)}
-              </p>
-            </div>
+            <CriptoValueComponent
+              fontClass="pw-text-white pw-text-sm"
+              crypto={true}
+              value={organizedWallets[0].balance}
+              code={chainIdToCode(
+                organizedWallets[0].chainId,
+                organizedWallets[0].currency
+              )}
+            />
           ) : (
             <p className="pw-font-[700] pw-text-xs">*****</p>
           )}

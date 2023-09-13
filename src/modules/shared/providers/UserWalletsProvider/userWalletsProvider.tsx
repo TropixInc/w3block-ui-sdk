@@ -9,6 +9,7 @@ import { AuthenticateModal } from '../../components/AuthenticateModal/Authentica
 import { useRouterConnect } from '../../hooks';
 import { useGetBalancesForWallets } from '../../hooks/useBalance';
 import { useIsProduction } from '../../hooks/useIsProduction';
+import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
 import { UserProvider } from '../UserProvider/userProvider';
 
@@ -48,6 +49,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [loyaltyWallet, setLoyaltyWallet] = useState<WalletLoyalty[]>([]);
+  const { data: session } = usePixwaySession();
   const { profile } = useProfileWithKYC();
   const [coinType, setCoinType] = useState<CoinsType>(CoinsType.MATIC);
   const isProduction = useIsProduction();
@@ -73,7 +75,11 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   }, [authenticatePaymentModal]);
 
   useEffect(() => {
-    if (!authenticatePaymentModal && router.query.authorizeLoyalty == 'true') {
+    if (
+      session &&
+      !authenticatePaymentModal &&
+      router.query.authorizeLoyalty == 'true'
+    ) {
       setAuthenticatePaymentModal(true);
     }
   }, [router.query]);

@@ -6,19 +6,17 @@ import {
 } from 'react';
 import { useClickAway } from 'react-use';
 
-import { ChainId, WalletTypes } from '@w3block/sdk-id';
+import {  WalletTypes } from '@w3block/sdk-id';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import useGetPassByUser from '../../../../../../pass/hooks/useGetPassByUser';
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
-import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
 import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 // import { ReactComponent as HelpIcon } from '../../../../../assets/icons/helpIconGray.svg';
 import { ReactComponent as IntegrationIcon } from '../../../../../assets/icons/integrationIconOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
-import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
 import { ReactComponent as MyOrdersIcon } from "../../../../../assets/icons/myOrders.svg"
 //import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
 // import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
@@ -32,6 +30,8 @@ import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
+import { chainIdToCode, useGetRightWallet } from '../../../../../utils/getRightWallet';
+import { CriptoValueComponent } from '../../../../CriptoValueComponent/CriptoValueComponent';
 import { PixwayButton } from '../../../../PixwayButton';
 import { NavigationMenuTabs } from '../interfaces/menu';
 interface NavigationLoginLoggedButtonProps {
@@ -100,7 +100,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
 
   const items: NavigationMenuTabs[] = [
     {
-      name: "Dashboard",
+      name: "Relatórios",
       route: PixwayAppRoutes.LOYALTY_REPORT,
       icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: isLoayaltyOperator,
@@ -178,6 +178,7 @@ const NavigationMenu = ({
   textColor,
 }: NavigationLoginLoggedButtonProps) => {
   const defaultTabs = useDefaultMenuTabs(textColor ?? "black");
+  const organizedWallets = useGetRightWallet()
   const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
@@ -186,14 +187,6 @@ const NavigationMenu = ({
   const { data: profile } = useProfile();
   const { mainWallet: wallet } = useUserWallet();
 
-  const renderIcon = () => {
-    return wallet?.chainId === ChainId.Polygon ||
-      wallet?.chainId === ChainId.Mumbai ? (
-      <MaticIcon className="pw-fill-[#8247E5]" />
-    ) : (
-      <ETHIcon className="pw-fill-black" />
-    );
-  };
   const hasMainWallet = profile?.data.mainWallet?.address;
 
   const WithWallet = () => {
@@ -213,10 +206,10 @@ const NavigationMenu = ({
         <div className="pw-flex pw-items-center">
           {showValue ? (
             <>
-              {renderIcon()}
-              <p className="pw-font-[700] pw-text-xs pw-ml-1">
-                {parseFloat(wallet?.balance ?? '').toFixed(2)}
-              </p>
+            <CriptoValueComponent fontClass='pw-text-white pw-text-sm' crypto={true} value={organizedWallets[0].balance} code={chainIdToCode(
+              organizedWallets[0].chainId,
+              organizedWallets[0].currency
+            )}  />
             </>
           ) : (
             <p className="pw-font-[700] pw-text-xs">*****</p>

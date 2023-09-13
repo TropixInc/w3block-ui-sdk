@@ -5,9 +5,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { useUserWallet } from '../../hooks/useUserWallet';
 import { generateRandomUUID } from '../../utils/generateRamdomUUID';
+import { useGetRightWallet } from '../../utils/getRightWallet';
 import { WalletCard } from '../WalletCard/WalletCard';
+
 export const WalletHeaderSDK = () => {
-  const { mainWallet, wallets, loyaltyWallet } = useUserWallet();
+  const { mainWallet } = useUserWallet();
+  const organizedLoyalties = useGetRightWallet();
 
   return (
     <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
@@ -46,22 +49,14 @@ export const WalletHeaderSDK = () => {
             } as CSSProperties
           }
         >
-          {loyaltyWallet?.map((wallet) => (
+          {organizedLoyalties?.map((wallet) => (
             <SwiperSlide style={{ width: 'auto' }} key={generateRandomUUID()}>
               <WalletCard
-                balance={wallet.balance}
-                type="loyalty"
-                currency={wallet.currency}
-              />
-            </SwiperSlide>
-          ))}
-          {wallets?.map((wallet) => (
-            <SwiperSlide style={{ width: 'auto' }} key={generateRandomUUID()}>
-              <WalletCard
-                chainId={wallet.chainId}
-                balance={wallet.balance}
-                type={wallet.type}
-              />
+                balance={wallet?.balance ?? '0'}
+                type={wallet?.type as any}
+                currency={wallet?.currency}
+                chainId={wallet?.chainId}
+              />{' '}
             </SwiperSlide>
           ))}
         </Swiper>
