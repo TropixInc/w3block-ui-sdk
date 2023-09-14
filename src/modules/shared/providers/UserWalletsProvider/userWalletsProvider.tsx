@@ -66,8 +66,8 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (authenticatePaymentModal) {
       router.replace({ query: { ...router.query, authorizeLoyalty: 'true' } });
-    } else {
-      if (router.query.authorizeLoyalty) {
+    } else if (router.query.authorizeLoyalty && !authenticatePaymentModal) {
+      {
         delete router.query.authorizeLoyalty;
         router.replace({ query: router.query });
       }

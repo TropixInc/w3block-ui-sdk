@@ -89,7 +89,7 @@ export const UserReportTemplate = () => {
 
     {
       key: '',
-      name: 'Endereço da carteira',
+      name: 'Descrição',
       component: (item: Erc20TokenHistory) => (
         <p className="pw-text-slate-500 pw-text-xs pw-font-regular pw-max-w-[300px]">
           {getTextToShow(item)}
