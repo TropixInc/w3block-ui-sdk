@@ -86,7 +86,7 @@ export const NavigationLoginLoggedButtonMobile = ({
           </div>
           {hideBalance ? (
             <CriptoValueComponent
-              fontClass="pw-text-white pw-text-sm"
+              fontClass="pw-text-sm"
               crypto={true}
               value={organizedWallets[0].balance}
               code={chainIdToCode(
