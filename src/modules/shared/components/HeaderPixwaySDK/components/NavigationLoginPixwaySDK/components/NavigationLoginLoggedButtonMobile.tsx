@@ -153,22 +153,24 @@ export const NavigationLoginLoggedButtonMobile = ({
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
           {wallet ? <WithWallet /> : <WithoutWallet />}
           <div className="pw-mt-3 pw-w-full">
-            {menuTabs.map((tab) => (
-              <div
-                onClick={() => {
-                  if (tab.action) tab.action();
-                  else if (tab.route) {
-                    toggleTabsMemo();
-                    router.pushConnect(tab.route);
-                  }
-                }}
-                className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-text-[#383857] hover:pw-text-black"
-                key={tab.name}
-              >
-                {tab.icon}
-                <p>{tab.name}</p>
-              </div>
-            ))}
+            {menuTabs.map((tab) =>
+              tab.isVisible ? (
+                <div
+                  onClick={() => {
+                    if (tab.action) tab.action();
+                    else if (tab.route) {
+                      toggleTabsMemo();
+                      router.pushConnect(tab.route);
+                    }
+                  }}
+                  className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-text-[#383857] hover:pw-text-black"
+                  key={tab.name}
+                >
+                  {tab.icon}
+                  <p>{tab.name}</p>
+                </div>
+              ) : null
+            )}
           </div>
         </div>
       ) : null}
