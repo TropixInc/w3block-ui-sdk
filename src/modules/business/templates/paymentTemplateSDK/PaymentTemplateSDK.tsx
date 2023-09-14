@@ -49,17 +49,18 @@ export const PaymentTemplateSDK = () => {
         getUserBalance(data.id as string, {
           onSuccess: (balance) => {
             setUserInfo((prev) => ({ ...prev, ...balance[0] }));
+            const balanceNormal = parseFloat(balance[0].balance ?? '0');
             const pointsValue =
               loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
             // const currencyValue =
             //   loyalties[0].paymentViewSettings.pointsEquivalent.currencyValue;
-            const totalMoney = parseFloat(balance.balance ?? '0') * pointsValue;
-
+            const totalMoney = balanceNormal * pointsValue;
             if (totalMoney <= parseFloat(valueToPay)) {
-              setValueToUse(balance.balance);
+              setValueToUse(balanceNormal.toString());
             } else {
               setValueToUse((parseFloat(valueToPay) / pointsValue).toString());
             }
+            handleGetPaymentPreview();
           },
         });
       },
@@ -81,7 +82,10 @@ export const PaymentTemplateSDK = () => {
       getPaymentPreview(
         {
           amount: valueToPay,
-          points: valueToUse == '' || valueToUse == 'NaN' ? '0' : valueToUse,
+          points:
+            valueToUse == '' || valueToUse == 'NaN' || !valueToUse
+              ? '0'
+              : valueToUse,
           userId: userInfo.id as string,
           userCode: code.join('') as string,
           loyaltyId: loyaltieToUse?.id as string,
@@ -162,18 +166,18 @@ export const PaymentTemplateSDK = () => {
       const pointsValue =
         loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
       const amountTotalPoints = parseFloat(valueToPay) / pointsValue;
-      if (parseFloat(valueToUse) > amountTotalPoints) {
+      if (parseFloat(valueToUse ?? '0') > amountTotalPoints) {
         setValueToUse(amountTotalPoints.toString());
       }
     }
 
     if (
       userInfo.balance &&
-      parseFloat(valueToUse) > parseFloat(userInfo.balance)
+      parseFloat(valueToUse ?? '0') > parseFloat(userInfo.balance)
     ) {
       setValueToUse(userInfo.balance);
       return;
-    } else if (parseFloat(valueToUse) < 0) {
+    } else if (parseFloat(valueToUse ?? '0') < 0) {
       setValueToUse('0');
       return;
     }
@@ -214,6 +218,8 @@ export const PaymentTemplateSDK = () => {
   const handleCancelUserCard = () => {
     setCode(['', '', '', '']);
     setUserInfo({});
+    setCashbackPoints('0');
+    setTotalDiscount('0');
   };
 
   return (
@@ -308,8 +314,13 @@ export const PaymentTemplateSDK = () => {
         ) : null}
         <div className="pw-flex pw-justify-end pw-mt-[32px]">
           <button
+            disabled={userInfo.id == undefined || code.length != 4}
             onClick={() => handleSubmitPayment()}
-            className="pw-px-6 pw-py-[6px] pw-bg-blue-800 pw-rounded-full pw-shadow pw-border-b pw-border-white pw-text-white pw-text-xs pw-font-medium"
+            className={`pw-px-6 pw-py-[6px] pw-bg-blue-800 pw-rounded-full pw-shadow pw-border-b pw-border-white pw-text-white pw-text-xs pw-font-medium ${
+              userInfo.id == undefined || code.length != 4
+                ? 'pw-opacity-50'
+                : ''
+            }`}
           >
             Confirmar
           </button>

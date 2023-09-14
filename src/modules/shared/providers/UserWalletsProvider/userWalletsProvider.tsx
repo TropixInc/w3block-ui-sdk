@@ -49,7 +49,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [loyaltyWallet, setLoyaltyWallet] = useState<WalletLoyalty[]>([]);
-  const { data: session } = usePixwaySession();
+  const { data: session, status } = usePixwaySession();
   const { profile } = useProfileWithKYC();
   const [coinType, setCoinType] = useState<CoinsType>(CoinsType.MATIC);
   const isProduction = useIsProduction();
@@ -76,13 +76,14 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (
+      status != 'loading' &&
       session &&
       !authenticatePaymentModal &&
       router.query.authorizeLoyalty == 'true'
     ) {
       setAuthenticatePaymentModal(true);
     }
-  }, [router.query]);
+  }, [router.query, session]);
 
   const { mutate: getBalanceFromLoyalty } = useGetUserBalance();
 
