@@ -166,7 +166,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
   useEffect(() => {
     setTabsToShow(items);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProduction, pass]);
+  }, [isProduction, pass, profile]);
 
   return tabsToShow;
 };
@@ -241,7 +241,7 @@ const NavigationMenu = ({
         {hasMainWallet ? <WithWallet /> : <WithoutWallet />}
 
         <div className="pw-mt-[10px]">
-          {menuTabs.map((menu) => menu.isVisible && (
+          {menuTabs.map((menu) => menu.isVisible ? (
             <a
               onClick={() => {
                 if (menu.route) {
@@ -258,7 +258,7 @@ const NavigationMenu = ({
                 {menu.name}
               </p>
             </a>
-          ))}
+          ):null)}
         </div>
       </div>
     </div>
