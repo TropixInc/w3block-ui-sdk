@@ -18,6 +18,7 @@ import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.s
 import { ReactComponent as IntegrationIcon } from '../../../../../assets/icons/integrationIconOutlined.svg';
 import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
 import { ReactComponent as MyOrdersIcon } from "../../../../../assets/icons/myOrders.svg"
+import {ReactComponent as ReceiptIcon} from "../../../../../assets/icons/receipt.svg";
 //import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
 // import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
 import { ReactComponent as TicketIcon } from '../../../../../assets/icons/ticketFilled.svg';
@@ -89,7 +90,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const { pass } = useFlags();
   const { data: passData } = useGetPassByUser();
   const hasPassAssociated = passData?.data.items !== undefined && passData?.data?.items?.length > 0;
-
+  const { loyaltyWallet } = useUserWallet();
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
@@ -122,6 +123,15 @@ export const useDefaultMenuTabs = (textColor: string) => {
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: isUser || isAdmin,
+    },
+    {
+      name: translate('wallet>page>extract'),
+      icon: (
+        <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
+      ),
+      route: PixwayAppRoutes.WALLET_RECEIPT,
+      isVisible:
+        (isUser || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0,
     },
     {
       name: translate('header>components>defaultTab>myOrders'),
