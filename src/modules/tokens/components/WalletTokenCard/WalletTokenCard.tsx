@@ -34,7 +34,7 @@ interface Props {
 }
 
 const cardClassName =
-  'pw-p-[18px] pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] hover:pw-border-[#295BA6] hover:pw-cursor-pointer';
+  'pw-bg-white pw-p-[18px] pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] hover:pw-border-[#295BA6] hover:pw-cursor-pointer';
 
 const descriptionContainerClassName =
   'pw-w-full pw-flex pw-flex-col pw-gap-y-2.5 pw-mt-2.5';

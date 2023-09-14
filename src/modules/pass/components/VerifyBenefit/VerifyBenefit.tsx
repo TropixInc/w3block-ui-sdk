@@ -14,9 +14,13 @@ interface iProps {
   useBenefit(): void;
   data: any;
   isLoading: boolean;
-  isLoadingInfo: boolean;
+  isLoadingInfo?: boolean;
   tokenPassBenefitAddresses?: BenefitAddress[];
   error?: boolean;
+  user?: {
+    name?: string,
+    email?: string,
+  }
 }
 
 export const VerifyBenefit = ({
@@ -28,10 +32,11 @@ export const VerifyBenefit = ({
   data,
   tokenPassBenefitAddresses,
   error,
+  user,
 }: iProps) => {
   useLockBodyScroll(hasOpen);
   const [translate] = useTranslation();
-
+  
   if (hasOpen) {
     return (
       <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8 pw-overflow-scroll">
@@ -60,10 +65,10 @@ export const VerifyBenefit = ({
                 :
                 <>
                   <div className="pw-px-[16px] pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                    {data?.tokenPassBenefit?.tokenPass?.name}
+                    {data?.tokenPassBenefit?.tokenPass?.name ?? data?.tokenPass?.name}
                     <p className="pw-text-[18px] pw-leading-[23px] pw-font-bold">
                       {translate('token>pass>benefit')}{' '}
-                      {data?.tokenPassBenefit?.name}
+                      {data?.tokenPassBenefit?.name ?? data?.name}
                     </p>
                   </div>
                   <div className='pw-flex pw-flex-col'>
@@ -81,23 +86,23 @@ export const VerifyBenefit = ({
                       {translate('token>pass>cancel')}
                     </Button>
                   </div>
-                  {data?.tokenPassBenefit?.description &&
+                  {(data?.tokenPassBenefit?.description ?? data?.description) &&
                     <>
                       <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                         {translate('token>pass>description')}
                       </div>
                       <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                        {data?.tokenPassBenefit?.description}
+                        {data?.tokenPassBenefit?.description ?? data?.description}
                       </div>
                     </>
                   }
-                  {data?.tokenPassBenefit?.rules &&
+                  {(data?.tokenPassBenefit?.rules ?? data?.rules) &&
                     <>
                       <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                         {translate('token>pass>rules')}
                       </div>
                       <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                        {data?.tokenPassBenefit?.rules}
+                        {data?.tokenPassBenefit?.rules ?? data?.rules}
                       </div>
                     </>
                   }
@@ -106,13 +111,13 @@ export const VerifyBenefit = ({
                       {translate('token>pass>user')}
                     </div>
                     <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                      Username: {data?.user?.name}
+                      Username: {data?.user?.name ?? user?.name}
                     </div>
                     <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                      E-mail: {data?.user?.email}
+                      E-mail: {data?.user?.email ?? user?.email}
                     </div>
                   </>
-                  {data?.tokenPassBenefit?.type == TokenPassBenefitType.PHYSICAL ? (
+                  {(data?.tokenPassBenefit?.type ?? data?.type) == TokenPassBenefitType.PHYSICAL ? (
                     tokenPassBenefitAddresses?.length &&
                     tokenPassBenefitAddresses.map((address: any) => (
                       <>
