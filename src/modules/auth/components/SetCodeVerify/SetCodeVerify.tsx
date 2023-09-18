@@ -3,6 +3,7 @@ import { Trans } from 'react-i18next';
 
 import { addMinutes } from 'date-fns';
 
+import { useProfile } from '../../../shared';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -11,6 +12,7 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
+import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 
 interface SetCodeVerifyProps {
   isPostSignUp?: boolean;
@@ -23,15 +25,18 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const { query, pushConnect } = useRouterConnect();
   const { connectProxyPass } = useCompanyConfig();
   const email = (query.email as string) ?? '';
+  const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
+  const emailToUse = profile?.data?.email ?? email;
   useEffect(() => {
-    setNewCountdown(addMinutes(new Date(), 1));
+    if (!profile) setNewCountdown(addMinutes(new Date(), 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const formattedEmail = useEmailProtectedLabel(email);
+  }, [profile]);
+  const formattedEmail = useEmailProtectedLabel(emailToUse);
 
+  const { mutate: mutateVerify } = useVerifySignUp();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const changeInput = (index: number, e: any) => {
     const inputsToChange = inputs;
@@ -70,12 +75,26 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6) {
-      pushConnect(
-        PixwayAppRoutes.COMPLETE_SIGNUP +
-          `?email=${encodeURIComponent(email)}&token=${code};${
-            Date.now() + HOUR_IN_MS
-          }&code=${code}`
-      );
+      if (profile) {
+        mutateVerify(
+          {
+            email: emailToUse,
+            token: code,
+          },
+          {
+            onSuccess: () => {
+              pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+            },
+          }
+        );
+      } else {
+        pushConnect(
+          PixwayAppRoutes.COMPLETE_SIGNUP +
+            `?email=${encodeURIComponent(emailToUse)}&token=${code};${
+              Date.now() + HOUR_IN_MS
+            }&code=${code}`
+        );
+      }
     } else {
       setError('código inválido');
     }
@@ -128,8 +147,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
           mutate({
-            email: email,
-            callbackPath,
+            email: emailToUse,
             verificationType: 'numeric',
           })
         }
@@ -152,7 +170,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({
-                email: email,
+                email: emailToUse,
                 callbackPath,
                 verificationType: 'numeric',
               })

@@ -88,7 +88,9 @@ export const SigInWithoutLayout = ({
   });
 
   const checkForCallbackUrl = () => {
-    if (profile?.data.kycStatus === KycStatus.Pending) {
+    if (profile && !profile.data.verified) {
+      return PixwayAppRoutes.VERIfY_WITH_CODE;
+    } else if (profile?.data.kycStatus === KycStatus.Pending) {
       return routerToAttachKyc;
     } else if (!profile?.data.mainWallet) {
       return routeToAttachWallet;

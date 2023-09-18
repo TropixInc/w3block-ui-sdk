@@ -102,7 +102,9 @@ const _HeaderPixwaySDK = ({
   useEffect(() => {
     if (profile) {
       if (signupContext) {
-        if (
+        if (!profile.data.verified) {
+          router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
+        } else if (
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active
         ) {

@@ -103,7 +103,9 @@ const _SignInTemplate = ({
   });
 
   const checkForCallbackUrl = () => {
-    if (profile?.data?.kycStatus === KycStatus.Pending) {
+    if (profile && !profile?.data.verified) {
+      return appBaseUrl + PixwayAppRoutes.VERIfY_WITH_CODE;
+    } else if (profile?.data?.kycStatus === KycStatus.Pending) {
       return appBaseUrl + routeToAttachKYC;
     } else if (!profile?.data?.mainWallet) {
       return routeToAttachWallet;
