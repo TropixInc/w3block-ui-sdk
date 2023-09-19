@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.18](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.9.17...v1.9.18) (2023-09-19)
+
+
+### Bug Fixes
+
+* adjusts on checkout and productPage ([f01222b](https://github.com/TropixInc/w3block-ui-sdk/commit/f01222b38da6f7ac07391eda505afd8b42e5a50f))
+
 ### [1.9.17](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.9.16...v1.9.17) (2023-09-14)
 
 ### [1.9.16](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.9.15...v1.9.16) (2023-09-14)
