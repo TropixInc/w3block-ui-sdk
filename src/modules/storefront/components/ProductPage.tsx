@@ -1,7 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useClickAway, useInterval, useLocalStorage } from 'react-use';
+import {
+  useClickAway,
+  useDebounce,
+  useInterval,
+  useLocalStorage,
+} from 'react-use';
 
 import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
@@ -402,9 +407,13 @@ export const ProductPage = ({
     }
   }, [currencyId, product?.id, variants]);
 
-  useEffect(() => {
-    getOrderPreviewFn();
-  }, [quantity]);
+  useDebounce(
+    () => {
+      getOrderPreviewFn();
+    },
+    300,
+    [quantity]
+  );
 
   useInterval(() => setCartOpen(false), 5000);
   const [termsChecked, setTermsChecked] = useState(true);
@@ -413,7 +422,7 @@ export const ProductPage = ({
       setTermsChecked(false);
     }
   }, [product]);
-
+  const [error, setError] = useState('');
   const onChangeCheckbox = () => {
     const termsAria = product?.terms
       ?.map(
@@ -732,77 +741,110 @@ export const ProductPage = ({
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
                 !currencyId?.crypto ? (
-                  <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
-                    <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
-                      <p className="pw-text-sm pw-text-black pw-mb-1">
-                        Quantidade
-                      </p>
-                      <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
-                        <p
-                          onClick={() => {
-                            if (quantity > 1) {
-                              setQuantity(quantity - 1);
-                            }
-                          }}
-                          className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                            quantity && quantity > 1
-                              ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
-                              : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
-                          }`}
-                        >
-                          -
+                  <>
+                    <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
+                      <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
+                        <p className="pw-text-sm pw-text-black pw-mb-1">
+                          Quantidade
                         </p>
-                        <div>
-                          <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
-                            {quantity}
+                        <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
+                          <p
+                            onClick={() => {
+                              if (quantity > 1) {
+                                setQuantity(quantity - 1);
+                              }
+                            }}
+                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                              quantity && quantity > 1
+                                ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
+                                : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
+                            }`}
+                          >
+                            -
                           </p>
-                        </div>
-                        <p
-                          className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                            product?.canPurchaseAmount &&
-                            product?.stockAmount &&
-                            quantity < product?.canPurchaseAmount &&
-                            quantity < product?.stockAmount
-                              ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
-                              : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
-                          }`}
-                          onClick={() => {
-                            if (
+                          <div>
+                            <input
+                              type="number"
+                              id="quantityValue"
+                              value={quantity}
+                              onChange={() => {
+                                const inputValue = parseFloat(
+                                  (
+                                    document.getElementById(
+                                      'quantityValue'
+                                    ) as HTMLInputElement
+                                  ).value
+                                );
+                                if (
+                                  product.canPurchaseAmount &&
+                                  inputValue > product.canPurchaseAmount
+                                ) {
+                                  setError(
+                                    `Limite máximo de ${product.canPurchaseAmount} unidades`
+                                  );
+                                  setQuantity(product.canPurchaseAmount);
+                                } else if (inputValue > 0) {
+                                  setError('');
+                                  setQuantity(inputValue);
+                                } else if (inputValue < 1) {
+                                  setQuantity(1);
+                                }
+                              }}
+                              className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center pw-w-[30px]"
+                            ></input>
+                          </div>
+                          <p
+                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                               product?.canPurchaseAmount &&
                               product?.stockAmount &&
                               quantity < product?.canPurchaseAmount &&
                               quantity < product?.stockAmount
-                            ) {
-                              setQuantity(quantity + 1);
-                            }
-                          }}
-                        >
-                          +
-                        </p>
+                                ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
+                                : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
+                            }`}
+                            onClick={() => {
+                              if (
+                                product?.canPurchaseAmount &&
+                                product?.stockAmount &&
+                                quantity < product?.canPurchaseAmount &&
+                                quantity < product?.stockAmount
+                              ) {
+                                setQuantity(quantity + 1);
+                              }
+                            }}
+                          >
+                            +
+                          </p>
+                        </div>
                       </div>
+                      {orderPreview && orderPreview?.products?.length > 1 ? (
+                        isLoadingValue ? (
+                          <Shimmer className="!pw-w-[56px] !pw-h-[20px]" />
+                        ) : (
+                          <CriptoValueComponent
+                            size={12}
+                            fontClass="pw-text-sm pw-font-[600] pw-text-[#353945] pw-opacity-50"
+                            crypto={
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.currency.crypto
+                            }
+                            code={
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.currency.name
+                            }
+                            value={orderPreview?.cartPrice ?? '0'}
+                          ></CriptoValueComponent>
+                        )
+                      ) : null}
                     </div>
-                    {orderPreview && orderPreview?.products?.length > 1 ? (
-                      isLoadingValue ? (
-                        <Shimmer className="!pw-w-[56px] !pw-h-[20px]" />
-                      ) : (
-                        <CriptoValueComponent
-                          size={12}
-                          fontClass="pw-text-sm pw-font-[600] pw-text-[#353945] pw-opacity-50"
-                          crypto={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.crypto
-                          }
-                          code={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.name
-                          }
-                          value={orderPreview?.cartPrice ?? '0'}
-                        ></CriptoValueComponent>
-                      )
-                    ) : null}
-                  </div>
+                    <p className="pw-text-sm pw-font-[600] pw-text-[#93949b] pw-text-left ">
+                      {error}
+                    </p>
+                  </>
                 ) : null}
 
                 {/* {showCategory && product?.tags?.length ? (

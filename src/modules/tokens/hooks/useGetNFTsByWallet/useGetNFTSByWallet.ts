@@ -63,7 +63,7 @@ export const useGetNFTSByWallet = (chainId: number | undefined) => {
         PixwayAPIRoutes.NFTS_BY_WALLET.replace(
           '{chainId}',
           chainId!.toString()
-        ).replace('{address}', address as string)
+        ).replace('{address}', address as string) + '?onlyMintedByWeblock=true'
       );
     },
     {

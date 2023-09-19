@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useInterval, useLocalStorage } from 'react-use';
+import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
 import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
 import { ReactComponent as ValueChangeIcon } from '../../../shared/assets/icons/icon-up-down.svg';
@@ -193,7 +193,7 @@ const _CheckoutInfo = ({
             ? cart.map((p) => {
                 const payload = {
                   productId: p.id,
-                  variantIds: p.variantIds,
+                  variantIds: p.variantIds ?? [],
                 };
                 return payload;
               })
@@ -241,13 +241,23 @@ const _CheckoutInfo = ({
               data.products.map((val) => {
                 return {
                   id: val.id,
-                  variantIds: val?.variants?.map((val) => val.id),
+                  variantIds: val?.variants?.map((val) => val.values[0].id),
                   prices: val.prices,
                 };
               })
             );
+            cart.sort((a, b) => {
+              if (a.id > b.id) return -1;
+              if (a.id < b.id) return 1;
+              return 0;
+            });
             if (data.products.map((p) => p.id).length != productIds.length) {
               setProductIds(data.products.map((p) => p.id));
+              productIds?.sort((a, b) => {
+                if (a > b) return -1;
+                if (a < b) return 1;
+                return 0;
+              });
             }
           },
           onError: () => {
@@ -258,10 +268,13 @@ const _CheckoutInfo = ({
     }
   };
 
-  useEffect(() => {
-    getOrderPreviewFn(couponCodeInput);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productIds, currencyIdState, token]);
+  useDebounce(
+    () => {
+      getOrderPreviewFn(couponCodeInput);
+    },
+    300,
+    [productIds, currencyIdState, token]
+  );
 
   useInterval(() => {
     getOrderPreviewFn(couponCodeInput);
@@ -339,9 +352,15 @@ const _CheckoutInfo = ({
   const changeQuantity = (
     add: boolean | null,
     id: string,
-    variants?: Variants[]
+    variants?: Variants[],
+    quantity?: number
   ) => {
     if (add != null) {
+      productIds?.sort((a, b) => {
+        if (a > b) return -1;
+        if (a < b) return 1;
+        return 0;
+      });
       let newArray: Array<string> = [];
       if (
         productIds &&
@@ -376,6 +395,13 @@ const _CheckoutInfo = ({
         }
       );
       if (isCart) {
+        cart.sort((a, b) => {
+          if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
+            return -1;
+          if (a.id < b.id || a.variantIds.toString() < b.variantIds.toString())
+            return 1;
+          return 0;
+        });
         if (add) {
           const newCart = cart.filter(
             (val) =>
@@ -386,6 +412,19 @@ const _CheckoutInfo = ({
                   .toString()
           );
           setCart([...cart, newCart[0]]);
+          cart.sort((a, b) => {
+            if (
+              a.id > b.id ||
+              a.variantIds.toString() > b.variantIds.toString()
+            )
+              return -1;
+            if (
+              a.id < b.id ||
+              a.variantIds.toString() < b.variantIds.toString()
+            )
+              return 1;
+            return 0;
+          });
         } else {
           const newCart = cart.find(
             (val) =>
@@ -400,11 +439,124 @@ const _CheckoutInfo = ({
             const newValue = [...cart];
             newValue.splice(ind, 1);
             setCart(newValue);
+            cart.sort((a, b) => {
+              if (
+                a.id > b.id ||
+                a.variantIds.toString() > b.variantIds.toString()
+              )
+                return -1;
+              if (
+                a.id < b.id ||
+                a.variantIds.toString() < b.variantIds.toString()
+              )
+                return 1;
+              return 0;
+            });
           }
         }
       }
 
       setProductIds(newArray);
+      productIds?.sort((a, b) => {
+        if (a > b) return -1;
+        if (a < b) return 1;
+        return 0;
+      });
+    } else if (quantity) {
+      if (!isCart) {
+        let newArray: Array<string> = [];
+        newArray = [...Array(quantity).fill(id)];
+        router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
+          query: {
+            productIds: newArray.join(','),
+            currencyId: orderPreview?.products[0].prices.find(
+              (price) => price.currencyId == currencyIdState
+            )?.currencyId,
+          },
+        });
+        setProductIds(newArray);
+        productIds?.sort((a, b) => {
+          if (a > b) return -1;
+          if (a < b) return 1;
+          return 0;
+        });
+      } else {
+        cart.sort((a, b) => {
+          if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
+            return -1;
+          if (a.id < b.id || a.variantIds.toString() < b.variantIds.toString())
+            return 1;
+          return 0;
+        });
+        const filteredProds = cart.filter(
+          (val) =>
+            val.id === id &&
+            val.variantIds.toString() ===
+              variants?.map((res) => res.values.map((res) => res.id)).toString()
+        );
+
+        if (productIds) {
+          productIds.sort((a, b) => {
+            if (a > b) return -1;
+            if (a < b) return 1;
+            return 0;
+          });
+          const filteredIds = productIds.find((val) => val === id);
+          if (filteredIds) {
+            const ind = productIds.indexOf(filteredIds);
+            const newIds = [...productIds];
+            newIds.splice(ind, filteredProds.length);
+            let newArray: Array<string> = [];
+            newArray = [...newIds, ...Array(quantity).fill(id)];
+            router.push(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
+              query: {
+                productIds: newArray.join(','),
+                currencyId: orderPreview?.products[0].prices.find(
+                  (price) => price.currencyId == currencyIdState
+                )?.currencyId,
+              },
+            });
+            setProductIds(newArray);
+            productIds?.sort((a, b) => {
+              if (a > b) return -1;
+              if (a < b) return 1;
+              return 0;
+            });
+          }
+        }
+        cart.sort((a, b) => {
+          if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
+            return -1;
+          if (a.id < b.id || a.variantIds.toString() < b.variantIds.toString())
+            return 1;
+          return 0;
+        });
+        const newCart = cart.find(
+          (val) =>
+            val.id === id &&
+            val.variantIds.toString() ===
+              variants?.map((res) => res.values.map((res) => res.id)).toString()
+        );
+        if (newCart) {
+          const ind = cart.indexOf(newCart);
+          const newValue = [...cart];
+          newValue.splice(ind, filteredProds.length);
+          setCart([...newValue, ...Array(quantity).fill(newCart)]);
+          cart.sort((a, b) => {
+            if (
+              a.id > b.id ||
+              a.variantIds.toString() > b.variantIds.toString()
+            )
+              return -1;
+            if (
+              a.id < b.id ||
+              a.variantIds.toString() < b.variantIds.toString()
+            )
+              return 1;
+            return 0;
+          });
+        }
+      }
     }
   };
 
@@ -441,9 +593,19 @@ const _CheckoutInfo = ({
     );
     if (isCart) {
       setCart(filteredProds);
+      cart.sort((a, b) => {
+        if (a.id > b.id) return -1;
+        if (a.id < b.id) return 1;
+        return 0;
+      });
     }
 
     setProductIds(filteredProds?.map((p) => p.id));
+    productIds?.sort((a, b) => {
+      if (a > b) return -1;
+      if (a < b) return 1;
+      return 0;
+    });
   };
 
   const differentProducts = useMemo<Array<Product>>(() => {
@@ -477,7 +639,45 @@ const _CheckoutInfo = ({
           uniqueProduct.push(p);
         }
       });
-      uniqueProduct.sort();
+      uniqueProduct.sort((a, b) => {
+        if (
+          (a?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? []) >
+          (b?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? [])
+        )
+          return -1;
+        if (
+          (a?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? []) <
+          (b?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? [])
+        )
+          return 1;
+        if (a.id > b.id) return -1;
+        if (a.id < b.id) return 1;
+        return 0;
+      });
       return uniqueProduct;
     } else {
       return [];
@@ -700,6 +900,7 @@ const _CheckoutInfo = ({
           <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
             {differentProducts.map((prod, index) => (
               <ProductInfo
+                index={index}
                 loadingPreview={isLoadingPreview}
                 isCart={isCart}
                 className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
