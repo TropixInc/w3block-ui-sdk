@@ -31,13 +31,6 @@ import { TokenPassBenefits, TokenPassBenefitType } from '../../interfaces/PassBe
 import { BaseTemplate } from '../BaseTemplate';
 import { VerifyBenefit } from '../VerifyBenefit';
 
-interface DataTable {
-  name?: string;
-  date?: string;
-  cpf?: string;
-  tokenEdition?: number;
-  timeOfUse?: string;
-}
 interface TableRow {
   name: ReactNode;
   local: string;
@@ -221,51 +214,6 @@ export const PassesDetail = () => {
     }
   };
 
-  const headersUses: ColumnType<DataTable, keyof DataTable>[] = [
-    { key: 'name', header: 'Nome' },
-    { key: 'cpf', header: 'CPF' },
-    { key: 'tokenEdition', header: 'Edição do Token' },
-    { key: 'date', header: 'Data' },
-    { key: 'timeOfUse', header: 'Hora do Uso' },
-  ];
-
-  const formatedDataUses: DataTable[] = [
-    {
-      name: 'Ricardo',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '11/04/2023',
-      timeOfUse: '10h40',
-    },
-    {
-      name: 'Sandra',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '12/06/2023',
-      timeOfUse: '15h40',
-    },
-    {
-      name: 'Angélica',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '10/03/2023',
-      timeOfUse: '6h40',
-    },
-    {
-      name: 'Eduardo',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '18/05/2023',
-      timeOfUse: '14h40',
-    },
-    {
-      name: 'Ana',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '24/08/2023',
-      timeOfUse: '12h40',
-    },
-  ];
 
   return pass ? (
     <BaseTemplate title="Token Pass" classes={{ modal: 'pw-mx-[22px] sm:pw-mx-0' }}>
@@ -286,16 +234,6 @@ export const PassesDetail = () => {
               <span className="pw-font-bold">Descrição:</span> {tokenPass?.data.description}
             </p>
           </div>
-        </div>
-        <div>
-          <p className="pw-text-xl pw-font-bold pw-mb-3">Usos: </p>
-          <GenericTable
-            columns={headersUses}
-            data={formatedDataUses}
-            showPagination={true}
-            limitRowsNumber={5}
-            itensPerPage={5}
-          />
         </div>
         {isLoadingBenefits ?
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
