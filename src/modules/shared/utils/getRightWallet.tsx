@@ -14,14 +14,19 @@ export const useGetRightWallet = () => {
         currency: wallet.currency,
         chainId: undefined,
         loyaltyId: wallet.loyaltyId,
+        image: wallet.image,
+        pointsPrecision: wallet.pointsPrecision,
       })),
-      ...wallets.map((wallet) => ({
-        type: wallet.type,
-        balance: wallet.balance,
-        currency: undefined,
-        chainId: wallet.chainId,
-        loyaltyId: undefined,
-      })),
+      ...wallets
+        .filter((wallet) => parseFloat(wallet?.balance ?? '0') > 0)
+        .map((wallet) => ({
+          type: wallet.type,
+          balance: wallet.balance,
+          currency: undefined,
+          chainId: wallet.chainId,
+          loyaltyId: undefined,
+          pointsPrecision: 'decimal',
+        })),
     ];
   }, [loyaltyWallet, wallets]);
 

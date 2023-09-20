@@ -3,7 +3,9 @@ import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg'
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { useUserWallet } from '../../hooks/useUserWallet';
 import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
+import { ImageSDK } from '../ImageSDK';
 import { WeblockButton } from '../WeblockButton/WeblockButton';
 interface WalletCardProps {
   type: 'metamask' | 'vault' | 'loyalty';
@@ -11,6 +13,8 @@ interface WalletCardProps {
   showValue?: boolean;
   currency?: string;
   balance?: string;
+  image?: string;
+  pointsPrecision?: 'decimal' | 'integer';
 }
 
 export const WalletCard = ({
@@ -18,9 +22,12 @@ export const WalletCard = ({
   chainId,
   currency = '',
   balance,
+  image,
+  pointsPrecision = 'integer',
 }: WalletCardProps) => {
   const { name } = useCompanyConfig();
   const { push } = useRouterConnect();
+  const { setAuthenticatePaymentModal } = useUserWallet();
   const getIcon = () => {
     switch (type) {
       case 'vault':
@@ -28,7 +35,17 @@ export const WalletCard = ({
       case 'metamask':
         return <MetamaskIcon />;
       default:
-        return <DollarIcon />;
+        return image ? (
+          <ImageSDK
+            src={image}
+            width={50}
+            fit="fit"
+            className="pw-w-[50px] pw-h-[50px]"
+            height={50}
+          />
+        ) : (
+          <DollarIcon />
+        );
     }
   };
 
@@ -60,6 +77,7 @@ export const WalletCard = ({
       <p className="pw-text-sm pw-text-slate-800 pw-font-[400]">{getName()}</p>
       <div className="pw-mt-4">
         <CriptoValueComponent
+          pointsPrecision={pointsPrecision}
           code={chainIdToCode()}
           crypto={true}
           value={balance ?? '0'}
@@ -69,11 +87,19 @@ export const WalletCard = ({
       {type == 'vault' ? (
         <WeblockButton
           onClick={() => push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
-          className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4"
+          className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
         >
           Adicionar
         </WeblockButton>
       ) : null}
+      {type == 'loyalty' && (
+        <WeblockButton
+          onClick={() => setAuthenticatePaymentModal?.(true)}
+          className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
+        >
+          Pontuar
+        </WeblockButton>
+      )}
     </div>
   );
 };

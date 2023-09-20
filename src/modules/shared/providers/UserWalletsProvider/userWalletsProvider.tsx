@@ -37,6 +37,8 @@ export interface WalletLoyalty {
   currency: string;
   loyaltyId: string;
   contractId: string;
+  image?: string;
+  pointsPrecision?: 'decimal' | 'integer';
 }
 
 export const UserWalletsContext = createContext<UserWalletsContextInterface>({

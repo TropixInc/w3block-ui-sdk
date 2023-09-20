@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {
-  ReactNode,
-  useContext, useEffect, useRef,
+  ReactNode, useEffect, useRef,
   useState,
 } from 'react';
 import { useClickAway } from 'react-use';
@@ -22,6 +21,7 @@ import {ReactComponent as ReceiptIcon} from "../../../../../assets/icons/receipt
 //import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
 // import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
 import { ReactComponent as TicketIcon } from '../../../../../assets/icons/ticketFilled.svg';
+import {ReactComponent as UserSimpleIcon} from "../../../../../assets/icons/user.svg"
 import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
 import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
@@ -30,10 +30,9 @@ import { useIsProduction } from '../../../../../hooks/useIsProduction';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
-import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
 import { chainIdToCode, useGetRightWallet } from '../../../../../utils/getRightWallet';
 import { CriptoValueComponent } from '../../../../CriptoValueComponent/CriptoValueComponent';
-import { PixwayButton } from '../../../../PixwayButton';
+import { WeblockButton } from '../../../../WeblockButton/WeblockButton';
 import { NavigationMenuTabs } from '../interfaces/menu';
 interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
@@ -52,29 +51,32 @@ export const NavigationLoginLoggedButton = ({
 }: NavigationLoginLoggedButtonProps) => {
   //const [translate] = useTranslation();
   const [menu, setMenu] = useState<boolean>(false);
+  const organizedLoyalties = useGetRightWallet()
   const ref = useRef(null);
   useClickAway(ref, () => {
     if (menu) setMenu(false);
   });
-  const { data: profile } = useProfile();
-  //const { wallet } = useUserWallet();
 
   return (
-    <div className="pw-ml-5" ref={ref}>
+    <div className="pw-ml-2" ref={ref}>
       <div onClick={() => setMenu(!menu)} className="pw-cursor-pointer">
-        {/* <p style={{ color: textColor }} className="pw-text-xs pw-font-[400]">
-          {wallet?.type === WalletTypes.Vault
-            ? translate('header>logged>hiWallet', { name: profile?.data?.name })
-            : translate('header>logged>metamaskHiWallet', {
-              name: profile?.data?.name,
-            })}
-        </p> */}
-        <div className="pw-flex pw-items-center">
-          <p style={{ color: textColor }} className="pw-text-sm pw-font-[600] pw-w-[165px] pw-truncate pw-overflow-hidden pw-text-right">
-            {profile?.data?.email || '-'}
-          </p>
-          <ArrowDown style={{ stroke: textColor }} className="pw-ml-1" />
-        </div>
+
+       <div
+        onClick={() => setMenu(!menu)}
+        className="pw-ml-5 pw-flex pw-items-center pw-gap-[6px] pw-cursor-pointer"
+      >
+        <UserSimpleIcon style={{ stroke: textColor }} />
+        {organizedLoyalties && organizedLoyalties.length > 0 && organizedLoyalties.some(wallet => wallet.type == 'loyalty' && wallet?.balance && parseFloat(wallet?.balance ?? "0") > 0) ? (<p style={{ color: textColor }} className="pw-font-[400] pw-text-xs">
+          {organizedLoyalties.find(wallet => (wallet.type == "loyalty" && wallet?.balance && parseFloat(wallet?.balance ?? "0") > 0)).pointsPrecision == "decimal" ? parseFloat(organizedLoyalties.find(wallet => (wallet.type == "loyalty" && wallet?.balance && parseFloat(wallet?.balance ?? "0") > 0))?.balance ?? "0").toFixed(2) : parseFloat(organizedLoyalties.find(wallet => (wallet.type == "loyalty" && wallet?.balance && parseFloat(wallet?.balance ?? "0") > 0))?.balance ?? "0").toFixed(0)}
+        </p>) : null}
+        
+        <ArrowDown
+          style={{
+            stroke: textColor,
+            transform: menu ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
+        />
+      </div>
       </div>
 
       {menu && <NavigationMenu textColor={textColor} backgroundColor={backgroundColor} menuTabs={menuTabs} logo={logo} fontFamily={fontFamily} />}
@@ -100,12 +102,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const isLoayaltyOperator = Boolean(userRoles?.includes('loyaltyOperator'));
 
   const items: NavigationMenuTabs[] = [
-    {
-      name: "Relatórios",
-      route: PixwayAppRoutes.LOYALTY_REPORT,
-      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: isLoayaltyOperator,
-    },
+   
     {
       name: "Pagamento",
       route: PixwayAppRoutes.LOYALTY_PAYMENT,
@@ -113,10 +110,16 @@ export const useDefaultMenuTabs = (textColor: string) => {
       isVisible: isLoayaltyOperator,
     },
     {
-      name: translate('header>components>defaultTab>myAccount'),
-      route: PixwayAppRoutes.MY_PROFILE,
-      icon: <UserIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: isUser || isAdmin,
+      name: translate('header>components>defaultTab>tokenPass'),
+      route: PixwayAppRoutes.TOKENPASS,
+      icon: <TicketIcon style={{color: textColor, stroke: textColor}} width={17} height={17} />,
+      isVisible: pass && isAdmin && hasPassAssociated,
+    },
+    {
+      name: "Relatórios",
+      route: PixwayAppRoutes.LOYALTY_REPORT,
+      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor, fill: textColor}} />,
+      isVisible: isLoayaltyOperator,
     },
     {
       name: translate('header>components>defaultTab>wallet'),
@@ -127,7 +130,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
     {
       name: translate('wallet>page>extract'),
       icon: (
-        <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
+        <ReceiptIcon style={{color: textColor, stroke: textColor}} width={15} height={15} />
       ),
       route: PixwayAppRoutes.WALLET_RECEIPT,
       isVisible:
@@ -140,10 +143,10 @@ export const useDefaultMenuTabs = (textColor: string) => {
       isVisible: isUser || isAdmin,
     },
     {
-      name: translate('header>components>defaultTab>tokenPass'),
-      route: PixwayAppRoutes.TOKENPASS,
-      icon: <TicketIcon style={{color: textColor, stroke: textColor}} width={17} height={17} />,
-      isVisible: pass && isAdmin && hasPassAssociated,
+      name: translate('header>components>defaultTab>myAccount'),
+      route: PixwayAppRoutes.MY_PROFILE,
+      icon: <UserIcon style={{color: textColor, stroke: textColor}} />,
+      isVisible: isUser || isAdmin,
     },
     {
       name: translate('components>menu>integration'),
@@ -189,18 +192,19 @@ const NavigationMenu = ({
 }: NavigationLoginLoggedButtonProps) => {
   const defaultTabs = useDefaultMenuTabs(textColor ?? "black");
   const organizedWallets = useGetRightWallet()
-  const { setAttachModal } = useContext(AttachWalletContext);
   const [translate] = useTranslation();
   const [showValue, setShowValue] = useState(false);
   const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
-  const { data: profile } = useProfile();
   const { mainWallet: wallet } = useUserWallet();
-
-  const hasMainWallet = profile?.data.mainWallet?.address;
-
+  const { setAuthenticatePaymentModal } = useUserWallet();
   const WithWallet = () => {
-    return (
+    return(organizedWallets &&
+      organizedWallets.length > 0 &&
+      organizedWallets[0].type == 'loyalty') ||
+    (organizedWallets &&
+      organizedWallets.length > 0 &&
+      parseFloat(organizedWallets[0].balance ?? '0') > 0) ? (
       <div style={{color: textColor}} className="pw-py-[6px] pw-px-2 pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
         <div className="pw-flex">
           <p className="pw-text-[10px] pw-font-[500]">
@@ -226,29 +230,17 @@ const NavigationMenu = ({
           )}
         </div>
       </div>
-    );
-  };
-
-  const WithoutWallet = () => {
-    return (
-      <PixwayButton
-        onClick={() => setAttachModal(true)}
-        fullWidth
-        className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
-      >
-        {translate('shared>header>connectWallet')}
-      </PixwayButton>
-    );
+    ): null
   };
 
   return (
     <div className="pw-relative">
       <div
         style={{backgroundColor, color: textColor}}
-        className={`pw-absolute pw-mt-[1.68rem] ${hasMainWallet ? 'pw-ml-[50px]' : ''
+        className={`pw-absolute pw-mt-[1.68rem] ${organizedWallets.length ? 'pw-right-[-16px]' : ''
           } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
       >
-        {hasMainWallet ? <WithWallet /> : <WithoutWallet />}
+        {organizedWallets.length ? <WithWallet /> : null}
 
         <div className="pw-mt-[10px]">
           {menuTabs.map((menu) => menu.isVisible ? (
@@ -269,6 +261,13 @@ const NavigationMenu = ({
               </p>
             </a>
           ):null)}
+          {organizedWallets.length && organizedWallets.some((w) => w.type == 'loyalty') ?<WeblockButton
+          onClick={() => setAuthenticatePaymentModal?.(true)}
+          className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
+        >
+          Pontuar
+        </WeblockButton> : null}
+          
         </div>
       </div>
     </div>

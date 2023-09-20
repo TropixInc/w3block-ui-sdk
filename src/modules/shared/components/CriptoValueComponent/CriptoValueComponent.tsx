@@ -13,6 +13,8 @@ export const CriptoValueComponent = ({
   crypto,
   showFree = false,
   dontShow = false,
+  pointsPrecision = 'integer',
+  textColor,
 }: {
   code?: string;
   value: string;
@@ -21,6 +23,8 @@ export const CriptoValueComponent = ({
   crypto?: boolean;
   showFree?: boolean;
   dontShow?: boolean;
+  pointsPrecision?: 'decimal' | 'integer';
+  textColor?: string;
 }) => {
   const [translate] = useTranslation();
   const getIcon = () => {
@@ -33,7 +37,12 @@ export const CriptoValueComponent = ({
         );
       default:
         return (
-          <p className={`pw-text-sm pw-text-gray-700 ${fontClass}`}>{code}</p>
+          <p
+            style={textColor ? { color: textColor } : {}}
+            className={`pw-text-sm pw-text-gray-700 ${fontClass}`}
+          >
+            {code}
+          </p>
         );
     }
   };
@@ -41,15 +50,22 @@ export const CriptoValueComponent = ({
   const getCryptoValueByCode = () => {
     if (code === CurrencyEnum.ETHEREUM) {
       return Number(Number(value).toFixed(4));
-    } else {
+    } else if (code === CurrencyEnum.MATIC) {
       return Number(Number(value).toFixed(3));
+    } else {
+      return pointsPrecision == 'decimal'
+        ? Number(value).toFixed(2)
+        : Number(Number(value).toFixed(0));
     }
   };
 
   return dontShow ? null : (
     <div className="pw-flex pw-gap-1 pw-items-center">
       {crypto && getIcon()}
-      <p className={`pw-font-semibold pw-text-black ${fontClass}`}>
+      <p
+        style={textColor ? { color: textColor } : {}}
+        className={`pw-font-semibold pw-text-black ${fontClass}`}
+      >
         {parseFloat(value) === 0 && showFree
           ? translate('commerce>checkout>free')
           : crypto

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
+import { ReactComponent as UserIcon } from '../../../../../assets/icons/user.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
@@ -28,17 +29,18 @@ export const NavigationLoginNonLoggedButton = ({
     <div className="pw-hidden sm:pw-block">
       <div
         onClick={() => setOpenMenu(!openMenu)}
-        className="pw-ml-5 pw-cursor-pointer"
+        className="pw-ml-5 pw-flex pw-items-center pw-gap-[6px] pw-cursor-pointer"
       >
+        <UserIcon style={{ stroke: textColor }} />
         <p style={{ color: textColor }} className="pw-font-[400] pw-text-xs">
           Login
         </p>
-        <div className="pw-flex pw-items-center pw-gap-x-1">
-          <p style={{ color: textColor }} className="pw-text-sm pw-font-[600]">
-            {translate('shared>myAcount')}
-          </p>
-          <ArrowDown style={{ stroke: textColor }} />
-        </div>
+        <ArrowDown
+          style={{
+            stroke: textColor,
+            transform: openMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
+        />
       </div>
       {openMenu ? (
         <div className="pw-relative">

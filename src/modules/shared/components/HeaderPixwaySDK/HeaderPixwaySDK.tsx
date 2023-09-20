@@ -78,8 +78,6 @@ const _HeaderPixwaySDK = ({
     } else setopenedLoginState(!openedloginState);
   };
 
-  const validatorMenuOpened = openedLogin ? openedLogin : openedloginState;
-
   const signupContext = useMemo(() => {
     if (contexts) {
       return contexts?.data?.items?.find(
@@ -185,18 +183,40 @@ const _HeaderPixwaySDK = ({
         )}
       >
         <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
-          <a
-            href={
-              logoLink && logoLink.trim() != ''
-                ? logoLink
-                : PixwayAppRoutes.HOME
-            }
-          >
-            <LogoToShow />
-          </a>
+          <div className="pw-flex pw-items-center pw-justify-start pw-gap-x-4 pw-pl-4">
+            <div className="sm:pw-hidden">
+              <NavigationTabsPixwaySDK
+                tabs={tabsToPass}
+                toogleMenu={toggleTabsMemo}
+                opened={openedMenu ? openedMenu : openedTabs}
+                hasSignUp={hasSignUp}
+                textColor={
+                  textColor ??
+                  context?.defaultTheme?.header?.styleData?.textColor
+                }
+                bgColor={headerBgColor}
+                fontFamily={
+                  (fontFamily ||
+                  context?.defaultTheme?.header?.styleData?.fontFamily
+                    ? fontFamily ??
+                      context?.defaultTheme?.header?.styleData?.fontFamily
+                    : 'Poppins') + ', sans-serif'
+                }
+              />
+            </div>
+            <a
+              href={
+                logoLink && logoLink.trim() != ''
+                  ? logoLink
+                  : PixwayAppRoutes.HOME
+              }
+            >
+              <LogoToShow />
+            </a>
+          </div>
 
           <div className="pw-flex pw-items-center">
-            <div className="pw-order-3 sm:pw-order-1">
+            <div className="pw-order-1 sm:pw-order-1 pw-hidden sm:pw-block">
               <NavigationTabsPixwaySDK
                 tabs={tabsToPass}
                 toogleMenu={toggleTabsMemo}
@@ -226,11 +246,11 @@ const _HeaderPixwaySDK = ({
                   textColor ??
                   context?.defaultTheme?.header?.styleData?.textColor
                 }
-                className="pw-border-l sm:pw-ml-4"
+                className="sm:pw-border-l sm:pw-ml-4"
               />
             )}
 
-            <div className="pw-order-1 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
+            <div className="pw-order-3 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
               <NavigationLoginPixwaySDK
                 backgroundColor={headerBgColor}
                 hasSignUp={hasSignUp}
@@ -238,8 +258,6 @@ const _HeaderPixwaySDK = ({
                   textColor ??
                   context?.defaultTheme?.header?.styleData?.textColor
                 }
-                toggleLoginMenu={toggleMenuMemo}
-                loginMenu={validatorMenuOpened}
                 signInRouter={signInRouter}
                 signUpRouter={signUpRouter}
                 fontFamily={
