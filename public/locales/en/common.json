@@ -107,7 +107,7 @@
   "tokens>StatusTag>active": "Active",
   "tokens>StatusTag>inactive": "Inactive",
   "tokens>StatusTag>unavailable": "Unavailable",
-  "connect>TokenDetailCard>passAssociated": "Pass associated with this token",
+  "connect>TokenDetailCard>passAssociated": "Benefits associated:",
   "connect>GenericTable>seeMore": "See more",
   "connect>ListAllPass>listBenefits": "List benefits",
   "connect>ListAllPass>tableTitle": "Listing benefits associated with this token:",

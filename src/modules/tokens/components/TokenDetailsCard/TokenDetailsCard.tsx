@@ -8,6 +8,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
 import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
+import useGetPassById from '../../../pass/hooks/useGetPassById';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
 import { useRouterConnect } from '../../../shared';
@@ -74,6 +75,8 @@ export const TokenDetailsCard = ({
     tokenPassId: collectionId as string,
     editionNumber: +editionNumber,
   });
+
+  const { data: passData } = useGetPassById(collectionId ?? '');
 
   const isMultiplePass = useMemo(() => {
     if (isSuccess) {
@@ -212,6 +215,25 @@ export const TokenDetailsCard = ({
             <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
               {translate('connect>TokenDetailCard>passAssociated')}
             </p>
+            <div
+              className="pw-text-black pw-font-normal pw-text-[14px] pw-leading-[21px]"
+              dangerouslySetInnerHTML={{
+                __html: passData?.data.description ?? '',
+              }}
+            ></div>
+            {passData?.data.rules && (
+              <>
+                <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
+                  Regras de uso:
+                </p>
+                <div
+                  className="pw-text-black pw-font-normal pw-text-[14px] pw-leading-[21px]"
+                  dangerouslySetInnerHTML={{
+                    __html: passData?.data.rules,
+                  }}
+                ></div>
+              </>
+            )}
             {formatedData && (
               <GenericTable
                 showPagination

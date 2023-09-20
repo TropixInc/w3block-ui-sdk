@@ -282,7 +282,7 @@
   "tokens>StatusTag>active": "Ativo",
   "tokens>StatusTag>inactive": "Inativo",
   "tokens>StatusTag>unavailable": "Indiponível",
-  "connect>TokenDetailCard>passAssociated": "Pass associados a este token:",
+  "connect>TokenDetailCard>passAssociated": "Beneficíos associados:",
   "connect>GenericTable>seeMore": "Visualizar mais",
   "connect>ListAllPass>listBenefits": "Listagem benefícios",
   "connect>ListAllPass>tableTitle": "Listagem benefícios associados a este token:",

@@ -230,7 +230,12 @@ export const PassesDetail = () => {
               {tokenPass?.data.name}
             </h3>
             <p className="pw-w-full pw-font-normal pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
-              <span className="pw-font-bold">Descrição:</span> {tokenPass?.data.description}
+              <span className="pw-font-bold">Descrição:</span> 
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: tokenPass?.data.description ?? '',
+                }}
+              ></div>
             </p>
           </div>
         </div>
