@@ -66,6 +66,7 @@ export const NavigationLoginPixwaySDK = ({
       </div>
       <div className="sm:pw-hidden">
         <NavigationLoginLoggedButtonMobile
+          hasSignUp={hasSignUp}
           textColor={textColor}
           menuOpened={validatorOpened}
           toggleMenu={toggleTabsMemo}

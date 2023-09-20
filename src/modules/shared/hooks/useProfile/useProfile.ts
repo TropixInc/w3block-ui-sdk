@@ -33,6 +33,11 @@ export const useProfile = () => {
       onError() {
         router.pushConnect(PixwayAppRoutes.SIGN_IN);
       },
+      onSuccess(data) {
+        if (data.data && !data.data.verified) {
+          router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE);
+        }
+      },
     }
   );
 };

@@ -24,7 +24,6 @@ import { ReactComponent as TicketIcon } from '../../assets/icons/ticketFilled.sv
 import { ReactComponent as UserIcon } from '../../assets/icons/userOutlined.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
-import { useIsProduction } from '../../hooks/useIsProduction';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
 import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
@@ -48,9 +47,7 @@ interface TabsConfig {
 const _Menu = ({ tabs, className }: MenuProps) => {
   const { data: profile } = useProfile();
   const router = useRouterConnect();
-  const isProduction = useIsProduction();
   const [translate] = useTranslation();
-  const { setAuthenticatePaymentModal } = useUserWallet();
   const [state, copyToClipboard] = useCopyToClipboard();
   const { profile: profileWithKYC } = useProfileWithKYC();
   const [isCopied, setIsCopied] = useState(false);
@@ -80,31 +77,25 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   useEffect(() => {
     const tabsDefault: TabsConfig[] = [
       {
-        title: translate('components>menu>dashboard'),
-        icon: <DashboardIcon width={17} height={17} />,
-        link: isLoayaltyOperator
-          ? PixwayAppRoutes.LOYALTY_REPORT
-          : PixwayAppRoutes.DASHBOARD,
-        isVisible: !isProduction || isLoayaltyOperator,
-      },
-      {
-        title: translate('components>menu>myProfile'),
-        icon: <UserIcon width={17} height={17} />,
-        link: PixwayAppRoutes.PROFILE,
-        isVisible: isUser || isAdmin,
-      },
-      {
         title: 'Pagamento',
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.LOYALTY_PAYMENT,
         isVisible: isLoayaltyOperator || isAdmin,
       },
-      // {
-      //   title: translate('components>menu>myTokens'),
-      //   icon: <ImageIcon width={17} height={17} />,
-      //   link: PixwayAppRoutes.TOKENS,
-      //   isVisible: true,
-      // },
+      {
+        title: translate('components>menu>tokenPass'),
+        icon: <TicketIcon width={17} height={17} />,
+        link: PixwayAppRoutes.TOKENPASS,
+        isVisible: pass && isAdmin && hasPassAssociated,
+      },
+      {
+        title: translate('components>menu>dashboard'),
+        icon: <DashboardIcon width={17} height={17} />,
+        link: isLoayaltyOperator
+          ? PixwayAppRoutes.LOYALTY_REPORT
+          : PixwayAppRoutes.DASHBOARD,
+        isVisible: isLoayaltyOperator,
+      },
       {
         title: translate('components>menu>wallet'),
         icon: <CardIcon width={17} height={17} />,
@@ -119,7 +110,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         link: PixwayAppRoutes.WALLET_RECEIPT,
         isVisible:
           (isUser || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0,
-        sub: true,
       },
       {
         title: translate('header>components>defaultTab>myOrders'),
@@ -128,10 +118,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         isVisible: isUser || isAdmin,
       },
       {
-        title: translate('components>menu>tokenPass'),
-        icon: <TicketIcon width={17} height={17} />,
-        link: PixwayAppRoutes.TOKENPASS,
-        isVisible: pass && isAdmin && hasPassAssociated,
+        title: translate('components>menu>myProfile'),
+        icon: <UserIcon width={17} height={17} />,
+        link: PixwayAppRoutes.PROFILE,
+        isVisible: isUser || isAdmin,
+      },
+      {
+        title: translate('components>menu>integration'),
+        icon: <IntegrationIcon width={17} height={17} />,
+        link: PixwayAppRoutes.CONNECTION,
+        isVisible: isUser || isAdmin,
       },
       {
         title: translate('components>menu>clients'),
@@ -140,22 +136,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         isVisible: false,
         sub: true,
       },
-      {
-        title: translate('components>menu>integration'),
-        icon: <IntegrationIcon width={17} height={17} />,
-        link: PixwayAppRoutes.CONNECTION,
-        isVisible: isUser || isAdmin,
-      },
-      // {
-      //   title: translate('components>menu>settings'),
-      //   icon: <SettingsIcon width={17} height={17} />,
-      //   link: PixwayAppRoutes.SETTINGS,
-      // },
-      // {
-      //   title: translate('components>menu>help'),
-      //   icon: <HelpIcon width={17} height={17} />,
-      //   link: PixwayAppRoutes.HELP,
-      // },
     ];
 
     if (!tabs) setTabsToShow(tabsDefault);
@@ -261,21 +241,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
               '-'
             )}
           </div>
-          {!isLoayaltyOperator && loyaltyWallet && loyaltyWallet.length > 0 ? (
-            <div className="pw-flex pw-justify-center ">
-              <button
-                onClick={() =>
-                  // isLoayaltyOperator
-                  //   ? router.pushConnect(PixwayAppRoutes.LOYALTY_PAYMENT)
-                  //   : setAuthenticatePaymentModal?.(true)
-                  setAuthenticatePaymentModal?.(true)
-                }
-                className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
-              >
-                Autenticar
-              </button>
-            </div>
-          ) : null}
         </div>
 
         <ul className="pw-mx-auto pw-w-[248px]">
