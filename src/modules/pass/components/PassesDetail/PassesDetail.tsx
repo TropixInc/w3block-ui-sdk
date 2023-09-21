@@ -214,6 +214,7 @@ export const PassesDetail = () => {
     }
   };
 
+
   return pass ? (
     <BaseTemplate title="Token Pass" classes={{ modal: 'pw-mx-[22px] sm:pw-mx-0' }}>
       <div className="pw-flex pw-flex-col pw-gap-8">
@@ -239,7 +240,6 @@ export const PassesDetail = () => {
             </p>
           </div>
         </div>
-
         {isLoadingBenefits ?
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
