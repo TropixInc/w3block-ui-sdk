@@ -8,25 +8,15 @@ import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import GenericTable, {
-  ColumnType,
-} from '../../../tokens/components/GenericTable/GenericTable';
 import { DetailPass } from '../../../tokens/components/PassTemplate/DetailPass';
 import { DetailsTemplate } from '../../../tokens/components/PassTemplate/DetailsTemplate';
 import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import { TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
+import BenefitUsesList from '../BenefitUsesList/BenefitUsesList';
 
 interface BenefitDetailsProps {
   benefitIdProp?: string;
-}
-
-interface DataTable {
-  name?: string;
-  date?: string;
-  cpf?: string;
-  tokenEdition?: number;
-  timeOfUse?: string;
 }
 
 const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
@@ -51,52 +41,6 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
     const local = filteredData && filteredData[0]?.tokenPassBenefitAddresses;
     return local;
   }, [benefitId, benefitsList?.data?.items]);
-
-  const headersUses: ColumnType<DataTable, keyof DataTable>[] = [
-    { key: 'name', header: 'Nome' },
-    { key: 'cpf', header: 'CPF' },
-    { key: 'tokenEdition', header: 'Edição do Token' },
-    { key: 'date', header: 'Data' },
-    { key: 'timeOfUse', header: 'Hora do Uso' },
-  ];
-
-  const formatedDataUses: DataTable[] = [
-    {
-      name: 'Ricardo',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '11/04/2023',
-      timeOfUse: '10h40',
-    },
-    {
-      name: 'Sandra',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '12/06/2023',
-      timeOfUse: '15h40',
-    },
-    {
-      name: 'Angélica',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '10/03/2023',
-      timeOfUse: '6h40',
-    },
-    {
-      name: 'Eduardo',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '18/05/2023',
-      timeOfUse: '14h40',
-    },
-    {
-      name: 'Ana',
-      cpf: '123.456.789-00',
-      tokenEdition: 1,
-      date: '24/08/2023',
-      timeOfUse: '12h40',
-    },
-  ];
 
   if (isLoadingBenefit) {
     return (
@@ -134,16 +78,9 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
               benefit?.data?.useLimit}
           </div>
         </div>
-        <div>
-          <p className="pw-text-xl pw-font-bold pw-mb-3">Usos: </p>
-          <GenericTable
-            columns={headersUses}
-            data={formatedDataUses}
-            showPagination={true}
-            limitRowsNumber={5}
-            itensPerPage={5}
-          />
-        </div>
+        <DetailsTemplate title="Usos:" autoExpand>
+          <BenefitUsesList benefitId={benefitId} />
+        </DetailsTemplate>
         <>
           <DetailsTemplate
             title={translate('token>benefits>details')}

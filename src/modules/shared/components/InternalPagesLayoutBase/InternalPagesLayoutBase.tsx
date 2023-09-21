@@ -25,7 +25,7 @@ export const InternalPagesLayoutBase = ({ classes = {}, children }: Props) => {
           <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
             <Menu />
           </div>
-          <div className="pw-flex pw-flex-col pw-w-full pw-flex-1">
+          <div className="pw-flex pw-flex-col pw-w-full pw-flex-1 sm:pw-px-0 pw-px-6">
             <div
               className={classNames(
                 'pw-flex-1 sm:pw-pl-8',
