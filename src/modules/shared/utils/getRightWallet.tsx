@@ -26,6 +26,7 @@ export const useGetRightWallet = () => {
           chainId: wallet.chainId,
           loyaltyId: undefined,
           pointsPrecision: 'decimal',
+          address: wallet.address,
         })),
     ];
   }, [loyaltyWallet, wallets]);

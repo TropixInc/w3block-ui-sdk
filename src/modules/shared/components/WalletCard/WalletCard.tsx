@@ -1,9 +1,11 @@
 import { ReactComponent as DollarIcon } from '../../assets/icons/dollar-sign.svg';
+import { ReactComponent as ExtractIcon } from '../../assets/icons/externalLink.svg';
 import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useUserWallet } from '../../hooks/useUserWallet';
+import { getExtractLinkByChainId } from '../../utils/getCryptoChainId';
 import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
 import { ImageSDK } from '../ImageSDK';
 import { WeblockButton } from '../WeblockButton/WeblockButton';
@@ -15,6 +17,7 @@ interface WalletCardProps {
   balance?: string;
   image?: string;
   pointsPrecision?: 'decimal' | 'integer';
+  address?: string;
 }
 
 export const WalletCard = ({
@@ -24,10 +27,12 @@ export const WalletCard = ({
   balance,
   image,
   pointsPrecision = 'integer',
+  address,
 }: WalletCardProps) => {
   const { name } = useCompanyConfig();
   const { push } = useRouterConnect();
   const { setAuthenticatePaymentModal } = useUserWallet();
+  const chainLink = getExtractLinkByChainId(chainId ?? 137, address ?? '0x0');
   const getIcon = () => {
     switch (type) {
       case 'vault':
@@ -71,8 +76,17 @@ export const WalletCard = ({
   };
 
   return (
-    <div className="pw-bg-white pw-rounded-[20px] pw-border pw-border-zinc-300 pw-p-[20px] pw-w-[200px]">
-      <div>{getIcon()}</div>
+    <div className="pw-bg-white pw-rounded-[20px] pw-border pw-border-zinc-300 pw-p-[20px] pw-w-full ">
+      <div className="pw-flex pw-justify-between">
+        {getIcon()}
+        <a
+          href={chainId ? chainLink : PixwayAppRoutes.WALLET_RECEIPT}
+          className="pw-flex pw-gap-2"
+        >
+          <p className="pw-text-[12px] pw-font-[600] pw-text-black">Extrato</p>
+          <ExtractIcon style={{ stroke: 'black' }} />
+        </a>
+      </div>
       <p className=" pw-text-slate-900 pw-mt-3">Saldo</p>
       <p className="pw-text-sm pw-text-slate-800 pw-font-[400]">{getName()}</p>
       <div className="pw-mt-4">

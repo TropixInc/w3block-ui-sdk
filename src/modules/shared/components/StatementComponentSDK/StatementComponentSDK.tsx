@@ -76,7 +76,9 @@ export const StatementComponentSDK = ({
         <div>
           <span className="pw-text-black pw-text-sm pw-font-semibold">
             {statement.transactionType == 'sending' ? '-' : '+'}{' '}
-            {statement.amount}{' '}
+            {statement.pointsPrecision == 'integer'
+              ? statement.amount.toFixed(0)
+              : statement.amount.toFixed(2)}{' '}
           </span>
           <span className="pw-text-black pw-text-[13px] pw-font-normal">
             {statement.currency}

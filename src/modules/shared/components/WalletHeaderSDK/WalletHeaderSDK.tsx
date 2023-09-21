@@ -8,14 +8,14 @@ import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 import { useGetRightWallet } from '../../utils/getRightWallet';
 import { WalletCard } from '../WalletCard/WalletCard';
 
-export const WalletHeaderSDK = () => {
+export const WalletHeaderSDK = ({ title = 'Carteira' }: { title?: string }) => {
   const { mainWallet } = useUserWallet();
   const organizedLoyalties = useGetRightWallet();
   return (
     <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
       <div className="pw-flex pw-justify-between">
         <div>
-          <p className="pw-text-[23px] pw-font-[600]">Carteira</p>
+          <p className="pw-text-[23px] pw-font-[600]">{title}</p>
           <p className="pw-text-[#777E8F] pw-text-xs">{mainWallet?.address}</p>
         </div>
       </div>
@@ -27,7 +27,6 @@ export const WalletHeaderSDK = () => {
       ).length > 0 ? (
         <div className="pw-mt-[24px] pw-max-w-[98%]">
           <Swiper
-            slidesPerView={'auto'}
             pagination={{
               clickable: true,
               dynamicBullets: true,
@@ -35,7 +34,14 @@ export const WalletHeaderSDK = () => {
             }}
             spaceBetween={16}
             autoplay={false}
-            //breakpoints={{ ...slicedBreakPoints }}
+            breakpoints={{
+              0: { slidesPerView: 1 },
+              440: { slidesPerView: 2 },
+              640: { slidesPerView: 3 },
+              768: { slidesPerView: 1 },
+              1024: { slidesPerView: 3 },
+              1306: { slidesPerView: 5 },
+            }}
             modules={[Pagination]}
             style={
               {
@@ -66,6 +72,7 @@ export const WalletHeaderSDK = () => {
                   key={generateRandomUUID()}
                 >
                   <WalletCard
+                    address={wallet.address}
                     pointsPrecision={wallet?.pointsPrecision}
                     image={wallet?.image}
                     balance={wallet?.balance ?? '0'}
