@@ -1,11 +1,8 @@
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useClickAway, useCopyToClipboard } from 'react-use';
-
-import { WalletTypes } from '@w3block/sdk-id';
 
 import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
 import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
-import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
 import { ReactComponent as UserSimpleIcon } from '../../../../../assets/icons/user.svg';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
@@ -13,12 +10,7 @@ import { useProfileWithKYC } from '../../../../../hooks/useProfileWithKYC/usePro
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
-import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
-import {
-  chainIdToCode,
-  useGetRightWallet,
-} from '../../../../../utils/getRightWallet';
-import { CriptoValueComponent } from '../../../../CriptoValueComponent/CriptoValueComponent';
+import { useGetRightWallet } from '../../../../../utils/getRightWallet';
 import { PixwayButton } from '../../../../PixwayButton';
 import { WeblockButton } from '../../../../WeblockButton/WeblockButton';
 import { NavigationMenuTabs } from '../interfaces/menu';
@@ -40,15 +32,15 @@ export const NavigationLoginLoggedButtonMobile = ({
   textColor,
   hasSignUp,
 }: NavigationLoginLoggedButtonMobileProps) => {
-  const { setAttachModal } = useContext(AttachWalletContext);
+  // const { setAttachModal } = useContext(AttachWalletContext);
   const [loginMenu, setLoginMenu] = useState<boolean>(false);
   const { setAuthenticatePaymentModal } = useUserWallet();
   const defaultTabs = useDefaultMenuTabs(textColor ?? 'black');
-  const [hideBalance, setHideBalance] = useState(true);
+  // const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const { profile } = useProfileWithKYC();
-  const { mainWallet: wallet } = useUserWallet();
+  // const { mainWallet: wallet } = useUserWallet();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
   const toggleTabsMemo = () => {
@@ -73,50 +65,52 @@ export const NavigationLoginLoggedButtonMobile = ({
 
   const organizedWallets = useGetRightWallet();
 
-  const WithWallet = () => {
-    return (
-      <div className="pw-mt-3 pw-px-[20px] pw-py-4 pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] pw-bg-white pw-rounded-2xl pw-w-full pw-flex">
-        <div className="pw-flex-1">
-          <div
-            onClick={() => setHideBalance(!hideBalance)}
-            className="pw-flex pw-items-center pw-gap-2 pw-cursor-pointer"
-          >
-            <p className="pw-text-xs pw-font-[400] pw-text-slate-600">
-              {wallet?.type === WalletTypes.Vault
-                ? translate('header>logged>pixwayBalance')
-                : translate('header>logged>metamaskBalance')}
-            </p>
-            <EyeIcon />
-          </div>
-          {hideBalance ? (
-            <CriptoValueComponent
-              fontClass="pw-text-sm pw-text-slate-900"
-              crypto={true}
-              value={organizedWallets[0].balance}
-              code={chainIdToCode(
-                organizedWallets[0].chainId,
-                organizedWallets[0].currency
-              )}
-            />
-          ) : (
-            <p className="pw-font-[700] pw-text-xs pw-text-slate-900">*****</p>
-          )}
-        </div>
-      </div>
-    );
-  };
+  // const WithWallet = () => {
+  //   return (
+  //     <div className="pw-mt-3 pw-px-[20px] pw-py-4 pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] pw-bg-white pw-rounded-2xl pw-w-full pw-flex">
+  //       <div className="pw-flex-1">
+  //         <div
+  //           onClick={() => setHideBalance(!hideBalance)}
+  //           className="pw-flex pw-items-center pw-gap-2 pw-cursor-pointer"
+  //         >
+  //           <p className="pw-text-xs pw-font-[400] pw-text-slate-600">
+  //             {wallet?.type === WalletTypes.Vault
+  //               ? translate('header>logged>pixwayBalance')
+  //               : translate('header>logged>metamaskBalance')}
+  //           </p>
+  //           <EyeIcon />
+  //         </div>
+  //         {hideBalance ? (
+  //           <CriptoValueComponent
+  //             fontClass="pw-text-sm pw-text-slate-900"
+  //             crypto={true}
+  //             value={
+  //               organizedWallets?.length ? organizedWallets[0].balance : '0'
+  //             }
+  //             code={chainIdToCode(
+  //               organizedWallets[0].chainId,
+  //               organizedWallets[0].currency
+  //             )}
+  //           />
+  //         ) : (
+  //           <p className="pw-font-[700] pw-text-xs pw-text-slate-900">*****</p>
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
-  const WithoutWallet = () => {
-    return (
-      <PixwayButton
-        onClick={() => setAttachModal(true)}
-        fullWidth
-        className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
-      >
-        {translate('shared>header>connectWallet')}
-      </PixwayButton>
-    );
-  };
+  // const WithoutWallet = () => {
+  //   return (
+  //     <PixwayButton
+  //       onClick={() => setAttachModal(true)}
+  //       fullWidth
+  //       className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
+  //     >
+  //       {translate('shared>header>connectWallet')}
+  //     </PixwayButton>
+  //   );
+  // };
 
   return session ? (
     <div style={{ backgroundColor }}>
@@ -201,7 +195,7 @@ export const NavigationLoginLoggedButtonMobile = ({
             ) : null}
           </div>
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
-          {wallet ? <WithWallet /> : <WithoutWallet />}
+          {/* {wallet ? <WithWallet /> : <WithoutWallet />} */}
           <div className="pw-mt-3 pw-w-full">
             {menuTabs.map((tab) =>
               tab.isVisible ? (
