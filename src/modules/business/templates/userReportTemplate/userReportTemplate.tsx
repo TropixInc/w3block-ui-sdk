@@ -88,6 +88,47 @@ export const UserReportTemplate = () => {
     },
 
     {
+      key: 'userInfo',
+      name: 'Usuário',
+      component: (item: Erc20TokenHistory) =>
+        item.from == null ? (
+          <div>
+            {item.to?.user_name && (
+              <p className="pw-text-xs pw-text-slate-900 pw-font-medium">
+                {item.to?.user_name}
+              </p>
+            )}
+            {item.to?.email && (
+              <p className="pw-text-xs pw-text-slate-700">{item.to?.email}</p>
+            )}
+            {item.to?.phone && (
+              <p className="pw-text-xs pw-text-slate-700">{item.to?.phone}</p>
+            )}
+            {item.to?.cpf && (
+              <p className="pw-text-xs pw-text-slate-700">{item.to?.cpf}</p>
+            )}
+          </div>
+        ) : (
+          <div>
+            {item.from?.user_name && (
+              <p className="pw-text-xs pw-text-slate-900 pw-font-medium">
+                {item.from?.user_name}
+              </p>
+            )}
+            {item.from?.email && (
+              <p className="pw-text-xs pw-text-slate-700">{item.from?.email}</p>
+            )}
+            {item.from?.phone && (
+              <p className="pw-text-xs pw-text-slate-700">{item.from?.phone}</p>
+            )}
+            {item.from?.cpf && (
+              <p className="pw-text-xs pw-text-slate-700">{item.from?.cpf}</p>
+            )}
+          </div>
+        ),
+    },
+
+    {
       key: '',
       name: 'Descrição',
       component: (item: Erc20TokenHistory) => (

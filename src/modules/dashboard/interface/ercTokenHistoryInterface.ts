@@ -43,6 +43,8 @@ export interface FromToInterface {
   type?: string;
   user_name?: string;
   wallet?: string;
+  cpf?: string;
+  email?: string;
 }
 export interface Metadata {
   confirmedAt: string;

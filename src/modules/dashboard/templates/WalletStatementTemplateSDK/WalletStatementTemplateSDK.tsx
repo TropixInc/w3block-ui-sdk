@@ -64,7 +64,7 @@ export const WalletStatementTemplateSDK = () => {
               type: item.type,
               status: item.status,
               loyaltieTransactions: item.loyaltiesTransactions,
-              amount: parseInt(item.request.amount),
+              amount: parseFloat(item.request.amount),
               description: '',
               currency: loyaltyWallet.length ? loyaltyWallet[0].currency : '',
               transactionType: wallets?.some(
