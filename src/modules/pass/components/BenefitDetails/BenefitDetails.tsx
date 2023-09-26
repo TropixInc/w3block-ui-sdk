@@ -13,6 +13,7 @@ import { DetailsTemplate } from '../../../tokens/components/PassTemplate/Details
 import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import { TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
+import BenefitUsesList from '../BenefitUsesList/BenefitUsesList';
 
 interface BenefitDetailsProps {
   benefitIdProp?: string;
@@ -77,6 +78,9 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
               benefit?.data?.useLimit}
           </div>
         </div>
+        <DetailsTemplate title="Usos:" autoExpand>
+          <BenefitUsesList benefitId={benefitId} />
+        </DetailsTemplate>
         <>
           <DetailsTemplate
             title={translate('token>benefits>details')}
