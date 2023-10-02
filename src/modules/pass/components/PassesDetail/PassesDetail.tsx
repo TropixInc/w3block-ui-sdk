@@ -216,9 +216,9 @@ export const PassesDetail = () => {
 
 
   return pass ? (
-    <BaseTemplate title="Token Pass" classes={{ modal: 'pw-mx-[22px] sm:pw-mx-0' }}>
+    <BaseTemplate title="Token Pass">
       <div className="pw-flex pw-flex-col pw-gap-8">
-        <div className="pw-flex pw-items-center pw-justify-start pw-p-4 pw-gap-4 pw-border pw-border-[#E6E8EC] pw-rounded-2xl">
+        <div className="pw-bg-white pw-flex pw-items-center pw-justify-start pw-p-4 pw-gap-4 pw-border pw-border-[#E6E8EC] pw-rounded-2xl">
           <img
             className="pw-w-[216px] pw-h-[175px] pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
             src={tokenPass?.data.imageUrl}
@@ -231,7 +231,7 @@ export const PassesDetail = () => {
               {tokenPass?.data.name}
             </h3>
             <p className="pw-w-full pw-font-normal pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
-              <span className="pw-font-bold">Descrição:</span> 
+              <span className="pw-font-bold">Descrição:</span>
               <div
                 dangerouslySetInnerHTML={{
                   __html: tokenPass?.data.description ?? '',
