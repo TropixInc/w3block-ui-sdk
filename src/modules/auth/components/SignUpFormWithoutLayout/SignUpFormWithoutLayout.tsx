@@ -14,6 +14,7 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { useSignUp } from '../../hooks/useSignUp';
+import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../../templates/SignUpTemplate';
 import { AuthButton } from '../AuthButton';
 import { AuthCheckbox } from '../AuthCheckbox';
 import { AuthFooter } from '../AuthFooter';
@@ -21,7 +22,6 @@ import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 import { AuthPasswordTips } from '../AuthPasswordTips';
 import { AuthTextController } from '../AuthTextController';
 import { SignUpFormData } from '../SignUpForm/interface';
-import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../SignUpTemplate';
 import { VerifySignUpWithCodeWithoutLayout } from '../VerifySignUpWithCodeWithoutLayout';
 
 interface Props {

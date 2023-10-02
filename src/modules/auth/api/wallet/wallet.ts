@@ -104,35 +104,3 @@ export const claimWalletVault = async (
     }
   }
 };
-
-export const claimWallet = async (
-  token: string,
-  companyId: string,
-  baseURL: string,
-  userId: string,
-  refreshToken: string
-) => {
-  try {
-    const sdk = new W3blockIdSDK({
-      autoRefresh: false,
-      baseURL,
-    });
-
-    if (refreshToken && token) {
-      await sdk.authenticate({
-        refreshToken: refreshToken,
-        authToken: token,
-        tenantId: companyId,
-      });
-    }
-
-    return await sdk.api.users.findAllWalletByUserId(userId, companyId);
-  } catch (error: any) {
-    if (error.isAxiosError) {
-      const axiosError = error as AxiosError;
-      return { data: axiosError.response?.data };
-    } else {
-      return error;
-    }
-  }
-};
