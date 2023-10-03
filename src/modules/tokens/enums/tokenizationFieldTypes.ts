@@ -9,4 +9,5 @@ export enum TokenizationFieldTypes {
   RADIOGROUP = 'RADIOGROUP',
   NUMERIC_TEXTFIELD = 'NUMERIC_TEXTFIELD',
   YEAR = 'YEAR',
+  ENCRYPTED_TEXT = 'ENCRYPTED_TEXT',
 }

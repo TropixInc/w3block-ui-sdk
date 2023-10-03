@@ -17,6 +17,7 @@ import {
   TextFieldDisplay,
   TextFieldDisplayClasses,
 } from '../SmartDisplay/TextFieldDisplay';
+import { TextFieldEncrypted } from '../SmartDisplay/TextFieldEncrypted';
 
 interface DataDisplayProps {
   fieldName: string;
@@ -40,7 +41,7 @@ const getDisplayValue = (
     return `${typedValue.x} x ${typedValue.y} cm`;
   }
   if (fieldType === TokenizationFieldTypes.DATE) {
-    return format(value as Date, 'dd/MM/yyyy');
+    return format(new Date(value as string), 'dd/MM/yyyy');
   }
   if (selectionFieldTypes.includes(fieldType)) {
     const { options } = formConfig[fieldName].config as SelectConfig;
@@ -62,11 +63,17 @@ export const SmartDataDisplayer = ({
     type,
     config: { label },
   } = formConfig[fieldName];
-
-  if (imageFieldTypes.includes(type)) return null;
   const displayValue = getDisplayValue(formConfig, value, type, fieldName);
 
-  return (
+  if (imageFieldTypes.includes(type)) return null;
+  return type === TokenizationFieldTypes.ENCRYPTED_TEXT ? (
+    <TextFieldEncrypted
+      label={label}
+      inline={inline}
+      value={displayValue}
+      classes={classes}
+    />
+  ) : (
     <TextFieldDisplay
       label={label}
       inline={inline}

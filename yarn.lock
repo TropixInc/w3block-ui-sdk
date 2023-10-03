@@ -1564,7 +1564,7 @@ arrify@^1.0.1:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha512-3CYzex9M9FGQjCGMGyi6/31c8GJbgb0qGyrx5HWxPd0aCwh4cB2YjMb2Xf9UuoogrMrlO9cTqnB5rI5GHZTcUA==
 
-asn1.js@^5.2.0:
+asn1.js@^5.0.0, asn1.js@^5.2.0:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/asn1.js/-/asn1.js-5.4.1.tgz#11a980b84ebb91781ce35b0fdc2ee294e3783f07"
   integrity sha512-+I//4cYPccV8LdmBLiX8CYvf9Sp3vQsrqu2QNXRcrbiWvcx/UdlFiqUJJzxRQxgsZmvhXhn4cSKeSmoFjVdupA==
@@ -4680,6 +4680,13 @@ openid-client@^5.1.0:
     lru-cache "^6.0.0"
     object-hash "^2.2.0"
     oidc-token-hash "^5.0.3"
+
+openpgp@^5.10.2:
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/openpgp/-/openpgp-5.10.2.tgz#695112abbccbdf13a399094e2153dcb899c99ede"
+  integrity sha512-nRqMp4o31rBagWB02tgfKCsocXWq4uYobZf9GDVlD5rQXBq/wRIZHiDhGX1dlDAI2inkZcPd2dSZOqmtGnsK1A==
+  dependencies:
+    asn1.js "^5.0.0"
 
 optionator@^0.9.3:
   version "0.9.3"
