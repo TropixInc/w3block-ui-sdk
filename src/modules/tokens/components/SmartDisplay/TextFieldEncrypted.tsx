@@ -38,12 +38,9 @@ export const TextFieldEncrypted = ({
     try {
       const formData = new FormData(e.target);
 
-      const privateKeyArmored = await openpgp.decryptKey({
-        privateKey: await openpgp.readPrivateKey({
-          armoredKey: formData.get('decryptedKey') as string,
-        }),
+      const privateKeyArmored = await openpgp.readPrivateKey({
+        armoredKey: formData.get('decryptedKey') as string,
       });
-
       const message = await openpgp.readMessage({
         armoredMessage: value,
       });
