@@ -69,7 +69,7 @@ export const TextFieldEncrypted = ({
           'pw-flex pw-flex-col pw-gap-y-2 pw-break-words'
         )}
       >
-        <div>
+        <div className="pw-flex pw-flex-col pw-gap-2">
           <h2
             className={classNames(
               'pw-font-medium pw-text-base pw-leading-[19px] pw-text-black',
@@ -79,15 +79,16 @@ export const TextFieldEncrypted = ({
           >
             {label}:
           </h2>
-          <p
+          <div
             className={classNames(
               'pw-font-base pw-leading-[19px] pw-text-[#676767]',
               classes.value ?? '',
-              inline ? 'pw-inline pw-ml-1' : ''
+              inline ? 'pw-inline' : ''
             )}
-          >
-            {decryptedText}
-          </p>
+            dangerouslySetInnerHTML={{
+              __html: decryptedText.replace('\n', '<br />'),
+            }}
+          ></div>
         </div>
         {decrypted ? (
           <WeblockButton
