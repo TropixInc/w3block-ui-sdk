@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { lazy, ReactNode, useEffect, useMemo, useState } from 'react';
 import { JSX } from 'react/jsx-runtime';
 
 import classNames from 'classnames';
@@ -25,7 +25,14 @@ import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/chec
 import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
 import { Alert } from '../../../shared/components/Alert';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
-import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
+//import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
+const QrCodeValidated = lazy(() =>
+  import('../../../shared/components/QrCodeReader/QrCodeValidated').then(
+    (module) => ({
+      default: module.QrCodeValidated,
+    })
+  )
+);
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';

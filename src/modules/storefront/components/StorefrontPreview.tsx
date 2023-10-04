@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { ReactNode, lazy, useContext, useEffect, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { useRouterConnect } from '../../shared';
@@ -17,18 +17,51 @@ import {
   Theme,
 } from '../interfaces';
 import { Page404 } from './404';
-import { Accordions } from './Accordions';
-import { Banner } from './Banner';
-import { Cookies } from './Cookies';
-import { Footer } from './Footer';
-import { GridItemArea } from './GridItemArea';
-import { Header } from './Header';
-import { ImagePlusText } from './ImagePlusText';
-import { Menu } from './Menu';
-import { Midia } from './Midia';
-import { Paragraph } from './Paragraph';
-import { ProductPage } from './ProductPage';
-import { Products } from './Products';
+// import { Accordions } from './Accordions';
+// import { Banner } from './Banner';
+// import { Cookies } from './Cookies';
+// import { Footer } from './Footer';
+// import { GridItemArea } from './GridItemArea';
+// import { Header } from './Header';
+// import { ImagePlusText } from './ImagePlusText';
+// import { Menu } from './Menu';
+// import { Midia } from './Midia';
+// import { Paragraph } from './Paragraph';
+// import { ProductPage } from './ProductPage';
+// import { Products } from './Products';
+
+const Header = lazy(() =>
+  import('./Header').then((m) => ({ default: m.Header }))
+);
+const Footer = lazy(() =>
+  import('./Footer').then((m) => ({ default: m.Footer }))
+);
+const Banner = lazy(() =>
+  import('./Banner').then((m) => ({ default: m.Banner }))
+);
+const Cookies = lazy(() =>
+  import('./Cookies').then((m) => ({ default: m.Cookies }))
+);
+const Accordions = lazy(() =>
+  import('./Accordions').then((m) => ({ default: m.Accordions }))
+);
+const GridItemArea = lazy(() =>
+  import('./GridItemArea').then((m) => ({ default: m.GridItemArea }))
+);
+const ImagePlusText = lazy(() =>
+  import('./ImagePlusText').then((m) => ({ default: m.ImagePlusText }))
+);
+const Menu = lazy(() => import('./Menu').then((m) => ({ default: m.Menu })));
+const Midia = lazy(() => import('./Midia').then((m) => ({ default: m.Midia })));
+const Paragraph = lazy(() =>
+  import('./Paragraph').then((m) => ({ default: m.Paragraph }))
+);
+const ProductPage = lazy(() =>
+  import('./ProductPage').then((m) => ({ default: m.ProductPage }))
+);
+const Products = lazy(() =>
+  import('./Products').then((m) => ({ default: m.Products }))
+);
 
 interface StorefrontPreviewProps {
   params?: string[];

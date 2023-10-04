@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, lazy, useMemo, useState } from 'react';
 import { useBoolean } from 'react-use';
 
 import { compareAsc, format } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
-import { QrCodeReader } from '../../../shared/components/QrCodeReader';
+// import { QrCodeReader } from '../../../shared/components/QrCodeReader';
+const QrCodeReader = lazy(() => import('../../../shared/components/QrCodeReader').then(module => ({ default: module.QrCodeReader })));
 import {
   QrCodeError,
   TypeError,

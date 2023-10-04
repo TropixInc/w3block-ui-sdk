@@ -27,18 +27,20 @@ export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
   } = mergedStyleData;
 
   return (
-    <HeaderPixwaySDK
-      logoLink={logoLink}
-      hasCart={hasCart}
-      logoSrc={logoSrc?.assetUrl}
-      bgColor={backgroundColor}
-      textColor={textColor}
-      brandText={brandName}
-      margin={convertSpacingToCSS(margin)}
-      padding={convertSpacingToCSS(padding)}
-      tabs={tabs?.map(mapOptionsToTabs)}
-      fontFamily={fontFamily}
-    />
+    <>
+      <HeaderPixwaySDK
+        logoLink={logoLink}
+        hasCart={hasCart}
+        logoSrc={logoSrc?.assetUrl}
+        bgColor={backgroundColor}
+        textColor={textColor}
+        brandText={brandName}
+        margin={convertSpacingToCSS(margin)}
+        padding={convertSpacingToCSS(padding)}
+        tabs={tabs?.map(mapOptionsToTabs)}
+        fontFamily={fontFamily}
+      />
+    </>
   );
 };
 

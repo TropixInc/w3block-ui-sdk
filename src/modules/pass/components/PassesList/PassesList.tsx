@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import validator from 'validator';
 
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
-import { QrCodeReader } from '../../../shared/components/QrCodeReader';
+//import { QrCodeReader } from '../../../shared/components/QrCodeReader';
+const QrCodeReader = lazy(() =>
+  import('../../../shared/components/QrCodeReader').then((module) => ({
+    default: module.QrCodeReader,
+  }))
+);
 import {
   QrCodeError,
   TypeError,

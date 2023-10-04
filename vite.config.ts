@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import url from 'url';
 import { defineConfig } from 'vite';
+import viteCompression from 'vite-plugin-compression';
 import dts from 'vite-plugin-dts';
 import svgr from 'vite-plugin-svgr';
 
@@ -34,6 +35,7 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
+    viteCompression(),
     dts({
       insertTypesEntry: true,
     }),
