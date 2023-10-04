@@ -1,5 +1,5 @@
-import { ReactComponent as CreditCardIcon } from '../../../shared/assets/icons/creditCardIcon.svg';
-import { ReactComponent as PixIcon } from '../../../shared/assets/icons/pix.svg';
+import CreditCardIcon from '../../../shared/assets/icons/creditCardIcon.svg?react';
+import PixIcon from '../../../shared/assets/icons/pix.svg?react';
 import { PaymentMethodsAvaiable } from '../../interface/interface';
 interface PaymentAccordionProps {
   method: PaymentMethodsAvaiable;

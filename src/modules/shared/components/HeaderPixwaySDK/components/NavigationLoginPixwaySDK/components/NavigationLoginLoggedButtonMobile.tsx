@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { useClickAway, useCopyToClipboard } from 'react-use';
 
-import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
-import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
-import { ReactComponent as UserSimpleIcon } from '../../../../../assets/icons/user.svg';
+import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
+import CopyIcon from '../../../../../assets/icons/copyIcon.svg?react';
+import UserSimpleIcon from '../../../../../assets/icons/user.svg?react';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfileWithKYC } from '../../../../../hooks/useProfileWithKYC/useProfileWithKYC';

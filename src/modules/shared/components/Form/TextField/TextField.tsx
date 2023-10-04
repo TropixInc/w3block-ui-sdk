@@ -3,8 +3,8 @@ import { useController } from 'react-hook-form';
 
 import classNames from 'classnames';
 
-import { ReactComponent as PasswordIconShow } from '../../../../shared/assets/icons/eyeIcon.svg';
-import { ReactComponent as PasswordIconHide } from '../../../../shared/assets/icons/eyeIconCrossed.svg';
+import PasswordIconShow from '../../../../shared/assets/icons/eyeIcon.svg?react';
+import PasswordIconHide from '../../../../shared/assets/icons/eyeIconCrossed.svg?react';
 import { FormItemContainer } from '../FormItemContainer';
 
 interface TextFieldProps {

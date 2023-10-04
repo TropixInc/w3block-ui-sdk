@@ -13,7 +13,6 @@ import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
 import { useRouterConnect } from '../../shared';
-// import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { Alert } from '../../shared/components/Alert';
 import { CheckboxAlt } from '../../shared/components/CheckboxAlt/CheckboxAlt';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';

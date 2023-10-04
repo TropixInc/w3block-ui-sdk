@@ -1,5 +1,5 @@
 import { useRouterConnect } from '../../../shared';
-import { ReactComponent as InfoIcon } from '../../../shared/assets/icons/informationCircledFilled.svg';
+import InfoIcon from '../../../shared/assets/icons/informationCircledFilled.svg?react';
 import { Box } from '../../../shared/components/Box/Box';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';

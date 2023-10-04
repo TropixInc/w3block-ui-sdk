@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 import { CheckoutStatus } from '../../../checkout';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
-import { ReactComponent as EthIcon } from '../../assets/icons/Eth.svg';
-import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
-import { ReactComponent as TrashIcon } from '../../assets/icons/trash.svg';
+import EthIcon from '../../assets/icons/Eth.svg?react';
+import MaticIcon from '../../assets/icons/maticIcon.svg?react';
+import TrashIcon from '../../assets/icons/trash.svg?react';
 import useTranslation from '../../hooks/useTranslation';
 import { ImageSDK } from '../ImageSDK';
 import { Shimmer } from '../Shimmer';

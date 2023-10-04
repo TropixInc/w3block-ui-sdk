@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
 import classNames from 'classnames';
 import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { Card } from '../../shared/components/Card';
+const Card = lazy(() =>
+  import('../../shared/components/Card').then((module) => ({
+    default: module.Card,
+  }))
+);
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import {
@@ -15,6 +19,7 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import {
@@ -23,11 +28,15 @@ import {
   CardTypesEnum,
   ProductsData,
 } from '../interfaces';
-import { ContentCard } from './ContentCard';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
+
+const ContentCard = lazy(() =>
+  import('./ContentCard').then((module) => ({
+    default: module.ContentCard,
+  }))
+);
 
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;

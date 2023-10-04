@@ -8,7 +8,7 @@ import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { ReactComponent as WalletImage } from '../../assets/wallet.svg';
+import WalletImage from '../../assets/wallet.svg?react';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
 import { Token } from '../../interfaces/Token';
 import { mapNFTToToken } from '../../utils/mapNFTToToken';

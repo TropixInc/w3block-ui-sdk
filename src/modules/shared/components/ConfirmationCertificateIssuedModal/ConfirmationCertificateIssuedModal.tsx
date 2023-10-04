@@ -1,4 +1,4 @@
-import { ReactComponent as CheckCircledFilled } from '../../assets/icons/checkCircledFilled.svg';
+import CheckCircledFilled from '../../assets/icons/checkCircledFilled.svg?react';
 import useTranslation from '../../hooks/useTranslation';
 import { ModalBase } from '../ModalBase';
 

@@ -7,7 +7,7 @@ import { addMinutes, isAfter } from 'date-fns';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
+import KeyIconOutlined from '../../assets/icons/keyIconOutlined.svg?react';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestPasswordChange } from '../../hooks/useRequestPasswordChange';
 interface PasswordChangeMailSentProps {

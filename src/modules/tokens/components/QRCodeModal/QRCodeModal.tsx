@@ -2,10 +2,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 
-import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copy.svg';
-import { ReactComponent as DownloadIcon } from '../../../shared/assets/icons/download.svg';
-import { ReactComponent as FrameTopLeftBorder } from '../../../shared/assets/icons/frameTopLeftBorderFilled.svg';
-import { ReactComponent as ScanMePlate } from '../../../shared/assets/icons/scanMePlate.svg';
+import  CopyIcon  from '../../../shared/assets/icons/copy.svg?react';
+import  DownloadIcon  from '../../../shared/assets/icons/download.svg?react';
+import  FrameTopLeftBorder  from '../../../shared/assets/icons/frameTopLeftBorderFilled.svg?react';
+import  ScanMePlate  from '../../../shared/assets/icons/scanMePlate.svg?react';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';

@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 
-import { useProfile } from '..';
-
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../usePixwaySession';
+import { useProfile } from '../useProfile/useProfile';
 import { useRouterConnect } from '../useRouterConnect';
 
 interface useHasWalletProps {

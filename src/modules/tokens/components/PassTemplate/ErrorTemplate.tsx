@@ -1,5 +1,5 @@
-import { ReactComponent as CloseCircledIcon } from '../../../shared/assets/icons/closeCircledOutlined.svg';
-import { ReactComponent as ErrorIcon } from '../../../shared/assets/icons/errorIconRed.svg';
+import CloseCircledIcon from '../../../shared/assets/icons/closeCircledOutlined.svg?react';
+import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg?react';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 

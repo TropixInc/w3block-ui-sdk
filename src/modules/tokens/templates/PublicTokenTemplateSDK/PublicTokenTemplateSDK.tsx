@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/esm/locale';
 
 import { useRouterConnect } from '../../../shared';
-import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
+import ExternalLinkIcon from '../../../shared/assets/icons/externalLink.svg?react';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';

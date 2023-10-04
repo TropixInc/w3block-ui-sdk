@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-import { ReactComponent as PixwayIconHorizontal } from '../../../shared/assets/icons/weblock_logo.svg';
+import PixwayIconHorizontal from '../../../shared/assets/icons/weblock_logo.svg?react';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface Props {

@@ -10,7 +10,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
+import MailSent from '../../assets/icons/mailSent.svg?react';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';

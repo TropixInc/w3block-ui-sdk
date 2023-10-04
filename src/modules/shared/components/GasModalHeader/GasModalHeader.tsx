@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { ReactComponent as Matic } from '../../assets/icons/maticFilled.svg';
+import Matic from '../../assets/icons/maticFilled.svg?react';
 import { useCryptoCurrencyExchangeRate } from '../../hooks/useCryptoCurrencyExchangeRate';
 import { TooltipHover } from '../TooltipHover/TooltipHover';
 

@@ -11,7 +11,7 @@ import {
 } from '@w3block/sdk-id';
 
 import { ErrorMessage } from '../../../../checkout/components/ErrorMessage/ErrorMessage';
-import { ReactComponent as UserIcon } from '../../../assets/icons/userOutlined.svg';
+import UserIcon from '../../../assets/icons/userOutlined.svg?react';
 import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
@@ -111,10 +111,10 @@ export const InputMultiFace = ({
   }, [height, width]);
 
   const [deviceId, setDeviceId] = useState('');
-  const [devices, setDevices] = useState<InputDeviceInfo[]>([]);
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 
   const handleDevices = useCallback(
-    (mediaDevices: InputDeviceInfo[]) => {
+    (mediaDevices: MediaDeviceInfo[]) => {
       setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput'));
       if (mediaDevices.filter(({ kind }) => kind === 'videoinput').length) {
         setDeviceId(
@@ -127,7 +127,9 @@ export const InputMultiFace = ({
   );
 
   useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then(handleDevices);
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((media) => handleDevices(media));
   }, [handleDevices]);
 
   return (

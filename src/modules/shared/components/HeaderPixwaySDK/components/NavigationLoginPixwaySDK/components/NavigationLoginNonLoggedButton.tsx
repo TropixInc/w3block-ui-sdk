@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
-import { ReactComponent as UserIcon } from '../../../../../assets/icons/user.svg';
+import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
+import UserIcon from '../../../../../assets/icons/user.svg?react';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';

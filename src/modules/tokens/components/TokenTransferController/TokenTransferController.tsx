@@ -7,7 +7,7 @@ import { useLocalStorage } from 'react-use';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
-import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
+import ExternalLinkIcon from '../../../shared/assets/icons/externalLink.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { TextField } from '../../../shared/components/Form/TextField';
 import { GasModalHeader } from '../../../shared/components/GasModalHeader';

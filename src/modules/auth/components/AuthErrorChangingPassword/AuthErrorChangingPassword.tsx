@@ -1,7 +1,7 @@
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as ErrorFilled } from '../../assets/icons/errorFilled.svg';
+import ErrorFilled from '../../assets/icons/errorFilled.svg?react';
 import { AuthButton } from '../AuthButton';
 
 interface Props {

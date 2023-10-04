@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { InternalPagesLayoutBase } from '../../../shared';
-import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
+import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';

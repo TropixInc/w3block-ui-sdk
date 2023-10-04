@@ -1,4 +1,4 @@
-import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
+import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
 import { Link } from '../../../shared/components/Link';
 import useRouter from '../../../shared/hooks/useRouter';
 

@@ -4,8 +4,8 @@ import { useLockBodyScroll } from 'react-use';
 import classNames from 'classnames';
 import validator from 'validator';
 
-import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
-import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
+import  ErrorIcon from '../../assets/icons/errorIconRed.svg?react';
+import  XIcon from '../../assets/icons/xFilled.svg?react';
 import useTranslation from '../../hooks/useTranslation';
 import { Button } from '../Buttons';
 

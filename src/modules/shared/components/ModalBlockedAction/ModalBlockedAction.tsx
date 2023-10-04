@@ -7,7 +7,7 @@ import { addMinutes, isAfter } from 'date-fns';
 import { AuthButton } from '../../../auth/components/AuthButton';
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../../../auth/hooks/useVerifySignUp';
-import { ReactComponent as CloseIcon } from '../../assets/icons/closeCircledOutlined.svg';
+import CloseIcon from '../../assets/icons/closeCircledOutlined.svg?react';
 import { LocalStorageFields } from '../../enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';

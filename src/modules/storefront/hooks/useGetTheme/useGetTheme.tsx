@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
-import { useRouterConnect } from '../../../shared';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 
 export const useGetTheme = () => {
   const [href, setHref] = useState('');
@@ -12,9 +12,9 @@ export const useGetTheme = () => {
   const { query } = useRouterConnect();
   useEffect(() => {
     if (window) {
-      setHref(window.location.href);
+      //setHref(window.location.href);
       //setHref('https://hashdex.stg.w3block.io/' + '?' + Date.now());
-      //setHref('https://foodbusters.stg.w3block.io/' + '?' + Date.now());
+      setHref('https://foodbusters.stg.w3block.io/' + '?' + Date.now());
     }
   }, []);
 

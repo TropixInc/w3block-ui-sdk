@@ -5,7 +5,7 @@ import {
   FromToInterface,
 } from '../../../dashboard/interface/ercTokenHistoryInterface';
 import { InternalPagesLayoutBase, useRouterConnect } from '../../../shared';
-import { ReactComponent as UserIcon } from '../../../shared/assets/icons/userOutlined.svg';
+import UserIcon from '../../../shared/assets/icons/userOutlined.svg?react';
 import { Pagination } from '../../../shared/components/Pagination';
 import {
   TableDefault,

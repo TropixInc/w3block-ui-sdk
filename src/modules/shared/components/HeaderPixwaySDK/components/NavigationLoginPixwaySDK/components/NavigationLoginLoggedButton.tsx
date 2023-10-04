@@ -11,19 +11,19 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import useGetPassByUser from '../../../../../../pass/hooks/useGetPassByUser';
-import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
-import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
-// import { ReactComponent as HelpIcon } from '../../../../../assets/icons/helpIconGray.svg';
-import { ReactComponent as IntegrationIcon } from '../../../../../assets/icons/integrationIconOutlined.svg';
-import { ReactComponent as LogoutIcon } from '../../../../../assets/icons/logoutIconGray.svg';
-import { ReactComponent as MyOrdersIcon } from "../../../../../assets/icons/myOrders.svg"
-import {ReactComponent as ReceiptIcon} from "../../../../../assets/icons/receipt.svg";
-//import { ReactComponent as MyTokenIcon } from '../../../../../assets/icons/myTokensIconGray.svg';
-// import { ReactComponent as SettingsIcon } from '../../../../../assets/icons/settingsIconGray.svg';
-import { ReactComponent as TicketIcon } from '../../../../../assets/icons/ticketFilled.svg';
-import {ReactComponent as UserSimpleIcon} from "../../../../../assets/icons/user.svg"
-import { ReactComponent as UserIcon } from '../../../../../assets/icons/userIconGray.svg';
-import { ReactComponent as WalletIcon } from '../../../../../assets/icons/walletIconGray.svg';
+import  ArrowDown  from '../../../../../assets/icons/arrowDown.svg?react';
+import  EyeIcon  from '../../../../../assets/icons/eyeGold.svg?react';
+// import  HelpIcon  from '../../../../../assets/icons/helpIconGray.svg?react';
+import  IntegrationIcon  from '../../../../../assets/icons/integrationIconOutlined.svg?react';
+import  LogoutIcon  from '../../../../../assets/icons/logoutIconGray.svg?react';
+import  MyOrdersIcon  from "../../../../../assets/icons/myOrders.svg?react"
+import  ReceiptIcon from "../../../../../assets/icons/receipt.svg?react";
+//import  MyTokenIcon  from '../../../../../assets/icons/myTokensIconGray.svg?react';
+// import  SettingsIcon  from '../../../../../assets/icons/settingsIconGray.svg?react';
+import  TicketIcon  from '../../../../../assets/icons/ticketFilled.svg?react';
+import  UserSimpleIcon from "../../../../../assets/icons/user.svg?react"
+import  UserIcon  from '../../../../../assets/icons/userIconGray.svg?react';
+import  WalletIcon  from '../../../../../assets/icons/walletIconGray.svg?react';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useProfile } from '../../../../../hooks';
 import { useIsProduction } from '../../../../../hooks/useIsProduction';

@@ -6,11 +6,11 @@ import { BusinessProviderSDK } from '../../../business/providers/businessProvide
 import { useGetWallets } from '../../../dashboard/hooks/useGetWallets';
 import { CoinsType } from '../../../storefront/interfaces';
 import { AuthenticateModal } from '../../components/AuthenticateModal/AuthenticateModal';
-import { useRouterConnect } from '../../hooks';
 import { useGetBalancesForWallets } from '../../hooks/useBalance';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
+import { useRouterConnect } from '../../hooks/useRouterConnect/useRouterConnect';
 import { UserProvider } from '../UserProvider/userProvider';
 
 interface UserWalletsContextInterface {

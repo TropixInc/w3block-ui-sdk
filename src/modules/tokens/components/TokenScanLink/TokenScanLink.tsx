@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-import { ReactComponent as BoxWithUpRightArrow } from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg';
+import BoxWithUpRightArrow from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg?react';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import useModalController from '../../hooks/useDialogController';

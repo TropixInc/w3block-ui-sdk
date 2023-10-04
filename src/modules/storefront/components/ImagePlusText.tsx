@@ -1,6 +1,10 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, lazy } from 'react';
 
-import { ImageSDK } from '../../shared/components/ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../../shared/components/ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ImagePlusTextData } from '../interfaces';

@@ -1,7 +1,7 @@
 import { ChainScan } from '../../enums/ChainId';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
-import { WalletSimple } from '../../providers';
+import { WalletSimple } from '../../providers/UserWalletsProvider/userWalletsProvider';
 import { useAxios } from '../useAxios';
 import { usePrivateQuery } from '../usePrivateQuery';
 

@@ -1,6 +1,10 @@
 import classNames from 'classnames';
 
-import { ImageSDK } from '../../shared/components/ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../../shared/components/ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
 import {
   breakpointsEnum,
   useBreakpoints,
@@ -8,6 +12,8 @@ import {
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, MidiaData } from '../interfaces';
+
+import { lazy } from 'react';
 
 const ratios: Record<string, string> = {
   default: '',

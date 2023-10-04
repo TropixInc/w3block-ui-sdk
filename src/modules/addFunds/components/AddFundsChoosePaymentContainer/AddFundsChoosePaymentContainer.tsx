@@ -1,10 +1,21 @@
-import { ReactComponent as UploadIcon } from '../../../shared/assets/icons/uploadIcon.svg';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+import { lazy } from 'react';
+
+import UploadIcon from '../../../shared/assets/icons/uploadIcon.svg?react';
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (module) => ({ default: module.WeblockButton })
+  )
+);
+
+const BalanceWalletArea = lazy(() =>
+  import('../BalanceWalletArea/BalanceWalletArea').then((module) => ({
+    default: module.BalanceWalletArea,
+  }))
+);
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { BalanceWalletArea } from '../BalanceWalletArea/BalanceWalletArea';
 
 export const AddFundsChoosePaymentContainer = () => {
   const { mainWallet: wallet } = useUserWallet();

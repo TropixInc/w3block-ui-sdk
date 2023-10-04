@@ -9,11 +9,11 @@ import {
 
 import classNames from 'classnames';
 
-import { ReactComponent as AlertTriangle } from '../../assets/icons/alertTriangle.svg';
-import { ReactComponent as CheckCircledFilled } from '../../assets/icons/checkCircledFilled.svg';
-import { ReactComponent as ErrorCircledFilled } from '../../assets/icons/errorCircledFilled.svg';
-import { ReactComponent as ExclamationCircledFilled } from '../../assets/icons/exclamationCircledFilled.svg';
-import { ReactComponent as InformationCircledFilled } from '../../assets/icons/informationCircledFilled.svg';
+import AlertTriangle from '../../assets/icons/alertTriangle.svg?react';
+import CheckCircledFilled from '../../assets/icons/checkCircledFilled.svg?react';
+import ErrorCircledFilled from '../../assets/icons/errorCircledFilled.svg?react';
+import ExclamationCircledFilled from '../../assets/icons/exclamationCircledFilled.svg?react';
+import InformationCircledFilled from '../../assets/icons/informationCircledFilled.svg?react';
 
 type AlertVariant =
   | 'error'

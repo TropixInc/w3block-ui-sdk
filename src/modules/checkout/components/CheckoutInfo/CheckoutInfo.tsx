@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
 import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
-import { ReactComponent as ValueChangeIcon } from '../../../shared/assets/icons/icon-up-down.svg';
+import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';

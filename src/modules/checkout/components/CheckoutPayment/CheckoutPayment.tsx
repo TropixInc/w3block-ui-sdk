@@ -6,8 +6,8 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 import { useProfile } from '../../../shared';
-import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copyIcon.svg';
-import { ReactComponent as Loading } from '../../../shared/assets/icons/loading.svg';
+import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
+import Loading from '../../../shared/assets/icons/loading.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';

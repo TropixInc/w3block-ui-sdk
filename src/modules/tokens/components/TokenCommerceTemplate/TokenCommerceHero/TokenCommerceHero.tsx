@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-import { ReactComponent as ArrowIcon } from '../../../../shared/assets/icons/arrowLeftOutlined.svg';
+import ArrowIcon from '../../../../shared/assets/icons/arrowLeftOutlined.svg?react';
 import { BreadCrumb } from '../../../../shared/components/Breadcrumb';
 import useRouter from '../../../../shared/hooks/useRouter';
 import useTranslation from '../../../../shared/hooks/useTranslation';

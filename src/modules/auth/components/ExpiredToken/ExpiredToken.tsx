@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
+import MailError from '../../assets/icons/mailError.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase } from '../AuthLayoutBase';

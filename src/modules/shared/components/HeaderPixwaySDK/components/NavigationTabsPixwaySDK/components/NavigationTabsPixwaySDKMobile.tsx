@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { ReactComponent as ChevronLeft } from '../../../../../assets/icons/chevronLeftFilled.svg';
-import { ReactComponent as ChevronRight } from '../../../../../assets/icons/chevronRightFilled.svg';
-import { ReactComponent as CloseIcon } from '../../../../../assets/icons/closeIconHeader.svg';
-import { ReactComponent as HamburguerIcon } from '../../../../../assets/icons/headerHamburger.svg';
+import ChevronLeft from '../../../../../assets/icons/chevronLeftFilled.svg?react';
+import ChevronRight from '../../../../../assets/icons/chevronRightFilled.svg?react';
+import CloseIcon from '../../../../../assets/icons/closeIconHeader.svg?react';
+import HamburguerIcon from '../../../../../assets/icons/headerHamburger.svg?react';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';

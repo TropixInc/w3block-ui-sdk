@@ -6,11 +6,11 @@ import { format } from 'date-fns';
 import { CheckoutStatus } from '../../../checkout';
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
 import { PriceAndGasInfo, ProductInfo } from '../../../shared';
-import { ReactComponent as ArrowIcon } from '../../../shared/assets/icons/arrowDown.svg';
-import { ReactComponent as CheckIcon } from '../../../shared/assets/icons/checkOutlined.svg';
-import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copy.svg';
-import { ReactComponent as InfoIcon } from '../../../shared/assets/icons/informationCircled.svg';
-import { ReactComponent as XIcon } from '../../../shared/assets/icons/x-circle.svg';
+import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
+import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
+import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
+import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react';
+import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 export enum OrderStatusEnum {
   PENDING = 'pending',

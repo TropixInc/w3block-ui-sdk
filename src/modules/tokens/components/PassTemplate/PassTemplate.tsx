@@ -20,9 +20,9 @@ import {
   useHasWallet,
   useProfile,
 } from '../../../shared';
-import { ReactComponent as ArrowLeftIcon } from '../../../shared/assets/icons/arrowLeftOutlined.svg';
-import { ReactComponent as CheckedIcon } from '../../../shared/assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as InfoCircledIcon } from '../../../shared/assets/icons/informationCircled.svg';
+import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
+import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
+import InfoCircledIcon from '../../../shared/assets/icons/informationCircled.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 //import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';

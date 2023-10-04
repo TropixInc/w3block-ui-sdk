@@ -1,4 +1,4 @@
-import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
+import ErrorIcon from '../../assets/icons/errorIconRed.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';

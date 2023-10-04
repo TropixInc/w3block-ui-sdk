@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
-import { ReactComponent as CircleCheck } from '../../../shared/assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copyIcon.svg';
+import CircleCheck from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
+import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
 import { HelpCircleOutlinedSVG } from '../../../shared/assets/icons/HelpCircleOutlined';
 import { UploadIconSVG } from '../../../shared/assets/icons/UploadIcon';
 import { Alert } from '../../../shared/components/Alert';

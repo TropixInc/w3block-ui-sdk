@@ -7,8 +7,8 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 // import { QrCodeReader } from '../../../shared/components/QrCodeReader';
 const QrCodeReader = lazy(() => import('../../../shared/components/QrCodeReader').then(module => ({ default: module.QrCodeReader })));
+const QrCodeError = lazy(() => import('../../../shared/components/QrCodeReader/QrCodeError').then(module => ({ default: module.QrCodeError })));
 import {
-  QrCodeError,
   TypeError,
 } from '../../../shared/components/QrCodeReader/QrCodeError';
 import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';

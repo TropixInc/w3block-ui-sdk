@@ -1,5 +1,5 @@
-import { ReactComponent as ETHIcon } from '../../assets/icons/Eth.svg';
-import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
+import ETHIcon from '../../assets/icons/Eth.svg?react';
+import MaticIcon from '../../assets/icons/maticIcon.svg?react';
 import { CurrencyEnum } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
 type CurrencyObjectType = {

@@ -1,19 +1,25 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { lazy, useContext, useEffect, useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
 
 import { KycStatus } from '@w3block/sdk-id';
 
 import { ContentTypeEnum } from '../../../poll';
+const ContainerControllerSDK = lazy(() =>
+  import('../../../shared').then((m) => ({ default: m.ContainerControllerSDK }))
+);
 import {
   ContainerControllerClasses,
-  ContainerControllerSDK,
   ExtraBy,
   position,
   useProfile,
   useRouterConnect,
 } from '../../../shared';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
-import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
@@ -24,7 +30,11 @@ import {
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { ThemeContext } from '../../../storefront/contexts';
-import { FormCompleteKYCWithoutLayout } from '../../components/FormCompleteKYCWithoutLayout';
+const FormCompleteKYCWithoutLayout = lazy(() =>
+  import('../../components/FormCompleteKYCWithoutLayout').then((m) => ({
+    default: m.FormCompleteKYCWithoutLayout,
+  }))
+);
 
 interface CompleteKYCTemplateSDKProps {
   bgColor?: string;

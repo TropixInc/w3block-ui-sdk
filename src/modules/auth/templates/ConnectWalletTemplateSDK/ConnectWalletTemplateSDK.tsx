@@ -1,24 +1,33 @@
-import { useContext, useMemo } from 'react';
+import { lazy, useContext, useMemo } from 'react';
 
-import { ContentTypeEnum } from '../../../poll';
-import {
-  ContainerControllerClasses,
-  ContainerControllerSDK,
-  ExtraBy,
-  position,
-} from '../../../shared';
+import { ContentTypeEnum } from '../../../poll/enums/contentType';
 import { Box } from '../../../shared/components/Box/Box';
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({
+    default: module.ContainerControllerSDK,
+  }))
+);
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { position } from '../../../shared/enums/styleConfigs';
 import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { ThemeContext } from '../../../storefront/contexts';
-import { ConnectExternalWalletWithoutLayout } from '../../components/ConnectExternalWalletWithoutLayout';
-
+const ConnectExternalWalletWithoutLayout = lazy(() =>
+  import('../../components/ConnectExternalWalletWithoutLayout').then(
+    (module) => ({
+      default: module.ConnectExternalWalletWithoutLayout,
+    })
+  )
+);
 interface ConnectWalletTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;

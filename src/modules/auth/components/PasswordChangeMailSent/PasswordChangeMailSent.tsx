@@ -10,7 +10,7 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
+import KeyIconOutlined from '../../assets/icons/keyIconOutlined.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { AuthButton } from '../AuthButton';

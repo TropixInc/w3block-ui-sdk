@@ -4,7 +4,7 @@ import { useToggle } from 'react-use';
 import classNames from 'classnames';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
-import { ReactComponent as FilterIcon } from '../../../shared/assets/icons/filterOutlined.svg';
+import FilterIcon from '../../../shared/assets/icons/filterOutlined.svg?react';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export interface ValidStatusProps {

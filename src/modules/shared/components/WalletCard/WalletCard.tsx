@@ -1,6 +1,6 @@
-import { ReactComponent as DollarIcon } from '../../assets/icons/dollar-sign.svg';
-import { ReactComponent as ExtractIcon } from '../../assets/icons/externalLink.svg';
-import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg';
+import DollarIcon from '../../assets/icons/dollar-sign.svg?react';
+import ExtractIcon from '../../assets/icons/externalLink.svg?react';
+import MetamaskIcon from '../../assets/icons/metamask.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';

@@ -1,9 +1,14 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, lazy } from 'react';
 
 import { Navigation, Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ImageSDK } from '../../shared/components/ImageSDK';
+//import { ImageSDK } from '../../shared/components/ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../../shared/components/ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import {
   useBreakpoints,

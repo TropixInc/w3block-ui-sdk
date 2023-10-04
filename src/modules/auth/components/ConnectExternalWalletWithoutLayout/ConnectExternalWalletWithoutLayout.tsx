@@ -5,7 +5,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
 import { useProfile } from '../../../shared';
-import { ReactComponent as MetamaskLogo } from '../../../shared/assets/icons/metamask.svg';
+import MetamaskLogo from '../../../shared/assets/icons/metamask.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';

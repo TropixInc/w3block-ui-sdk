@@ -1,4 +1,11 @@
-import { HeaderPixwaySDK, NavigationTabsPixwaySDKTabs } from '../../shared';
+import { lazy } from 'react';
+
+import { NavigationTabsPixwaySDKTabs } from '../../shared';
+const HeaderPixwaySDK = lazy(() =>
+  import('../../shared').then((module) => ({
+    default: module.HeaderPixwaySDK,
+  }))
+);
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { MainModuleThemeInterface } from '../interfaces';

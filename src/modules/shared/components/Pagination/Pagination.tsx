@@ -6,8 +6,8 @@ import { number, object } from 'yup';
 
 import TokenizationFormItemContainer from '../../../tokens/components/TokenizationFormItemContainer/TokenizationFormItemContainer';
 import { getNumbersFromString } from '../../../tokens/utils/getNumbersFromString';
-import { ReactComponent as ChevronLeft } from '../../assets/icons/chevronLeftFilled.svg';
-import { ReactComponent as ChevronRight } from '../../assets/icons/chevronRightFilled.svg';
+import ChevronLeft from '../../assets/icons/chevronLeftFilled.svg?react';
+import ChevronRight from '../../assets/icons/chevronRightFilled.svg?react';
 import useTranslation from '../../hooks/useTranslation';
 import { PixwayButton } from '../PixwayButton';
 

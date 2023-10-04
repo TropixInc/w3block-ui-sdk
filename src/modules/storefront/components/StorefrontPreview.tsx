@@ -1,34 +1,25 @@
 import { ReactNode, lazy, useContext, useEffect, useState } from 'react';
 import { useEffectOnce } from 'react-use';
 
-import { useRouterConnect } from '../../shared';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import {
   breakpointsEnum,
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useUserWallet } from '../../shared/hooks/useUserWallet';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { ThemeContext, ThemeProvider } from '../contexts';
+import { ThemeContext, ThemeProvider } from '../contexts/ThemeContext';
 import {
   MainModuleThemeInterface,
   ModulesType,
   TemplateData,
   Theme,
 } from '../interfaces';
-import { Page404 } from './404';
-// import { Accordions } from './Accordions';
-// import { Banner } from './Banner';
-// import { Cookies } from './Cookies';
-// import { Footer } from './Footer';
-// import { GridItemArea } from './GridItemArea';
-// import { Header } from './Header';
-// import { ImagePlusText } from './ImagePlusText';
-// import { Menu } from './Menu';
-// import { Midia } from './Midia';
-// import { Paragraph } from './Paragraph';
-// import { ProductPage } from './ProductPage';
-// import { Products } from './Products';
+
+const Page404 = lazy(() =>
+  import('./404').then((m) => ({ default: m.Page404 }))
+);
 
 const Header = lazy(() =>
   import('./Header').then((m) => ({ default: m.Header }))

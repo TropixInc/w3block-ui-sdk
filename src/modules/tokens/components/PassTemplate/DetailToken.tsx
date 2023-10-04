@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
-import { ReactComponent as LinkIcon } from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg';
-import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copyIcon.svg';
+import LinkIcon from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg?react';
+import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const DetailToken = ({

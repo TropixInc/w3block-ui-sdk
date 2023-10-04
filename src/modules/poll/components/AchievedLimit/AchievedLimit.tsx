@@ -1,4 +1,4 @@
-import { ReactComponent as InfoIcon } from '../../../shared/assets/icons/informationCircledFilled.svg';
+import InfoIcon from '../../../shared/assets/icons/informationCircledFilled.svg?react';
 import { Box } from '../../../shared/components/Box/Box';
 import useTranslation from '../../../shared/hooks/useTranslation';
 export const AchievedLimit = () => {

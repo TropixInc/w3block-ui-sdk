@@ -4,7 +4,7 @@ import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
 
-import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
+import  XIcon  from '../../assets/icons/xFilled.svg?react';
 import { Backdrop } from '../Backdrop';
 
 

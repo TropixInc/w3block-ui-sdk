@@ -1,14 +1,12 @@
 import { useMemo } from 'react';
 
-import {
-  differenceInSeconds,
-  differenceInMinutes,
-  differenceInHours,
-  subHours,
-  subMinutes,
-  differenceInDays,
-  subDays,
-} from 'date-fns';
+import differenceInDays from 'date-fns/differenceInDays';
+import differenceInHours from 'date-fns/differenceInHours';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
+import differenceInSeconds from 'date-fns/differenceInSeconds';
+import subDays from 'date-fns/subDays';
+import subHours from 'date-fns/subHours';
+import subMinutes from 'date-fns/subMinutes';
 
 export const useTimeDistance = (from: Date, to: Date) => {
   return useMemo(() => {

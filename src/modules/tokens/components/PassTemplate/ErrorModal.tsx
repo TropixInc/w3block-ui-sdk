@@ -1,6 +1,6 @@
 import { useLockBodyScroll } from 'react-use';
 
-import { ReactComponent as ErrorIcon } from '../../../shared/assets/icons/errorIconRed.svg';
+import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg?react';
 import { CloseButton } from '../../../shared/components/CloseButton';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';

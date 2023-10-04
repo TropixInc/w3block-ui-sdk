@@ -1,4 +1,4 @@
-import { ReactComponent as CheckCircleOutlined } from '../../../shared/assets/icons/checkCircledOutlined.svg';
+import CheckCircleOutlined from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';

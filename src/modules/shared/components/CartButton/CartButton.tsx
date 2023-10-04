@@ -1,5 +1,5 @@
 import { useCart } from '../../../checkout/hooks/useCart';
-import { ReactComponent as CartIcon } from '../../assets/icons/shoppingCart.svg';
+import CartIcon from '../../assets/icons/shoppingCart.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 interface CartButtonProps {

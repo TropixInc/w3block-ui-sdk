@@ -3,7 +3,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import classNames from 'classnames';
 
-import { ReactComponent as CheckFilledIcon } from '../../assets/icons/checkOutlined.svg';
+import CheckFilledIcon from '../../assets/icons/checkOutlined.svg?react';
 
 interface Props {
   name: string;

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
-import { ReactComponent as ArrowDown } from '../../../shared/assets/icons/arrowDown.svg';
+import ArrowDown from '../../../shared/assets/icons/arrowDown.svg?react';
 import { formatterCurrency } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { AvailableInstallmentInfo } from '../../interface/interface';
 interface CheckoutInstalmentsProps {

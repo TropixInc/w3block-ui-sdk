@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
+import MailError from '../../assets/icons/mailError.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 
 interface Props {

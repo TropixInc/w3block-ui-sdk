@@ -10,7 +10,7 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
-import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
+import MailSent from '../../assets/icons/mailSent.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
