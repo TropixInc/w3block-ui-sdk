@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import CircleCheck from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
@@ -6,7 +6,14 @@ import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
 import { HelpCircleOutlinedSVG } from '../../../shared/assets/icons/HelpCircleOutlined';
 import { UploadIconSVG } from '../../../shared/assets/icons/UploadIcon';
 import { Alert } from '../../../shared/components/Alert';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({
+      default: m.WeblockButton,
+    })
+  )
+);
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';

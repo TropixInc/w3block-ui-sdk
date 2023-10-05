@@ -1,6 +1,21 @@
-import { CheckoutHeader } from '../../../checkout';
-import { ContainerWithFAQ } from '../../../shared/components/ContainerWithFAQ';
-import { AddFundsChoosePaymentContainer } from '../../components/AddFundsChoosePaymentContainer';
+import { lazy } from 'react';
+
+const CheckoutHeader = lazy(() =>
+  import('../../../checkout/components/CheckoutHeader/CheckoutHeader').then(
+    (m) => ({ default: m.CheckoutHeader })
+  )
+);
+
+const ContainerWithFAQ = lazy(() =>
+  import('../../../shared/components/ContainerWithFAQ').then((m) => ({
+    default: m.ContainerWithFAQ,
+  }))
+);
+const AddFundsChoosePaymentContainer = lazy(() =>
+  import('../../components/AddFundsChoosePaymentContainer').then((m) => ({
+    default: m.AddFundsChoosePaymentContainer,
+  }))
+);
 
 export const AddFundsTypeChooseTemplateSDK = () => {
   return (
