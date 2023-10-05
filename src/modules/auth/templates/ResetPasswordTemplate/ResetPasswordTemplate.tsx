@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { isAfter, isValid } from 'date-fns';
+import isAfter from 'date-fns/isAfter';
+import isValid from 'date-fns/isValid';
 import { object, string } from 'yup';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -10,15 +11,46 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { AuthButton } from '../../components/AuthButton';
-import { AuthErrorChagingPassword } from '../../components/AuthErrorChangingPassword';
+const AuthButton = lazy(() =>
+  import('../../components/AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+const AuthErrorChagingPassword = lazy(() =>
+  import('../../components/AuthErrorChangingPassword').then((m) => ({
+    default: m.AuthErrorChagingPassword,
+  }))
+);
 import { AuthFooter } from '../../components/AuthFooter';
-import { AuthLayoutBase } from '../../components/AuthLayoutBase';
-import { AuthPasswordChanged } from '../../components/AuthPasswordChanged';
-import { AuthPasswordTips } from '../../components/AuthPasswordTips';
-import { AuthTextController } from '../../components/AuthTextController';
-import { ExpiredToken } from '../../components/ExpiredToken';
-import { PasswordChangeMailSent } from '../../components/PasswordChangeMailSent';
+const AuthLayoutBase = lazy(() =>
+  import('../../components/AuthLayoutBase').then((m) => ({
+    default: m.AuthLayoutBase,
+  }))
+);
+const AuthPasswordChanged = lazy(() =>
+  import('../../components/AuthPasswordChanged').then((m) => ({
+    default: m.AuthPasswordChanged,
+  }))
+);
+const AuthPasswordTips = lazy(() =>
+  import('../../components/AuthPasswordTips').then((m) => ({
+    default: m.AuthPasswordTips,
+  }))
+);
+const AuthTextController = lazy(() =>
+  import('../../components/AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }))
+);
+const ExpiredToken = lazy(() =>
+  import('../../components/ExpiredToken').then((m) => ({
+    default: m.ExpiredToken,
+  }))
+);
+const PasswordChangeMailSent = lazy(() =>
+  import('../../components/PasswordChangeMailSent').then((m) => ({
+    default: m.PasswordChangeMailSent,
+  }))
+);
+
 import { useChangePasswordAndSignIn } from '../../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 

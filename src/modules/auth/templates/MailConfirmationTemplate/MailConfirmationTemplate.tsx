@@ -1,18 +1,32 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
-import { isAfter } from 'date-fns';
+import isAfter from 'date-fns/isAfter';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { AuthButton } from '../../components/AuthButton';
+const AuthButton = lazy(() =>
+  import('../../components/AuthButton').then((m) => ({ default: m.AuthButton }))
+);
 import { AuthFooter } from '../../components/AuthFooter';
-import { AuthLayoutBase } from '../../components/AuthLayoutBase';
-import { VerifySignUpMailSent } from '../../components/VerifySignUpMailSent';
-import { VerifySignUpTokenExpired } from '../../components/VerifySignUpTokenExpired';
+const AuthLayoutBase = lazy(() =>
+  import('../../components/AuthLayoutBase').then((m) => ({
+    default: m.AuthLayoutBase,
+  }))
+);
+const VerifySignUpMailSent = lazy(() =>
+  import('../../components/VerifySignUpMailSent').then((m) => ({
+    default: m.VerifySignUpMailSent,
+  }))
+);
+const VerifySignUpTokenExpired = lazy(() =>
+  import('../../components/VerifySignUpTokenExpired').then((m) => ({
+    default: m.VerifySignUpTokenExpired,
+  }))
+);
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 
 enum Steps {

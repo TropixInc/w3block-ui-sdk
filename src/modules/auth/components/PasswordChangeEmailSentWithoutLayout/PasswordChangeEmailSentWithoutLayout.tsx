@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
-import { addMinutes, isAfter } from 'date-fns';
+import addMinutes from 'date-fns/addMinutes';
+import isAfter from 'date-fns/isAfter';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';

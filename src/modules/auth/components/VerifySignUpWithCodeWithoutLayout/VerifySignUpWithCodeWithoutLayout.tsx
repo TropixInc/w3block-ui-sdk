@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import { addMinutes } from 'date-fns';
+import addMinutes from 'date-fns/addMinutes';
 
-import { useProfile } from '../../../shared';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';

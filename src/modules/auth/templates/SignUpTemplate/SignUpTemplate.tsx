@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
 import { I18NLocaleEnum } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
@@ -7,9 +7,15 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { SignUpForm } from '../../components/SignUpForm';
+const SignUpForm = lazy(() =>
+  import('../../components/SignUpForm').then((m) => ({ default: m.SignUpForm }))
+);
 import { SignUpFormData } from '../../components/SignUpForm/interface';
-import { VerifySignUpMailSent } from '../../components/VerifySignUpMailSent';
+const VerifySignUpMailSent = lazy(() =>
+  import('../../components/VerifySignUpMailSent').then((m) => ({
+    default: m.VerifySignUpMailSent,
+  }))
+);
 import { useSignUp } from '../../hooks/useSignUp';
 
 enum Steps {

@@ -1,11 +1,13 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import MailError from '../../assets/icons/mailError.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
+const AuthLayoutBase = lazy(() =>
+  import('../AuthLayoutBase').then((m) => ({ default: m.AuthLayoutBase }))
+);
 
 interface Props {
   companyId?: string;

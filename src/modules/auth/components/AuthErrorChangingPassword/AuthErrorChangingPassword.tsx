@@ -1,8 +1,12 @@
+import { lazy } from 'react';
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import ErrorFilled from '../../assets/icons/errorFilled.svg?react';
-import { AuthButton } from '../AuthButton';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
 
 interface Props {
   onRetry: () => void;

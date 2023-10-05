@@ -1,21 +1,41 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
-import { Link } from '../../../shared/components/Link';
+const Link = lazy(() =>
+  import('../../../shared/components/Link').then((m) => ({ default: m.Link }))
+);
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { AuthButton } from '../../components/AuthButton';
+const AuthButton = lazy(() =>
+  import('../../components/AuthButton').then((m) => ({ default: m.AuthButton }))
+);
 import { AuthFooter } from '../../components/AuthFooter';
-import { AuthLayoutBase } from '../../components/AuthLayoutBase';
-import { AuthTextController } from '../../components/AuthTextController';
-import { AuthValidationTip } from '../../components/AuthValidationTip';
-import { PasswordChangeMailSent } from '../../components/PasswordChangeMailSent';
+const AuthLayoutBase = lazy(() =>
+  import('../../components/AuthLayoutBase').then((m) => ({
+    default: m.AuthLayoutBase,
+  }))
+);
+const AuthTextController = lazy(() =>
+  import('../../components/AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }))
+);
+const AuthValidationTip = lazy(() =>
+  import('../../components/AuthValidationTip').then((m) => ({
+    default: m.AuthValidationTip,
+  }))
+);
+const PasswordChangeMailSent = lazy(() =>
+  import('../../components/PasswordChangeMailSent').then((m) => ({
+    default: m.PasswordChangeMailSent,
+  }))
+);
 import { useRequestPasswordChange } from '../../hooks';
 
 interface Form {

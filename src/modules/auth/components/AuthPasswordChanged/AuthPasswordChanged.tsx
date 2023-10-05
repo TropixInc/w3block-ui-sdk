@@ -1,11 +1,19 @@
+import { lazy } from 'react';
+
 import CheckCircleOutlined from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { AuthButton } from '../AuthButton';
-import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+const AuthFooter = lazy(() =>
+  import('../AuthFooter').then((m) => ({ default: m.AuthFooter }))
+);
+const AuthLayoutBase = lazy(() =>
+  import('../AuthLayoutBase').then((m) => ({ default: m.AuthLayoutBase }))
+);
 
 export const AuthPasswordChanged = () => {
   const router = useRouterConnect();

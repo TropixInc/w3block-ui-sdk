@@ -1,13 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 // import { useQueryClient } from 'react-query';
 
-import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
-import { useProfile } from '../../../shared';
+const MailVerifiedInterceptorProvider = lazy(() =>
+  import('../../../core/providers/MailVerifiedInterceptorProvider').then(
+    (m) => ({ default: m.MailVerifiedInterceptorProvider })
+  )
+);
+
 import MetamaskLogo from '../../../shared/assets/icons/metamask.svg?react';
 import { Alert } from '../../../shared/components/Alert';
-import { Spinner } from '../../../shared/components/Spinner';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 // import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -23,11 +32,29 @@ import { useWallets } from '../../../shared/hooks/useWallets/useWallets';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { WalletsOptions } from '../../../storefront/interfaces';
 import { claimWalletVault } from '../../api/wallet';
-import { AuthButton } from '../AuthButton';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+
 import { AuthFooter } from '../AuthFooter';
-import { ConnectToMetamaskButton } from '../ConnectWalletTemplate';
-import { GenerateTokenDialog } from '../ConnectWalletTemplate/GenerateTokenDialog';
-import { MetamaskAppErrorModal } from '../MetamaskAppErrorModal';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+const ConnectToMetamaskButton = lazy(() =>
+  import('../ConnectWalletTemplate').then((m) => ({
+    default: m.ConnectToMetamaskButton,
+  }))
+);
+
+const GenerateTokenDialog = lazy(() =>
+  import('../ConnectWalletTemplate/GenerateTokenDialog').then((m) => ({
+    default: m.GenerateTokenDialog,
+  }))
+);
+
+const MetamaskAppErrorModal = lazy(() =>
+  import('../MetamaskAppErrorModal').then((m) => ({
+    default: m.MetamaskAppErrorModal,
+  }))
+);
 
 enum Step {
   CONFIRMATION,

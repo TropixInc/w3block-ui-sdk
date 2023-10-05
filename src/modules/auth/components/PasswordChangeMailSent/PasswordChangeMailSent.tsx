@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
-import { isAfter, addMinutes } from 'date-fns';
+import addMinutes from 'date-fns/addMinutes';
+import isAfter from 'date-fns/isAfter';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -13,9 +14,14 @@ import useTranslation from '../../../shared/hooks/useTranslation';
 import KeyIconOutlined from '../../assets/icons/keyIconOutlined.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
-import { AuthButton } from '../AuthButton';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
+const AuthLayoutBase = lazy(() =>
+  import('../AuthLayoutBase').then((m) => ({ default: m.AuthLayoutBase }))
+);
 
 interface PasswordChangeMailSentProps {
   email: string;

@@ -1,7 +1,10 @@
 import { lazy, useContext, useMemo } from 'react';
 
 import { ContentTypeEnum } from '../../../poll/enums/contentType';
-import { Box } from '../../../shared/components/Box/Box';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
+
 import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 const ContainerControllerSDK = lazy(() =>
   import(

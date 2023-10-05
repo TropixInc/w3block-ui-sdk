@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
 import isAfter from 'date-fns/isAfter';
 
@@ -17,10 +17,27 @@ import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
-import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
-import { SignUpTemplateSDK } from '../SignUpTemplateSDK/SignUpTemplateSDK';
-import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
-import { VerifySignUpTokenExpiredTemplateSDK } from '../VerifySignUpTokenExpiredTemplateSDK';
+const CompleteSignUpSuccessTemplateSDK = lazy(() =>
+  import('../CompleteSignUpSuccessTemplateSDK').then((m) => ({
+    default: m.CompleteSignUpSuccessTemplateSDK,
+  }))
+);
+
+const SignUpTemplateSDK = lazy(() =>
+  import('../SignUpTemplateSDK').then((m) => ({ default: m.SignUpTemplateSDK }))
+);
+
+const VerifySignUpMailSentTemplateSDK = lazy(() =>
+  import('../VerifySignUpMailSentTemplateSDK').then((m) => ({
+    default: m.VerifySignUpMailSentTemplateSDK,
+  }))
+);
+
+const VerifySignUpTokenExpiredTemplateSDK = lazy(() =>
+  import('../VerifySignUpTokenExpiredTemplateSDK').then((m) => ({
+    default: m.VerifySignUpTokenExpiredTemplateSDK,
+  }))
+);
 
 enum Steps {
   FORM = 1,

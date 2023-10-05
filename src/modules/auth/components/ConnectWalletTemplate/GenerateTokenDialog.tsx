@@ -1,4 +1,10 @@
-import { DialogBase } from '../../../shared/components/DialogBase';
+const DialogBase = lazy(() =>
+  import('../../../shared/components/DialogBase').then((m) => ({
+    default: m.DialogBase,
+  }))
+);
+import { lazy } from 'react';
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useHostname } from '../../../shared/hooks/useHostname/useHostname';
 import useTranslation from '../../../shared/hooks/useTranslation';

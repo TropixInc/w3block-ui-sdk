@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import classNames from 'classnames';
-import { isAfter, addMinutes } from 'date-fns';
+import addMinutes from 'date-fns/addMinutes';
+import isAfter from 'date-fns/isAfter';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -14,7 +15,12 @@ import MailSent from '../../assets/icons/mailSent.svg?react';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
+const AuthLayoutBase = lazy(() => {
+  return import('../AuthLayoutBase').then((m) => ({
+    default: m.AuthLayoutBase,
+  }));
+});
+import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 
 interface PasswordChangeMailSentProps {
   email: string;

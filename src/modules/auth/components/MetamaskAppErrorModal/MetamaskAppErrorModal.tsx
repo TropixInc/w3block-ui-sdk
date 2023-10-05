@@ -1,7 +1,13 @@
+import { lazy } from 'react';
 import { useCopyToClipboard } from 'react-use';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
 
-import { ModalBase } from '../../../shared/components/ModalBase';
 import useTranslation from '../../../shared/hooks/useTranslation';
+
 interface MetamaskAppErrorModalProps {
   isOpen: boolean;
   closeModal: () => void;

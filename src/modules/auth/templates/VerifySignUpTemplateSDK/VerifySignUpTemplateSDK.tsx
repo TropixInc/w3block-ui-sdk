@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
-import { isAfter } from 'date-fns';
+import isAfter from 'date-fns/isAfter';
 
 import { ContentTypeEnum } from '../../../poll/enums/contentType';
 import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
@@ -13,9 +13,21 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { position } from '../../../shared/enums/styleConfigs';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
-import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
-import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
-import { VerifySignUpTokenExpiredTemplateSDK } from '../VerifySignUpTokenExpiredTemplateSDK';
+const CompleteSignUpSuccessTemplateSDK = lazy(() =>
+  import('../CompleteSignUpSuccessTemplateSDK').then((m) => ({
+    default: m.CompleteSignUpSuccessTemplateSDK,
+  }))
+);
+const VerifySignUpMailSentTemplateSDK = lazy(() =>
+  import('../VerifySignUpMailSentTemplateSDK').then((m) => ({
+    default: m.VerifySignUpMailSentTemplateSDK,
+  }))
+);
+const VerifySignUpTokenExpiredTemplateSDK = lazy(() =>
+  import('../VerifySignUpTokenExpiredTemplateSDK').then((m) => ({
+    default: m.VerifySignUpTokenExpiredTemplateSDK,
+  }))
+);
 
 enum Steps {
   LOADING = 1,

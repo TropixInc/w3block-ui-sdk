@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -8,9 +8,11 @@ import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import { object, string } from 'yup';
 
-import { useProfile } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
-import { Link } from '../../../shared/components/Link';
+const Link = lazy(() =>
+  import('../../../shared/components/Link').then((m) => ({ default: m.Link }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -19,16 +21,29 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { AuthButton } from '../../components/AuthButton';
+const AuthButton = lazy(() =>
+  import('../../components/AuthButton').then((m) => ({ default: m.AuthButton }))
+);
 import { AuthFooter } from '../../components/AuthFooter';
-import {
-  AuthLayoutBase,
-  AuthLayoutBaseClasses,
-} from '../../components/AuthLayoutBase';
-import { AuthTextController } from '../../components/AuthTextController/AuthTextController';
-import { AuthValidationTip } from '../../components/AuthValidationTip';
+const AuthLayoutBase = lazy(() =>
+  import('../../components/AuthLayoutBase').then((m) => ({
+    default: m.AuthLayoutBase,
+  }))
+);
+import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
+const AuthTextController = lazy(() =>
+  import('../../components/AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }))
+);
+const AuthValidationTip = lazy(() =>
+  import('../../components/AuthValidationTip').then((m) => ({
+    default: m.AuthValidationTip,
+  }))
+);
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 
 interface Form {
   email: string;

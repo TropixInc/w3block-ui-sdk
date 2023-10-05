@@ -1,13 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
-import { MailVerifiedInterceptorProvider } from '../../../core/providers/MailVerifiedInterceptorProvider';
-import { useProfile } from '../../../shared';
+const MailVerifiedInterceptorProvider = lazy(() =>
+  import('../../../core/providers/MailVerifiedInterceptorProvider').then(
+    (m) => ({ default: m.MailVerifiedInterceptorProvider })
+  )
+);
+
 import MetamaskLogo from '../../../shared/assets/icons/metamask.svg?react';
 import { Alert } from '../../../shared/components/Alert';
-import { Spinner } from '../../../shared/components/Spinner/Spinner';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -22,10 +30,21 @@ import { useToken } from '../../../shared/hooks/useToken';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useWallets } from '../../../shared/hooks/useWallets/useWallets';
 import { claimWalletVault } from '../../api/wallet';
-import { AuthButton } from '../AuthButton';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase } from '../AuthLayoutBase';
-import { GenerateTokenDialog } from './GenerateTokenDialog';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+const AuthLayoutBase = lazy(() =>
+  import('../AuthLayoutBase').then((m) => ({ default: m.AuthLayoutBase }))
+);
+
+const GenerateTokenDialog = lazy(() =>
+  import('./GenerateTokenDialog').then((m) => ({
+    default: m.GenerateTokenDialog,
+  }))
+);
 
 interface MetamaskButtonProps {
   onClick: () => void;

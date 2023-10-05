@@ -1,13 +1,22 @@
 import { lazy, useContext, useMemo } from 'react';
 
-import { Box } from '../../../shared/components/Box/Box';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { ThemeContext } from '../../../storefront/contexts';
-import { RequestPasswordChangeWithoutLayout } from '../../components/RequestPasswordChangeWithoutLayout';
+const RequestPasswordChangeWithoutLayout = lazy(() =>
+  import('../../components/RequestPasswordChangeWithoutLayout').then(
+    (module) => ({
+      default: module.RequestPasswordChangeWithoutLayout,
+    })
+  )
+);
+
 import { AllAuthPageProps } from '../CompleteProfileCustomTemplate';
 const ContainerControllerSDK = lazy(() =>
   import(
