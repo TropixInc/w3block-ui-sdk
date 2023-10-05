@@ -3,12 +3,14 @@ import { useDebounce } from 'react-use';
 
 import { isAfter } from 'date-fns';
 
-import { ContentTypeEnum } from '../../../poll';
-import { ContainerControllerClasses, ExtraBy, position } from '../../../shared';
+import { ContentTypeEnum } from '../../../poll/enums/contentType';
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { position } from '../../../shared/enums/styleConfigs';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';

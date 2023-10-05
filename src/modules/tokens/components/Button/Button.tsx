@@ -3,6 +3,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary';
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 }
 
 const primaryVariant = 'pw-bg-brand-primary pw-text-white pw-shadow-md';
@@ -15,9 +16,11 @@ export const Button = ({
   variant = 'primary',
   onClick,
   className = '',
+  disabled = false,
 }: ButtonProps) => {
   return (
     <button
+      disabled={disabled}
       onClick={onClick}
       className={`${
         variant == 'primary' ? primaryVariant : secondaryVariant

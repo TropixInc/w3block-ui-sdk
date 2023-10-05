@@ -1,8 +1,17 @@
+import { lazy } from 'react';
+
 import classNames from 'classnames';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Source, TokenCommerceHero } from './TokenCommerceHero';
+
+const TokenCommerceHero = lazy(() =>
+  import('./TokenCommerceHero/TokenCommerceHero').then((m) => ({
+    default: m.TokenCommerceHero,
+  }))
+);
+
+import { Source } from './TokenCommerceHero';
 
 interface TokenCommerceTemplateProps {
   tokenSrc?: Source;

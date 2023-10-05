@@ -1,5 +1,9 @@
+import { lazy } from 'react';
+
 import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
-import { Link } from '../../../shared/components/Link';
+const Link = lazy(() =>
+  import('../../../shared/components/Link').then((m) => ({ default: m.Link }))
+);
 import useRouter from '../../../shared/hooks/useRouter';
 
 interface BreadcrumbProps {

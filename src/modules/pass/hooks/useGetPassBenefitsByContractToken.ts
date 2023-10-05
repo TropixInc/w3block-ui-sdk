@@ -1,5 +1,3 @@
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -36,9 +34,12 @@ const useGetPassBenefitsByContractToken = ({
       ),
     {
       enabled:
-        validator.isUUID(tenantId) &&
-        validator.isUUID(collectionId) &&
-        !validator.isEmpty(String(editionNumber)),
+        tenantId != undefined &&
+        tenantId != '' &&
+        collectionId != undefined &&
+        collectionId != '' &&
+        editionNumber != undefined &&
+        editionNumber != '',
       refetchInterval: false,
       refetchOnMount: false,
       refetchOnReconnect: false,

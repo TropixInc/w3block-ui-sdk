@@ -1,10 +1,14 @@
+import { lazy } from 'react';
+
 import classNames from 'classnames';
 
 import BoxWithUpRightArrow from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg?react';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import useModalController from '../../hooks/useDialogController';
-import { Tooltip } from '../Tooltip';
+const Tooltip = lazy(() =>
+  import('../Tooltip').then((m) => ({ default: m.Tooltip }))
+);
 
 interface TokenLinkProps {
   href: string;

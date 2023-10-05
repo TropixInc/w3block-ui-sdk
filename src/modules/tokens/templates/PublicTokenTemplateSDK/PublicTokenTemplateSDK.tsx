@@ -1,16 +1,16 @@
 import { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/esm/locale';
+import ptBR from 'date-fns/esm/locale/pt-BR';
+import format from 'date-fns/format';
 
-import { useRouterConnect } from '../../../shared';
 import ExternalLinkIcon from '../../../shared/assets/icons/externalLink.svg?react';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 interface PublicTokenTemplateSDKProps {
   chainId?: string;

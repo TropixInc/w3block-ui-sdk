@@ -1,17 +1,22 @@
 /* eslint-disable prettier/prettier */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, useCallback, useEffect, useRef, useState } from 'react';
 
 
 import  CopyIcon  from '../../../shared/assets/icons/copy.svg?react';
 import  DownloadIcon  from '../../../shared/assets/icons/download.svg?react';
 import  FrameTopLeftBorder  from '../../../shared/assets/icons/frameTopLeftBorderFilled.svg?react';
 import  ScanMePlate  from '../../../shared/assets/icons/scanMePlate.svg?react';
-import { ModalBase } from '../../../shared/components/ModalBase';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import useTruncate from '../../hooks/useTruncate';
-import { OffpixButtonBase } from '../DisplayCards/OffpixButtonBase';
-import { PublicPageQRCode } from '../PublicPageQRCode';
+const OffpixButtonBase = lazy(() => import('../DisplayCards/OffpixButtonBase').then((m) => ({ default: m.OffpixButtonBase })));
+const PublicPageQRCode = lazy(() => import('../PublicPageQRCode').then((m) => ({ default: m.PublicPageQRCode })));
+
 
 interface Props {
   isOpen: boolean;

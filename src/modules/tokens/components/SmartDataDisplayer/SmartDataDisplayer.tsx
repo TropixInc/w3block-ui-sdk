@@ -1,4 +1,6 @@
-import { format } from 'date-fns';
+import { lazy } from 'react';
+
+import format from 'date-fns/format';
 
 import { imageFieldTypes } from '../../../shared/utils/imageFieldTypes';
 import { selectionFieldTypes } from '../../../shared/utils/selectionFieldTypes';
@@ -13,10 +15,14 @@ import {
   SelectConfig,
 } from '../../interfaces/DynamicFormConfiguration';
 import { DynamicFormFieldValue } from '../../interfaces/DynamicFormFieldValue';
-import {
-  TextFieldDisplay,
-  TextFieldDisplayClasses,
-} from '../SmartDisplay/TextFieldDisplay';
+
+const TextFieldDisplay = lazy(() =>
+  import('../SmartDisplay/TextFieldDisplay').then((m) => ({
+    default: m.TextFieldDisplay,
+  }))
+);
+
+import { TextFieldDisplayClasses } from '../SmartDisplay/TextFieldDisplay';
 
 interface DataDisplayProps {
   fieldName: string;

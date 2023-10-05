@@ -2,7 +2,7 @@
 import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
-import validator from 'validator';
+
 
 import  ErrorIcon from '../../assets/icons/errorIconRed.svg?react';
 import  XIcon from '../../assets/icons/xFilled.svg?react';
@@ -71,7 +71,7 @@ export const QrCodeError = ({ hasOpen, onClose, validateAgain, type, error = '' 
       <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
         {getMessageByTypeError(type)}
       </div>
-      {!validator.isEmpty(error) &&
+      {error != undefined && error != "" &&
         <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
           {error}
         </div>}

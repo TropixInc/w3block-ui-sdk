@@ -32,7 +32,6 @@
     "@stripe/react-stripe-js": "^1.13.0",
     "@stripe/stripe-js": "^1.41.0",
     "@types/node": "18.11.18",
-    "@types/validator": "^13.7.11",
     "@w3block/sdk-id": "^0.1.63",
     "axios": "^0.27.2",
     "card-validator": "^8.1.1",
@@ -56,7 +55,6 @@
     "react-webcam": "^7.0.1",
     "socket.io-client": "^4.6.1",
     "swiper": "^8.4.5",
-    "validator": "^13.7.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

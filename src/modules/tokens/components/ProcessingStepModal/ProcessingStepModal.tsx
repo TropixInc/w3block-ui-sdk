@@ -1,8 +1,23 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, lazy, useEffect } from 'react';
 
-import { ModalBase } from '../../../shared/components/ModalBase';
-import { PixwayButton } from '../../../shared/components/PixwayButton';
-import { PixwayLinkButton } from '../../../shared/components/PixwayLinkButton';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
+
+const PixwayButton = lazy(() =>
+  import('../../../shared/components/PixwayButton').then((m) => ({
+    default: m.PixwayButton,
+  }))
+);
+
+const PixwayLinkButton = lazy(() =>
+  import('../../../shared/components/PixwayLinkButton').then((m) => ({
+    default: m.PixwayLinkButton,
+  }))
+);
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';

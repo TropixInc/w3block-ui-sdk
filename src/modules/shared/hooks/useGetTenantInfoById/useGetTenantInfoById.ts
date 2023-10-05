@@ -1,7 +1,5 @@
 import { useQuery } from 'react-query';
 
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
@@ -29,6 +27,6 @@ export function useGetTenantInfoById(tenantId: string) {
       });
       return info.data;
     },
-    { enabled: !validator.isEmpty(tenantId) }
+    { enabled: tenantId != undefined && tenantId != '' }
   );
 }

@@ -1,9 +1,19 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, lazy, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CertificateIssuanceController } from '../../../shared/components/CertificateIssuanceController';
+const CertificateIssuanceController = lazy(() =>
+  import('../../../shared/components/CertificateIssuanceController').then(
+    (m) => ({ default: m.CertificateIssuanceController })
+  )
+);
+
+const TokenTransferController = lazy(() =>
+  import('../../components/TokenTransferController').then((m) => ({
+    default: m.TokenTransferController,
+  }))
+);
+
 import { useModalController } from '../../../shared/hooks/useModalController';
-import { TokenTransferController } from '../../components/TokenTransferController';
 import {
   ITokenActionContext,
   TokenActionsContext,

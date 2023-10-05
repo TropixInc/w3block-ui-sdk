@@ -1,10 +1,24 @@
-import { useRef } from 'react';
+import { lazy, useRef } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 
-import { Checkbox } from '../../../shared/components/Checkbox';
-import { ModalBase } from '../../../shared/components/ModalBase';
-import { PixwayButton } from '../../../shared/components/PixwayButton';
+const Checkbox = lazy(() =>
+  import('../../../shared/components/Checkbox').then((m) => ({
+    default: m.Checkbox,
+  }))
+);
+
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
+const PixwayButton = lazy(() =>
+  import('../../../shared/components/PixwayButton').then((m) => ({
+    default: m.PixwayButton,
+  }))
+);
+
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface Tokens {

@@ -1,6 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-import { DataGridPagination } from '../DataGridPagination';
+const DataGridPagination = lazy(() =>
+  import('../DataGridPagination').then((m) => ({
+    default: m.DataGridPagination,
+  }))
+);
+
 import TableHeader from '../TableHeader/TableHeader';
 import TableRows from '../TableRow/TableRow';
 

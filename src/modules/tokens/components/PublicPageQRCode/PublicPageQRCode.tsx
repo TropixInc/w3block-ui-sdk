@@ -1,4 +1,8 @@
-import { QRCodeSVG } from 'qrcode.react';
+const QRCodeSVG = lazy(() =>
+  import('qrcode.react').then((m) => ({ default: m.QRCodeSVG }))
+);
+
+import { lazy } from 'react';
 
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { getPublicTokenPageURL } from '../../utils/getPublicTokenPageURL';

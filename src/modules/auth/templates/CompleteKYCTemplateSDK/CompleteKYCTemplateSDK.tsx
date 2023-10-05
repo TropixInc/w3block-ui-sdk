@@ -3,32 +3,33 @@ import { useLocalStorage } from 'react-use';
 
 import { KycStatus } from '@w3block/sdk-id';
 
-import { ContentTypeEnum } from '../../../poll';
 const ContainerControllerSDK = lazy(() =>
-  import('../../../shared').then((m) => ({ default: m.ContainerControllerSDK }))
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((m) => ({ default: m.ContainerControllerSDK }))
 );
-import {
-  ContainerControllerClasses,
-  ExtraBy,
-  position,
-  useProfile,
-  useRouterConnect,
-} from '../../../shared';
+
 const Spinner = lazy(() =>
   import('../../../shared/components/Spinner').then((m) => ({
     default: m.Spinner,
   }))
 );
+import { ContentTypeEnum } from '../../../poll/enums/contentType';
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { position } from '../../../shared/enums/styleConfigs';
 import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import { ThemeContext } from '../../../storefront/contexts';
 const FormCompleteKYCWithoutLayout = lazy(() =>
   import('../../components/FormCompleteKYCWithoutLayout').then((m) => ({

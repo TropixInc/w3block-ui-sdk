@@ -1,9 +1,19 @@
+import { lazy } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg?react';
-import { CloseButton } from '../../../shared/components/CloseButton';
+const CloseButton = lazy(() =>
+  import('../../../shared/components/CloseButton').then((m) => ({
+    default: m.CloseButton,
+  }))
+);
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Button } from '../../../tokens/components/Button';
+
+const Button = lazy(() =>
+  import('../../../tokens/components/Button').then((m) => ({
+    default: m.Button,
+  }))
+);
 
 interface iProps {
   hasOpen: boolean;

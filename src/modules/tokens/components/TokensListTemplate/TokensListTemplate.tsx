@@ -1,19 +1,35 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-import { InternalPagesLayoutBase, useProfile } from '../../../shared';
-import { Pagination } from '../../../shared/components/Pagination/Pagination';
+const InternalPagesLayoutBase = lazy(() =>
+  import(
+    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
+  ).then((m) => ({ default: m.InternalPagesLayoutBase }))
+);
+
+const Pagination = lazy(() =>
+  import('../../../shared/components/Pagination/Pagination').then((m) => ({
+    default: m.Pagination,
+  }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import WalletImage from '../../assets/wallet.svg?react';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
 import { Token } from '../../interfaces/Token';
 import { mapNFTToToken } from '../../utils/mapNFTToToken';
-import { WalletTokenCard } from '../WalletTokenCard';
-import { TokenListTemplateSkeleton } from './Skeleton';
+const WalletTokenCard = lazy(() =>
+  import('../WalletTokenCard').then((m) => ({ default: m.WalletTokenCard }))
+);
+
+const TokenListTemplateSkeleton = lazy(() =>
+  import('./Skeleton').then((m) => ({ default: m.TokenListTemplateSkeleton }))
+);
 
 interface Props {
   tokens?: Array<Token>;

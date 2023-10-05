@@ -1,5 +1,3 @@
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -41,8 +39,10 @@ const useGetPassBenefits = ({
       ),
     {
       enabled:
-        !validator.isEmpty(String(contractAddress ?? '')) &&
-        !validator.isEmpty(String(chainId ?? '')) &&
+        contractAddress != undefined &&
+        contractAddress != '' &&
+        chainId != undefined &&
+        chainId != '' &&
         enabled,
     }
   );

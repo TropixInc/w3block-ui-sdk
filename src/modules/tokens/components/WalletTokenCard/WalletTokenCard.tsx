@@ -1,20 +1,41 @@
-import { MouseEventHandler, useRef } from 'react';
+import { MouseEventHandler, lazy, useRef } from 'react';
 import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
-import { useRouterConnect } from '../../../shared';
-import { Button } from '../../../shared/components/Buttons';
-import { FallbackImage } from '../../../shared/components/FallbackImage';
-import { ImageSDK } from '../../../shared/components/ImageSDK';
-import { Link } from '../../../shared/components/Link';
+const Button = lazy(() =>
+  import('../../../tokens/components/Button').then((m) => ({
+    default: m.Button,
+  }))
+);
+const FallbackImage = lazy(() =>
+  import('../../../shared/components/FallbackImage').then((m) => ({
+    default: m.FallbackImage,
+  }))
+);
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK').then((m) => ({
+    default: m.ImageSDK,
+  }))
+);
+const Link = lazy(() =>
+  import('../../../shared/components/Link').then((m) => ({
+    default: m.Link,
+  }))
+);
+
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useModalController } from '../../../shared/hooks/useModalController';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { TokenActionsProvider } from '../../providers/TokenActionsProvider';
-import { WalletTokenCardActionsPanel } from './ActionsPanel';
+const WalletTokenCardActionsPanel = lazy(() =>
+  import('./ActionsPanel').then((m) => ({
+    default: m.WalletTokenCardActionsPanel,
+  }))
+);
 
 interface Props {
   name: string;
@@ -159,8 +180,6 @@ export const WalletTokenCard = ({
             {hasPass && (
               <Button
                 disabled={proccessing}
-                model="primary"
-                width="small"
                 onClick={() =>
                   router.pushConnect(
                     PixwayAppRoutes.TOKEN_DETAILS.replace('{tokenId}', id)

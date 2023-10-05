@@ -1,7 +1,6 @@
 import { lazy, useState } from 'react';
 
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import validator from 'validator';
 
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
 //import { QrCodeReader } from '../../../shared/components/QrCodeReader';
@@ -10,10 +9,14 @@ const QrCodeReader = lazy(() =>
     default: module.QrCodeReader,
   }))
 );
-import {
-  QrCodeError,
-  TypeError,
-} from '../../../shared/components/QrCodeReader/QrCodeError';
+const QrCodeError = lazy(() =>
+  import('../../../shared/components/QrCodeReader/QrCodeError').then(
+    (module) => ({
+      default: module.QrCodeError,
+    })
+  )
+);
+import { TypeError } from '../../../shared/components/QrCodeReader/QrCodeError';
 import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -48,7 +51,7 @@ const _PassesList = () => {
     secret: secret,
     userId: userId,
     editionNumber: editionNumber,
-    enabled: !validator.isEmpty(secret ?? ''),
+    enabled: secret != undefined && secret != '',
   });
   const filteredPass = passes?.find(
     ({ id }) => id === verifyBenefit?.data?.tokenPassBenefit?.tokenPass?.id

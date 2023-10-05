@@ -1,5 +1,3 @@
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -29,7 +27,7 @@ const usePassBenefitOperatorsByBenefitId = (
         ).replace('{benefitId}', benefitId ?? '') + `?orderBy=${orderBy}`
       ),
     {
-      enabled: validator.isUUID(tenantId),
+      enabled: tenantId != undefined && tenantId != '',
       refetchInterval: false,
       refetchOnMount: false,
       refetchOnReconnect: false,

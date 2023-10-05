@@ -140,3 +140,12 @@ export const cleanObject = (obj: any): any => {
   });
   return obj;
 };
+
+export function isValidUrl(string: string) {
+  try {
+    new URL(string);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}

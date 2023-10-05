@@ -1,15 +1,21 @@
-import {
-  ContainerControllerClasses,
-  ContainerControllerSDK,
-  ExtraBy,
-  position,
-} from '../../../shared';
+import { lazy } from 'react';
+
+import { ExtraBy, position } from '../../../shared';
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { PollBox } from '../../components';
 import { ContentTypeEnum } from '../../enums/contentType';
+
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({
+    default: module.ContainerControllerSDK,
+  }))
+);
 
 interface PolltemplateSDKProps {
   bgColor?: string;

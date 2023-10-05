@@ -1,6 +1,5 @@
-import { useContext, useMemo } from 'react';
+import { lazy, useContext, useMemo } from 'react';
 
-import { ContainerControllerSDK } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import {
@@ -10,6 +9,13 @@ import {
 import { ThemeContext } from '../../../storefront/contexts';
 import { RequestPasswordChangeWithoutLayout } from '../../components/RequestPasswordChangeWithoutLayout';
 import { AllAuthPageProps } from '../CompleteProfileCustomTemplate';
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({
+    default: module.ContainerControllerSDK,
+  }))
+);
 
 export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
   const context = useContext(ThemeContext);

@@ -3,11 +3,11 @@ import { isValidPhoneNumber } from 'react-phone-number-input';
 
 import { DataTypesEnum, TenantInputEntityDto } from '@w3block/sdk-id';
 import { cpf } from 'cpf-cnpj-validator';
-import isURL from 'validator/lib/isURL';
 import { AnySchema, object, string } from 'yup';
 import * as yup from 'yup';
 
 import useTranslation from '../hooks/useTranslation';
+import { isValidUrl } from './validators';
 
 export interface ValidationsValues {
   yupKey: string;
@@ -166,7 +166,7 @@ export const useGetValidationsTypesForSignup = (
                       'url',
                       translate('auth>getValidationsTypesForSignup>insertUrl'),
                       (value) => {
-                        return value ? isURL(value) : true;
+                        return value ? isValidUrl(value) : true;
                       }
                     )
                     .required(
@@ -176,7 +176,7 @@ export const useGetValidationsTypesForSignup = (
                     'url',
                     translate('auth>getValidationsTypesForSignup>insertUrl'),
                     (value) => {
-                      return value ? isURL(value) : true;
+                      return value ? isValidUrl(value) : true;
                     }
                   ),
             }),

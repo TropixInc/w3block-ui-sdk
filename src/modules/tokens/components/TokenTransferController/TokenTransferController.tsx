@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
@@ -8,12 +8,38 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
 import ExternalLinkIcon from '../../../shared/assets/icons/externalLink.svg?react';
-import { Alert } from '../../../shared/components/Alert';
-import { TextField } from '../../../shared/components/Form/TextField';
-import { GasModalHeader } from '../../../shared/components/GasModalHeader';
-import { ImageSDK } from '../../../shared/components/ImageSDK';
-import { PoliciesAgreementStepModal } from '../../../shared/components/PoliciesAgreementStepModal';
-import { Spinner } from '../../../shared/components/Spinner';
+
+const TextField = lazy(() =>
+  import('../../../shared/components/Form/TextField').then((m) => ({
+    default: m.TextField,
+  }))
+);
+
+const GasModalHeader = lazy(() =>
+  import('../../../shared/components/GasModalHeader').then((m) => ({
+    default: m.GasModalHeader,
+  }))
+);
+
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK').then((m) => ({
+    default: m.ImageSDK,
+  }))
+);
+
+const PoliciesAgreementStepModal = lazy(() =>
+  import('../../../shared/components/PoliciesAgreementStepModal').then((m) => ({
+    default: m.PoliciesAgreementStepModal,
+  }))
+);
+
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+
+import { Alert } from '../../../shared/components/Alert/Alert';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -27,8 +53,16 @@ import {
 } from '../../hooks/useGetTransferToken/useGetTransferToken';
 import useTransferToken from '../../hooks/useTransferTokens/useTransferToken';
 import useTransferTokenWithEmail from '../../hooks/useTransferTokenWithEmail/useTransferTokenWithEmail';
-import { ProcessingStepModal } from '../ProcessingStepModal';
-import { TokenTransferProcessModal } from '../TokenTransferProcessModal';
+const ProcessingStepModal = lazy(() =>
+  import('../ProcessingStepModal').then((m) => ({
+    default: m.ProcessingStepModal,
+  }))
+);
+const TokenTransferProcessModal = lazy(() =>
+  import('../TokenTransferProcessModal').then((m) => ({
+    default: m.TokenTransferProcessModal,
+  }))
+);
 
 interface Tokens {
   id: string;
