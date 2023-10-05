@@ -290,11 +290,17 @@ export const ProductPage = ({
   };
 
   const handleClick = () => {
-    if (user) {
-      setIsOpen(true);
+    if (product?.requirements) {
+      if (user) {
+        setIsOpen(true);
+      } else {
+        pushConnect(PixwayAppRoutes.SIGN_IN, {
+          callbackPath: window.location.href + '?openModal=true',
+        });
+      }
     } else {
       pushConnect(PixwayAppRoutes.SIGN_IN, {
-        callbackPath: window.location.href + '?openModal=true',
+        callbackPath: window.location.href,
       });
     }
   };
@@ -873,9 +879,7 @@ export const ProductPage = ({
                   </>
                 ) : null} */}
 
-                {product?.requirements &&
-                product?.hasWhitelistBlocker &&
-                product?.stockAmount != 0 ? (
+                {product?.hasWhitelistBlocker && product?.stockAmount != 0 ? (
                   product?.requirements?.requirementCTALabel ? (
                     <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-w-full pw-mt-5">
                       <p className="pw-text-sm pw-font-poppins pw-font-medium pw-text-black">
@@ -883,9 +887,16 @@ export const ProductPage = ({
                       </p>
                       <button
                         onClick={handleClick}
+                        disabled={user && !product?.requirements ? true : false}
                         style={{
-                          backgroundColor: '#0050FF',
-                          color: 'white',
+                          backgroundColor:
+                            user && !product?.requirements
+                              ? '#DCDCDC'
+                              : '#0050FF',
+                          color:
+                            user && !product?.requirements
+                              ? '#777E8F'
+                              : buttonTextColor ?? 'white',
                         }}
                         className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
@@ -897,10 +908,19 @@ export const ProductPage = ({
                       {!currencyId?.crypto && hasCart ? (
                         <button
                           onClick={handleClick}
+                          disabled={
+                            user && !product?.requirements ? true : false
+                          }
                           style={{
                             backgroundColor: 'none',
-                            borderColor: buttonColor ?? '#0050FF',
-                            color: buttonColor ?? '#0050FF',
+                            borderColor:
+                              user && !product?.requirements
+                                ? '#DCDCDC'
+                                : buttonColor ?? '#0050FF',
+                            color:
+                              user && !product?.requirements
+                                ? '#DCDCDC'
+                                : buttonColor ?? '#0050FF',
                           }}
                           className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
                         >
@@ -909,9 +929,26 @@ export const ProductPage = ({
                       ) : null}
                       <button
                         onClick={handleClick}
+                        disabled={
+                          product?.hasWhitelistBlocker &&
+                          user &&
+                          !product?.requirements
+                            ? true
+                            : false
+                        }
                         style={{
-                          backgroundColor: buttonColor ?? '#0050FF',
-                          color: buttonTextColor ?? 'white',
+                          backgroundColor:
+                            product?.hasWhitelistBlocker &&
+                            user &&
+                            !product?.requirements
+                              ? '#DCDCDC'
+                              : buttonColor ?? '#0050FF',
+                          color:
+                            product?.hasWhitelistBlocker &&
+                            user &&
+                            !product?.requirements
+                              ? '#777E8F'
+                              : buttonTextColor ?? 'white',
                         }}
                         className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
@@ -1010,11 +1047,12 @@ export const ProductPage = ({
                           ? buttonText
                           : 'Comprar agora'}
                       </button>
-                      {product?.canPurchaseAmount === 0 && (
-                        <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">
-                          * Limite de compra por usuário atingido
-                        </p>
-                      )}
+                      {product?.canPurchaseAmount === 0 &&
+                        !product?.hasWhitelistBlocker && (
+                          <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">
+                            * Limite de compra por usuário atingido
+                          </p>
+                        )}
                     </div>
                   )
                 )}
