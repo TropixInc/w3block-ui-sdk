@@ -1,5 +1,11 @@
+import { lazy } from 'react';
+
 import { PaymentMethodsAvaiable } from '../../interface/interface';
-import { PaymentAccordion } from '../PaymentAccordion/PaymentAccordion';
+const PaymentAccordion = lazy(() =>
+  import('../PaymentAccordion/PaymentAccordion').then((m) => ({
+    default: m.PaymentAccordion,
+  }))
+);
 
 interface PaymentMethodsComponentProps {
   methods: PaymentMethodsAvaiable[];

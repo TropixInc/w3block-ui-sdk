@@ -1,6 +1,12 @@
+import { lazy } from 'react';
+
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-import { CheckoutPayment } from '../../components';
+const CheckoutPayment = lazy(() =>
+  import('../../components/CheckoutPayment').then((m) => ({
+    default: m.CheckoutPayment,
+  }))
+);
 
 export const CheckoutPaymentTemplate = () => {
   const { isAuthorized, isLoading } = usePrivateRoute();

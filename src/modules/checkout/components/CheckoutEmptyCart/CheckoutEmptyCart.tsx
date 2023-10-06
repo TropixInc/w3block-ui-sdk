@@ -1,6 +1,12 @@
-import { useRouterConnect } from '../../../shared';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({ default: m.WeblockButton })
+  )
+);
+import { lazy } from 'react';
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 
 export const CheckoutEmptyCart = () => {
   const { pushConnect } = useRouterConnect();

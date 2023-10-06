@@ -1,14 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
-import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
 import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
-import { ModalBase } from '../../../shared/components/ModalBase';
-import { PixwayButton } from '../../../shared/components/PixwayButton';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
+const PixwayButton = lazy(() =>
+  import('../../../shared/components/PixwayButton').then((m) => ({
+    default: m.PixwayButton,
+  }))
+);
+const PriceAndGasInfo = lazy(() =>
+  import('../../../shared/components/PriceAndGasInfo').then((m) => ({
+    default: m.PriceAndGasInfo,
+  }))
+);
+const ProductInfo = lazy(() =>
+  import('../../../shared/components/ProductInfo').then((m) => ({
+    default: m.ProductInfo,
+  }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({
+      default: m.WeblockButton,
+    })
+  )
+);
+
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -17,6 +43,7 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
+import { Product } from '../../../shared/interface/Product';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import {
   ORDER_COMPLETED_INFO_KEY,
@@ -32,9 +59,26 @@ import {
   PaymentMethodsAvaiable,
   ProductErrorInterface,
 } from '../../interface/interface';
-import { ConfirmCryptoBuy } from '../ConfirmCryptoBuy/ConfirmCryptoBuy';
-import { PaymentMethodsComponent } from '../PaymentMethodsComponent/PaymentMethodsComponent';
-import { ProductError } from '../ProductError/ProductError';
+const ConfirmCryptoBuy = lazy(() =>
+  import('../ConfirmCryptoBuy/ConfirmCryptoBuy').then((m) => ({
+    default: m.ConfirmCryptoBuy,
+  }))
+);
+
+const PaymentMethodsComponent = lazy(() => {
+  return import('../PaymentMethodsComponent/PaymentMethodsComponent').then(
+    (m) => ({
+      default: m.PaymentMethodsComponent,
+    })
+  );
+});
+
+const ProductError = lazy(() => {
+  return import('../ProductError/ProductError').then((m) => ({
+    default: m.ProductError,
+  }));
+});
+
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',

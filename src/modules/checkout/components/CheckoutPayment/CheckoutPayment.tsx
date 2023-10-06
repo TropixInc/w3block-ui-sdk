@@ -1,21 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  SyntheticEvent,
+  lazy,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useCopyToClipboard, useInterval, useLocalStorage } from 'react-use';
 
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import { useProfile } from '../../../shared';
 import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
 import Loading from '../../../shared/assets/icons/loading.svg?react';
 import { Alert } from '../../../shared/components/Alert';
-import { Spinner } from '../../../shared/components/Spinner';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({ default: m.WeblockButton })
+  )
+);
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import {
@@ -35,9 +50,22 @@ import {
   CheckoutPaymentComponent,
   INPUTS_POSSIBLE,
 } from '../CheckoutPaymentComponent/CheckoutPaymentComponent';
-import { CheckouResume } from '../CheckoutResume/CheckoutResume';
-import { CheckoutStripeForm } from '../CheckoutStripeForm/CheckoutStripeForm';
-import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
+const CheckouResume = lazy(() =>
+  import('../CheckoutResume/CheckoutResume').then((m) => ({
+    default: m.CheckouResume,
+  }))
+);
+
+const CheckoutStripeForm = lazy(() =>
+  import('../CheckoutStripeForm/CheckoutStripeForm').then((m) => ({
+    default: m.CheckoutStripeForm,
+  }))
+);
+const ErrorMessage = lazy(() =>
+  import('../ErrorMessage/ErrorMessage').then((m) => ({
+    default: m.ErrorMessage,
+  }))
+);
 
 export const CheckoutPayment = () => {
   const {

@@ -1,4 +1,17 @@
-import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
+const PriceAndGasInfo = lazy(() =>
+  import('../../../shared/components/PriceAndGasInfo/PriceAndGasInfo').then(
+    (m) => ({ default: m.PriceAndGasInfo })
+  )
+);
+import { lazy } from 'react';
+
+const ProductInfo = lazy(() =>
+  import('../../../shared/components/ProductInfo/ProductInfo').then((m) => ({
+    default: m.ProductInfo,
+  }))
+);
+
+import { Product } from '../../../shared/interface/Product';
 
 interface CheckoutResumeProps {
   products: Product[];
