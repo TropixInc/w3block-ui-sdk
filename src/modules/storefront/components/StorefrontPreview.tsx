@@ -59,6 +59,8 @@ interface StorefrontPreviewProps {
   children?: ReactNode;
   hasHeader?: boolean;
   hasFooter?: boolean;
+  upperTheme?: Theme | null;
+  upperPage?: TemplateData | null;
 }
 
 export const StorefrontPreview = ({
@@ -66,9 +68,11 @@ export const StorefrontPreview = ({
   children,
   hasFooter = true,
   hasHeader = true,
+  upperTheme,
+  upperPage,
 }: StorefrontPreviewProps) => {
   return (
-    <ThemeProvider>
+    <ThemeProvider upperPage={upperPage} upperTheme={upperTheme}>
       <Storefront hasFooter={hasFooter} hasHeader={hasHeader} params={params}>
         {children}
       </Storefront>
@@ -188,18 +192,18 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const hasHeaderDefault =
     mergedConfigStyleData?.hasHeader != undefined &&
     (asPath || '').includes('/auth/')
-      ? mergedConfigStyleData.hasHeader
+      ? mergedConfigStyleData?.hasHeader
       : true;
   const hasFooterDefault =
-    mergedConfigStyleData.hasFooter != undefined &&
+    mergedConfigStyleData?.hasFooter != undefined &&
     (asPath || '').includes('/auth/')
-      ? mergedConfigStyleData.hasFooter
+      ? mergedConfigStyleData?.hasFooter
       : true;
   return (
     <div
       style={{
-        color: mergedConfigStyleData.textColor ?? 'black',
-        background: mergedConfigStyleData.backgroundColor ?? 'white',
+        color: mergedConfigStyleData?.textColor ?? 'black',
+        background: mergedConfigStyleData?.backgroundColor ?? 'white',
         padding: convertSpacingToCSS(mergedConfigStyleData.padding),
         fontFamily,
       }}

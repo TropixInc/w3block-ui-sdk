@@ -26,12 +26,30 @@ interface IThemeContext {
 
 const BASE_THEME_KEY = 'baseThem_key';
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+export const ThemeProvider = ({
+  children,
+  upperTheme,
+  upperPage,
+}: {
+  children: ReactNode;
+  upperTheme?: Theme | null;
+  upperPage?: TemplateData | null;
+}) => {
   const [defaultTheme, setDefaultTheme] = useState<Theme | null>(null);
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageThemeSession, setPageThemeSession] =
     useSessionStorage<TemplateData | null>(BASE_THEME_KEY);
   const [_, setPageName] = useState('');
+  useEffect(() => {
+    if (upperTheme) {
+      setDefaultTheme(upperTheme);
+    }
+  }, [upperTheme]);
+  useEffect(() => {
+    if (upperPage) {
+      setPageTheme(upperPage);
+    }
+  }, [upperPage]);
   const {
     data: theme,
     isError: isThemeError,
