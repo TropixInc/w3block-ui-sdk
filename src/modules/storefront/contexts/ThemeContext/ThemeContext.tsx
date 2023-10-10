@@ -54,8 +54,10 @@ export const ThemeProvider = ({
     data: theme,
     isError: isThemeError,
     isSuccess: isThemeSuccess,
-  } = useGetTheme();
-  const { data: pageModules, isError } = useGetPageModules();
+  } = useGetTheme(upperTheme ? true : false);
+  const { data: pageModules, isError } = useGetPageModules(
+    upperPage ? true : false
+  );
   useEffect(() => {
     if (theme) {
       setDefaultTheme(theme.data);

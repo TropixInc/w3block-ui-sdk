@@ -6,7 +6,7 @@ import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
-export const useGetPageModules = () => {
+export const useGetPageModules = (disabled = false) => {
   const { status } = usePixwaySession();
   const [href, setHref] = useState('');
   const axios = useAxios(W3blockAPI.COMMERCE);
@@ -35,7 +35,8 @@ export const useGetPageModules = () => {
         !href.includes('/product/slug') &&
         !href.includes('/checkout/') &&
         status != 'loading' &&
-        !query.preview,
+        !query.preview &&
+        !disabled,
       refetchOnWindowFocus: false,
     }
   );
