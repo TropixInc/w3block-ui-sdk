@@ -1,12 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
-import { ProductsDataStyleData, SpecificContentCard } from '../interfaces';
+import {
+  CardTypesEnum,
+  ProductsDataStyleData,
+  SpecificContentCard,
+} from '../interfaces';
 
 interface ContentCardProps {
   config: ProductsDataStyleData;
   product: SpecificContentCard;
+  cardType?: CardTypesEnum;
 }
 
-export const ContentCard = ({ config, product }: ContentCardProps) => {
+export const ContentCard = ({
+  config,
+  product,
+  cardType,
+}: ContentCardProps) => {
   const {
     format,
     showCardImage,
@@ -41,14 +51,19 @@ export const ContentCard = ({ config, product }: ContentCardProps) => {
     valueFontSizeType,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
+  const linkToSend = () => {
+    if (cardType == CardTypesEnum.CONTENT) {
+      if (product.hasLink && product.link && product.link != '')
+        return product.link;
+      else return undefined;
+    } else {
+      return `/product/slug/${product.link}`;
+    }
+  };
   return (
     <>
       <a
-        href={
-          product.hasLink && product.link && product.link != ''
-            ? product.link
-            : undefined
-        }
+        href={linkToSend()}
         className={`pw-w-full ${!product.hasLink && 'pw-cursor-default'} `}
       >
         {' '}

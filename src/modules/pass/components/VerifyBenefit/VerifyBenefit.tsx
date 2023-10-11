@@ -36,7 +36,7 @@ export const VerifyBenefit = ({
 }: iProps) => {
   useLockBodyScroll(hasOpen);
   const [translate] = useTranslation();
-  
+
   if (hasOpen) {
     return (
       <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8 pw-overflow-scroll">
@@ -76,7 +76,7 @@ export const VerifyBenefit = ({
                       className='pw-mt-5'
                       onClick={useBenefit}
                     >
-                      {translate('token>pass>selfUse')}
+                      Confirmar utilização
                     </Button>
                     <Button
                       className='pw-mt-5'
@@ -91,8 +91,7 @@ export const VerifyBenefit = ({
                       <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                         {translate('token>pass>description')}
                       </div>
-                      <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                        {data?.tokenPassBenefit?.description ?? data?.description}
+                      <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]' dangerouslySetInnerHTML={{ __html: data?.tokenPassBenefit?.description ?? data?.description }}>
                       </div>
                     </>
                   }
@@ -101,8 +100,7 @@ export const VerifyBenefit = ({
                       <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                         {translate('token>pass>rules')}
                       </div>
-                      <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-                        {data?.tokenPassBenefit?.rules ?? data?.rules}
+                      <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]' dangerouslySetInnerHTML={{ __html: data?.tokenPassBenefit?.rules ?? data?.rules }}>
                       </div>
                     </>
                   }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CSSProperties } from 'react';
 
 import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
