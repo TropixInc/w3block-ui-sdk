@@ -149,6 +149,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   key={card.id}
                   product={card}
                   config={mergedStyleData}
+                  cardType={cardType}
                 />
               ))
           : cardType == 'content' && (!format || format == 'product')
@@ -221,6 +222,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   overlay: productOverlay,
                 }}
                 config={mergedStyleData}
+                cardType={cardType}
               />
             ))}
       </div>
@@ -271,6 +273,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   product={card}
                   config={mergedStyleData}
                   key={card.id}
+                  cardType={cardType}
                 />
               </SwiperSlide>
             ))
@@ -347,6 +350,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     })),
                   }}
                   config={mergedStyleData}
+                  cardType={cardType}
                 />
               </SwiperSlide>
             ))}
