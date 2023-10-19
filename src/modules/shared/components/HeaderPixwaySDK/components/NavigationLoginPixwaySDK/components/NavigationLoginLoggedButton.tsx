@@ -129,9 +129,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
     },
     {
       name: translate('wallet>page>extract'),
-      icon: (
-        <ReceiptIcon style={{color: textColor, stroke: textColor}} width={15} height={15} />
-      ),
+      icon: <ReceiptIcon style={{color: textColor, stroke: textColor, fill: textColor}} width={15} height={15} />,
       route: PixwayAppRoutes.WALLET_RECEIPT,
       isVisible:
         (isUser || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0,
@@ -179,7 +177,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
   useEffect(() => {
     setTabsToShow(items);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProduction, pass, profile]);
+  }, [isProduction, pass, profile, loyaltyWallet]);
 
   return tabsToShow;
 };
