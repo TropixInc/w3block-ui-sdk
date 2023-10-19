@@ -1,15 +1,11 @@
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
 import UserIcon from '../../../../../assets/icons/user.svg?react';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
-const PixwayButton = lazy(() =>
-  import('../../../../PixwayButton/PixwayButton').then((mod) => ({
-    default: mod.PixwayButton,
-  }))
-);
+import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 
 interface NavigationLoginNonLoggedButtonProps {
   signInRoute?: string;
@@ -59,7 +55,7 @@ export const NavigationLoginNonLoggedButton = ({
             >
               {translate('shared>login')}
             </PixwayButton>
-            {hasSignUp && (
+            {hasSignUp ? (
               <PixwayButton
                 onClick={() => router.pushConnect(signUpRoute)}
                 fullWidth
@@ -67,7 +63,7 @@ export const NavigationLoginNonLoggedButton = ({
               >
                 {translate('shared>register')}
               </PixwayButton>
-            )}
+            ) : null}
           </div>
         </div>
       ) : null}

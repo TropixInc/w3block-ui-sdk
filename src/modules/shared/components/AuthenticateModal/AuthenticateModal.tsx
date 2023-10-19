@@ -1,25 +1,11 @@
-import { Suspense, lazy } from 'react';
-
-const ImageSDK = lazy(() =>
-  import('../ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
-const ModalBase = lazy(() =>
-  import('../ModalBase').then((module) => ({
-    default: module.ModalBase,
-  }))
-);
-
-const Shimmer = lazy(() =>
-  import('../Shimmer').then((module) => ({
-    default: module.Shimmer,
-  }))
-);
+import { Suspense } from 'react';
 
 import { UseGetTemporaryUserCode } from '../../hooks/useGetTemporaryUserCode/useGetTemporaryUserCode';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
+import { ImageSDK } from '../ImageSDK';
+import { ModalBase } from '../ModalBase';
+import { Shimmer } from '../Shimmer';
 
 interface AuthenticateModalProps {
   isOpen: boolean;

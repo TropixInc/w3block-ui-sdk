@@ -1,13 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { ReactNode, lazy } from 'react';
+import { ReactNode } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
 
 import  XIcon  from '../../assets/icons/xFilled.svg?react';
-const Backdrop = lazy(() =>
-  import('../Backdrop').then((module) => ({ default: module.Backdrop }))
-);
+import { Backdrop } from '../Backdrop';
+
 
 
 interface Props {

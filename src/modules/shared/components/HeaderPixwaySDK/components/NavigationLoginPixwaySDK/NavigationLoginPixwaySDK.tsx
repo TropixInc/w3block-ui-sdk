@@ -42,7 +42,6 @@ export const NavigationLoginPixwaySDK = ({
 }: NavigationLoginPixwaySDKProps) => {
   const { data: session } = usePixwaySession();
   const [userMenu, setUserMenu] = useState<boolean>(false);
-
   const toggleTabsMemo = () => {
     if (toggleLoginMenu) {
       toggleLoginMenu();
