@@ -66,6 +66,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
         style={{
           margin: convertSpacingToCSS(margin),
           height: bannerHeight(),
+          overflow: 'hidden',
         }}
       >
         <Swiper
@@ -93,6 +94,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
           {banners?.map((banner) => (
             <SwiperSlide key={banner.title}>
               <Slide
+                height={height}
                 data={{ ...banner, padding }}
                 ratioClassName={ratios[bannerRatio ?? 'default']}
               />
@@ -107,9 +109,11 @@ export const Banner = ({ data }: { data: BannerData }) => {
 const Slide = ({
   data,
   ratioClassName,
+  height,
 }: {
   data: SpecificBannerInfo;
   ratioClassName?: string;
+  height?: string;
 }) => {
   const {
     titleColor,
@@ -179,6 +183,7 @@ const Slide = ({
           backgroundColor: backgroundColor,
           background: bg,
           padding: convertSpacingToCSS(padding),
+          height: height ? height + 'px' : '60vh',
         }}
         className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full  pw-flex ${rowAlignmentClass} pw-items-center`}
       >
@@ -187,6 +192,7 @@ const Slide = ({
             src={bgUrl?.assetUrl}
             className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
             width={1440}
+            height={parseInt(height ?? '60')}
             quality="best"
           />
         )}

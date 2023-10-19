@@ -1,3 +1,5 @@
+import { lazy } from 'react';
+
 import DollarIcon from '../../assets/icons/dollar-sign.svg?react';
 import ExtractIcon from '../../assets/icons/externalLink.svg?react';
 import MetamaskIcon from '../../assets/icons/metamask.svg?react';
@@ -6,9 +8,22 @@ import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useUserWallet } from '../../hooks/useUserWallet';
 import { getExtractLinkByChainId } from '../../utils/getCryptoChainId';
-import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
-import { ImageSDK } from '../ImageSDK';
-import { WeblockButton } from '../WeblockButton/WeblockButton';
+const CriptoValueComponent = lazy(() =>
+  import('../CriptoValueComponent/CriptoValueComponent').then((module) => ({
+    default: module.CriptoValueComponent,
+  }))
+);
+const ImageSDK = lazy(() =>
+  import('../ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../WeblockButton/WeblockButton').then((module) => ({
+    default: module.WeblockButton,
+  }))
+);
+
 interface WalletCardProps {
   type: 'metamask' | 'vault' | 'loyalty';
   chainId?: number;

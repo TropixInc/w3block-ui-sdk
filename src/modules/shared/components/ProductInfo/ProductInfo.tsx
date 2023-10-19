@@ -1,15 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
-import { CheckoutStatus } from '../../../checkout';
+import { CheckoutStatus } from '../../../checkout/components';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import EthIcon from '../../assets/icons/Eth.svg?react';
 import MaticIcon from '../../assets/icons/maticIcon.svg?react';
 import TrashIcon from '../../assets/icons/trash.svg?react';
 import useTranslation from '../../hooks/useTranslation';
-import { ImageSDK } from '../ImageSDK';
-import { Shimmer } from '../Shimmer';
+const ImageSDK = lazy(() =>
+  import('../ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
+const Shimmer = lazy(() =>
+  import('../Shimmer').then((module) => ({
+    default: module.Shimmer,
+  }))
+);
 interface ProductInfoProps {
   status?: CheckoutStatus;
   image: string;

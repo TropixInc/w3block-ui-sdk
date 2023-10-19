@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, useCallback, useEffect, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -12,14 +12,42 @@ import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStora
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
-import { useRouterConnect } from '../../shared';
 import { Alert } from '../../shared/components/Alert';
-import { CheckboxAlt } from '../../shared/components/CheckboxAlt/CheckboxAlt';
-import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
-import { ImageSDK } from '../../shared/components/ImageSDK';
-import { ModalBase } from '../../shared/components/ModalBase';
-import { Shimmer } from '../../shared/components/Shimmer';
-import { Spinner } from '../../shared/components/Spinner';
+
+const CheckboxAlt = lazy(() =>
+  import('../../shared/components/CheckboxAlt/CheckboxAlt').then((mod) => ({
+    default: mod.CheckboxAlt,
+  }))
+);
+
+const CriptoValueComponent = lazy(() =>
+  import(
+    '../../shared/components/CriptoValueComponent/CriptoValueComponent'
+  ).then((mod) => ({ default: mod.CriptoValueComponent }))
+);
+const ImageSDK = lazy(() =>
+  import('../../shared/components/ImageSDK').then((mod) => ({
+    default: mod.ImageSDK,
+  }))
+);
+const ModalBase = lazy(() =>
+  import('../../shared/components/ModalBase').then((mod) => ({
+    default: mod.ModalBase,
+  }))
+);
+
+const Shimmer = lazy(() =>
+  import('../../shared/components/Shimmer').then((mod) => ({
+    default: mod.Shimmer,
+  }))
+);
+
+const Spinner = lazy(() =>
+  import('../../shared/components/Spinner').then((mod) => ({
+    default: mod.Spinner,
+  }))
+);
+
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -28,6 +56,7 @@ import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoB
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import useRouter from '../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { useUtms } from '../../shared/hooks/useUtms/useUtms';
@@ -723,7 +752,7 @@ export const ProductPage = ({
                         <ProductVariants
                           key={val.id}
                           variants={val}
-                          onClick={(e) => {
+                          onClick={(e: any) => {
                             setVariants({
                               ...variants,
                               [val.id]: Object.values(e)[0],

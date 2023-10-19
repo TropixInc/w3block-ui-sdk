@@ -1,8 +1,12 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy } from 'react';
 
 import Matic from '../../assets/icons/maticFilled.svg?react';
 import { useCryptoCurrencyExchangeRate } from '../../hooks/useCryptoCurrencyExchangeRate';
-import { TooltipHover } from '../TooltipHover/TooltipHover';
+const TooltipHover = lazy(() =>
+  import('../TooltipHover/TooltipHover').then((module) => ({
+    default: module.TooltipHover,
+  }))
+);
 
 interface Props {
   imageBox?: ReactNode;

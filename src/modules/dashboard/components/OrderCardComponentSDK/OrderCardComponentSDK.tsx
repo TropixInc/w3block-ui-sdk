@@ -1,11 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
 import { format } from 'date-fns';
 
 import { CheckoutStatus } from '../../../checkout';
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
-import { PriceAndGasInfo, ProductInfo } from '../../../shared';
+const PriceAndGasInfo = lazy(() =>
+  import('../../../shared/components/PriceAndGasInfo/PriceAndGasInfo').then(
+    (mod) => ({ default: mod.PriceAndGasInfo })
+  )
+);
+
+const ProductInfo = lazy(() =>
+  import('../../../shared/components/ProductInfo/ProductInfo').then((mod) => ({
+    default: mod.ProductInfo,
+  }))
+);
 import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
 import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
 import CopyIcon from '../../../shared/assets/icons/copy.svg?react';

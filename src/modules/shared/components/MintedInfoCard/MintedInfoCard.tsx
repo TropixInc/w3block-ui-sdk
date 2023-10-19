@@ -1,8 +1,24 @@
-import classNames from 'classnames';
+import { lazy } from 'react';
 
-import { DisplayCardBase } from '../../../tokens/components/DisplayCards/DisplayCardBase';
-import { QRCodeModal } from '../../../tokens/components/QRCodeModal';
-import { TokenScanLink } from '../../../tokens/components/TokenScanLink';
+import classNames from 'classnames';
+const DisplayCardBase = lazy(() =>
+  import('../../../tokens/components/DisplayCards/DisplayCardBase').then(
+    (module) => ({
+      default: module.DisplayCardBase,
+    })
+  )
+);
+const QRCodeModal = lazy(() =>
+  import('../../../tokens/components/QRCodeModal').then((module) => ({
+    default: module.QRCodeModal,
+  }))
+);
+const TokenScanLink = lazy(() =>
+  import('../../../tokens/components/TokenScanLink').then((module) => ({
+    default: module.TokenScanLink,
+  }))
+);
+
 import useModalController from '../../../tokens/hooks/useDialogController';
 import { getPublicTokenPageURL } from '../../../tokens/utils/getPublicTokenPageURL';
 import { useRouterConnect } from '../../hooks';

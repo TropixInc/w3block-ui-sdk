@@ -35,7 +35,7 @@ export const useGetPageModules = (disabled = false) => {
         !href.includes('/product/slug') &&
         !href.includes('/checkout/') &&
         status != 'loading' &&
-        !query.preview &&
+        !query?.preview &&
         !disabled,
       refetchOnWindowFocus: false,
     }

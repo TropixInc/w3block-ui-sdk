@@ -25,7 +25,7 @@ export const useGetTheme = (disabled = false) => {
         .get(PixwayAPIRoutes.GET_THEME + `?url=${href}`)
         .then((data) => data.data),
     {
-      enabled: href != undefined && href != '' && !query.preview && !disabled,
+      enabled: href != undefined && href != '' && !query?.preview && !disabled,
       refetchOnWindowFocus: false,
       retry: 1,
     }

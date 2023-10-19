@@ -1,8 +1,14 @@
+import { lazy } from 'react';
+
 import ErrorIcon from '../../assets/icons/errorIconRed.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
-import { PixwayButton } from '../PixwayButton';
+const PixwayButton = lazy(() =>
+  import('../PixwayButton').then((module) => ({
+    default: module.PixwayButton,
+  }))
+);
 
 interface ErrorMessageProps {
   className?: string;

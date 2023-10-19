@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { lazy, useRef, useState } from 'react';
 import { useClickAway, useCopyToClipboard } from 'react-use';
 
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
@@ -11,8 +11,17 @@ import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { useGetRightWallet } from '../../../../../utils/getRightWallet';
-import { PixwayButton } from '../../../../PixwayButton';
-import { WeblockButton } from '../../../../WeblockButton/WeblockButton';
+const PixwayButton = lazy(() =>
+  import('../../../../PixwayButton/PixwayButton').then((mod) => ({
+    default: mod.PixwayButton,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../../../../WeblockButton/WeblockButton').then((mod) => ({
+    default: mod.WeblockButton,
+  }))
+);
+
 import { NavigationMenuTabs } from '../interfaces/menu';
 import { useDefaultMenuTabs } from './NavigationLoginLoggedButton';
 interface NavigationLoginLoggedButtonMobileProps {

@@ -1,4 +1,10 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
+const BaseTemplate = lazy(() =>
+  import('../BaseTemplate').then((mod) => ({ default: mod.BaseTemplate }))
+);
+const TableBase = lazy(() =>
+  import('../TableBase').then((mod) => ({ default: mod.TableBase }))
+);
 import { Trans } from 'react-i18next';
 import { useDebounce } from 'react-use';
 
@@ -12,8 +18,6 @@ import {
   Filters,
   ValidStatusProps,
 } from '../../../tokens/components/Filters/Filters';
-import { BaseTemplate } from '../BaseTemplate';
-import { TableBase } from '../TableBase';
 import { dataMoked } from './dataMoked';
 
 export const ClientTemplate = () => {

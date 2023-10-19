@@ -2,18 +2,55 @@ import { useTranslation } from 'react-i18next';
 
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
 
-import InputBirthdate from '../SmartInputs/InputBirthdate';
-import InputCpf from '../SmartInputs/InputCpf';
-import InputEmail from '../SmartInputs/InputEmail';
-import InputFile from '../SmartInputs/InputFile';
-import { InputMultiFace } from '../SmartInputs/InputMultiFace/InputMultiFace';
-import InputPhone from '../SmartInputs/InputPhone';
-import {
-  InputSelector,
-  Options,
-} from '../SmartInputs/InputSelector/InputSelector';
-import InputText from '../SmartInputs/InputText';
-import InputUrl from '../SmartInputs/InputUrl';
+const InputBirthdate = lazy(() =>
+  import('../SmartInputs/InputBirthdate').then((module) => ({
+    default: module.default,
+  }))
+);
+const InputCpf = lazy(() =>
+  import('../SmartInputs/InputCpf').then((module) => ({
+    default: module.default,
+  }))
+);
+const InputEmail = lazy(() =>
+  import('../SmartInputs/InputEmail').then((module) => ({
+    default: module.default,
+  }))
+);
+const InputFile = lazy(() =>
+  import('../SmartInputs/InputFile').then((module) => ({
+    default: module.default,
+  }))
+);
+const InputMultiFace = lazy(() =>
+  import('../SmartInputs/InputMultiFace/InputMultiFace').then((module) => ({
+    default: module.InputMultiFace,
+  }))
+);
+const InputPhone = lazy(() =>
+  import('../SmartInputs/InputPhone').then((module) => ({
+    default: module.default,
+  }))
+);
+const InputSelector = lazy(() =>
+  import('../SmartInputs/InputSelector/InputSelector').then((module) => ({
+    default: module.InputSelector,
+  }))
+);
+const InputText = lazy(() =>
+  import('../SmartInputs/InputText').then((module) => ({
+    default: module.default,
+  }))
+);
+const InputUrl = lazy(() =>
+  import('../SmartInputs/InputUrl').then((module) => ({
+    default: module.default,
+  }))
+);
+
+import { Options } from '../SmartInputs/InputSelector/InputSelector';
+
+import { lazy } from 'react';
 
 interface SmartProps {
   type: DataTypesEnum;

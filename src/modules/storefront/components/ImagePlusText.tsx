@@ -81,6 +81,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               src={image?.assetUrl}
               className="pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg"
               width={500}
+              height={274}
               quality="eco"
             />
           </div>

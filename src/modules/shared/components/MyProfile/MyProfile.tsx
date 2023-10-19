@@ -1,6 +1,14 @@
+import { lazy } from 'react';
+
 import { useProfile } from '../../hooks/useProfile';
 import useTranslation from '../../hooks/useTranslation';
-import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds/InternalPageHeaderWithFunds';
+const InternalPageHeaderWithFunds = lazy(() =>
+  import('../InternalPageHeaderWithFunds/InternalPageHeaderWithFunds').then(
+    (module) => ({
+      default: module.InternalpageHeaderWithFunds,
+    })
+  )
+);
 
 export const MyProfile = () => {
   const { data: profile } = useProfile();
@@ -8,7 +16,7 @@ export const MyProfile = () => {
 
   return (
     <div className="">
-      <InternalpageHeaderWithFunds
+      <InternalPageHeaderWithFunds
         title={translate('components>menu>myProfile')}
       >
         <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px]">
@@ -19,7 +27,7 @@ export const MyProfile = () => {
             </div>
           </div>
         </div>
-      </InternalpageHeaderWithFunds>
+      </InternalPageHeaderWithFunds>
     </div>
   );
 };

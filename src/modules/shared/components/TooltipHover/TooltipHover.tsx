@@ -1,7 +1,13 @@
+import { lazy } from 'react';
+
 import classNames from 'classnames';
 
 import { useModalController } from '../../hooks/useModalController';
-import { Tooltip } from '../Tooltip/Tooltip';
+const Tooltip = lazy(() =>
+  import('../Tooltip/Tooltip').then((module) => ({
+    default: module.Tooltip,
+  }))
+);
 
 interface Props {
   children: React.ReactNode;

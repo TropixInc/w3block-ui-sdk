@@ -1,11 +1,20 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 
 import useGetProductById from '../../../storefront/hooks/useGetProductById/useGetProductById';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useSessionUser } from '../../hooks/useSessionUser';
-import { Box } from '../Box/Box';
-import { Spinner } from '../Spinner';
+const Box = lazy(() =>
+  import('../Box/Box').then((module) => ({
+    default: module.Box,
+  }))
+);
+const Spinner = lazy(() =>
+  import('../Spinner').then((module) => ({
+    default: module.Spinner,
+  }))
+);
+
 import TranslatableComponent from '../TranslatableComponent';
 
 const _RedirectTemplate = () => {

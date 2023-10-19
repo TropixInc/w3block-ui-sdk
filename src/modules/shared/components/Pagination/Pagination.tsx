@@ -1,4 +1,11 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  lazy,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,7 +16,11 @@ import { getNumbersFromString } from '../../../tokens/utils/getNumbersFromString
 import ChevronLeft from '../../assets/icons/chevronLeftFilled.svg?react';
 import ChevronRight from '../../assets/icons/chevronRightFilled.svg?react';
 import useTranslation from '../../hooks/useTranslation';
-import { PixwayButton } from '../PixwayButton';
+const PixwayButton = lazy(() =>
+  import('../PixwayButton').then((module) => ({
+    default: module.PixwayButton,
+  }))
+);
 
 interface Props {
   pagesQuantity: number;

@@ -1,9 +1,18 @@
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 
 import { format } from 'date-fns';
 
-import { Spinner } from '../../../shared/components/Spinner';
-import { DataGridPagination } from '../../../tokens/components/DataGridPagination';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((mod) => ({
+    default: mod.Spinner,
+  }))
+);
+const DataGridPagination = lazy(() =>
+  import('../../../tokens/components/DataGridPagination').then((mod) => ({
+    default: mod.DataGridPagination,
+  }))
+);
+
 import { ColumnType } from '../../../tokens/components/GenericTable';
 import TableHeader from '../../../tokens/components/TableHeader/TableHeader';
 import TableRows from '../../../tokens/components/TableRow/TableRow';

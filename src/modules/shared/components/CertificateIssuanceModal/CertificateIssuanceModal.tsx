@@ -1,7 +1,14 @@
-import Link from 'next/link';
+import { lazy } from 'react';
 
-import { ModalBase } from '../../../shared/components/ModalBase';
+import Link from 'next/link';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((module) => ({
+    default: module.ModalBase,
+  }))
+);
+
 import useTranslation from '../../hooks/useTranslation';
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;

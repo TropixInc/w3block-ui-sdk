@@ -1,10 +1,18 @@
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 
 import { PixwayAppRoutes } from '../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../hooks/usePixwaySession';
 import useTranslation from '../../../../hooks/useTranslation';
-import { NavigationTabsPixwaySDKDesktop } from './components/NavigationTabsPixwaySDKDesktop';
-import { NavigationTabsPixwaySDKMobile } from './components/NavigationTabsPixwaySDKMobile';
+const NavigationTabsPixwaySDKDesktop = lazy(() =>
+  import('./components/NavigationTabsPixwaySDKDesktop').then((mod) => ({
+    default: mod.NavigationTabsPixwaySDKDesktop,
+  }))
+);
+const NavigationTabsPixwaySDKMobile = lazy(() =>
+  import('./components/NavigationTabsPixwaySDKMobile').then((mod) => ({
+    default: mod.NavigationTabsPixwaySDKMobile,
+  }))
+);
 
 export interface NavigationTabsPixwaySDKProps {
   tabs?: NavigationTabsPixwaySDKTabs[];

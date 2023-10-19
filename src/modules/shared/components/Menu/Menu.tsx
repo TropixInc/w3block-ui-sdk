@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, lazy, useEffect, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
@@ -28,7 +28,11 @@ import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithK
 import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
 import { useUserWallet } from '../../hooks/useUserWallet';
-import { ImageSDK } from '../ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
 import TranslatableComponent from '../TranslatableComponent';
 
 interface MenuProps {

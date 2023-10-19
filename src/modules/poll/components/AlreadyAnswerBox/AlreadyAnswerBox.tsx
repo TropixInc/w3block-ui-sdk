@@ -1,8 +1,14 @@
-import { useRouterConnect } from '../../../shared';
+import { lazy } from 'react';
+
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((module) => ({
+    default: module.Box,
+  }))
+);
 import InfoIcon from '../../../shared/assets/icons/informationCircledFilled.svg?react';
-import { Box } from '../../../shared/components/Box/Box';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 export const AlreadyAnswerBox = () => {
   const router = useRouterConnect();

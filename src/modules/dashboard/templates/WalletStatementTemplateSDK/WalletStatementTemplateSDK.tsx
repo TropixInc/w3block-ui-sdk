@@ -1,9 +1,30 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, lazy } from 'react';
 
-import { InternalPagesLayoutBase } from '../../../shared';
-import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
-import { Pagination } from '../../../shared/components/Pagination';
-import { StatementComponentSDK } from '../../../shared/components/StatementComponentSDK/StatementComponentSDK';
+const InternalPagesLayoutBase = lazy(() =>
+  import(
+    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
+  ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
+);
+
+const CriptoValueComponent = lazy(() =>
+  import(
+    '../../../shared/components/CriptoValueComponent/CriptoValueComponent'
+  ).then((mod) => ({ default: mod.CriptoValueComponent }))
+);
+
+const Pagination = lazy(() =>
+  import('../../../shared/components/Pagination').then((mod) => ({
+    default: mod.Pagination,
+  }))
+);
+
+const StatementComponentSDK = lazy(() =>
+  import(
+    '../../../shared/components/StatementComponentSDK/StatementComponentSDK'
+  ).then((mod) => ({
+    default: mod.StatementComponentSDK,
+  }))
+);
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';

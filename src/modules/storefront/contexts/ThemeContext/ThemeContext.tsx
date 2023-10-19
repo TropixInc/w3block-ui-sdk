@@ -13,7 +13,7 @@ import { useGetTheme } from '../../hooks/useGetTheme';
 import { Theme, TemplateData } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
-interface IThemeContext {
+export interface IThemeContext {
   defaultTheme: Theme | null;
   setDefaultTheme?: (Theme: Theme) => void;
   pageTheme: TemplateData | null;

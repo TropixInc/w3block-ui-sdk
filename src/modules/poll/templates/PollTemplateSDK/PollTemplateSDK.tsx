@@ -6,7 +6,11 @@ import { ContainerTextBesideProps } from '../../../shared/components/ContainerTe
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { PollBox } from '../../components';
+const PollBox = lazy(() =>
+  import('../../components/PollBox/PollBox').then((module) => ({
+    default: module.PollBox,
+  }))
+);
 import { ContentTypeEnum } from '../../enums/contentType';
 
 const ContainerControllerSDK = lazy(() =>

@@ -1,4 +1,11 @@
-import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
+const CriptoValueComponent = lazy(() =>
+  import(
+    '../../../shared/components/CriptoValueComponent/CriptoValueComponent'
+  ).then((mod) => ({ default: mod.CriptoValueComponent }))
+);
+
+import { lazy } from 'react';
+
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 
 interface BuySummarySDKProps {

@@ -1,4 +1,11 @@
-import { Shimmer } from '../../../shared/components/Shimmer';
+const Shimmer = lazy(() =>
+  import('../../../shared/components/Shimmer').then((mod) => ({
+    default: mod.Shimmer,
+  }))
+);
+
+import { lazy } from 'react';
+
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';

@@ -1,16 +1,32 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, lazy, useMemo } from 'react';
 
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
-import { CartProvider } from '../../../checkout/providers/cartProvider';
+const CartProvider = lazy(() =>
+  import('../../../checkout/providers/cartProvider').then((m) => ({
+    default: m.CartProvider,
+  }))
+);
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
-import { MetamaskProviderUiSDK } from '../../metamask';
-import { SocketProviderUiSDK } from '../../metamask/providers/SocketProviderUiSDK';
-import { LocaleProvider } from '../LocaleProvider';
-import { W3blockApiProvider } from '../W3blockApiProvider';
+const MetamaskProviderUiSDK = lazy(() =>
+  import('../../metamask').then((m) => ({ default: m.MetamaskProviderUiSDK }))
+);
+const SocketProviderUiSDK = lazy(() =>
+  import('../../metamask/providers/SocketProviderUiSDK').then((m) => ({
+    default: m.SocketProviderUiSDK,
+  }))
+);
+const LocaleProvider = lazy(() =>
+  import('../LocaleProvider').then((m) => ({ default: m.LocaleProvider }))
+);
+const W3blockApiProvider = lazy(() =>
+  import('../W3blockApiProvider').then((m) => ({
+    default: m.W3blockApiProvider,
+  }))
+);
 
 interface Props extends JSX.IntrinsicAttributes {
   children: ReactNode;

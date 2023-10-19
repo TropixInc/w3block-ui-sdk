@@ -1,13 +1,15 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy } from 'react';
 
 import { ContentTypeEnum } from '../../../poll';
 import { position } from '../../enums';
 import { FAQContextEnum } from '../../enums/FAQContext';
-import {
-  ContainerTextBeside,
-  ContainerTextBesideProps,
-} from '../ContainerTextBeside/ContainerTextBeside';
-import { FAQ } from '../FAQ';
+const FAQ = lazy(() => import('../FAQ').then((m) => ({ default: m.FAQ })));
+const ContainerTextBeside = lazy(() =>
+  import('../ContainerTextBeside/ContainerTextBeside').then((m) => ({
+    default: m.ContainerTextBeside,
+  }))
+);
+import { ContainerTextBesideProps } from '../ContainerTextBeside/ContainerTextBeside';
 import { ContainerControllerClasses } from './ContainerControllerSDK';
 
 interface ContainerBesideProps {

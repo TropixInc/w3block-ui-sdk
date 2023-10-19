@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 
 import { WalletTypes } from '@w3block/sdk-id';
 
@@ -14,10 +14,23 @@ import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { useProfile } from '../../hooks/useProfile';
 import useTranslation from '../../hooks/useTranslation';
 import { useUserWallet } from '../../hooks/useUserWallet';
-import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
+const InternalPagesLayoutBase = lazy(() =>
+  import('../InternalPagesLayoutBase').then((module) => ({
+    default: module.InternalPagesLayoutBase,
+  }))
+);
+const WalletConnectDesinModal = lazy(() =>
+  import('./WalletConnectDesincModal').then((module) => ({
+    default: module.WalletConnectDesinModal,
+  }))
+);
+const WalletConnectModal = lazy(() =>
+  import('./WalletConnectModal').then((module) => ({
+    default: module.WalletConnectModal,
+  }))
+);
+
 import TranslatableComponent from '../TranslatableComponent';
-import { WalletConnectDesinModal } from './WalletConnectDesincModal';
-import { WalletConnectModal } from './WalletConnectModal';
 
 const _WalletConnectIntegration = () => {
   const { data: profile } = useProfile();

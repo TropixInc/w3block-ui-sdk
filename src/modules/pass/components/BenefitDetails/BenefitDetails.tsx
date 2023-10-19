@@ -1,19 +1,42 @@
-import { useMemo } from 'react';
+import { lazy, useMemo } from 'react';
 
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
-import { InternalPagesLayoutBase } from '../../../shared';
+const InternalPagesLayoutBase = lazy(() =>
+  import(
+    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
+  ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
+);
+
 import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
-import { Spinner } from '../../../shared/components/Spinner';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((mod) => ({
+    default: mod.Spinner,
+  }))
+);
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { DetailPass } from '../../../tokens/components/PassTemplate/DetailPass';
-import { DetailsTemplate } from '../../../tokens/components/PassTemplate/DetailsTemplate';
+const DetailPass = lazy(() =>
+  import('../../../tokens/components/PassTemplate/DetailPass').then((mod) => ({
+    default: mod.DetailPass,
+  }))
+);
+const DetailsTemplate = lazy(() =>
+  import('../../../tokens/components/PassTemplate/DetailsTemplate').then(
+    (mod) => ({
+      default: mod.DetailsTemplate,
+    })
+  )
+);
+const BenefitUsesList = lazy(() =>
+  import('../BenefitUsesList/BenefitUsesList').then((mod) => ({
+    default: mod.default,
+  }))
+);
 import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import { TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
-import BenefitUsesList from '../BenefitUsesList/BenefitUsesList';
 
 interface BenefitDetailsProps {
   benefitIdProp?: string;

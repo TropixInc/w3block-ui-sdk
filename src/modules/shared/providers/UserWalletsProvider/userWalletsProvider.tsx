@@ -1,11 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, createContext, useEffect, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  lazy,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
+const BusinessProviderSDK = lazy(() =>
+  import(
+    '../../../business/providers/businessProvider/businessProviderSDK'
+  ).then((m) => ({ default: m.BusinessProviderSDK }))
+);
+
+const AuthenticateModal = lazy(() =>
+  import('../../components/AuthenticateModal/AuthenticateModal').then((m) => ({
+    default: m.AuthenticateModal,
+  }))
+);
 import { useGetUserBalance } from '../../../business/hooks/useGetUserBalance';
-import { BusinessProviderSDK } from '../../../business/providers/businessProvider/businessProviderSDK';
 import { useGetWallets } from '../../../dashboard/hooks/useGetWallets';
 import { CoinsType } from '../../../storefront/interfaces';
-import { AuthenticateModal } from '../../components/AuthenticateModal/AuthenticateModal';
 import { useGetBalancesForWallets } from '../../hooks/useBalance';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import { usePixwaySession } from '../../hooks/usePixwaySession';

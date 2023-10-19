@@ -1,10 +1,17 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
 
-import { ModalBase } from '../ModalBase';
-import { WeblockButton } from '../WeblockButton/WeblockButton';
+const ModalBase = lazy(() =>
+  import('../ModalBase').then((module) => ({ default: module.ModalBase }))
+);
+
+const WeblockButton = lazy(() =>
+  import('../WeblockButton/WeblockButton').then((module) => ({
+    default: module.WeblockButton,
+  }))
+);
 
 interface Props {
   isOpen: boolean;

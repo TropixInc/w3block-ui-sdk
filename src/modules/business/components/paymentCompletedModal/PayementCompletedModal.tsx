@@ -1,4 +1,9 @@
-import { ModalBase } from '../../../shared/components/ModalBase';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((mod) => ({
+    default: mod.ModalBase,
+  }))
+);
+import { lazy } from 'react';
 
 interface PayementCompletedModalProps {
   onClose?: () => void;

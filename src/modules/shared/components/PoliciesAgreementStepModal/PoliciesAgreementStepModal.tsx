@@ -1,8 +1,16 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
-import { Checkbox } from '../Checkbox';
-import { DialogBase } from '../DialogBase';
+const Checkbox = lazy(() =>
+  import('../Checkbox').then((module) => ({
+    default: module.Checkbox,
+  }))
+);
+const DialogBase = lazy(() =>
+  import('../DialogBase').then((module) => ({
+    default: module.DialogBase,
+  }))
+);
 
 interface Props {
   cancelButtonLabel: string;

@@ -9,7 +9,7 @@ import {
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useUserWallet } from '../../shared/hooks/useUserWallet';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { ThemeContext, ThemeProvider } from '../contexts/ThemeContext';
+import { ThemeContext } from '../contexts/ThemeContext';
 import {
   MainModuleThemeInterface,
   ModulesType,
@@ -63,24 +63,21 @@ interface StorefrontPreviewProps {
   upperPage?: TemplateData | null;
 }
 
+// export const StorefrontPreview = ({
+//   params,
+//   children,
+//   hasFooter = true,
+//   hasHeader = true,
+//   upperTheme,
+//   upperPage,
+// }: StorefrontPreviewProps) => {
+//   return <Storefront params={params}>{children}</Storefront>;
+// };
+
 export const StorefrontPreview = ({
   params,
   children,
-  hasFooter = true,
-  hasHeader = true,
-  upperTheme,
-  upperPage,
 }: StorefrontPreviewProps) => {
-  return (
-    <ThemeProvider upperPage={upperPage} upperTheme={upperTheme}>
-      <Storefront hasFooter={hasFooter} hasHeader={hasHeader} params={params}>
-        {children}
-      </Storefront>
-    </ThemeProvider>
-  );
-};
-
-const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const context = useContext(ThemeContext);
   const { setMainCoin } = useUserWallet();
   const { asPath, pushConnect } = useRouterConnect();
@@ -177,7 +174,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     ? { ...headerStyleData, ...headerMobileStyleData }
     : headerStyleData;
 
-  const headerData = context.defaultTheme?.header
+  const headerData = context?.defaultTheme?.header
     ? {
         ...theme.header,
         styleData: { ...mergedHeaderStyleData, fontFamily },

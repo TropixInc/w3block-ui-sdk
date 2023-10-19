@@ -16,19 +16,43 @@ const QrCodeError = lazy(() =>
     })
   )
 );
+const QrCodeValidated = lazy(() =>
+  import('../../../shared/components/QrCodeReader/QrCodeValidated').then(
+    (module) => ({ default: module.QrCodeValidated })
+  )
+);
+const TokenListTemplateSkeleton = lazy(() =>
+  import('../../../tokens/components/TokensListTemplate/Skeleton').then(
+    (module) => ({
+      default: module.TokenListTemplateSkeleton,
+    })
+  )
+);
+const Button = lazy(() =>
+  import('../../../tokens/components/Button').then((module) => ({
+    default: module.Button,
+  }))
+);
+const BaseTemplate = lazy(() =>
+  import('../BaseTemplate').then((module) => ({ default: module.BaseTemplate }))
+);
+const VerifyBenefit = lazy(() =>
+  import('../VerifyBenefit').then((module) => ({
+    default: module.VerifyBenefit,
+  }))
+);
+const PassCard = lazy(() =>
+  import('../PassCard').then((module) => ({
+    default: module.PassCard,
+  }))
+);
 import { TypeError } from '../../../shared/components/QrCodeReader/QrCodeError';
-import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Button } from '../../../tokens/components/Button';
-import { TokenListTemplateSkeleton } from '../../../tokens/components/TokensListTemplate/Skeleton';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import useGetPassByUser from '../../hooks/useGetPassByUser';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import useVerifyBenefit from '../../hooks/useVerifyBenefit';
-import { BaseTemplate } from '../BaseTemplate';
-import { PassCard } from '../PassCard';
-import { VerifyBenefit } from '../VerifyBenefit';
 
 const _PassesList = () => {
   const { data, isLoading } = useGetPassByUser();

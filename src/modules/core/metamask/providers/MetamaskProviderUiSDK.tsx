@@ -128,15 +128,19 @@ export const MetamaskProviderUiSDK = ({
 
   useEffect(() => {
     const getProvider = async () => {
-      const provider = await detectEthereumProvider({ silent: true });
-      setHasProvider(Boolean(provider));
-      const provider2 = new ethers.providers.Web3Provider(window.ethereum);
-      setProvider(provider2);
+      try {
+        const provider = await detectEthereumProvider({ silent: true });
+        setHasProvider(Boolean(provider));
+        const provider2 = new ethers.providers.Web3Provider(window.ethereum);
+        setProvider(provider2);
 
-      if (provider) {
-        updateWalletAndAccounts();
-        window.ethereum.on('accountsChanged', updateWallet);
-        window.ethereum.on('chainChanged', updateWalletAndAccounts);
+        if (provider) {
+          updateWalletAndAccounts();
+          window.ethereum.on('accountsChanged', updateWallet);
+          window.ethereum.on('chainChanged', updateWalletAndAccounts);
+        }
+      } catch (e) {
+        console.log(e);
       }
     };
 

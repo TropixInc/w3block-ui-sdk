@@ -1,9 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import { format } from 'date-fns';
 
-import { PaginationNumbers } from '../../../shared/components/Pagination';
+const PaginationNumbers = lazy(() =>
+  import('../../../shared/components/Pagination').then((module) => ({
+    default: module.PaginationNumbers,
+  }))
+);
+
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const TableBase = ({

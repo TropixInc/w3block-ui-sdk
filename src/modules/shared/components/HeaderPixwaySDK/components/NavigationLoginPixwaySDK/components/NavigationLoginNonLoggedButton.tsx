@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
 import UserIcon from '../../../../../assets/icons/user.svg?react';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
-import { PixwayButton } from '../../../../PixwayButton';
+const PixwayButton = lazy(() =>
+  import('../../../../PixwayButton/PixwayButton').then((mod) => ({
+    default: mod.PixwayButton,
+  }))
+);
 
 interface NavigationLoginNonLoggedButtonProps {
   signInRoute?: string;

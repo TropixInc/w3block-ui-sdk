@@ -1,6 +1,12 @@
+import { lazy } from 'react';
+
 import CheckCircledFilled from '../../assets/icons/checkCircledFilled.svg?react';
 import useTranslation from '../../hooks/useTranslation';
-import { ModalBase } from '../ModalBase';
+const ModalBase = lazy(() =>
+  import('../ModalBase').then((module) => ({
+    default: module.ModalBase,
+  }))
+);
 
 interface Props {
   isOpen: boolean;

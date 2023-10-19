@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy } from 'react';
 
-import { FAQ } from '../FAQ';
+const FAQ = lazy(() => import('../FAQ').then((m) => ({ default: m.FAQ })));
 
 interface ContainerWithFAQProps {
   children?: ReactNode;

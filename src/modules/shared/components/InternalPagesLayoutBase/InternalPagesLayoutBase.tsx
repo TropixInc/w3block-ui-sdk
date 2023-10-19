@@ -1,8 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy } from 'react';
 
 import classNames from 'classnames';
 
-import { Menu } from '../Menu';
+const Menu = lazy(() =>
+  import('../Menu').then((module) => ({ default: module.Menu }))
+);
 
 interface Props {
   classes?: {

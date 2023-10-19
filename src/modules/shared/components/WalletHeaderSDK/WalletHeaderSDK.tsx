@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, lazy } from 'react';
 
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -6,7 +6,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useUserWallet } from '../../hooks/useUserWallet';
 import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 import { useGetRightWallet } from '../../utils/getRightWallet';
-import { WalletCard } from '../WalletCard/WalletCard';
+const WalletCard = lazy(() =>
+  import('../WalletCard/WalletCard').then((module) => ({
+    default: module.WalletCard,
+  }))
+);
 
 export const WalletHeaderSDK = ({ title = 'Carteira' }: { title?: string }) => {
   const { mainWallet } = useUserWallet();

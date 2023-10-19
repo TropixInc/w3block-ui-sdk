@@ -1,13 +1,38 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'react-use';
 
-import { ErrorMessage } from '../../../checkout/components/ErrorMessage/ErrorMessage';
-import { InternalPagesLayoutBase } from '../../../shared';
+const ErrorMessage = lazy(() =>
+  import('../../../checkout/components/ErrorMessage/ErrorMessage').then(
+    (mod) => ({ default: mod.ErrorMessage })
+  )
+);
+
+const InternalPagesLayoutBase = lazy(() =>
+  import(
+    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
+  ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
+);
+
 import './index.css';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { BuySummarySDK } from '../../components/buySumarySDK/buySumarrySDK';
-import { PayementCompletedModal } from '../../components/paymentCompletedModal/PayementCompletedModal';
-import { UserCard } from '../../components/userCard/userCard';
+const BuySummarySDK = lazy(() =>
+  import('../../components/buySumarySDK/buySumarrySDK').then((mod) => ({
+    default: mod.BuySummarySDK,
+  }))
+);
+
+const PayementCompletedModal = lazy(() =>
+  import('../../components/paymentCompletedModal/PayementCompletedModal').then(
+    (mod) => ({ default: mod.PayementCompletedModal })
+  )
+);
+
+const UserCard = lazy(() =>
+  import('../../components/userCard/userCard').then((mod) => ({
+    default: mod.UserCard,
+  }))
+);
+
 import { useCreatePayment } from '../../hooks/useCreatePayment';
 import { useGetPaymentPreview } from '../../hooks/useGetPaymentPreview';
 import { useGetUserBalance } from '../../hooks/useGetUserBalance';

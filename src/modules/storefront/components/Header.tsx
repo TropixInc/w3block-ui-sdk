@@ -1,10 +1,19 @@
 import { lazy } from 'react';
 
 import { NavigationTabsPixwaySDKTabs } from '../../shared';
-const HeaderPixwaySDK = lazy(() =>
-  import('../../shared').then((module) => ({
-    default: module.HeaderPixwaySDK,
+const NavigationTabsPixwaySDKTabs = lazy(() =>
+  import(
+    '../../shared/components/HeaderPixwaySDK/components/NavigationTabsPixwaySDK/NavigationTabsPixwaySDK'
+  ).then((module) => ({
+    default: module.NavigationTabsPixwaySDK,
   }))
+);
+const HeaderPixwaySDK = lazy(() =>
+  import('../../shared/components/HeaderPixwaySDK/HeaderPixwaySDK').then(
+    (module) => ({
+      default: module.HeaderPixwaySDK,
+    })
+  )
 );
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';

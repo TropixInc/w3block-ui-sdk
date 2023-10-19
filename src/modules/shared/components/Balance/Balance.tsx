@@ -1,7 +1,13 @@
+import { lazy } from 'react';
+
 import classNames from 'classnames';
 
 import { chainIdToCode, useGetRightWallet } from '../../utils/getRightWallet';
-import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
+const CriptoValueComponent = lazy(() =>
+  import('../CriptoValueComponent/CriptoValueComponent').then((module) => ({
+    default: module.CriptoValueComponent,
+  }))
+);
 
 interface Classes {
   container?: string;

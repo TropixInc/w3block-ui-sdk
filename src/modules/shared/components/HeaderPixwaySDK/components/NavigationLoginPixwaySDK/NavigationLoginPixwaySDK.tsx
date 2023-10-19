@@ -1,9 +1,21 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
 import { usePixwaySession } from '../../../../hooks/usePixwaySession';
-import { NavigationLoginLoggedButton } from './components/NavigationLoginLoggedButton';
-import { NavigationLoginLoggedButtonMobile } from './components/NavigationLoginLoggedButtonMobile';
-import { NavigationLoginNonLoggedButton } from './components/NavigationLoginNonLoggedButton';
+const NavigationLoginLoggedButton = lazy(() =>
+  import('./components/NavigationLoginLoggedButton').then((mod) => ({
+    default: mod.NavigationLoginLoggedButton,
+  }))
+);
+const NavigationLoginLoggedButtonMobile = lazy(() =>
+  import('./components/NavigationLoginLoggedButtonMobile').then((mod) => ({
+    default: mod.NavigationLoginLoggedButtonMobile,
+  }))
+);
+const NavigationLoginNonLoggedButton = lazy(() =>
+  import('./components/NavigationLoginNonLoggedButton').then((mod) => ({
+    default: mod.NavigationLoginNonLoggedButton,
+  }))
+);
 
 interface NavigationLoginPixwaySDKProps {
   className?: string;

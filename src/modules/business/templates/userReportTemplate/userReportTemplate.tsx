@@ -1,19 +1,38 @@
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 
 import {
   Erc20TokenHistory,
   FromToInterface,
 } from '../../../dashboard/interface/ercTokenHistoryInterface';
-import { InternalPagesLayoutBase, useRouterConnect } from '../../../shared';
+const InternalPagesLayoutBase = lazy(() =>
+  import(
+    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
+  ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
+);
 import UserIcon from '../../../shared/assets/icons/userOutlined.svg?react';
-import { Pagination } from '../../../shared/components/Pagination';
-import {
-  TableDefault,
-  TableHeaderItem,
-} from '../../../shared/components/TableDefault/TableDefault';
+const Pagination = lazy(() =>
+  import('../../../shared/components/Pagination').then((mod) => ({
+    default: mod.Pagination,
+  }))
+);
+
+const TableDefault = lazy(() =>
+  import('../../../shared/components/TableDefault/TableDefault').then(
+    (mod) => ({
+      default: mod.TableDefault,
+    })
+  )
+);
+
+const ActionBusinessCardSDK = lazy(() =>
+  import('../../components/actionBusinessCardSDK').then((mod) => ({
+    default: mod.ActionBusinessCardSDK,
+  }))
+);
+import { TableHeaderItem } from '../../../shared/components/TableDefault/TableDefault';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { ActionBusinessCardSDK } from '../../components/actionBusinessCardSDK';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useGetAllReportsAdmin } from '../../hooks/useGetAllReportsAdmin';
 import { useGetAllReportsByOperatorId } from '../../hooks/useGetAllReportsByOperatorId';
 import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';

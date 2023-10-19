@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 
 import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
@@ -9,13 +9,23 @@ import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
-import { CartButton } from '../CartButton/CartButton';
+const CartButton = lazy(() =>
+  import('../CartButton/CartButton').then((mod) => ({
+    default: mod.CartButton,
+  }))
+);
 import TranslatableComponent from '../TranslatableComponent';
-import {
-  NavigationLoginPixwaySDK,
-  NavigationTabsPixwaySDK,
-  NavigationTabsPixwaySDKTabs,
-} from './components';
+const NavigationLoginPixwaySDK = lazy(() =>
+  import('./components/NavigationLoginPixwaySDK/NavigationLoginPixwaySDK').then(
+    (mod) => ({ default: mod.NavigationLoginPixwaySDK })
+  )
+);
+const NavigationTabsPixwaySDK = lazy(() => {
+  return import(
+    './components/NavigationTabsPixwaySDK/NavigationTabsPixwaySDK'
+  ).then((mod) => ({ default: mod.NavigationTabsPixwaySDK }));
+});
+import { NavigationTabsPixwaySDKTabs } from './components';
 
 interface HeaderPixwaySDKProps {
   headerClassName?: string;
@@ -163,6 +173,7 @@ const _HeaderPixwaySDK = ({
   return context?.defaultTheme || standalone ? (
     <div
       style={{
+        minHeight: '90px',
         backgroundColor: headerBgColor,
         margin,
         fontFamily:

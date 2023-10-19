@@ -11,14 +11,17 @@ const QrCodeError = lazy(() => import('../../../shared/components/QrCodeReader/Q
 import {
   TypeError,
 } from '../../../shared/components/QrCodeReader/QrCodeError';
-import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
-import { Spinner } from '../../../shared/components/Spinner';
+const QrCodeValidated = lazy(() => import('../../../shared/components/QrCodeReader/QrCodeValidated').then(module => ({ default: module.QrCodeValidated })));
+const Spinner = lazy(() => import('../../../shared/components/Spinner').then(module => ({ default: module.Spinner })));
+const Button = lazy(() => import('../../../tokens/components/Button').then(module => ({ default: module.Button })));
+const BaseTemplate = lazy(() => import('../BaseTemplate').then(module => ({ default: module.BaseTemplate })));
+const VerifyBenefit = lazy(() => import('../VerifyBenefit').then(module => ({ default: module.VerifyBenefit })));
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Button } from '../../../tokens/components/Button';
 import GenericTable, {
   ColumnType,
 } from '../../../tokens/components/GenericTable/GenericTable';
@@ -29,8 +32,7 @@ import useGetPassById from '../../hooks/useGetPassById';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import useVerifyBenefit from '../../hooks/useVerifyBenefit';
 import { TokenPassBenefits, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
-import { BaseTemplate } from '../BaseTemplate';
-import { VerifyBenefit } from '../VerifyBenefit';
+
 
 interface TableRow {
   name: ReactNode;

@@ -1,9 +1,50 @@
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { FormCompleteKYCWithoutLayout } from '../../../auth/components/FormCompleteKYCWithoutLayout';
+const FormCompleteKYCWithoutLayout = lazy(() =>
+  import('../../../auth/components/FormCompleteKYCWithoutLayout').then(
+    (module) => ({
+      default: module.FormCompleteKYCWithoutLayout,
+    })
+  )
+);
+
+const KYCStatus = lazy(() =>
+  import('../KYCStatus').then((module) => ({
+    default: module.default,
+  }))
+);
+const Menu = lazy(() =>
+  import('../Menu').then((module) => ({
+    default: module.Menu,
+  }))
+);
+
+const ModalBase = lazy(() =>
+  import('../ModalBase').then((module) => ({
+    default: module.ModalBase,
+  }))
+);
+
+const MyProfile = lazy(() =>
+  import('../MyProfile/MyProfile').then((module) => ({
+    default: module.MyProfile,
+  }))
+);
+
+const PixwayButton = lazy(() =>
+  import('../PixwayButton').then((module) => ({
+    default: module.PixwayButton,
+  }))
+);
+
+const Spinner = lazy(() =>
+  import('../Spinner').then((module) => ({
+    default: module.Spinner,
+  }))
+);
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
@@ -12,12 +53,6 @@ import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenan
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
-import KYCStatus from '../KYCStatus';
-import { Menu } from '../Menu';
-import { ModalBase } from '../ModalBase';
-import { MyProfile } from '../MyProfile/MyProfile';
-import { PixwayButton } from '../PixwayButton';
-import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {

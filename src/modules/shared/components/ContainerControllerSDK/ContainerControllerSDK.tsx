@@ -1,12 +1,21 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy } from 'react';
 
 import { ContentTypeEnum } from '../../../poll';
 import { position } from '../../enums';
 import { FAQContextEnum } from '../../enums/FAQContext';
+const ContainerBeside = lazy(() =>
+  import('./ContainerBeside').then((m) => ({ default: m.ContainerBeside }))
+);
+const ContainerCenter = lazy(() =>
+  import('./ContainerCenter').then((m) => ({ default: m.ContainerCenter }))
+);
+
+const PoweredBy = lazy(() =>
+  import('../PoweredBy').then((m) => ({ default: m.PoweredBy }))
+);
+
 import { ContainerTextBesideProps } from '../ContainerTextBeside/ContainerTextBeside';
-import { ExtraBy, PoweredBy } from '../PoweredBy';
-import { ContainerBeside } from './ContainerBeside';
-import { ContainerCenter } from './ContainerCenter';
+import { ExtraBy } from '../PoweredBy';
 
 interface ContainerControllerProps {
   bgColor?: string;

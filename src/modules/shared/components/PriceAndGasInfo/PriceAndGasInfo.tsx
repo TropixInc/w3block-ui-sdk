@@ -1,7 +1,17 @@
+import { lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
-import { Shimmer } from '../Shimmer';
+const CriptoValueComponent = lazy(() =>
+  import('../CriptoValueComponent/CriptoValueComponent').then((module) => ({
+    default: module.CriptoValueComponent,
+  }))
+);
+const Shimmer = lazy(() =>
+  import('../Shimmer').then((module) => ({
+    default: module.Shimmer,
+  }))
+);
+
 import TranslatableComponent from '../TranslatableComponent';
 
 interface PriceAndGasInfo {
