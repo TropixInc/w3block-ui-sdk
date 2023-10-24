@@ -37,7 +37,7 @@ const TableRows = <T, K extends keyof T>({
     ) : null;
   });
 
-  return <tbody>{rows}</tbody>;
+  return <tbody className="pw-bg-white">{rows}</tbody>;
 };
 
 export default TableRows;

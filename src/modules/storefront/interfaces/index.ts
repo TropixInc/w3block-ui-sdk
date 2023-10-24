@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type TemplateData = {
   title: string;
   slug: string;
@@ -349,6 +350,8 @@ export interface ProductsDataStyleData {
   valueFontBold?: boolean;
   valueFontItalic?: boolean;
   valueFontSizeType?: string;
+  cardProductOverlay?: string;
+  productOverlay?: boolean;
 }
 
 interface ComboBoxReturnInterface {

@@ -2,6 +2,18 @@ import { lazy } from 'react';
 
 import format from 'date-fns/format';
 
+const TextFieldDisplay = lazy(() =>
+  import('../SmartDisplay/TextFieldDisplay').then((m) => ({
+    default: m.TextFieldDisplay,
+  }))
+);
+
+const TextFieldEncrypted = lazy(() =>
+  import('../SmartDisplay/TextFieldEncrypted').then((m) => ({
+    default: m.TextFieldEncrypted,
+  }))
+);
+
 import { imageFieldTypes } from '../../../shared/utils/imageFieldTypes';
 import { selectionFieldTypes } from '../../../shared/utils/selectionFieldTypes';
 import { TokenizationFieldTypes } from '../../enums/tokenizationFieldTypes';
@@ -15,13 +27,6 @@ import {
   SelectConfig,
 } from '../../interfaces/DynamicFormConfiguration';
 import { DynamicFormFieldValue } from '../../interfaces/DynamicFormFieldValue';
-
-const TextFieldDisplay = lazy(() =>
-  import('../SmartDisplay/TextFieldDisplay').then((m) => ({
-    default: m.TextFieldDisplay,
-  }))
-);
-
 import { TextFieldDisplayClasses } from '../SmartDisplay/TextFieldDisplay';
 
 interface DataDisplayProps {
@@ -46,7 +51,7 @@ const getDisplayValue = (
     return `${typedValue.x} x ${typedValue.y} cm`;
   }
   if (fieldType === TokenizationFieldTypes.DATE) {
-    return format(value as Date, 'dd/MM/yyyy');
+    return format(new Date(value as string), 'dd/MM/yyyy');
   }
   if (selectionFieldTypes.includes(fieldType)) {
     const { options } = formConfig[fieldName].config as SelectConfig;
@@ -68,11 +73,17 @@ export const SmartDataDisplayer = ({
     type,
     config: { label },
   } = formConfig[fieldName];
-
-  if (imageFieldTypes.includes(type)) return null;
   const displayValue = getDisplayValue(formConfig, value, type, fieldName);
 
-  return (
+  if (imageFieldTypes.includes(type)) return null;
+  return type === TokenizationFieldTypes.ENCRYPTED_TEXT ? (
+    <TextFieldEncrypted
+      label={label}
+      inline={inline}
+      value={displayValue}
+      classes={classes}
+    />
+  ) : (
     <TextFieldDisplay
       label={label}
       inline={inline}

@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "1.9.25-alpha.10",
+  "version": "1.9.33",
   "type": "module",
   "files": [
     "dist"
@@ -44,6 +44,7 @@
     "i18next-browser-languagedetector": "^6.1.4",
     "jwt-decode": "^3.1.2",
     "launchdarkly-react-client-sdk": "^2.29.2",
+    "openpgp": "^5.10.2",
     "qrcode.react": "^3.1.0",
     "react-credit-cards-2": "^1.0.1",
     "react-dropzone": "^12.0.4",

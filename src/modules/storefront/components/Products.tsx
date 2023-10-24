@@ -70,6 +70,8 @@ export const Products = ({ data }: { data: ProductsData }) => {
     sessionButtonText,
     margin,
     padding,
+    cardProductOverlay,
+    productOverlay,
   } = mergedStyleData;
   const {
     moduleTitle,
@@ -156,6 +158,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   key={card.id}
                   product={card}
                   config={mergedStyleData}
+                  cardType={cardType}
                 />
               ))
           : cardType == 'content' && (!format || format == 'product')
@@ -195,7 +198,8 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   }}
                 />
               ))
-          : clampedProducts?.map((p) => (
+          : format === 'product'
+          ? clampedProducts?.map((p) => (
               <Card
                 key={p.id}
                 product={p}
@@ -203,6 +207,31 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   styleData: mergedStyleData,
                   contentData: mergedContentData,
                 }}
+              />
+            ))
+          : clampedProducts?.map((p) => (
+              <ContentCard
+                key={p.id}
+                product={{
+                  title: p?.name ?? '',
+                  value: p?.prices?.[0]?.amount ?? '',
+                  hasLink: p?.hasLink,
+                  id: p?.id ?? '',
+                  link: p?.slug ?? '',
+                  image: {
+                    assetId: p?.images?.[0]?.assetId ?? '',
+                    assetUrl: p?.images?.[0]?.original ?? '',
+                  },
+                  description: p?.description,
+                  category: p?.tags?.map((val) => ({
+                    label: val?.name ?? '',
+                    value: val?.id ?? '',
+                  })),
+                  cardOverlayColor: cardProductOverlay,
+                  overlay: productOverlay,
+                }}
+                config={mergedStyleData}
+                cardType={cardType}
               />
             ))}
       </div>
@@ -253,6 +282,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   product={card}
                   config={mergedStyleData}
                   key={card.id}
+                  cardType={cardType}
                 />
               </SwiperSlide>
             ))
@@ -293,7 +323,8 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 />
               </SwiperSlide>
             ))
-          : clampedProducts?.map((p) => (
+          : format === 'product'
+          ? clampedProducts?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
                 <Card
                   key={p.id}
@@ -302,6 +333,33 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     styleData: mergedStyleData,
                     contentData: mergedContentData,
                   }}
+                />
+              </SwiperSlide>
+            ))
+          : clampedProducts?.map((p) => (
+              <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
+                <ContentCard
+                  key={p.id}
+                  product={{
+                    title: p?.name ?? '',
+                    value: p?.prices?.[0]?.amount ?? '',
+                    hasLink: p?.hasLink,
+                    id: p?.id ?? '',
+                    link: p?.slug ?? '',
+                    image: {
+                      assetId: p?.images?.[0]?.assetId ?? '',
+                      assetUrl: p?.images?.[0]?.original ?? '',
+                    },
+                    description: p?.description ?? '',
+                    cardOverlayColor: cardProductOverlay,
+                    overlay: productOverlay,
+                    category: p?.tags?.map((val) => ({
+                      label: val?.name ?? '',
+                      value: val?.id ?? '',
+                    })),
+                  }}
+                  config={mergedStyleData}
+                  cardType={cardType}
                 />
               </SwiperSlide>
             ))}
