@@ -1,8 +1,13 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, lazy } from 'react';
 
 import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { CardTypesEnum, ProductsData } from '../../../storefront/interfaces';
-import { ImageSDK } from '../ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK/ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
+
 import './Card.css';
 
 export const Card = ({

@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 
-import { differenceInHours, format } from 'date-fns';
+import differenceInHours from 'date-fns/differenceInHours';
+import format from 'date-fns/format';
 
 import { PassDates } from '../../../pass/interfaces/PassDates';
-import { ReactComponent as ClockIcon } from '../../../shared/assets/icons/clockOutlined.svg';
+import ClockIcon from '../../../shared/assets/icons/clockOutlined.svg?react';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 interface Props {

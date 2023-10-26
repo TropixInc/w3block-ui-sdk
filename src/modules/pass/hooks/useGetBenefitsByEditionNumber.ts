@@ -1,5 +1,3 @@
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -31,8 +29,7 @@ const useGetBenefitsByEditionNumber = ({
       ),
     {
       enabled:
-        !validator.isEmpty(String(tokenPassId)) &&
-        !validator.isEmpty(String(editionNumber)),
+        tokenPassId != null && editionNumber != null && tokenPassId !== '',
     }
   );
 };

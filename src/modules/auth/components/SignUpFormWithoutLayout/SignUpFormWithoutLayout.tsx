@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -7,22 +7,38 @@ import { I18NLocaleEnum } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import { boolean, object, string } from 'yup';
 
-import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { useSignUp } from '../../hooks/useSignUp';
-import { AuthButton } from '../AuthButton';
-import { AuthCheckbox } from '../AuthCheckbox';
+import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../../templates/SignUpTemplate';
+const AuthButton = lazy(() => {
+  return import('../AuthButton').then((m) => ({ default: m.AuthButton }));
+});
+const AuthCheckbox = lazy(() => {
+  return import('../AuthCheckbox').then((m) => ({ default: m.AuthCheckbox }));
+});
 import { AuthFooter } from '../AuthFooter';
+const AuthPasswordTips = lazy(() => {
+  return import('../AuthPasswordTips').then((m) => ({
+    default: m.AuthPasswordTips,
+  }));
+});
 import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
-import { AuthPasswordTips } from '../AuthPasswordTips';
-import { AuthTextController } from '../AuthTextController';
+const AuthTextController = lazy(() => {
+  return import('../AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }));
+});
 import { SignUpFormData } from '../SignUpForm/interface';
-import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../SignUpTemplate';
-import { VerifySignUpWithCodeWithoutLayout } from '../VerifySignUpWithCodeWithoutLayout';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+const VerifySignUpWithCodeWithoutLayout = lazy(() => {
+  return import(
+    '../VerifySignUpWithCodeWithoutLayout/VerifySignUpWithCodeWithoutLayout'
+  ).then((m) => ({ default: m.VerifySignUpWithCodeWithoutLayout }));
+});
 
 interface Props {
   onSubmit?: (data: SignUpFormData) => void;

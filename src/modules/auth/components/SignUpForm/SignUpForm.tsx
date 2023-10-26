@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 
@@ -6,20 +6,41 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
 import { boolean, object, string } from 'yup';
 
-import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
-import { Link } from '../../../shared/components/Link';
+const Link = lazy(() =>
+  import('../../../shared/components/Link').then((m) => ({ default: m.Link }))
+);
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
-import { AuthButton } from '../AuthButton';
-import { AuthCheckbox } from '../AuthCheckbox/AuthCheckbox';
+const AuthButton = lazy(() => {
+  return import('../AuthButton').then((m) => ({ default: m.AuthButton }));
+});
+const AuthCheckbox = lazy(() => {
+  return import('../AuthCheckbox/AuthCheckbox').then((m) => ({
+    default: m.AuthCheckbox,
+  }));
+});
+
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
-import { AuthPasswordTips } from '../AuthPasswordTips';
-import { AuthTextController } from '../AuthTextController';
+const AuthLayoutBase = lazy(() =>
+  import('../AuthLayoutBase').then((m) => ({ default: m.AuthLayoutBase }))
+);
+import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
+const AuthPasswordTips = lazy(() => {
+  return import('../AuthPasswordTips').then((m) => ({
+    default: m.AuthPasswordTips,
+  }));
+});
+const AuthTextController = lazy(() => {
+  return import('../AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }));
+});
 import { SignUpFormData } from './interface';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 
 interface Props {
   onSubmit: (data: SignUpFormData) => void;

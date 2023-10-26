@@ -1,8 +1,14 @@
-import Link from 'next/link';
+import { lazy } from 'react';
 
-import { ModalBase } from '../../../shared/components/ModalBase';
+import Link from 'next/link';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((module) => ({
+    default: module.ModalBase,
+  }))
+);
+
 import useTranslation from '../../hooks/useTranslation';
-import PDFViewer from './PDF';
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -34,12 +40,13 @@ export const CertificateIssuanceModal = ({
         <h2 className="pw-text-center pw-text-[#000000] pw-font-semibold pw-text-xl pw-leading-[30px] pw-mb-[33px]">
           {translate('components>certificateModal>title')}
         </h2>
-        <PDFViewer
+
+        {/* <PDFViewer
           src={`${process.env.NEXT_PUBLIC_PDF_API_URL}certification/${contractAddress}/${chainId}/${tokenId}`}
         />
         <p className="pw-mt-4 pw-mb-10 pw-text-[13px] pw-leading-[15px]">
           Preview
-        </p>
+        </p> */}
         <Link
           href={`${process.env.NEXT_PUBLIC_PDF_API_URL}certification/${contractAddress}/${chainId}/${tokenId}`}
         >

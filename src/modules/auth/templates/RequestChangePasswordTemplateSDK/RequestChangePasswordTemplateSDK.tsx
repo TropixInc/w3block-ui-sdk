@@ -1,15 +1,30 @@
-import { useContext, useMemo } from 'react';
+import { lazy, useContext, useMemo } from 'react';
 
-import { ContainerControllerSDK } from '../../../shared';
-import { Box } from '../../../shared/components/Box/Box';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { ThemeContext } from '../../../storefront/contexts';
-import { RequestPasswordChangeWithoutLayout } from '../../components/RequestPasswordChangeWithoutLayout';
+const RequestPasswordChangeWithoutLayout = lazy(() =>
+  import('../../components/RequestPasswordChangeWithoutLayout').then(
+    (module) => ({
+      default: module.RequestPasswordChangeWithoutLayout,
+    })
+  )
+);
+
 import { AllAuthPageProps } from '../CompleteProfileCustomTemplate';
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({
+    default: module.ContainerControllerSDK,
+  }))
+);
 
 export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
   const context = useContext(ThemeContext);

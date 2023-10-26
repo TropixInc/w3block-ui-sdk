@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import { add } from 'date-fns';
+import add from 'date-fns/add';
 import { QRCodeSVG } from 'qrcode.react';
 
-import { useProfile } from '../../../shared';
 import { Spinner } from '../../../shared/components/Spinner';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import useTranslation from '../../../shared/hooks/useTranslation';
 interface iQrCodeSection {
   hasExpired?: boolean;
@@ -14,6 +14,7 @@ interface iQrCodeSection {
   secret: string;
   isDynamic: boolean;
   benefitId: string;
+  refetchSecret: () => void;
 }
 
 export const QrCodeSection = ({
@@ -22,6 +23,7 @@ export const QrCodeSection = ({
   secret,
   isDynamic,
   benefitId,
+  refetchSecret,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState('');
   const { setNewCountdown: setQrCountDown, ...qrCountDown } = useCountdown();
@@ -31,8 +33,9 @@ export const QrCodeSection = ({
 
   useEffect(() => {
     if (qrCountDown.seconds === 0 && secret !== undefined) {
+      refetchSecret();
       setQrCountDown(add(new Date(), { seconds: 15 }));
-      setCodeQr(`${editionNumber};${profile?.data?.id};${secret};${benefitId}`);
+      setCodeQr(`${editionNumber},${profile?.data?.id},${secret},${benefitId}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrCountDown.isActive, secret]);

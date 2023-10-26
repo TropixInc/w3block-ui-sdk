@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/esm/locale';
+import ptBR from 'date-fns/esm/locale/pt-BR';
+import format from 'date-fns/format';
 
-import { useRouterConnect } from '../../../shared';
-import { ReactComponent as ExternalLinkIcon } from '../../../shared/assets/icons/externalLink.svg';
+import ExternalLinkIcon from '../../../shared/assets/icons/externalLink.svg?react';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import { SmartDataDisplayer } from '../../components/SmartDataDisplayer';
+import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
+import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 interface PublicTokenTemplateSDKProps {
   chainId?: string;
@@ -39,6 +43,11 @@ const _PublicTokenTemplateSDK = ({
     chainId: chainId ?? chainIdQ,
     tokenId: tokenId ?? tokenIdQ,
   });
+
+  const dynamicData = useDynamicDataFromTokenCollection(
+    publicTokenResponse?.data?.dynamicInformation?.tokenData,
+    publicTokenResponse?.data?.dynamicInformation?.publishedTokenTemplate
+  );
 
   useEffect(() => {
     if (
@@ -120,27 +129,28 @@ const _PublicTokenTemplateSDK = ({
         </div>
       </ContentArea>
       <ContentArea title="">
-        <div className="pw-grid pw-grid-cols-2">
-          {Object.keys(
-            publicTokenResponse?.data?.dynamicInformation?.tokenData ?? {}
-          ).map((key) => (
-            <div key={key}>
-              <Title
-                title={
-                  publicTokenResponse?.data?.dynamicInformation
-                    ?.publishedTokenTemplate[key]?.config?.label + ':'
-                }
-              />
-              <p className="pw-font-robto pw-mt-2 pw-mb-8">
-                {publicTokenResponse?.data?.dynamicInformation?.tokenData[key]
-                  ? (publicTokenResponse?.data?.dynamicInformation?.tokenData[
-                      key
-                    ] as string)
-                  : ''}
-              </p>
+        {dynamicData ? (
+          <FormConfigurationContext.Provider
+            value={
+              publicTokenResponse?.data?.dynamicInformation
+                ?.publishedTokenTemplate ?? {}
+            }
+          >
+            <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-x-[21px] pw-gap-y-8 sm:pw-gap-y-8 sm:pw-pt-6 pw-break-words">
+              {dynamicData.map(({ id, value }: { id: any; value: any }) => (
+                <SmartDataDisplayer
+                  fieldName={id}
+                  key={id}
+                  value={value}
+                  inline
+                  classes={{
+                    label: 'pw-font-medium',
+                  }}
+                />
+              ))}
             </div>
-          ))}
-        </div>
+          </FormConfigurationContext.Provider>
+        ) : null}
       </ContentArea>
       <ContentArea title="">
         <div className="">

@@ -1,16 +1,16 @@
-import { useContext, useMemo } from 'react';
+import { lazy, useContext, useMemo } from 'react';
 
-import { ContentTypeEnum } from '../../../poll';
-import {
-  ContainerControllerSDK,
-  position,
-  ContainerControllerClasses,
-  ExtraBy,
-} from '../../../shared';
-import { Box } from '../../../shared/components/Box/Box';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
+
+import { ContentTypeEnum } from '../../../poll/enums/contentType';
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
+import { position } from '../../../shared/enums/styleConfigs';
 import {
   breakpointsEnum,
   useBreakpoints,
@@ -18,7 +18,19 @@ import {
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ThemeContext } from '../../../storefront/contexts';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
-import { SignUpFormWithoutLayout } from '../../components/SignUpFormWithoutLayout';
+const SignUpFormWithoutLayout = lazy(() =>
+  import('../../components/SignUpFormWithoutLayout').then((module) => ({
+    default: module.SignUpFormWithoutLayout,
+  }))
+);
+
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({
+    default: module.ContainerControllerSDK,
+  }))
+);
 
 interface SignUpTemplateSDKProps {
   bgColor?: string;

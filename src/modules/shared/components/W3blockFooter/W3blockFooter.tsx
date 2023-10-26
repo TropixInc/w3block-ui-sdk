@@ -4,15 +4,15 @@ import { CSSProperties, useContext } from 'react';
 
 import { ThemeContext, ThemeProvider } from '../../../storefront/contexts';
 import { FooterData } from '../../../storefront/interfaces';
-import { ReactComponent as DiscordIcon } from '../../assets/icons/discord.svg';
-import { ReactComponent as FacebookIcon } from '../../assets/icons/facebook.svg';
-import { ReactComponent as GlobeIcon } from '../../assets/icons/globe.svg';
-import { ReactComponent as InstagramIcon } from '../../assets/icons/instagram.svg';
-import { ReactComponent as LinkedinIcon } from '../../assets/icons/linkedin.svg';
-import { ReactComponent as TelegramIcon } from '../../assets/icons/message.svg';
-import { ReactComponent as TwitterIcon } from '../../assets/icons/twitter.svg';
-import W3blockLogo from '../../assets/icons/weblock_logo.svg';
-import { ReactComponent as WhatsappIcon } from '../../assets/icons/whatsapp.svg';
+import DiscordIcon from '../../assets/icons/discord.svg?react';
+import FacebookIcon from '../../assets/icons/facebook.svg?react';
+import GlobeIcon from '../../assets/icons/globe.svg?react';
+import InstagramIcon from '../../assets/icons/instagram.svg?react';
+import LinkedinIcon from '../../assets/icons/linkedin.svg?react';
+import TelegramIcon from '../../assets/icons/message.svg?react';
+import TwitterIcon from '../../assets/icons/twitter.svg?react';
+import W3blockLogo from '../../assets/icons/weblock_logo.svg?react';
+import WhatsappIcon from '../../assets/icons/whatsapp.svg?react';
 import { convertSpacingToCSS } from '../../utils/convertSpacingToCSS';
 import { ExtraBy } from '../PoweredBy';
 import TranslatableComponent from '../TranslatableComponent';
@@ -182,7 +182,7 @@ const _W3blockFooter = ({
       {styleData?.w3blockSignature && (
         <div className="pw-w-full pw-py-[14px] pw-flex pw-justify-center pw-itens-center pw-place-items-center pw-h-[14px] pw-bg-white pw-font-medium pw-text-xs">
           <p>Copyright {new Date().getFullYear()} -</p>
-          <img className="pw-h-[20px]" src={W3blockLogo} />
+          <W3blockLogo className="pw-h-20px" />
         </div>
       )}
     </div>

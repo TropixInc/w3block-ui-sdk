@@ -1,5 +1,17 @@
-import { InternalPagesLayoutBase } from '../../../shared';
-import { MintedInfoCard } from '../../../shared/components/MintedInfoCard';
+import { lazy } from 'react';
+
+const InternalPagesLayoutBase = lazy(() =>
+  import('../../../shared').then((m) => ({
+    default: m.InternalPagesLayoutBase,
+  }))
+);
+
+const MintedInfoCard = lazy(() =>
+  import('../../../shared/components/MintedInfoCard').then((m) => ({
+    default: m.MintedInfoCard,
+  }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
@@ -8,7 +20,9 @@ import {
   Dimensions2DValue,
   Dimensions3DValue,
 } from '../../interfaces/DimensionsValue';
-import { TokenDetailsCard } from '../TokenDetailsCard';
+const TokenDetailsCard = lazy(() =>
+  import('../TokenDetailsCard').then((m) => ({ default: m.TokenDetailsCard }))
+);
 
 const _TokenDetailsTemplate = () => {
   const router = useRouterConnect();

@@ -1,6 +1,10 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, lazy } from 'react';
 
-import { ImageSDK } from '../../shared/components/ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../../shared/components/ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ImagePlusTextData } from '../interfaces';
@@ -77,6 +81,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               src={image?.assetUrl}
               className="pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg"
               width={500}
+              height={274}
               quality="eco"
             />
           </div>

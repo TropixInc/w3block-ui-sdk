@@ -1,5 +1,5 @@
-import { ReactComponent as ETHIcon } from '../../assets/icons/Eth.svg';
-import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
+import ETHIcon from '../../assets/icons/Eth.svg?react';
+import MaticIcon from '../../assets/icons/maticIcon.svg?react';
 import { CurrencyEnum } from '../../enums/Currency';
 import useTranslation from '../../hooks/useTranslation';
 type CurrencyObjectType = {
@@ -13,6 +13,8 @@ export const CriptoValueComponent = ({
   crypto,
   showFree = false,
   dontShow = false,
+  pointsPrecision = 'integer',
+  textColor,
 }: {
   code?: string;
   value: string;
@@ -21,6 +23,8 @@ export const CriptoValueComponent = ({
   crypto?: boolean;
   showFree?: boolean;
   dontShow?: boolean;
+  pointsPrecision?: 'decimal' | 'integer';
+  textColor?: string;
 }) => {
   const [translate] = useTranslation();
   const getIcon = () => {
@@ -32,22 +36,36 @@ export const CriptoValueComponent = ({
           <MaticIcon style={{ width: size + 'px', height: size + 'px' }} />
         );
       default:
-        return <p className="pw-text-sm pw-text-gray-700">{code}</p>;
+        return (
+          <p
+            style={textColor ? { color: textColor } : {}}
+            className={`pw-text-sm pw-text-gray-700 ${fontClass}`}
+          >
+            {code}
+          </p>
+        );
     }
   };
 
   const getCryptoValueByCode = () => {
     if (code === CurrencyEnum.ETHEREUM) {
       return Number(Number(value).toFixed(4));
-    } else {
+    } else if (code === CurrencyEnum.MATIC) {
       return Number(Number(value).toFixed(3));
+    } else {
+      return pointsPrecision == 'decimal'
+        ? Number(value).toFixed(2)
+        : Number(Number(value).toFixed(0));
     }
   };
 
   return dontShow ? null : (
     <div className="pw-flex pw-gap-1 pw-items-center">
       {crypto && getIcon()}
-      <p className={`pw-font-semibold pw-text-black ${fontClass}`}>
+      <p
+        style={textColor ? { color: textColor } : {}}
+        className={`pw-font-semibold pw-text-black ${fontClass}`}
+      >
         {parseFloat(value) === 0 && showFree
           ? translate('commerce>checkout>free')
           : crypto

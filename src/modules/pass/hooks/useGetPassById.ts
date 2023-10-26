@@ -1,5 +1,3 @@
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -21,7 +19,7 @@ const useGetPassById = (passId: string) => {
         ).replace('{id}', passId ?? '')
       ),
     {
-      enabled: validator.isUUID(passId),
+      enabled: passId != undefined && passId != '',
     }
   );
 };

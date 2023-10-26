@@ -1,7 +1,7 @@
-import { ReactComponent as PendingIcon } from '../../assets/icons/clock.svg';
-// import { ReactComponent as CopyIcon } from '../../assets/icons/copy.svg';
-import { ReactComponent as RejectIcon } from '../../assets/icons/minusCircle.svg';
-import { ReactComponent as ApprovedIcon } from '../../assets/icons/plusCircle.svg';
+import PendingIcon from '../../assets/icons/clock.svg?react';
+// import  CopyIcon  from '../../assets/icons/copy.svg?react';
+import RejectIcon from '../../assets/icons/minusCircle.svg?react';
+import ApprovedIcon from '../../assets/icons/plusCircle.svg?react';
 import {
   Erc20ActionStatus,
   Statement,
@@ -76,7 +76,9 @@ export const StatementComponentSDK = ({
         <div>
           <span className="pw-text-black pw-text-sm pw-font-semibold">
             {statement.transactionType == 'sending' ? '-' : '+'}{' '}
-            {statement.amount}{' '}
+            {statement.pointsPrecision == 'integer'
+              ? statement.amount.toFixed(0)
+              : statement.amount.toFixed(2)}{' '}
           </span>
           <span className="pw-text-black pw-text-[13px] pw-font-normal">
             {statement.currency}

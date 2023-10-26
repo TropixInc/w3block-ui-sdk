@@ -1,17 +1,40 @@
 /* eslint-disable no-useless-escape */
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import Cards from 'react-credit-cards-2';
 
 import cardValidator from 'card-validator';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
-import { Spinner } from '../../../shared/components/Spinner';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({
+      default: m.WeblockButton,
+    })
+  )
+);
+
 import { AvailableInstallmentInfo } from '../../interface/interface';
-import { CheckoutCustomizableInput } from '../CheckoutCustomizableInput/CheckoutCustomizableInput';
-import { CheckoutInstalments } from '../CheckoutInstallments/CheckoutInstalments';
-import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
+const CheckoutCustomizableInput = lazy(() =>
+  import('../CheckoutCustomizableInput/CheckoutCustomizableInput').then(
+    (m) => ({ default: m.CheckoutCustomizableInput })
+  )
+);
+const CheckoutInstalments = lazy(() =>
+  import('../CheckoutInstallments/CheckoutInstalments').then((m) => ({
+    default: m.CheckoutInstalments,
+  }))
+);
+const ErrorMessage = lazy(() =>
+  import('../ErrorMessage/ErrorMessage').then((m) => ({
+    default: m.ErrorMessage,
+  }))
+);
 
 interface CheckoutPaymentComponentProps {
   inputs: INPUTS_POSSIBLE[];

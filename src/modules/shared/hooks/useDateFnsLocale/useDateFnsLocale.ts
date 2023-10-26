@@ -1,4 +1,5 @@
-import { ptBR, enUS } from 'date-fns/locale';
+import enUS from 'date-fns/locale/en-US';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import useTranslation from '../useTranslation';
 

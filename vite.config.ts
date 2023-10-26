@@ -1,7 +1,8 @@
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import url from 'url';
-import { defineConfig } from 'vite';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import viteCompression from 'vite-plugin-compression';
 import dts from 'vite-plugin-dts';
 import svgr from 'vite-plugin-svgr';
 
@@ -20,9 +21,15 @@ export default defineConfig({
       fileName: 'w3block-ui-sdk',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'next-auth', 'react-query'],
+      external: [
+        'react',
+        'react-dom',
+        'next-auth',
+        'react-query',
+        'html5-qrcode',
+      ],
       output: {
-        sourcemap: true,
+        sourcemap: false,
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
@@ -34,6 +41,8 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
+    viteCompression(),
+    splitVendorChunkPlugin(),
     dts({
       insertTypesEntry: true,
     }),

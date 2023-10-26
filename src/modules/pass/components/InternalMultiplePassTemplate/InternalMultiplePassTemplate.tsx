@@ -1,7 +1,19 @@
-import { InternalPagesLayoutBase } from '../../../shared';
+const InternalPagesLayoutBase = lazy(() =>
+  import('../../../shared/components/InternalPagesLayoutBase').then((mod) => ({
+    default: mod.InternalPagesLayoutBase,
+  }))
+);
+
+const TokenDetailsCard = lazy(() =>
+  import('../../../tokens/components/TokenDetailsCard').then((mod) => ({
+    default: mod.TokenDetailsCard,
+  }))
+);
+
+import { lazy } from 'react';
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useRouter from '../../../shared/hooks/useRouter';
-import { TokenDetailsCard } from '../../../tokens/components/TokenDetailsCard';
 import { usePublicTokenData } from '../../../tokens/hooks/usePublicTokenData';
 import {
   Dimensions2DValue,

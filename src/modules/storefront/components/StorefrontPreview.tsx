@@ -1,16 +1,23 @@
-import { ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  lazy,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useEffectOnce } from 'react-use';
 
 import { getPageMap } from '../../custom/utils/customMap';
-import { useRouterConnect } from '../../shared';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import {
   breakpointsEnum,
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useUserWallet } from '../../shared/hooks/useUserWallet';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { ThemeContext, ThemeProvider } from '../contexts';
+import { ThemeContext } from '../contexts/ThemeContext';
 import {
   DynamicApiModuleInterface,
   MainModuleThemeInterface,
@@ -19,43 +26,68 @@ import {
   Theme,
 } from '../interfaces';
 import { DynamicApiProvider } from '../provider/DynamicApiProvider';
-import { Page404 } from './404';
-import { Accordions } from './Accordions';
-import { Banner } from './Banner';
-import { Cookies } from './Cookies';
-import { Footer } from './Footer';
-import { GridItemArea } from './GridItemArea';
-import { Header } from './Header';
-import { ImagePlusText } from './ImagePlusText';
-import { Menu } from './Menu';
-import { Midia } from './Midia';
-import { Paragraph } from './Paragraph';
-import { ProductPage } from './ProductPage';
-import { Products } from './Products';
+
+const Page404 = lazy(() =>
+  import('./404').then((m) => ({ default: m.Page404 }))
+);
+
+const Header = lazy(() =>
+  import('./Header').then((m) => ({ default: m.Header }))
+);
+const Footer = lazy(() =>
+  import('./Footer').then((m) => ({ default: m.Footer }))
+);
+const Banner = lazy(() =>
+  import('./Banner').then((m) => ({ default: m.Banner }))
+);
+const Cookies = lazy(() =>
+  import('./Cookies').then((m) => ({ default: m.Cookies }))
+);
+const Accordions = lazy(() =>
+  import('./Accordions').then((m) => ({ default: m.Accordions }))
+);
+const GridItemArea = lazy(() =>
+  import('./GridItemArea').then((m) => ({ default: m.GridItemArea }))
+);
+const ImagePlusText = lazy(() =>
+  import('./ImagePlusText').then((m) => ({ default: m.ImagePlusText }))
+);
+const Menu = lazy(() => import('./Menu').then((m) => ({ default: m.Menu })));
+const Midia = lazy(() => import('./Midia').then((m) => ({ default: m.Midia })));
+const Paragraph = lazy(() =>
+  import('./Paragraph').then((m) => ({ default: m.Paragraph }))
+);
+const ProductPage = lazy(() =>
+  import('./ProductPage').then((m) => ({ default: m.ProductPage }))
+);
+const Products = lazy(() =>
+  import('./Products').then((m) => ({ default: m.Products }))
+);
 
 interface StorefrontPreviewProps {
   params?: string[];
   children?: ReactNode;
   hasHeader?: boolean;
   hasFooter?: boolean;
+  upperTheme?: Theme | null;
+  upperPage?: TemplateData | null;
 }
+
+// export const StorefrontPreview = ({
+//   params,
+//   children,
+//   hasFooter = true,
+//   hasHeader = true,
+//   upperTheme,
+//   upperPage,
+// }: StorefrontPreviewProps) => {
+//   return <Storefront params={params}>{children}</Storefront>;
+// };
 
 export const StorefrontPreview = ({
   params,
   children,
-  hasFooter = true,
-  hasHeader = true,
 }: StorefrontPreviewProps) => {
-  return (
-    <ThemeProvider>
-      <Storefront hasFooter={hasFooter} hasHeader={hasHeader} params={params}>
-        {children}
-      </Storefront>
-    </ThemeProvider>
-  );
-};
-
-const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const context = useContext(ThemeContext);
   const { setMainCoin } = useUserWallet();
   const { asPath, pushConnect } = useRouterConnect();
@@ -164,7 +196,7 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
     ? { ...headerStyleData, ...headerMobileStyleData }
     : headerStyleData;
 
-  const headerData = context.defaultTheme?.header
+  const headerData = context?.defaultTheme?.header
     ? {
         ...theme.header,
         styleData: { ...mergedHeaderStyleData, fontFamily },
@@ -179,12 +211,12 @@ const Storefront = ({ params, children }: StorefrontPreviewProps) => {
   const hasHeaderDefault =
     mergedConfigStyleData?.hasHeader != undefined &&
     (asPath || '').includes('/auth/')
-      ? mergedConfigStyleData.hasHeader
+      ? mergedConfigStyleData?.hasHeader
       : true;
   const hasFooterDefault =
-    mergedConfigStyleData.hasFooter != undefined &&
+    mergedConfigStyleData?.hasFooter != undefined &&
     (asPath || '').includes('/auth/')
-      ? mergedConfigStyleData.hasFooter
+      ? mergedConfigStyleData?.hasFooter
       : true;
   data = {
     ...data,

@@ -2,8 +2,8 @@ import { useController } from 'react-hook-form';
 
 import classNames from 'classnames';
 
-import { ReactComponent as CheckCircleOutlined } from '../../../shared/assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as ErrorCircled } from '../../../shared/assets/icons/errorCircled.svg';
+import CheckCircleOutlined from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
+import ErrorCircled from '../../../shared/assets/icons/errorCircled.svg?react';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePasswordMeetsCriteria } from '../../hooks/usePasswordMeetsCriteria';
 

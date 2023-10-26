@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 
-import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/chevronDownOutlined.svg';
+import ArrowDownIcon from '../../shared/assets/icons/chevronDownOutlined.svg?react';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AccordionsData, SpecificContentAccordion } from '../interfaces';

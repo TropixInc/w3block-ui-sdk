@@ -1,5 +1,3 @@
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -32,8 +30,10 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
     },
     {
       enabled:
-        validator.isUUID(benefitId) &&
-        !validator.isEmpty(String(editionNumber)),
+        benefitId != undefined &&
+        benefitId != '' &&
+        editionNumber != undefined &&
+        editionNumber != '',
       retry: false,
     }
   );

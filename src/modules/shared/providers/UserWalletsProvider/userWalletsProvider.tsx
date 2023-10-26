@@ -6,11 +6,11 @@ import { BusinessProviderSDK } from '../../../business/providers/businessProvide
 import { useGetWallets } from '../../../dashboard/hooks/useGetWallets';
 import { CoinsType } from '../../../storefront/interfaces';
 import { AuthenticateModal } from '../../components/AuthenticateModal/AuthenticateModal';
-import { useRouterConnect } from '../../hooks';
 import { useGetBalancesForWallets } from '../../hooks/useBalance';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
+import { useRouterConnect } from '../../hooks/useRouterConnect/useRouterConnect';
 import { UserProvider } from '../UserProvider/userProvider';
 
 interface UserWalletsContextInterface {
@@ -37,6 +37,8 @@ export interface WalletLoyalty {
   currency: string;
   loyaltyId: string;
   contractId: string;
+  image?: string;
+  pointsPrecision?: 'decimal' | 'integer';
 }
 
 export const UserWalletsContext = createContext<UserWalletsContextInterface>({
@@ -50,6 +52,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const { data: session } = usePixwaySession();
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [loyaltyWallet, setLoyaltyWallet] = useState<WalletLoyalty[]>([]);
+  const { data: session, status } = usePixwaySession();
   const { profile } = useProfileWithKYC();
   const [coinType, setCoinType] = useState<CoinsType>(CoinsType.MATIC);
   const isProduction = useIsProduction();
@@ -66,8 +69,8 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (authenticatePaymentModal) {
       router.replace({ query: { ...router.query, authorizeLoyalty: 'true' } });
-    } else {
-      if (router.query.authorizeLoyalty) {
+    } else if (router.query.authorizeLoyalty && !authenticatePaymentModal) {
+      {
         delete router.query.authorizeLoyalty;
         router.replace({ query: router.query });
       }
@@ -76,13 +79,14 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (
+      status != 'loading' &&
       session &&
       !authenticatePaymentModal &&
       router.query.authorizeLoyalty == 'true'
     ) {
       setAuthenticatePaymentModal(true);
     }
-  }, [router.query]);
+  }, [router.query, session]);
 
   const { mutate: getBalanceFromLoyalty } = useGetUserBalance();
 

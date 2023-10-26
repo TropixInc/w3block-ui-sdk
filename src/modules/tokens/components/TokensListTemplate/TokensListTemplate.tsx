@@ -1,19 +1,35 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-import { InternalPagesLayoutBase, useProfile } from '../../../shared';
-import { Pagination } from '../../../shared/components/Pagination/Pagination';
+const InternalPagesLayoutBase = lazy(() =>
+  import(
+    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
+  ).then((m) => ({ default: m.InternalPagesLayoutBase }))
+);
+
+const Pagination = lazy(() =>
+  import('../../../shared/components/Pagination/Pagination').then((m) => ({
+    default: m.Pagination,
+  }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useProcessingTokens } from '../../../shared/hooks/useProcessingTokens';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { ReactComponent as WalletImage } from '../../assets/wallet.svg';
+import WalletImage from '../../assets/wallet.svg?react';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
 import { Token } from '../../interfaces/Token';
 import { mapNFTToToken } from '../../utils/mapNFTToToken';
-import { WalletTokenCard } from '../WalletTokenCard';
-import { TokenListTemplateSkeleton } from './Skeleton';
+const WalletTokenCard = lazy(() =>
+  import('../WalletTokenCard').then((m) => ({ default: m.WalletTokenCard }))
+);
+
+const TokenListTemplateSkeleton = lazy(() =>
+  import('./Skeleton').then((m) => ({ default: m.TokenListTemplateSkeleton }))
+);
 
 interface Props {
   tokens?: Array<Token>;
@@ -82,7 +98,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
       </div>
     </div>
   ) : (
-    <div className="pw-flex pw-flex-1 pw-px-10 pw-flex-col pw-relative pw-font-poppins pw-items-center pw-justify-start sm:pw-justify-center pw-mb-13">
+    <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden pw-flex pw-flex-1 pw-px-10 pw-flex-col pw-relative pw-font-poppins pw-items-center pw-justify-start sm:pw-justify-center pw-mb-13">
       <h1 className="pw-font-semibold pw-ctext-[15px] pw-leading-[22px]  pw-hidden pw-mb-[61px]">
         {translate('connectTokens>tokensList>pageTitle')}
       </h1>

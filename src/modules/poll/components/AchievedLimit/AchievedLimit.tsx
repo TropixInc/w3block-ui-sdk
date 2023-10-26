@@ -1,5 +1,11 @@
-import { ReactComponent as InfoIcon } from '../../../shared/assets/icons/informationCircledFilled.svg';
-import { Box } from '../../../shared/components/Box/Box';
+import { lazy } from 'react';
+
+import InfoIcon from '../../../shared/assets/icons/informationCircledFilled.svg?react';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((module) => ({
+    default: module.Box,
+  }))
+);
 import useTranslation from '../../../shared/hooks/useTranslation';
 export const AchievedLimit = () => {
   const [translate] = useTranslation();

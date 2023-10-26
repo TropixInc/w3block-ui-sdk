@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
 import useGetProductById from '../../../storefront/hooks/useGetProductById/useGetProductById';
 import { useGetNFTSByWallet } from '../../../tokens/hooks/useGetNFTsByWallet';
@@ -8,9 +8,17 @@ import { useHasWallet, useProfile, useRouterConnect } from '../../hooks';
 import { useAcceptIntegrationToken } from '../../hooks/useAcceptIntegrationToken/useAcceptIntegrationToken';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { useUserWallet } from '../../hooks/useUserWallet';
+const Box = lazy(() =>
+  import('../Box/Box').then((module) => ({
+    default: module.Box,
+  }))
+);
+const Spinner = lazy(() =>
+  import('../Spinner').then((module) => ({
+    default: module.Spinner,
+  }))
+);
 import { Alert } from '../Alert';
-import { Box } from '../Box/Box';
-import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
 
 enum Steps {

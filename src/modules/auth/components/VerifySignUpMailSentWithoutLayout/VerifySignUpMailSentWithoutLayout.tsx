@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
-import { addMinutes, isAfter } from 'date-fns';
+import addMinutes from 'date-fns/addMinutes';
+import isAfter from 'date-fns/isAfter';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -10,7 +11,7 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
-import { ReactComponent as MailSent } from '../../assets/icons/mailSent.svg';
+import MailSent from '../../assets/icons/mailSent.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';

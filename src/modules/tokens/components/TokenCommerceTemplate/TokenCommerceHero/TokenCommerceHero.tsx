@@ -1,7 +1,13 @@
+import { lazy } from 'react';
+
 import classNames from 'classnames';
 
-import { ReactComponent as ArrowIcon } from '../../../../shared/assets/icons/arrowLeftOutlined.svg';
-import { BreadCrumb } from '../../../../shared/components/Breadcrumb';
+import ArrowIcon from '../../../../shared/assets/icons/arrowLeftOutlined.svg?react';
+const BreadCrumb = lazy(() =>
+  import('../../../../shared/components/Breadcrumb').then((m) => ({
+    default: m.BreadCrumb,
+  }))
+);
 import useRouter from '../../../../shared/hooks/useRouter';
 import useTranslation from '../../../../shared/hooks/useTranslation';
 

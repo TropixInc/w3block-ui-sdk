@@ -1,13 +1,10 @@
-import { useContext, useMemo } from 'react';
+import { lazy, useContext, useMemo } from 'react';
 
-import { ContentTypeEnum } from '../../../poll';
-import {
-  ContainerControllerClasses,
-  ContainerControllerSDK,
-  ExtraBy,
-  position,
-} from '../../../shared';
-import { Box } from '../../../shared/components/Box/Box';
+import { position, ExtraBy } from '../../../shared';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
@@ -16,7 +13,20 @@ import {
   breakpointsEnum,
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { ThemeContext } from '../../../storefront/contexts';
-import { VerifySignUpTokenExpiredWithoutLayout } from '../../components/VerifySignUpTokenExpiredWithoutLayout/VerifySignUpTokenExpiredWithoutLayout';
+import { ContentTypeEnum } from '../../../poll/enums/contentType';
+const VerifySignUpTokenExpiredWithoutLayout = lazy(() =>
+  import('../../components/VerifySignUpTokenExpiredWithoutLayout').then(
+    (module) => ({ default: module.VerifySignUpTokenExpiredWithoutLayout })
+  )
+);
+
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({
+    default: module.ContainerControllerSDK,
+  }))
+);
 
 interface VerifySignUpTokenExpired {
   email?: string;

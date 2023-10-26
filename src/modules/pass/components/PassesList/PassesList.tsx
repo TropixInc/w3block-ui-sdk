@@ -1,26 +1,58 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import validator from 'validator';
 
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
-import { QrCodeReader } from '../../../shared/components/QrCodeReader';
-import {
-  QrCodeError,
-  TypeError,
-} from '../../../shared/components/QrCodeReader/QrCodeError';
-import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
+//import { QrCodeReader } from '../../../shared/components/QrCodeReader';
+const QrCodeReader = lazy(() =>
+  import('../../../shared/components/QrCodeReader').then((module) => ({
+    default: module.QrCodeReader,
+  }))
+);
+const QrCodeError = lazy(() =>
+  import('../../../shared/components/QrCodeReader/QrCodeError').then(
+    (module) => ({
+      default: module.QrCodeError,
+    })
+  )
+);
+const QrCodeValidated = lazy(() =>
+  import('../../../shared/components/QrCodeReader/QrCodeValidated').then(
+    (module) => ({ default: module.QrCodeValidated })
+  )
+);
+const TokenListTemplateSkeleton = lazy(() =>
+  import('../../../tokens/components/TokensListTemplate/Skeleton').then(
+    (module) => ({
+      default: module.TokenListTemplateSkeleton,
+    })
+  )
+);
+const Button = lazy(() =>
+  import('../../../tokens/components/Button').then((module) => ({
+    default: module.Button,
+  }))
+);
+const BaseTemplate = lazy(() =>
+  import('../BaseTemplate').then((module) => ({ default: module.BaseTemplate }))
+);
+const VerifyBenefit = lazy(() =>
+  import('../VerifyBenefit').then((module) => ({
+    default: module.VerifyBenefit,
+  }))
+);
+const PassCard = lazy(() =>
+  import('../PassCard').then((module) => ({
+    default: module.PassCard,
+  }))
+);
+import { TypeError } from '../../../shared/components/QrCodeReader/QrCodeError';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Button } from '../../../tokens/components/Button';
-import { TokenListTemplateSkeleton } from '../../../tokens/components/TokensListTemplate/Skeleton';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import useGetPassByUser from '../../hooks/useGetPassByUser';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import useVerifyBenefit from '../../hooks/useVerifyBenefit';
-import { BaseTemplate } from '../BaseTemplate';
-import { PassCard } from '../PassCard';
-import { VerifyBenefit } from '../VerifyBenefit';
 
 const _PassesList = () => {
   const { data, isLoading } = useGetPassByUser();
@@ -33,13 +65,17 @@ const _PassesList = () => {
   const [showVerify, setShowVerify] = useState(false);
   const [errorType, setErrorType] = useState<TypeError>(TypeError.read);
   const [error, setError] = useState('');
-  const [editionNumber, userId, secret, benefitId] = qrCodeData.split(';');
-  const { data: verifyBenefit, isLoading: verifyLoading } = useVerifyBenefit({
+  const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
+  const {
+    data: verifyBenefit,
+    isLoading: verifyLoading,
+    isError: verifyError,
+  } = useVerifyBenefit({
     benefitId: benefitId,
     secret: secret,
     userId: userId,
     editionNumber: editionNumber,
-    enabled: !validator.isEmpty(secret ?? ''),
+    enabled: secret != undefined && secret != '',
   });
   const filteredPass = passes?.find(
     ({ id }) => id === verifyBenefit?.data?.tokenPassBenefit?.tokenPass?.id
@@ -58,10 +94,12 @@ const _PassesList = () => {
     usePostBenefitRegisterUse();
 
   const verifyBenefitUse = (qrCodeData: string) => {
-    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(';');
+    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
     setOpenScan(false);
-
-    if (editionNumber && userId && secret && benefitId) {
+    if (verifyError) {
+      setError(translate('token>pass>invalidFormat'));
+      setShowError(true);
+    } else if (editionNumber && userId && secret && benefitId) {
       setQrCodeData(qrCodeData);
       setShowVerify(true);
     } else {
@@ -71,7 +109,7 @@ const _PassesList = () => {
   };
 
   const validateBenefitUse = (qrCodeData: string) => {
-    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(';');
+    const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
 
     registerUse(
       {
@@ -155,6 +193,7 @@ const _PassesList = () => {
         />
         <VerifyBenefit
           hasOpen={showVerify}
+          error={verifyError}
           isLoading={registerLoading}
           isLoadingInfo={verifyLoading}
           onClose={() => setShowVerify(false)}

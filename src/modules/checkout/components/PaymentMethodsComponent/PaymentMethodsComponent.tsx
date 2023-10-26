@@ -1,11 +1,18 @@
+import { lazy } from 'react';
+
 import { PaymentMethodsAvaiable } from '../../interface/interface';
-import { PaymentAccordion } from '../PaymentAccordion/PaymentAccordion';
+const PaymentAccordion = lazy(() =>
+  import('../PaymentAccordion/PaymentAccordion').then((m) => ({
+    default: m.PaymentAccordion,
+  }))
+);
 
 interface PaymentMethodsComponentProps {
   methods: PaymentMethodsAvaiable[];
   className?: string;
   onSelectedPayemnt: (method: PaymentMethodsAvaiable) => void;
   methodSelected: PaymentMethodsAvaiable;
+  loadingPreview?: boolean;
 }
 
 export const PaymentMethodsComponent = ({
@@ -13,6 +20,7 @@ export const PaymentMethodsComponent = ({
   className = '',
   onSelectedPayemnt,
   methodSelected,
+  loadingPreview = false,
 }: PaymentMethodsComponentProps) => {
   return (
     <div className={`${className}`}>
@@ -26,6 +34,7 @@ export const PaymentMethodsComponent = ({
           className="pw-mt-3"
           key={method.paymentMethod}
           method={method}
+          loadingPreview={loadingPreview}
         />
       ))}
     </div>

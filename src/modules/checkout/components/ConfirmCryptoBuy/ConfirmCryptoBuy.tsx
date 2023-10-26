@@ -1,21 +1,44 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-import { ERROR_STATUS, metamaskErrors, useMetamask } from '../../../core';
 import { useSocket } from '../../../core/metamask/hooks/useSocket/useSocket';
-import { useProfile, useRouterConnect } from '../../../shared';
-import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
-import { Spinner } from '../../../shared/components/Spinner';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+const CriptoValueComponent = lazy(() =>
+  import(
+    '../../../shared/components/CriptoValueComponent/CriptoValueComponent'
+  ).then((m) => ({ default: m.CriptoValueComponent }))
+);
+
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({ default: m.WeblockButton })
+  )
+);
+import {
+  ERROR_STATUS,
+  metamaskErrors,
+} from '../../../core/metamask/providers/MetamaskProviderUiSDK';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
   OrderPreviewCache,
   createOrderResponse,
 } from '../../interface/interface';
-import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
+import { useMetamask } from '../../../core/metamask/hooks/useMetamask/useMetamask';
+const ErrorMessage = lazy(() =>
+  import('../ErrorMessage/ErrorMessage').then((m) => ({
+    default: m.ErrorMessage,
+  }))
+);
 
 enum BuyStatus {
   INITIAL,

@@ -1,13 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useContext, useState } from 'react';
+import { lazy, useContext, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+const AuthButton = lazy(() =>
+  import('../../../auth/components/AuthButton').then((module) => ({
+    default: module.AuthButton,
+  }))
+);
+
+const AuthFooter = lazy(() =>
+  import('../../../auth/components/AuthFooter').then((module) => ({
+    default: module.AuthFooter,
+  }))
+);
+
+const GenerateTokenDialog = lazy(() =>
+  import(
+    '../../../auth/components/ConnectWalletTemplate/GenerateTokenDialog'
+  ).then((module) => ({
+    default: module.GenerateTokenDialog,
+  }))
+);
+
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((module) => ({
+    default: module.ModalBase,
+  }))
+);
+
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((module) => ({
+    default: module.Spinner,
+  }))
+);
+
 import { ConnectToMetamaskButton } from '../../../auth';
 import { claimWalletVault } from '../../../auth/api/wallet';
-import { AuthButton } from '../../../auth/components/AuthButton';
-import { AuthFooter } from '../../../auth/components/AuthFooter';
-import { GenerateTokenDialog } from '../../../auth/components/ConnectWalletTemplate/GenerateTokenDialog';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useModalController } from '../../hooks/useModalController';
@@ -18,8 +47,6 @@ import useTranslation from '../../hooks/useTranslation';
 import { useWallets } from '../../hooks/useWallets/useWallets';
 import { AttachWalletContext } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import { Alert } from '../Alert';
-import { ModalBase } from '../ModalBase';
-import { Spinner } from '../Spinner';
 
 enum Step {
   CONFIRMATION,

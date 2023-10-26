@@ -1,5 +1,5 @@
-import { ReactComponent as CheckIcon } from '../../../assets/icons/checkCircledOutlined.svg';
-import { ReactComponent as ErrorIcon } from '../../../assets/icons/x-circle.svg';
+import CheckIcon from '../../../assets/icons/checkCircledOutlined.svg?react';
+import ErrorIcon from '../../../assets/icons/x-circle.svg?react';
 
 interface PropsInputStatus {
   invalid: boolean;

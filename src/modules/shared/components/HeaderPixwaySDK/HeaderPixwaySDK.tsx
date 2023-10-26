@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 
 import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
@@ -9,13 +9,23 @@ import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
-import { CartButton } from '../CartButton/CartButton';
+const CartButton = lazy(() =>
+  import('../CartButton/CartButton').then((mod) => ({
+    default: mod.CartButton,
+  }))
+);
 import TranslatableComponent from '../TranslatableComponent';
-import {
-  NavigationLoginPixwaySDK,
-  NavigationTabsPixwaySDK,
-  NavigationTabsPixwaySDKTabs,
-} from './components';
+const NavigationLoginPixwaySDK = lazy(() =>
+  import('./components/NavigationLoginPixwaySDK/NavigationLoginPixwaySDK').then(
+    (mod) => ({ default: mod.NavigationLoginPixwaySDK })
+  )
+);
+const NavigationTabsPixwaySDK = lazy(() => {
+  return import(
+    './components/NavigationTabsPixwaySDK/NavigationTabsPixwaySDK'
+  ).then((mod) => ({ default: mod.NavigationTabsPixwaySDK }));
+});
+import { NavigationTabsPixwaySDKTabs } from './components';
 
 interface HeaderPixwaySDKProps {
   headerClassName?: string;
@@ -78,8 +88,6 @@ const _HeaderPixwaySDK = ({
     } else setopenedLoginState(!openedloginState);
   };
 
-  const validatorMenuOpened = openedLogin ? openedLogin : openedloginState;
-
   const signupContext = useMemo(() => {
     if (contexts) {
       return contexts?.data?.items?.find(
@@ -102,7 +110,9 @@ const _HeaderPixwaySDK = ({
   useEffect(() => {
     if (profile) {
       if (signupContext) {
-        if (
+        if (!profile.data.verified) {
+          router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
+        } else if (
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active
         ) {
@@ -163,6 +173,7 @@ const _HeaderPixwaySDK = ({
   return context?.defaultTheme || standalone ? (
     <div
       style={{
+        minHeight: '90px',
         backgroundColor: headerBgColor,
         margin,
         fontFamily:
@@ -183,18 +194,40 @@ const _HeaderPixwaySDK = ({
         )}
       >
         <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
-          <a
-            href={
-              logoLink && logoLink.trim() != ''
-                ? logoLink
-                : PixwayAppRoutes.HOME
-            }
-          >
-            <LogoToShow />
-          </a>
+          <div className="pw-flex pw-items-center pw-justify-start pw-gap-x-4 pw-pl-4">
+            <div className="sm:pw-hidden">
+              <NavigationTabsPixwaySDK
+                tabs={tabsToPass}
+                toogleMenu={toggleTabsMemo}
+                opened={openedMenu ? openedMenu : openedTabs}
+                hasSignUp={hasSignUp}
+                textColor={
+                  textColor ??
+                  context?.defaultTheme?.header?.styleData?.textColor
+                }
+                bgColor={headerBgColor}
+                fontFamily={
+                  (fontFamily ||
+                  context?.defaultTheme?.header?.styleData?.fontFamily
+                    ? fontFamily ??
+                      context?.defaultTheme?.header?.styleData?.fontFamily
+                    : 'Poppins') + ', sans-serif'
+                }
+              />
+            </div>
+            <a
+              href={
+                logoLink && logoLink.trim() != ''
+                  ? logoLink
+                  : PixwayAppRoutes.HOME
+              }
+            >
+              <LogoToShow />
+            </a>
+          </div>
 
           <div className="pw-flex pw-items-center">
-            <div className="pw-order-3 sm:pw-order-1">
+            <div className="pw-order-1 sm:pw-order-1 pw-hidden sm:pw-block">
               <NavigationTabsPixwaySDK
                 tabs={tabsToPass}
                 toogleMenu={toggleTabsMemo}
@@ -224,11 +257,11 @@ const _HeaderPixwaySDK = ({
                   textColor ??
                   context?.defaultTheme?.header?.styleData?.textColor
                 }
-                className="pw-border-l sm:pw-ml-4"
+                className="sm:pw-border-l sm:pw-ml-4"
               />
             )}
 
-            <div className="pw-order-1 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
+            <div className="pw-order-3 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
               <NavigationLoginPixwaySDK
                 backgroundColor={headerBgColor}
                 hasSignUp={hasSignUp}
@@ -236,8 +269,6 @@ const _HeaderPixwaySDK = ({
                   textColor ??
                   context?.defaultTheme?.header?.styleData?.textColor
                 }
-                toggleLoginMenu={toggleMenuMemo}
-                loginMenu={validatorMenuOpened}
                 signInRouter={signInRouter}
                 signUpRouter={signUpRouter}
                 fontFamily={

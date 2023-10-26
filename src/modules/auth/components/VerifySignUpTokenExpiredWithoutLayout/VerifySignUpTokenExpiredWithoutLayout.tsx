@@ -5,7 +5,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
-import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
+import MailError from '../../assets/icons/mailError.svg?react';
 import { useRequestPasswordChange } from '../../hooks';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';

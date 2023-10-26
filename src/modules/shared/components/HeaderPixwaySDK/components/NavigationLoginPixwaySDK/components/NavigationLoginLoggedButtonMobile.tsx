@@ -1,20 +1,27 @@
-import { useContext, useState } from 'react';
-import { useCopyToClipboard } from 'react-use';
+import { lazy, useRef, useState } from 'react';
+import { useClickAway, useCopyToClipboard } from 'react-use';
 
-import { ChainId, WalletTypes } from '@w3block/sdk-id';
-
-import { ReactComponent as CopyIcon } from '../../../../../assets/icons/copyIcon.svg';
-import { ReactComponent as ETHIcon } from '../../../../../assets/icons/Eth.svg';
-import { ReactComponent as EyeIcon } from '../../../../../assets/icons/eyeGold.svg';
-import { ReactComponent as MaticIcon } from '../../../../../assets/icons/maticFilled.svg';
+import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
+import CopyIcon from '../../../../../assets/icons/copyIcon.svg?react';
+import UserSimpleIcon from '../../../../../assets/icons/user.svg?react';
+import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useProfileWithKYC } from '../../../../../hooks/useProfileWithKYC/useProfileWithKYC';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
-import { AttachWalletContext } from '../../../../../providers/AttachWalletProvider/AttachWalletProvider';
-import { PixwayButton } from '../../../../PixwayButton';
-import { UserTag } from '../../../../UserTag/UserTag';
+import { useGetRightWallet } from '../../../../../utils/getRightWallet';
+const PixwayButton = lazy(() =>
+  import('../../../../PixwayButton/PixwayButton').then((mod) => ({
+    default: mod.PixwayButton,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../../../../WeblockButton/WeblockButton').then((mod) => ({
+    default: mod.WeblockButton,
+  }))
+);
+
 import { NavigationMenuTabs } from '../interfaces/menu';
 import { useDefaultMenuTabs } from './NavigationLoginLoggedButton';
 interface NavigationLoginLoggedButtonMobileProps {
@@ -23,6 +30,7 @@ interface NavigationLoginLoggedButtonMobileProps {
   menuTabs?: NavigationMenuTabs[];
   backgroundColor?: string;
   textColor?: string;
+  hasSignUp?: boolean;
 }
 
 export const NavigationLoginLoggedButtonMobile = ({
@@ -31,15 +39,17 @@ export const NavigationLoginLoggedButtonMobile = ({
   menuTabs: _menuTabs,
   backgroundColor,
   textColor,
+  hasSignUp,
 }: NavigationLoginLoggedButtonMobileProps) => {
-  const { setAttachModal } = useContext(AttachWalletContext);
+  // const { setAttachModal } = useContext(AttachWalletContext);
+  const [loginMenu, setLoginMenu] = useState<boolean>(false);
   const { setAuthenticatePaymentModal } = useUserWallet();
   const defaultTabs = useDefaultMenuTabs(textColor ?? 'black');
-  const [hideBalance, setHideBalance] = useState(true);
+  // const [hideBalance, setHideBalance] = useState(true);
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const { profile } = useProfileWithKYC();
-  const { mainWallet: wallet } = useUserWallet();
+  // const { mainWallet: wallet } = useUserWallet();
   const [userMenu, setUserMenu] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
   const toggleTabsMemo = () => {
@@ -47,6 +57,11 @@ export const NavigationLoginLoggedButtonMobile = ({
       toggleMenu();
     } else setUserMenu(!userMenu);
   };
+  const divRef = useRef<HTMLDivElement>(null);
+  useClickAway(divRef, () => {
+    setLoginMenu(false);
+  });
+
   const [copied, setCopied] = useState<boolean>(false);
   const [_, setCopy] = useCopyToClipboard();
   const copyAddress = (address: string) => {
@@ -56,78 +71,125 @@ export const NavigationLoginLoggedButtonMobile = ({
   };
   const menuTabs = _menuTabs ?? defaultTabs;
   const validatorOpened = menuOpened ? menuOpened : userMenu;
-  const isUser =
-    (profile?.roles?.includes('user') ||
-      profile?.roles?.includes('admin') ||
-      profile?.roles?.includes('superAdmin')) &&
-    !profile?.roles?.includes('loyaltyOperator');
 
-  const renderIcon = () => {
-    return wallet?.chainId === ChainId.Polygon ||
-      wallet?.chainId === ChainId.Mumbai ? (
-      <MaticIcon className="pw-fill-[#8247E5]" />
-    ) : (
-      <ETHIcon className="pw-fill-black" />
-    );
-  };
+  const organizedWallets = useGetRightWallet();
 
-  const { loyaltyWallet } = useUserWallet();
+  // const WithWallet = () => {
+  //   return (
+  //     <div className="pw-mt-3 pw-px-[20px] pw-py-4 pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] pw-bg-white pw-rounded-2xl pw-w-full pw-flex">
+  //       <div className="pw-flex-1">
+  //         <div
+  //           onClick={() => setHideBalance(!hideBalance)}
+  //           className="pw-flex pw-items-center pw-gap-2 pw-cursor-pointer"
+  //         >
+  //           <p className="pw-text-xs pw-font-[400] pw-text-slate-600">
+  //             {wallet?.type === WalletTypes.Vault
+  //               ? translate('header>logged>pixwayBalance')
+  //               : translate('header>logged>metamaskBalance')}
+  //           </p>
+  //           <EyeIcon />
+  //         </div>
+  //         {hideBalance ? (
+  //           <CriptoValueComponent
+  //             fontClass="pw-text-sm pw-text-slate-900"
+  //             crypto={true}
+  //             value={
+  //               organizedWallets?.length ? organizedWallets[0].balance : '0'
+  //             }
+  //             code={chainIdToCode(
+  //               organizedWallets[0].chainId,
+  //               organizedWallets[0].currency
+  //             )}
+  //           />
+  //         ) : (
+  //           <p className="pw-font-[700] pw-text-xs pw-text-slate-900">*****</p>
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
-  const WithWallet = () => {
-    return (
-      <div className="pw-mt-3 pw-px-[20px] pw-py-4 pw-shadow-[1px_1px_10px_rgba(0,0,0,0.2)] pw-rounded-2xl pw-w-full pw-flex">
-        <div className="pw-flex-1">
-          <div
-            onClick={() => setHideBalance(!hideBalance)}
-            className="pw-flex pw-items-center pw-gap-2 pw-cursor-pointer"
-          >
-            <p className="pw-text-xs pw-font-[400]">
-              {wallet?.type === WalletTypes.Vault
-                ? translate('header>logged>pixwayBalance')
-                : translate('header>logged>metamaskBalance')}
-            </p>
-            <EyeIcon />
-          </div>
-          {hideBalance ? (
-            <div className="pw-flex pw-gap-x-2">
-              {renderIcon()}
-              <p className="pw-font-[700] pw-text-xs pw-ml-1">
-                {parseFloat(wallet?.balance ?? '').toFixed(2)}
-              </p>
-            </div>
-          ) : (
-            <p className="pw-font-[700] pw-text-xs">*****</p>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const WithoutWallet = () => {
-    return (
-      <PixwayButton
-        onClick={() => setAttachModal(true)}
-        fullWidth
-        className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
-      >
-        {translate('shared>header>connectWallet')}
-      </PixwayButton>
-    );
-  };
+  // const WithoutWallet = () => {
+  //   return (
+  //     <PixwayButton
+  //       onClick={() => setAttachModal(true)}
+  //       fullWidth
+  //       className="!pw-bg-brand-primary !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
+  //     >
+  //       {translate('shared>header>connectWallet')}
+  //     </PixwayButton>
+  //   );
+  // };
 
   return session ? (
     <div style={{ backgroundColor }}>
-      <UserTag onClick={toggleTabsMemo} className="pw-mr-4 pw-cursor-pointer" />
+      <div onClick={() => setUserMenu(!userMenu)} className="pw-cursor-pointer">
+        <div
+          onClick={() => setUserMenu(!userMenu)}
+          className="pw-ml-5 pw-flex pw-items-center pw-gap-[6px] pw-cursor-pointer"
+        >
+          <UserSimpleIcon style={{ stroke: textColor }} />
+          {organizedWallets &&
+          organizedWallets.length > 0 &&
+          organizedWallets.some(
+            (wallet) =>
+              wallet.type == 'loyalty' &&
+              wallet?.balance &&
+              parseFloat(wallet?.balance ?? '0') > 0
+          ) ? (
+            <p
+              style={{ color: textColor }}
+              className="pw-font-[400] pw-text-xs"
+            >
+              {organizedWallets.find(
+                (wallet) =>
+                  wallet.type == 'loyalty' &&
+                  wallet?.balance &&
+                  parseFloat(wallet?.balance ?? '0') > 0
+              ).pointsPrecision == 'decimal'
+                ? parseFloat(
+                    organizedWallets.find(
+                      (wallet) =>
+                        wallet.type == 'loyalty' &&
+                        wallet?.balance &&
+                        parseFloat(wallet?.balance ?? '0') > 0
+                    )?.balance ?? '0'
+                  ).toFixed(2)
+                : parseFloat(
+                    organizedWallets.find(
+                      (wallet) =>
+                        wallet.type == 'loyalty' &&
+                        wallet?.balance &&
+                        parseFloat(wallet?.balance ?? '0') > 0
+                    )?.balance ?? '0'
+                  ).toFixed(0)}
+            </p>
+          ) : null}
+
+          <ArrowDown
+            style={{
+              stroke: textColor,
+              transform: userMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+            }}
+          />
+        </div>
+      </div>
       {validatorOpened ? (
-        <div className="pw-bg-white pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center">
-          <p className="pw-text-xs pw-font-[400]">
+        <div
+          style={{ backgroundColor: backgroundColor }}
+          className=" pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center"
+        >
+          <p style={{ color: textColor }} className="pw-text-xs pw-font-[400]">
             {translate('header>logged>hiWallet', { name: profile?.name })}
           </p>
           <div
             onClick={() => copyAddress(profile?.mainWallet?.address || '')}
             className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
           >
-            <p className="pw-text-xs pw-font-[400] pw-cursor-pointer">
+            <p
+              style={{ color: textColor }}
+              className="pw-text-xs pw-font-[400] pw-cursor-pointer"
+            >
               {profile?.mainWallet?.address || '-'}
             </p>
             <CopyIcon />
@@ -141,38 +203,90 @@ export const NavigationLoginLoggedButtonMobile = ({
               </div>
             ) : null}
           </div>
-          <div className="pw-flex pw-justify-center ">
-            {isUser && loyaltyWallet && loyaltyWallet.length ? (
-              <button
-                onClick={() => setAuthenticatePaymentModal?.(true)}
-                className="pw-px-6 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-black pw-backdrop-blur-sm pw-justify-center pw-items-center pw-gap-2.5 pw-mt-[10px] pw-text-black pw-text-xs pw-font-medium"
-              >
-                Autenticar
-              </button>
-            ) : null}
-          </div>
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
-          {wallet ? <WithWallet /> : <WithoutWallet />}
+          {/* {wallet ? <WithWallet /> : <WithoutWallet />} */}
           <div className="pw-mt-3 pw-w-full">
-            {menuTabs.map((tab) => (
-              <div
-                onClick={() => {
-                  if (tab.action) tab.action();
-                  else if (tab.route) {
-                    toggleTabsMemo();
-                    router.pushConnect(tab.route);
-                  }
-                }}
-                className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg pw-text-[#383857] hover:pw-text-black"
-                key={tab.name}
+            {menuTabs.map((tab) =>
+              tab.isVisible ? (
+                <div
+                  onClick={() => {
+                    if (tab.action) tab.action();
+                    else if (tab.route) {
+                      toggleTabsMemo();
+                      router.pushConnect(tab.route);
+                    }
+                  }}
+                  style={{ color: textColor }}
+                  className="pw-flex pw-gap-x-5 pw-items-center pw-justify-center pw-w-full pw-py-3 hover:pw-bg-brand-primary pw-cursor-pointer pw-rounded pw-text-lg"
+                  key={tab.name}
+                >
+                  {tab.icon}
+                  <p>{tab.name}</p>
+                </div>
+              ) : null
+            )}
+            {organizedWallets.length &&
+            organizedWallets.some((w) => w.type == 'loyalty') ? (
+              <WeblockButton
+                onClick={() => setAuthenticatePaymentModal?.(true)}
+                className="!pw-text-white !pw-py-[10px] !pw-px-[24px] pw-mt-4 pw-w-full"
               >
-                {tab.icon}
-                <p>{tab.name}</p>
-              </div>
-            ))}
+                Pontuar
+              </WeblockButton>
+            ) : null}
           </div>
         </div>
       ) : null}
     </div>
-  ) : null;
+  ) : (
+    <div ref={divRef}>
+      <div
+        onClick={() => setLoginMenu(!loginMenu)}
+        className="pw-cursor-pointer"
+      >
+        <div
+          onClick={() => setLoginMenu(!loginMenu)}
+          className="pw-ml-2 pw-flex pw-items-center pw-gap-[6px] pw-cursor-pointer"
+        >
+          <UserSimpleIcon style={{ stroke: textColor }} />
+
+          <p style={{ color: textColor }} className="pw-font-[400] pw-text-xs">
+            Login
+          </p>
+
+          <ArrowDown
+            style={{
+              stroke: textColor,
+              transform: loginMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+            }}
+          />
+        </div>
+      </div>
+      {loginMenu && (
+        <div
+          style={{ backgroundColor: backgroundColor }}
+          className="pw-absolute pw-top-[90px] pw-left-0 pw-z-10 pw-w-[100vw] pw-px-4 pw-py-8"
+        >
+          <div className="pw-flex pw-justify-center pw-gap-x-[26px]">
+            <PixwayButton
+              onClick={() => router.pushConnect(PixwayAppRoutes.SIGN_IN)}
+              fullWidth
+              className="!pw-bg-brand-primary !pw-px-[40px] !pw-text-white !pw-text-xs !pw-py-[9px] pw-rounded-[48px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)]"
+            >
+              {translate('shared>login')}
+            </PixwayButton>
+            {hasSignUp && (
+              <PixwayButton
+                onClick={() => router.pushConnect(PixwayAppRoutes.SIGN_UP)}
+                fullWidth
+                className="!pw-bg-[#EFEFEF] !pw-px-[40px] !pw-text-black !pw-text-xs !pw-py-[9px] pw-rounded-[48px]  !pw-border-[#DCDCDC] !pw-border-1"
+              >
+                {translate('shared>register')}
+              </PixwayButton>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };

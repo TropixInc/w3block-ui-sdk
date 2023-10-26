@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
-import { ReactComponent as ArrowDown } from '../../shared/assets/icons/arrowDown.svg';
+import ArrowDown from '../../shared/assets/icons/arrowDown.svg?react';
 import { Variants } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 
 interface Props {

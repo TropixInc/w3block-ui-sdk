@@ -1,13 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { CheckoutStatus } from '../../../checkout';
+import { lazy, useState } from 'react';
+
+import { CheckoutStatus } from '../../../checkout/components';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
-import { ReactComponent as EthIcon } from '../../assets/icons/Eth.svg';
-import { ReactComponent as MaticIcon } from '../../assets/icons/maticIcon.svg';
-import { ReactComponent as TrashIcon } from '../../assets/icons/trash.svg';
+import EthIcon from '../../assets/icons/Eth.svg?react';
+import MaticIcon from '../../assets/icons/maticIcon.svg?react';
+import TrashIcon from '../../assets/icons/trash.svg?react';
 import useTranslation from '../../hooks/useTranslation';
-import { ImageSDK } from '../ImageSDK';
-import { Shimmer } from '../Shimmer';
+const ImageSDK = lazy(() =>
+  import('../ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
+const Shimmer = lazy(() =>
+  import('../Shimmer').then((module) => ({
+    default: module.Shimmer,
+  }))
+);
 interface ProductInfoProps {
   status?: CheckoutStatus;
   image: string;
@@ -21,7 +31,8 @@ interface ProductInfoProps {
   changeQuantity?: (
     n: boolean | null,
     id: string,
-    variants?: Variants[]
+    variants?: Variants[],
+    quantity?: number
   ) => void;
   stockAmount: number;
   canPurchaseAmount?: number;
@@ -29,6 +40,8 @@ interface ProductInfoProps {
   isCart?: boolean;
   originalPrice?: string;
   variants?: Variants[];
+  loadingPreview?: boolean;
+  index?: number;
 }
 
 export const ProductInfo = ({
@@ -48,9 +61,12 @@ export const ProductInfo = ({
   isCart,
   originalPrice,
   variants,
+  loadingPreview = false,
+  index,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
-  const maxUp = stockAmount > 5 ? 5 : stockAmount;
+  const [error, setError] = useState('');
+  const [qnt, setQnt] = useState(quantity ?? 1);
   const StatusToShow = () => {
     switch (status) {
       case CheckoutStatus.FINISHED:
@@ -106,7 +122,7 @@ export const ProductInfo = ({
               );
             })}
         </div>
-        {loading ? (
+        {loading || loadingPreview ? (
           <Shimmer className="pw-w-[80px] pw-h-6" />
         ) : (
           <div className="pw-flex pw-gap-1">
@@ -235,65 +251,105 @@ export const ProductInfo = ({
         )}
 
         {currency != 'MATIC' && currency != 'ETH' && (
-          <div className="pw-flex pw-gap-x-4 pw-items-center pw-justify-center">
-            {status == CheckoutStatus.CONFIRMATION && (
-              <p
-                onClick={() =>
-                  changeQuantity?.(
-                    (quantity && quantity > 1) || !isCart ? false : null,
-                    id,
-                    variants ?? []
-                  )
-                }
-                className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                  (quantity && quantity > 1) || !isCart
-                    ? 'pw-text-[#353945] pw-border-brand-primary'
-                    : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-invisible'
-                }`}
-              >
-                -
-              </p>
-            )}
-            <div>
-              {status === CheckoutStatus.FINISHED && (
-                <p className="pw-text-center pw-text-xs pw-text-[#353945]">
-                  Quant.
-                </p>
-              )}
-
-              <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
-                {quantity}
-              </p>
-            </div>
-
-            {status == CheckoutStatus.CONFIRMATION && (
-              <p
-                className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                  quantity &&
-                  quantity < canPurchaseAmount &&
-                  quantity < stockAmount &&
-                  quantity < maxUp
-                    ? 'pw-border-brand-primary pw-text-[#353945]'
-                    : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-invisible'
-                }`}
-                onClick={() => {
-                  if (
-                    quantity &&
-                    quantity < canPurchaseAmount &&
-                    quantity < stockAmount
-                  ) {
+          <>
+            <div className="pw-flex pw-gap-x-4 pw-items-center pw-justify-center">
+              {status == CheckoutStatus.CONFIRMATION && (
+                <p
+                  onClick={() => {
+                    setQnt(qnt - 1);
                     changeQuantity?.(
-                      quantity && quantity < maxUp ? true : null,
+                      (quantity && quantity > 1 && qnt > 1) || !isCart
+                        ? false
+                        : null,
                       id,
                       variants ?? []
                     );
-                  }
-                }}
-              >
-                +
-              </p>
-            )}
-          </div>
+                  }}
+                  className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                    (quantity && quantity > 1 && qnt > 1) || !isCart
+                      ? 'pw-text-[#353945] pw-border-brand-primary'
+                      : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-invisible'
+                  }`}
+                >
+                  -
+                </p>
+              )}
+              <div>
+                {status === CheckoutStatus.FINISHED && (
+                  <p className="pw-text-center pw-text-xs pw-text-[#353945]">
+                    Quant.
+                  </p>
+                )}
+
+                <input
+                  type="number"
+                  id={`quantityValue${index}`}
+                  disabled={loading || loadingPreview}
+                  value={qnt}
+                  onChange={() => {
+                    const inputValue = parseFloat(
+                      (
+                        document.getElementById(
+                          'quantityValue' + index
+                        ) as HTMLInputElement
+                      ).value
+                    );
+                    if (canPurchaseAmount && inputValue > canPurchaseAmount) {
+                      setError(
+                        `Limite máximo de ${canPurchaseAmount} unidades`
+                      );
+                      setQnt(canPurchaseAmount);
+                      changeQuantity?.(
+                        null,
+                        id,
+                        variants ?? [],
+                        canPurchaseAmount
+                      );
+                    } else if (inputValue > 0) {
+                      setError('');
+                      setQnt(inputValue);
+                      changeQuantity?.(null, id, variants ?? [], inputValue);
+                    } else if (inputValue < 1) {
+                      setQnt(1);
+                      changeQuantity?.(null, id, variants ?? [], 1);
+                    }
+                  }}
+                  className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center pw-w-[30px]"
+                ></input>
+              </div>
+
+              {status == CheckoutStatus.CONFIRMATION && (
+                <p
+                  className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                    quantity &&
+                    quantity < canPurchaseAmount &&
+                    quantity < stockAmount
+                      ? 'pw-border-brand-primary pw-text-[#353945]'
+                      : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-invisible'
+                  }`}
+                  onClick={() => {
+                    if (
+                      quantity &&
+                      quantity < canPurchaseAmount &&
+                      quantity < stockAmount
+                    ) {
+                      setQnt(qnt + 1);
+                      changeQuantity?.(
+                        quantity ? true : null,
+                        id,
+                        variants ?? []
+                      );
+                    }
+                  }}
+                >
+                  +
+                </p>
+              )}
+            </div>
+            <p className="pw-text-sm pw-font-[600] pw-text-[#93949b] pw-text-left ">
+              {error}
+            </p>
+          </>
         )}
       </div>
     </div>

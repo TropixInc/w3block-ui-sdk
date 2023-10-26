@@ -22,7 +22,7 @@ export const mobileHeaders: ColumnType<TableRowMobile, keyof TableRowMobile>[] =
   [
     {
       key: 'name',
-      header: 'Pass',
+      header: 'Benefício',
     },
     {
       key: 'actionComponent',
@@ -33,7 +33,7 @@ export const mobileHeaders: ColumnType<TableRowMobile, keyof TableRowMobile>[] =
 export const headers: ColumnType<TableRow, keyof TableRow>[] = [
   {
     key: 'name',
-    header: 'Pass',
+    header: 'Benefício',
   },
   {
     key: 'type',

@@ -7,11 +7,11 @@ import { WalletTypes } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { useProfile } from '../../../shared';
-import { ReactComponent as CashIcon } from '../../../shared/assets/icons/cashFilled.svg';
-import { ReactComponent as EyeIcon } from '../../../shared/assets/icons/eyeIcon.svg';
-import { ReactComponent as EyeCrossedIcon } from '../../../shared/assets/icons/eyeIconCrossed.svg';
-import { ReactComponent as MetamaskIcon } from '../../../shared/assets/icons/metamask.svg';
-import { ReactComponent as WalletIcon } from '../../../shared/assets/icons/walletOutlined.svg';
+import CashIcon from '../../../shared/assets/icons/cashFilled.svg?react';
+import EyeIcon from '../../../shared/assets/icons/eyeIcon.svg?react';
+import EyeCrossedIcon from '../../../shared/assets/icons/eyeIconCrossed.svg?react';
+import MetamaskIcon from '../../../shared/assets/icons/metamask.svg?react';
+import WalletIcon from '../../../shared/assets/icons/walletOutlined.svg?react';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { Chip } from './Chip';
@@ -40,7 +40,7 @@ export const BaseTemplate = ({
       className={classNames(
         classes?.modal
           ? classes.modal
-          : 'pw-flex pw-flex-col pw-gap-[20px] sm:pw-gap-[32px] sm:pw-rounded-[20px] pw-p-0 sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-mb-[100px]'
+          : 'pw-bg-white pw-flex pw-flex-col pw-gap-[20px] sm:pw-gap-[32px] sm:pw-rounded-[20px] pw-p-0 sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-mb-[100px]'
       )}
     >
       <div className="pw-flex">

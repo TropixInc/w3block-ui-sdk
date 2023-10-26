@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { ReactComponent as CheckboxOutlined } from '../../assets/icons/checkboxOutlined.svg';
+import CheckboxOutlined from '../../assets/icons/checkboxOutlined.svg?react';
 
 interface Props {
   name: string;

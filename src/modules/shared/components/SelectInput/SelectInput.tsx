@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
-import { ReactComponent as ArrowDown } from '../../assets/icons/arrowDown.svg';
+import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 
 interface SelectInputProps {
   options: { value: string; label: string }[];

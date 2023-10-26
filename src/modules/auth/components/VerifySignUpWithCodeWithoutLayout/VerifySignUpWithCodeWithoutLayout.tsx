@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import { addMinutes } from 'date-fns';
+import addMinutes from 'date-fns/addMinutes';
 
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
@@ -29,14 +30,16 @@ export const VerifySignUpWithCodeWithoutLayout = ({
   const { mutate: mutateVerify, isLoading: isLoadingVerify } =
     useVerifySignUp();
   const { companyId } = useCompanyConfig();
+  const { data: profile } = useProfile();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
   useEffect(() => {
-    setNewCountdown(addMinutes(new Date(), 1));
+    if (!profile) setNewCountdown(addMinutes(new Date(), 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const formattedEmail = useEmailProtectedLabel(emailLocal ?? '');
+  }, [profile]);
+  const emailToUse = profile?.data?.email ?? emailLocal;
+  const formattedEmail = useEmailProtectedLabel(emailToUse ?? '');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const changeInput = (index: number, e: any) => {
@@ -60,24 +63,24 @@ export const VerifySignUpWithCodeWithoutLayout = ({
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && !profile) {
       setNewCountdown(addMinutes(new Date(), 1));
       reset();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, reset]);
+  }, [isSuccess, reset, profile]);
 
   const queryString = new URLSearchParams(query as any).toString();
 
   const sendCode = () => {
     const code = inputs.join('');
-    if (code.length == 6 && emailLocal) {
+    if (code.length == 6 && emailToUse) {
       mutateVerify(
-        { email: emailLocal, token: code },
+        { email: emailToUse, token: code },
         {
           onSuccess(data: any) {
             if (data.data.verified && password) {
-              signIn({ email: emailLocal, password, companyId }).then(
+              signIn({ email: emailToUse, password, companyId }).then(
                 (data) => {
                   if (data.error == null) {
                     pushConnect(
@@ -144,7 +147,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
           mutate({
-            email: emailLocal ?? '',
+            email: emailToUse ?? '',
             verificationType: 'numeric',
           })
         }
@@ -167,7 +170,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({
-                email: emailLocal ?? '',
+                email: emailToUse ?? '',
                 verificationType: 'numeric',
               })
             }

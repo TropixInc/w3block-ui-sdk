@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -8,7 +8,6 @@ import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import { object, string } from 'yup';
 
-import { useProfile } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -18,10 +17,22 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
-import { AuthButton } from '../AuthButton';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+
 import { AuthFooter } from '../AuthFooter';
-import { AuthTextController } from '../AuthTextController';
-import { AuthValidationTip } from '../AuthValidationTip';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+const AuthTextController = lazy(() => {
+  return import('../AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }));
+});
+const AuthValidationTip = lazy(() => {
+  return import('../AuthValidationTip').then((m) => ({
+    default: m.AuthValidationTip,
+  }));
+});
 
 interface Form {
   email: string;
@@ -88,7 +99,9 @@ export const SigInWithoutLayout = ({
   });
 
   const checkForCallbackUrl = () => {
-    if (profile?.data.kycStatus === KycStatus.Pending) {
+    if (profile && !profile.data.verified) {
+      return PixwayAppRoutes.VERIfY_WITH_CODE;
+    } else if (profile?.data.kycStatus === KycStatus.Pending) {
       return routerToAttachKyc;
     } else if (!profile?.data.mainWallet) {
       return routeToAttachWallet;

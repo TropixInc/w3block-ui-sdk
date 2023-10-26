@@ -10,6 +10,7 @@ export interface Statement {
   loyaltieTransactions: LoyaltiesTransaction[];
   currency: string;
   transactionType: 'receiving' | 'sending';
+  pointsPrecision: 'integer' | 'decimal';
 }
 
 export enum Erc20ActionType {

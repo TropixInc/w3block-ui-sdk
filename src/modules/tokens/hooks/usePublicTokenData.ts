@@ -1,7 +1,6 @@
 import { useQuery } from 'react-query';
 
 import { AxiosResponse } from 'axios';
-import validator from 'validator';
 
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
@@ -94,9 +93,12 @@ export const usePublicTokenData = ({
     {
       staleTime: Infinity,
       enabled:
-        !validator.isEmpty(contractAddress ?? '') &&
-        !validator.isEmpty(tokenId ?? '') &&
-        !validator.isEmpty(chainId ?? '') &&
+        contractAddress != undefined &&
+        tokenId != undefined &&
+        chainId != undefined &&
+        contractAddress != '' &&
+        tokenId != '' &&
+        chainId != '' &&
         enabled,
     }
   );

@@ -1,14 +1,14 @@
 import { CSSProperties } from 'react';
 
-import { ReactComponent as DiscordIcon } from '../../shared/assets/icons/discord.svg';
-import { ReactComponent as FacebookIcon } from '../../shared/assets/icons/facebook.svg';
-import { ReactComponent as GlobeIcon } from '../../shared/assets/icons/globe.svg';
-import { ReactComponent as InstagramIcon } from '../../shared/assets/icons/instagram.svg';
-import { ReactComponent as LinkedinIcon } from '../../shared/assets/icons/linkedin.svg';
-import { ReactComponent as TelegramIcon } from '../../shared/assets/icons/message.svg';
-import { ReactComponent as TwitterIcon } from '../../shared/assets/icons/twitter.svg';
-import { ReactComponent as WeblockLogo } from '../../shared/assets/icons/w3block_logo_white.svg';
-import { ReactComponent as WhatsappIcon } from '../../shared/assets/icons/whatsapp.svg';
+import DiscordIcon from '../../shared/assets/icons/discord.svg?react';
+import FacebookIcon from '../../shared/assets/icons/facebook.svg?react';
+import GlobeIcon from '../../shared/assets/icons/globe.svg?react';
+import InstagramIcon from '../../shared/assets/icons/instagram.svg?react';
+import LinkedinIcon from '../../shared/assets/icons/linkedin.svg?react';
+import TelegramIcon from '../../shared/assets/icons/message.svg?react';
+import TwitterIcon from '../../shared/assets/icons/twitter.svg?react';
+import WeblockLogo from '../../shared/assets/icons/w3block_logo_white.svg?react';
+import WhatsappIcon from '../../shared/assets/icons/whatsapp.svg?react';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { FooterData } from '../interfaces';

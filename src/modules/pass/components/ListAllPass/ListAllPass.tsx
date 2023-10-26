@@ -1,18 +1,31 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 import { useDebounce } from 'react-use';
 
 import classNames from 'classnames';
 import { format } from 'date-fns';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useRouter } from 'next/router';
+const InternalPagesLayoutBase = lazy(() =>
+  import('../../../shared/components/InternalPagesLayoutBase').then((mod) => ({
+    default: mod.InternalPagesLayoutBase,
+  }))
+);
 
-import { InternalPagesLayoutBase } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Breadcrumb } from '../../../tokens/components/Breadcrumb';
-import { Button } from '../../../tokens/components/Button';
+const Breadcrumb = lazy(() =>
+  import('../../../tokens/components/Breadcrumb').then((mod) => ({
+    default: mod.Breadcrumb,
+  }))
+);
+const Button = lazy(() =>
+  import('../../../tokens/components/Button').then((mod) => ({
+    default: mod.Button,
+  }))
+);
+
 import { Filters, ValidStatusProps } from '../../../tokens/components/Filters';
 import GenericTable from '../../../tokens/components/GenericTable/GenericTable';
 import { InternalPageTitle } from '../../../tokens/components/InternalPageTitle';

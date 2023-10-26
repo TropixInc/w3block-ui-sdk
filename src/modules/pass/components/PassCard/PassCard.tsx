@@ -1,9 +1,23 @@
+import { lazy } from 'react';
+
 import classNames from 'classnames';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+const Button = lazy(() =>
+  import('../../../shared/components/Buttons').then((mod) => ({
+    default: mod.Button,
+  }))
+);
+const FallbackImage = lazy(() =>
+  import('../../../shared/components/FallbackImage').then((mod) => ({
+    default: mod.FallbackImage,
+  }))
+);
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK').then((mod) => ({
+    default: mod.ImageSDK,
+  }))
+);
 
-import { Button } from '../../../shared/components/Buttons';
-import { FallbackImage } from '../../../shared/components/FallbackImage';
-import { ImageSDK } from '../../../shared/components/ImageSDK';
 import Skeleton from '../../../shared/components/Skeleton/Skeleton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useRouter from '../../../shared/hooks/useRouter';

@@ -1,16 +1,38 @@
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 
-import { Erc20TokenHistory } from '../../../dashboard/interface/ercTokenHistoryInterface';
-import { InternalPagesLayoutBase, useRouterConnect } from '../../../shared';
-import { ReactComponent as UserIcon } from '../../../shared/assets/icons/userOutlined.svg';
-import { Pagination } from '../../../shared/components/Pagination';
 import {
-  TableDefault,
-  TableHeaderItem,
-} from '../../../shared/components/TableDefault/TableDefault';
+  Erc20TokenHistory,
+  FromToInterface,
+} from '../../../dashboard/interface/ercTokenHistoryInterface';
+const InternalPagesLayoutBase = lazy(() =>
+  import(
+    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
+  ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
+);
+import UserIcon from '../../../shared/assets/icons/userOutlined.svg?react';
+const Pagination = lazy(() =>
+  import('../../../shared/components/Pagination').then((mod) => ({
+    default: mod.Pagination,
+  }))
+);
+
+const TableDefault = lazy(() =>
+  import('../../../shared/components/TableDefault/TableDefault').then(
+    (mod) => ({
+      default: mod.TableDefault,
+    })
+  )
+);
+
+const ActionBusinessCardSDK = lazy(() =>
+  import('../../components/actionBusinessCardSDK').then((mod) => ({
+    default: mod.ActionBusinessCardSDK,
+  }))
+);
+import { TableHeaderItem } from '../../../shared/components/TableDefault/TableDefault';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { ActionBusinessCardSDK } from '../../components/actionBusinessCardSDK';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useGetAllReportsAdmin } from '../../hooks/useGetAllReportsAdmin';
 import { useGetAllReportsByOperatorId } from '../../hooks/useGetAllReportsByOperatorId';
 import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';
@@ -30,17 +52,17 @@ export const UserReportTemplate = () => {
     }
   }, [loyalties]);
 
-  const getTransferColorAndStatus = (to: string, from?: string): any => {
+  const getTransferColorAndStatus = (from?: FromToInterface): any => {
     if (mainLoyaltie) {
-      if (to == mainLoyaltie.tokenIssuanceAddress) {
+      if (from == null) {
+        return {
+          color: 'red',
+          status: 'Débito',
+        };
+      } else if (from.type == 'user') {
         return {
           color: 'green',
           status: 'Crédito',
-        };
-      } else if (from == mainLoyaltie.tokenTransferabilityAddress) {
-        return {
-          color: 'red',
-          status: 'Debito',
         };
       } else {
         return {
@@ -48,6 +70,20 @@ export const UserReportTemplate = () => {
           status: 'Crédito',
         };
       }
+    }
+  };
+
+  const getTextToShow = (erc: Erc20TokenHistory): string => {
+    if (
+      erc.from == null &&
+      erc.request.metadata &&
+      Array.isArray(erc.request.metadata)
+    ) {
+      return `${erc.request.metadata[0].description} - Gerado pelo operador ${erc.request.metadata[0].operatorName}`;
+    } else if (erc.request.metadata && erc.from != null) {
+      return `${erc.request.metadata.description} - Feito pelo usuário ${erc.from.user_name}`;
+    } else {
+      return '';
     }
   };
 
@@ -59,31 +95,64 @@ export const UserReportTemplate = () => {
         <div className="pw-flex pw-items-center pw-gap-2 pw-py-4">
           <div
             style={{
-              backgroundColor: getTransferColorAndStatus(
-                item.request.to,
-                item.request.from
-              ).color,
+              backgroundColor: getTransferColorAndStatus(item.from).color,
             }}
             className="pw-w-2 pw-h-2 pw-rounded-full"
           ></div>
           <p className="pw-text-slate-500 pw-text-sm pw-font-semibold">
-            {
-              getTransferColorAndStatus(item.request.to, item.request.from)
-                .status
-            }
+            {getTransferColorAndStatus(item.from).status}
           </p>
         </div>
       ),
     },
 
     {
+      key: 'userInfo',
+      name: 'Usuário',
+      component: (item: Erc20TokenHistory) =>
+        item.from == null ? (
+          <div>
+            {item.to?.user_name && (
+              <p className="pw-text-xs pw-text-slate-900 pw-font-medium">
+                {item.to?.user_name}
+              </p>
+            )}
+            {item.to?.email && (
+              <p className="pw-text-xs pw-text-slate-700">{item.to?.email}</p>
+            )}
+            {item.to?.phone && (
+              <p className="pw-text-xs pw-text-slate-700">{item.to?.phone}</p>
+            )}
+            {item.to?.cpf && (
+              <p className="pw-text-xs pw-text-slate-700">{item.to?.cpf}</p>
+            )}
+          </div>
+        ) : (
+          <div>
+            {item.from?.user_name && (
+              <p className="pw-text-xs pw-text-slate-900 pw-font-medium">
+                {item.from?.user_name}
+              </p>
+            )}
+            {item.from?.email && (
+              <p className="pw-text-xs pw-text-slate-700">{item.from?.email}</p>
+            )}
+            {item.from?.phone && (
+              <p className="pw-text-xs pw-text-slate-700">{item.from?.phone}</p>
+            )}
+            {item.from?.cpf && (
+              <p className="pw-text-xs pw-text-slate-700">{item.from?.cpf}</p>
+            )}
+          </div>
+        ),
+    },
+
+    {
       key: '',
-      name: 'Endereço da carteira',
+      name: 'Descrição',
       component: (item: Erc20TokenHistory) => (
-        <p className="pw-text-slate-500 pw-text-sm pw-font-semibold">
-          {item.request.to == mainLoyaltie?.tokenIssuanceAddress
-            ? item.request.from
-            : item.request.to}
+        <p className="pw-text-slate-500 pw-text-xs pw-font-regular pw-max-w-[300px]">
+          {getTextToShow(item)}
         </p>
       ),
     },

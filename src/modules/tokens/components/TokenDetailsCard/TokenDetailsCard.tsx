@@ -1,19 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMemo } from 'react';
+import { lazy, useMemo } from 'react';
 
 import classNames from 'classnames';
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
 import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
+import useGetPassById from '../../../pass/hooks/useGetPassById';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
-import { useRouterConnect } from '../../../shared';
-import { ImageSDK } from '../../../shared/components/ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK').then((m) => ({
+    default: m.ImageSDK,
+  }))
+);
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import {
   headers,
@@ -27,13 +32,37 @@ import {
   Dimensions3DValue,
 } from '../../interfaces/DimensionsValue';
 import { DynamicFormConfiguration } from '../../interfaces/DynamicFormConfiguration';
-import { Breadcrumb } from '../Breadcrumb';
-import { Button } from '../Button';
+
+const Breadcrumb = lazy(() =>
+  import('../Breadcrumb').then((m) => ({ default: m.Breadcrumb }))
+);
+
+const Button = lazy(() =>
+  import('../Button').then((m) => ({ default: m.Button }))
+);
+
 import GenericTable from '../GenericTable/GenericTable';
-import { InternalPageTitle } from '../InternalPageTitle';
-import { LineDivider } from '../LineDivider';
-import { SmartDataDisplayer } from '../SmartDataDisplayer';
-import { TextFieldDisplay } from '../SmartDisplay/TextFieldDisplay';
+
+const InternalPageTitle = lazy(() =>
+  import('../InternalPageTitle').then((m) => ({ default: m.InternalPageTitle }))
+);
+
+const LineDivider = lazy(() =>
+  import('../LineDivider').then((m) => ({ default: m.LineDivider }))
+);
+
+const SmartDataDisplayer = lazy(() =>
+  import('../SmartDataDisplayer').then((m) => ({
+    default: m.SmartDataDisplayer,
+  }))
+);
+
+const TextFieldDisplay = lazy(() =>
+  import('../SmartDisplay/TextFieldDisplay').then((m) => ({
+    default: m.TextFieldDisplay,
+  }))
+);
+
 import StatusTag from '../StatusTag/StatusTag';
 
 interface Props {
@@ -74,6 +103,8 @@ export const TokenDetailsCard = ({
     tokenPassId: collectionId as string,
     editionNumber: +editionNumber,
   });
+
+  const { data: passData } = useGetPassById(collectionId ?? '');
 
   const isMultiplePass = useMemo(() => {
     if (isSuccess) {
@@ -212,6 +243,25 @@ export const TokenDetailsCard = ({
             <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
               {translate('connect>TokenDetailCard>passAssociated')}
             </p>
+            <div
+              className="pw-text-black pw-font-normal pw-text-[14px] pw-leading-[21px]"
+              dangerouslySetInnerHTML={{
+                __html: passData?.data.description ?? '',
+              }}
+            ></div>
+            {passData?.data.rules && (
+              <>
+                <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
+                  Regras de uso:
+                </p>
+                <div
+                  className="pw-text-black pw-font-normal pw-text-[14px] pw-leading-[21px]"
+                  dangerouslySetInnerHTML={{
+                    __html: passData?.data.rules,
+                  }}
+                ></div>
+              </>
+            )}
             {formatedData && (
               <GenericTable
                 showPagination

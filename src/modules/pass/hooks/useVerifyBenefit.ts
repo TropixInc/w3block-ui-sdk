@@ -1,5 +1,3 @@
-import validator from 'validator';
-
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -50,8 +48,10 @@ const useVerifyBenefit = ({
       ),
     {
       enabled:
-        validator.isUUID(tenantId ?? '') &&
-        !validator.isEmpty(secret ?? '') &&
+        tenantId != undefined &&
+        tenantId != '' &&
+        secret != undefined &&
+        secret != '' &&
         enabled,
     }
   );

@@ -1,14 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useInterval, useLocalStorage } from 'react-use';
+import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
-import { PriceAndGasInfo, Product, ProductInfo } from '../../../shared';
-import { ReactComponent as ValueChangeIcon } from '../../../shared/assets/icons/icon-up-down.svg';
-import { ModalBase } from '../../../shared/components/ModalBase';
-import { PixwayButton } from '../../../shared/components/PixwayButton';
+import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
+const PixwayButton = lazy(() =>
+  import('../../../shared/components/PixwayButton').then((m) => ({
+    default: m.PixwayButton,
+  }))
+);
+const PriceAndGasInfo = lazy(() =>
+  import('../../../shared/components/PriceAndGasInfo').then((m) => ({
+    default: m.PriceAndGasInfo,
+  }))
+);
+const ProductInfo = lazy(() =>
+  import('../../../shared/components/ProductInfo').then((m) => ({
+    default: m.ProductInfo,
+  }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({
+      default: m.WeblockButton,
+    })
+  )
+);
+
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -17,6 +43,7 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
+import { Product } from '../../../shared/interface/Product';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import {
   ORDER_COMPLETED_INFO_KEY,
@@ -32,9 +59,26 @@ import {
   PaymentMethodsAvaiable,
   ProductErrorInterface,
 } from '../../interface/interface';
-import { ConfirmCryptoBuy } from '../ConfirmCryptoBuy/ConfirmCryptoBuy';
-import { PaymentMethodsComponent } from '../PaymentMethodsComponent/PaymentMethodsComponent';
-import { ProductError } from '../ProductError/ProductError';
+const ConfirmCryptoBuy = lazy(() =>
+  import('../ConfirmCryptoBuy/ConfirmCryptoBuy').then((m) => ({
+    default: m.ConfirmCryptoBuy,
+  }))
+);
+
+const PaymentMethodsComponent = lazy(() => {
+  return import('../PaymentMethodsComponent/PaymentMethodsComponent').then(
+    (m) => ({
+      default: m.PaymentMethodsComponent,
+    })
+  );
+});
+
+const ProductError = lazy(() => {
+  return import('../ProductError/ProductError').then((m) => ({
+    default: m.ProductError,
+  }));
+});
+
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',
@@ -81,6 +125,7 @@ const _CheckoutInfo = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const utms = useUtms();
   const [checkUtm, setCheckUtm] = useState(true);
   const [couponCodeInput, setCouponCodeInput] = useState<string | undefined>(
@@ -185,13 +230,14 @@ const _CheckoutInfo = ({
       token &&
       checkoutStatus === CheckoutStatus.CONFIRMATION
     ) {
+      setIsLoadingPreview(true);
       getOrderPreview.mutate(
         {
           productIds: isCart
             ? cart.map((p) => {
                 const payload = {
                   productId: p.id,
-                  variantIds: p.variantIds,
+                  variantIds: p.variantIds ?? [],
                 };
                 return payload;
               })
@@ -220,18 +266,42 @@ const _CheckoutInfo = ({
             if (data.productsErrors && data.productsErrors?.length > 0) {
               setProductErros(data.productsErrors ?? []);
             }
+            if (
+              choosedPayment &&
+              choosedPayment.paymentMethod == 'credit_card'
+            ) {
+              setChoosedPayment({
+                ...choosedPayment,
+                availableInstallments: data.providersForSelection?.find(
+                  (val) =>
+                    val.paymentMethod == choosedPayment.paymentMethod &&
+                    val.paymentProvider == choosedPayment.paymentProvider
+                )?.availableInstallments,
+              });
+            }
             setOrderPreview(data);
+            setIsLoadingPreview(false);
             setCart(
               data.products.map((val) => {
                 return {
                   id: val.id,
-                  variantIds: val?.variants?.map((val) => val.id),
+                  variantIds: val?.variants?.map((val) => val.values[0].id),
                   prices: val.prices,
                 };
               })
             );
+            cart.sort((a, b) => {
+              if (a.id > b.id) return -1;
+              if (a.id < b.id) return 1;
+              return 0;
+            });
             if (data.products.map((p) => p.id).length != productIds.length) {
               setProductIds(data.products.map((p) => p.id));
+              productIds?.sort((a, b) => {
+                if (a > b) return -1;
+                if (a < b) return 1;
+                return 0;
+              });
             }
           },
           onError: () => {
@@ -242,10 +312,13 @@ const _CheckoutInfo = ({
     }
   };
 
-  useEffect(() => {
-    getOrderPreviewFn(couponCodeInput);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productIds, currencyIdState, token]);
+  useDebounce(
+    () => {
+      getOrderPreviewFn(couponCodeInput);
+    },
+    300,
+    [productIds, currencyIdState, token]
+  );
 
   useInterval(() => {
     getOrderPreviewFn(couponCodeInput);
@@ -323,9 +396,15 @@ const _CheckoutInfo = ({
   const changeQuantity = (
     add: boolean | null,
     id: string,
-    variants?: Variants[]
+    variants?: Variants[],
+    quantity?: number
   ) => {
     if (add != null) {
+      productIds?.sort((a, b) => {
+        if (a > b) return -1;
+        if (a < b) return 1;
+        return 0;
+      });
       let newArray: Array<string> = [];
       if (
         productIds &&
@@ -360,6 +439,13 @@ const _CheckoutInfo = ({
         }
       );
       if (isCart) {
+        cart.sort((a, b) => {
+          if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
+            return -1;
+          if (a.id < b.id || a.variantIds.toString() < b.variantIds.toString())
+            return 1;
+          return 0;
+        });
         if (add) {
           const newCart = cart.filter(
             (val) =>
@@ -370,6 +456,19 @@ const _CheckoutInfo = ({
                   .toString()
           );
           setCart([...cart, newCart[0]]);
+          cart.sort((a, b) => {
+            if (
+              a.id > b.id ||
+              a.variantIds.toString() > b.variantIds.toString()
+            )
+              return -1;
+            if (
+              a.id < b.id ||
+              a.variantIds.toString() < b.variantIds.toString()
+            )
+              return 1;
+            return 0;
+          });
         } else {
           const newCart = cart.find(
             (val) =>
@@ -384,11 +483,124 @@ const _CheckoutInfo = ({
             const newValue = [...cart];
             newValue.splice(ind, 1);
             setCart(newValue);
+            cart.sort((a, b) => {
+              if (
+                a.id > b.id ||
+                a.variantIds.toString() > b.variantIds.toString()
+              )
+                return -1;
+              if (
+                a.id < b.id ||
+                a.variantIds.toString() < b.variantIds.toString()
+              )
+                return 1;
+              return 0;
+            });
           }
         }
       }
 
       setProductIds(newArray);
+      productIds?.sort((a, b) => {
+        if (a > b) return -1;
+        if (a < b) return 1;
+        return 0;
+      });
+    } else if (quantity) {
+      if (!isCart) {
+        let newArray: Array<string> = [];
+        newArray = [...Array(quantity).fill(id)];
+        router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
+          query: {
+            productIds: newArray.join(','),
+            currencyId: orderPreview?.products[0].prices.find(
+              (price) => price.currencyId == currencyIdState
+            )?.currencyId,
+          },
+        });
+        setProductIds(newArray);
+        productIds?.sort((a, b) => {
+          if (a > b) return -1;
+          if (a < b) return 1;
+          return 0;
+        });
+      } else {
+        cart.sort((a, b) => {
+          if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
+            return -1;
+          if (a.id < b.id || a.variantIds.toString() < b.variantIds.toString())
+            return 1;
+          return 0;
+        });
+        const filteredProds = cart.filter(
+          (val) =>
+            val.id === id &&
+            val.variantIds.toString() ===
+              variants?.map((res) => res.values.map((res) => res.id)).toString()
+        );
+
+        if (productIds) {
+          productIds.sort((a, b) => {
+            if (a > b) return -1;
+            if (a < b) return 1;
+            return 0;
+          });
+          const filteredIds = productIds.find((val) => val === id);
+          if (filteredIds) {
+            const ind = productIds.indexOf(filteredIds);
+            const newIds = [...productIds];
+            newIds.splice(ind, filteredProds.length);
+            let newArray: Array<string> = [];
+            newArray = [...newIds, ...Array(quantity).fill(id)];
+            router.push(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
+              query: {
+                productIds: newArray.join(','),
+                currencyId: orderPreview?.products[0].prices.find(
+                  (price) => price.currencyId == currencyIdState
+                )?.currencyId,
+              },
+            });
+            setProductIds(newArray);
+            productIds?.sort((a, b) => {
+              if (a > b) return -1;
+              if (a < b) return 1;
+              return 0;
+            });
+          }
+        }
+        cart.sort((a, b) => {
+          if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
+            return -1;
+          if (a.id < b.id || a.variantIds.toString() < b.variantIds.toString())
+            return 1;
+          return 0;
+        });
+        const newCart = cart.find(
+          (val) =>
+            val.id === id &&
+            val.variantIds.toString() ===
+              variants?.map((res) => res.values.map((res) => res.id)).toString()
+        );
+        if (newCart) {
+          const ind = cart.indexOf(newCart);
+          const newValue = [...cart];
+          newValue.splice(ind, filteredProds.length);
+          setCart([...newValue, ...Array(quantity).fill(newCart)]);
+          cart.sort((a, b) => {
+            if (
+              a.id > b.id ||
+              a.variantIds.toString() > b.variantIds.toString()
+            )
+              return -1;
+            if (
+              a.id < b.id ||
+              a.variantIds.toString() < b.variantIds.toString()
+            )
+              return 1;
+            return 0;
+          });
+        }
+      }
     }
   };
 
@@ -425,9 +637,19 @@ const _CheckoutInfo = ({
     );
     if (isCart) {
       setCart(filteredProds);
+      cart.sort((a, b) => {
+        if (a.id > b.id) return -1;
+        if (a.id < b.id) return 1;
+        return 0;
+      });
     }
 
     setProductIds(filteredProds?.map((p) => p.id));
+    productIds?.sort((a, b) => {
+      if (a > b) return -1;
+      if (a < b) return 1;
+      return 0;
+    });
   };
 
   const differentProducts = useMemo<Array<Product>>(() => {
@@ -461,7 +683,45 @@ const _CheckoutInfo = ({
           uniqueProduct.push(p);
         }
       });
-      uniqueProduct.sort();
+      uniqueProduct.sort((a, b) => {
+        if (
+          (a?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? []) >
+          (b?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? [])
+        )
+          return -1;
+        if (
+          (a?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? []) <
+          (b?.variants
+            ?.map((res) => {
+              return res.values.map((res) => {
+                return res.id;
+              });
+            })
+            .toString() ?? [])
+        )
+          return 1;
+        if (a.id > b.id) return -1;
+        if (a.id < b.id) return 1;
+        return 0;
+      });
       return uniqueProduct;
     } else {
       return [];
@@ -497,7 +757,7 @@ const _CheckoutInfo = ({
               }
               totalPrice={orderPreview?.totalPrice || '0'}
               service={orderPreview?.clientServiceFee || '0'}
-              loading={isLoading}
+              loading={isLoading || isLoadingPreview}
               className="pw-mt-4"
               price={
                 parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
@@ -545,6 +805,7 @@ const _CheckoutInfo = ({
             </div>
             {parseFloat(orderPreview?.totalPrice ?? '0') !== 0 && (
               <PaymentMethodsComponent
+                loadingPreview={isLoadingPreview}
                 methodSelected={
                   choosedPayment ?? ({} as PaymentMethodsAvaiable)
                 }
@@ -566,7 +827,7 @@ const _CheckoutInfo = ({
                 {translate('shared>cancel')}
               </PixwayButton>
               <PixwayButton
-                disabled={!orderPreview}
+                disabled={!orderPreview || isLoadingPreview}
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
@@ -641,7 +902,7 @@ const _CheckoutInfo = ({
         );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderPreview, choosedPayment, currencyIdState]);
+  }, [orderPreview, choosedPayment, currencyIdState, isLoadingPreview]);
 
   const anchorCurrencyId = useMemo(() => {
     return orderPreview?.products && orderPreview.products.length
@@ -683,6 +944,8 @@ const _CheckoutInfo = ({
           <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
             {differentProducts.map((prod, index) => (
               <ProductInfo
+                index={index}
+                loadingPreview={isLoadingPreview}
                 isCart={isCart}
                 className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
                 currency={

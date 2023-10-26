@@ -1,8 +1,8 @@
-import { useProfile } from '../../../shared';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { usePaginatedPrivateQuery } from '../../../shared/hooks/usePaginatedPrivateQuery';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 
 interface Media {
   raw: string;
@@ -63,7 +63,7 @@ export const useGetNFTSByWallet = (chainId: number | undefined) => {
         PixwayAPIRoutes.NFTS_BY_WALLET.replace(
           '{chainId}',
           chainId!.toString()
-        ).replace('{address}', address as string)
+        ).replace('{address}', address as string) + '?onlyMintedByWeblock=true'
       );
     },
     {

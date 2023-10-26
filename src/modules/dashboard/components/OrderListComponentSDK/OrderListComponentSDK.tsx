@@ -1,9 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
 import { useGetOrders } from '../../../checkout/hooks/useGetOrders';
-import { Pagination } from '../../../shared/components/Pagination';
-import { OrderCardComponentSDK } from '../OrderCardComponentSDK/OrderCardComponentSDK';
+const Pagination = lazy(() =>
+  import('../../../shared/components/Pagination').then((mod) => ({
+    default: mod.Pagination,
+  }))
+);
+
+const OrderCardComponentSDK = lazy(() =>
+  import('../OrderCardComponentSDK/OrderCardComponentSDK').then((mod) => ({
+    default: mod.OrderCardComponentSDK,
+  }))
+);
 
 export const OrderListComponentSDK = () => {
   const [actualPage, setActualPage] = useState(1);

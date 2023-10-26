@@ -1,9 +1,14 @@
+import { lazy } from 'react';
+
 import classNames from 'classnames';
 
-import {
-  PixwayButton,
-  PixwayButtonProps,
-} from '../../../shared/components/PixwayButton';
+const PixwayButton = lazy(() =>
+  import('../../../shared/components/PixwayButton').then((m) => ({
+    default: m.PixwayButton,
+  }))
+);
+
+import { PixwayButtonProps } from '../../../shared/components/PixwayButton';
 
 export const AuthButton = ({
   className = '',

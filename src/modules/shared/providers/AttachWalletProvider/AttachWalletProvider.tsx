@@ -1,6 +1,10 @@
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, lazy, ReactNode, useState } from 'react';
 
-import { AttachWalletModal } from '../../components/AttachWalletModal';
+const AttachWalletModal = lazy(() =>
+  import('../../components/AttachWalletModal').then((module) => ({
+    default: module.AttachWalletModal,
+  }))
+);
 
 interface AttachWalletProviderProps {
   setAttachModal: (bol: boolean) => void;

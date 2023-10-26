@@ -1,7 +1,12 @@
-import { ReactNode } from 'react';
+import { lazy, ReactNode } from 'react';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { Link } from '../Link';
+const Link = lazy(() =>
+  import('../Link').then((module) => ({
+    default: module.Link,
+  }))
+);
+
 import { getButtonClassNames, OffpixButtonVariant } from '../PixwayButton';
 
 interface Props {

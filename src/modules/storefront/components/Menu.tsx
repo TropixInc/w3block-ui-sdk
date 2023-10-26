@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useClickAway, useToggle } from 'react-use';
 
-import { ReactComponent as ArrowDownIcon } from '../../shared/assets/icons/arrowDown.svg';
+import ArrowDownIcon from '../../shared/assets/icons/arrowDown.svg?react';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';

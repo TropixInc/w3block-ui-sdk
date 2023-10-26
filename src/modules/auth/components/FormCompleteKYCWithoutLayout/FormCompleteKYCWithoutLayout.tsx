@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -8,9 +8,17 @@ import { object } from 'yup';
 
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
-import { Box } from '../../../shared/components/Box/Box';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
+
 import SmartInputsController from '../../../shared/components/SmartInputsController';
-import { Spinner } from '../../../shared/components/Spinner';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -22,7 +30,9 @@ import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignup
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { useGetReasonsRequiredReview } from '../../hooks/useGetReasonsRequiredReview';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
-import { AuthButton } from '../AuthButton';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
 
 interface Props {
   userId: string;

@@ -3,7 +3,7 @@ import { UseQueryResult } from 'react-query';
 
 import { AxiosResponse } from 'axios';
 
-import { PixwayPaginatedResponse } from '../../interfaces/PixwayPaginatedResponse';
+import { PixwayPaginatedResponse } from '../../interface/PixwayPaginatedResponse';
 import { QueryConfig, usePrivateQuery } from '../usePrivateQuery';
 import { useRouterConnect } from '../useRouterConnect';
 
@@ -40,6 +40,7 @@ export interface QueryParams {
   search?: string;
   sortBy?: string;
   orderBy?: string;
+  walletAddresses?: Array<string>;
 }
 
 export const usePaginatedPrivateQuery = <QueryData>(

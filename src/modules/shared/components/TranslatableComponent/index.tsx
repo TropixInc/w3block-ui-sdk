@@ -8,15 +8,13 @@ interface TranslatableComponentProps {
 }
 
 const TranslatableComponent = ({ children }: TranslatableComponentProps) => {
-  const [hasHydrated, setHasHydrated] = useState(false);
+  const [_, setHasHydrated] = useState(false);
 
   useEffect(() => {
     setHasHydrated(true);
   }, []);
 
-  return hasHydrated ? (
-    <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
-  ) : null;
+  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
 
 export default TranslatableComponent;

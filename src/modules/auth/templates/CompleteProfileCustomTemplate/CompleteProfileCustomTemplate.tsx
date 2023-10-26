@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
-import { isAfter } from 'date-fns';
+import isAfter from 'date-fns/isAfter';
 
-import { ContentTypeEnum } from '../../../poll';
-import { ContainerControllerClasses, ExtraBy, position } from '../../../shared';
+import { ContentTypeEnum } from '../../../poll/enums/contentType';
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { position } from '../../../shared/enums/styleConfigs';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -15,10 +17,27 @@ import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
-import { CompleteSignUpSuccessTemplateSDK } from '../CompleteSignUpSuccessTemplateSDK';
-import { SignUpTemplateSDK } from '../SignUpTemplateSDK/SignUpTemplateSDK';
-import { VerifySignUpMailSentTemplateSDK } from '../VerifySignUpMailSentTemplateSDK';
-import { VerifySignUpTokenExpiredTemplateSDK } from '../VerifySignUpTokenExpiredTemplateSDK';
+const CompleteSignUpSuccessTemplateSDK = lazy(() =>
+  import('../CompleteSignUpSuccessTemplateSDK').then((m) => ({
+    default: m.CompleteSignUpSuccessTemplateSDK,
+  }))
+);
+
+const SignUpTemplateSDK = lazy(() =>
+  import('../SignUpTemplateSDK').then((m) => ({ default: m.SignUpTemplateSDK }))
+);
+
+const VerifySignUpMailSentTemplateSDK = lazy(() =>
+  import('../VerifySignUpMailSentTemplateSDK').then((m) => ({
+    default: m.VerifySignUpMailSentTemplateSDK,
+  }))
+);
+
+const VerifySignUpTokenExpiredTemplateSDK = lazy(() =>
+  import('../VerifySignUpTokenExpiredTemplateSDK').then((m) => ({
+    default: m.VerifySignUpTokenExpiredTemplateSDK,
+  }))
+);
 
 enum Steps {
   FORM = 1,

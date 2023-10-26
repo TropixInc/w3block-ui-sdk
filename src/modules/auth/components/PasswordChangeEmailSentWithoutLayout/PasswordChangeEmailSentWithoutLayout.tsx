@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
-import { addMinutes, isAfter } from 'date-fns';
+import addMinutes from 'date-fns/addMinutes';
+import isAfter from 'date-fns/isAfter';
 
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { ReactComponent as KeyIconOutlined } from '../../assets/icons/keyIconOutlined.svg';
+import KeyIconOutlined from '../../assets/icons/keyIconOutlined.svg?react';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { useRequestPasswordChange } from '../../hooks/useRequestPasswordChange';
 interface PasswordChangeMailSentProps {

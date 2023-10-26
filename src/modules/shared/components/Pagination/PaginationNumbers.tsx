@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
 import { number, object } from 'yup';
 
-import { ReactComponent as ChevronLeft } from '../../assets/icons/chevronLeftFilled.svg';
+import ChevronLeft from '../../assets/icons/chevronLeftFilled.svg?react';
 
 interface Props {
   pagesQuantity: number;

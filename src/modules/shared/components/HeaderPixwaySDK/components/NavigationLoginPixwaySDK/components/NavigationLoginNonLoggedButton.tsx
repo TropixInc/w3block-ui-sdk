@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
-import { ReactComponent as ArrowDown } from '../../../../../assets/icons/arrowDown.svg';
+import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
+import UserIcon from '../../../../../assets/icons/user.svg?react';
 import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
+import { useRouterConnect } from '../../../../../hooks/useRouterConnect/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
-import { PixwayButton } from '../../../../PixwayButton';
+import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 
 interface NavigationLoginNonLoggedButtonProps {
   signInRoute?: string;
@@ -28,17 +29,18 @@ export const NavigationLoginNonLoggedButton = ({
     <div className="pw-hidden sm:pw-block">
       <div
         onClick={() => setOpenMenu(!openMenu)}
-        className="pw-ml-5 pw-cursor-pointer"
+        className="pw-ml-5 pw-flex pw-items-center pw-gap-[6px] pw-cursor-pointer"
       >
+        <UserIcon style={{ stroke: textColor }} />
         <p style={{ color: textColor }} className="pw-font-[400] pw-text-xs">
           Login
         </p>
-        <div className="pw-flex pw-items-center pw-gap-x-1">
-          <p style={{ color: textColor }} className="pw-text-sm pw-font-[600]">
-            {translate('shared>myAcount')}
-          </p>
-          <ArrowDown style={{ stroke: textColor }} />
-        </div>
+        <ArrowDown
+          style={{
+            stroke: textColor,
+            transform: openMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
+        />
       </div>
       {openMenu ? (
         <div className="pw-relative">
@@ -53,7 +55,7 @@ export const NavigationLoginNonLoggedButton = ({
             >
               {translate('shared>login')}
             </PixwayButton>
-            {hasSignUp && (
+            {hasSignUp ? (
               <PixwayButton
                 onClick={() => router.pushConnect(signUpRoute)}
                 fullWidth
@@ -61,7 +63,7 @@ export const NavigationLoginNonLoggedButton = ({
               >
                 {translate('shared>register')}
               </PixwayButton>
-            )}
+            ) : null}
           </div>
         </div>
       ) : null}

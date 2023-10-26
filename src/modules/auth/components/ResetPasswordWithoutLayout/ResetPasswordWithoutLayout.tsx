@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { isAfter, isValid } from 'date-fns';
+import isAfter from 'date-fns/isAfter';
+import isValid from 'date-fns/isValid';
 import { object, string } from 'yup';
 
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -11,13 +12,37 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useChangePasswordAndSignIn } from '../../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
-import { AuthButton } from '../AuthButton';
-import { AuthErrorChagingPassword } from '../AuthErrorChangingPassword';
-import { AuthPasswordChangedWithoutLayout } from '../AuthPasswordChangedWithoutLayout';
-import { AuthPasswordTips } from '../AuthPasswordTips';
-import { AuthTextController } from '../AuthTextController';
-import { ExpiredTokenWithoutLayout } from '../ExpiredTokenWithoutLayout/ExpiredTokenWithoutLayout';
-import { PasswordChangeEmailSentWithoutLayout } from '../PasswordChangeEmailSentWithoutLayout/PasswordChangeEmailSentWithoutLayout';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+const AuthErrorChagingPassword = lazy(() =>
+  import('../AuthErrorChangingPassword').then((m) => ({
+    default: m.AuthErrorChagingPassword,
+  }))
+);
+const AuthPasswordChangedWithoutLayout = lazy(() =>
+  import('../AuthPasswordChangedWithoutLayout').then((m) => ({
+    default: m.AuthPasswordChangedWithoutLayout,
+  }))
+);
+const AuthPasswordTips = lazy(() =>
+  import('../AuthPasswordTips').then((m) => ({ default: m.AuthPasswordTips }))
+);
+const AuthTextController = lazy(() =>
+  import('../AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }))
+);
+const ExpiredTokenWithoutLayout = lazy(() =>
+  import('../ExpiredTokenWithoutLayout').then((m) => ({
+    default: m.ExpiredTokenWithoutLayout,
+  }))
+);
+const PasswordChangeEmailSentWithoutLayout = lazy(() => {
+  return import(
+    '../PasswordChangeEmailSentWithoutLayout/PasswordChangeEmailSentWithoutLayout'
+  ).then((m) => ({ default: m.PasswordChangeEmailSentWithoutLayout }));
+});
 
 interface Form {
   password: string;

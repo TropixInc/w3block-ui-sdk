@@ -1,4 +1,20 @@
-import { HeaderPixwaySDK, NavigationTabsPixwaySDKTabs } from '../../shared';
+import { lazy } from 'react';
+
+import { NavigationTabsPixwaySDKTabs } from '../../shared';
+const NavigationTabsPixwaySDKTabs = lazy(() =>
+  import(
+    '../../shared/components/HeaderPixwaySDK/components/NavigationTabsPixwaySDK/NavigationTabsPixwaySDK'
+  ).then((module) => ({
+    default: module.NavigationTabsPixwaySDK,
+  }))
+);
+const HeaderPixwaySDK = lazy(() =>
+  import('../../shared/components/HeaderPixwaySDK/HeaderPixwaySDK').then(
+    (module) => ({
+      default: module.HeaderPixwaySDK,
+    })
+  )
+);
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { MainModuleThemeInterface } from '../interfaces';
@@ -27,18 +43,20 @@ export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
   } = mergedStyleData;
 
   return (
-    <HeaderPixwaySDK
-      logoLink={logoLink}
-      hasCart={hasCart}
-      logoSrc={logoSrc?.assetUrl}
-      bgColor={backgroundColor}
-      textColor={textColor}
-      brandText={brandName}
-      margin={convertSpacingToCSS(margin)}
-      padding={convertSpacingToCSS(padding)}
-      tabs={tabs?.map(mapOptionsToTabs)}
-      fontFamily={fontFamily}
-    />
+    <>
+      <HeaderPixwaySDK
+        logoLink={logoLink}
+        hasCart={hasCart}
+        logoSrc={logoSrc?.assetUrl}
+        bgColor={backgroundColor}
+        textColor={textColor}
+        brandText={brandName}
+        margin={convertSpacingToCSS(margin)}
+        padding={convertSpacingToCSS(padding)}
+        tabs={tabs?.map(mapOptionsToTabs)}
+        fontFamily={fontFamily}
+      />
+    </>
   );
 };
 

@@ -2,8 +2,8 @@ import { ReactNode, createContext, useMemo } from 'react';
 
 import { UserPublicResponseDto } from '@w3block/sdk-id';
 
-import { useProfileWithouRedirect } from '../../hooks';
 import { useGetDocuments } from '../../hooks/useGetDocuments';
+import { useProfileWithouRedirect } from '../../hooks/useProfile/useProfile';
 
 interface UserProfileWithKYC extends UserPublicResponseDto {
   avatarSrc?: string;

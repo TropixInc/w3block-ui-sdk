@@ -1,5 +1,15 @@
-import { ImageSDK } from '../../../shared/components/ImageSDK';
-import { Shimmer } from '../../../shared/components/Shimmer';
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK').then((mod) => ({
+    default: mod.ImageSDK,
+  }))
+);
+import { lazy } from 'react';
+
+const Shimmer = lazy(() =>
+  import('../../../shared/components/Shimmer').then((mod) => ({
+    default: mod.Shimmer,
+  }))
+);
 
 interface UserCardProps {
   onCancel?: () => void;

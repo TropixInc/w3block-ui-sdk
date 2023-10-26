@@ -1,16 +1,50 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosResponse } from 'axios';
 import { object, string } from 'yup';
 
-import { AuthTextController } from '../../../auth/components/AuthTextController';
+const AuthTextController = lazy(() =>
+  import('../../../auth/components/AuthTextController').then((module) => ({
+    default: module.AuthTextController,
+  }))
+);
+
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((module) => ({
+    default: module.Box,
+  }))
+);
+
+const FallbackImage = lazy(() =>
+  import('../../../shared/components/FallbackImage').then((module) => ({
+    default: module.FallbackImage,
+  }))
+);
+
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (module) => ({
+      default: module.WeblockButton,
+    })
+  )
+);
+
+const AchievedLimit = lazy(() =>
+  import('../AchievedLimit').then((module) => ({
+    default: module.AchievedLimit,
+  }))
+);
+
+const AlreadyAnswerBox = lazy(() =>
+  import('../AlreadyAnswerBox').then((module) => ({
+    default: module.AlreadyAnswerBox,
+  }))
+);
+
 import StarFilled from '../../../shared/assets/icons/starFilled.png';
 import StarOutlined from '../../../shared/assets/icons/starOutlined.png';
-import { Box } from '../../../shared/components/Box/Box';
-import { FallbackImage } from '../../../shared/components/FallbackImage';
-import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -20,8 +54,6 @@ import { usePollBySlug } from '../../hooks/usePollBySlug';
 import { usePostAnswer } from '../../hooks/usePostAnswer';
 import { useSendToPipeForm } from '../../hooks/useSendToPipeForm';
 import { PostAnswerResponseInterface } from '../../interfaces/PollResponseInterface';
-import { AchievedLimit } from '../AchievedLimit';
-import { AlreadyAnswerBox } from '../AlreadyAnswerBox';
 import { IPollInterface } from './IPollInterface';
 
 interface PollBoxProps {

@@ -1,17 +1,22 @@
 /* eslint-disable prettier/prettier */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, useCallback, useEffect, useRef, useState } from 'react';
 
 
-import { ReactComponent as CopyIcon } from '../../../shared/assets/icons/copy.svg';
-import { ReactComponent as DownloadIcon } from '../../../shared/assets/icons/download.svg';
-import { ReactComponent as FrameTopLeftBorder } from '../../../shared/assets/icons/frameTopLeftBorderFilled.svg';
-import { ReactComponent as ScanMePlate } from '../../../shared/assets/icons/scanMePlate.svg';
-import { ModalBase } from '../../../shared/components/ModalBase';
+import  CopyIcon  from '../../../shared/assets/icons/copy.svg?react';
+import  DownloadIcon  from '../../../shared/assets/icons/download.svg?react';
+import  FrameTopLeftBorder  from '../../../shared/assets/icons/frameTopLeftBorderFilled.svg?react';
+import  ScanMePlate  from '../../../shared/assets/icons/scanMePlate.svg?react';
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import useTruncate from '../../hooks/useTruncate';
-import { OffpixButtonBase } from '../DisplayCards/OffpixButtonBase';
-import { PublicPageQRCode } from '../PublicPageQRCode';
+const OffpixButtonBase = lazy(() => import('../DisplayCards/OffpixButtonBase').then((m) => ({ default: m.OffpixButtonBase })));
+const PublicPageQRCode = lazy(() => import('../PublicPageQRCode').then((m) => ({ default: m.PublicPageQRCode })));
+
 
 interface Props {
   isOpen: boolean;

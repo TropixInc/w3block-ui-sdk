@@ -9,7 +9,7 @@ import {
 } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import { ReactComponent as FileIcon } from '../../../assets/icons/fileOutlined.svg';
+import FileIcon from '../../../assets/icons/fileOutlined.svg?react';
 import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';

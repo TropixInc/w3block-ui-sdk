@@ -1,13 +1,19 @@
 /* eslint-disable prettier/prettier */
+import { lazy } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
-import validator from 'validator';
 
-import { ReactComponent as ErrorIcon } from '../../assets/icons/errorIconRed.svg';
-import { ReactComponent as XIcon } from '../../assets/icons/xFilled.svg';
+
+import  ErrorIcon from '../../assets/icons/errorIconRed.svg?react';
+import  XIcon from '../../assets/icons/xFilled.svg?react';
 import useTranslation from '../../hooks/useTranslation';
-import { Button } from '../Buttons';
+const Button = lazy(() =>
+  import('../Buttons').then((module) => ({
+    default: module.Button,
+  }))
+);
+
 
 export enum TypeError {
   read,
@@ -71,7 +77,7 @@ export const QrCodeError = ({ hasOpen, onClose, validateAgain, type, error = '' 
       <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
         {getMessageByTypeError(type)}
       </div>
-      {!validator.isEmpty(error) &&
+      {error != undefined && error != "" &&
         <div className="pw-w-full pw-flex pw-justify-center pw-text-center">
           {error}
         </div>}

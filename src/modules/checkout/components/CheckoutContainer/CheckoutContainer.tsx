@@ -1,4 +1,11 @@
-import { CheckoutInfo, CheckoutStatus } from '../CheckoutInfo';
+const CheckoutInfo = lazy(() =>
+  import('../CheckoutInfo/CheckoutInfo').then((m) => ({
+    default: m.CheckoutInfo,
+  }))
+);
+import { lazy } from 'react';
+
+import { CheckoutStatus } from '../CheckoutInfo';
 
 interface CheckoutContainerProps {
   checkoutStatus: CheckoutStatus;

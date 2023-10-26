@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Trans } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -7,10 +7,15 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
-import { ReactComponent as MailError } from '../../assets/icons/mailError.svg';
+import MailError from '../../assets/icons/mailError.svg?react';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { AuthFooter } from '../AuthFooter';
-import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
+const AuthLayoutBase = lazy(() => {
+  return import('../AuthLayoutBase').then((m) => ({
+    default: m.AuthLayoutBase,
+  }));
+});
+import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 
 interface Props {
   email: string;

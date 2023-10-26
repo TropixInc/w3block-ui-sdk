@@ -1,7 +1,11 @@
+import { lazy } from 'react';
+
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { AuthButton } from '../AuthButton';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
 
 export const CompleteSignUpSuccessWithoutLayout = () => {
   const router = useRouterConnect();

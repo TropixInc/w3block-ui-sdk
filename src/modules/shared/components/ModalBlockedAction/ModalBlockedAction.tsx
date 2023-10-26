@@ -1,13 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { addMinutes, isAfter } from 'date-fns';
 
-import { AuthButton } from '../../../auth/components/AuthButton';
+const AuthButton = lazy(() =>
+  import('../../../auth/components/AuthButton').then((module) => ({
+    default: module.AuthButton,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (module) => ({
+      default: module.WeblockButton,
+    })
+  )
+);
+
 import { useRequestConfirmationMail } from '../../../auth/hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../../../auth/hooks/useVerifySignUp';
-import { ReactComponent as CloseIcon } from '../../assets/icons/closeCircledOutlined.svg';
+import CloseIcon from '../../assets/icons/closeCircledOutlined.svg?react';
 import { LocalStorageFields } from '../../enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
@@ -16,7 +28,6 @@ import useCountdown from '../../hooks/useCountdown/useCountdown';
 import { useSessionUser } from '../../hooks/useSessionUser';
 import useTranslation from '../../hooks/useTranslation';
 import { removeDoubleSlashesOnUrl } from '../../utils/removeDuplicateSlahes';
-import { WeblockButton } from '../WeblockButton/WeblockButton';
 
 interface ModalBlockedActionProps {
   email: string;

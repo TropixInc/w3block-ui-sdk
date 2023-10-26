@@ -1,4 +1,10 @@
-import { ImageSDK } from '../../../shared/components/ImageSDK';
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK').then((m) => ({
+    default: m.ImageSDK,
+  }))
+);
+import { lazy } from 'react';
+
 import { ProductErrorInterface } from '../../interface/interface';
 
 interface ProductErrorProps {

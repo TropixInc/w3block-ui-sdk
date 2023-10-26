@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-import { ReactComponent as PixwayIcon } from '../../assets/icons/pixwayIconFilled.svg';
+import PixwayIcon from '../../assets/icons/pixwayIconFilled.svg?react';
 
 interface Props {
   className?: string;

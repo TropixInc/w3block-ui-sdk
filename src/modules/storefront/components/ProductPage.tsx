@@ -1,21 +1,53 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useClickAway, useInterval, useLocalStorage } from 'react-use';
+import { lazy, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useClickAway,
+  useDebounce,
+  useInterval,
+  useLocalStorage,
+} from 'react-use';
 
 import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
-import { useRouterConnect } from '../../shared';
-// import { ReactComponent as BackButton } from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { Alert } from '../../shared/components/Alert';
-import { CheckboxAlt } from '../../shared/components/CheckboxAlt/CheckboxAlt';
-import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
-import { ImageSDK } from '../../shared/components/ImageSDK';
-import { ModalBase } from '../../shared/components/ModalBase';
-import { Shimmer } from '../../shared/components/Shimmer';
-import { Spinner } from '../../shared/components/Spinner';
+
+const CheckboxAlt = lazy(() =>
+  import('../../shared/components/CheckboxAlt/CheckboxAlt').then((mod) => ({
+    default: mod.CheckboxAlt,
+  }))
+);
+
+const CriptoValueComponent = lazy(() =>
+  import(
+    '../../shared/components/CriptoValueComponent/CriptoValueComponent'
+  ).then((mod) => ({ default: mod.CriptoValueComponent }))
+);
+const ImageSDK = lazy(() =>
+  import('../../shared/components/ImageSDK').then((mod) => ({
+    default: mod.ImageSDK,
+  }))
+);
+const ModalBase = lazy(() =>
+  import('../../shared/components/ModalBase').then((mod) => ({
+    default: mod.ModalBase,
+  }))
+);
+
+const Shimmer = lazy(() =>
+  import('../../shared/components/Shimmer').then((mod) => ({
+    default: mod.Shimmer,
+  }))
+);
+
+const Spinner = lazy(() =>
+  import('../../shared/components/Spinner').then((mod) => ({
+    default: mod.Spinner,
+  }))
+);
+
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -24,6 +56,7 @@ import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoB
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import useRouter from '../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { useUtms } from '../../shared/hooks/useUtms/useUtms';
@@ -285,11 +318,17 @@ export const ProductPage = ({
   };
 
   const handleClick = () => {
-    if (user) {
-      setIsOpen(true);
+    if (product?.requirements) {
+      if (user) {
+        setIsOpen(true);
+      } else {
+        pushConnect(PixwayAppRoutes.SIGN_IN, {
+          callbackPath: window.location.href + '?openModal=true',
+        });
+      }
     } else {
       pushConnect(PixwayAppRoutes.SIGN_IN, {
-        callbackPath: window.location.href + '?openModal=true',
+        callbackPath: window.location.href,
       });
     }
   };
@@ -402,9 +441,13 @@ export const ProductPage = ({
     }
   }, [currencyId, product?.id, variants]);
 
-  useEffect(() => {
-    getOrderPreviewFn();
-  }, [quantity]);
+  useDebounce(
+    () => {
+      getOrderPreviewFn();
+    },
+    300,
+    [quantity]
+  );
 
   useInterval(() => setCartOpen(false), 5000);
   const [termsChecked, setTermsChecked] = useState(true);
@@ -413,7 +456,7 @@ export const ProductPage = ({
       setTermsChecked(false);
     }
   }, [product]);
-
+  const [error, setError] = useState('');
   const onChangeCheckbox = () => {
     const termsAria = product?.terms
       ?.map(
@@ -715,7 +758,7 @@ export const ProductPage = ({
                         <ProductVariants
                           key={val.id}
                           variants={val}
-                          onClick={(e) => {
+                          onClick={(e: any) => {
                             setVariants({
                               ...variants,
                               [val.id]: Object.values(e)[0],
@@ -732,77 +775,110 @@ export const ProductPage = ({
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
                 !currencyId?.crypto ? (
-                  <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
-                    <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
-                      <p className="pw-text-sm pw-text-black pw-mb-1">
-                        Quantidade
-                      </p>
-                      <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
-                        <p
-                          onClick={() => {
-                            if (quantity > 1) {
-                              setQuantity(quantity - 1);
-                            }
-                          }}
-                          className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                            quantity && quantity > 1
-                              ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
-                              : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
-                          }`}
-                        >
-                          -
+                  <>
+                    <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
+                      <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
+                        <p className="pw-text-sm pw-text-black pw-mb-1">
+                          Quantidade
                         </p>
-                        <div>
-                          <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center">
-                            {quantity}
+                        <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
+                          <p
+                            onClick={() => {
+                              if (quantity > 1) {
+                                setQuantity(quantity - 1);
+                              }
+                            }}
+                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                              quantity && quantity > 1
+                                ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
+                                : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
+                            }`}
+                          >
+                            -
                           </p>
-                        </div>
-                        <p
-                          className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                            product?.canPurchaseAmount &&
-                            product?.stockAmount &&
-                            quantity < product?.canPurchaseAmount &&
-                            quantity < product?.stockAmount
-                              ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
-                              : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
-                          }`}
-                          onClick={() => {
-                            if (
+                          <div>
+                            <input
+                              type="number"
+                              id="quantityValue"
+                              value={quantity}
+                              onChange={() => {
+                                const inputValue = parseFloat(
+                                  (
+                                    document.getElementById(
+                                      'quantityValue'
+                                    ) as HTMLInputElement
+                                  ).value
+                                );
+                                if (
+                                  product.canPurchaseAmount &&
+                                  inputValue > product.canPurchaseAmount
+                                ) {
+                                  setError(
+                                    `Limite máximo de ${product.canPurchaseAmount} unidades`
+                                  );
+                                  setQuantity(product.canPurchaseAmount);
+                                } else if (inputValue > 0) {
+                                  setError('');
+                                  setQuantity(inputValue);
+                                } else if (inputValue < 1) {
+                                  setQuantity(1);
+                                }
+                              }}
+                              className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center pw-w-[30px]"
+                            ></input>
+                          </div>
+                          <p
+                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                               product?.canPurchaseAmount &&
                               product?.stockAmount &&
                               quantity < product?.canPurchaseAmount &&
                               quantity < product?.stockAmount
-                            ) {
-                              setQuantity(quantity + 1);
-                            }
-                          }}
-                        >
-                          +
-                        </p>
+                                ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
+                                : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
+                            }`}
+                            onClick={() => {
+                              if (
+                                product?.canPurchaseAmount &&
+                                product?.stockAmount &&
+                                quantity < product?.canPurchaseAmount &&
+                                quantity < product?.stockAmount
+                              ) {
+                                setQuantity(quantity + 1);
+                              }
+                            }}
+                          >
+                            +
+                          </p>
+                        </div>
                       </div>
+                      {orderPreview && orderPreview?.products?.length > 1 ? (
+                        isLoadingValue ? (
+                          <Shimmer className="!pw-w-[56px] !pw-h-[20px]" />
+                        ) : (
+                          <CriptoValueComponent
+                            size={12}
+                            fontClass="pw-text-sm pw-font-[600] pw-text-[#353945] pw-opacity-50"
+                            crypto={
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.currency.crypto
+                            }
+                            code={
+                              product?.prices.find(
+                                (price: any) =>
+                                  price.currencyId == currencyId?.id
+                              )?.currency.name
+                            }
+                            value={orderPreview?.cartPrice ?? '0'}
+                          ></CriptoValueComponent>
+                        )
+                      ) : null}
                     </div>
-                    {orderPreview && orderPreview?.products?.length > 1 ? (
-                      isLoadingValue ? (
-                        <Shimmer className="!pw-w-[56px] !pw-h-[20px]" />
-                      ) : (
-                        <CriptoValueComponent
-                          size={12}
-                          fontClass="pw-text-sm pw-font-[600] pw-text-[#353945] pw-opacity-50"
-                          crypto={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.crypto
-                          }
-                          code={
-                            product?.prices.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.currency.name
-                          }
-                          value={orderPreview?.cartPrice ?? '0'}
-                        ></CriptoValueComponent>
-                      )
-                    ) : null}
-                  </div>
+                    <p className="pw-text-sm pw-font-[600] pw-text-[#93949b] pw-text-left ">
+                      {error}
+                    </p>
+                  </>
                 ) : null}
 
                 {/* {showCategory && product?.tags?.length ? (
@@ -831,9 +907,7 @@ export const ProductPage = ({
                   </>
                 ) : null} */}
 
-                {product?.requirements &&
-                product?.hasWhitelistBlocker &&
-                product?.stockAmount != 0 ? (
+                {product?.hasWhitelistBlocker && product?.stockAmount != 0 ? (
                   product?.requirements?.requirementCTALabel ? (
                     <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-w-full pw-mt-5">
                       <p className="pw-text-sm pw-font-poppins pw-font-medium pw-text-black">
@@ -841,9 +915,16 @@ export const ProductPage = ({
                       </p>
                       <button
                         onClick={handleClick}
+                        disabled={user && !product?.requirements ? true : false}
                         style={{
-                          backgroundColor: '#0050FF',
-                          color: 'white',
+                          backgroundColor:
+                            user && !product?.requirements
+                              ? '#DCDCDC'
+                              : '#0050FF',
+                          color:
+                            user && !product?.requirements
+                              ? '#777E8F'
+                              : buttonTextColor ?? 'white',
                         }}
                         className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
@@ -855,10 +936,19 @@ export const ProductPage = ({
                       {!currencyId?.crypto && hasCart ? (
                         <button
                           onClick={handleClick}
+                          disabled={
+                            user && !product?.requirements ? true : false
+                          }
                           style={{
                             backgroundColor: 'none',
-                            borderColor: buttonColor ?? '#0050FF',
-                            color: buttonColor ?? '#0050FF',
+                            borderColor:
+                              user && !product?.requirements
+                                ? '#DCDCDC'
+                                : buttonColor ?? '#0050FF',
+                            color:
+                              user && !product?.requirements
+                                ? '#DCDCDC'
+                                : buttonColor ?? '#0050FF',
                           }}
                           className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
                         >
@@ -867,9 +957,26 @@ export const ProductPage = ({
                       ) : null}
                       <button
                         onClick={handleClick}
+                        disabled={
+                          product?.hasWhitelistBlocker &&
+                          user &&
+                          !product?.requirements
+                            ? true
+                            : false
+                        }
                         style={{
-                          backgroundColor: buttonColor ?? '#0050FF',
-                          color: buttonTextColor ?? 'white',
+                          backgroundColor:
+                            product?.hasWhitelistBlocker &&
+                            user &&
+                            !product?.requirements
+                              ? '#DCDCDC'
+                              : buttonColor ?? '#0050FF',
+                          color:
+                            product?.hasWhitelistBlocker &&
+                            user &&
+                            !product?.requirements
+                              ? '#777E8F'
+                              : buttonTextColor ?? 'white',
                         }}
                         className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
@@ -968,11 +1075,12 @@ export const ProductPage = ({
                           ? buttonText
                           : 'Comprar agora'}
                       </button>
-                      {product?.canPurchaseAmount === 0 && (
-                        <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">
-                          * Limite de compra por usuário atingido
-                        </p>
-                      )}
+                      {product?.canPurchaseAmount === 0 &&
+                        !product?.hasWhitelistBlocker && (
+                          <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">
+                            * Limite de compra por usuário atingido
+                          </p>
+                        )}
                     </div>
                   )
                 )}

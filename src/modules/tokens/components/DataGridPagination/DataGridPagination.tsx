@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { ReactComponent as ArrowPagination } from '../../assets/ArrowPagination.svg';
+import ArrowPagination from '../../assets/ArrowPagination.svg?react';
 
 export enum PaginationAlignment {
   LEFT = 'justify-start',

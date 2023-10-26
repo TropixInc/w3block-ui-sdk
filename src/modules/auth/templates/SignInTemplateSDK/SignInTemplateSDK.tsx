@@ -1,23 +1,32 @@
-import { useContext, useMemo } from 'react';
+import { lazy, useContext, useMemo } from 'react';
 
-import { ContentTypeEnum } from '../../../poll';
-import {
-  ContainerControllerClasses,
-  ContainerControllerSDK,
-  ExtraBy,
-  position,
-} from '../../../shared';
-import { Box } from '../../../shared/components/Box/Box';
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
+import { ContentTypeEnum } from '../../../poll/enums/contentType';
+import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
+import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { position } from '../../../shared/enums/styleConfigs';
 import {
   breakpointsEnum,
   useBreakpoints,
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
 import { ThemeContext } from '../../../storefront/contexts';
-import { SigInWithoutLayout } from '../../components/SignInWithoutLayout/SignInWithoutLayout';
+const SigInWithoutLayout = lazy(() =>
+  import('../../components/SignInWithoutLayout/SignInWithoutLayout').then(
+    (module) => ({ default: module.SigInWithoutLayout })
+  )
+);
+
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({ default: module.ContainerControllerSDK }))
+);
 
 interface SignInSignupTemplateSDKProps {
   bgColor?: string;

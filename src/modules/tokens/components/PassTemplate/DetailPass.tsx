@@ -2,7 +2,7 @@ import { useToggle } from 'react-use';
 
 import classNames from 'classnames';
 
-import { ReactComponent as ChevronDown } from '../../../shared/assets/icons/chevronDownOutlined.svg';
+import ChevronDown from '../../../shared/assets/icons/chevronDownOutlined.svg?react';
 
 export const DetailPass = ({
   title,
@@ -22,9 +22,10 @@ export const DetailPass = ({
           isOpen ? 'pw-flex' : 'pw-hidden',
           'pw-p-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'
         )}
-      >
-        {description}
-      </div>
+        dangerouslySetInnerHTML={{
+          __html: description,
+        }}
+      ></div>
       <div className={'pw-cursor-pointer sm:pw-hidden'} onClick={toggleOpen}>
         <ChevronDown
           className={classNames(

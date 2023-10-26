@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { lazy, useState } from 'react';
 
 import { useModalController } from '../../hooks/useModalController';
-import { CertificateIssuanceModal } from '../CertificateIssuanceModal';
-import { ConfirmationCertificateIssuedModal } from '../ConfirmationCertificateIssuedModal';
+const CertificateIssuanceModal = lazy(() =>
+  import('../CertificateIssuanceModal').then((module) => ({
+    default: module.CertificateIssuanceModal,
+  }))
+);
+
+const ConfirmationCertificateIssuedModal = lazy(() =>
+  import('../ConfirmationCertificateIssuedModal').then((module) => ({
+    default: module.ConfirmationCertificateIssuedModal,
+  }))
+);
 
 interface Props {
   isOpen: boolean;

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,10 +8,24 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useRequestPasswordChange } from '../../hooks';
-import { AuthButton } from '../AuthButton';
-import { AuthTextController } from '../AuthTextController';
-import { AuthValidationTip } from '../AuthValidationTip';
-import { PasswordChangeEmailSentWithoutLayout } from '../PasswordChangeEmailSentWithoutLayout/PasswordChangeEmailSentWithoutLayout';
+const AuthButton = lazy(() =>
+  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+);
+
+const AuthTextController = lazy(() =>
+  import('../AuthTextController').then((m) => ({
+    default: m.AuthTextController,
+  }))
+);
+
+const AuthValidationTip = lazy(() =>
+  import('../AuthValidationTip').then((m) => ({ default: m.AuthValidationTip }))
+);
+const PasswordChangeEmailSentWithoutLayout = lazy(() =>
+  import(
+    '../PasswordChangeEmailSentWithoutLayout/PasswordChangeEmailSentWithoutLayout'
+  ).then((m) => ({ default: m.PasswordChangeEmailSentWithoutLayout }))
+);
 
 interface Form {
   email: string;

@@ -1,9 +1,19 @@
+import { lazy } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
-import { ReactComponent as ErrorIcon } from '../../../shared/assets/icons/errorIconRed.svg';
-import { CloseButton } from '../../../shared/components/CloseButton';
+import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg?react';
+const CloseButton = lazy(() =>
+  import('../../../shared/components/CloseButton').then((m) => ({
+    default: m.CloseButton,
+  }))
+);
 import useTranslation from '../../../shared/hooks/useTranslation';
-import { Button } from '../../../tokens/components/Button';
+
+const Button = lazy(() =>
+  import('../../../tokens/components/Button').then((m) => ({
+    default: m.Button,
+  }))
+);
 
 interface iProps {
   hasOpen: boolean;
@@ -18,7 +28,7 @@ export const ErrorModal = (props: iProps) => {
     return (
       <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8">
         <CloseButton onClose={props.onClose} />
-        <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+        <div className="pw-max-w-[400px] pw-mx-auto pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
           <CloseButton onClose={props.onClose} />
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
