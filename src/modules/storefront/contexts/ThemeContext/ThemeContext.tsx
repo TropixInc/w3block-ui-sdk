@@ -31,10 +31,12 @@ export const ThemeProvider = ({
   children,
   upperTheme,
   upperPage,
+  upperPageInfo,
 }: {
   children: ReactNode;
   upperTheme?: Theme | null;
   upperPage?: TemplateData | null;
+  upperPageInfo?: GetPageInfoInterface | undefined;
 }) => {
   const [defaultTheme, setDefaultTheme] = useState<Theme | null>(null);
   const [pageInfo, setPageInfo] = useState<GetPageInfoInterface | undefined>();
@@ -52,6 +54,11 @@ export const ThemeProvider = ({
       setPageTheme(upperPage);
     }
   }, [upperPage]);
+  useEffect(() => {
+    if (upperPageInfo) {
+      setPageInfo(upperPageInfo);
+    }
+  }, [upperPageInfo]);
   const {
     data: theme,
     isError: isThemeError,

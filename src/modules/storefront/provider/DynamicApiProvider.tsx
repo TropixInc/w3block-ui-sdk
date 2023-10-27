@@ -38,13 +38,16 @@ export const DynamicApiProvider = ({
   }, [dynamicModule]);
 
   const makeApiCall = async (url: string, apiName: string) => {
-    const getIndex = new RegExp(/({\w+}*)/g).exec(url)?.length
-      ? url.match(new RegExp(/({\w+})/g))
+    const getIndex = new RegExp(/{(\w+)}*/g).exec(url)?.length
+      ? new RegExp(/{(\w+)}*/g).exec(url)?.slice(1)
       : '';
     let newUrlApi = url;
     if (getIndex && getIndex.length > 0) {
-      getIndex.forEach((item, index) => {
-        newUrlApi = newUrlApi.replaceAll(item, dynamicModule?.matches[index]);
+      getIndex.forEach((item) => {
+        newUrlApi = newUrlApi.replaceAll(
+          `{${item}}`,
+          dynamicModule?.groups[item]
+        );
       });
     }
 

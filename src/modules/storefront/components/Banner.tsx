@@ -24,6 +24,9 @@ import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
+
+import _ from 'lodash';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const { styleData, mobileStyleData } = data;
@@ -150,6 +153,7 @@ const Slide = ({
     subtitleFontItalic,
     subtitleFontSizeType,
   } = data;
+  const { isDynamic, datasource } = useDynamicApi();
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -169,7 +173,11 @@ const Slide = ({
     overlay && overlayColor
       ? `linear-gradient(${overlayColor},${overlayColor}),`
       : ''
-  } url("${bgUrlThreath}") no-repeat center`;
+  } url("${
+    isDynamic
+      ? _.get(datasource, bgUrl?.assetUrl ?? '', bgUrlThreath)
+      : bgUrlThreath
+  }") no-repeat center`;
 
   return (
     <a
@@ -187,9 +195,21 @@ const Slide = ({
         }}
         className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full  pw-flex ${rowAlignmentClass} pw-items-center`}
       >
-        {isVideo(bgUrl?.assetUrl ?? '') && (
+        {isVideo(
+          isDynamic
+            ? _.get(datasource, bgUrl?.assetUrl ?? '', bgUrl?.assetUrl ?? '')
+            : bgUrl?.assetUrl ?? ''
+        ) && (
           <ImageSDK
-            src={bgUrl?.assetUrl}
+            src={
+              isDynamic
+                ? _.get(
+                    datasource,
+                    bgUrl?.assetUrl ?? '',
+                    bgUrl?.assetUrl ?? ''
+                  )
+                : bgUrl?.assetUrl ?? ''
+            }
             className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
             width={1440}
             height={parseInt(height ?? '60')}

@@ -37,6 +37,7 @@ export type Theme = {
 export interface DynamicApiModuleInterface {
   regexp: any;
   matches: any;
+  groups?: any;
   apis: {
     apiName: string;
     url: string;
@@ -81,6 +82,7 @@ export interface GridItemAreaData extends MainModuleThemeInterface {
       fit?: FitImage;
       link?: string;
       image: AssetInterface;
+      module?: MainModuleThemeInterface;
     }[];
   };
   mobileStyleData: GridItemAreaData['styleData'];
@@ -174,6 +176,8 @@ export interface BannerData extends MainModuleThemeInterface {
     bannerDisposition?: Layout;
     bannerRatio?: Ratio;
     autoSlide?: boolean;
+    dynamicBanner?: boolean;
+    routeToDynamicBanner?: string;
     banners?: SpecificBannerInfo[];
     height?: string;
     heightUnity?: string;
