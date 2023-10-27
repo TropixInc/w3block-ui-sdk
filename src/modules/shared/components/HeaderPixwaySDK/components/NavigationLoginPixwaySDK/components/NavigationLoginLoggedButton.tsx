@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 import {
-  ReactNode, lazy, useEffect, useRef,
+  ReactNode,  useEffect, useRef,
   useState,
 } from 'react';
 import { useClickAway } from 'react-use';
 
 import {  WalletTypes } from '@w3block/sdk-id';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-const CriptoValueComponent = lazy(() => import('../../../../CriptoValueComponent/CriptoValueComponent').then((mod) => ({ default: mod.CriptoValueComponent })));
+
 
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
@@ -32,6 +32,7 @@ import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
 import { useUserWallet } from '../../../../../hooks/useUserWallet';
 import { chainIdToCode, useGetRightWallet } from '../../../../../utils/getRightWallet';
+import { CriptoValueComponent } from '../../../../CriptoValueComponent/CriptoValueComponent';
 import { WeblockButton } from '../../../../WeblockButton/WeblockButton';
 import { NavigationMenuTabs } from '../interfaces/menu';
 interface NavigationLoginLoggedButtonProps {
