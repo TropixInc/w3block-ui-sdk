@@ -27,6 +27,7 @@ import GenericTable, {
 } from '../../../tokens/components/GenericTable/GenericTable';
 import StatusTag, { statusMobile } from '../../../tokens/components/StatusTag/StatusTag';
 import { BenefitStatus } from '../../enums/BenefitStatus';
+import useGetPassBenefitById from '../../hooks/useGetPassBenefitById';
 import useGetPassBenefits from '../../hooks/useGetPassBenefits';
 import useGetPassById from '../../hooks/useGetPassById';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
@@ -78,7 +79,7 @@ export const PassesDetail = () => {
 
   const { mutate: registerUse, isLoading: registerLoading } = usePostBenefitRegisterUse();
   const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
-  const filteredBenefit = benefits?.data.items.find(({ id }) => id === benefitId);
+  const { data: filteredBenefit } = useGetPassBenefitById(benefitId);
 
   const formatedData = useMemo(() => {
     const filteredBenefits = tokenPass?.data?.tokenPassBenefits?.filter(benefit => {
@@ -269,9 +270,9 @@ export const PassesDetail = () => {
             hasOpen={showSuccess}
             onClose={() => setShowSuccess(false)}
             validateAgain={() => setOpenScan()}
-            name={filteredBenefit?.name}
-            type={filteredBenefit?.type}
-            tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
+            name={filteredBenefit?.data?.name}
+            type={filteredBenefit?.data?.type}
+            tokenPassBenefitAddresses={filteredBenefit?.data?.tokenPassBenefitAddresses}
             userEmail={verifyBenefit?.data?.user?.email}
             userName={verifyBenefit?.data?.user?.name}
           />
@@ -290,7 +291,7 @@ export const PassesDetail = () => {
             onClose={() => setShowVerify(false)}
             useBenefit={() => validateBenefitUse(qrCodeData)}
             data={verifyBenefit?.data}
-            tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
+            tokenPassBenefitAddresses={filteredBenefit?.data?.tokenPassBenefitAddresses}
           />
         </>
         : null}
