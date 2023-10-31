@@ -27,6 +27,7 @@
     "pre-release": "standard-version --prerelease alpha"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^2.9.6",
     "@metamask/detect-provider": "^2.0.0",
     "@stripe/react-stripe-js": "^1.13.0",
@@ -52,6 +53,7 @@
     "react-i18next": "^11.18.1",
     "react-input-mask": "^2.0.4",
     "react-phone-number-input": "^3.2.19",
+    "react-tiny-popover": "^8.0.4",
     "react-use": "^17.4.0",
     "react-webcam": "^7.0.1",
     "socket.io-client": "^4.6.1",
