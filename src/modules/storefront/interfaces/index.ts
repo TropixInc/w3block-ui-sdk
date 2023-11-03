@@ -75,6 +75,9 @@ export interface GridItemAreaData extends MainModuleThemeInterface {
     gridRows?: string;
     gapX?: string;
     gapY?: string;
+    dynamicGrid?: boolean;
+    dynamicGridPath: string;
+    dynamicMaxItens?: number;
     Items?: {
       target?: '_self' | '_blank';
       quadrants?: number[];
@@ -189,6 +192,19 @@ export interface SpecificBannerInfo {
   backgroundColor?: string;
   backgroundUrl?: AssetInterface;
   backgroundUrlMobile?: AssetInterface;
+  sideImageUrl?: AssetInterface;
+  sideImagePosition?:
+    | 'left-center'
+    | 'right-center'
+    | 'center-center'
+    | 'center-top'
+    | 'center-bottom'
+    | 'left-bottom'
+    | 'right-bottom'
+    | 'left-top'
+    | 'right-top';
+  sideImageHeight?: string;
+  sideImageWidth?: string;
   overlay?: boolean;
   padding?: string;
   overlayColor?: string;
@@ -394,6 +410,12 @@ export interface ParagraphData extends MainModuleThemeInterface {
     alignment?: AlignmentEnum;
     titleColor?: string;
     textColor?: string;
+    textSize?: string;
+    textFontFamily?: string;
+    textUnit?: string;
+    titleSize?: string;
+    titleFontFamily?: string;
+    titleUnit?: string;
   };
   contentData: {
     titleInput?: string;
