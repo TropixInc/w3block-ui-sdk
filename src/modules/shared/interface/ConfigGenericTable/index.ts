@@ -23,7 +23,7 @@ export enum FormatFilterType {
 }
 
 export interface TableStylesClasses {
-  hoot?: string;
+  root?: string;
   header?: string;
   line?: string;
 }
@@ -99,6 +99,6 @@ export interface ConfigGenericTable {
   actions?: Array<Actions>;
   lineActions?: Actions;
   externalFilterClasses?: {
-    hoot?: string;
+    root?: string;
   };
 }

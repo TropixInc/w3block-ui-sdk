@@ -27,6 +27,11 @@ const Header = lazy(() =>
 const Footer = lazy(() =>
   import('./Footer').then((m) => ({ default: m.Footer }))
 );
+const GenericTableWrapper = lazy(() =>
+  import('./GenericTableWrapper').then((m) => ({
+    default: m.GenericTableWrapper,
+  }))
+);
 const Banner = lazy(() =>
   import('./Banner').then((m) => ({ default: m.Banner }))
 );
@@ -286,6 +291,10 @@ export const StorefrontPreview = ({
                     );
                   case ModulesType.MIDIA:
                     return <Midia data={{ ...theme.midia, ...item }} />;
+                  case ModulesType.TABLE:
+                    return (
+                      <GenericTableWrapper data={{ ...theme.table, ...item }} />
+                    );
                   default:
                     break;
                 }

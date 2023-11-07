@@ -1,7 +1,7 @@
 import { getMonth, getYear } from 'date-fns';
 
-import ChevronLeftFilledIcon from '../../assets/icons/chevronLeftFilled.svg';
-import ChevronRightFilledIcon from '../../shared/assets/icons/chevronRightFilled.svg';
+import ChevronLeftFilledIcon from '../../assets/icons/chevronLeftFilled.svg?react';
+import ChevronRightFilledIcon from '../../assets/icons/chevronRightFilled.svg?react';
 
 interface Props {
   date: Date;

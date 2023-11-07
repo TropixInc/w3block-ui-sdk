@@ -6,9 +6,9 @@ import _ from 'lodash';
 import { useRouter } from 'next/router';
 
 import useTruncate from '../../../tokens/hooks/useTruncate';
-import ArrowDown from '../../assets/icons/arrowDownOutlined.svg?react';
+import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import ClearFilter from '../../assets/icons/clearFilterOutlined.svg?react';
-import CopyIcon from '../../assets/icons/copy2.svg?react';
+import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import FilterIcon from '../../assets/icons/filterOutlined.svg?react';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
@@ -30,7 +30,7 @@ import { Spinner } from '../Spinner';
 interface GenericTableProps {
   config: ConfigGenericTable;
   classes?: {
-    hoot?: string;
+    root?: string;
     grid?: string;
     rows?: string;
   };
@@ -270,8 +270,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     setFilterLabels({});
   };
 
-  console.log(Object.values(filters));
-
   return (
     <div className="pw-w-full">
       <FormProvider {...methods}>
@@ -279,7 +277,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           <div
             className={classNames(
               'pw-relative pw-w-full pw-mb-10 pw-gap-x-3 pw-flex pw-flex-wrap sm:pw-max-w-[1000px]',
-              externalFilterClasses?.hoot ?? ''
+              externalFilterClasses?.root ?? ''
             )}
           >
             {columns
@@ -331,9 +329,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                 onClick={() => onClearAllFilter()}
               >
                 <span className="pw-text-red-500 pw-font-medium">
-                  {translate(
-                    'tokenization>selectContractForTokenization>clearFilters'
-                  )}
+                  {translate('shared>genericTable>clearFilters')}
                 </span>
                 <ClearFilter className="pw-stroke-2 pw-stroke-red-500 pw-w-5 pw-h-5" />
               </button>
@@ -344,14 +340,15 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         <div
           className={classNames(
             'pw-mb-10 pw-min-h-[500px] pw-rounded-t-2xl pw-overflow-auto',
-            classes?.hoot ?? '',
-            tableStyles?.hoot ?? ''
+            classes?.root ?? '',
+            tableStyles?.root ?? ''
           )}
         >
           <div
             className={classNames(
-              'pw-px-3 pw-h-[72px] pw-min-w-[1400px] pw-bg-[#DDE6F3] pw-gap-x-3 pw-rounded-t-2xl pw-w-[800px] pw-justify-between pw-text-sm pw-items-center pw-grid sm:pw-w-full',
-              classes?.grid ?? ''
+              'pw-px-3 pw-h-[72px] pw-bg-[#DDE6F3] pw-gap-x-3 pw-rounded-t-2xl pw-w-[800px] pw-justify-between pw-text-sm pw-items-center pw-grid sm:pw-w-full',
+              classes?.grid ?? '',
+              tableStyles?.header ?? ''
             )}
           >
             {columns.map(({ sortable, header, key, sortableTamplate }) => (
@@ -471,7 +468,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   onClick={() => handleAction(lineActions?.action, item)}
                   disabled={!lineActions}
                   className={classNames(
-                    'pw-min-w-[1400px] pw-w-full pw-justify-between pw-grid pw-items-center  pw-gap-x-2 pw-px-8 pw-py-[19px] pw-border-t',
+                    'pw-w-full pw-justify-between pw-grid pw-items-center  pw-gap-x-2 pw-px-8 pw-py-[19px] pw-border-t',
                     classes?.grid ?? '',
                     tableStyles?.line ?? ''
                   )}

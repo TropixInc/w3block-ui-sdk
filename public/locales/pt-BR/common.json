@@ -406,5 +406,6 @@
   "auth>formCompletKYCWithoutLayout>notEditInfos": "Seus dados já foram revisados e aprovados. Por favor, contate o suporte técnico se você precisa atualizar suas informações.",
   "auth>myProfileTemplate>moreInfos": "Informações Complementares",
   "commerce>productPage>totalAvailable": "Tokens disponíveis",
-  "commerce>checkout>free": "Gratuito"
+  "commerce>checkout>free": "Gratuito",
+  "shared>genericTable>clearFilters": "Limpar filtros"
 }

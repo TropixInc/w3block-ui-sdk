@@ -76,7 +76,7 @@ export const DynamicGenericFilter = ({
     if (data && dynamicFilterParameters) {
       const items = _.get(data, dynamicFilterParameters.itemsPath, []);
 
-      const arrOptions = items.map((item) => ({
+      const arrOptions = items.map((item: any) => ({
         value: _.get(item, dynamicFilterParameters.key, ''),
         label: _.get(item, dynamicFilterParameters.label, ''),
       }));

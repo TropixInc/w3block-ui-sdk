@@ -4,7 +4,7 @@ import { Popover } from 'react-tiny-popover';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
 
-import Dots from '../../assets/icons/dotsVerficalFilled.svg?react';
+import Dots from '../../assets/icons/dashOutlined.svg?react';
 
 interface ButtonProps {
   dataItem: any;
