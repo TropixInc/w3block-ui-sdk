@@ -49,9 +49,9 @@ export const UserWalletsContext = createContext<UserWalletsContextInterface>({
 
 const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();
+  const { data: session } = usePixwaySession();
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [loyaltyWallet, setLoyaltyWallet] = useState<WalletLoyalty[]>([]);
-  const { data: session, status } = usePixwaySession();
   const { profile } = useProfileWithKYC();
   const [coinType, setCoinType] = useState<CoinsType>(CoinsType.MATIC);
   const isProduction = useIsProduction();

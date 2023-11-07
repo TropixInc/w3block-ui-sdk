@@ -133,7 +133,7 @@ export const PaymentTemplateSDK = () => {
       createPayment(
         {
           amount: valueToPay,
-          points: valueToUse,
+          points: valueToUse === '' ? '0' : valueToUse,
           userId: userInfo.id as string,
           userCode: code.join('') as string,
           loyaltyId: loyaltieToUse?.id as string,
