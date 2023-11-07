@@ -159,6 +159,7 @@ export const StorefrontPreview = ({
   }, [context?.defaultTheme, themeListener]);
 
   let data = { ...context?.pageTheme, ...currentPage };
+
   const themeContext = context?.defaultTheme;
 
   const dynamicApi = useMemo<DynamicApiModuleInterface | undefined>(() => {
