@@ -13,6 +13,7 @@ import {
   ModulesType,
 } from '../interfaces';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
 import { Accordions } from './Accordions';
 import { Banner } from './Banner';
 import { ImagePlusText } from './ImagePlusText';
@@ -131,13 +132,6 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
       default:
         break;
     }
-  };
-
-  const changeDynamicJsonToInsertIndex = (json: any, index: number) => {
-    let stringJSON = JSON.stringify(json);
-
-    stringJSON = stringJSON.replaceAll(/{index}/g, index.toString());
-    return JSON.parse(stringJSON);
   };
 
   const dynamicGridRenderer = () => {

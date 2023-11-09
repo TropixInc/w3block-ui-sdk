@@ -9,6 +9,9 @@ const ImageSDK = lazy(() =>
 );
 
 import './Card.css';
+import _ from 'lodash';
+
+import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 
 export const Card = ({
   product,
@@ -21,10 +24,11 @@ export const Card = ({
   };
 }) => {
   const { styleData, contentData } = config;
+  const { datasource } = useDynamicApi();
   const linkToSend = () => {
     if (contentData.cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink) {
-        return product.slug ?? '';
+        return _.get(datasource, product.slug, product.slug);
       }
     } else {
       return `/product/slug/${product.slug}`;
@@ -44,7 +48,15 @@ export const Card = ({
     >
       <div className="pw-flex pw-justify-center pw-w-full">
         <ImageSDK
-          src={product.images.length ? product.images[0]?.thumb : undefined}
+          src={
+            product.images.length
+              ? _.get(
+                  datasource,
+                  product.images[0]?.thumb ?? '',
+                  product.images[0]?.thumb
+                )
+              : undefined
+          }
           className="pw-w-full pw-min-h-[230px] pw-h-full pw-object-cover pw-rounded-md"
           quality="best"
           width={600}
@@ -82,7 +94,7 @@ export const Card = ({
           }}
           className="pw-line-clamp-2 pw-min-h-[36px] pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
         >
-          {product.name}
+          {_.get(datasource, product.name ?? '', product.name)}
         </p>
       )}
       {styleData.showCardDescription && (
@@ -112,7 +124,7 @@ export const Card = ({
           }}
           className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px] pw-mt-2 pw-text-sm pw-leading-5"
         >
-          {product.description}
+          {_.get(datasource, product.description ?? '', product.description)}
         </p>
       )}
       {styleData.showCardCategory && (
@@ -179,7 +191,11 @@ export const Card = ({
               <span className="pw-text-sm pw-pr-2">
                 {product.prices[0].currency.symbol}
               </span>
-              {product.prices[0].amount}
+              {_.get(
+                datasource,
+                product.prices[0].amount,
+                product.prices[0].amount
+              )}
             </>
           )}
         </p>
