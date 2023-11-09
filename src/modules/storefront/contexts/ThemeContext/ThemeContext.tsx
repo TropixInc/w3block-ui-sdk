@@ -10,7 +10,7 @@ import { useSessionStorage } from 'react-use';
 
 import { useGetPageModules } from '../../hooks/useGetPageModules/useGetPageModules';
 import { useGetTheme } from '../../hooks/useGetTheme';
-import { Theme, TemplateData } from '../../interfaces';
+import { Theme, TemplateData, GetPageInfoInterface } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
 export interface IThemeContext {
@@ -22,6 +22,7 @@ export interface IThemeContext {
   isThemeError: boolean;
   isThemeSuccess: boolean;
   setPageTheme: (TemplateData: TemplateData) => void;
+  pageInfo?: GetPageInfoInterface;
 }
 
 const BASE_THEME_KEY = 'baseThem_key';
@@ -30,12 +31,15 @@ export const ThemeProvider = ({
   children,
   upperTheme,
   upperPage,
+  upperPageInfo,
 }: {
   children: ReactNode;
   upperTheme?: Theme | null;
   upperPage?: TemplateData | null;
+  upperPageInfo?: GetPageInfoInterface | undefined;
 }) => {
   const [defaultTheme, setDefaultTheme] = useState<Theme | null>(null);
+  const [pageInfo, setPageInfo] = useState<GetPageInfoInterface | undefined>();
   const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
   const [pageThemeSession, setPageThemeSession] =
     useSessionStorage<TemplateData | null>(BASE_THEME_KEY);
@@ -50,6 +54,11 @@ export const ThemeProvider = ({
       setPageTheme(upperPage);
     }
   }, [upperPage]);
+  useEffect(() => {
+    if (upperPageInfo) {
+      setPageInfo(upperPageInfo);
+    }
+  }, [upperPageInfo]);
   const {
     data: theme,
     isError: isThemeError,
@@ -71,6 +80,7 @@ export const ThemeProvider = ({
   useEffect(() => {
     if (pageModules) {
       setPageTheme(pageModules.data);
+      setPageInfo(pageModules);
     }
   }, [pageModules]);
 
@@ -85,6 +95,7 @@ export const ThemeProvider = ({
         isThemeError,
         isThemeSuccess,
         setPageTheme,
+        pageInfo,
       }}
     >
       {children}

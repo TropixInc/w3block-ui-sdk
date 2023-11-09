@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import { Autoplay, Navigation } from 'swiper';
@@ -31,6 +31,11 @@ import {
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
+
+import _ from 'lodash';
+
+import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
 
 const ContentCard = lazy(() =>
   import('./ContentCard').then((module) => ({
@@ -51,7 +56,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
   );
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [error, _] = useState('');
+  const [error, __] = useState('');
   const [translate] = useTranslation();
   const breakpoint = useBreakpoints();
   const {
@@ -85,7 +90,38 @@ export const Products = ({ data }: { data: ProductsData }) => {
     moduleFontItalic,
     moduleFontSizeType,
     moduleFontFamily,
+    dynamicCards,
+    dynamicCardsPath,
+    dynamicMaxItens,
   } = mergedContentData;
+
+  const { datasource } = useDynamicApi();
+
+  const dynamicCardsData = useMemo(() => {
+    console.log(dynamicCards, contentCards);
+    if (dynamicCards == true && contentCards && contentCards.length > 0) {
+      const itemsToRender = _.get(datasource, dynamicCardsPath ?? '', []).slice(
+        0,
+        dynamicMaxItens ?? 10
+      ) as any[];
+
+      const productToFollow = contentCards[0];
+      console.log('chegou aqui');
+      return itemsToRender.map((_, index) =>
+        changeDynamicJsonToInsertIndex(productToFollow, index)
+      );
+    } else {
+      return contentCards;
+    }
+  }, [
+    dynamicCards,
+    dynamicCardsPath,
+    dynamicMaxItens,
+    datasource,
+    contentCards,
+  ]);
+
+  console.log(dynamicCardsData);
 
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.COMMERCE);
@@ -151,7 +187,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
         className={`pw-grid pw-gap-4 pw-w-full pw-flex-1 pw-box-border`}
       >
         {cardType == 'content' && format && format != 'product'
-          ? contentCards
+          ? dynamicCardsData
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
               .map((card) => (
                 <ContentCard
@@ -162,14 +198,14 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 />
               ))
           : cardType == 'content' && (!format || format == 'product')
-          ? contentCards
+          ? dynamicCardsData
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
               .map((p) => (
                 <Card
                   key={p?.id}
                   product={{
                     tags:
-                      p?.category?.map((cat) => ({
+                      p?.category?.map((cat: any) => ({
                         name: cat.label,
                         id: cat.value,
                       })) ?? [],
@@ -272,7 +308,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
         className="pw-w-full md:pw-px-6"
       >
         {cardType == 'content' && format && format != 'product'
-          ? contentCards?.map((card) => (
+          ? dynamicCardsData?.map((card) => (
               <SwiperSlide
                 key={card.id}
                 className="pw-flex pw-w-full pw-justify-center"
@@ -287,7 +323,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
               </SwiperSlide>
             ))
           : cardType == 'content' && (!format || format == 'product')
-          ? contentCards?.map((p) => (
+          ? dynamicCardsData?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
                 <Card
                   key={p?.id}
@@ -298,7 +334,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     slug: p.link ?? '',
                     hasLink: p.hasLink,
                     tags:
-                      p?.category?.map((cat) => ({
+                      p?.category?.map((cat: any) => ({
                         name: cat.label,
                         id: cat.value,
                       })) ?? [],

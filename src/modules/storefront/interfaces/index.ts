@@ -2,6 +2,8 @@
 export type TemplateData = {
   title: string;
   slug: string;
+  dynamicApi?: DynamicApiModuleInterface;
+  custom?: string;
   modules: (
     | CategoriesData
     | BannerData
@@ -31,6 +33,16 @@ export type Theme = {
   midia?: MidiaData;
   GridItemArea?: GridItemAreaData;
 };
+
+export interface DynamicApiModuleInterface {
+  regexp: any;
+  matches: any;
+  groups?: any;
+  apis: {
+    apiName: string;
+    url: string;
+  }[];
+}
 
 export interface MainModuleThemeInterface {
   name: string;
@@ -63,6 +75,9 @@ export interface GridItemAreaData extends MainModuleThemeInterface {
     gridRows?: string;
     gapX?: string;
     gapY?: string;
+    dynamicGrid?: boolean;
+    dynamicGridPath: string;
+    dynamicMaxItens?: number;
     Items?: {
       target?: '_self' | '_blank';
       quadrants?: number[];
@@ -70,6 +85,7 @@ export interface GridItemAreaData extends MainModuleThemeInterface {
       fit?: FitImage;
       link?: string;
       image: AssetInterface;
+      module?: MainModuleThemeInterface;
     }[];
   };
   mobileStyleData: GridItemAreaData['styleData'];
@@ -163,6 +179,8 @@ export interface BannerData extends MainModuleThemeInterface {
     bannerDisposition?: Layout;
     bannerRatio?: Ratio;
     autoSlide?: boolean;
+    dynamicBanner?: boolean;
+    routeToDynamicBanner?: string;
     banners?: SpecificBannerInfo[];
     height?: string;
     heightUnity?: string;
@@ -174,6 +192,19 @@ export interface SpecificBannerInfo {
   backgroundColor?: string;
   backgroundUrl?: AssetInterface;
   backgroundUrlMobile?: AssetInterface;
+  sideImageUrl?: AssetInterface;
+  sideImagePosition?:
+    | 'left-center'
+    | 'right-center'
+    | 'center-center'
+    | 'center-top'
+    | 'center-bottom'
+    | 'left-bottom'
+    | 'right-bottom'
+    | 'left-top'
+    | 'right-top';
+  sideImageHeight?: string;
+  sideImageWidth?: string;
   overlay?: boolean;
   padding?: string;
   overlayColor?: string;
@@ -286,6 +317,9 @@ export interface ProductsData extends MainModuleThemeInterface {
     moduleFontBold?: boolean;
     moduleFontItalic?: boolean;
     moduleFontSizeType?: string;
+    dynamicCards?: boolean;
+    dynamicCardsPath?: string;
+    dynamicMaxItens?: number;
   };
   mobileStyleData: ProductsDataStyleData;
   mobileContentData: ProductsData['contentData'];
@@ -379,6 +413,12 @@ export interface ParagraphData extends MainModuleThemeInterface {
     alignment?: AlignmentEnum;
     titleColor?: string;
     textColor?: string;
+    textSize?: string;
+    textFontFamily?: string;
+    textUnit?: string;
+    titleSize?: string;
+    titleFontFamily?: string;
+    titleUnit?: string;
   };
   contentData: {
     titleInput?: string;
@@ -518,4 +558,29 @@ export enum ModulesType {
   PRODUCT_PAGE = 'Product_page',
   MIDIA = 'Midia',
   GRID_ITEM_AREA = 'GridItemArea',
+  DYNAMIC_API = 'DynamicApi',
+}
+
+export interface GetPageInfoInterface {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  companyId: string;
+  projectId: string;
+  routePattern: string;
+  isRoutePatternRegex: boolean;
+  data: any;
+  name: string;
+  isActive: boolean;
+  auth: Auth;
+}
+
+export interface Auth {
+  data: Data2;
+  type: string;
+  redirectUrl: string;
+}
+
+export interface Data2 {
+  whitelists: any[];
 }
