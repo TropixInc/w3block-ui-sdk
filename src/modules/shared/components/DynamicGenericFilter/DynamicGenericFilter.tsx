@@ -38,12 +38,33 @@ interface DynamicProps {
   filterLabels?: any;
   onSelected?: (value: string) => void;
   selected?: string;
+  placeholder?: string;
 }
+
+const paginationMapping = {
+  default: {},
+  strapi: {
+    inputMap: (data: any) => {
+      if (data) {
+        return {
+          totalItems: data?.meta?.pagination?.total,
+          totalPages: data?.meta?.pagination?.pageCount,
+        };
+      }
+    },
+    outputMap: (params: any) => {
+      const newParams = { ...params, page: undefined };
+      newParams['pagination[pageSize]'] = 50;
+      newParams['pagination[page]'] = params?.page;
+
+      return newParams;
+    },
+  },
+};
 
 export const DynamicGenericFilter = ({
   format,
   filterOptionsUrl,
-  filterContext,
   dynamicFilterParameters,
   itemKey,
   onSelectedSearchItem,
@@ -53,12 +74,11 @@ export const DynamicGenericFilter = ({
   filterLabels,
   onSelected,
   selected,
+  placeholder,
 }: DynamicProps) => {
   const [searchName, setSearchName] = useState<string | undefined>('');
   const [searchValue, setSearchValue] = useState<string | undefined>('');
   const [showResponseModal, setShowResponseModal] = useState<boolean>(false);
-
-  const [translate] = useTranslation();
 
   const setSearchValueCallback = useCallback(() => {
     setSearchValue(searchName);
@@ -66,10 +86,10 @@ export const DynamicGenericFilter = ({
 
   useDebounce(setSearchValueCallback, 900, [setSearchValueCallback]);
 
-  const [{ data, isLoading }] = usePaginatedGenericApiGet({
+  const [{ data }] = usePaginatedGenericApiGet({
     url: filterOptionsUrl ?? '',
-    context: filterContext,
     search: searchValue,
+    ...paginationMapping[dynamicFilterParameters?.paginationType || 'default'],
   });
 
   const options = useMemo(() => {
@@ -95,10 +115,10 @@ export const DynamicGenericFilter = ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (selected as Array<any>).map(({ label }) => label).join(', ');
       } else {
-        return 'Status';
+        return placeholder ?? 'Selecione';
       }
     } else {
-      return 'Status';
+      return placeholder ?? 'Selecione';
     }
   };
 
@@ -125,7 +145,7 @@ export const DynamicGenericFilter = ({
             showResponseModal={showResponseModal}
             onShowResponseModal={setShowResponseModal}
             items={options ?? []}
-            inputPlaceholder={translate('key>nameFilter>search')}
+            inputPlaceholder={placeholder ?? 'Buscar'}
             classes={{
               root: '!pw-w-full',
               input:
@@ -141,6 +161,8 @@ export const DynamicGenericFilter = ({
             onChange={onSelected as (value: string) => void}
             options={options ?? []}
             selected={selected ?? ''}
+            placeholder={placeholder}
+            className="pw-w-full"
           />
         );
       }

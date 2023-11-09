@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import classNames from 'classnames';
 import _ from 'lodash';
-import { useRouter } from 'next/router';
 
 import useTruncate from '../../../tokens/hooks/useTruncate';
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
@@ -13,6 +12,7 @@ import FilterIcon from '../../assets/icons/filterOutlined.svg?react';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
+import useRouter from '../../hooks/useRouter';
 import useTranslation from '../../hooks/useTranslation';
 import {
   ConfigGenericTable,
@@ -36,16 +36,41 @@ interface GenericTableProps {
   };
 }
 
+const paginationMapping = {
+  default: {},
+  strapi: {
+    inputMap: (data: any) => {
+      if (data) {
+        return {
+          totalItems: data?.meta?.pagination?.total,
+          totalPages: data?.meta?.pagination?.pageCount,
+        };
+      }
+    },
+    outputMap: (params: any) => {
+      const newParams = { ...params, page: undefined };
+      newParams['pagination[pageSize]'] = 10;
+      newParams['pagination[page]'] = params?.page;
+
+      return newParams;
+    },
+  },
+};
+
 export const GenericTable = ({ classes, config }: GenericTableProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
     columns,
+    localeItems,
     dataSource,
     xlsReports,
     actions,
     tableStyles,
     lineActions,
     externalFilterClasses,
+    paginationType = 'default',
+    filtersTitle,
+    tableTitle,
   } = config;
 
   const { companyId: tenantId } = useCompanyConfig();
@@ -59,6 +84,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const methods = useForm();
   const truncate = useTruncate();
   const router = useRouter();
+
   useEffect(() => {
     const itemSorteble = columns.find((item) => item.sortable);
     if (itemSorteble && itemSorteble?.sortableTamplate) {
@@ -78,7 +104,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
     url: apiUrl ? apiUrl : dataSource?.url ?? '',
-    context: dataSource?.urlContext,
+    ...paginationMapping[paginationType],
   });
 
   const handleAction = (action: any, row: any) => {
@@ -89,7 +115,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           (item: string) => (url = url.replace(`{${item}}`, _.get(row, item)))
         );
 
-        router.push(url);
+        if ((url as string).includes('http')) {
+          window.location.href = url;
+        } else {
+          router.push(url);
+        }
       }
     } else if (action && action.type == 'function') {
       action.data(row);
@@ -131,7 +161,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     item: any,
     itemKey: string,
-    format: FormatApiData
+    format: FormatApiData,
+    basicUrl?: string
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -145,8 +176,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
       case FormatTypeColumn.MAPPING: {
         const value = _.get(item, itemKey, '');
-        const formatedValue = _.get(format.mapping, value, '-');
 
+        const formatedValue = _.get(format.mapping, value, '-');
         return formatedValue ? formatedValue : value;
       }
       case FormatTypeColumn.HASH: {
@@ -176,7 +207,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       case FormatTypeColumn.THUMBNAIL: {
         return (
           <img
-            src={_.get(item, itemKey, '')}
+            src={
+              basicUrl
+                ? `${basicUrl}${_.get(item, itemKey, '')}`
+                : _.get(item, itemKey, '')
+            }
             alt=""
             className="pw-w-10 pw-h-10 pw-rounded-md"
           />
@@ -271,47 +306,49 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   };
 
   return (
-    <div className="pw-w-full">
+    <div className="pw-w-full pw-mt-20">
       <FormProvider {...methods}>
         <div className="pw-w-full pw-flex pw-justify-between">
           <div
             className={classNames(
-              'pw-relative pw-w-full pw-mb-10 pw-gap-x-3 pw-flex pw-flex-wrap sm:pw-max-w-[1000px]',
+              'pw-relative pw-w-full pw-gap-x-3 pw-flex pw-flex-wrap sm:pw-max-w-[1000px]',
               externalFilterClasses?.root ?? ''
             )}
           >
+            {filtersTitle ? (
+              <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-2">
+                {filtersTitle}
+              </p>
+            ) : null}
             {columns
               .filter((item) => item.header.filter?.placement === 'external')
-              .map(({ header, key }) => (
-                <div
-                  key={key}
-                  className={classNames(
-                    'pw-w-full',
-                    header.filter?.filterClass ?? ''
-                  )}
-                >
-                  <SmartGenericFilter
-                    filterType={header.filter?.type}
-                    filterFormat={header.filter?.format}
-                    filterOptions={header.filter?.values}
-                    itemShowFilterKey={key}
-                    itemKey={key}
-                    filters={filters}
-                    onChangeFilter={setFilters}
-                    onCloseFilters={setIsShowFilterKey}
-                    filterLabels={filterLabels}
-                    onChangeFilterLabels={setFilterLabels}
-                    filterTemplate={
-                      header.filter?.replacedFilterTemplate
-                        ? header.filter?.replacedFilterTemplate
-                        : header.filter?.filterTemplate
-                    }
-                    filterOptionsUrl={header.filter?.data?.url}
-                    filterContext={header.filter?.data?.filterUrlContext}
-                    dynamicFilterParameters={header.filter?.data?.parameters}
-                  />
-                </div>
-              ))}
+              .map(({ header, key }) => {
+                return (
+                  <div key={key} style={header.filter?.filterClass as any}>
+                    <SmartGenericFilter
+                      filterType={header.filter?.type}
+                      filterFormat={header.filter?.format}
+                      filterOptions={header.filter?.values}
+                      itemShowFilterKey={key}
+                      itemKey={key}
+                      filters={filters}
+                      onChangeFilter={setFilters}
+                      onCloseFilters={setIsShowFilterKey}
+                      filterLabels={filterLabels}
+                      onChangeFilterLabels={setFilterLabels}
+                      filterTemplate={
+                        header.filter?.replacedFilterTemplate
+                          ? header.filter?.replacedFilterTemplate
+                          : header.filter?.filterTemplate
+                      }
+                      filterOptionsUrl={header.filter?.data?.url}
+                      filterContext={header.filter?.data?.filterUrlContext}
+                      dynamicFilterParameters={header.filter?.data?.parameters}
+                      filterPlaceholder={header.filter?.placeholder}
+                    />
+                  </div>
+                );
+              })}
           </div>
           <div>
             {xlsReports?.url && (
@@ -337,147 +374,166 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           </div>
         </div>
 
+        {tableTitle ? (
+          <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mt-3">
+            {tableTitle}
+          </p>
+        ) : null}
+
         <div
           className={classNames(
-            'pw-mb-10 pw-min-h-[500px] pw-rounded-t-2xl pw-overflow-auto',
+            'pw-mb-10 pw-rounded-t-2xl pw-overflow-auto',
             classes?.root ?? '',
             tableStyles?.root ?? ''
           )}
         >
           <div
+            style={classes?.grid as any}
             className={classNames(
-              'pw-px-3 pw-h-[72px] pw-bg-[#DDE6F3] pw-gap-x-3 pw-rounded-t-2xl pw-w-[800px] pw-justify-between pw-text-sm pw-items-center pw-grid sm:pw-w-full',
-              classes?.grid ?? '',
+              'pw-px-3 pw-h-[72px] pw-bg-[#DDE6F3] pw-gap-x-2 pw-rounded-t-2xl pw-w-[800px] pw-justify-between pw-text-sm pw-items-center pw-grid sm:pw-w-full',
               tableStyles?.header ?? ''
             )}
           >
-            {columns.map(({ sortable, header, key, sortableTamplate }) => (
-              <div key={key} className="pw-w-full pw-relative">
-                <div className="pw-flex pw-items-center pw-justify-between">
-                  <p
-                    className={classNames(
-                      'pw-font-semibold pw-flex pw-flex-col pw-text-sm',
-                      header.filter ? 'pw-w-[70%]' : 'pw-w-full'
-                    )}
-                  >
-                    <span>{header.label}</span>
-                    {header.filter?.placement !== 'external' ? (
-                      <span className="pw-text-xs pw-font-normal pw-opacity-90 pw-line-clamp-2">
-                        {renderFilterValues(
-                          (filterLabels as any)?.[key],
-                          header.filter?.format,
-                          header.filter?.values
-                        )}
-                      </span>
-                    ) : null}
-                  </p>
-                  <div className="pw-flex pw-gap-x-1 pw-items-center">
-                    {sortable ? (
-                      <div className="pw-relative pw-z-20">
-                        <button
-                          className={classNames(
-                            'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
-                            sort.includes(key) ? 'pw-bg-blue1' : 'pw-opacity-80'
+            {columns
+              .filter(({ header }) => header.label)
+              .map(({ sortable, header, key, sortableTamplate }) => (
+                <div key={key} className="pw-w-full pw-relative">
+                  <div className="pw-flex pw-items-center pw-justify-between">
+                    <p
+                      className={classNames(
+                        'pw-font-semibold pw-flex pw-flex-col pw-text-sm',
+                        header.filter ? 'pw-w-[70%]' : 'pw-w-full'
+                      )}
+                    >
+                      <span>{header.label}</span>
+                      {header.filter?.placement !== 'external' ? (
+                        <span className="pw-text-xs pw-font-normal pw-opacity-90 pw-line-clamp-2">
+                          {renderFilterValues(
+                            (filterLabels as any)?.[key],
+                            header.filter?.format,
+                            header.filter?.values
                           )}
-                          onClick={() => onHandleSort(sortableTamplate ?? '')}
-                        >
-                          <ArrowDown
-                            className={classNames(
-                              sort.includes(key)
-                                ? 'pw-stroke-white'
-                                : 'pw-stroke-blue1',
-                              sort.includes('ASC')
-                                ? 'pw-rotate-180'
-                                : 'pw-rotate-0'
-                            )}
-                          />
-                        </button>
-                      </div>
-                    ) : null}
-                    {header.filter?.placement !== 'external' ? (
-                      <>
-                        {(filterLabels as any)?.[key]?.length ? (
+                        </span>
+                      ) : null}
+                    </p>
+                    <div className="pw-flex pw-gap-x-1 pw-items-center">
+                      {sortable ? (
+                        <div className="pw-relative pw-z-20">
                           <button
-                            className="pw-w-6 pw-h-6"
-                            onClick={() => onClearFilter(key)}
+                            className={classNames(
+                              'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
+                              sort.includes(key)
+                                ? 'pw-bg-blue1'
+                                : 'pw-opacity-80'
+                            )}
+                            onClick={() => onHandleSort(sortableTamplate ?? '')}
                           >
-                            <ClearFilter className="pw-stroke-2 pw-stroke-red-500 pw-w-5 pw-h-5" />
-                          </button>
-                        ) : null}
-                        {header.filter ? (
-                          <div>
-                            <button
+                            <ArrowDown
                               className={classNames(
-                                'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px]',
-                                (filterLabels as any)[key]?.length
-                                  ? 'pw-bg-blue1'
-                                  : 'pw-opacity-80'
+                                sort.includes(key)
+                                  ? 'pw-stroke-white'
+                                  : 'pw-stroke-blue1',
+                                sort.includes('ASC')
+                                  ? 'pw-rotate-180'
+                                  : 'pw-rotate-0'
                               )}
-                              onClick={() => setIsShowFilterKey(key)}
+                            />
+                          </button>
+                        </div>
+                      ) : null}
+                      {header.filter?.placement !== 'external' ? (
+                        <>
+                          {(filterLabels as any)?.[key]?.length ? (
+                            <button
+                              className="pw-w-6 pw-h-6"
+                              onClick={() => onClearFilter(key)}
                             >
-                              <FilterIcon
-                                className={classNames(
-                                  (filterLabels as any)[key]?.length
-                                    ? 'pw-stroke-white'
-                                    : 'pw-stroke-blue1'
-                                )}
-                              />
+                              <ClearFilter className="pw-stroke-2 pw-stroke-red-500 pw-w-5 pw-h-5" />
                             </button>
-                          </div>
-                        ) : null}
-                      </>
-                    ) : null}
+                          ) : null}
+                          {header.filter ? (
+                            <div>
+                              <button
+                                className={classNames(
+                                  'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px]',
+                                  (filterLabels as any)[key]?.length
+                                    ? 'pw-bg-blue1'
+                                    : 'pw-opacity-80'
+                                )}
+                                onClick={() => setIsShowFilterKey(key)}
+                              >
+                                <FilterIcon
+                                  className={classNames(
+                                    (filterLabels as any)[key]?.length
+                                      ? 'pw-stroke-white'
+                                      : 'pw-stroke-blue1'
+                                  )}
+                                />
+                              </button>
+                            </div>
+                          ) : null}
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="pw-absolute pw-w-full">
+                    <SmartGenericFilter
+                      filterType={header.filter?.type}
+                      filterFormat={header.filter?.format}
+                      filterOptions={header.filter?.values}
+                      itemShowFilterKey={isShowFilterKey}
+                      itemKey={key}
+                      filters={filters}
+                      onChangeFilter={setFilters}
+                      onCloseFilters={setIsShowFilterKey}
+                      filterLabels={filterLabels}
+                      onChangeFilterLabels={setFilterLabels}
+                      filterTemplate={
+                        header.filter?.replacedFilterTemplate
+                          ? header.filter?.replacedFilterTemplate
+                          : header.filter?.filterTemplate
+                      }
+                      filterOptionsUrl={header.filter?.data?.url}
+                      filterContext={header.filter?.data?.filterUrlContext}
+                      dynamicFilterParameters={header.filter?.data?.parameters}
+                    />
                   </div>
                 </div>
-                <div className="pw-absolute pw-w-full">
-                  <SmartGenericFilter
-                    filterType={header.filter?.type}
-                    filterFormat={header.filter?.format}
-                    filterOptions={header.filter?.values}
-                    itemShowFilterKey={isShowFilterKey}
-                    itemKey={key}
-                    filters={filters}
-                    onChangeFilter={setFilters}
-                    onCloseFilters={setIsShowFilterKey}
-                    filterLabels={filterLabels}
-                    onChangeFilterLabels={setFilterLabels}
-                    filterTemplate={
-                      header.filter?.replacedFilterTemplate
-                        ? header.filter?.replacedFilterTemplate
-                        : header.filter?.filterTemplate
-                    }
-                    filterOptionsUrl={header.filter?.data?.url}
-                    filterContext={header.filter?.data?.filterUrlContext}
-                    dynamicFilterParameters={header.filter?.data?.parameters}
-                  />
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
           {isLoading && (
             <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
               <Spinner />
             </div>
           )}
-          {!isLoading && data?.data.items.length ? (
+          {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
             <div className="pw-h-auto pw-shadow-[#00000014] pw-shadow-[-7px_5px_8px_-1px] pw-border">
-              {data?.data.items.map((item: any) => (
+              {_.get(data, localeItems ?? '', []).map((item: any) => (
                 <button
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   key={(item as any).id}
                   onClick={() => handleAction(lineActions?.action, item)}
                   disabled={!lineActions}
+                  style={classes?.grid as any}
                   className={classNames(
-                    'pw-w-full pw-justify-between pw-grid pw-items-center  pw-gap-x-2 pw-px-8 pw-py-[19px] pw-border-t',
-                    classes?.grid ?? '',
+                    'pw-w-full pw-justify-between pw-grid pw-items-center  pw-gap-x-2 pw-px-3 pw-py-[19px] pw-border-t',
                     tableStyles?.line ?? ''
                   )}
                 >
-                  {columns.map(({ key, format }) => (
-                    <p key={key} className="pw-text-sm pw-text-left">
-                      <span>{customizerValues(item as any, key, format)}</span>
-                    </p>
-                  ))}
+                  {columns
+                    .filter(({ header }) => header.label)
+                    .map(({ key, format, header }) => (
+                      <p key={key} className="pw-text-sm pw-text-left">
+                        <span>
+                          {customizerValues(
+                            item as any,
+                            key,
+                            format,
+                            header.baseUrl
+                          )}
+                        </span>
+                      </p>
+                    ))}
                   <GenericButtonActions
                     dataItem={item}
                     actions={actions ?? []}
@@ -486,18 +542,20 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               ))}
             </div>
           ) : null}
-          {!isLoading && !data?.data?.items.length && !isError && (
-            <Alert variant="information">
-              {translate('token>pass>notResult')}
-            </Alert>
-          )}
+          {!isLoading &&
+            !_.get(data, localeItems ?? '', [])?.length &&
+            !isError && (
+              <Alert variant="information">
+                {translate('token>pass>notResult')}
+              </Alert>
+            )}
           {isError && (
             <Alert variant="error" className="pw-mt-5">
               {translate('contact>inviteContactTemplate>error')}
             </Alert>
           )}
         </div>
-        {totalItems && page > 1 ? (
+        {totalItems && totalPages && totalPages > 1 ? (
           <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10">
             <p className="pw-text-sm pw-font-semibold">
               {translate('keytokenEditionsList>totalItems', {
@@ -506,7 +564,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             </p>
 
             <Pagination
-              currentPage={page}
+              currentPage={page ?? 1}
               onChangePage={changePage}
               pagesQuantity={totalPages ?? 0}
             />

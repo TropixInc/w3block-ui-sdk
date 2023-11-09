@@ -8,6 +8,7 @@ interface SelectInputProps {
   selected: string;
   onChange: (value: string) => void;
   className?: string;
+  placeholder?: string;
 }
 
 export const Selectinput = ({
@@ -15,6 +16,7 @@ export const Selectinput = ({
   selected,
   onChange,
   className = '',
+  placeholder,
 }: SelectInputProps) => {
   const ref = useRef<HTMLDivElement>(null);
   useClickAway(ref, () => setIsOpened(false));
@@ -27,14 +29,16 @@ export const Selectinput = ({
       >
         <p className="pw-text-sm pw-text-slate-800">
           {selected == ''
-            ? options[0].label
+            ? placeholder
+              ? placeholder
+              : options[0].label
             : options.find((opt) => opt.value == selected)?.label}
         </p>
         <ArrowDown className="pw-stroke-slate-600" />
       </div>
       {isOpened && (
-        <div className="pw-relative">
-          <div className="pw-absolute pw-bg-white pw-border pw-border-slate-300 pw-rounded-lg pw-w-full pw-mt-1">
+        <div className="pw-relative  pw-h-full">
+          <div className="pw-absolute pw-max-h-[200px] pw-overflow-auto pw-bg-white pw-z-10 pw-bg-white pw-border pw-border-slate-300 pw-rounded-lg pw-w-full pw-mt-1">
             {options.map((option) => (
               <div
                 key={option.value}

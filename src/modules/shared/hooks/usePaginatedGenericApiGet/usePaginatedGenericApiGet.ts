@@ -1,26 +1,32 @@
-import { W3blockAPI } from '../../enums/W3blockAPI';
-import { useAxios } from '../useAxios';
+import axios from 'axios';
+
 import { usePaginatedPrivateQuery } from '../usePaginatedPrivateQuery';
 
 interface GenericProps {
   url: string;
-  context?: W3blockAPI;
   search?: string;
+  inputMap?: (data: any) => any;
+  outputMap?: (data: any) => any;
 }
 
 export const usePaginatedGenericApiGet = ({
   url,
-  context,
   search,
+  inputMap,
+  outputMap,
 }: GenericProps) => {
-  const axios = useAxios(context ?? W3blockAPI.KEY);
-
   return usePaginatedPrivateQuery(
-    [url, context ?? '', search ?? ''],
-    (params) => axios.get(url, { params: { ...params, search: search } }),
+    [url, search ?? ''],
+    (params) => {
+      const newParams = outputMap ? outputMap(params) : params;
+      return axios.get(url, { params: { ...newParams } });
+    },
+
     {
       enabled: Boolean(url),
       refetchOnWindowFocus: false,
+      disableUrl: true,
+      inputMap: inputMap,
     }
   );
 };

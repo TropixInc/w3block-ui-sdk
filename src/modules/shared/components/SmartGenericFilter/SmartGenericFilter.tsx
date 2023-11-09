@@ -5,8 +5,6 @@ import { useClickAway, useDebounce } from 'react-use';
 import _, { isArray } from 'lodash';
 
 import { W3blockAPI } from '../../enums/W3blockAPI';
-// eslint-disable-next-line import-helpers/order-imports
-import useTranslation from '../../hooks/useTranslation';
 
 const SelectInput = lazy(() =>
   import('../SelectInput/SelectInput').then((module) => ({
@@ -44,6 +42,7 @@ interface GenericFilterDto {
   filterOptionsUrl?: string;
   filterContext?: W3blockAPI;
   dynamicFilterParameters?: FilterParameters | undefined;
+  filterPlaceholder?: string;
 }
 
 const SmartGenericFilter = ({
@@ -61,9 +60,9 @@ const SmartGenericFilter = ({
   filterOptionsUrl,
   filterContext,
   dynamicFilterParameters,
+  filterPlaceholder,
 }: GenericFilterDto) => {
   const [defaultDate, setDefaultDate] = useState(new Date());
-  const [translate] = useTranslation();
   const [startDate, setStartDate] = useState<Date>();
   const [selected, setSelected] = useState<string | undefined>('');
   const [searchSelectedItem, setSearchSelectedItem] = useState<string>();
@@ -260,6 +259,7 @@ const SmartGenericFilter = ({
       // eslint-disable-next-line no-prototype-builtins
       if (filters && !filters.hasOwnProperty(itemKey)) {
         setMultSelected(undefined);
+        setSelected(undefined);
         field.onChange('');
       }
     }
@@ -277,13 +277,12 @@ const SmartGenericFilter = ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (selected as Array<any>).map(({ label }) => label).join(', ');
       } else {
-        return 'Status';
+        return filterPlaceholder ?? 'Selecione';
       }
     } else {
-      return 'Status';
+      return filterPlaceholder ?? 'Selecione';
     }
   };
-
   const renderFilter = (eachFilterType: FormatFilterType) => {
     switch (eachFilterType) {
       case FormatFilterType.LOCALDATE: {
@@ -303,8 +302,10 @@ const SmartGenericFilter = ({
         return (
           <SelectInput
             options={filterOptions ?? []}
-            selected={filters[itemKey ?? '']}
+            selected={selected ?? ''}
             onChange={setSelected}
+            className="pw-w-full"
+            placeholder={filterPlaceholder}
           />
         );
       }
@@ -327,7 +328,7 @@ const SmartGenericFilter = ({
             <input
               className="pw-w-full pw-h-[40px] pw-rounded-lg pw-outline-none pw-px-2"
               type="text"
-              placeholder={translate('key>nameFilter>search')}
+              placeholder={filterPlaceholder ?? 'Buscar'}
               value={searchStaticValue}
               onChange={(e) => setSearchStaticValue(e.target.value)}
             />
@@ -364,6 +365,7 @@ const SmartGenericFilter = ({
           filterLabels={filterLabels}
           onSelected={setSelected}
           selected={selected}
+          placeholder={filterPlaceholder}
         />
       )}
     </div>

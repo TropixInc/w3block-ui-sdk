@@ -51,6 +51,7 @@ export interface FilterParameters {
   key: string;
   label: string;
   subLabel?: string;
+  paginationType?: 'default' | 'strapi';
 }
 
 export interface Actions {
@@ -71,10 +72,12 @@ export interface ColumnsTable {
   sortableTamplate?: string;
   header: {
     label: string;
+    baseUrl?: string;
     filter?: {
       type: FilterTableType;
       format: FormatFilterType;
       filterClass?: string;
+      placeholder?: string;
       placement?: 'internal' | 'external';
       values?: {
         label: string;
@@ -92,7 +95,11 @@ export interface ColumnsTable {
 }
 
 export interface ConfigGenericTable {
+  filtersTitle?: string;
+  tableTitle?: string;
+  paginationType?: 'default' | 'strapi';
   dataSource?: DataSource;
+  localeItems?: string;
   columns: Array<ColumnsTable>;
   xlsReports?: XlsReportsDto;
   tableStyles?: TableStylesClasses;

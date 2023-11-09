@@ -334,11 +334,7 @@ export const StorefrontPreview = ({
                     case ModulesType.MIDIA:
                       return <Midia data={{ ...theme.midia, ...item }} />;
                     case ModulesType.TABLE:
-                      return (
-                        <GenericTableWrapper
-                          data={{ ...theme.table, ...item }}
-                        />
-                      );
+                      return <GenericTableWrapper data={{ ...item }} />;
                     default:
                       break;
                   }
