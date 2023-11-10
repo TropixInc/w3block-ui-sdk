@@ -14,6 +14,7 @@ export interface PaginatedQueryConfig {
   orderBy?: string;
   sortBy?: string;
   disableUrl?: boolean;
+  inputMap?: (data: any) => { totalItems: number; totalPages: number };
 }
 
 type QueryFunctionResponse<QueryData> = AxiosResponse<
@@ -27,7 +28,7 @@ type PaginatedQueryFunctionReturnValue<QueryData> = Promise<
 type usePaginatedPrivateQueryReturnValue<QueryData> = [
   UseQueryResult<QueryFunctionResponse<QueryData>>,
   {
-    page: number;
+    page: number | undefined;
     changePage: (nextPage: number) => void;
     totalItems?: number;
     totalPages?: number;
@@ -55,6 +56,7 @@ export const usePaginatedPrivateQuery = <QueryData>(
     sortBy,
     orderBy,
     disableUrl = false,
+    inputMap = (data) => data?.meta,
     ...rest
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PaginatedQueryConfig & QueryConfig<any, any, any> = {}
@@ -63,7 +65,13 @@ export const usePaginatedPrivateQuery = <QueryData>(
   const [totalPages, setTotalPages] = useState(0);
 
   const defineInitialPage = () => {
-    if (disableUrl) return 1;
+    if (disableUrl) {
+      if (initialPage === 0) {
+        return undefined;
+      } else {
+        return 1;
+      }
+    }
     if (router.query.page) {
       return Number(router.query.page) > 0 ? Number(router.query.page) : 1;
     }
@@ -72,9 +80,10 @@ export const usePaginatedPrivateQuery = <QueryData>(
   };
 
   const [page, setPage] = useState(defineInitialPage());
+
   const finalItemsPerPage = itemsPerPage ?? 10;
   const configQueryKey = [
-    page.toString(),
+    page ? page.toString() : '',
     finalItemsPerPage.toString(),
     search ?? '',
     orderBy ?? '',
@@ -120,11 +129,11 @@ export const usePaginatedPrivateQuery = <QueryData>(
     {
       ...rest,
       onSuccess: ({ data }) => {
-        if (data.meta.totalPages !== totalPages) {
-          setTotalPages(data.meta.totalPages);
+        if (inputMap(data).totalPages !== totalPages) {
+          setTotalPages(inputMap(data).totalPages);
         }
 
-        if (page > data.meta.totalPages && !disableUrl) {
+        if (page && page > inputMap(data).totalPages && !disableUrl) {
           router.replace({
             query: {
               ...router.query,
@@ -142,7 +151,7 @@ export const usePaginatedPrivateQuery = <QueryData>(
       {
         page,
         changePage: setPage,
-        totalItems: queryResult.data?.data.meta.totalItems,
+        totalItems: inputMap(queryResult?.data?.data)?.totalItems,
         totalPages,
       },
     ];

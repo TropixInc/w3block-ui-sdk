@@ -1,3 +1,11 @@
+import {
+  Actions,
+  ColumnsTable,
+  DataSource,
+  TableStylesClasses,
+  XlsReportsDto,
+} from '../../shared/interface/ConfigGenericTable';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type TemplateData = {
   title: string;
@@ -15,6 +23,7 @@ export type TemplateData = {
     | ParagraphData
     | MidiaData
     | GridItemAreaData
+    | GenericTableData
   )[];
 };
 
@@ -32,6 +41,7 @@ export type Theme = {
   productPage: ProductPageData;
   midia?: MidiaData;
   GridItemArea?: GridItemAreaData;
+  table?: GenericTableData;
 };
 
 export interface DynamicApiModuleInterface {
@@ -539,6 +549,28 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
   mobileContentData: ImagePlusTextData['contentData'];
 }
 
+export interface GenericTableData extends MainModuleThemeInterface {
+  type: ModulesType.TABLE;
+  styleData: {
+    classes?: {
+      root?: string;
+      grid?: string;
+      rows?: string;
+    };
+  };
+  contentData: {
+    dataSource?: DataSource;
+    xlsReports?: XlsReportsDto;
+    columns: Array<ColumnsTable>;
+    actions?: Array<Actions>;
+    lineActions?: Actions;
+    tableStyles?: TableStylesClasses;
+    externalFilterClasses?: {
+      root?: string;
+    };
+  };
+}
+
 enum ImagePositionEnum {
   LEFT = 'left',
   RIGHT = 'right',
@@ -559,6 +591,7 @@ export enum ModulesType {
   MIDIA = 'Midia',
   GRID_ITEM_AREA = 'GridItemArea',
   DYNAMIC_API = 'DynamicApi',
+  TABLE = 'Table',
 }
 
 export interface GetPageInfoInterface {
