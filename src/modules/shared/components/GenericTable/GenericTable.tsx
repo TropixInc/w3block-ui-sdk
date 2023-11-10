@@ -533,7 +533,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   disabled={!lineActions}
                   style={classes?.grid as any}
                   className={classNames(
-                    'pw-w-full pw-justify-between pw-grid pw-items-center  pw-gap-x-2 pw-px-3 pw-py-[19px] pw-border-t',
+                    'pw-w-full pw-justify-between pw-w-[800px] pw-grid pw-items-center  pw-gap-x-2 pw-px-3 pw-py-[19px] pw-border-t',
                     tableStyles?.line ?? ''
                   )}
                 >
