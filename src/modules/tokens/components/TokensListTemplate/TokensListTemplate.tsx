@@ -23,6 +23,7 @@ import WalletImage from '../../assets/wallet.svg?react';
 import { useGetNFTSByWallet } from '../../hooks/useGetNFTsByWallet/useGetNFTSByWallet';
 import { Token } from '../../interfaces/Token';
 import { mapNFTToToken } from '../../utils/mapNFTToToken';
+
 const WalletTokenCard = lazy(() =>
   import('../WalletTokenCard').then((m) => ({ default: m.WalletTokenCard }))
 );

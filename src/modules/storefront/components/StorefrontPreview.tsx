@@ -37,6 +37,11 @@ const Header = lazy(() =>
 const Footer = lazy(() =>
   import('./Footer').then((m) => ({ default: m.Footer }))
 );
+const GenericTableWrapper = lazy(() =>
+  import('./GenericTableWrapper').then((m) => ({
+    default: m.GenericTableWrapper,
+  }))
+);
 const Banner = lazy(() =>
   import('./Banner').then((m) => ({ default: m.Banner }))
 );
@@ -154,6 +159,7 @@ export const StorefrontPreview = ({
   }, [context?.defaultTheme, themeListener]);
 
   let data = { ...context?.pageTheme, ...currentPage };
+
   const themeContext = context?.defaultTheme;
 
   const dynamicApi = useMemo<DynamicApiModuleInterface | undefined>(() => {
@@ -327,6 +333,8 @@ export const StorefrontPreview = ({
                       );
                     case ModulesType.MIDIA:
                       return <Midia data={{ ...theme.midia, ...item }} />;
+                    case ModulesType.TABLE:
+                      return <GenericTableWrapper data={{ ...item }} />;
                     default:
                       break;
                   }
