@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 
 import ChevronLeft from '../../../../../assets/icons/chevronLeftFilled.svg?react';
 import ChevronRight from '../../../../../assets/icons/chevronRightFilled.svg?react';
@@ -8,11 +8,7 @@ import { PixwayAppRoutes } from '../../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../../hooks/usePixwaySession';
 import { useRouterConnect } from '../../../../../hooks/useRouterConnect';
 import useTranslation from '../../../../../hooks/useTranslation';
-const PixwayButton = lazy(() =>
-  import('../../../../PixwayButton/PixwayButton').then((mod) => ({
-    default: mod.PixwayButton,
-  }))
-);
+import { PixwayButton } from '../../../../PixwayButton/PixwayButton';
 import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
 
 export const NavigationTabsPixwaySDKMobile = ({

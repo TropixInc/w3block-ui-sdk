@@ -15,6 +15,18 @@ import { PixwayButton } from '../../../../PixwayButton';
 import { WeblockButton } from '../../../../WeblockButton/WeblockButton';
 import { NavigationMenuTabs } from '../interfaces/menu';
 import { useDefaultMenuTabs } from './NavigationLoginLoggedButton';
+
+// const PixwayButton = lazy(() =>
+//   import('../../../../PixwayButton/PixwayButton').then((mod) => ({
+//     default: mod.PixwayButton,
+//   }))
+// );
+// const WeblockButton = lazy(() =>
+//   import('../../../../WeblockButton/WeblockButton').then((mod) => ({
+//     default: mod.WeblockButton,
+//   }))
+// );
+
 interface NavigationLoginLoggedButtonMobileProps {
   menuOpened?: boolean;
   toggleMenu?: () => void;
