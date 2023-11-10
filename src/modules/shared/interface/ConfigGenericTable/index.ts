@@ -12,6 +12,7 @@ export enum FormatTypeColumn {
   MAPPING = 'mapping',
   HASH = 'hash',
   THUMBNAIL = 'thumbnail',
+  COLLECTION = 'collection',
 }
 
 export enum FormatFilterType {
@@ -68,6 +69,8 @@ export interface Actions {
 export interface ColumnsTable {
   format: FormatApiData;
   key: string;
+  keyInCollection?: string;
+  subLabel?: string;
   sortable: boolean;
   sortableTamplate?: string;
   header: {

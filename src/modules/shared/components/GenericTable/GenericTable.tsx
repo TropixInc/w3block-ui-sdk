@@ -162,7 +162,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     item: any,
     itemKey: string,
     format: FormatApiData,
-    basicUrl?: string
+    basicUrl?: string,
+    keyInCollection?: string
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -217,12 +218,29 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           />
         );
       }
+      case FormatTypeColumn.COLLECTION: {
+        const value = _.get(item, itemKey, '');
+        const valueRendered = _.get(value[0], keyInCollection ?? '', '');
+
+        if (value.length > 1) {
+          return (
+            <p>
+              <p>{valueRendered}</p>
+              <p className="pw-text-xs pw-opacity-70">{`+${
+                value.length - 1
+              } academia(s)`}</p>
+            </p>
+          );
+        } else {
+          return valueRendered;
+        }
+      }
 
       default:
         return (
           <div className="pw-w-full">
             <p className="pw-text-ellipsis pw-overflow-hidden">
-              {_.get(item, itemKey, '--')}
+              {_.get(item, itemKey, '--') ?? '---'}
             </p>
           </div>
         );
@@ -374,12 +392,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           </div>
         </div>
 
-        {tableTitle ? (
-          <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mt-3">
-            {tableTitle}
-          </p>
-        ) : null}
-
         <div
           className={classNames(
             'pw-mb-10 pw-rounded-t-2xl pw-overflow-auto',
@@ -387,6 +399,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             tableStyles?.root ?? ''
           )}
         >
+          {tableTitle ? (
+            <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-4">
+              {tableTitle}
+            </p>
+          ) : null}
           <div
             style={classes?.grid as any}
             className={classNames(
@@ -522,14 +539,15 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                 >
                   {columns
                     .filter(({ header }) => header.label)
-                    .map(({ key, format, header }) => (
+                    .map(({ key, format, header, keyInCollection }) => (
                       <p key={key} className="pw-text-sm pw-text-left">
                         <span>
                           {customizerValues(
                             item as any,
                             key,
                             format,
-                            header.baseUrl
+                            header.baseUrl,
+                            keyInCollection
                           )}
                         </span>
                       </p>
