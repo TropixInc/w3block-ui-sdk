@@ -10,8 +10,12 @@ import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/u
 import { ImagePlusTextData } from '../interfaces';
 
 import './ImagePlusText.css';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
+
+import _ from 'lodash';
 
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
+  const { datasource } = useDynamicApi();
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
@@ -78,7 +82,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
         >
           <div className="pw-grid pw-place-items-center">
             <ImageSDK
-              src={image?.assetUrl}
+              src={_.get(datasource, image?.assetUrl ?? '', image?.assetUrl)}
               className="pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg"
               width={500}
               height={274}
@@ -94,12 +98,14 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               style={{ color: titleColor }}
               className="pw-font-semibold pw-text-[19px]"
             >
-              {title}
+              {_.get(datasource, title ?? '', title)}
             </h3>
             <div
               style={{ color: contentColor }}
               className="pw-text-[15px]"
-              dangerouslySetInnerHTML={{ __html: content ?? '' }}
+              dangerouslySetInnerHTML={{
+                __html: _.get(datasource, content ?? '', content) ?? '',
+              }}
             />
           </div>
         </div>

@@ -326,7 +326,7 @@ const Slide = ({
               }}
               className={`${alignmentTextClass} pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
             >
-              {title}
+              {_.get(datasource, title ?? '', title)}
             </h2>
             <p
               style={{
@@ -354,7 +354,7 @@ const Slide = ({
               }}
               className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
             >
-              {subtitle}
+              {_.get(datasource, subtitle ?? '', subtitle)}
             </p>
 
             <div className="pw-flex pw-gap-4">
@@ -367,7 +367,7 @@ const Slide = ({
                     borderWidth: buttonBorderColor ? '2px' : '0',
                   }}
                   className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
-                  href={buttonLink}
+                  href={_.get(datasource, buttonLink ?? '', buttonLink)}
                 >
                   {buttonText ?? 'Saiba mais'}
                 </a>
@@ -381,7 +381,11 @@ const Slide = ({
                     borderWidth: secondaryButtonBorderColor ? '2px' : '0',
                   }}
                   className="pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer pw-z-20"
-                  href={secondaryButtonLink}
+                  href={_.get(
+                    datasource,
+                    secondaryButtonLink ?? '',
+                    secondaryButtonLink
+                  )}
                 >
                   {secondaryButtonText ?? 'Saiba mais'}
                 </a>

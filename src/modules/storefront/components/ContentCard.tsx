@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import _ from 'lodash';
+
 import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import {
   CardTypesEnum,
   ProductsDataStyleData,
   SpecificContentCard,
 } from '../interfaces';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 interface ContentCardProps {
   config: ProductsDataStyleData;
@@ -51,10 +54,11 @@ export const ContentCard = ({
     valueFontSizeType,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
+  const { datasource } = useDynamicApi();
   const linkToSend = () => {
     if (cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink && product.link && product.link != '')
-        return product.link;
+        return _.get(datasource, product.link ?? '', product.link);
       else return undefined;
     } else {
       return `/product/slug/${product.link}`;
@@ -73,7 +77,12 @@ export const ContentCard = ({
               backgroundImage:
                 product.image?.assetUrl && showCardImage
                   ? `url('${threathUrlCloudinary({
-                      src: product.image.assetUrl ?? '',
+                      src:
+                        _.get(
+                          datasource,
+                          product.image.assetUrl,
+                          product.image.assetUrl
+                        ) ?? '',
                       InternalProps: { width: 600, quality: 'best' },
                     })}') `
                   : 'white',
@@ -137,7 +146,7 @@ export const ContentCard = ({
                       }}
                       className="pw-line-clamp-2 pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
                     >
-                      {product.title}
+                      {_.get(datasource, product.title ?? '', product.title)}
                     </p>
                   )}
                   {showCardDescription && (
@@ -167,7 +176,11 @@ export const ContentCard = ({
                       }}
                       className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
                     >
-                      {product.description}
+                      {_.get(
+                        datasource,
+                        product.description ?? '',
+                        product.description
+                      )}
                     </p>
                   )}
                   {showCardCategory && (
@@ -233,7 +246,7 @@ export const ContentCard = ({
                       className="pw-font-bold pw-text-lg pw-mt-2"
                     >
                       <span className="pw-text-sm pw-pr-2">R$</span>
-                      {product.value}
+                      {_.get(datasource, product.value ?? '', product.value)}
                     </p>
                   )}
                 </div>
@@ -269,7 +282,7 @@ export const ContentCard = ({
                 }}
                 className="pw-line-clamp-2 pw-font-[400] pw-mt-2 "
               >
-                {product.title}
+                {_.get(datasource, product.title ?? '', product.title)}
               </p>
             )}
             {showCardDescription && (
@@ -300,7 +313,11 @@ export const ContentCard = ({
                 }}
                 className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
               >
-                {product.description}
+                {_.get(
+                  datasource,
+                  product.description ?? '',
+                  product.description
+                )}
               </p>
             )}
             {showCardCategory && (
@@ -366,7 +383,7 @@ export const ContentCard = ({
                 className="pw-font-bold pw-text-lg pw-mt-2"
               >
                 <span className="pw-text-sm pw-pr-2">R$</span>
-                {product.value}
+                {_.get(datasource, product.value ?? '', product.value)}
               </p>
             )}
           </div>

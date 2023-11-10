@@ -327,6 +327,9 @@ export interface ProductsData extends MainModuleThemeInterface {
     moduleFontBold?: boolean;
     moduleFontItalic?: boolean;
     moduleFontSizeType?: string;
+    dynamicCards?: boolean;
+    dynamicCardsPath?: string;
+    dynamicMaxItens?: number;
   };
   mobileStyleData: ProductsDataStyleData;
   mobileContentData: ProductsData['contentData'];

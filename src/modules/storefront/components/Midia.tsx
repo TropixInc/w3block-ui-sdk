@@ -5,6 +5,8 @@ const ImageSDK = lazy(() =>
     default: module.ImageSDK,
   }))
 );
+import _ from 'lodash';
+
 import {
   breakpointsEnum,
   useBreakpoints,
@@ -14,6 +16,8 @@ import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/u
 import { AlignmentEnum, MidiaData } from '../interfaces';
 
 import { lazy } from 'react';
+
+import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 const ratios: Record<string, string> = {
   default: '',
@@ -31,6 +35,7 @@ const rowAlignments: AlignmentClassNameMap = {
 };
 
 export const Midia = ({ data }: { data: MidiaData }) => {
+  const { datasource } = useDynamicApi();
   const { styleData, mobileStyleData } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
@@ -71,14 +76,14 @@ export const Midia = ({ data }: { data: MidiaData }) => {
       }}
     >
       <div className={classNames(ratio, layoutClass, 'pw-mx-auto')}>
-        <a href={mediaLink}>
+        <a href={_.get(datasource, mediaLink, mediaLink)}>
           <ImageSDK
             className={classNames(
               ratio,
               rowAlignmentClass,
               '!pw-object-center pw-object-cover pw-w-full pw-h-full'
             )}
-            src={bgUrl?.assetUrl}
+            src={_.get(datasource, bgUrl.assetUrl, bgUrl.assetUrl)}
             width={1440}
             quality="best"
           />
