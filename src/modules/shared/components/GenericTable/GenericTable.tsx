@@ -11,6 +11,7 @@ import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import FilterIcon from '../../assets/icons/filterOutlined.svg?react';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import useRouter from '../../hooks/useRouter';
 import useTranslation from '../../hooks/useTranslation';
@@ -72,7 +73,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     filtersTitle,
     tableTitle,
   } = config;
-
+  const isMobile = useIsMobile();
   const { companyId: tenantId } = useCompanyConfig();
   const { data: company } = useCompanyById(tenantId || '');
   const { name, companyId } = useCompanyConfig();
@@ -104,6 +105,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
     url: apiUrl ? apiUrl : dataSource?.url ?? '',
+    isPublicApi: dataSource?.isPublicApi,
     ...paginationMapping[paginationType],
   });
 
@@ -207,15 +209,17 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
       case FormatTypeColumn.THUMBNAIL: {
         return (
-          <img
-            src={
-              basicUrl
-                ? `${basicUrl}${_.get(item, itemKey, '')}`
-                : _.get(item, itemKey, '')
-            }
-            alt=""
-            className="pw-w-10 pw-h-10 pw-rounded-md"
-          />
+          <div className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md">
+            <img
+              src={
+                basicUrl
+                  ? `${basicUrl}${_.get(item, itemKey, '')}`
+                  : _.get(item, itemKey, '')
+              }
+              alt=""
+              className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md"
+            />
+          </div>
         );
       }
       case FormatTypeColumn.COLLECTION: {
@@ -326,10 +330,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   return (
     <div className="pw-w-full pw-mt-20">
       <FormProvider {...methods}>
-        <div className="pw-w-full pw-flex pw-justify-between">
+        <div className="pw-w-full sm:pw-flex sm:pw-justify-between">
           <div
             className={classNames(
-              'pw-relative pw-w-full pw-gap-x-3 pw-flex pw-flex-wrap sm:pw-max-w-[1000px]',
+              'pw-relative pw-w-full pw-gap-x-3 pw-flex-wrap sm:pw-max-w-[1000px] sm:pw-flex',
               externalFilterClasses?.root ?? ''
             )}
           >
@@ -342,7 +346,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               .filter((item) => item.header.filter?.placement === 'external')
               .map(({ header, key }) => {
                 return (
-                  <div key={key} style={header.filter?.filterClass as any}>
+                  <div
+                    key={key}
+                    style={!isMobile ? (header.filter?.filterClass as any) : {}}
+                    className="pw-w-full"
+                  >
                     <SmartGenericFilter
                       filterType={header.filter?.type}
                       filterFormat={header.filter?.format}
@@ -363,6 +371,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                       filterContext={header.filter?.data?.filterUrlContext}
                       dynamicFilterParameters={header.filter?.data?.parameters}
                       filterPlaceholder={header.filter?.placeholder}
+                      isPublicFilterApi={header.filter?.data?.isPublicFilterApi}
                     />
                   </div>
                 );
@@ -380,7 +389,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             )}
             {Object.values(filters || {}).length ? (
               <button
-                className="-pw-mt-4 pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-red-500 pw-rounded-md pw-items-center hover:pw-shadow-lg"
+                className="pw-mt-4 pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-red-500 pw-rounded-md pw-items-center hover:pw-shadow-lg sm:-pw-mt-4"
                 onClick={() => onClearAllFilter()}
               >
                 <span className="pw-text-red-500 pw-font-medium">
@@ -407,7 +416,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           <div
             style={classes?.grid as any}
             className={classNames(
-              'pw-px-3 pw-h-[72px] pw-bg-[#DDE6F3] pw-gap-x-2 pw-rounded-t-2xl pw-w-[800px] pw-justify-between pw-text-sm pw-items-center pw-grid sm:pw-w-full',
+              'pw-px-3 pw-h-[72px] pw-bg-[#DDE6F3] pw-gap-x-2 pw-rounded-t-2xl pw-min-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
               tableStyles?.header ?? ''
             )}
           >
@@ -513,6 +522,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                       filterOptionsUrl={header.filter?.data?.url}
                       filterContext={header.filter?.data?.filterUrlContext}
                       dynamicFilterParameters={header.filter?.data?.parameters}
+                      isPublicFilterApi={header.filter?.data?.isPublicFilterApi}
                     />
                   </div>
                 </div>
@@ -524,7 +534,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             </div>
           )}
           {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
-            <div className="pw-h-auto pw-shadow-[#00000014] pw-shadow-[-7px_5px_8px_-1px] pw-border">
+            <div className="pw-h-auto pw-min-w-[800px] pw-shadow-[#00000014] pw-shadow-[-7px_5px_8px_-1px] pw-border">
               {_.get(data, localeItems ?? '', []).map((item: any) => (
                 <button
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -533,7 +543,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   disabled={!lineActions}
                   style={classes?.grid as any}
                   className={classNames(
-                    'pw-w-full pw-justify-between pw-w-[800px] pw-grid pw-items-center  pw-gap-x-2 pw-px-3 pw-py-[19px] pw-border-t',
+                    'pw-w-full pw-min-w-[800px] pw-grid pw-items-center  pw-gap-x-2 pw-px-3 pw-py-[19px] pw-border-t',
                     tableStyles?.line ?? ''
                   )}
                 >

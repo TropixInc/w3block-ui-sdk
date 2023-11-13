@@ -1,12 +1,13 @@
 import axios from 'axios';
 
-import { usePaginatedPrivateQuery } from '../usePaginatedPrivateQuery';
+import { usePaginatedQuery } from '../usePaginatedQuery';
 
 interface GenericProps {
   url: string;
   search?: string;
   inputMap?: (data: any) => any;
   outputMap?: (data: any) => any;
+  isPublicApi?: boolean;
 }
 
 export const usePaginatedGenericApiGet = ({
@@ -14,8 +15,9 @@ export const usePaginatedGenericApiGet = ({
   search,
   inputMap,
   outputMap,
+  isPublicApi,
 }: GenericProps) => {
-  return usePaginatedPrivateQuery(
+  return usePaginatedQuery(
     [url, search ?? ''],
     (params) => {
       const newParams = outputMap ? outputMap(params) : params;
@@ -27,6 +29,7 @@ export const usePaginatedGenericApiGet = ({
       refetchOnWindowFocus: false,
       disableUrl: true,
       inputMap: inputMap,
+      isPublicApi,
     }
   );
 };

@@ -39,6 +39,7 @@ interface DynamicProps {
   onSelected?: (value: string) => void;
   selected?: string;
   placeholder?: string;
+  isPublicFilterApi?: boolean;
 }
 
 const paginationMapping = {
@@ -75,6 +76,7 @@ export const DynamicGenericFilter = ({
   onSelected,
   selected,
   placeholder,
+  isPublicFilterApi,
 }: DynamicProps) => {
   const [searchName, setSearchName] = useState<string | undefined>('');
   const [searchValue, setSearchValue] = useState<string | undefined>('');
@@ -86,8 +88,11 @@ export const DynamicGenericFilter = ({
 
   useDebounce(setSearchValueCallback, 900, [setSearchValueCallback]);
 
+  console.log(isPublicFilterApi, 'isPublicFilterApi');
+
   const [{ data }] = usePaginatedGenericApiGet({
     url: filterOptionsUrl ?? '',
+    isPublicApi: isPublicFilterApi,
     search: searchValue,
     ...paginationMapping[dynamicFilterParameters?.paginationType || 'default'],
   });
