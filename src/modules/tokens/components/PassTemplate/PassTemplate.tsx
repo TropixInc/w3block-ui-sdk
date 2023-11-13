@@ -18,6 +18,20 @@ import {
 import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
 import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
 import InfoCircledIcon from '../../../shared/assets/icons/informationCircled.svg?react';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
+import { useHasWallet } from '../../../shared/hooks/useHasWallet/useHasWallet';
+import { useLocale } from '../../../shared/hooks/useLocale';
+import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
+import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
+import { usePublicTokenData } from '../../hooks/usePublicTokenData';
+import { ErrorModal } from './ErrorModal';
+import { UsedPass } from './UsedSection';
 const Alert = lazy(() =>
   import('../../../shared/components/Alert').then((module) => ({
     default: module.Alert,
@@ -29,7 +43,6 @@ const ImageSDK = lazy(() =>
     default: module.ImageSDK,
   }))
 );
-//import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 const QrCodeValidated = lazy(() =>
   import('../../../shared/components/QrCodeReader/QrCodeValidated').then(
     (module) => ({
@@ -50,18 +63,6 @@ const Spinner = lazy(() =>
   }))
 );
 
-import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
-import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
-import { useHasWallet } from '../../../shared/hooks/useHasWallet/useHasWallet';
-import { useLocale } from '../../../shared/hooks/useLocale';
-import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-import useTranslation from '../../../shared/hooks/useTranslation';
-import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
-import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 const Button = lazy(() =>
   import('../Button/Button').then((module) => ({
     default: module.Button,
@@ -87,9 +88,6 @@ const QrCodeSection = lazy(() =>
     default: module.QrCodeSection,
   }))
 );
-
-import { ErrorModal } from './ErrorModal';
-import { UsedPass } from './UsedSection';
 
 interface PassTemplateProps {
   tokenIdProp?: string;

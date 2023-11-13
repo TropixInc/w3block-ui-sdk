@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { lazy } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import { format, getDay } from 'date-fns';
@@ -8,16 +7,8 @@ import { BenefitAddress, TokenPassBenefitType } from '../../../pass/interfaces/P
 import  CheckCircledIcon  from '../../assets/icons/checkCircledOutlined.svg?react';
 import useTranslation from '../../hooks/useTranslation';
 import { shortDays } from '../../utils/shortDays';
-const Button = lazy(() =>
-  import('../Buttons').then((module) => ({
-    default: module.Button,
-  }))
-);
-const CloseButton = lazy(() =>
-  import('../CloseButton').then((module) => ({
-    default: module.CloseButton,
-  }))
-);
+import { Button } from '../Buttons';
+import { CloseButton } from '../CloseButton';
 
 
 interface iProps {

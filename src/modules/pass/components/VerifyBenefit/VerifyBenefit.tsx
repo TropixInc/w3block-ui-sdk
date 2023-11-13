@@ -1,25 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
-import { lazy } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import  ErrorIcon  from '../../../shared/assets/icons/errorIconRed.svg?react';
-const CloseButton = lazy(() =>
-  import('../../../shared/components/CloseButton').then((module) => ({
-    default: module.CloseButton,
-  }))
-);
-const Spinner = lazy(() =>
-  import('../../../shared/components/Spinner').then((module) => ({
-    default: module.Spinner,
-  }))
-);
-const Button = lazy(() =>
-  import('../../../tokens/components/Button').then((module) => ({
-    default: module.Button,
-  }))
-);
+import { CloseButton } from '../../../shared/components/CloseButton';
+import { Spinner } from '../../../shared/components/Spinner';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { Button } from '../../../tokens/components/Button';
 import { BenefitAddress, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
 
 
