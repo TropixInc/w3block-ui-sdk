@@ -2,7 +2,7 @@ import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { QueryParams } from '../../shared/hooks/usePaginatedPrivateQuery';
+import { QueryParams } from '../../shared/hooks/usePaginatedQuery';
 import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
 

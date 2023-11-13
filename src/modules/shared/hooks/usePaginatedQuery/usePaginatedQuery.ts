@@ -5,6 +5,7 @@ import { AxiosResponse } from 'axios';
 
 import { PixwayPaginatedResponse } from '../../interface/PixwayPaginatedResponse';
 import { QueryConfig, usePrivateQuery } from '../usePrivateQuery';
+import { usePublicQuery } from '../usePublicQuery';
 import { useRouterConnect } from '../useRouterConnect';
 
 export interface PaginatedQueryConfig {
@@ -15,6 +16,7 @@ export interface PaginatedQueryConfig {
   sortBy?: string;
   disableUrl?: boolean;
   inputMap?: (data: any) => { totalItems: number; totalPages: number };
+  isPublicApi?: boolean;
 }
 
 type QueryFunctionResponse<QueryData> = AxiosResponse<
@@ -25,7 +27,7 @@ type PaginatedQueryFunctionReturnValue<QueryData> = Promise<
   QueryFunctionResponse<QueryData>
 >;
 
-type usePaginatedPrivateQueryReturnValue<QueryData> = [
+type usePaginatedQueryReturnValue<QueryData> = [
   UseQueryResult<QueryFunctionResponse<QueryData>>,
   {
     page: number | undefined;
@@ -44,7 +46,7 @@ export interface QueryParams {
   walletAddresses?: Array<string>;
 }
 
-export const usePaginatedPrivateQuery = <QueryData>(
+export const usePaginatedQuery = <QueryData>(
   queryKey: string | Array<string | number>,
   queryFn: (
     params: QueryParams
@@ -57,10 +59,11 @@ export const usePaginatedPrivateQuery = <QueryData>(
     orderBy,
     disableUrl = false,
     inputMap = (data) => data?.meta,
+    isPublicApi = false,
     ...rest
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PaginatedQueryConfig & QueryConfig<any, any, any> = {}
-): usePaginatedPrivateQueryReturnValue<QueryData> => {
+): usePaginatedQueryReturnValue<QueryData> => {
   const router = useRouterConnect();
   const [totalPages, setTotalPages] = useState(0);
 
@@ -121,31 +124,57 @@ export const usePaginatedPrivateQuery = <QueryData>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
-  const queryResult = usePrivateQuery(
-    Array.isArray(queryKey)
-      ? queryKey.concat(configQueryKey)
-      : [queryKey, ...configQueryKey],
-    () => queryFn({ page, limit: itemsPerPage, orderBy, sortBy }),
-    {
-      ...rest,
-      onSuccess: ({ data }) => {
-        if (inputMap(data).totalPages !== totalPages) {
-          setTotalPages(inputMap(data).totalPages);
-        }
+  const queryResult = isPublicApi
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      usePublicQuery(
+        Array.isArray(queryKey)
+          ? queryKey.concat(configQueryKey)
+          : [queryKey, ...configQueryKey],
+        () => queryFn({ page, limit: itemsPerPage, orderBy, sortBy }),
+        {
+          ...rest,
+          onSuccess: ({ data }) => {
+            if (inputMap(data).totalPages !== totalPages) {
+              setTotalPages(inputMap(data).totalPages);
+            }
 
-        if (page && page > inputMap(data).totalPages && !disableUrl) {
-          router.replace({
-            query: {
-              ...router.query,
-              page: 1,
-            },
-          });
+            if (page && page > inputMap(data).totalPages && !disableUrl) {
+              router.replace({
+                query: {
+                  ...router.query,
+                  page: 1,
+                },
+              });
+            }
+          },
         }
-      },
-    }
-  );
+      )
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      usePrivateQuery(
+        Array.isArray(queryKey)
+          ? queryKey.concat(configQueryKey)
+          : [queryKey, ...configQueryKey],
+        () => queryFn({ page, limit: itemsPerPage, orderBy, sortBy }),
+        {
+          ...rest,
+          onSuccess: ({ data }) => {
+            if (inputMap(data).totalPages !== totalPages) {
+              setTotalPages(inputMap(data).totalPages);
+            }
 
-  return useMemo<usePaginatedPrivateQueryReturnValue<QueryData>>(() => {
+            if (page && page > inputMap(data).totalPages && !disableUrl) {
+              router.replace({
+                query: {
+                  ...router.query,
+                  page: 1,
+                },
+              });
+            }
+          },
+        }
+      );
+
+  return useMemo<usePaginatedQueryReturnValue<QueryData>>(() => {
     return [
       queryResult,
       {
@@ -155,5 +184,6 @@ export const usePaginatedPrivateQuery = <QueryData>(
         totalPages,
       },
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, queryResult, totalPages]);
 };

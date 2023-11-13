@@ -34,6 +34,7 @@ export interface DataSource {
   url: string;
   itemsPath?: string;
   urlContext: W3blockAPI;
+  isPublicApi?: boolean;
 }
 
 export interface XlsReportsDto {
@@ -90,6 +91,7 @@ export interface ColumnsTable {
       replacedFilterTemplate?: string;
       data?: {
         url: string;
+        isPublicFilterApi?: boolean;
         parameters?: FilterParameters;
         filterUrlContext?: W3blockAPI;
       };

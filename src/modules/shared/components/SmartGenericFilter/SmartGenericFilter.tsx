@@ -43,6 +43,7 @@ interface GenericFilterDto {
   filterContext?: W3blockAPI;
   dynamicFilterParameters?: FilterParameters | undefined;
   filterPlaceholder?: string;
+  isPublicFilterApi?: boolean;
 }
 
 const SmartGenericFilter = ({
@@ -61,6 +62,7 @@ const SmartGenericFilter = ({
   filterContext,
   dynamicFilterParameters,
   filterPlaceholder,
+  isPublicFilterApi,
 }: GenericFilterDto) => {
   const [defaultDate, setDefaultDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date>();
@@ -366,6 +368,7 @@ const SmartGenericFilter = ({
           onSelected={setSelected}
           selected={selected}
           placeholder={filterPlaceholder}
+          isPublicFilterApi={isPublicFilterApi}
         />
       )}
     </div>
