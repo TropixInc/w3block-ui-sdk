@@ -88,8 +88,6 @@ export const DynamicGenericFilter = ({
 
   useDebounce(setSearchValueCallback, 900, [setSearchValueCallback]);
 
-  console.log(isPublicFilterApi, 'isPublicFilterApi');
-
   const [{ data }] = usePaginatedGenericApiGet({
     url: filterOptionsUrl ?? '',
     isPublicApi: isPublicFilterApi,

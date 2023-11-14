@@ -227,6 +227,7 @@ export const StorefrontPreview = ({
     (asPath || '').includes('/auth/')
       ? mergedConfigStyleData?.hasHeader
       : true;
+
   const hasFooterDefault =
     mergedConfigStyleData?.hasFooter != undefined &&
     (asPath || '').includes('/auth/')
@@ -236,6 +237,7 @@ export const StorefrontPreview = ({
     ...data,
     dynamicApi,
   };
+
   return (
     <DynamicApiProvider dynamicModule={data.dynamicApi}>
       <div

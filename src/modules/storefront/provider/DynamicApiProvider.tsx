@@ -58,7 +58,11 @@ export const DynamicApiProvider = ({
 
   return (
     <DynamicApiContext.Provider
-      value={{ datasource, isDynamic: dynamicModule != undefined }}
+      value={{
+        datasource,
+        isDynamic: dynamicModule != undefined,
+        config: dynamicModule,
+      }}
     >
       {children}
     </DynamicApiContext.Provider>
