@@ -245,6 +245,17 @@ export interface SpecificBannerInfo {
   subtitleFontBold?: boolean;
   subtitleFontItalic?: boolean;
   subtitleFontSizeType?: string;
+  baseUrl?: string;
+  titleTextShadow?: string;
+  titleTextAlign?:
+    | 'start'
+    | 'end'
+    | 'left'
+    | 'right'
+    | 'center'
+    | 'justify'
+    | 'match-parent';
+  titleMaxWidth?: string;
 }
 
 type CategoryItem = { name: string; slug: string };

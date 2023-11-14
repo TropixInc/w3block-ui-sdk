@@ -83,7 +83,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
               rowAlignmentClass,
               '!pw-object-center pw-object-cover pw-w-full pw-h-full'
             )}
-            src={_.get(datasource, bgUrl.assetUrl, bgUrl.assetUrl)}
+            src={_.get(datasource, bgUrl?.assetUrl, bgUrl?.assetUrl)}
             width={1440}
             quality="best"
           />

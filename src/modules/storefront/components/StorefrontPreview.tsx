@@ -8,6 +8,8 @@ import {
 } from 'react';
 import { useEffectOnce } from 'react-use';
 
+import classNames from 'classnames';
+
 import { getPageMap } from '../../custom/utils/customMap';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import {
@@ -236,6 +238,7 @@ export const StorefrontPreview = ({
     ...data,
     dynamicApi,
   };
+
   return (
     <DynamicApiProvider dynamicModule={data.dynamicApi}>
       <div
@@ -288,7 +291,14 @@ export const StorefrontPreview = ({
               getPageMap(data.custom)
             ) : (
               <div
-                className={!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}
+                className={classNames(
+                  `${!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}`,
+                  `${
+                    data.dynamicApi?.matches.length > 0
+                      ? 'sm:pw-px-0 pw-px-6'
+                      : ''
+                  }`
+                )}
               >
                 {data.modules?.map((item) => {
                   if (item.deviceType == 'none') return null;

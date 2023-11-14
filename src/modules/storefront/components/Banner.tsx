@@ -157,6 +157,10 @@ const Slide = ({
     sideImageHeight,
     sideImageWidth,
     sideImageUrl,
+    baseUrl,
+    titleTextShadow,
+    titleMaxWidth,
+    titleTextAlign,
   } = data;
   const { isDynamic, datasource } = useDynamicApi();
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -198,7 +202,7 @@ const Slide = ({
           padding: convertSpacingToCSS(padding),
           height: height ? height + 'px' : '60vh',
         }}
-        className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full  `}
+        className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full`}
       >
         {isVideo(
           isDynamic
@@ -277,11 +281,18 @@ const Slide = ({
                   <ImageSDK
                     src={
                       isDynamic
-                        ? _.get(
-                            datasource,
-                            sideImageUrl?.assetUrl ?? '',
-                            sideImageUrl?.assetUrl ?? ''
-                          )
+                        ? baseUrl
+                          ? baseUrl +
+                            _.get(
+                              datasource,
+                              sideImageUrl?.assetUrl ?? '',
+                              sideImageUrl?.assetUrl ?? ''
+                            )
+                          : _.get(
+                              datasource,
+                              sideImageUrl?.assetUrl ?? '',
+                              sideImageUrl?.assetUrl ?? ''
+                            )
                         : sideImageUrl?.assetUrl ?? ''
                     }
                     className={`pw-object-contain pw-h-full pw-w-full`}
@@ -323,6 +334,9 @@ const Slide = ({
                         parseInt(titleFontSize) * 0.05
                       ).toFixed(0) + 'px'
                     : 'auto',
+                textShadow: titleTextShadow ?? 'none',
+                textAlign: titleTextAlign ?? 'right',
+                maxWidth: titleMaxWidth ?? '550px',
               }}
               className={`${alignmentTextClass} pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
             >

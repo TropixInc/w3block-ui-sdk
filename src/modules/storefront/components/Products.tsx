@@ -98,7 +98,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
   const { datasource } = useDynamicApi();
 
   const dynamicCardsData = useMemo(() => {
-    console.log(dynamicCards, contentCards);
     if (dynamicCards == true && contentCards && contentCards.length > 0) {
       const itemsToRender = _.get(datasource, dynamicCardsPath ?? '', []).slice(
         0,
@@ -106,7 +105,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
       ) as any[];
 
       const productToFollow = contentCards[0];
-      console.log('chegou aqui');
       return itemsToRender.map((_, index) =>
         changeDynamicJsonToInsertIndex(productToFollow, index)
       );
@@ -120,8 +118,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
     datasource,
     contentCards,
   ]);
-
-  console.log(dynamicCardsData);
 
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.COMMERCE);
