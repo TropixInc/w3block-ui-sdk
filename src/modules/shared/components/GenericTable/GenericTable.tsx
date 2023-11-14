@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import classNames from 'classnames';
 import _ from 'lodash';
 
+import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import useTruncate from '../../../tokens/hooks/useTruncate';
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import ClearFilter from '../../assets/icons/clearFilterOutlined.svg?react';
@@ -73,6 +74,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     filtersTitle,
     tableTitle,
   } = config;
+  const { config: configDynamic } = useDynamicApi();
   const isMobile = useIsMobile();
   const { companyId: tenantId } = useCompanyConfig();
   const { data: company } = useCompanyById(tenantId || '');
@@ -134,21 +136,35 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       (item: string) => (item as string)?.length > 0
     );
 
-    if (filteredArrFilters?.length) {
-      if (dataSource?.url.includes('?')) {
-        setApiUrl(`${dataSource?.url}&${filteredArrFilters.join('&')}&${sort}`);
+    let replacedUrl = dataSource?.url;
+
+    const replacements = Array.from(
+      (dataSource?.url ?? '').matchAll(new RegExp(/{(\w+)}*/g))
+    );
+
+    replacements.forEach((item) => {
+      const y = configDynamic?.groups[item[1]];
+
+      if (y !== undefined) {
+        replacedUrl = replacedUrl?.replace(item[0], y);
+      }
+    });
+
+    if (replacedUrl && filteredArrFilters?.length) {
+      if (replacedUrl.includes('?')) {
+        setApiUrl(`${replacedUrl}&${filteredArrFilters.join('&')}&${sort}`);
       } else {
-        setApiUrl(`${dataSource?.url}?${filteredArrFilters.join('&')}&${sort}`);
+        setApiUrl(`${replacedUrl}?${filteredArrFilters.join('&')}&${sort}`);
       }
     } else {
-      if (sort) {
-        if (dataSource?.url.includes('?')) {
-          setApiUrl(`${dataSource?.url}&${sort}`);
+      if (replacedUrl && sort) {
+        if (replacedUrl.includes('?')) {
+          setApiUrl(`${replacedUrl}&${sort}`);
         } else {
-          setApiUrl(`${dataSource?.url}?${sort}`);
+          setApiUrl(`${replacedUrl}?${sort}`);
         }
       } else {
-        setApiUrl(dataSource?.url);
+        setApiUrl(replacedUrl);
       }
     }
 
