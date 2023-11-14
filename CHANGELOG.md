@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### [1.11.9](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.8...v1.11.9) (2023-11-14)
 
 ### [1.11.8](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.6...v1.11.8) (2023-11-14)
+### [1.11.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.6...v1.11.7) (2023-11-14)
 
 ### [1.11.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.5...v1.11.6) (2023-11-13)
 
