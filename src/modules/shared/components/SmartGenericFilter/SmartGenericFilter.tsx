@@ -326,7 +326,7 @@ const SmartGenericFilter = ({
       }
       case FormatFilterType.SEARCH: {
         return (
-          <div className="pw-w-full pw-min-w-[200px] pw-h-[42px] pw-rounded-lg pw-border pw-border-[#B9D1F3]">
+          <div className="pw-w-full pw-min-w-[200px] pw-h-[42px] pw-rounded-lg pw-border pw-border-slate-300">
             <input
               className="pw-w-full pw-h-[40px] pw-rounded-lg pw-outline-none pw-px-2"
               type="text"

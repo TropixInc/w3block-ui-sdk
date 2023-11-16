@@ -6,7 +6,7 @@ import { GenericTableData } from '../interfaces';
 export const GenericTableWrapper = ({ data }: { data: GenericTableData }) => {
   const { styleData, contentData } = data;
   return (
-    <div className="pw-container pw-mx-auto pw-pb-10 sm:!pw-px-0">
+    <div className="pw-container pw-mx-auto pw-pb-10 pw-px-2 sm:!pw-px-0">
       <GenericTable
         config={contentData}
         classes={{
