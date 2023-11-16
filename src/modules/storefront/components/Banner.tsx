@@ -335,10 +335,11 @@ const Slide = ({
                       ).toFixed(0) + 'px'
                     : 'auto',
                 textShadow: titleTextShadow ?? 'none',
-                textAlign: titleTextAlign ?? 'right',
                 maxWidth: titleMaxWidth ?? '550px',
               }}
-              className={`${alignmentTextClass} pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
+              className={`${alignmentTextClass} ${
+                titleTextAlign ?? ''
+              } pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
             >
               {_.get(datasource, title ?? '', title)}
             </h2>
