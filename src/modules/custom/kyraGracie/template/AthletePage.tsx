@@ -6,6 +6,7 @@ const Shimmer = lazy(() =>
 
 import { lazy } from 'react';
 
+import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import blackBelt from '../assets/black_belt.png';
@@ -18,7 +19,7 @@ import Logo from '../assets/WJJC.png';
 import { AthleteInterface, BeltColor } from '../hooks/useGetAthlete';
 
 export const AthletePage = () => {
-  const { datasource } = useDynamicApi();
+  const { datasource, loading } = useDynamicApi();
   const isProduction = useIsProduction();
   const belts = [
     BeltColor.BLUE,
@@ -75,6 +76,13 @@ export const AthletePage = () => {
       athleteNationality: '',
     };
   };
+
+  if (loading)
+    return (
+      <div className="pw-w-full pw-h-[30rem]">
+        <Spinner className="pw-m-auto pw-w-[40px] pw-h-[40px] pw-opacity-50 pw-mt-[20%]" />
+      </div>
+    );
 
   return datasource.athlete?.items.length ? (
     <div

@@ -44,7 +44,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
 
   const alignmentTextClass = alignmentsText[alignment ?? AlignmentEnum.LEFT];
 
-  const { isDynamic, datasource } = useDynamicApi();
+  const { isDynamic, datasource, loading } = useDynamicApi();
 
   return (
     <div className="pw-container pw-mx-auto pw-flex pw-items-start pw-gap-2">
@@ -71,7 +71,11 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames('pw-font-semibold')}
         >
-          {isDynamic ? _.get(datasource, titleInput ?? '', '') : titleInput}
+          {isDynamic
+            ? loading
+              ? ''
+              : _.get(datasource, titleInput ?? '', '')
+            : titleInput}
         </h2>
         <div
           style={{
@@ -81,7 +85,9 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
           dangerouslySetInnerHTML={{
-            __html: _.get(datasource, textInput ?? '', textInput ?? ''),
+            __html: loading
+              ? ''
+              : _.get(datasource, textInput ?? '', textInput ?? ''),
           }}
         />
       </div>

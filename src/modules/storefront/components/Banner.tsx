@@ -21,12 +21,12 @@ import { isImage, isVideo } from '../../shared/utils/validators';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
 
+import _ from 'lodash';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
-
-import _ from 'lodash';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const { styleData, mobileStyleData } = data;
@@ -162,7 +162,7 @@ const Slide = ({
     titleMaxWidth,
     titleTextAlign,
   } = data;
-  const { isDynamic, datasource } = useDynamicApi();
+  const { isDynamic, datasource, loading } = useDynamicApi();
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -341,7 +341,7 @@ const Slide = ({
                 titleTextAlign ?? ''
               } pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
             >
-              {_.get(datasource, title ?? '', title)}
+              {loading ? '' : _.get(datasource, title ?? '', title)}
             </h2>
             <p
               style={{
@@ -369,7 +369,7 @@ const Slide = ({
               }}
               className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
             >
-              {_.get(datasource, subtitle ?? '', subtitle)}
+              {loading ? '' : _.get(datasource, subtitle ?? '', subtitle)}
             </p>
 
             <div className="pw-flex pw-gap-4">
