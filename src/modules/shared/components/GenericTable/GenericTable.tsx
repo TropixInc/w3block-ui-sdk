@@ -352,7 +352,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     if (filterValues.some((item: any) => item.length)) {
       return (
         <button
-          className="pw-mt-4 pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg sm:-pw-mt-4"
+          className="pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
           onClick={() => onClearAllFilter()}
         >
           <span className="pw-text-[#aaa] pw-font-medium">
@@ -368,17 +368,20 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     <div className="pw-w-full pw-mt-20">
       <FormProvider {...methods}>
         <div className="pw-text-black">
-          <div>
+          <div style={externalFilterClasses?.container}>
             {filtersTitle ? (
               <p className="pw-text-[22px] pw-font-semibold pw-mb-2">
                 {filtersTitle}
               </p>
             ) : null}
-            <div className="pw-w-full sm:pw-flex sm:pw-justify-between">
+            <div
+              style={externalFilterClasses?.wrapper}
+              className="pw-w-full sm:pw-flex sm:pw-justify-between"
+            >
               <div
+                style={externalFilterClasses?.root}
                 className={classNames(
-                  'pw-relative pw-w-full pw-gap-x-3 pw-gap-y-3 pw-flex-wrap sm:pw-max-w-[900px] sm:pw-flex',
-                  externalFilterClasses?.root ?? ''
+                  'pw-relative pw-w-full pw-gap-x-3 pw-gap-y-3 pw-flex-wrap sm:pw-max-w-[900px] sm:pw-flex'
                 )}
               >
                 {columns
@@ -424,7 +427,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     );
                   })}
               </div>
-              <div>
+              <div style={externalFilterClasses?.buttonsContainer}>
                 {xlsReports?.url && (
                   <GenerateGenericXlsReports
                     url={xlsReports.url}

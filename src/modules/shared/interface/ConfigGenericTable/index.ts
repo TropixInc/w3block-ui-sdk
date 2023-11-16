@@ -111,6 +111,9 @@ export interface ConfigGenericTable {
   actions?: Array<Actions>;
   lineActions?: Actions;
   externalFilterClasses?: {
-    root?: string;
+    root?: any;
+    container?: any;
+    wrapper?: any;
+    buttonsContainer?: any;
   };
 }
