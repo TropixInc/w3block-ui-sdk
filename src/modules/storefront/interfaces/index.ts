@@ -440,6 +440,9 @@ export interface ParagraphData extends MainModuleThemeInterface {
     titleSize?: string;
     titleFontFamily?: string;
     titleUnit?: string;
+    image?: {
+      assetUrl?: string;
+    };
   };
   contentData: {
     titleInput?: string;

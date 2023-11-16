@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import _ from 'lodash';
 
+import { ImageSDK } from '../../shared/components/ImageSDK';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, ParagraphData } from '../interfaces';
@@ -37,6 +38,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
     textFontFamily,
     textSize,
     textUnit,
+    image,
   } = mergedStyleData;
   const { textInput, titleInput } = mergedContentData;
 
@@ -45,7 +47,16 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const { isDynamic, datasource } = useDynamicApi();
 
   return (
-    <div className="pw-container pw-mx-auto">
+    <div className="pw-container pw-mx-auto pw-flex pw-items-start pw-gap-2">
+      {image?.assetUrl ? (
+        <div className="pw-grid pw-place-items-center pw-mt-1 pw-min-w-[35px]">
+          <ImageSDK
+            src={_.get(datasource, image?.assetUrl ?? '', image?.assetUrl)}
+            width={35}
+            height={35}
+          />
+        </div>
+      ) : null}
       <div
         style={{
           margin: convertSpacingToCSS(margin),
