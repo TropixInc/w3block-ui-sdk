@@ -111,7 +111,7 @@ const GenericSearchFilter = ({
 
   return (
     <div className={classNames('pw-relative pw-w-full', classes?.root)}>
-      <div className="pw-flex pw-w-full pw-items-center pw-h-[42px] pw-gap-x-2 pw-bg-white pw-border pw-border-[#B9D1F3] pw-pl-4 pw-pr-1 pw-rounded-lg">
+      <div className="pw-flex pw-w-full pw-items-center pw-h-[42px] pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-pl-4 pw-pr-1 pw-rounded-lg">
         <SearchIcon />
         <input
           type="text"
@@ -119,7 +119,7 @@ const GenericSearchFilter = ({
           value={search}
           onChange={(e) => handleSearchChange(e)}
           className={classNames(
-            'pw-text-[15px] pw-text-[#8BAEE2] placeholder:pw-text-[#8BAEE2] pw-w-full focus:pw-outline-none',
+            'pw-text-[15px] pw-text-slate-300 placeholder:pw-text-slate-300 pw-w-full focus:pw-outline-none',
             classes?.input ?? ''
           )}
         />

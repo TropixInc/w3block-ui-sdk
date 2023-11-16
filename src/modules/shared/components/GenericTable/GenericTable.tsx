@@ -445,7 +445,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
 
         <div
           className={classNames(
-            'pw-mb-10 pw-rounded-2xl pw-overflow-auto',
+            'pw-w-full pw-overflow-auto',
             classes?.root ?? ''
           )}
           style={tableStyles?.root as any}
@@ -459,7 +459,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           <div
             style={classes?.grid as any}
             className={classNames(
-              'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-3 pw-gap-x-2 pw-rounded-t-2xl pw-min-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
+              'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-3 pw-gap-x-2 !pw-border-b-0 pw-rounded-t-2xl pw-min-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
               tableStyles?.header ?? ''
             )}
           >
@@ -470,7 +470,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   <div className="pw-flex pw-items-center pw-justify-between">
                     <p
                       className={classNames(
-                        'pw-font-semibold pw-flex pw-flex-col pw-text-sm',
+                        'pw-font-semibold pw-text-left pw-flex pw-flex-col pw-text-sm',
                         header.filter ? 'pw-w-[70%]' : 'pw-w-full'
                       )}
                     >
@@ -571,13 +571,15 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                 </div>
               ))}
           </div>
+
           {isLoading && (
             <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
               <Spinner />
             </div>
           )}
+
           {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
-            <div className="pw-h-auto pw-min-w-[800px] pw-w-full pw-px-3 pw-box-border pw-border pw-rounded-b-2xl">
+            <div className="pw-h-auto pw-min-w-[800px] pw-w-full pw-px-3 pw-box-border pw-border pw-border-t-0 pw-rounded-b-2xl">
               {_.get(data, localeItems ?? '', []).map((item: any) => (
                 <button
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -629,6 +631,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             </Alert>
           )}
         </div>
+
         {totalItems && totalPages && totalPages > 1 ? (
           <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10">
             <p className="pw-text-sm pw-font-semibold">
