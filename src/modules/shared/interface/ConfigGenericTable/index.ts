@@ -24,9 +24,9 @@ export enum FormatFilterType {
 }
 
 export interface TableStylesClasses {
-  root?: string;
-  header?: string;
-  line?: string;
+  root?: any;
+  header?: any;
+  line?: any;
 }
 
 export interface DataSource {
@@ -111,6 +111,9 @@ export interface ConfigGenericTable {
   actions?: Array<Actions>;
   lineActions?: Actions;
   externalFilterClasses?: {
-    root?: string;
+    root?: any;
+    container?: any;
+    wrapper?: any;
+    buttonsContainer?: any;
   };
 }

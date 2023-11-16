@@ -226,15 +226,19 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       case FormatTypeColumn.THUMBNAIL: {
         return (
           <div className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md">
-            <img
-              src={
-                basicUrl
-                  ? `${basicUrl}${_.get(item, itemKey, '')}`
-                  : _.get(item, itemKey, '')
-              }
-              alt=""
-              className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md"
-            />
+            {_.get(item, itemKey, '') ? (
+              <img
+                src={
+                  basicUrl
+                    ? `${basicUrl}${_.get(item, itemKey, '')}`
+                    : _.get(item, itemKey, '')
+                }
+                alt=""
+                className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md"
+              />
+            ) : (
+              <div className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md pw-border"></div>
+            )}
           </div>
         );
       }
@@ -343,96 +347,119 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     setFilterLabels({});
   };
 
+  const renderClearFilterButton = () => {
+    const filterValues = Object.values(filters || {});
+    if (filterValues.some((item: any) => item.length)) {
+      return (
+        <button
+          className="pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
+          onClick={() => onClearAllFilter()}
+        >
+          <span className="pw-text-[#aaa] pw-font-medium">
+            {translate('shared>genericTable>clearFilters')}
+          </span>
+          <ClearFilter className="pw-stroke-2 pw-stroke-[#aaa] pw-w-5 pw-h-5" />
+        </button>
+      );
+    } else return null;
+  };
+
   return (
     <div className="pw-w-full pw-mt-20">
       <FormProvider {...methods}>
-        <div className="pw-w-full sm:pw-flex sm:pw-justify-between">
-          <div
-            className={classNames(
-              'pw-relative pw-w-full pw-gap-x-3 pw-flex-wrap sm:pw-max-w-[1000px] sm:pw-flex',
-              externalFilterClasses?.root ?? ''
-            )}
-          >
+        <div className="pw-text-black">
+          <div style={externalFilterClasses?.container}>
             {filtersTitle ? (
-              <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-2">
+              <p className="pw-text-[22px] pw-font-semibold pw-mb-2">
                 {filtersTitle}
               </p>
             ) : null}
-            {columns
-              .filter((item) => item.header.filter?.placement === 'external')
-              .map(({ header, key }) => {
-                return (
-                  <div
-                    key={key}
-                    style={!isMobile ? (header.filter?.filterClass as any) : {}}
-                    className="pw-w-full"
-                  >
-                    <SmartGenericFilter
-                      filterType={header.filter?.type}
-                      filterFormat={header.filter?.format}
-                      filterOptions={header.filter?.values}
-                      itemShowFilterKey={key}
-                      itemKey={key}
-                      filters={filters}
-                      onChangeFilter={setFilters}
-                      onCloseFilters={setIsShowFilterKey}
-                      filterLabels={filterLabels}
-                      onChangeFilterLabels={setFilterLabels}
-                      filterTemplate={
-                        header.filter?.replacedFilterTemplate
-                          ? header.filter?.replacedFilterTemplate
-                          : header.filter?.filterTemplate
-                      }
-                      filterOptionsUrl={header.filter?.data?.url}
-                      filterContext={header.filter?.data?.filterUrlContext}
-                      dynamicFilterParameters={header.filter?.data?.parameters}
-                      filterPlaceholder={header.filter?.placeholder}
-                      isPublicFilterApi={header.filter?.data?.isPublicFilterApi}
-                    />
-                  </div>
-                );
-              })}
-          </div>
-          <div>
-            {xlsReports?.url && (
-              <GenerateGenericXlsReports
-                url={xlsReports.url}
-                context={xlsReports.urlContext}
-                filters={filters}
-                observerUrlReport={xlsReports.observerUrl}
-                sort={sort}
-              />
-            )}
-            {Object.values(filters || {}).length ? (
-              <button
-                className="pw-mt-4 pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-red-500 pw-rounded-md pw-items-center hover:pw-shadow-lg sm:-pw-mt-4"
-                onClick={() => onClearAllFilter()}
+            <div
+              style={externalFilterClasses?.wrapper}
+              className="pw-w-full sm:pw-flex sm:pw-justify-between"
+            >
+              <div
+                style={externalFilterClasses?.root}
+                className={classNames(
+                  'pw-relative pw-w-full pw-gap-x-3 pw-gap-y-3 pw-flex-wrap sm:pw-max-w-[900px] sm:pw-flex'
+                )}
               >
-                <span className="pw-text-red-500 pw-font-medium">
-                  {translate('shared>genericTable>clearFilters')}
-                </span>
-                <ClearFilter className="pw-stroke-2 pw-stroke-red-500 pw-w-5 pw-h-5" />
-              </button>
-            ) : null}
+                {columns
+                  .filter(
+                    (item) => item.header.filter?.placement === 'external'
+                  )
+                  .map(({ header, key }) => {
+                    return (
+                      <div
+                        key={key}
+                        style={
+                          !isMobile ? (header.filter?.filterClass as any) : {}
+                        }
+                        className="pw-w-full"
+                      >
+                        <SmartGenericFilter
+                          filterType={header.filter?.type}
+                          filterFormat={header.filter?.format}
+                          filterOptions={header.filter?.values}
+                          itemShowFilterKey={key}
+                          itemKey={key}
+                          filters={filters}
+                          onChangeFilter={setFilters}
+                          onCloseFilters={setIsShowFilterKey}
+                          filterLabels={filterLabels}
+                          onChangeFilterLabels={setFilterLabels}
+                          filterTemplate={
+                            header.filter?.replacedFilterTemplate
+                              ? header.filter?.replacedFilterTemplate
+                              : header.filter?.filterTemplate
+                          }
+                          filterOptionsUrl={header.filter?.data?.url}
+                          filterContext={header.filter?.data?.filterUrlContext}
+                          dynamicFilterParameters={
+                            header.filter?.data?.parameters
+                          }
+                          filterPlaceholder={header.filter?.placeholder}
+                          isPublicFilterApi={
+                            header.filter?.data?.isPublicFilterApi
+                          }
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
+              <div style={externalFilterClasses?.buttonsContainer}>
+                {xlsReports?.url && (
+                  <GenerateGenericXlsReports
+                    url={xlsReports.url}
+                    context={xlsReports.urlContext}
+                    filters={filters}
+                    observerUrlReport={xlsReports.observerUrl}
+                    sort={sort}
+                  />
+                )}
+                {renderClearFilterButton()}
+              </div>
+            </div>
           </div>
         </div>
 
         <div
           className={classNames(
-            'pw-mb-10 pw-rounded-t-2xl pw-overflow-auto',
-            classes?.root ?? '',
-            tableStyles?.root ?? ''
+            'pw-mb-10 pw-rounded-2xl pw-overflow-auto',
+            classes?.root ?? ''
           )}
+          style={tableStyles?.root as any}
         >
           {tableTitle ? (
             <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-4">
               {tableTitle}
             </p>
           ) : null}
+
           <div
             style={classes?.grid as any}
             className={classNames(
-              'pw-px-3 pw-h-[72px] pw-bg-[#DDE6F3] pw-gap-x-2 pw-rounded-t-2xl pw-min-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
+              'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-3 pw-gap-x-2 pw-rounded-t-2xl pw-min-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
               tableStyles?.header ?? ''
             )}
           >
@@ -550,7 +577,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             </div>
           )}
           {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
-            <div className="pw-h-auto pw-min-w-[800px] pw-shadow-[#00000014] pw-shadow-[-7px_5px_8px_-1px] pw-border">
+            <div className="pw-h-auto pw-min-w-[800px] pw-w-full pw-px-3 pw-box-border pw-border pw-rounded-b-2xl">
               {_.get(data, localeItems ?? '', []).map((item: any) => (
                 <button
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -559,7 +586,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   disabled={!lineActions}
                   style={classes?.grid as any}
                   className={classNames(
-                    'pw-w-full pw-min-w-[800px] pw-grid pw-items-center  pw-gap-x-2 pw-px-3 pw-py-[19px] pw-border-t',
+                    'pw-w-full pw-min-w-[800px] pw-grid pw-items-center pw-gap-x-2 pw-py-[19px] pw-border-t',
                     tableStyles?.line ?? ''
                   )}
                 >
@@ -589,7 +616,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           {!isLoading &&
             !_.get(data, localeItems ?? '', [])?.length &&
             !isError && (
-              <Alert variant="information">
+              <Alert
+                variant="information"
+                className="pw-bg-[#eee] pw-text-[#999]"
+              >
                 {translate('token>pass>notResult')}
               </Alert>
             )}
