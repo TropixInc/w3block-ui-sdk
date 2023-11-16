@@ -24,9 +24,9 @@ export enum FormatFilterType {
 }
 
 export interface TableStylesClasses {
-  root?: string;
-  header?: string;
-  line?: string;
+  root?: any;
+  header?: any;
+  line?: any;
 }
 
 export interface DataSource {
