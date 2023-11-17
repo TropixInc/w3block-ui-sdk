@@ -28,7 +28,7 @@ import {
   CardTypesEnum,
   ProductsData,
 } from '../interfaces';
-
+import './Products.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
@@ -77,6 +77,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
     padding,
     cardProductOverlay,
     productOverlay,
+    hasSpaceBetween,
   } = mergedStyleData;
   const {
     moduleTitle,
@@ -103,7 +104,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
         0,
         dynamicMaxItens ?? 10
       ) as any[];
-
       const productToFollow = contentCards[0];
       return itemsToRender.map((_, index) =>
         changeDynamicJsonToInsertIndex(productToFollow, index)
@@ -301,7 +301,9 @@ export const Products = ({ data }: { data: ProductsData }) => {
             : false
         }
         breakpoints={{ ...slicedBreakPoints }}
-        className="pw-w-full md:pw-px-6"
+        className={`pw-w-full md:pw-px-6 ${
+          hasSpaceBetween ? 'cardSpaceBetween' : ''
+        }`}
       >
         {cardType == 'content' && format && format != 'product'
           ? dynamicCardsData?.map((card) => (

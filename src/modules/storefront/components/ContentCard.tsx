@@ -52,18 +52,23 @@ export const ContentCard = ({
     valueFontBold,
     valueFontItalic,
     valueFontSizeType,
+    border,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
   const { datasource } = useDynamicApi();
   const linkToSend = () => {
     if (cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink && product.link && product.link != '')
-        return _.get(datasource, product.link ?? '', product.link);
+        return product?.basePath
+          ? product.basePath +
+              _.get(datasource, product.link ?? '', product.link)
+          : _.get(datasource, product.link ?? '', product.link);
       else return undefined;
     } else {
       return `/product/slug/${product.link}`;
     }
   };
+
   return (
     <>
       <a
@@ -74,18 +79,26 @@ export const ContentCard = ({
         {showCardImage && (
           <div
             style={{
-              backgroundImage:
-                product.image?.assetUrl && showCardImage
-                  ? `url('${threathUrlCloudinary({
-                      src:
-                        _.get(
-                          datasource,
-                          product.image.assetUrl,
-                          product.image.assetUrl
-                        ) ?? '',
-                      InternalProps: { width: 600, quality: 'best' },
-                    })}') `
-                  : 'white',
+              backgroundImage: product?.image?.basePath
+                ? `url('${
+                    product.image?.basePath +
+                    _.get(
+                      datasource,
+                      product?.image?.assetUrl,
+                      product?.image?.assetUrl
+                    )
+                  }') `
+                : product.image?.assetUrl && showCardImage
+                ? `url('${threathUrlCloudinary({
+                    src:
+                      _.get(
+                        datasource,
+                        product.image.assetUrl,
+                        product.image.assetUrl
+                      ) ?? '',
+                    InternalProps: { width: 600, quality: 'best' },
+                  })}') `
+                : 'white',
               backgroundPosition: 'center',
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
@@ -113,7 +126,7 @@ export const ContentCard = ({
                     ? product.cardOverlayColor
                     : 'rgba(0,0,0,0)',
               }}
-              className={`pw-absolute pw-top-0 pw-left-0 pw-h-full pw-w-full  ${
+              className={`pw-absolute pw-top-0 pw-left-0 pw-h-full pw-w-full ${border}  ${
                 format === 'rounded' ? 'pw-rounded-full' : 'pw-rounded-[20px]'
               }`}
             >

@@ -132,6 +132,7 @@ export interface PageData extends MainModuleThemeInterface {
 export interface AssetInterface {
   assetId: string;
   assetUrl: string;
+  basePath?: string;
 }
 export interface HeaderData extends MainModuleThemeInterface {
   type: ModulesType.HEADER;
@@ -347,6 +348,8 @@ export interface ProductsData extends MainModuleThemeInterface {
 }
 
 export interface ProductsDataStyleData {
+  hasSpaceBetween?: boolean;
+  border?: string;
   margin?: string;
   padding?: string;
   layoutDisposition?: CardLayoutDisposition;
@@ -424,6 +427,7 @@ export interface SpecificContentCard {
   link?: string;
   overlay?: boolean;
   cardOverlayColor?: string;
+  basePath?: string;
 }
 
 export interface ParagraphData extends MainModuleThemeInterface {
