@@ -246,12 +246,12 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         const value = _.get(item, itemKey, '');
         const valueRendered = _.get(value[0], keyInCollection ?? '', '');
 
-        if (value.length > 1) {
+        if (value?.length > 1) {
           return (
             <p>
               <p>{valueRendered}</p>
               <p className="pw-text-xs pw-opacity-70">{`+${
-                value.length - 1
+                value?.length - 1
               } academia(s)`}</p>
             </p>
           );
@@ -349,7 +349,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
 
   const renderClearFilterButton = () => {
     const filterValues = Object.values(filters || {});
-    if (filterValues.some((item: any) => item.length)) {
+    if (filterValues.some((item: any) => item?.length)) {
       return (
         <button
           className="pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"

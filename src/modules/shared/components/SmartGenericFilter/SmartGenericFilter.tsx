@@ -270,12 +270,12 @@ const SmartGenericFilter = ({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getPlaceholderForMultipleSelect = (multpleSelected: Array<any>) => {
-    if (multpleSelected && multpleSelected.length > 0) {
+    if (multpleSelected && multpleSelected?.length > 0) {
       const selected = multpleSelected.map((item) => {
         return filterOptions?.find(({ value }) => value === item);
       });
 
-      if (selected.length > 0) {
+      if (selected?.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (selected as Array<any>).map(({ label }) => label).join(', ');
       } else {
