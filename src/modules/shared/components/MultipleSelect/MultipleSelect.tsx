@@ -41,7 +41,7 @@ export const MultipleSelect = ({
   } = useController({ name: name });
 
   const isSelected = (selectedValue: string) => {
-    if (value && value.length > 0) return value.includes(selectedValue);
+    if (value && value?.length > 0) return value.includes(selectedValue);
 
     return false;
   };
@@ -81,14 +81,14 @@ export const MultipleSelect = ({
 
   const handleSelect = (newValue: string) => {
     const selectedUpdated =
-      value && value.length > 0 ? [...value, newValue] : [newValue];
+      value && value?.length > 0 ? [...value, newValue] : [newValue];
 
     onChange(selectedUpdated);
   };
 
   const handleDeselect = (deselectValue: string) => {
     const selectedUpdated = value.filter((el: string) => el !== deselectValue);
-    if (selectedUpdated.length > 0) {
+    if (selectedUpdated?.length > 0) {
       onChange(selectedUpdated);
     } else {
       onChange([]);

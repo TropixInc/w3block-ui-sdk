@@ -295,7 +295,7 @@ export const StorefrontPreview = ({
                 className={classNames(
                   `${!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}`,
                   `${
-                    data.dynamicApi?.matches.length > 0
+                    data?.dynamicApi?.matches?.length > 0
                       ? 'sm:pw-px-0 pw-px-6'
                       : ''
                   }`
