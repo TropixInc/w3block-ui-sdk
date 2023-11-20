@@ -459,7 +459,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           <div
             style={classes?.grid as any}
             className={classNames(
-              'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-3 pw-gap-x-2 !pw-border-b-0 pw-rounded-t-2xl pw-min-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
+              'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-3 pw-gap-x-2 !pw-border-b-0 pw-rounded-t-2xl pw-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
               tableStyles?.header ?? ''
             )}
           >
@@ -579,7 +579,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           )}
 
           {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
-            <div className="pw-h-auto pw-min-w-[800px] pw-w-full pw-px-3 pw-box-border pw-border pw-border-t-0 pw-rounded-b-2xl">
+            <div className="pw-h-auto pw-w-[800px] pw-border pw-border-t-0 pw-rounded-b-2xl sm:pw-w-full">
               {_.get(data, localeItems ?? '', []).map((item: any) => (
                 <button
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -588,7 +588,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   disabled={!lineActions}
                   style={classes?.grid as any}
                   className={classNames(
-                    'pw-w-full pw-min-w-[800px] pw-grid pw-items-center pw-gap-x-2 pw-py-[19px] pw-border-t',
+                    'pw-w-[800px] pw-grid  pw-px-3 pw-items-center pw-gap-x-2 pw-py-[19px] pw-border-t sm:pw-w-full ',
                     tableStyles?.line ?? ''
                   )}
                 >
