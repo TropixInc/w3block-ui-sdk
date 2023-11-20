@@ -101,9 +101,7 @@ const GenericSearchFilter = ({
             ))}
           </ul>
         ) : (
-          <p className="pw-text-center">
-            {translate('key>filtersListContracts>notFoundContracts')}
-          </p>
+          <p className="pw-text-center">{translate('token>pass>notResult')}</p>
         )}
       </div>
     ) : null;
@@ -111,8 +109,8 @@ const GenericSearchFilter = ({
 
   return (
     <div className={classNames('pw-relative pw-w-full', classes?.root)}>
-      <div className="pw-flex pw-w-full pw-items-center pw-h-[42px] pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-pl-4 pw-pr-1 pw-rounded-lg">
-        <SearchIcon />
+      <div className="pw-flex pw-w-full pw-items-center pw-h-[48px] pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-pl-4 pw-pr-1 pw-rounded-lg">
+        <SearchIcon className="pw-stroke-slate-500" />
         <input
           type="text"
           placeholder={inputPlaceholder}

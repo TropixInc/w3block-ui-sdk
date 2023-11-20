@@ -40,28 +40,8 @@ interface DynamicProps {
   selected?: string;
   placeholder?: string;
   isPublicFilterApi?: boolean;
+  searchFilterTemplate?: string;
 }
-
-const paginationMapping = {
-  default: {},
-  strapi: {
-    inputMap: (data: any) => {
-      if (data) {
-        return {
-          totalItems: data?.meta?.pagination?.total,
-          totalPages: data?.meta?.pagination?.pageCount,
-        };
-      }
-    },
-    outputMap: (params: any) => {
-      const newParams = { ...params, page: undefined };
-      newParams['pagination[pageSize]'] = 50;
-      newParams['pagination[page]'] = params?.page;
-
-      return newParams;
-    },
-  },
-};
 
 export const DynamicGenericFilter = ({
   format,
@@ -77,16 +57,41 @@ export const DynamicGenericFilter = ({
   selected,
   placeholder,
   isPublicFilterApi,
+  searchFilterTemplate,
 }: DynamicProps) => {
   const [searchName, setSearchName] = useState<string | undefined>('');
   const [searchValue, setSearchValue] = useState<string | undefined>('');
   const [showResponseModal, setShowResponseModal] = useState<boolean>(false);
+
+  console.log(searchFilterTemplate, 'searchFilterTemplate');
 
   const setSearchValueCallback = useCallback(() => {
     setSearchValue(searchName);
   }, [searchName, setSearchValue]);
 
   useDebounce(setSearchValueCallback, 900, [setSearchValueCallback]);
+
+  const paginationMapping = {
+    default: {},
+    strapi: {
+      inputMap: (data: any) => {
+        if (data) {
+          return {
+            totalItems: data?.meta?.pagination?.total,
+            totalPages: data?.meta?.pagination?.pageCount,
+          };
+        }
+      },
+      outputMap: (params: any) => {
+        const newParams = { ...params, page: undefined };
+        newParams['pagination[pageSize]'] = 50;
+        newParams['pagination[page]'] = params?.page;
+        newParams[searchFilterTemplate ?? ''] = searchValue;
+
+        return newParams;
+      },
+    },
+  };
 
   const [{ data }] = usePaginatedGenericApiGet({
     url: filterOptionsUrl ?? '',

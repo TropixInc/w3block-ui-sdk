@@ -227,7 +227,7 @@
   "token>pass>detailsToken": "Visualizar detalhes do token",
   "token>pass>network": "Rede:",
   "token>pass>inactivePass": "Pass inativo",
-  "token>pass>inactivePassMessage": "Esse token ainda não esta disponivel, durante o período de utilização do Pass você poderá acessar nessa tela o QR-Code para validação no evento.",
+  "token>pass>inactivePassMessage": "Este benefício não está ativo no momento. Por favor verifique o período e horário de utilização abaixo.",
   "token>pass>qrCodeExpires": "QR Code expira em <1>{{seconds}} segundos</1>",
   "token>pass>youStillHave": "Você ainda tem {{quantity}} passes para utilizar",
   "token>pass>purchaseMade": "Compra realizada em {{date}}, as {{time}} Pedido: {{order}}",

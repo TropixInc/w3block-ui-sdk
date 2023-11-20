@@ -369,6 +369,7 @@ const SmartGenericFilter = ({
           selected={selected}
           placeholder={filterPlaceholder}
           isPublicFilterApi={isPublicFilterApi}
+          searchFilterTemplate={filterTemplate}
         />
       )}
     </div>
