@@ -74,7 +74,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const hasPassAssociated =
     passData?.data.items !== undefined && passData?.data?.items?.length > 0;
 
-  const userRoles = profile?.data?.roles || [];
+  const userRoles = useMemo(() => {
+    return profile?.data?.roles || [];
+  }, [profile?.data?.roles]);
   const isAdmin = Boolean(
     userRoles.find(
       (e: string) => e === 'admin' || e === 'superAdmin' || e === 'operator'
