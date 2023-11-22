@@ -245,6 +245,7 @@ export interface SpecificBannerInfo {
   secondaryButtonTextColor?: string;
   secondaryButtonColor?: string;
   buttonSize?: '12px' | '14px' | '16px' | '18px' | '20px';
+  secondaryButtonSize?: '12px' | '14px' | '16px' | '18px' | '20px';
   secondaryButtonBorderColor?: string;
   titleFontFamily?: string;
   titleFontSize?: string;

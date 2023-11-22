@@ -162,6 +162,7 @@ const Slide = ({
     titleMaxWidth,
     titleTextAlign,
     buttonSize,
+    secondaryButtonSize,
   } = data;
   const { isDynamic, datasource, loading } = useDynamicApi();
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -411,6 +412,10 @@ const Slide = ({
                     color: secondaryButtonTextColor,
                     borderColor: secondaryButtonBorderColor ?? 'transparent',
                     borderWidth: secondaryButtonBorderColor ? '2px' : '0',
+                    fontSize: secondaryButtonSize
+                      ? secondaryButtonSize
+                      : '12px',
+                    padding: getSizeButton(secondaryButtonSize || '12px'),
                   }}
                   className="pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer pw-z-20"
                   href={_.get(
