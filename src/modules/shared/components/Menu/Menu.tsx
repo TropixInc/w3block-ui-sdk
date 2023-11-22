@@ -1,5 +1,12 @@
 /* eslint-disable react/jsx-key */
-import { ReactNode, lazy, useEffect, useState } from 'react';
+import {
+  ReactNode,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
@@ -34,6 +41,7 @@ const ImageSDK = lazy(() =>
   }))
 );
 import TranslatableComponent from '../TranslatableComponent';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface MenuProps {
   tabs?: TabsConfig[];
@@ -42,6 +50,7 @@ interface MenuProps {
 
 interface TabsConfig {
   title: string;
+  id: string;
   icon: ReactNode;
   link: string;
   sub?: boolean;
@@ -65,12 +74,15 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const hasPassAssociated =
     passData?.data.items !== undefined && passData?.data?.items?.length > 0;
 
-  const userRoles = profile?.data.roles || [];
+  const userRoles = useMemo(() => {
+    return profile?.data?.roles || [];
+  }, [profile?.data?.roles]);
   const isAdmin = Boolean(
     userRoles.find(
       (e: string) => e === 'admin' || e === 'superAdmin' || e === 'operator'
     )
   );
+  const { defaultTheme } = UseThemeConfig();
 
   const isUser = Boolean(userRoles.find((e: string) => e === 'user'));
 
@@ -78,66 +90,124 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     userRoles.find((e: string) => e === 'loyaltyOperator')
   );
 
+  const internalMenuData = useMemo(() => {
+    return defaultTheme?.configurations.styleData.internalMenu || {};
+  }, [defaultTheme?.configurations.styleData.internalMenu]);
+
+  const isHidden = useCallback(
+    (id: string) => {
+      if (defaultTheme?.configurations.styleData.internalMenu) {
+        const hiddenOption = internalMenuData[id]?.hidden;
+
+        let computedRole = 'user';
+
+        if (
+          userRoles?.find((e: string) => e === 'admin' || e === 'superAdmin')
+        ) {
+          computedRole = 'admin';
+        } else if (userRoles?.find((e: string) => e === 'operator')) {
+          computedRole = 'operator';
+        } else if (userRoles?.find((e: string) => e === 'loyaltyOperator')) {
+          computedRole = 'loyaltyOperator';
+        }
+
+        if (hiddenOption) {
+          return hiddenOption[computedRole];
+        }
+      }
+    },
+    [defaultTheme, internalMenuData, userRoles]
+  );
+
   useEffect(() => {
     const tabsDefault: TabsConfig[] = [
       {
-        title: 'Pagamento',
+        title: internalMenuData['payment']?.customLabel || 'Pagamento',
+        id: 'payment',
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.LOYALTY_PAYMENT,
-        isVisible: isLoayaltyOperator || isAdmin,
+        isVisible: (isLoayaltyOperator || isAdmin) && !isHidden('payment'),
       },
       {
-        title: translate('components>menu>tokenPass'),
+        title:
+          internalMenuData['pass']?.customLabel ||
+          translate('components>menu>tokenPass'),
+        id: 'pass',
         icon: <TicketIcon width={17} height={17} />,
+
         link: PixwayAppRoutes.TOKENPASS,
-        isVisible: pass && isAdmin && hasPassAssociated,
+        isVisible: pass && isAdmin && hasPassAssociated && !isHidden('pass'),
       },
       {
-        title: translate('components>menu>dashboard'),
+        title:
+          internalMenuData['dash']?.customLabel ||
+          translate('components>menu>dashboard'),
+        id: 'dash',
         icon: <DashboardIcon width={17} height={17} />,
         link: isLoayaltyOperator
           ? PixwayAppRoutes.LOYALTY_REPORT
           : PixwayAppRoutes.DASHBOARD,
-        isVisible: isLoayaltyOperator,
+        isVisible: isLoayaltyOperator && !isHidden('dash'),
       },
       {
-        title: translate('components>menu>wallet'),
+        title:
+          internalMenuData['wallet']?.customLabel ||
+          translate('components>menu>wallet'),
+        id: 'wallet',
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WALLET,
-        isVisible: isUser || isAdmin,
+        isVisible: (isUser || isAdmin) && !isHidden('wallet'),
       },
       {
-        title: translate('wallet>page>extract'),
+        title:
+          internalMenuData['extract']?.customLabel ||
+          translate('wallet>page>extract'),
+        id: 'extract',
         icon: (
           <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
         ),
         link: PixwayAppRoutes.WALLET_RECEIPT,
         isVisible:
-          (isUser || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0,
+          (isUser || isAdmin) &&
+          loyaltyWallet &&
+          loyaltyWallet.length > 0 &&
+          !isHidden('extract'),
       },
       {
-        title: translate('header>components>defaultTab>myOrders'),
+        title:
+          internalMenuData['myOrders']?.customLabel ||
+          translate('header>components>defaultTab>myOrders'),
+        id: 'myOrders',
         link: PixwayAppRoutes.MY_ORDERS,
         icon: <MyOrdersIcon />,
-        isVisible: isUser || isAdmin,
+        isVisible: (isUser || isAdmin) && !isHidden('myOrders'),
       },
       {
-        title: translate('components>menu>myProfile'),
+        title:
+          internalMenuData['myProfile']?.customLabel ||
+          translate('components>menu>myProfile'),
+        id: 'myProfile',
         icon: <UserIcon width={17} height={17} />,
         link: PixwayAppRoutes.PROFILE,
-        isVisible: isUser || isAdmin,
+        isVisible: (isUser || isAdmin) && !isHidden('myProfile'),
       },
       {
-        title: translate('components>menu>integration'),
+        title:
+          internalMenuData['integration']?.customLabel ||
+          translate('components>menu>integration'),
         icon: <IntegrationIcon width={17} height={17} />,
+        id: 'integration',
         link: PixwayAppRoutes.CONNECTION,
-        isVisible: isUser || isAdmin,
+        isVisible: (isUser || isAdmin) && !isHidden('integration'),
       },
       {
-        title: translate('components>menu>clients'),
+        title:
+          internalMenuData['clients']?.customLabel ||
+          translate('components>menu>clients'),
+        id: 'clients',
         icon: <DashIcon width={17} height={17} />,
         link: PixwayAppRoutes.TOKENS_CLIENTS,
-        isVisible: false,
+        isVisible: false && !isHidden('clients'),
         sub: true,
       },
     ];
@@ -152,6 +222,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     isAdmin,
     hasPassAssociated,
     isLoayaltyOperator,
+    defaultTheme,
   ]);
 
   const handleCopy = () => {
