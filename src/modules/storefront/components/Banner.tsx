@@ -161,6 +161,7 @@ const Slide = ({
     titleTextShadow,
     titleMaxWidth,
     titleTextAlign,
+    buttonSize,
   } = data;
   const { isDynamic, datasource, loading } = useDynamicApi();
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -187,6 +188,20 @@ const Slide = ({
       ? _.get(datasource, bgUrl?.assetUrl ?? '', bgUrlThreath)
       : bgUrlThreath
   }") no-repeat center`;
+
+  const getSizeButton = (fontSize: string) => {
+    if (fontSize == '12px') {
+      return '8px 16px';
+    } else if (fontSize == '14px') {
+      return '8px 16px';
+    } else if (fontSize == '16px') {
+      return '10px 20px';
+    } else if (fontSize == '18px') {
+      return '12px 26px';
+    } else if (fontSize == '20px') {
+      return '14px 30px';
+    }
+  };
 
   return (
     <a
@@ -380,8 +395,10 @@ const Slide = ({
                     color: buttonTextColor,
                     borderColor: buttonBorderColor ?? 'transparent',
                     borderWidth: buttonBorderColor ? '2px' : '0',
+                    fontSize: buttonSize ? buttonSize : '12px',
+                    padding: getSizeButton(buttonSize || '12px'),
                   }}
-                  className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
+                  className=" pw-font-bold pw-rounded-[60px] pw-mt-6 pw-cursor-pointer"
                   href={_.get(datasource, buttonLink ?? '', buttonLink)}
                 >
                   {buttonText ?? 'Saiba mais'}

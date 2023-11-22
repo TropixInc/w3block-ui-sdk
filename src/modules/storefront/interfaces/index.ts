@@ -10,6 +10,7 @@ import {
 export type TemplateData = {
   title: string;
   slug: string;
+
   dynamicApi?: DynamicApiModuleInterface;
   custom?: string;
   modules: (
@@ -28,6 +29,7 @@ export type TemplateData = {
 };
 
 export type Theme = {
+  internalMenu: InternalMenuInterface;
   configurations: MainModuleThemeInterface;
   header: MainModuleThemeInterface;
   categories: MainModuleThemeInterface;
@@ -52,6 +54,13 @@ export interface DynamicApiModuleInterface {
     apiName: string;
     url: string;
   }[];
+}
+
+export interface InternalMenuInterface {
+  [key: string]: {
+    customLabel?: string;
+    hidden?: any;
+  };
 }
 
 export interface MainModuleThemeInterface {
@@ -235,6 +244,7 @@ export interface SpecificBannerInfo {
   secondaryButtonLink?: string;
   secondaryButtonTextColor?: string;
   secondaryButtonColor?: string;
+  buttonSize?: '12px' | '14px' | '16px' | '18px' | '20px';
   secondaryButtonBorderColor?: string;
   titleFontFamily?: string;
   titleFontSize?: string;
