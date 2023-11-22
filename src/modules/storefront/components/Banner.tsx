@@ -190,7 +190,7 @@ const Slide = ({
       : bgUrlThreath
   }") no-repeat center`;
 
-  const getSizeButton = (fontSize: string) => {
+  const getButtonPadding = (fontSize: string) => {
     if (fontSize == '12px') {
       return '8px 16px';
     } else if (fontSize == '14px') {
@@ -397,7 +397,7 @@ const Slide = ({
                     borderColor: buttonBorderColor ?? 'transparent',
                     borderWidth: buttonBorderColor ? '2px' : '0',
                     fontSize: buttonSize ? buttonSize : '12px',
-                    padding: getSizeButton(buttonSize || '12px'),
+                    padding: getButtonPadding(buttonSize || '12px'),
                   }}
                   className=" pw-font-bold pw-rounded-[60px] pw-mt-6 pw-cursor-pointer"
                   href={_.get(datasource, buttonLink ?? '', buttonLink)}
@@ -415,7 +415,7 @@ const Slide = ({
                     fontSize: secondaryButtonSize
                       ? secondaryButtonSize
                       : '12px',
-                    padding: getSizeButton(secondaryButtonSize || '12px'),
+                    padding: getButtonPadding(secondaryButtonSize || '12px'),
                   }}
                   className="pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer pw-z-20"
                   href={_.get(
