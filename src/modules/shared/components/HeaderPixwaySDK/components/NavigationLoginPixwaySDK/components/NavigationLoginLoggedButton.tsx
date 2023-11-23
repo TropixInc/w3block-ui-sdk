@@ -127,18 +127,18 @@ export const useDefaultMenuTabs = (textColor: string) => {
       isVisible: pass && isAdmin && hasPassAssociated  && !isHidden('pass'),
     },
     {
-      name: internalMenuData['relatorios']?.customLabel || "Relatórios",
-      id: 'relatorios',
+      name: internalMenuData['dash']?.customLabel || translate('components>menu>dashboard'),
+      id: 'dash',
       route: PixwayAppRoutes.LOYALTY_REPORT,
       icon: <MyOrdersIcon style={{color: textColor, stroke: textColor, fill: textColor}} />,
-      isVisible: isLoayaltyOperator && !isHidden('relatorios'),
+      isVisible: isLoayaltyOperator && !isHidden('dash'),
     },
     {
       name: internalMenuData['wallet']?.customLabel || translate('components>menu>wallet'),
       id: 'wallet',
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: isUser || isAdmin && !isHidden('wallet'),
+      isVisible: (isUser || isAdmin) && !isHidden('wallet'),
     },
     {
       name: internalMenuData['extract']?.customLabel || translate('wallet>page>extract'),

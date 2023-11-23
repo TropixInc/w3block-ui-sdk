@@ -136,7 +136,7 @@ const Slide = ({
     buttonText,
     actionButton,
     subtitle,
-    secondaryActionButton = true,
+    secondaryActionButton,
     secondaryButtonText,
     secondaryButtonLink,
     secondaryButtonTextColor,
