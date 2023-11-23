@@ -136,7 +136,7 @@ const Slide = ({
     buttonText,
     actionButton,
     subtitle,
-    secondaryActionButton,
+    secondaryActionButton = true,
     secondaryButtonText,
     secondaryButtonLink,
     secondaryButtonTextColor,
@@ -192,15 +192,15 @@ const Slide = ({
 
   const getButtonPadding = (fontSize: string) => {
     if (fontSize == '12px') {
-      return '8px 16px';
+      return '8px 20px';
     } else if (fontSize == '14px') {
-      return '8px 16px';
+      return '8px 20px';
     } else if (fontSize == '16px') {
-      return '10px 20px';
+      return '10px 22px';
     } else if (fontSize == '18px') {
-      return '12px 26px';
+      return '12px 22px';
     } else if (fontSize == '20px') {
-      return '14px 30px';
+      return '14px 32px';
     }
   };
 
@@ -399,7 +399,7 @@ const Slide = ({
                     fontSize: buttonSize ? buttonSize : '12px',
                     padding: getButtonPadding(buttonSize || '12px'),
                   }}
-                  className=" pw-font-bold pw-rounded-[60px] pw-mt-6 pw-cursor-pointer"
+                  className=" pw-font-bold pw-rounded-[60px] pw-flex pw-items-center pw-justify-center pw-mt-6 pw-cursor-pointer"
                   href={_.get(datasource, buttonLink ?? '', buttonLink)}
                 >
                   {buttonText ?? 'Saiba mais'}
@@ -417,7 +417,7 @@ const Slide = ({
                       : '12px',
                     padding: getButtonPadding(secondaryButtonSize || '12px'),
                   }}
-                  className="pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer pw-z-20"
+                  className="pw-font-bold pw-flex pw-items-center pw-justify-center pw-rounded-[60px] pw-mt-6 pw-cursor-pointer pw-z-20"
                   href={_.get(
                     datasource,
                     secondaryButtonLink ?? '',

@@ -1,12 +1,5 @@
 /* eslint-disable react/jsx-key */
-import {
-  ReactNode,
-  lazy,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ReactNode, lazy, useEffect, useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
@@ -42,6 +35,7 @@ const ImageSDK = lazy(() =>
 );
 import TranslatableComponent from '../TranslatableComponent';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
+import { useIsHiddenMenuItem } from '../../hooks/useIsHiddenMenuItem/useIsHiddenMenuItem';
 
 interface MenuProps {
   tabs?: TabsConfig[];
@@ -82,6 +76,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       (e: string) => e === 'admin' || e === 'superAdmin' || e === 'operator'
     )
   );
+
+  const isHidden = useIsHiddenMenuItem(userRoles);
+
   const { defaultTheme } = UseThemeConfig();
 
   const isUser = Boolean(userRoles.find((e: string) => e === 'user'));
@@ -93,31 +90,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const internalMenuData = useMemo(() => {
     return defaultTheme?.configurations.styleData.internalMenu || {};
   }, [defaultTheme?.configurations.styleData.internalMenu]);
-
-  const isHidden = useCallback(
-    (id: string) => {
-      if (defaultTheme?.configurations.styleData.internalMenu) {
-        const hiddenOption = internalMenuData[id]?.hidden;
-
-        let computedRole = 'user';
-
-        if (
-          userRoles?.find((e: string) => e === 'admin' || e === 'superAdmin')
-        ) {
-          computedRole = 'admin';
-        } else if (userRoles?.find((e: string) => e === 'operator')) {
-          computedRole = 'operator';
-        } else if (userRoles?.find((e: string) => e === 'loyaltyOperator')) {
-          computedRole = 'loyaltyOperator';
-        }
-
-        if (hiddenOption) {
-          return hiddenOption[computedRole];
-        }
-      }
-    },
-    [defaultTheme, internalMenuData, userRoles]
-  );
 
   useEffect(() => {
     const tabsDefault: TabsConfig[] = [
