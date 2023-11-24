@@ -72,6 +72,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     externalFilterClasses,
     paginationType = 'default',
     filtersTitle,
+    filtersSubtitle,
     tableTitle,
   } = config;
   const { config: configDynamic } = useDynamicApi();
@@ -372,6 +373,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             {filtersTitle ? (
               <p className="pw-text-[22px] pw-font-semibold pw-mb-2">
                 {filtersTitle}
+              </p>
+            ) : null}
+            {filtersSubtitle ? (
+              <p className="pw-text-[15px] pw-font-semibold pw-mb-2">
+                {filtersSubtitle}
               </p>
             ) : null}
             <div

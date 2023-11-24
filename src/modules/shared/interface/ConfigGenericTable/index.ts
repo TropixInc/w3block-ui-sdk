@@ -54,6 +54,7 @@ export interface FilterParameters {
   label: string;
   subLabel?: string;
   paginationType?: 'default' | 'strapi';
+  filterDynamicParameter?: string;
 }
 
 export interface Actions {
@@ -102,6 +103,7 @@ export interface ColumnsTable {
 export interface ConfigGenericTable {
   filtersTitle?: string;
   tableTitle?: string;
+  filtersSubtitle?: string;
   paginationType?: 'default' | 'strapi';
   dataSource?: DataSource;
   localeItems?: string;
