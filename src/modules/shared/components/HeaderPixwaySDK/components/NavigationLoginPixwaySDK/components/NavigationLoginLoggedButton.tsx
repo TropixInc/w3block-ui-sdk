@@ -123,6 +123,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
     {
       name: internalMenuData['pass']?.customLabel || translate('components>menu>tokenPass'),
       id: 'pass',
+      route: PixwayAppRoutes.TOKENPASS,
       icon: <TicketIcon style={{color: textColor, stroke: textColor}} width={17} height={17} />,
       isVisible: pass && isAdmin && hasPassAssociated  && !isHidden('pass'),
     },
