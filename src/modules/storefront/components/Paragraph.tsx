@@ -47,7 +47,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const { isDynamic, datasource, loading } = useDynamicApi();
 
   return (
-    <div className="pw-container pw-mx-auto pw-flex pw-items-start pw-gap-2">
+    <div className="pw-container pw-mx-auto">
       {image?.assetUrl ? (
         <div className="pw-grid pw-place-items-center pw-mt-1 pw-min-w-[35px]">
           <ImageSDK
