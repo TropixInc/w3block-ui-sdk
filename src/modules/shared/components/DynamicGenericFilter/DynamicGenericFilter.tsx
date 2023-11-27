@@ -63,8 +63,6 @@ export const DynamicGenericFilter = ({
   const [searchValue, setSearchValue] = useState<string | undefined>('');
   const [showResponseModal, setShowResponseModal] = useState<boolean>(false);
 
-  console.log(searchFilterTemplate, 'searchFilterTemplate');
-
   const setSearchValueCallback = useCallback(() => {
     setSearchValue(searchName);
   }, [searchName, setSearchValue]);
@@ -86,7 +84,8 @@ export const DynamicGenericFilter = ({
         const newParams = { ...params, page: undefined };
         newParams['pagination[pageSize]'] = 50;
         newParams['pagination[page]'] = params?.page;
-        newParams[searchFilterTemplate ?? ''] = searchValue;
+        newParams[dynamicFilterParameters?.filterDynamicParameter ?? ''] =
+          searchValue;
 
         return newParams;
       },
