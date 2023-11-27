@@ -97,6 +97,7 @@ export const DynamicGenericFilter = ({
     isPublicApi: isPublicFilterApi,
     search: searchValue,
     ...paginationMapping[dynamicFilterParameters?.paginationType || 'default'],
+    enabled: Boolean(searchValue && searchValue?.length > 2),
   });
 
   const options = useMemo(() => {

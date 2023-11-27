@@ -8,6 +8,7 @@ interface GenericProps {
   inputMap?: (data: any) => any;
   outputMap?: (data: any) => any;
   isPublicApi?: boolean;
+  enabled?: boolean;
 }
 
 export const usePaginatedGenericApiGet = ({
@@ -16,6 +17,7 @@ export const usePaginatedGenericApiGet = ({
   inputMap,
   outputMap,
   isPublicApi,
+  enabled = true,
 }: GenericProps) => {
   return usePaginatedQuery(
     [url, search ?? ''],
@@ -25,7 +27,7 @@ export const usePaginatedGenericApiGet = ({
     },
 
     {
-      enabled: Boolean(url),
+      enabled: Boolean(url && enabled),
       refetchOnWindowFocus: false,
       disableUrl: true,
       inputMap: inputMap,
