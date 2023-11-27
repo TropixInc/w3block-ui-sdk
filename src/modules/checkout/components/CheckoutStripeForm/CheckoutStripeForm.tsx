@@ -1,4 +1,4 @@
-import { SyntheticEvent, lazy, useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 import {
   PaymentElement,
@@ -6,19 +6,8 @@ import {
   useStripe,
 } from '@stripe/react-stripe-js';
 
-const Spinner = lazy(() =>
-  import('../../../shared/components/Spinner').then((m) => ({
-    default: m.Spinner,
-  }))
-);
-const WeblockButton = lazy(() =>
-  import('../../../shared/components/WeblockButton/WeblockButton').then(
-    (m) => ({
-      default: m.WeblockButton,
-    })
-  )
-);
-
+import { Spinner } from '../../../shared/components/Spinner';
+import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../../shared/hooks/useTranslation';
