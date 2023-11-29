@@ -428,6 +428,12 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                           isPublicFilterApi={
                             header.filter?.data?.isPublicFilterApi
                           }
+                          isFilterDependency={
+                            header.filter?.data?.parameters?.isFilterDependency
+                          }
+                          filterDependencies={
+                            header.filter?.data?.parameters?.dependencies
+                          }
                         />
                       </div>
                     );

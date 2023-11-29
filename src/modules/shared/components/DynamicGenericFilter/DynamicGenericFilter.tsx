@@ -11,7 +11,6 @@ import _ from 'lodash';
 
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
-import useTranslation from '../../hooks/useTranslation';
 import {
   FilterParameters,
   FormatFilterType,
@@ -25,6 +24,13 @@ const SelectInput = lazy(() =>
   }))
 );
 
+interface DependencyTipes {
+  [key: string]: {
+    required: boolean;
+    urlParam: string;
+  };
+}
+
 interface DynamicProps {
   format: FormatFilterType | undefined;
   filterOptionsUrl?: string;
@@ -36,11 +42,14 @@ interface DynamicProps {
   onChangeFilterLabels?: (value: any) => void;
   searchSelectedItem?: string;
   filterLabels?: any;
+  filters?: any;
   onSelected?: (value: string) => void;
   selected?: string;
   placeholder?: string;
   isPublicFilterApi?: boolean;
   searchFilterTemplate?: string;
+  isFilterDependency?: boolean;
+  filterDependencies?: DependencyTipes;
 }
 
 export const DynamicGenericFilter = ({
@@ -57,11 +66,14 @@ export const DynamicGenericFilter = ({
   selected,
   placeholder,
   isPublicFilterApi,
-  searchFilterTemplate,
+  isFilterDependency,
+  filterDependencies,
+  filters,
 }: DynamicProps) => {
   const [searchName, setSearchName] = useState<string | undefined>('');
   const [searchValue, setSearchValue] = useState<string | undefined>('');
   const [showResponseModal, setShowResponseModal] = useState<boolean>(false);
+  const [dependencyUrl, setDependencyUrl] = useState(filterOptionsUrl);
 
   const setSearchValueCallback = useCallback(() => {
     setSearchValue(searchName);
@@ -92,12 +104,37 @@ export const DynamicGenericFilter = ({
     },
   };
 
+  useEffect(() => {
+    if (isFilterDependency && filterDependencies) {
+      const params = [''];
+      Object.keys(filterDependencies || {}).forEach((key) => {
+        const item = filterDependencies[key];
+        const value = _.get(filters, key)
+          ? (filters[key] || '').split('=')
+          : '';
+        if (value.length >= 2) {
+          params.push(`${item.urlParam}${value[1]}`);
+        }
+      });
+
+      setDependencyUrl(
+        filterOptionsUrl +
+          (filterOptionsUrl?.includes('?') ? '&' : '?') +
+          params.join('&')
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFilterDependency, filters, filterDependencies]);
+
   const [{ data }] = usePaginatedGenericApiGet({
-    url: filterOptionsUrl ?? '',
+    url: (isFilterDependency ? dependencyUrl : filterOptionsUrl) ?? '',
     isPublicApi: isPublicFilterApi,
     search: searchValue,
     ...paginationMapping[dynamicFilterParameters?.paginationType || 'default'],
-    enabled: Boolean(searchValue && searchValue?.length > 2),
+    enabled:
+      format === FormatFilterType.SEARCH
+        ? Boolean(searchValue && searchValue?.length > 2)
+        : true,
   });
 
   const options = useMemo(() => {
@@ -109,7 +146,7 @@ export const DynamicGenericFilter = ({
         label: _.get(item, dynamicFilterParameters.label, ''),
       }));
 
-      return arrOptions;
+      return arrOptions.filter((item) => item.value);
     } else return [];
   }, [data, dynamicFilterParameters]);
 
@@ -143,6 +180,16 @@ export const DynamicGenericFilter = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options, searchSelectedItem]);
 
+  const onDisabledInput = () => {
+    if (filters && filterDependencies) {
+      const keys = Object.keys(filterDependencies || {});
+      return keys.every((key) => {
+        // eslint-disable-next-line no-prototype-builtins
+        return filters.hasOwnProperty(key);
+      });
+    }
+  };
+
   const renderFilter = (eachFilterType: FormatFilterType) => {
     switch (eachFilterType) {
       case FormatFilterType.SEARCH: {
@@ -160,6 +207,11 @@ export const DynamicGenericFilter = ({
                 '!pw-w-full !pw-text-black !pw-placeholder-black pw-opacity-80',
             }}
             onSelectItemById={onSelectedSearchItem}
+            isFilterDependency={isFilterDependency}
+            filters={filters}
+            dependenciesKeys={
+              filterDependencies ? Object.keys(filterDependencies || {}) : []
+            }
           />
         );
       }
@@ -170,6 +222,7 @@ export const DynamicGenericFilter = ({
             options={options ?? []}
             selected={selected ?? ''}
             placeholder={placeholder}
+            disabled={isFilterDependency && !onDisabledInput()}
             className="pw-w-full"
           />
         );

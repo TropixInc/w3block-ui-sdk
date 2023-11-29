@@ -44,6 +44,13 @@ interface GenericFilterDto {
   dynamicFilterParameters?: FilterParameters | undefined;
   filterPlaceholder?: string;
   isPublicFilterApi?: boolean;
+  isFilterDependency?: boolean;
+  filterDependencies?: {
+    [key: string]: {
+      required: boolean;
+      urlParam: string;
+    };
+  };
 }
 
 const SmartGenericFilter = ({
@@ -63,6 +70,8 @@ const SmartGenericFilter = ({
   dynamicFilterParameters,
   filterPlaceholder,
   isPublicFilterApi,
+  isFilterDependency,
+  filterDependencies,
 }: GenericFilterDto) => {
   const [defaultDate, setDefaultDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date>();
@@ -349,6 +358,7 @@ const SmartGenericFilter = ({
         return <p className="pw-w-full">{filters[itemKey ?? '']}</p>;
     }
   };
+
   return itemShowFilterKey === itemKey ? (
     <div ref={divRef} className="pw-w-full pw-bg-white pw-rounded-md pw-mt-1">
       {filterFormat && filterType === FilterTableType.STATIC ? (
@@ -370,6 +380,9 @@ const SmartGenericFilter = ({
           placeholder={filterPlaceholder}
           isPublicFilterApi={isPublicFilterApi}
           searchFilterTemplate={filterTemplate}
+          isFilterDependency={isFilterDependency}
+          filterDependencies={filterDependencies}
+          filters={filters}
         />
       )}
     </div>
