@@ -268,6 +268,8 @@ export interface SpecificBannerInfo {
     | 'justify'
     | 'match-parent';
   titleMaxWidth?: string;
+  titleWidth?: string;
+  imageRounded?: boolean;
 }
 
 type CategoryItem = { name: string; slug: string };
@@ -569,6 +571,11 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
     backgroundUrl?: AssetInterface;
     overlay?: boolean;
     overlayColor?: string;
+    imageWidth?: number;
+    imageHeight?: number;
+    imageClass?: string;
+    imageContainerClass?: string;
+    containerClass?: string;
   };
   contentData: {
     title?: string;
