@@ -163,6 +163,8 @@ const Slide = ({
     titleTextAlign,
     buttonSize,
     secondaryButtonSize,
+    titleWidth,
+    imageRounded,
   } = data;
   const { isDynamic, datasource, loading } = useDynamicApi();
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -311,7 +313,11 @@ const Slide = ({
                             )
                         : sideImageUrl?.assetUrl ?? ''
                     }
-                    className={`pw-object-contain pw-h-full pw-w-full`}
+                    className={
+                      imageRounded
+                        ? 'pw-object-cover pw-rounded-full pw-w-[200px] pw-h-[200px] pw-mx-auto pw-mt-[15%]'
+                        : `pw-object-contain pw-h-full pw-w-full`
+                    }
                   />
                 </div>
               </div>
@@ -322,7 +328,9 @@ const Slide = ({
           className={`pw-flex ${rowAlignmentClass} pw-absolute pw-items-center pw-h-full pw-w-full pw-z-10`}
         >
           <div
-            className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8 pw-w-full`}
+            className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-mx-auto pw-py-8 ${
+              titleWidth ?? 'pw-w-full pw-container'
+            }`}
           >
             <h2
               style={{

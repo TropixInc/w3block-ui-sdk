@@ -40,6 +40,11 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     backgroundColor,
     overlay,
     overlayColor,
+    imageWidth,
+    imageHeight,
+    imageClass,
+    imageContainerClass,
+    containerClass,
   } = mergedStyleData;
 
   const { title, content } = mergedContentData;
@@ -66,7 +71,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     >
       <div className="pw-container pw-mx-auto">
         <div
-          className="pw-flex pw-gap-8 image-plus-text"
+          className={`${containerClass ?? 'pw-gap-8'} pw-flex image-plus-text`}
           style={
             {
               '--image-plus-text-direction-mobile': isImageOnLeft
@@ -80,13 +85,16 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
             } as CSSProperties
           }
         >
-          <div className="pw-grid pw-place-items-center">
+          <div
+            className={`${imageContainerClass} pw-grid pw-place-items-center`}
+          >
             <ImageSDK
               src={_.get(datasource, image?.assetUrl ?? '', image?.assetUrl)}
-              className="pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg"
-              width={500}
-              height={274}
-              quality="eco"
+              className={
+                imageClass ?? 'pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg'
+              }
+              width={imageWidth ?? 500}
+              height={imageHeight ?? 274}
             />
           </div>
 
