@@ -55,6 +55,13 @@ export interface FilterParameters {
   subLabel?: string;
   paginationType?: 'default' | 'strapi';
   filterDynamicParameter?: string;
+  isFilterDependency?: boolean;
+  dependencies: {
+    [key: string]: {
+      required: boolean;
+      urlParam: string;
+    };
+  };
 }
 
 export interface Actions {
