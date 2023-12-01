@@ -47,6 +47,9 @@ const GenericTableWrapper = lazy(() =>
 const Banner = lazy(() =>
   import('./Banner').then((m) => ({ default: m.Banner }))
 );
+const BannerVariant = lazy(() =>
+  import('./BannerVariant').then((m) => ({ default: m.Banner }))
+);
 const Cookies = lazy(() =>
   import('./Cookies').then((m) => ({ default: m.Cookies }))
 );
@@ -346,6 +349,12 @@ export const StorefrontPreview = ({
                       return <Midia data={{ ...theme.midia, ...item }} />;
                     case ModulesType.TABLE:
                       return <GenericTableWrapper data={{ ...item }} />;
+                    case ModulesType.BANNER_VARIANT:
+                      return (
+                        <BannerVariant
+                          data={{ ...theme.bannerVariant, ...item }}
+                        />
+                      );
                     default:
                       break;
                   }

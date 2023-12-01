@@ -25,6 +25,7 @@ export type TemplateData = {
     | MidiaData
     | GridItemAreaData
     | GenericTableData
+    | BannerVariantData
   )[];
 };
 
@@ -44,6 +45,7 @@ export type Theme = {
   midia?: MidiaData;
   GridItemArea?: GridItemAreaData;
   table?: GenericTableData;
+  bannerVariant?: MainModuleThemeInterface;
 };
 
 export interface DynamicApiModuleInterface {
@@ -207,6 +209,22 @@ export interface BannerData extends MainModuleThemeInterface {
   };
   mobileStyleData: BannerData['styleData'];
 }
+export interface BannerVariantData extends MainModuleThemeInterface {
+  type: ModulesType.BANNER_VARIANT;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    bannerDisposition?: Layout;
+    bannerRatio?: Ratio;
+    autoSlide?: boolean;
+    dynamicBanner?: boolean;
+    routeToDynamicBanner?: string;
+    banners?: SpecificBannerInfo[];
+    height?: string;
+    heightUnity?: string;
+  };
+  mobileStyleData: BannerVariantData['styleData'];
+}
 
 export interface SpecificBannerInfo {
   backgroundColor?: string;
@@ -270,6 +288,8 @@ export interface SpecificBannerInfo {
   titleMaxWidth?: string;
   titleWidth?: string;
   imageRounded?: boolean;
+  contentClass?: string;
+  spacing?: string;
 }
 
 type CategoryItem = { name: string; slug: string };
@@ -628,6 +648,7 @@ export enum ModulesType {
   GRID_ITEM_AREA = 'GridItemArea',
   DYNAMIC_API = 'DynamicApi',
   TABLE = 'Table',
+  BANNER_VARIANT = 'BannerVariant',
 }
 
 export interface GetPageInfoInterface {

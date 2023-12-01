@@ -278,7 +278,6 @@ export const CheckoutPayment = () => {
           onSuccess: (data: CreateOrderResponse) => {
             setOrderResponse(data);
             setStayPooling(false);
-            setLoading(false);
             if (data.paymentProvider == PaymentMethod.STRIPE) {
               setIsStripe(data.paymentInfo.clientSecret ?? '');
               setStripeKey(data.paymentInfo.publicKey ?? '');
