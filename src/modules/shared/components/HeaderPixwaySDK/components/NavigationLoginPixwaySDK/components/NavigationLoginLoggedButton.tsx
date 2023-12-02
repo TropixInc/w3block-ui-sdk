@@ -11,7 +11,6 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
-import useGetPassByUser from '../../../../../../pass/hooks/useGetPassByUser';
 import { UseThemeConfig } from '../../../../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import  ArrowDown  from '../../../../../assets/icons/arrowDown.svg?react';
 import  EyeIcon  from '../../../../../assets/icons/eyeGold.svg?react';
@@ -93,8 +92,6 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const { signOut } = usePixwayAuthentication();
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
   const { pass } = useFlags();
-  const { data: passData } = useGetPassByUser();
-  const hasPassAssociated = passData?.data.items !== undefined && passData?.data?.items?.length > 0;
   const { loyaltyWallet } = useUserWallet();
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
@@ -125,7 +122,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
       id: 'pass',
       route: PixwayAppRoutes.TOKENPASS,
       icon: <TicketIcon style={{color: textColor, stroke: textColor}} width={17} height={17} />,
-      isVisible: pass && isAdmin && hasPassAssociated  && !isHidden('pass'),
+      isVisible: pass && isAdmin && !isHidden('pass'),
     },
     {
       name: internalMenuData['dash']?.customLabel || translate('components>menu>dashboard'),

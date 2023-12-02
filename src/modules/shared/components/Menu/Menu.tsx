@@ -7,7 +7,6 @@ import { format } from 'date-fns/esm';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
-import useGetPassByUser from '../../../pass/hooks/useGetPassByUser';
 import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import CardIcon from '../../assets/icons/creditCardOutlined.svg?react';
 import DashboardIcon from '../../assets/icons/dashboard.svg?react';
@@ -63,10 +62,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const formatedDate = format(createdAt, 'dd/MM/yyyy');
   const [tabsToShow, setTabsToShow] = useState(tabs);
   const { pass } = useFlags();
-  const { data: passData } = useGetPassByUser();
   const { loyaltyWallet } = useUserWallet();
-  const hasPassAssociated =
-    passData?.data.items !== undefined && passData?.data?.items?.length > 0;
 
   const userRoles = useMemo(() => {
     return profile?.data?.roles || [];
@@ -108,7 +104,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         icon: <TicketIcon width={17} height={17} />,
 
         link: PixwayAppRoutes.TOKENPASS,
-        isVisible: pass && isAdmin && hasPassAssociated && !isHidden('pass'),
+        isVisible: pass && isAdmin && !isHidden('pass'),
       },
       {
         title:
@@ -187,15 +183,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     if (!tabs) setTabsToShow(tabsDefault);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    pass,
-    profile,
-    loyaltyWallet,
-    isAdmin,
-    hasPassAssociated,
-    isLoayaltyOperator,
-    defaultTheme,
-  ]);
+  }, [pass, profile, loyaltyWallet, isAdmin, isLoayaltyOperator, defaultTheme]);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);
