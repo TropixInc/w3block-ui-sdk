@@ -77,7 +77,7 @@ export const AthletePage = () => {
     };
   };
 
-  if (loading)
+  if (loading && !datasource)
     return (
       <div className="pw-w-full pw-h-[30rem]">
         <Spinner className="pw-m-auto pw-w-[40px] pw-h-[40px] pw-opacity-50 pw-mt-[20%]" />

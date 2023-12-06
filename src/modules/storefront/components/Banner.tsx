@@ -365,7 +365,9 @@ const Slide = ({
                 titleTextAlign ?? ''
               } pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
             >
-              {loading ? '' : _.get(datasource, title ?? '', title)}
+              {loading && !datasource
+                ? ''
+                : _.get(datasource, title ?? '', title)}
             </h2>
             <p
               style={{
@@ -393,7 +395,9 @@ const Slide = ({
               }}
               className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
             >
-              {loading ? '' : _.get(datasource, subtitle ?? '', subtitle)}
+              {loading && !datasource
+                ? ''
+                : _.get(datasource, subtitle ?? '', subtitle)}
             </p>
 
             <div className="pw-flex pw-gap-4">

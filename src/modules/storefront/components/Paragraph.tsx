@@ -72,7 +72,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           className={classNames('pw-font-semibold')}
         >
           {isDynamic
-            ? loading
+            ? loading && !datasource
               ? ''
               : _.get(datasource, titleInput ?? '', '')
             : titleInput}
@@ -85,9 +85,10 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
           dangerouslySetInnerHTML={{
-            __html: loading
-              ? ''
-              : _.get(datasource, textInput ?? '', textInput ?? ''),
+            __html:
+              loading && !datasource
+                ? ''
+                : _.get(datasource, textInput ?? '', textInput ?? ''),
           }}
         />
       </div>
