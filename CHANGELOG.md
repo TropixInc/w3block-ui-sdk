@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.25](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.24...v1.11.25) (2023-12-08)
+
+
+### Features
+
+* add dynamic text replacement hook ([e93d049](https://github.com/TropixInc/w3block-ui-sdk/commit/e93d049ba2606bc0b34bf5b3c66d3e3677f8a6df))
+* add dynamic text replacement hook ([98bd50c](https://github.com/TropixInc/w3block-ui-sdk/commit/98bd50c5af519136723b7f6054e76ffd68537b0b))
+
 ### [1.11.24](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.23...v1.11.24) (2023-12-06)
 
 ### [1.11.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.22...v1.11.23) (2023-12-02)
