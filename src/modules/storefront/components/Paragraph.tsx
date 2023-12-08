@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, ParagraphData } from '../interfaces';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
@@ -44,7 +45,10 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
 
   const alignmentTextClass = alignmentsText[alignment ?? AlignmentEnum.LEFT];
 
-  const { isDynamic, datasource, loading } = useDynamicApi();
+  const { datasource } = useDynamicApi();
+
+  const { text: title } = useDynamicString(titleInput);
+  const { text: content } = useDynamicString(textInput);
 
   return (
     <div className="pw-container pw-mx-auto">
@@ -71,11 +75,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames('pw-font-semibold')}
         >
-          {isDynamic
-            ? loading && !datasource
-              ? ''
-              : _.get(datasource, titleInput ?? '', '')
-            : titleInput}
+          {title}
         </h2>
         <div
           style={{
@@ -85,10 +85,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
           dangerouslySetInnerHTML={{
-            __html:
-              loading && !datasource
-                ? ''
-                : _.get(datasource, textInput ?? '', textInput ?? ''),
+            __html: content ?? '',
           }}
         />
       </div>

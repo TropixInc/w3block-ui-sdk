@@ -1,18 +1,18 @@
 import { CSSProperties, lazy } from 'react';
 
+import _ from 'lodash';
 const ImageSDK = lazy(() =>
   import('../../shared/components/ImageSDK').then((module) => ({
     default: module.ImageSDK,
   }))
 );
+
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ImagePlusTextData } from '../interfaces';
-
 import './ImagePlusText.css';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
-
-import _ from 'lodash';
 
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { datasource } = useDynamicApi();
@@ -47,7 +47,9 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     containerClass,
   } = mergedStyleData;
 
-  const { title, content } = mergedContentData;
+  const { title: titleInput, content: contentInput } = mergedContentData;
+  const { text: title } = useDynamicString(titleInput);
+  const { text: content } = useDynamicString(contentInput);
 
   const isImageOnLeft = imagePosition === 'left' || imagePosition === undefined;
 
@@ -106,13 +108,13 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               style={{ color: titleColor }}
               className="pw-font-semibold pw-text-[19px]"
             >
-              {_.get(datasource, title ?? '', title)}
+              {title}
             </h3>
             <div
               style={{ color: contentColor }}
               className="pw-text-[15px]"
               dangerouslySetInnerHTML={{
-                __html: _.get(datasource, content ?? '', content) ?? '',
+                __html: content ?? '',
               }}
             />
           </div>
