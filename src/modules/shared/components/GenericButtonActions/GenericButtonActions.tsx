@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { Popover } from 'react-tiny-popover';
 
 import _ from 'lodash';
-import { useRouter } from 'next/router';
 
 import Dots from '../../assets/icons/dashOutlined.svg?react';
 
@@ -13,7 +12,6 @@ interface ButtonProps {
 
 export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const router = useRouter();
 
   const renderOptions = useMemo(() => {
     return actions.filter((item) =>
@@ -21,7 +19,14 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
     );
   }, [actions, dataItem]);
 
-  const handleAction = (action: any) => {
+  const handleAction = (event: any, action: any) => {
+    if (action && action.type == 'function') {
+      event?.preventDefault();
+      action.data(dataItem);
+    }
+  };
+
+  const getHref = (action: any) => {
     if (action && action.type == 'navigate') {
       let url = action.data;
       if (action.replacedQuery) {
@@ -30,10 +35,10 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
             (url = url.replace(`{${item}}`, _.get(dataItem, item)))
         );
 
-        router.push(url);
+        return url;
       }
     } else if (action && action.type == 'function') {
-      action.data(dataItem);
+      return '';
     }
   };
 
@@ -47,13 +52,14 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
       content={() => (
         <div className="pw-border pw-border-[#9cc2f7] pw-w-[200px] pw-bg-white pw-rounded-lg pw-overflow-hidden">
           {renderOptions.map((item, index) => (
-            <button
+            <a
               key={item.label + index}
-              onClick={() => handleAction(item.action)}
+              onClick={(e) => handleAction(e, item.action)}
+              href={getHref(item.action)}
               className="pw-w-full pw-text-sm pw-text-left pw-p-3 hover:pw-bg-[#9cc2f7]"
             >
               {item.label}
-            </button>
+            </a>
           ))}
         </div>
       )}

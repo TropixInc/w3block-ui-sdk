@@ -1,8 +1,8 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.fixAll": true,
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll": "explicit"
   },
   "files.eol": "\n",
   "editor.tabSize": 2,
