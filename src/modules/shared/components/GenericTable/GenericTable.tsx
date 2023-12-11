@@ -111,8 +111,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   });
 
   const handleAction = (event: any, action: any, row: any) => {
-    event?.preventDefault();
     if (action && action.type == 'function') {
+      event?.preventDefault();
       action.data(row);
     }
   };
@@ -602,7 +602,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   style={classes?.grid as any}
                   className={classNames(
                     'pw-w-[800px] pw-grid  pw-px-3 pw-items-center pw-gap-x-2 pw-py-[19px] pw-border-t sm:pw-w-full ',
-                    tableStyles?.line ?? ''
+                    tableStyles?.line ?? '',
+                    lineActions ? 'pw-cursor-pointer' : 'pw-cursor-default'
                   )}
                 >
                   {columns

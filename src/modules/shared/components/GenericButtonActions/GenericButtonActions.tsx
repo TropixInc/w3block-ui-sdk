@@ -20,8 +20,8 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
   }, [actions, dataItem]);
 
   const handleAction = (event: any, action: any) => {
-    event?.preventDefault();
     if (action && action.type == 'function') {
+      event?.preventDefault();
       action.data(dataItem);
     }
   };
