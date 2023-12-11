@@ -14,7 +14,6 @@ import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
-import useRouter from '../../hooks/useRouter';
 import useTranslation from '../../hooks/useTranslation';
 import {
   ConfigGenericTable,
@@ -87,7 +86,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const [filterLabels, setFilterLabels] = useState<any | undefined>();
   const methods = useForm();
   const truncate = useTruncate();
-  const router = useRouter();
 
   useEffect(() => {
     const itemSorteble = columns.find((item) => item.sortable);
@@ -113,6 +111,12 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   });
 
   const handleAction = (action: any, row: any) => {
+    if (action && action.type == 'function') {
+      action.data(row);
+    }
+  };
+
+  const getHref = (action: any, row: any) => {
     if (action && action.type == 'navigate') {
       let url = action.data;
       if (action.replacedQuery) {
@@ -120,14 +124,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           (item: string) => (url = url.replace(`{${item}}`, _.get(row, item)))
         );
 
-        if ((url as string).includes('http')) {
-          window.location.href = url;
-        } else {
-          router.push(url);
-        }
+        return url;
       }
     } else if (action && action.type == 'function') {
-      action.data(row);
+      return '';
     }
   };
 
@@ -593,11 +593,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
             <div className="pw-h-auto pw-w-[800px] pw-border pw-border-t-0 pw-rounded-b-2xl sm:pw-w-full">
               {_.get(data, localeItems ?? '', []).map((item: any) => (
-                <button
+                <a
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   key={(item as any).id}
                   onClick={() => handleAction(lineActions?.action, item)}
-                  disabled={!lineActions}
+                  href={getHref(lineActions?.action, item)}
                   style={classes?.grid as any}
                   className={classNames(
                     'pw-w-[800px] pw-grid  pw-px-3 pw-items-center pw-gap-x-2 pw-py-[19px] pw-border-t sm:pw-w-full ',
@@ -623,7 +623,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     dataItem={item}
                     actions={actions ?? []}
                   />
-                </button>
+                </a>
               ))}
             </div>
           ) : null}
