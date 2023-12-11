@@ -19,7 +19,8 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
     );
   }, [actions, dataItem]);
 
-  const handleAction = (action: any) => {
+  const handleAction = (event: any, action: any) => {
+    event?.preventDefault();
     if (action && action.type == 'function') {
       action.data(dataItem);
     }
@@ -53,7 +54,7 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
           {renderOptions.map((item, index) => (
             <a
               key={item.label + index}
-              onClick={() => handleAction(item.action)}
+              onClick={(e) => handleAction(e, item.action)}
               href={getHref(item.action)}
               className="pw-w-full pw-text-sm pw-text-left pw-p-3 hover:pw-bg-[#9cc2f7]"
             >

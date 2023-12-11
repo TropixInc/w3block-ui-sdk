@@ -110,7 +110,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     ...paginationMapping[paginationType],
   });
 
-  const handleAction = (action: any, row: any) => {
+  const handleAction = (event: any, action: any, row: any) => {
+    event?.preventDefault();
     if (action && action.type == 'function') {
       action.data(row);
     }
@@ -596,7 +597,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                 <a
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   key={(item as any).id}
-                  onClick={() => handleAction(lineActions?.action, item)}
+                  onClick={(e) => handleAction(e, lineActions?.action, item)}
                   href={getHref(lineActions?.action, item)}
                   style={classes?.grid as any}
                   className={classNames(
