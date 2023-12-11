@@ -13,6 +13,7 @@ export interface PixwayButtonProps extends HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   className?: string;
   variant?: OffpixButtonVariant;
+  placeholder?: string;
 }
 
 type GetButtonClassNameArgs = Pick<
