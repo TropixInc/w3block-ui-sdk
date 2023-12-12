@@ -73,5 +73,5 @@ No caso de produçao o processo é o mesmo, porem o nome da branch é main.
 E o comando para o release ja altera um pouco pois é necessário dizer para qual versão o release vai ser feito.
 
 ```bash 
-yarn pre-release --release-as v*.*.*
+yarn release --release-as v*.*.*
 ```
