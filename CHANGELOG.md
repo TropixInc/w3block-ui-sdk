@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.27](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.26...v1.11.27) (2023-12-15)
+
+
+### Features
+
+* add dynamic string to banner ([58550e4](https://github.com/TropixInc/w3block-ui-sdk/commit/58550e412f29d831bc65f10e657f5c87623696f2))
+
 ### [1.11.26](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.25...v1.11.26) (2023-12-12)
 
 ### [1.11.25](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.24...v1.11.25) (2023-12-08)
