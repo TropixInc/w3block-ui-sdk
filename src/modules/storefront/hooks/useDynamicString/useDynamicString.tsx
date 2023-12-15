@@ -20,10 +20,7 @@ export const useDynamicString = (input: string | undefined) => {
       const [namespace] = (key || '').split('.');
       const hasFirstLoad = _.get(datasource, namespace);
       if (loaded && !hasFirstLoad) loaded = false;
-      text = text.replace(
-        q,
-        _.get(datasource, key, hasFirstLoad ? q : 'loading...')
-      );
+      text = text.replace(q, _.get(datasource, key, ''));
     });
     return { text, loaded, loading };
   }, [datasource, input, isDynamic, loading]);
