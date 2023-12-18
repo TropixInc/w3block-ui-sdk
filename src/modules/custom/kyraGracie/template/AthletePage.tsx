@@ -7,6 +7,8 @@ const Shimmer = lazy(() =>
 
 import { lazy } from 'react';
 
+import { format } from 'date-fns';
+
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
@@ -159,15 +161,22 @@ export const AthletePage = () => {
               <Shimmer className="pw-min-h-[17px] pw-min-w-[150px] pw-mt-2" />
             ) : (
               <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-                {data?.items[0]?.tokenData?.athleteBirthdate ??
-                  getPlaceholder().athleteBirthdate}
+                {format(
+                  new Date(
+                    datasource?.athlete?.data[0]?.attributes?.birthdate?.replace(
+                      '-',
+                      ','
+                    )
+                  ),
+                  'PP'
+                ) ?? getPlaceholder().athleteBirthdate}
               </p>
             )}
             {!datasource ? (
               <Shimmer className="pw-min-h-[17px] pw-min-w-[130px] pw-mt-2" />
             ) : (
               <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-                {data?.items[0]?.tokenData?.athleteGender ??
+                {datasource?.athlete?.data[0]?.attributes?.gender ??
                   getPlaceholder().athleteGender}
               </p>
             )}
@@ -175,7 +184,7 @@ export const AthletePage = () => {
               <Shimmer className="pw-min-h-[17px] pw-min-w-[170px] pw-mt-2" />
             ) : (
               <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-                {datasource?.athlete?.data[0]?.attributes?.country ??
+                {datasource?.athlete?.data[0]?.attributes?.nationality ??
                   getPlaceholder().athleteNationality}
               </p>
             )}
@@ -191,6 +200,18 @@ export const AthletePage = () => {
                 const respectiveToken = data?.items.find(
                   (item: any) => item.tokenData?.beltColor === belt
                 );
+                const date = () => {
+                  if (
+                    respectiveBelt?.date &&
+                    respectiveBelt?.date?.includes('-01-01')
+                  ) {
+                    return respectiveBelt?.date?.slice(0, 4);
+                  } else
+                    return format(
+                      new Date(respectiveBelt?.date?.replace('-', ',')),
+                      'PP'
+                    );
+                };
                 return (
                   <div
                     key={belt}
@@ -283,9 +304,7 @@ export const AthletePage = () => {
                               ''}
                           </p>
                           <p className="pw-text-[12px] pw-font-[500] pw-text-black ">
-                            {respectiveBelt?.date ??
-                              respectiveToken?.tokenData?.graduationDate ??
-                              ''}
+                            {date() ?? ''}
                           </p>
                         </a>
                       )}
