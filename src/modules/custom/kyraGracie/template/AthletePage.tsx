@@ -95,7 +95,7 @@ export const AthletePage = () => {
       athleteNationality: '',
     };
   };
-  console.log(datasource);
+
   if ((loading || isLoading) && (!datasource || !data))
     return (
       <div className="pw-w-full pw-h-[30rem]">
