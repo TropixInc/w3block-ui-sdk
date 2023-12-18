@@ -658,6 +658,7 @@ export interface GetPageInfoInterface {
   companyId: string;
   projectId: string;
   routePattern: string;
+  routePatternRegex: string;
   isRoutePatternRegex: boolean;
   data: any;
   name: string;

@@ -170,10 +170,11 @@ export const StorefrontPreview = ({
   const dynamicApi = useMemo<DynamicApiModuleInterface | undefined>(() => {
     if (context?.pageInfo && context.pageInfo.isRoutePatternRegex) {
       return {
-        regexp: context.pageInfo.routePattern,
-        groups: RegExp(context.pageInfo.routePattern, 'g').exec(asPath || '')
-          ?.groups,
-        matches: RegExp(context.pageInfo.routePattern, 'g')
+        regexp: context.pageInfo.routePatternRegex,
+        groups: RegExp(context.pageInfo.routePatternRegex, 'g').exec(
+          asPath || ''
+        )?.groups,
+        matches: RegExp(context.pageInfo.routePatternRegex, 'g')
           .exec(asPath || '')
           ?.slice(1),
         apis: data.dynamicApi?.apis ?? [],
