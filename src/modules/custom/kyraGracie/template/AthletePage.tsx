@@ -161,15 +161,17 @@ export const AthletePage = () => {
               <Shimmer className="pw-min-h-[17px] pw-min-w-[150px] pw-mt-2" />
             ) : (
               <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-                {format(
-                  new Date(
-                    datasource?.athlete?.data[0]?.attributes?.birthdate?.replace(
-                      '-',
-                      ','
+                {datasource?.athlete?.data[0]?.attributes?.birthdate
+                  ? format(
+                      new Date(
+                        datasource?.athlete?.data[0]?.attributes?.birthdate?.replace(
+                          '-',
+                          ','
+                        )
+                      ),
+                      'PP'
                     )
-                  ),
-                  'PP'
-                ) ?? getPlaceholder().athleteBirthdate}
+                  : getPlaceholder().athleteBirthdate}
               </p>
             )}
             {!datasource ? (
@@ -204,13 +206,14 @@ export const AthletePage = () => {
                   if (
                     respectiveBelt?.date &&
                     respectiveBelt?.date?.includes('-01-01')
-                  ) {
+                  )
                     return respectiveBelt?.date?.slice(0, 4);
-                  } else
+                  else if (respectiveBelt?.date)
                     return format(
                       new Date(respectiveBelt?.date?.replace('-', ',')),
                       'PP'
                     );
+                  else return '';
                 };
                 return (
                   <div
