@@ -14,6 +14,8 @@ export enum BeltColor {
   BLACK = 'Black',
   RED = 'Red',
   CORAL = 'Coral',
+  YELLOW = 'Yellow',
+  ORANGE = 'Orange',
 }
 
 export interface AthleteInterface {

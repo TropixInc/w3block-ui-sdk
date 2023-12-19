@@ -16,8 +16,10 @@ import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';
 import brownBelt from '../assets/brown_belt.png';
 import coralBelt from '../assets/coral_belt.png';
+import orangeBelt from '../assets/orange_belt.png';
 import purpleBelt from '../assets/purple_belt.png';
 import redBelt from '../assets/red_belt.png';
+import yellowBelt from '../assets/yellow_belt.png';
 import {
   AthleteInterface,
   BeltColor,
@@ -32,6 +34,8 @@ export const AthletePage = () => {
 
   const isProduction = useIsProduction();
   const belts = [
+    BeltColor.YELLOW,
+    BeltColor.ORANGE,
     BeltColor.BLUE,
     BeltColor.PURPLE,
     BeltColor.BROWN,
@@ -41,6 +45,8 @@ export const AthletePage = () => {
   ];
 
   const beltMap = {
+    Amarela: 'Yellow',
+    Laranja: 'Orange',
     Azul: 'Blue',
     Roxa: 'Purple',
     Marrom: 'Brown',
@@ -49,9 +55,22 @@ export const AthletePage = () => {
     Coral: 'Coral',
   };
 
-  type Belt = 'Azul' | 'Roxa' | 'Marrom' | 'Preta' | 'Vermelha' | 'Coral';
+  type Belt =
+    | 'Amarela'
+    | 'Laranja'
+    | 'Azul'
+    | 'Roxa'
+    | 'Marrom'
+    | 'Preta'
+    | 'Vermelha'
+    | 'Coral';
+
   const getBeltImage = (belt: BeltColor) => {
     switch (belt) {
+      case BeltColor.ORANGE:
+        return orangeBelt;
+      case BeltColor.YELLOW:
+        return yellowBelt;
       case BeltColor.BLUE:
         return blueBelt;
       case BeltColor.PURPLE:
@@ -70,16 +89,20 @@ export const AthletePage = () => {
   const getZIndexNumberByIndex = (index: number) => {
     switch (index) {
       case 0:
-        return 6;
+        return 8;
       case 1:
-        return 5;
+        return 7;
       case 2:
-        return 4;
+        return 6;
       case 3:
-        return 3;
+        return 5;
       case 4:
-        return 2;
+        return 4;
       case 5:
+        return 3;
+      case 6:
+        return 2;
+      case 7:
         return 1;
     }
   };
@@ -96,6 +119,22 @@ export const AthletePage = () => {
       graduationTeacher: '',
       athleteNationality: '',
     };
+  };
+
+  const birthDate = () => {
+    try {
+      if (datasource?.athlete?.data[0]?.attributes?.birthdate)
+        return format(
+          Date.parse(
+            datasource?.athlete?.data[0]?.attributes?.birthdate + 'T12:00:00'
+          ),
+          'PP'
+        );
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
+    return '';
   };
 
   if ((loading || isLoading) && (!datasource || !data))
@@ -145,7 +184,7 @@ export const AthletePage = () => {
                     : data?.items[0]?.mainImage ??
                       'https://placehold.co/600x400'
                 }
-                alt={datasource?.athlete?.data[0]?.attributes?.name}
+                alt={datasource?.athlete?.data[0]?.attributes?.name ?? ''}
               />
             )}
 
@@ -161,17 +200,7 @@ export const AthletePage = () => {
               <Shimmer className="pw-min-h-[17px] pw-min-w-[150px] pw-mt-2" />
             ) : (
               <p className="pw-text-center pw-text-black pw-font-[500] pw-mt-2 pw-text-[16px]">
-                {datasource?.athlete?.data[0]?.attributes?.birthdate
-                  ? format(
-                      new Date(
-                        datasource?.athlete?.data[0]?.attributes?.birthdate?.replace(
-                          '-',
-                          ','
-                        )
-                      ),
-                      'PP'
-                    )
-                  : getPlaceholder().athleteBirthdate}
+                {birthDate() ?? getPlaceholder().athleteBirthdate}
               </p>
             )}
             {!datasource ? (
@@ -193,27 +222,32 @@ export const AthletePage = () => {
             <div className="pw-mt-[60px]">
               {belts.map((belt, index) => {
                 const titlesFiltered =
-                  datasource?.athlete?.data[0]?.attributes?.titles.filter(
-                    (item: any) => item.type === 'belt'
+                  datasource?.athlete?.data[0]?.attributes?.titles?.filter(
+                    (item: any) => item?.type === 'belt'
                   );
                 const respectiveBelt = titlesFiltered?.find(
                   (item: any) => beltMap[item?.belt as Belt] == belt
                 );
-                const respectiveToken = data?.items.find(
-                  (item: any) => item.tokenData?.beltColor === belt
+                const respectiveToken = data?.items?.find(
+                  (item: any) => item?.tokenData?.beltColor === belt
                 );
                 const date = () => {
-                  if (
-                    respectiveBelt?.date &&
-                    respectiveBelt?.date?.includes('-01-01')
-                  )
-                    return respectiveBelt?.date?.slice(0, 4);
-                  else if (respectiveBelt?.date)
-                    return format(
-                      new Date(respectiveBelt?.date?.replace('-', ',')),
-                      'PP'
-                    );
-                  else return '';
+                  try {
+                    if (
+                      respectiveBelt?.date &&
+                      respectiveBelt?.date?.includes('-01-01')
+                    )
+                      return respectiveBelt?.date?.slice(0, 4);
+                    else if (respectiveBelt?.date)
+                      return format(
+                        Date.parse(respectiveBelt?.date + 'T12:00:00'),
+                        'PP'
+                      );
+                  } catch (e) {
+                    // eslint-disable-next-line no-console
+                    console.log(e);
+                  }
+                  return '';
                 };
                 return (
                   <div
