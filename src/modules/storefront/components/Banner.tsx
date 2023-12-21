@@ -28,7 +28,7 @@ import 'swiper/css/pagination';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 export const Banner = ({ data }: { data: BannerData }) => {
-  const { styleData, mobileStyleData } = data;
+  const { styleData, mobileStyleData, id } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -64,6 +64,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
   return (
     <TranslatableComponent>
       <div
+        id={`sf-${id}`}
         className={`${layoutClass} pw-mx-auto`}
         style={{
           margin: convertSpacingToCSS(margin),

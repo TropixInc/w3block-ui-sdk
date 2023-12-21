@@ -172,6 +172,7 @@ const _HeaderPixwaySDK = ({
 
   return context?.defaultTheme || standalone ? (
     <div
+      id="sf-header"
       style={{
         minHeight: '90px',
         backgroundColor: headerBgColor,

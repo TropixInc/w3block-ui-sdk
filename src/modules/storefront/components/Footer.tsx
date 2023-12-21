@@ -76,6 +76,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
 
   return (
     <div
+      id="sf-footer"
       style={{
         margin: convertSpacingToCSS(margin),
         // padding: convertSpacingToCSS(padding),

@@ -16,7 +16,8 @@ import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { datasource } = useDynamicApi();
-  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData, id } =
+    data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -55,6 +56,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
 
   return (
     <div
+      id={`sf-${id}`}
       style={{
         background:
           backgroundSession && backgroundUrl

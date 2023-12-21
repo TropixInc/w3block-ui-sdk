@@ -13,7 +13,7 @@ import {
 } from '../interfaces';
 
 export const Menu = ({ data }: { data: CategoriesData }) => {
-  const { styleData, mobileStyleData } = data;
+  const { styleData, mobileStyleData, id } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -46,6 +46,7 @@ export const Menu = ({ data }: { data: CategoriesData }) => {
           margin: convertSpacingToCSS(margin),
           padding: convertSpacingToCSS(padding),
         }}
+        id={`sf-${id}`}
       >
         <div
           style={{

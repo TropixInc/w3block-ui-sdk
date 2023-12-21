@@ -44,7 +44,8 @@ const ContentCard = lazy(() =>
 );
 
 export const Products = ({ data }: { data: ProductsData }) => {
-  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData, id } =
+    data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -177,6 +178,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
   const GridProducts = () => {
     return (
       <div
+        id={`sf-${id}`}
         style={{
           gridTemplateColumns: `repeat(${quantityOfItemsGrid()}, minmax(0, 1fr))`,
         }}

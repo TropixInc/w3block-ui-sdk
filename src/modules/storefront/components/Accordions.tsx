@@ -7,7 +7,8 @@ import { AccordionsData, SpecificContentAccordion } from '../interfaces';
 import './Accordions.css';
 
 export const Accordions = ({ data }: { data: AccordionsData }) => {
-  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData, id } =
+    data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -23,6 +24,7 @@ export const Accordions = ({ data }: { data: AccordionsData }) => {
 
   return (
     <div
+      id={`sf-${id}`}
       className="pw-container pw-mx-auto"
       style={{
         margin: convertSpacingToCSS(margin),
