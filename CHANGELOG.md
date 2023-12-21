@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.33](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.32...v1.11.33) (2023-12-21)
+
+
+### Bug Fixes
+
+* add suspense to prevent breaking when changing resolution. add support to highlight element from constructor ([6b90ac3](https://github.com/TropixInc/w3block-ui-sdk/commit/6b90ac32029a38bc6ff6575f06317ad7feea9756))
+
 ### [1.11.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.31...v1.11.32) (2023-12-19)
 
 ### [1.11.31](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.11.30...v1.11.31) (2023-12-18)
