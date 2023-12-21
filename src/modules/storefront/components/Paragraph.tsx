@@ -16,7 +16,8 @@ const alignmentsText: AlignmentClassNameMap = {
 type AlignmentClassNameMap = Record<AlignmentEnum, string>;
 
 export const Paragraph = ({ data }: { data: ParagraphData }) => {
-  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData, id } =
+    data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -51,7 +52,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const { text: content } = useDynamicString(textInput);
 
   return (
-    <div className="pw-container pw-mx-auto">
+    <div className="pw-container pw-mx-auto" id={`sf-${id}`}>
       {image?.assetUrl ? (
         <div className="pw-grid pw-place-items-center pw-mt-1 pw-min-w-[35px]">
           <ImageSDK
