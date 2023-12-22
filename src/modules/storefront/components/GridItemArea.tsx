@@ -7,6 +7,7 @@ import { useRouterConnect } from '../../shared';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import {
+  CardTypesEnum,
   FitImage,
   GridItemAreaData,
   MainModuleThemeInterface,
@@ -16,6 +17,8 @@ import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
 import { Accordions } from './Accordions';
 import { Banner } from './Banner';
+import { Button } from './Button';
+import { ContentCard } from './ContentCard';
 import { ImagePlusText } from './ImagePlusText';
 import { Menu } from './Menu';
 import { Midia } from './Midia';
@@ -45,6 +48,12 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
     dynamicMaxItens,
     gapX,
     gapY,
+    title,
+    titleColor,
+    titleSize,
+    titleWeight,
+    showHeight,
+    titlePadding,
   } = mergedStyleData;
 
   const letters = 'abcdefghijklmnopqrst';
@@ -129,6 +138,16 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
         return <GridItemArea data={{ ...module } as any} />;
       case ModulesType.MIDIA:
         return <Midia data={{ ...module } as any} />;
+      case ModulesType.CONTENT_CARD:
+        return (
+          <ContentCard
+            config={{ ...module.styleData } as any}
+            product={{ ...module.contentData } as any}
+            cardType={CardTypesEnum.CONTENT}
+          />
+        );
+      case ModulesType.BUTTON:
+        return <Button data={{ ...module } as any} />;
       default:
         break;
     }
@@ -162,6 +181,18 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
           container == 'fullWidth' ? 'pw-w-full' : 'pw-container'
         } pw-mx-auto`}
       >
+        {title && (
+          <p
+            style={{
+              fontSize: titleSize ?? '15px',
+              fontWeight: titleWeight ?? '600',
+              color: titleColor ?? 'black',
+              padding: convertSpacingToCSS(titlePadding),
+            }}
+          >
+            {title}
+          </p>
+        )}
         <div
           style={
             {
@@ -184,7 +215,11 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
                     quad + 1 >
                     parseInt(gridRows ?? '2') * parseInt(gridColumns ?? '4')
                 ) ? null : ite.module ? (
-                  <div className={'pw-min-h-[calc(100vh-150px)]'}>
+                  <div
+                    className={`${
+                      showHeight && 'pw-min-h-[calc(100vh-150px)]'
+                    }`}
+                  >
                     {ModuleToRenderer(ite.module)}
                   </div>
                 ) : (

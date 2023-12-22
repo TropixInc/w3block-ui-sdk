@@ -24,6 +24,7 @@ interface CheckoutResumeProps {
   originalPrice?: string;
   originalService?: string;
   originalTotalPrice?: string;
+  isCoinPayment?: boolean;
 }
 
 export const CheckouResume = ({
@@ -37,32 +38,34 @@ export const CheckouResume = ({
   originalPrice,
   originalService,
   originalTotalPrice,
+  isCoinPayment,
 }: CheckoutResumeProps) => {
   return (
     <div>
-      {products.map((product: Product) => (
-        <ProductInfo
-          className="pw-bg-white pw-rounded-lg pw-border pw-border-slate-200"
-          key={product.id}
-          image={product.images[0].thumb}
-          name={product.name}
-          id={product.id}
-          currency={
-            product.prices.find((price) => price.currencyId == currencyId)
-              ?.currency.symbol ?? 'R$'
-          }
-          price={
-            product.prices.find((price) => price.currencyId == currencyId)
-              ?.amount ?? '0'
-          }
-          stockAmount={0}
-          originalPrice={
-            product.prices.find((price) => price.currencyId == currencyId)
-              ?.originalAmount ?? '0'
-          }
-          variants={product.variants}
-        />
-      ))}
+      {!isCoinPayment &&
+        products.map((product: Product) => (
+          <ProductInfo
+            className="pw-bg-white pw-rounded-lg pw-border pw-border-slate-200"
+            key={product?.id}
+            image={product?.images[0]?.thumb}
+            name={product?.name}
+            id={product?.id}
+            currency={
+              product?.prices?.find((price) => price?.currencyId == currencyId)
+                ?.currency.symbol ?? 'R$'
+            }
+            price={
+              product?.prices?.find((price) => price?.currencyId == currencyId)
+                ?.amount ?? '0'
+            }
+            stockAmount={0}
+            originalPrice={
+              product?.prices?.find((price) => price?.currencyId == currencyId)
+                ?.originalAmount ?? '0'
+            }
+            variants={product.variants}
+          />
+        ))}
       <PriceAndGasInfo
         className="pw-px-4 pw-mt-4"
         price={price}

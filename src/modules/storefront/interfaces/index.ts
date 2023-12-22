@@ -88,6 +88,12 @@ export interface GridItemAreaData extends MainModuleThemeInterface {
     dynamicGrid?: boolean;
     dynamicGridPath: string;
     dynamicMaxItens?: number;
+    title?: string;
+    titleColor?: string;
+    titleSize?: string;
+    titleWeight?: string;
+    showHeight?: boolean;
+    titlePadding?: string;
     Items?: {
       target?: '_self' | '_blank';
       quadrants?: number[];
@@ -396,6 +402,8 @@ export interface ProductsDataStyleData {
   valueFontSizeType?: string;
   cardProductOverlay?: string;
   productOverlay?: boolean;
+  textPadding?: string;
+  containerRadius?: string;
 }
 
 interface ComboBoxReturnInterface {
@@ -479,6 +487,18 @@ export interface MidiaData extends MainModuleThemeInterface {
     imageAlignment: AlignmentEnum;
   };
   mobileStyleData: MidiaData['styleData'];
+}
+export interface ButtonData extends MainModuleThemeInterface {
+  type: ModulesType.BUTTON;
+  styleData: {
+    title?: string;
+    href?: string;
+    width?: string;
+    height?: string;
+    bgColor?: string;
+    onHoverColor?: string;
+  };
+  mobileStyleData: ButtonData['styleData'];
 }
 
 export enum CardSearchEnum {
@@ -592,6 +612,9 @@ export enum ModulesType {
   GRID_ITEM_AREA = 'GridItemArea',
   DYNAMIC_API = 'DynamicApi',
   TABLE = 'Table',
+  BANNER_VARIANT = 'BannerVariant',
+  CONTENT_CARD = 'Content Card',
+  BUTTON = 'Button',
 }
 
 export interface GetPageInfoInterface {

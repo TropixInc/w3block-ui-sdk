@@ -16,22 +16,33 @@ import {
 
 interface GetOrderPreviewPayload {
   productIds: ProductToSendPayload[];
-  currencyId: string;
+  currencyId?: string;
   companyId: string;
   couponCode?: string;
+  payments?: {
+    currencyId: string;
+    amountType: string;
+    amount: number;
+  }[];
 }
 
 interface ProductToSendPayload {
   productId: string;
   productTokenId?: string;
   variantIds?: string[];
+  quantity?: number;
 }
 
 interface OrderPreviewPayload {
   orderProducts: ProductToSendPayload[];
-  currencyId: string;
+  currencyId?: string;
   acceptIncompleteCart?: boolean;
   couponCode?: string;
+  payments?: {
+    currencyId: string;
+    amountType: string;
+    amount: number;
+  }[];
 }
 
 export const useCheckout = () => {
@@ -40,15 +51,17 @@ export const useCheckout = () => {
   const getOrderPreview = useMutation(
     async ({
       productIds,
-      currencyId,
       companyId,
       couponCode,
+      payments,
+      currencyId,
     }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
         (pId): ProductToSendPayload => {
           return {
             productId: pId.productId,
             variantIds: pId.variantIds,
+            quantity: pId.quantity,
           };
         }
       );
@@ -61,6 +74,7 @@ export const useCheckout = () => {
         currencyId,
         acceptIncompleteCart: true,
         couponCode,
+        payments,
       });
       return preview.data;
     }
