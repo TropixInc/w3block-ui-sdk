@@ -43,6 +43,14 @@ interface GenericFilterDto {
   filterContext?: W3blockAPI;
   dynamicFilterParameters?: FilterParameters | undefined;
   filterPlaceholder?: string;
+  isPublicFilterApi?: boolean;
+  isFilterDependency?: boolean;
+  filterDependencies?: {
+    [key: string]: {
+      required: boolean;
+      urlParam: string;
+    };
+  };
 }
 
 const SmartGenericFilter = ({
@@ -61,6 +69,9 @@ const SmartGenericFilter = ({
   filterContext,
   dynamicFilterParameters,
   filterPlaceholder,
+  isPublicFilterApi,
+  isFilterDependency,
+  filterDependencies,
 }: GenericFilterDto) => {
   const [defaultDate, setDefaultDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date>();
@@ -268,12 +279,12 @@ const SmartGenericFilter = ({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getPlaceholderForMultipleSelect = (multpleSelected: Array<any>) => {
-    if (multpleSelected && multpleSelected.length > 0) {
+    if (multpleSelected && multpleSelected?.length > 0) {
       const selected = multpleSelected.map((item) => {
         return filterOptions?.find(({ value }) => value === item);
       });
 
-      if (selected.length > 0) {
+      if (selected?.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (selected as Array<any>).map(({ label }) => label).join(', ');
       } else {
@@ -324,7 +335,7 @@ const SmartGenericFilter = ({
       }
       case FormatFilterType.SEARCH: {
         return (
-          <div className="pw-w-full pw-min-w-[200px] pw-h-[42px] pw-rounded-lg pw-border pw-border-[#B9D1F3]">
+          <div className="pw-w-full pw-min-w-[200px] pw-h-[42px] pw-rounded-lg pw-border pw-border-slate-300">
             <input
               className="pw-w-full pw-h-[40px] pw-rounded-lg pw-outline-none pw-px-2"
               type="text"
@@ -347,6 +358,7 @@ const SmartGenericFilter = ({
         return <p className="pw-w-full">{filters[itemKey ?? '']}</p>;
     }
   };
+
   return itemShowFilterKey === itemKey ? (
     <div ref={divRef} className="pw-w-full pw-bg-white pw-rounded-md pw-mt-1">
       {filterFormat && filterType === FilterTableType.STATIC ? (
@@ -366,6 +378,11 @@ const SmartGenericFilter = ({
           onSelected={setSelected}
           selected={selected}
           placeholder={filterPlaceholder}
+          isPublicFilterApi={isPublicFilterApi}
+          searchFilterTemplate={filterTemplate}
+          isFilterDependency={isFilterDependency}
+          filterDependencies={filterDependencies}
+          filters={filters}
         />
       )}
     </div>

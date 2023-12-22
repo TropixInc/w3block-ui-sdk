@@ -46,6 +46,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
   return (
     <TranslatableComponent>
       <div
+        id="sf-cookies"
         style={{
           backgroundColor,
           margin: convertSpacingToCSS(margin),

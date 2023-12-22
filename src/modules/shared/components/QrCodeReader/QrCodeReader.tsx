@@ -1,4 +1,4 @@
-import { ReactNode, lazy, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
@@ -9,11 +9,7 @@ import { Html5QrcodeCameraScanConfig } from 'html5-qrcode/esm/html5-qrcode';
 import LoadingIcon from '../../../shared/assets/icons/loading.svg?react';
 import W3block from '../../assets/images/w3blockWhite.svg?react';
 import useTranslation from '../../hooks/useTranslation';
-const CloseButton = lazy(() =>
-  import('../CloseButton').then((module) => ({
-    default: module.CloseButton,
-  }))
-);
+import { CloseButton } from '../CloseButton';
 
 interface iProps {
   hasOpen: boolean;

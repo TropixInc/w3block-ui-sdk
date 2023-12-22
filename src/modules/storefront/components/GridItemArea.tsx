@@ -26,7 +26,7 @@ import { Paragraph } from './Paragraph';
 import { Products } from './Products';
 
 export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
-  const { styleData, mobileStyleData } = data;
+  const { styleData, mobileStyleData, id } = data;
   const { datasource } = useDynamicApi();
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -172,6 +172,7 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
 
   return (
     <div
+      id={`sf-${id}`}
       style={{
         backgroundColor,
       }}

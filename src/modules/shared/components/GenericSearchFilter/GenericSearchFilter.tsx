@@ -26,6 +26,9 @@ interface SearchUserProps {
     input?: string;
   };
   onSelectItemById?: (value: string) => void;
+  isFilterDependency?: boolean;
+  filters: any;
+  dependenciesKeys?: Array<string>;
 }
 
 const GenericSearchFilter = ({
@@ -37,6 +40,9 @@ const GenericSearchFilter = ({
   inputPlaceholder,
   classes,
   onSelectItemById,
+  isFilterDependency,
+  filters,
+  dependenciesKeys,
 }: SearchUserProps) => {
   const [translate] = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -66,6 +72,15 @@ const GenericSearchFilter = ({
     onShowModal(false);
     onSelectItemById && onSelectItemById(id);
     onSearch(label);
+  };
+
+  const onDisabledInput = () => {
+    if (filters && dependenciesKeys) {
+      return dependenciesKeys.every((key) => {
+        // eslint-disable-next-line no-prototype-builtins
+        return filters.hasOwnProperty(key);
+      });
+    }
   };
 
   const renderResponseItems = () => {
@@ -101,9 +116,7 @@ const GenericSearchFilter = ({
             ))}
           </ul>
         ) : (
-          <p className="pw-text-center">
-            {translate('key>filtersListContracts>notFoundContracts')}
-          </p>
+          <p className="pw-text-center">{translate('token>pass>notResult')}</p>
         )}
       </div>
     ) : null;
@@ -111,15 +124,16 @@ const GenericSearchFilter = ({
 
   return (
     <div className={classNames('pw-relative pw-w-full', classes?.root)}>
-      <div className="pw-flex pw-w-full pw-items-center pw-h-[42px] pw-gap-x-2 pw-bg-white pw-border pw-border-[#B9D1F3] pw-pl-4 pw-pr-1 pw-rounded-lg">
-        <SearchIcon />
+      <div className="pw-flex pw-w-full pw-items-center pw-h-[46px] pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-pl-4 pw-pr-1 pw-rounded-lg">
+        <SearchIcon className="pw-stroke-slate-500" />
         <input
           type="text"
           placeholder={inputPlaceholder}
           value={search}
+          disabled={isFilterDependency && !onDisabledInput()}
           onChange={(e) => handleSearchChange(e)}
           className={classNames(
-            'pw-text-[15px] pw-text-[#8BAEE2] placeholder:pw-text-[#8BAEE2] pw-w-full focus:pw-outline-none',
+            'pw-text-[15px] pw-text-slate-300 placeholder:pw-text-slate-300 pw-w-full focus:pw-outline-none disabled:pw-opacity-30',
             classes?.input ?? ''
           )}
         />

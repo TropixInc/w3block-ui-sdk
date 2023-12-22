@@ -24,9 +24,9 @@ export enum FormatFilterType {
 }
 
 export interface TableStylesClasses {
-  root?: string;
-  header?: string;
-  line?: string;
+  root?: any;
+  header?: any;
+  line?: any;
 }
 
 export interface DataSource {
@@ -34,6 +34,7 @@ export interface DataSource {
   url: string;
   itemsPath?: string;
   urlContext: W3blockAPI;
+  isPublicApi?: boolean;
 }
 
 export interface XlsReportsDto {
@@ -53,6 +54,14 @@ export interface FilterParameters {
   label: string;
   subLabel?: string;
   paginationType?: 'default' | 'strapi';
+  filterDynamicParameter?: string;
+  isFilterDependency?: boolean;
+  dependencies: {
+    [key: string]: {
+      required: boolean;
+      urlParam: string;
+    };
+  };
 }
 
 export interface Actions {
@@ -90,6 +99,7 @@ export interface ColumnsTable {
       replacedFilterTemplate?: string;
       data?: {
         url: string;
+        isPublicFilterApi?: boolean;
         parameters?: FilterParameters;
         filterUrlContext?: W3blockAPI;
       };
@@ -100,6 +110,7 @@ export interface ColumnsTable {
 export interface ConfigGenericTable {
   filtersTitle?: string;
   tableTitle?: string;
+  filtersSubtitle?: string;
   paginationType?: 'default' | 'strapi';
   dataSource?: DataSource;
   localeItems?: string;
@@ -109,6 +120,9 @@ export interface ConfigGenericTable {
   actions?: Array<Actions>;
   lineActions?: Actions;
   externalFilterClasses?: {
-    root?: string;
+    root?: any;
+    container?: any;
+    wrapper?: any;
+    buttonsContainer?: any;
   };
 }

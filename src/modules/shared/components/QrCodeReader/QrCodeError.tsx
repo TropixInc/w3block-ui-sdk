@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { lazy } from 'react';
 import { useLockBodyScroll } from 'react-use';
 
 import classNames from 'classnames';
@@ -8,11 +7,7 @@ import classNames from 'classnames';
 import  ErrorIcon from '../../assets/icons/errorIconRed.svg?react';
 import  XIcon from '../../assets/icons/xFilled.svg?react';
 import useTranslation from '../../hooks/useTranslation';
-const Button = lazy(() =>
-  import('../Buttons').then((module) => ({
-    default: module.Button,
-  }))
-);
+import { Button } from '../Buttons';
 
 
 export enum TypeError {

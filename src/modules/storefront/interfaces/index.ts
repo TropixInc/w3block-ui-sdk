@@ -10,6 +10,7 @@ import {
 export type TemplateData = {
   title: string;
   slug: string;
+
   dynamicApi?: DynamicApiModuleInterface;
   custom?: string;
   modules: (
@@ -24,10 +25,12 @@ export type TemplateData = {
     | MidiaData
     | GridItemAreaData
     | GenericTableData
+    | BannerVariantData
   )[];
 };
 
 export type Theme = {
+  internalMenu: InternalMenuInterface;
   configurations: MainModuleThemeInterface;
   header: MainModuleThemeInterface;
   categories: MainModuleThemeInterface;
@@ -42,6 +45,7 @@ export type Theme = {
   midia?: MidiaData;
   GridItemArea?: GridItemAreaData;
   table?: GenericTableData;
+  bannerVariant?: MainModuleThemeInterface;
 };
 
 export interface DynamicApiModuleInterface {
@@ -52,6 +56,13 @@ export interface DynamicApiModuleInterface {
     apiName: string;
     url: string;
   }[];
+}
+
+export interface InternalMenuInterface {
+  [key: string]: {
+    customLabel?: string;
+    hidden?: any;
+  };
 }
 
 export interface MainModuleThemeInterface {
@@ -138,6 +149,7 @@ export interface PageData extends MainModuleThemeInterface {
 export interface AssetInterface {
   assetId: string;
   assetUrl: string;
+  basePath?: string;
 }
 export interface HeaderData extends MainModuleThemeInterface {
   type: ModulesType.HEADER;
@@ -203,6 +215,22 @@ export interface BannerData extends MainModuleThemeInterface {
   };
   mobileStyleData: BannerData['styleData'];
 }
+export interface BannerVariantData extends MainModuleThemeInterface {
+  type: ModulesType.BANNER_VARIANT;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    bannerDisposition?: Layout;
+    bannerRatio?: Ratio;
+    autoSlide?: boolean;
+    dynamicBanner?: boolean;
+    routeToDynamicBanner?: string;
+    banners?: SpecificBannerInfo[];
+    height?: string;
+    heightUnity?: string;
+  };
+  mobileStyleData: BannerVariantData['styleData'];
+}
 
 export interface SpecificBannerInfo {
   backgroundColor?: string;
@@ -240,6 +268,8 @@ export interface SpecificBannerInfo {
   secondaryButtonLink?: string;
   secondaryButtonTextColor?: string;
   secondaryButtonColor?: string;
+  buttonSize?: '12px' | '14px' | '16px' | '18px' | '20px';
+  secondaryButtonSize?: '12px' | '14px' | '16px' | '18px' | '20px';
   secondaryButtonBorderColor?: string;
   titleFontFamily?: string;
   titleFontSize?: string;
@@ -251,6 +281,21 @@ export interface SpecificBannerInfo {
   subtitleFontBold?: boolean;
   subtitleFontItalic?: boolean;
   subtitleFontSizeType?: string;
+  baseUrl?: string;
+  titleTextShadow?: string;
+  titleTextAlign?:
+    | 'start'
+    | 'end'
+    | 'left'
+    | 'right'
+    | 'center'
+    | 'justify'
+    | 'match-parent';
+  titleMaxWidth?: string;
+  titleWidth?: string;
+  imageRounded?: boolean;
+  contentClass?: string;
+  spacing?: string;
 }
 
 type CategoryItem = { name: string; slug: string };
@@ -342,6 +387,8 @@ export interface ProductsData extends MainModuleThemeInterface {
 }
 
 export interface ProductsDataStyleData {
+  hasSpaceBetween?: boolean;
+  border?: string;
   margin?: string;
   padding?: string;
   layoutDisposition?: CardLayoutDisposition;
@@ -421,6 +468,7 @@ export interface SpecificContentCard {
   link?: string;
   overlay?: boolean;
   cardOverlayColor?: string;
+  basePath?: string;
 }
 
 export interface ParagraphData extends MainModuleThemeInterface {
@@ -437,6 +485,9 @@ export interface ParagraphData extends MainModuleThemeInterface {
     titleSize?: string;
     titleFontFamily?: string;
     titleUnit?: string;
+    image?: {
+      assetUrl?: string;
+    };
   };
   contentData: {
     titleInput?: string;
@@ -560,6 +611,11 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
     backgroundUrl?: AssetInterface;
     overlay?: boolean;
     overlayColor?: string;
+    imageWidth?: number;
+    imageHeight?: number;
+    imageClass?: string;
+    imageContainerClass?: string;
+    containerClass?: string;
   };
   contentData: {
     title?: string;
@@ -624,6 +680,7 @@ export interface GetPageInfoInterface {
   companyId: string;
   projectId: string;
   routePattern: string;
+  routePatternRegex: string;
   isRoutePatternRegex: boolean;
   data: any;
   name: string;

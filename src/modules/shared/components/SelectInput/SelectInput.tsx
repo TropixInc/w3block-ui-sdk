@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
+import classNames from 'classnames';
+
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 
 interface SelectInputProps {
@@ -9,6 +11,7 @@ interface SelectInputProps {
   onChange: (value: string) => void;
   className?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export const Selectinput = ({
@@ -17,6 +20,7 @@ export const Selectinput = ({
   onChange,
   className = '',
   placeholder,
+  disabled,
 }: SelectInputProps) => {
   const ref = useRef<HTMLDivElement>(null);
   useClickAway(ref, () => setIsOpened(false));
@@ -25,7 +29,10 @@ export const Selectinput = ({
     <div ref={ref} className={` ${className}`}>
       <div
         onClick={() => setIsOpened(!isOpened)}
-        className="pw-flex pw-w-full pw-p-3 pw-justify-between pw-items-center pw-rounded-lg pw-border pw-border-slate-300 pw-bg-white"
+        className={classNames(
+          'pw-flex pw-w-full pw-p-3 pw-justify-between pw-items-center pw-rounded-lg pw-border pw-border-slate-300 pw-bg-white',
+          disabled ? 'pw-opacity-50' : ''
+        )}
       >
         <p className="pw-text-sm pw-text-slate-800">
           {selected == ''
@@ -36,7 +43,7 @@ export const Selectinput = ({
         </p>
         <ArrowDown className="pw-stroke-slate-600" />
       </div>
-      {isOpened && (
+      {isOpened && !disabled && (
         <div className="pw-relative  pw-h-full">
           <div className="pw-absolute pw-max-h-[200px] pw-overflow-auto pw-bg-white pw-z-10 pw-bg-white pw-border pw-border-slate-300 pw-rounded-lg pw-w-full pw-mt-1">
             {options.map((option) => (

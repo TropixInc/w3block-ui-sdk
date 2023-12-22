@@ -5,8 +5,6 @@ import {
   useQuery,
 } from 'react-query';
 
-import { useToken } from '../useToken';
-
 export type QueryConfig<
   TQueryFnData = unknown,
   TError = unknown,
@@ -16,7 +14,7 @@ export type QueryConfig<
   'queryKey' | 'queryFn'
 >;
 
-export const usePrivateQuery = <
+export const usePublicQuery = <
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData
@@ -25,14 +23,5 @@ export const usePrivateQuery = <
   queryFn: QueryFunction<TQueryFnData, QueryKey>,
   options?: QueryConfig<TQueryFnData, TError, TData>
 ) => {
-  const token = useToken();
-  const enabled = Object.keys(options ?? {}).includes('enabled')
-    ? options?.enabled && Boolean(token)
-    : Boolean(token);
-
-  return useQuery(
-    queryKey,
-    queryFn,
-    options ? { ...options, enabled } : { enabled }
-  );
+  return useQuery(queryKey, queryFn, options);
 };

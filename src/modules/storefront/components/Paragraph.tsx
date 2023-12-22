@@ -1,7 +1,9 @@
 import classNames from 'classnames';
 import _ from 'lodash';
 
+import { ImageSDK } from '../../shared/components/ImageSDK';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, ParagraphData } from '../interfaces';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
@@ -14,7 +16,8 @@ const alignmentsText: AlignmentClassNameMap = {
 type AlignmentClassNameMap = Record<AlignmentEnum, string>;
 
 export const Paragraph = ({ data }: { data: ParagraphData }) => {
-  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData, id } =
+    data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -37,15 +40,28 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
     textFontFamily,
     textSize,
     textUnit,
+    image,
   } = mergedStyleData;
   const { textInput, titleInput } = mergedContentData;
 
   const alignmentTextClass = alignmentsText[alignment ?? AlignmentEnum.LEFT];
 
-  const { isDynamic, datasource } = useDynamicApi();
+  const { datasource } = useDynamicApi();
+
+  const { text: title } = useDynamicString(titleInput);
+  const { text: content } = useDynamicString(textInput);
 
   return (
-    <div className="pw-container pw-mx-auto">
+    <div className="pw-container pw-mx-auto" id={`sf-${id}`}>
+      {image?.assetUrl ? (
+        <div className="pw-grid pw-place-items-center pw-mt-1 pw-min-w-[35px]">
+          <ImageSDK
+            src={_.get(datasource, image?.assetUrl ?? '', image?.assetUrl)}
+            width={35}
+            height={35}
+          />
+        </div>
+      ) : null}
       <div
         style={{
           margin: convertSpacingToCSS(margin),
@@ -60,7 +76,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames('pw-font-semibold')}
         >
-          {isDynamic ? _.get(datasource, titleInput ?? '', '') : titleInput}
+          {title}
         </h2>
         <div
           style={{
@@ -70,7 +86,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
           dangerouslySetInnerHTML={{
-            __html: _.get(datasource, textInput ?? '', textInput ?? ''),
+            __html: content ?? '',
           }}
         />
       </div>

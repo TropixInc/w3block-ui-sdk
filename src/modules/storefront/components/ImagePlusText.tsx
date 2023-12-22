@@ -1,22 +1,23 @@
 import { CSSProperties, lazy } from 'react';
 
+import _ from 'lodash';
 const ImageSDK = lazy(() =>
   import('../../shared/components/ImageSDK').then((module) => ({
     default: module.ImageSDK,
   }))
 );
+
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { ImagePlusTextData } from '../interfaces';
-
 import './ImagePlusText.css';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
-import _ from 'lodash';
-
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { datasource } = useDynamicApi();
-  const { styleData, contentData, mobileStyleData, mobileContentData } = data;
+  const { styleData, contentData, mobileStyleData, mobileContentData, id } =
+    data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -40,14 +41,22 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     backgroundColor,
     overlay,
     overlayColor,
+    imageWidth,
+    imageHeight,
+    imageClass,
+    imageContainerClass,
+    containerClass,
   } = mergedStyleData;
 
-  const { title, content } = mergedContentData;
+  const { title: titleInput, content: contentInput } = mergedContentData;
+  const { text: title } = useDynamicString(titleInput);
+  const { text: content } = useDynamicString(contentInput);
 
   const isImageOnLeft = imagePosition === 'left' || imagePosition === undefined;
 
   return (
     <div
+      id={`sf-${id}`}
       style={{
         background:
           backgroundSession && backgroundUrl
@@ -66,7 +75,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     >
       <div className="pw-container pw-mx-auto">
         <div
-          className="pw-flex pw-gap-8 image-plus-text"
+          className={`${containerClass ?? 'pw-gap-8'} pw-flex image-plus-text`}
           style={
             {
               '--image-plus-text-direction-mobile': isImageOnLeft
@@ -80,13 +89,16 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
             } as CSSProperties
           }
         >
-          <div className="pw-grid pw-place-items-center">
+          <div
+            className={`${imageContainerClass} pw-grid pw-place-items-center`}
+          >
             <ImageSDK
               src={_.get(datasource, image?.assetUrl ?? '', image?.assetUrl)}
-              className="pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg"
-              width={500}
-              height={274}
-              quality="eco"
+              className={
+                imageClass ?? 'pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg'
+              }
+              width={imageWidth ?? 500}
+              height={imageHeight ?? 274}
             />
           </div>
 
@@ -98,13 +110,13 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               style={{ color: titleColor }}
               className="pw-font-semibold pw-text-[19px]"
             >
-              {_.get(datasource, title ?? '', title)}
+              {title}
             </h3>
             <div
               style={{ color: contentColor }}
               className="pw-text-[15px]"
               dangerouslySetInnerHTML={{
-                __html: _.get(datasource, content ?? '', content) ?? '',
+                __html: content ?? '',
               }}
             />
           </div>

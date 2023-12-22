@@ -36,7 +36,6 @@ export const ImageSDK = ({
   const isCloud = isCloudinary(src ?? '');
   const isVid = isVideo(src ?? '');
   const [isError, setError] = useState(false);
-
   const VideoThreath = () => {
     return (
       <>
@@ -141,7 +140,7 @@ export const ImageSDK = ({
       ) : (
         <img
           alt={alt}
-          onError={() => setError(true)}
+          // onError={() => setError(true)}
           className={`${className}`}
           src={isError ? imagePlaceholder : src ?? ''}
         ></img>

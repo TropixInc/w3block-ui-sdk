@@ -14,6 +14,8 @@ export enum BeltColor {
   BLACK = 'Black',
   RED = 'Red',
   CORAL = 'Coral',
+  YELLOW = 'Yellow',
+  ORANGE = 'Orange',
 }
 
 export interface AthleteInterface {
@@ -28,7 +30,7 @@ export interface AthleteInterface {
   athleteNationality: string;
 }
 
-const collectionId = 'f59ef068-6642-40ca-9b9a-fb6a9ce1bc07';
+const collectionId = 'f96b35de-09a2-4b3a-bb26-264549d01407';
 export const useGetAthlete = (id: string) => {
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();

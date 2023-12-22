@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import classNames from 'classnames';
 import _ from 'lodash';
 
+import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import useTruncate from '../../../tokens/hooks/useTruncate';
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import ClearFilter from '../../assets/icons/clearFilterOutlined.svg?react';
@@ -11,8 +12,8 @@ import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import FilterIcon from '../../assets/icons/filterOutlined.svg?react';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
-import useRouter from '../../hooks/useRouter';
 import useTranslation from '../../hooks/useTranslation';
 import {
   ConfigGenericTable,
@@ -70,9 +71,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     externalFilterClasses,
     paginationType = 'default',
     filtersTitle,
+    filtersSubtitle,
     tableTitle,
   } = config;
-
+  const { config: configDynamic } = useDynamicApi();
+  const isMobile = useIsMobile();
   const { companyId: tenantId } = useCompanyConfig();
   const { data: company } = useCompanyById(tenantId || '');
   const { name, companyId } = useCompanyConfig();
@@ -83,7 +86,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const [filterLabels, setFilterLabels] = useState<any | undefined>();
   const methods = useForm();
   const truncate = useTruncate();
-  const router = useRouter();
 
   useEffect(() => {
     const itemSorteble = columns.find((item) => item.sortable);
@@ -104,10 +106,18 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
     url: apiUrl ? apiUrl : dataSource?.url ?? '',
+    isPublicApi: dataSource?.isPublicApi,
     ...paginationMapping[paginationType],
   });
 
-  const handleAction = (action: any, row: any) => {
+  const handleAction = (event: any, action: any, row: any) => {
+    if (action && action.type == 'function') {
+      event?.preventDefault();
+      action.data(row);
+    }
+  };
+
+  const getHref = (action: any, row: any) => {
     if (action && action.type == 'navigate') {
       let url = action.data;
       if (action.replacedQuery) {
@@ -115,14 +125,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           (item: string) => (url = url.replace(`{${item}}`, _.get(row, item)))
         );
 
-        if ((url as string).includes('http')) {
-          window.location.href = url;
-        } else {
-          router.push(url);
-        }
+        return url;
       }
     } else if (action && action.type == 'function') {
-      action.data(row);
+      return '';
     }
   };
 
@@ -132,21 +138,35 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       (item: string) => (item as string)?.length > 0
     );
 
-    if (filteredArrFilters?.length) {
-      if (dataSource?.url.includes('?')) {
-        setApiUrl(`${dataSource?.url}&${filteredArrFilters.join('&')}&${sort}`);
+    let replacedUrl = dataSource?.url;
+
+    const replacements = Array.from(
+      (dataSource?.url ?? '').matchAll(new RegExp(/{(\w+)}*/g))
+    );
+
+    replacements.forEach((item) => {
+      const y = configDynamic?.groups[item[1]];
+
+      if (y !== undefined) {
+        replacedUrl = replacedUrl?.replace(item[0], y);
+      }
+    });
+
+    if (replacedUrl && filteredArrFilters?.length) {
+      if (replacedUrl.includes('?')) {
+        setApiUrl(`${replacedUrl}&${filteredArrFilters.join('&')}&${sort}`);
       } else {
-        setApiUrl(`${dataSource?.url}?${filteredArrFilters.join('&')}&${sort}`);
+        setApiUrl(`${replacedUrl}?${filteredArrFilters.join('&')}&${sort}`);
       }
     } else {
-      if (sort) {
-        if (dataSource?.url.includes('?')) {
-          setApiUrl(`${dataSource?.url}&${sort}`);
+      if (replacedUrl && sort) {
+        if (replacedUrl.includes('?')) {
+          setApiUrl(`${replacedUrl}&${sort}`);
         } else {
-          setApiUrl(`${dataSource?.url}?${sort}`);
+          setApiUrl(`${replacedUrl}?${sort}`);
         }
       } else {
-        setApiUrl(dataSource?.url);
+        setApiUrl(replacedUrl);
       }
     }
 
@@ -207,27 +227,33 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
       case FormatTypeColumn.THUMBNAIL: {
         return (
-          <img
-            src={
-              basicUrl
-                ? `${basicUrl}${_.get(item, itemKey, '')}`
-                : _.get(item, itemKey, '')
-            }
-            alt=""
-            className="pw-w-10 pw-h-10 pw-rounded-md"
-          />
+          <div className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md">
+            {_.get(item, itemKey, '') ? (
+              <img
+                src={
+                  basicUrl
+                    ? `${basicUrl}${_.get(item, itemKey, '')}`
+                    : _.get(item, itemKey, '')
+                }
+                alt=""
+                className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md"
+              />
+            ) : (
+              <div className="block pw-min-w-10 pw-min-h-10 pw-w-10 pw-h-10 pw-rounded-md pw-border"></div>
+            )}
+          </div>
         );
       }
       case FormatTypeColumn.COLLECTION: {
         const value = _.get(item, itemKey, '');
         const valueRendered = _.get(value[0], keyInCollection ?? '', '');
 
-        if (value.length > 1) {
+        if (value?.length > 1) {
           return (
             <p>
               <p>{valueRendered}</p>
               <p className="pw-text-xs pw-opacity-70">{`+${
-                value.length - 1
+                value?.length - 1
               } academia(s)`}</p>
             </p>
           );
@@ -323,91 +349,130 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     setFilterLabels({});
   };
 
+  const renderClearFilterButton = () => {
+    const filterValues = Object.values(filters || {});
+    if (filterValues.some((item: any) => item?.length)) {
+      return (
+        <button
+          className="pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
+          onClick={() => onClearAllFilter()}
+        >
+          <span className="pw-text-[#aaa] pw-font-medium">
+            {translate('shared>genericTable>clearFilters')}
+          </span>
+          <ClearFilter className="pw-stroke-2 pw-stroke-[#aaa] pw-w-5 pw-h-5" />
+        </button>
+      );
+    } else return null;
+  };
+
   return (
     <div className="pw-w-full pw-mt-20">
       <FormProvider {...methods}>
-        <div className="pw-w-full pw-flex pw-justify-between">
-          <div
-            className={classNames(
-              'pw-relative pw-w-full pw-gap-x-3 pw-flex pw-flex-wrap sm:pw-max-w-[1000px]',
-              externalFilterClasses?.root ?? ''
-            )}
-          >
+        <div className="pw-text-black">
+          <div style={externalFilterClasses?.container}>
             {filtersTitle ? (
-              <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-2">
+              <p className="pw-text-[22px] pw-font-semibold pw-mb-2">
                 {filtersTitle}
               </p>
             ) : null}
-            {columns
-              .filter((item) => item.header.filter?.placement === 'external')
-              .map(({ header, key }) => {
-                return (
-                  <div key={key} style={header.filter?.filterClass as any}>
-                    <SmartGenericFilter
-                      filterType={header.filter?.type}
-                      filterFormat={header.filter?.format}
-                      filterOptions={header.filter?.values}
-                      itemShowFilterKey={key}
-                      itemKey={key}
-                      filters={filters}
-                      onChangeFilter={setFilters}
-                      onCloseFilters={setIsShowFilterKey}
-                      filterLabels={filterLabels}
-                      onChangeFilterLabels={setFilterLabels}
-                      filterTemplate={
-                        header.filter?.replacedFilterTemplate
-                          ? header.filter?.replacedFilterTemplate
-                          : header.filter?.filterTemplate
-                      }
-                      filterOptionsUrl={header.filter?.data?.url}
-                      filterContext={header.filter?.data?.filterUrlContext}
-                      dynamicFilterParameters={header.filter?.data?.parameters}
-                      filterPlaceholder={header.filter?.placeholder}
-                    />
-                  </div>
-                );
-              })}
-          </div>
-          <div>
-            {xlsReports?.url && (
-              <GenerateGenericXlsReports
-                url={xlsReports.url}
-                context={xlsReports.urlContext}
-                filters={filters}
-                observerUrlReport={xlsReports.observerUrl}
-                sort={sort}
-              />
-            )}
-            {Object.values(filters || {}).length ? (
-              <button
-                className="-pw-mt-4 pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-red-500 pw-rounded-md pw-items-center hover:pw-shadow-lg"
-                onClick={() => onClearAllFilter()}
-              >
-                <span className="pw-text-red-500 pw-font-medium">
-                  {translate('shared>genericTable>clearFilters')}
-                </span>
-                <ClearFilter className="pw-stroke-2 pw-stroke-red-500 pw-w-5 pw-h-5" />
-              </button>
+            {filtersSubtitle ? (
+              <p className="pw-text-[15px] pw-font-semibold pw-mb-2">
+                {filtersSubtitle}
+              </p>
             ) : null}
+            <div
+              style={externalFilterClasses?.wrapper}
+              className="pw-w-full sm:pw-flex sm:pw-justify-between"
+            >
+              <div
+                style={externalFilterClasses?.root}
+                className={classNames(
+                  'pw-relative pw-w-full pw-gap-x-3 pw-gap-y-3 pw-flex-wrap sm:pw-max-w-[900px] sm:pw-flex'
+                )}
+              >
+                {columns
+                  .filter(
+                    (item) => item.header.filter?.placement === 'external'
+                  )
+                  .map(({ header, key }) => {
+                    return (
+                      <div
+                        key={key}
+                        style={
+                          !isMobile ? (header.filter?.filterClass as any) : {}
+                        }
+                        className="pw-w-full"
+                      >
+                        <SmartGenericFilter
+                          filterType={header.filter?.type}
+                          filterFormat={header.filter?.format}
+                          filterOptions={header.filter?.values}
+                          itemShowFilterKey={key}
+                          itemKey={key}
+                          filters={filters}
+                          onChangeFilter={setFilters}
+                          onCloseFilters={setIsShowFilterKey}
+                          filterLabels={filterLabels}
+                          onChangeFilterLabels={setFilterLabels}
+                          filterTemplate={
+                            header.filter?.replacedFilterTemplate
+                              ? header.filter?.replacedFilterTemplate
+                              : header.filter?.filterTemplate
+                          }
+                          filterOptionsUrl={header.filter?.data?.url}
+                          filterContext={header.filter?.data?.filterUrlContext}
+                          dynamicFilterParameters={
+                            header.filter?.data?.parameters
+                          }
+                          filterPlaceholder={header.filter?.placeholder}
+                          isPublicFilterApi={
+                            header.filter?.data?.isPublicFilterApi
+                          }
+                          isFilterDependency={
+                            header.filter?.data?.parameters?.isFilterDependency
+                          }
+                          filterDependencies={
+                            header.filter?.data?.parameters?.dependencies
+                          }
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
+              <div style={externalFilterClasses?.buttonsContainer}>
+                {xlsReports?.url && (
+                  <GenerateGenericXlsReports
+                    url={xlsReports.url}
+                    context={xlsReports.urlContext}
+                    filters={filters}
+                    observerUrlReport={xlsReports.observerUrl}
+                    sort={sort}
+                  />
+                )}
+                {renderClearFilterButton()}
+              </div>
+            </div>
           </div>
         </div>
 
         <div
           className={classNames(
-            'pw-mb-10 pw-rounded-t-2xl pw-overflow-auto',
-            classes?.root ?? '',
-            tableStyles?.root ?? ''
+            'pw-w-full pw-overflow-auto',
+            classes?.root ?? ''
           )}
+          style={tableStyles?.root as any}
         >
           {tableTitle ? (
             <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-4">
               {tableTitle}
             </p>
           ) : null}
+
           <div
             style={classes?.grid as any}
             className={classNames(
-              'pw-px-3 pw-h-[72px] pw-bg-[#DDE6F3] pw-gap-x-2 pw-rounded-t-2xl pw-w-[800px] pw-justify-between pw-text-sm pw-items-center pw-grid sm:pw-w-full',
+              'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-3 pw-gap-x-2 !pw-border-b-0 pw-rounded-t-2xl pw-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
               tableStyles?.header ?? ''
             )}
           >
@@ -418,7 +483,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   <div className="pw-flex pw-items-center pw-justify-between">
                     <p
                       className={classNames(
-                        'pw-font-semibold pw-flex pw-flex-col pw-text-sm',
+                        'pw-font-semibold pw-text-left pw-flex pw-flex-col pw-text-sm',
                         header.filter ? 'pw-w-[70%]' : 'pw-w-full'
                       )}
                     >
@@ -513,28 +578,32 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                       filterOptionsUrl={header.filter?.data?.url}
                       filterContext={header.filter?.data?.filterUrlContext}
                       dynamicFilterParameters={header.filter?.data?.parameters}
+                      isPublicFilterApi={header.filter?.data?.isPublicFilterApi}
                     />
                   </div>
                 </div>
               ))}
           </div>
+
           {isLoading && (
             <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
               <Spinner />
             </div>
           )}
+
           {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
-            <div className="pw-h-auto pw-shadow-[#00000014] pw-shadow-[-7px_5px_8px_-1px] pw-border">
+            <div className="pw-h-auto pw-w-[800px] pw-border pw-border-t-0 pw-rounded-b-2xl sm:pw-w-full">
               {_.get(data, localeItems ?? '', []).map((item: any) => (
-                <button
+                <a
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   key={(item as any).id}
-                  onClick={() => handleAction(lineActions?.action, item)}
-                  disabled={!lineActions}
+                  onClick={(e) => handleAction(e, lineActions?.action, item)}
+                  href={getHref(lineActions?.action, item)}
                   style={classes?.grid as any}
                   className={classNames(
-                    'pw-w-full pw-justify-between pw-w-[800px] pw-grid pw-items-center  pw-gap-x-2 pw-px-3 pw-py-[19px] pw-border-t',
-                    tableStyles?.line ?? ''
+                    'pw-w-[800px] pw-grid  pw-px-3 pw-items-center pw-gap-x-2 pw-py-[19px] pw-border-t sm:pw-w-full ',
+                    tableStyles?.line ?? '',
+                    lineActions ? 'pw-cursor-pointer' : 'pw-cursor-default'
                   )}
                 >
                   {columns
@@ -556,14 +625,17 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     dataItem={item}
                     actions={actions ?? []}
                   />
-                </button>
+                </a>
               ))}
             </div>
           ) : null}
           {!isLoading &&
             !_.get(data, localeItems ?? '', [])?.length &&
             !isError && (
-              <Alert variant="information">
+              <Alert
+                variant="information"
+                className="pw-bg-[#eee] pw-text-[#999]"
+              >
                 {translate('token>pass>notResult')}
               </Alert>
             )}
@@ -573,6 +645,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             </Alert>
           )}
         </div>
+
         {totalItems && totalPages && totalPages > 1 ? (
           <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10">
             <p className="pw-text-sm pw-font-semibold">

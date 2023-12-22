@@ -1,5 +1,6 @@
 import { CSSProperties, lazy } from 'react';
 
+import _ from 'lodash';
 import { Navigation, Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -18,18 +19,16 @@ import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { isImage, isVideo } from '../../shared/utils/validators';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
-import _ from 'lodash';
-
 export const Banner = ({ data }: { data: BannerData }) => {
-  const { styleData, mobileStyleData } = data;
+  const { styleData, mobileStyleData, id } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -65,6 +64,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
   return (
     <TranslatableComponent>
       <div
+        id={`sf-${id}`}
         className={`${layoutClass} pw-mx-auto`}
         style={{
           margin: convertSpacingToCSS(margin),
@@ -130,12 +130,12 @@ const Slide = ({
     overlayColor,
     backgroundUrl,
     backgroundUrlMobile,
-    title,
+    title: titleRaw,
     padding,
     overlay,
     buttonText,
     actionButton,
-    subtitle,
+    subtitle: subtitleRaw,
     secondaryActionButton,
     secondaryButtonText,
     secondaryButtonLink,
@@ -157,8 +157,18 @@ const Slide = ({
     sideImageHeight,
     sideImageWidth,
     sideImageUrl,
+    baseUrl,
+    titleTextShadow,
+    titleMaxWidth,
+    titleTextAlign,
+    buttonSize,
+    secondaryButtonSize,
+    titleWidth,
+    imageRounded,
   } = data;
   const { isDynamic, datasource } = useDynamicApi();
+  const { text: title } = useDynamicString(titleRaw);
+  const { text: subtitle } = useDynamicString(subtitleRaw);
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -184,6 +194,20 @@ const Slide = ({
       : bgUrlThreath
   }") no-repeat center`;
 
+  const getButtonPadding = (fontSize: string) => {
+    if (fontSize == '12px') {
+      return '8px 20px';
+    } else if (fontSize == '14px') {
+      return '8px 20px';
+    } else if (fontSize == '16px') {
+      return '10px 22px';
+    } else if (fontSize == '18px') {
+      return '12px 22px';
+    } else if (fontSize == '20px') {
+      return '14px 32px';
+    }
+  };
+
   return (
     <a
       href={
@@ -198,7 +222,7 @@ const Slide = ({
           padding: convertSpacingToCSS(padding),
           height: height ? height + 'px' : '60vh',
         }}
-        className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full  `}
+        className={`${ratioClassName} !pw-bg-cover pw-h-full pw-w-full`}
       >
         {isVideo(
           isDynamic
@@ -277,14 +301,25 @@ const Slide = ({
                   <ImageSDK
                     src={
                       isDynamic
-                        ? _.get(
-                            datasource,
-                            sideImageUrl?.assetUrl ?? '',
-                            sideImageUrl?.assetUrl ?? ''
-                          )
+                        ? baseUrl
+                          ? baseUrl +
+                            _.get(
+                              datasource,
+                              sideImageUrl?.assetUrl ?? '',
+                              sideImageUrl?.assetUrl ?? ''
+                            )
+                          : _.get(
+                              datasource,
+                              sideImageUrl?.assetUrl ?? '',
+                              sideImageUrl?.assetUrl ?? ''
+                            )
                         : sideImageUrl?.assetUrl ?? ''
                     }
-                    className={`pw-object-contain pw-h-full pw-w-full`}
+                    className={
+                      imageRounded
+                        ? 'pw-object-cover pw-rounded-full pw-w-[200px] pw-h-[200px] pw-mx-auto pw-mt-[15%]'
+                        : `pw-object-contain pw-h-full pw-w-full`
+                    }
                   />
                 </div>
               </div>
@@ -295,7 +330,9 @@ const Slide = ({
           className={`pw-flex ${rowAlignmentClass} pw-absolute pw-items-center pw-h-full pw-w-full pw-z-10`}
         >
           <div
-            className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-container pw-mx-auto pw-py-8 pw-w-full`}
+            className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-mx-auto pw-py-8 ${
+              titleWidth ?? 'pw-w-full pw-container'
+            }`}
           >
             <h2
               style={{
@@ -323,10 +360,14 @@ const Slide = ({
                         parseInt(titleFontSize) * 0.05
                       ).toFixed(0) + 'px'
                     : 'auto',
+                textShadow: titleTextShadow ?? 'none',
+                maxWidth: titleMaxWidth ?? '550px',
               }}
-              className={`${alignmentTextClass} pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
+              className={`${alignmentTextClass} ${
+                titleTextAlign ?? ''
+              } pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
             >
-              {_.get(datasource, title ?? '', title)}
+              {title}
             </h2>
             <p
               style={{
@@ -354,7 +395,7 @@ const Slide = ({
               }}
               className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
             >
-              {_.get(datasource, subtitle ?? '', subtitle)}
+              {subtitle}
             </p>
 
             <div className="pw-flex pw-gap-4">
@@ -365,8 +406,10 @@ const Slide = ({
                     color: buttonTextColor,
                     borderColor: buttonBorderColor ?? 'transparent',
                     borderWidth: buttonBorderColor ? '2px' : '0',
+                    fontSize: buttonSize ? buttonSize : '12px',
+                    padding: getButtonPadding(buttonSize || '12px'),
                   }}
-                  className=" pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer"
+                  className=" pw-font-bold pw-rounded-[60px] pw-flex pw-items-center pw-justify-center pw-mt-6 pw-cursor-pointer"
                   href={_.get(datasource, buttonLink ?? '', buttonLink)}
                 >
                   {buttonText ?? 'Saiba mais'}
@@ -379,8 +422,12 @@ const Slide = ({
                     color: secondaryButtonTextColor,
                     borderColor: secondaryButtonBorderColor ?? 'transparent',
                     borderWidth: secondaryButtonBorderColor ? '2px' : '0',
+                    fontSize: secondaryButtonSize
+                      ? secondaryButtonSize
+                      : '12px',
+                    padding: getButtonPadding(secondaryButtonSize || '12px'),
                   }}
-                  className="pw-font-bold pw-text-xs pw-rounded-[60px] pw-px-4 pw-py-2 pw-mt-6 pw-cursor-pointer pw-z-20"
+                  className="pw-font-bold pw-flex pw-items-center pw-justify-center pw-rounded-[60px] pw-mt-6 pw-cursor-pointer pw-z-20"
                   href={_.get(
                     datasource,
                     secondaryButtonLink ?? '',

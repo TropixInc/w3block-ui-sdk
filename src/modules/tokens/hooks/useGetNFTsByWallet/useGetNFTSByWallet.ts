@@ -1,7 +1,7 @@
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
-import { usePaginatedPrivateQuery } from '../../../shared/hooks/usePaginatedPrivateQuery';
+import { usePaginatedQuery } from '../../../shared/hooks/usePaginatedQuery';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 
 interface Media {
@@ -56,7 +56,7 @@ export const useGetNFTSByWallet = (chainId: number | undefined) => {
 
   const address = profile?.data?.mainWallet?.address;
 
-  return usePaginatedPrivateQuery<NFTByWalletDTO>(
+  return usePaginatedQuery<NFTByWalletDTO>(
     [PixwayAPIRoutes.NFTS_BY_WALLET, address as string, chainId!],
     () => {
       return axios.get(
