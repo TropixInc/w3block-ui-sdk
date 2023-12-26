@@ -87,6 +87,10 @@ export const CheckoutPayment = () => {
   const [stripeKey, setStripeKey] = useState('');
   const iframeRef = useRef(null);
   const router = useRouterConnect();
+  const isCoinPayment =
+    router?.query?.coinPayment && router?.query?.coinPayment.includes('true')
+      ? true
+      : false;
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
   const [requestError, setRequestError] = useState<string>();
@@ -192,9 +196,17 @@ export const CheckoutPayment = () => {
             const payload = {
               productId: p.productId,
               variantIds: p.variantIds,
+              quantity: p.quantity,
             };
             return payload;
           }),
+          payments: [
+            {
+              currencyId: productCache.currencyId,
+              amountType: 'percentage',
+              amount: 100,
+            },
+          ],
           currencyId: productCache.currencyId,
           companyId,
           couponCode: productCache.couponCode,
@@ -226,7 +238,7 @@ export const CheckoutPayment = () => {
 
   const isFree = useMemo(() => {
     if (orderResponse !== undefined)
-      return parseFloat(orderResponse.totalAmount) === 0;
+      return parseFloat(orderResponse?.totalAmount[0]?.amount) === 0;
     else return parseFloat(productCache?.totalPrice ?? '') === 0;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderResponse]);
@@ -264,14 +276,33 @@ export const CheckoutPayment = () => {
                     ),
                 }
               : undefined,
-            destinationWalletAddress:
-              profile.data?.data.mainWallet?.address ?? '',
+            destinationWalletAddress: router.query.destinationWalletAddress
+              ? (router.query.destinationWalletAddress as string)
+              : profile.data?.data.mainWallet?.address ?? '',
             successUrl:
               appBaseUrl +
               PixwayAppRoutes.MY_TOKENS +
               '?' +
               query.split('?')[0],
             couponCode: orderInfo.couponCode,
+            payments: [
+              {
+                currencyId: orderInfo.currencyId,
+                paymentMethod: orderInfo.choosedPayment?.paymentMethod,
+                paymentProvider: orderInfo.choosedPayment?.paymentProvider,
+                providerInputs: orderInfo.choosedPayment?.inputs
+                  ? {
+                      ...inputs,
+                      transparent_checkout:
+                        orderInfo.choosedPayment?.inputs?.includes(
+                          'transparent_checkout'
+                        ),
+                    }
+                  : undefined,
+                amountType: 'percentage',
+                amount: 100,
+              },
+            ],
           },
         },
         {
@@ -526,6 +557,7 @@ export const CheckoutPayment = () => {
         <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-6 pw-px-4 sm:pw-px-0">
           <div className="pw-order-1 sm:pw-order-2 pw-w-full sm:pw-w-[40%]">
             <CheckouResume
+              isCoinPayment={isCoinPayment}
               price={
                 orderResponse !== undefined
                   ? orderResponse.currencyAmount
@@ -549,7 +581,7 @@ export const CheckoutPayment = () => {
               }
               totalPrice={
                 orderResponse !== undefined
-                  ? orderResponse.totalAmount
+                  ? orderResponse.totalAmount[0]?.amount
                   : myOrderPreview?.totalPrice ?? '0'
               }
               loading={loading}

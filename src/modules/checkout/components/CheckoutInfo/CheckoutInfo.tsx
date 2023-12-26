@@ -3,38 +3,14 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
+import { QRCodeSVG } from 'qrcode.react';
+
+import { useProfile } from '../../../shared';
 import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
-const ModalBase = lazy(() =>
-  import('../../../shared/components/ModalBase').then((m) => ({
-    default: m.ModalBase,
-  }))
-);
-const PixwayButton = lazy(() =>
-  import('../../../shared/components/PixwayButton').then((m) => ({
-    default: m.PixwayButton,
-  }))
-);
-const PriceAndGasInfo = lazy(() =>
-  import('../../../shared/components/PriceAndGasInfo').then((m) => ({
-    default: m.PriceAndGasInfo,
-  }))
-);
-const ProductInfo = lazy(() =>
-  import('../../../shared/components/ProductInfo').then((m) => ({
-    default: m.ProductInfo,
-  }))
-);
-
+import { Alert } from '../../../shared/components/Alert';
+import { Shimmer } from '../../../shared/components/Shimmer';
+import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-
-const WeblockButton = lazy(() =>
-  import('../../../shared/components/WeblockButton/WeblockButton').then(
-    (m) => ({
-      default: m.WeblockButton,
-    })
-  )
-);
-
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -44,7 +20,9 @@ import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { Product } from '../../../shared/interface/Product';
+import { Selector } from '../../../storefront/components/Selector';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import {
   ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
@@ -59,6 +37,39 @@ import {
   PaymentMethodsAvaiable,
   ProductErrorInterface,
 } from '../../interface/interface';
+
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({
+      default: m.WeblockButton,
+    })
+  )
+);
+
+const ModalBase = lazy(() =>
+  import('../../../shared/components/ModalBase').then((m) => ({
+    default: m.ModalBase,
+  }))
+);
+
+const PixwayButton = lazy(() =>
+  import('../../../shared/components/PixwayButton').then((m) => ({
+    default: m.PixwayButton,
+  }))
+);
+
+const PriceAndGasInfo = lazy(() =>
+  import('../../../shared/components/PriceAndGasInfo').then((m) => ({
+    default: m.PriceAndGasInfo,
+  }))
+);
+
+const ProductInfo = lazy(() =>
+  import('../../../shared/components/ProductInfo').then((m) => ({
+    default: m.ProductInfo,
+  }))
+);
+
 const ConfirmCryptoBuy = lazy(() =>
   import('../ConfirmCryptoBuy/ConfirmCryptoBuy').then((m) => ({
     default: m.ConfirmCryptoBuy,
@@ -102,10 +113,12 @@ const _CheckoutInfo = ({
   currencyId,
   isCart = false,
 }: CheckoutInfoProps) => {
+  const { datasource } = useDynamicApi();
   const router = useRouterConnect();
+  const profile = useProfile();
   const { isOpen, openModal, closeModal } = useModalController();
   const [requestError, setRequestError] = useState(false);
-  const { getOrderPreview } = useCheckout();
+  const { getOrderPreview, getStatus } = useCheckout();
   const [translate] = useTranslation();
   const { setCart, cart } = useCart();
   const [productErros, setProductErros] = useState<ProductErrorInterface[]>([]);
@@ -118,6 +131,11 @@ const _CheckoutInfo = ({
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   const [productVariants] = useLocalStorage<any>(PRODUCT_VARIANTS_INFO_KEY);
   const query = useQuery();
+  const params = new URLSearchParams(query);
+  const isCoinPayment = params.get('coinPayment')?.includes('true')
+    ? true
+    : false;
+  const destinationWalletAddress = params.get('destinationWalletAddress');
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
     currencyId
@@ -153,7 +171,7 @@ const _CheckoutInfo = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview?.appliedCoupon, utms?.expires, utms.utm_campaign]);
-
+  const [paymentAmount, setPaymentAmount] = useState('');
   const { data: session } = usePixwaySession();
 
   const token = session ? (session.accessToken as string) : null;
@@ -186,6 +204,7 @@ const _CheckoutInfo = ({
       setCurrencyIdState(preview?.currencyId);
       if (preview && preview.products.length > 0) {
         setOrderPreview({
+          ...orderPreview,
           products: [...preview.products],
           totalPrice: preview.totalPrice,
           clientServiceFee: preview.clientServiceFee,
@@ -243,6 +262,7 @@ const _CheckoutInfo = ({
               })
             : productIds.map((p) => {
                 const payload = {
+                  quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                   productId: p,
                   variantIds: productVariants
                     ? Object.values(productVariants).map((value) => {
@@ -253,6 +273,13 @@ const _CheckoutInfo = ({
                 };
                 return payload;
               }),
+          payments: [
+            {
+              currencyId: currencyIdState,
+              amountType: 'percentage',
+              amount: 100,
+            },
+          ],
           currencyId: currencyIdState,
           companyId,
           couponCode: coupon(),
@@ -324,6 +351,9 @@ const _CheckoutInfo = ({
     getOrderPreviewFn(couponCodeInput);
   }, 30000);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getOrderPreviewFn(), [paymentAmount]);
+
   const isLoading = orderPreview == null;
 
   const beforeProcced = () => {
@@ -340,6 +370,7 @@ const _CheckoutInfo = ({
           })
         : orderPreview.products?.map((pID) => {
             return {
+              quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
               productId: pID.id,
               expectedPrice:
                 pID.prices.find((price) => price.currencyId == currencyIdState)
@@ -370,6 +401,15 @@ const _CheckoutInfo = ({
         originalCartPrice: orderPreview?.originalCartPrice ?? '',
         originalClientServiceFee: orderPreview?.originalClientServiceFee ?? '',
         originalTotalPrice: orderPreview?.originalTotalPrice ?? '',
+        destinationUser: {
+          walletAddress: destinationWalletAddress ?? '',
+          name: datasource?.master?.data.filter(
+            (e: { attributes: { walletAddress: string | null } }) =>
+              e.attributes.walletAddress === destinationWalletAddress
+          )[0]?.attributes?.name,
+        },
+        isCoinPayment,
+        cashback: orderPreview.cashback?.cashbackAmount,
       });
     }
     if (proccedAction) {
@@ -735,41 +775,125 @@ const _CheckoutInfo = ({
     getOrderPreviewFn(val.value);
   };
 
+  const [poolStatus, setPoolStatus] = useState(true);
+  const [countdown, setCountdown] = useState(true);
+  const orderId = orderResponse?.id ?? '';
+  const [statusResponse, setStatusResponse] = useState<CreateOrderResponse>();
+  const [codeQr, setCodeQr] = useState('');
+  useEffect(() => {
+    if (poolStatus && orderId !== '') {
+      validatePixStatus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolStatus]);
+
+  const validatePixStatus = async () => {
+    if (poolStatus && orderId) {
+      const interval = setInterval(() => {
+        getStatus.mutate(
+          { companyId, orderId },
+          {
+            onSuccess: (data: CreateOrderResponse) => {
+              if (data.status === 'pending' && countdown) {
+                setCountdown(false);
+              } else if (
+                data.status == 'concluded' ||
+                data.status == 'delivering'
+              ) {
+                clearInterval(interval);
+                setPoolStatus(false);
+                setStatusResponse(data);
+                setCodeQr(data.deliverId);
+              }
+            },
+          }
+        );
+      }, 3000);
+    }
+  };
+
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
         return (
           <>
-            <PriceAndGasInfo
-              name={
-                orderPreview?.products && orderPreview?.products.length
-                  ? orderPreview?.products[0]?.prices.find(
-                      (price) => price.currency.id == currencyIdState
-                    )?.currency.name
-                  : 'BRL'
-              }
-              currency={
-                orderPreview?.products && orderPreview?.products.length
-                  ? orderPreview?.products[0]?.prices.find(
-                      (price) => price.currency.id == currencyIdState
-                    )?.currency.symbol
-                  : 'R$'
-              }
-              totalPrice={orderPreview?.totalPrice || '0'}
-              service={orderPreview?.clientServiceFee || '0'}
-              loading={isLoading || isLoadingPreview}
-              className="pw-mt-4"
-              price={
-                parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
-              }
-              gasFee={
-                parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
-                '0'
-              }
-              originalPrice={orderPreview?.originalCartPrice ?? ''}
-              originalService={orderPreview?.originalClientServiceFee ?? ''}
-              originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
-            />
+            {!isCoinPayment && (
+              <PriceAndGasInfo
+                name={
+                  orderPreview?.products && orderPreview?.products.length
+                    ? orderPreview?.products[0]?.prices.find(
+                        (price) => price.currency.id == currencyIdState
+                      )?.currency.name
+                    : 'BRL'
+                }
+                currency={
+                  orderPreview?.products && orderPreview?.products.length
+                    ? orderPreview?.products[0]?.prices.find(
+                        (price) => price.currency.id == currencyIdState
+                      )?.currency.symbol
+                    : 'R$'
+                }
+                totalPrice={orderPreview?.totalPrice || '0'}
+                service={orderPreview?.clientServiceFee || '0'}
+                loading={isLoading || isLoadingPreview}
+                className="pw-mt-4"
+                price={
+                  parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
+                }
+                gasFee={
+                  parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
+                  '0'
+                }
+                originalPrice={orderPreview?.originalCartPrice ?? ''}
+                originalService={orderPreview?.originalClientServiceFee ?? ''}
+                originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
+              />
+            )}
+            {isCoinPayment && (
+              <>
+                {datasource?.master?.data && (
+                  <Selector
+                    data={datasource.master.data}
+                    title="Restaurante"
+                    initialValue={
+                      datasource?.master?.data.filter(
+                        (e: { attributes: { walletAddress: string | null } }) =>
+                          e.attributes.walletAddress ===
+                          destinationWalletAddress
+                      )[0]?.attributes?.name
+                    }
+                    onClick={(e) =>
+                      router.pushConnect(
+                        `/checkout/confirmation?productIds=36a3eec4-05e1-437d-a2b6-8b830ec84326&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&coinPayment=true&destinationWalletAddress=${e}`
+                      )
+                    }
+                  />
+                )}
+                <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
+                  Valor do Pagamento
+                </p>
+                <div className="pw-mb-8">
+                  <div className="pw-flex pw-gap-3">
+                    <input
+                      name="paymentValue"
+                      id="paymentValue"
+                      type="number"
+                      placeholder="R$"
+                      onChange={() =>
+                        setPaymentAmount(
+                          (
+                            document.getElementById(
+                              'paymentValue'
+                            ) as HTMLInputElement
+                          ).value
+                        )
+                      }
+                      className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
               Cupom
             </p>
@@ -813,6 +937,58 @@ const _CheckoutInfo = ({
                 onSelectedPayemnt={setChoosedPayment}
               />
             )}
+            {isCoinPayment && (
+              <>
+                <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C] pw-mt-[40px]">
+                  Resumo da compra
+                </p>
+                <PriceAndGasInfo
+                  name={
+                    orderPreview?.products && orderPreview?.products.length
+                      ? orderPreview?.products[0]?.prices.find(
+                          (price) => price.currency.id == currencyIdState
+                        )?.currency.name
+                      : 'BRL'
+                  }
+                  currency={
+                    orderPreview?.products && orderPreview?.products.length
+                      ? orderPreview?.products[0]?.prices.find(
+                          (price) => price.currency.id == currencyIdState
+                        )?.currency.symbol
+                      : 'R$'
+                  }
+                  totalPrice={orderPreview?.totalPrice || '0'}
+                  service={orderPreview?.clientServiceFee || '0'}
+                  loading={isLoading || isLoadingPreview}
+                  className="pw-mt-4"
+                  price={
+                    parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
+                  }
+                  gasFee={
+                    parseFloat(
+                      orderPreview?.gasFee?.amount || '0'
+                    ).toString() || '0'
+                  }
+                  originalPrice={orderPreview?.originalCartPrice ?? ''}
+                  originalService={orderPreview?.originalClientServiceFee ?? ''}
+                  originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
+                />
+                <Alert
+                  variant="success"
+                  className="!pw-text-black !pw-font-normal pw-mt-4"
+                >
+                  Voce irá ganhar{' '}
+                  <b className="pw-mx-[4px]">
+                    {isLoading || isLoadingPreview ? (
+                      <Shimmer />
+                    ) : (
+                      'R$' + orderPreview?.cashback?.cashbackAmount
+                    )}
+                  </b>{' '}
+                  em Food Coins.
+                </Alert>
+              </>
+            )}
             <div className="pw-flex pw-mt-4 pw-gap-x-4">
               <PixwayButton
                 onClick={
@@ -841,51 +1017,115 @@ const _CheckoutInfo = ({
       case CheckoutStatus.FINISHED:
         return (
           <div className="pw-mt-4">
-            <p className="pw-text-xs pw-text-[#353945] ">
-              {translate(
-                'checkout>components>checkoutInfo>infoAboutProcessing'
-              )}
-            </p>
-            <PriceAndGasInfo
-              name={
-                productCache?.products && productCache?.products.length
-                  ? productCache?.products[0].prices.find(
-                      (price) =>
-                        price.currencyId == (router.query.currencyId as string)
-                    )?.currency.name
-                  : 'BRL'
-              }
-              currency={
-                productCache?.products && productCache?.products.length
-                  ? productCache?.products[0].prices.find(
-                      (price) =>
-                        price.currencyId == (router.query.currencyId as string)
-                    )?.currency.symbol
-                  : 'R$'
-              }
-              totalPrice={orderPreview?.totalPrice || '0'}
-              service={orderPreview?.clientServiceFee || '0'}
-              loading={isLoading}
-              className="pw-mt-4"
-              price={
-                parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
-              }
-              gasFee={
-                parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
-                '0'
-              }
-              originalPrice={
-                orderResponse !== undefined
-                  ? orderResponse.originalCurrencyAmount
-                  : orderPreview?.originalCartPrice ?? ''
-              }
-              originalService={orderPreview?.originalClientServiceFee ?? ''}
-              originalTotalPrice={
-                orderResponse !== undefined
-                  ? orderResponse.originalTotalAmount
-                  : orderPreview?.originalTotalPrice ?? ''
-              }
-            />
+            {productCache?.isCoinPayment ? (
+              <>
+                <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
+                  Pagamento realizado com sucesso!
+                </p>
+                <p className="pw-text-sm pw-font-normal pw-text-center sm:pw-text-left pw-text-black">
+                  Apresente esse QR CODE ao estabelecimento para comprovar seu
+                  pagamento.
+                </p>
+                <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center sm:pw-text-left pw-mt-5">
+                  <div>
+                    {statusResponse?.deliverId ? (
+                      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
+                        <QRCodeSVG value={String(codeQr)} size={150} />
+                        <p className="pw-text-[32px] pw-font-semibold">
+                          {statusResponse?.deliverId ?? ''}
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
+                          Aguardando confirmação do pagamento
+                        </p>
+                        <div className="pw-mt-5">
+                          <Spinner className="pw-mx-auto" />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className="pw-mt-5">
+                    <p className="pw-text-xs pw-font-normal">
+                      Nome do restaurante
+                    </p>
+                    <p className="pw-text-xs pw-font-semibold">
+                      {productCache?.destinationUser?.name}
+                    </p>
+                  </div>
+                  <div className="pw-mt-5">
+                    <p className="pw-text-xs pw-font-normal">Nome do usuário</p>
+                    <p className="pw-text-xs pw-font-semibold">
+                      {profile?.data?.data?.name}
+                    </p>
+                  </div>
+                  <div className="pw-mt-5">
+                    <p className="pw-text-xs pw-font-normal">Valor pago</p>
+                    <p className="pw-text-xs pw-font-semibold">
+                      R${orderResponse?.totalAmount[0]?.amount}
+                    </p>
+                  </div>
+                  <div className="pw-mt-5">
+                    <p className="pw-text-xs pw-font-normal">Cashback ganho</p>
+                    <p className="pw-text-xs pw-font-semibold">
+                      R${productCache?.cashback}
+                    </p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="pw-text-xs pw-text-[#353945] ">
+                  {translate(
+                    'checkout>components>checkoutInfo>infoAboutProcessing'
+                  )}
+                </p>
+                <PriceAndGasInfo
+                  name={
+                    productCache?.products && productCache?.products.length
+                      ? productCache?.products[0].prices.find(
+                          (price) =>
+                            price.currencyId ==
+                            (router.query.currencyId as string)
+                        )?.currency.name
+                      : 'BRL'
+                  }
+                  currency={
+                    productCache?.products && productCache?.products.length
+                      ? productCache?.products[0].prices.find(
+                          (price) =>
+                            price.currencyId ==
+                            (router.query.currencyId as string)
+                        )?.currency.symbol
+                      : 'R$'
+                  }
+                  totalPrice={orderPreview?.totalPrice || '0'}
+                  service={orderPreview?.clientServiceFee || '0'}
+                  loading={isLoading}
+                  className="pw-mt-4"
+                  price={
+                    parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
+                  }
+                  gasFee={
+                    parseFloat(
+                      orderPreview?.gasFee?.amount || '0'
+                    ).toString() || '0'
+                  }
+                  originalPrice={
+                    orderResponse !== undefined
+                      ? orderResponse.originalCurrencyAmount
+                      : orderPreview?.originalCartPrice ?? ''
+                  }
+                  originalService={orderPreview?.originalClientServiceFee ?? ''}
+                  originalTotalPrice={
+                    orderResponse !== undefined
+                      ? orderResponse.originalTotalAmount
+                      : orderPreview?.originalTotalPrice ?? ''
+                  }
+                />
+              </>
+            )}
             <PixwayButton
               onClick={
                 returnAction
@@ -902,7 +1142,14 @@ const _CheckoutInfo = ({
         );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderPreview, choosedPayment, currencyIdState, isLoadingPreview]);
+  }, [
+    orderPreview,
+    choosedPayment,
+    currencyIdState,
+    isLoadingPreview,
+    codeQr,
+    statusResponse?.deliverId,
+  ]);
 
   const anchorCurrencyId = useMemo(() => {
     return orderPreview?.products && orderPreview.products.length
@@ -931,88 +1178,95 @@ const _CheckoutInfo = ({
     <>
       <div className="pw-flex pw-flex-col sm:pw-flex-row">
         <div className="pw-w-full lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
-          <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
-            Resumo da compra
-          </p>
-          {checkoutStatus == CheckoutStatus.FINISHED && (
-            <p className="pw-font-[700] pw-text-[#295BA6] pw-text-2xl pw-mb-6 pw-mt-2">
-              {translate(
-                'checkout>components>checkoutInfo>proccessingBlockchain'
+          {isCoinPayment || productCache?.isCoinPayment ? null : (
+            <>
+              <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
+                Resumo da compra
+              </p>
+
+              {checkoutStatus == CheckoutStatus.FINISHED && (
+                <p className="pw-font-[700] pw-text-[#295BA6] pw-text-2xl pw-mb-6 pw-mt-2">
+                  {translate(
+                    'checkout>components>checkoutInfo>proccessingBlockchain'
+                  )}
+                </p>
               )}
-            </p>
+            </>
           )}
-          <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
-            {differentProducts.map((prod, index) => (
-              <ProductInfo
-                index={index}
-                loadingPreview={isLoadingPreview}
-                isCart={isCart}
-                className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
-                currency={
-                  prod.prices.find(
-                    (prodI) => prodI.currencyId == currencyIdState
-                  )?.currency.symbol
-                }
-                quantity={
-                  orderPreview?.products.filter(
-                    (p) =>
-                      p.id == prod.id &&
-                      prod.prices.find(
-                        (price) => price.currencyId == currencyIdState
-                      )?.amount ==
-                        p.prices.find(
-                          (price) => price.currencyId == currencyIdState
-                        )?.amount &&
-                      p.variants
-                        ?.map((res) => {
-                          return res.values.map((res) => {
-                            return res.id;
-                          });
-                        })
-                        .toString() ==
-                        prod.variants
+          {isCoinPayment || productCache?.isCoinPayment ? null : (
+            <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
+              {differentProducts.map((prod, index) => (
+                <ProductInfo
+                  index={index}
+                  loadingPreview={isLoadingPreview}
+                  isCart={isCart}
+                  className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
+                  currency={
+                    prod?.prices?.find(
+                      (prodI) => prodI?.currencyId == currencyIdState
+                    )?.currency?.symbol
+                  }
+                  quantity={
+                    orderPreview?.products?.filter(
+                      (p) =>
+                        p?.id == prod?.id &&
+                        prod?.prices?.find(
+                          (price) => price?.currencyId == currencyIdState
+                        )?.amount ==
+                          p?.prices?.find(
+                            (price) => price?.currencyId == currencyIdState
+                          )?.amount &&
+                        p?.variants
                           ?.map((res) => {
-                            return res.values.map((res) => {
-                              return res.id;
+                            return res?.values?.map((res) => {
+                              return res?.id;
                             });
                           })
-                          .toString()
-                  ).length ?? 1
-                }
-                stockAmount={prod.stockAmount}
-                canPurchaseAmount={prod.canPurchaseAmount}
-                changeQuantity={changeQuantity}
-                loading={isLoading}
-                status={checkoutStatus}
-                deleteProduct={(id, variants) =>
-                  deleteProduct(
-                    id,
-                    prod.prices.find(
-                      (price) => price.currencyId == currencyIdState
-                    )?.amount ?? '0',
-                    variants
-                  )
-                }
-                id={prod.id}
-                key={index}
-                image={prod.images[0].thumb}
-                name={prod.name}
-                price={parseFloat(
-                  prod.prices.find(
-                    (price) => price.currencyId == currencyIdState
-                  )?.amount ?? '0'
-                ).toString()}
-                originalPrice={parseFloat(
-                  prod.prices.find(
-                    (price) => price.currencyId == currencyIdState
-                  )?.originalAmount ?? '0'
-                ).toString()}
-                variants={prod.variants}
-              />
-            ))}
-          </div>
+                          .toString() ==
+                          prod?.variants
+                            ?.map((res) => {
+                              return res?.values?.map((res) => {
+                                return res?.id;
+                              });
+                            })
+                            .toString()
+                    ).length ?? 1
+                  }
+                  stockAmount={prod?.stockAmount}
+                  canPurchaseAmount={prod?.canPurchaseAmount}
+                  changeQuantity={changeQuantity}
+                  loading={isLoading}
+                  status={checkoutStatus}
+                  deleteProduct={(id, variants) =>
+                    deleteProduct(
+                      id,
+                      prod?.prices?.find(
+                        (price) => price?.currencyId == currencyIdState
+                      )?.amount ?? '0',
+                      variants
+                    )
+                  }
+                  id={prod?.id}
+                  key={index}
+                  image={prod?.images[0]?.thumb}
+                  name={prod?.name}
+                  price={parseFloat(
+                    prod?.prices?.find(
+                      (price) => price?.currencyId == currencyIdState
+                    )?.amount ?? '0'
+                  ).toString()}
+                  originalPrice={parseFloat(
+                    prod?.prices?.find(
+                      (price) => price?.currencyId == currencyIdState
+                    )?.originalAmount ?? '0'
+                  ).toString()}
+                  variants={prod?.variants}
+                />
+              ))}
+            </div>
+          )}
           <div>
-            {productErros.length > 0 && (
+            {productErros.length > 0 && !isCoinPayment && (
               <ProductError
                 className="pw-mt-4"
                 productsErrors={productErros.reduce(
@@ -1039,25 +1293,25 @@ const _CheckoutInfo = ({
                   {
                     orderPreview?.products
                       .find((prod) =>
-                        prod.prices.find(
-                          (price) => price.currencyId == currencyIdState
+                        prod?.prices?.find(
+                          (price) => price?.currencyId == currencyIdState
                         )
                       )
-                      ?.prices.find(
-                        (price) => price.currencyId == currencyIdState
-                      )?.currency.symbol
+                      ?.prices?.find(
+                        (price) => price?.currencyId == currencyIdState
+                      )?.currency?.symbol
                   }{' '}
                   pode variar de acordo com a cotação desta moeda em{' '}
                   {
                     orderPreview?.products
                       .find((prod) =>
-                        prod.prices.some(
-                          (price) => price.currencyId == anchorCurrencyId
+                        prod?.prices?.some(
+                          (price) => price?.currencyId == anchorCurrencyId
                         )
                       )
-                      ?.prices.find(
-                        (price) => price.currencyId == anchorCurrencyId
-                      )?.currency.symbol
+                      ?.prices?.find(
+                        (price) => price?.currencyId == anchorCurrencyId
+                      )?.currency?.symbol
                   }
                   .
                 </p>

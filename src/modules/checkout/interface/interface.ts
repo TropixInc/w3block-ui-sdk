@@ -17,6 +17,11 @@ export interface OrderPreviewResponse {
   originalClientServiceFee?: string;
   originalTotalPrice?: string;
   variants?: Variants[];
+  cashback?: {
+    amount?: string;
+    cashbackAmount?: string;
+    currencyId?: string;
+  };
 }
 
 export interface ProductErrorInterface {
@@ -88,12 +93,19 @@ export interface OrderPreviewCache {
   originalCartPrice?: string;
   originalClientServiceFee?: string;
   originalTotalPrice?: string;
+  destinationUser?: {
+    walletAddress: string;
+    name: string;
+  };
+  isCoinPayment?: boolean;
+  cashback?: string;
 }
 
 export interface OrderProductsInterface {
   expectedPrice: string;
   productId: string;
   variantIds?: string[];
+  quantity?: number;
 }
 
 export interface CreateOrder {
@@ -107,6 +119,14 @@ export interface CreateOrder {
   providerInputs?: unknown;
   utmParams?: UtmContextInterface;
   couponCode?: string;
+  payments?: {
+    currencyId: string;
+    paymentMethod?: string;
+    paymentProvider?: string;
+    providerInputs?: unknown;
+    amountType?: string;
+    amount?: number;
+  }[];
 }
 
 export interface CreateOrderProduct {
@@ -135,9 +155,13 @@ export interface CreateOrderResponse {
   status: OrderStatus;
   updatedAt: string;
   userId: string;
-  totalAmount: string;
+  totalAmount: {
+    amount: string;
+    currencyId: string;
+  }[];
   originalCurrencyAmount?: string;
   originalTotalAmount?: string;
+  deliverId: string;
 }
 
 export interface PaymentInfoInterface {

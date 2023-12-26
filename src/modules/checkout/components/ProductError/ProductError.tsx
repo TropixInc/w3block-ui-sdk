@@ -26,12 +26,12 @@ export const ProductError = ({
       case 'purchase-limit':
         return {
           title: `Limite de compra excedido`,
-          message: `O item ${error.product?.name} possui limite de compra de ${error.error.limit} unidades por CPF/CNPJ.`,
+          message: `O item ${error?.product?.name} possui limite de compra de ${error?.error?.limit} unidades por CPF/CNPJ.`,
         };
       default:
         return {
-          title: `Erro ao processar o item ${error.product?.name}`,
-          message: `Ocorreu um erro ao processar o item ${error.product?.name}. Por favor, tente novamente mais tarde.`,
+          title: `Erro ao processar o item ${error?.product?.name}`,
+          message: `Ocorreu um erro ao processar o item ${error?.product?.name}. Por favor, tente novamente mais tarde.`,
         };
     }
   };
@@ -46,14 +46,14 @@ export const ProductError = ({
             }`}
           >
             <ImageSDK
-              src={error.product.images[0].thumb}
+              src={error?.product?.images[0]?.thumb}
               className="pw-w-[48px] pw-h-[48px] pw-rounded-lg pw-object-cover"
               width={500}
               quality="good"
             />
             <div className="">
               <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate">
-                {error.product.name}
+                {error?.product?.name}
               </p>
               <p className="pw-text-xs pw-text-red-600 pw-font-[700]">
                 {getErrorMessage(error).title}
