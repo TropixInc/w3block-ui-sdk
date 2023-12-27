@@ -1063,7 +1063,7 @@ const _CheckoutInfo = ({
                   <div className="pw-mt-5">
                     <p className="pw-text-xs pw-font-normal">Valor pago</p>
                     <p className="pw-text-xs pw-font-semibold">
-                      R${orderResponse?.totalAmount[0]?.amount}
+                      R${orderResponse?.totalAmount}
                     </p>
                   </div>
                   <div className="pw-mt-5">

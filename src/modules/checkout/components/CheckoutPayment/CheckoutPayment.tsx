@@ -238,7 +238,7 @@ export const CheckoutPayment = () => {
 
   const isFree = useMemo(() => {
     if (orderResponse !== undefined)
-      return parseFloat(orderResponse?.totalAmount[0]?.amount) === 0;
+      return parseFloat(orderResponse?.totalAmount) === 0;
     else return parseFloat(productCache?.totalPrice ?? '') === 0;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderResponse]);
@@ -558,6 +558,7 @@ export const CheckoutPayment = () => {
           <div className="pw-order-1 sm:pw-order-2 pw-w-full sm:pw-w-[40%]">
             <CheckouResume
               isCoinPayment={isCoinPayment}
+              destinationUser={productCache?.destinationUser?.name}
               price={
                 orderResponse !== undefined
                   ? orderResponse.currencyAmount
@@ -581,7 +582,7 @@ export const CheckoutPayment = () => {
               }
               totalPrice={
                 orderResponse !== undefined
-                  ? orderResponse.totalAmount[0]?.amount
+                  ? orderResponse.totalAmount
                   : myOrderPreview?.totalPrice ?? '0'
               }
               loading={loading}

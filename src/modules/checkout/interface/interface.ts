@@ -155,10 +155,7 @@ export interface CreateOrderResponse {
   status: OrderStatus;
   updatedAt: string;
   userId: string;
-  totalAmount: {
-    amount: string;
-    currencyId: string;
-  }[];
+  totalAmount: string;
   originalCurrencyAmount?: string;
   originalTotalAmount?: string;
   deliverId: string;

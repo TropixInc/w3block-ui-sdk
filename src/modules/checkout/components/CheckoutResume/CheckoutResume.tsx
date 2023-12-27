@@ -25,6 +25,7 @@ interface CheckoutResumeProps {
   originalService?: string;
   originalTotalPrice?: string;
   isCoinPayment?: boolean;
+  destinationUser?: string;
 }
 
 export const CheckouResume = ({
@@ -39,10 +40,11 @@ export const CheckouResume = ({
   originalService,
   originalTotalPrice,
   isCoinPayment,
+  destinationUser,
 }: CheckoutResumeProps) => {
   return (
     <div>
-      {!isCoinPayment &&
+      {!isCoinPayment ? (
         products.map((product: Product) => (
           <ProductInfo
             className="pw-bg-white pw-rounded-lg pw-border pw-border-slate-200"
@@ -65,9 +67,19 @@ export const CheckouResume = ({
             }
             variants={product.variants}
           />
-        ))}
+        ))
+      ) : (
+        <div className="pw-flex pw-justify-between pw-px-4">
+          <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
+            Destinatário
+          </p>
+          <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
+            {destinationUser}
+          </p>
+        </div>
+      )}
       <PriceAndGasInfo
-        className="pw-px-4 pw-mt-4"
+        className={`pw-px-4 ${isCoinPayment ? 'pw-mt-2' : 'pw-mt-4'}`}
         price={price}
         gasFee={gasFee}
         service={service}
