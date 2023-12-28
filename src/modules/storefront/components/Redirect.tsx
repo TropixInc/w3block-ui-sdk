@@ -16,7 +16,7 @@ const _Redirect = () => {
   useEffect(() => {
     if (datasource) {
       router.pushConnect(
-        `/praticante/${datasource?.athlete?.data[0]?.attributes.slug}`
+        `${router.basePath}/praticante/${datasource?.athlete?.data[0]?.attributes.slug}`
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
