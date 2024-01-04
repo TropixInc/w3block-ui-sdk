@@ -1,26 +1,20 @@
-import { lazy, useEffect } from 'react';
+import { useDebounce } from 'react-use';
 
 import { useRouterConnect } from '../../shared';
+import { Spinner } from '../../shared/components/Spinner';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
-
-const Spinner = lazy(() =>
-  import('../../shared/components/Spinner').then((module) => ({
-    default: module.Spinner,
-  }))
-);
 
 const _Redirect = () => {
   const router = useRouterConnect();
   const { datasource } = useDynamicApi();
-  useEffect(() => {
+  useDebounce(() => {
     if (datasource) {
-      router.pushConnect(
+      router.push(
         `${router.basePath}/praticante/${datasource?.athlete?.data[0]?.attributes.slug}`
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [datasource]);
+  }, 6000);
   return (
     <div className="pw-h-[80vh] pw-flex pw-flex-col pw-justify-center pw-items-center">
       <>
