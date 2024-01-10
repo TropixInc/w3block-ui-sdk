@@ -7,7 +7,12 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useCopyToClipboard, useInterval, useLocalStorage } from 'react-use';
+import {
+  useCopyToClipboard,
+  useDebounce,
+  useInterval,
+  useLocalStorage,
+} from 'react-use';
 
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -204,7 +209,7 @@ export const CheckoutPayment = () => {
             {
               currencyId: productCache.currencyId,
               amountType: 'percentage',
-              amount: 100,
+              amount: '100',
             },
           ],
           currencyId: productCache.currencyId,
@@ -236,10 +241,28 @@ export const CheckoutPayment = () => {
     }
   }, 20000);
 
+  useDebounce(() => {
+    if (
+      isFree &&
+      orderResponse == undefined &&
+      isCoinPayment &&
+      productCache?.totalPrice === ''
+    ) {
+      createOrder({});
+    }
+  }, 4000);
+
   const isFree = useMemo(() => {
-    if (orderResponse !== undefined)
-      return parseFloat(orderResponse?.totalAmount) === 0;
-    else return parseFloat(productCache?.totalPrice ?? '') === 0;
+    // if (orderResponse !== undefined)
+    // return parseFloat(orderResponse?.totalAmount as string) === 0;
+    // else
+    return (
+      parseFloat(
+        productCache?.payments?.filter(
+          (e) => e.currencyId === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+        )[0]?.totalPrice ?? ''
+      ) === 0
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderResponse]);
 
@@ -258,7 +281,9 @@ export const CheckoutPayment = () => {
       ) {
         inputs[INPUTS_POSSIBLE.installments] = installment?.amount ?? 1;
       }
-
+      const coinPayment = orderInfo?.payments?.filter(
+        (e) => e.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+      );
       createOrderHook.mutate(
         {
           companyId,
@@ -285,24 +310,68 @@ export const CheckoutPayment = () => {
               '?' +
               query.split('?')[0],
             couponCode: orderInfo.couponCode,
-            payments: [
-              {
-                currencyId: orderInfo.currencyId,
-                paymentMethod: orderInfo.choosedPayment?.paymentMethod,
-                paymentProvider: orderInfo.choosedPayment?.paymentProvider,
-                providerInputs: orderInfo.choosedPayment?.inputs
-                  ? {
-                      ...inputs,
-                      transparent_checkout:
-                        orderInfo.choosedPayment?.inputs?.includes(
-                          'transparent_checkout'
-                        ),
-                    }
-                  : undefined,
-                amountType: 'percentage',
-                amount: 100,
-              },
-            ],
+            payments:
+              coinPayment?.length && coinPayment?.length > 0
+                ? isFree
+                  ? [
+                      {
+                        currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                        paymentMethod: 'crypto',
+                        amountType: 'percentage',
+                        amount: (
+                          (parseFloat(coinPayment?.[0]?.totalPrice ?? '') *
+                            100) /
+                          parseFloat(orderInfo?.cartPrice ?? '')
+                        ).toFixed(5),
+                      },
+                    ]
+                  : [
+                      {
+                        currencyId: orderInfo.currencyId,
+                        paymentMethod: orderInfo.choosedPayment?.paymentMethod,
+                        paymentProvider:
+                          orderInfo.choosedPayment?.paymentProvider,
+                        providerInputs: orderInfo.choosedPayment?.inputs
+                          ? {
+                              ...inputs,
+                              transparent_checkout:
+                                orderInfo.choosedPayment?.inputs?.includes(
+                                  'transparent_checkout'
+                                ),
+                            }
+                          : undefined,
+                        amountType: 'all_remaining',
+                      },
+                      {
+                        currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                        paymentMethod: 'crypto',
+                        amountType: 'percentage',
+                        amount: (
+                          (parseFloat(coinPayment?.[0]?.totalPrice ?? '') *
+                            100) /
+                          parseFloat(orderInfo?.cartPrice ?? '')
+                        ).toFixed(5),
+                      },
+                    ]
+                : [
+                    {
+                      currencyId: orderInfo.currencyId,
+                      paymentMethod: orderInfo.choosedPayment?.paymentMethod,
+                      paymentProvider:
+                        orderInfo.choosedPayment?.paymentProvider,
+                      providerInputs: orderInfo.choosedPayment?.inputs
+                        ? {
+                            ...inputs,
+                            transparent_checkout:
+                              orderInfo.choosedPayment?.inputs?.includes(
+                                'transparent_checkout'
+                              ),
+                          }
+                        : undefined,
+                      amountType: 'percentage',
+                      amount: '100',
+                    },
+                  ],
           },
         },
         {
@@ -557,6 +626,7 @@ export const CheckoutPayment = () => {
         <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-6 pw-px-4 sm:pw-px-0">
           <div className="pw-order-1 sm:pw-order-2 pw-w-full sm:pw-w-[40%]">
             <CheckouResume
+              payments={productCache?.payments}
               isCoinPayment={isCoinPayment}
               destinationUser={productCache?.destinationUser?.name}
               price={
@@ -582,7 +652,7 @@ export const CheckoutPayment = () => {
               }
               totalPrice={
                 orderResponse !== undefined
-                  ? orderResponse.totalAmount
+                  ? (orderResponse.totalAmount as string)
                   : myOrderPreview?.totalPrice ?? '0'
               }
               loading={loading}

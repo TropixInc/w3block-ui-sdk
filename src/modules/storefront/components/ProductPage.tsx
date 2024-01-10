@@ -404,7 +404,7 @@ export const ProductPage = ({
             {
               currencyId: currencyId?.id ?? '',
               amountType: 'percentage',
-              amount: 100,
+              amount: '100',
             },
           ],
           companyId,

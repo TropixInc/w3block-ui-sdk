@@ -20,9 +20,10 @@ interface GetOrderPreviewPayload {
   companyId: string;
   couponCode?: string;
   payments?: {
-    currencyId: string;
-    amountType: string;
-    amount: number;
+    currencyId?: string;
+    amountType?: string;
+    amount?: string;
+    paymentMethod?: string;
   }[];
 }
 
@@ -39,9 +40,10 @@ interface OrderPreviewPayload {
   acceptIncompleteCart?: boolean;
   couponCode?: string;
   payments?: {
-    currencyId: string;
-    amountType: string;
-    amount: number;
+    currencyId?: string;
+    amountType?: string;
+    amount?: string;
+    paymentMethod?: string;
   }[];
 }
 

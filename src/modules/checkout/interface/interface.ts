@@ -1,9 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UtmContextInterface } from '../../core/context/UtmContext';
 import { Status } from '../../core/metamask/interface';
 import { Product } from '../../shared';
 import { GasFee } from '../../shared/interface/GasFee';
 import { Variants } from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { OrderStatus, PaymentMethod } from '../enum';
+
+export interface PaymentsResponse {
+  totalPrice?: string;
+  currencyId?: string;
+  originalCartPrice?: string;
+  originalClientServiceFee?: string;
+  originalTotalPrice?: string;
+  cartPrice?: string;
+  clientServiceFee?: string;
+  gasFee?: GasFee;
+  providersForSelection?: PaymentMethodsAvaiable[];
+}
 export interface OrderPreviewResponse {
   products: Product[];
   cartPrice?: string;
@@ -22,6 +35,7 @@ export interface OrderPreviewResponse {
     cashbackAmount?: string;
     currencyId?: string;
   };
+  payments?: PaymentsResponse[];
 }
 
 export interface ProductErrorInterface {
@@ -79,6 +93,7 @@ export interface PaymentMethodsAvaiable {
   availableInstallments?: AvailableInstallmentInfo[];
 }
 export interface OrderPreviewCache {
+  payments?: PaymentsResponse[];
   currencyId: string;
   products: Product[];
   orderProducts: OrderProductsInterface[];
@@ -125,7 +140,7 @@ export interface CreateOrder {
     paymentProvider?: string;
     providerInputs?: unknown;
     amountType?: string;
-    amount?: number;
+    amount?: string;
   }[];
 }
 
@@ -155,7 +170,7 @@ export interface CreateOrderResponse {
   status: OrderStatus;
   updatedAt: string;
   userId: string;
-  totalAmount: string;
+  totalAmount: any;
   originalCurrencyAmount?: string;
   originalTotalAmount?: string;
   deliverId: string;

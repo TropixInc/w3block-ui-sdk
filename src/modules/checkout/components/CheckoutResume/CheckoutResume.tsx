@@ -12,6 +12,7 @@ const ProductInfo = lazy(() =>
 );
 
 import { Product } from '../../../shared/interface/Product';
+import { PaymentsResponse } from '../../interface/interface';
 
 interface CheckoutResumeProps {
   products: Product[];
@@ -26,6 +27,7 @@ interface CheckoutResumeProps {
   originalTotalPrice?: string;
   isCoinPayment?: boolean;
   destinationUser?: string;
+  payments?: PaymentsResponse[];
 }
 
 export const CheckouResume = ({
@@ -41,6 +43,7 @@ export const CheckouResume = ({
   originalTotalPrice,
   isCoinPayment,
   destinationUser,
+  payments,
 }: CheckoutResumeProps) => {
   return (
     <div>
@@ -88,6 +91,7 @@ export const CheckouResume = ({
         originalPrice={originalPrice}
         originalService={originalService}
         originalTotalPrice={originalTotalPrice}
+        payments={payments}
       />
     </div>
   );

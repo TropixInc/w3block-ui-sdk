@@ -20,6 +20,7 @@ import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { Product } from '../../../shared/interface/Product';
+import { useGetRightWallet } from '../../../shared/utils/getRightWallet';
 import { Selector } from '../../../storefront/components/Selector';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
@@ -114,6 +115,7 @@ const _CheckoutInfo = ({
   isCart = false,
 }: CheckoutInfoProps) => {
   const { datasource } = useDynamicApi();
+  const organizedLoyalties = useGetRightWallet();
   const router = useRouterConnect();
   const profile = useProfile();
   const { isOpen, openModal, closeModal } = useModalController();
@@ -172,6 +174,7 @@ const _CheckoutInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview?.appliedCoupon, utms?.expires, utms.utm_campaign]);
   const [paymentAmount, setPaymentAmount] = useState('');
+  const [coinAmountPayment, setCounAmountPayment] = useState('');
   const { data: session } = usePixwaySession();
 
   const token = session ? (session.accessToken as string) : null;
@@ -273,13 +276,30 @@ const _CheckoutInfo = ({
                 };
                 return payload;
               }),
-          payments: [
-            {
-              currencyId: currencyIdState,
-              amountType: 'percentage',
-              amount: 100,
-            },
-          ],
+          payments:
+            isCoinPayment && coinAmountPayment != ''
+              ? [
+                  {
+                    currencyId: currencyIdState,
+                    amountType: 'all_remaining',
+                  },
+                  {
+                    currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                    paymentMethod: 'crypto',
+                    amountType: 'percentage',
+                    amount: (
+                      (parseFloat(coinAmountPayment) * 100) /
+                      parseFloat(paymentAmount)
+                    ).toFixed(5),
+                  },
+                ]
+              : [
+                  {
+                    currencyId: currencyIdState,
+                    amountType: 'percentage',
+                    amount: '100',
+                  },
+                ],
           currencyId: currencyIdState,
           companyId,
           couponCode: coupon(),
@@ -347,12 +367,37 @@ const _CheckoutInfo = ({
     [productIds, currencyIdState, token]
   );
 
+  const [coinError, setCoinError] = useState('');
+  const payWithCoin = () => {
+    if (parseFloat(coinAmountPayment) > parseFloat(paymentAmount)) {
+      setCoinError(
+        'O quantidade de moedas utilizadas não pode ser maior que o valor a pagar'
+      );
+      return false;
+    }
+    if (
+      parseFloat(coinAmountPayment) >
+      parseFloat(
+        organizedLoyalties?.filter((wallet) => wallet.type == 'loyalty')?.[0]
+          ?.balance
+      )
+    ) {
+      setCoinError('Você não possui saldo suficiente');
+      return false;
+    } else {
+      setCoinError('');
+      return true;
+    }
+  };
+
   useInterval(() => {
-    getOrderPreviewFn(couponCodeInput);
+    if (payWithCoin()) getOrderPreviewFn(couponCodeInput);
   }, 30000);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getOrderPreviewFn(), [paymentAmount]);
+  useEffect(() => {
+    if (payWithCoin()) getOrderPreviewFn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paymentAmount, coinAmountPayment]);
 
   const isLoading = orderPreview == null;
 
@@ -384,6 +429,7 @@ const _CheckoutInfo = ({
             };
           });
       setProductCache({
+        payments: orderPreview.payments,
         products: orderPreview.products,
         orderProducts,
         currencyId: currencyIdState || '',
@@ -819,6 +865,7 @@ const _CheckoutInfo = ({
           <>
             {!isCoinPayment && (
               <PriceAndGasInfo
+                payments={orderPreview?.payments}
                 name={
                   orderPreview?.products && orderPreview?.products.length
                     ? orderPreview?.products[0]?.prices.find(
@@ -826,27 +873,8 @@ const _CheckoutInfo = ({
                       )?.currency.name
                     : 'BRL'
                 }
-                currency={
-                  orderPreview?.products && orderPreview?.products.length
-                    ? orderPreview?.products[0]?.prices.find(
-                        (price) => price.currency.id == currencyIdState
-                      )?.currency.symbol
-                    : 'R$'
-                }
-                totalPrice={orderPreview?.totalPrice || '0'}
-                service={orderPreview?.clientServiceFee || '0'}
                 loading={isLoading || isLoadingPreview}
                 className="pw-mt-4"
-                price={
-                  parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
-                }
-                gasFee={
-                  parseFloat(orderPreview?.gasFee?.amount || '0').toString() ||
-                  '0'
-                }
-                originalPrice={orderPreview?.originalCartPrice ?? ''}
-                originalService={orderPreview?.originalClientServiceFee ?? ''}
-                originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
               />
             )}
             {isCoinPayment && (
@@ -927,22 +955,94 @@ const _CheckoutInfo = ({
                   </p>
                 )}
             </div>
-            {parseFloat(orderPreview?.totalPrice ?? '0') !== 0 && (
+            {parseFloat(
+              orderPreview?.payments?.filter(
+                (e) => e.currencyId === currencyIdState
+              )[0]?.totalPrice ?? '0'
+            ) !== 0 && (
               <PaymentMethodsComponent
                 loadingPreview={isLoadingPreview}
                 methodSelected={
                   choosedPayment ?? ({} as PaymentMethodsAvaiable)
                 }
-                methods={orderPreview?.providersForSelection ?? []}
+                methods={
+                  orderPreview?.payments?.filter(
+                    (e) => e.currencyId === currencyIdState
+                  )[0]?.providersForSelection ?? []
+                }
                 onSelectedPayemnt={setChoosedPayment}
               />
             )}
             {isCoinPayment && (
               <>
+                <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
+                  Food Coins (Saldo:{' '}
+                  {organizedLoyalties &&
+                  organizedLoyalties.length > 0 &&
+                  organizedLoyalties.some(
+                    (wallet) =>
+                      wallet.type == 'loyalty' &&
+                      wallet?.balance &&
+                      parseFloat(wallet?.balance ?? '0') > 0
+                  ) ? (
+                    <>
+                      {organizedLoyalties.find(
+                        (wallet) =>
+                          wallet.type == 'loyalty' &&
+                          wallet?.balance &&
+                          parseFloat(wallet?.balance ?? '0') > 0
+                      ).pointsPrecision == 'decimal'
+                        ? parseFloat(
+                            organizedLoyalties.find(
+                              (wallet) =>
+                                wallet.type == 'loyalty' &&
+                                wallet?.balance &&
+                                parseFloat(wallet?.balance ?? '0') > 0
+                            )?.balance ?? '0'
+                          ).toFixed(2)
+                        : parseFloat(
+                            organizedLoyalties.find(
+                              (wallet) =>
+                                wallet.type == 'loyalty' &&
+                                wallet?.balance &&
+                                parseFloat(wallet?.balance ?? '0') > 0
+                            )?.balance ?? '0'
+                          ).toFixed(0)}
+                    </>
+                  ) : null}
+                  )
+                </p>
+                <div className="pw-mb-8">
+                  <div className="pw-flex pw-gap-3">
+                    <input
+                      disabled={paymentAmount === ''}
+                      name="coinAmountPayment"
+                      id="coinAmountPayment"
+                      type="number"
+                      placeholder="R$"
+                      onChange={() =>
+                        setCounAmountPayment(
+                          (
+                            document.getElementById(
+                              'coinAmountPayment'
+                            ) as HTMLInputElement
+                          ).value
+                        )
+                      }
+                      className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
+                    />
+                  </div>
+                </div>
+                {!payWithCoin() ? (
+                  <Alert variant="atention" className="pw-mt-3">
+                    {coinError}
+                  </Alert>
+                ) : null}
                 <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C] pw-mt-[40px]">
                   Resumo da compra
                 </p>
                 <PriceAndGasInfo
+                  payments={orderPreview?.payments}
                   name={
                     orderPreview?.products && orderPreview?.products.length
                       ? orderPreview?.products[0]?.prices.find(
@@ -950,28 +1050,8 @@ const _CheckoutInfo = ({
                         )?.currency.name
                       : 'BRL'
                   }
-                  currency={
-                    orderPreview?.products && orderPreview?.products.length
-                      ? orderPreview?.products[0]?.prices.find(
-                          (price) => price.currency.id == currencyIdState
-                        )?.currency.symbol
-                      : 'R$'
-                  }
-                  totalPrice={orderPreview?.totalPrice || '0'}
-                  service={orderPreview?.clientServiceFee || '0'}
                   loading={isLoading || isLoadingPreview}
                   className="pw-mt-4"
-                  price={
-                    parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
-                  }
-                  gasFee={
-                    parseFloat(
-                      orderPreview?.gasFee?.amount || '0'
-                    ).toString() || '0'
-                  }
-                  originalPrice={orderPreview?.originalCartPrice ?? ''}
-                  originalService={orderPreview?.originalClientServiceFee ?? ''}
-                  originalTotalPrice={orderPreview?.originalTotalPrice ?? ''}
                 />
                 <Alert
                   variant="success"
@@ -1003,7 +1083,7 @@ const _CheckoutInfo = ({
                 {translate('shared>cancel')}
               </PixwayButton>
               <PixwayButton
-                disabled={!orderPreview || isLoadingPreview}
+                disabled={!orderPreview || isLoadingPreview || !payWithCoin()}
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
@@ -1063,7 +1143,9 @@ const _CheckoutInfo = ({
                   <div className="pw-mt-5">
                     <p className="pw-text-xs pw-font-normal">Valor pago</p>
                     <p className="pw-text-xs pw-font-semibold">
-                      R${orderResponse?.totalAmount}
+                      R$
+                      {orderResponse?.totalAmount?.[0]?.amount ??
+                        orderResponse?.totalAmount}
                     </p>
                   </div>
                   <div className="pw-mt-5">
@@ -1091,38 +1173,9 @@ const _CheckoutInfo = ({
                         )?.currency.name
                       : 'BRL'
                   }
-                  currency={
-                    productCache?.products && productCache?.products.length
-                      ? productCache?.products[0].prices.find(
-                          (price) =>
-                            price.currencyId ==
-                            (router.query.currencyId as string)
-                        )?.currency.symbol
-                      : 'R$'
-                  }
-                  totalPrice={orderPreview?.totalPrice || '0'}
-                  service={orderPreview?.clientServiceFee || '0'}
                   loading={isLoading}
                   className="pw-mt-4"
-                  price={
-                    parseFloat(orderPreview?.cartPrice || '0').toString() || '0'
-                  }
-                  gasFee={
-                    parseFloat(
-                      orderPreview?.gasFee?.amount || '0'
-                    ).toString() || '0'
-                  }
-                  originalPrice={
-                    orderResponse !== undefined
-                      ? orderResponse.originalCurrencyAmount
-                      : orderPreview?.originalCartPrice ?? ''
-                  }
-                  originalService={orderPreview?.originalClientServiceFee ?? ''}
-                  originalTotalPrice={
-                    orderResponse !== undefined
-                      ? orderResponse.originalTotalAmount
-                      : orderPreview?.originalTotalPrice ?? ''
-                  }
+                  payments={productCache?.payments}
                 />
               </>
             )}
@@ -1149,6 +1202,7 @@ const _CheckoutInfo = ({
     isLoadingPreview,
     codeQr,
     statusResponse?.deliverId,
+    coinError,
   ]);
 
   const anchorCurrencyId = useMemo(() => {
