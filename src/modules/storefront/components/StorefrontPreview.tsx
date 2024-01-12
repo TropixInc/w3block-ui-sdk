@@ -51,6 +51,9 @@ const Banner = lazy(() =>
 const BannerVariant = lazy(() =>
   import('./BannerVariant').then((m) => ({ default: m.Banner }))
 );
+const BannerWJJC = lazy(() =>
+  import('./BannerWJJC').then((m) => ({ default: m.BannerWJJC }))
+);
 const Cookies = lazy(() =>
   import('./Cookies').then((m) => ({ default: m.Cookies }))
 );
@@ -206,6 +209,7 @@ export const StorefrontPreview = ({
         apis: data.dynamicApi?.apis ?? [],
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context?.pageInfo, data]);
 
   const breakpoint = useBreakpoints();
@@ -322,12 +326,7 @@ export const StorefrontPreview = ({
               ) : (
                 <div
                   className={classNames(
-                    `${!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}`,
-                    `${
-                      data?.dynamicApi?.matches?.length > 0
-                        ? 'sm:pw-px-0 pw-px-6'
-                        : ''
-                    }`
+                    `${!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}`
                   )}
                 >
                   {data.modules?.map((item) => {
@@ -382,6 +381,10 @@ export const StorefrontPreview = ({
                           <BannerVariant
                             data={{ ...theme.bannerVariant, ...item }}
                           />
+                        );
+                      case ModulesType.BANNER_WJJC:
+                        return (
+                          <BannerWJJC data={{ ...theme.bannerWjjc, ...item }} />
                         );
                       default:
                         break;
