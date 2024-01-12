@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { CurrencyInput } from 'react-currency-mask';
 import { useTranslation } from 'react-i18next';
 import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
@@ -174,7 +175,7 @@ const _CheckoutInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview?.appliedCoupon, utms?.expires, utms.utm_campaign]);
   const [paymentAmount, setPaymentAmount] = useState('');
-  const [coinAmountPayment, setCounAmountPayment] = useState('');
+  const [coinAmountPayment, setCoinAmountPayment] = useState('');
   const { data: session } = usePixwaySession();
 
   const token = session ? (session.accessToken as string) : null;
@@ -391,13 +392,16 @@ const _CheckoutInfo = ({
   };
 
   useInterval(() => {
-    if (payWithCoin()) getOrderPreviewFn(couponCodeInput);
+    if (payWithCoin() && !isCoinPayment) getOrderPreviewFn(couponCodeInput);
   }, 30000);
 
-  useEffect(() => {
-    if (payWithCoin()) getOrderPreviewFn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentAmount, coinAmountPayment]);
+  useDebounce(
+    () => {
+      if (payWithCoin()) getOrderPreviewFn();
+    },
+    400,
+    [paymentAmount, coinAmountPayment]
+  );
 
   const isLoading = orderPreview == null;
 
@@ -888,9 +892,9 @@ const _CheckoutInfo = ({
                         (e: { attributes: { walletAddress: string | null } }) =>
                           e.attributes.walletAddress ===
                           destinationWalletAddress
-                      )[0]?.attributes?.name
+                      )[0]?.id
                     }
-                    onClick={(e) =>
+                    onChange={(e) =>
                       router.pushConnect(
                         `/checkout/confirmation?productIds=36a3eec4-05e1-437d-a2b6-8b830ec84326&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&coinPayment=true&destinationWalletAddress=${e}`
                       )
@@ -902,21 +906,16 @@ const _CheckoutInfo = ({
                 </p>
                 <div className="pw-mb-8">
                   <div className="pw-flex pw-gap-3">
-                    <input
-                      name="paymentValue"
-                      id="paymentValue"
-                      type="number"
-                      placeholder="R$"
-                      onChange={() =>
-                        setPaymentAmount(
-                          (
-                            document.getElementById(
-                              'paymentValue'
-                            ) as HTMLInputElement
-                          ).value
-                        )
+                    <CurrencyInput
+                      onChangeValue={(_, value) => {
+                        setPaymentAmount(value as string);
+                      }}
+                      InputElement={
+                        <input
+                          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none"
+                          placeholder="R$ 0,0"
+                        />
                       }
-                      className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
                     />
                   </div>
                 </div>
@@ -931,7 +930,7 @@ const _CheckoutInfo = ({
                   name="couponCode"
                   id="couponCode"
                   placeholder="Código do cupom"
-                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3]"
+                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3] focus:pw-outline-none"
                   defaultValue={couponCodeInput}
                 />
                 <PixwayButton
@@ -1014,22 +1013,18 @@ const _CheckoutInfo = ({
                 </p>
                 <div className="pw-mb-8">
                   <div className="pw-flex pw-gap-3">
-                    <input
-                      disabled={paymentAmount === ''}
-                      name="coinAmountPayment"
-                      id="coinAmountPayment"
-                      type="number"
-                      placeholder="R$"
-                      onChange={() =>
-                        setCounAmountPayment(
-                          (
-                            document.getElementById(
-                              'coinAmountPayment'
-                            ) as HTMLInputElement
-                          ).value
-                        )
+                    <CurrencyInput
+                      hideSymbol
+                      onChangeValue={(_, value) => {
+                        setCoinAmountPayment(value as string);
+                      }}
+                      InputElement={
+                        <input
+                          disabled={paymentAmount === ''}
+                          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none"
+                          placeholder="0,0"
+                        />
                       }
-                      className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black"
                     />
                   </div>
                 </div>
