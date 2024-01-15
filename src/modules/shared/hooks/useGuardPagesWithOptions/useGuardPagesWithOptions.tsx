@@ -44,6 +44,7 @@ export const useGuardPagesWithOptions = ({
       });
       return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   if (status == 'loading') {
@@ -55,15 +56,15 @@ export const useGuardPagesWithOptions = ({
     });
     return;
   }
-  if (needAdmin && !isAdmin && profile) {
-    pushConnect(redirectPage ?? PixwayAppRoutes.TOKENS);
-    return;
-  }
   if (needSuperAdmin && !isSuperAdmin && profile) {
     pushConnect(redirectPage ?? PixwayAppRoutes.TOKENS);
     return;
   }
-  if (needBusiness && !isBusiness && profile) {
+  if (needAdmin && !isAdmin && !isSuperAdmin && profile) {
+    pushConnect(redirectPage ?? PixwayAppRoutes.TOKENS);
+    return;
+  }
+  if (needBusiness && !isBusiness && !isAdmin && !isSuperAdmin && profile) {
     pushConnect(redirectPage ?? PixwayAppRoutes.TOKENS);
     return;
   }

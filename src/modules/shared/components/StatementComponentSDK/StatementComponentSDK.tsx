@@ -1,7 +1,11 @@
+import { format } from 'date-fns';
+import { enUS, ptBR } from 'date-fns/locale';
+
 import PendingIcon from '../../assets/icons/clock.svg?react';
 // import  CopyIcon  from '../../assets/icons/copy.svg?react';
 import RejectIcon from '../../assets/icons/minusCircle.svg?react';
 import ApprovedIcon from '../../assets/icons/plusCircle.svg?react';
+import { useLocale } from '../../hooks/useLocale';
 import {
   Erc20ActionStatus,
   Statement,
@@ -15,6 +19,7 @@ interface StatementComponentSDKProps {
 export const StatementComponentSDK = ({
   statement,
 }: StatementComponentSDKProps) => {
+  const locale = useLocale();
   const getStatementColorAndIcon = () => {
     if (statement.transactionType == 'receiving') {
       if (statement.status == Erc20ActionStatus.SUCCESS) {
@@ -23,7 +28,7 @@ export const StatementComponentSDK = ({
           icon: (
             <ApprovedIcon className="pw-stroke-blue-800 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Crédito',
+          text: 'Carga',
         };
       } else {
         return {
@@ -31,7 +36,7 @@ export const StatementComponentSDK = ({
           icon: (
             <PendingIcon className="pw-stroke-orange-600 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Crédito',
+          text: 'Carga',
         };
       }
     } else {
@@ -41,7 +46,7 @@ export const StatementComponentSDK = ({
           icon: (
             <RejectIcon className="pw-stroke-rose-500 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Débito',
+          text: 'Uso',
         };
       } else {
         return {
@@ -49,7 +54,7 @@ export const StatementComponentSDK = ({
           icon: (
             <RejectIcon className="pw-stroke-orange-600 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Débito',
+          text: 'Uso',
         };
       }
     }
@@ -88,7 +93,11 @@ export const StatementComponentSDK = ({
       <div className="pw-flex pw-flex-col pw-items-end">
         <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-bold">
           {' '}
-          {new Date(statement.createdAt).toDateString()}
+          {statement?.createdAt
+            ? format(new Date(statement.createdAt ?? Date.now()), 'PPpp', {
+                locale: locale === 'pt-BR' ? ptBR : enUS,
+              })
+            : null}
         </div>
         <div className="pw-mt-2"></div>
         {statement.loyaltieTransactions?.map((loyaltieTransaction) => (

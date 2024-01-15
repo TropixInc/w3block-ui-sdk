@@ -11,8 +11,10 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
+import { useLoyaltiesInfo } from '../../../../../../business/hooks/useLoyaltiesInfo';
 import { UseThemeConfig } from '../../../../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import  ArrowDown  from '../../../../../assets/icons/arrowDown.svg?react';
+import DashboardIcon from '../../../../../assets/icons/dashboard.svg?react';
 import  EyeIcon  from '../../../../../assets/icons/eyeGold.svg?react';
 // import  HelpIcon  from '../../../../../assets/icons/helpIconGray.svg?react';
 import  IntegrationIcon  from '../../../../../assets/icons/integrationIconOutlined.svg?react';
@@ -101,7 +103,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
   );
   const isUser = Boolean(userRoles?.includes('user')); 
   const isLoayaltyOperator = Boolean(userRoles?.includes('loyaltyOperator'));
-
+  const hasLoyalty = !!useLoyaltiesInfo()?.loyalties?.length;
   const { defaultTheme } = UseThemeConfig();
 
   const internalMenuData = useMemo(() => {
@@ -115,7 +117,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
       id: 'payment',
       route: PixwayAppRoutes.LOYALTY_PAYMENT,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: isLoayaltyOperator && !isHidden('payment'),
+      isVisible: (isLoayaltyOperator || isAdmin) && !isHidden('payment') && hasLoyalty,
     },
     {
       name: internalMenuData['pass']?.customLabel || translate('components>menu>tokenPass'),
@@ -128,8 +130,8 @@ export const useDefaultMenuTabs = (textColor: string) => {
       name: internalMenuData['dash']?.customLabel || translate('components>menu>dashboard'),
       id: 'dash',
       route: PixwayAppRoutes.LOYALTY_REPORT,
-      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor, fill: textColor}} />,
-      isVisible: isLoayaltyOperator && !isHidden('dash'),
+      icon: <DashboardIcon style={{color: textColor, stroke: textColor, fill: textColor}} />,
+      isVisible: (isLoayaltyOperator || isAdmin) && !isHidden('dash') && hasLoyalty,
     },
     {
       name: internalMenuData['wallet']?.customLabel || translate('components>menu>wallet'),
