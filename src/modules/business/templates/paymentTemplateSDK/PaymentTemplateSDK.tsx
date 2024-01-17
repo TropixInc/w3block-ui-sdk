@@ -79,17 +79,6 @@ export const PaymentTemplateSDK = () => {
         getUserBalance(data.id as string, {
           onSuccess: (balance) => {
             setUserInfo((prev) => ({ ...prev, ...balance[0] }));
-            const balanceNormal = parseFloat(balance[0].balance ?? '0');
-            const pointsValue =
-              loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
-            // const currencyValue =
-            //   loyalties[0].paymentViewSettings.pointsEquivalent.currencyValue;
-            const totalMoney = balanceNormal * pointsValue;
-            if (totalMoney <= valueToPay) {
-              setValueToUse(balanceNormal);
-            } else {
-              setValueToUse(valueToPay / pointsValue);
-            }
             handleGetPaymentPreview();
           },
         });
@@ -100,7 +89,7 @@ export const PaymentTemplateSDK = () => {
     });
   };
 
-  useDebounce(() => handleGetPaymentPreview(), 600, [valueToPay, valueToUse]);
+  useDebounce(() => handleGetPaymentPreview(), 100, [valueToPay, valueToUse]);
 
   useEffect(() => {
     handleGetPaymentPreview();
@@ -193,61 +182,6 @@ export const PaymentTemplateSDK = () => {
     }
   };
 
-  const handleValueToUse = () => {
-    if (valueToUse == 0) {
-      setValueToUse(0);
-      return;
-    }
-    if (loyalties.length) {
-      const pointsValue =
-        loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
-      const amountTotalPoints = valueToPay / pointsValue;
-      if (valueToUse > amountTotalPoints) {
-        setValueToUse(amountTotalPoints);
-      }
-    }
-
-    if (userInfo.balance && valueToUse > parseFloat(userInfo.balance)) {
-      setValueToUse(parseFloat(userInfo.balance));
-      return;
-    } else if (valueToUse < 0) {
-      setValueToUse(0);
-      return;
-    }
-  };
-
-  const handleChangeValueTopay = () => {
-    if (loyalties.length > 0) {
-      const pointsValue =
-        loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
-      const totalMoney = parseFloat(userInfo.balance ?? '0') * pointsValue;
-
-      if (totalMoney <= valueToPay && userInfo.balance) {
-        setValueToUse(parseFloat(userInfo.balance));
-      } else if (valueToPay != 0) {
-        setValueToUse(valueToPay / pointsValue);
-      } else {
-        setValueToUse(0);
-      }
-    }
-  };
-
-  useDebounce(
-    () => {
-      handleChangeValueTopay();
-    },
-    600,
-    [valueToPay]
-  );
-
-  useDebounce(
-    () => {
-      handleValueToUse();
-    },
-    500,
-    [valueToUse]
-  );
-
   const handleCancelUserCard = () => {
     setCode(['', '', '', '']);
     setUserInfo({});
@@ -324,11 +258,14 @@ export const PaymentTemplateSDK = () => {
             name={userInfo.name}
             avatarSrc={userInfo.avatarUrl}
             balance={
-              userInfo.balance == 'NaN' || userInfo.balance == ''
+              userInfo?.balance == 'NaN' || userInfo?.balance == ''
                 ? '0'
-                : userInfo.balance
+                : userInfo?.balance
             }
-            currency={userInfo.currency}
+            currency={userInfo?.currency}
+            setMaxValue={() =>
+              setValueToUse(parseFloat(userInfo?.balance ?? '0'))
+            }
           />
         </div>
         <BuySummarySDK
@@ -354,6 +291,7 @@ export const PaymentTemplateSDK = () => {
               userInfo.id == undefined ||
               code.length != 4 ||
               valueToPay === 0 ||
+              valueToUse > parseFloat(userInfo?.balance ?? '0') ||
               isLoading
             }
             onClick={() => handleSubmitPayment()}
@@ -361,6 +299,7 @@ export const PaymentTemplateSDK = () => {
               userInfo.id == undefined ||
               code.length != 4 ||
               valueToPay === 0 ||
+              valueToUse > parseFloat(userInfo?.balance ?? '0') ||
               isLoading
                 ? 'pw-opacity-50'
                 : ''
