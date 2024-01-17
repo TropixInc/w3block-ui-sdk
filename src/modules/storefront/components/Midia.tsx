@@ -36,7 +36,7 @@ const rowAlignments: AlignmentClassNameMap = {
 
 export const Midia = ({ data }: { data: MidiaData }) => {
   const { datasource } = useDynamicApi();
-  const { styleData, mobileStyleData } = data;
+  const { styleData, mobileStyleData, id } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -69,6 +69,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
 
   return (
     <div
+      id={`sf-${id}`}
       className="pw-w-full"
       style={{
         margin: convertSpacingToCSS(margin),

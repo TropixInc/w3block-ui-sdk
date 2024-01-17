@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  Suspense,
 } from 'react';
 import { useEffectOnce } from 'react-use';
 
@@ -103,9 +104,15 @@ export const StorefrontPreview = ({
   const { asPath, pushConnect } = useRouterConnect();
   const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
   const [themeListener, setThemeListener] = useState<Theme | null>();
+  const [currentHighlight, setCurrentHighlight] = useState('');
   const listener = ({
     data,
-  }: MessageEvent<{ update: string; theme: Theme; page: TemplateData }>) => {
+  }: MessageEvent<{
+    update: string;
+    theme: Theme;
+    page: TemplateData;
+    highlight?: string;
+  }>) => {
     if (data && data.theme) {
       setThemeListener(data.theme);
       context?.setDefaultTheme?.(data.theme);
@@ -114,7 +121,20 @@ export const StorefrontPreview = ({
       setCurrentPage(data.page);
       context?.setPageTheme?.(data.page);
     }
+    if (data?.highlight !== undefined) {
+      setCurrentHighlight(data?.highlight);
+    }
   };
+  useEffect(() => {
+    if (!currentHighlight) return;
+    document.getElementById(currentHighlight)?.classList?.add('highlighted');
+    return () => {
+      if (!currentHighlight) return;
+      document
+        .getElementById(currentHighlight)
+        ?.classList?.remove('highlighted');
+    };
+  }, [currentHighlight]);
 
   useEffect(() => {
     if (context?.isThemeError && !children) {
@@ -170,10 +190,11 @@ export const StorefrontPreview = ({
   const dynamicApi = useMemo<DynamicApiModuleInterface | undefined>(() => {
     if (context?.pageInfo && context.pageInfo.isRoutePatternRegex) {
       return {
-        regexp: context.pageInfo.routePattern,
-        groups: RegExp(context.pageInfo.routePattern, 'g').exec(asPath || '')
-          ?.groups,
-        matches: RegExp(context.pageInfo.routePattern, 'g')
+        regexp: context.pageInfo.routePatternRegex,
+        groups: RegExp(context.pageInfo.routePatternRegex, 'g').exec(
+          asPath || ''
+        )?.groups,
+        matches: RegExp(context.pageInfo.routePatternRegex, 'g')
           .exec(asPath || '')
           ?.slice(1),
         apis: data.dynamicApi?.apis ?? [],
@@ -244,132 +265,30 @@ export const StorefrontPreview = ({
   };
 
   return (
-    <DynamicApiProvider dynamicModule={data.dynamicApi}>
-      <div
-        style={{
-          color: mergedConfigStyleData.textColor ?? 'black',
-          background: mergedConfigStyleData.backgroundColor ?? 'white',
-          padding: convertSpacingToCSS(mergedConfigStyleData.padding),
-          fontFamily,
-        }}
-      >
-        {hasHeaderDefault && headerData ? (
-          <Header data={headerData as MainModuleThemeInterface} />
-        ) : null}
+    <Suspense
+      fallback={
+        <div className="h-dvh flex items-center justify-center bg-slate-50" />
+      }
+    >
+      <DynamicApiProvider dynamicModule={data.dynamicApi}>
+        <div
+          style={{
+            color: mergedConfigStyleData.textColor ?? 'black',
+            background: mergedConfigStyleData.backgroundColor ?? 'white',
+            padding: convertSpacingToCSS(mergedConfigStyleData.padding),
+            fontFamily,
+          }}
+        >
+          {hasHeaderDefault && headerData ? (
+            <Header data={headerData as MainModuleThemeInterface} />
+          ) : null}
 
-        <Cookies
-          data={
-            theme.cookies ?? {
-              id: '',
-              name: 'cookies',
-              type: ModulesType.COOKIE,
-              styleData: {},
-              contentData: {},
-              mobileStyleData: {},
-              mobileContentData: {},
-            }
-          }
-        />
-        {context?.isError && !children ? (
-          <Page404 />
-        ) : (
-          <>
-            {isProductPage && (
-              <ProductPage
-                hasCart={mergedConfigStyleData.hasCart}
-                params={params}
-                data={
-                  theme.productPage ?? {
-                    id: '',
-                    name: 'productsPage',
-                    type: ModulesType.PRODUCT_PAGE,
-                    styleData: {},
-                    mobileStyleData: {},
-                  }
-                }
-              />
-            )}
-            {children ? (
-              children
-            ) : data.custom && data.custom != '' ? (
-              getPageMap(data.custom)
-            ) : (
-              <div
-                className={classNames(
-                  `${!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}`,
-                  `${
-                    data?.dynamicApi?.matches?.length > 0
-                      ? 'sm:pw-px-0 pw-px-6'
-                      : ''
-                  }`
-                )}
-              >
-                {data.modules?.map((item) => {
-                  if (item.deviceType == 'none') return null;
-
-                  if (
-                    item.deviceType == 'desktop' &&
-                    mobileBreakpoints.includes(breakpoint)
-                  )
-                    return null;
-                  if (
-                    item.deviceType == 'mobile' &&
-                    !mobileBreakpoints.includes(breakpoint)
-                  )
-                    return null;
-
-                  switch (item.type) {
-                    case ModulesType.CATEGORIES:
-                      return <Menu data={{ ...theme.categories, ...item }} />;
-                    case ModulesType.BANNER:
-                      return <Banner data={{ ...theme.banner, ...item }} />;
-                    case ModulesType.CARDS:
-                      return <Products data={{ ...theme.products, ...item }} />;
-                    case ModulesType.ACCORDIONS:
-                      return (
-                        <Accordions data={{ ...theme.accordions, ...item }} />
-                      );
-                    case ModulesType.IMAGE_PLUS_TEXT:
-                      return (
-                        <ImagePlusText
-                          data={{ ...theme.imagePlusText, ...item }}
-                        />
-                      );
-                    case ModulesType.PARAGRAPH:
-                      return (
-                        <Paragraph data={{ ...theme.paragraph, ...item }} />
-                      );
-                    case ModulesType.GRID_ITEM_AREA:
-                      return (
-                        <GridItemArea
-                          data={{ ...theme.GridItemArea, ...item }}
-                        />
-                      );
-                    case ModulesType.MIDIA:
-                      return <Midia data={{ ...theme.midia, ...item }} />;
-                    case ModulesType.TABLE:
-                      return <GenericTableWrapper data={{ ...item }} />;
-                    case ModulesType.BANNER_VARIANT:
-                      return (
-                        <BannerVariant
-                          data={{ ...theme.bannerVariant, ...item }}
-                        />
-                      );
-                    default:
-                      break;
-                  }
-                })}
-              </div>
-            )}
-          </>
-        )}
-        {hasFooterDefault && (
-          <Footer
+          <Cookies
             data={
-              theme.footer ?? {
+              theme.cookies ?? {
                 id: '',
-                name: 'footer',
-                type: ModulesType.FOOTER,
+                name: 'cookies',
+                type: ModulesType.COOKIE,
                 styleData: {},
                 contentData: {},
                 mobileStyleData: {},
@@ -377,8 +296,118 @@ export const StorefrontPreview = ({
               }
             }
           />
-        )}
-      </div>
-    </DynamicApiProvider>
+          {context?.isError && !children ? (
+            <Page404 />
+          ) : (
+            <>
+              {isProductPage && (
+                <ProductPage
+                  hasCart={mergedConfigStyleData.hasCart}
+                  params={params}
+                  data={
+                    theme.productPage ?? {
+                      id: '',
+                      name: 'productsPage',
+                      type: ModulesType.PRODUCT_PAGE,
+                      styleData: {},
+                      mobileStyleData: {},
+                    }
+                  }
+                />
+              )}
+              {children ? (
+                children
+              ) : data.custom && data.custom != '' ? (
+                getPageMap(data.custom)
+              ) : (
+                <div
+                  className={classNames(
+                    `${!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}`,
+                    `${
+                      data?.dynamicApi?.matches?.length > 0
+                        ? 'sm:pw-px-0 pw-px-6'
+                        : ''
+                    }`
+                  )}
+                >
+                  {data.modules?.map((item) => {
+                    if (item.deviceType == 'none') return null;
+
+                    if (
+                      item.deviceType == 'desktop' &&
+                      mobileBreakpoints.includes(breakpoint)
+                    )
+                      return null;
+                    if (
+                      item.deviceType == 'mobile' &&
+                      !mobileBreakpoints.includes(breakpoint)
+                    )
+                      return null;
+
+                    switch (item.type) {
+                      case ModulesType.CATEGORIES:
+                        return <Menu data={{ ...theme.categories, ...item }} />;
+                      case ModulesType.BANNER:
+                        return <Banner data={{ ...theme.banner, ...item }} />;
+                      case ModulesType.CARDS:
+                        return (
+                          <Products data={{ ...theme.products, ...item }} />
+                        );
+                      case ModulesType.ACCORDIONS:
+                        return (
+                          <Accordions data={{ ...theme.accordions, ...item }} />
+                        );
+                      case ModulesType.IMAGE_PLUS_TEXT:
+                        return (
+                          <ImagePlusText
+                            data={{ ...theme.imagePlusText, ...item }}
+                          />
+                        );
+                      case ModulesType.PARAGRAPH:
+                        return (
+                          <Paragraph data={{ ...theme.paragraph, ...item }} />
+                        );
+                      case ModulesType.GRID_ITEM_AREA:
+                        return (
+                          <GridItemArea
+                            data={{ ...theme.GridItemArea, ...item }}
+                          />
+                        );
+                      case ModulesType.MIDIA:
+                        return <Midia data={{ ...theme.midia, ...item }} />;
+                      case ModulesType.TABLE:
+                        return <GenericTableWrapper data={{ ...item }} />;
+                      case ModulesType.BANNER_VARIANT:
+                        return (
+                          <BannerVariant
+                            data={{ ...theme.bannerVariant, ...item }}
+                          />
+                        );
+                      default:
+                        break;
+                    }
+                  })}
+                </div>
+              )}
+            </>
+          )}
+          {hasFooterDefault && (
+            <Footer
+              data={
+                theme.footer ?? {
+                  id: '',
+                  name: 'footer',
+                  type: ModulesType.FOOTER,
+                  styleData: {},
+                  contentData: {},
+                  mobileStyleData: {},
+                  mobileContentData: {},
+                }
+              }
+            />
+          )}
+        </div>
+      </DynamicApiProvider>
+    </Suspense>
   );
 };

@@ -1,7 +1,11 @@
+import { format } from 'date-fns';
+import { enUS, ptBR } from 'date-fns/locale';
+
 import PendingIcon from '../../assets/icons/clock.svg?react';
 // import  CopyIcon  from '../../assets/icons/copy.svg?react';
 import RejectIcon from '../../assets/icons/minusCircle.svg?react';
 import ApprovedIcon from '../../assets/icons/plusCircle.svg?react';
+import { useLocale } from '../../hooks/useLocale';
 import {
   Erc20ActionStatus,
   Statement,
@@ -15,6 +19,7 @@ interface StatementComponentSDKProps {
 export const StatementComponentSDK = ({
   statement,
 }: StatementComponentSDKProps) => {
+  const locale = useLocale();
   const getStatementColorAndIcon = () => {
     if (statement.transactionType == 'receiving') {
       if (statement.status == Erc20ActionStatus.SUCCESS) {
@@ -88,7 +93,9 @@ export const StatementComponentSDK = ({
       <div className="pw-flex pw-flex-col pw-items-end">
         <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-bold">
           {' '}
-          {new Date(statement.createdAt).toDateString()}
+          {format(new Date(statement.createdAt), 'PPpp', {
+            locale: locale == 'pt-BR' ? ptBR : enUS,
+          })}
         </div>
         <div className="pw-mt-2"></div>
         {statement.loyaltieTransactions?.map((loyaltieTransaction) => (

@@ -1,5 +1,6 @@
 import { CSSProperties, lazy } from 'react';
 
+import _ from 'lodash';
 import { Navigation, Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -18,22 +19,20 @@ import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { isImage, isVideo } from '../../shared/utils/validators';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import {
   AlignmentEnum,
   BannerVariantData,
   SpecificBannerInfo,
 } from '../interfaces';
-
-import _ from 'lodash';
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 export const Banner = ({ data }: { data: BannerVariantData }) => {
-  const { styleData, mobileStyleData } = data;
+  const { styleData, mobileStyleData, id } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -69,6 +68,7 @@ export const Banner = ({ data }: { data: BannerVariantData }) => {
   return (
     <TranslatableComponent>
       <div
+        id={`sf-${id}`}
         className={`${layoutClass} pw-mx-auto`}
         style={{
           margin: convertSpacingToCSS(margin),
@@ -134,12 +134,12 @@ const Slide = ({
     overlayColor,
     backgroundUrl,
     backgroundUrlMobile,
-    title,
+    title: titleRaw,
     padding,
     overlay,
     buttonText,
     actionButton,
-    subtitle,
+    subtitle: subtitleRaw,
     secondaryActionButton,
     secondaryButtonText,
     secondaryButtonLink,
@@ -171,7 +171,9 @@ const Slide = ({
     contentClass,
     spacing,
   } = data;
-  const { isDynamic, datasource, loading } = useDynamicApi();
+  const { isDynamic, datasource } = useDynamicApi();
+  const { text: title } = useDynamicString(titleRaw);
+  const { text: subtitle } = useDynamicString(subtitleRaw);
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -326,9 +328,7 @@ const Slide = ({
                   titleTextAlign ?? ''
                 } pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
               >
-                {loading && !datasource
-                  ? ''
-                  : _.get(datasource, title ?? '', title)}
+                {title}
               </h2>
               <p
                 style={{
@@ -356,9 +356,7 @@ const Slide = ({
                 }}
                 className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
               >
-                {loading && !datasource
-                  ? ''
-                  : _.get(datasource, subtitle ?? '', subtitle)}
+                {subtitle}
               </p>
 
               <div className="pw-flex pw-gap-4">
