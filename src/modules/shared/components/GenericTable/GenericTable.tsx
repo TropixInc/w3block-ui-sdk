@@ -87,8 +87,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const methods = useForm();
   const truncate = useTruncate();
 
-  console.log(filters, 'filters');
-
   useEffect(() => {
     const itemSorteble = columns.find((item) => item.sortable);
     if (itemSorteble && itemSorteble?.sortableTamplate) {
