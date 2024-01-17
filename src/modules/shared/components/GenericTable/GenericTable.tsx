@@ -50,7 +50,7 @@ const paginationMapping = {
     },
     outputMap: (params: any) => {
       const newParams = { ...params, page: undefined };
-      newParams['pagination[pageSize]'] = 2;
+      newParams['pagination[pageSize]'] = 10;
       newParams['pagination[page]'] = params?.page;
 
       return newParams;
