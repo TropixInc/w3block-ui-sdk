@@ -50,7 +50,7 @@ const paginationMapping = {
     },
     outputMap: (params: any) => {
       const newParams = { ...params, page: undefined };
-      newParams['pagination[pageSize]'] = 10;
+      newParams['pagination[pageSize]'] = 2;
       newParams['pagination[page]'] = params?.page;
 
       return newParams;
@@ -86,6 +86,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const [filterLabels, setFilterLabels] = useState<any | undefined>();
   const methods = useForm();
   const truncate = useTruncate();
+
+  console.log(filters, 'filters');
 
   useEffect(() => {
     const itemSorteble = columns.find((item) => item.sortable);
@@ -151,6 +153,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         replacedUrl = replacedUrl?.replace(item[0], y);
       }
     });
+
+    if (filteredArrFilters?.length) {
+      changePage(1);
+    }
 
     if (replacedUrl && filteredArrFilters?.length) {
       if (replacedUrl.includes('?')) {
@@ -647,7 +653,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         </div>
 
         {totalItems && totalPages && totalPages > 1 ? (
-          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10">
+          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10 pw-mt-2">
             <p className="pw-text-sm pw-font-semibold">
               {translate('keytokenEditionsList>totalItems', {
                 total: totalItems,
