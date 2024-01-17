@@ -86,7 +86,7 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
           dangerouslySetInnerHTML={{
-            __html: content ?? '',
+            __html: content !== 'null' ? content ?? '' : 'Não disponível',
           }}
         />
       </div>
