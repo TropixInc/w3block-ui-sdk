@@ -40,6 +40,7 @@ export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
     fontFamily,
     hasCart,
     logoLink,
+    hasLogIn,
   } = mergedStyleData;
 
   return (
@@ -55,6 +56,7 @@ export const Header = ({ data }: { data: MainModuleThemeInterface }) => {
         padding={convertSpacingToCSS(padding)}
         tabs={tabs?.map(mapOptionsToTabs)}
         fontFamily={fontFamily}
+        hasLogIn={hasLogIn}
       />
     </>
   );
