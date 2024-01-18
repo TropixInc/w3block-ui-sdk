@@ -6,7 +6,9 @@ import { useDebounce } from 'react-use';
 
 import './index.css';
 
+import { Spinner } from '../../../shared/components/Spinner';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import { PaymentFailedModal } from '../../components/paymentFailedModal/PaymentFailedModal';
 import { useCreatePayment } from '../../hooks/useCreatePayment';
 import { useGetPaymentPreview } from '../../hooks/useGetPaymentPreview';
 import { useGetUserBalance } from '../../hooks/useGetUserBalance';
@@ -54,6 +56,7 @@ export const PaymentTemplateSDK = () => {
   const [code, setCode] = useState(['', '', '', '']);
   const [paymentCompletedModal, setPaymentCompletedModal] =
     useState<boolean>(false);
+  const [paymentFailedModal, setPaymentFailedModal] = useState<boolean>(false);
   const { loyalties } = useLoyaltiesInfo();
   const [codeError, setCodeError] = useState<string>('');
   const [userInfo, setUserInfo] = useState<UserInfoInterface>({});
@@ -150,8 +153,9 @@ export const PaymentTemplateSDK = () => {
             setTotalValue('');
             setIsLoading(false);
           },
-          onError(error) {
-            console.log(error);
+          onError() {
+            setPaymentFailedModal(true);
+            setIsLoading(false);
           },
         }
       );
@@ -305,13 +309,17 @@ export const PaymentTemplateSDK = () => {
                 : ''
             }`}
           >
-            Confirmar
+            {isLoading ? <Spinner className="pw-w-5 pw-h-5" /> : 'Confirmar'}
           </button>
         </div>
       </div>
       <PayementCompletedModal
         isOpen={paymentCompletedModal}
         onClose={() => setPaymentCompletedModal(false)}
+      />
+      <PaymentFailedModal
+        isOpen={paymentFailedModal}
+        onClose={() => setPaymentFailedModal(false)}
       />
     </InternalPagesLayoutBase>
   );

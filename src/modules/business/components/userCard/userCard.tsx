@@ -94,13 +94,13 @@ export const UserCard = ({
           )}
           {balance && parseFloat(balance) != 0 ? (
             <div className="pw-flex pw-justify-between pw-text-slate-500 pw-text-sm pw-items-center pw-mt-3">
-              <p>Saldo: {balance}</p>
+              <p>Saldo: {parseFloat(balance).toFixed(2)}</p>
               <button
                 onClick={() => {
                   setMaxValue();
                   setError(false);
                 }}
-                className="pw-p-[2px_10px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-zinc-300  "
+                className="pw-p-[2px_10px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-zinc-600  pw-text-slate-800 pw-font-medium"
               >
                 Max
               </button>
