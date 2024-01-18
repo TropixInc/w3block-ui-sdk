@@ -120,6 +120,8 @@ const _FormCompleteKYCWithoutLayout = ({
     }
   };
 
+  console.log(tenantInputs, 'tenant');
+
   useEffect(() => {
     if ((tenantInputs?.data && tenantInputs?.data?.length < 1) || isSuccess) {
       if (!profilePage) {

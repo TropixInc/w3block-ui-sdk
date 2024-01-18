@@ -6,6 +6,9 @@ import { FormItemContainer } from '../../Form/FormItemContainer';
 export interface Options {
   label: string;
   value: string;
+  type?: string;
+  valuePath?: string;
+  labelPath?: string;
 }
 
 interface Props {
