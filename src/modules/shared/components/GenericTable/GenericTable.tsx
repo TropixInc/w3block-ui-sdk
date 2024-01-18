@@ -152,6 +152,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
     });
 
+    if (filteredArrFilters?.length) {
+      changePage(1);
+    }
+
     if (replacedUrl && filteredArrFilters?.length) {
       if (replacedUrl.includes('?')) {
         setApiUrl(`${replacedUrl}&${filteredArrFilters.join('&')}&${sort}`);
@@ -647,7 +651,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         </div>
 
         {totalItems && totalPages && totalPages > 1 ? (
-          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10">
+          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10 pw-mt-2">
             <p className="pw-text-sm pw-font-semibold">
               {translate('keytokenEditionsList>totalItems', {
                 total: totalItems,
