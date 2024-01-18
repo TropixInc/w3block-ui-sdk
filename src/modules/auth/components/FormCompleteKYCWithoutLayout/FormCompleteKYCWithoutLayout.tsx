@@ -120,8 +120,6 @@ const _FormCompleteKYCWithoutLayout = ({
     }
   };
 
-  console.log(tenantInputs, 'tenant');
-
   useEffect(() => {
     if ((tenantInputs?.data && tenantInputs?.data?.length < 1) || isSuccess) {
       if (!profilePage) {
@@ -178,6 +176,7 @@ const _FormCompleteKYCWithoutLayout = ({
                   getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
                 }
                 onChangeUploadProgess={setUploadProgress}
+                selectData={item.data}
               />
             ))}
 
