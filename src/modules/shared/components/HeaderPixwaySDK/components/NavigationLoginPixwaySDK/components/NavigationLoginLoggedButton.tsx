@@ -20,6 +20,7 @@ import  EyeIcon  from '../../../../../assets/icons/eyeGold.svg?react';
 import  IntegrationIcon  from '../../../../../assets/icons/integrationIconOutlined.svg?react';
 import  LogoutIcon  from '../../../../../assets/icons/logoutIconGray.svg?react';
 import  MyOrdersIcon  from "../../../../../assets/icons/myOrders.svg?react"
+import  NewsIcon  from '../../../../../assets/icons/news.svg?react';
 import  ReceiptIcon from "../../../../../assets/icons/receipt.svg?react";
 //import  MyTokenIcon  from '../../../../../assets/icons/myTokensIconGray.svg?react';
 // import  SettingsIcon  from '../../../../../assets/icons/settingsIconGray.svg?react';
@@ -57,6 +58,7 @@ export const NavigationLoginLoggedButton = ({
   const [menu, setMenu] = useState<boolean>(false);
   const organizedLoyalties = useGetRightWallet()
   const ref = useRef(null);
+
   useClickAway(ref, () => {
     if (menu) setMenu(false);
   });
@@ -110,6 +112,13 @@ export const useDefaultMenuTabs = (textColor: string) => {
     return defaultTheme?.configurations.styleData.internalMenu || {};
   }, [defaultTheme?.configurations.styleData.internalMenu]);
 
+  const isShowAffiliates =
+  (defaultTheme &&
+    defaultTheme.configurations &&
+    defaultTheme?.configurations?.styleData &&
+    defaultTheme?.configurations?.styleData?.memberGetMember) ||
+  false;
+
   const items: NavigationMenuTabs[] = [
    
     {
@@ -139,6 +148,13 @@ export const useDefaultMenuTabs = (textColor: string) => {
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: (isUser || isAdmin) && !isHidden('wallet'),
+    },
+    {
+      name: internalMenuData['affiliates']?.customLabel ||   translate('shared>menu>affiliates'),
+      id: 'affiliates',
+      route: PixwayAppRoutes.AFFILIATES,
+      icon: <NewsIcon width={17} height={17} style={{color: textColor, stroke: textColor}} />,
+      isVisible: (isUser || isAdmin) && !isHidden('affiliates') && isShowAffiliates,
     },
     {
       name: internalMenuData['extract']?.customLabel || translate('wallet>page>extract'),

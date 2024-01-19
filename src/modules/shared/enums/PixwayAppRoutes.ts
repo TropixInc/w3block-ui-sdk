@@ -49,4 +49,5 @@ export enum PixwayAppRoutes {
   PRODUCT_PAGE = '/product/slug/{slug}',
   LOYALTY_PAYMENT = '/business/loyalty/payment',
   LOYALTY_REPORT = '/business/loyalty/report',
+  AFFILIATES = '/affiliates',
 }

@@ -10,3 +10,4 @@ export * from './poll';
 export * from './storefront';
 export * from './custom';
 export * from './business';
+export * from './affiliates';
