@@ -37,6 +37,7 @@ import {
   BeltColor,
   useGetAthlete,
 } from '../hooks/useGetAthlete';
+import { useGetAthleteByAddress } from '../hooks/useGetAthleteByAddress';
 export const AthletePage = () => {
   const { datasource, loading } = useDynamicApi();
   const { data, isLoading } = useGetAthlete(
@@ -47,12 +48,20 @@ export const AthletePage = () => {
     (e: any) => e.type === 'belt'
   );
   const titles = datasource?.athlete?.data[0]?.attributes.titles;
+  const { data: athleteData } = useGetAthleteByAddress(
+    datasource?.athlete?.data[0]?.id ?? '',
+    '0x30905c662ce29c4c4fc527edee57a47c808f3213',
+    '1284'
+  );
+  if (athleteData?.items?.length) {
+    const certification = athleteData?.items[0]?.tokenData;
+    titles.push(certification);
+  }
   const dates = beltsData?.map((e: any) => {
     return e?.date;
   });
   const datesRange = createDateRange(dates ?? []);
   const groupTitles = groupByDateRange(titles ?? [], datesRange ?? []);
-
   const belts = [
     BeltColor.ORANGE,
     BeltColor.YELLOW,
@@ -349,6 +358,27 @@ export const AthletePage = () => {
                                   );
                                 else return '';
                               };
+
+                              if (res?.instructorIdentification) {
+                                return (
+                                  <a
+                                    target="_blank"
+                                    href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/q?instructorIdentification=${datasource?.athlete?.data[0]?.id}&preview`}
+                                    key={index}
+                                    className="pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2"
+                                    rel="noreferrer"
+                                  >
+                                    <p>
+                                      {`(${format(
+                                        Date.parse(res?.dateOfIssue),
+                                        'P',
+                                        { locale: ptBR }
+                                      )})`}{' '}
+                                      WJJC Certified Instructor
+                                    </p>
+                                  </a>
+                                );
+                              }
 
                               return (
                                 <a
