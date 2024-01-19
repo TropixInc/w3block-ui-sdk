@@ -18,3 +18,4 @@ export * from './modules/poll';
 export * from './modules/storefront';
 export * from './modules/custom';
 export * from './modules/business';
+export * from './modules/affiliates';

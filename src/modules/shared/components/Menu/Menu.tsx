@@ -19,6 +19,7 @@ import IntegrationIcon from '../../assets/icons/integrationIconOutlined.svg?reac
 // import  HelpIcon  from '../../assets/icons/helpCircleOutlined.svg?react';
 import LogoutIcon from '../../assets/icons/logoutOutlined.svg?react';
 import MyOrdersIcon from '../../assets/icons/myOrders.svg?react';
+import NewsIcon from '../../assets/icons/news.svg?react';
 import ReceiptIcon from '../../assets/icons/receipt.svg?react';
 import TicketIcon from '../../assets/icons/ticketFilled.svg?react';
 // import  SettingsIcon  from '../../assets/icons/settingsOutlined.svg?react';
@@ -78,6 +79,13 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const { defaultTheme } = UseThemeConfig();
 
+  const isShowAffiliates =
+    (defaultTheme &&
+      defaultTheme.configurations &&
+      defaultTheme?.configurations?.styleData &&
+      defaultTheme?.configurations?.styleData?.memberGetMember) ||
+    false;
+
   const isUser = Boolean(userRoles.find((e: string) => e === 'user'));
 
   const isLoyaltyOperator = Boolean(
@@ -130,6 +138,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WALLET,
         isVisible: (isUser || isAdmin) && !isHidden('wallet'),
+      },
+      {
+        title:
+          internalMenuData['affiliates']?.customLabel ||
+          translate('shared>menu>affiliates'),
+        id: 'affiliates',
+        icon: <NewsIcon width={17} height={17} />,
+        link: PixwayAppRoutes.AFFILIATES,
+        isVisible:
+          (isUser || isAdmin) && !isHidden('affiliates') && isShowAffiliates,
       },
       {
         title:
