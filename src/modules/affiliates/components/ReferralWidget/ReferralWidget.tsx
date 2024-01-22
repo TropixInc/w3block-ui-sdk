@@ -4,6 +4,7 @@ import { useCopyToClipboard, useLocation } from 'react-use';
 
 import { AuthButton } from '../../../auth/components/AuthButton';
 import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
+import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useProfileWithKYC } from '../../../shared/hooks/useProfileWithKYC/useProfileWithKYC';
 
 interface ReferralProps {
@@ -16,6 +17,7 @@ export const ReferralWidget = ({
   shareMenssage,
 }: ReferralProps) => {
   const [translate] = useTranslation();
+  const isMobile = useIsMobile();
   const { profile } = useProfileWithKYC();
   const { host } = useLocation();
   const [isCopied, setIsCopied] = useState(false);
@@ -48,7 +50,14 @@ export const ReferralWidget = ({
     } else {
       copyToClipboard(link);
     }
+
+    if (!state.error) setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 3000);
   };
+
+  const whatsappLink = shareMenssage
+    ? shareMenssage.replace('{shareLink}', link)
+    : link;
 
   return (
     <div className="pw-max-w-[800px] pw-w-full pw-mb-6">
@@ -66,13 +75,21 @@ export const ReferralWidget = ({
         </button>
       </div>
       <div className="pw-flex pw-gap-x-2 pw-flex-col  pw-mt-2 sm:pw-flex-row">
-        <AuthButton variant="filled" className="pw-w-full sm:pw-w-[50%]">
+        <AuthButton
+          variant="filled"
+          className="pw-w-full pw-flex pw-items-center pw-justify-center sm:pw-w-[50%] !pw-py-0"
+        >
           <a
             target="_blank"
-            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-              shareMenssage ? shareMenssage.replace('{shareLink}', link) : link
-            )}`}
-            className="pw-no-underline pw-w-full pw-h-8"
+            href={
+              isMobile
+                ? `whatsapp://send?text=${encodeURIComponent(whatsappLink)}`
+                : `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                    whatsappLink
+                  )}`
+            }
+            data-action="share/whatsapp/share"
+            className="pw-p-0 pw-no-underline pw-w-[95%] pw-flex pw-items-center pw-justify-center pw-h-9"
             rel="noreferrer"
           >
             Whatsapp
