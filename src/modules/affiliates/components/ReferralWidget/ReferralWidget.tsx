@@ -4,6 +4,7 @@ import { useCopyToClipboard, useLocation } from 'react-use';
 
 import { AuthButton } from '../../../auth/components/AuthButton';
 import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
+import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useProfileWithKYC } from '../../../shared/hooks/useProfileWithKYC/useProfileWithKYC';
 
 interface ReferralProps {
@@ -16,6 +17,7 @@ export const ReferralWidget = ({
   shareMenssage,
 }: ReferralProps) => {
   const [translate] = useTranslation();
+  const isMobile = useIsMobile();
   const { profile } = useProfileWithKYC();
   const { host } = useLocation();
   const [isCopied, setIsCopied] = useState(false);
@@ -79,7 +81,13 @@ export const ReferralWidget = ({
         >
           <a
             target="_blank"
-            href={`whatsapp://send?text=${encodeURIComponent(whatsappLink)}`}
+            href={
+              isMobile
+                ? `whatsapp://send?text=${encodeURIComponent(whatsappLink)}`
+                : `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                    whatsappLink
+                  )}`
+            }
             data-action="share/whatsapp/share"
             className="pw-p-0 pw-no-underline pw-w-[95%] pw-flex pw-items-center pw-justify-center pw-h-9"
             rel="noreferrer"
