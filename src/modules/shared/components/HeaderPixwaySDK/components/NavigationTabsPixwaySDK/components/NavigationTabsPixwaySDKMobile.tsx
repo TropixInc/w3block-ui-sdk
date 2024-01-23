@@ -20,6 +20,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   signUpRoute = PixwayAppRoutes.SIGN_UP,
   textColor = 'black',
   hasSignUp,
+  hasLogIn = true,
   bgColor,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
@@ -134,7 +135,7 @@ export const NavigationTabsPixwaySDKMobile = ({
             );
           })}
 
-          {!session && (
+          {!session && hasLogIn && (
             <div className="pw-flex pw-justify-center pw-gap-x-[26px]">
               <PixwayButton
                 onClick={() => router.pushConnect(signInRoute)}

@@ -3,7 +3,14 @@ import { useCallback, useMemo } from 'react';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 export const useIsHiddenMenuItem = (
-  roles: Array<'user' | 'superAdmin' | 'admin' | 'operator' | 'loyaltyOperator'>
+  roles: Array<
+    | 'user'
+    | 'superAdmin'
+    | 'admin'
+    | 'operator'
+    | 'loyaltyOperator'
+    | 'commerce.orderReceiver'
+  >
 ) => {
   const { defaultTheme } = UseThemeConfig();
 

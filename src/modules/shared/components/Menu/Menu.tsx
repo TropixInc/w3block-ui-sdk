@@ -7,6 +7,8 @@ import { format } from 'date-fns/esm';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
+import { useLoyaltiesInfo } from '../../../business/hooks/useLoyaltiesInfo';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import CardIcon from '../../assets/icons/creditCardOutlined.svg?react';
 import DashboardIcon from '../../assets/icons/dashboard.svg?react';
@@ -17,25 +19,25 @@ import IntegrationIcon from '../../assets/icons/integrationIconOutlined.svg?reac
 // import  HelpIcon  from '../../assets/icons/helpCircleOutlined.svg?react';
 import LogoutIcon from '../../assets/icons/logoutOutlined.svg?react';
 import MyOrdersIcon from '../../assets/icons/myOrders.svg?react';
+import NewsIcon from '../../assets/icons/news.svg?react';
 import ReceiptIcon from '../../assets/icons/receipt.svg?react';
 import TicketIcon from '../../assets/icons/ticketFilled.svg?react';
 // import  SettingsIcon  from '../../assets/icons/settingsOutlined.svg?react';
 import UserIcon from '../../assets/icons/userOutlined.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
+import { useIsHiddenMenuItem } from '../../hooks/useIsHiddenMenuItem/useIsHiddenMenuItem';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
 import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
 import { useUserWallet } from '../../hooks/useUserWallet';
+import TranslatableComponent from '../TranslatableComponent';
+
 const ImageSDK = lazy(() =>
   import('../ImageSDK').then((module) => ({
     default: module.ImageSDK,
   }))
 );
-import TranslatableComponent from '../TranslatableComponent';
-import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
-import { useIsHiddenMenuItem } from '../../hooks/useIsHiddenMenuItem/useIsHiddenMenuItem';
-
 interface MenuProps {
   tabs?: TabsConfig[];
   className?: string;
@@ -77,15 +79,24 @@ const _Menu = ({ tabs, className }: MenuProps) => {
 
   const { defaultTheme } = UseThemeConfig();
 
+  const isShowAffiliates =
+    (defaultTheme &&
+      defaultTheme.configurations &&
+      defaultTheme?.configurations?.styleData &&
+      defaultTheme?.configurations?.styleData?.memberGetMember) ||
+    false;
+
   const isUser = Boolean(userRoles.find((e: string) => e === 'user'));
 
-  const isLoayaltyOperator = Boolean(
+  const isLoyaltyOperator = Boolean(
     userRoles.find((e: string) => e === 'loyaltyOperator')
   );
 
   const internalMenuData = useMemo(() => {
     return defaultTheme?.configurations.styleData.internalMenu || {};
   }, [defaultTheme?.configurations.styleData.internalMenu]);
+
+  const hasLoyalty = !!useLoyaltiesInfo()?.loyalties?.length;
 
   useEffect(() => {
     const tabsDefault: TabsConfig[] = [
@@ -94,7 +105,8 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         id: 'payment',
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.LOYALTY_PAYMENT,
-        isVisible: (isLoayaltyOperator || isAdmin) && !isHidden('payment'),
+        isVisible:
+          (isLoyaltyOperator || isAdmin) && !isHidden('payment') && hasLoyalty,
       },
       {
         title:
@@ -112,10 +124,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           translate('components>menu>dashboard'),
         id: 'dash',
         icon: <DashboardIcon width={17} height={17} />,
-        link: isLoayaltyOperator
+        link: hasLoyalty
           ? PixwayAppRoutes.LOYALTY_REPORT
           : PixwayAppRoutes.DASHBOARD,
-        isVisible: isLoayaltyOperator && !isHidden('dash'),
+        isVisible:
+          (isLoyaltyOperator || isAdmin) && !isHidden('dash') && hasLoyalty,
       },
       {
         title:
@@ -125,6 +138,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WALLET,
         isVisible: (isUser || isAdmin) && !isHidden('wallet'),
+      },
+      {
+        title:
+          internalMenuData['affiliates']?.customLabel ||
+          translate('shared>menu>affiliates'),
+        id: 'affiliates',
+        icon: <NewsIcon width={17} height={17} />,
+        link: PixwayAppRoutes.AFFILIATES,
+        isVisible:
+          (isUser || isAdmin) && !isHidden('affiliates') && isShowAffiliates,
       },
       {
         title:
@@ -183,7 +206,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     if (!tabs) setTabsToShow(tabsDefault);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pass, profile, loyaltyWallet, isAdmin, isLoayaltyOperator, defaultTheme]);
+  }, [pass, profile, loyaltyWallet, isAdmin, isLoyaltyOperator, defaultTheme]);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);

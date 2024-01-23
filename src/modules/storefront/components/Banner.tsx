@@ -169,6 +169,8 @@ const Slide = ({
   const { isDynamic, datasource } = useDynamicApi();
   const { text: title } = useDynamicString(titleRaw);
   const { text: subtitle } = useDynamicString(subtitleRaw);
+  const { text: primaryLink } = useDynamicString(buttonLink);
+  const { text: secondaryLink } = useDynamicString(secondaryButtonLink);
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -211,7 +213,7 @@ const Slide = ({
   return (
     <a
       href={
-        actionButton && buttonLink && buttonLink != '' ? buttonLink : undefined
+        actionButton && buttonLink && buttonLink != '' ? primaryLink : undefined
       }
     >
       <div
@@ -410,7 +412,11 @@ const Slide = ({
                     padding: getButtonPadding(buttonSize || '12px'),
                   }}
                   className=" pw-font-bold pw-rounded-[60px] pw-flex pw-items-center pw-justify-center pw-mt-6 pw-cursor-pointer"
-                  href={_.get(datasource, buttonLink ?? '', buttonLink)}
+                  href={
+                    actionButton && buttonLink && buttonLink != ''
+                      ? primaryLink
+                      : undefined
+                  }
                 >
                   {buttonText ?? 'Saiba mais'}
                 </a>
@@ -428,11 +434,13 @@ const Slide = ({
                     padding: getButtonPadding(secondaryButtonSize || '12px'),
                   }}
                   className="pw-font-bold pw-flex pw-items-center pw-justify-center pw-rounded-[60px] pw-mt-6 pw-cursor-pointer pw-z-20"
-                  href={_.get(
-                    datasource,
-                    secondaryButtonLink ?? '',
-                    secondaryButtonLink
-                  )}
+                  href={
+                    secondaryActionButton &&
+                    secondaryButtonLink &&
+                    secondaryButtonLink != ''
+                      ? secondaryLink
+                      : undefined
+                  }
                 >
                   {secondaryButtonText ?? 'Saiba mais'}
                 </a>
