@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -10,30 +12,31 @@ import { boolean, object, string } from 'yup';
 import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { useSignUp } from '../../hooks/useSignUp';
 import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../../templates/SignUpTemplate';
+import { AuthFooter } from '../AuthFooter';
+import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
+import { SignUpFormData } from '../SignUpForm/interface';
 const AuthButton = lazy(() => {
   return import('../AuthButton').then((m) => ({ default: m.AuthButton }));
 });
 const AuthCheckbox = lazy(() => {
   return import('../AuthCheckbox').then((m) => ({ default: m.AuthCheckbox }));
 });
-import { AuthFooter } from '../AuthFooter';
 const AuthPasswordTips = lazy(() => {
   return import('../AuthPasswordTips').then((m) => ({
     default: m.AuthPasswordTips,
   }));
 });
-import { AuthLayoutBaseClasses } from '../AuthLayoutBase';
 const AuthTextController = lazy(() => {
   return import('../AuthTextController').then((m) => ({
     default: m.AuthTextController,
   }));
 });
-import { SignUpFormData } from '../SignUpForm/interface';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 const VerifySignUpWithCodeWithoutLayout = lazy(() => {
   return import(
     '../VerifySignUpWithCodeWithoutLayout/VerifySignUpWithCodeWithoutLayout'
@@ -67,7 +70,9 @@ export const SignUpFormWithoutLayout = ({
   title,
   hasSignUp = true,
 }: Props) => {
-  const passwordSchema = usePasswordValidationSchema();
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+  const passwordSchema = usePasswordValidationSchema({ isPasswordless });
   const { appBaseUrl, connectProxyPass } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouterConnect();
@@ -90,7 +95,6 @@ export const SignUpFormWithoutLayout = ({
 
   useEffect(() => {
     if (!hasSignUp) router.pushConnect(PixwayAppRoutes.SIGN_IN);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasSignUp]);
 
   useEffect(() => {
@@ -131,15 +135,21 @@ export const SignUpFormWithoutLayout = ({
   const schema = object().shape({
     email: string().email(),
     password: passwordSchema,
-    confirmation: string()
-      .required(translate('auth>signUp>confirmationRequired'))
-      .test(
-        'Ok',
-        translate('auth>signUp>passwordConfirmation'),
-        (value, context) => value === context.parent.password
-      ),
-    acceptsPolicyTerms: boolean().required().isTrue(),
-    acceptsTermsOfUse: boolean().required().isTrue(),
+    confirmation: isPasswordless
+      ? string()
+      : string()
+          .required(translate('auth>signUp>confirmationRequired'))
+          .test(
+            'Ok',
+            translate('auth>signUp>passwordConfirmation'),
+            (value, context) => value === context.parent.password
+          ),
+    acceptsPolicyTerms: isPasswordless
+      ? boolean()
+      : boolean().required().isTrue(),
+    acceptsTermsOfUse: isPasswordless
+      ? boolean()
+      : boolean().required().isTrue(),
   });
 
   const methods = useForm<SignUpFormData>({
@@ -157,37 +167,45 @@ export const SignUpFormWithoutLayout = ({
   useEffect(() => {
     if (email)
       methods.setValue('email', email ? decodeURIComponent(email) : '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email]);
 
-  return step === Steps.SIGN_UP ? (
-    <div>
-      {error || signUpError ? (
-        <Alert
-          variant="error"
-          className="pw-flex pw-items-center pw-gap-x-2 pw-my-3"
-        >
-          <Alert.Icon />{' '}
-          <span className="pw-text-xs">
-            {error ? error : getErrorMessage()}
-          </span>
-        </Alert>
-      ) : null}
-      <FormProvider {...methods}>
-        {title ? (
-          <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-mb-8 pw-text-center pw-font-[700]">
-            {title}
-          </p>
-        ) : null}
+  useEffect(() => {
+    const typedError = signUpError as AxiosError;
+    const emailInUse =
+      (typedError?.response?.data as Record<string, string>)?.message ===
+      EMAIL_ALREADY_IN_USE_API_MESSAGE;
+    if (isPasswordless && signUpError && emailInUse) {
+      router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
+        email: emailLocal,
+      });
+    }
+  }, [signUpError]);
 
-        <form
-          onSubmit={
-            onSubmit
-              ? methods.handleSubmit(onSubmit)
-              : methods.handleSubmit(onSubmitLocal)
-          }
-          className="sm:pw-mt-6"
-        >
+  const inputs = () => {
+    if (isPasswordless)
+      return (
+        <>
+          <AuthTextController
+            disabled={Boolean(email)}
+            name="email"
+            label={translate('home>contactModal>email')}
+            className="pw-mb-3"
+            placeholder={translate('companyAuth>newPassword>enterYourEmail')}
+          />
+
+          <AuthButton
+            type="submit"
+            fullWidth
+            className="pw-mb-1"
+            disabled={isLoading || signUpLoading || !methods.formState.isValid}
+          >
+            {translate('components>advanceButton>continue')}
+          </AuthButton>
+        </>
+      );
+    else
+      return (
+        <>
           <AuthTextController
             disabled={Boolean(email)}
             name="email"
@@ -252,6 +270,39 @@ export const SignUpFormWithoutLayout = ({
             </Trans>
           </p>
           <AuthFooter />
+        </>
+      );
+  };
+
+  return step === Steps.SIGN_UP ? (
+    <div>
+      {(error || signUpError) && !isPasswordless ? (
+        <Alert
+          variant="error"
+          className="pw-flex pw-items-center pw-gap-x-2 pw-my-3"
+        >
+          <Alert.Icon />{' '}
+          <span className="pw-text-xs">
+            {error ? error : getErrorMessage()}
+          </span>
+        </Alert>
+      ) : null}
+      <FormProvider {...methods}>
+        {title ? (
+          <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-mb-8 pw-text-center pw-font-[700]">
+            {title}
+          </p>
+        ) : null}
+
+        <form
+          onSubmit={
+            onSubmit
+              ? methods.handleSubmit(onSubmit)
+              : methods.handleSubmit(onSubmitLocal)
+          }
+          className="sm:pw-mt-6"
+        >
+          {inputs()}
         </form>
       </FormProvider>
     </div>

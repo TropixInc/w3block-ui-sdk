@@ -78,4 +78,6 @@ export enum PixwayAPIRoutes {
   GET_ERC_TOKENS_BY_LOYALTY_ID_BY_OPERATOR_ID = '/{companyId}/erc20-tokens/{loyaltyId}/history/operator/{operatorId}',
   GET_BENEFIT_USES = '/token-pass-benefits/tenants/{companyId}/usages',
   METADATA_BY_ADDRESS_AND_CHAINID = '/metadata/tokens/{address}/{chainId}',
+  SIGNIN_WITH_CODE = 'auth/signin/code',
+  REQUEST_SIGNIN_CODE = '/auth/signin/request-code',
 }

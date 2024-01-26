@@ -12,17 +12,17 @@ import { Alert } from '../../../shared/components/Alert';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
+import { AuthFooter } from '../AuthFooter';
 const AuthButton = lazy(() =>
   import('../AuthButton').then((m) => ({ default: m.AuthButton }))
 );
-
-import { AuthFooter } from '../AuthFooter';
-import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 const AuthTextController = lazy(() => {
   return import('../AuthTextController').then((m) => ({
     default: m.AuthTextController,
@@ -56,10 +56,15 @@ export const SigInWithoutLayout = ({
   hasSignUp = true,
 }: SignInWithoutLayoutProps) => {
   const { companyId } = useCompanyConfig();
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
-    pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
+    isPasswordless,
+    messageConfig: {
+      pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
+    },
   });
   const { data: session } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);
@@ -132,6 +137,11 @@ export const SigInWithoutLayout = ({
   }, [session, router, profile]);
 
   const onSubmit = async ({ email, password }: Form) => {
+    if (isPasswordless) {
+      router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
+        email,
+      });
+    }
     try {
       setIsLoading(true);
       const response = await signIn({
@@ -154,7 +164,7 @@ export const SigInWithoutLayout = ({
         onSubmit={methods.handleSubmit(onSubmit)}
         className="pw-font-montserrat"
       >
-        {isShowingErrorMessage ? (
+        {isShowingErrorMessage && !isPasswordless ? (
           <Alert
             variant="error"
             className="pw-mb-6 pw-mt-4 pw-flex !pw-justify-start"
@@ -174,30 +184,32 @@ export const SigInWithoutLayout = ({
           placeholder={translate('companyAuth>newPassword>enterYourEmail')}
           autoComplete="username"
         />
-        <AuthTextController
-          name="password"
-          autoComplete="current-password"
-          label={translate('companyAuth>newPassword>passwordFieldLabel')}
-          type="password"
-          className="pw-mb-6"
-          placeholder={translate('companyAuth>newPassword>enterYourPassword')}
-          renderTips={() => (
-            <div className="pw-flex pw-justify-between pw-items-center pw-gap-x-1.5 pw-mt-2">
-              <AuthValidationTip
-                isDirty={fieldState.isDirty}
-                error={fieldState.error}
-              />
-              <a
-                href={router.routerToHref(
-                  PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
-                )}
-                className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
-              >
-                {translate('auth>passwordChange>requestChangeFormTitle')}
-              </a>
-            </div>
-          )}
-        />
+        {!isPasswordless ? (
+          <AuthTextController
+            name="password"
+            autoComplete="current-password"
+            label={translate('companyAuth>newPassword>passwordFieldLabel')}
+            type="password"
+            className="pw-mb-6"
+            placeholder={translate('companyAuth>newPassword>enterYourPassword')}
+            renderTips={() => (
+              <div className="pw-flex pw-justify-between pw-items-center pw-gap-x-1.5 pw-mt-2">
+                <AuthValidationTip
+                  isDirty={fieldState.isDirty}
+                  error={fieldState.error}
+                />
+                <a
+                  href={router.routerToHref(
+                    PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
+                  )}
+                  className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
+                >
+                  {translate('auth>passwordChange>requestChangeFormTitle')}
+                </a>
+              </div>
+            )}
+          />
+        ) : null}
 
         <div className="pw-mb-6">
           <AuthButton

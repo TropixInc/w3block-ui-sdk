@@ -70,7 +70,7 @@ const _ResetPasswordTemplate = () => {
   const { logoUrl } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const passwordSchema = usePasswordValidationSchema();
+  const passwordSchema = usePasswordValidationSchema({});
   const { mutate, isLoading, isSuccess, isExpired, isError } =
     useChangePasswordAndSignIn();
   const { email, token, step } = router.query;

@@ -115,14 +115,17 @@ const _FormCompleteKYCWithoutLayout = ({
           documents: {
             documents: validDocs,
           },
+          currentStep: step as string,
         },
         {
           onSuccess: () => {
             const steps = Object.keys(groupedInputs).length;
             if (steps && parseInt(step as string) < steps) {
-              router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-                contextSlug: slug(),
-                step: parseInt(step as string) + 1,
+              router.replace({
+                query: {
+                  contextSlug: slug(),
+                  step: parseInt(step as string) + 1,
+                },
               });
             } else if (!profilePage) {
               router.pushConnect(

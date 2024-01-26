@@ -15,3 +15,4 @@ export * from './RequestPasswordChangeTemplate';
 export * from './ResetPasswordTemplate';
 export * from './SignInTemplate';
 export * from './SignUpTemplate';
+export * from './SignInWithCodeTemplateSDK';
