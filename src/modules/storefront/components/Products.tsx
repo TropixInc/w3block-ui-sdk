@@ -1,14 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
+import _ from 'lodash';
 import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-const Card = lazy(() =>
-  import('../../shared/components/Card').then((module) => ({
-    default: module.Card,
-  }))
-);
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import {
@@ -32,11 +29,12 @@ import './Products.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
-
-import _ from 'lodash';
-
 import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
-
+const Card = lazy(() =>
+  import('../../shared/components/Card').then((module) => ({
+    default: module.Card,
+  }))
+);
 const ContentCard = lazy(() =>
   import('./ContentCard').then((module) => ({
     default: module.ContentCard,
@@ -127,7 +125,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
       callApiForDynamicProducts();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardSearch, cardType, breakpoint, totalRows, itensPerLine]);
+  }, [cardSearch, cardType, breakpoint, totalRows, itensPerLine, companyId]);
 
   const quantityOfItemsGrid = () => {
     if (breakpoint == breakpointsEnum.XS) {
@@ -158,19 +156,20 @@ export const Products = ({ data }: { data: ProductsData }) => {
 
   const callApiForDynamicProducts = () => {
     const limit = carouselSize;
-    axios
-      .get(
-        `/companies/${companyId}/products?limit=${limit}&${
-          cardSearch && cardSearch.length > 0
-            ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
-            : ''
-        }`
-      )
-      .then((response) => {
-        if (response) {
-          setProducts(response.data.items);
-        }
-      });
+    if (companyId)
+      axios
+        .get(
+          `/companies/${companyId}/products?limit=${limit}&${
+            cardSearch && cardSearch.length > 0
+              ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+              : ''
+          }`
+        )
+        .then((response) => {
+          if (response) {
+            setProducts(response.data.items);
+          }
+        });
   };
 
   const clampedProducts = products?.slice(0, carouselSize);
