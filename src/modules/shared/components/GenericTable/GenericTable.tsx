@@ -10,6 +10,9 @@ import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import ClearFilter from '../../assets/icons/clearFilterOutlined.svg?react';
 import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import FilterIcon from '../../assets/icons/filterOutlined.svg?react';
+import MetamaskIcon from '../../assets/icons/metamask.svg?react';
+import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg?react';
+import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg?react';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
@@ -187,7 +190,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     itemKey: string,
     format: FormatApiData,
     basicUrl?: string,
-    keyInCollection?: string
+    keyInCollection?: string,
+    moreInfos?: any
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -201,8 +205,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
       case FormatTypeColumn.MAPPING: {
         const value = _.get(item, itemKey, '');
-
-        const formatedValue = _.get(format.mapping, value, '-');
+        const formatedValue =
+          typeof format.mapping === 'function'
+            ? format.mapping(item)
+            : _.get(format.mapping, value, '-');
         return formatedValue ? formatedValue : value;
       }
       case FormatTypeColumn.HASH: {
@@ -263,6 +269,60 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           );
         } else {
           return valueRendered;
+        }
+      }
+
+      case FormatTypeColumn.USER: {
+        return (
+          <div className="w-full">
+            <div className="flex gap-x-1 flex-col">
+              <p className="text-ellipsis overflow-hidden">
+                {_.get(item, itemKey, '--')}
+              </p>
+              <p className="text-xs opacity-60 pw-flex pw-flex-col">
+                <span>{_.get(item, moreInfos.name, '')}</span>
+                <span>{_.get(item, moreInfos.cpf, '')}</span>
+                <span>{_.get(item, moreInfos.phone, '')}</span>
+              </p>
+            </div>
+          </div>
+        );
+      }
+      case FormatTypeColumn.WALLET: {
+        if (_.get(item, itemKey)) {
+          return (
+            <div className="pw-flex pw-gap-2 pw-items-center">
+              {_.get(item, moreInfos.name, '') === 'metamask' ? (
+                <MetamaskIcon width={40} height={40} />
+              ) : (
+                <W3blockIcon
+                  width={40}
+                  height={40}
+                  className="pw-fill-[#5682C3] pw-stroke-[#DDE6F3]"
+                />
+              )}
+
+              <div>
+                <p className="pw-w-full pw-text-sm">
+                  {_.get(item, moreInfos.name, '') === 'metamask'
+                    ? translate('shared>genericTable>metamaskWallet')
+                    : translate('addFunds>type>weblockWallet')}
+                </p>
+                <p className="pw-w-full pw-text-sm pw-text-ellipsis pw-overflow-hidden">
+                  {_.get(item, itemKey)}
+                </p>
+              </div>
+            </div>
+          );
+        } else {
+          return (
+            <div className="pw-flex pw-items-center">
+              <NoWallet width={40} height={40} />
+              <p className="text-sm text-[#A9A9A9] line-clamp-1">
+                {translate('contacts>contactItem>notConfimed')}
+              </p>
+            </div>
+          );
         }
       }
 
@@ -358,7 +418,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     if (filterValues.some((item: any) => item?.length)) {
       return (
         <button
-          className="pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
+          className="pw-min-w-[165px] !pw-h-[44px] pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
           onClick={() => onClearAllFilter()}
         >
           <span className="pw-text-[#aaa] pw-font-medium">
@@ -612,19 +672,22 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                 >
                   {columns
                     .filter(({ header }) => header.label)
-                    .map(({ key, format, header, keyInCollection }) => (
-                      <p key={key} className="pw-text-sm pw-text-left">
-                        <span>
-                          {customizerValues(
-                            item as any,
-                            key,
-                            format,
-                            header.baseUrl,
-                            keyInCollection
-                          )}
-                        </span>
-                      </p>
-                    ))}
+                    .map(
+                      ({ key, format, header, keyInCollection, moreInfos }) => (
+                        <p key={key} className="pw-text-sm pw-text-left">
+                          <span>
+                            {customizerValues(
+                              item as any,
+                              key,
+                              format,
+                              header.baseUrl,
+                              keyInCollection,
+                              moreInfos
+                            )}
+                          </span>
+                        </p>
+                      )
+                    )}
                   <GenericButtonActions
                     dataItem={item}
                     actions={actions ?? []}
