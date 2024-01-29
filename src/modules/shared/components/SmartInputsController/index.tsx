@@ -48,6 +48,7 @@ const InputUrl = lazy(() =>
   }))
 );
 
+import InputImage from '../SmartInputs/InputImage/InputImage';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
 
 import { lazy } from 'react';
@@ -64,6 +65,11 @@ interface SmartProps {
   docFileValue?: string;
   profilePage?: boolean;
   options?: Options[];
+  inputImageTitle?: string;
+  inputImageSubtitle?: string;
+  inputImagePlaceholder?: string;
+  inputImageInstructions?: string;
+  acceptImageTypes?: Array<string>;
 }
 
 export interface InputError {
@@ -85,6 +91,11 @@ const SmartInputsController = ({
   onChangeUploadProgess,
   profilePage,
   options,
+  inputImageInstructions,
+  inputImagePlaceholder,
+  inputImageSubtitle,
+  inputImageTitle,
+  acceptImageTypes,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -155,6 +166,21 @@ const SmartInputsController = ({
             docStatus={docStatus}
             openDocs={openDocs}
             acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
+            onChangeUploadProgess={onChangeUploadProgess}
+          />
+        );
+
+      case DataTypesEnum.Image:
+        return (
+          <InputImage
+            title={inputImageTitle || ''}
+            subtitle={inputImageSubtitle}
+            name={name}
+            imagePlaceholder={inputImagePlaceholder}
+            instructions={inputImageInstructions}
+            docValue={docFileValue}
+            openDocs={openDocs}
+            acceptTypes={acceptImageTypes || ['.png', '.jpeg', '.jpg']}
             onChangeUploadProgess={onChangeUploadProgess}
           />
         );

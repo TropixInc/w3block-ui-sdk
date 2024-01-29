@@ -30,6 +30,7 @@ import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignup
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { useGetReasonsRequiredReview } from '../../hooks/useGetReasonsRequiredReview';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
+
 const AuthButton = lazy(() =>
   import('../AuthButton').then((m) => ({ default: m.AuthButton }))
 );
@@ -170,12 +171,17 @@ const _FormCompleteKYCWithoutLayout = ({
                 type={item.type}
                 options={item.options}
                 assetId={getDocumentByInputId(item?.id)?.assetId}
+                inputImageTitle={item?.data?.title}
+                inputImageSubtitle={item?.data?.subtitle}
+                inputImagePlaceholder={item?.data?.placeholderImage}
+                inputImageInstructions={item?.data?.instructions}
                 value={getDocumentByInputId(item?.id)?.value}
                 docStatus={getDocumentByInputId(item?.id)?.status}
                 docFileValue={
                   getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
                 }
                 onChangeUploadProgess={setUploadProgress}
+                acceptImageTypes={item?.data?.acceptTypes}
               />
             ))}
 

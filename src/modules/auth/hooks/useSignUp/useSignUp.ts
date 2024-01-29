@@ -39,11 +39,11 @@ export const useSignUp = () => {
       verificationType: VerificationType.Numeric,
       callbackUrl:
         payload.callbackUrl ??
-        removeDoubleSlashesOnUrl(
+        (removeDoubleSlashesOnUrl(
           appBaseUrl +
             connectProxyPass +
             PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION
-        ),
+        ) as any),
     });
   });
 };
