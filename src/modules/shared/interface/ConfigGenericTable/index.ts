@@ -13,6 +13,8 @@ export enum FormatTypeColumn {
   HASH = 'hash',
   THUMBNAIL = 'thumbnail',
   COLLECTION = 'collection',
+  USER = 'user',
+  WALLET = 'wallet',
 }
 
 export enum FormatFilterType {
@@ -81,6 +83,11 @@ export interface ColumnsTable {
   keyInCollection?: string;
   subLabel?: string;
   sortable: boolean;
+  moreInfos?: {
+    name?: string;
+    cpf?: string;
+    phone?: string;
+  };
   sortableTamplate?: string;
   header: {
     label: string;

@@ -412,5 +412,12 @@
   "keytokenEditionsList>totalItems": "{{total}} item(s)",
   "contact>inviteContactTemplate>error": "Houve um erro. Se o problema persistir, contate seu administrador.",
   "shared>menu>affiliates": "Afiliados",
-  "affiliates>referrakWidget>shared": "Compartilhar"
+  "affiliates>referrakWidget>shared": "Compartilhar",
+  "shared>genericTable>metamaskWallet": "Carteira Metamask",
+  "contacts>contactItem>notConfimed": "Não confirmado",
+  "shared>genericTable>searchByEmail": "Busque pelo e-mail",
+  "key>salesReportsTemplate>exportReport": "Exportar relatório",
+  "tokens>generateGenericXlsReports>await": "Aguarde",
+  "key>salesReportsTemplate>download": "Relatório finalizado, clique aqui para baixar",
+  "home>contactModal>error": "Falha no envio. Tente novamente mais tarde."
 }
