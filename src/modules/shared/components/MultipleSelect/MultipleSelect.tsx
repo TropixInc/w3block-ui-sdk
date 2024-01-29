@@ -4,6 +4,7 @@ import { useClickAway } from 'react-use';
 
 import { Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import ArrowDownOutlined from '../../assets/icons/arrowDown.svg?react';
 import CheckBoxIcon from '../../assets/icons/checkOutlined.svg?react';
@@ -63,7 +64,7 @@ export const MultipleSelect = ({
       if (hasValue) newValues.push(val);
     });
 
-    if (JSON.stringify(newValues) !== JSON.stringify(value)) {
+    if (_.isEqual(newValues, value)) {
       if (onChangeMultipleSelected) {
         onChangeMultipleSelected(newValues);
       } else {
