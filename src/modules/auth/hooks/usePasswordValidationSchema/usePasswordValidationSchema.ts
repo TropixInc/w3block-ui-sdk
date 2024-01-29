@@ -11,21 +11,29 @@ interface ErrorMessages {
   pattern?: string;
 }
 
-export const usePasswordValidationSchema = (
-  messageConfig: ErrorMessages = {}
-) => {
+interface Params {
+  messageConfig?: ErrorMessages;
+  isPasswordless?: boolean;
+}
+
+export const usePasswordValidationSchema = ({
+  messageConfig,
+  isPasswordless = false,
+}: Params) => {
   const [translate] = useTranslation();
   return useMemo(() => {
-    return string()
-      .required(
-        messageConfig.required ??
-          translate('components>form>requiredFieldValidation')
-      )
-      .min(8, 'Minimo 8 caracteres')
-      .matches(
-        passwordRegex,
-        messageConfig.pattern ??
-          translate('auth>passwordErrorFeedback>genericInvalidMessage')
-      );
-  }, [translate, messageConfig]);
+    if (isPasswordless) return string();
+    else
+      return string()
+        .required(
+          messageConfig?.required ??
+            translate('components>form>requiredFieldValidation')
+        )
+        .min(8, 'Minimo 8 caracteres')
+        .matches(
+          passwordRegex,
+          messageConfig?.pattern ??
+            translate('auth>passwordErrorFeedback>genericInvalidMessage')
+        );
+  }, [translate, messageConfig, isPasswordless]);
 };

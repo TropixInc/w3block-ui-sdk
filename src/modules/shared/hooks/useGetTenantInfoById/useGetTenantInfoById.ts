@@ -14,6 +14,11 @@ export interface IcompanyInfo {
   name: string;
   info: unknown;
   hosts: HostInfo[];
+  configuration?: {
+    passwordless?: {
+      enabled: boolean;
+    };
+  };
 }
 
 export function useGetTenantInfoById(tenantId: string) {

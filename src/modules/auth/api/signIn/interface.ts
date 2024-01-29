@@ -6,6 +6,11 @@ export interface SignInPayload {
   companyId: string;
 }
 
+export interface SignInWithCodePayload {
+  email: string;
+  code: string;
+}
+
 interface UserDataSignIn {
   sub: string;
   email: string;

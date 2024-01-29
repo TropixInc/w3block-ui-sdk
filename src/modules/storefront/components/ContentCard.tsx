@@ -52,6 +52,8 @@ export const ContentCard = ({
     valueFontBold,
     valueFontItalic,
     valueFontSizeType,
+    textPadding,
+    containerRadius,
     border,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
@@ -102,8 +104,14 @@ export const ContentCard = ({
               backgroundPosition: 'center',
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
+              borderRadius:
+                format === 'rounded'
+                  ? '9999px'
+                  : containerRadius
+                  ? containerRadius
+                  : '20px',
             }}
-            className={` pw-w-full pw-relative ${
+            className={`pw-w-full pw-relative ${
               format === 'square' || format == 'rounded'
                 ? 'pw-h-0 pw-pt-[100%] '
                 : ''
@@ -115,8 +123,6 @@ export const ContentCard = ({
               format === 'rectVertical'
                 ? 'pw-min-h-[380px] pw-max-h-[380px]'
                 : ''
-            } ${
-              format === 'rounded' ? 'pw-rounded-full' : 'pw-rounded-[20px]'
             } `}
           >
             <div
@@ -268,10 +274,11 @@ export const ContentCard = ({
           </div>
         )}
         {!txtOver || format == 'rounded' ? (
-          <div className=" pw-pt-4 pw-px-[24px]">
+          <div>
             {showCardTitle && (
               <p
                 style={{
+                  padding: textPadding ?? '16px 24px 0 24px',
                   color: cardProductNameColor ?? 'black',
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: titleFontFamily ?? '',
@@ -301,6 +308,7 @@ export const ContentCard = ({
             {showCardDescription && (
               <p
                 style={{
+                  padding: textPadding ?? '0 24px',
                   color: cardDescriptionColor ?? '#7E7E7E',
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: descriptionFontFamily ?? '',
@@ -336,6 +344,7 @@ export const ContentCard = ({
             {showCardCategory && (
               <p
                 style={{
+                  padding: textPadding ?? '0 24px',
                   color: cardCategoryColor ?? '#C63535',
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: categoryFontFamily ?? '',
@@ -367,6 +376,7 @@ export const ContentCard = ({
             {showCardValue && (
               <p
                 style={{
+                  padding: textPadding ?? '0 24px',
                   color: cardValueColor ?? 'black',
                   textAlign: format == 'rounded' ? 'center' : 'left',
                   fontFamily: valueFontFamily ?? '',

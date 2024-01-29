@@ -160,6 +160,38 @@ export const getNextAuthConfig = ({
         }
       },
     }),
+    CredentialsProvider({
+      id: CredentialProviderName.SIGN_IN_WITH_CODE,
+      credentials: {
+        email: {
+          type: 'email',
+        },
+        code: {
+          type: 'code',
+        },
+      },
+      authorize: async (payload) => {
+        const response = await fetch(
+          removeDuplicateSlahes(
+            `${baseURL}/${PixwayAPIRoutes.SIGNIN_WITH_CODE}`
+          ),
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              email: payload?.email ?? '',
+              code: payload?.code ?? '',
+            }),
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
+        const responseAsJSON = await response.json();
+        if (responseAsJSON.statusCode >= 300) {
+          throw new Error(responseAsJSON.message);
+        }
+        const user = mapSignInReponseToSessionUser(responseAsJSON);
+        return user;
+      },
+    }),
   ],
   callbacks: {
     async jwt({ token, user, account }) {

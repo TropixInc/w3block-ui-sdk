@@ -76,7 +76,9 @@ const _SignInTemplate = ({
   const [translate] = useTranslation();
   const { signIn } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
-    pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
+    messageConfig: {
+      pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
+    },
   });
   const { data: session } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);

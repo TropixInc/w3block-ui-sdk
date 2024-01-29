@@ -1,9 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UtmContextInterface } from '../../core/context/UtmContext';
 import { Status } from '../../core/metamask/interface';
 import { Product } from '../../shared';
 import { GasFee } from '../../shared/interface/GasFee';
 import { Variants } from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { OrderStatus, PaymentMethod } from '../enum';
+
+export interface PaymentsResponse {
+  totalPrice?: string;
+  currencyId?: string;
+  originalCartPrice?: string;
+  originalClientServiceFee?: string;
+  originalTotalPrice?: string;
+  cartPrice?: string;
+  clientServiceFee?: string;
+  gasFee?: GasFee;
+  providersForSelection?: PaymentMethodsAvaiable[];
+}
 export interface OrderPreviewResponse {
   products: Product[];
   cartPrice?: string;
@@ -17,6 +30,12 @@ export interface OrderPreviewResponse {
   originalClientServiceFee?: string;
   originalTotalPrice?: string;
   variants?: Variants[];
+  cashback?: {
+    amount?: string;
+    cashbackAmount?: string;
+    currencyId?: string;
+  };
+  payments?: PaymentsResponse[];
 }
 
 export interface ProductErrorInterface {
@@ -74,6 +93,7 @@ export interface PaymentMethodsAvaiable {
   availableInstallments?: AvailableInstallmentInfo[];
 }
 export interface OrderPreviewCache {
+  payments?: PaymentsResponse[];
   currencyId: string;
   products: Product[];
   orderProducts: OrderProductsInterface[];
@@ -88,12 +108,19 @@ export interface OrderPreviewCache {
   originalCartPrice?: string;
   originalClientServiceFee?: string;
   originalTotalPrice?: string;
+  destinationUser?: {
+    walletAddress: string;
+    name: string;
+  };
+  isCoinPayment?: boolean;
+  cashback?: string;
 }
 
 export interface OrderProductsInterface {
   expectedPrice: string;
   productId: string;
   variantIds?: string[];
+  quantity?: number;
 }
 
 export interface CreateOrder {
@@ -107,6 +134,14 @@ export interface CreateOrder {
   providerInputs?: unknown;
   utmParams?: UtmContextInterface;
   couponCode?: string;
+  payments?: {
+    currencyId: string;
+    paymentMethod?: string;
+    paymentProvider?: string;
+    providerInputs?: unknown;
+    amountType?: string;
+    amount?: string;
+  }[];
 }
 
 export interface CreateOrderProduct {
@@ -135,9 +170,10 @@ export interface CreateOrderResponse {
   status: OrderStatus;
   updatedAt: string;
   userId: string;
-  totalAmount: string;
+  totalAmount: any;
   originalCurrencyAmount?: string;
   originalTotalAmount?: string;
+  deliverId: string;
 }
 
 export interface PaymentInfoInterface {

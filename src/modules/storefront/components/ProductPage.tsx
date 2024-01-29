@@ -400,6 +400,13 @@ export const ProductPage = ({
             }),
           ],
           currencyId: currencyId.id ?? '',
+          payments: [
+            {
+              currencyId: currencyId?.id ?? '',
+              amountType: 'percentage',
+              amount: '100',
+            },
+          ],
           companyId,
           couponCode:
             utms.utm_campaign &&
