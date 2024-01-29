@@ -64,6 +64,7 @@ interface SmartProps {
   docFileValue?: string;
   profilePage?: boolean;
   options?: Options[];
+  selectData?: any;
 }
 
 export interface InputError {
@@ -71,6 +72,16 @@ export interface InputError {
   value: {
     message: string;
   };
+}
+
+export interface InputDataDTO {
+  labelPath: string;
+  responsePath: string;
+  url: string;
+  valuePath: string;
+  isPublicApi?: boolean;
+  paginationType?: 'external' | 'internal';
+  isMultiple?: boolean;
 }
 
 const SmartInputsController = ({
@@ -85,6 +96,7 @@ const SmartInputsController = ({
   onChangeUploadProgess,
   profilePage,
   options,
+  selectData,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -183,7 +195,24 @@ const SmartInputsController = ({
         );
       case DataTypesEnum.SimpleSelect:
         return (
-          <InputSelector options={options ?? []} name={name} label={label} />
+          <InputSelector
+            type={DataTypesEnum.SimpleSelect}
+            options={options ?? []}
+            name={name}
+            label={label}
+            docValue={value}
+          />
+        );
+      case DataTypesEnum.DynamicSelect:
+        return (
+          <InputSelector
+            type={DataTypesEnum.DynamicSelect}
+            options={options ?? []}
+            name={name}
+            label={label}
+            configData={selectData as InputDataDTO}
+            docValue={value}
+          />
         );
     }
   };

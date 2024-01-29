@@ -40,6 +40,7 @@ export const FormTemplate = ({
             }}
           >
             <SmartInputsController
+              key={item.id}
               label={item.label}
               name={item.id}
               type={item.type}
@@ -51,6 +52,7 @@ export const FormTemplate = ({
                 getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
               }
               onChangeUploadProgess={setUploadProgress}
+              selectData={item.data}
             />
           </div>
         ))}

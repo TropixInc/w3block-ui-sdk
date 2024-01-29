@@ -4,9 +4,10 @@ import { useClickAway } from 'react-use';
 
 import { Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import ArrowDownOutlined from '../../assets/icons/arrowDown.svg?react';
-import CheckBoxIcon from '../../assets/icons/checkboxOutlined.svg?react';
+import CheckBoxIcon from '../../assets/icons/checkOutlined.svg?react';
 import { Option } from '../GenericSearchFilter/GenericSearchFilter';
 
 interface Props {
@@ -19,6 +20,8 @@ interface Props {
     option?: string;
   };
   placeholder: string;
+  onChangeMultipleSelected?: (value: Array<string | undefined>) => void;
+  multipleSelected?: Array<string | undefined>;
 }
 
 export const MultipleSelect = ({
@@ -27,6 +30,8 @@ export const MultipleSelect = ({
   disabled = false,
   classes = {},
   placeholder,
+  onChangeMultipleSelected,
+  multipleSelected,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,7 +46,11 @@ export const MultipleSelect = ({
   } = useController({ name: name });
 
   const isSelected = (selectedValue: string) => {
-    if (value && value?.length > 0) return value.includes(selectedValue);
+    if (multipleSelected && multipleSelected?.length > 0) {
+      return multipleSelected.includes(selectedValue);
+    } else {
+      if (value && value?.length > 0) return value.includes(selectedValue);
+    }
 
     return false;
   };
@@ -55,14 +64,23 @@ export const MultipleSelect = ({
       if (hasValue) newValues.push(val);
     });
 
-    if (JSON.stringify(newValues) !== JSON.stringify(value))
-      onChange(newValues);
+    if (_.isEqual(newValues, value)) {
+      if (onChangeMultipleSelected) {
+        onChangeMultipleSelected(newValues);
+      } else {
+        onChange(newValues);
+      }
+    }
   };
 
   useEffect(() => {
     if (options) {
       if (options?.length < 1) {
-        onChange([]);
+        if (onChangeMultipleSelected) {
+          onChangeMultipleSelected([]);
+        } else {
+          onChange([]);
+        }
       } else if (value?.length) {
         removeValuesNotInOptions();
       }
@@ -80,18 +98,40 @@ export const MultipleSelect = ({
   };
 
   const handleSelect = (newValue: string) => {
-    const selectedUpdated =
-      value && value?.length > 0 ? [...value, newValue] : [newValue];
+    const selectedUpdated = multipleSelected
+      ? multipleSelected && multipleSelected?.length > 0
+        ? [...multipleSelected, newValue]
+        : [newValue]
+      : value && value?.length > 0
+      ? [...value, newValue]
+      : [newValue];
 
-    onChange(selectedUpdated);
+    if (onChangeMultipleSelected) {
+      onChangeMultipleSelected(selectedUpdated);
+    } else {
+      onChange(selectedUpdated);
+    }
   };
 
   const handleDeselect = (deselectValue: string) => {
-    const selectedUpdated = value.filter((el: string) => el !== deselectValue);
+    const selectedUpdated =
+      multipleSelected && multipleSelected.length > 0
+        ? (multipleSelected as Array<string>).filter(
+            (el: string) => el !== deselectValue
+          )
+        : value.filter((el: string) => el !== deselectValue);
     if (selectedUpdated?.length > 0) {
-      onChange(selectedUpdated);
+      if (onChangeMultipleSelected) {
+        onChangeMultipleSelected(selectedUpdated);
+      } else {
+        onChange(selectedUpdated);
+      }
     } else {
-      onChange([]);
+      if (onChangeMultipleSelected) {
+        onChangeMultipleSelected([]);
+      } else {
+        onChange([]);
+      }
     }
   };
 
@@ -168,18 +208,18 @@ export const MultipleSelect = ({
                             classes.option ?? ''
                           )}
                         >
-                          {selected ? (
-                            <CheckBoxIcon className="pw-w-[16px] pw-h-[16px] pw-stroke-[#94B8ED] pw-shrink-0" />
-                          ) : (
-                            <div
-                              className={classNames(
-                                'pw-w-[16px] pw-h-[16px] pw-border pw-rounded-[4px] pw-shrink-0',
-                                disabled
-                                  ? 'pw-border-[#D1D1D1]'
-                                  : 'pw-border-[#94B8ED]'
-                              )}
-                            />
-                          )}
+                          <div
+                            className={classNames(
+                              'pw-w-[16px] pw-h-[16px] pw-border pw-rounded-[4px] pw-shrink-0',
+                              disabled
+                                ? 'pw-border-[#D1D1D1]'
+                                : 'pw-border-[#94B8ED]'
+                            )}
+                          >
+                            {selected && (
+                              <CheckBoxIcon className="pw-w-[16px] pw-h-[16px] pw-stroke-[#94B8ED] pw-shrink-0" />
+                            )}
+                          </div>
 
                           {option.icon && option.icon}
 
