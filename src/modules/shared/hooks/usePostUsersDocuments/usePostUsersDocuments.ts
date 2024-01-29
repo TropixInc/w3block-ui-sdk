@@ -10,6 +10,7 @@ interface Params {
   userId: string;
   contextId: string;
   documents: AttachDocumentsToUser;
+  currentStep?: string;
 }
 
 export const usePostUsersDocuments = () => {

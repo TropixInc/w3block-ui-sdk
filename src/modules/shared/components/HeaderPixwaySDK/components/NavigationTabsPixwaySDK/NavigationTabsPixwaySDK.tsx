@@ -25,6 +25,7 @@ export interface NavigationTabsPixwaySDKProps {
   hasSignUp?: boolean;
   fontFamily?: string;
   bgColor?: string;
+  hasLogIn?: boolean;
 }
 
 interface NavigationTabsClassNames {
@@ -49,6 +50,7 @@ export const NavigationTabsPixwaySDK = ({
   hasSignUp,
   fontFamily,
   bgColor,
+  hasLogIn = true,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -113,6 +115,7 @@ export const NavigationTabsPixwaySDK = ({
             textColor={textColor}
             hasSignUp={hasSignUp}
             bgColor={bgColor}
+            hasLogIn={hasLogIn}
           />
         </div>
       )}

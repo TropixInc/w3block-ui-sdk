@@ -26,6 +26,7 @@ export type TemplateData = {
     | GridItemAreaData
     | GenericTableData
     | BannerVariantData
+    | BannerWJJCData
   )[];
 };
 
@@ -46,6 +47,7 @@ export type Theme = {
   GridItemArea?: GridItemAreaData;
   table?: GenericTableData;
   bannerVariant?: MainModuleThemeInterface;
+  bannerWjjc?: MainModuleThemeInterface;
 };
 
 export interface DynamicApiModuleInterface {
@@ -230,6 +232,23 @@ export interface BannerVariantData extends MainModuleThemeInterface {
     heightUnity?: string;
   };
   mobileStyleData: BannerVariantData['styleData'];
+}
+
+export interface BannerWJJCData extends MainModuleThemeInterface {
+  type: ModulesType.BANNER_WJJC;
+  styleData: {
+    margin?: string;
+    padding?: string;
+    bannerDisposition?: Layout;
+    bannerRatio?: Ratio;
+    autoSlide?: boolean;
+    dynamicBanner?: boolean;
+    routeToDynamicBanner?: string;
+    banners?: SpecificBannerInfo;
+    height?: string;
+    heightUnity?: string;
+  };
+  mobileStyleData: BannerWJJCData['styleData'];
 }
 
 export interface SpecificBannerInfo {
@@ -671,6 +690,7 @@ export enum ModulesType {
   BANNER_VARIANT = 'BannerVariant',
   CONTENT_CARD = 'Content Card',
   BUTTON = 'Button',
+  BANNER_WJJC = 'BannerWJJC',
 }
 
 export interface GetPageInfoInterface {

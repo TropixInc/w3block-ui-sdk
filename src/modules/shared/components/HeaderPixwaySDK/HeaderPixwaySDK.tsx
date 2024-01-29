@@ -48,6 +48,7 @@ interface HeaderPixwaySDKProps {
   hasCart?: boolean;
   logoLink?: string;
   standalone?: boolean;
+  hasLogIn?: boolean;
 }
 
 const _HeaderPixwaySDK = ({
@@ -71,6 +72,7 @@ const _HeaderPixwaySDK = ({
   hasCart = true,
   logoLink,
   standalone = false,
+  hasLogIn = true,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
   const router = useRouterConnect();
@@ -214,6 +216,7 @@ const _HeaderPixwaySDK = ({
                       context?.defaultTheme?.header?.styleData?.fontFamily
                     : 'Poppins') + ', sans-serif'
                 }
+                hasLogIn={hasLogIn}
               />
             </div>
             <a
@@ -246,6 +249,7 @@ const _HeaderPixwaySDK = ({
                       context?.defaultTheme?.header?.styleData?.fontFamily
                     : 'Poppins') + ', sans-serif'
                 }
+                hasLogIn={hasLogIn}
               />
             </div>
             {hasCart && (
@@ -261,26 +265,27 @@ const _HeaderPixwaySDK = ({
                 className="sm:pw-border-l sm:pw-ml-4"
               />
             )}
-
-            <div className="pw-order-3 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
-              <NavigationLoginPixwaySDK
-                backgroundColor={headerBgColor}
-                hasSignUp={hasSignUp}
-                textColor={
-                  textColor ??
-                  context?.defaultTheme?.header?.styleData?.textColor
-                }
-                signInRouter={signInRouter}
-                signUpRouter={signUpRouter}
-                fontFamily={
-                  (fontFamily ||
-                  context?.defaultTheme?.header?.styleData?.fontFamily
-                    ? fontFamily ??
-                      context?.defaultTheme?.header?.styleData?.fontFamily
-                    : 'Poppins') + ', sans-serif'
-                }
-              />
-            </div>
+            {hasLogIn && (
+              <div className="pw-order-3 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
+                <NavigationLoginPixwaySDK
+                  backgroundColor={headerBgColor}
+                  hasSignUp={hasSignUp}
+                  textColor={
+                    textColor ??
+                    context?.defaultTheme?.header?.styleData?.textColor
+                  }
+                  signInRouter={signInRouter}
+                  signUpRouter={signUpRouter}
+                  fontFamily={
+                    (fontFamily ||
+                    context?.defaultTheme?.header?.styleData?.fontFamily
+                      ? fontFamily ??
+                        context?.defaultTheme?.header?.styleData?.fontFamily
+                      : 'Poppins') + ', sans-serif'
+                  }
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

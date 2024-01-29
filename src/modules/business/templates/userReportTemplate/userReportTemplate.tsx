@@ -1,15 +1,27 @@
 import { lazy, useMemo, useState } from 'react';
 
+import { format } from 'date-fns';
+import { enUS, ptBR } from 'date-fns/locale';
+
 import {
   Erc20TokenHistory,
   FromToInterface,
 } from '../../../dashboard/interface/ercTokenHistoryInterface';
+import UserIcon from '../../../shared/assets/icons/userOutlined.svg?react';
+import { TableHeaderItem } from '../../../shared/components/TableDefault/TableDefault';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import { useLocale } from '../../../shared/hooks/useLocale';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import { useGetAllReportsAdmin } from '../../hooks/useGetAllReportsAdmin';
+import { useGetAllReportsByOperatorId } from '../../hooks/useGetAllReportsByOperatorId';
+import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';
+
 const InternalPagesLayoutBase = lazy(() =>
   import(
     '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
   ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
 );
-import UserIcon from '../../../shared/assets/icons/userOutlined.svg?react';
 const Pagination = lazy(() =>
   import('../../../shared/components/Pagination').then((mod) => ({
     default: mod.Pagination,
@@ -29,16 +41,10 @@ const ActionBusinessCardSDK = lazy(() =>
     default: mod.ActionBusinessCardSDK,
   }))
 );
-import { TableHeaderItem } from '../../../shared/components/TableDefault/TableDefault';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-import { useGetAllReportsAdmin } from '../../hooks/useGetAllReportsAdmin';
-import { useGetAllReportsByOperatorId } from '../../hooks/useGetAllReportsByOperatorId';
-import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';
 
 export const UserReportTemplate = () => {
   const { pushConnect } = useRouterConnect();
+  const locale = useLocale();
   const [actualPage, setActualPage] = useState(1);
   useGuardPagesWithOptions({ needBusiness: true, needUser: true });
   const { loyalties } = useLoyaltiesInfo();
@@ -52,22 +58,23 @@ export const UserReportTemplate = () => {
     }
   }, [loyalties]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getTransferColorAndStatus = (from?: FromToInterface): any => {
     if (mainLoyaltie) {
       if (from == null) {
         return {
           color: 'red',
-          status: 'Débito',
+          status: 'Carga',
         };
       } else if (from.type == 'user') {
         return {
           color: 'green',
-          status: 'Crédito',
+          status: 'Uso',
         };
       } else {
         return {
           color: 'green',
-          status: 'Crédito',
+          status: 'Uso',
         };
       }
     }
@@ -169,13 +176,16 @@ export const UserReportTemplate = () => {
       key: 'executeAt',
       name: 'Data',
       component: (item: Erc20TokenHistory) => (
-        <p className="pw-text-slate-500 pw-text-sm pw-font-semibold">
-          {new Date(item.executeAt ?? Date.now()).toLocaleDateString()}
+        <p className="pw-text-slate-500 pw-text-sm pw-font-semibold pw-break-words">
+          {item?.executeAt
+            ? format(new Date(item?.executeAt ?? Date.now()), 'Pp', {
+                locale: locale === 'pt-BR' ? ptBR : enUS,
+              })
+            : null}
         </p>
       ),
     },
   ];
-
   const tableContent = useMemo(() => {
     if (adminHistory && adminHistory?.items?.length > 0) {
       return adminHistory;
@@ -183,7 +193,6 @@ export const UserReportTemplate = () => {
       return loyaltyHistory;
     } else return { items: [], meta: { totalPages: 1 } };
   }, [loyaltyHistory, adminHistory]);
-
   return (
     <InternalPagesLayoutBase>
       <div className=" pw-p-6 pw-bg-white pw-rounded-[20px] pw-shadow pw-flex-col pw-justify-start pw-items-start">

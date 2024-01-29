@@ -63,7 +63,7 @@ export const SignUpForm = ({
 }: Props) => {
   const { logoUrl } = useCompanyConfig();
   const router = useRouterConnect();
-  const passwordSchema = usePasswordValidationSchema();
+  const passwordSchema = usePasswordValidationSchema({});
   const [translate] = useTranslation();
 
   const schema = object().shape({

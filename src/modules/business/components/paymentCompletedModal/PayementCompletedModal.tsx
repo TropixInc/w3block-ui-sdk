@@ -15,7 +15,7 @@ export const PayementCompletedModal = ({
   isOpen,
 }: PayementCompletedModalProps) => {
   return (
-    <ModalBase isOpen={isOpen ?? false} onClose={onClose!}>
+    <ModalBase isOpen={isOpen ?? false} onClose={onClose!} clickAway={false}>
       <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-py-8">
         <p className="pw-text-lg pw-text-center pw-font-[600] pw-text-zinc-900 pw-mb-10">
           Pagamento e cashback registrados com sucesso!

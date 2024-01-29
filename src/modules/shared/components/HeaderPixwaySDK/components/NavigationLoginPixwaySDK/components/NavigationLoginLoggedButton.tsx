@@ -11,13 +11,16 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
+import { useLoyaltiesInfo } from '../../../../../../business/hooks/useLoyaltiesInfo';
 import { UseThemeConfig } from '../../../../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import  ArrowDown  from '../../../../../assets/icons/arrowDown.svg?react';
+import DashboardIcon from '../../../../../assets/icons/dashboard.svg?react';
 import  EyeIcon  from '../../../../../assets/icons/eyeGold.svg?react';
 // import  HelpIcon  from '../../../../../assets/icons/helpIconGray.svg?react';
 import  IntegrationIcon  from '../../../../../assets/icons/integrationIconOutlined.svg?react';
 import  LogoutIcon  from '../../../../../assets/icons/logoutIconGray.svg?react';
 import  MyOrdersIcon  from "../../../../../assets/icons/myOrders.svg?react"
+import  NewsIcon  from '../../../../../assets/icons/news.svg?react';
 import  ReceiptIcon from "../../../../../assets/icons/receipt.svg?react";
 //import  MyTokenIcon  from '../../../../../assets/icons/myTokensIconGray.svg?react';
 // import  SettingsIcon  from '../../../../../assets/icons/settingsIconGray.svg?react';
@@ -55,6 +58,7 @@ export const NavigationLoginLoggedButton = ({
   const [menu, setMenu] = useState<boolean>(false);
   const organizedLoyalties = useGetRightWallet()
   const ref = useRef(null);
+
   useClickAway(ref, () => {
     if (menu) setMenu(false);
   });
@@ -101,12 +105,19 @@ export const useDefaultMenuTabs = (textColor: string) => {
   );
   const isUser = Boolean(userRoles?.includes('user')); 
   const isLoayaltyOperator = Boolean(userRoles?.includes('loyaltyOperator'));
-
+  const hasLoyalty = !!useLoyaltiesInfo()?.loyalties?.length;
   const { defaultTheme } = UseThemeConfig();
 
   const internalMenuData = useMemo(() => {
     return defaultTheme?.configurations.styleData.internalMenu || {};
   }, [defaultTheme?.configurations.styleData.internalMenu]);
+
+  const isShowAffiliates =
+  (defaultTheme &&
+    defaultTheme.configurations &&
+    defaultTheme?.configurations?.styleData &&
+    defaultTheme?.configurations?.styleData?.memberGetMember) ||
+  false;
 
   const items: NavigationMenuTabs[] = [
    
@@ -115,7 +126,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
       id: 'payment',
       route: PixwayAppRoutes.LOYALTY_PAYMENT,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
-      isVisible: isLoayaltyOperator && !isHidden('payment'),
+      isVisible: (isLoayaltyOperator || isAdmin) && !isHidden('payment') && hasLoyalty,
     },
     {
       name: internalMenuData['pass']?.customLabel || translate('components>menu>tokenPass'),
@@ -128,8 +139,8 @@ export const useDefaultMenuTabs = (textColor: string) => {
       name: internalMenuData['dash']?.customLabel || translate('components>menu>dashboard'),
       id: 'dash',
       route: PixwayAppRoutes.LOYALTY_REPORT,
-      icon: <MyOrdersIcon style={{color: textColor, stroke: textColor, fill: textColor}} />,
-      isVisible: isLoayaltyOperator && !isHidden('dash'),
+      icon: <DashboardIcon style={{color: textColor, stroke: textColor, fill: textColor}} />,
+      isVisible: (isLoayaltyOperator || isAdmin) && !isHidden('dash') && hasLoyalty,
     },
     {
       name: internalMenuData['wallet']?.customLabel || translate('components>menu>wallet'),
@@ -137,6 +148,13 @@ export const useDefaultMenuTabs = (textColor: string) => {
       route: PixwayAppRoutes.WALLET,
       icon: <WalletIcon style={{color: textColor, stroke: textColor}} />,
       isVisible: (isUser || isAdmin) && !isHidden('wallet'),
+    },
+    {
+      name: internalMenuData['affiliates']?.customLabel ||   translate('shared>menu>affiliates'),
+      id: 'affiliates',
+      route: PixwayAppRoutes.AFFILIATES,
+      icon: <NewsIcon width={17} height={17} style={{color: textColor, stroke: textColor}} />,
+      isVisible: (isUser || isAdmin) && !isHidden('affiliates') && isShowAffiliates,
     },
     {
       name: internalMenuData['extract']?.customLabel || translate('wallet>page>extract'),

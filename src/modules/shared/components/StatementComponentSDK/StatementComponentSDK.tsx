@@ -28,7 +28,7 @@ export const StatementComponentSDK = ({
           icon: (
             <ApprovedIcon className="pw-stroke-blue-800 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Crédito',
+          text: 'Carga',
         };
       } else {
         return {
@@ -36,7 +36,7 @@ export const StatementComponentSDK = ({
           icon: (
             <PendingIcon className="pw-stroke-orange-600 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Crédito',
+          text: 'Carga',
         };
       }
     } else {
@@ -46,7 +46,7 @@ export const StatementComponentSDK = ({
           icon: (
             <RejectIcon className="pw-stroke-rose-500 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Débito',
+          text: 'Uso',
         };
       } else {
         return {
@@ -54,7 +54,7 @@ export const StatementComponentSDK = ({
           icon: (
             <RejectIcon className="pw-stroke-orange-600 pw-w-[16px] pw-h-[16px]" />
           ),
-          text: 'Débito',
+          text: 'Uso',
         };
       }
     }
@@ -93,9 +93,11 @@ export const StatementComponentSDK = ({
       <div className="pw-flex pw-flex-col pw-items-end">
         <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-bold">
           {' '}
-          {format(new Date(statement.createdAt), 'PPpp', {
-            locale: locale == 'pt-BR' ? ptBR : enUS,
-          })}
+          {statement?.createdAt
+            ? format(new Date(statement.createdAt ?? Date.now()), 'PPpp', {
+                locale: locale === 'pt-BR' ? ptBR : enUS,
+              })
+            : null}
         </div>
         <div className="pw-mt-2"></div>
         {statement.loyaltieTransactions?.map((loyaltieTransaction) => (

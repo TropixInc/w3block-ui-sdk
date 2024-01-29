@@ -1,5 +1,20 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { CurrencyInput } from 'react-currency-mask';
 import { useDebounce } from 'react-use';
+
+import './index.css';
+
+import { Spinner } from '../../../shared/components/Spinner';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import { PaymentFailedModal } from '../../components/paymentFailedModal/PaymentFailedModal';
+import { useCreatePayment } from '../../hooks/useCreatePayment';
+import { useGetPaymentPreview } from '../../hooks/useGetPaymentPreview';
+import { useGetUserBalance } from '../../hooks/useGetUserBalance';
+import { useGetUserByCode } from '../../hooks/useGetUserByCode';
+import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';
+import { UserInfoInterface } from '../../interface/userInfo';
 
 const ErrorMessage = lazy(() =>
   import('../../../checkout/components/ErrorMessage/ErrorMessage').then(
@@ -13,8 +28,6 @@ const InternalPagesLayoutBase = lazy(() =>
   ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
 );
 
-import './index.css';
-import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 const BuySummarySDK = lazy(() =>
   import('../../components/buySumarySDK/buySumarrySDK').then((mod) => ({
     default: mod.BuySummarySDK,
@@ -33,22 +46,17 @@ const UserCard = lazy(() =>
   }))
 );
 
-import { useCreatePayment } from '../../hooks/useCreatePayment';
-import { useGetPaymentPreview } from '../../hooks/useGetPaymentPreview';
-import { useGetUserBalance } from '../../hooks/useGetUserBalance';
-import { useGetUserByCode } from '../../hooks/useGetUserByCode';
-import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';
-import { UserInfoInterface } from '../../interface/userInfo';
-
 export const PaymentTemplateSDK = () => {
-  const [valueToPay, setValueToPay] = useState('0');
-  const [valueToUse, setValueToUse] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [valueToPay, setValueToPay] = useState(0);
+  const [valueToUse, setValueToUse] = useState<number>(0);
   const [totalValue, setTotalValue] = useState('');
   const [cahsbackPoints, setCashbackPoints] = useState<string>('');
   const [totalDiscount, setTotalDiscount] = useState<string>('');
   const [code, setCode] = useState(['', '', '', '']);
   const [paymentCompletedModal, setPaymentCompletedModal] =
     useState<boolean>(false);
+  const [paymentFailedModal, setPaymentFailedModal] = useState<boolean>(false);
   const { loyalties } = useLoyaltiesInfo();
   const [codeError, setCodeError] = useState<string>('');
   const [userInfo, setUserInfo] = useState<UserInfoInterface>({});
@@ -74,17 +82,6 @@ export const PaymentTemplateSDK = () => {
         getUserBalance(data.id as string, {
           onSuccess: (balance) => {
             setUserInfo((prev) => ({ ...prev, ...balance[0] }));
-            const balanceNormal = parseFloat(balance[0].balance ?? '0');
-            const pointsValue =
-              loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
-            // const currencyValue =
-            //   loyalties[0].paymentViewSettings.pointsEquivalent.currencyValue;
-            const totalMoney = balanceNormal * pointsValue;
-            if (totalMoney <= parseFloat(valueToPay)) {
-              setValueToUse(balanceNormal.toString());
-            } else {
-              setValueToUse((parseFloat(valueToPay) / pointsValue).toString());
-            }
             handleGetPaymentPreview();
           },
         });
@@ -95,7 +92,7 @@ export const PaymentTemplateSDK = () => {
     });
   };
 
-  useDebounce(() => handleGetPaymentPreview(), 600, [valueToPay, valueToUse]);
+  useDebounce(() => handleGetPaymentPreview(), 100, [valueToPay, valueToUse]);
 
   useEffect(() => {
     handleGetPaymentPreview();
@@ -106,11 +103,11 @@ export const PaymentTemplateSDK = () => {
     if (userInfo.id && code.length == 4 && loyaltieToUse?.id) {
       getPaymentPreview(
         {
-          amount: valueToPay,
+          amount: valueToPay.toString(),
           points:
-            valueToUse == '' || valueToUse == 'NaN' || !valueToUse
+            valueToUse == 0 || isNaN(valueToUse) || !valueToUse
               ? '0'
-              : valueToUse,
+              : valueToUse.toString(),
           userId: userInfo.id as string,
           userCode: code.join('') as string,
           loyaltyId: loyaltieToUse?.id as string,
@@ -123,6 +120,10 @@ export const PaymentTemplateSDK = () => {
             //setValueToUse(data.discount);
             setTotalValue(data.total);
           },
+          onError: () => {
+            setTotalDiscount('');
+            setCashbackPoints('');
+          },
         }
       );
     }
@@ -130,10 +131,11 @@ export const PaymentTemplateSDK = () => {
 
   const handleSubmitPayment = () => {
     if (userInfo.id && code.length == 4 && loyaltieToUse?.id) {
+      setIsLoading(true);
       createPayment(
         {
-          amount: valueToPay,
-          points: valueToUse === '' ? '0' : valueToUse,
+          amount: valueToPay.toString(),
+          points: valueToUse === 0 ? '0' : valueToUse.toString(),
           userId: userInfo.id as string,
           userCode: code.join('') as string,
           loyaltyId: loyaltieToUse?.id as string,
@@ -143,15 +145,17 @@ export const PaymentTemplateSDK = () => {
           onSuccess: (_) => {
             setPaymentCompletedModal(true);
             setCode(['', '', '', '']);
-            setValueToPay('0');
-            setValueToUse('');
+            setValueToPay(0);
+            setValueToUse(0);
             setUserInfo({});
             setCashbackPoints('');
             setTotalDiscount('');
             setTotalValue('');
+            setIsLoading(false);
           },
-          onError(error) {
-            console.log(error);
+          onError() {
+            setPaymentFailedModal(true);
+            setIsLoading(false);
           },
         }
       );
@@ -182,64 +186,6 @@ export const PaymentTemplateSDK = () => {
     }
   };
 
-  const handleValueToUse = () => {
-    if (valueToUse == '') {
-      setValueToUse('0');
-      return;
-    }
-    if (loyalties.length) {
-      const pointsValue =
-        loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
-      const amountTotalPoints = parseFloat(valueToPay) / pointsValue;
-      if (parseFloat(valueToUse ?? '0') > amountTotalPoints) {
-        setValueToUse(amountTotalPoints.toString());
-      }
-    }
-
-    if (
-      userInfo.balance &&
-      parseFloat(valueToUse ?? '0') > parseFloat(userInfo.balance)
-    ) {
-      setValueToUse(userInfo.balance);
-      return;
-    } else if (parseFloat(valueToUse ?? '0') < 0) {
-      setValueToUse('0');
-      return;
-    }
-  };
-
-  const handleChangeValueTopay = () => {
-    if (loyalties.length > 0) {
-      const pointsValue =
-        loyalties[0].paymentViewSettings.pointsEquivalent.pointsValue;
-      const totalMoney = parseFloat(userInfo.balance ?? '0') * pointsValue;
-
-      if (totalMoney <= parseFloat(valueToPay) && userInfo.balance) {
-        setValueToUse(userInfo.balance);
-      } else if (valueToPay != '') {
-        setValueToUse((parseFloat(valueToPay) / pointsValue).toString());
-      } else {
-        setValueToUse('0');
-      }
-    }
-  };
-
-  useDebounce(
-    () => {
-      handleChangeValueTopay();
-    },
-    600,
-    [valueToPay]
-  );
-
-  useDebounce(
-    () => {
-      handleValueToUse();
-    },
-    500,
-    [valueToUse]
-  );
-
   const handleCancelUserCard = () => {
     setCode(['', '', '', '']);
     setUserInfo({});
@@ -257,15 +203,18 @@ export const PaymentTemplateSDK = () => {
           <p className="pw-text-sm pw-text-zinc-700 pw-font-semibold">
             Valor a ser pago
           </p>
-          <input
-            placeholder="Apenas numeros"
-            type="number"
-            value={valueToPay}
-            onChange={(e) => {
-              setValueToPay(e.target.value);
-              setTotalValue(e.target.value);
+          <CurrencyInput
+            onChangeValue={(_, value) => {
+              setValueToPay(value as number);
+              setTotalValue(value as string);
             }}
-            className="pw-text-[13px] pw-text-black pw-p-[10px] pw-border pw-border-blue-600 pw-rounded-lg pw-w-full"
+            value={valueToPay}
+            InputElement={
+              <input
+                placeholder="Apenas numeros"
+                className="pw-text-[13px] pw-text-black pw-p-[10px] pw-border pw-border-blue-600 pw-rounded-lg pw-w-full"
+              />
+            }
           />
         </div>
         <div className="pw-flex-col sm:pw-flex-row pw-flex first-letter pw-gap-[32px] pw-mt-[32px]">
@@ -313,16 +262,19 @@ export const PaymentTemplateSDK = () => {
             name={userInfo.name}
             avatarSrc={userInfo.avatarUrl}
             balance={
-              userInfo.balance == 'NaN' || userInfo.balance == ''
+              userInfo?.balance == 'NaN' || userInfo?.balance == ''
                 ? '0'
-                : userInfo.balance
+                : userInfo?.balance
             }
-            currency={userInfo.currency}
+            currency={userInfo?.currency}
+            setMaxValue={() =>
+              setValueToUse(parseFloat(userInfo?.balance ?? '0'))
+            }
           />
         </div>
         <BuySummarySDK
           className="pw-mt-[32px]"
-          totalValue={valueToPay}
+          totalValue={valueToPay.toString()}
           currencyToUse={userInfo.currency}
           discountValue={totalDiscount}
           valueToPay={totalValue}
@@ -339,21 +291,35 @@ export const PaymentTemplateSDK = () => {
         ) : null}
         <div className="pw-flex pw-justify-end pw-mt-[32px]">
           <button
-            disabled={userInfo.id == undefined || code.length != 4}
+            disabled={
+              userInfo.id == undefined ||
+              code.length != 4 ||
+              valueToPay === 0 ||
+              valueToUse > parseFloat(userInfo?.balance ?? '0') ||
+              isLoading
+            }
             onClick={() => handleSubmitPayment()}
             className={`pw-px-6 pw-py-[6px] pw-bg-blue-800 pw-rounded-full pw-shadow pw-border-b pw-border-white pw-text-white pw-text-xs pw-font-medium ${
-              userInfo.id == undefined || code.length != 4
+              userInfo.id == undefined ||
+              code.length != 4 ||
+              valueToPay === 0 ||
+              valueToUse > parseFloat(userInfo?.balance ?? '0') ||
+              isLoading
                 ? 'pw-opacity-50'
                 : ''
             }`}
           >
-            Confirmar
+            {isLoading ? <Spinner className="pw-w-5 pw-h-5" /> : 'Confirmar'}
           </button>
         </div>
       </div>
       <PayementCompletedModal
         isOpen={paymentCompletedModal}
         onClose={() => setPaymentCompletedModal(false)}
+      />
+      <PaymentFailedModal
+        isOpen={paymentFailedModal}
+        onClose={() => setPaymentFailedModal(false)}
       />
     </InternalPagesLayoutBase>
   );

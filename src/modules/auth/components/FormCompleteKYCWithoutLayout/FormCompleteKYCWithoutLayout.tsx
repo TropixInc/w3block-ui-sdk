@@ -1,24 +1,16 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { DocumentDto, KycStatus } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
+import _ from 'lodash';
 import { object } from 'yup';
 
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
-const Box = lazy(() =>
-  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
-);
-
-import SmartInputsController from '../../../shared/components/SmartInputsController';
-const Spinner = lazy(() =>
-  import('../../../shared/components/Spinner').then((m) => ({
-    default: m.Spinner,
-  }))
-);
-
+import { FormTemplate } from '../../../shared/components/FormTemplate';
+import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -30,10 +22,9 @@ import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignup
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { useGetReasonsRequiredReview } from '../../hooks/useGetReasonsRequiredReview';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
-const AuthButton = lazy(() =>
-  import('../AuthButton').then((m) => ({ default: m.AuthButton }))
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
 );
-
 interface Props {
   userId: string;
   contextId?: string;
@@ -59,14 +50,21 @@ const _FormCompleteKYCWithoutLayout = ({
   const [translate] = useTranslation();
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
-
+  const slug = () => {
+    const querySlug = router.query.contextSlug;
+    if (contextSlug) return contextSlug;
+    else if (querySlug) return querySlug as string;
+    else return 'signup';
+  };
   const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
-
+  const step = router.query.step;
   const { data: tenantInputs, isLoading: isLoadingKyc } =
     useGetTenantInputsBySlug({
-      slug: contextSlug ? contextSlug : 'signup',
+      slug: slug(),
     });
+
+  const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
 
   const { data: documents } = useGetUsersDocuments({
     userId: userId ?? '',
@@ -109,29 +107,46 @@ const _FormCompleteKYCWithoutLayout = ({
 
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
-      mutate({
-        tenantId,
-        contextId,
-        userId,
-        documents: {
-          documents: validDocs,
+      mutate(
+        {
+          tenantId,
+          contextId,
+          userId,
+          documents: {
+            documents: validDocs,
+          },
+          currentStep: step as string,
         },
-      });
+        {
+          onSuccess: () => {
+            const steps = Object.keys(groupedInputs).length;
+            if (steps && parseInt(step as string) < steps) {
+              router.replace({
+                query: {
+                  contextSlug: slug(),
+                  step: parseInt(step as string) + 1,
+                },
+              });
+            } else if (!profilePage) {
+              router.pushConnect(
+                PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+                query
+              );
+            }
+          },
+        }
+      );
     }
   };
-
-  useEffect(() => {
-    if ((tenantInputs?.data && tenantInputs?.data?.length < 1) || isSuccess) {
-      if (!profilePage) {
-        router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, query);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tenantInputs?.data, tenantInputs?.data?.length, isSuccess, profilePage]);
 
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
+
+  const inputsToShow = () => {
+    if (step) return groupedInputs[step as string];
+    else return tenantInputs?.data ?? [];
+  };
 
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
@@ -160,72 +175,49 @@ const _FormCompleteKYCWithoutLayout = ({
           </p>
         )}
 
-        <form onSubmit={dynamicMethods.handleSubmit(onSubmit)}>
-          {tenantInputs?.data &&
-            tenantInputs?.data?.map((item: any) => (
-              <SmartInputsController
-                key={item.id}
-                label={item.label}
-                name={item.id}
-                type={item.type}
-                options={item.options}
-                assetId={getDocumentByInputId(item?.id)?.assetId}
-                value={getDocumentByInputId(item?.id)?.value}
-                docStatus={getDocumentByInputId(item?.id)?.status}
-                docFileValue={
-                  getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
-                }
-                onChangeUploadProgess={setUploadProgress}
-                selectData={item.data}
-              />
-            ))}
+        <FormTemplate
+          isLoading={isLoading}
+          buttonDisabled={
+            !dynamicMethods.formState.isValid ||
+            isLoading ||
+            Boolean(
+              contextSlug === 'signup' &&
+                (userKycStatus === KycStatus.Approved ||
+                  userKycStatus === KycStatus.Denied)
+            )
+          }
+          onSubmit={dynamicMethods.handleSubmit(onSubmit)}
+          tenantInputs={inputsToShow()}
+          setUploadProgress={setUploadProgress}
+          getDocumentByInputId={getDocumentByInputId}
+        ></FormTemplate>
 
-          {isSuccess && (
-            <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
-              <div className="pw-p-3 pw-w-full pw-rounded-lg">
-                <p className="pw-text-green-300">
-                  {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
-                </p>
-              </div>
-            </Alert>
-          )}
-          {isError && (
-            <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
-              <p className="pw-text-sm">{errorMessage?.message}</p>
-            </Alert>
-          )}
-          {uploadProgress && (
-            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
-              {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
-            </p>
-          )}
-          {contextSlug === 'signup' &&
-          (userKycStatus === KycStatus.Approved ||
-            userKycStatus === KycStatus.Denied) ? (
-            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
-              {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
-            </p>
-          ) : null}
-          <AuthButton
-            type="submit"
-            className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-            disabled={
-              !dynamicMethods.formState.isValid ||
-              isLoading ||
-              Boolean(
-                contextSlug === 'signup' &&
-                  (userKycStatus === KycStatus.Approved ||
-                    userKycStatus === KycStatus.Denied)
-              )
-            }
-          >
-            {isLoading ? (
-              <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
-            ) : (
-              translate('components>advanceButton>continue')
-            )}
-          </AuthButton>
-        </form>
+        {isSuccess && (
+          <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
+            <div className="pw-p-3 pw-w-full pw-rounded-lg">
+              <p className="pw-text-green-300">
+                {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
+              </p>
+            </div>
+          </Alert>
+        )}
+        {isError && (
+          <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+            <p className="pw-text-sm">{errorMessage?.message}</p>
+          </Alert>
+        )}
+        {uploadProgress && (
+          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+            {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
+          </p>
+        )}
+        {contextSlug === 'signup' &&
+        (userKycStatus === KycStatus.Approved ||
+          userKycStatus === KycStatus.Denied) ? (
+          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+            {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
+          </p>
+        ) : null}
         {profilePage ? null : (
           <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
             <button
