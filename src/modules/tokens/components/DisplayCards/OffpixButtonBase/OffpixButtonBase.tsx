@@ -14,6 +14,7 @@ export interface OffpixButtonBaseProps
   disabled?: boolean;
   className?: string;
   variant?: OffpixButtonVariant;
+  styleClass?: any;
 }
 
 type GetButtonClassNameArgs = Pick<
@@ -42,9 +43,11 @@ export const OffpixButtonBase = ({
   children,
   fullWidth = false,
   variant = 'filled',
+  styleClass = {},
   ...props
 }: OffpixButtonBaseProps) => (
   <button
+    style={styleClass}
     className={getButtonClassNames({ className, fullWidth, variant })}
     type={type}
     {...props}

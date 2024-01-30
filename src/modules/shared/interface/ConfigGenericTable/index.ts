@@ -131,5 +131,7 @@ export interface ConfigGenericTable {
     container?: any;
     wrapper?: any;
     buttonsContainer?: any;
+    clearFilterButton?: any;
+    reportsButton?: any;
   };
 }

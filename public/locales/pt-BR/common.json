@@ -415,7 +415,7 @@
   "affiliates>referrakWidget>shared": "Compartilhar",
   "shared>genericTable>metamaskWallet": "Carteira Metamask",
   "contacts>contactItem>notConfimed": "Não confirmado",
-  "shared>genericTable>searchByEmail": "Busque pelo e-mail",
+  "shared>genericTable>searchByEmail": "Buscar por carteira, nome ou email",
   "key>salesReportsTemplate>exportReport": "Exportar relatório",
   "tokens>generateGenericXlsReports>await": "Aguarde",
   "key>salesReportsTemplate>download": "Relatório finalizado, clique aqui para baixar",

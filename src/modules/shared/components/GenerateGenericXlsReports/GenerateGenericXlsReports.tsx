@@ -14,6 +14,7 @@ interface XlsReportsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filters?: any;
   sort?: string;
+  styleClass?: any;
 }
 
 export const GenerateGenericXlsReports = ({
@@ -22,6 +23,7 @@ export const GenerateGenericXlsReports = ({
   filters,
   observerUrlReport,
   sort,
+  styleClass,
 }: XlsReportsProps) => {
   const [translate] = useTranslation();
   const [urlReports, setUrlReports] = useState<string>('');
@@ -132,6 +134,7 @@ export const GenerateGenericXlsReports = ({
         className="pw-px-4 !pw-py-2 pw-text-base"
         onClick={() => handleCallReportXls()}
         disabled={isXlsLoading}
+        styleClass={styleClass}
       >
         {isXlsLoading ? (
           <div className="pw-flex pw-items-center pw-justify-center pw-gap-x-2">

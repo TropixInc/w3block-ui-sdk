@@ -274,12 +274,12 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
 
       case FormatTypeColumn.USER: {
         return (
-          <div className="w-full">
-            <div className="flex gap-x-1 flex-col">
-              <p className="text-ellipsis overflow-hidden">
+          <div className="pw-w-full">
+            <div className="pw-w-full pw-flex pw-gap-x-1 pw-flex-col">
+              <p className="pw-w-[165px] pw-text-ellipsis pw-overflow-hidden sm:pw-w-full">
                 {_.get(item, itemKey, '--')}
               </p>
-              <p className="text-xs opacity-60 pw-flex pw-flex-col">
+              <p className="pw-w-[165px] pw-text-ellipsis pw-overflow-hidden  pw-text-xs pw-opacity-60 pw-flex pw-flex-col sm:pw-w-full">
                 <span>{_.get(item, moreInfos.name, '')}</span>
                 <span>{_.get(item, moreInfos.cpf, '')}</span>
                 <span>{_.get(item, moreInfos.phone, '')}</span>
@@ -291,15 +291,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       case FormatTypeColumn.WALLET: {
         if (_.get(item, itemKey)) {
           return (
-            <div className="pw-flex pw-gap-2 pw-items-center">
+            <div className="pw-w-[200px] pw-flex pw-gap-2 pw-items-center sm:pw-w-full">
               {_.get(item, moreInfos.name, '') === 'metamask' ? (
-                <MetamaskIcon width={40} height={40} />
+                <MetamaskIcon className="!pw-w-6 !pw-h-6 sm:!pw-w-10 sm:!pw-h-10" />
               ) : (
-                <W3blockIcon
-                  width={40}
-                  height={40}
-                  className="pw-fill-[#5682C3] pw-stroke-[#DDE6F3]"
-                />
+                <W3blockIcon className="!pw-w-6 !pw-h-6 pw-fill-[#5682C3] pw-stroke-[#DDE6F3] sm:!pw-w-10 sm:!pw-h-10" />
               )}
 
               <div>
@@ -308,7 +304,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     ? translate('shared>genericTable>metamaskWallet')
                     : translate('addFunds>type>weblockWallet')}
                 </p>
-                <p className="pw-w-full pw-text-sm pw-text-ellipsis pw-overflow-hidden">
+                <p className="pw-w-[150px] pw-text-sm pw-text-ellipsis pw-overflow-hidden sm:pw-w-full">
                   {_.get(item, itemKey)}
                 </p>
               </div>
@@ -317,7 +313,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         } else {
           return (
             <div className="pw-flex pw-items-center">
-              <NoWallet width={40} height={40} />
+              <NoWallet className="!pw-w-6 !pw-h-6 sm:!pw-w-10 sm:!pw-h-10" />
               <p className="text-sm text-[#A9A9A9] line-clamp-1">
                 {translate('contacts>contactItem>notConfimed')}
               </p>
@@ -420,6 +416,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         <button
           className="pw-min-w-[165px] !pw-h-[44px] pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
           onClick={() => onClearAllFilter()}
+          style={externalFilterClasses?.clearFilterButton}
         >
           <span className="pw-text-[#aaa] pw-font-medium">
             {translate('shared>genericTable>clearFilters')}
@@ -504,7 +501,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     );
                   })}
               </div>
-              <div style={externalFilterClasses?.buttonsContainer}>
+              <div
+                className="pw-mt-2 sm:pw-mt-0"
+                style={externalFilterClasses?.buttonsContainer}
+              >
                 {xlsReports?.url && (
                   <GenerateGenericXlsReports
                     url={xlsReports.url}
@@ -512,6 +512,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     filters={filters}
                     observerUrlReport={xlsReports.observerUrl}
                     sort={sort}
+                    styleClass={externalFilterClasses?.reportsButton}
                   />
                 )}
                 {renderClearFilterButton()}
