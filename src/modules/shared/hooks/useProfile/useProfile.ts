@@ -5,6 +5,7 @@ import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
+import { useGetTenantInfoByHostname } from '../useGetTenantInfoByHostname';
 import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { usePrivateQuery } from '../usePrivateQuery';
 import { useRouterConnect } from '../useRouterConnect';
@@ -22,6 +23,8 @@ export interface Wallet {
 
 export const useProfile = () => {
   const getW3blockIdSDK = useGetW3blockIdSDK();
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const router = useRouterConnect();
   return usePrivateQuery(
     [PixwayAPIRoutes.GET_PROFILE],
@@ -34,7 +37,7 @@ export const useProfile = () => {
         router.pushConnect(PixwayAppRoutes.SIGN_IN);
       },
       onSuccess(data) {
-        if (data.data && !data.data.verified) {
+        if (data.data && !data.data.verified && !isPasswordless) {
           router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE);
         }
       },

@@ -62,19 +62,21 @@ export const SignInWithCodeWithoutLayout = () => {
     }
   }, [isSuccess, reset, profile]);
 
-  const queryString = new URLSearchParams(query as any).toString();
-
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6 && emailToUse) {
       mutateVerify(
         { email: emailToUse, code },
         {
-          onSuccess(data: any) {
-            signInWithCode({ email: emailToUse, code });
-            if (data.error == null) {
-              pushConnect(PixwayAppRoutes.COMPLETE_KYC + '?' + queryString);
-            }
+          onSuccess() {
+            signInWithCode({ email: emailToUse, code }).then((data) => {
+              if (data.error == null) {
+                pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                  contextSlug: 'testeprofile',
+                  step: 1,
+                });
+              }
+            });
           },
         }
       );

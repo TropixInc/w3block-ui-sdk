@@ -26,6 +26,7 @@ const NavigationTabsPixwaySDK = lazy(() => {
   ).then((mod) => ({ default: mod.NavigationTabsPixwaySDK }));
 });
 import { NavigationTabsPixwaySDKTabs } from './components';
+import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
 
 interface HeaderPixwaySDKProps {
   headerClassName?: string;
@@ -80,6 +81,9 @@ const _HeaderPixwaySDK = ({
   const { data: contexts } = useGetTenantContext();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
+
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const { logoUrl } = useCompanyConfig();
   const toggleMenuMemo = () => {
     if (openedMenu || openedTabs) {
@@ -112,7 +116,7 @@ const _HeaderPixwaySDK = ({
   useEffect(() => {
     if (profile) {
       if (signupContext) {
-        if (!profile.data.verified) {
+        if (!profile.data.verified && !isPasswordless) {
           router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
         } else if (
           profile?.data?.kycStatus === KycStatus.Pending &&

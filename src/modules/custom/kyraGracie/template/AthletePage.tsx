@@ -38,6 +38,16 @@ import {
   useGetAthlete,
 } from '../hooks/useGetAthlete';
 import { useGetAthleteByAddress } from '../hooks/useGetAthleteByAddress';
+
+export const gradeMap = {
+  degree_1: '1º Degree',
+  degree_2: '2º Degree',
+  degree_3: '3º Degree',
+  degree_4: '4º Degree',
+};
+
+export type Grade = 'degree_1' | 'degree_2' | 'degree_3' | 'degree_4';
+
 export const AthletePage = () => {
   const { datasource, loading } = useDynamicApi();
   const { data, isLoading } = useGetAthlete(
@@ -83,15 +93,6 @@ export const AthletePage = () => {
     Vermelha: 'Red',
     Coral: 'Coral',
   };
-
-  const gradeMap = {
-    degree_1: '1º Degree',
-    degree_2: '2º Degree',
-    degree_3: '3º Degree',
-    degree_4: '4º Degree',
-  };
-
-  type Grade = 'degree_1' | 'degree_2' | 'degree_3' | 'degree_4';
 
   type Belt =
     | 'Amarela'

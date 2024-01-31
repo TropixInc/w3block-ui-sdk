@@ -114,8 +114,8 @@ const _FormCompleteKYCWithoutLayout = ({
           userId,
           documents: {
             documents: validDocs,
+            currentStep: parseInt(step as string),
           },
-          currentStep: step as string,
         },
         {
           onSuccess: () => {
@@ -128,10 +128,7 @@ const _FormCompleteKYCWithoutLayout = ({
                 },
               });
             } else if (!profilePage) {
-              router.pushConnect(
-                PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-                query
-              );
+              router.pushConnect(PixwayAppRoutes.HOME, query);
             }
           },
         }

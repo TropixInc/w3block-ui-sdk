@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { I18NLocaleEnum } from '@w3block/sdk-id';
+import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import { boolean, object, string } from 'yup';
 
@@ -97,30 +97,44 @@ export const SignUpFormWithoutLayout = ({
     if (!hasSignUp) router.pushConnect(PixwayAppRoutes.SIGN_IN);
   }, [hasSignUp]);
 
+  const queryString = new URLSearchParams(router.query as any).toString();
+
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && isPasswordless) {
+      router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
+        email: emailLocal,
+        callbackUrl: queryString,
+      });
+    } else if (isSuccess) {
       setStep(Steps.SUCCESS);
     }
   }, [isSuccess]);
 
-  const queryString = new URLSearchParams(router.query as any).toString();
-
   const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
-    mutate({
-      confirmation,
-      email,
-      password,
-      i18nLocale: language,
-      callbackUrl:
-        removeDoubleSlashesOnUrl(
-          appBaseUrl +
-            connectProxyPass +
-            PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION
-        ) +
-        '?' +
-        queryString,
-    });
+    if (isPasswordless) {
+      mutate({
+        email,
+        confirmation,
+        password,
+      });
+    } else {
+      mutate({
+        confirmation,
+        email,
+        password,
+        i18nLocale: language,
+        callbackUrl:
+          removeDoubleSlashesOnUrl(
+            appBaseUrl +
+              connectProxyPass +
+              PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION
+          ) +
+          '?' +
+          queryString,
+        verificationType: VerificationType.Numeric,
+      });
+    }
   };
 
   const getErrorMessage = () => {

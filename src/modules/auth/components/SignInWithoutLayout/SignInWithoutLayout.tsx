@@ -20,6 +20,7 @@ import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthFooter } from '../AuthFooter';
+import { SignUpFormWithoutLayout } from '../SignUpFormWithoutLayout';
 const AuthButton = lazy(() =>
   import('../AuthButton').then((m) => ({ default: m.AuthButton }))
 );
@@ -158,86 +159,91 @@ export const SigInWithoutLayout = ({
     }
   };
 
-  return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(onSubmit)}
-        className="pw-font-montserrat"
-      >
-        {isShowingErrorMessage && !isPasswordless ? (
-          <Alert
-            variant="error"
-            className="pw-mb-6 pw-mt-4 pw-flex !pw-justify-start"
-          >
-            <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
-            {translate('companyAuth>signIn>loginFailedError')}
-          </Alert>
-        ) : null}
-        <p className="pw-font-[700] pw-text-[24px] pw-mb-6 pw-font-poppins pw-text-[#35394C] pw-text-center">
-          {translate('auth>signIn>title')}
-        </p>
-
-        <AuthTextController
-          name="email"
-          label={translate('home>contactModal>email')}
-          className="pw-mb-3"
-          placeholder={translate('companyAuth>newPassword>enterYourEmail')}
-          autoComplete="username"
-        />
-        {!isPasswordless ? (
-          <AuthTextController
-            name="password"
-            autoComplete="current-password"
-            label={translate('companyAuth>newPassword>passwordFieldLabel')}
-            type="password"
-            className="pw-mb-6"
-            placeholder={translate('companyAuth>newPassword>enterYourPassword')}
-            renderTips={() => (
-              <div className="pw-flex pw-justify-between pw-items-center pw-gap-x-1.5 pw-mt-2">
-                <AuthValidationTip
-                  isDirty={fieldState.isDirty}
-                  error={fieldState.error}
-                />
-                <a
-                  href={router.routerToHref(
-                    PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
-                  )}
-                  className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
-                >
-                  {translate('auth>passwordChange>requestChangeFormTitle')}
-                </a>
-              </div>
-            )}
-          />
-        ) : null}
-
-        <div className="pw-mb-6">
-          <AuthButton
-            className={classNames('pw-mb-1')}
-            type="submit"
-            fullWidth
-            disabled={!methods.formState.isValid || isLoading}
-          >
-            {translate('loginPage>formSubmitButton>signIn')}
-          </AuthButton>
-          {hasSignUp ? (
-            <p className="pw-text-[13px] pw-font-normal pw-leading-5 pw-text-[#383857] pw-text-center">
-              <Trans i18nKey={'auth>signIn>signUpCTA'}>
-                Não tem conta ainda?
-                <a
-                  href={router.routerToHref(
-                    PixwayAppRoutes.SIGN_UP + '?' + queryString
-                  )}
-                  className="pw-text-brand-primary pw-underline"
-                >
-                  Cadastre-se.
-                </a>
-              </Trans>
-            </p>
+  if (isPasswordless)
+    return <SignUpFormWithoutLayout title="Insira seu e-mail" />;
+  else
+    return (
+      <FormProvider {...methods}>
+        <form
+          onSubmit={methods.handleSubmit(onSubmit)}
+          className="pw-font-montserrat"
+        >
+          {isShowingErrorMessage && !isPasswordless ? (
+            <Alert
+              variant="error"
+              className="pw-mb-6 pw-mt-4 pw-flex !pw-justify-start"
+            >
+              <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
+              {translate('companyAuth>signIn>loginFailedError')}
+            </Alert>
           ) : null}
-        </div>
-        <AuthFooter />
-      </form>
-    </FormProvider>
-  );
+          <p className="pw-font-[700] pw-text-[24px] pw-mb-6 pw-font-poppins pw-text-[#35394C] pw-text-center">
+            {translate('auth>signIn>title')}
+          </p>
+
+          <AuthTextController
+            name="email"
+            label={translate('home>contactModal>email')}
+            className="pw-mb-3"
+            placeholder={translate('companyAuth>newPassword>enterYourEmail')}
+            autoComplete="username"
+          />
+          {!isPasswordless ? (
+            <AuthTextController
+              name="password"
+              autoComplete="current-password"
+              label={translate('companyAuth>newPassword>passwordFieldLabel')}
+              type="password"
+              className="pw-mb-6"
+              placeholder={translate(
+                'companyAuth>newPassword>enterYourPassword'
+              )}
+              renderTips={() => (
+                <div className="pw-flex pw-justify-between pw-items-center pw-gap-x-1.5 pw-mt-2">
+                  <AuthValidationTip
+                    isDirty={fieldState.isDirty}
+                    error={fieldState.error}
+                  />
+                  <a
+                    href={router.routerToHref(
+                      PixwayAppRoutes.REQUEST_PASSWORD_CHANGE
+                    )}
+                    className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
+                  >
+                    {translate('auth>passwordChange>requestChangeFormTitle')}
+                  </a>
+                </div>
+              )}
+            />
+          ) : null}
+
+          <div className="pw-mb-6">
+            <AuthButton
+              className={classNames('pw-mb-1')}
+              type="submit"
+              fullWidth
+              disabled={!methods.formState.isValid || isLoading}
+            >
+              {translate('loginPage>formSubmitButton>signIn')}
+            </AuthButton>
+            {hasSignUp ? (
+              <p className="pw-text-[13px] pw-font-normal pw-leading-5 pw-text-[#383857] pw-text-center">
+                <Trans i18nKey={'auth>signIn>signUpCTA'}>
+                  Não tem conta ainda?
+                  <a
+                    href={router.routerToHref(
+                      PixwayAppRoutes.SIGN_UP + '?' + queryString
+                    )}
+                    className="pw-text-brand-primary pw-underline"
+                  >
+                    Cadastre-se.
+                  </a>
+                </Trans>
+              </p>
+            ) : null}
+          </div>
+          <AuthFooter />
+        </form>
+      </FormProvider>
+    );
 };

@@ -90,7 +90,9 @@ export const VerifySignUpWithCodeWithoutLayout = ({
                 }
               );
             } else {
-              setError('código inválido');
+              pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
+                email: emailLocal,
+              });
             }
           },
         }
@@ -99,6 +101,13 @@ export const VerifySignUpWithCodeWithoutLayout = ({
       setError('código inválido');
     }
   };
+
+  useEffect(() => {
+    mutate({
+      email: emailToUse ?? '',
+      verificationType: 'numeric',
+    });
+  }, [emailToUse]);
 
   return (
     <div className="pw-flex pw-flex-col pw-items-center">

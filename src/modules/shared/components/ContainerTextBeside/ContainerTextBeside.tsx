@@ -26,19 +26,19 @@ export const ContainerTextBeside = ({
       />
       <p
         style={{ color: textColor }}
-        className="pw-text-[18px] pw-text-center sm:pw-text-left sm:pw-text-[55px] pw-font-poppins pw-font-[700] pw-leading-[23px] sm:pw-leading-[60px] pw-mt-[10px] sm:pw-mt-[40px]"
+        className="pw-text-[18px] pw-text-center sm:pw-text-left sm:pw-text-[55px] pw-font-poppins pw-font-[700] pw-leading-[23px] sm:pw-leading-[60px] pw-mt-[10px] sm:pw-mt-[20px]"
       >
         {mainText}
       </p>
       <p
         style={{ color: textColor }}
-        className="sm:pw-text-[24px] pw-text-[14px] pw-text-center sm:pw-text-left pw-font-poppins pw-font-[500] pw-leading-[21px] sm:pw-leading-[27px] pw-mt-[10px] sm:pw-mt-[40px]"
+        className="sm:pw-text-[24px] pw-text-[14px] pw-text-center sm:pw-text-left pw-font-poppins pw-font-[500] pw-leading-[21px] sm:pw-leading-[27px] pw-mt-[10px] sm:pw-mt-[20px]"
       >
         {subtitleText}
       </p>
       <p
         style={{ color: textColor }}
-        className="sm:pw-text-[14px] pw-text-[11px] pw-text-center sm:pw-text-left pw-font-poppins pw-font-[400] sm:pw-leading-[21px] pw-mt-[10px] sm:pw-mt-[40px]"
+        className="sm:pw-text-[14px] pw-text-[11px] pw-text-center sm:pw-text-left pw-font-poppins pw-font-[400] sm:pw-leading-[21px] pw-mt-[10px] sm:pw-mt-[20px]"
       >
         {auxiliarText}
       </p>
