@@ -69,8 +69,8 @@ export const AthletePage = () => {
     BeltColor.PURPLE,
     BeltColor.BROWN,
     BeltColor.BLACK,
-    BeltColor.RED,
     BeltColor.CORAL,
+    BeltColor.RED,
   ];
 
   const beltMap = {
@@ -80,8 +80,8 @@ export const AthletePage = () => {
     Roxa: 'Purple',
     Marrom: 'Brown',
     Preta: 'Black',
-    Vermelha: 'Red',
     Coral: 'Coral',
+    Vermelha: 'Red',
   };
 
   const gradeMap = {
@@ -100,8 +100,8 @@ export const AthletePage = () => {
     | 'Roxa'
     | 'Marrom'
     | 'Preta'
-    | 'Vermelha'
-    | 'Coral';
+    | 'Coral'
+    | 'Vermelha';
 
   const getBeltImage = (belt: BeltColor) => {
     switch (belt) {
@@ -117,10 +117,10 @@ export const AthletePage = () => {
         return brownBelt;
       case BeltColor.BLACK:
         return blackBelt;
-      case BeltColor.RED:
-        return redBelt;
       case BeltColor.CORAL:
         return coralBelt;
+      case BeltColor.RED:
+        return redBelt;
     }
   };
 
@@ -185,7 +185,7 @@ export const AthletePage = () => {
               <Shimmer className="pw-min-h-[350px] pw-min-w-[350px] pw-rounded-lg pw-mt-[45px]" />
             ) : (
               <img
-                className="pw-rounded-full sm:pw-w-[250px] pw-w-[150px] sm:pw-h-[250px] pw-h-[150px] pw-object-contain pw-object-center pw-mt-[45px]"
+                className="pw-w-[300px] pw-h-[375px]  pw-object-contain pw-object-center pw-mt-[45px]"
                 src={
                   datasource?.athlete?.data[0]?.attributes?.picture?.data
                     ?.attributes?.url
@@ -271,6 +271,10 @@ export const AthletePage = () => {
                   return '';
                 };
 
+                const beltWithDate = rangeTitles
+                  ? rangeTitles?.some((res: any) => res.type === 'belt')
+                  : false;
+
                 if (
                   respectiveBelt === undefined &&
                   (belt === BeltColor.ORANGE || belt === BeltColor.YELLOW)
@@ -282,11 +286,17 @@ export const AthletePage = () => {
                       {({ open }) => (
                         <>
                           <Disclosure.Button
-                            disabled={respectiveBelt === undefined}
+                            disabled={
+                              respectiveBelt !== undefined ||
+                              (athleteData?.items?.length && belt === 'Black')
+                                ? false
+                                : true
+                            }
                             className={`${
-                              respectiveBelt === undefined
-                                ? 'pw-opacity-60'
-                                : ''
+                              respectiveBelt !== undefined ||
+                              (athleteData?.items?.length && belt === 'Black')
+                                ? ''
+                                : 'pw-opacity-60'
                             } pw-p-[9px_12px] !pw-bg-[#F7F7F7] pw-text-black pw-font-bold pw-text-base flex pw-w-full pw-justify-between pw-items-center`}
                           >
                             <div className="pw-flex pw-gap-2">
@@ -306,6 +316,67 @@ export const AthletePage = () => {
                             />
                           </Disclosure.Button>
                           <Disclosure.Panel className="pw-p-[12px] pw-bg-[#F7F7F7] pw-flex pw-flex-col pw-gap-5">
+                            {!beltWithDate && respectiveBelt ? (
+                              <a
+                                target={`${
+                                  respectiveToken &&
+                                  respectiveBelt.type === 'belt'
+                                    ? '_blank'
+                                    : ''
+                                }`}
+                                href={
+                                  respectiveToken &&
+                                  respectiveBelt.type === 'belt'
+                                    ? `https://pdf${
+                                        !isProduction ? '.stg' : ''
+                                      }.w3block.io/certification/${
+                                        respectiveToken?.contractAddress
+                                      }/${respectiveToken?.chainId}/${
+                                        respectiveToken?.tokenId
+                                      }?preview`
+                                    : undefined
+                                }
+                                key={index}
+                                className={`${
+                                  respectiveToken &&
+                                  respectiveBelt.type === 'belt'
+                                    ? ''
+                                    : 'pw-opacity-60'
+                                } pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2`}
+                              >
+                                <p>
+                                  {`${date() !== '' ? `(${date()})` : ''} ${
+                                    belt + ' Belt'
+                                  }`}
+                                </p>
+                              </a>
+                            ) : null}
+                            {(!rangeTitles ||
+                              !rangeTitles?.some(
+                                (res: any) => res?.instructorIdentification
+                              )) &&
+                            athleteData?.items?.length &&
+                            belt === 'Black' ? (
+                              <a
+                                target="_blank"
+                                href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/q?instructorIdentification=${datasource?.athlete?.data[0]?.id}&preview`}
+                                key={index}
+                                className="pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2"
+                                rel="noreferrer"
+                              >
+                                <p>
+                                  {`(${format(
+                                    Date.parse(
+                                      athleteData?.items[0]?.tokenData
+                                        ?.dateOfIssue
+                                    ),
+                                    'P',
+                                    { locale: ptBR }
+                                  )})`}{' '}
+                                  WJJC Certified Instructor
+                                </p>
+                              </a>
+                            ) : null}
                             {rangeTitles?.map((res: any, index: any) => {
                               const date = () => {
                                 if (res?.date && res?.date?.includes('-01-01'))
