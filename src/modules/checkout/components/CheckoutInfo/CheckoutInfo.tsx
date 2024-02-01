@@ -15,6 +15,7 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
@@ -27,6 +28,7 @@ import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetPr
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import {
   ORDER_COMPLETED_INFO_KEY,
+  PRACTITIONER_DATA_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
   PRODUCT_VARIANTS_INFO_KEY,
 } from '../../config/keys/localStorageKey';
@@ -233,6 +235,11 @@ const _CheckoutInfo = ({
     }
   }, [query]);
 
+  const storageData = useGetStorageData(
+    PRACTITIONER_DATA_INFO_KEY,
+    router?.query?.id as string
+  );
+
   const getOrderPreviewFn = (couponCode?: string) => {
     const coupon = () => {
       if (couponCode) {
@@ -265,9 +272,13 @@ const _CheckoutInfo = ({
                 return payload;
               })
             : productIds.map((p) => {
+                const tokenId = storageData?.products?.find(
+                  (res: any) => res.productId === p
+                )?.tokenId;
                 const payload = {
                   quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                   productId: p,
+                  tokenId: tokenId ?? '',
                   variantIds: productVariants
                     ? Object.values(productVariants).map((value) => {
                         if ((value as any).productId === p)
@@ -418,9 +429,13 @@ const _CheckoutInfo = ({
             };
           })
         : orderPreview.products?.map((pID) => {
+            const tokenId = storageData?.products?.find(
+              (res: any) => res.productId === pID.id
+            )?.tokenId;
             return {
               quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
               productId: pID.id,
+              tokenId: tokenId ?? '',
               expectedPrice:
                 pID.prices.find((price) => price.currencyId == currencyIdState)
                   ?.amount ?? '0',

@@ -1,7 +1,4 @@
 import { lazy, useContext, useEffect, useMemo } from 'react';
-import { useLocalStorage } from 'react-use';
-
-import { KycStatus } from '@w3block/sdk-id';
 
 const ContainerControllerSDK = lazy(() =>
   import(
@@ -20,7 +17,6 @@ import { ContainerTextBesideProps } from '../../../shared/components/ContainerTe
 import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
-import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { position } from '../../../shared/enums/styleConfigs';
 import {
@@ -31,13 +27,9 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import { ThemeContext } from '../../../storefront/contexts';
-const FormCompleteKYCWithoutLayout = lazy(() =>
-  import('../../components/FormCompleteKYCWithoutLayout').then((m) => ({
-    default: m.FormCompleteKYCWithoutLayout,
-  }))
-);
+import { ConfirmationKycWithoutLayout } from '../../components/ConfirmationKycWithoutLayout';
 
-interface CompleteKYCTemplateSDKProps {
+interface ConfirmationKycTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;
   contentType?: ContentTypeEnum;
@@ -53,7 +45,7 @@ interface CompleteKYCTemplateSDKProps {
   redirectLink?: string;
 }
 
-export const CompleteKYCTemplateSDK = ({
+export const ConfirmationKycTemplateSDK = ({
   bgColor = 'white',
   infoPosition,
   contentType,
@@ -62,29 +54,13 @@ export const CompleteKYCTemplateSDK = ({
   separation,
   logoUrl,
   textContainer,
-  defaultRedirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   className,
   extraBy,
-}: CompleteKYCTemplateSDKProps) => {
+}: ConfirmationKycTemplateSDKProps) => {
   const { data: profile, isLoading: isLoadingProfile } = useProfile();
   const router = useRouterConnect();
   const { status } = usePixwaySession();
-  const { data: session } = usePixwaySession();
-  const [callbackUrl, setCallbackUrl] = useLocalStorage<string>(
-    LocalStorageFields.AUTHENTICATION_CALLBACK,
-    ''
-  );
   const query = Object.keys(router.query).length > 0 ? router.query : '';
-
-  useEffect(() => {
-    if (session && profile?.data) {
-      const { data: user } = profile;
-      if (user.kycStatus !== KycStatus.Pending && !router.query.contextSlug) {
-        router.pushConnect(getRedirectUrl(), query);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, router, profile]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -92,18 +68,6 @@ export const CompleteKYCTemplateSDK = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
-
-  const checkForCallbackUrl = () => {
-    if (!profile?.data.mainWallet) {
-      return PixwayAppRoutes.CONNECT_EXTERNAL_WALLET;
-    } else if (callbackUrl) {
-      const url = callbackUrl;
-      setCallbackUrl('');
-      return url;
-    }
-  };
-
-  const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
   const context = useContext(ThemeContext);
   const breakpoint = useBreakpoints();
@@ -129,9 +93,7 @@ export const CompleteKYCTemplateSDK = ({
     >
       <Spinner />
     </div>
-  ) : profile &&
-    (profile?.data?.kycStatus !== KycStatus.NoRequired ||
-      router.query.contextSlug) ? (
+  ) : profile ? (
     <TranslatableComponent>
       <div
         style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
@@ -147,9 +109,7 @@ export const CompleteKYCTemplateSDK = ({
           className={className}
           bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           extraBy={extraBy}
-          infoComponent={
-            <FormCompleteKYCWithoutLayout userId={profile?.data?.id} />
-          }
+          infoComponent={<ConfirmationKycWithoutLayout />}
         />
       </div>
     </TranslatableComponent>

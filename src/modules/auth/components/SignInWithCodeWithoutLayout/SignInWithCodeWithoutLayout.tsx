@@ -71,10 +71,9 @@ export const SignInWithCodeWithoutLayout = () => {
           onSuccess() {
             signInWithCode({ email: emailToUse, code }).then((data) => {
               if (data.error == null) {
-                pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-                  contextSlug: 'testeprofile',
-                  step: 1,
-                });
+                if (query.contextSlug?.length)
+                  pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+                else pushConnect('/');
               }
             });
           },

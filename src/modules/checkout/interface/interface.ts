@@ -121,6 +121,7 @@ export interface OrderProductsInterface {
   productId: string;
   variantIds?: string[];
   quantity?: number;
+  tokenId?: string;
 }
 
 export interface CreateOrder {

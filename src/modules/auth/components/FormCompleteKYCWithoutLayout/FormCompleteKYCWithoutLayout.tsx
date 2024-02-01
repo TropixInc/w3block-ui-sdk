@@ -63,7 +63,6 @@ const _FormCompleteKYCWithoutLayout = ({
     useGetTenantInputsBySlug({
       slug: slug(),
     });
-
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
 
   const { data: documents } = useGetUsersDocuments({
@@ -128,7 +127,10 @@ const _FormCompleteKYCWithoutLayout = ({
                 },
               });
             } else if (!profilePage) {
-              router.pushConnect(PixwayAppRoutes.HOME, query);
+              router.pushConnect(
+                PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
+                query
+              );
             }
           },
         }

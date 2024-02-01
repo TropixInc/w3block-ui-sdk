@@ -51,4 +51,5 @@ export enum PixwayAppRoutes {
   LOYALTY_REPORT = '/business/loyalty/report',
   AFFILIATES = '/affiliates',
   SIGNIN_WITH_CODE = '/auth/signIn/code',
+  COMPLETE_KYC_CONFIRMATION = '/auth/complete-kyc/confirmation',
 }

@@ -200,6 +200,7 @@ export const CheckoutPayment = () => {
           productIds: productCache.orderProducts.map((p) => {
             const payload = {
               productId: p.productId,
+              tokenId: p?.tokenId ?? '',
               variantIds: p.variantIds,
               quantity: p.quantity,
             };

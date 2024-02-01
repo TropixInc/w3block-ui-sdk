@@ -16,3 +16,4 @@ export * from './ResetPasswordTemplate';
 export * from './SignInTemplate';
 export * from './SignUpTemplate';
 export * from './SignInWithCodeTemplateSDK';
+export * from './ConfirmationKycTemplateSDK';

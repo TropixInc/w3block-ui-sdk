@@ -9,6 +9,7 @@ import { ContentTypeEnum } from '../../poll';
 import { position, useRouterConnect } from '../../shared';
 import { Box } from '../../shared/components/Box/Box';
 import { ContainerControllerSDK } from '../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
+import { Shimmer } from '../../shared/components/Shimmer';
 import { WeblockButton } from '../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
@@ -53,6 +54,8 @@ export const WjjcStart = () => {
     return text;
   };
 
+  const firstLoading = Object.keys(datasource).length < 1;
+
   const onContinue = () => {
     setInfoData({
       [id]: {
@@ -67,10 +70,26 @@ export const WjjcStart = () => {
           certificationDate: date(),
           title: title(),
         },
+        products: [
+          {
+            productId:
+              datasource?.athlete?.data[0]?.attributes?.affiliationProductId,
+            tokenId:
+              datasource?.athlete?.data[0]?.attributes?.affiliationTokenId,
+          },
+          {
+            productId:
+              datasource?.athlete?.data[0]?.attributes?.certificationProductId,
+            tokenId:
+              datasource?.athlete?.data[0]?.attributes?.certificationTokenId,
+          },
+        ],
+        postKycUrl: `/checkout/confirmation?productIds=${datasource?.athlete?.data[0]?.attributes?.affiliationProductId},${datasource?.athlete?.data[0]?.attributes?.certificationProductId}`,
+        postCheckoutUrl: '/',
       },
     });
     pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-      contextSlug: 'wjjcInfo',
+      contextSlug: 'wjjcstart',
       step: 1,
       id,
     });
@@ -95,37 +114,53 @@ export const WjjcStart = () => {
             <p className="pw-font-poppins sm:pw-text-[24px] pw-text-lg pw-text-[#35394C] pw-font-[700] pw-text-center pw-max-w-[369px]">
               Confirme os dados da certificação do praticante
             </p>
-            <div className="pw-text-lg pw-font-poppins pw-text-black pw-text-left pw-flex pw-flex-col pw-gap-[2px] pw-items-start pw-justify-center pw-w-full pw-mt-5">
+            <div className="pw-text-lg pw-font-poppins pw-text-black pw-text-left pw-flex pw-flex-col pw-items-start pw-justify-center pw-w-full pw-mt-5">
               <h3 className="pw-font-semibold">Nome completo</h3>
-              <p className="pw-font-normal">
-                {datasource?.athlete?.data[0]?.attributes?.name}
-              </p>
-              <h3 className="pw-font-semibold pw-mt-[2px]">Academia</h3>
-              <p className="pw-font-normal">
-                {
-                  datasource?.athlete?.data[0]?.attributes?.academy?.data
-                    ?.attributes?.name
-                }
-              </p>
-              <h3 className="pw-font-semibold pw-mt-[2px]">
-                Nome do professor
-              </h3>
-              <p className="pw-font-normal">
-                {
-                  datasource?.athlete?.data[0]?.attributes?.master?.data
-                    ?.attributes?.name
-                }
-              </p>
-              <h3 className="pw-font-semibold pw-mt-[2px]">
-                Data da cerimônia
-              </h3>
-              <p className="pw-font-normal">{date()}</p>
-              <h3 className="pw-font-semibold pw-mt-[2px]">Conquista</h3>
-              <p className="pw-font-normal">{title()}</p>
+              {firstLoading ? (
+                <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
+              ) : (
+                <p className="pw-font-normal">
+                  {datasource?.athlete?.data[0]?.attributes?.name}
+                </p>
+              )}
+              <h3 className="pw-font-semibold pw-mt-5">Academia</h3>
+              {firstLoading ? (
+                <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
+              ) : (
+                <p className="pw-font-normal">
+                  {
+                    datasource?.athlete?.data[0]?.attributes?.academy?.data
+                      ?.attributes?.name
+                  }
+                </p>
+              )}
+              <h3 className="pw-font-semibold pw-mt-5">Nome do professor</h3>
+              {firstLoading ? (
+                <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
+              ) : (
+                <p className="pw-font-normal">
+                  {
+                    datasource?.athlete?.data[0]?.attributes?.master?.data
+                      ?.attributes?.name
+                  }
+                </p>
+              )}
+              <h3 className="pw-font-semibold pw-mt-5">Data da cerimônia</h3>
+              {firstLoading ? (
+                <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
+              ) : (
+                <p className="pw-font-normal">{date()}</p>
+              )}
+              <h3 className="pw-font-semibold pw-mt-5">Conquista</h3>
+              {firstLoading ? (
+                <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
+              ) : (
+                <p className="pw-font-normal">{title()}</p>
+              )}
             </div>
             <WeblockButton
               onClick={onContinue}
-              className="pw-mt-4 pw-text-white"
+              className="pw-mt-5 pw-text-white"
               fullWidth={true}
             >
               Continuar

@@ -103,7 +103,7 @@ export const SignUpFormWithoutLayout = ({
     if (isSuccess && isPasswordless) {
       router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
         email: emailLocal,
-        callbackUrl: queryString,
+        ...router.query,
       });
     } else if (isSuccess) {
       setStep(Steps.SUCCESS);
@@ -191,6 +191,7 @@ export const SignUpFormWithoutLayout = ({
     if (isPasswordless && signUpError && emailInUse) {
       router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
         email: emailLocal,
+        ...router.query,
       });
     }
   }, [signUpError]);
