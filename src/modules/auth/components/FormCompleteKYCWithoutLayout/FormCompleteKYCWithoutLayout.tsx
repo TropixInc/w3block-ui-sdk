@@ -25,6 +25,7 @@ import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 const Box = lazy(() =>
   import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
 );
+
 interface Props {
   userId: string;
   contextId?: string;

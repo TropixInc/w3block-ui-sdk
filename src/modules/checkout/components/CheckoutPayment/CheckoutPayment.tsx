@@ -377,6 +377,7 @@ export const CheckoutPayment = () => {
         },
         {
           onSuccess: (data: CreateOrderResponse) => {
+            setLoading(false);
             setOrderResponse(data);
             setStayPooling(false);
             if (data.paymentProvider == PaymentMethod.STRIPE) {

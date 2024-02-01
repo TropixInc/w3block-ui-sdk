@@ -13,6 +13,9 @@ export enum FormatTypeColumn {
   HASH = 'hash',
   THUMBNAIL = 'thumbnail',
   COLLECTION = 'collection',
+  USER = 'user',
+  WALLET = 'wallet',
+  LINK = 'link',
 }
 
 export enum FormatFilterType {
@@ -79,8 +82,15 @@ export interface ColumnsTable {
   format: FormatApiData;
   key: string;
   keyInCollection?: string;
+  hrefLink?: string;
+  linkLabel?: string;
   subLabel?: string;
   sortable: boolean;
+  moreInfos?: {
+    name?: string;
+    cpf?: string;
+    phone?: string;
+  };
   sortableTamplate?: string;
   header: {
     label: string;
@@ -124,5 +134,7 @@ export interface ConfigGenericTable {
     container?: any;
     wrapper?: any;
     buttonsContainer?: any;
+    clearFilterButton?: any;
+    reportsButton?: any;
   };
 }

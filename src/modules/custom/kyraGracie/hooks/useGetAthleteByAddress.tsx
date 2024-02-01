@@ -27,6 +27,7 @@ export interface AthleteInterface {
   graduationAcademy: string;
   graduationTeacher: string;
   athleteNationality: string;
+  dateOfIssue: string;
 }
 
 export const useGetAthleteByAddress = (
