@@ -419,5 +419,6 @@
   "key>salesReportsTemplate>exportReport": "Exportar relatório",
   "tokens>generateGenericXlsReports>await": "Aguarde",
   "key>salesReportsTemplate>download": "Relatório finalizado, clique aqui para baixar",
-  "home>contactModal>error": "Falha no envio. Tente novamente mais tarde."
+  "home>contactModal>error": "Falha no envio. Tente novamente mais tarde.",
+  "contractDetails>RoyaltiesArea>date": "Data"
 }

@@ -15,6 +15,7 @@ export enum FormatTypeColumn {
   COLLECTION = 'collection',
   USER = 'user',
   WALLET = 'wallet',
+  LINK = 'link',
 }
 
 export enum FormatFilterType {
@@ -81,6 +82,8 @@ export interface ColumnsTable {
   format: FormatApiData;
   key: string;
   keyInCollection?: string;
+  hrefLink?: string;
+  linkLabel?: string;
   subLabel?: string;
   sortable: boolean;
   moreInfos?: {
