@@ -45,8 +45,6 @@ export const DateFilter = ({
   );
   const [endInterval, setEndInterval] = useState<Date | undefined>(undefined);
 
-  console.log(placeholder, 'plaaceholder');
-
   useEffect(() => {
     if (!startDate) {
       setStartInterval(undefined);
