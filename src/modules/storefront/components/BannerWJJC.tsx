@@ -317,7 +317,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                       </div>
                     )}
                     {(datasource?.master?.data[0]?.attributes?.placeOfBirth
-                      ?.state ||
+                      ?.city ||
                       datasource?.master?.data[0]?.attributes?.placeOfBirth
                         ?.country) && (
                       <div>
@@ -327,7 +327,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                         <p className="pw-font-bold pw-text-lg pw-font-poppins pw-text-black">
                           {getPlace(
                             datasource?.master?.data[0]?.attributes
-                              ?.placeOfBirth?.state,
+                              ?.placeOfBirth?.city,
                             datasource?.master?.data[0]?.attributes
                               ?.placeOfBirth?.country
                           )}
@@ -335,7 +335,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                       </div>
                     )}
                     {(datasource?.master?.data[0]?.attributes?.placeOfResidence
-                      ?.state ||
+                      ?.city ||
                       datasource?.master?.data[0]?.attributes?.placeOfResidence
                         ?.country) && (
                       <div>
@@ -345,7 +345,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                         <p className="pw-font-bold pw-text-lg pw-font-poppins pw-text-black">
                           {getPlace(
                             datasource?.master?.data[0]?.attributes
-                              ?.placeOfResidence?.state,
+                              ?.placeOfResidence?.city,
                             datasource?.master?.data[0]?.attributes
                               ?.placeOfResidence?.country
                           )}

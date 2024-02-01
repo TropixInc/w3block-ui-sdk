@@ -306,6 +306,7 @@ const SmartGenericFilter = ({
             onCancel={onCancelDates}
             startDate={startDate}
             endDate={endDate}
+            placeholder={filterPlaceholder}
           />
         );
       }

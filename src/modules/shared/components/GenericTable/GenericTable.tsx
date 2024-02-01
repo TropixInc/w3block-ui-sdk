@@ -10,6 +10,9 @@ import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import ClearFilter from '../../assets/icons/clearFilterOutlined.svg?react';
 import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import FilterIcon from '../../assets/icons/filterOutlined.svg?react';
+import MetamaskIcon from '../../assets/icons/metamask.svg?react';
+import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg?react';
+import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg?react';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
@@ -187,7 +190,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     itemKey: string,
     format: FormatApiData,
     basicUrl?: string,
-    keyInCollection?: string
+    keyInCollection?: string,
+    moreInfos?: any,
+    hrefLink?: string,
+    linkLabel?: string
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -201,9 +207,13 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
       case FormatTypeColumn.MAPPING: {
         const value = _.get(item, itemKey, '');
-
-        const formatedValue = _.get(format.mapping, value, '-');
-        return formatedValue ? formatedValue : value;
+        const formatedValue = _.get(format.mapping, value);
+        const defaultValue = format.mapping.default;
+        return formatedValue
+          ? formatedValue
+          : defaultValue
+          ? defaultValue
+          : value;
       }
       case FormatTypeColumn.HASH: {
         const value = _.get(item, itemKey, '');
@@ -264,6 +274,67 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         } else {
           return valueRendered;
         }
+      }
+
+      case FormatTypeColumn.USER: {
+        return (
+          <div className="pw-w-full">
+            <div className="pw-w-full pw-flex pw-gap-x-1 pw-flex-col">
+              <p className="pw-w-[165px] pw-text-ellipsis pw-overflow-hidden sm:pw-w-full">
+                {_.get(item, itemKey, '--')}
+              </p>
+              <p className="pw-w-[165px] pw-text-ellipsis pw-overflow-hidden  pw-text-xs pw-opacity-60 pw-flex pw-flex-col sm:pw-w-full">
+                <span>{_.get(item, moreInfos.name, '')}</span>
+                <span>{_.get(item, moreInfos.cpf, '')}</span>
+                <span>{_.get(item, moreInfos.phone, '')}</span>
+              </p>
+            </div>
+          </div>
+        );
+      }
+      case FormatTypeColumn.WALLET: {
+        if (_.get(item, itemKey)) {
+          return (
+            <div className="pw-w-[200px] pw-flex pw-gap-2 pw-items-center sm:pw-w-full">
+              {_.get(item, moreInfos.name, '') === 'metamask' ? (
+                <MetamaskIcon className="!pw-w-6 !pw-h-6 sm:!pw-w-10 sm:!pw-h-10" />
+              ) : (
+                <W3blockIcon className="!pw-w-6 !pw-h-6 pw-fill-[#5682C3] pw-stroke-[#DDE6F3] sm:!pw-w-10 sm:!pw-h-10" />
+              )}
+
+              <div>
+                <p className="pw-w-full pw-text-sm">
+                  {_.get(item, moreInfos.name, '') === 'metamask'
+                    ? translate('shared>genericTable>metamaskWallet')
+                    : translate('addFunds>type>weblockWallet')}
+                </p>
+                <p className="pw-w-[150px] pw-text-sm pw-text-ellipsis pw-overflow-hidden sm:pw-w-full">
+                  {_.get(item, itemKey)}
+                </p>
+              </div>
+            </div>
+          );
+        } else {
+          return (
+            <div className="pw-flex pw-items-center">
+              <NoWallet className="!pw-w-6 !pw-h-6 sm:!pw-w-10 sm:!pw-h-10" />
+              <p className="text-sm text-[#A9A9A9] line-clamp-1">
+                {translate('contacts>contactItem>notConfimed')}
+              </p>
+            </div>
+          );
+        }
+      }
+
+      case FormatTypeColumn.LINK: {
+        return (
+          <a
+            className="pw-font-medium pw-text-blue-600"
+            href={hrefLink?.replace('{replacedValue}', _.get(item, itemKey))}
+          >
+            {linkLabel}
+          </a>
+        );
       }
 
       default:
@@ -358,8 +429,9 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     if (filterValues.some((item: any) => item?.length)) {
       return (
         <button
-          className="pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
+          className="pw-min-w-[165px] !pw-h-[44px] pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
           onClick={() => onClearAllFilter()}
+          style={externalFilterClasses?.clearFilterButton}
         >
           <span className="pw-text-[#aaa] pw-font-medium">
             {translate('shared>genericTable>clearFilters')}
@@ -444,7 +516,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     );
                   })}
               </div>
-              <div style={externalFilterClasses?.buttonsContainer}>
+              <div
+                className="pw-mt-2 sm:pw-mt-0"
+                style={externalFilterClasses?.buttonsContainer}
+              >
                 {xlsReports?.url && (
                   <GenerateGenericXlsReports
                     url={xlsReports.url}
@@ -452,6 +527,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     filters={filters}
                     observerUrlReport={xlsReports.observerUrl}
                     sort={sort}
+                    styleClass={externalFilterClasses?.reportsButton}
                   />
                 )}
                 {renderClearFilterButton()}
@@ -582,7 +658,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                       filterOptionsUrl={header.filter?.data?.url}
                       filterContext={header.filter?.data?.filterUrlContext}
                       dynamicFilterParameters={header.filter?.data?.parameters}
+                      filterPlaceholder={header.filter?.placeholder}
                       isPublicFilterApi={header.filter?.data?.isPublicFilterApi}
+                      isFilterDependency={
+                        header.filter?.data?.parameters?.isFilterDependency
+                      }
+                      filterDependencies={
+                        header.filter?.data?.parameters?.dependencies
+                      }
                     />
                   </div>
                 </div>
@@ -612,19 +695,32 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                 >
                   {columns
                     .filter(({ header }) => header.label)
-                    .map(({ key, format, header, keyInCollection }) => (
-                      <p key={key} className="pw-text-sm pw-text-left">
-                        <span>
-                          {customizerValues(
-                            item as any,
-                            key,
-                            format,
-                            header.baseUrl,
-                            keyInCollection
-                          )}
-                        </span>
-                      </p>
-                    ))}
+                    .map(
+                      ({
+                        key,
+                        format,
+                        header,
+                        keyInCollection,
+                        moreInfos,
+                        hrefLink,
+                        linkLabel,
+                      }) => (
+                        <p key={key} className="pw-text-sm pw-text-left">
+                          <span>
+                            {customizerValues(
+                              item as any,
+                              key,
+                              format,
+                              header.baseUrl,
+                              keyInCollection,
+                              moreInfos,
+                              hrefLink,
+                              linkLabel
+                            )}
+                          </span>
+                        </p>
+                      )
+                    )}
                   <GenericButtonActions
                     dataItem={item}
                     actions={actions ?? []}
