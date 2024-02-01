@@ -141,7 +141,7 @@ export const DateFilter = ({
               onClick={() => handleSelectDate()}
             >
               <p className="pw-text-sm pw-font-semibold">
-                {translate('key>dateFilter>select')}
+                {translate('shared>myProfile>confirm')}
               </p>
             </OffpixButtonBase>
           </div>
