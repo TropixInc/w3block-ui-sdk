@@ -45,6 +45,8 @@ export const DateFilter = ({
   );
   const [endInterval, setEndInterval] = useState<Date | undefined>(undefined);
 
+  console.log(placeholder, 'plaaceholder');
+
   useEffect(() => {
     if (!startDate) {
       setStartInterval(undefined);
@@ -80,7 +82,9 @@ export const DateFilter = ({
           isSelectingInterval ? '' : formatedEndDate
         }`;
       } else {
-        return translate('contractDetails>RoyaltiesArea>date');
+        return placeholder
+          ? placeholder
+          : translate('contractDetails>RoyaltiesArea>date');
       }
     } else if (typeOfCalendar === CalendarType.SINGLE) {
       if (selectedDate) {

@@ -191,7 +191,9 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     format: FormatApiData,
     basicUrl?: string,
     keyInCollection?: string,
-    moreInfos?: any
+    moreInfos?: any,
+    hrefLink?: string,
+    linkLabel?: string
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -205,11 +207,13 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
       case FormatTypeColumn.MAPPING: {
         const value = _.get(item, itemKey, '');
-        const formatedValue =
-          typeof format.mapping === 'function'
-            ? format.mapping(item)
-            : _.get(format.mapping, value, '-');
-        return formatedValue ? formatedValue : value;
+        const formatedValue = _.get(format.mapping, value);
+        const defaultValue = format.mapping.default;
+        return formatedValue
+          ? formatedValue
+          : defaultValue
+          ? defaultValue
+          : value;
       }
       case FormatTypeColumn.HASH: {
         const value = _.get(item, itemKey, '');
@@ -320,6 +324,17 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             </div>
           );
         }
+      }
+
+      case FormatTypeColumn.LINK: {
+        return (
+          <a
+            className="pw-font-medium pw-text-blue-600"
+            href={hrefLink?.replace('{replacedValue}', _.get(item, itemKey))}
+          >
+            {linkLabel}
+          </a>
+        );
       }
 
       default:
@@ -643,7 +658,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                       filterOptionsUrl={header.filter?.data?.url}
                       filterContext={header.filter?.data?.filterUrlContext}
                       dynamicFilterParameters={header.filter?.data?.parameters}
+                      filterPlaceholder={header.filter?.placeholder}
                       isPublicFilterApi={header.filter?.data?.isPublicFilterApi}
+                      isFilterDependency={
+                        header.filter?.data?.parameters?.isFilterDependency
+                      }
+                      filterDependencies={
+                        header.filter?.data?.parameters?.dependencies
+                      }
                     />
                   </div>
                 </div>
@@ -674,7 +696,15 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   {columns
                     .filter(({ header }) => header.label)
                     .map(
-                      ({ key, format, header, keyInCollection, moreInfos }) => (
+                      ({
+                        key,
+                        format,
+                        header,
+                        keyInCollection,
+                        moreInfos,
+                        hrefLink,
+                        linkLabel,
+                      }) => (
                         <p key={key} className="pw-text-sm pw-text-left">
                           <span>
                             {customizerValues(
@@ -683,7 +713,9 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                               format,
                               header.baseUrl,
                               keyInCollection,
-                              moreInfos
+                              moreInfos,
+                              hrefLink,
+                              linkLabel
                             )}
                           </span>
                         </p>
