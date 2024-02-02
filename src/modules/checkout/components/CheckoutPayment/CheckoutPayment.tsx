@@ -2,6 +2,7 @@
 import {
   SyntheticEvent,
   lazy,
+  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -38,6 +39,7 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { ThemeContext } from '../../../storefront';
 import {
   ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
@@ -80,6 +82,7 @@ export const CheckoutPayment = () => {
   } = useCheckout();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [, setInputsValue] = useState<any>({});
+  const context = useContext(ThemeContext);
   const [pixImage, setPixImage] = useState<string>();
   const [pixPayload, setPixPayload] = useState<string>();
   const [poolStatus, setPoolStatus] = useState<boolean>(false);
@@ -200,7 +203,7 @@ export const CheckoutPayment = () => {
           productIds: productCache.orderProducts.map((p) => {
             const payload = {
               productId: p.productId,
-              tokenId: p?.tokenId ?? '',
+              productTokenId: p?.productTokenId ?? '',
               variantIds: p.variantIds,
               quantity: p.quantity,
             };
@@ -285,6 +288,18 @@ export const CheckoutPayment = () => {
       const coinPayment = orderInfo?.payments?.filter(
         (e) => e.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
       );
+      const destinationWalletAddress = () => {
+        if (
+          context?.defaultTheme?.configurations?.contentData
+            ?.productsReturnToWallet &&
+          context?.defaultTheme?.configurations?.contentData?.tenantWallet
+        )
+          return context?.defaultTheme?.configurations?.contentData
+            ?.tenantWallet;
+        else if (router?.query?.destinationWalletAddress)
+          return router?.query?.destinationWalletAddress;
+        else return profile.data?.data.mainWallet?.address ?? '';
+      };
       createOrderHook.mutate(
         {
           companyId,
@@ -302,9 +317,7 @@ export const CheckoutPayment = () => {
                     ),
                 }
               : undefined,
-            destinationWalletAddress: router.query.destinationWalletAddress
-              ? (router.query.destinationWalletAddress as string)
-              : profile.data?.data.mainWallet?.address ?? '',
+            destinationWalletAddress: destinationWalletAddress(),
             successUrl:
               appBaseUrl +
               PixwayAppRoutes.MY_TOKENS +

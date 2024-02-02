@@ -69,13 +69,19 @@ export const SignInWithCodeWithoutLayout = () => {
         { email: emailToUse, code },
         {
           onSuccess() {
-            signInWithCode({ email: emailToUse, code }).then((data) => {
-              if (data.error == null) {
-                if (query.contextSlug?.length)
-                  pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
-                else pushConnect('/');
+            signInWithCode({ email: emailToUse, code, tenantId }).then(
+              (data) => {
+                if (data.error == null) {
+                  if (query.callbackUrl?.length)
+                    pushConnect(query.callbackUrl as string);
+                  if (query.callbackPath?.length)
+                    pushConnect(query.callbackPath as string);
+                  else if (query.contextSlug?.length)
+                    pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+                  else pushConnect('/');
+                }
               }
-            });
+            );
           },
         }
       );
@@ -94,16 +100,11 @@ export const SignInWithCodeWithoutLayout = () => {
   return (
     <div className="pw-flex pw-flex-col pw-items-center">
       <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-font-[700] pw-text-center">
-        {translate('auth>codeVerify>necessaryVerification')}
+        Você já esteve por aqui
       </p>
       <p className="pw-text-[#353945] pw-mt-4 pw-mb-6 pw-text-center pw-text-[13px] pw-leading-[20px] pw-font-normal">
-        <Trans
-          i18nKey="auth>emailConfirmation>mailSentToEmail"
-          values={{ email: formattedEmail }}
-        >
-          Enviamos um email para:
-          <span className="pw-block">email</span>
-        </Trans>
+        Enviamos um código para confirmar sua identidade
+        <span className="pw-block">{formattedEmail}</span>
       </p>
       <div className="pw-flex pw-gap-x-2">
         {inputs.map((val: string, index: number) => (

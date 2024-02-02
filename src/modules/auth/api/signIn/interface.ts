@@ -9,6 +9,7 @@ export interface SignInPayload {
 export interface SignInWithCodePayload {
   email: string;
   code: string;
+  tenantId: string;
 }
 
 interface UserDataSignIn {

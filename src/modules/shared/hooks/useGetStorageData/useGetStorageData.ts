@@ -6,7 +6,7 @@ export const useGetStorageData = (infoKey: string, id?: string) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data] = useLocalStorage<any>(infoKey);
   const { query } = useRouterConnect();
-  const queryId = query.id;
+  const queryId = query.sessionId;
   if (id) {
     const specificData = data[id];
     return specificData;

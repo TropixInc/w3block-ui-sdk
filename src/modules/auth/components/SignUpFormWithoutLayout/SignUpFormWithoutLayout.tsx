@@ -16,6 +16,7 @@ import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantIn
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { useSignUp } from '../../hooks/useSignUp';
 import { EMAIL_ALREADY_IN_USE_API_MESSAGE } from '../../templates/SignUpTemplate';
 import { AuthFooter } from '../AuthFooter';
@@ -73,7 +74,7 @@ export const SignUpFormWithoutLayout = ({
   const { data: companyInfo } = useGetTenantInfoByHostname();
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const passwordSchema = usePasswordValidationSchema({ isPasswordless });
-  const { appBaseUrl, connectProxyPass } = useCompanyConfig();
+  const { appBaseUrl, connectProxyPass, companyId } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const [step, setStep] = useState(Steps.SIGN_UP);
@@ -93,6 +94,7 @@ export const SignUpFormWithoutLayout = ({
     isSuccess,
   } = useSignUp();
 
+  const { signInAfterSignUp } = usePixwayAuthentication();
   useEffect(() => {
     if (!hasSignUp) router.pushConnect(PixwayAppRoutes.SIGN_IN);
   }, [hasSignUp]);
@@ -100,12 +102,7 @@ export const SignUpFormWithoutLayout = ({
   const queryString = new URLSearchParams(router.query as any).toString();
 
   useEffect(() => {
-    if (isSuccess && isPasswordless) {
-      router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
-        email: emailLocal,
-        ...router.query,
-      });
-    } else if (isSuccess) {
+    if (isSuccess && !isPasswordless) {
       setStep(Steps.SUCCESS);
     }
   }, [isSuccess]);
@@ -113,10 +110,25 @@ export const SignUpFormWithoutLayout = ({
   const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
     if (isPasswordless) {
-      mutate({
-        email,
-        confirmation,
-        password,
+      signInAfterSignUp({ email, tenantId: companyId }).then((e) => {
+        if (e.error === EMAIL_ALREADY_IN_USE_API_MESSAGE && e.status === 401) {
+          router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
+            email,
+            ...router.query,
+          });
+        } else if (e.status === 200) {
+          if (router.query.callbackPath?.length) {
+            router.pushConnect(router.query.callbackPath as string);
+          } else if (router.query.callbackUrl?.length) {
+            router.pushConnect(router.query.callbackUrl as string);
+          } else if (router.query.contextSlug?.length) {
+            router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+              ...router.query,
+            });
+          } else {
+            router.pushConnect('/');
+          }
+        }
       });
     } else {
       mutate({
@@ -182,19 +194,6 @@ export const SignUpFormWithoutLayout = ({
     if (email)
       methods.setValue('email', email ? decodeURIComponent(email) : '');
   }, [email]);
-
-  useEffect(() => {
-    const typedError = signUpError as AxiosError;
-    const emailInUse =
-      (typedError?.response?.data as Record<string, string>)?.message ===
-      EMAIL_ALREADY_IN_USE_API_MESSAGE;
-    if (isPasswordless && signUpError && emailInUse) {
-      router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
-        email: emailLocal,
-        ...router.query,
-      });
-    }
-  }, [signUpError]);
 
   const inputs = () => {
     if (isPasswordless)

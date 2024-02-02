@@ -167,7 +167,10 @@ export const getNextAuthConfig = ({
           type: 'email',
         },
         code: {
-          type: 'code',
+          type: 'string',
+        },
+        companyId: {
+          type: 'string',
         },
       },
       authorize: async (payload) => {
@@ -180,6 +183,38 @@ export const getNextAuthConfig = ({
             body: JSON.stringify({
               email: payload?.email ?? '',
               code: payload?.code ?? '',
+            }),
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
+        const responseAsJSON = await response.json();
+        if (responseAsJSON.statusCode >= 300) {
+          throw new Error(responseAsJSON.message);
+        }
+        const user = mapSignInReponseToSessionUser(responseAsJSON);
+        return user;
+      },
+    }),
+    CredentialsProvider({
+      id: CredentialProviderName.SIGNIN_AFTER_SIGNUP,
+      credentials: {
+        email: {
+          type: 'email',
+        },
+        tenantId: {
+          type: 'string',
+        },
+      },
+      authorize: async (payload) => {
+        const response = await fetch(
+          removeDuplicateSlahes(`${baseURL}/${PixwayAPIRoutes.SIGN_UP}`),
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              email: payload?.email ?? '',
+              tenantId: payload?.tenantId ?? '',
+              password: '',
+              confirmation: '',
             }),
             headers: { 'Content-type': 'application/json' },
           }

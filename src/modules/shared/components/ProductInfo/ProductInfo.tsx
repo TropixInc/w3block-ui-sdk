@@ -42,6 +42,7 @@ interface ProductInfoProps {
   variants?: Variants[];
   loadingPreview?: boolean;
   index?: number;
+  disableQuantity?: boolean;
 }
 
 export const ProductInfo = ({
@@ -63,6 +64,7 @@ export const ProductInfo = ({
   variants,
   loadingPreview = false,
   index,
+  disableQuantity = false,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const [error, setError] = useState('');
@@ -253,7 +255,7 @@ export const ProductInfo = ({
         {currency != 'MATIC' && currency != 'ETH' && (
           <>
             <div className="pw-flex pw-gap-x-4 pw-items-center pw-justify-center">
-              {status == CheckoutStatus.CONFIRMATION && (
+              {status == CheckoutStatus.CONFIRMATION && !disableQuantity && (
                 <p
                   onClick={() => {
                     setQnt(qnt - 1);
@@ -284,7 +286,7 @@ export const ProductInfo = ({
                 <input
                   type="number"
                   id={`quantityValue${index}`}
-                  disabled={loading || loadingPreview}
+                  disabled={loading || loadingPreview || disableQuantity}
                   value={qnt}
                   onChange={() => {
                     const inputValue = parseFloat(
@@ -318,7 +320,7 @@ export const ProductInfo = ({
                 ></input>
               </div>
 
-              {status == CheckoutStatus.CONFIRMATION && (
+              {status == CheckoutStatus.CONFIRMATION && !disableQuantity && (
                 <p
                   className={` pw-cursor-pointer pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                     quantity &&

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { useGetTenantInfoByHostname } from '../useGetTenantInfoByHostname';
 import { usePixwaySession } from '../usePixwaySession';
 import { useProfile } from '../useProfile/useProfile';
 import { useRouterConnect } from '../useRouterConnect';
@@ -17,30 +18,33 @@ export const useHasWallet = ({
   const { data: session } = usePixwaySession();
   const { data: profile, isLoading, isSuccess } = useProfile();
   const router = useRouterConnect();
-
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   useEffect(() => {
-    if (onlyWithSession) {
-      if (
-        !profile?.data.mainWallet &&
-        !isLoading &&
-        router.isReady &&
-        isSuccess &&
-        session
-      ) {
-        router.pushConnect(redirectRoute, {
-          callbackPath: window.location.href,
-        });
-      }
-    } else {
-      if (
-        !profile?.data.mainWallet &&
-        !isLoading &&
-        router.isReady &&
-        isSuccess
-      ) {
-        router.pushConnect(redirectRoute, {
-          callbackPath: window.location.href,
-        });
+    if (!isPasswordless) {
+      if (onlyWithSession) {
+        if (
+          !profile?.data.mainWallet &&
+          !isLoading &&
+          router.isReady &&
+          isSuccess &&
+          session
+        ) {
+          router.pushConnect(redirectRoute, {
+            callbackPath: window.location.href,
+          });
+        }
+      } else {
+        if (
+          !profile?.data.mainWallet &&
+          !isLoading &&
+          router.isReady &&
+          isSuccess
+        ) {
+          router.pushConnect(redirectRoute, {
+            callbackPath: window.location.href,
+          });
+        }
       }
     }
 

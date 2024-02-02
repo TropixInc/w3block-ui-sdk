@@ -62,7 +62,7 @@ export const useCheckout = () => {
         (pId): ProductToSendPayload => {
           return {
             productId: pId.productId,
-            productTokenId: pId?.productTokenId ?? '',
+            productTokenId: pId?.productTokenId ?? undefined,
             variantIds: pId.variantIds,
             quantity: pId.quantity,
           };

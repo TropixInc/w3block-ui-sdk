@@ -16,7 +16,7 @@ export const ConfirmationKycWithoutLayout = () => {
   const querySlug = router.query.contextSlug;
   const storageData = useGetStorageData(
     PRACTITIONER_DATA_INFO_KEY,
-    router?.query?.id as string
+    router?.query?.sessionId as string
   );
   const { data: tenantInputs, isLoading: isLoadingKyc } =
     useGetTenantInputsBySlug({

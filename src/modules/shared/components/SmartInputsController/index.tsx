@@ -71,6 +71,7 @@ interface SmartProps {
   inputImagePlaceholder?: string;
   inputImageInstructions?: string;
   acceptImageTypes?: Array<string>;
+  autofill?: boolean;
 }
 
 export interface InputError {
@@ -108,6 +109,7 @@ const SmartInputsController = ({
   inputImageSubtitle,
   inputImageTitle,
   acceptImageTypes,
+  autofill = false,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -157,6 +159,7 @@ const SmartInputsController = ({
             name={name}
             docValue={value}
             docStatus={docStatus}
+            autofill={autofill}
           />
         );
       case DataTypesEnum.Url:

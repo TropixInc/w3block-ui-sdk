@@ -84,14 +84,14 @@ export const WjjcStart = () => {
               datasource?.athlete?.data[0]?.attributes?.certificationTokenId,
           },
         ],
-        postKycUrl: `/checkout/confirmation?productIds=${datasource?.athlete?.data[0]?.attributes?.affiliationProductId},${datasource?.athlete?.data[0]?.attributes?.certificationProductId}`,
+        postKycUrl: `/checkout/confirmation?productIds=${datasource?.athlete?.data[0]?.attributes?.affiliationProductId},${datasource?.athlete?.data[0]?.attributes?.certificationProductId}&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&sessionId=${id}`,
         postCheckoutUrl: '/',
       },
     });
     pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
       contextSlug: 'wjjcstart',
       step: 1,
-      id,
+      sessionId: id,
     });
   };
 

@@ -105,11 +105,11 @@ export const SigInWithoutLayout = ({
   });
 
   const checkForCallbackUrl = () => {
-    if (profile && !profile.data.verified) {
+    if (profile && !profile.data.verified && !isPasswordless) {
       return PixwayAppRoutes.VERIfY_WITH_CODE;
     } else if (profile?.data.kycStatus === KycStatus.Pending) {
       return routerToAttachKyc;
-    } else if (!profile?.data.mainWallet) {
+    } else if (!profile?.data.mainWallet && !isPasswordless) {
       return routeToAttachWallet;
     } else if (router.query.callbackPath) {
       return router.query.callbackPath as string;
@@ -131,7 +131,7 @@ export const SigInWithoutLayout = ({
       : '';
 
   useEffect(() => {
-    if (session && profile) {
+    if (session && profile && !isPasswordless) {
       router.pushConnect(getRedirectUrl(), query);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

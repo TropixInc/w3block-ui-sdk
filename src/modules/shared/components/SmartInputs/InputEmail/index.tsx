@@ -4,6 +4,7 @@ import { useController } from 'react-hook-form';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
+import { useProfile } from '../../../hooks';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
@@ -15,6 +16,7 @@ interface InputEmailProps {
   docValue?: string;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
+  autofill?: boolean;
 }
 
 const InputEmail = ({
@@ -23,10 +25,18 @@ const InputEmail = ({
   docValue,
   docStatus,
   hidenValidations = false,
+  autofill = false,
 }: InputEmailProps) => {
   const { field, fieldState } = useController({ name });
   const error = fieldState?.error as unknown as InputError;
   const [inputValue, setInputValue] = useState<string | undefined>();
+  const profile = useProfile();
+
+  useEffect(() => {
+    if (autofill && profile?.data?.data)
+      handleChange(profile?.data?.data?.email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autofill]);
 
   const handleChange = (value: string) => {
     if (value) {
@@ -56,6 +66,7 @@ const InputEmail = ({
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
         <input
+          disabled={autofill}
           name={name}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleChange(e.target.value)}

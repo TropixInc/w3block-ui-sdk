@@ -237,7 +237,7 @@ const _CheckoutInfo = ({
 
   const storageData = useGetStorageData(
     PRACTITIONER_DATA_INFO_KEY,
-    router?.query?.id as string
+    router?.query?.sessionId as string
   );
 
   const getOrderPreviewFn = (couponCode?: string) => {
@@ -278,7 +278,7 @@ const _CheckoutInfo = ({
                 const payload = {
                   quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                   productId: p,
-                  tokenId: tokenId ?? '',
+                  productTokenId: tokenId ?? undefined,
                   variantIds: productVariants
                     ? Object.values(productVariants).map((value) => {
                         if ((value as any).productId === p)
@@ -435,7 +435,7 @@ const _CheckoutInfo = ({
             return {
               quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
               productId: pID.id,
-              tokenId: tokenId ?? '',
+              productTokenId: tokenId ?? undefined,
               expectedPrice:
                 pID.prices.find((price) => price.currencyId == currencyIdState)
                   ?.amount ?? '0',
@@ -1261,6 +1261,7 @@ const _CheckoutInfo = ({
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
               {differentProducts.map((prod, index) => (
                 <ProductInfo
+                  disableQuantity={storageData?.products.length}
                   index={index}
                   loadingPreview={isLoadingPreview}
                   isCart={isCart}
