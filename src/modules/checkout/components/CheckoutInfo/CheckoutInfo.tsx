@@ -208,7 +208,7 @@ const _CheckoutInfo = ({
     } else {
       const preview = productCache;
       setCurrencyIdState(preview?.currencyId);
-      if (preview && preview.products.length > 0) {
+      if (preview && preview?.products?.length > 0) {
         setOrderPreview({
           ...orderPreview,
           products: [...preview.products],
@@ -220,7 +220,7 @@ const _CheckoutInfo = ({
           },
           cartPrice: preview.cartPrice,
         });
-      } else if (preview && preview.products.length == 0 && isCart) {
+      } else if (preview && preview?.products?.length == 0 && isCart) {
         setCart([]);
       }
     }
@@ -354,7 +354,7 @@ const _CheckoutInfo = ({
               if (a.id < b.id) return 1;
               return 0;
             });
-            if (data.products.map((p) => p.id).length != productIds.length) {
+            if (data.products.map((p) => p.id)?.length != productIds?.length) {
               setProductIds(data.products.map((p) => p.id));
               productIds?.sort((a, b) => {
                 if (a > b) return -1;
@@ -513,8 +513,8 @@ const _CheckoutInfo = ({
       let newArray: Array<string> = [];
       if (
         productIds &&
-        productIds?.filter((filteredId) => filteredId == id).length <
-          productIds?.filter((filteredId) => filteredId == id).length +
+        productIds?.filter((filteredId) => filteredId == id)?.length <
+          productIds?.filter((filteredId) => filteredId == id)?.length +
             (add ? 1 : -1)
       ) {
         newArray = [...productIds, id];
@@ -522,8 +522,8 @@ const _CheckoutInfo = ({
         productIds?.forEach((idProd) => {
           if (
             id != idProd ||
-            newArray.filter((idNew) => idNew == idProd).length <
-              productIds?.filter((filteredId) => filteredId == idProd).length +
+            newArray.filter((idNew) => idNew == idProd)?.length <
+              productIds?.filter((filteredId) => filteredId == idProd)?.length +
                 (add ? 1 : -1)
           ) {
             newArray.push(idProd);
@@ -654,7 +654,7 @@ const _CheckoutInfo = ({
           if (filteredIds) {
             const ind = productIds.indexOf(filteredIds);
             const newIds = [...productIds];
-            newIds.splice(ind, filteredProds.length);
+            newIds.splice(ind, filteredProds?.length);
             let newArray: Array<string> = [];
             newArray = [...newIds, ...Array(quantity).fill(id)];
             router.push(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
@@ -689,7 +689,7 @@ const _CheckoutInfo = ({
         if (newCart) {
           const ind = cart.indexOf(newCart);
           const newValue = [...cart];
-          newValue.splice(ind, filteredProds.length);
+          newValue.splice(ind, filteredProds?.length);
           setCart([...newValue, ...Array(quantity).fill(newCart)]);
           cart.sort((a, b) => {
             if (
@@ -758,28 +758,29 @@ const _CheckoutInfo = ({
   };
 
   const differentProducts = useMemo<Array<Product>>(() => {
-    if (orderPreview && orderPreview.products.length) {
+    if (orderPreview && orderPreview?.products?.length) {
       const uniqueProduct: Product[] = [];
-      orderPreview.products.forEach((p) => {
+      orderPreview?.products?.forEach((p) => {
         if (
           !uniqueProduct.some(
             (prod) =>
               p?.id == prod?.id &&
-              prod.prices.find((price) => price.currencyId == currencyIdState)
-                ?.amount ==
-                p.prices.find((price) => price.currencyId == currencyIdState)
+              prod?.prices?.find(
+                (price) => price?.currencyId == currencyIdState
+              )?.amount ==
+                p?.prices?.find((price) => price?.currencyId == currencyIdState)
                   ?.amount &&
               p?.variants
                 ?.map((res) => {
-                  return res.values.map((res) => {
-                    return res.id;
+                  return res?.values?.map((res) => {
+                    return res?.id;
                   });
                 })
                 .toString() ==
                 prod?.variants
                   ?.map((res) => {
-                    return res.values.map((res) => {
-                      return res.id;
+                    return res?.values?.map((res) => {
+                      return res?.id;
                     });
                   })
                   .toString()
@@ -886,10 +887,10 @@ const _CheckoutInfo = ({
               <PriceAndGasInfo
                 payments={orderPreview?.payments}
                 name={
-                  orderPreview?.products && orderPreview?.products.length
+                  orderPreview?.products && orderPreview?.products?.length
                     ? orderPreview?.products[0]?.prices.find(
-                        (price) => price.currency.id == currencyIdState
-                      )?.currency.name
+                        (price) => price?.currency?.id == currencyIdState
+                      )?.currency?.name
                     : 'BRL'
                 }
                 loading={isLoading || isLoadingPreview}
@@ -900,12 +901,12 @@ const _CheckoutInfo = ({
               <>
                 {datasource?.master?.data && (
                   <Selector
-                    data={datasource.master.data}
+                    data={datasource?.master?.data}
                     title="Restaurante"
                     initialValue={
                       datasource?.master?.data.filter(
                         (e: { attributes: { walletAddress: string | null } }) =>
-                          e.attributes.walletAddress ===
+                          e?.attributes?.walletAddress ===
                           destinationWalletAddress
                       )[0]?.id
                     }
@@ -992,24 +993,24 @@ const _CheckoutInfo = ({
                 <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
                   Food Coins (Saldo:{' '}
                   {organizedLoyalties &&
-                  organizedLoyalties.length > 0 &&
-                  organizedLoyalties.some(
+                  organizedLoyalties?.length > 0 &&
+                  organizedLoyalties?.some(
                     (wallet) =>
-                      wallet.type == 'loyalty' &&
+                      wallet?.type == 'loyalty' &&
                       wallet?.balance &&
                       parseFloat(wallet?.balance ?? '0') > 0
                   ) ? (
                     <>
                       {organizedLoyalties.find(
                         (wallet) =>
-                          wallet.type == 'loyalty' &&
+                          wallet?.type == 'loyalty' &&
                           wallet?.balance &&
                           parseFloat(wallet?.balance ?? '0') > 0
                       ).pointsPrecision == 'decimal'
                         ? parseFloat(
                             organizedLoyalties.find(
                               (wallet) =>
-                                wallet.type == 'loyalty' &&
+                                wallet?.type == 'loyalty' &&
                                 wallet?.balance &&
                                 parseFloat(wallet?.balance ?? '0') > 0
                             )?.balance ?? '0'
@@ -1017,7 +1018,7 @@ const _CheckoutInfo = ({
                         : parseFloat(
                             organizedLoyalties.find(
                               (wallet) =>
-                                wallet.type == 'loyalty' &&
+                                wallet?.type == 'loyalty' &&
                                 wallet?.balance &&
                                 parseFloat(wallet?.balance ?? '0') > 0
                             )?.balance ?? '0'
@@ -1054,10 +1055,10 @@ const _CheckoutInfo = ({
                 <PriceAndGasInfo
                   payments={orderPreview?.payments}
                   name={
-                    orderPreview?.products && orderPreview?.products.length
-                      ? orderPreview?.products[0]?.prices.find(
-                          (price) => price.currency.id == currencyIdState
-                        )?.currency.name
+                    orderPreview?.products && orderPreview?.products?.length
+                      ? orderPreview?.products[0]?.prices?.find(
+                          (price) => price?.currency?.id == currencyIdState
+                        )?.currency?.name
                       : 'BRL'
                   }
                   loading={isLoading || isLoadingPreview}
@@ -1175,12 +1176,12 @@ const _CheckoutInfo = ({
                 </p>
                 <PriceAndGasInfo
                   name={
-                    productCache?.products && productCache?.products.length
-                      ? productCache?.products[0].prices.find(
+                    productCache?.products && productCache?.products?.length
+                      ? productCache?.products[0]?.prices?.find(
                           (price) =>
-                            price.currencyId ==
-                            (router.query.currencyId as string)
-                        )?.currency.name
+                            price?.currencyId ==
+                            (router?.query?.currencyId as string)
+                        )?.currency?.name
                       : 'BRL'
                   }
                   loading={isLoading}
@@ -1216,10 +1217,12 @@ const _CheckoutInfo = ({
   ]);
 
   const anchorCurrencyId = useMemo(() => {
-    return orderPreview?.products && orderPreview.products.length
+    return orderPreview?.products && orderPreview?.products?.length
       ? orderPreview?.products
-          .find((prod) => prod.prices.some((price) => price.anchorCurrencyId))
-          ?.prices.find((price) => price.anchorCurrencyId)?.anchorCurrencyId
+          .find((prod) =>
+            prod?.prices?.some((price) => price?.anchorCurrencyId)
+          )
+          ?.prices.find((price) => price?.anchorCurrencyId)?.anchorCurrencyId
       : '';
   }, [orderPreview]);
 
@@ -1261,7 +1264,8 @@ const _CheckoutInfo = ({
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
               {differentProducts.map((prod, index) => (
                 <ProductInfo
-                  disableQuantity={storageData?.products.length}
+                  subtitle={prod?.subtitle}
+                  disableQuantity={storageData?.products?.length}
                   index={index}
                   loadingPreview={isLoadingPreview}
                   isCart={isCart}

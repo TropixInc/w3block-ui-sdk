@@ -81,4 +81,5 @@ export enum PixwayAPIRoutes {
   SIGNIN_WITH_CODE = '/auth/signin/code',
   REQUEST_SIGNIN_CODE = '/auth/signin/request-code',
   SIGN_UP = '/auth/signup',
+  TENANT_CONTEXT_BY_SLUG = '/tenant-context/{tenantId}/slug/{slug}',
 }

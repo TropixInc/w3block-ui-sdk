@@ -43,6 +43,7 @@ interface ProductInfoProps {
   loadingPreview?: boolean;
   index?: number;
   disableQuantity?: boolean;
+  subtitle?: string;
 }
 
 export const ProductInfo = ({
@@ -65,6 +66,7 @@ export const ProductInfo = ({
   loadingPreview = false,
   index,
   disableQuantity = false,
+  subtitle,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const [error, setError] = useState('');
@@ -110,6 +112,11 @@ export const ProductInfo = ({
           <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
             {name}
           </p>
+        )}
+        {subtitle && (
+          <div className="pw-flex pw-gap-1">
+            <p className="pw-text-xs pw-text-black">{subtitle}</p>
+          </div>
         )}
         <div className="pw-flex pw-flex-col pw-gap-1 -pw-mt-2 pw-mb-2 pw-opacity-50">
           {variants &&
@@ -195,6 +202,11 @@ export const ProductInfo = ({
           <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
             {name}
           </p>
+        )}
+        {subtitle && (
+          <div className="pw-flex pw-gap-1 -pw-mt-2 pw-mb-2">
+            <p className="pw-text-xs pw-text-black">{subtitle}</p>
+          </div>
         )}
         <div className="pw-flex pw-flex-col pw-gap-1 -pw-mt-2 pw-mb-2 pw-opacity-50">
           {variants &&

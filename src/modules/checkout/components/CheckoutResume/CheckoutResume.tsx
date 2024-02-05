@@ -68,7 +68,8 @@ export const CheckouResume = ({
               product?.prices?.find((price) => price?.currencyId == currencyId)
                 ?.originalAmount ?? '0'
             }
-            variants={product.variants}
+            variants={product?.variants}
+            subtitle={product?.subtitle}
           />
         ))
       ) : (

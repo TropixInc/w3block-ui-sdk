@@ -98,6 +98,18 @@ export const ConfirmationKycWithoutLayout = () => {
                   </button>
                 </p>
                 {groupedInputs[res].map((res) => {
+                  const value = () => {
+                    const value = getDocumentByInputId(res?.id)?.value;
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    if ((res?.data as any)?.subtype === 'document') {
+                      if (typeof value === 'string' && value) {
+                        const valueParsed = JSON.parse(value);
+                        return valueParsed?.docType === 'cpf'
+                          ? `CPF - ${valueParsed?.document}`
+                          : `Passaporte - ${valueParsed?.document}`;
+                      } else return '';
+                    } else return value;
+                  };
                   return (
                     <div
                       key={res.id}
@@ -106,9 +118,7 @@ export const ConfirmationKycWithoutLayout = () => {
                       <h3 className="pw-font-semibold pw-mt-[14px]">
                         {res.label}
                       </h3>
-                      <p className="pw-font-normal">
-                        {getDocumentByInputId(res?.id)?.value}
-                      </p>
+                      <p className="pw-font-normal">{value()}</p>
                     </div>
                   );
                 })}

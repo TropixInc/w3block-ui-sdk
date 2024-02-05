@@ -23,6 +23,7 @@ import {
   useBreakpoints,
   breakpointsEnum,
 } from '../../../shared/hooks/useBreakpoints/useBreakpoints';
+import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
@@ -61,7 +62,11 @@ export const ConfirmationKycTemplateSDK = ({
   const router = useRouterConnect();
   const { status } = usePixwaySession();
   const query = Object.keys(router.query).length > 0 ? router.query : '';
-
+  const { data: kycContext } = useGetTenantContextBySlug(
+    router?.query?.contextSlug as string
+  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.pushConnect(PixwayAppRoutes.SIGN_IN, query);
@@ -99,13 +104,21 @@ export const ConfirmationKycTemplateSDK = ({
         style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
       >
         <ContainerControllerSDK
-          infoPosition={infoPosition}
-          contentType={contentType}
+          infoPosition={
+            screenConfig?.position ? screenConfig?.position : infoPosition
+          }
+          contentType={
+            screenConfig?.contentType ? screenConfig?.contentType : contentType
+          }
           FAQContext={FAQContext}
           classes={classes}
           separation={separation}
           logoUrl={style?.onBoardingLogoSrc?.assetUrl ?? logoUrl}
-          textContainer={textContainer}
+          textContainer={
+            screenConfig?.textContainer
+              ? screenConfig?.textContainer
+              : textContainer
+          }
           className={className}
           bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           extraBy={extraBy}

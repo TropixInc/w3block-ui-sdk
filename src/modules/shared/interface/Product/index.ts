@@ -35,6 +35,7 @@ export interface Product {
   canPurchaseAmount: number;
   tokensAmount: number;
   variants?: Variants[];
+  subtitle?: string;
 }
 
 export interface Images {

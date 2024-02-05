@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
@@ -48,10 +49,9 @@ const InputUrl = lazy(() =>
   }))
 );
 
+import InputDocuments from '../SmartInputs/InputDocuments';
 import InputImage from '../SmartInputs/InputImage/InputImage';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
-
-import { lazy } from 'react';
 
 interface SmartProps {
   type: DataTypesEnum;
@@ -65,6 +65,7 @@ interface SmartProps {
   docFileValue?: string;
   profilePage?: boolean;
   options?: Options[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectData?: any;
   inputImageTitle?: string;
   inputImageSubtitle?: string;
@@ -72,6 +73,7 @@ interface SmartProps {
   inputImageInstructions?: string;
   acceptImageTypes?: Array<string>;
   autofill?: boolean;
+  inputSubtype?: string;
 }
 
 export interface InputError {
@@ -110,6 +112,7 @@ const SmartInputsController = ({
   inputImageTitle,
   acceptImageTypes,
   autofill = false,
+  inputSubtype,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -125,14 +128,18 @@ const SmartInputsController = ({
           />
         );
       case DataTypesEnum.Text:
-        return (
-          <InputText
-            label={label}
-            name={name}
-            docValue={value}
-            docStatus={docStatus}
-          />
-        );
+        if (inputSubtype && inputSubtype === 'document') {
+          return <InputDocuments name={name} label={label} docValue={value} />;
+        } else {
+          return (
+            <InputText
+              label={label}
+              name={name}
+              docValue={value}
+              docStatus={docStatus}
+            />
+          );
+        }
       case DataTypesEnum.Birthdate:
         return (
           <InputBirthdate

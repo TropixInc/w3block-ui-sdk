@@ -54,6 +54,7 @@ export const FormTemplate = ({
               }
               onChangeUploadProgess={setUploadProgress}
               selectData={item.data}
+              inputSubtype={(item?.data as any)?.subtype}
             />
           </div>
         ))}

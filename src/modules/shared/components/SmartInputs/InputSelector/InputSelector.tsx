@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
 import { useController } from 'react-hook-form';
 
@@ -153,7 +154,7 @@ export const InputSelector = ({
           <select
             name={name}
             onChange={(e) => handleTextChange(e.target.value)}
-            className="pw-max-h-[180px] pw-w-full pw-overflow-y-auto"
+            className="pw-max-h-[180px] pw-w-full pw-overflow-y-auto pw-text-black"
           >
             <option value="">Selecione uma opção</option>
             {type === DataTypesEnum.SimpleSelect
