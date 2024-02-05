@@ -49,6 +49,7 @@ const InputUrl = lazy(() =>
 );
 
 import InputImage from '../SmartInputs/InputImage/InputImage';
+import InputLocale from '../SmartInputs/InputLocale/InputLocale';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
 
 import { lazy } from 'react';
@@ -70,6 +71,7 @@ interface SmartProps {
   inputImagePlaceholder?: string;
   inputImageInstructions?: string;
   acceptImageTypes?: Array<string>;
+  inputSubtype?: string;
 }
 
 export interface InputError {
@@ -96,6 +98,7 @@ const SmartInputsController = ({
   inputImageSubtitle,
   inputImageTitle,
   acceptImageTypes,
+  inputSubtype,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -111,14 +114,19 @@ const SmartInputsController = ({
           />
         );
       case DataTypesEnum.Text:
-        return (
-          <InputText
-            label={label}
-            name={name}
-            docValue={value}
-            docStatus={docStatus}
-          />
-        );
+        if (inputSubtype && inputSubtype === 'locale') {
+          return <InputLocale name={name} label={label} docValue={value} />;
+        } else {
+          return (
+            <InputText
+              label={label}
+              name={name}
+              docValue={value}
+              docStatus={docStatus}
+            />
+          );
+        }
+
       case DataTypesEnum.Birthdate:
         return (
           <InputBirthdate
