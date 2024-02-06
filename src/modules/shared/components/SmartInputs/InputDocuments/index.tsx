@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
+import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
@@ -8,7 +9,7 @@ import { FormItemContainer } from '../../Form/FormItemContainer';
 interface InputDocuments {
   label: string;
   name: string;
-  docValue?: string;
+  docValue?: object;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
 }
@@ -22,7 +23,7 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
   const docTypeOptions = [
     {
       label: 'Passaporte',
-      value: 'passaport',
+      value: 'passport',
     },
     {
       label: 'CPF',
@@ -30,18 +31,15 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
     },
   ];
 
-  const CPFMask = /^(\d{3})(\d{3})(\d{3})(\d{2})/;
-
   const handleChange = (value: string | undefined) => {
     if (value) {
       setDocument(value);
-      const valueObject = {
-        docType: selectDocType,
-        document: value,
-      };
       field.onChange({
         inputId: name,
-        value: JSON.stringify(valueObject),
+        value: {
+          docType: selectDocType,
+          document: value,
+        },
       });
     } else {
       setDocument('');
@@ -52,15 +50,9 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
     }
   };
 
-  const formatCpfValue = () => {
-    if (document && document.length === 11) {
-      setDocument(document.replace(CPFMask, '$1.$2.$3-$4'));
-    }
-  };
-
   useEffect(() => {
     if (docValue) {
-      setApiSavedValue(JSON.parse(docValue));
+      setApiSavedValue(docValue);
     }
   }, [docValue]);
 
@@ -72,7 +64,7 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
   }, [apiSavedValue]);
 
   return (
-    <div className="pw-mb-3 pw-w-full">
+    <div className="pw-mb-6 pw-w-full">
       <div className="pw-w-full">
         <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
           Documento de Identificação
@@ -99,19 +91,19 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
             ))}
           </select>
         </FormItemContainer>
-        <div className="pw-w-full pw-mt-3">
+        <div className="pw-w-full pw-mt-7">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             Número do Documento
           </p>
           <FormItemContainer className="pw-p-[0.6rem]">
             {selectDocType === 'cpf' ? (
-              <input
+              <ReactInputMask
+                mask={'999.999.999-99'}
+                maskChar={''}
                 name={name}
                 onChange={(e) => handleChange(e.target.value)}
                 value={document}
                 placeholder="Digite apenas números"
-                maxLength={11}
-                onBlur={() => formatCpfValue()}
                 className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent"
               />
             ) : (

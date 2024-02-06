@@ -52,7 +52,7 @@ const InputPhone = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3 pw-w-full">
+    <div className="pw-mb-2 pw-w-full">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
@@ -74,16 +74,14 @@ const InputPhone = ({
           )}
         />
       </FormItemContainer>
-      {!hidenValidations && (
-        <p className="mt-5">
-          {field.value && (
-            <InputStatus
-              invalid={fieldState.invalid}
-              errorMessage={error?.value?.message}
-            />
-          )}
-        </p>
-      )}
+      <p className="mt-5 pw-h-[16px]">
+        {!hidenValidations && field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={error?.value?.message}
+          />
+        )}
+      </p>
     </div>
   );
 };

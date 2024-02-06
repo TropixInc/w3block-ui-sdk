@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useTranslation } from 'react-i18next';
 import { useDebounce, useInterval, useLocalStorage } from 'react-use';
@@ -23,6 +23,7 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { Product } from '../../../shared/interface/Product';
 import { useGetRightWallet } from '../../../shared/utils/getRightWallet';
+import { ThemeContext } from '../../../storefront';
 import { Selector } from '../../../storefront/components/Selector';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
@@ -118,6 +119,7 @@ const _CheckoutInfo = ({
   isCart = false,
 }: CheckoutInfoProps) => {
   const { datasource } = useDynamicApi();
+  const context = useContext(ThemeContext);
   const organizedLoyalties = useGetRightWallet();
   const router = useRouterConnect();
   const profile = useProfile();
@@ -1170,9 +1172,13 @@ const _CheckoutInfo = ({
             ) : (
               <>
                 <p className="pw-text-xs pw-text-[#353945] ">
-                  {translate(
-                    'checkout>components>checkoutInfo>infoAboutProcessing'
-                  )}
+                  {typeof context?.defaultTheme?.configurations?.contentData
+                    ?.checkoutConfig?.message === 'string'
+                    ? context?.defaultTheme?.configurations?.contentData
+                        ?.checkoutConfig?.message
+                    : translate(
+                        'checkout>components>checkoutInfo>infoAboutProcessing'
+                      )}
                 </p>
                 <PriceAndGasInfo
                   name={
@@ -1192,7 +1198,15 @@ const _CheckoutInfo = ({
             )}
             <PixwayButton
               onClick={
-                returnAction
+                context?.defaultTheme?.configurations?.contentData
+                  ?.checkoutConfig?.actionButton?.link
+                  ? () => {
+                      router.pushConnect(
+                        context?.defaultTheme?.configurations?.contentData
+                          ?.checkoutConfig?.actionButton?.link
+                      );
+                    }
+                  : returnAction
                   ? () => returnAction(query)
                   : () => {
                       router.pushConnect(PixwayAppRoutes.MY_TOKENS);
@@ -1200,7 +1214,11 @@ const _CheckoutInfo = ({
               }
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
             >
-              {translate('tokens>tokenTransferController>goToMyTokens')}
+              {context?.defaultTheme?.configurations?.contentData
+                ?.checkoutConfig?.actionButton?.label
+                ? context?.defaultTheme?.configurations?.contentData
+                    ?.checkoutConfig?.actionButton?.label
+                : translate('tokens>tokenTransferController>goToMyTokens')}
             </PixwayButton>
           </div>
         );

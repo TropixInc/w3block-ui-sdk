@@ -64,29 +64,37 @@ const InputEmail = ({
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
-        <input
-          disabled={autofill}
-          name={name}
-          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
-          onChange={(e) => handleChange(e.target.value)}
-          value={inputValue}
-          type="email"
+      {autofill ? (
+        <div
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-black pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-py-[15px] autofill:pw-bg-transparent'
           )}
-        />
-      </FormItemContainer>
-      {!hidenValidations && (
-        <p className="mt-5">
-          {field.value && (
-            <InputStatus
-              invalid={fieldState.invalid}
-              errorMessage={error?.value?.message}
-            />
-          )}
-        </p>
+        >
+          {inputValue}
+        </div>
+      ) : (
+        <FormItemContainer invalid={fieldState.invalid || !field.value}>
+          <input
+            disabled={autofill}
+            name={name}
+            readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+            onChange={(e) => handleChange(e.target.value)}
+            value={inputValue}
+            type="email"
+            className={classNames(
+              'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+            )}
+          />
+        </FormItemContainer>
       )}
+      <p className={`mt-5 ${!autofill && 'pw-h-[16px]'}`}>
+        {!hidenValidations && field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={error?.value?.message}
+          />
+        )}
+      </p>
     </div>
   );
 };

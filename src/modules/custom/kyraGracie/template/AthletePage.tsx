@@ -360,7 +360,7 @@ export const AthletePage = () => {
                             belt === 'Black' ? (
                               <a
                                 target="_blank"
-                                href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/q?instructorIdentification=${datasource?.athlete?.data[0]?.id}&preview`}
+                                href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/?instructorIdentification=${datasource?.athlete?.data[0]?.id}&preview`}
                                 key={index}
                                 className="pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2"
                                 rel="noreferrer"
@@ -435,7 +435,7 @@ export const AthletePage = () => {
                                 return (
                                   <a
                                     target="_blank"
-                                    href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/q?instructorIdentification=${datasource?.athlete?.data[0]?.id}&preview`}
+                                    href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/?instructorIdentification=${datasource?.athlete?.data[0]?.id}&preview`}
                                     key={index}
                                     className="pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2"
                                     rel="noreferrer"

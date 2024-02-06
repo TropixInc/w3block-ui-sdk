@@ -405,7 +405,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
             <div className="pw-flex pw-gap-4 pw-mt-5">
               {athleteData?.items.length ? (
                 <a
-                  href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/q?instructorIdentification=${datasource?.master?.data[0]?.id}&preview`}
+                  href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/?instructorIdentification=${datasource?.master?.data[0]?.id}&preview`}
                   target="_blank"
                   className="pw-p-[5px_24px_5px_24px] pw-bg-[#295BA6] pw-border-solid pw-border-[1px] pw-border-[#FFFFFF] pw-text-white pw-rounded-[16px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] pw-font-poppins pw-text-xs"
                   rel="noreferrer"

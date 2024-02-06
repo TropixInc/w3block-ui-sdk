@@ -57,7 +57,8 @@ interface SmartProps {
   type: DataTypesEnum;
   label: string;
   name: string;
-  value?: string;
+  simpleValue?: string;
+  complexValue?: object;
   assetId?: string | null;
   docStatus?: UserDocumentStatus;
   openDocs?: boolean;
@@ -97,7 +98,8 @@ const SmartInputsController = ({
   label,
   name,
   type,
-  value,
+  simpleValue,
+  complexValue,
   assetId,
   docStatus,
   docFileValue,
@@ -112,7 +114,6 @@ const SmartInputsController = ({
   inputImageTitle,
   acceptImageTypes,
   autofill = false,
-  inputSubtype,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -122,30 +123,26 @@ const SmartInputsController = ({
           <InputCpf
             label={label}
             name={name}
-            docValue={value}
+            docValue={simpleValue}
             docStatus={docStatus}
             profilePage={profilePage}
           />
         );
       case DataTypesEnum.Text:
-        if (inputSubtype && inputSubtype === 'document') {
-          return <InputDocuments name={name} label={label} docValue={value} />;
-        } else {
-          return (
-            <InputText
-              label={label}
-              name={name}
-              docValue={value}
-              docStatus={docStatus}
-            />
-          );
-        }
+        return (
+          <InputText
+            label={label}
+            name={name}
+            docValue={simpleValue}
+            docStatus={docStatus}
+          />
+        );
       case DataTypesEnum.Birthdate:
         return (
           <InputBirthdate
             label={label}
             name={name}
-            docValue={value}
+            docValue={simpleValue}
             docStatus={docStatus}
             profilePage={profilePage}
           />
@@ -155,7 +152,7 @@ const SmartInputsController = ({
           <InputPhone
             label={label}
             name={name}
-            docValue={value}
+            docValue={simpleValue}
             docStatus={docStatus}
           />
         );
@@ -164,9 +161,10 @@ const SmartInputsController = ({
           <InputEmail
             label={label}
             name={name}
-            docValue={value}
+            docValue={simpleValue}
             docStatus={docStatus}
             autofill={autofill}
+            hidenValidations={autofill}
           />
         );
       case DataTypesEnum.Url:
@@ -174,7 +172,7 @@ const SmartInputsController = ({
           <InputUrl
             label={label}
             name={name}
-            docValue={value}
+            docValue={simpleValue}
             docStatus={docStatus}
           />
         );
@@ -225,7 +223,7 @@ const SmartInputsController = ({
           <InputText
             label={label}
             name={name}
-            docValue={value}
+            docValue={simpleValue}
             docStatus={docStatus}
           />
         );
@@ -236,7 +234,7 @@ const SmartInputsController = ({
             options={options ?? []}
             name={name}
             label={label}
-            docValue={value}
+            docValue={simpleValue}
           />
         );
       case DataTypesEnum.DynamicSelect:
@@ -247,8 +245,12 @@ const SmartInputsController = ({
             name={name}
             label={label}
             configData={selectData as InputDataDTO}
-            docValue={value}
+            docValue={simpleValue}
           />
+        );
+      case DataTypesEnum.IdentificationDocument:
+        return (
+          <InputDocuments name={name} label={label} docValue={complexValue} />
         );
     }
   };

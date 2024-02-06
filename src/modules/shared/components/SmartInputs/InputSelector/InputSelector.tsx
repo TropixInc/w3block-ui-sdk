@@ -136,7 +136,7 @@ export const InputSelector = ({
   };
 
   return (
-    <div className="pw-mt-4 pw-mb-3">
+    <div className="pw-mb-6">
       <label className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </label>

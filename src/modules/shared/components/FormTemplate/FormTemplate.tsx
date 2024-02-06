@@ -29,35 +29,36 @@ export const FormTemplate = ({
   return (
     <form onSubmit={onSubmit}>
       {tenantInputs &&
-        tenantInputs?.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              width:
-                item?.data && (item?.data as any)['width']
-                  ? (item?.data as any)['width']
-                  : '100%',
-            }}
-          >
-            <SmartInputsController
+        tenantInputs?.map((item) => {
+          const doc = getDocumentByInputId(item?.id);
+          return (
+            <div
               key={item.id}
-              label={item.label}
-              name={item.id}
-              type={item.type}
-              options={item.options}
-              autofill={(item.data as any)?.autofill}
-              assetId={getDocumentByInputId(item?.id)?.assetId}
-              value={getDocumentByInputId(item?.id)?.value}
-              docStatus={getDocumentByInputId(item?.id)?.status}
-              docFileValue={
-                getDocumentByInputId(item?.id)?.asset?.directLink ?? ''
-              }
-              onChangeUploadProgess={setUploadProgress}
-              selectData={item.data}
-              inputSubtype={(item?.data as any)?.subtype}
-            />
-          </div>
-        ))}
+              style={{
+                width:
+                  item?.data && (item?.data as any)['width']
+                    ? (item?.data as any)['width']
+                    : '100%',
+              }}
+            >
+              <SmartInputsController
+                key={item.id}
+                label={item.label}
+                name={item.id}
+                type={item.type}
+                options={item.options}
+                autofill={(item.data as any)?.autofill}
+                assetId={doc?.assetId}
+                simpleValue={doc?.simpleValue}
+                complexValue={doc?.complexValue}
+                docStatus={doc?.status}
+                docFileValue={doc?.asset?.directLink ?? ''}
+                onChangeUploadProgess={setUploadProgress}
+                selectData={item.data}
+              />
+            </div>
+          );
+        })}
       {children}
       <AuthButton
         type="submit"

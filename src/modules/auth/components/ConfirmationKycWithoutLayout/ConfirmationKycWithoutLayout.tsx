@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import _ from 'lodash';
 
 import { PRACTITIONER_DATA_INFO_KEY } from '../../../checkout/config/keys/localStorageKey';
@@ -99,16 +100,16 @@ export const ConfirmationKycWithoutLayout = () => {
                 </p>
                 {groupedInputs[res].map((res) => {
                   const value = () => {
-                    const value = getDocumentByInputId(res?.id)?.value;
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    if ((res?.data as any)?.subtype === 'document') {
-                      if (typeof value === 'string' && value) {
-                        const valueParsed = JSON.parse(value);
-                        return valueParsed?.docType === 'cpf'
-                          ? `CPF - ${valueParsed?.document}`
-                          : `Passaporte - ${valueParsed?.document}`;
+                    const doc = getDocumentByInputId(res?.id);
+                    const simpleValue = doc?.simpleValue;
+                    const complexValue = doc?.complexValue;
+                    if (res?.type === 'identification_document') {
+                      if (complexValue) {
+                        return (complexValue as any)?.docType === 'cpf'
+                          ? `CPF - ${(complexValue as any)?.document}`
+                          : `Passaporte - ${(complexValue as any)?.document}`;
                       } else return '';
-                    } else return value;
+                    } else return simpleValue;
                   };
                   return (
                     <div

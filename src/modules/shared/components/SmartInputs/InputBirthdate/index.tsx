@@ -41,7 +41,7 @@ const InputBirthdate = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3">
+    <div className="pw-mb-2">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
@@ -57,7 +57,7 @@ const InputBirthdate = ({
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
         />
       </FormItemContainer>
-      <p className="mt-5">
+      <p className="mt-5 pw-h-[16px]">
         {field.value && (
           <InputStatus
             invalid={fieldState.invalid}

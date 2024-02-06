@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromString';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
@@ -31,18 +30,15 @@ const InputCpf = ({
 }: InputCPFProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
-  const [translate] = useTranslation();
 
   const error = fieldState?.error as unknown as InputError;
 
-  const CPFMask = /^(\d{3})(\d{3})(\d{3})(\d{2})/;
-
   const handleChange = (value: string | undefined) => {
     if (value) {
-      setInputValue(getNumbersFromString(value, false));
+      setInputValue(value);
       field.onChange({
         inputId: name,
-        value: getNumbersFromString(value, false),
+        value: value,
       });
     } else {
       setInputValue('');
@@ -50,12 +46,6 @@ const InputCpf = ({
         inputId: undefined,
         value: undefined,
       });
-    }
-  };
-
-  const formatCpfValue = () => {
-    if (inputValue && inputValue.length === 11) {
-      setInputValue(inputValue.replace(CPFMask, '$1.$2.$3-$4'));
     }
   };
 
@@ -68,37 +58,35 @@ const InputCpf = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3 pw-w-full">
+    <div className="pw-mb-2 pw-w-full">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
       <FormItemContainer invalid={fieldState.invalid || !field.value}>
-        <input
+        <ReactInputMask
           readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
             profilePage
           }
+          mask={'999.999.999-99'}
+          maskChar={''}
           name={name}
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}
-          placeholder={translate('auth>inputCpf>placeholder')}
-          maxLength={11}
-          onBlur={() => formatCpfValue()}
+          placeholder="Digite apenas números"
           className={classNames(
             'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
           )}
         />
       </FormItemContainer>
-      {!hidenValidations && (
-        <p className="mt-5">
-          {field.value && (
-            <InputStatus
-              invalid={fieldState.invalid}
-              errorMessage={error?.value?.message}
-            />
-          )}
-        </p>
-      )}
+      <p className="mt-5 pw-h-[16px]">
+        {!hidenValidations && field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={error?.value?.message}
+          />
+        )}
+      </p>
     </div>
   );
 };
