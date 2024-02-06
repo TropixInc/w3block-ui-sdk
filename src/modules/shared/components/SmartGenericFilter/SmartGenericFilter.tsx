@@ -81,11 +81,27 @@ const SmartGenericFilter = ({
   const [multSelected, setMultSelected] = useState<Array<string> | undefined>(
     []
   );
+
   const [endDate, setEndDate] = useState<Date>();
   const [numberRange, setNumberRange] = useState<{
     start: string | undefined;
     end: string | undefined;
   }>();
+
+  useEffect(() => {
+    if (filterFormat === FormatFilterType.SEARCH) {
+      if (!_.get(filterLabels, itemKey || '')) {
+        setSearchStaticValue('');
+      }
+    }
+
+    if (filterFormat === FormatFilterType.LOCALDATE) {
+      if (!_.get(filterLabels, itemKey || '')) {
+        setStartDate(undefined);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterLabels]);
 
   const { field } = useController({ name: itemKey ?? '' });
 
@@ -336,7 +352,7 @@ const SmartGenericFilter = ({
       }
       case FormatFilterType.SEARCH: {
         return (
-          <div className="pw-w-full pw-min-w-[200px] pw-h-[42px] pw-rounded-lg pw-border pw-border-slate-300">
+          <div className="pw-w-full pw-min-w-[200px] pw-h-11 pw-rounded-lg pw-border pw-border-slate-300">
             <input
               className="pw-w-full pw-h-[40px] pw-rounded-lg pw-outline-none pw-px-2"
               type="text"

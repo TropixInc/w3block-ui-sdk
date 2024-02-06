@@ -202,7 +202,7 @@ export const DynamicGenericFilter = ({
             items={options ?? []}
             inputPlaceholder={placeholder ?? 'Buscar'}
             classes={{
-              root: '!pw-w-full',
+              root: '!pw-w-full pw-h-11',
               input:
                 '!pw-w-full !pw-text-black !pw-placeholder-black pw-opacity-80',
             }}

@@ -182,7 +182,6 @@ const _FormCompleteKYCWithoutLayout = ({
                 }
                 onChangeUploadProgess={setUploadProgress}
                 acceptImageTypes={item?.data?.acceptTypes}
-                inputSubtype={item?.data?.subtype}
               />
             ))}
 

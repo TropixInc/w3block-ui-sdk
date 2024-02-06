@@ -71,7 +71,6 @@ interface SmartProps {
   inputImagePlaceholder?: string;
   inputImageInstructions?: string;
   acceptImageTypes?: Array<string>;
-  inputSubtype?: string;
 }
 
 export interface InputError {
@@ -98,7 +97,6 @@ const SmartInputsController = ({
   inputImageSubtitle,
   inputImageTitle,
   acceptImageTypes,
-  inputSubtype,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const renderInput = () => {
@@ -114,18 +112,14 @@ const SmartInputsController = ({
           />
         );
       case DataTypesEnum.Text:
-        if (inputSubtype && inputSubtype === 'locale') {
-          return <InputLocale name={name} label={label} docValue={value} />;
-        } else {
-          return (
-            <InputText
-              label={label}
-              name={name}
-              docValue={value}
-              docStatus={docStatus}
-            />
-          );
-        }
+        return (
+          <InputText
+            label={label}
+            name={name}
+            docValue={value}
+            docStatus={docStatus}
+          />
+        );
 
       case DataTypesEnum.Birthdate:
         return (
@@ -219,6 +213,8 @@ const SmartInputsController = ({
         return (
           <InputSelector options={options ?? []} name={name} label={label} />
         );
+      case DataTypesEnum.SimpleLocation:
+        return <InputLocale name={name} label={label} docValue={value} />;
     }
   };
   return <div>{renderInput()}</div>;

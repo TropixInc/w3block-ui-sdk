@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import _ from 'lodash';
 
@@ -68,6 +69,7 @@ const CityAutoComplete = ({
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
+  const [translate] = useTranslation();
   const [placeId, setPlaceId] = useState<string | undefined>();
   const [showOptions, setShowOptions] = useState(false);
   const { placesService, placePredictions, getPlacePredictions } =
@@ -105,7 +107,7 @@ const CityAutoComplete = ({
           onChangeRegion(components.region);
           field.onChange({
             inputId: name,
-            value: JSON.stringify({ ...components, placeId: placeId }),
+            value: { ...components, placeId: placeId },
           });
         }
       );
@@ -134,6 +136,9 @@ const CityAutoComplete = ({
 
   return (
     <div className="pw-mt-3 pw-relative">
+      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        {translate('shared>cityAutoComplete>city')}
+      </p>
       <FormItemContainer
         invalid={fieldState.invalid}
         className="pw-p-[0.6rem] pw-h-11"
@@ -142,7 +147,9 @@ const CityAutoComplete = ({
           type="text"
           className="pw-w-full pw-outline-none"
           value={inputValue}
+          placeholder={translate('shared>cityAutoComplete>searchCity')}
           onChange={(e) => onChangeInputValue(e.target.value)}
+          disabled={!country.length}
         />
       </FormItemContainer>
       {showOptions ? (
