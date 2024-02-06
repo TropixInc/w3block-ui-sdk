@@ -109,6 +109,12 @@ export const ConfirmationKycWithoutLayout = () => {
                           ? `CPF - ${(complexValue as any)?.document}`
                           : `Passaporte - ${(complexValue as any)?.document}`;
                       } else return '';
+                    } else if (res?.type === 'simple_location') {
+                      if (complexValue) {
+                        return `${(complexValue as any)?.city}, ${
+                          (complexValue as any)?.region
+                        } / ${(complexValue as any)?.country}`;
+                      } else return '';
                     } else return simpleValue;
                   };
                   return (

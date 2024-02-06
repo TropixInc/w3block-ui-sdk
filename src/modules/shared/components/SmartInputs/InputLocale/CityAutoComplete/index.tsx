@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
@@ -145,7 +146,7 @@ const CityAutoComplete = ({
       >
         <input
           type="text"
-          className="pw-w-full pw-outline-none"
+          className="pw-w-full pw-outline-none pw-text-black"
           value={inputValue}
           placeholder={translate('shared>cityAutoComplete>searchCity')}
           onChange={(e) => onChangeInputValue(e.target.value)}
@@ -153,7 +154,7 @@ const CityAutoComplete = ({
         />
       </FormItemContainer>
       {showOptions ? (
-        <div className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg">
+        <div className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg pw-text-black">
           {placePredictions.length ? (
             <ul>
               {options()?.map((item) => {

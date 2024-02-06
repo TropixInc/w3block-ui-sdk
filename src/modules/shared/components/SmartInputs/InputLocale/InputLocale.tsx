@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -45,8 +46,8 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
 
   return (
     <div className="pw-mb-7">
-      <p className="pw-text-lg pw-font-semibold">{label}</p>
-      <div className="pw-mt-2 pw-flex pw-gap-2">
+      <p className="pw-text-lg pw-font-semibold pw-text-black">{label}</p>
+      <div className="pw-mt-2 pw-flex pw-gap-5">
         <div className="pw-w-full">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             {translate('shared>unputLocale>contry')}
@@ -54,7 +55,7 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
           <FormItemContainer className="pw-p-[0.6rem]">
             <select
               onChange={(e) => setSelectCountry(e.target.value)}
-              className="pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none"
+              className="pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
             >
               <option value={''}>
                 {translate('shared>unputLocale>selectContry')}
@@ -76,7 +77,7 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
             <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
               {translate('shared>unputLocale>state')}
             </p>
-            <p className="pw-text-[15px] pw-mt-3">{region}</p>
+            <p className="pw-text-[15px] pw-mt-3 pw-text-black">{region}</p>
           </div>
         ) : null}
       </div>
