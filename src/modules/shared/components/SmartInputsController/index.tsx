@@ -51,6 +51,7 @@ const InputUrl = lazy(() =>
 
 import InputDocuments from '../SmartInputs/InputDocuments';
 import InputImage from '../SmartInputs/InputImage/InputImage';
+import InputLocale from '../SmartInputs/InputLocale/InputLocale';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
 
 interface SmartProps {
@@ -137,6 +138,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
           />
         );
+
       case DataTypesEnum.Birthdate:
         return (
           <InputBirthdate
@@ -251,6 +253,10 @@ const SmartInputsController = ({
       case DataTypesEnum.IdentificationDocument:
         return (
           <InputDocuments name={name} label={label} docValue={complexValue} />
+        );
+      case DataTypesEnum.SimpleLocation:
+        return (
+          <InputLocale name={name} label={label} docValue={complexValue} />
         );
     }
   };
