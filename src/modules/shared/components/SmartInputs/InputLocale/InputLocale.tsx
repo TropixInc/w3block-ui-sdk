@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import _ from 'lodash';
 
@@ -8,7 +9,7 @@ import CityAutoComplete from './CityAutoComplete';
 interface LocaleProps {
   label: string;
   name: string;
-  docValue?: string;
+  docValue?: any;
 }
 
 const optionsLocale = [
@@ -33,20 +34,14 @@ const optionsLocale = [
 const InputLocale = ({ name, label, docValue }: LocaleProps) => {
   const [selectCountry, setSelectCountry] = useState<string | undefined>();
   const [region, setRegion] = useState<string | undefined>();
-  const [apiSavedValue, setApiSavedValue] = useState<any>();
+  const [translate] = useTranslation();
 
   useEffect(() => {
     if (docValue) {
-      setApiSavedValue(JSON.parse(docValue));
+      setSelectCountry(docValue.country);
+      setRegion(docValue.region);
     }
   }, [docValue]);
-
-  useEffect(() => {
-    if (apiSavedValue) {
-      setSelectCountry(apiSavedValue.country);
-      setRegion(apiSavedValue.region);
-    }
-  }, [apiSavedValue]);
 
   return (
     <div className="pw-mb-7">
@@ -54,19 +49,19 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
       <div className="pw-mt-2 pw-flex pw-gap-2">
         <div className="pw-w-full">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
-            País
+            {translate('shared>unputLocale>contry')}
           </p>
           <FormItemContainer className="pw-p-[0.6rem]">
             <select
               onChange={(e) => setSelectCountry(e.target.value)}
               className="pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none"
             >
-              <option value={''}>Selecione um país..</option>
+              <option value={''}>
+                {translate('shared>unputLocale>selectContry')}
+              </option>
               {optionsLocale.map((val) => (
                 <option
-                  selected={
-                    apiSavedValue ? apiSavedValue.country === val.value : false
-                  }
+                  selected={docValue ? docValue.country === val.value : false}
                   key={val.value}
                   value={val.value}
                 >
@@ -79,7 +74,7 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
         {region ? (
           <div className="pw-w-[160px]">
             <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
-              Estado
+              {translate('shared>unputLocale>state')}
             </p>
             <p className="pw-text-[15px] pw-mt-3">{region}</p>
           </div>
@@ -90,7 +85,7 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
         country={selectCountry ?? ''}
         name={name}
         onChangeRegion={setRegion}
-        apiValue={apiSavedValue?.placeId}
+        apiValue={docValue?.placeId}
       />
     </div>
   );

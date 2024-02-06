@@ -420,5 +420,10 @@
   "tokens>generateGenericXlsReports>await": "Aguarde",
   "key>salesReportsTemplate>download": "Relatório finalizado, clique aqui para baixar",
   "home>contactModal>error": "Falha no envio. Tente novamente mais tarde.",
-  "contractDetails>RoyaltiesArea>date": "Data"
+  "contractDetails>RoyaltiesArea>date": "Data",
+  "shared>unputLocale>contry": "País",
+  "shared>unputLocale>selectContry": "Selecione um país",
+  "shared>unputLocale>state": "Estado",
+  "shared>cityAutoComplete>city": "Cidade",
+  "shared>cityAutoComplete>searchCity": "Buscar cidade"
 }
