@@ -19,7 +19,7 @@ const optionsLocale = [
     value: 'BR',
   },
   {
-    label: 'Potugal',
+    label: 'Portugal',
     value: 'PT',
   },
   {
