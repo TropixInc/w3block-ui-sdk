@@ -138,11 +138,6 @@ export const SigInWithoutLayout = ({
   }, [session, router, profile]);
 
   const onSubmit = async ({ email, password }: Form) => {
-    if (isPasswordless) {
-      router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
-        email,
-      });
-    }
     try {
       setIsLoading(true);
       const response = await signIn({

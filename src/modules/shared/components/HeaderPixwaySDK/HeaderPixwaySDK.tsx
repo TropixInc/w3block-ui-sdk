@@ -8,13 +8,10 @@ import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
+import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
-const CartButton = lazy(() =>
-  import('../CartButton/CartButton').then((mod) => ({
-    default: mod.CartButton,
-  }))
-);
 import TranslatableComponent from '../TranslatableComponent';
+import { NavigationTabsPixwaySDKTabs } from './components';
 const NavigationLoginPixwaySDK = lazy(() =>
   import('./components/NavigationLoginPixwaySDK/NavigationLoginPixwaySDK').then(
     (mod) => ({ default: mod.NavigationLoginPixwaySDK })
@@ -25,8 +22,11 @@ const NavigationTabsPixwaySDK = lazy(() => {
     './components/NavigationTabsPixwaySDK/NavigationTabsPixwaySDK'
   ).then((mod) => ({ default: mod.NavigationTabsPixwaySDK }));
 });
-import { NavigationTabsPixwaySDKTabs } from './components';
-import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
+const CartButton = lazy(() =>
+  import('../CartButton/CartButton').then((mod) => ({
+    default: mod.CartButton,
+  }))
+);
 
 interface HeaderPixwaySDKProps {
   headerClassName?: string;
@@ -81,7 +81,6 @@ const _HeaderPixwaySDK = ({
   const { data: contexts } = useGetTenantContext();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
-
   const { data: companyInfo } = useGetTenantInfoByHostname();
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const { logoUrl } = useCompanyConfig();
@@ -120,7 +119,9 @@ const _HeaderPixwaySDK = ({
           router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
         } else if (
           profile?.data?.kycStatus === KycStatus.Pending &&
-          signupContext.active
+          signupContext.active &&
+          window?.location?.pathname !==
+            PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION
         ) {
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
         }

@@ -8,20 +8,27 @@ import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
+import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 
 export const ConfirmationKycWithoutLayout = () => {
   const router = useRouterConnect();
   const { data: profile } = useProfile();
-  const querySlug = router.query.contextSlug;
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const storageData = useGetStorageData(
     PRACTITIONER_DATA_INFO_KEY,
     router?.query?.sessionId as string
   );
+  const slug = () => {
+    const querySlug = router.query.contextSlug;
+    if (querySlug) return querySlug as string;
+    else return 'signup';
+  };
   const { data: tenantInputs, isLoading: isLoadingKyc } =
     useGetTenantInputsBySlug({
-      slug: querySlug as string,
+      slug: slug(),
     });
 
   const { data: documents } = useGetUsersDocuments({
@@ -36,6 +43,13 @@ export const ConfirmationKycWithoutLayout = () => {
   }
 
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
+
+  const onContinue = () => {
+    if (storageData.postKycUrl) router.pushConnect(storageData.postKycUrl);
+    else if (isPasswordless) router.pushConnect('/');
+    else
+      router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, router.query);
+  };
 
   if (isLoadingKyc)
     return (
@@ -75,12 +89,12 @@ export const ConfirmationKycWithoutLayout = () => {
               <p className="pw-font-normal">
                 {storageData?.certificate?.title}
               </p>
-              <div className="pw-w-full pw-border-[2px] pw-border-black pw-my-5"></div>
+              <div className="pw-w-full pw-border-[2px] pw-border-black pw-mt-5"></div>
             </div>
           ) : null}
           {Object.keys(groupedInputs).map((res) => {
             return (
-              <div key={res} className="pw-w-full">
+              <div key={res} className="pw-w-full pw-mt-5">
                 <p className="pw-text-sm pw-font-semibold pw-font-poppins pw-text-black pw-text-left pw-w-full">
                   Informações pessoais{' '}
                   {Object.keys(groupedInputs).length > 1
@@ -101,6 +115,7 @@ export const ConfirmationKycWithoutLayout = () => {
                 {groupedInputs[res].map((res) => {
                   const value = () => {
                     const doc = getDocumentByInputId(res?.id);
+                    const value = doc?.value;
                     const simpleValue = doc?.simpleValue;
                     const complexValue = doc?.complexValue;
                     if (res?.type === 'identification_document') {
@@ -115,29 +130,27 @@ export const ConfirmationKycWithoutLayout = () => {
                           (complexValue as any)?.region
                         } / ${(complexValue as any)?.country}`;
                       } else return '';
-                    } else return simpleValue;
+                    } else if (simpleValue) return simpleValue;
+                    else return value;
                   };
-                  return (
-                    <div
-                      key={res.id}
-                      className="pw-text-sm pw-font-poppins pw-text-black pw-text-left pw-flex pw-flex-col pw-items-start pw-justify-center pw-w-full"
-                    >
-                      <h3 className="pw-font-semibold pw-mt-[14px]">
-                        {res.label}
-                      </h3>
-                      <p className="pw-font-normal">{value()}</p>
-                    </div>
-                  );
+                  if (res.type !== 'multiface_selfie')
+                    return (
+                      <div
+                        key={res.id}
+                        className="pw-text-sm pw-font-poppins pw-text-black pw-text-left pw-flex pw-flex-col pw-items-start pw-justify-center pw-w-full"
+                      >
+                        <h3 className="pw-font-semibold pw-mt-[14px]">
+                          {res.label}
+                        </h3>
+                        <p className="pw-font-normal">{value()}</p>
+                      </div>
+                    );
                 })}
               </div>
             );
           })}
           <WeblockButton
-            onClick={() =>
-              router.pushConnect(
-                storageData.postKycUrl ? storageData.postKycUrl : '/'
-              )
-            }
+            onClick={onContinue}
             className="pw-mt-4 pw-text-white"
             fullWidth={true}
           >

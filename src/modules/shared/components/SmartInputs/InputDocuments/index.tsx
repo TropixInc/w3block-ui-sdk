@@ -104,14 +104,14 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
                 onChange={(e) => handleChange(e.target.value)}
                 value={document}
                 placeholder="Digite apenas números"
-                className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent"
+                className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
               />
             ) : (
               <input
                 name={name}
                 onChange={(e) => handleChange(e.target.value)}
                 value={document}
-                className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent autofill:pw-bg-transparent focus:pw-outline-none"
+                className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
               />
             )}
           </FormItemContainer>

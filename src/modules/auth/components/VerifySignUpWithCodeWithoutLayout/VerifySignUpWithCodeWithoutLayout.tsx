@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
@@ -41,7 +42,6 @@ export const VerifySignUpWithCodeWithoutLayout = ({
   const emailToUse = profile?.data?.email ?? emailLocal;
   const formattedEmail = useEmailProtectedLabel(emailToUse ?? '');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const changeInput = (index: number, e: any) => {
     const inputsToChange = inputs;
     inputsToChange[index] = e.target.value;
@@ -52,7 +52,6 @@ export const VerifySignUpWithCodeWithoutLayout = ({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const keyUp = (e: any, index: number) => {
     if (e.code === 'Backspace' && inputs[index] == '') {
       const previous = document.getElementById(`input-${index - 1}`);
@@ -89,10 +88,6 @@ export const VerifySignUpWithCodeWithoutLayout = ({
                   }
                 }
               );
-            } else {
-              pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
-                email: emailLocal,
-              });
             }
           },
         }
@@ -101,13 +96,6 @@ export const VerifySignUpWithCodeWithoutLayout = ({
       setError('código inválido');
     }
   };
-
-  useEffect(() => {
-    mutate({
-      email: emailToUse ?? '',
-      verificationType: 'numeric',
-    });
-  }, [emailToUse]);
 
   return (
     <div className="pw-flex pw-flex-col pw-items-center">

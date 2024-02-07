@@ -47,10 +47,11 @@ export const WjjcStart = () => {
   };
 
   const title = () => {
-    const text =
-      gradeMap[datasource?.athlete?.data[0]?.attributes?.degree as Grade] +
-      ' da Faixa ' +
-      datasource?.athlete?.data[0]?.attributes?.belt;
+    const text = datasource?.athlete?.data[0]?.attributes?.degree
+      ? gradeMap[datasource?.athlete?.data[0]?.attributes?.degree as Grade] +
+        ' da Faixa ' +
+        datasource?.athlete?.data[0]?.attributes?.belt
+      : 'Faixa ' + datasource?.athlete?.data[0]?.attributes?.belt;
     return text;
   };
 

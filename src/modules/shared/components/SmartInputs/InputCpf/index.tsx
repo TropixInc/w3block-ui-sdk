@@ -5,6 +5,7 @@ import ReactInputMask from 'react-input-mask';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
+import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromString';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { InputError } from '../../SmartInputsController';
@@ -15,7 +16,6 @@ interface InputCPFProps {
   name: string;
   hidenValidations?: boolean;
   profilePage?: boolean;
-
   docValue?: string;
   docStatus?: UserDocumentStatus;
 }
@@ -35,10 +35,10 @@ const InputCpf = ({
 
   const handleChange = (value: string | undefined) => {
     if (value) {
-      setInputValue(value);
+      setInputValue(getNumbersFromString(value, false));
       field.onChange({
         inputId: name,
-        value: value,
+        value: getNumbersFromString(value, false),
       });
     } else {
       setInputValue('');
@@ -75,7 +75,7 @@ const InputCpf = ({
           value={inputValue}
           placeholder="Digite apenas números"
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-px-[10px] pw-outline-none'
           )}
         />
       </FormItemContainer>

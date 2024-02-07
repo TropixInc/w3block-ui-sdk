@@ -1,5 +1,4 @@
 import { lazy, useContext, useEffect, useMemo } from 'react';
-import { useLocalStorage } from 'react-use';
 
 import { KycStatus } from '@w3block/sdk-id';
 
@@ -20,7 +19,6 @@ import { ContainerTextBesideProps } from '../../../shared/components/ContainerTe
 import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { FAQContextEnum } from '../../../shared/enums/FAQContext';
-import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { position } from '../../../shared/enums/styleConfigs';
 import {
@@ -63,7 +61,6 @@ export const CompleteKYCTemplateSDK = ({
   separation,
   logoUrl,
   textContainer,
-  defaultRedirectRoute = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   className,
   extraBy,
 }: CompleteKYCTemplateSDKProps) => {
@@ -75,22 +72,7 @@ export const CompleteKYCTemplateSDK = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
   const { status } = usePixwaySession();
-  const { data: session } = usePixwaySession();
-  const [callbackUrl, setCallbackUrl] = useLocalStorage<string>(
-    LocalStorageFields.AUTHENTICATION_CALLBACK,
-    ''
-  );
   const query = Object.keys(router.query).length > 0 ? router.query : '';
-
-  useEffect(() => {
-    if (session && profile?.data) {
-      const { data: user } = profile;
-      if (user.kycStatus !== KycStatus.Pending && !router.query.contextSlug) {
-        router.pushConnect(getRedirectUrl(), query);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, router, profile]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -98,18 +80,6 @@ export const CompleteKYCTemplateSDK = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
-
-  const checkForCallbackUrl = () => {
-    if (!profile?.data.mainWallet) {
-      return PixwayAppRoutes.CONNECT_EXTERNAL_WALLET;
-    } else if (callbackUrl) {
-      const url = callbackUrl;
-      setCallbackUrl('');
-      return url;
-    }
-  };
-
-  const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
   const context = useContext(ThemeContext);
   const breakpoint = useBreakpoints();

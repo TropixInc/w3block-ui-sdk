@@ -67,7 +67,7 @@ const InputEmail = ({
       {autofill ? (
         <div
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-black pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] pw-py-[15px] autofill:pw-bg-transparent'
+            'pw-mt-1 pw-text-base pw-h-[46px] pw-text-black pw-leading-4 pw-w-full pw-py-[15px]'
           )}
         >
           {inputValue}

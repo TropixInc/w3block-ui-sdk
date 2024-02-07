@@ -154,7 +154,7 @@ export const InputSelector = ({
           <select
             name={name}
             onChange={(e) => handleTextChange(e.target.value)}
-            className="pw-max-h-[180px] pw-w-full pw-overflow-y-auto pw-text-black"
+            className="pw-max-h-[180px] pw-w-full pw-overflow-y-auto pw-text-black pw-outline-none"
           >
             <option value="">Selecione uma opção</option>
             {type === DataTypesEnum.SimpleSelect

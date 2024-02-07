@@ -4,12 +4,6 @@ import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import _ from 'lodash';
 
-//import { ImageSDK } from '../../shared/components/ImageSDK';
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
 import { useGetAthleteByAddress } from '../../custom/kyraGracie/hooks/useGetAthleteByAddress';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import {
@@ -17,6 +11,7 @@ import {
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { useLocale } from '../../shared/hooks/useLocale';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { useDynamicString } from '../hooks/useDynamicString';
@@ -28,6 +23,11 @@ import 'swiper/css/pagination';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { SocialNetworks } from './SocialNetworks';
 
+const ImageSDK = lazy(() =>
+  import('../../shared/components/ImageSDK').then((module) => ({
+    default: module.ImageSDK,
+  }))
+);
 export const BannerWJJC = ({ data }: { data: BannerWJJCData }) => {
   const { styleData, mobileStyleData, id } = data;
 
@@ -77,7 +77,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
   } = data;
   const { isDynamic, datasource } = useDynamicApi();
   const { text: title } = useDynamicString(titleRaw);
-
+  const [translate] = useTranslation();
   const { data: athleteData } = useGetAthleteByAddress(
     datasource?.master?.data[0]?.id ?? '',
     '0x30905c662ce29c4c4fc527edee57a47c808f3213',
@@ -328,8 +328,10 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                           {getPlace(
                             datasource?.master?.data[0]?.attributes
                               ?.placeOfBirth?.city,
-                            datasource?.master?.data[0]?.attributes
-                              ?.placeOfBirth?.country
+                            translate(
+                              datasource?.master?.data[0]?.attributes
+                                ?.placeOfResidence?.country
+                            )
                           )}
                         </p>
                       </div>
@@ -346,8 +348,10 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                           {getPlace(
                             datasource?.master?.data[0]?.attributes
                               ?.placeOfResidence?.city,
-                            datasource?.master?.data[0]?.attributes
-                              ?.placeOfResidence?.country
+                            translate(
+                              datasource?.master?.data[0]?.attributes
+                                ?.placeOfResidence?.country
+                            )
                           )}
                         </p>
                       </div>
