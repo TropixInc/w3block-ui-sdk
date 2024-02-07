@@ -343,9 +343,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         return (
           <div className="pw-w-full">
             <p className="pw-text-ellipsis pw-overflow-hidden">
-              {isTranslatable && translatePrefix && _.get(item, itemKey) ? (
+              {isTranslatable && _.get(item, itemKey) ? (
                 translate(
-                  `${translatePrefix}${_.get(item, itemKey, '--') ?? '---'}`
+                  `${translatePrefix || ''}${
+                    _.get(item, itemKey, '--') ?? '---'
+                  }`
                 )
               ) : (
                 <p>{_.get(item, itemKey, '--') ?? '---'}</p>
