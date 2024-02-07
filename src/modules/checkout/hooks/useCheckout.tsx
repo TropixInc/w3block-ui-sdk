@@ -60,12 +60,18 @@ export const useCheckout = () => {
     }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
         (pId): ProductToSendPayload => {
-          return {
-            productId: pId.productId,
-            productTokenId: pId?.productTokenId ?? undefined,
-            variantIds: pId.variantIds,
-            quantity: pId.quantity,
-          };
+          return pId?.productTokenId
+            ? {
+                productId: pId.productId,
+                productTokenId: pId?.productTokenId,
+                variantIds: pId.variantIds,
+                quantity: pId.quantity,
+              }
+            : {
+                productId: pId.productId,
+                variantIds: pId.variantIds,
+                quantity: pId.quantity,
+              };
         }
       );
       const preview = await axios.post<

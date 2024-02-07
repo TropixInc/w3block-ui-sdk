@@ -201,12 +201,18 @@ export const CheckoutPayment = () => {
       getOrderPreview.mutate(
         {
           productIds: productCache.orderProducts.map((p) => {
-            const payload = {
-              productId: p.productId,
-              productTokenId: p?.productTokenId ?? '',
-              variantIds: p.variantIds,
-              quantity: p.quantity,
-            };
+            const payload = p?.productTokenId
+              ? {
+                  productId: p.productId,
+                  productTokenId: p?.productTokenId ?? '',
+                  variantIds: p.variantIds,
+                  quantity: p.quantity,
+                }
+              : {
+                  productId: p.productId,
+                  variantIds: p.variantIds,
+                  quantity: p.quantity,
+                };
             return payload;
           }),
           payments: [
@@ -401,7 +407,10 @@ export const CheckoutPayment = () => {
                 productCache.choosedPayment?.paymentMethod == 'credit_card' ||
                 isFree
               ) {
-                router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
+                router.pushConnect(
+                  PixwayAppRoutes.CHECKOUT_COMPLETED,
+                  router.query
+                );
               } else {
                 if ('pix' in data.paymentInfo) {
                   setPixImage(data.paymentInfo.pix?.encodedImage ?? '');

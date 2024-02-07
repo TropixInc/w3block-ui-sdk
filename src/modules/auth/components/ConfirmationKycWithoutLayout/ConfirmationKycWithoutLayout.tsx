@@ -45,7 +45,8 @@ export const ConfirmationKycWithoutLayout = () => {
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
 
   const onContinue = () => {
-    if (storageData.postKycUrl) router.pushConnect(storageData.postKycUrl);
+    if (typeof storageData?.postKycUrl === 'string')
+      router.pushConnect(storageData?.postKycUrl);
     else if (isPasswordless) router.pushConnect('/');
     else
       router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, router.query);

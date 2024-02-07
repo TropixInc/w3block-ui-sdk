@@ -277,17 +277,30 @@ const _CheckoutInfo = ({
                 const tokenId = storageData?.products?.find(
                   (res: any) => res.productId === p
                 )?.tokenId;
-                const payload = {
-                  quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
-                  productId: p,
-                  productTokenId: tokenId ?? undefined,
-                  variantIds: productVariants
-                    ? Object.values(productVariants).map((value) => {
-                        if ((value as any).productId === p)
-                          return (value as any).id;
-                      })
-                    : [],
-                };
+                const payload = tokenId
+                  ? {
+                      quantity:
+                        paymentAmount != '' ? parseFloat(paymentAmount) : 1,
+                      productId: p,
+                      productTokenId: tokenId,
+                      variantIds: productVariants
+                        ? Object.values(productVariants).map((value) => {
+                            if ((value as any).productId === p)
+                              return (value as any).id;
+                          })
+                        : [],
+                    }
+                  : {
+                      quantity:
+                        paymentAmount != '' ? parseFloat(paymentAmount) : 1,
+                      productId: p,
+                      variantIds: productVariants
+                        ? Object.values(productVariants).map((value) => {
+                            if ((value as any).productId === p)
+                              return (value as any).id;
+                          })
+                        : [],
+                    };
                 return payload;
               }),
           payments:
@@ -434,20 +447,36 @@ const _CheckoutInfo = ({
             const tokenId = storageData?.products?.find(
               (res: any) => res.productId === pID.id
             )?.tokenId;
-            return {
-              quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
-              productId: pID.id,
-              productTokenId: tokenId ?? undefined,
-              expectedPrice:
-                pID.prices.find((price) => price.currencyId == currencyIdState)
-                  ?.amount ?? '0',
-              variantIds: productVariants
-                ? Object.values(productVariants).map((value) => {
-                    if ((value as any).productId === pID.id)
-                      return (value as any).id;
-                  })
-                : [],
-            };
+            return tokenId
+              ? {
+                  quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
+                  productId: pID.id,
+                  productTokenId: tokenId,
+                  expectedPrice:
+                    pID.prices.find(
+                      (price) => price.currencyId == currencyIdState
+                    )?.amount ?? '0',
+                  variantIds: productVariants
+                    ? Object.values(productVariants).map((value) => {
+                        if ((value as any).productId === pID.id)
+                          return (value as any).id;
+                      })
+                    : [],
+                }
+              : {
+                  quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
+                  productId: pID.id,
+                  expectedPrice:
+                    pID.prices.find(
+                      (price) => price.currencyId == currencyIdState
+                    )?.amount ?? '0',
+                  variantIds: productVariants
+                    ? Object.values(productVariants).map((value) => {
+                        if ((value as any).productId === pID.id)
+                          return (value as any).id;
+                      })
+                    : [],
+                };
           });
       setProductCache({
         payments: orderPreview.payments,
@@ -849,14 +878,14 @@ const _CheckoutInfo = ({
   const [statusResponse, setStatusResponse] = useState<CreateOrderResponse>();
   const [codeQr, setCodeQr] = useState('');
   useEffect(() => {
-    if (poolStatus && orderId !== '') {
-      validatePixStatus();
+    if (poolStatus && orderId !== '' && isCoinPayment) {
+      validateOrderStatus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolStatus]);
+  }, [poolStatus, isCoinPayment]);
 
-  const validatePixStatus = async () => {
-    if (poolStatus && orderId) {
+  const validateOrderStatus = async () => {
+    if (poolStatus && orderId && isCoinPayment) {
       const interval = setInterval(() => {
         getStatus.mutate(
           { companyId, orderId },
