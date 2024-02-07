@@ -86,6 +86,8 @@ export interface ColumnsTable {
   linkLabel?: string;
   subLabel?: string;
   sortable: boolean;
+  isTranslatable?: boolean;
+  translatePrefix?: string;
   moreInfos?: {
     name?: string;
     cpf?: string;

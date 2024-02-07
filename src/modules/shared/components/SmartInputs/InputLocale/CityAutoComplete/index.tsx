@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useClickAway } from 'react-use';
 
 import _ from 'lodash';
 
@@ -69,6 +70,7 @@ const CityAutoComplete = ({
   apiValue,
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
+  const divRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [translate] = useTranslation();
   const [placeId, setPlaceId] = useState<string | undefined>();
@@ -135,6 +137,10 @@ const CityAutoComplete = ({
     }
   };
 
+  useClickAway(divRef, () => {
+    setShowOptions(false);
+  });
+
   return (
     <div className="pw-mt-3 pw-relative">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
@@ -154,7 +160,10 @@ const CityAutoComplete = ({
         />
       </FormItemContainer>
       {showOptions ? (
-        <div className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg pw-text-black">
+        <div
+          ref={divRef}
+          className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg pw-text-black pw-z-50"
+        >
           {placePredictions.length ? (
             <ul>
               {options()?.map((item) => {
@@ -164,7 +173,7 @@ const CityAutoComplete = ({
                     className="pw-px-3 pw-py-2 pw-cursor-pointer pw-rounded-md hover:pw-bg-[#94B8ED]"
                   >
                     <button
-                      className="pw-w-full pw-h-full"
+                      className="pw-w-full pw-h-full pw-text-left"
                       onClick={(e) => {
                         setPlaceId(item.value);
                         setShowOptions(false);
