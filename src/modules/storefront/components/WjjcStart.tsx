@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { useLocalStorage } from 'react-use';
 
 import { format } from 'date-fns';
@@ -13,6 +14,7 @@ import { Shimmer } from '../../shared/components/Shimmer';
 import { WeblockButton } from '../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
+import { ThemeContext } from '../contexts';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 export const WjjcStart = () => {
@@ -58,6 +60,38 @@ export const WjjcStart = () => {
   const firstLoading = Object.keys(datasource).length < 1;
 
   const onContinue = () => {
+    const productIds = () => {
+      const arr = [];
+      if (datasource?.athlete?.data[0]?.attributes?.affiliationProductId)
+        arr.push(
+          datasource?.athlete?.data[0]?.attributes?.affiliationProductId
+        );
+      if (datasource?.athlete?.data[0]?.attributes?.certificationProductId)
+        arr.push(
+          datasource?.athlete?.data[0]?.attributes?.certificationProductId
+        );
+      const finalPlace = arr.join(', ');
+      return finalPlace;
+    };
+
+    const products = () => {
+      const arr = [];
+      if (datasource?.athlete?.data[0]?.attributes?.affiliationProductId)
+        arr.push({
+          productId:
+            datasource?.athlete?.data[0]?.attributes?.affiliationProductId,
+          tokenId: datasource?.athlete?.data[0]?.attributes?.affiliationTokenId,
+        });
+      if (datasource?.athlete?.data[0]?.attributes?.certificationProductId)
+        arr.push({
+          productId:
+            datasource?.athlete?.data[0]?.attributes?.certificationProductId,
+          tokenId:
+            datasource?.athlete?.data[0]?.attributes?.certificationTokenId,
+        });
+      return arr;
+    };
+
     setInfoData({
       [id]: {
         certificate: {
@@ -71,21 +105,8 @@ export const WjjcStart = () => {
           certificationDate: date(),
           title: title(),
         },
-        products: [
-          {
-            productId:
-              datasource?.athlete?.data[0]?.attributes?.affiliationProductId,
-            tokenId:
-              datasource?.athlete?.data[0]?.attributes?.affiliationTokenId,
-          },
-          {
-            productId:
-              datasource?.athlete?.data[0]?.attributes?.certificationProductId,
-            tokenId:
-              datasource?.athlete?.data[0]?.attributes?.certificationTokenId,
-          },
-        ],
-        postKycUrl: `/checkout/confirmation?productIds=${datasource?.athlete?.data[0]?.attributes?.affiliationProductId},${datasource?.athlete?.data[0]?.attributes?.certificationProductId}&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&sessionId=${id}`,
+        products: products(),
+        postKycUrl: `/checkout/confirmation?productIds=${productIds()}&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&sessionId=${id}`,
         postCheckoutUrl: '/',
       },
     });
@@ -96,8 +117,14 @@ export const WjjcStart = () => {
     });
   };
 
+  const context = useContext(ThemeContext);
+
   return (
     <ContainerControllerSDK
+      logoUrl={
+        context?.defaultTheme?.configurations?.styleData?.onBoardingLogoSrc
+          ?.assetUrl ?? ''
+      }
       fullScreen
       infoPosition={position.RIGHT}
       contentType={ContentTypeEnum.TEXT_LOGO}

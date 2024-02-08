@@ -33,6 +33,8 @@ interface Props {
   renderSubtitle?: boolean;
   profilePage?: boolean;
   userKycStatus?: KycStatus;
+  formTitle?: string;
+  formFooter?: string;
 }
 
 interface ErrorProps {
@@ -45,6 +47,8 @@ const _FormCompleteKYCWithoutLayout = ({
   renderSubtitle = true,
   profilePage,
   userKycStatus,
+  formFooter,
+  formTitle,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -169,10 +173,19 @@ const _FormCompleteKYCWithoutLayout = ({
             </p>
           </div>
         ) : null}
-        {renderSubtitle && (
+        {renderSubtitle && typeof formTitle !== 'string' && (
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
             {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
           </p>
+        )}
+
+        {formTitle && (
+          <div
+            className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5"
+            dangerouslySetInnerHTML={{
+              __html: formTitle ?? '',
+            }}
+          ></div>
         )}
 
         <FormTemplate
@@ -218,7 +231,7 @@ const _FormCompleteKYCWithoutLayout = ({
             {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
           </p>
         ) : null}
-        {profilePage ? null : (
+        {profilePage || typeof formFooter === 'string' ? null : (
           <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
             <button
               onClick={() =>
@@ -233,6 +246,13 @@ const _FormCompleteKYCWithoutLayout = ({
             {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
           </p>
         )}
+        {formFooter && (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formFooter ?? '',
+            }}
+          ></div>
+        )}
       </FormProvider>
     </Box>
   ) : null;
@@ -244,6 +264,8 @@ export const FormCompleteKYCWithoutLayout = ({
   renderSubtitle,
   profilePage,
   userKycStatus,
+  formFooter,
+  formTitle,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -252,6 +274,8 @@ export const FormCompleteKYCWithoutLayout = ({
       renderSubtitle={renderSubtitle}
       profilePage={profilePage}
       userKycStatus={userKycStatus}
+      formFooter={formFooter}
+      formTitle={formTitle}
     />
   </TranslatableComponent>
 );

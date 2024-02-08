@@ -69,19 +69,20 @@ export const SignInWithCodeWithoutLayout = () => {
         { email: emailToUse, code },
         {
           onSuccess() {
-            signInWithCode({ email: emailToUse, code, tenantId }).then(
-              (data) => {
-                if (data.error == null) {
-                  if (query.callbackUrl?.length)
-                    pushConnect(query.callbackUrl as string);
-                  if (query.callbackPath?.length)
-                    pushConnect(query.callbackPath as string);
-                  else if (query.contextSlug?.length)
-                    pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
-                  else pushConnect('/');
+            signInWithCode &&
+              signInWithCode({ email: emailToUse, code, tenantId }).then(
+                (data) => {
+                  if (data.error == null) {
+                    if (query.callbackUrl?.length)
+                      pushConnect(query.callbackUrl as string);
+                    if (query.callbackPath?.length)
+                      pushConnect(query.callbackPath as string);
+                    else if (query.contextSlug?.length)
+                      pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+                    else pushConnect('/');
+                  }
                 }
-              }
-            );
+              );
           },
         }
       );

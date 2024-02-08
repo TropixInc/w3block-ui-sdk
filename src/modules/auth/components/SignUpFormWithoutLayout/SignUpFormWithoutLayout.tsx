@@ -110,26 +110,30 @@ export const SignUpFormWithoutLayout = ({
   const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
     if (isPasswordless) {
-      signInAfterSignUp({ email, tenantId: companyId }).then((e) => {
-        if (e.error === EMAIL_ALREADY_IN_USE_API_MESSAGE && e.status === 401) {
-          router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
-            email,
-            ...router.query,
-          });
-        } else if (e.status === 200) {
-          if (router.query.callbackPath?.length) {
-            router.pushConnect(router.query.callbackPath as string);
-          } else if (router.query.callbackUrl?.length) {
-            router.pushConnect(router.query.callbackUrl as string);
-          } else if (router.query.contextSlug?.length) {
-            router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+      signInAfterSignUp &&
+        signInAfterSignUp({ email, tenantId: companyId }).then((e) => {
+          if (
+            e.error === EMAIL_ALREADY_IN_USE_API_MESSAGE &&
+            e.status === 401
+          ) {
+            router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
+              email,
               ...router.query,
             });
-          } else {
-            router.pushConnect('/');
+          } else if (e.status === 200) {
+            if (router.query.callbackPath?.length) {
+              router.pushConnect(router.query.callbackPath as string);
+            } else if (router.query.callbackUrl?.length) {
+              router.pushConnect(router.query.callbackUrl as string);
+            } else if (router.query.contextSlug?.length) {
+              router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                ...router.query,
+              });
+            } else {
+              router.pushConnect('/');
+            }
           }
-        }
-      });
+        });
     } else {
       mutate({
         confirmation,

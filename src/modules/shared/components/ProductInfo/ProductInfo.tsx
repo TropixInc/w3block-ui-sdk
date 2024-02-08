@@ -44,6 +44,8 @@ interface ProductInfoProps {
   index?: number;
   disableQuantity?: boolean;
   subtitle?: string;
+  anchorCurrencyAmount?: string;
+  anchorCurrencySymbol?: string;
 }
 
 export const ProductInfo = ({
@@ -67,6 +69,8 @@ export const ProductInfo = ({
   index,
   disableQuantity = false,
   subtitle,
+  anchorCurrencyAmount,
+  anchorCurrencySymbol,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const [error, setError] = useState('');
@@ -147,16 +151,36 @@ export const ProductInfo = ({
                 {originalPrice}
               </p>
             )}
-            <p className="pw-font-[400] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
-              {currency == 'MATIC' ? (
-                <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
-              ) : currency == 'ETH' ? (
-                <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
-              ) : (
-                currency
-              )}
-              {price}
-            </p>
+            {anchorCurrencyAmount ? (
+              <>
+                <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
+                  {anchorCurrencySymbol ?? 'US$'}
+                  {anchorCurrencyAmount}
+                </p>
+                <p className="pw-font-[400] pw-text-[#35394C] pw-opacity-50 pw-text-sm pw-flex pw-items-center">
+                  (
+                  {currency == 'MATIC' ? (
+                    <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : currency == 'ETH' ? (
+                    <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : (
+                    currency
+                  )}
+                  {price})
+                </p>
+              </>
+            ) : (
+              <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
+                {currency == 'MATIC' ? (
+                  <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                ) : currency === 'ETH' ? (
+                  <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
+                ) : (
+                  currency
+                )}
+                {price}
+              </p>
+            )}
           </div>
         )}
         <p className="pw-text-[13px] pw-font-[400] pw-text-[#35394C]">
@@ -237,16 +261,36 @@ export const ProductInfo = ({
                 {originalPrice}
               </p>
             )}
-            <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
-              {currency == 'MATIC' ? (
-                <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
-              ) : currency === 'ETH' ? (
-                <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
-              ) : (
-                currency
-              )}
-              {price}
-            </p>
+            {anchorCurrencyAmount ? (
+              <>
+                <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
+                  {anchorCurrencySymbol ?? 'US$'}
+                  {anchorCurrencyAmount}
+                </p>
+                <p className="pw-font-[400] pw-text-[#35394C] pw-opacity-50 pw-text-sm pw-flex pw-items-center">
+                  (
+                  {currency == 'MATIC' ? (
+                    <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : currency == 'ETH' ? (
+                    <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : (
+                    currency
+                  )}
+                  {price})
+                </p>
+              </>
+            ) : (
+              <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
+                {currency == 'MATIC' ? (
+                  <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                ) : currency === 'ETH' ? (
+                  <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
+                ) : (
+                  currency
+                )}
+                {price}
+              </p>
+            )}
           </div>
         )}
       </div>

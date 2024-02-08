@@ -1377,6 +1377,16 @@ const _CheckoutInfo = ({
                     )?.originalAmount ?? '0'
                   ).toString()}
                   variants={prod?.variants}
+                  anchorCurrencyAmount={parseFloat(
+                    prod?.prices?.find(
+                      (price) => price?.currencyId == currencyIdState
+                    )?.anchorCurrencyAmount ?? '0'
+                  ).toString()}
+                  anchorCurrencySymbol={
+                    prod?.prices?.find(
+                      (price) => price?.currencyId == currencyIdState
+                    )?.anchorCurrency.symbol ?? ''
+                  }
                 />
               ))}
             </div>
@@ -1403,7 +1413,7 @@ const _CheckoutInfo = ({
           <div>
             {anchorCurrencyId && (
               <div className="pw-flex pw-gap-2 pw-mt-2 pw-items-center">
-                <ValueChangeIcon className="pw-mt-1" />
+                <ValueChangeIcon />
                 <p className="pw-text-xs  pw-font-medium pw-text-[#777E8F]">
                   *O valor do produto em{' '}
                   {
@@ -1422,12 +1432,12 @@ const _CheckoutInfo = ({
                     orderPreview?.products
                       .find((prod) =>
                         prod?.prices?.some(
-                          (price) => price?.currencyId == anchorCurrencyId
+                          (price) => price?.currencyId == currencyIdState
                         )
                       )
                       ?.prices?.find(
-                        (price) => price?.currencyId == anchorCurrencyId
-                      )?.currency?.symbol
+                        (price) => price?.currencyId == currencyIdState
+                      )?.anchorCurrency?.symbol
                   }
                   .
                 </p>

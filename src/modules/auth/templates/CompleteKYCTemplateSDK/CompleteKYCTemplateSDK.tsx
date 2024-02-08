@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useContext, useEffect, useMemo } from 'react';
 
 import { KycStatus } from '@w3block/sdk-id';
@@ -69,7 +70,6 @@ export const CompleteKYCTemplateSDK = ({
   const { data: kycContext } = useGetTenantContextBySlug(
     router?.query?.contextSlug as string
   );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
   const { status } = usePixwaySession();
   const query = Object.keys(router.query).length > 0 ? router.query : '';
@@ -132,7 +132,11 @@ export const CompleteKYCTemplateSDK = ({
           bgColor={style?.onBoardingBackgroundColor ?? bgColor}
           extraBy={extraBy}
           infoComponent={
-            <FormCompleteKYCWithoutLayout userId={profile?.data?.id} />
+            <FormCompleteKYCWithoutLayout
+              userId={profile?.data?.id}
+              formFooter={screenConfig?.form?.footer}
+              formTitle={screenConfig?.form?.title}
+            />
           }
         />
       </div>

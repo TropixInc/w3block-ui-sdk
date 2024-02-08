@@ -20,8 +20,10 @@ export interface Product {
   prices: {
     amount?: string;
     currency: CurrencyResponse;
+    anchorCurrency: CurrencyResponse;
     currencyId: string;
     anchorCurrencyId?: string;
+    anchorCurrencyAmount?: string;
     originalAmount?: string;
   }[];
   promotions: PublicPromotion[];

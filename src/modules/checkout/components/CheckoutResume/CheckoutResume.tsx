@@ -70,6 +70,14 @@ export const CheckouResume = ({
             }
             variants={product?.variants}
             subtitle={product?.subtitle}
+            anchorCurrencyAmount={parseFloat(
+              product?.prices?.find((price) => price?.currencyId == currencyId)
+                ?.anchorCurrencyAmount ?? '0'
+            ).toString()}
+            anchorCurrencySymbol={
+              product?.prices?.find((price) => price?.currencyId == currencyId)
+                ?.anchorCurrency.symbol ?? ''
+            }
           />
         ))
       ) : (
