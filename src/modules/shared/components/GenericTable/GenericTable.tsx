@@ -481,7 +481,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   .filter(
                     (item) => item.header.filter?.placement === 'external'
                   )
-                  .map(({ header, key }) => {
+                  .map(({ header, key, isTranslatable, translatePrefix }) => {
                     return (
                       <div
                         key={key}
@@ -521,6 +521,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                           filterDependencies={
                             header.filter?.data?.parameters?.dependencies
                           }
+                          isTranslatable={isTranslatable}
+                          translatePrefix={translatePrefix}
                         />
                       </div>
                     );

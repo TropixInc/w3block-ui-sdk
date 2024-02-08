@@ -23,6 +23,8 @@ import { Option } from '../GenericSearchFilter/GenericSearchFilter';
 import { MultipleSelect } from '../MultipleSelect';
 import NumberRange from '../NumberRange/NumberRange';
 
+import { useTranslation } from 'react-i18next';
+
 interface GenericFilterDto {
   filterType: FilterTableType | undefined;
   filterFormat: FormatFilterType | undefined;
@@ -51,6 +53,8 @@ interface GenericFilterDto {
       urlParam: string;
     };
   };
+  isTranslatable?: boolean;
+  translatePrefix?: string;
 }
 
 const SmartGenericFilter = ({
@@ -72,12 +76,15 @@ const SmartGenericFilter = ({
   isPublicFilterApi,
   isFilterDependency,
   filterDependencies,
+  isTranslatable,
+  translatePrefix,
 }: GenericFilterDto) => {
   const [defaultDate, setDefaultDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date>();
   const [selected, setSelected] = useState<string | undefined>('');
   const [searchSelectedItem, setSearchSelectedItem] = useState<string>();
   const [searchStaticValue, setSearchStaticValue] = useState<string>();
+  const [translate] = useTranslation();
   const [multSelected, setMultSelected] = useState<Array<string> | undefined>(
     []
   );
@@ -294,7 +301,11 @@ const SmartGenericFilter = ({
   }, [filters, itemKey]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const getPlaceholderForMultipleSelect = (multpleSelected: Array<any>) => {
+  const getPlaceholderForMultipleSelect = (
+    multpleSelected: Array<any>,
+    isTranslatable?: boolean,
+    translatePrefix?: string
+  ) => {
     if (multpleSelected && multpleSelected?.length > 0) {
       const selected = multpleSelected.map((item) => {
         return filterOptions?.find(({ value }) => value === item);
@@ -302,7 +313,13 @@ const SmartGenericFilter = ({
 
       if (selected?.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (selected as Array<any>).map(({ label }) => label).join(', ');
+        return (selected as Array<any>)
+          .map(({ label }) =>
+            isTranslatable
+              ? translate(`${translatePrefix || ''}${label}`)
+              : label
+          )
+          .join(', ');
       } else {
         return filterPlaceholder ?? 'Selecione';
       }
@@ -334,6 +351,8 @@ const SmartGenericFilter = ({
             onChange={setSelected}
             className="pw-w-full"
             placeholder={filterPlaceholder}
+            isTranslatable={isTranslatable}
+            translatePrefix={translatePrefix}
           />
         );
       }
@@ -345,8 +364,14 @@ const SmartGenericFilter = ({
               button: 'pw-h-[42px] pw-z-1',
             }}
             name="status"
-            placeholder={getPlaceholderForMultipleSelect(field.value)}
+            placeholder={getPlaceholderForMultipleSelect(
+              field.value,
+              isTranslatable,
+              translatePrefix
+            )}
             options={filterOptions ?? []}
+            isTranslatable={isTranslatable}
+            translatePrefix={translatePrefix}
           />
         );
       }

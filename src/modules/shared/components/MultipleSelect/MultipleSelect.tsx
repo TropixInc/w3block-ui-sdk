@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useController } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useClickAway } from 'react-use';
 
 import { Listbox, Transition } from '@headlessui/react';
@@ -22,6 +23,8 @@ interface Props {
   placeholder: string;
   onChangeMultipleSelected?: (value: Array<string | undefined>) => void;
   multipleSelected?: Array<string | undefined>;
+  isTranslatable?: boolean;
+  translatePrefix?: string;
 }
 
 export const MultipleSelect = ({
@@ -32,9 +35,11 @@ export const MultipleSelect = ({
   placeholder,
   onChangeMultipleSelected,
   multipleSelected,
+  isTranslatable,
+  translatePrefix,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [translate] = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   useClickAway(containerRef, () => {
     if (isOpen) setIsOpen(false);
@@ -224,7 +229,11 @@ export const MultipleSelect = ({
                           {option.icon && option.icon}
 
                           <span className="pw-text-sm pw-leading-4 pw-block pw-truncate">
-                            {option.label}
+                            {isTranslatable
+                              ? translate(
+                                  `${translatePrefix || ''}${option.label}`
+                                )
+                              : option.label}
                           </span>
                         </div>
                       )}
