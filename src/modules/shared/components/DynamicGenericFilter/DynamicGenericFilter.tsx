@@ -5,6 +5,7 @@ import {
   FieldValues,
   useController,
 } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useDebounce } from 'react-use';
 
 import _ from 'lodash';
@@ -50,6 +51,8 @@ interface DynamicProps {
   searchFilterTemplate?: string;
   isFilterDependency?: boolean;
   filterDependencies?: DependencyTipes;
+  isTranslatable?: boolean;
+  translatePrefix?: string;
 }
 
 export const DynamicGenericFilter = ({
@@ -69,12 +72,14 @@ export const DynamicGenericFilter = ({
   isFilterDependency,
   filterDependencies,
   filters,
+  isTranslatable,
+  translatePrefix,
 }: DynamicProps) => {
   const [searchName, setSearchName] = useState<string | undefined>('');
   const [searchValue, setSearchValue] = useState<string | undefined>('');
   const [showResponseModal, setShowResponseModal] = useState<boolean>(false);
   const [dependencyUrl, setDependencyUrl] = useState(filterOptionsUrl);
-
+  const [translate] = useTranslation();
   const setSearchValueCallback = useCallback(() => {
     setSearchValue(searchName);
   }, [searchName, setSearchValue]);
@@ -150,7 +155,11 @@ export const DynamicGenericFilter = ({
     } else return [];
   }, [data, dynamicFilterParameters]);
 
-  const getPlaceholderForMultipleSelect = (multpleSelected: Array<any>) => {
+  const getPlaceholderForMultipleSelect = (
+    multpleSelected: Array<any>,
+    isTranslatable?: boolean,
+    translatePrefix?: string
+  ) => {
     if (multpleSelected && multpleSelected.length > 0) {
       const selected = multpleSelected.map((item) => {
         return options?.find(({ value }) => value === item);
@@ -158,7 +167,13 @@ export const DynamicGenericFilter = ({
 
       if (selected.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (selected as Array<any>).map(({ label }) => label).join(', ');
+        return (selected as Array<any>)
+          .map(({ label }) =>
+            isTranslatable
+              ? translate(`${translatePrefix || ''}${label}`)
+              : label
+          )
+          .join(', ');
       } else {
         return placeholder ?? 'Selecione';
       }
@@ -224,6 +239,8 @@ export const DynamicGenericFilter = ({
             placeholder={placeholder}
             disabled={isFilterDependency && !onDisabledInput()}
             className="pw-w-full"
+            isTranslatable={isTranslatable}
+            translatePrefix={translatePrefix}
           />
         );
       }
@@ -237,6 +254,8 @@ export const DynamicGenericFilter = ({
             name="status"
             placeholder={getPlaceholderForMultipleSelect(field?.value || '')}
             options={options ?? []}
+            isTranslatable={isTranslatable}
+            translatePrefix={translatePrefix}
           />
         );
       }

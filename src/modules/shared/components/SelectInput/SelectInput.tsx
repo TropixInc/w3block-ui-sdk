@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
@@ -12,6 +13,8 @@ interface SelectInputProps {
   className?: string;
   placeholder?: string;
   disabled?: boolean;
+  isTranslatable?: boolean;
+  translatePrefix?: string;
 }
 
 export const Selectinput = ({
@@ -21,10 +24,13 @@ export const Selectinput = ({
   className = '',
   placeholder,
   disabled,
+  isTranslatable,
+  translatePrefix,
 }: SelectInputProps) => {
   const ref = useRef<HTMLDivElement>(null);
   useClickAway(ref, () => setIsOpened(false));
   const [isOpened, setIsOpened] = useState(false);
+  const [translate] = useTranslation();
   return (
     <div ref={ref} className={` ${className}`}>
       <div
@@ -39,6 +45,12 @@ export const Selectinput = ({
             ? placeholder
               ? placeholder
               : options[0].label
+            : isTranslatable
+            ? translate(
+                `${translatePrefix || ''}${
+                  options.find((opt) => opt.value == selected)?.label
+                }`
+              )
             : options.find((opt) => opt.value == selected)?.label}
         </p>
         <ArrowDown className="pw-stroke-slate-600" />
@@ -55,7 +67,9 @@ export const Selectinput = ({
                   setIsOpened(false);
                 }}
               >
-                {option.label}
+                {isTranslatable
+                  ? translate(`${translatePrefix || ''}${option.label}`)
+                  : option.label}
               </div>
             ))}
           </div>
