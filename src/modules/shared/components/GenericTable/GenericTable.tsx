@@ -193,7 +193,9 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     keyInCollection?: string,
     moreInfos?: any,
     hrefLink?: string,
-    linkLabel?: string
+    linkLabel?: string,
+    isTranslatable?: boolean,
+    translatePrefix?: string
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -341,7 +343,15 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         return (
           <div className="pw-w-full">
             <p className="pw-text-ellipsis pw-overflow-hidden">
-              {_.get(item, itemKey, '--') ?? '---'}
+              {isTranslatable && _.get(item, itemKey) ? (
+                translate(
+                  `${translatePrefix || ''}${
+                    _.get(item, itemKey, '--') ?? '---'
+                  }`
+                )
+              ) : (
+                <p>{_.get(item, itemKey, '--') ?? '---'}</p>
+              )}
             </p>
           </div>
         );
@@ -471,7 +481,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   .filter(
                     (item) => item.header.filter?.placement === 'external'
                   )
-                  .map(({ header, key }) => {
+                  .map(({ header, key, isTranslatable, translatePrefix }) => {
                     return (
                       <div
                         key={key}
@@ -511,6 +521,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                           filterDependencies={
                             header.filter?.data?.parameters?.dependencies
                           }
+                          isTranslatable={isTranslatable}
+                          translatePrefix={translatePrefix}
                         />
                       </div>
                     );
@@ -704,6 +716,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                         moreInfos,
                         hrefLink,
                         linkLabel,
+                        isTranslatable,
+                        translatePrefix,
                       }) => (
                         <p key={key} className="pw-text-sm pw-text-left">
                           <span>
@@ -715,7 +729,9 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                               keyInCollection,
                               moreInfos,
                               hrefLink,
-                              linkLabel
+                              linkLabel,
+                              isTranslatable,
+                              translatePrefix
                             )}
                           </span>
                         </p>

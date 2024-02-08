@@ -316,10 +316,10 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                         </p>
                       </div>
                     )}
-                    {(datasource?.master?.data[0]?.attributes?.placeOfBirth
-                      ?.city ||
-                      datasource?.master?.data[0]?.attributes?.placeOfBirth
-                        ?.country) && (
+                    {translate(
+                      `country>${datasource?.master?.data[0]?.attributes?.placeOfBirth?.city}` ||
+                        `country>${datasource?.master?.data[0]?.attributes?.placeOfBirth?.country}`
+                    ) && (
                       <div>
                         <p className="pw-font-normal pw-text-sm pw-font-poppins pw-text-black">
                           Local de nascimento
@@ -336,10 +336,10 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                         </p>
                       </div>
                     )}
-                    {(datasource?.master?.data[0]?.attributes?.placeOfResidence
-                      ?.city ||
-                      datasource?.master?.data[0]?.attributes?.placeOfResidence
-                        ?.country) && (
+                    {translate(
+                      `country>${datasource?.master?.data[0]?.attributes?.placeOfResidence?.city}` ||
+                        `country>${datasource?.master?.data[0]?.attributes?.placeOfResidence?.country}`
+                    ) && (
                       <div>
                         <p className="pw-font-normal pw-text-sm pw-font-poppins pw-text-black">
                           Residência

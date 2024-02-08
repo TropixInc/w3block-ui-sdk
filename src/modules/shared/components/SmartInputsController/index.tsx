@@ -69,11 +69,6 @@ interface SmartProps {
   options?: Options[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectData?: any;
-  inputImageTitle?: string;
-  inputImageSubtitle?: string;
-  inputImagePlaceholder?: string;
-  inputImageInstructions?: string;
-  acceptImageTypes?: Array<string>;
   autofill?: boolean;
   inputSubtype?: string;
 }
@@ -109,11 +104,6 @@ const SmartInputsController = ({
   profilePage,
   options,
   selectData,
-  inputImageInstructions,
-  inputImagePlaceholder,
-  inputImageSubtitle,
-  inputImageTitle,
-  acceptImageTypes,
   autofill = false,
 }: SmartProps) => {
   const [translate] = useTranslation();
@@ -195,14 +185,14 @@ const SmartInputsController = ({
       case DataTypesEnum.Image:
         return (
           <InputImage
-            title={inputImageTitle || ''}
-            subtitle={inputImageSubtitle}
+            title={selectData.title || ''}
+            subtitle={selectData.subtitle}
             name={name}
-            imagePlaceholder={inputImagePlaceholder}
-            instructions={inputImageInstructions}
+            imagePlaceholder={selectData.placeholderImage}
+            instructions={selectData.instructions}
             docValue={docFileValue}
             openDocs={openDocs}
-            acceptTypes={acceptImageTypes || ['.png', '.jpeg', '.jpg']}
+            acceptTypes={selectData.acceptTypes || ['.png', '.jpeg', '.jpg']}
             onChangeUploadProgess={onChangeUploadProgess}
           />
         );
