@@ -53,8 +53,6 @@ const InputImage = ({
   const [file, setFile] = useState<File | undefined>();
   const { companyId: tenantId } = useCompanyConfig();
 
-  console.log(instructions, 'instruc');
-
   const {
     mutate: mutateAssets,
     data: assets,
