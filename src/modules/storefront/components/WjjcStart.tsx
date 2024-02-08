@@ -70,8 +70,8 @@ export const WjjcStart = () => {
         arr.push(
           datasource?.athlete?.data[0]?.attributes?.certificationProductId
         );
-      const finalPlace = arr.join(', ');
-      return finalPlace;
+      const productsId = arr.join(',');
+      return productsId;
     };
 
     const products = () => {
@@ -110,11 +110,17 @@ export const WjjcStart = () => {
         postCheckoutUrl: '/',
       },
     });
-    pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-      contextSlug: 'wjjcstart',
-      step: 1,
-      sessionId: id,
-    });
+    if (datasource?.athlete?.data[0]?.attributes?.affiliationProductId) {
+      pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+        contextSlug: 'wjjcstart',
+        step: 1,
+        sessionId: id,
+      });
+    } else {
+      pushConnect(
+        `/checkout/confirmation?productIds=${productIds()}&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&sessionId=${id}`
+      );
+    }
   };
 
   const context = useContext(ThemeContext);
