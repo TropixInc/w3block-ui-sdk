@@ -280,7 +280,7 @@
   "companyAuth>changingPassword>errorChangingPasswordMessage": "Não foi possível alterar a senha.",
   "companyAuth>changePassword>passworldFieldPlaceholder": "Insira sua nova senha",
   "companyAuth>newPassword>passwordConfirmationFieldLabel": "Confirmar senha",
-  "companyAuth>newPasswordTips>passwordContainsUppercaseLetter": "Contém letras maiusculacas",
+  "companyAuth>newPasswordTips>passwordContainsUppercaseLetter": "Contém letras maiúsculas",
   "companyAuth>newPasswordTips>passwordContainsLowercaseLetter": "Contém letras minúsculas",
   "companyAuth>newPasswordTips>passwordContainsNumbers": "Contém números",
   "companyAuth>newPasswordTips>passwordMeetsMinimumCharactersQuantity": "Ter pelo menos 8 caracteres",
