@@ -1421,24 +1421,24 @@
     "@volar/language-core" "1.11.1"
     path-browserify "^1.0.1"
 
-"@vue/compiler-core@3.4.16":
-  version "3.4.16"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.4.16.tgz#366805bb40d23ec82d4c352b78227a3d58293a30"
-  integrity sha512-HXgyy7gen4FNJS8Hz2q/NNBEdzD3QInhDTWaP2/mS0TlmV9CnjmXip7TZ0ROYiQM4FgXZCCJvh74yDikFkPpkQ==
+"@vue/compiler-core@3.4.18":
+  version "3.4.18"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.4.18.tgz#b875e27f6ba71c6e2cf4e9befa7f98c66afabf22"
+  integrity sha512-F7YK8lMK0iv6b9/Gdk15A67wM0KKZvxDxed0RR60C1z9tIJTKta+urs4j0RTN5XqHISzI3etN3mX0uHhjmoqjQ==
   dependencies:
     "@babel/parser" "^7.23.9"
-    "@vue/shared" "3.4.16"
+    "@vue/shared" "3.4.18"
     entities "^4.5.0"
     estree-walker "^2.0.2"
     source-map-js "^1.0.2"
 
 "@vue/compiler-dom@^3.3.0":
-  version "3.4.16"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.4.16.tgz#f3c0d8062a5cbc3bba9a83c16237483622a2c998"
-  integrity sha512-lvs9ankPzLEuIC5aB72ntLUcwVGmgY7ASkXDRvo9+lUMWOOCqnAmM/64AZPeVAZ4EnjocCE40OUN+ZboNe4ygA==
+  version "3.4.18"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.4.18.tgz#43eca1e570199f732a9d71c0fe0db1bfd455078a"
+  integrity sha512-24Eb8lcMfInefvQ6YlEVS18w5Q66f4+uXWVA+yb7praKbyjHRNuKVWGuinfSSjM0ZIiPi++QWukhkgznBaqpEA==
   dependencies:
-    "@vue/compiler-core" "3.4.16"
-    "@vue/shared" "3.4.16"
+    "@vue/compiler-core" "3.4.18"
+    "@vue/shared" "3.4.18"
 
 "@vue/language-core@1.8.27", "@vue/language-core@^1.8.26":
   version "1.8.27"
@@ -1455,15 +1455,15 @@
     path-browserify "^1.0.1"
     vue-template-compiler "^2.7.14"
 
-"@vue/shared@3.4.16", "@vue/shared@^3.3.0":
-  version "3.4.16"
-  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.4.16.tgz#003eb5e759adea5aa1d5d51625ab10d7be437b26"
-  integrity sha512-HKCjeaxR+R95dCw1BDaytcHdlzZj9lxj7RlFnxWtcKq670t8oSeMsbPlkzkNc2V6IUzHaMtUxdBcdREAhb+7NA==
+"@vue/shared@3.4.18", "@vue/shared@^3.3.0":
+  version "3.4.18"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.4.18.tgz#5a5bbd5f8c47d5279d585991884be0418ddf5014"
+  integrity sha512-CxouGFxxaW5r1WbrSmWwck3No58rApXgRSBxrqgnY1K+jk20F6DrXJkHdH9n4HVT+/B6G2CAn213Uq3npWiy8Q==
 
 "@w3block/sdk-id@^0.1.70":
-  version "0.1.70"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.70.tgz#5d6492aa60de8bc723bf470a3f2d9a796a2f3a54"
-  integrity sha512-0uL+DX7MvNfLaqoIz4vSdVr4EUCsuwKcTXdede/fWl66REfKH6reg6OmI86kRU9wN0CK+Q0ECGeFUnOZ2XVM7Q==
+  version "0.1.71"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.71.tgz#f16f5f906ebe749fe975af9c02290f6320101037"
+  integrity sha512-KzmyuJwwr+IdmmUwqDrrKTEVEcSBG7cCvv4gd2jLCqc/PSVcVtULHKXn+w0no0PDWIw6hb1pxKKTAnKeiLTnsQ==
   dependencies:
     axios "^0.24.0"
     date-fns "2.29.1"
@@ -2709,9 +2709,9 @@ ecc-jsbn@~0.1.1:
     safer-buffer "^2.1.0"
 
 electron-to-chromium@^1.4.648:
-  version "1.4.662"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.662.tgz#0e014d31687210312c5f601bc9edcae2fa1663ef"
-  integrity sha512-gfl1XVWTQmPHhqEG0kN77SpUxaqPpMb9r83PT4gvKhg7P3irSxru3lW85RxvK1uI1j2CAcTWPjG/HbE0IP/Rtg==
+  version "1.4.664"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.664.tgz#b00fc67d5d4f124e429b0dcce5a02ae18ef33ede"
+  integrity sha512-k9VKKSkOSNPvSckZgDDl/IQx45E1quMjX8QfLzUsAs/zve8AyFDK+ByRynSP/OfEfryiKHpQeMf00z0leLCc3A==
 
 elliptic@6.5.4, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"

@@ -57,7 +57,14 @@ export const Selectinput = ({
       </div>
       {isOpened && !disabled && (
         <div className="pw-relative  pw-h-full">
-          <div className="pw-absolute pw-max-h-[200px] pw-overflow-auto pw-bg-white pw-z-10 pw-bg-white pw-border pw-border-slate-300 pw-rounded-lg pw-w-full pw-mt-1">
+          <div className="pw-absolute pw-max-h-[200px] pw-overflow-auto pw-bg-white pw-z-10 pw-border pw-border-slate-300 pw-rounded-lg pw-w-full pw-mt-1">
+            <div
+              className="pw-p-3 pw-h-11 pw-text-sm pw-text-slate-800 pw-cursor-pointer hover:pw-bg-slate-100"
+              onClick={() => {
+                onChange('');
+                setIsOpened(false);
+              }}
+            ></div>
             {options.map((option) => (
               <div
                 key={option.value}
