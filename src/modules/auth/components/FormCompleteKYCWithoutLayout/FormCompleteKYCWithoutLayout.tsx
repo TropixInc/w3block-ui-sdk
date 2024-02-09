@@ -14,6 +14,8 @@ import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
+import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
@@ -61,6 +63,11 @@ const _FormCompleteKYCWithoutLayout = ({
     else if (querySlug) return querySlug as string;
     else return 'signup';
   };
+  const { data: kycContext } = useGetTenantContextBySlug(slug());
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
   const step = router.query.step;
@@ -132,10 +139,23 @@ const _FormCompleteKYCWithoutLayout = ({
                 },
               });
             } else if (!profilePage) {
-              router.pushConnect(
-                PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
-                query
-              );
+              if (screenConfig.skipConfirmation) {
+                if (typeof screenConfig.postKycUrl === 'string') {
+                  router.pushConnect(screenConfig.postKycUrl);
+                } else if (isPasswordless) {
+                  router.pushConnect('/');
+                } else {
+                  router.pushConnect(
+                    PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+                    router.query
+                  );
+                }
+              } else {
+                router.pushConnect(
+                  PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
+                  query
+                );
+              }
             }
           },
         }

@@ -151,10 +151,16 @@ export const ProductInfo = ({
                 {originalPrice}
               </p>
             )}
-            {anchorCurrencyAmount ? (
+            {anchorCurrencyAmount !== '0' ? (
               <>
                 <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
-                  {anchorCurrencySymbol ?? 'US$'}
+                  {anchorCurrencySymbol == 'MATIC' ? (
+                    <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : anchorCurrencySymbol == 'ETH' ? (
+                    <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : (
+                    anchorCurrencySymbol
+                  )}
                   {anchorCurrencyAmount}
                 </p>
                 <p className="pw-font-[400] pw-text-[#35394C] pw-opacity-50 pw-text-sm pw-flex pw-items-center">
@@ -261,10 +267,16 @@ export const ProductInfo = ({
                 {originalPrice}
               </p>
             )}
-            {anchorCurrencyAmount ? (
+            {anchorCurrencyAmount !== '0' ? (
               <>
                 <p className="pw-font-[700] pw-text-[#35394C] pw-text-sm pw-flex pw-items-center">
-                  {anchorCurrencySymbol ?? 'US$'}
+                  {anchorCurrencySymbol == 'MATIC' ? (
+                    <MaticIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : anchorCurrencySymbol == 'ETH' ? (
+                    <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
+                  ) : (
+                    anchorCurrencySymbol
+                  )}
                   {anchorCurrencyAmount}
                 </p>
                 <p className="pw-font-[400] pw-text-[#35394C] pw-opacity-50 pw-text-sm pw-flex pw-items-center">

@@ -651,7 +651,7 @@ export const ProductPage = ({
                                   type="radio"
                                 />
                                 <p className="pw-text-xs pw-text-slate-600 pw-font-[600]">
-                                  {price.currency.symbol}
+                                  {price?.currency?.symbol}
                                 </p>
                               </div>
                             ))}
@@ -1099,7 +1099,7 @@ export const ProductPage = ({
                     {
                       product?.prices.find(
                         (price: any) => price.currencyId == currencyId?.id
-                      )?.currency.symbol
+                      )?.currency?.symbol
                     }{' '}
                     pode variar de acordo com a cotação desta moeda em{' '}
                     {
@@ -1109,7 +1109,7 @@ export const ProductPage = ({
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
                           )?.anchorCurrencyId
-                      )?.currency.symbol
+                      )?.currency?.symbol
                     }
                     .
                   </p>

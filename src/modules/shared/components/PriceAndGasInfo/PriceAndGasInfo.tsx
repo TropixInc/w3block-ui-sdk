@@ -48,13 +48,21 @@ const _PriceAndGasInfo = ({
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
 
-  const coinPayment = payments?.filter(
-    (e) => e.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
-  );
+  const coinPayment = () => {
+    if (payments?.length === 1) return payments[0];
+    else
+      return payments?.filter(
+        (e) => e?.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+      )[0];
+  };
 
-  const moneyPayment = payments?.filter(
-    (e) => e.currencyId === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
-  );
+  const payment = () => {
+    if (payments?.length === 1) return payments[0];
+    else
+      return payments?.filter(
+        (e) => e?.currencyId === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+      )[0];
+  };
 
   if (payments) {
     return (
@@ -65,36 +73,44 @@ const _PriceAndGasInfo = ({
             <Shimmer />
           ) : (
             <div className="pw-flex pw-gap-2">
-              {moneyPayment?.[0]?.originalCartPrice &&
-                parseFloat(moneyPayment?.[0]?.originalCartPrice) >
-                  parseFloat(moneyPayment?.[0]?.cartPrice ?? '') && (
+              {payment()?.originalCartPrice &&
+                parseFloat(payment()?.originalCartPrice ?? '') >
+                  parseFloat(payment()?.cartPrice ?? '') && (
                   <CriptoValueComponent
                     code={name}
                     value={originalPrice ?? ''}
-                    crypto={currency == 'MATIC' || currency == 'ETH'}
+                    crypto={
+                      payment()?.currency?.symbol == 'MATIC' ||
+                      payment()?.currency?.symbol == 'ETH'
+                    }
                     fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                   />
                 )}
               <CriptoValueComponent
                 code={name}
                 value={
-                  coinPayment?.length && coinPayment?.length > 0
-                    ? ((parseFloat(moneyPayment?.[0]?.totalPrice ?? '') +
+                  coinPayment()?.currencyId ===
+                  '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+                    ? ((parseFloat(payment()?.totalPrice ?? '') +
                         parseFloat(
-                          coinPayment?.[0]?.totalPrice ?? ''
+                          coinPayment()?.totalPrice ?? ''
                         )) as unknown as string)
-                    : parseFloat(moneyPayment?.[0]?.cartPrice ?? '') === 0 &&
-                      parseFloat(moneyPayment?.[0]?.totalPrice ?? '') !== 0
-                    ? moneyPayment?.[0]?.totalPrice ?? ''
-                    : moneyPayment?.[0]?.cartPrice ?? ''
+                    : parseFloat(payment()?.cartPrice ?? '') === 0 &&
+                      parseFloat(payment()?.totalPrice ?? '') !== 0
+                    ? payment()?.totalPrice ?? ''
+                    : payment()?.cartPrice ?? ''
                 }
-                crypto={currency == 'MATIC' || currency == 'ETH'}
+                crypto={
+                  payment()?.currency?.symbol == 'MATIC' ||
+                  payment()?.currency?.symbol == 'ETH'
+                }
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
               />
             </div>
           )}
         </div>
-        {coinPayment?.length && coinPayment?.length > 0 ? (
+        {coinPayment()?.currencyId ===
+        '6ec75381-dd84-4edc-bedb-1a77fb430e10' ? (
           <div className="pw-flex pw-justify-between pw-mt-2">
             <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
               FoodCoin
@@ -106,16 +122,19 @@ const _PriceAndGasInfo = ({
                 -{' '}
                 <CriptoValueComponent
                   code={name}
-                  value={coinPayment?.[0]?.cartPrice ?? ''}
-                  crypto={currency == 'MATIC' || currency == 'ETH'}
+                  value={coinPayment()?.cartPrice ?? ''}
+                  crypto={
+                    coinPayment()?.currency?.symbol == 'MATIC' ||
+                    coinPayment()?.currency?.symbol == 'ETH'
+                  }
                   fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                 />
               </div>
             )}
           </div>
         ) : null}
-        {moneyPayment?.[0]?.clientServiceFee &&
-          parseFloat(moneyPayment?.[0]?.clientServiceFee) > 0 && (
+        {payment()?.clientServiceFee &&
+          parseFloat(payment()?.clientServiceFee ?? '') > 0 && (
             <div className="pw-flex pw-justify-between pw-mt-2">
               <div className="pw-flex pw-gap-x-1">
                 <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
@@ -123,28 +142,32 @@ const _PriceAndGasInfo = ({
                 </p>
                 {/* <InfoIcon className="pw-mt-[2px]" /> */}
               </div>
-              {moneyPayment?.[0]?.clientServiceFee &&
-              parseFloat(moneyPayment?.[0]?.clientServiceFee) > 0 ? (
+              {payment()?.clientServiceFee &&
+              parseFloat(payment()?.clientServiceFee ?? '') > 0 ? (
                 loading || loadingPreview ? (
                   <Shimmer />
                 ) : (
                   <div className="pw-flex pw-gap-2">
-                    {moneyPayment?.[0]?.originalClientServiceFee &&
-                      parseFloat(moneyPayment?.[0]?.originalClientServiceFee) >
-                        parseFloat(moneyPayment?.[0]?.clientServiceFee) && (
+                    {payment()?.originalClientServiceFee &&
+                      parseFloat(payment()?.originalClientServiceFee ?? '') >
+                        parseFloat(payment()?.clientServiceFee ?? '') && (
                         <CriptoValueComponent
                           code={name}
-                          value={
-                            moneyPayment?.[0]?.originalClientServiceFee ?? ''
+                          value={payment()?.originalClientServiceFee ?? ''}
+                          crypto={
+                            payment()?.currency?.symbol == 'MATIC' ||
+                            payment()?.currency?.symbol == 'ETH'
                           }
-                          crypto={currency == 'MATIC' || currency == 'ETH'}
                           fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                         />
                       )}
                     <CriptoValueComponent
                       code={name}
-                      value={moneyPayment?.[0]?.clientServiceFee}
-                      crypto={currency == 'MATIC' || currency == 'ETH'}
+                      value={payment()?.clientServiceFee ?? ''}
+                      crypto={
+                        payment()?.currency?.symbol == 'MATIC' ||
+                        payment()?.currency?.symbol == 'ETH'
+                      }
                       fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                     />
                   </div>
@@ -153,7 +176,7 @@ const _PriceAndGasInfo = ({
             </div>
           )}
 
-        {parseFloat(moneyPayment?.[0]?.gasFee?.amount ?? '') == 0 ? null : (
+        {parseFloat(payment()?.gasFee?.amount ?? '') == 0 ? null : (
           <div className="pw-flex pw-justify-between pw-mt-2">
             <div className="pw-flex pw-gap-x-1">
               <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
@@ -163,12 +186,14 @@ const _PriceAndGasInfo = ({
             </div>
             {loading ? (
               <Shimmer />
-            ) : parseFloat(moneyPayment?.[0]?.gasFee?.amount ?? '') ==
-              0 ? null : (
+            ) : parseFloat(payment()?.gasFee?.amount ?? '') == 0 ? null : (
               <CriptoValueComponent
                 code={name}
-                value={moneyPayment?.[0]?.gasFee?.amount ?? ''}
-                crypto={currency == 'MATIC' || currency == 'ETH'}
+                value={payment()?.gasFee?.amount ?? ''}
+                crypto={
+                  payment()?.currency?.symbol == 'MATIC' ||
+                  payment()?.currency?.symbol == 'ETH'
+                }
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
               />
             )}
@@ -183,21 +208,27 @@ const _PriceAndGasInfo = ({
             <Shimmer className="pw-h-6 pw-w-17" />
           ) : (
             <div className="pw-flex pw-gap-2">
-              {moneyPayment?.[0]?.originalTotalPrice &&
-                parseFloat(moneyPayment?.[0]?.originalTotalPrice) >
-                  parseFloat(moneyPayment?.[0]?.totalPrice ?? '') && (
+              {payment()?.originalTotalPrice &&
+                parseFloat(payment()?.originalTotalPrice ?? '') >
+                  parseFloat(payment()?.totalPrice ?? '') && (
                   <CriptoValueComponent
                     code={name}
-                    value={moneyPayment?.[0]?.originalTotalPrice}
-                    crypto={currency == 'MATIC' || currency == 'ETH'}
+                    value={payment()?.originalTotalPrice ?? ''}
+                    crypto={
+                      payment()?.currency?.symbol == 'MATIC' ||
+                      payment()?.currency?.symbol == 'ETH'
+                    }
                     fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                   />
                 )}
               <CriptoValueComponent
                 code={name}
-                value={moneyPayment?.[0]?.totalPrice ?? ''}
+                value={payment()?.totalPrice ?? ''}
                 showFree
-                crypto={currency == 'MATIC' || currency == 'ETH'}
+                crypto={
+                  payment()?.currency?.symbol == 'MATIC' ||
+                  payment()?.currency?.symbol == 'ETH'
+                }
                 fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
               />
             </div>

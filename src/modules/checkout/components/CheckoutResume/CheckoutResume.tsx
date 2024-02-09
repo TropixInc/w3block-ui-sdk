@@ -57,7 +57,7 @@ export const CheckouResume = ({
             id={product?.id}
             currency={
               product?.prices?.find((price) => price?.currencyId == currencyId)
-                ?.currency.symbol ?? 'R$'
+                ?.currency?.symbol ?? 'R$'
             }
             price={
               product?.prices?.find((price) => price?.currencyId == currencyId)

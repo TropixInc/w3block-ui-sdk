@@ -3,7 +3,10 @@ import { UtmContextInterface } from '../../core/context/UtmContext';
 import { Status } from '../../core/metamask/interface';
 import { Product } from '../../shared';
 import { GasFee } from '../../shared/interface/GasFee';
-import { Variants } from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+import {
+  CurrencyResponse,
+  Variants,
+} from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { OrderStatus, PaymentMethod } from '../enum';
 
 export interface PaymentsResponse {
@@ -16,6 +19,7 @@ export interface PaymentsResponse {
   clientServiceFee?: string;
   gasFee?: GasFee;
   providersForSelection?: PaymentMethodsAvaiable[];
+  currency?: CurrencyResponse;
 }
 export interface OrderPreviewResponse {
   products: Product[];
