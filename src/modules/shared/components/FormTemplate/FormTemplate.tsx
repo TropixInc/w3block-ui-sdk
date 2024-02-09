@@ -15,6 +15,7 @@ interface Props {
   setUploadProgress: Dispatch<SetStateAction<boolean>>;
   getDocumentByInputId(inputId: string): DocumentEntityDto | undefined;
   children?: ReactNode;
+  formState?: string;
 }
 
 export const FormTemplate = ({
@@ -25,7 +26,10 @@ export const FormTemplate = ({
   setUploadProgress,
   getDocumentByInputId,
   children,
+  formState,
 }: Props) => {
+  const isInitial = typeof formState === 'string' && formState === 'initial';
+
   return (
     <form onSubmit={onSubmit}>
       {tenantInputs &&
@@ -48,11 +52,13 @@ export const FormTemplate = ({
                 type={item.type}
                 options={item.options}
                 autofill={(item.data as any)?.autofill}
-                assetId={doc?.assetId}
-                simpleValue={doc?.simpleValue}
-                complexValue={doc?.complexValue}
-                docStatus={doc?.status}
-                docFileValue={doc?.asset?.directLink ?? ''}
+                assetId={isInitial ? undefined : doc?.assetId}
+                simpleValue={isInitial ? undefined : doc?.simpleValue}
+                complexValue={isInitial ? undefined : doc?.complexValue}
+                docStatus={isInitial ? undefined : doc?.status}
+                docFileValue={
+                  isInitial ? undefined : doc?.asset?.directLink ?? ''
+                }
                 onChangeUploadProgess={setUploadProgress}
                 selectData={item.data}
               />

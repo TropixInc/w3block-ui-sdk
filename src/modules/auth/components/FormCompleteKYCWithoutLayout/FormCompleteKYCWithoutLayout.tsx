@@ -172,6 +172,8 @@ const _FormCompleteKYCWithoutLayout = ({
     else return tenantInputs?.data ?? [];
   };
 
+  const formState = router.query.formState as string;
+
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
       <Spinner />
@@ -223,6 +225,7 @@ const _FormCompleteKYCWithoutLayout = ({
           tenantInputs={inputsToShow()}
           setUploadProgress={setUploadProgress}
           getDocumentByInputId={getDocumentByInputId}
+          formState={formState}
         ></FormTemplate>
 
         {isSuccess && (

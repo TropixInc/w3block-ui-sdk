@@ -115,6 +115,7 @@ export const WjjcStart = () => {
         contextSlug: 'wjjcstart',
         step: 1,
         sessionId: id,
+        formState: 'initial',
       });
     } else {
       pushConnect(
