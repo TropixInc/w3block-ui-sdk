@@ -89,8 +89,6 @@ const SmartGenericFilter = ({
     []
   );
 
-  console.log(selected, 'selected');
-
   const [endDate, setEndDate] = useState<Date>();
   const [numberRange, setNumberRange] = useState<{
     start: string | undefined;
