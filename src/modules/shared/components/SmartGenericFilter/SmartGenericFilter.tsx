@@ -233,6 +233,12 @@ const SmartGenericFilter = ({
           });
 
         onCloseFilters(undefined);
+      } else {
+        const newFilters = filters;
+        const removedItemFilters = _.omit(newFilters, itemKey || '');
+        onChangeFilter && onChangeFilter(removedItemFilters);
+
+        onCloseFilters(undefined);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
