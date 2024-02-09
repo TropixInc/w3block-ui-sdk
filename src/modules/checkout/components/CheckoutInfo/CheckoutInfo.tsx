@@ -1385,7 +1385,7 @@ const _CheckoutInfo = ({
                   anchorCurrencySymbol={
                     prod?.prices?.find(
                       (price) => price?.currencyId == currencyIdState
-                    )?.anchorCurrency.symbol ?? ''
+                    )?.anchorCurrency?.symbol ?? ''
                   }
                 />
               ))}

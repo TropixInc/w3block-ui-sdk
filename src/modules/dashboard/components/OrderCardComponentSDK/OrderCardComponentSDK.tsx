@@ -156,7 +156,9 @@ export const OrderCardComponentSDK = ({
                   }, [])
                   .map((prod: any, index: number) => (
                     <ProductInfo
-                      currency={order.data.currency.symbol ?? CurrencyEnum.BRL}
+                      currency={
+                        order?.data?.currency?.symbol ?? CurrencyEnum.BRL
+                      }
                       image={
                         prod?.productToken?.product?.images?.length
                           ? prod?.productToken?.product?.images?.[0]?.thumb
@@ -165,32 +167,33 @@ export const OrderCardComponentSDK = ({
                       }
                       name={prod?.productToken?.product?.name ?? ''}
                       id={prod?.productToken?.product.id ?? ''}
-                      price={prod.currencyAmount}
+                      price={prod?.currencyAmount}
                       status={CheckoutStatus.MY_ORDER}
                       quantity={
                         products.filter((pr: any) => {
                           if (pr.variantIds) {
                             return (
-                              pr.productToken.product.id ==
-                                prod.productToken.product.id &&
+                              pr?.productToken?.product?.id ==
+                                prod?.productToken?.product?.id &&
                               pr?.variantIds?.toString() ==
                                 prod?.variantIds?.toString()
                             );
                           } else {
                             return (
-                              pr.productToken.product.id ==
-                              prod.productToken.product.id
+                              pr?.productToken?.product?.id ==
+                              prod?.productToken?.product?.id
                             );
                           }
                         }).length
                       }
                       stockAmount={1}
-                      key={prod.productToken.id + index}
-                      originalPrice={prod.originalCurrencyAmount}
+                      key={prod?.productToken?.id + index}
+                      originalPrice={prod?.originalCurrencyAmount}
                       variants={
                         productsRes?.find(
-                          (val) => val.productToken.id == prod.productToken.id
-                        ).variants
+                          (val) =>
+                            val?.productToken?.id == prod?.productToken?.id
+                        )?.variants
                       }
                     />
                   ))

@@ -76,7 +76,7 @@ export const CheckouResume = ({
             ).toString()}
             anchorCurrencySymbol={
               product?.prices?.find((price) => price?.currencyId == currencyId)
-                ?.anchorCurrency.symbol ?? ''
+                ?.anchorCurrency?.symbol ?? ''
             }
           />
         ))
