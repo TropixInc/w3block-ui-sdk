@@ -133,7 +133,7 @@ const _HeaderPixwaySDK = ({
   const defaultTabs = context?.defaultTheme?.header?.styleData?.tabs;
   const tabsToPass = tabs ? tabs : defaultTabs;
 
-  const LogoToShow = () => {
+  const LogoToShow = useMemo(() => {
     if (
       logoSrc ||
       context?.defaultTheme?.header?.styleData?.logoSrc?.assetUrl
@@ -171,7 +171,15 @@ const _HeaderPixwaySDK = ({
         />
       );
     }
-  };
+  }, [
+    brandText,
+    context?.defaultTheme?.header?.styleData?.brandName,
+    context?.defaultTheme?.header?.styleData?.logoSrc?.assetUrl,
+    logoHeight,
+    logoSrc,
+    logoUrl,
+    textColor,
+  ]);
 
   const defaultBgColor =
     context?.defaultTheme?.header?.styleData?.backgroundColor;
@@ -231,7 +239,7 @@ const _HeaderPixwaySDK = ({
                   : PixwayAppRoutes.HOME
               }
             >
-              <LogoToShow />
+              {LogoToShow}
             </a>
           </div>
 
