@@ -11,6 +11,10 @@ export interface Statement {
   currency: string;
   transactionType: 'receiving' | 'sending';
   pointsPrecision: 'integer' | 'decimal';
+  deliverId?: string;
+  buyerName?: string;
+  buyerEmail?: string;
+  executeAt?: string;
 }
 
 export enum Erc20ActionType {

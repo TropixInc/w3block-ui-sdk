@@ -107,7 +107,9 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const isLoayaltyOperator = Boolean(userRoles?.includes('loyaltyOperator'));
   const hasLoyalty = !!useLoyaltiesInfo()?.loyalties?.length;
   const { defaultTheme } = UseThemeConfig();
-
+  const isCommerceReceiver = Boolean(
+    userRoles.find((e: string) => e === 'commerce.orderReceiver')
+  );  
   const internalMenuData = useMemo(() => {
     return defaultTheme?.configurations.styleData.internalMenu || {};
   }, [defaultTheme?.configurations.styleData.internalMenu]);
@@ -163,6 +165,14 @@ export const useDefaultMenuTabs = (textColor: string) => {
       route: PixwayAppRoutes.WALLET_RECEIPT,
       isVisible:
         (isUser || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0 && !isHidden('extract'),
+    },
+    {
+      name: internalMenuData['futureStatement']?.customLabel || 'Recebimentos',
+      id: 'futureStatement',
+      icon: <ReceiptIcon style={{color: textColor, stroke: textColor, fill: textColor}} width={15} height={15} />,
+      route: PixwayAppRoutes.WALLET_FUTURE,
+      isVisible:
+        isCommerceReceiver,
     },
     {
       name:  internalMenuData['myOrders']?.customLabel ||

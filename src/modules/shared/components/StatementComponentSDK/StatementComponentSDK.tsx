@@ -14,15 +14,17 @@ import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 
 interface StatementComponentSDKProps {
   statement: Statement;
+  future?: boolean;
 }
 
 export const StatementComponentSDK = ({
   statement,
+  future,
 }: StatementComponentSDKProps) => {
   const locale = useLocale();
   const getStatementColorAndIcon = () => {
-    if (statement.transactionType == 'receiving') {
-      if (statement.status == Erc20ActionStatus.SUCCESS) {
+    if (statement?.transactionType == 'receiving') {
+      if (statement?.status == Erc20ActionStatus.SUCCESS) {
         return {
           color: 'pw-text-blue-800',
           icon: (
@@ -40,7 +42,7 @@ export const StatementComponentSDK = ({
         };
       }
     } else {
-      if (statement.status == Erc20ActionStatus.SUCCESS) {
+      if (statement?.status == Erc20ActionStatus.SUCCESS) {
         return {
           color: 'pw-stroke-rose-500',
           icon: (
@@ -50,9 +52,9 @@ export const StatementComponentSDK = ({
         };
       } else {
         return {
-          color: 'pw-text-orange-600',
+          color: 'pw-stroke-rose-500',
           icon: (
-            <RejectIcon className="pw-stroke-orange-600 pw-w-[16px] pw-h-[16px]" />
+            <RejectIcon className="pw-stroke-rose-500 pw-w-[16px] pw-h-[16px]" />
           ),
           text: 'Uso',
         };
@@ -63,30 +65,58 @@ export const StatementComponentSDK = ({
     <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
       <div className="pw-flex pw-flex-col pw-items-start">
         <div className="pw-flex pw-items-center pw-gap-2">
-          {getStatementColorAndIcon().icon}
-          <p
-            className={`pw-text-sm pw-font-semibold ${
-              getStatementColorAndIcon().color
-            }`}
-          >
-            {getStatementColorAndIcon().text}
-          </p>
+          {future ? (
+            <>
+              <p className="pw-text-sm pw-font-semibold pw-text-black">
+                Recibo de pagamento {statement?.deliverId}
+              </p>
+            </>
+          ) : (
+            <>
+              {getStatementColorAndIcon().icon}
+              <p
+                className={`pw-text-sm pw-font-semibold ${
+                  getStatementColorAndIcon().color
+                }`}
+              >
+                {getStatementColorAndIcon().text}
+              </p>
+            </>
+          )}
         </div>
         <div className="pw-flex pw-items-center pw-gap-2">
           <p className="pw-text-black pw-text-xs pw-font-medium">
-            ID: {statement.id}
+            {future ? (
+              <>
+                Comprador: {statement?.buyerName} ({statement?.buyerEmail})
+              </>
+            ) : (
+              <>ID: {statement?.id}</>
+            )}
           </p>
           {/* <CopyIcon className="pw-fill-blue-800 pw-w-[13px] pw-h-[13px]" /> */}
         </div>
+        {future ? (
+          <div className="pw-flex pw-items-center pw-gap-2">
+            <p className="pw-text-black pw-text-xs pw-font-medium">
+              {statement?.executeAt
+                ? 'Recebimento previsto para: ' +
+                  format(new Date(statement?.executeAt), 'PPP', {
+                    locale: locale === 'pt-BR' ? ptBR : enUS,
+                  })
+                : null}
+            </p>
+          </div>
+        ) : null}
         <div>
           <span className="pw-text-black pw-text-sm pw-font-semibold">
-            {statement.transactionType == 'sending' ? '-' : '+'}{' '}
-            {statement.pointsPrecision == 'integer'
-              ? statement.amount.toFixed(0)
-              : statement.amount.toFixed(2)}{' '}
+            {statement?.transactionType == 'sending' ? '-' : '+'}{' '}
+            {statement?.pointsPrecision == 'integer'
+              ? statement?.amount?.toFixed(0)
+              : statement?.amount?.toFixed(2)}{' '}
           </span>
           <span className="pw-text-black pw-text-[13px] pw-font-normal">
-            {statement.currency}
+            {statement?.currency}
           </span>
         </div>
       </div>
@@ -94,18 +124,18 @@ export const StatementComponentSDK = ({
         <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-bold">
           {' '}
           {statement?.createdAt
-            ? format(new Date(statement.createdAt ?? Date.now()), 'PPpp', {
+            ? format(new Date(statement?.createdAt ?? Date.now()), 'PPpp', {
                 locale: locale === 'pt-BR' ? ptBR : enUS,
               })
             : null}
         </div>
         <div className="pw-mt-2"></div>
-        {statement.loyaltieTransactions?.map((loyaltieTransaction) => (
+        {statement?.loyaltieTransactions?.map((loyaltieTransaction) => (
           <div
             key={generateRandomUUID()}
             className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mb-1"
           >
-            {loyaltieTransaction.metadata.description}
+            {loyaltieTransaction?.metadata?.description}
           </div>
         ))}
         <div></div>

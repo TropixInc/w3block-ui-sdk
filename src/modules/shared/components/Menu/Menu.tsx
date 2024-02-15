@@ -75,6 +75,10 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     )
   );
 
+  const isCommerceReceiver = Boolean(
+    userRoles.find((e: string) => e === 'commerce.orderReceiver')
+  );
+
   const isHidden = useIsHiddenMenuItem(userRoles);
 
   const { defaultTheme } = UseThemeConfig();
@@ -163,6 +167,16 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           loyaltyWallet &&
           loyaltyWallet.length > 0 &&
           !isHidden('extract'),
+      },
+      {
+        title:
+          internalMenuData['futureStatement']?.customLabel || 'Recebimentos',
+        id: 'futureStatement',
+        icon: (
+          <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
+        ),
+        link: PixwayAppRoutes.WALLET_FUTURE,
+        isVisible: isCommerceReceiver,
       },
       {
         title:
