@@ -139,9 +139,9 @@ const _FormCompleteKYCWithoutLayout = ({
                 },
               });
             } else if (!profilePage) {
-              if (screenConfig.skipConfirmation) {
-                if (typeof screenConfig.postKycUrl === 'string') {
-                  router.pushConnect(screenConfig.postKycUrl);
+              if (screenConfig?.skipConfirmation) {
+                if (typeof screenConfig?.postKycUrl === 'string') {
+                  router.pushConnect(screenConfig?.postKycUrl);
                 } else if (isPasswordless) {
                   router.pushConnect('/');
                 } else {
