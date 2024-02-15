@@ -112,9 +112,7 @@ const _PriceAndGasInfo = ({
         {coinPayment()?.currencyId ===
         '6ec75381-dd84-4edc-bedb-1a77fb430e10' ? (
           <div className="pw-flex pw-justify-between pw-mt-2">
-            <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
-              FoodCoin
-            </p>
+            <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">Zucas</p>
             {loading || loadingPreview ? (
               <Shimmer />
             ) : (

@@ -179,6 +179,7 @@ export interface CreateOrderResponse {
   originalCurrencyAmount?: string;
   originalTotalAmount?: string;
   deliverId: string;
+  failReason?: string;
 }
 
 export interface PaymentInfoInterface {

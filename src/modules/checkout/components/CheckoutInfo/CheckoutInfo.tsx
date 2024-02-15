@@ -313,11 +313,8 @@ const _CheckoutInfo = ({
                   {
                     currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
                     paymentMethod: 'crypto',
-                    amountType: 'percentage',
-                    amount: (
-                      (parseFloat(coinAmountPayment) * 100) /
-                      parseFloat(paymentAmount)
-                    ).toFixed(5),
+                    amountType: 'fixed',
+                    amount: coinAmountPayment,
                   },
                 ]
               : [
@@ -877,6 +874,7 @@ const _CheckoutInfo = ({
   const orderId = orderResponse?.id ?? '';
   const [statusResponse, setStatusResponse] = useState<CreateOrderResponse>();
   const [codeQr, setCodeQr] = useState('');
+  const [error, setError] = useState('');
   useEffect(() => {
     if (poolStatus && orderId !== '' && isCoinPayment) {
       validateOrderStatus();
@@ -893,6 +891,12 @@ const _CheckoutInfo = ({
             onSuccess: (data: CreateOrderResponse) => {
               if (data.status === 'pending' && countdown) {
                 setCountdown(false);
+              } else if (data.status === 'failed') {
+                setCountdown(false);
+                clearInterval(interval);
+                setPoolStatus(false);
+                setStatusResponse(data);
+                setError(data?.failReason ?? '');
               } else if (
                 data.status == 'concluded' ||
                 data.status == 'delivering'
@@ -906,6 +910,38 @@ const _CheckoutInfo = ({
           }
         );
       }, 3000);
+    }
+  };
+
+  const onClickButton = () => {
+    if (error !== '' && statusResponse?.status === 'failed') {
+      router.pushConnect(PixwayAppRoutes.CHECKOUT_CONFIRMATION, query);
+    } else if (
+      context?.defaultTheme?.configurations?.contentData?.checkoutConfig
+        ?.actionButton?.link
+    ) {
+      router.pushConnect(
+        context?.defaultTheme?.configurations?.contentData?.checkoutConfig
+          ?.actionButton?.link
+      );
+    } else if (returnAction) {
+      returnAction(query);
+    } else {
+      router.pushConnect(PixwayAppRoutes.MY_TOKENS);
+    }
+  };
+
+  const buttonText = () => {
+    if (error !== '' && statusResponse?.status === 'failed') {
+      return 'Tentar novamente';
+    } else if (
+      context?.defaultTheme?.configurations?.contentData?.checkoutConfig
+        ?.actionButton?.label
+    ) {
+      return context?.defaultTheme?.configurations?.contentData?.checkoutConfig
+        ?.actionButton?.label;
+    } else {
+      return translate('tokens>tokenTransferController>goToMyTokens');
     }
   };
 
@@ -1022,7 +1058,7 @@ const _CheckoutInfo = ({
             {isCoinPayment && (
               <>
                 <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                  Food Coins (Saldo:{' '}
+                  Zucas (Saldo:{' '}
                   {organizedLoyalties &&
                   organizedLoyalties?.length > 0 &&
                   organizedLoyalties?.some(
@@ -1107,7 +1143,7 @@ const _CheckoutInfo = ({
                       'R$' + orderPreview?.cashback?.cashbackAmount
                     )}
                   </b>{' '}
-                  em Food Coins.
+                  em Zucas.
                 </Alert>
               </>
             )}
@@ -1141,62 +1177,72 @@ const _CheckoutInfo = ({
           <div className="pw-mt-4">
             {productCache?.isCoinPayment ? (
               <>
-                <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
-                  Pagamento realizado com sucesso!
-                </p>
-                <p className="pw-text-sm pw-font-normal pw-text-center sm:pw-text-left pw-text-black">
-                  Apresente esse QR CODE ao estabelecimento para comprovar seu
-                  pagamento.
-                </p>
-                <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center sm:pw-text-left pw-mt-5">
-                  <div>
-                    {statusResponse?.deliverId ? (
-                      <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
-                        <QRCodeSVG value={String(codeQr)} size={150} />
-                        <p className="pw-text-[32px] pw-font-semibold">
-                          {statusResponse?.deliverId ?? ''}
+                {error !== '' && statusResponse?.status === 'failed' ? (
+                  <Alert variant="error">{error}</Alert>
+                ) : (
+                  <>
+                    <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
+                      Pagamento realizado com sucesso!
+                    </p>
+                    <p className="pw-text-sm pw-font-normal pw-text-center sm:pw-text-left pw-text-black">
+                      Apresente esse QR CODE ao estabelecimento para comprovar
+                      seu pagamento.
+                    </p>
+                    <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center sm:pw-text-left pw-mt-5">
+                      <div>
+                        {statusResponse?.deliverId ? (
+                          <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
+                            <QRCodeSVG value={String(codeQr)} size={150} />
+                            <p className="pw-text-[32px] pw-font-semibold">
+                              {statusResponse?.deliverId ?? ''}
+                            </p>
+                          </div>
+                        ) : (
+                          <>
+                            <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
+                              Aguardando confirmação do pagamento
+                            </p>
+                            <div className="pw-mt-5">
+                              <Spinner className="pw-mx-auto" />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="pw-mt-5">
+                        <p className="pw-text-xs pw-font-normal">
+                          Nome do restaurante
+                        </p>
+                        <p className="pw-text-xs pw-font-semibold">
+                          {productCache?.destinationUser?.name}
                         </p>
                       </div>
-                    ) : (
-                      <>
-                        <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
-                          Aguardando confirmação do pagamento
+                      <div className="pw-mt-5">
+                        <p className="pw-text-xs pw-font-normal">
+                          Nome do usuário
                         </p>
-                        <div className="pw-mt-5">
-                          <Spinner className="pw-mx-auto" />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  <div className="pw-mt-5">
-                    <p className="pw-text-xs pw-font-normal">
-                      Nome do restaurante
-                    </p>
-                    <p className="pw-text-xs pw-font-semibold">
-                      {productCache?.destinationUser?.name}
-                    </p>
-                  </div>
-                  <div className="pw-mt-5">
-                    <p className="pw-text-xs pw-font-normal">Nome do usuário</p>
-                    <p className="pw-text-xs pw-font-semibold">
-                      {profile?.data?.data?.name}
-                    </p>
-                  </div>
-                  <div className="pw-mt-5">
-                    <p className="pw-text-xs pw-font-normal">Valor pago</p>
-                    <p className="pw-text-xs pw-font-semibold">
-                      R$
-                      {orderResponse?.totalAmount?.[0]?.amount ??
-                        orderResponse?.totalAmount}
-                    </p>
-                  </div>
-                  <div className="pw-mt-5">
-                    <p className="pw-text-xs pw-font-normal">Cashback ganho</p>
-                    <p className="pw-text-xs pw-font-semibold">
-                      R${productCache?.cashback}
-                    </p>
-                  </div>
-                </div>
+                        <p className="pw-text-xs pw-font-semibold">
+                          {profile?.data?.data?.name}
+                        </p>
+                      </div>
+                      <div className="pw-mt-5">
+                        <p className="pw-text-xs pw-font-normal">Valor pago</p>
+                        <p className="pw-text-xs pw-font-semibold">
+                          R$
+                          {orderResponse?.totalAmount?.[0]?.amount ??
+                            orderResponse?.totalAmount}
+                        </p>
+                      </div>
+                      <div className="pw-mt-5">
+                        <p className="pw-text-xs pw-font-normal">
+                          Cashback ganho
+                        </p>
+                        <p className="pw-text-xs pw-font-semibold">
+                          R${productCache?.cashback}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             ) : (
               <>
@@ -1226,28 +1272,10 @@ const _CheckoutInfo = ({
               </>
             )}
             <PixwayButton
-              onClick={
-                context?.defaultTheme?.configurations?.contentData
-                  ?.checkoutConfig?.actionButton?.link
-                  ? () => {
-                      router.pushConnect(
-                        context?.defaultTheme?.configurations?.contentData
-                          ?.checkoutConfig?.actionButton?.link
-                      );
-                    }
-                  : returnAction
-                  ? () => returnAction(query)
-                  : () => {
-                      router.pushConnect(PixwayAppRoutes.MY_TOKENS);
-                    }
-              }
+              onClick={onClickButton}
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
             >
-              {context?.defaultTheme?.configurations?.contentData
-                ?.checkoutConfig?.actionButton?.label
-                ? context?.defaultTheme?.configurations?.contentData
-                    ?.checkoutConfig?.actionButton?.label
-                : translate('tokens>tokenTransferController>goToMyTokens')}
+              {buttonText()}
             </PixwayButton>
           </div>
         );

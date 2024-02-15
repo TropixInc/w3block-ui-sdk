@@ -63,6 +63,9 @@ export enum INPUTS_POSSIBLE {
   credit_card_holder_postal_code = 'credit_card_holder_postal_code',
   credit_card_holder_phone = 'credit_card_holder_phone',
   installments = 'installments',
+  credit_card_id = 'credit_card_id',
+  save_credit_card = 'save_credit_card',
+  save_credit_card_name = 'save_credit_card_name',
 }
 
 export const CheckoutPaymentComponent = ({
@@ -223,7 +226,10 @@ export const CheckoutPaymentComponent = ({
         input !== INPUTS_POSSIBLE.credit_card_expiry &&
         input !== INPUTS_POSSIBLE.credit_card_ccv &&
         input !== INPUTS_POSSIBLE.credit_card_holder_name &&
-        input !== INPUTS_POSSIBLE.installments
+        input !== INPUTS_POSSIBLE.installments &&
+        input !== INPUTS_POSSIBLE.credit_card_id &&
+        input !== INPUTS_POSSIBLE.save_credit_card &&
+        input !== INPUTS_POSSIBLE.save_credit_card_name
       ) {
         if (
           includeTwoCpfs &&

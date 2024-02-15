@@ -330,19 +330,15 @@ export const CheckoutPayment = () => {
               '?' +
               query.split('?')[0],
             couponCode: orderInfo.couponCode,
-            payments:
-              coinPayment?.length && coinPayment?.length > 0
+            payments: orderInfo.isCoinPayment
+              ? coinPayment?.length && coinPayment?.length > 0
                 ? isFree
                   ? [
                       {
                         currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
                         paymentMethod: 'crypto',
                         amountType: 'percentage',
-                        amount: (
-                          (parseFloat(coinPayment?.[0]?.totalPrice ?? '') *
-                            100) /
-                          parseFloat(orderInfo?.cartPrice ?? '')
-                        ).toFixed(5),
+                        amount: '100',
                       },
                     ]
                   : [
@@ -365,12 +361,8 @@ export const CheckoutPayment = () => {
                       {
                         currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
                         paymentMethod: 'crypto',
-                        amountType: 'percentage',
-                        amount: (
-                          (parseFloat(coinPayment?.[0]?.totalPrice ?? '') *
-                            100) /
-                          parseFloat(orderInfo?.cartPrice ?? '')
-                        ).toFixed(5),
+                        amountType: 'fixed',
+                        amount: coinPayment?.[0]?.totalPrice,
                       },
                     ]
                 : [
@@ -388,10 +380,33 @@ export const CheckoutPayment = () => {
                               ),
                           }
                         : undefined,
-                      amountType: 'percentage',
-                      amount: '100',
+                      amountType: 'all_remaining',
                     },
-                  ],
+                    {
+                      currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                      paymentMethod: 'crypto',
+                      amountType: 'fixed',
+                      amount: '0',
+                    },
+                  ]
+              : [
+                  {
+                    currencyId: orderInfo.currencyId,
+                    paymentMethod: orderInfo.choosedPayment?.paymentMethod,
+                    paymentProvider: orderInfo.choosedPayment?.paymentProvider,
+                    providerInputs: orderInfo.choosedPayment?.inputs
+                      ? {
+                          ...inputs,
+                          transparent_checkout:
+                            orderInfo.choosedPayment?.inputs?.includes(
+                              'transparent_checkout'
+                            ),
+                        }
+                      : undefined,
+                    amountType: 'percentage',
+                    amount: '100',
+                  },
+                ],
           },
         },
         {
