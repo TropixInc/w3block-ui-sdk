@@ -44,7 +44,7 @@ export const StatementComponentSDK = ({
     } else {
       if (statement?.status == Erc20ActionStatus.SUCCESS) {
         return {
-          color: 'pw-stroke-rose-500',
+          color: 'pw-text-rose-500',
           icon: (
             <RejectIcon className="pw-stroke-rose-500 pw-w-[16px] pw-h-[16px]" />
           ),
@@ -52,7 +52,7 @@ export const StatementComponentSDK = ({
         };
       } else {
         return {
-          color: 'pw-stroke-rose-500',
+          color: 'pw-text-rose-500',
           icon: (
             <RejectIcon className="pw-stroke-rose-500 pw-w-[16px] pw-h-[16px]" />
           ),

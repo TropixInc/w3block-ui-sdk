@@ -120,6 +120,15 @@ const _CheckoutInfo = ({
 }: CheckoutInfoProps) => {
   const { datasource } = useDynamicApi();
   const context = useContext(ThemeContext);
+  const hideCoupon =
+    context?.defaultTheme?.configurations?.contentData?.checkoutConfig
+      ?.hideCoupon;
+  const editableDestination =
+    context?.defaultTheme?.configurations?.contentData?.checkoutConfig
+      ?.editableDestination;
+  const automaxLoyalty =
+    context?.defaultTheme?.configurations?.contentData?.checkoutConfig
+      ?.automaxLoyalty;
   const organizedLoyalties = useGetRightWallet();
   const router = useRouterConnect();
   const profile = useProfile();
@@ -181,7 +190,6 @@ const _CheckoutInfo = ({
   const [paymentAmount, setPaymentAmount] = useState('');
   const [coinAmountPayment, setCoinAmountPayment] = useState('');
   const { data: session } = usePixwaySession();
-
   const token = session ? (session.accessToken as string) : null;
 
   useEffect(() => {
@@ -945,6 +953,35 @@ const _CheckoutInfo = ({
     }
   };
 
+  const changeValue = (value: string) => {
+    setPaymentAmount(value as string);
+    if (automaxLoyalty) {
+      if (
+        organizedLoyalties &&
+        organizedLoyalties?.length > 0 &&
+        organizedLoyalties?.some(
+          (wallet) =>
+            wallet?.type == 'loyalty' &&
+            wallet?.balance &&
+            parseFloat(wallet?.balance ?? '0') > 0
+        )
+      ) {
+        const balance = parseFloat(
+          organizedLoyalties.find(
+            (wallet) =>
+              wallet?.type == 'loyalty' &&
+              wallet?.balance &&
+              parseFloat(wallet?.balance ?? '0') > 0
+          )?.balance ?? '0'
+        );
+        if (balance < parseFloat(value))
+          setCoinAmountPayment(balance.toFixed(2));
+        else if (balance > parseFloat(value) || balance == parseFloat(value))
+          setCoinAmountPayment(value);
+      } else setCoinAmountPayment('');
+    }
+  };
+
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
@@ -968,6 +1005,7 @@ const _CheckoutInfo = ({
               <>
                 {datasource?.master?.data && (
                   <Selector
+                    disabled={!editableDestination}
                     data={datasource?.master?.data}
                     title="Restaurante"
                     initialValue={
@@ -991,7 +1029,7 @@ const _CheckoutInfo = ({
                   <div className="pw-flex pw-gap-3">
                     <CurrencyInput
                       onChangeValue={(_, value) => {
-                        setPaymentAmount(value as string);
+                        changeValue(value as string);
                       }}
                       InputElement={
                         <input
@@ -1001,47 +1039,94 @@ const _CheckoutInfo = ({
                       }
                     />
                   </div>
+                  {automaxLoyalty ? (
+                    <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2">
+                      Saldo Zucas:{' '}
+                      {organizedLoyalties &&
+                      organizedLoyalties?.length > 0 &&
+                      organizedLoyalties?.some(
+                        (wallet) =>
+                          wallet?.type == 'loyalty' &&
+                          wallet?.balance &&
+                          parseFloat(wallet?.balance ?? '0') > 0
+                      ) ? (
+                        <>
+                          {organizedLoyalties.find(
+                            (wallet) =>
+                              wallet?.type == 'loyalty' &&
+                              wallet?.balance &&
+                              parseFloat(wallet?.balance ?? '0') > 0
+                          ).pointsPrecision == 'decimal'
+                            ? parseFloat(
+                                organizedLoyalties.find(
+                                  (wallet) =>
+                                    wallet?.type == 'loyalty' &&
+                                    wallet?.balance &&
+                                    parseFloat(wallet?.balance ?? '0') > 0
+                                )?.balance ?? '0'
+                              ).toFixed(2)
+                            : parseFloat(
+                                organizedLoyalties.find(
+                                  (wallet) =>
+                                    wallet?.type == 'loyalty' &&
+                                    wallet?.balance &&
+                                    parseFloat(wallet?.balance ?? '0') > 0
+                                )?.balance ?? '0'
+                              ).toFixed(0)}
+                        </>
+                      ) : (
+                        '0'
+                      )}
+                    </p>
+                  ) : null}
                 </div>
               </>
             )}
-            <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
-              Cupom
-            </p>
-            <div className="pw-mb-8">
-              <div className="pw-flex pw-gap-3">
-                <input
-                  name="couponCode"
-                  id="couponCode"
-                  placeholder="Código do cupom"
-                  className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3] focus:pw-outline-none"
-                  defaultValue={couponCodeInput}
-                />
-                <PixwayButton
-                  onClick={onSubmitCupom}
-                  className="!pw-py-3 sm:!pw-px-[42px] !pw-px-0 sm:pw-flex-[0.1] pw-flex-[1] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
-                >
-                  Aplicar cupom
-                </PixwayButton>
-              </div>
-              {orderPreview?.appliedCoupon && (
-                <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
-                  Cupom <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
-                  aplicado com sucesso!
+            {hideCoupon ? null : (
+              <>
+                <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
+                  Cupom
                 </p>
-              )}
-              {orderPreview?.appliedCoupon === null &&
-                couponCodeInput !== '' &&
-                couponCodeInput !== undefined && (
-                  <p className="pw-text-red-500 pw-text-xs pw-mt-2">
-                    Cupom inválido ou expirado.
-                  </p>
-                )}
-            </div>
+                <div className="pw-mb-8">
+                  <div className="pw-flex pw-gap-3">
+                    <input
+                      name="couponCode"
+                      id="couponCode"
+                      placeholder="Código do cupom"
+                      className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3] focus:pw-outline-none"
+                      defaultValue={couponCodeInput}
+                    />
+                    <PixwayButton
+                      onClick={onSubmitCupom}
+                      className="!pw-py-3 sm:!pw-px-[42px] !pw-px-0 sm:pw-flex-[0.1] pw-flex-[1] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
+                    >
+                      Aplicar cupom
+                    </PixwayButton>
+                  </div>
+                  {orderPreview?.appliedCoupon && (
+                    <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
+                      Cupom <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
+                      aplicado com sucesso!
+                    </p>
+                  )}
+                  {orderPreview?.appliedCoupon === null &&
+                    couponCodeInput !== '' &&
+                    couponCodeInput !== undefined && (
+                      <p className="pw-text-red-500 pw-text-xs pw-mt-2">
+                        Cupom inválido ou expirado.
+                      </p>
+                    )}
+                </div>
+              </>
+            )}
             {parseFloat(
               orderPreview?.payments?.filter(
                 (e) => e.currencyId === currencyIdState
               )[0]?.totalPrice ?? '0'
-            ) !== 0 && (
+            ) === 0 ||
+            (isCoinPayment &&
+              (paymentAmount === '' ||
+                parseFloat(paymentAmount) === 0)) ? null : (
               <PaymentMethodsComponent
                 loadingPreview={isLoadingPreview}
                 methodSelected={
@@ -1057,94 +1142,106 @@ const _CheckoutInfo = ({
             )}
             {isCoinPayment && (
               <>
-                <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                  Zucas (Saldo:{' '}
-                  {organizedLoyalties &&
-                  organizedLoyalties?.length > 0 &&
-                  organizedLoyalties?.some(
-                    (wallet) =>
-                      wallet?.type == 'loyalty' &&
-                      wallet?.balance &&
-                      parseFloat(wallet?.balance ?? '0') > 0
-                  ) ? (
-                    <>
-                      {organizedLoyalties.find(
+                {!automaxLoyalty ? (
+                  <>
+                    <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
+                      Zucas (Saldo:{' '}
+                      {organizedLoyalties &&
+                      organizedLoyalties?.length > 0 &&
+                      organizedLoyalties?.some(
                         (wallet) =>
                           wallet?.type == 'loyalty' &&
                           wallet?.balance &&
                           parseFloat(wallet?.balance ?? '0') > 0
-                      ).pointsPrecision == 'decimal'
-                        ? parseFloat(
-                            organizedLoyalties.find(
-                              (wallet) =>
-                                wallet?.type == 'loyalty' &&
-                                wallet?.balance &&
-                                parseFloat(wallet?.balance ?? '0') > 0
-                            )?.balance ?? '0'
-                          ).toFixed(2)
-                        : parseFloat(
-                            organizedLoyalties.find(
-                              (wallet) =>
-                                wallet?.type == 'loyalty' &&
-                                wallet?.balance &&
-                                parseFloat(wallet?.balance ?? '0') > 0
-                            )?.balance ?? '0'
-                          ).toFixed(0)}
-                    </>
-                  ) : null}
-                  )
-                </p>
-                <div className="pw-mb-8">
-                  <div className="pw-flex pw-gap-3">
-                    <CurrencyInput
-                      hideSymbol
-                      onChangeValue={(_, value) => {
-                        setCoinAmountPayment(value as string);
-                      }}
-                      InputElement={
-                        <input
-                          disabled={paymentAmount === ''}
-                          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none"
-                          placeholder="0,0"
+                      ) ? (
+                        <>
+                          {organizedLoyalties.find(
+                            (wallet) =>
+                              wallet?.type == 'loyalty' &&
+                              wallet?.balance &&
+                              parseFloat(wallet?.balance ?? '0') > 0
+                          ).pointsPrecision == 'decimal'
+                            ? parseFloat(
+                                organizedLoyalties.find(
+                                  (wallet) =>
+                                    wallet?.type == 'loyalty' &&
+                                    wallet?.balance &&
+                                    parseFloat(wallet?.balance ?? '0') > 0
+                                )?.balance ?? '0'
+                              ).toFixed(2)
+                            : parseFloat(
+                                organizedLoyalties.find(
+                                  (wallet) =>
+                                    wallet?.type == 'loyalty' &&
+                                    wallet?.balance &&
+                                    parseFloat(wallet?.balance ?? '0') > 0
+                                )?.balance ?? '0'
+                              ).toFixed(0)}
+                        </>
+                      ) : (
+                        '0'
+                      )}
+                      )
+                    </p>
+                    <div className="pw-mb-8">
+                      <div className="pw-flex pw-gap-3">
+                        <CurrencyInput
+                          hideSymbol
+                          onChangeValue={(_, value) => {
+                            setCoinAmountPayment(value as string);
+                          }}
+                          defaultValue={coinAmountPayment}
+                          InputElement={
+                            <input
+                              disabled={paymentAmount === '' || automaxLoyalty}
+                              className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none"
+                              placeholder="0,0"
+                            />
+                          }
                         />
-                      }
-                    />
-                  </div>
-                </div>
+                      </div>
+                    </div>
+                  </>
+                ) : null}
                 {!payWithCoin() ? (
                   <Alert variant="atention" className="pw-mt-3">
                     {coinError}
                   </Alert>
                 ) : null}
-                <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C] pw-mt-[40px]">
-                  Resumo da compra
-                </p>
-                <PriceAndGasInfo
-                  payments={orderPreview?.payments}
-                  name={
-                    orderPreview?.products && orderPreview?.products?.length
-                      ? orderPreview?.products[0]?.prices?.find(
-                          (price) => price?.currency?.id == currencyIdState
-                        )?.currency?.name
-                      : 'BRL'
-                  }
-                  loading={isLoading || isLoadingPreview}
-                  className="pw-mt-4"
-                />
-                <Alert
-                  variant="success"
-                  className="!pw-text-black !pw-font-normal pw-mt-4"
-                >
-                  Voce irá ganhar{' '}
-                  <b className="pw-mx-[4px]">
-                    {isLoading || isLoadingPreview ? (
-                      <Shimmer />
-                    ) : (
-                      'R$' + orderPreview?.cashback?.cashbackAmount
-                    )}
-                  </b>{' '}
-                  em Zucas.
-                </Alert>
+                {paymentAmount === '' ||
+                parseFloat(paymentAmount) === 0 ? null : (
+                  <>
+                    <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C] pw-mt-[40px]">
+                      Resumo da compra
+                    </p>
+                    <PriceAndGasInfo
+                      payments={orderPreview?.payments}
+                      name={
+                        orderPreview?.products && orderPreview?.products?.length
+                          ? orderPreview?.products[0]?.prices?.find(
+                              (price) => price?.currency?.id == currencyIdState
+                            )?.currency?.name
+                          : 'BRL'
+                      }
+                      loading={isLoading || isLoadingPreview}
+                      className="pw-mt-4"
+                    />
+                    <Alert
+                      variant="success"
+                      className="!pw-text-black !pw-font-normal pw-mt-4"
+                    >
+                      Voce irá ganhar{' '}
+                      <b className="pw-mx-[4px]">
+                        {isLoading || isLoadingPreview ? (
+                          <Shimmer />
+                        ) : (
+                          'R$' + orderPreview?.cashback?.cashbackAmount
+                        )}
+                      </b>{' '}
+                      em Zucas.
+                    </Alert>
+                  </>
+                )}
               </>
             )}
             <div className="pw-flex pw-mt-4 pw-gap-x-4">
@@ -1161,7 +1258,13 @@ const _CheckoutInfo = ({
                 {translate('shared>cancel')}
               </PixwayButton>
               <PixwayButton
-                disabled={!orderPreview || isLoadingPreview || !payWithCoin()}
+                disabled={
+                  !orderPreview ||
+                  isLoadingPreview ||
+                  !payWithCoin() ||
+                  (isCoinPayment &&
+                    (paymentAmount === '' || parseFloat(paymentAmount) === 0))
+                }
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
@@ -1181,14 +1284,10 @@ const _CheckoutInfo = ({
                   <Alert variant="error">{error}</Alert>
                 ) : (
                   <>
-                    <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
+                    <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
                       Pagamento realizado com sucesso!
                     </p>
-                    <p className="pw-text-sm pw-font-normal pw-text-center sm:pw-text-left pw-text-black">
-                      Apresente esse QR CODE ao estabelecimento para comprovar
-                      seu pagamento.
-                    </p>
-                    <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center sm:pw-text-left pw-mt-5">
+                    <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px]">
                       <div>
                         {statusResponse?.deliverId ? (
                           <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
@@ -1199,7 +1298,7 @@ const _CheckoutInfo = ({
                           </div>
                         ) : (
                           <>
-                            <p className="pw-text-base pw-font-semibold pw-text-center sm:pw-text-left pw-text-black">
+                            <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
                               Aguardando confirmação do pagamento
                             </p>
                             <div className="pw-mt-5">
