@@ -33,6 +33,7 @@ interface WalletCardProps {
   image?: string;
   pointsPrecision?: 'decimal' | 'integer';
   address?: string;
+  hideLoyaltyAuthentication?: boolean;
 }
 
 export const WalletCard = ({
@@ -43,6 +44,7 @@ export const WalletCard = ({
   image,
   pointsPrecision = 'integer',
   address,
+  hideLoyaltyAuthentication = false,
 }: WalletCardProps) => {
   const { name } = useCompanyConfig();
   const { push } = useRouterConnect();
@@ -121,7 +123,7 @@ export const WalletCard = ({
           Adicionar
         </WeblockButton>
       ) : null}
-      {type == 'loyalty' && (
+      {type == 'loyalty' && !hideLoyaltyAuthentication && (
         <WeblockButton
           onClick={() => setAuthenticatePaymentModal?.(true)}
           className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"

@@ -3,6 +3,7 @@ import { CSSProperties, lazy } from 'react';
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useUserWallet } from '../../hooks/useUserWallet';
 import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 import { useGetRightWallet } from '../../utils/getRightWallet';
@@ -15,6 +16,9 @@ const WalletCard = lazy(() =>
 export const WalletHeaderSDK = ({ title = 'Carteira' }: { title?: string }) => {
   const { mainWallet } = useUserWallet();
   const organizedLoyalties = useGetRightWallet();
+  const { defaultTheme } = UseThemeConfig();
+  const hideLoyaltyAuthentication =
+    defaultTheme?.configurations?.contentData?.hideLoyaltyAuthentication;
   return (
     <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
       <div className="pw-flex pw-justify-between">
@@ -83,6 +87,7 @@ export const WalletHeaderSDK = ({ title = 'Carteira' }: { title?: string }) => {
                     type={wallet?.type as any}
                     currency={wallet?.currency}
                     chainId={wallet?.chainId}
+                    hideLoyaltyAuthentication={hideLoyaltyAuthentication}
                   />{' '}
                 </SwiperSlide>
               ))}

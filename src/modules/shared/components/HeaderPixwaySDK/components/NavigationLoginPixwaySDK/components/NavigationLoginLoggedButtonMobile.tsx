@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useClickAway, useCopyToClipboard } from 'react-use';
 
+import { UseThemeConfig } from '../../../../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
 import CopyIcon from '../../../../../assets/icons/copyIcon.svg?react';
 import UserSimpleIcon from '../../../../../assets/icons/user.svg?react';
@@ -124,6 +125,10 @@ export const NavigationLoginLoggedButtonMobile = ({
   //   );
   // };
 
+  const { defaultTheme } = UseThemeConfig();
+  const hideLoyaltyAuthentication =
+    defaultTheme?.configurations?.contentData?.hideLoyaltyAuthentication;
+
   return session ? (
     <div style={{ backgroundColor }}>
       <div onClick={() => setUserMenu(!userMenu)} className="pw-cursor-pointer">
@@ -229,7 +234,8 @@ export const NavigationLoginLoggedButtonMobile = ({
               ) : null
             )}
             {organizedWallets.length &&
-            organizedWallets.some((w) => w.type == 'loyalty') ? (
+            organizedWallets.some((w) => w.type == 'loyalty') &&
+            !hideLoyaltyAuthentication ? (
               <WeblockButton
                 onClick={() => setAuthenticatePaymentModal?.(true)}
                 className="!pw-text-white !pw-py-[10px] !pw-px-[24px] pw-mt-4 pw-w-full"

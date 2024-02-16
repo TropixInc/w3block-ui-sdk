@@ -11,6 +11,7 @@ const InternalPagesLayoutBase = lazy(() =>
   ).then((mod) => ({ default: mod.InternalPagesLayoutBase }))
 );
 
+import { useRouterConnect } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 const OrderListComponentSDK = lazy(() =>
@@ -21,10 +22,14 @@ const OrderListComponentSDK = lazy(() =>
 
 const _MyOrdersTemplateSDK = () => {
   const { isAuthorized, isLoading } = usePrivateRoute();
+  const router = useRouterConnect();
+  const orderId = router?.query?.orderId;
   return isAuthorized && !isLoading ? (
     <div>
       <InternalPagesLayoutBase>
-        <InternalpageHeaderWithFunds title="Minhas compras" />
+        <InternalpageHeaderWithFunds
+          title={`${orderId ? 'Detalhes da compra' : 'Minhas compras'}`}
+        />
         <OrderListComponentSDK />
       </InternalPagesLayoutBase>
     </div>

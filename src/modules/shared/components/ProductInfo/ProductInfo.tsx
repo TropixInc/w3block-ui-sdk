@@ -147,7 +147,7 @@ export const ProductInfo = ({
                   <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
                 ) : (
                   currency
-                )}
+                )}{' '}
                 {originalPrice}
               </p>
             )}
@@ -160,7 +160,7 @@ export const ProductInfo = ({
                     <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
                   ) : (
                     anchorCurrencySymbol
-                  )}
+                  )}{' '}
                   {anchorCurrencyAmount}
                 </p>
                 <p className="pw-font-[400] pw-text-[#35394C] pw-opacity-50 pw-text-sm pw-flex pw-items-center">
@@ -171,7 +171,7 @@ export const ProductInfo = ({
                     <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
                   ) : (
                     currency
-                  )}
+                  )}{' '}
                   {price})
                 </p>
               </>
@@ -183,7 +183,7 @@ export const ProductInfo = ({
                   <EthIcon className="pw-h-[16px] pw-w-[16px] pw-mr-2" />
                 ) : (
                   currency
-                )}
+                )}{' '}
                 {price}
               </p>
             )}
@@ -202,7 +202,7 @@ export const ProductInfo = ({
             <EthIcon className="pw-w-[16px] pw-h-[16px] pw-mr-2" />
           ) : (
             currency
-          )}
+          )}{' '}
           {(parseFloat(price) * (quantity ?? 1)).toFixed(2)}
         </p>
       </div>

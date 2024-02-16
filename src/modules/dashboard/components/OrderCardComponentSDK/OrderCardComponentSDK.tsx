@@ -7,10 +7,11 @@ import { CheckoutStatus } from '../../../checkout';
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
 import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
 import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
-import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
+// import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
 import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react';
 import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
+import { useGetApi } from '../../hooks/useGetApi';
 import { PriceComponent } from '../PriceComponent/PriceComponent';
 
 const ProductInfo = lazy(() =>
@@ -37,6 +38,8 @@ interface OrderCardComponentSDKProps {
   expiresIn?: string;
   paymentProvider?: string;
   productsRes?: any[];
+  startOpened?: boolean;
+  deliverId?: string;
 }
 
 export const OrderCardComponentSDK = ({
@@ -46,19 +49,22 @@ export const OrderCardComponentSDK = ({
   expiresIn,
   paymentProvider,
   productsRes,
+  deliverId,
+  startOpened = false,
 }: OrderCardComponentSDKProps) => {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(startOpened);
   const { data: order } = useGetEspecificOrder(id, opened);
   const statusObj = getStatusText(status);
   const products = order?.data.products;
   const [infoOpened, setInfoOpened] = useState(false);
+  const { data } = useGetApi(order?.data?.destinationWalletAddress, opened);
   return (
     <div className="pw-p-6 pw-bg-white pw-rounded-xl pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-w-full">
       <div className="pw-flex pw-justify-between">
         <div className="">
           <p
             style={{ color: statusObj?.color }}
-            className="pw-text-sm pw-font-bold pw-flex pw-gap-1"
+            className="pw-text-sm pw-font-bold pw-flex pw-gap-1 pw-items-center"
           >
             {statusObj?.icon && <span>{statusObj?.icon}</span>}
 
@@ -95,26 +101,36 @@ export const OrderCardComponentSDK = ({
                 Expira as:{' '}
               </p>
               <p className="pw-text-xs pw-text-slate-500">
-                {format(new Date(expiresIn), 'H:mm d MMM, yyyy ')}
+                {format(new Date(expiresIn ?? ''), 'H:mm d MMM, yyyy ')}
               </p>
             </div>
           )}
           <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
             ID: {id}{' '}
-            <span>
+            {/* <span>
               <CopyIcon className="pw-fill-[#295BA6] pw-text-xs pw-w-[12px] pw-h-[12px] pw-cursor-pointer" />
-            </span>
+            </span> */}
           </p>
+          {deliverId && (
+            <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
+              Compra: {deliverId}{' '}
+              {/* <span>
+                <CopyIcon className="pw-fill-[#295BA6] pw-text-xs pw-w-[12px] pw-h-[12px] pw-cursor-pointer" />
+              </span> */}
+            </p>
+          )}
         </div>
         <div className="pw-flex pw-items-center pw-gap-x-2 pw-justify-end">
-          <div className="">
-            <p className="pw-text-xs pw-font-[500] pw-text-[#353945] pw-text-right">
-              Pedido realizado em:
-            </p>
-            <p className="pw-text-xs pw-font-[500] pw-text-[#353945]  pw-text-right">
-              {format(new Date(createdAt), 'd MMM, yyyy')}
-            </p>
-          </div>
+          {createdAt && (
+            <div className="">
+              <p className="pw-text-xs pw-font-[500] pw-text-[#353945] pw-text-right">
+                Pedido realizado em:
+              </p>
+              <p className="pw-text-xs pw-font-[500] pw-text-[#353945]  pw-text-right">
+                {format(new Date(createdAt ?? ''), 'd MMM, yyyy')}
+              </p>
+            </div>
+          )}
           <div
             onClick={() => setOpened(!opened)}
             className="pw-w-[30px] pw-h-[30px] pw-flex  pw-justify-center pw-items-center pw-bg-[#EFEFEF] pw-rounded-full pw-cursor-pointer"
@@ -164,7 +180,12 @@ export const OrderCardComponentSDK = ({
                             CurrencyEnum.BRL
                       }
                       image={
-                        prod?.productToken?.product?.images?.length
+                        data?.data?.data?.length > 0 &&
+                        data?.data?.data?.[0]?.attributes?.image
+                          ? 'https://cms.foodbusters.com.br' +
+                            data?.data?.data?.[0]?.attributes?.image?.data
+                              ?.attributes?.formats?.thumbnail?.url
+                          : prod?.productToken?.product?.images?.length
                           ? prod?.productToken?.product?.images?.[0]?.thumb
                           : prod?.productToken?.metadata?.media?.[0]?.cached
                               .smallSizeUrl ?? ''
@@ -208,10 +229,23 @@ export const OrderCardComponentSDK = ({
                   ))
               : null}
           </div>
+          {data?.data?.data?.[0]?.attributes?.name ? (
+            <div className="pw-flex pw-justify-between pw-mt-6 pw-mb-2">
+              <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
+                Destinatário
+              </p>
+              <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
+                {' '}
+                {data?.data?.data?.[0]?.attributes?.name}
+              </p>
+            </div>
+          ) : null}
           <PriceComponent
-            payments={order.data.payments}
+            payments={order?.data?.payments}
             name={order?.data?.currency?.code ?? CurrencyEnum.BRL}
-            className="pw-mt-6"
+            className={`${
+              data?.data?.data?.[0]?.attributes?.name ? '' : 'pw-mt-6'
+            }`}
           />
         </div>
       )}

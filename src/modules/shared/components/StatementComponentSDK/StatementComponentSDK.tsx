@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
+import { useCopyToClipboard } from 'react-use';
+
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 
 import PendingIcon from '../../assets/icons/clock.svg?react';
-// import  CopyIcon  from '../../assets/icons/copy.svg?react';
+import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import RejectIcon from '../../assets/icons/minusCircle.svg?react';
 import ApprovedIcon from '../../assets/icons/plusCircle.svg?react';
 import { useLocale } from '../../hooks/useLocale';
@@ -22,6 +26,14 @@ export const StatementComponentSDK = ({
   future,
 }: StatementComponentSDKProps) => {
   const locale = useLocale();
+  const [state, copyToClipboard] = useCopyToClipboard();
+  const [isCopied, setIsCopied] = useState(false);
+  const handleCopy = () => {
+    copyToClipboard(statement?.txHash ?? '');
+    if (!state.error) setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 3000);
+  };
+
   const getStatementColorAndIcon = () => {
     if (statement?.transactionType == 'receiving') {
       if (statement?.status == Erc20ActionStatus.SUCCESS) {
@@ -34,9 +46,9 @@ export const StatementComponentSDK = ({
         };
       } else {
         return {
-          color: 'pw-text-orange-600',
+          color: 'pw-text-blue-800',
           icon: (
-            <PendingIcon className="pw-stroke-orange-600 pw-w-[16px] pw-h-[16px]" />
+            <PendingIcon className="pw-stroke-blue-800 pw-w-[16px] pw-h-[16px]" />
           ),
           text: 'Carga',
         };
@@ -64,32 +76,70 @@ export const StatementComponentSDK = ({
   const subtext = () => {
     if (
       (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
+        'cashback_multilevel' &&
+      ((statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+        ?.indirectCashbackLevel == 1 ||
+        (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+          ?.indirectCashbackLevel > 1)
+    ) {
+      return 'Comissão por pagamento de indicado';
+    }
+    if (
+      (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
       'cashback_multilevel'
     ) {
       return (
         <p>
-          Cashback na{' '}
-          <a>
-            compra{' '}
+          Cashback no{' '}
+          <a
+            className="!pw-font-bold"
+            href={`/profile/orders?orderId=${
+              (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+                ?.commerce?.orderId
+            }`}
+          >
+            pagamento #
             {
               (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
                 ?.commerce?.deliverId
             }
-          </a>
+          </a>{' '}
+          para{' '}
+          {
+            (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+              ?.operatorName
+          }
         </p>
       );
     } else if (
       statement?.commerce &&
-      statement?.request?.to === '0x0000000000000000000000000000000000000000'
+      statement?.request?.from === '0x0000000000000000000000000000000000000000'
     ) {
       return (
         <p>
-          Carga de Zuca para <a>pagamento {statement?.commerce?.deliverId}</a> a{' '}
-          {statement?.commerce?.destinationUserName}
+          Carga de Zuca para{' '}
+          <a
+            className="!pw-font-bold"
+            href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
+          >
+            pagamento #{statement?.commerce?.deliverId}
+          </a>{' '}
+          a {statement?.commerce?.destinationUserName}
         </p>
       );
     } else if (statement?.commerce) {
-      return `Compra no valor total de ${statement?.commerce?.erc20PurchaseAmount}`;
+      return (
+        <p>
+          <a
+            className="!pw-font-bold"
+            href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
+          >
+            Pagamento #{statement?.commerce?.deliverId}
+          </a>{' '}
+          no valor total de {statement?.commerce?.erc20PurchaseAmount} ZUCA para{' '}
+          {statement?.commerce?.destinationUserName}
+        </p>
+      );
     } else return '';
   };
   return (
@@ -116,17 +166,29 @@ export const StatementComponentSDK = ({
           )}
         </div>
         <div className="pw-flex pw-items-center pw-gap-2">
-          <p className="pw-text-black pw-text-xs pw-font-medium">
-            {future ? (
-              <>
-                Comprador: {statement?.buyerName} ({statement?.buyerEmail})
-              </>
-            ) : (
-              <>ID: {statement?.id}</>
-            )}
-          </p>
-          {/* <CopyIcon className="pw-fill-blue-800 pw-w-[13px] pw-h-[13px]" /> */}
+          {future ? (
+            <p className="pw-text-black pw-text-xs pw-font-medium">
+              Comprador: {statement?.buyerName} ({statement?.buyerEmail})
+            </p>
+          ) : (
+            <p className="pw-text-[#777E8F] pw-text-xs pw-font-medium">
+              tx: {statement?.txHash?.substring(0, 6)}
+              {'...'}
+              {statement?.txHash?.substring(
+                statement?.txHash?.length - 4,
+                statement?.txHash?.length
+              )}
+            </p>
+          )}
+          <button onClick={handleCopy}>
+            <CopyIcon className="pw-stroke-[#777E8F] pw-w-[13px] pw-h-[13px]" />
+          </button>
         </div>
+        {isCopied && (
+          <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
+            Copiado!
+          </span>
+        )}
         {future ? (
           <div className="pw-flex pw-items-center pw-gap-2">
             <p className="pw-text-black pw-text-xs pw-font-medium">
@@ -150,7 +212,7 @@ export const StatementComponentSDK = ({
             {statement?.currency}
           </span>
         </div>
-        <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mt-1">
+        <div className="pw-text-left pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mt-1">
           {subtext()}
         </div>
       </div>

@@ -21,6 +21,7 @@ export interface Statement {
     to?: string;
     from?: string;
   };
+  txHash?: string;
 }
 
 export enum Erc20ActionType {
