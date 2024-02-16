@@ -17,9 +17,13 @@ export interface PaymentsResponse {
   originalTotalPrice?: string;
   cartPrice?: string;
   clientServiceFee?: string;
-  gasFee?: GasFee;
+  gasFee?: GasFee | string;
   providersForSelection?: PaymentMethodsAvaiable[];
   currency?: CurrencyResponse;
+  amount?: string;
+  originalTotalAmount?: string;
+  originalAmount?: string;
+  fullOrderTotalAmount?: string;
 }
 export interface OrderPreviewResponse {
   products: Product[];

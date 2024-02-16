@@ -98,6 +98,8 @@ export const WalletStatementTemplateSDK = () => {
                 )
                   ? 'receiving'
                   : 'sending',
+                commerce: item?.metadata?.commerce,
+                request: item?.request,
               }}
             />
           ))

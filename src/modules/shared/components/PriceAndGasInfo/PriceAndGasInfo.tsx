@@ -13,6 +13,7 @@ const Shimmer = lazy(() =>
 );
 
 import { PaymentsResponse } from '../../../checkout/interface/interface';
+import { GasFee } from '../../interface/GasFee';
 import TranslatableComponent from '../TranslatableComponent';
 
 interface PriceAndGasInfo {
@@ -78,10 +79,11 @@ const _PriceAndGasInfo = ({
                   parseFloat(payment()?.cartPrice ?? '') && (
                   <CriptoValueComponent
                     code={name}
-                    value={originalPrice ?? ''}
+                    value={payment()?.originalCartPrice ?? ''}
                     crypto={
                       payment()?.currency?.symbol == 'MATIC' ||
-                      payment()?.currency?.symbol == 'ETH'
+                      payment()?.currency?.symbol == 'ETH' ||
+                      payment()?.currency?.symbol == 'ZUCA'
                     }
                     fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                   />
@@ -102,7 +104,8 @@ const _PriceAndGasInfo = ({
                 }
                 crypto={
                   payment()?.currency?.symbol == 'MATIC' ||
-                  payment()?.currency?.symbol == 'ETH'
+                  payment()?.currency?.symbol == 'ETH' ||
+                  payment()?.currency?.symbol == 'ZUCA'
                 }
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
               />
@@ -119,11 +122,13 @@ const _PriceAndGasInfo = ({
               <div className="pw-flex pw-gap-2 pw-text-[#35394C]">
                 -{' '}
                 <CriptoValueComponent
-                  code={name}
+                  pointsPrecision="decimal"
+                  code={coinPayment()?.currency?.symbol}
                   value={coinPayment()?.cartPrice ?? ''}
                   crypto={
                     coinPayment()?.currency?.symbol == 'MATIC' ||
-                    coinPayment()?.currency?.symbol == 'ETH'
+                    coinPayment()?.currency?.symbol == 'ETH' ||
+                    coinPayment()?.currency?.symbol == 'ZUCA'
                   }
                   fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                 />
@@ -154,7 +159,8 @@ const _PriceAndGasInfo = ({
                           value={payment()?.originalClientServiceFee ?? ''}
                           crypto={
                             payment()?.currency?.symbol == 'MATIC' ||
-                            payment()?.currency?.symbol == 'ETH'
+                            payment()?.currency?.symbol == 'ETH' ||
+                            payment()?.currency?.symbol == 'ZUCA'
                           }
                           fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                         />
@@ -164,7 +170,8 @@ const _PriceAndGasInfo = ({
                       value={payment()?.clientServiceFee ?? ''}
                       crypto={
                         payment()?.currency?.symbol == 'MATIC' ||
-                        payment()?.currency?.symbol == 'ETH'
+                        payment()?.currency?.symbol == 'ETH' ||
+                        payment()?.currency?.symbol == 'ZUCA'
                       }
                       fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                     />
@@ -174,7 +181,7 @@ const _PriceAndGasInfo = ({
             </div>
           )}
 
-        {parseFloat(payment()?.gasFee?.amount ?? '') == 0 ? null : (
+        {parseFloat((payment()?.gasFee as GasFee)?.amount ?? '') == 0 ? null : (
           <div className="pw-flex pw-justify-between pw-mt-2">
             <div className="pw-flex pw-gap-x-1">
               <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
@@ -184,13 +191,15 @@ const _PriceAndGasInfo = ({
             </div>
             {loading ? (
               <Shimmer />
-            ) : parseFloat(payment()?.gasFee?.amount ?? '') == 0 ? null : (
+            ) : parseFloat((payment()?.gasFee as GasFee)?.amount ?? '') ==
+              0 ? null : (
               <CriptoValueComponent
                 code={name}
-                value={payment()?.gasFee?.amount ?? ''}
+                value={(payment()?.gasFee as GasFee)?.amount ?? ''}
                 crypto={
                   payment()?.currency?.symbol == 'MATIC' ||
-                  payment()?.currency?.symbol == 'ETH'
+                  payment()?.currency?.symbol == 'ETH' ||
+                  payment()?.currency?.symbol == 'ZUCA'
                 }
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
               />
@@ -214,7 +223,8 @@ const _PriceAndGasInfo = ({
                     value={payment()?.originalTotalPrice ?? ''}
                     crypto={
                       payment()?.currency?.symbol == 'MATIC' ||
-                      payment()?.currency?.symbol == 'ETH'
+                      payment()?.currency?.symbol == 'ETH' ||
+                      payment()?.currency?.symbol == 'ZUCA'
                     }
                     fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                   />
@@ -225,7 +235,8 @@ const _PriceAndGasInfo = ({
                 showFree
                 crypto={
                   payment()?.currency?.symbol == 'MATIC' ||
-                  payment()?.currency?.symbol == 'ETH'
+                  payment()?.currency?.symbol == 'ETH' ||
+                  payment()?.currency?.symbol == 'ZUCA'
                 }
                 fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
               />

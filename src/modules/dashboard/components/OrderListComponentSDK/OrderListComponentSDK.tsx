@@ -16,7 +16,10 @@ const OrderCardComponentSDK = lazy(() =>
 
 export const OrderListComponentSDK = () => {
   const [actualPage, setActualPage] = useState(1);
-  const { data, refetch } = useGetOrders({ page: actualPage });
+  const { data, refetch } = useGetOrders({
+    page: actualPage,
+    search: 'a2101ec6-f297-4ea3-9d05-e15de23d3f51',
+  });
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps

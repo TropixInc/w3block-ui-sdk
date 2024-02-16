@@ -61,6 +61,37 @@ export const StatementComponentSDK = ({
       }
     }
   };
+  const subtext = () => {
+    if (
+      (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
+      'cashback_multilevel'
+    ) {
+      return (
+        <p>
+          Cashback na{' '}
+          <a>
+            compra{' '}
+            {
+              (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+                ?.commerce?.deliverId
+            }
+          </a>
+        </p>
+      );
+    } else if (
+      statement?.commerce &&
+      statement?.request?.to === '0x0000000000000000000000000000000000000000'
+    ) {
+      return (
+        <p>
+          Carga de Zuca para <a>pagamento {statement?.commerce?.deliverId}</a> a{' '}
+          {statement?.commerce?.destinationUserName}
+        </p>
+      );
+    } else if (statement?.commerce) {
+      return `Compra no valor total de ${statement?.commerce?.erc20PurchaseAmount}`;
+    } else return '';
+  };
   return (
     <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
       <div className="pw-flex pw-flex-col pw-items-start">
@@ -118,6 +149,9 @@ export const StatementComponentSDK = ({
           <span className="pw-text-black pw-text-[13px] pw-font-normal">
             {statement?.currency}
           </span>
+        </div>
+        <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mt-1">
+          {subtext()}
         </div>
       </div>
       <div className="pw-flex pw-flex-col pw-items-end">

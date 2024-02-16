@@ -5,23 +5,20 @@ import { format } from 'date-fns';
 
 import { CheckoutStatus } from '../../../checkout';
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
-const PriceAndGasInfo = lazy(() =>
-  import('../../../shared/components/PriceAndGasInfo/PriceAndGasInfo').then(
-    (mod) => ({ default: mod.PriceAndGasInfo })
-  )
-);
-
-const ProductInfo = lazy(() =>
-  import('../../../shared/components/ProductInfo/ProductInfo').then((mod) => ({
-    default: mod.ProductInfo,
-  }))
-);
 import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
 import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
 import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
 import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react';
 import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
+import { PriceComponent } from '../PriceComponent/PriceComponent';
+
+const ProductInfo = lazy(() =>
+  import('../../../shared/components/ProductInfo/ProductInfo').then((mod) => ({
+    default: mod.ProductInfo,
+  }))
+);
+
 export enum OrderStatusEnum {
   PENDING = 'pending',
   EXPIRED = 'expired',
@@ -157,7 +154,14 @@ export const OrderCardComponentSDK = ({
                   .map((prod: any, index: number) => (
                     <ProductInfo
                       currency={
-                        order?.data?.currency?.symbol ?? CurrencyEnum.BRL
+                        order?.data?.payments?.length > 1
+                          ? order?.data?.payments?.find(
+                              (res: { currencyId: string }) =>
+                                res.currencyId ===
+                                '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+                            )?.currency?.symbol ?? CurrencyEnum.BRL
+                          : order?.data?.payments?.[0]?.currency?.symbol ??
+                            CurrencyEnum.BRL
                       }
                       image={
                         prod?.productToken?.product?.images?.length
@@ -167,7 +171,11 @@ export const OrderCardComponentSDK = ({
                       }
                       name={prod?.productToken?.product?.name ?? ''}
                       id={prod?.productToken?.product.id ?? ''}
-                      price={prod?.currencyAmount}
+                      price={
+                        typeof prod?.currencyAmount === 'string'
+                          ? prod?.currencyAmount
+                          : prod?.currencyAmount?.[0]?.amount
+                      }
                       status={CheckoutStatus.MY_ORDER}
                       quantity={
                         products.filter((pr: any) => {
@@ -195,20 +203,15 @@ export const OrderCardComponentSDK = ({
                             val?.productToken?.id == prod?.productToken?.id
                         )?.variants
                       }
+                      anchorCurrencyAmount="0"
                     />
                   ))
               : null}
           </div>
-          <PriceAndGasInfo
-            name={order.data.currency.code ?? CurrencyEnum.BRL}
-            currency={order.data.currency.code ?? CurrencyEnum.BRL}
+          <PriceComponent
+            payments={order.data.payments}
+            name={order?.data?.currency?.code ?? CurrencyEnum.BRL}
             className="pw-mt-6"
-            gasFee={order.data.gasFee}
-            service={order.data.clientServiceFee}
-            price={order.data.currencyAmount}
-            totalPrice={parseFloat(order.data.totalAmount).toFixed(2)}
-            originalPrice={order.data.originalCurrencyAmount}
-            originalTotalPrice={order.data.originalTotalAmount}
           />
         </div>
       )}

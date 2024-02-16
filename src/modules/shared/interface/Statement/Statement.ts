@@ -15,6 +15,12 @@ export interface Statement {
   buyerName?: string;
   buyerEmail?: string;
   executeAt?: string;
+  commerce?: any;
+  request?: {
+    amount?: string;
+    to?: string;
+    from?: string;
+  };
 }
 
 export enum Erc20ActionType {

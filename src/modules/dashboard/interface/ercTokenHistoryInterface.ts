@@ -94,4 +94,5 @@ export interface Metadata2 {
   ruleId?: string;
   description: string;
   operatorUserId: string;
+  action?: string;
 }
