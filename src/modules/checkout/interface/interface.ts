@@ -180,6 +180,25 @@ export interface CreateOrderResponse {
   originalTotalAmount?: string;
   deliverId: string;
   failReason?: string;
+  payments?: {
+    currency?: {
+      id?: string;
+    };
+    currencyId: string;
+    paymentMethod?: string;
+    paymentProvider?: string;
+    providerInputs?: unknown;
+    amountType?: string;
+    amount?: string;
+    publicData?: {
+      pix?: {
+        encodedImage?: string;
+        expirationDate?: string;
+        payload?: string;
+      };
+      paymentUrl?: string;
+    };
+  }[];
 }
 
 export interface PaymentInfoInterface {

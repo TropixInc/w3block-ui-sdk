@@ -427,14 +427,18 @@ export const CheckoutPayment = () => {
                   router.query
                 );
               } else {
-                if ('pix' in data.paymentInfo) {
-                  setPixImage(data.paymentInfo.pix?.encodedImage ?? '');
-                  setPixPayload(data.paymentInfo.pix?.payload ?? '');
+                const payment = data?.payments?.find(
+                  (res) =>
+                    res?.currency?.id === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+                );
+                if (payment?.paymentMethod === 'pix') {
+                  setPixImage(payment?.publicData?.pix?.encodedImage ?? '');
+                  setPixPayload(payment?.publicData?.pix?.payload ?? '');
                   setPoolStatus(true);
                   setOrderId(data.id);
                 }
 
-                setIframeLink(data.paymentInfo.paymentUrl ?? '');
+                setIframeLink(payment?.publicData?.paymentUrl ?? '');
               }
             }
             setSending(false);
