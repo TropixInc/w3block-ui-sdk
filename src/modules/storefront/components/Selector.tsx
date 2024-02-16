@@ -41,7 +41,7 @@ export const Selector = ({
       </p>
       {disabled ? (
         <p className="pw-font-normal pw-text-base pw-text-[#35394C]">
-          {value.attributes.name}
+          {value?.attributes?.name}
         </p>
       ) : (
         <Combobox

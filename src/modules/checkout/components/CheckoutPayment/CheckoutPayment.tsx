@@ -164,7 +164,10 @@ export const CheckoutPayment = () => {
               ) {
                 clearInterval(interval);
                 setPoolStatus(false);
-                router.pushConnect(PixwayAppRoutes.CHECKOUT_COMPLETED + query);
+                router.pushConnect(
+                  PixwayAppRoutes.CHECKOUT_COMPLETED,
+                  router.query
+                );
               } else if (
                 data.status === 'failed' ||
                 data.status === 'cancelled'
@@ -617,7 +620,8 @@ export const CheckoutPayment = () => {
                     window?.location.hostname
                   ) {
                     router.pushConnect(
-                      PixwayAppRoutes.CHECKOUT_COMPLETED + query
+                      PixwayAppRoutes.CHECKOUT_COMPLETED,
+                      router.query
                     );
                   }
                 }}

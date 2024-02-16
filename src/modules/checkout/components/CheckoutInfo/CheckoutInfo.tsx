@@ -1284,9 +1284,11 @@ const _CheckoutInfo = ({
                   <Alert variant="error">{error}</Alert>
                 ) : (
                   <>
-                    <p className="pw-text-base pw-font-semibold pw-text-center pw-max-w-[350px] pw-text-black">
-                      Pagamento realizado com sucesso!
-                    </p>
+                    {statusResponse?.deliverId ? (
+                      <p className="pw-text-base pw-font-semibold pw-text-center pw-max-w-[350px] pw-text-black">
+                        Pagamento realizado com sucesso!
+                      </p>
+                    ) : null}
                     <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px]">
                       <div>
                         {statusResponse?.deliverId ? (
