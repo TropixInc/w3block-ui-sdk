@@ -1018,7 +1018,8 @@ const _CheckoutInfo = ({
                     }
                     onChange={(e) =>
                       router.pushConnect(
-                        `/checkout/confirmation?productIds=36a3eec4-05e1-437d-a2b6-8b830ec84326&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&coinPayment=true&destinationWalletAddress=${e}`
+                        PixwayAppRoutes.CHECKOUT_CONFIRMATION,
+                        { destinationWalletAddress: e, ...router.query }
                       )
                     }
                     classes={{
