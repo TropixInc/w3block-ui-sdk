@@ -67,9 +67,12 @@ export const CompleteKYCTemplateSDK = ({
 }: CompleteKYCTemplateSDKProps) => {
   const { data: profile, isLoading: isLoadingProfile } = useProfile();
   const router = useRouterConnect();
-  const { data: kycContext } = useGetTenantContextBySlug(
-    router?.query?.contextSlug as string
-  );
+  const slug = () => {
+    const querySlug = router?.query?.contextSlug;
+    if (querySlug) return querySlug as string;
+    else return 'signup';
+  };
+  const { data: kycContext } = useGetTenantContextBySlug(slug());
   const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
   const { status } = usePixwaySession();
   const query = Object.keys(router.query).length > 0 ? router.query : '';

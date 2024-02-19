@@ -874,8 +874,8 @@ const _CheckoutInfo = ({
 
   const onSubmitCupom = () => {
     const val = document.getElementById('couponCode') as HTMLInputElement;
-    setCouponCodeInput(val.value !== '' ? val.value : undefined);
-    getOrderPreviewFn(val.value);
+    setCouponCodeInput(val?.value !== '' ? val?.value : undefined);
+    getOrderPreviewFn(val?.value);
   };
 
   const [poolStatus, setPoolStatus] = useState(true);
@@ -1034,8 +1034,11 @@ const _CheckoutInfo = ({
                   <div className="pw-flex pw-gap-3">
                     <CurrencyInput
                       onChangeValue={(_, value) => {
-                        changeValue(value as string);
+                        if (value) {
+                          changeValue(value as string);
+                        }
                       }}
+                      value={paymentAmount}
                       InputElement={
                         <input
                           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
@@ -1207,7 +1210,9 @@ const _CheckoutInfo = ({
                         <CurrencyInput
                           hideSymbol
                           onChangeValue={(_, value) => {
-                            setCoinAmountPayment(value as string);
+                            if (value) {
+                              setCoinAmountPayment(value as string);
+                            }
                           }}
                           defaultValue={coinAmountPayment}
                           InputElement={

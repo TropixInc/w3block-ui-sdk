@@ -62,9 +62,12 @@ export const ConfirmationKycTemplateSDK = ({
   const router = useRouterConnect();
   const { status } = usePixwaySession();
   const query = Object.keys(router.query).length > 0 ? router.query : '';
-  const { data: kycContext } = useGetTenantContextBySlug(
-    router?.query?.contextSlug as string
-  );
+  const slug = () => {
+    const querySlug = router?.query?.contextSlug;
+    if (querySlug) return querySlug as string;
+    else return 'signup';
+  };
+  const { data: kycContext } = useGetTenantContextBySlug(slug());
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
   useEffect(() => {

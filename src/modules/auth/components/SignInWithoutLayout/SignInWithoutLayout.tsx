@@ -17,6 +17,7 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthFooter } from '../AuthFooter';
@@ -80,7 +81,9 @@ export const SigInWithoutLayout = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (router.query as any) ?? {}
   ).toString();
-
+  const { defaultTheme } = UseThemeConfig();
+  const postSigninURL =
+    defaultTheme?.configurations?.contentData?.postSigninURL;
   const schema = object().shape({
     email: string()
       .required(translate('components>form>requiredFieldValidation'))
@@ -117,6 +120,8 @@ export const SigInWithoutLayout = ({
       const url = callbackUrl;
       setCallbackUrl('');
       return url;
+    } else if (postSigninURL) {
+      return postSigninURL;
     } else {
       return PixwayAppRoutes.TOKENS;
     }

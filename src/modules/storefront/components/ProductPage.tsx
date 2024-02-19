@@ -814,7 +814,7 @@ export const ProductPage = ({
                                     document.getElementById(
                                       'quantityValue'
                                     ) as HTMLInputElement
-                                  ).value
+                                  )?.value
                                 );
                                 if (
                                   product.canPurchaseAmount &&
