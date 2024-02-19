@@ -18,7 +18,6 @@ export const useDynamicString = (input: string | undefined) => {
     replacements.forEach((item) => {
       const [q, key] = item;
       const [namespace] = (key || '').split('.');
-
       const hasFirstLoad = _.get(datasource, namespace);
       if (loaded && !hasFirstLoad) loaded = false;
       text = text.replace(q, _.get(datasource, key, ''));
