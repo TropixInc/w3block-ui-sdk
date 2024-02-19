@@ -15,6 +15,7 @@ import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg?react';
 import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg?react';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { useDynamicValueByTable } from '../../hooks/useDynamicValueByTable/useDynamicValueByTable';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import useTranslation from '../../hooks/useTranslation';
@@ -81,6 +82,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const isMobile = useIsMobile();
   const { companyId: tenantId } = useCompanyConfig();
   const { data: company } = useCompanyById(tenantId || '');
+  const getValue = useDynamicValueByTable();
   const { name, companyId } = useCompanyConfig();
   const [translate] = useTranslation();
   const [isShowFilterKey, setIsShowFilterKey] = useState<string>();
@@ -209,13 +211,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
       case FormatTypeColumn.MAPPING: {
         const value = _.get(item, itemKey, '');
-        const formatedValue = _.get(format.mapping, value);
-        const defaultValue = format.mapping.default;
-        return formatedValue
-          ? formatedValue
-          : defaultValue
-          ? defaultValue
-          : value;
+        const formatedValue = _.get(
+          format.mapping,
+          value,
+          format.mapping.default
+        );
+        const dynamicValue = getValue(formatedValue, item);
+
+        return dynamicValue.text ? dynamicValue.text : formatedValue || value;
       }
       case FormatTypeColumn.HASH: {
         const value = _.get(item, itemKey, '');
@@ -339,22 +342,21 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         );
       }
 
-      default:
+      default: {
+        const value = _.get(item, itemKey);
+        const dynamicValue = getValue(value, item);
         return (
           <div className="pw-w-full">
             <p className="pw-text-ellipsis pw-overflow-hidden">
-              {isTranslatable && _.get(item, itemKey) ? (
-                translate(
-                  `${translatePrefix || ''}${
-                    _.get(item, itemKey, '--') ?? '---'
-                  }`
-                )
+              {isTranslatable && value ? (
+                translate(`${translatePrefix || ''}${value ?? '---'}`)
               ) : (
-                <p>{_.get(item, itemKey, '--') ?? '---'}</p>
+                <p>{dynamicValue.text ? dynamicValue.text : value || '--'}</p>
               )}
             </p>
           </div>
         );
+      }
     }
   };
 
