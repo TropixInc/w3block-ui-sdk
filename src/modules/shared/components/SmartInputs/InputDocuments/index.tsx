@@ -29,6 +29,10 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
       label: 'CPF',
       value: 'cpf',
     },
+    {
+      label: 'RG',
+      value: 'rg',
+    },
   ];
 
   const handleChange = (value: string | undefined) => {
@@ -105,6 +109,7 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
                 value={document}
                 placeholder="Digite apenas números"
                 className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
+                inputMode="numeric"
               />
             ) : (
               <input

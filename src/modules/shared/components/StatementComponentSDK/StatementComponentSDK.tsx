@@ -36,7 +36,10 @@ export const StatementComponentSDK = ({
 
   const getStatementColorAndIcon = () => {
     if (statement?.transactionType == 'receiving') {
-      if (statement?.status == Erc20ActionStatus.SUCCESS) {
+      if (
+        statement?.status == Erc20ActionStatus.SUCCESS ||
+        statement?.status == Erc20ActionStatus.EXTERNAL
+      ) {
         return {
           color: 'pw-text-blue-800',
           icon: (

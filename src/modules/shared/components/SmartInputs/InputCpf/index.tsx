@@ -77,6 +77,7 @@ const InputCpf = ({
           className={classNames(
             'pw-mt-1 pw-text-base pw-h-[46px] pw-text-[#969696] pw-leading-4 pw-w-full pw-px-[10px] pw-outline-none'
           )}
+          inputMode="numeric"
         />
       </FormItemContainer>
       <p className="mt-5 pw-h-[16px]">

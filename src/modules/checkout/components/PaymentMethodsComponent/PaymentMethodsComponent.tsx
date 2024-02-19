@@ -1,5 +1,7 @@
 import { lazy } from 'react';
 
+import classNames from 'classnames';
+
 import { PaymentMethodsAvaiable } from '../../interface/interface';
 const PaymentAccordion = lazy(() =>
   import('../PaymentAccordion/PaymentAccordion').then((m) => ({
@@ -13,6 +15,8 @@ interface PaymentMethodsComponentProps {
   onSelectedPayemnt: (method: PaymentMethodsAvaiable) => void;
   methodSelected: PaymentMethodsAvaiable;
   loadingPreview?: boolean;
+  title?: string;
+  titleClass?: string;
 }
 
 export const PaymentMethodsComponent = ({
@@ -21,11 +25,18 @@ export const PaymentMethodsComponent = ({
   onSelectedPayemnt,
   methodSelected,
   loadingPreview = false,
+  title = 'Métodos de pagamento',
+  titleClass,
 }: PaymentMethodsComponentProps) => {
   return (
     <div className={`${className}`}>
-      <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
-        Métodos de pagamento
+      <p
+        className={classNames(
+          titleClass,
+          'pw-text-[18px] pw-font-[700] pw-text-[#35394C]'
+        )}
+      >
+        {title}
       </p>
       {methods.map((method) => (
         <PaymentAccordion

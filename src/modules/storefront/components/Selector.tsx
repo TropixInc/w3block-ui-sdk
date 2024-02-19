@@ -2,6 +2,7 @@
 import { Fragment, useState } from 'react';
 
 import { Combobox, Transition } from '@headlessui/react';
+import classNames from 'classnames';
 
 import ArrowDown from '../../shared/assets/icons/arrowDown.svg?react';
 
@@ -11,6 +12,10 @@ interface Props {
   data: any;
   initialValue?: string;
   disabled?: boolean;
+  classes?: {
+    title?: string;
+    value?: string;
+  };
 }
 
 export const Selector = ({
@@ -19,6 +24,7 @@ export const Selector = ({
   initialValue,
   title,
   disabled,
+  classes,
 }: Props) => {
   const [value, setValue] = useState(
     data.filter((e: { id: string }) => e.id == initialValue)[0]
@@ -36,11 +42,21 @@ export const Selector = ({
 
   return (
     <div className="pw-relative">
-      <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
-        {title}:
+      <p
+        className={classNames(
+          'pw-font-[600] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-1',
+          classes?.title
+        )}
+      >
+        {title}
       </p>
       {disabled ? (
-        <p className="pw-font-normal pw-text-base pw-text-[#35394C]">
+        <p
+          className={classNames(
+            classes?.value,
+            'pw-font-normal pw-text-base pw-text-[#35394C]'
+          )}
+        >
           {value?.attributes?.name}
         </p>
       ) : (

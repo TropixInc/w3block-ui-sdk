@@ -42,6 +42,7 @@ import {
   PaymentMethodsAvaiable,
   ProductErrorInterface,
 } from '../../interface/interface';
+import { CoinPaymentResume } from '../CoinPaymentResume/CoinPaymentResume';
 
 const WeblockButton = lazy(() =>
   import('../../../shared/components/WeblockButton/WeblockButton').then(
@@ -1007,7 +1008,7 @@ const _CheckoutInfo = ({
                   <Selector
                     disabled={!editableDestination}
                     data={datasource?.master?.data}
-                    title="Restaurante"
+                    title="Você vai pagar para"
                     initialValue={
                       datasource?.master?.data.filter(
                         (e: { attributes: { walletAddress: string | null } }) =>
@@ -1020,10 +1021,14 @@ const _CheckoutInfo = ({
                         `/checkout/confirmation?productIds=36a3eec4-05e1-437d-a2b6-8b830ec84326&currencyId=65fe1119-6ec0-4b78-8d30-cb989914bdcb&coinPayment=true&destinationWalletAddress=${e}`
                       )
                     }
+                    classes={{
+                      title: '!pw-font-[400] pw-font-poppins',
+                      value: '!pw-font-[700] pw-font-poppins',
+                    }}
                   />
                 )}
-                <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                  Valor do Pagamento
+                <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2 pw-font-poppins">
+                  Valor a pagar
                 </p>
                 <div className="pw-mb-8">
                   <div className="pw-flex pw-gap-3">
@@ -1033,14 +1038,14 @@ const _CheckoutInfo = ({
                       }}
                       InputElement={
                         <input
-                          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none"
+                          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
                           placeholder="R$ 0,0"
                         />
                       }
                     />
                   </div>
                   {automaxLoyalty ? (
-                    <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2">
+                    <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2 pw-font-poppins">
                       Saldo Zucas:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
@@ -1056,7 +1061,7 @@ const _CheckoutInfo = ({
                               wallet?.type == 'loyalty' &&
                               wallet?.balance &&
                               parseFloat(wallet?.balance ?? '0') > 0
-                          ).pointsPrecision == 'decimal'
+                          )?.pointsPrecision == 'decimal'
                             ? parseFloat(
                                 organizedLoyalties.find(
                                   (wallet) =>
@@ -1080,6 +1085,10 @@ const _CheckoutInfo = ({
                     </p>
                   ) : null}
                 </div>
+                {paymentAmount === '' ||
+                parseFloat(paymentAmount) === 0 ? null : (
+                  <CoinPaymentResume payments={orderPreview?.payments} />
+                )}
               </>
             )}
             {hideCoupon ? null : (
@@ -1138,13 +1147,23 @@ const _CheckoutInfo = ({
                   )[0]?.providersForSelection ?? []
                 }
                 onSelectedPayemnt={setChoosedPayment}
+                title={
+                  isCoinPayment
+                    ? 'Como deseja completar o seu pagamento?'
+                    : 'Métodos de pagamento'
+                }
+                titleClass={
+                  isCoinPayment
+                    ? '!pw-font-[400] pw-font-poppins !pw-text-base'
+                    : ''
+                }
               />
             )}
             {isCoinPayment && (
               <>
                 {!automaxLoyalty ? (
                   <>
-                    <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
+                    <p className="pw-font-[600] pw-text-sm pw-font-poppins pw-text-[#35394C] pw-mt-5 pw-mb-2">
                       Zucas (Saldo:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
@@ -1194,7 +1213,7 @@ const _CheckoutInfo = ({
                           InputElement={
                             <input
                               disabled={paymentAmount === '' || automaxLoyalty}
-                              className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none"
+                              className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
                               placeholder="0,0"
                             />
                           }
@@ -1211,24 +1230,9 @@ const _CheckoutInfo = ({
                 {paymentAmount === '' ||
                 parseFloat(paymentAmount) === 0 ? null : (
                   <>
-                    <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C] pw-mt-[40px]">
-                      Resumo da compra
-                    </p>
-                    <PriceAndGasInfo
-                      payments={orderPreview?.payments}
-                      name={
-                        orderPreview?.products && orderPreview?.products?.length
-                          ? orderPreview?.products[0]?.prices?.find(
-                              (price) => price?.currency?.id == currencyIdState
-                            )?.currency?.name
-                          : 'BRL'
-                      }
-                      loading={isLoading || isLoadingPreview}
-                      className="pw-mt-4"
-                    />
                     <Alert
                       variant="success"
-                      className="!pw-text-black !pw-font-normal pw-mt-4"
+                      className="!pw-text-black !pw-font-normal pw-mt-4 pw-font-poppins"
                     >
                       Voce irá ganhar{' '}
                       <b className="pw-mx-[4px]">
@@ -1390,6 +1394,7 @@ const _CheckoutInfo = ({
     codeQr,
     statusResponse?.deliverId,
     coinError,
+    organizedLoyalties,
   ]);
 
   const anchorCurrencyId = useMemo(() => {

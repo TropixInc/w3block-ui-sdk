@@ -36,4 +36,5 @@ export enum Erc20ActionStatus {
   SUCCESS = 'success',
   FAILED = 'failed',
   WAIT_EVENT = 'wait_event',
+  EXTERNAL = 'external',
 }

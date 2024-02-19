@@ -1,0 +1,60 @@
+import { PaymentsResponse } from '../../../checkout/interface/interface';
+import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
+import { Shimmer } from '../../../shared/components/Shimmer';
+
+interface CoinPaymentResume {
+  payments?: PaymentsResponse[];
+  loading?: boolean;
+}
+
+export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
+  const coinPayment = () => {
+    return payments?.filter(
+      (e) => e?.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+    )[0];
+  };
+
+  const payment = () => {
+    return payments?.filter(
+      (e) => e?.currencyId === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+    )[0];
+  };
+  return (
+    <div className="pw-mb-8 !pw-font-poppins">
+      <h1 className="pw-font-normal pw-text-base pw-mb-4">
+        Forma de pagamento
+      </h1>
+      <div className="pw-flex pw-justify-between pw-px-5">
+        <p className="pw-text-base pw-text-[#35394C] pw-font-[400]">Zucas:</p>
+        {loading ? (
+          <Shimmer />
+        ) : (
+          <div className="pw-flex pw-gap-2">
+            <CriptoValueComponent
+              code={coinPayment()?.currency?.code}
+              value={coinPayment()?.totalPrice ?? ''}
+              crypto
+              fontClass="pw-text-base pw-font-[600] pw-text-[#35394C]"
+            />
+          </div>
+        )}
+      </div>
+      <div className="pw-flex pw-justify-between pw-px-5 pw-font-semibold">
+        <p className="pw-text-base pw-text-[#35394C">Complemento:</p>
+        {loading ? (
+          <Shimmer />
+        ) : (
+          <div className="pw-flex pw-gap-2">
+            <CriptoValueComponent
+              code={payment()?.currency?.code}
+              value={payment()?.totalPrice ?? ''}
+              fontClass="pw-text-base pw-text-[#35394C]"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CoinPaymentResume;
