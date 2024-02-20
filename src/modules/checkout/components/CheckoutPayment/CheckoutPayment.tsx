@@ -295,7 +295,7 @@ export const CheckoutPayment = () => {
         inputs[INPUTS_POSSIBLE.installments] = installment?.amount ?? 1;
       }
       const coinPayment = orderInfo?.payments?.filter(
-        (e) => e.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+        (e) => e.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
       );
       const destinationWalletAddress = () => {
         if (
@@ -338,7 +338,7 @@ export const CheckoutPayment = () => {
                 ? isFree
                   ? [
                       {
-                        currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                        currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
                         paymentMethod: 'crypto',
                         amountType: 'percentage',
                         amount: '100',
@@ -362,7 +362,7 @@ export const CheckoutPayment = () => {
                         amountType: 'all_remaining',
                       },
                       {
-                        currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                        currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
                         paymentMethod: 'crypto',
                         amountType: 'fixed',
                         amount: coinPayment?.[0]?.totalPrice,
@@ -386,7 +386,7 @@ export const CheckoutPayment = () => {
                       amountType: 'all_remaining',
                     },
                     {
-                      currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                      currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
                       paymentMethod: 'crypto',
                       amountType: 'fixed',
                       amount: '0',

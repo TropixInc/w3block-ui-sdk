@@ -1,4 +1,4 @@
-import InputMask from 'react-input-mask';
+import { IMaskInput } from 'react-imask';
 
 import { INPUTS_POSSIBLE } from '../CheckoutPaymentComponent/CheckoutPaymentComponent';
 interface CheckoutCustomizableInputProps {
@@ -28,21 +28,14 @@ export const CheckoutCustomizableInput = ({
           type="text"
         />
       ) : (
-        <InputMask
+        <IMaskInput
           readOnly={readonly}
-          maskChar={''}
-          mask={
-            type == INPUTS_POSSIBLE.cpf_cnpj ||
-            type == INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj
-              ? value.length < 15
-                ? '999.999.999-999'
-                : '99.999.999/9999-99'
-              : getMask(type)
-          }
+          radix="."
+          mask={getMask(type)}
           placeholder={getPlaceholder(type)}
           className="pw-full pw-border pw-border-slate-300 pw-rounded-lg pw-p-3 pw-text-sm pw-text-slate-700 pw-w-full"
           value={value}
-          onChange={(e: any) => onChange(e.target.value)}
+          onAccept={(e: any) => onChange(e)}
           type="text"
         />
       )}
@@ -78,19 +71,19 @@ const getPlaceholder = (type: INPUTS_POSSIBLE) => {
 const getMask = (type: INPUTS_POSSIBLE) => {
   switch (type) {
     case INPUTS_POSSIBLE.credit_card_number:
-      return '9999 9999 9999 9999';
+      return '0000 0000 0000 0000';
     case INPUTS_POSSIBLE.credit_card_expiry:
-      return '99/99';
+      return '00/00';
     case INPUTS_POSSIBLE.credit_card_ccv:
-      return '9999';
+      return '0000';
     case INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj:
-      return '999.999.999-99';
+      return '000.000.000-00';
     case INPUTS_POSSIBLE.credit_card_holder_phone:
-      return '(99) 99999-9999';
+      return '(00) 00000-0000';
     case INPUTS_POSSIBLE.credit_card_holder_postal_code:
-      return '99999-999';
+      return '00000-000';
     case INPUTS_POSSIBLE.cpf_cnpj:
-      return '999.999.999-99';
+      return '000.000.000-00';
     default:
       return '***************************************************';
   }

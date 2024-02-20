@@ -26,7 +26,7 @@ const _PriceComponent = ({
     if (payments?.length === 1) return payments[0];
     else
       return payments?.filter(
-        (e) => e?.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+        (e) => e?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
       )[0];
   };
 
@@ -65,7 +65,7 @@ const _PriceComponent = ({
               code={name}
               value={
                 coinPayment()?.currencyId ===
-                  '6ec75381-dd84-4edc-bedb-1a77fb430e10' &&
+                  '9e5c87cb-22ca-4550-8f09-f2272203410b' &&
                 payments &&
                 payments?.length > 1
                   ? ((parseFloat(payment()?.amount ?? '') +
@@ -84,7 +84,7 @@ const _PriceComponent = ({
           </div>
         )}
       </div>
-      {coinPayment()?.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10' &&
+      {coinPayment()?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b' &&
       payments &&
       payments?.length > 1 ? (
         <div className="pw-flex pw-justify-between pw-mt-2">
@@ -206,7 +206,7 @@ const _PriceComponent = ({
               code={name}
               value={
                 coinPayment()?.currencyId ===
-                '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+                '9e5c87cb-22ca-4550-8f09-f2272203410b'
                   ? payment()?.originalTotalAmount ?? ''
                   : payment()?.fullOrderTotalAmount ?? ''
               }

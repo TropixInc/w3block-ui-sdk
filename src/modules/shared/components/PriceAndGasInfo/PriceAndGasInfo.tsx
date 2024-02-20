@@ -53,7 +53,7 @@ const _PriceAndGasInfo = ({
     if (payments?.length === 1) return payments[0];
     else
       return payments?.filter(
-        (e) => e?.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+        (e) => e?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
       )[0];
   };
 
@@ -83,7 +83,7 @@ const _PriceAndGasInfo = ({
                     crypto={
                       payment()?.currency?.symbol == 'MATIC' ||
                       payment()?.currency?.symbol == 'ETH' ||
-                      payment()?.currency?.symbol == 'ZUCA'
+                      payment()?.currency?.code == 'ZUCA'
                     }
                     fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                   />
@@ -92,7 +92,7 @@ const _PriceAndGasInfo = ({
                 code={name}
                 value={
                   coinPayment()?.currencyId ===
-                  '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+                  '9e5c87cb-22ca-4550-8f09-f2272203410b'
                     ? ((parseFloat(payment()?.totalPrice ?? '') +
                         parseFloat(
                           coinPayment()?.totalPrice ?? ''
@@ -105,7 +105,7 @@ const _PriceAndGasInfo = ({
                 crypto={
                   payment()?.currency?.symbol == 'MATIC' ||
                   payment()?.currency?.symbol == 'ETH' ||
-                  payment()?.currency?.symbol == 'ZUCA'
+                  payment()?.currency?.code == 'ZUCA'
                 }
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
               />
@@ -113,7 +113,7 @@ const _PriceAndGasInfo = ({
           )}
         </div>
         {coinPayment()?.currencyId ===
-        '6ec75381-dd84-4edc-bedb-1a77fb430e10' ? (
+        '9e5c87cb-22ca-4550-8f09-f2272203410b' ? (
           <div className="pw-flex pw-justify-between pw-mt-2">
             <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">Zucas</p>
             {loading || loadingPreview ? (
@@ -128,7 +128,7 @@ const _PriceAndGasInfo = ({
                   crypto={
                     coinPayment()?.currency?.symbol == 'MATIC' ||
                     coinPayment()?.currency?.symbol == 'ETH' ||
-                    coinPayment()?.currency?.symbol == 'ZUCA'
+                    coinPayment()?.currency?.code == 'ZUCA'
                   }
                   fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                 />
@@ -160,7 +160,7 @@ const _PriceAndGasInfo = ({
                           crypto={
                             payment()?.currency?.symbol == 'MATIC' ||
                             payment()?.currency?.symbol == 'ETH' ||
-                            payment()?.currency?.symbol == 'ZUCA'
+                            payment()?.currency?.code == 'ZUCA'
                           }
                           fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                         />
@@ -171,7 +171,7 @@ const _PriceAndGasInfo = ({
                       crypto={
                         payment()?.currency?.symbol == 'MATIC' ||
                         payment()?.currency?.symbol == 'ETH' ||
-                        payment()?.currency?.symbol == 'ZUCA'
+                        payment()?.currency?.code == 'ZUCA'
                       }
                       fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                     />
@@ -199,7 +199,7 @@ const _PriceAndGasInfo = ({
                 crypto={
                   payment()?.currency?.symbol == 'MATIC' ||
                   payment()?.currency?.symbol == 'ETH' ||
-                  payment()?.currency?.symbol == 'ZUCA'
+                  payment()?.currency?.code == 'ZUCA'
                 }
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
               />
@@ -224,7 +224,7 @@ const _PriceAndGasInfo = ({
                     crypto={
                       payment()?.currency?.symbol == 'MATIC' ||
                       payment()?.currency?.symbol == 'ETH' ||
-                      payment()?.currency?.symbol == 'ZUCA'
+                      payment()?.currency?.code == 'ZUCA'
                     }
                     fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                   />
@@ -236,7 +236,7 @@ const _PriceAndGasInfo = ({
                 crypto={
                   payment()?.currency?.symbol == 'MATIC' ||
                   payment()?.currency?.symbol == 'ETH' ||
-                  payment()?.currency?.symbol == 'ZUCA'
+                  payment()?.currency?.code == 'ZUCA'
                 }
                 fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
               />
