@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from 'react-query';
 
 import { ErcTokenHistoryInterfaceResponse } from '../../dashboard/interface/ercTokenHistoryInterface';
@@ -7,7 +8,11 @@ import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { cleanObject } from '../../shared/utils/validators';
 
-export const useGetDeferredByUserId = (userId: string, filter?: any) => {
+export const useGetDeferredByUserId = (
+  userId: string,
+  filter?: any,
+  enabled?: boolean
+) => {
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.KEY);
   const cleaned = cleanObject(filter ?? {});
@@ -20,11 +25,12 @@ export const useGetDeferredByUserId = (userId: string, filter?: any) => {
           PixwayAPIRoutes.GET_DEFERRED_BY_USER_ID.replace(
             '{companyId}',
             companyId
-          ).replace('{userId}', userId) + `?${queryString}`
+          ).replace('{userId}', userId) +
+            `?${queryString}&status=deferred&status=pending`
         )
         .then((res) => res?.data),
     {
-      enabled: !!userId && !!companyId,
+      enabled: !!userId && !!companyId && enabled,
     }
   );
 };

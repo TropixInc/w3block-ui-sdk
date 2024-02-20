@@ -1,5 +1,13 @@
 import { useMemo, useState, lazy } from 'react';
 
+import { useGetDeferredByUserId } from '../../../business/hooks/useGetDeferredByUserId';
+import { useProfile } from '../../../shared';
+import { Spinner } from '../../../shared/components/Spinner';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
+import { generateRandomUUID } from '../../../shared/utils/generateRamdomUUID';
+
 const InternalPagesLayoutBase = lazy(() =>
   import(
     '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
@@ -19,27 +27,26 @@ const StatementComponentSDK = lazy(() =>
     default: mod.StatementComponentSDK,
   }))
 );
-import { useGetDeferredByUserId } from '../../../business/hooks/useGetDeferredByUserId';
-import { useProfile } from '../../../shared';
-import { Spinner } from '../../../shared/components/Spinner';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { generateRandomUUID } from '../../../shared/utils/generateRamdomUUID';
 
 export const WalletFutureStatementTemplateSDK = () => {
   const { wallets, loyaltyWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
   const { data: profile } = useProfile();
-  const { data, isLoading } = useGetDeferredByUserId(profile?.data?.id ?? '', {
-    page: actualPage,
-    sortBy: 'createdAt',
-    orderBy: 'DESC',
-  });
 
   const loyaltyWalletDefined = useMemo(() => {
     return loyaltyWallet.length ? loyaltyWallet[0] : undefined;
   }, [loyaltyWallet]);
+
+  const { data, isLoading } = useGetDeferredByUserId(
+    profile?.data?.id ?? '',
+    {
+      page: actualPage,
+      sortBy: 'createdAt',
+      orderBy: 'DESC',
+      loyaltyId: loyaltyWalletDefined?.loyaltyId,
+    },
+    !!loyaltyWalletDefined
+  );
 
   useGuardPagesWithOptions({
     needUser: true,

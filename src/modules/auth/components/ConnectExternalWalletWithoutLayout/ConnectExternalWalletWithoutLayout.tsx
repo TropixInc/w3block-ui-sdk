@@ -3,20 +3,8 @@ import { useState, useEffect, useMemo, lazy } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 // import { useQueryClient } from 'react-query';
 
-const MailVerifiedInterceptorProvider = lazy(() =>
-  import('../../../core/providers/MailVerifiedInterceptorProvider').then(
-    (m) => ({ default: m.MailVerifiedInterceptorProvider })
-  )
-);
-
 import MetamaskLogo from '../../../shared/assets/icons/metamask.svg?react';
 import { Alert } from '../../../shared/components/Alert';
-const Spinner = lazy(() =>
-  import('../../../shared/components/Spinner').then((m) => ({
-    default: m.Spinner,
-  }))
-);
-
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 // import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -25,6 +13,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
@@ -32,12 +21,17 @@ import { useWallets } from '../../../shared/hooks/useWallets/useWallets';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { WalletsOptions } from '../../../storefront/interfaces';
 import { claimWalletVault } from '../../api/wallet';
+import { AuthFooter } from '../AuthFooter';
 const AuthButton = lazy(() =>
   import('../AuthButton').then((m) => ({ default: m.AuthButton }))
 );
 
-import { AuthFooter } from '../AuthFooter';
-import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+const MailVerifiedInterceptorProvider = lazy(() =>
+  import('../../../core/providers/MailVerifiedInterceptorProvider').then(
+    (m) => ({ default: m.MailVerifiedInterceptorProvider })
+  )
+);
+
 const ConnectToMetamaskButton = lazy(() =>
   import('../ConnectWalletTemplate').then((m) => ({
     default: m.ConnectToMetamaskButton,
@@ -47,6 +41,12 @@ const ConnectToMetamaskButton = lazy(() =>
 const GenerateTokenDialog = lazy(() =>
   import('../ConnectWalletTemplate/GenerateTokenDialog').then((m) => ({
     default: m.GenerateTokenDialog,
+  }))
+);
+
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
   }))
 );
 
@@ -94,6 +94,8 @@ const _ConnectExternalWalletWithoutLayout = ({
   const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
   const { defaultTheme } = UseThemeConfig();
+  const postSigninURL =
+    defaultTheme?.configurations?.contentData?.postSigninURL;
   useEffect(() => {
     if (status === 'unauthenticated')
       router.pushConnect(PixwayAppRoutes.SIGN_IN);
@@ -103,13 +105,17 @@ const _ConnectExternalWalletWithoutLayout = ({
       const { mainWalletId } = user;
 
       if (mainWalletId) {
-        router.pushConnect(
-          router.query.callbackPath
-            ? (router.query.callbackPath as string)
-            : redirectLink
-            ? redirectLink
-            : redirectRoute
-        );
+        if (router?.query?.callbackPath) {
+          router.pushConnect(router.query.callbackPath as string);
+        } else if (router?.query?.callbackUrl) {
+          router.pushConnect(router.query.callbackUrl as string);
+        } else if (postSigninURL) {
+          router.pushConnect(postSigninURL);
+        } else if (redirectLink) {
+          router.pushConnect(redirectLink);
+        } else {
+          router.pushConnect(redirectRoute);
+        }
       } else {
         if (
           forceVault ||
@@ -168,12 +174,17 @@ const _ConnectExternalWalletWithoutLayout = ({
       onCreateWalletSuccessfully();
     } catch (error: any) {
       if (!error?.message || error.message == '') {
-        if (router.query.callbackPath) {
+        if (router?.query?.callbackPath) {
           router.pushConnect(router.query.callbackPath as string);
+        } else if (router?.query?.callbackUrl) {
+          router.pushConnect(router.query.callbackUrl as string);
+        } else if (postSigninURL) {
+          router.pushConnect(postSigninURL);
+        } else if (redirectLink) {
+          router.pushConnect(redirectLink);
         } else {
-          router.pushConnect(redirectLink ?? redirectRoute);
+          router.pushConnect(redirectRoute);
         }
-
         return;
       }
       console.error(error);
@@ -203,10 +214,16 @@ const _ConnectExternalWalletWithoutLayout = ({
   const onCreateWalletSuccessfully = () => {
     refetch().then(() => {
       setIsConnecting(false);
-      if (router.query.callbackPath) {
+      if (router?.query?.callbackPath) {
         router.pushConnect(router.query.callbackPath as string);
+      } else if (router?.query?.callbackUrl) {
+        router.pushConnect(router.query.callbackUrl as string);
+      } else if (postSigninURL) {
+        router.pushConnect(postSigninURL);
+      } else if (redirectLink) {
+        router.pushConnect(redirectLink);
       } else {
-        router.pushConnect(redirectLink ?? redirectRoute);
+        router.pushConnect(redirectRoute);
       }
     });
 
