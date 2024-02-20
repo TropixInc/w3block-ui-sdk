@@ -181,10 +181,12 @@ const _CheckoutInfo = ({
       orderPreview?.appliedCoupon === null
     ) {
       const val = document.getElementById('couponCode') as HTMLInputElement;
-      val.value = '';
-      setCheckUtm(false);
-      setCouponCodeInput('');
-      getOrderPreviewFn(couponCodeInput);
+      if (val) {
+        val.value = '';
+        setCheckUtm(false);
+        setCouponCodeInput('');
+        getOrderPreviewFn(couponCodeInput);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderPreview?.appliedCoupon, utms?.expires, utms.utm_campaign]);
@@ -320,7 +322,7 @@ const _CheckoutInfo = ({
                     amountType: 'all_remaining',
                   },
                   {
-                    currencyId: '6ec75381-dd84-4edc-bedb-1a77fb430e10',
+                    currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
                     paymentMethod: 'crypto',
                     amountType: 'fixed',
                     amount: coinAmountPayment,

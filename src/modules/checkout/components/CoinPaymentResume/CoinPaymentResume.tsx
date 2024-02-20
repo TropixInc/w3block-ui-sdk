@@ -10,7 +10,7 @@ interface CoinPaymentResume {
 export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
   const coinPayment = () => {
     return payments?.filter(
-      (e) => e?.currencyId === '6ec75381-dd84-4edc-bedb-1a77fb430e10'
+      (e) => e?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
     )[0];
   };
 
