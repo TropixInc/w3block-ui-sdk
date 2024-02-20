@@ -96,6 +96,8 @@ const _ConnectExternalWalletWithoutLayout = ({
   const { defaultTheme } = UseThemeConfig();
   const postSigninURL =
     defaultTheme?.configurations?.contentData?.postSigninURL;
+  const walletOption =
+    defaultTheme?.configurations?.styleData?.onBoardingWalletsOptions;
   useEffect(() => {
     if (status === 'unauthenticated')
       router.pushConnect(PixwayAppRoutes.SIGN_IN);
@@ -119,9 +121,7 @@ const _ConnectExternalWalletWithoutLayout = ({
       } else {
         if (
           forceVault ||
-          (defaultTheme?.configurations?.styleData?.onBoardingWalletsOptions &&
-            defaultTheme?.configurations.styleData.onBoardingWalletsOptions ==
-              WalletsOptions.CUSTODY)
+          (walletOption && walletOption == WalletsOptions.CUSTODY)
         ) {
           onClickContinue();
         }
@@ -259,7 +259,11 @@ const _ConnectExternalWalletWithoutLayout = ({
     return <h1>{translate('companyAuth>externalWallet>CompanyNotFound')}</h1>;
   }
 
-  if (isLoading || forceVault) {
+  if (
+    isLoading ||
+    forceVault ||
+    (walletOption && walletOption == WalletsOptions.CUSTODY)
+  ) {
     return (
       <div className="pw-flex pw-justify-center pw-items-center pw-py-10">
         <Spinner />

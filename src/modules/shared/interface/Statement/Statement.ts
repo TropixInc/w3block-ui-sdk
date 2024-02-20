@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LoyaltiesTransaction } from '../../../dashboard/interface/ercTokenHistoryInterface';
 
 export interface Statement {
@@ -20,8 +21,10 @@ export interface Statement {
     amount?: string;
     to?: string;
     from?: string;
+    metadata?: any;
   };
   txHash?: string;
+  metadata?: any;
 }
 
 export enum Erc20ActionType {

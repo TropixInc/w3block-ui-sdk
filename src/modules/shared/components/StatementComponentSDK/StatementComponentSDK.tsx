@@ -143,7 +143,12 @@ export const StatementComponentSDK = ({
           {statement?.commerce?.destinationUserName}
         </p>
       );
-    } else return '';
+    } else
+      return (
+        (statement?.request?.metadata?.description ||
+          statement?.metadata?.description) ??
+        ''
+      );
   };
   return (
     <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">

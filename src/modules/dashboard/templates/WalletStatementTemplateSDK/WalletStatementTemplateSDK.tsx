@@ -101,6 +101,7 @@ export const WalletStatementTemplateSDK = () => {
                 commerce: item?.metadata?.commerce,
                 request: item?.request,
                 txHash: item?.txHash,
+                metadata: item?.metadata,
               }}
             />
           ))
