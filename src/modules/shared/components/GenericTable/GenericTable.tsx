@@ -218,7 +218,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         );
         const dynamicValue = getValue(formatedValue, item);
 
-        return dynamicValue.text ? dynamicValue.text : formatedValue || value;
+        return dynamicValue ? dynamicValue : formatedValue || value;
       }
       case FormatTypeColumn.HASH: {
         const value = _.get(item, itemKey, '');
@@ -351,7 +351,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               {isTranslatable && value ? (
                 translate(`${translatePrefix || ''}${value ?? '---'}`)
               ) : (
-                <p>{dynamicValue.text ? dynamicValue.text : value || '--'}</p>
+                <p>{dynamicValue ? dynamicValue : value || '--'}</p>
               )}
             </p>
           </div>
