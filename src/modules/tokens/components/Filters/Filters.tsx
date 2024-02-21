@@ -2,7 +2,6 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useToggle } from 'react-use';
 
 import classNames from 'classnames';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import FilterIcon from '../../../shared/assets/icons/filterOutlined.svg?react';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -27,7 +26,6 @@ export const Filters = ({
 }) => {
   const [translate] = useTranslation();
   const [showFilter, setShowFilter] = useToggle(false);
-  const { pass } = useFlags();
   return (
     <div className="pw-flex pw-flex-col pw-gap-4">
       <div className="pw-w-full pw-flex">
@@ -53,7 +51,7 @@ export const Filters = ({
           />
         </div>
       </div>
-      {showFilter && pass ? (
+      {showFilter ? (
         <>
           <div className="pw-flex pw-flex-col pw-gap-2 pw-text-[#777E8F] pw-text-[14px] pw-leading-[21px] pw-font-semibold">
             <div>{translate('token>pass>status')}</div>

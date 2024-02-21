@@ -70,17 +70,22 @@ export const CriptoValueComponent = ({
           ? translate('commerce>checkout>free')
           : crypto
           ? getCryptoValueByCode()
-          : formatterCurrency(code ?? 'BRL').format(Number(value))}
+          : formatterCurrency(code ?? 'BRL', value)}
       </p>
     </div>
   );
 };
 
-export const formatterCurrency = (code: string): Intl.NumberFormat => {
-  return Intl.NumberFormat(currencyLocales[code ?? 'BRL'], {
-    style: 'currency',
-    currency: code || 'BRL',
-  });
+export const formatterCurrency = (code: string, value: string) => {
+  try {
+    return Intl.NumberFormat(currencyLocales[code ?? 'BRL'], {
+      style: 'currency',
+      currency: code || 'BRL',
+    }).format(parseFloat(value));
+  } catch {
+    /* empty */
+  }
+  return code + ' ' + value;
 };
 
 export const currencyLocales: CurrencyObjectType = {

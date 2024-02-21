@@ -6,7 +6,6 @@ import {
 import { useClickAway } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 
 
@@ -95,7 +94,6 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
-  const { pass } = useFlags();
   const { loyaltyWallet } = useUserWallet();
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
@@ -135,7 +133,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
       id: 'pass',
       route: PixwayAppRoutes.TOKENPASS,
       icon: <TicketIcon style={{ color: textColor, stroke: textColor }} width={17} height={17} />,
-      isVisible: pass && isAdmin && !isHidden('pass'),
+      isVisible: isAdmin && !isHidden('pass'),
     },
     {
       name: internalMenuData['dash']?.customLabel || translate('components>menu>dashboard'),
@@ -225,7 +223,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
   useEffect(() => {
     setTabsToShow(items);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProduction, pass, profile, loyaltyWallet]);
+  }, [isProduction, profile, loyaltyWallet]);
 
   return tabsToShow;
 };

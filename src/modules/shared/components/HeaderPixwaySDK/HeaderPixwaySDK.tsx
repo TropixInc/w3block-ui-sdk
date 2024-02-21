@@ -121,7 +121,8 @@ const _HeaderPixwaySDK = ({
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active &&
           window?.location?.pathname !==
-            PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION
+            PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION &&
+          window?.location?.pathname !== PixwayAppRoutes.SIGN_IN
         ) {
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
         }

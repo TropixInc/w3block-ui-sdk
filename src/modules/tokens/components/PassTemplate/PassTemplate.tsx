@@ -3,7 +3,6 @@ import { JSX } from 'react/jsx-runtime';
 
 import classNames from 'classnames';
 import { format, getDay, isSameDay } from 'date-fns';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { VerifyBenefit } from '../../../pass/components/VerifyBenefit';
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
@@ -150,7 +149,6 @@ const _PassTemplate = ({
   benefitIdProp,
   successValidationProp,
 }: PassTemplateProps) => {
-  const { pass } = useFlags();
   const [translate] = useTranslation();
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -774,7 +772,7 @@ const _PassTemplate = ({
             </DetailsTemplate>
           </>
 
-          {successValidation && pass ? (
+          {successValidation ? (
             <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">
               <PassButton model="primary">
                 {translate('token>pass>tokenPage')}

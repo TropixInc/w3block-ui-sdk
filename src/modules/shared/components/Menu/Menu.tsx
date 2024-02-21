@@ -4,7 +4,6 @@ import { useCopyToClipboard } from 'react-use';
 
 import classNames from 'classnames';
 import { format } from 'date-fns/esm';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { usePixwayAuthentication } from '../../../auth/hooks/usePixwayAuthentication';
 import { useLoyaltiesInfo } from '../../../business/hooks/useLoyaltiesInfo';
@@ -63,7 +62,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
   const { signOut } = usePixwayAuthentication();
   const formatedDate = format(createdAt, 'dd/MM/yyyy');
   const [tabsToShow, setTabsToShow] = useState(tabs);
-  const { pass } = useFlags();
   const { loyaltyWallet } = useUserWallet();
 
   const userRoles = useMemo(() => {
@@ -120,7 +118,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         icon: <TicketIcon width={17} height={17} />,
 
         link: PixwayAppRoutes.TOKENPASS,
-        isVisible: pass && isAdmin && !isHidden('pass'),
+        isVisible: isAdmin && !isHidden('pass'),
       },
       {
         title:
@@ -220,7 +218,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     if (!tabs) setTabsToShow(tabsDefault);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pass, profile, loyaltyWallet, isAdmin, isLoyaltyOperator, defaultTheme]);
+  }, [profile, loyaltyWallet, isAdmin, isLoyaltyOperator, defaultTheme]);
 
   const handleCopy = () => {
     copyToClipboard(profile?.data.mainWallet?.address as string);

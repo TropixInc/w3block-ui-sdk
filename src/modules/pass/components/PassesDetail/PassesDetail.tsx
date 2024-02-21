@@ -3,20 +3,11 @@ import { ReactNode, lazy, useMemo, useState } from 'react';
 import { useBoolean } from 'react-use';
 
 import { compareAsc, format } from 'date-fns';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 // import { QrCodeReader } from '../../../shared/components/QrCodeReader';
-const QrCodeReader = lazy(() => import('../../../shared/components/QrCodeReader').then(module => ({ default: module.QrCodeReader })));
-const QrCodeError = lazy(() => import('../../../shared/components/QrCodeReader/QrCodeError').then(module => ({ default: module.QrCodeError })));
 import {
   TypeError,
 } from '../../../shared/components/QrCodeReader/QrCodeError';
-const QrCodeValidated = lazy(() => import('../../../shared/components/QrCodeReader/QrCodeValidated').then(module => ({ default: module.QrCodeValidated })));
-const Spinner = lazy(() => import('../../../shared/components/Spinner').then(module => ({ default: module.Spinner })));
-const Button = lazy(() => import('../../../tokens/components/Button').then(module => ({ default: module.Button })));
-const BaseTemplate = lazy(() => import('../BaseTemplate').then(module => ({ default: module.BaseTemplate })));
-const VerifyBenefit = lazy(() => import('../VerifyBenefit').then(module => ({ default: module.VerifyBenefit })));
-
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import useRouter from '../../../shared/hooks/useRouter';
@@ -32,7 +23,13 @@ import useGetPassById from '../../hooks/useGetPassById';
 import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
 import useVerifyBenefit from '../../hooks/useVerifyBenefit';
 import { TokenPassBenefits, TokenPassBenefitType } from '../../interfaces/PassBenefitDTO';
-
+const QrCodeValidated = lazy(() => import('../../../shared/components/QrCodeReader/QrCodeValidated').then(module => ({ default: module.QrCodeValidated })));
+const Spinner = lazy(() => import('../../../shared/components/Spinner').then(module => ({ default: module.Spinner })));
+const Button = lazy(() => import('../../../tokens/components/Button').then(module => ({ default: module.Button })));
+const BaseTemplate = lazy(() => import('../BaseTemplate').then(module => ({ default: module.BaseTemplate })));
+const VerifyBenefit = lazy(() => import('../VerifyBenefit').then(module => ({ default: module.VerifyBenefit })));
+const QrCodeReader = lazy(() => import('../../../shared/components/QrCodeReader').then(module => ({ default: module.QrCodeReader })));
+const QrCodeError = lazy(() => import('../../../shared/components/QrCodeReader/QrCodeError').then(module => ({ default: module.QrCodeError })));
 
 interface TableRow {
   name: ReactNode;
@@ -62,7 +59,6 @@ export const PassesDetail = () => {
   const [errorType, setErrorType] = useState<TypeError>(TypeError.read);
   const [benefitId, setBenefitId] = useState('');
   const [qrCodeData, setQrCodeData] = useState('');
-  const { pass } = useFlags();
 
   const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
   const { data: verifyBenefit, isLoading: verifyLoading, isError: verifyError } = useVerifyBenefit({
@@ -218,7 +214,7 @@ export const PassesDetail = () => {
   };
 
 
-  return pass ? (
+  return (
     <BaseTemplate title="Token Pass">
       <div className="pw-flex pw-flex-col pw-gap-8">
         <div className="pw-bg-white pw-flex pw-items-center pw-justify-start pw-p-4 pw-gap-4 pw-border pw-border-[#E6E8EC] pw-rounded-2xl">
@@ -258,42 +254,41 @@ export const PassesDetail = () => {
       </div>
 
 
-      {pass ?
-        <>
-          <QrCodeReader
-            hasOpen={showScan}
-            returnValue={(e) => verifyBenefitUse(e)}
-            onClose={() => setOpenScan(false)}
-          />
-          <QrCodeValidated
-            hasOpen={showSuccess}
-            onClose={() => setShowSuccess(false)}
-            validateAgain={() => setOpenScan()}
-            name={filteredBenefit?.name}
-            type={filteredBenefit?.type}
-            tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
-            userEmail={verifyBenefit?.data?.user?.email}
-            userName={verifyBenefit?.data?.user?.name}
-          />
-          <QrCodeError
-            hasOpen={showError}
-            onClose={() => setShowError(false)}
-            validateAgain={() => setOpenScan()}
-            type={errorType}
-            error={error}
-          />
-          <VerifyBenefit
-            hasOpen={showVerify}
-            error={verifyError}
-            isLoading={registerLoading}
-            isLoadingInfo={verifyLoading}
-            onClose={() => setShowVerify(false)}
-            useBenefit={() => validateBenefitUse(qrCodeData)}
-            data={verifyBenefit?.data}
-            tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
-          />
-        </>
-        : null}
+
+      <>
+        <QrCodeReader
+          hasOpen={showScan}
+          returnValue={(e) => verifyBenefitUse(e)}
+          onClose={() => setOpenScan(false)}
+        />
+        <QrCodeValidated
+          hasOpen={showSuccess}
+          onClose={() => setShowSuccess(false)}
+          validateAgain={() => setOpenScan()}
+          name={filteredBenefit?.name}
+          type={filteredBenefit?.type}
+          tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
+          userEmail={verifyBenefit?.data?.user?.email}
+          userName={verifyBenefit?.data?.user?.name}
+        />
+        <QrCodeError
+          hasOpen={showError}
+          onClose={() => setShowError(false)}
+          validateAgain={() => setOpenScan()}
+          type={errorType}
+          error={error}
+        />
+        <VerifyBenefit
+          hasOpen={showVerify}
+          error={verifyError}
+          isLoading={registerLoading}
+          isLoadingInfo={verifyLoading}
+          onClose={() => setShowVerify(false)}
+          useBenefit={() => validateBenefitUse(qrCodeData)}
+          data={verifyBenefit?.data}
+          tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
+        />
+      </>
     </BaseTemplate>
-  ) : null;
+  );
 };

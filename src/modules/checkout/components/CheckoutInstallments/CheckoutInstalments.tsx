@@ -20,8 +20,9 @@ export const CheckoutInstalments = ({
   const [opened, setOpened] = useState<boolean>(false);
   const divRef = useRef<HTMLDivElement>(null);
   function generateStringText(installment: AvailableInstallmentInfo) {
-    return `${installment.amount}x de ${formatterCurrency(currency).format(
-      installment.installmentPrice
+    return `${installment.amount}x de ${formatterCurrency(
+      currency,
+      String(installment?.installmentPrice)
     )} ${
       installment.interest && installment.interest != 0
         ? `(${installment.interest}% de juros)`

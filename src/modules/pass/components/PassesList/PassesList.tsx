@@ -1,9 +1,13 @@
 import { lazy, useState } from 'react';
 
-import { useFlags } from 'launchdarkly-react-client-sdk';
-
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
-//import { QrCodeReader } from '../../../shared/components/QrCodeReader';
+import { TypeError } from '../../../shared/components/QrCodeReader/QrCodeError';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import useTranslation from '../../../shared/hooks/useTranslation';
+import useGetPassBenefits from '../../hooks/useGetPassBenefits';
+import useGetPassByUser from '../../hooks/useGetPassByUser';
+import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
+import useVerifyBenefit from '../../hooks/useVerifyBenefit';
 const QrCodeReader = lazy(() =>
   import('../../../shared/components/QrCodeReader').then((module) => ({
     default: module.QrCodeReader,
@@ -46,14 +50,6 @@ const PassCard = lazy(() =>
     default: module.PassCard,
   }))
 );
-import { TypeError } from '../../../shared/components/QrCodeReader/QrCodeError';
-import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import useTranslation from '../../../shared/hooks/useTranslation';
-import useGetPassBenefits from '../../hooks/useGetPassBenefits';
-import useGetPassByUser from '../../hooks/useGetPassByUser';
-import usePostBenefitRegisterUse from '../../hooks/usePostBenefitRegisterUse';
-import useVerifyBenefit from '../../hooks/useVerifyBenefit';
-
 const _PassesList = () => {
   const { data, isLoading } = useGetPassByUser();
   const [translate] = useTranslation();
@@ -207,7 +203,6 @@ const _PassesList = () => {
 };
 
 export const PassesList = () => {
-  const { pass } = useFlags();
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
@@ -218,7 +213,7 @@ export const PassesList = () => {
   return (
     <TranslatableComponent>
       <InternalPagesLayoutBase>
-        {pass && isAdmin && <_PassesList />}
+        {isAdmin && <_PassesList />}
       </InternalPagesLayoutBase>
     </TranslatableComponent>
   );

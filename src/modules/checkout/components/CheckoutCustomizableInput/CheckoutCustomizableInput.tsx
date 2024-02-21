@@ -27,6 +27,19 @@ export const CheckoutCustomizableInput = ({
           onChange={(e: any) => onChange(e.target.value)}
           type="text"
         />
+      ) : type === INPUTS_POSSIBLE.credit_card_ccv ||
+        type === INPUTS_POSSIBLE.credit_card_number ? (
+        <IMaskInput
+          data-private
+          readOnly={readonly}
+          radix="."
+          mask={getMask(type)}
+          placeholder={getPlaceholder(type)}
+          className="pw-full pw-border pw-border-slate-300 pw-rounded-lg pw-p-3 pw-text-sm pw-text-slate-700 pw-w-full"
+          value={value}
+          onAccept={(e: any) => onChange(e)}
+          type="text"
+        />
       ) : (
         <IMaskInput
           readOnly={readonly}

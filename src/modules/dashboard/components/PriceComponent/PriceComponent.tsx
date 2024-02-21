@@ -16,7 +16,6 @@ interface PriceComponent {
 const _PriceComponent = ({
   className,
   loading,
-  name = 'BRL',
   loadingPreview = false,
   payments,
 }: PriceComponent) => {
@@ -50,19 +49,18 @@ const _PriceComponent = ({
               parseFloat(payment()?.originalAmount ?? '') >
                 parseFloat(payment()?.amount ?? '') && (
                 <CriptoValueComponent
-                  code={name}
+                  code={payment()?.currency?.symbol}
                   value={payment()?.originalAmount ?? ''}
                   crypto={
                     payment()?.currency?.symbol == 'MATIC' ||
-                    payment()?.currency?.symbol == 'ETH' ||
-                    payment()?.currency?.symbol == 'ZUCA'
+                    payment()?.currency?.symbol == 'ETH'
                   }
                   fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                 />
               )}
             <CriptoValueComponent
               pointsPrecision="decimal"
-              code={name}
+              code={payment()?.currency?.symbol}
               value={
                 coinPayment()?.currencyId ===
                   '9e5c87cb-22ca-4550-8f09-f2272203410b' &&
@@ -76,8 +74,7 @@ const _PriceComponent = ({
               }
               crypto={
                 payment()?.currency?.symbol == 'MATIC' ||
-                payment()?.currency?.symbol == 'ETH' ||
-                payment()?.currency?.symbol == 'ZUCA'
+                payment()?.currency?.symbol == 'ETH'
               }
               fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
             />
@@ -85,6 +82,7 @@ const _PriceComponent = ({
         )}
       </div>
       {coinPayment()?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b' &&
+      parseFloat(coinPayment()?.amount ?? '') > 0 &&
       payments &&
       payments?.length > 1 ? (
         <div className="pw-flex pw-justify-between pw-mt-2">
@@ -100,8 +98,7 @@ const _PriceComponent = ({
                 value={coinPayment()?.amount ?? ''}
                 crypto={
                   coinPayment()?.currency?.symbol == 'MATIC' ||
-                  coinPayment()?.currency?.symbol == 'ETH' ||
-                  coinPayment()?.currency?.symbol == 'ZUCA'
+                  coinPayment()?.currency?.symbol == 'ETH'
                 }
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
               />
@@ -128,23 +125,21 @@ const _PriceComponent = ({
                     parseFloat(payment()?.originalClientServiceFee ?? '') >
                       parseFloat(payment()?.clientServiceFee ?? '') && (
                       <CriptoValueComponent
-                        code={name}
+                        code={payment()?.currency?.symbol}
                         value={payment()?.originalClientServiceFee ?? ''}
                         crypto={
                           payment()?.currency?.symbol == 'MATIC' ||
-                          payment()?.currency?.symbol == 'ETH' ||
-                          payment()?.currency?.symbol == 'ZUCA'
+                          payment()?.currency?.symbol == 'ETH'
                         }
                         fontClass="pw-text-sm pw-font-[600] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                       />
                     )}
                   <CriptoValueComponent
-                    code={name}
+                    code={payment()?.currency?.symbol}
                     value={payment()?.clientServiceFee ?? ''}
                     crypto={
                       payment()?.currency?.symbol == 'MATIC' ||
-                      payment()?.currency?.symbol == 'ETH' ||
-                      payment()?.currency?.symbol == 'ZUCA'
+                      payment()?.currency?.symbol == 'ETH'
                     }
                     fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                   />
@@ -166,12 +161,11 @@ const _PriceComponent = ({
             <Shimmer />
           ) : parseFloat((payment()?.gasFee as string) ?? '') == 0 ? null : (
             <CriptoValueComponent
-              code={name}
+              code={payment()?.currency?.symbol}
               value={(payment()?.gasFee as string) ?? ''}
               crypto={
                 payment()?.currency?.symbol == 'MATIC' ||
-                payment()?.currency?.symbol == 'ETH' ||
-                payment()?.currency?.symbol == 'ZUCA'
+                payment()?.currency?.symbol == 'ETH'
               }
               fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
             />
@@ -191,19 +185,18 @@ const _PriceComponent = ({
               parseFloat(payment()?.originalTotalAmount ?? '') >
                 parseFloat(payment()?.fullOrderTotalAmount ?? '') && (
                 <CriptoValueComponent
-                  code={name}
+                  code={payment()?.currency?.symbol}
                   value={payment()?.originalTotalAmount ?? ''}
                   crypto={
                     payment()?.currency?.symbol == 'MATIC' ||
-                    payment()?.currency?.symbol == 'ETH' ||
-                    payment()?.currency?.symbol == 'ZUCA'
+                    payment()?.currency?.symbol == 'ETH'
                   }
                   fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C] !pw-text-opacity-50 pw-line-through"
                 />
               )}
             <CriptoValueComponent
               pointsPrecision="decimal"
-              code={name}
+              code={payment()?.currency?.symbol}
               value={
                 coinPayment()?.currencyId ===
                 '9e5c87cb-22ca-4550-8f09-f2272203410b'
@@ -213,8 +206,7 @@ const _PriceComponent = ({
               showFree
               crypto={
                 payment()?.currency?.symbol == 'MATIC' ||
-                payment()?.currency?.symbol == 'ETH' ||
-                payment()?.currency?.symbol == 'ZUCA'
+                payment()?.currency?.symbol == 'ETH'
               }
               fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
             />

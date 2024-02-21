@@ -2,8 +2,18 @@ import { MouseEventHandler, lazy, useRef } from 'react';
 import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
+import Skeleton from '../../../shared/components/Skeleton/Skeleton';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useModalController } from '../../../shared/hooks/useModalController';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
+import { TokenActionsProvider } from '../../providers/TokenActionsProvider';
+const WalletTokenCardActionsPanel = lazy(() =>
+  import('./ActionsPanel').then((m) => ({
+    default: m.WalletTokenCardActionsPanel,
+  }))
+);
 const Button = lazy(() =>
   import('../../../tokens/components/Button').then((m) => ({
     default: m.Button,
@@ -24,19 +34,6 @@ const Link = lazy(() =>
     default: m.Link,
   }))
 );
-
-import Skeleton from '../../../shared/components/Skeleton/Skeleton';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useModalController } from '../../../shared/hooks/useModalController';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
-import useTranslation from '../../../shared/hooks/useTranslation';
-import { TokenActionsProvider } from '../../providers/TokenActionsProvider';
-const WalletTokenCardActionsPanel = lazy(() =>
-  import('./ActionsPanel').then((m) => ({
-    default: m.WalletTokenCardActionsPanel,
-  }))
-);
-
 interface Props {
   name: string;
   category: string;
@@ -79,10 +76,9 @@ export const WalletTokenCard = ({
     if (isOpen) closeModal();
   });
   const [translate] = useTranslation();
-  const { pass } = useFlags();
   const isInternalToken = collectionData !== undefined;
 
-  const hasPass = collectionData?.pass && pass;
+  const hasPass = collectionData?.pass;
 
   const onClickOptionsButton: MouseEventHandler<HTMLButtonElement> = (
     event

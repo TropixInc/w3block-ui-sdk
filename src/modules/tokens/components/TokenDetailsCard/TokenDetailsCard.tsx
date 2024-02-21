@@ -3,7 +3,6 @@ import { lazy, useMemo } from 'react';
 
 import classNames from 'classnames';
 import format from 'date-fns/format';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
 import { PassType } from '../../../pass/enums/PassType';
@@ -11,11 +10,6 @@ import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByE
 import useGetPassById from '../../../pass/hooks/useGetPassById';
 import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
 import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
-const ImageSDK = lazy(() =>
-  import('../../../shared/components/ImageSDK').then((m) => ({
-    default: m.ImageSDK,
-  }))
-);
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
@@ -32,7 +26,8 @@ import {
   Dimensions3DValue,
 } from '../../interfaces/DimensionsValue';
 import { DynamicFormConfiguration } from '../../interfaces/DynamicFormConfiguration';
-
+import GenericTable from '../GenericTable/GenericTable';
+import StatusTag from '../StatusTag/StatusTag';
 const Breadcrumb = lazy(() =>
   import('../Breadcrumb').then((m) => ({ default: m.Breadcrumb }))
 );
@@ -40,9 +35,11 @@ const Breadcrumb = lazy(() =>
 const Button = lazy(() =>
   import('../Button').then((m) => ({ default: m.Button }))
 );
-
-import GenericTable from '../GenericTable/GenericTable';
-
+const ImageSDK = lazy(() =>
+  import('../../../shared/components/ImageSDK').then((m) => ({
+    default: m.ImageSDK,
+  }))
+);
 const InternalPageTitle = lazy(() =>
   import('../InternalPageTitle').then((m) => ({ default: m.InternalPageTitle }))
 );
@@ -62,9 +59,6 @@ const TextFieldDisplay = lazy(() =>
     default: m.TextFieldDisplay,
   }))
 );
-
-import StatusTag from '../StatusTag/StatusTag';
-
 interface Props {
   contract: string;
   title: string;
@@ -97,7 +91,6 @@ export const TokenDetailsCard = ({
     tokenData,
     tokenTemplate
   );
-  const { pass } = useFlags();
 
   const { data: benefitsByEdition, isSuccess } = useGetBenefitsByEditionNumber({
     tokenPassId: collectionId as string,
@@ -235,8 +228,8 @@ export const TokenDetailsCard = ({
       )}
     >
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
-      {pass ? <InternalPageTitle contract={contract} title={title} /> : null}
-      {isMultiplePass && pass ? (
+      <InternalPageTitle contract={contract} title={title} />
+      {isMultiplePass ? (
         <>
           <LineDivider />
           <div className="pw-flex pw-flex-col pw-gap-6">

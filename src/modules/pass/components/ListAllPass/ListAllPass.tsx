@@ -3,7 +3,6 @@ import { useDebounce } from 'react-use';
 
 import classNames from 'classnames';
 import { format } from 'date-fns';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useRouter } from 'next/router';
 const InternalPagesLayoutBase = lazy(() =>
   import('../../../shared/components/InternalPagesLayoutBase').then((mod) => ({
@@ -50,7 +49,6 @@ interface Props {
 const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
-  const { pass } = useFlags();
 
   const router = useRouter();
 
@@ -198,7 +196,7 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
       name: translate('connect>ListAllPass>listBenefits'),
     },
   ];
-  return publicTokenResponse && isDevelopment && pass ? (
+  return publicTokenResponse && isDevelopment ? (
     <div
       className={classNames(
         'pw-flex pw-flex-col pw-p-[17px] sm:pw-p-6 pw-bg-white pw-relative pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-mx-[22px] sm:pw-mx-0'

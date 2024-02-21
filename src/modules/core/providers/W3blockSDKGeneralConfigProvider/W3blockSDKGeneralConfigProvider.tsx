@@ -1,13 +1,5 @@
 import { ReactNode, lazy, useMemo } from 'react';
 
-import { withLDProvider } from 'launchdarkly-react-client-sdk';
-
-const CartProvider = lazy(() =>
-  import('../../../checkout/providers/cartProvider').then((m) => ({
-    default: m.CartProvider,
-  }))
-);
-import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
@@ -27,7 +19,11 @@ const W3blockApiProvider = lazy(() =>
     default: m.W3blockApiProvider,
   }))
 );
-
+const CartProvider = lazy(() =>
+  import('../../../checkout/providers/cartProvider').then((m) => ({
+    default: m.CartProvider,
+  }))
+);
 interface Props extends JSX.IntrinsicAttributes {
   children: ReactNode;
   api: {
@@ -45,11 +41,10 @@ interface Props extends JSX.IntrinsicAttributes {
   isProduction: boolean;
   appBaseUrl: string;
   connectProxyPass?: string;
-  launchDarklyKey?: string;
   name?: string;
 }
 
-export const W3blockUISDKGeneralConfig = ({
+export const W3blockUISDKGeneralConfigProvider = ({
   children,
   api,
   locale,
@@ -94,24 +89,4 @@ export const W3blockUISDKGeneralConfig = ({
       </EnvironmentContext.Provider>
     </W3blockUISDKGereralConfigContext.Provider>
   );
-};
-
-export const W3blockUISDKGeneralConfigProvider = ({
-  launchDarklyKey,
-  ...props
-}: Props) => {
-  const isProduction = useIsProduction();
-  const LDProvider = useMemo(
-    () =>
-      withLDProvider<Props>({
-        clientSideID: launchDarklyKey
-          ? launchDarklyKey
-          : isProduction
-          ? '636e4bf4ec20a110ee5be93d'
-          : '636e4bf4ec20a110ee5be93c',
-      })(W3blockUISDKGeneralConfig),
-    [isProduction, launchDarklyKey]
-  );
-
-  return <LDProvider {...props} />;
 };
