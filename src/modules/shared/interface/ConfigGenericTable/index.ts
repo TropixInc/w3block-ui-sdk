@@ -79,6 +79,7 @@ export interface Actions {
 }
 
 export interface ColumnsTable {
+  styleColumn?: string;
   format: FormatApiData;
   key: string;
   keyInCollection?: string;
