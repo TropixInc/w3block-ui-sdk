@@ -18,7 +18,8 @@ export const CheckoutCustomizableInput = ({
 }: CheckoutCustomizableInputProps) => {
   return (
     <div className="pw-w-full">
-      {type === INPUTS_POSSIBLE.credit_card_holder_name ? (
+      {type === INPUTS_POSSIBLE.credit_card_holder_name ||
+      type === INPUTS_POSSIBLE.save_credit_card_name ? (
         <input
           readOnly={readonly}
           placeholder={getPlaceholder(type)}
@@ -76,6 +77,8 @@ const getPlaceholder = (type: INPUTS_POSSIBLE) => {
       return 'CEP do titular do cartão';
     case INPUTS_POSSIBLE.cpf_cnpj:
       return 'CPF/CNPJ do usuário';
+    case INPUTS_POSSIBLE.save_credit_card_name:
+      return 'Como gostaria de chamar este cartão?';
     default:
       return '';
   }

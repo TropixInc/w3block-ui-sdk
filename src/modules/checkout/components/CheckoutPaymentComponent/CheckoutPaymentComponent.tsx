@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-useless-escape */
 import { lazy, useEffect, useMemo, useState } from 'react';
 import Cards from 'react-credit-cards-2';
@@ -6,20 +8,12 @@ import cardValidator from 'card-validator';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
-const Spinner = lazy(() =>
-  import('../../../shared/components/Spinner').then((m) => ({
-    default: m.Spinner,
-  }))
-);
-const WeblockButton = lazy(() =>
-  import('../../../shared/components/WeblockButton/WeblockButton').then(
-    (m) => ({
-      default: m.WeblockButton,
-    })
-  )
-);
 
-import { AvailableInstallmentInfo } from '../../interface/interface';
+import {
+  AvailableCreditCards,
+  AvailableInstallmentInfo,
+} from '../../interface/interface';
+import { CardsSelector } from '../CardsSelector';
 const CheckoutCustomizableInput = lazy(() =>
   import('../CheckoutCustomizableInput/CheckoutCustomizableInput').then(
     (m) => ({ default: m.CheckoutCustomizableInput })
@@ -35,13 +29,23 @@ const ErrorMessage = lazy(() =>
     default: m.ErrorMessage,
   }))
 );
-
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({
+      default: m.WeblockButton,
+    })
+  )
+);
 interface CheckoutPaymentComponentProps {
   inputs: INPUTS_POSSIBLE[];
   installments?: AvailableInstallmentInfo[];
   setInstallment?: (installments: AvailableInstallmentInfo) => void;
   instalment?: AvailableInstallmentInfo;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (value: any) => void;
   title?: string;
   onConcluded?: (val: any) => void;
@@ -50,6 +54,7 @@ interface CheckoutPaymentComponentProps {
   error?: string;
   currency?: string;
   buttonLoadingText?: string;
+  userCreditCards?: AvailableCreditCards[];
 }
 
 export enum INPUTS_POSSIBLE {
@@ -81,22 +86,22 @@ export const CheckoutPaymentComponent = ({
   installments,
   instalment,
   buttonLoadingText,
+  userCreditCards,
 }: CheckoutPaymentComponentProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [value, setValue] = useState<any>({});
   const [sameCpf, setSameCpf] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [saveCard, setSaveCard] = useState(true);
+  const [useSavedCard, setUseSavedCard] = useState(false);
+  const [newCard, setNewCard] = useState(false);
   const [errors, setErrors] = useState<any>({});
   const inputsObj = useMemo(
     () =>
       inputs.reduce((acc, input) => {
         acc[input] = '';
         return acc;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, {} as any),
     [inputs]
   );
-
   const includeTwoCpfs = useMemo(() => {
     return (
       inputs.includes(INPUTS_POSSIBLE.cpf_cnpj) &&
@@ -104,8 +109,14 @@ export const CheckoutPaymentComponent = ({
     );
   }, [inputs]);
 
+  const saveAvailable = useMemo(() => {
+    return (
+      inputs.includes(INPUTS_POSSIBLE.save_credit_card) &&
+      inputs.includes(INPUTS_POSSIBLE.save_credit_card_name)
+    );
+  }, [inputs]);
+
   const validateBeforeProcced = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const validatedErrors = {} as any;
     Object.keys(inputsObj).map((input) => {
       if (
@@ -161,7 +172,7 @@ export const CheckoutPaymentComponent = ({
         return false;
       } else return true;
     });
-    if (Object.keys(validatedErrors).length) {
+    if (Object.keys(validatedErrors).length && !useSavedCard) {
       setErrors(validatedErrors);
     } else {
       setErrors({});
@@ -189,7 +200,6 @@ export const CheckoutPaymentComponent = ({
 
   useEffect(() => {
     onChange?.(value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const replaceAllPossibleWrongCharacters = (value: string) => {
@@ -214,7 +224,6 @@ export const CheckoutPaymentComponent = ({
           acc[input] = inputsObj[input];
         }
         return acc;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, {} as any);
     } else return null;
   }, [inputsObj]);
@@ -242,185 +251,277 @@ export const CheckoutPaymentComponent = ({
         }
       }
       return acc;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }, {} as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputsObj]);
 
+  useEffect(() => {
+    if (userCreditCards && userCreditCards?.length > 0 && !newCard) {
+      setUseSavedCard(true);
+      setValue({
+        [INPUTS_POSSIBLE.credit_card_id]: userCreditCards?.[0]?.id,
+      });
+    }
+  }, [userCreditCards?.[0]?.id]);
+
+  useEffect(() => {
+    if (saveAvailable) {
+      setValue({
+        ...value,
+        [INPUTS_POSSIBLE.save_credit_card]: saveCard,
+      });
+    }
+  }, [saveCard, saveAvailable]);
   return (
     <div className="pw-p-4 sm:pw-p-6 pw-bg-white pw-rounded-lg pw-shadow-lg">
       <p className="pw-text-lg pw-text-slate-800 pw-font-[600] pw-mb-6">
         {title}
       </p>
-      {creditCardInputs && (
-        <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4">
-          <Cards
-            cvc={value[INPUTS_POSSIBLE.credit_card_ccv] ?? ''}
-            number={value[INPUTS_POSSIBLE.credit_card_number] ?? ''}
-            expiry={value[INPUTS_POSSIBLE.credit_card_expiry] ?? ''}
-            name={value[INPUTS_POSSIBLE.credit_card_holder_name] ?? ''}
-          />
-          <div className="pw-flex-col pw-flex pw-gap-3 pw-flex-1">
-            <CheckoutCustomizableInput
-              readonly={loading}
-              errors={errors[INPUTS_POSSIBLE.credit_card_number]}
-              type={INPUTS_POSSIBLE.credit_card_number}
-              value={value[INPUTS_POSSIBLE.credit_card_number] ?? ''}
-              onChange={(val) => {
-                setErrors({
-                  ...errors,
-                  [INPUTS_POSSIBLE.credit_card_number]: '',
-                });
-                setValue({
-                  ...value,
-                  [INPUTS_POSSIBLE.credit_card_number]: val,
-                });
-              }}
-            />
-            <CheckoutCustomizableInput
-              readonly={loading}
-              errors={errors[INPUTS_POSSIBLE.credit_card_holder_name]}
-              type={INPUTS_POSSIBLE.credit_card_holder_name}
-              value={value[INPUTS_POSSIBLE.credit_card_holder_name] ?? ''}
-              onChange={(val) => {
-                setErrors({
-                  ...errors,
-                  [INPUTS_POSSIBLE.credit_card_holder_name]: '',
-                });
-                setValue({
-                  ...value,
-                  [INPUTS_POSSIBLE.credit_card_holder_name]: val,
-                });
-              }}
-            />
-            <div className="pw-flex pw-gap-3">
-              <CheckoutCustomizableInput
-                readonly={loading}
-                errors={errors[INPUTS_POSSIBLE.credit_card_expiry]}
-                type={INPUTS_POSSIBLE.credit_card_expiry}
-                value={value[INPUTS_POSSIBLE.credit_card_expiry] ?? ''}
-                onChange={(val) => {
-                  setErrors({
-                    ...errors,
-                    [INPUTS_POSSIBLE.credit_card_expiry]: '',
-                  });
-                  setValue({
-                    ...value,
-                    [INPUTS_POSSIBLE.credit_card_expiry]: val,
-                  });
-                }}
-              />
-              <CheckoutCustomizableInput
-                readonly={loading}
-                errors={errors[INPUTS_POSSIBLE.credit_card_ccv]}
-                type={INPUTS_POSSIBLE.credit_card_ccv}
-                value={value[INPUTS_POSSIBLE.credit_card_ccv] ?? ''}
-                onChange={(val) => {
-                  setErrors({
-                    ...errors,
-                    [INPUTS_POSSIBLE.credit_card_ccv]: '',
-                  });
-                  setValue({
-                    ...value,
-                    [INPUTS_POSSIBLE.credit_card_ccv]: val,
-                  });
-                }}
-              />
-            </div>
-          </div>
-        </div>
+      {userCreditCards && userCreditCards?.length > 0 && (
+        <CardsSelector
+          onChange={(e) => {
+            if (e === 'newCard') {
+              setUseSavedCard(false);
+              setValue({ [INPUTS_POSSIBLE.save_credit_card]: saveCard });
+              setNewCard(true);
+            } else {
+              setUseSavedCard(true);
+              setNewCard(false);
+              setValue({
+                [INPUTS_POSSIBLE.credit_card_id]: e,
+              });
+            }
+          }}
+          data={userCreditCards}
+        />
       )}
-      <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
-        {installments && installments.length > 0 && (
-          <CheckoutInstalments
-            installments={installments}
-            value={instalment}
-            currency={currency}
-            setInstallment={(install) => {
-              setValue({
-                ...value,
-                [INPUTS_POSSIBLE.installments]: install?.amount ?? 1,
-              });
-              setInstallment?.(install);
-            }}
-          />
-        )}
+      {newCard || !userCreditCards || userCreditCards?.length === 0 ? (
+        <>
+          {creditCardInputs && (
+            <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4 pw-mt-4">
+              <Cards
+                cvc={value[INPUTS_POSSIBLE.credit_card_ccv] ?? ''}
+                number={value[INPUTS_POSSIBLE.credit_card_number] ?? ''}
+                expiry={value[INPUTS_POSSIBLE.credit_card_expiry] ?? ''}
+                name={value[INPUTS_POSSIBLE.credit_card_holder_name] ?? ''}
+              />
+              <div className="pw-flex-col pw-flex pw-gap-3 pw-flex-1">
+                <CheckoutCustomizableInput
+                  readonly={loading}
+                  errors={errors[INPUTS_POSSIBLE.credit_card_number]}
+                  type={INPUTS_POSSIBLE.credit_card_number}
+                  value={value[INPUTS_POSSIBLE.credit_card_number] ?? ''}
+                  onChange={(val) => {
+                    setErrors({
+                      ...errors,
+                      [INPUTS_POSSIBLE.credit_card_number]: '',
+                    });
+                    setValue({
+                      ...value,
+                      [INPUTS_POSSIBLE.credit_card_number]: val,
+                    });
+                  }}
+                />
+                <CheckoutCustomizableInput
+                  readonly={loading}
+                  errors={errors[INPUTS_POSSIBLE.credit_card_holder_name]}
+                  type={INPUTS_POSSIBLE.credit_card_holder_name}
+                  value={value[INPUTS_POSSIBLE.credit_card_holder_name] ?? ''}
+                  onChange={(val) => {
+                    setErrors({
+                      ...errors,
+                      [INPUTS_POSSIBLE.credit_card_holder_name]: '',
+                    });
+                    setValue({
+                      ...value,
+                      [INPUTS_POSSIBLE.credit_card_holder_name]: val,
+                    });
+                  }}
+                />
+                <div className="pw-flex pw-gap-3">
+                  <CheckoutCustomizableInput
+                    readonly={loading}
+                    errors={errors[INPUTS_POSSIBLE.credit_card_expiry]}
+                    type={INPUTS_POSSIBLE.credit_card_expiry}
+                    value={value[INPUTS_POSSIBLE.credit_card_expiry] ?? ''}
+                    onChange={(val) => {
+                      setErrors({
+                        ...errors,
+                        [INPUTS_POSSIBLE.credit_card_expiry]: '',
+                      });
+                      setValue({
+                        ...value,
+                        [INPUTS_POSSIBLE.credit_card_expiry]: val,
+                      });
+                    }}
+                  />
+                  <CheckoutCustomizableInput
+                    readonly={loading}
+                    errors={errors[INPUTS_POSSIBLE.credit_card_ccv]}
+                    type={INPUTS_POSSIBLE.credit_card_ccv}
+                    value={value[INPUTS_POSSIBLE.credit_card_ccv] ?? ''}
+                    onChange={(val) => {
+                      setErrors({
+                        ...errors,
+                        [INPUTS_POSSIBLE.credit_card_ccv]: '',
+                      });
+                      setValue({
+                        ...value,
+                        [INPUTS_POSSIBLE.credit_card_ccv]: val,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
+            {installments && installments.length > 0 && (
+              <CheckoutInstalments
+                installments={installments}
+                value={instalment}
+                currency={currency}
+                setInstallment={(install) => {
+                  setValue({
+                    ...value,
+                    [INPUTS_POSSIBLE.installments]: install?.amount ?? 1,
+                  });
+                  setInstallment?.(install);
+                }}
+              />
+            )}
 
-        {Object.keys(otherInputs).map((input) => {
-          return input != INPUTS_POSSIBLE.transparent_checkout ? (
-            <CheckoutCustomizableInput
-              readonly={loading}
-              errors={errors[input]}
-              key={input}
-              onChange={(val) => {
-                setErrors({ ...errors, [input]: '' });
-                setValue({
-                  ...value,
-                  [input]: val,
-                });
-              }}
-              value={value[input] ?? ''}
-              type={input as INPUTS_POSSIBLE}
-            />
-          ) : null;
-        })}
-      </div>
-      {includeTwoCpfs && (
-        <div className="pw-flex pw-flex-col  pw-gap-4 pw-mt-4">
-          <CheckoutCustomizableInput
-            readonly={loading}
-            errors={errors[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]}
-            key={INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj}
-            onChange={(val) => {
-              setErrors({
-                ...errors,
-                [INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]: '',
-              });
-              setValue({
-                ...value,
-                [INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]: val,
-              });
-            }}
-            value={value[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj] ?? ''}
-            type={INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj}
-          />
-          <div className="pw-flex pw-gap-3 pw-items-center">
-            <div
-              onClick={() => setSameCpf(!sameCpf)}
-              className="pw-flex pw-w-[15px] pw-h-[15px] pw-rounded-sm pw-border-slate-400 pw-border pw-justify-center pw-items-center"
-            >
+            {Object.keys(otherInputs).map((input) => {
+              return input != INPUTS_POSSIBLE.transparent_checkout ? (
+                <CheckoutCustomizableInput
+                  readonly={loading}
+                  errors={errors[input]}
+                  key={input}
+                  onChange={(val) => {
+                    setErrors({ ...errors, [input]: '' });
+                    setValue({
+                      ...value,
+                      [input]: val,
+                    });
+                  }}
+                  value={value[input] ?? ''}
+                  type={input as INPUTS_POSSIBLE}
+                />
+              ) : null;
+            })}
+          </div>
+          {includeTwoCpfs && (
+            <div className="pw-flex pw-flex-col  pw-gap-4 pw-mt-4">
+              <CheckoutCustomizableInput
+                readonly={loading}
+                errors={errors[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]}
+                key={INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj}
+                onChange={(val) => {
+                  setErrors({
+                    ...errors,
+                    [INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]: '',
+                  });
+                  setValue({
+                    ...value,
+                    [INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj]: val,
+                  });
+                }}
+                value={value[INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj] ?? ''}
+                type={INPUTS_POSSIBLE.credit_card_holder_cpf_cnpj}
+              />
+              <div className="pw-flex pw-gap-3 pw-items-center">
+                <div
+                  onClick={() => setSameCpf(!sameCpf)}
+                  className="pw-flex pw-w-[15px] pw-h-[15px] pw-rounded-sm pw-border-slate-400 pw-border pw-justify-center pw-items-center"
+                >
+                  {!sameCpf && (
+                    <div className="pw-w-[10px] pw-h-[10px] pw-bg-blue-600 pw-rounded-sm"></div>
+                  )}
+                </div>
+                <p className="pw-text-sm pw-text-slate-600">
+                  O CPF do comprador é diferente do titular do cartão
+                </p>
+              </div>
               {!sameCpf && (
-                <div className="pw-w-[10px] pw-h-[10px] pw-bg-blue-600 pw-rounded-sm"></div>
+                <CheckoutCustomizableInput
+                  readonly={loading}
+                  errors={errors[INPUTS_POSSIBLE.cpf_cnpj]}
+                  key={INPUTS_POSSIBLE.cpf_cnpj}
+                  onChange={(val) => {
+                    setErrors({
+                      ...errors,
+                      [INPUTS_POSSIBLE.cpf_cnpj]: '',
+                    });
+                    setValue({
+                      ...value,
+                      [INPUTS_POSSIBLE.cpf_cnpj]: val,
+                    });
+                  }}
+                  value={value[INPUTS_POSSIBLE.cpf_cnpj] ?? ''}
+                  type={INPUTS_POSSIBLE.cpf_cnpj}
+                />
               )}
             </div>
-            <p className="pw-text-sm pw-text-slate-600">
-              O CPF do comprador é diferente do titular do cartão
-            </p>
-          </div>
-          {!sameCpf && (
-            <CheckoutCustomizableInput
-              readonly={loading}
-              errors={errors[INPUTS_POSSIBLE.cpf_cnpj]}
-              key={INPUTS_POSSIBLE.cpf_cnpj}
-              onChange={(val) => {
-                setErrors({
-                  ...errors,
-                  [INPUTS_POSSIBLE.cpf_cnpj]: '',
-                });
+          )}
+          {saveAvailable && (
+            <>
+              <div className="pw-flex pw-gap-3 pw-items-center pw-my-3">
+                <div
+                  onClick={() => {
+                    setSaveCard(!saveCard);
+                  }}
+                  className="pw-flex pw-w-[15px] pw-h-[15px] pw-rounded-sm pw-border-slate-400 pw-border pw-justify-center pw-items-center"
+                >
+                  {saveCard && (
+                    <div className="pw-w-[10px] pw-h-[10px] pw-bg-blue-600 pw-rounded-sm"></div>
+                  )}
+                </div>
+                <p className="pw-text-sm pw-text-slate-600">
+                  Desejo cadastrar esse cartão para futuras compras
+                </p>
+              </div>
+              {saveCard && (
+                <CheckoutCustomizableInput
+                  readonly={loading}
+                  errors={errors[INPUTS_POSSIBLE.save_credit_card_name]}
+                  key={INPUTS_POSSIBLE.save_credit_card_name}
+                  onChange={(val) => {
+                    setErrors({
+                      ...errors,
+                      [INPUTS_POSSIBLE.save_credit_card_name]: '',
+                    });
+                    setValue({
+                      ...value,
+                      [INPUTS_POSSIBLE.save_credit_card_name]: val,
+                    });
+                  }}
+                  value={value[INPUTS_POSSIBLE.save_credit_card_name] ?? ''}
+                  type={INPUTS_POSSIBLE.save_credit_card_name}
+                />
+              )}
+            </>
+          )}
+          {error && error != '' ? (
+            <ErrorMessage className="pw-mt-4" title={error} />
+          ) : null}
+        </>
+      ) : (
+        <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
+          {installments && installments.length > 0 && (
+            <CheckoutInstalments
+              installments={installments}
+              value={instalment}
+              currency={currency}
+              setInstallment={(install) => {
                 setValue({
                   ...value,
-                  [INPUTS_POSSIBLE.cpf_cnpj]: val,
+                  [INPUTS_POSSIBLE.installments]: install?.amount ?? 1,
                 });
+                setInstallment?.(install);
               }}
-              value={value[INPUTS_POSSIBLE.cpf_cnpj] ?? ''}
-              type={INPUTS_POSSIBLE.cpf_cnpj}
             />
           )}
         </div>
       )}
-      {error && error != '' ? (
-        <ErrorMessage className="pw-mt-4" title={error} />
-      ) : null}
       <div className="pw-flex pw-justify-end pw-mt-6">
         <WeblockButton
           disabled={loading}

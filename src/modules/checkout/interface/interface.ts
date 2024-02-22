@@ -94,11 +94,20 @@ export interface AvailableInstallmentInfo {
   interest?: number;
   installmentPrice: number;
 }
+
+export interface AvailableCreditCards {
+  brand: string;
+  createdAt: string;
+  id: string;
+  lastNumbers: string;
+  name: string;
+}
 export interface PaymentMethodsAvaiable {
   paymentMethod: string;
   paymentProvider: string;
   inputs: string[];
   availableInstallments?: AvailableInstallmentInfo[];
+  userCreditCards?: AvailableCreditCards[];
 }
 export interface OrderPreviewCache {
   payments?: PaymentsResponse[];

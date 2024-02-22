@@ -78,6 +78,7 @@ export const CheckouResume = ({
               product?.prices?.find((price) => price?.currencyId == currencyId)
                 ?.anchorCurrency?.symbol ?? ''
             }
+            metadata={product?.metadata}
           />
         ))
       ) : (

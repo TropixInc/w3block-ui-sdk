@@ -83,4 +83,5 @@ export enum PixwayAPIRoutes {
   SIGN_UP = '/auth/signup',
   TENANT_CONTEXT_BY_SLUG = '/tenant-context/{tenantId}/slug/{slug}',
   GET_DEFERRED_BY_USER_ID = '/{companyId}/loyalties/users/deferred/{userId}',
+  GET_SAVED_CARDS = '/companies/{companyId}/users/{userId}/credit-cards',
 }

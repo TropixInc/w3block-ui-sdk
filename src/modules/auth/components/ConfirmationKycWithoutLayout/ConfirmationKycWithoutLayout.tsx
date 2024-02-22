@@ -106,6 +106,7 @@ export const ConfirmationKycWithoutLayout = () => {
                     onClick={() =>
                       router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                         step: res,
+                        formState: 'remain',
                         ...router.query,
                       })
                     }
@@ -123,6 +124,8 @@ export const ConfirmationKycWithoutLayout = () => {
                       if (complexValue) {
                         return (complexValue as any)?.docType === 'cpf'
                           ? `CPF - ${(complexValue as any)?.document}`
+                          : (complexValue as any)?.docType === 'rg'
+                          ? `RG - ${(complexValue as any)?.document}`
                           : `Passaporte - ${(complexValue as any)?.document}`;
                       } else return '';
                     } else if (res?.type === 'simple_location') {

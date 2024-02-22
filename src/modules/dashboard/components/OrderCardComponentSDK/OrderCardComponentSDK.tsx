@@ -225,6 +225,8 @@ export const OrderCardComponentSDK = ({
                         )?.variants
                       }
                       anchorCurrencyAmount="0"
+                      metadata={prod?.metadata}
+                      subtitle={prod?.subtitle}
                     />
                   ))
               : null}
