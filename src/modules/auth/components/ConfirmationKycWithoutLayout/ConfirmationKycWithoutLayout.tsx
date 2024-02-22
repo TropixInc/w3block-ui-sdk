@@ -70,9 +70,9 @@ export const ConfirmationKycWithoutLayout = () => {
               <h2 className="pw-font-semibold">Informações da certificação</h2>
               <h3 className="pw-font-semibold pw-mt-[14px]">Nome completo</h3>
               <p className="pw-font-normal">{storageData?.certificate?.name}</p>
-              <h3 className="pw-font-semibold pw-mt-[14px]">Academia</h3>
+              <h3 className="pw-font-semibold pw-mt-[14px]">Conquista</h3>
               <p className="pw-font-normal">
-                {storageData?.certificate?.academy}
+                {storageData?.certificate?.title}
               </p>
               <h3 className="pw-font-semibold pw-mt-[14px]">
                 Nome do professor
@@ -80,15 +80,15 @@ export const ConfirmationKycWithoutLayout = () => {
               <p className="pw-font-normal">
                 {storageData?.certificate?.master}
               </p>
+              <h3 className="pw-font-semibold pw-mt-[14px]">Academia</h3>
+              <p className="pw-font-normal">
+                {storageData?.certificate?.academy}
+              </p>
               <h3 className="pw-font-semibold pw-mt-[14px]">
                 Data da cerimônia
               </h3>
               <p className="pw-font-normal">
                 {storageData?.certificate?.certificationDate}
-              </p>
-              <h3 className="pw-font-semibold pw-mt-[14px]">Conquista</h3>
-              <p className="pw-font-normal">
-                {storageData?.certificate?.title}
               </p>
               <div className="pw-w-full pw-border-[2px] pw-border-black pw-mt-5"></div>
             </div>

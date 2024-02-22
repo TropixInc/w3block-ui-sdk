@@ -38,6 +38,7 @@ export interface Product {
   tokensAmount: number;
   variants?: Variants[];
   subtitle?: string;
+  metadata?: any;
 }
 
 export interface Images {

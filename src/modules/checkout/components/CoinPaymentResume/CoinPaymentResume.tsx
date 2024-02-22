@@ -32,6 +32,7 @@ export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
           <div className="pw-flex pw-gap-2">
             <CriptoValueComponent
               code={coinPayment()?.currency?.code}
+              symbol={coinPayment()?.currency?.symbol}
               value={coinPayment()?.totalPrice ?? ''}
               crypto
               fontClass="pw-text-base pw-font-[600] pw-text-[#35394C]"
@@ -47,6 +48,7 @@ export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
           <div className="pw-flex pw-gap-2">
             <CriptoValueComponent
               code={payment()?.currency?.code}
+              symbol={coinPayment()?.currency?.symbol}
               value={payment()?.totalPrice ?? ''}
               fontClass="pw-text-base pw-text-[#35394C]"
             />

@@ -15,6 +15,7 @@ export const CriptoValueComponent = ({
   dontShow = false,
   pointsPrecision = 'integer',
   textColor,
+  symbol,
 }: {
   code?: string;
   value: string;
@@ -25,6 +26,7 @@ export const CriptoValueComponent = ({
   dontShow?: boolean;
   pointsPrecision?: 'decimal' | 'integer';
   textColor?: string;
+  symbol?: string;
 }) => {
   const [translate] = useTranslation();
   const getIcon = () => {
@@ -70,22 +72,28 @@ export const CriptoValueComponent = ({
           ? translate('commerce>checkout>free')
           : crypto
           ? getCryptoValueByCode()
-          : formatterCurrency(code ?? 'BRL', value)}
+          : formatterCurrency(code ?? 'BRL', value, symbol)}
       </p>
     </div>
   );
 };
 
-export const formatterCurrency = (code: string, value: string) => {
+export const formatterCurrency = (
+  code: string,
+  value: string,
+  symbol?: string
+) => {
   try {
     return Intl.NumberFormat(currencyLocales[code ?? 'BRL'], {
       style: 'currency',
       currency: code || 'BRL',
-    }).format(parseFloat(value));
+    }).format(Number(value));
   } catch {
     /* empty */
   }
-  return code + ' ' + value;
+  return symbol
+    ? symbol + ' ' + parseFloat(value).toFixed(2)
+    : code + ' ' + parseFloat(value).toFixed(2);
 };
 
 export const currencyLocales: CurrencyObjectType = {

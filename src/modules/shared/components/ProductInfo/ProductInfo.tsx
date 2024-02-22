@@ -46,6 +46,7 @@ interface ProductInfoProps {
   subtitle?: string;
   anchorCurrencyAmount?: string;
   anchorCurrencySymbol?: string;
+  metadata?: any;
 }
 
 export const ProductInfo = ({
@@ -71,6 +72,7 @@ export const ProductInfo = ({
   subtitle,
   anchorCurrencyAmount,
   anchorCurrencySymbol,
+  metadata,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const [error, setError] = useState('');
@@ -88,6 +90,32 @@ export const ProductInfo = ({
       default:
         return null;
     }
+  };
+
+  const beltMap = {
+    Blue: 'Blue',
+    Purple: 'Purple',
+    Brown: 'Brown',
+    Black: 'Black',
+    Coral: 'Coral',
+    Red: 'Red',
+  };
+
+  type Belt = 'Blue' | 'Purple' | 'Brown' | 'Black' | 'Coral' | 'Red';
+
+  const renderName = () => {
+    if (metadata?.metadata?.degree) return 'WJJC Degree Certification';
+    else if (
+      metadata?.metadata?.beltColor &&
+      beltMap[metadata?.metadata?.beltColor as Belt]
+    )
+      return 'WJJC Belt Certification';
+    else if (
+      metadata?.metadata?.beltColor &&
+      !beltMap[metadata?.metadata?.beltColor as Belt]
+    )
+      return 'WJJC Children’s Belt Certification';
+    else return name;
   };
 
   return status == CheckoutStatus.MY_ORDER ? (
@@ -114,7 +142,7 @@ export const ProductInfo = ({
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
         ) : (
           <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
-            {name}
+            {renderName()}
           </p>
         )}
         {subtitle && (
@@ -230,7 +258,7 @@ export const ProductInfo = ({
           <Shimmer className="pw-mb-1 pw-w-[120px]" />
         ) : (
           <p className="pw-font-[600] pw-text-[13px] pw-text-[#353945] pw-min-w-0 pw-truncate pw-whitespace-pre-wrap pw-mb-2">
-            {name}
+            {renderName()}
           </p>
         )}
         {subtitle && (

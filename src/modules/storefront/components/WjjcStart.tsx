@@ -158,16 +158,11 @@ export const WjjcStart = () => {
                   {datasource?.athlete?.data[0]?.attributes?.name}
                 </p>
               )}
-              <h3 className="pw-font-semibold pw-mt-5">Academia</h3>
+              <h3 className="pw-font-semibold pw-mt-5">Conquista</h3>
               {firstLoading ? (
                 <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
               ) : (
-                <p className="pw-font-normal">
-                  {
-                    datasource?.athlete?.data[0]?.attributes?.academy?.data
-                      ?.attributes?.name
-                  }
-                </p>
+                <p className="pw-font-normal">{title()}</p>
               )}
               <h3 className="pw-font-semibold pw-mt-5">Nome do professor</h3>
               {firstLoading ? (
@@ -180,17 +175,22 @@ export const WjjcStart = () => {
                   }
                 </p>
               )}
+              <h3 className="pw-font-semibold pw-mt-5">Academia</h3>
+              {firstLoading ? (
+                <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
+              ) : (
+                <p className="pw-font-normal">
+                  {
+                    datasource?.athlete?.data[0]?.attributes?.academy?.data
+                      ?.attributes?.name
+                  }
+                </p>
+              )}
               <h3 className="pw-font-semibold pw-mt-5">Data da cerimônia</h3>
               {firstLoading ? (
                 <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
               ) : (
                 <p className="pw-font-normal">{date()}</p>
-              )}
-              <h3 className="pw-font-semibold pw-mt-5">Conquista</h3>
-              {firstLoading ? (
-                <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
-              ) : (
-                <p className="pw-font-normal">{title()}</p>
               )}
             </div>
             <WeblockButton
@@ -202,7 +202,7 @@ export const WjjcStart = () => {
             </WeblockButton>
             <p className="pw-font-poppins pw-font-normal pw-text-black pw-text-xs pw-text-center pw-mt-2">
               Caso alguma informação esteja incorreta, por favor entrar em
-              contato com a academia.
+              contato com o seu professor.
             </p>
           </div>
         </Box>

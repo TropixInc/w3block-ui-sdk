@@ -1453,6 +1453,7 @@ const _CheckoutInfo = ({
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
               {differentProducts.map((prod, index) => (
                 <ProductInfo
+                  metadata={prod?.metadata}
                   subtitle={prod?.subtitle}
                   disableQuantity={storageData?.products?.length}
                   index={index}

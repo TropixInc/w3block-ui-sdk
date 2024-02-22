@@ -49,7 +49,8 @@ const _PriceComponent = ({
               parseFloat(payment()?.originalAmount ?? '') >
                 parseFloat(payment()?.amount ?? '') && (
                 <CriptoValueComponent
-                  code={payment()?.currency?.symbol}
+                  code={payment()?.currency?.code}
+                  symbol={payment()?.currency?.symbol}
                   value={payment()?.originalAmount ?? ''}
                   crypto={
                     payment()?.currency?.symbol == 'MATIC' ||
@@ -60,7 +61,8 @@ const _PriceComponent = ({
               )}
             <CriptoValueComponent
               pointsPrecision="decimal"
-              code={payment()?.currency?.symbol}
+              code={payment()?.currency?.code}
+              symbol={payment()?.currency?.symbol}
               value={
                 coinPayment()?.currencyId ===
                   '9e5c87cb-22ca-4550-8f09-f2272203410b' &&
@@ -94,7 +96,8 @@ const _PriceComponent = ({
               -{' '}
               <CriptoValueComponent
                 pointsPrecision="decimal"
-                code={coinPayment()?.currency?.symbol}
+                code={coinPayment()?.currency?.code}
+                symbol={coinPayment()?.currency?.symbol}
                 value={coinPayment()?.amount ?? ''}
                 crypto={
                   coinPayment()?.currency?.symbol == 'MATIC' ||
@@ -125,7 +128,8 @@ const _PriceComponent = ({
                     parseFloat(payment()?.originalClientServiceFee ?? '') >
                       parseFloat(payment()?.clientServiceFee ?? '') && (
                       <CriptoValueComponent
-                        code={payment()?.currency?.symbol}
+                        code={payment()?.currency?.code}
+                        symbol={payment()?.currency?.symbol}
                         value={payment()?.originalClientServiceFee ?? ''}
                         crypto={
                           payment()?.currency?.symbol == 'MATIC' ||
@@ -135,7 +139,8 @@ const _PriceComponent = ({
                       />
                     )}
                   <CriptoValueComponent
-                    code={payment()?.currency?.symbol}
+                    code={payment()?.currency?.code}
+                    symbol={payment()?.currency?.symbol}
                     value={payment()?.clientServiceFee ?? ''}
                     crypto={
                       payment()?.currency?.symbol == 'MATIC' ||
@@ -161,7 +166,8 @@ const _PriceComponent = ({
             <Shimmer />
           ) : parseFloat((payment()?.gasFee as string) ?? '') == 0 ? null : (
             <CriptoValueComponent
-              code={payment()?.currency?.symbol}
+              code={payment()?.currency?.code}
+              symbol={payment()?.currency?.symbol}
               value={(payment()?.gasFee as string) ?? ''}
               crypto={
                 payment()?.currency?.symbol == 'MATIC' ||
@@ -185,7 +191,8 @@ const _PriceComponent = ({
               parseFloat(payment()?.originalTotalAmount ?? '') >
                 parseFloat(payment()?.fullOrderTotalAmount ?? '') && (
                 <CriptoValueComponent
-                  code={payment()?.currency?.symbol}
+                  code={payment()?.currency?.code}
+                  symbol={payment()?.currency?.symbol}
                   value={payment()?.originalTotalAmount ?? ''}
                   crypto={
                     payment()?.currency?.symbol == 'MATIC' ||
@@ -196,7 +203,8 @@ const _PriceComponent = ({
               )}
             <CriptoValueComponent
               pointsPrecision="decimal"
-              code={payment()?.currency?.symbol}
+              code={payment()?.currency?.code}
+              symbol={payment()?.currency?.symbol}
               value={
                 coinPayment()?.currencyId ===
                 '9e5c87cb-22ca-4550-8f09-f2272203410b'
