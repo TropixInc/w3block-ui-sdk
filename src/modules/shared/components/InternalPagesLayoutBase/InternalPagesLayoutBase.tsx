@@ -20,7 +20,7 @@ export const InternalPagesLayoutBase = ({ classes = {}, children }: Props) => {
       <div className="pw-container pw-mx-auto">
         <div
           className={classNames(
-            'pw-flex  pw-w-full pw-flex-1 pw-pt-[59px]',
+            'pw-flex pw-w-full pw-flex-1 sm:pw-pt-[59px] pw-pt-2',
             classes.middleSectionContainer ?? ''
           )}
         >

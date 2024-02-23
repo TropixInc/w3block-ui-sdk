@@ -3,6 +3,7 @@ import { ReactNode, lazy, useMemo } from 'react';
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
+import { ErrorProvider } from '../ErrorProvider/ErrorProvider';
 const MetamaskProviderUiSDK = lazy(() =>
   import('../../metamask').then((m) => ({ default: m.MetamaskProviderUiSDK }))
 );
@@ -42,6 +43,7 @@ interface Props extends JSX.IntrinsicAttributes {
   appBaseUrl: string;
   connectProxyPass?: string;
   name?: string;
+  logError?(): void;
 }
 
 export const W3blockUISDKGeneralConfigProvider = ({
@@ -54,6 +56,7 @@ export const W3blockUISDKGeneralConfigProvider = ({
   appBaseUrl,
   connectProxyPass = '',
   name = '',
+  logError,
 }: Props) => {
   const companyValue = useMemo(
     () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass, name }),
@@ -81,7 +84,9 @@ export const W3blockUISDKGeneralConfigProvider = ({
           <MetamaskProviderUiSDK>
             <SocketProviderUiSDK>
               <CartProvider>
-                <LocaleProvider locale={locale}>{children}</LocaleProvider>
+                <ErrorProvider logError={logError}>
+                  <LocaleProvider locale={locale}>{children}</LocaleProvider>
+                </ErrorProvider>
               </CartProvider>
             </SocketProviderUiSDK>
           </MetamaskProviderUiSDK>

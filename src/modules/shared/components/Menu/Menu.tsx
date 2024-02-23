@@ -195,6 +195,13 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         isVisible: (isUser || isAdmin) && !isHidden('myProfile'),
       },
       {
+        title: internalMenuData['cards']?.customLabel || 'Meus cartões',
+        id: 'cards',
+        icon: <CardIcon width={17} height={17} />,
+        link: PixwayAppRoutes.CARDS,
+        isVisible: (isUser || isAdmin) && !isHidden('cards'),
+      },
+      {
         title:
           internalMenuData['integration']?.customLabel ||
           translate('components>menu>integration'),

@@ -105,9 +105,9 @@ export const ConfirmationKycWithoutLayout = () => {
                     className="pw-underline pw-text-blue-400 pw-ml-3"
                     onClick={() =>
                       router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                        ...router.query,
                         step: res,
                         formState: 'remain',
-                        ...router.query,
                       })
                     }
                   >

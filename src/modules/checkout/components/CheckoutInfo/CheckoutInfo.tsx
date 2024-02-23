@@ -915,7 +915,9 @@ const _CheckoutInfo = ({
                 clearInterval(interval);
                 setPoolStatus(false);
                 setStatusResponse(data);
-                setCodeQr(data.deliverId);
+                setCodeQr(
+                  `${window?.location?.origin}/order/${data.deliverId}`
+                );
               }
             },
           }
@@ -1044,6 +1046,8 @@ const _CheckoutInfo = ({
                       value={paymentAmount}
                       InputElement={
                         <input
+                          inputMode="numeric"
+                          autoFocus
                           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
                           placeholder="R$ 0,0"
                         />
@@ -1290,23 +1294,53 @@ const _CheckoutInfo = ({
       case CheckoutStatus.FINISHED:
         return (
           <div className="pw-mt-4">
-            {productCache?.isCoinPayment ? (
+            {productCache?.isCoinPayment || isCoinPayment ? (
               <>
                 {error !== '' && statusResponse?.status === 'failed' ? (
                   <Alert variant="error">{error}</Alert>
                 ) : (
                   <>
                     {statusResponse?.deliverId ? (
-                      <p className="pw-text-base pw-font-semibold pw-text-center pw-max-w-[350px] pw-text-black">
+                      <p className="pw-text-base pw-font-semibold pw-text-center pw-max-w-[350px] pw-text-black sm:pw-mx-0 pw-mx-auto">
                         Pagamento realizado com sucesso!
                       </p>
                     ) : null}
-                    <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px]">
+                    <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px] sm:pw-mx-0 pw-mx-auto">
                       <div>
+                        <p className="pw-text-sm pw-font-normal">
+                          Pagamento para
+                        </p>
+                        <p className="pw-text-sm pw-font-semibold">
+                          {productCache?.destinationUser?.name}
+                        </p>
+                      </div>
+                      <div className="pw-mt-5">
+                        <p className="pw-text-sm pw-font-normal">Quem pagou</p>
+                        <p className="pw-text-sm pw-font-semibold">
+                          {profile?.data?.data?.name}
+                        </p>
+                      </div>
+                      <div className="pw-mt-5">
+                        <p className="pw-text-sm pw-font-normal">Valor pago</p>
+                        <p className="pw-text-sm pw-font-semibold">
+                          R$
+                          {orderResponse?.totalAmount?.[0]?.amount ??
+                            orderResponse?.totalAmount}
+                        </p>
+                      </div>
+                      <div className="pw-mt-5">
+                        <p className="pw-text-sm pw-font-normal">
+                          Cashback ganho
+                        </p>
+                        <p className="pw-text-sm pw-font-semibold">
+                          R${productCache?.cashback}
+                        </p>
+                      </div>
+                      <div className="pw-mt-5">
                         {statusResponse?.deliverId ? (
                           <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
-                            <QRCodeSVG value={String(codeQr)} size={150} />
-                            <p className="pw-text-[32px] pw-font-semibold">
+                            <QRCodeSVG value={String(codeQr)} size={84} />
+                            <p className="pw-text-[20px] pw-font-semibold">
                               {statusResponse?.deliverId ?? ''}
                             </p>
                           </div>
@@ -1320,38 +1354,6 @@ const _CheckoutInfo = ({
                             </div>
                           </>
                         )}
-                      </div>
-                      <div className="pw-mt-5">
-                        <p className="pw-text-xs pw-font-normal">
-                          Nome do restaurante
-                        </p>
-                        <p className="pw-text-xs pw-font-semibold">
-                          {productCache?.destinationUser?.name}
-                        </p>
-                      </div>
-                      <div className="pw-mt-5">
-                        <p className="pw-text-xs pw-font-normal">
-                          Nome do usuário
-                        </p>
-                        <p className="pw-text-xs pw-font-semibold">
-                          {profile?.data?.data?.name}
-                        </p>
-                      </div>
-                      <div className="pw-mt-5">
-                        <p className="pw-text-xs pw-font-normal">Valor pago</p>
-                        <p className="pw-text-xs pw-font-semibold">
-                          R$
-                          {orderResponse?.totalAmount?.[0]?.amount ??
-                            orderResponse?.totalAmount}
-                        </p>
-                      </div>
-                      <div className="pw-mt-5">
-                        <p className="pw-text-xs pw-font-normal">
-                          Cashback ganho
-                        </p>
-                        <p className="pw-text-xs pw-font-semibold">
-                          R${productCache?.cashback}
-                        </p>
                       </div>
                     </div>
                   </>
@@ -1384,12 +1386,20 @@ const _CheckoutInfo = ({
                 />
               </>
             )}
-            <PixwayButton
-              onClick={onClickButton}
-              className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+            <div
+              className={`pw-flex ${
+                isCoinPayment || productCache?.isCoinPayment
+                  ? 'sm:pw-justify-start pw-justify-center'
+                  : 'pw-justify-start'
+              }`}
             >
-              {buttonText()}
-            </PixwayButton>
+              <PixwayButton
+                onClick={onClickButton}
+                className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+              >
+                {buttonText()}
+              </PixwayButton>
+            </div>
           </div>
         );
     }

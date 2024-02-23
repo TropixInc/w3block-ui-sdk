@@ -189,6 +189,13 @@ export const useDefaultMenuTabs = (textColor: string) => {
       isVisible: (isUser || isAdmin) && !isHidden('myProfile'),
     },
     {
+      name: internalMenuData['cards']?.customLabel || 'Meus cartões',
+      id: 'cards',
+      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
+      route: PixwayAppRoutes.CARDS,
+      isVisible: (isUser || isAdmin) && !isHidden('cards'),
+    },
+    {
       name: internalMenuData['integration']?.customLabel ||
         translate('components>menu>integration'),
       id: 'integration',

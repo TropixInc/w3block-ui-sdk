@@ -84,4 +84,6 @@ export enum PixwayAPIRoutes {
   TENANT_CONTEXT_BY_SLUG = '/tenant-context/{tenantId}/slug/{slug}',
   GET_DEFERRED_BY_USER_ID = '/{companyId}/loyalties/users/deferred/{userId}',
   GET_SAVED_CARDS = '/companies/{companyId}/users/{userId}/credit-cards',
+  DELETE_SAVED_CARDS = '/companies/{companyId}/users/{userId}/credit-cards/{creditCardId}',
+  PUBLIC_ORDER_BY_DELIVERID = '/companies/{companyId}/orders/get-by-deliver-id/{deliverId}',
 }

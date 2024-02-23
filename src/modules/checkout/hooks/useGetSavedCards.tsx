@@ -5,6 +5,18 @@ import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
 
+interface SavedCardsResponse {
+  name: string;
+  brand: string;
+  lastNumbers: string;
+  createdAt: string;
+  id: string;
+}
+
+interface Response {
+  items: SavedCardsResponse[];
+}
+
 export const useGetSavedCards = () => {
   const axios = useAxios(W3blockAPI.COMMERCE);
   const { companyId } = useCompanyConfig();
@@ -13,7 +25,7 @@ export const useGetSavedCards = () => {
   return usePrivateQuery(
     [userId, companyId, PixwayAPIRoutes.GET_SAVED_CARDS],
     () => {
-      return axios.get(
+      return axios.get<Response>(
         PixwayAPIRoutes.GET_SAVED_CARDS.replace(
           '{companyId}',
           companyId

@@ -35,6 +35,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
+import { useLogError } from '../../../shared/hooks/useLogError';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
@@ -279,6 +280,8 @@ export const CheckoutPayment = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderResponse]);
 
+  const { logError } = useLogError();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createOrder = (val: any) => {
     setLoading(true);
@@ -450,6 +453,7 @@ export const CheckoutPayment = () => {
             }
           },
           onError: (err: any) => {
+            logError && logError(err);
             setSending(false);
             setLoading(false);
             setRequestError(

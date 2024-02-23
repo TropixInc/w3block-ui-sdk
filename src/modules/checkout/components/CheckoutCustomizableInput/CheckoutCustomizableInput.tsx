@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IMaskInput } from 'react-imask';
 
 import { INPUTS_POSSIBLE } from '../CheckoutPaymentComponent/CheckoutPaymentComponent';
@@ -43,6 +44,7 @@ export const CheckoutCustomizableInput = ({
         />
       ) : (
         <IMaskInput
+          inputMode={type === INPUTS_POSSIBLE.cpf_cnpj ? 'numeric' : 'text'}
           readOnly={readonly}
           radix="."
           mask={getMask(type)}
