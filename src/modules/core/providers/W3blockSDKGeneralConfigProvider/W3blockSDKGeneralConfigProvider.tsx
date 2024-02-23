@@ -43,7 +43,8 @@ interface Props extends JSX.IntrinsicAttributes {
   appBaseUrl: string;
   connectProxyPass?: string;
   name?: string;
-  logError?(): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  logError?(error: any, extra?: object): void;
 }
 
 export const W3blockUISDKGeneralConfigProvider = ({
