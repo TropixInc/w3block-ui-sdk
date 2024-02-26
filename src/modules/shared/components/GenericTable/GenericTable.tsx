@@ -200,7 +200,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     hrefLink?: string,
     linkLabel?: string,
     isTranslatable?: boolean,
-    translatePrefix?: string
+    translatePrefix?: string,
+    isDynamic?: boolean
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -347,14 +348,16 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
 
       default: {
         const value = _.get(item, itemKey);
-        const dynamicValue = getValue(value, item);
+        const dynamicValue = getValue(itemKey, item);
         return (
           <div className="pw-w-full">
             <p className="pw-text-ellipsis pw-overflow-hidden">
               {isTranslatable && value ? (
                 translate(`${translatePrefix || ''}${value ?? '---'}`)
               ) : (
-                <p>{dynamicValue ? dynamicValue : value || '--'}</p>
+                <p>
+                  {isDynamic && dynamicValue ? dynamicValue : value || '--'}
+                </p>
               )}
             </p>
           </div>
@@ -565,8 +568,13 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               {tableTitle}
             </p>
           ) : null}
-          <div className="pw-border pw-rounded-t-2xl">
-            <table className="pw-w-full pw-table-auto pw-border-collapse pw-border pw-rounded-t-2xl">
+          <div className="pw-rounded-t-2xl">
+            <table
+              className={classNames(
+                tableStyles?.table ?? '',
+                'pw-w-full pw-border-collapse pw-border pw-rounded-t-2xl'
+              )}
+            >
               <thead className="pw-rounded-2xl">
                 <tr
                   className={classNames(
@@ -582,75 +590,77 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                         header,
                         key,
                         sortableTamplate,
-                        styleColumn,
+                        columnStyles,
                       }) => (
                         <th
                           className={classNames(
-                            styleColumn ?? '',
-                            'pw-text-left pw-px-3 pw-relative pw-whitespace-nowrap'
+                            'pw-text-left pw-px-3 pw-relative'
                           )}
                           key={key}
                           scope="col"
                         >
-                          {header.label}
-                          {sortable ? (
-                            <div className="pw-flex pw-gap-x-1 pw-items-center pw-absolute -pw-right-6 -pw-bottom-1 sm:-pw-right-10">
-                              <div className="pw-relative pw-z-20">
-                                <button
-                                  className={classNames(
-                                    'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
-                                    sort.includes(key)
-                                      ? 'pw-bg-blue-200'
-                                      : 'pw-opacity-80'
-                                  )}
-                                  onClick={() =>
-                                    onHandleSort(sortableTamplate ?? '')
-                                  }
-                                >
-                                  <ArrowDown
+                          <div className={classNames(columnStyles, '')}>
+                            {header.label}
+                            {sortable ? (
+                              <div className="pw-flex pw-gap-x-1 pw-items-center pw-absolute -pw-right-6 -pw-bottom-1 sm:-pw-right-10">
+                                <div className="pw-relative pw-z-20">
+                                  <button
                                     className={classNames(
+                                      'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
                                       sort.includes(key)
-                                        ? 'pw-stroke-white'
-                                        : 'pw-stroke-blue-700',
-                                      sort.includes('ASC')
-                                        ? 'pw-rotate-180'
-                                        : 'pw-rotate-0'
+                                        ? 'pw-bg-blue-200'
+                                        : 'pw-opacity-80'
                                     )}
-                                  />
-                                </button>
+                                    onClick={() =>
+                                      onHandleSort(sortableTamplate ?? '')
+                                    }
+                                  >
+                                    <ArrowDown
+                                      className={classNames(
+                                        sort.includes(key)
+                                          ? 'pw-stroke-white'
+                                          : 'pw-stroke-blue-700',
+                                        sort.includes('ASC')
+                                          ? 'pw-rotate-180'
+                                          : 'pw-rotate-0'
+                                      )}
+                                    />
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ) : null}
+                            ) : null}
+                          </div>
                         </th>
                       )
                     )}
                 </tr>
               </thead>
-              <tbody>
-                {isLoading && (
-                  <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
-                    <Spinner />
-                  </div>
-                )}
-                {!isLoading &&
-                  !_.get(data, localeItems ?? '', [])?.length &&
-                  !isError && (
-                    <Alert
-                      variant="information"
-                      className="pw-bg-[#eee] pw-text-[#999]"
-                    >
-                      {translate('token>pass>notResult')}
-                    </Alert>
-                  )}
-                {isError && (
-                  <Alert variant="error" className="pw-mt-5">
-                    {translate('contact>inviteContactTemplate>error')}
+              {isLoading && (
+                <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
+                  <Spinner />
+                </div>
+              )}
+              {!isLoading &&
+                !_.get(data, localeItems ?? '', [])?.length &&
+                !isError && (
+                  <Alert
+                    variant="information"
+                    className="pw-bg-[#eee] pw-text-[#999]"
+                  >
+                    {translate('token>pass>notResult')}
                   </Alert>
                 )}
+              {isError && (
+                <Alert variant="error" className="pw-mt-5">
+                  {translate('contact>inviteContactTemplate>error')}
+                </Alert>
+              )}
+              <tbody>
                 {!isLoading && _.get(data, localeItems ?? '', [])?.length
                   ? _.get(data, localeItems ?? '', []).map((item: any) => (
                       <tr
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
                         key={(item as any).id}
                         onClick={(e) =>
                           handleAction(e, lineActions?.action, item)
@@ -676,23 +686,28 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                               linkLabel,
                               isTranslatable,
                               translatePrefix,
+                              isDynamicValue,
+                              columnStyles,
                             }) => (
                               <td
                                 key={key}
                                 className="pw-text-sm pw-text-left pw-px-3"
                               >
-                                {customizerValues(
-                                  item as any,
-                                  key,
-                                  format,
-                                  header.baseUrl,
-                                  keyInCollection,
-                                  moreInfos,
-                                  hrefLink,
-                                  linkLabel,
-                                  isTranslatable,
-                                  translatePrefix
-                                )}
+                                <div className={classNames(columnStyles, '')}>
+                                  {customizerValues(
+                                    item as any,
+                                    key,
+                                    format,
+                                    header.baseUrl,
+                                    keyInCollection,
+                                    moreInfos,
+                                    hrefLink,
+                                    linkLabel,
+                                    isTranslatable,
+                                    translatePrefix,
+                                    isDynamicValue
+                                  )}
+                                </div>
                               </td>
                             )
                           )}
