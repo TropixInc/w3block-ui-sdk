@@ -1047,7 +1047,6 @@ const _CheckoutInfo = ({
                       InputElement={
                         <input
                           inputMode="numeric"
-                          autoFocus
                           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
                           placeholder="R$ 0,0"
                         />
@@ -1412,9 +1411,27 @@ const _CheckoutInfo = ({
     codeQr,
     statusResponse?.deliverId,
     coinError,
-    organizedLoyalties,
   ]);
 
+  useEffect(() => {
+    console.log('re-render input', {
+      orderPreview,
+      choosedPayment,
+      currencyIdState,
+      isLoadingPreview,
+      codeQr,
+      deliverId: statusResponse?.deliverId,
+      coinError,
+    });
+  }, [
+    orderPreview,
+    choosedPayment,
+    currencyIdState,
+    isLoadingPreview,
+    codeQr,
+    statusResponse?.deliverId,
+    coinError,
+  ]);
   const anchorCurrencyId = useMemo(() => {
     return orderPreview?.products && orderPreview?.products?.length
       ? orderPreview?.products

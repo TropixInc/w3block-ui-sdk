@@ -16,7 +16,7 @@ export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
 
   const payment = () => {
     return payments?.filter(
-      (e) => e?.currencyId === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+      (e) => e?.currencyId !== '9e5c87cb-22ca-4550-8f09-f2272203410b'
     )[0];
   };
   return (
@@ -48,7 +48,7 @@ export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
           <div className="pw-flex pw-gap-2">
             <CriptoValueComponent
               code={payment()?.currency?.code}
-              symbol={coinPayment()?.currency?.symbol}
+              symbol={payment()?.currency?.symbol}
               value={payment()?.totalPrice ?? ''}
               fontClass="pw-text-base pw-text-[#35394C]"
             />

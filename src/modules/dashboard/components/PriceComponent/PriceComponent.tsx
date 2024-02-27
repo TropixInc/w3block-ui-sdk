@@ -33,7 +33,7 @@ const _PriceComponent = ({
     if (payments?.length === 1) return payments[0];
     else
       return payments?.filter(
-        (e) => e?.currencyId === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+        (e) => e?.currencyId !== '9e5c87cb-22ca-4550-8f09-f2272203410b'
       )[0];
   };
 

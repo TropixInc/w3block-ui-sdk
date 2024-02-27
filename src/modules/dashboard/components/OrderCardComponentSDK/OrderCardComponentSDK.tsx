@@ -2,6 +2,7 @@
 import { lazy, useState } from 'react';
 
 import { format } from 'date-fns';
+import { ptBR, enUS } from 'date-fns/locale';
 
 import { CheckoutStatus } from '../../../checkout';
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
@@ -11,6 +12,7 @@ import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
 import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react';
 import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
+import { useLocale } from '../../../shared/hooks/useLocale';
 import { useGetApi } from '../../hooks/useGetApi';
 import { PriceComponent } from '../PriceComponent/PriceComponent';
 
@@ -54,6 +56,7 @@ export const OrderCardComponentSDK = ({
 }: OrderCardComponentSDKProps) => {
   const [opened, setOpened] = useState(startOpened);
   const { data: order } = useGetEspecificOrder(id, opened);
+  const locale = useLocale();
   const statusObj = getStatusText(status);
   const products = order?.data.products;
   const [infoOpened, setInfoOpened] = useState(false);
@@ -113,7 +116,7 @@ export const OrderCardComponentSDK = ({
           </p>
           {deliverId && (
             <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
-              Compra: {deliverId}{' '}
+              Compra: <span className="pw-font-[700]">{deliverId}</span>{' '}
               {/* <span>
                 <CopyIcon className="pw-fill-[#295BA6] pw-text-xs pw-w-[12px] pw-h-[12px] pw-cursor-pointer" />
               </span> */}
@@ -127,7 +130,9 @@ export const OrderCardComponentSDK = ({
                 Pedido realizado em:
               </p>
               <p className="pw-text-xs pw-font-[500] pw-text-[#353945]  pw-text-right">
-                {format(new Date(createdAt ?? ''), 'd MMM, yyyy')}
+                {format(new Date(createdAt ?? ''), 'PPpp', {
+                  locale: locale === 'pt-BR' ? ptBR : enUS,
+                })}
               </p>
             </div>
           )}
@@ -173,8 +178,8 @@ export const OrderCardComponentSDK = ({
                         order?.data?.payments?.length > 1
                           ? order?.data?.payments?.find(
                               (res: { currencyId: string }) =>
-                                res.currencyId ===
-                                '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+                                res.currencyId !==
+                                '9e5c87cb-22ca-4550-8f09-f2272203410b'
                             )?.currency?.symbol ?? CurrencyEnum.BRL
                           : order?.data?.payments?.[0]?.currency?.symbol ??
                             CurrencyEnum.BRL

@@ -273,7 +273,7 @@ export const CheckoutPayment = () => {
     return (
       parseFloat(
         productCache?.payments?.filter(
-          (e) => e.currencyId === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+          (e) => e.currencyId !== '9e5c87cb-22ca-4550-8f09-f2272203410b'
         )[0]?.totalPrice ?? ''
       ) === 0
     );
