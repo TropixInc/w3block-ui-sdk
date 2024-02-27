@@ -447,7 +447,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     if (filterValues.some((item: any) => item?.length)) {
       return (
         <button
-          className="pw-min-w-[165px] !pw-h-[44px] pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
+          className="pw-w-full pw-min-w-[165px] !pw-h-[44px] pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center pw-justify-center hover:pw-shadow-lg"
           onClick={() => onClearAllFilter()}
           style={externalFilterClasses?.clearFilterButton}
         >
@@ -537,7 +537,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   })}
               </div>
               <div
-                className="pw-mt-2 sm:pw-mt-0"
+                className="pw-mt-1 pw-w-full sm:pw-mt-1 sm:pw-ml-1 sm:pw-max-w-[200px]"
                 style={externalFilterClasses?.buttonsContainer}
               >
                 {xlsReports?.url && (
