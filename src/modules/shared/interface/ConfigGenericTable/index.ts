@@ -30,6 +30,7 @@ export interface TableStylesClasses {
   root?: any;
   header?: any;
   line?: any;
+  table?: string;
 }
 
 export interface DataSource {
@@ -88,6 +89,8 @@ export interface ColumnsTable {
   sortable: boolean;
   isTranslatable?: boolean;
   translatePrefix?: string;
+  columnStyles?: string;
+  isDynamicValue?: boolean;
   moreInfos?: {
     name?: string;
     cpf?: string;

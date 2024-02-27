@@ -9,7 +9,7 @@ import useTruncate from '../../../tokens/hooks/useTruncate';
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import ClearFilter from '../../assets/icons/clearFilterOutlined.svg?react';
 import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
-import FilterIcon from '../../assets/icons/filterOutlined.svg?react';
+/* import FilterIcon from '../../assets/icons/filterOutlined.svg?react'; */
 import MetamaskIcon from '../../assets/icons/metamask.svg?react';
 import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg?react';
 import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg?react';
@@ -22,7 +22,7 @@ import useTranslation from '../../hooks/useTranslation';
 import {
   ConfigGenericTable,
   FormatApiData,
-  FormatFilterType,
+  /*  FormatFilterType, */
   FormatTypeColumn,
 } from '../../interface/ConfigGenericTable';
 import { Alert } from '../Alert';
@@ -85,6 +85,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const getValue = useDynamicValueByTable();
   const { name, companyId } = useCompanyConfig();
   const [translate] = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isShowFilterKey, setIsShowFilterKey] = useState<string>();
   const [sort, setSort] = useState<string>('');
   const [filters, setFilters] = useState<any | undefined>();
@@ -119,6 +120,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     if (action && action.type == 'function') {
       event?.preventDefault();
       action.data(row);
+    } else {
+      window.location.href = getHref(lineActions?.action, row);
     }
   };
 
@@ -197,7 +200,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     hrefLink?: string,
     linkLabel?: string,
     isTranslatable?: boolean,
-    translatePrefix?: string
+    translatePrefix?: string,
+    isDynamic?: boolean
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
@@ -344,14 +348,16 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
 
       default: {
         const value = _.get(item, itemKey);
-        const dynamicValue = getValue(value, item);
+        const dynamicValue = getValue(itemKey, item);
         return (
           <div className="pw-w-full">
             <p className="pw-text-ellipsis pw-overflow-hidden">
               {isTranslatable && value ? (
                 translate(`${translatePrefix || ''}${value ?? '---'}`)
               ) : (
-                <p>{dynamicValue ? dynamicValue : value || '--'}</p>
+                <p>
+                  {isDynamic && dynamicValue ? dynamicValue : value || '--'}
+                </p>
               )}
             </p>
           </div>
@@ -360,7 +366,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     }
   };
 
-  const renderFilterValues = (
+  /*   const renderFilterValues = (
     values: any,
     type?: FormatFilterType,
     options?: any
@@ -414,7 +420,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       }
     }
   };
-
+ */
   const onHandleSort = (value: string) => {
     if (sort.includes('ASC')) {
       setSort(value.replace('{order}', 'DESC'));
@@ -423,14 +429,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     }
   };
 
-  const onClearFilter = (item: string) => {
+  /*   const onClearFilter = (item: string) => {
     const removedFilter = _.omit(filters, item);
     const removedFilterLabels = _.omit(filterLabels, item);
 
     setFilters(removedFilter);
     setFilterLabels(removedFilterLabels);
   };
-
+ */
   const onClearAllFilter = () => {
     setFilters({});
     setFilterLabels({});
@@ -441,7 +447,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     if (filterValues.some((item: any) => item?.length)) {
       return (
         <button
-          className="pw-min-w-[165px] !pw-h-[44px] pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center hover:pw-shadow-lg"
+          className="pw-w-full pw-min-w-[165px] !pw-h-[44px] pw-px-4 pw-py-2 pw-flex pw-gap-x-3 pw-border pw-border-[#aaa] pw-rounded-md pw-items-center pw-justify-center hover:pw-shadow-lg"
           onClick={() => onClearAllFilter()}
           style={externalFilterClasses?.clearFilterButton}
         >
@@ -531,7 +537,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   })}
               </div>
               <div
-                className="pw-mt-2 sm:pw-mt-0"
+                className="pw-mt-1 pw-w-full sm:pw-mt-1 sm:pw-ml-1 sm:pw-max-w-[200px]"
                 style={externalFilterClasses?.buttonsContainer}
               >
                 {xlsReports?.url && (
@@ -551,6 +557,173 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         </div>
 
         <div
+          className={classNames(
+            'pw-w-full pw-overflow-auto',
+            classes?.root ?? ''
+          )}
+          style={tableStyles?.root as any}
+        >
+          {tableTitle ? (
+            <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-4">
+              {tableTitle}
+            </p>
+          ) : null}
+          <div className="pw-rounded-t-2xl">
+            <table
+              className={classNames(
+                tableStyles?.table ?? '',
+                'pw-w-full pw-border-collapse pw-border pw-rounded-t-2xl'
+              )}
+            >
+              <thead className="pw-rounded-2xl">
+                <tr
+                  className={classNames(
+                    'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-1 !pw-border-b-0 pw-rounded-2xl pw-text-sm pw-items-center pw-w-full',
+                    tableStyles?.header ?? ''
+                  )}
+                >
+                  {columns
+                    .filter(({ header }) => header.label)
+                    .map(
+                      ({
+                        sortable,
+                        header,
+                        key,
+                        sortableTamplate,
+                        columnStyles,
+                      }) => (
+                        <th
+                          className={classNames(
+                            'pw-text-left pw-px-3 pw-relative'
+                          )}
+                          key={key}
+                          scope="col"
+                        >
+                          <div className={classNames(columnStyles, '')}>
+                            {header.label}
+                            {sortable ? (
+                              <div className="pw-flex pw-gap-x-1 pw-items-center pw-absolute -pw-right-6 -pw-bottom-1 sm:-pw-right-10">
+                                <div className="pw-relative pw-z-20">
+                                  <button
+                                    className={classNames(
+                                      'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
+                                      sort.includes(key)
+                                        ? 'pw-bg-blue-200'
+                                        : 'pw-opacity-80'
+                                    )}
+                                    onClick={() =>
+                                      onHandleSort(sortableTamplate ?? '')
+                                    }
+                                  >
+                                    <ArrowDown
+                                      className={classNames(
+                                        sort.includes(key)
+                                          ? 'pw-stroke-white'
+                                          : 'pw-stroke-blue-700',
+                                        sort.includes('ASC')
+                                          ? 'pw-rotate-180'
+                                          : 'pw-rotate-0'
+                                      )}
+                                    />
+                                  </button>
+                                </div>
+                              </div>
+                            ) : null}
+                          </div>
+                        </th>
+                      )
+                    )}
+                </tr>
+              </thead>
+              {isLoading && (
+                <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
+                  <Spinner />
+                </div>
+              )}
+              {!isLoading &&
+                !_.get(data, localeItems ?? '', [])?.length &&
+                !isError && (
+                  <Alert
+                    variant="information"
+                    className="pw-bg-[#eee] pw-text-[#999]"
+                  >
+                    {translate('token>pass>notResult')}
+                  </Alert>
+                )}
+              {isError && (
+                <Alert variant="error" className="pw-mt-5">
+                  {translate('contact>inviteContactTemplate>error')}
+                </Alert>
+              )}
+              <tbody>
+                {!isLoading && _.get(data, localeItems ?? '', [])?.length
+                  ? _.get(data, localeItems ?? '', []).map((item: any) => (
+                      <tr
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+                        key={(item as any).id}
+                        onClick={(e) =>
+                          handleAction(e, lineActions?.action, item)
+                        }
+                        className={classNames(
+                          tableStyles?.line ?? '',
+                          'pw-px-3 pw-items-center pw-gap-x-1 pw-h-[72px] pw-border-t sm:pw-w-full ',
+                          lineActions
+                            ? 'pw-cursor-pointer'
+                            : 'pw-cursor-default'
+                        )}
+                      >
+                        {columns
+                          .filter(({ header }) => header.label)
+                          .map(
+                            ({
+                              key,
+                              format,
+                              header,
+                              keyInCollection,
+                              moreInfos,
+                              hrefLink,
+                              linkLabel,
+                              isTranslatable,
+                              translatePrefix,
+                              isDynamicValue,
+                              columnStyles,
+                            }) => (
+                              <td
+                                key={key}
+                                className="pw-text-sm pw-text-left pw-px-3"
+                              >
+                                <div className={classNames(columnStyles, '')}>
+                                  {customizerValues(
+                                    item as any,
+                                    key,
+                                    format,
+                                    header.baseUrl,
+                                    keyInCollection,
+                                    moreInfos,
+                                    hrefLink,
+                                    linkLabel,
+                                    isTranslatable,
+                                    translatePrefix,
+                                    isDynamicValue
+                                  )}
+                                </div>
+                              </td>
+                            )
+                          )}
+                        <GenericButtonActions
+                          dataItem={item}
+                          actions={actions ?? []}
+                        />
+                      </tr>
+                    ))
+                  : null}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/*         <div
           className={classNames(
             'pw-w-full pw-overflow-auto',
             classes?.root ?? ''
@@ -762,7 +935,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               {translate('contact>inviteContactTemplate>error')}
             </Alert>
           )}
-        </div>
+        </div> */}
 
         {totalItems && totalPages && totalPages > 1 ? (
           <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10 pw-mt-2">
