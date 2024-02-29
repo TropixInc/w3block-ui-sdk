@@ -239,7 +239,8 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     });
   };
 
-  const hideWallet = defaultTheme?.configurations.contentData.hideWalletAddress;
+  const hideWallet =
+    defaultTheme?.configurations?.contentData?.hideWalletAddress;
 
   const RenderTab = (tab: TabsConfig) => {
     const isActive: boolean = router.pathname === tab.link;

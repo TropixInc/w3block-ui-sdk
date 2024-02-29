@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect } from 'react';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 
@@ -18,7 +19,10 @@ export interface ValidationsValues {
 
 const validates: Array<ValidationsValues> = [];
 
-const validateBirthdate = (date: string | undefined): boolean => {
+const validateBirthdate = (
+  date: string | undefined,
+  minimumAge?: number
+): boolean => {
   const today = new Date();
   if (date) {
     const birthdate = new Date(date);
@@ -29,7 +33,8 @@ const validateBirthdate = (date: string | undefined): boolean => {
       age--;
     }
 
-    return age >= 18;
+    if (minimumAge) return age >= minimumAge;
+    else return age >= 18;
   } else return false;
 };
 
@@ -38,10 +43,14 @@ export const useGetValidationsTypesForSignup = (
   valueContextId?: string
 ) => {
   const [translate] = useTranslation();
-
+  const birthdateText = (age?: number) => {
+    if (age && age === 1) return `Você precisa ter ${age} ano ou mais`;
+    else if (age && age > 1) return `Você precisa ter ${age} anos ou mais`;
+    else return 'Você precisa ter 18 anos ou mais';
+  };
   const getValidations = useCallback(() => {
     const arrayValid: Array<ValidationsValues> = [];
-    values.forEach(({ id, contextId, type, mandatory }) => {
+    values.forEach(({ id, contextId, type, mandatory, data }) => {
       switch (type) {
         case DataTypesEnum.File || DataTypesEnum.MultifaceSelfie:
           arrayValid.push({
@@ -209,13 +218,15 @@ export const useGetValidationsTypesForSignup = (
                     )
                     .test(
                       'birthdate',
-                      'Você precisa ter 18 anos ou mais.',
-                      (value) => validateBirthdate(value)
+                      birthdateText((data as any)?.minimumAge),
+                      (value) =>
+                        validateBirthdate(value, (data as any)?.minimumAge)
                     )
                 : string().test(
                     'birthdate',
-                    'Você precisa ter 18 anos ou mais.',
-                    (value) => validateBirthdate(value)
+                    birthdateText((data as any)?.minimumAge),
+                    (value) =>
+                      validateBirthdate(value, (data as any)?.minimumAge)
                   ),
             }),
           });
