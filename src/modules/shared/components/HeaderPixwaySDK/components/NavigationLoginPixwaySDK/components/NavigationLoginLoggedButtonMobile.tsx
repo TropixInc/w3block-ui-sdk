@@ -128,7 +128,8 @@ export const NavigationLoginLoggedButtonMobile = ({
   const { defaultTheme } = UseThemeConfig();
   const hideLoyaltyAuthentication =
     defaultTheme?.configurations?.contentData?.hideLoyaltyAuthentication;
-
+  const hideWallet =
+    defaultTheme?.configurations?.contentData?.hideWalletAddress;
   return session ? (
     <div style={{ backgroundColor }}>
       <div onClick={() => setUserMenu(!userMenu)} className="pw-cursor-pointer">
@@ -187,30 +188,37 @@ export const NavigationLoginLoggedButtonMobile = ({
           style={{ backgroundColor: backgroundColor }}
           className=" pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-pt-4 pw-pb-[30px] pw-px-[30px] pw-flex pw-flex-col pw-items-center"
         >
-          <p style={{ color: textColor }} className="pw-text-xs pw-font-[400]">
-            {translate('header>logged>hiWallet', { name: profile?.name })}
-          </p>
-          <div
-            onClick={() => copyAddress(profile?.mainWallet?.address || '')}
-            className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
-          >
-            <p
-              style={{ color: textColor }}
-              className="pw-text-xs pw-font-[400] pw-cursor-pointer"
-            >
-              {profile?.mainWallet?.address || '-'}
-            </p>
-            <CopyIcon />
-            {copied ? (
-              <div className="pw-relative">
-                <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2 pw-absolute pw-bg-slate-300 pw-shadow-md pw-rounded-md pw-right-0 pw-top-3 pw-p-1">
-                  <p className="pw-text-sm pw-text-[#353945]">
-                    {translate('components>menu>copied')}
-                  </p>
-                </div>
+          {!hideWallet ? (
+            <>
+              <p
+                style={{ color: textColor }}
+                className="pw-text-xs pw-font-[400]"
+              >
+                {translate('header>logged>hiWallet', { name: profile?.name })}
+              </p>
+              <div
+                onClick={() => copyAddress(profile?.mainWallet?.address || '')}
+                className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
+              >
+                <p
+                  style={{ color: textColor }}
+                  className="pw-text-xs pw-font-[400] pw-cursor-pointer"
+                >
+                  {profile?.mainWallet?.address || '-'}
+                </p>
+                <CopyIcon />
+                {copied ? (
+                  <div className="pw-relative">
+                    <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2 pw-absolute pw-bg-slate-300 pw-shadow-md pw-rounded-md pw-right-0 pw-top-3 pw-p-1">
+                      <p className="pw-text-sm pw-text-[#353945]">
+                        {translate('components>menu>copied')}
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
+            </>
+          ) : null}
           <div className="pw-w-full pw-h-[1px] pw-bg-[#E6E8EC] pw-mt-3"></div>
           {/* {wallet ? <WithWallet /> : <WithoutWallet />} */}
           <div className="pw-mt-3 pw-w-full">

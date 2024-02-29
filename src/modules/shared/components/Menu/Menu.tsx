@@ -239,6 +239,8 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     });
   };
 
+  const hideWallet = defaultTheme?.configurations.contentData.hideWalletAddress;
+
   const RenderTab = (tab: TabsConfig) => {
     const isActive: boolean = router.pathname === tab.link;
 
@@ -291,7 +293,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           </p>
 
           <div className="pw-flex pw-items-center pw-justify-center ">
-            {profile?.data.mainWallet?.address ? (
+            {profile?.data.mainWallet?.address && !hideWallet ? (
               <>
                 <p className="pw-font-poppins pw-text-sm pw-font-semibold pw-text-[#777E8F] pw-mr-2 pw-mt-[1px]">
                   {profile?.data.mainWallet?.address?.substring(0, 8)}

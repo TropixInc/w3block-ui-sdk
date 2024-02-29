@@ -19,12 +19,18 @@ export const WalletHeaderSDK = ({ title = 'Carteira' }: { title?: string }) => {
   const { defaultTheme } = UseThemeConfig();
   const hideLoyaltyAuthentication =
     defaultTheme?.configurations?.contentData?.hideLoyaltyAuthentication;
+  const hideWallet =
+    defaultTheme?.configurations?.contentData?.hideWalletAddress;
   return (
     <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
       <div className="pw-flex pw-justify-between">
         <div>
           <p className="pw-text-[23px] pw-font-[600]">{title}</p>
-          <p className="pw-text-[#777E8F] pw-text-xs">{mainWallet?.address}</p>
+          {!hideWallet ? (
+            <p className="pw-text-[#777E8F] pw-text-xs">
+              {mainWallet?.address}
+            </p>
+          ) : null}
         </div>
       </div>
       {organizedLoyalties.length > 0 &&

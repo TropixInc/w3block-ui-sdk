@@ -25,13 +25,14 @@ const StatementComponentSDK = lazy(() =>
     default: mod.StatementComponentSDK,
   }))
 );
+import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { generateRandomUUID } from '../../../shared/utils/generateRamdomUUID';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useGetErcTokensHistory } from '../../hooks/useGetErcTokensHistory';
-
 export const WalletStatementTemplateSDK = () => {
   const { wallets, loyaltyWallet, mainWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
@@ -43,6 +44,10 @@ export const WalletStatementTemplateSDK = () => {
     return loyaltyWallet.length ? loyaltyWallet[0] : undefined;
   }, [loyaltyWallet]);
 
+  const { defaultTheme } = UseThemeConfig();
+  const hideWallet =
+    defaultTheme?.configurations?.contentData?.hideWalletAddress;
+
   useGuardPagesWithOptions({
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
@@ -53,9 +58,11 @@ export const WalletStatementTemplateSDK = () => {
         <div className="pw-flex pw-justify-between">
           <div>
             <p className="pw-text-[23px] pw-font-[600]">Extrato</p>
-            <p className="pw-text-[#777E8F] pw-text-xs">
-              {mainWallet?.address}
-            </p>
+            {!hideWallet ? (
+              <p className="pw-text-[#777E8F] pw-text-xs">
+                {mainWallet?.address}
+              </p>
+            ) : null}
             {loyaltyWalletDefined ? (
               <div className="pw-mt-[14px]">
                 <p className="pw-text-black pw-text-lg pw-font-medium pw-leading-[23px]">
@@ -70,6 +77,11 @@ export const WalletStatementTemplateSDK = () => {
                 />
               </div>
             ) : null}
+            <p className="pw-text-[#777E8F] pw-text-xs pw-flex pw-gap-1 pw-mt-2 pw-items-center">
+              <PendingIcon className="pw-stroke-[#777E8F] pw-w-[12px] pw-h-[12px]" />
+              Créditos de cashback podem levar até duas horas para serem
+              computados em seu saldo.
+            </p>
           </div>
         </div>
       </div>

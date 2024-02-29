@@ -31,6 +31,7 @@ export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
         ) : (
           <div className="pw-flex pw-gap-2">
             <CriptoValueComponent
+              pointsPrecision="decimal"
               code={coinPayment()?.currency?.code}
               symbol={coinPayment()?.currency?.symbol}
               value={coinPayment()?.totalPrice ?? ''}
