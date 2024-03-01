@@ -176,7 +176,7 @@ export const StatementComponentSDK = ({
         <div className="pw-flex pw-items-center pw-gap-2">
           {future ? (
             <p className="pw-text-black pw-text-xs pw-font-medium">
-              Comprador: {statement?.buyerName} ({statement?.buyerEmail})
+              Comprador: {statement?.buyerName}
             </p>
           ) : (
             <p className="pw-text-[#777E8F] pw-text-xs pw-font-medium">

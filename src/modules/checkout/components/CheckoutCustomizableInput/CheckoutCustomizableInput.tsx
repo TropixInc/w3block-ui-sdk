@@ -32,6 +32,7 @@ export const CheckoutCustomizableInput = ({
       ) : type === INPUTS_POSSIBLE.credit_card_ccv ||
         type === INPUTS_POSSIBLE.credit_card_number ? (
         <IMaskInput
+          inputMode="numeric"
           data-private
           readOnly={readonly}
           radix="."

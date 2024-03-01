@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const Shimmer = lazy(() =>
   import('../../../shared/components/Shimmer').then((mod) => ({
@@ -12,13 +11,12 @@ import { Disclosure } from '@headlessui/react';
 import classNames from 'classnames';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { groupBy } from 'lodash';
 
 import ChevronDown from '../../../../modules/shared/assets/icons/arrowDown.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
-import { createDateRange } from '../../utils/createDateRange';
-import { groupByDateRange } from '../../utils/groupByDateRange';
 import firstDegree from '../assets/1_degree.svg';
 import secondDegree from '../assets/2_degree.svg';
 import thirdDegree from '../assets/3_degree.svg';
@@ -27,17 +25,38 @@ import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';
 import brownBelt from '../assets/brown_belt.png';
 import coralBelt from '../assets/coral_belt.png';
+import grayBelt from '../assets/gray_belt.png';
+import grayBlackBelt from '../assets/gray_black_belt.png';
+import grayWhiteBelt from '../assets/gray_white_belt.png';
+import greenBelt from '../assets/green_belt.png';
+import greenBlackBelt from '../assets/green_black_belt.png';
+import greenWhiteBelt from '../assets/green_white_belt.png';
 import orangeBelt from '../assets/orange_belt.png';
+import orangeBlackBelt from '../assets/orange_black_belt.png';
+import orangeWhiteBelt from '../assets/orange_white_belt.png';
+import placeholderAvatar from '../assets/placeholderAvatar.png';
 import purpleBelt from '../assets/purple_belt.png';
 import redBelt from '../assets/red_belt.png';
 import star from '../assets/star.svg';
+import whiteBelt from '../assets/white_belt.png';
 import yellowBelt from '../assets/yellow_belt.png';
+import yellowBlackBelt from '../assets/yellow_black_belt.png';
+import yellowWhiteBelt from '../assets/yellow_white_belt.png';
 import {
   AthleteInterface,
   BeltColor,
   useGetAthlete,
 } from '../hooks/useGetAthlete';
 import { useGetAthleteByAddress } from '../hooks/useGetAthleteByAddress';
+import {
+  Belt,
+  BeltEnglish,
+  KidsBelt,
+  beltEnglishMap,
+  beltMap,
+  belts,
+  kidsMap,
+} from '../interfaces';
 
 export const gradeMap = {
   degree_1: '1º Degree',
@@ -54,62 +73,51 @@ export const AthletePage = () => {
     datasource?.athlete?.data[0]?.id ?? ''
   );
   const isProduction = useIsProduction();
-  const beltsData = datasource?.athlete?.data[0]?.attributes.titles.filter(
-    (e: any) => e.type === 'belt'
-  );
-  const titles = datasource?.athlete?.data[0]?.attributes.titles;
+  const titles = datasource?.athlete?.data[0]?.attributes?.titles;
   const { data: athleteData } = useGetAthleteByAddress(
     datasource?.athlete?.data[0]?.id ?? '',
     '0x30905c662ce29c4c4fc527edee57a47c808f3213',
     '1284'
   );
+  const groupByBelt = groupBy(titles, 'belt');
   if (athleteData?.items?.length) {
     const certification = athleteData?.items[0]?.tokenData;
-    titles.push(certification);
+    if (groupByBelt['Vermelha']?.length) {
+      groupByBelt['Vermelha'].push({ ...certification, belt: 'Vermelha' });
+    } else if (groupByBelt['Coral']?.length) {
+      groupByBelt['Coral'].push({ ...certification, belt: 'Coral' });
+    } else if (groupByBelt['Preta']?.length) {
+      groupByBelt['Preta'].push({ ...certification, belt: 'Preta' });
+    }
   }
-  const dates = beltsData?.map((e: any) => {
-    return e?.date;
-  });
-  const datesRange = createDateRange(dates ?? []);
-  const groupTitles = groupByDateRange(titles ?? [], datesRange ?? []);
-  const belts = [
-    BeltColor.ORANGE,
-    BeltColor.YELLOW,
-    BeltColor.BLUE,
-    BeltColor.PURPLE,
-    BeltColor.BROWN,
-    BeltColor.BLACK,
-    BeltColor.CORAL,
-    BeltColor.RED,
-  ];
-
-  const beltMap = {
-    Amarela: 'Yellow',
-    Laranja: 'Orange',
-    Azul: 'Blue',
-    Roxa: 'Purple',
-    Marrom: 'Brown',
-    Preta: 'Black',
-    Coral: 'Coral',
-    Vermelha: 'Red',
-  };
-
-  type Belt =
-    | 'Amarela'
-    | 'Laranja'
-    | 'Azul'
-    | 'Roxa'
-    | 'Marrom'
-    | 'Preta'
-    | 'Coral'
-    | 'Vermelha';
-
   const getBeltImage = (belt: BeltColor) => {
     switch (belt) {
-      case BeltColor.ORANGE:
-        return orangeBelt;
+      case BeltColor.WHITE:
+        return whiteBelt;
+      case BeltColor.GRAY_AND_WHITE:
+        return grayWhiteBelt;
+      case BeltColor.GRAY:
+        return grayBelt;
+      case BeltColor.GRAY_AND_BLACK:
+        return grayBlackBelt;
+      case BeltColor.YELLOW_AND_WHITE:
+        return yellowWhiteBelt;
       case BeltColor.YELLOW:
         return yellowBelt;
+      case BeltColor.YELLOW_AND_BLACK:
+        return yellowBlackBelt;
+      case BeltColor.ORANGE_AND_WHITE:
+        return orangeWhiteBelt;
+      case BeltColor.ORANGE:
+        return orangeBelt;
+      case BeltColor.ORANGE_AND_BLACK:
+        return orangeBlackBelt;
+      case BeltColor.GREEN_AND_WHITE:
+        return greenWhiteBelt;
+      case BeltColor.GREEN:
+        return greenBelt;
+      case BeltColor.GREEN_AND_BLACK:
+        return greenBlackBelt;
       case BeltColor.BLUE:
         return blueBelt;
       case BeltColor.PURPLE:
@@ -156,8 +164,8 @@ export const AthletePage = () => {
           'P',
           { locale: ptBR }
         );
-    } catch (e) {
-      console.log(e);
+    } catch {
+      /* empty */
     }
     return '';
   };
@@ -193,8 +201,7 @@ export const AthletePage = () => {
                     ? 'https://strapi.w3block.io' +
                       datasource?.athlete?.data[0]?.attributes?.picture?.data
                         ?.attributes?.url
-                    : data?.items[0]?.mainImage ??
-                      'https://placehold.co/600x400'
+                    : placeholderAvatar
                 }
                 alt={datasource?.athlete?.data[0]?.attributes?.name ?? ''}
               />
@@ -242,17 +249,6 @@ export const AthletePage = () => {
                   (item: any) => beltMap[item?.belt as Belt] == belt
                 );
 
-                const rangeTitles = groupTitles.find((res: any[]) =>
-                  res.some(
-                    (res) =>
-                      res?.type === 'belt' && beltMap[res?.belt as Belt] == belt
-                  )
-                );
-
-                const respectiveToken = data?.items?.find(
-                  (item: any) => item?.tokenData?.beltColor === belt
-                );
-
                 const date = () => {
                   try {
                     if (
@@ -266,19 +262,16 @@ export const AthletePage = () => {
                         'P',
                         { locale: ptBR }
                       );
-                  } catch (e) {
-                    console.log(e);
+                  } catch {
+                    /* empty */
                   }
                   return '';
                 };
 
-                const beltWithDate = rangeTitles
-                  ? rangeTitles?.some((res: any) => res.type === 'belt')
-                  : false;
-
                 if (
                   respectiveBelt === undefined &&
-                  (belt === BeltColor.ORANGE || belt === BeltColor.YELLOW)
+                  kidsMap[belt as KidsBelt] &&
+                  !groupByBelt[beltEnglishMap[belt as BeltEnglish]]
                 )
                   return null;
                 else
@@ -289,13 +282,17 @@ export const AthletePage = () => {
                           <Disclosure.Button
                             disabled={
                               respectiveBelt !== undefined ||
-                              (athleteData?.items?.length && belt === 'Black')
+                              (athleteData?.items?.length &&
+                                belt === 'Black') ||
+                              groupByBelt[beltEnglishMap[belt as BeltEnglish]]
                                 ? false
                                 : true
                             }
                             className={`${
                               respectiveBelt !== undefined ||
-                              (athleteData?.items?.length && belt === 'Black')
+                              (athleteData?.items?.length &&
+                                belt === 'Black') ||
+                              groupByBelt[beltEnglishMap[belt as BeltEnglish]]
                                 ? ''
                                 : 'pw-opacity-60'
                             } pw-p-[9px_12px] !pw-bg-[#F7F7F7] pw-text-black pw-font-bold pw-text-base flex pw-w-full pw-justify-between pw-items-center`}
@@ -317,68 +314,9 @@ export const AthletePage = () => {
                             />
                           </Disclosure.Button>
                           <Disclosure.Panel className="pw-p-[12px] pw-bg-[#F7F7F7] pw-flex pw-flex-col pw-gap-5">
-                            {!beltWithDate && respectiveBelt ? (
-                              <a
-                                target={`${
-                                  respectiveToken &&
-                                  respectiveBelt.type === 'belt'
-                                    ? '_blank'
-                                    : ''
-                                }`}
-                                href={
-                                  respectiveToken &&
-                                  respectiveBelt.type === 'belt'
-                                    ? `https://pdf${
-                                        !isProduction ? '.stg' : ''
-                                      }.w3block.io/certification/${
-                                        respectiveToken?.contractAddress
-                                      }/${respectiveToken?.chainId}/${
-                                        respectiveToken?.tokenId
-                                      }?preview`
-                                    : undefined
-                                }
-                                key={index}
-                                className={`${
-                                  respectiveToken &&
-                                  respectiveBelt.type === 'belt'
-                                    ? ''
-                                    : 'pw-opacity-60'
-                                } pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2`}
-                              >
-                                <p>
-                                  {`${date() !== '' ? `(${date()})` : ''} ${
-                                    belt + ' Belt'
-                                  }`}
-                                </p>
-                              </a>
-                            ) : null}
-                            {(!rangeTitles ||
-                              !rangeTitles?.some(
-                                (res: any) => res?.instructorIdentification
-                              )) &&
-                            athleteData?.items?.length &&
-                            belt === 'Black' ? (
-                              <a
-                                target="_blank"
-                                href={`https://pdf.wjjc.io/certification/0x30905c662ce29c4c4fc527edee57a47c808f3213/1284/?instructorIdentification=${datasource?.athlete?.data[0]?.id}&preview`}
-                                key={index}
-                                className="pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2"
-                                rel="noreferrer"
-                              >
-                                <p>
-                                  {`(${format(
-                                    Date.parse(
-                                      athleteData?.items[0]?.tokenData
-                                        ?.dateOfIssue
-                                    ),
-                                    'P',
-                                    { locale: ptBR }
-                                  )})`}{' '}
-                                  WJJC Certified Instructor
-                                </p>
-                              </a>
-                            ) : null}
-                            {rangeTitles?.map((res: any, index: any) => {
+                            {groupByBelt[
+                              beltEnglishMap[belt as BeltEnglish]
+                            ]?.map((res: any, index: any) => {
                               const date = () => {
                                 if (res?.date && res?.date?.includes('-01-01'))
                                   return res?.date?.slice(0, 4);
@@ -430,6 +368,17 @@ export const AthletePage = () => {
                                   );
                                 else return '';
                               };
+                              const respectiveToken = data?.items?.find(
+                                (item: any) => {
+                                  if (typeof res.degree === 'string')
+                                    return (
+                                      item?.tokenData?.degree === res.degree &&
+                                      item?.tokenData?.beltColor === belt
+                                    );
+                                  else
+                                    return item?.tokenData?.beltColor === belt;
+                                }
+                              );
 
                               if (res?.instructorIdentification) {
                                 return (
@@ -455,12 +404,16 @@ export const AthletePage = () => {
                               return (
                                 <a
                                   target={`${
-                                    respectiveToken && res.type === 'belt'
+                                    respectiveToken &&
+                                    (res.type === 'belt' ||
+                                      res.type === 'grade')
                                       ? '_blank'
                                       : ''
                                   }`}
                                   href={
-                                    respectiveToken && res.type === 'belt'
+                                    respectiveToken &&
+                                    (res.type === 'belt' ||
+                                      res.type === 'grade')
                                       ? `https://pdf${
                                           !isProduction ? '.stg' : ''
                                         }.w3block.io/certification/${
@@ -472,7 +425,9 @@ export const AthletePage = () => {
                                   }
                                   key={index}
                                   className={`${
-                                    respectiveToken && res.type === 'belt'
+                                    respectiveToken &&
+                                    (res.type === 'belt' ||
+                                      res.type === 'grade')
                                       ? ''
                                       : 'pw-opacity-60'
                                   } pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2`}

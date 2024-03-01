@@ -7,15 +7,25 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { MetadataApiInterface } from '../../../shared/interface/metadata/metadata';
 
 export enum BeltColor {
-  BLUE = 'Blue',
   WHITE = 'White',
+  GRAY_AND_WHITE = 'Gray and White',
+  GRAY = 'Gray',
+  GRAY_AND_BLACK = 'Gray and Black',
+  YELLOW_AND_WHITE = 'Yellow and White',
+  YELLOW = 'Yellow',
+  YELLOW_AND_BLACK = 'Yellow and Black',
+  ORANGE_AND_WHITE = 'Orange and White',
+  ORANGE = 'Orange',
+  ORANGE_AND_BLACK = 'Orange and Black',
+  GREEN_AND_WHITE = 'Green and White',
+  GREEN = 'Green',
+  GREEN_AND_BLACK = 'Green and Black',
+  BLUE = 'Blue',
   PURPLE = 'Purple',
   BROWN = 'Brown',
   BLACK = 'Black',
   RED = 'Red',
   CORAL = 'Coral',
-  YELLOW = 'Yellow',
-  ORANGE = 'Orange',
 }
 
 export interface AthleteInterface {
@@ -28,23 +38,27 @@ export interface AthleteInterface {
   graduationAcademy: string;
   graduationTeacher: string;
   athleteNationality: string;
+  degree?: string;
 }
 
-const collectionId = 'f96b35de-09a2-4b3a-bb26-264549d01407';
+const address = '0xda859035c78cfa6423cf9388e23e72db1ad2c583';
+const chainId = '1284';
 export const useGetAthlete = (id: string) => {
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();
   const filter = { athleteIdentification: Number(id) };
 
   return useQuery(
-    [PixwayAPIRoutes.METADATA_BY_COLLECTION_ID, collectionId, companyId, id],
+    [PixwayAPIRoutes.METADATA_BY_ADDRESS_AND_CHAINID, address, companyId, id],
     () =>
       axios
         .get(
-          PixwayAPIRoutes.METADATA_BY_COLLECTION_ID.replace(
+          PixwayAPIRoutes.METADATA_BY_ADDRESS_AND_CHAINID.replace(
             '{companyId}',
             companyId
-          ).replace('{collectionId}', collectionId) +
+          )
+            .replace('{address}', address)
+            .replace('{chainId}', chainId) +
             `?metadataFilter=${encodeURI(JSON.stringify(filter))}&limit=30`
         )
         .then(
