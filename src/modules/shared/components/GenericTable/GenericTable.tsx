@@ -84,7 +84,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const { data: company } = useCompanyById(tenantId || '');
   const getValue = useDynamicValueByTable();
   const { name, companyId } = useCompanyConfig();
-  const [translate] = useTranslation();
+  const [translate, locale] = useTranslation();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isShowFilterKey, setIsShowFilterKey] = useState<string>();
   const [sort, setSort] = useState<string>('');
@@ -205,8 +205,11 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   ) => {
     switch (format.type) {
       case FormatTypeColumn.LOCALTIME: {
-        const createdDate = _.get(item, itemKey, '--');
-        return new Date(createdDate).toLocaleDateString();
+        const date = _.get(item, itemKey, '--');
+
+        return new Date(date).toLocaleDateString(locale.language, {
+          timeZone: 'UTC',
+        });
       }
       case FormatTypeColumn.MONEY: {
         const symbol = _.get(item, format.currencySymbolKey ?? '', '-');
@@ -599,10 +602,15 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                           key={key}
                           scope="col"
                         >
-                          <div className={classNames(columnStyles, '')}>
+                          <div
+                            className={classNames(
+                              columnStyles,
+                              'pw-flex pw-gap-2 pw-items-center'
+                            )}
+                          >
                             {header.label}
                             {sortable ? (
-                              <div className="pw-flex pw-gap-x-1 pw-items-center pw-absolute -pw-right-6 -pw-bottom-1 sm:-pw-right-10">
+                              <div className="pw-flex pw-gap-x-1 pw-items-center">
                                 <div className="pw-relative pw-z-20">
                                   <button
                                     className={classNames(
