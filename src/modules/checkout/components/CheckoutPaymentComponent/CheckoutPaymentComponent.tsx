@@ -505,22 +505,27 @@ export const CheckoutPaymentComponent = ({
           ) : null}
         </>
       ) : (
-        <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
-          {installments && installments.length > 0 && (
-            <CheckoutInstalments
-              installments={installments}
-              value={instalment}
-              currency={currency}
-              setInstallment={(install) => {
-                setValue({
-                  ...value,
-                  [INPUTS_POSSIBLE.installments]: install?.amount ?? 1,
-                });
-                setInstallment?.(install);
-              }}
-            />
-          )}
-        </div>
+        <>
+          <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
+            {installments && installments.length > 0 && (
+              <CheckoutInstalments
+                installments={installments}
+                value={instalment}
+                currency={currency}
+                setInstallment={(install) => {
+                  setValue({
+                    ...value,
+                    [INPUTS_POSSIBLE.installments]: install?.amount ?? 1,
+                  });
+                  setInstallment?.(install);
+                }}
+              />
+            )}
+          </div>
+          {error && error != '' ? (
+            <ErrorMessage className="pw-mt-4" title={error} />
+          ) : null}
+        </>
       )}
       <div className="pw-flex pw-justify-end pw-mt-6">
         <WeblockButton

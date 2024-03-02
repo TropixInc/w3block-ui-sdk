@@ -472,7 +472,14 @@ const _CheckoutInfo = ({
                     : [],
                 }
               : {
-                  quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
+                  quantity:
+                    paymentAmount != ''
+                      ? parseFloat(
+                          pID.prices.find(
+                            (price) => price.currencyId == currencyIdState
+                          )?.amount ?? ''
+                        )
+                      : 1,
                   productId: pID.id,
                   expectedPrice:
                     pID.prices.find(
