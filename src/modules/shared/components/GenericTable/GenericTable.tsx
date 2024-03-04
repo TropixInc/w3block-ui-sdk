@@ -90,22 +90,25 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const [sort, setSort] = useState<string>('');
   const [filters, setFilters] = useState<any | undefined>();
   const [filterLabels, setFilterLabels] = useState<any | undefined>();
+  const [apiUrl, setApiUrl] = useState<string>();
   const methods = useForm();
   const truncate = useTruncate();
 
   useEffect(() => {
-    const itemSorteble = columns.find((item) => item.sortable);
-    if (itemSorteble && itemSorteble?.sortableTamplate) {
-      setSort(itemSorteble?.sortableTamplate?.replace('{order}', 'ASC'));
+    const itemSorteble = columns.filter((item) => item.sortable);
+    const preferSortable = itemSorteble.find((item) => item.preferredSortable);
+
+    if (preferSortable && preferSortable?.sortableTamplate) {
+      setSort(preferSortable?.sortableTamplate?.replace('{order}', 'DESC'));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [columns]);
+
+  console.log(apiUrl, 'apiUrl');
 
   const mainWalletAddress = company?.data?.operatorAddress ?? '';
 
   const tenantName = company?.data.id === companyId ? name : '';
-
-  const [apiUrl, setApiUrl] = useState<string>();
 
   const [
     { data, isLoading, isError },
@@ -463,6 +466,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     } else return null;
   };
 
+  console.log(sort.includes('attributes.certificationDate'), 'sort');
+
   return (
     <div className="pw-w-full pw-mt-20">
       <FormProvider {...methods}>
@@ -575,7 +580,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             <table
               className={classNames(
                 tableStyles?.table ?? '',
-                'pw-w-full pw-border-collapse pw-border pw-rounded-t-2xl'
+                'pw-w-full pw-border-collapse pw-border pw-rounded-t-2xl pw-relative'
               )}
             >
               <thead className="pw-rounded-2xl">
@@ -615,7 +620,9 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                                   <button
                                     className={classNames(
                                       'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
-                                      sort.includes(key)
+                                      sort.includes(
+                                        key.replace('attributes.', '')
+                                      )
                                         ? 'pw-bg-blue-200'
                                         : 'pw-opacity-80'
                                     )}
@@ -625,10 +632,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                                   >
                                     <ArrowDown
                                       className={classNames(
-                                        sort.includes(key)
+                                        sort.includes(
+                                          key.replace('attributes.', '')
+                                        )
                                           ? 'pw-stroke-white'
                                           : 'pw-stroke-blue-700',
-                                        sort.includes('ASC')
+                                        sort.includes(
+                                          key.replace('attributes.', '')
+                                        ) && sort.includes('ASC')
                                           ? 'pw-rotate-180'
                                           : 'pw-rotate-0'
                                       )}
@@ -643,27 +654,39 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                     )}
                 </tr>
               </thead>
-              {isLoading && (
-                <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
-                  <Spinner />
-                </div>
-              )}
-              {!isLoading &&
-                !_.get(data, localeItems ?? '', [])?.length &&
-                !isError && (
-                  <Alert
-                    variant="information"
-                    className="pw-bg-[#eee] pw-text-[#999]"
-                  >
-                    {translate('token>pass>notResult')}
+              <div
+                className={classNames(
+                  isLoading ||
+                    isError ||
+                    !_.get(data, localeItems ?? '', [])?.length
+                    ? 'pw-h-20 pw-flex pw-items-end'
+                    : ''
+                )}
+              >
+                {!isLoading &&
+                  !_.get(data, localeItems ?? '', [])?.length &&
+                  !isError && (
+                    <Alert
+                      variant="information"
+                      className="pw-bg-[#eee] pw-text-[#999] pw-w-full pw-absolute"
+                    >
+                      {translate('token>pass>notResult')}
+                    </Alert>
+                  )}
+                {isError && (
+                  <Alert variant="error" className="pw-w-full pw-absolute">
+                    {translate('contact>inviteContactTemplate>error')}
                   </Alert>
                 )}
-              {isError && (
-                <Alert variant="error" className="pw-mt-5">
-                  {translate('contact>inviteContactTemplate>error')}
-                </Alert>
-              )}
-              <tbody>
+
+                {isLoading && (
+                  <div className="pw-w-full pw-flex pw-py-5 pw-items-center pw-justify-center pw-absolute">
+                    <Spinner />
+                  </div>
+                )}
+              </div>
+
+              <tbody className="">
                 {!isLoading && _.get(data, localeItems ?? '', [])?.length
                   ? _.get(data, localeItems ?? '', []).map((item: any) => (
                       <tr
