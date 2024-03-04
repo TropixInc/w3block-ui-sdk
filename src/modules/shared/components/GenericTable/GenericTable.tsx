@@ -104,8 +104,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns]);
 
-  console.log(apiUrl, 'apiUrl');
-
   const mainWalletAddress = company?.data?.operatorAddress ?? '';
 
   const tenantName = company?.data.id === companyId ? name : '';
@@ -465,8 +463,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       );
     } else return null;
   };
-
-  console.log(sort.includes('attributes.certificationDate'), 'sort');
 
   return (
     <div className="pw-w-full pw-mt-20">
