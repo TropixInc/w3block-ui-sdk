@@ -264,7 +264,7 @@ export const CheckoutPaymentComponent = ({
   }, [userCreditCards?.[0]?.id]);
 
   useEffect(() => {
-    if (saveAvailable) {
+    if (saveAvailable && !useSavedCard && !userCreditCards?.length) {
       setValue({
         ...value,
         [INPUTS_POSSIBLE.save_credit_card]: saveCard,
