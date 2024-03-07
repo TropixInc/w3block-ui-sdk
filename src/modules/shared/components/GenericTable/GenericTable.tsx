@@ -99,7 +99,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     const preferSortable = itemSorteble.find((item) => item.preferredSortable);
 
     if (preferSortable && preferSortable?.sortableTamplate) {
-      setSort(preferSortable?.sortableTamplate?.replace('{order}', 'DESC'));
+      setSort(
+        preferSortable?.sortableTamplate?.replace(
+          '{order}',
+          preferSortable.initialSortParameter
+            ? preferSortable.initialSortParameter
+            : 'DESC'
+        )
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns]);

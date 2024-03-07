@@ -1,10 +1,7 @@
 import { useRef } from 'react';
 import { useController } from 'react-hook-form';
 import { Trans } from 'react-i18next';
-
-import classNames from 'classnames';
-
-import CheckboxOutlined from '../../assets/icons/checkboxOutlined.svg?react';
+import './style.css';
 
 interface Props {
   name: string;
@@ -23,55 +20,43 @@ export const AuthCheckbox = ({
 }: Props) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
   const { field } = useController({ name });
+
   return (
-    <div className="pw-flex pw-items-center pw-gap-x-2 pw-cursor-pointer pw-text-[#353945]">
-      <input
-        type="checkbox"
-        {...field}
-        ref={checkboxRef}
-        className="pw-hidden"
-      />
-      <span
-        onClick={() => checkboxRef.current?.click()}
-        className={classNames(
-          field.value
-            ? 'pw-hidden'
-            : 'pw-w-[12.75px] pw-h-[12.75px] pw-border pw-border-[#353945] pw-rounded-sm'
-        )}
-      />
-      <CheckboxOutlined
-        onClick={() => checkboxRef.current?.click()}
-        className={classNames(
-          !field.value
-            ? 'pw-hidden'
-            : 'pw-w-[12.75px] pw-h-[12.75px] pw-stroke-[#76DE8D]'
-        )}
-      />
-      {redirectLink ? (
-        <Trans i18nKey={keyTrans}>
-          <p
-            onClick={() => checkboxRef.current?.click()}
-            className="pw-leading-[15.85px] pw-text-[#353945]"
-          >
-            {label}
-          </p>
-          <a
-            className="pw-leading-[15.85px] pw-underline pw-text-[#353945]"
-            href={redirectLink}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {linkText}
-          </a>
-        </Trans>
-      ) : (
-        <label
-          className="pw-leading-[15.85px] pw-text-[#353945]"
-          onClick={() => checkboxRef.current?.click()}
-        >
-          {label}
-        </label>
-      )}
+    <div className="pw-flex pw-items-center pw-gap-x-2  pw-text-[#353945]">
+      <label htmlFor={name} className="inputContainer" id="">
+        <input
+          {...field}
+          type="checkbox"
+          onClick={() => {
+            field.onChange(!field.value);
+          }}
+          ref={checkboxRef}
+          className="checkbox"
+          id={name}
+        />
+        <span className="checkmark"></span>
+        <p className="pw-ml-8 pw-mt-[3px] pw-flex pw-gap-[3px]">
+          {redirectLink ? (
+            <Trans i18nKey={keyTrans}>
+              <span className="pw-leading-[15.85px] pw-text-[#353945]">
+                {label}
+              </span>
+              <a
+                className="pw-leading-[15.85px] pw-underline pw-text-[#353945]"
+                href={redirectLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {linkText}
+              </a>
+            </Trans>
+          ) : (
+            <p className="pw-leading-[15.85px] pw-text-[#353945] pw-ml-8">
+              {label}
+            </p>
+          )}
+        </p>
+      </label>
     </div>
   );
 };
