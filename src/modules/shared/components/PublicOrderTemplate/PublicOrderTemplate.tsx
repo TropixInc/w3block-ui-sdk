@@ -7,7 +7,8 @@ import { Spinner } from '../Spinner';
 export const PublicOrderTemplate = () => {
   const router = useRouterConnect();
   const { data, isLoading, isError } = useGetPublicOrder(
-    router?.query?.id as string
+    router?.query?.id as string,
+    true
   );
 
   if (isLoading)

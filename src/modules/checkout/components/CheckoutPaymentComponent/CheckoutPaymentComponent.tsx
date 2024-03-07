@@ -9,6 +9,10 @@ import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
+import { useRouterConnect } from '../../../shared';
+import { ModalBase } from '../../../shared/components/ModalBase';
+import { PixwayButton } from '../../../shared/components/PixwayButton';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import {
   AvailableCreditCards,
   AvailableInstallmentInfo,
@@ -48,13 +52,14 @@ interface CheckoutPaymentComponentProps {
   instalment?: AvailableInstallmentInfo;
   onChange?: (value: any) => void;
   title?: string;
-  onConcluded?: (val: any) => void;
+  onConcluded?: (val: any, allowSimilarPayment?: boolean) => void;
   buttonText?: string;
   loading?: boolean;
   error?: string;
   currency?: string;
   buttonLoadingText?: string;
   userCreditCards?: AvailableCreditCards[];
+  errorCode?: string;
 }
 
 export enum INPUTS_POSSIBLE {
@@ -87,6 +92,7 @@ export const CheckoutPaymentComponent = ({
   instalment,
   buttonLoadingText,
   userCreditCards,
+  errorCode,
 }: CheckoutPaymentComponentProps) => {
   const [value, setValue] = useState<any>({});
   const [sameCpf, setSameCpf] = useState(true);
@@ -271,6 +277,78 @@ export const CheckoutPaymentComponent = ({
       });
     }
   }, [saveCard, saveAvailable]);
+
+  const [similarPayment, setSimilarPayment] = useState(false);
+  const router = useRouterConnect();
+  useEffect(() => {
+    if (errorCode === 'similar-order-not-accepted') setSimilarPayment(true);
+  }, [errorCode]);
+
+  const DeleteModal = ({
+    isOpen,
+    onClose,
+    onContinue,
+  }: {
+    isOpen: boolean;
+    onClose(): void;
+    onContinue(): void;
+  }) => {
+    const [agree, setAgree] = useState(false);
+    return (
+      <ModalBase
+        isOpen={isOpen}
+        onClose={onClose}
+        clickAway={false}
+        hideCloseButton
+        classes={{ classComplement: 'sm:!pw-p-8 !pw-p-4' }}
+      >
+        <div className="pw-p-8 pw-text-center pw-text-black">
+          <p className="sm:pw-text-base pw-text-sm">
+            Você realizou uma compra de mesmo valor momentos atrás. Você pode
+            verificar na área de &quot;Minhas Compras&quot; se a sua compra
+            anterior foi finalizada.
+          </p>
+          <p className="pw-font-semibold pw-mt-2 sm:pw-text-base pw-text-sm">
+            Se realmente deseja seguir com a compra, marque a caixa
+            &quot;Confirmar compra de mesmo valor&quot; e clique no botão
+            &quot;Confirmar Compra&quot;
+          </p>
+
+          <div className="pw-flex pw-flex-col pw-justify-around pw-mt-6">
+            <PixwayButton
+              onClick={() => router.pushConnect(PixwayAppRoutes.MY_ORDERS)}
+              className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl"
+            >
+              Visualizar minhas compras
+            </PixwayButton>
+            <PixwayButton
+              disabled={!agree}
+              onClick={onContinue}
+              className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 disabled:pw-opacity-50 disabled:!pw-bg-white hover:pw-shadow-xl"
+            >
+              Confirmar compra
+            </PixwayButton>
+          </div>
+          <div className="pw-flex sm:pw-gap-3 pw-gap-2 pw-items-center pw-justify-center pw-my-5 ">
+            <div
+              onClick={() => {
+                setAgree(!agree);
+              }}
+              className="pw-flex pw-w-[18px] pw-h-[18px] pw-rounded-sm pw-border-slate-400 pw-border pw-justify-center pw-items-center"
+            >
+              {agree && (
+                <div className="pw-w-[10px] pw-h-[10px] pw-bg-blue-600 pw-rounded-sm"></div>
+              )}
+            </div>
+            <p className="sm:pw-text-base pw-text-xs pw-text-slate-600">
+              Confirmar compra de mesmo valor
+            </p>
+          </div>
+        </div>
+      </ModalBase>
+    );
+  };
+
   return (
     <div className="pw-p-4 sm:pw-p-6 pw-bg-white pw-rounded-lg pw-shadow-lg">
       <p className="pw-text-lg pw-text-slate-800 pw-font-[600] pw-mb-6">
@@ -544,6 +622,14 @@ export const CheckoutPaymentComponent = ({
           )}
         </WeblockButton>
       </div>
+      <DeleteModal
+        isOpen={similarPayment}
+        onClose={() => setSimilarPayment(false)}
+        onContinue={() => {
+          onConcluded?.(value, true);
+          setSimilarPayment(false);
+        }}
+      />
     </div>
   );
 };

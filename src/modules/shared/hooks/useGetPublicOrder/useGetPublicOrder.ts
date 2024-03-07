@@ -5,7 +5,7 @@ import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 
-export const useGetPublicOrder = (deliverId: string) => {
+export const useGetPublicOrder = (deliverId: string, enabled?: boolean) => {
   const axios = useAxios(W3blockAPI.COMMERCE);
   const { companyId } = useCompanyConfig();
   return useQuery(
@@ -18,7 +18,7 @@ export const useGetPublicOrder = (deliverId: string) => {
         ).replace('{deliverId}', deliverId)
       ),
     {
-      enabled: !!deliverId,
+      enabled: !!deliverId && enabled,
       retry: false,
     }
   );

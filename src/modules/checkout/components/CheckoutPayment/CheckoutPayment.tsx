@@ -104,6 +104,7 @@ export const CheckoutPayment = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [translate] = useTranslation();
   const [requestError, setRequestError] = useState<string>();
+  const [errorCode, setErrorCode] = useState('');
   const profile = useProfile();
   const [sending, setSending] = useState<boolean>(false);
   const { companyId, appBaseUrl } = useCompanyConfig();
@@ -289,7 +290,7 @@ export const CheckoutPayment = () => {
   const { logError } = useLogError();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const createOrder = (val: any) => {
+  const createOrder = (val: any, allowSimilarPayment?: boolean) => {
     setLoading(true);
     const orderInfo = productCache;
     if (orderInfo && !iframeLink && !sending && session && profile) {
@@ -322,6 +323,7 @@ export const CheckoutPayment = () => {
         {
           companyId,
           createOrder: {
+            acceptSimilarOrderInShortPeriod: allowSimilarPayment,
             orderProducts: orderInfo.orderProducts,
             signedGasFee: orderInfo.signedGasFee,
             currencyId: orderInfo.currencyId,
@@ -459,16 +461,20 @@ export const CheckoutPayment = () => {
             }
           },
           onError: (err: any) => {
+            if (err.errorCode === 'similar-order-not-accepted') {
+              setErrorCode(err.errorCode);
+            } else {
+              setRequestError(
+                err.message
+                  .toString()
+                  .includes('Informe o endereço do titular do cartão.')
+                  ? 'Por favor, insira um CEP válido.'
+                  : err.message.toString()
+              );
+            }
             logError && logError(err);
             setSending(false);
             setLoading(false);
-            setRequestError(
-              err.message
-                .toString()
-                .includes('Informe o endereço do titular do cartão.')
-                ? 'Por favor, insira um CEP válido.'
-                : err.message.toString()
-            );
           },
         }
       );
@@ -486,8 +492,8 @@ export const CheckoutPayment = () => {
   }, [isStripe, stripeKey]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const concluded = (val: any) => {
-    createOrder(val);
+  const concluded = (val: any, allowSimilarPayment?: boolean) => {
+    createOrder(val, allowSimilarPayment);
   };
 
   const WichPaymentMethod = () => {
@@ -532,9 +538,9 @@ export const CheckoutPayment = () => {
                 setRequestError('');
               }}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              onConcluded={(val: any) => {
+              onConcluded={(val: any, allowSimilarPayment?: boolean) => {
                 setInputsValue(val);
-                concluded(val);
+                concluded(val, allowSimilarPayment);
               }}
               title="Informações para pagamento"
               inputs={productCache?.choosedPayment?.inputs as INPUTS_POSSIBLE[]}
@@ -544,6 +550,7 @@ export const CheckoutPayment = () => {
                   : 'Finalizando compra'
               }
               userCreditCards={productCache?.choosedPayment?.userCreditCards}
+              errorCode={errorCode}
             />
           ) : (
             <div className="pw-bg-white pw-p-4 sm:pw-p-6 pw-flex pw-justify-center pw-items-center pw-shadow-brand-shadow pw-rounded-lg">

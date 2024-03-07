@@ -160,6 +160,7 @@ export interface CreateOrder {
     amountType?: string;
     amount?: string;
   }[];
+  acceptSimilarOrderInShortPeriod?: boolean;
 }
 
 export interface CreateOrderProduct {
