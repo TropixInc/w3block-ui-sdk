@@ -20,7 +20,6 @@ export const AuthCheckbox = ({
 }: Props) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
   const { field } = useController({ name });
-  console.log(field.value, 'field');
 
   return (
     <div className="pw-flex pw-items-center pw-gap-x-2  pw-text-[#353945]">
