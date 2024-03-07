@@ -4,6 +4,7 @@ import { PaymentsResponse } from '../../../checkout/interface/interface';
 import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { Shimmer } from '../../../shared/components/Shimmer';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface PriceComponent {
   className?: string;
@@ -20,12 +21,15 @@ const _PriceComponent = ({
   payments,
 }: PriceComponent) => {
   const [translate] = useTranslation();
-
+  const { defaultTheme } = UseThemeConfig();
+  const coinPaymentCurrencyId =
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
+    '9e5c87cb-22ca-4550-8f09-f2272203410b';
   const coinPayment = () => {
     if (payments?.length === 1) return payments[0];
     else
       return payments?.filter(
-        (e) => e?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
+        (e) => e?.currencyId === coinPaymentCurrencyId
       )[0];
   };
 
@@ -33,7 +37,7 @@ const _PriceComponent = ({
     if (payments?.length === 1) return payments[0];
     else
       return payments?.filter(
-        (e) => e?.currencyId !== '9e5c87cb-22ca-4550-8f09-f2272203410b'
+        (e) => e?.currencyId !== coinPaymentCurrencyId
       )[0];
   };
 
@@ -64,8 +68,7 @@ const _PriceComponent = ({
               code={payment()?.currency?.code}
               symbol={payment()?.currency?.symbol}
               value={
-                coinPayment()?.currencyId ===
-                  '9e5c87cb-22ca-4550-8f09-f2272203410b' &&
+                coinPayment()?.currencyId === coinPaymentCurrencyId &&
                 payments &&
                 payments?.length > 1
                   ? ((parseFloat(payment()?.amount ?? '') +
@@ -83,7 +86,7 @@ const _PriceComponent = ({
           </div>
         )}
       </div>
-      {coinPayment()?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b' &&
+      {coinPayment()?.currencyId === coinPaymentCurrencyId &&
       parseFloat(coinPayment()?.amount ?? '') > 0 &&
       payments &&
       payments?.length > 1 ? (
@@ -206,8 +209,7 @@ const _PriceComponent = ({
               code={payment()?.currency?.code}
               symbol={payment()?.currency?.symbol}
               value={
-                coinPayment()?.currencyId ===
-                '9e5c87cb-22ca-4550-8f09-f2272203410b'
+                coinPayment()?.currencyId === coinPaymentCurrencyId
                   ? payment()?.originalTotalAmount ?? ''
                   : payment()?.fullOrderTotalAmount ?? ''
               }

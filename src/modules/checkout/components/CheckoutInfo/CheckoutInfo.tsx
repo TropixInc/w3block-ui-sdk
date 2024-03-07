@@ -26,6 +26,7 @@ import { useGetRightWallet } from '../../../shared/utils/getRightWallet';
 import { ThemeContext } from '../../../storefront';
 import { Selector } from '../../../storefront/components/Selector';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import {
   ORDER_COMPLETED_INFO_KEY,
@@ -253,6 +254,10 @@ const _CheckoutInfo = ({
     router?.query?.sessionId as string
   );
 
+  const { defaultTheme } = UseThemeConfig();
+  const coinPaymentCurrencyId =
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
+    '9e5c87cb-22ca-4550-8f09-f2272203410b';
   const getOrderPreviewFn = (couponCode?: string) => {
     const coupon = () => {
       if (couponCode) {
@@ -322,7 +327,7 @@ const _CheckoutInfo = ({
                     amountType: 'all_remaining',
                   },
                   {
-                    currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
+                    currencyId: coinPaymentCurrencyId,
                     paymentMethod: 'crypto',
                     amountType: 'fixed',
                     amount: coinAmountPayment,

@@ -1,6 +1,7 @@
 import { PaymentsResponse } from '../../../checkout/interface/interface';
 import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { Shimmer } from '../../../shared/components/Shimmer';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface CoinPaymentResume {
   payments?: PaymentsResponse[];
@@ -8,16 +9,17 @@ interface CoinPaymentResume {
 }
 
 export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
+  const { defaultTheme } = UseThemeConfig();
+  const coinPaymentCurrencyId =
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
+    '9e5c87cb-22ca-4550-8f09-f2272203410b';
+
   const coinPayment = () => {
-    return payments?.filter(
-      (e) => e?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
-    )[0];
+    return payments?.filter((e) => e?.currencyId === coinPaymentCurrencyId)[0];
   };
 
   const payment = () => {
-    return payments?.filter(
-      (e) => e?.currencyId !== '9e5c87cb-22ca-4550-8f09-f2272203410b'
-    )[0];
+    return payments?.filter((e) => e?.currencyId !== coinPaymentCurrencyId)[0];
   };
   return (
     <div className="pw-mb-8 !pw-font-poppins">

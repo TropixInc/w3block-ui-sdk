@@ -41,6 +41,7 @@ import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { ThemeContext } from '../../../storefront';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import {
   ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
@@ -266,6 +267,11 @@ export const CheckoutPayment = () => {
     }
   }, 4000);
 
+  const { defaultTheme } = UseThemeConfig();
+  const coinPaymentCurrencyId =
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
+    '9e5c87cb-22ca-4550-8f09-f2272203410b';
+
   const isFree = useMemo(() => {
     // if (orderResponse !== undefined)
     // return parseFloat(orderResponse?.totalAmount as string) === 0;
@@ -273,7 +279,7 @@ export const CheckoutPayment = () => {
     return (
       parseFloat(
         productCache?.payments?.filter(
-          (e) => e.currencyId !== '9e5c87cb-22ca-4550-8f09-f2272203410b'
+          (e) => e.currencyId !== coinPaymentCurrencyId
         )[0]?.totalPrice ?? ''
       ) === 0
     );
@@ -298,7 +304,7 @@ export const CheckoutPayment = () => {
         inputs[INPUTS_POSSIBLE.installments] = installment?.amount ?? 1;
       }
       const coinPayment = orderInfo?.payments?.filter(
-        (e) => e.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
+        (e) => e.currencyId === coinPaymentCurrencyId
       );
       const destinationWalletAddress = () => {
         if (
@@ -341,7 +347,7 @@ export const CheckoutPayment = () => {
                 ? isFree
                   ? [
                       {
-                        currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
+                        currencyId: coinPaymentCurrencyId,
                         paymentMethod: 'crypto',
                         amountType: 'percentage',
                         amount: '100',
@@ -365,7 +371,7 @@ export const CheckoutPayment = () => {
                         amountType: 'all_remaining',
                       },
                       {
-                        currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
+                        currencyId: coinPaymentCurrencyId,
                         paymentMethod: 'crypto',
                         amountType: 'fixed',
                         amount: coinPayment?.[0]?.totalPrice,
@@ -389,7 +395,7 @@ export const CheckoutPayment = () => {
                       amountType: 'all_remaining',
                     },
                     {
-                      currencyId: '9e5c87cb-22ca-4550-8f09-f2272203410b',
+                      currencyId: coinPaymentCurrencyId,
                       paymentMethod: 'crypto',
                       amountType: 'fixed',
                       amount: '0',
@@ -417,7 +423,7 @@ export const CheckoutPayment = () => {
         },
         {
           onSuccess: (data: CreateOrderResponse) => {
-            setLoading(false);
+            setLoading(true);
             setOrderResponse(data);
             setStayPooling(false);
             if (data.paymentProvider == PaymentMethod.STRIPE) {

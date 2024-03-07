@@ -13,6 +13,7 @@ const Shimmer = lazy(() =>
 );
 
 import { PaymentsResponse } from '../../../checkout/interface/interface';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { GasFee } from '../../interface/GasFee';
 import TranslatableComponent from '../TranslatableComponent';
 
@@ -48,12 +49,15 @@ const _PriceAndGasInfo = ({
   payments,
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
-
+  const { defaultTheme } = UseThemeConfig();
+  const coinPaymentCurrencyId =
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
+    '9e5c87cb-22ca-4550-8f09-f2272203410b';
   const coinPayment = () => {
     if (payments?.length === 1) return payments[0];
     else
       return payments?.filter(
-        (e) => e?.currencyId === '9e5c87cb-22ca-4550-8f09-f2272203410b'
+        (e) => e?.currencyId === coinPaymentCurrencyId
       )[0];
   };
 
@@ -61,7 +65,7 @@ const _PriceAndGasInfo = ({
     if (payments?.length === 1) return payments[0];
     else
       return payments?.filter(
-        (e) => e?.currencyId !== '9e5c87cb-22ca-4550-8f09-f2272203410b'
+        (e) => e?.currencyId !== coinPaymentCurrencyId
       )[0];
   };
 
@@ -91,8 +95,7 @@ const _PriceAndGasInfo = ({
               <CriptoValueComponent
                 code={name}
                 value={
-                  coinPayment()?.currencyId ===
-                  '9e5c87cb-22ca-4550-8f09-f2272203410b'
+                  coinPayment()?.currencyId === coinPaymentCurrencyId
                     ? ((parseFloat(payment()?.totalPrice ?? '') +
                         parseFloat(
                           coinPayment()?.totalPrice ?? ''
@@ -112,8 +115,7 @@ const _PriceAndGasInfo = ({
             </div>
           )}
         </div>
-        {coinPayment()?.currencyId ===
-        '9e5c87cb-22ca-4550-8f09-f2272203410b' ? (
+        {coinPayment()?.currencyId === coinPaymentCurrencyId ? (
           <div className="pw-flex pw-justify-between pw-mt-2">
             <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">Zucas</p>
             {loading || loadingPreview ? (

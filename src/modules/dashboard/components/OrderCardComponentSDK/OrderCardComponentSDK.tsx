@@ -13,6 +13,7 @@ import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react'
 import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useGetApi } from '../../hooks/useGetApi';
 import { PriceComponent } from '../PriceComponent/PriceComponent';
 
@@ -61,6 +62,10 @@ export const OrderCardComponentSDK = ({
   const products = order?.data.products;
   const [infoOpened, setInfoOpened] = useState(false);
   const { data } = useGetApi(order?.data?.destinationWalletAddress, opened);
+  const { defaultTheme } = UseThemeConfig();
+  const coinPaymentCurrencyId =
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
+    '9e5c87cb-22ca-4550-8f09-f2272203410b';
   return (
     <div className="pw-p-6 pw-bg-white pw-rounded-xl pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-w-full">
       <div className="pw-flex pw-justify-between">
@@ -178,8 +183,7 @@ export const OrderCardComponentSDK = ({
                         order?.data?.payments?.length > 1
                           ? order?.data?.payments?.find(
                               (res: { currencyId: string }) =>
-                                res.currencyId !==
-                                '9e5c87cb-22ca-4550-8f09-f2272203410b'
+                                res.currencyId !== coinPaymentCurrencyId
                             )?.currency?.symbol ?? CurrencyEnum.BRL
                           : order?.data?.payments?.[0]?.currency?.symbol ??
                             CurrencyEnum.BRL
