@@ -21,8 +21,7 @@ import { useSignInWithCode } from '../../hooks/useSignInWithCode/useSignInWithCo
 export const SignInWithCodeWithoutLayout = () => {
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
   const { query, pushConnect } = useRouterConnect();
-  const { mutate: mutateVerify, isLoading: isLoadingVerify } =
-    useSignInWithCode();
+  const { mutate: mutateVerify } = useSignInWithCode();
   const { signInWithCode } = usePixwayAuthentication();
   const { companyId: tenantId } = useCompanyConfig();
   const { data: profile } = useProfile();
@@ -61,10 +60,12 @@ export const SignInWithCodeWithoutLayout = () => {
       reset();
     }
   }, [isSuccess, reset, profile]);
-
+  const [remainLoading, setRemainLoading] = useState(false);
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6 && emailToUse) {
+      setRemainLoading(true);
+      setError('');
       mutateVerify(
         { email: emailToUse, code },
         {
@@ -84,9 +85,14 @@ export const SignInWithCodeWithoutLayout = () => {
                 }
               );
           },
+          onError() {
+            setRemainLoading(false);
+            setError('Código inválido ou expirado');
+          },
         }
       );
     } else {
+      setRemainLoading(false);
       setError('código inválido');
     }
   };
@@ -122,14 +128,14 @@ export const SignInWithCodeWithoutLayout = () => {
           />
         ))}
       </div>
-      {error && (
+      {error !== '' && (
         <Alert variant="error">
           <p className="pw-text-xs pw-text-red-500 pw-font-poppins">{error}</p>
         </Alert>
       )}
 
       <WeblockButton
-        disabled={inputs.some((i) => i == '') || isLoadingVerify}
+        disabled={inputs.some((i) => i == '') || remainLoading}
         onClick={sendCode}
         className="pw-mt-4 pw-text-white"
         fullWidth={true}

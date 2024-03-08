@@ -5,6 +5,7 @@ import { Trans } from 'react-i18next';
 import { KycStatus } from '@w3block/sdk-id';
 import addMinutes from 'date-fns/addMinutes';
 
+import { Alert } from '../../../shared/components/Alert';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -91,10 +92,12 @@ export const VerifySignUpWithCodeWithoutLayout = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile, signupContext]);
-
+  const [remainLoading, setRemainLoading] = useState(false);
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6 && emailToUse) {
+      setError('');
+      setRemainLoading(true);
       mutateVerify(
         { email: emailToUse, token: code },
         {
@@ -107,11 +110,15 @@ export const VerifySignUpWithCodeWithoutLayout = ({
                   }
                 }
               );
+            } else {
+              setRemainLoading(false);
+              setError('Código inválido ou expirado');
             }
           },
         }
       );
     } else {
+      setRemainLoading(false);
       setError('código inválido');
     }
   };
@@ -145,9 +152,11 @@ export const VerifySignUpWithCodeWithoutLayout = ({
           />
         ))}
       </div>
-      <div className="pw-flex pw-w-full">
-        <p className="pw-text-xs pw-text-red-500 pw-font-poppins">{error}</p>
-      </div>
+      {error !== '' ? (
+        <Alert variant="error" className="pw-mt-2">
+          {error}
+        </Alert>
+      ) : null}
 
       <WeblockButton
         disabled={inputs.some((i) => i == '') || isLoadingVerify || redirect}
@@ -159,7 +168,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
       </WeblockButton>
 
       <button
-        disabled={isLoading || isActive}
+        disabled={isActive || remainLoading}
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
           mutate({
