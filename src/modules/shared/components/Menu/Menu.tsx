@@ -174,7 +174,11 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
         ),
         link: PixwayAppRoutes.WALLET_FUTURE,
-        isVisible: isCommerceReceiver,
+        isVisible:
+          (isCommerceReceiver || isAdmin) &&
+          loyaltyWallet &&
+          loyaltyWallet.length > 0 &&
+          !isHidden('futureStatement'),
       },
       {
         title:

@@ -170,7 +170,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
       icon: <ReceiptIcon style={{ color: textColor, stroke: textColor, fill: textColor }} width={15} height={15} />,
       route: PixwayAppRoutes.WALLET_FUTURE,
       isVisible:
-        isCommerceReceiver,
+        (isCommerceReceiver || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0 && !isHidden('futureStatement'),
     },
     {
       name: internalMenuData['myOrders']?.customLabel ||

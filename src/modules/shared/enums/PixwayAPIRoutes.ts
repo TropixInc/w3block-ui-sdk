@@ -87,4 +87,5 @@ export enum PixwayAPIRoutes {
   DELETE_SAVED_CARDS = '/companies/{companyId}/users/{userId}/credit-cards/{creditCardId}',
   PUBLIC_ORDER_BY_DELIVERID = '/companies/{companyId}/orders/get-by-deliver-id/{deliverId}',
   GET_DEFERRED_XLSX = '/{companyId}/loyalties/users/deferred/xlsx',
+  GET_DEFERRED = '/{companyId}/loyalties/users/deferred',
 }

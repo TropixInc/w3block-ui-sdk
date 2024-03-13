@@ -19,11 +19,13 @@ import { generateRandomUUID } from '../../utils/generateRamdomUUID';
 interface StatementComponentSDKProps {
   statement: Statement;
   future?: boolean;
+  isAdmin?: boolean;
 }
 
 export const StatementComponentSDK = ({
   statement,
   future,
+  isAdmin,
 }: StatementComponentSDKProps) => {
   const locale = useLocale();
   const [state, copyToClipboard] = useCopyToClipboard();
@@ -77,78 +79,81 @@ export const StatementComponentSDK = ({
     }
   };
   const subtext = () => {
-    if (
-      (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
-        'cashback_multilevel' &&
-      ((statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
-        ?.indirectCashbackLevel == 1 ||
-        (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
-          ?.indirectCashbackLevel > 1)
-    ) {
-      return 'Comissão por pagamento de indicado';
-    }
-    if (
-      (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
-      'cashback_multilevel'
-    ) {
-      return (
-        <p>
-          Cashback no{' '}
-          <a
-            className="!pw-font-bold"
-            href={`/profile/orders?orderId=${
-              (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
-                ?.commerce?.orderId
-            }`}
-          >
-            pagamento #
+    if (!future) {
+      if (
+        (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
+          'cashback_multilevel' &&
+        ((statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+          ?.indirectCashbackLevel == 1 ||
+          (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+            ?.indirectCashbackLevel > 1)
+      ) {
+        return 'Comissão por pagamento de indicado';
+      }
+      if (
+        (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
+        'cashback_multilevel'
+      ) {
+        return (
+          <p>
+            Cashback no{' '}
+            <a
+              className="!pw-font-bold"
+              href={`/profile/orders?orderId=${
+                (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+                  ?.commerce?.orderId
+              }`}
+            >
+              pagamento #
+              {
+                (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+                  ?.commerce?.deliverId
+              }
+            </a>{' '}
+            para{' '}
             {
               (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
-                ?.commerce?.deliverId
+                ?.operatorName
             }
-          </a>{' '}
-          para{' '}
-          {
-            (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
-              ?.operatorName
-          }
-        </p>
-      );
-    } else if (
-      statement?.commerce &&
-      statement?.request?.from === '0x0000000000000000000000000000000000000000'
-    ) {
-      return (
-        <p>
-          Carga de Zuca para{' '}
-          <a
-            className="!pw-font-bold"
-            href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
-          >
-            pagamento #{statement?.commerce?.deliverId}
-          </a>{' '}
-          a {statement?.commerce?.destinationUserName}
-        </p>
-      );
-    } else if (statement?.commerce) {
-      return (
-        <p>
-          <a
-            className="!pw-font-bold"
-            href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
-          >
-            Pagamento #{statement?.commerce?.deliverId}
-          </a>{' '}
-          no valor total de {statement?.commerce?.erc20PurchaseAmount} ZUCA para{' '}
-          {statement?.commerce?.destinationUserName}
-        </p>
-      );
-    } else
-      return (
-        (statement?.request?.metadata?.description ||
-          statement?.metadata?.description) ??
-        ''
-      );
+          </p>
+        );
+      } else if (
+        statement?.commerce &&
+        statement?.request?.from ===
+          '0x0000000000000000000000000000000000000000'
+      ) {
+        return (
+          <p>
+            Carga de Zuca para{' '}
+            <a
+              className="!pw-font-bold"
+              href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
+            >
+              pagamento #{statement?.commerce?.deliverId}
+            </a>{' '}
+            a {statement?.commerce?.destinationUserName}
+          </p>
+        );
+      } else if (statement?.commerce) {
+        return (
+          <p>
+            <a
+              className="!pw-font-bold"
+              href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
+            >
+              Pagamento #{statement?.commerce?.deliverId}
+            </a>{' '}
+            no valor total de {statement?.commerce?.erc20PurchaseAmount} ZUCA
+            para {statement?.commerce?.destinationUserName}
+          </p>
+        );
+      } else
+        return (
+          (statement?.request?.metadata?.description ||
+            statement?.metadata?.description) ??
+          ''
+        );
+    } else return '';
   };
   return (
     <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
@@ -192,6 +197,13 @@ export const StatementComponentSDK = ({
             <CopyIcon className="pw-stroke-[#777E8F] pw-w-[13px] pw-h-[13px]" />
           </button>
         </div>
+        {future && statement?.metadata?.operatorName && isAdmin ? (
+          <div className="pw-flex pw-items-center pw-gap-2">
+            <p className="pw-text-black pw-text-xs pw-font-medium">
+              Para: {statement?.metadata?.operatorName}
+            </p>
+          </div>
+        ) : null}
         {isCopied && (
           <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
             Copiado!

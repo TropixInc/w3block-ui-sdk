@@ -66,7 +66,10 @@ export const OrderCardComponentSDK = ({
   const statusObj = getStatusText(status);
   const products = order?.data.products;
   const [infoOpened, setInfoOpened] = useState(false);
-  const { data } = useGetApi(order?.data?.destinationWalletAddress, opened);
+  const { data } = useGetApi({
+    address: order?.data?.destinationWalletAddress,
+    enabled: opened,
+  });
   const { defaultTheme } = UseThemeConfig();
   const coinPaymentCurrencyId =
     defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??

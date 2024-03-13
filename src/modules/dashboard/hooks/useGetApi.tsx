@@ -2,12 +2,19 @@ import { useQuery } from 'react-query';
 
 import axios from 'axios';
 
-export const useGetApi = (address: string, enabled: boolean) => {
+interface Params {
+  address?: string;
+  enabled?: boolean;
+}
+
+export const useGetApi = ({ address, enabled }: Params) => {
   return useQuery(
     [address],
     () => {
       return axios.get(
-        `https://cms.foodbusters.com.br/api/restaurante-fas?populate[image][*]&filters[walletAddress]=${address}`
+        address
+          ? `https://cms.foodbusters.com.br/api/restaurante-fas?populate[image][*]&filters[walletAddress]=${address}`
+          : 'https://cms.foodbusters.com.br/api/restaurante-fas?populate[image][*]'
       );
     },
     { enabled: enabled }

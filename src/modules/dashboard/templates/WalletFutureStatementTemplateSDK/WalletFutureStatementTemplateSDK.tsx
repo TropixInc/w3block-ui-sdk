@@ -2,6 +2,7 @@ import { useMemo, useState, lazy } from 'react';
 
 import fileDownload from 'js-file-download';
 
+import { useGetDeferred } from '../../../business/hooks/useGetDeferred';
 import { useGetDeferredByUserId } from '../../../business/hooks/useGetDeferredByUserId';
 import { useGetXlsxDeferred } from '../../../business/hooks/useGetXlsxDeferred';
 import { useProfile } from '../../../shared';
@@ -13,6 +14,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { generateRandomUUID } from '../../../shared/utils/generateRamdomUUID';
+import { useGetApi } from '../../hooks/useGetApi';
 
 const InternalPagesLayoutBase = lazy(() =>
   import(
@@ -45,6 +47,13 @@ export const WalletFutureStatementTemplateSDK = () => {
   const [startDate, setStartDate] = useState<Date | string>();
   const [endDate, setEndDate] = useState<Date | string>();
   const [selected, setSelected] = useState<string | undefined>('');
+  const [selectedRestaurant, setSelectedRestaurant] = useState<
+    string | undefined
+  >('');
+  const userRoles = profile?.data.roles || [];
+  const isAdmin = Boolean(
+    userRoles?.includes('admin') || userRoles?.includes('superAdmin')
+  );
   const { data, isLoading } = useGetDeferredByUserId(
     profile?.data?.id ?? '',
     {
@@ -56,8 +65,28 @@ export const WalletFutureStatementTemplateSDK = () => {
       endDate: endDate ? new Date(endDate).toISOString() : '',
       rangeDateBy: selected ? selected : 'createdAt',
     },
-    !!loyaltyWalletDefined
+    !!loyaltyWalletDefined && !isAdmin
   );
+
+  const { data: adminDeferred, isLoading: loadingAdminDeferred } =
+    useGetDeferred(
+      {
+        page: actualPage,
+        sortBy: 'createdAt',
+        orderBy: 'DESC',
+        loyaltyId: loyaltyWalletDefined?.loyaltyId,
+        startDate: startDate ? new Date(startDate).toISOString() : '',
+        endDate: endDate ? new Date(endDate).toISOString() : '',
+        rangeDateBy: selected ? selected : 'createdAt',
+        walletAddress: selectedRestaurant,
+      },
+      !!loyaltyWalletDefined && isAdmin
+    );
+
+  const { data: restaurants } = useGetApi({
+    enabled: isAdmin,
+  });
+
   const xlsx = useGetXlsxDeferred(
     {
       sortBy: 'createdAt',
@@ -65,23 +94,42 @@ export const WalletFutureStatementTemplateSDK = () => {
       loyaltyId: loyaltyWalletDefined?.loyaltyId,
       startDate: startDate ? new Date(startDate).toISOString() : '',
       endDate: endDate ? new Date(endDate).toISOString() : '',
-      userId: profile?.data?.id ?? '',
-      walletAdress: profile?.data?.mainWalletId ?? '',
+      walletAddress: isAdmin
+        ? selectedRestaurant
+        : profile?.data?.mainWallet?.address ?? '',
       rangeDateBy: selected ? selected : 'createdAt',
     },
     !!loyaltyWalletDefined
   );
+
   const initDowload = () => {
     if (xlsx.data) fileDownload(xlsx.data?.data, 'relatorioExport.xlsx');
   };
+
   const filterOptions = [
     { label: 'Criação', value: 'createdAt' },
     { label: 'Recebimento', value: 'executeAt' },
   ];
+
+  const restaurantOptions = restaurants?.data?.data?.map(
+    (res: { attributes: { name: string; walletAddress: string } }) => {
+      return {
+        label: res?.attributes?.name,
+        value: res?.attributes?.walletAddress,
+      };
+    }
+  );
+
+  const dataToUse = () => {
+    if (isAdmin) return adminDeferred;
+    else return data;
+  };
+
   useGuardPagesWithOptions({
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
   });
+
   return (
     <InternalPagesLayoutBase>
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
@@ -106,8 +154,17 @@ export const WalletFutureStatementTemplateSDK = () => {
           selected={selected ?? ''}
           onChange={setSelected}
           placeholder="Data de"
-          className="sm:pw-w-[300px] pw-w-full"
+          className="sm:pw-w-[200px] pw-w-full"
         />
+        {isAdmin ? (
+          <Selectinput
+            options={restaurantOptions ?? []}
+            selected={selectedRestaurant ?? ''}
+            onChange={setSelectedRestaurant}
+            placeholder="Restaurantes"
+            className="sm:pw-w-[300px] pw-w-full"
+          />
+        ) : null}
         <PixwayButton
           onClick={() => initDowload()}
           disabled={!xlsx.data}
@@ -117,14 +174,15 @@ export const WalletFutureStatementTemplateSDK = () => {
         </PixwayButton>
       </div>
       <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
-        {isLoading ? (
+        {isLoading || loadingAdminDeferred ? (
           <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
             <Spinner className="pw-h-10 pw-w-10" />
           </div>
-        ) : data?.items?.length ? (
-          data?.items.map((item: any) => (
+        ) : dataToUse()?.items?.length ? (
+          dataToUse()?.items.map((item: any) => (
             <StatementComponentSDK
               future
+              isAdmin={isAdmin}
               key={generateRandomUUID()}
               statement={{
                 deliverId: item?.metadata?.deliverId ?? '',
@@ -149,6 +207,7 @@ export const WalletFutureStatementTemplateSDK = () => {
                 )
                   ? 'receiving'
                   : 'sending',
+                metadata: item?.metadata,
               }}
             />
           ))
@@ -157,10 +216,10 @@ export const WalletFutureStatementTemplateSDK = () => {
             Nenhum lançamento futuro
           </div>
         )}
-        {data?.meta && data?.meta?.totalPages > 1 ? (
+        {dataToUse()?.meta && (dataToUse()?.meta?.totalPages ?? 0) > 1 ? (
           <div className="pw-mt-4">
             <Pagination
-              pagesQuantity={data?.meta.totalPages ?? 0}
+              pagesQuantity={dataToUse()?.meta.totalPages ?? 0}
               currentPage={actualPage}
               onChangePage={setActualPage}
             />
