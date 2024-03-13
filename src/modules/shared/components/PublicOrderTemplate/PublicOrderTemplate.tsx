@@ -1,7 +1,10 @@
+import { format } from 'date-fns';
+import { enUS, ptBR } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { useRouterConnect } from '../../hooks';
 import { useGetPublicOrder } from '../../hooks/useGetPublicOrder/useGetPublicOrder';
+import { useLocale } from '../../hooks/useLocale';
 import { Spinner } from '../Spinner';
 
 export const PublicOrderTemplate = () => {
@@ -10,7 +13,7 @@ export const PublicOrderTemplate = () => {
     router?.query?.id as string,
     true
   );
-
+  const locale = useLocale();
   if (isLoading)
     return (
       <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10 pw-h-[80vh]">
@@ -52,6 +55,20 @@ export const PublicOrderTemplate = () => {
             <p className="pw-text-base pw-font-semibold">
               {data?.data?.cashback?.currency?.symbol}{' '}
               {data?.data?.cashback?.cashbackAmount}
+            </p>
+          </div>
+          <div className="pw-mt-5">
+            <p className="pw-text-base pw-font-normal">Compra realizada em</p>
+            <p className="pw-text-base pw-font-semibold">
+              {data?.data?.createdAt
+                ? format(
+                    new Date(data?.data?.createdAt ?? Date.now()),
+                    'PPpp',
+                    {
+                      locale: locale === 'pt-BR' ? ptBR : enUS,
+                    }
+                  )
+                : null}
             </p>
           </div>
           <div className="pw-mt-5">

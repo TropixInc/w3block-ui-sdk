@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 
 import { format } from 'date-fns';
@@ -8,8 +9,8 @@ import useTranslation from '../../hooks/useTranslation';
 import Calendar, { CalendarType } from '../Calendar/Calendar';
 
 interface DateFilterProps {
-  onChangeStartDate?: (date: Date) => void;
-  onChangeEndDate?: (date: Date) => void;
+  onChangeStartDate?: (date: any) => void;
+  onChangeEndDate?: (date: any) => void;
   defaultDate: Date;
   onChangeDefaultDate: (date: Date) => void;
   onCancel: () => void;

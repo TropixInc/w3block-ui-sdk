@@ -1,7 +1,13 @@
 import { useMemo, useState, lazy } from 'react';
 
+import fileDownload from 'js-file-download';
+
 import { useGetDeferredByUserId } from '../../../business/hooks/useGetDeferredByUserId';
+import { useGetXlsxDeferred } from '../../../business/hooks/useGetXlsxDeferred';
 import { useProfile } from '../../../shared';
+import { DateFilter } from '../../../shared/components/DateFilter';
+import { PixwayButton } from '../../../shared/components/PixwayButton';
+import { Selectinput } from '../../../shared/components/SelectInput/SelectInput';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
@@ -32,11 +38,13 @@ export const WalletFutureStatementTemplateSDK = () => {
   const { wallets, loyaltyWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
   const { data: profile } = useProfile();
-
   const loyaltyWalletDefined = useMemo(() => {
     return loyaltyWallet.length ? loyaltyWallet[0] : undefined;
   }, [loyaltyWallet]);
-
+  const [defaultDate, setDefaultDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<Date | string>();
+  const [endDate, setEndDate] = useState<Date | string>();
+  const [selected, setSelected] = useState<string | undefined>('');
   const { data, isLoading } = useGetDeferredByUserId(
     profile?.data?.id ?? '',
     {
@@ -44,10 +52,32 @@ export const WalletFutureStatementTemplateSDK = () => {
       sortBy: 'createdAt',
       orderBy: 'DESC',
       loyaltyId: loyaltyWalletDefined?.loyaltyId,
+      startDate: startDate ? new Date(startDate).toISOString() : '',
+      endDate: endDate ? new Date(endDate).toISOString() : '',
+      rangeDateBy: selected ? selected : 'createdAt',
     },
     !!loyaltyWalletDefined
   );
-
+  const xlsx = useGetXlsxDeferred(
+    {
+      sortBy: 'createdAt',
+      orderBy: 'DESC',
+      loyaltyId: loyaltyWalletDefined?.loyaltyId,
+      startDate: startDate ? new Date(startDate).toISOString() : '',
+      endDate: endDate ? new Date(endDate).toISOString() : '',
+      userId: profile?.data?.id ?? '',
+      walletAdress: profile?.data?.mainWalletId ?? '',
+      rangeDateBy: selected ? selected : 'createdAt',
+    },
+    !!loyaltyWalletDefined
+  );
+  const initDowload = () => {
+    if (xlsx.data) fileDownload(xlsx.data?.data, 'relatorioExport.xlsx');
+  };
+  const filterOptions = [
+    { label: 'Criação', value: 'createdAt' },
+    { label: 'Recebimento', value: 'executeAt' },
+  ];
   useGuardPagesWithOptions({
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
@@ -56,6 +86,35 @@ export const WalletFutureStatementTemplateSDK = () => {
     <InternalPagesLayoutBase>
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
         <p className="pw-text-[23px] pw-font-[600]">Recebimentos futuros</p>
+      </div>
+      <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
+        <DateFilter
+          onChangeStartDate={setStartDate}
+          onChangeEndDate={setEndDate}
+          defaultDate={defaultDate}
+          onChangeDefaultDate={setDefaultDate}
+          onCancel={() => {
+            setStartDate('');
+            setEndDate('');
+          }}
+          startDate={startDate as Date}
+          endDate={endDate as Date}
+          placeholder={'Data'}
+        />
+        <Selectinput
+          options={filterOptions ?? []}
+          selected={selected ?? ''}
+          onChange={setSelected}
+          placeholder="Data de"
+          className="sm:pw-w-[300px] pw-w-full"
+        />
+        <PixwayButton
+          onClick={() => initDowload()}
+          disabled={!xlsx.data}
+          className="!pw-py-2 !pw-px-[30px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl disabled:pw-opacity-50 disabled:!pw-bg-white"
+        >
+          Baixar relatório
+        </PixwayButton>
       </div>
       <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
         {isLoading ? (

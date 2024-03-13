@@ -125,6 +125,22 @@ export const OrderCardComponentSDK = ({
                 </p>
               </div>
               <div className="pw-mt-5">
+                <p className="pw-text-base pw-font-normal">
+                  Compra realizada em
+                </p>
+                <p className="pw-text-base pw-font-semibold">
+                  {receipt?.data?.createdAt
+                    ? format(
+                        new Date(receipt?.data?.createdAt ?? Date.now()),
+                        'PPpp',
+                        {
+                          locale: locale === 'pt-BR' ? ptBR : enUS,
+                        }
+                      )
+                    : null}
+                </p>
+              </div>
+              <div className="pw-mt-5">
                 <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
                   <QRCodeSVG
                     value={`${window?.location?.origin}/order/${receipt?.data?.deliverId}`}

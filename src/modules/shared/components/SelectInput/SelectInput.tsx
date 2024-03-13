@@ -64,7 +64,9 @@ export const Selectinput = ({
                 onChange('');
                 setIsOpened(false);
               }}
-            ></div>
+            >
+              {placeholder}
+            </div>
             {options.map((option) => (
               <div
                 key={option.value}
