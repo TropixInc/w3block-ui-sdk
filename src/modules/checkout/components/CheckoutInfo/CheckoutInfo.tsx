@@ -153,7 +153,7 @@ const _CheckoutInfo = ({
   const isCoinPayment = params.get('coinPayment')?.includes('true')
     ? true
     : false;
-  const destinationWalletAddress = params.get('destinationWalletAddress');
+  const destinationUser = params.get('destination');
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
     currencyId
@@ -511,10 +511,13 @@ const _CheckoutInfo = ({
         originalClientServiceFee: orderPreview?.originalClientServiceFee ?? '',
         originalTotalPrice: orderPreview?.originalTotalPrice ?? '',
         destinationUser: {
-          walletAddress: destinationWalletAddress ?? '',
+          walletAddress: datasource?.master?.data.filter(
+            (e: { attributes: { slug: string | null } }) =>
+              e.attributes.slug === destinationUser
+          )[0]?.attributes?.walletAddress,
           name: datasource?.master?.data.filter(
-            (e: { attributes: { walletAddress: string | null } }) =>
-              e.attributes.walletAddress === destinationWalletAddress
+            (e: { attributes: { slug: string | null } }) =>
+              e.attributes.slug === destinationUser
           )[0]?.attributes?.name,
         },
         isCoinPayment,
@@ -1020,15 +1023,14 @@ const _CheckoutInfo = ({
                     title="Você vai pagar para"
                     initialValue={
                       datasource?.master?.data.filter(
-                        (e: { attributes: { walletAddress: string | null } }) =>
-                          e?.attributes?.walletAddress ===
-                          destinationWalletAddress
+                        (e: { attributes: { slug: string | null } }) =>
+                          e?.attributes?.slug === destinationUser
                       )[0]?.id
                     }
                     onChange={(e) =>
                       router.pushConnect(
                         PixwayAppRoutes.CHECKOUT_CONFIRMATION,
-                        { destinationWalletAddress: e, ...router.query }
+                        { ...router.query, destination: e }
                       )
                     }
                     classes={{

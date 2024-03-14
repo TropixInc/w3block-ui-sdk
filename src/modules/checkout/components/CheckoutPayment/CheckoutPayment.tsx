@@ -315,8 +315,8 @@ export const CheckoutPayment = () => {
         )
           return context?.defaultTheme?.configurations?.contentData
             ?.tenantWallet;
-        else if (router?.query?.destinationWalletAddress)
-          return router?.query?.destinationWalletAddress;
+        else if (orderInfo?.destinationUser?.walletAddress)
+          return orderInfo?.destinationUser?.walletAddress;
         else return profile.data?.data.mainWallet?.address ?? '';
       };
       createOrderHook.mutate(

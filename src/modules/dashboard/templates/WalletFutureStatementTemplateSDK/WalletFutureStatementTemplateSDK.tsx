@@ -37,7 +37,7 @@ const StatementComponentSDK = lazy(() =>
 );
 
 export const WalletFutureStatementTemplateSDK = () => {
-  const { wallets, loyaltyWallet } = useUserWallet();
+  const { loyaltyWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
   const { data: profile } = useProfile();
   const loyaltyWalletDefined = useMemo(() => {
@@ -107,8 +107,8 @@ export const WalletFutureStatementTemplateSDK = () => {
   };
 
   const filterOptions = [
-    { label: 'Criação', value: 'createdAt' },
-    { label: 'Recebimento', value: 'executeAt' },
+    { label: 'Data de Criação', value: 'createdAt' },
+    { label: 'Data de Recebimento', value: 'executeAt' },
   ];
 
   const restaurantOptions = restaurants?.data?.data?.map(
@@ -132,46 +132,47 @@ export const WalletFutureStatementTemplateSDK = () => {
 
   return (
     <InternalPagesLayoutBase>
-      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
+      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg">
         <p className="pw-text-[23px] pw-font-[600]">Recebimentos futuros</p>
-      </div>
-      <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
-        <DateFilter
-          onChangeStartDate={setStartDate}
-          onChangeEndDate={setEndDate}
-          defaultDate={defaultDate}
-          onChangeDefaultDate={setDefaultDate}
-          onCancel={() => {
-            setStartDate('');
-            setEndDate('');
-          }}
-          startDate={startDate as Date}
-          endDate={endDate as Date}
-          placeholder={'Data'}
-        />
-        <Selectinput
-          options={filterOptions ?? []}
-          selected={selected ?? ''}
-          onChange={setSelected}
-          placeholder="Data de"
-          className="sm:pw-w-[200px] pw-w-full"
-        />
-        {isAdmin ? (
+        <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
           <Selectinput
-            options={restaurantOptions ?? []}
-            selected={selectedRestaurant ?? ''}
-            onChange={setSelectedRestaurant}
-            placeholder="Restaurantes"
-            className="sm:pw-w-[300px] pw-w-full"
+            options={filterOptions ?? []}
+            selected={selected ?? ''}
+            onChange={setSelected}
+            placeholder="Data de Criação"
+            className="sm:pw-w-[200px] pw-w-full"
+            hideFirstOption
           />
-        ) : null}
-        <PixwayButton
-          onClick={() => initDowload()}
-          disabled={!xlsx.data}
-          className="!pw-py-2 !pw-px-[30px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl disabled:pw-opacity-50 disabled:!pw-bg-white"
-        >
-          Baixar relatório
-        </PixwayButton>
+          <DateFilter
+            onChangeStartDate={setStartDate}
+            onChangeEndDate={setEndDate}
+            defaultDate={defaultDate}
+            onChangeDefaultDate={setDefaultDate}
+            onCancel={() => {
+              setStartDate('');
+              setEndDate('');
+            }}
+            startDate={startDate as Date}
+            endDate={endDate as Date}
+            placeholder={'Data'}
+          />
+          {isAdmin ? (
+            <Selectinput
+              options={restaurantOptions ?? []}
+              selected={selectedRestaurant ?? ''}
+              onChange={setSelectedRestaurant}
+              placeholder="Restaurantes"
+              className="sm:pw-w-[250px] pw-w-full"
+            />
+          ) : null}
+          <PixwayButton
+            onClick={() => initDowload()}
+            disabled={!xlsx.data}
+            className="!pw-py-2 !pw-px-[30px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl disabled:pw-opacity-50 disabled:!pw-bg-white"
+          >
+            Baixar relatório
+          </PixwayButton>
+        </div>
       </div>
       <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
         {isLoading || loadingAdminDeferred ? (
@@ -201,12 +202,7 @@ export const WalletFutureStatementTemplateSDK = () => {
                 currency: loyaltyWallet?.length
                   ? loyaltyWallet[0]?.currency
                   : '',
-                transactionType: wallets?.some(
-                  (wallet) =>
-                    wallet?.address == (item?.request?.to ?? item?.toAddress)
-                )
-                  ? 'receiving'
-                  : 'sending',
+                transactionType: 'receiving',
                 metadata: item?.metadata,
               }}
             />

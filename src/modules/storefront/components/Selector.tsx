@@ -65,7 +65,7 @@ export const Selector = ({
           value={value}
           onChange={(e) => {
             setValue(e);
-            onChange(e.attributes.walletAddress);
+            onChange(e.attributes.slug);
           }}
         >
           <div className="pw-relative">
@@ -90,7 +90,7 @@ export const Selector = ({
             <Combobox.Options className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-w-[1032px]">
               {filteredPeople.map(
                 (res: {
-                  attributes: { name: string; walletAddress: string };
+                  attributes: { name: string; slug: string };
                   id: string;
                 }) => (
                   <Combobox.Option
