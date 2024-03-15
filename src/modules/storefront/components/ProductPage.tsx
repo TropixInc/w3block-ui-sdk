@@ -52,6 +52,7 @@ import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
+import { useDispatchGaEvent } from '../../shared/hooks/useDispatchGaEvent/useDispatchGaEvent';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
@@ -155,6 +156,7 @@ export const ProductPage = ({
   const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
   const [isOpen, setIsOpen] = useState(openModal);
   const [cartOpen, setCartOpen] = useState(false);
+  const { gtag } = useDispatchGaEvent();
   const addToCart = () => {
     setCartOpen(true);
     setProductVariants({ ...variants });
@@ -171,6 +173,12 @@ export const ProductPage = ({
         };
       }) ?? [];
     setCart([...cart, ...cartPreview]);
+    gtag &&
+      gtag('add_to_cart', {
+        items: [{ item_id: product?.id }],
+        currency: product?.prices?.[0]?.currency?.code,
+        value: product?.prices?.[0]?.amount,
+      });
   };
 
   useEffect(() => {

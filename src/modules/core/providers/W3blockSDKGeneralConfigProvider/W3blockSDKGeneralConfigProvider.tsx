@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, lazy, useMemo } from 'react';
 
 import { PixwayUISdkLocale } from '../../context';
 import { EnvironmentContext } from '../../context/EnvironmentContext';
 import { W3blockUISDKGereralConfigContext } from '../../context/W3blockUISDKGeneralConfigContext';
 import { ErrorProvider } from '../ErrorProvider/ErrorProvider';
+import { TagManagerProvider } from '../TagManagerProvider/TagManagerProvider';
 const MetamaskProviderUiSDK = lazy(() =>
   import('../../metamask').then((m) => ({ default: m.MetamaskProviderUiSDK }))
 );
@@ -43,8 +45,8 @@ interface Props extends JSX.IntrinsicAttributes {
   appBaseUrl: string;
   connectProxyPass?: string;
   name?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logError?(error: any, extra?: object): void;
+  gtag?(event: any, params?: object): void;
 }
 
 export const W3blockUISDKGeneralConfigProvider = ({
@@ -58,6 +60,7 @@ export const W3blockUISDKGeneralConfigProvider = ({
   connectProxyPass = '',
   name = '',
   logError,
+  gtag,
 }: Props) => {
   const companyValue = useMemo(
     () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass, name }),
@@ -85,9 +88,11 @@ export const W3blockUISDKGeneralConfigProvider = ({
           <MetamaskProviderUiSDK>
             <SocketProviderUiSDK>
               <CartProvider>
-                <ErrorProvider logError={logError}>
-                  <LocaleProvider locale={locale}>{children}</LocaleProvider>
-                </ErrorProvider>
+                <TagManagerProvider gtag={gtag}>
+                  <ErrorProvider logError={logError}>
+                    <LocaleProvider locale={locale}>{children}</LocaleProvider>
+                  </ErrorProvider>
+                </TagManagerProvider>
               </CartProvider>
             </SocketProviderUiSDK>
           </MetamaskProviderUiSDK>

@@ -44,6 +44,7 @@ export interface OrderPreviewResponse {
     currencyId?: string;
   };
   payments?: PaymentsResponse[];
+  currency?: CurrencyResponse;
 }
 
 export interface ProductErrorInterface {
@@ -213,6 +214,7 @@ export interface CreateOrderResponse {
       paymentUrl?: string;
     };
   }[];
+  currency?: CurrencyResponse;
 }
 
 export interface PaymentInfoInterface {

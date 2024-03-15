@@ -34,6 +34,7 @@ const WeblockButton = lazy(() =>
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import { useDispatchGaEvent } from '../../../shared/hooks/useDispatchGaEvent/useDispatchGaEvent';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useLogError } from '../../../shared/hooks/useLogError';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -165,6 +166,14 @@ export const CheckoutPayment = () => {
                 data.status == 'delivering' ||
                 data.status == 'waiting_delivery'
               ) {
+                gtag &&
+                  gtag('purchase', {
+                    value: data?.totalAmount,
+                    currency: data?.currency?.code,
+                    items: productCache?.products.map((res) => {
+                      return { item_id: res.id };
+                    }),
+                  });
                 clearInterval(interval);
                 setPoolStatus(false);
                 router.pushConnect(
@@ -288,7 +297,7 @@ export const CheckoutPayment = () => {
   }, [orderResponse]);
 
   const { logError } = useLogError();
-
+  const { gtag } = useDispatchGaEvent();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createOrder = (val: any, allowSimilarPayment?: boolean) => {
     setLoading(true);
@@ -436,6 +445,14 @@ export const CheckoutPayment = () => {
                 productCache.choosedPayment?.paymentMethod == 'credit_card' ||
                 isFree
               ) {
+                gtag &&
+                  gtag('purchase', {
+                    value: data?.totalAmount,
+                    currency: data?.currency?.code,
+                    items: productCache?.products.map((res) => {
+                      return { item_id: res.id };
+                    }),
+                  });
                 router.pushConnect(
                   PixwayAppRoutes.CHECKOUT_COMPLETED,
                   router.query

@@ -4,6 +4,8 @@ import { CurrencyInput } from 'react-currency-mask';
 import { useTranslation } from 'react-i18next';
 import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
+import { format } from 'date-fns';
+import { enUS, ptBR } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { useProfile } from '../../../shared';
@@ -15,7 +17,9 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useDispatchGaEvent } from '../../../shared/hooks/useDispatchGaEvent/useDispatchGaEvent';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
+import { useLocale } from '../../../shared/hooks/useLocale';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
@@ -443,7 +447,7 @@ const _CheckoutInfo = ({
   );
 
   const isLoading = orderPreview == null;
-
+  const { gtag } = useDispatchGaEvent();
   const beforeProcced = () => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION && orderPreview) {
       const orderProducts = isCart
@@ -535,6 +539,15 @@ const _CheckoutInfo = ({
         openModal();
         return;
       } else {
+        gtag &&
+          gtag('begin_checkout', {
+            value: orderPreview?.totalPrice,
+            currency: orderPreview?.currency?.code,
+            coupon: orderPreview?.appliedCoupon,
+            items: orderPreview?.products.map((res) => {
+              return { item_id: res.id };
+            }),
+          });
         router.pushConnect(
           PixwayAppRoutes.CHECKOUT_PAYMENT +
             '?' +
@@ -994,7 +1007,7 @@ const _CheckoutInfo = ({
       } else setCoinAmountPayment('');
     }
   };
-
+  const locale = useLocale();
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
@@ -1330,8 +1343,11 @@ const _CheckoutInfo = ({
                         <p className="pw-text-sm pw-font-normal">Valor pago</p>
                         <p className="pw-text-sm pw-font-semibold">
                           R$
-                          {orderResponse?.totalAmount?.[0]?.amount ??
-                            orderResponse?.totalAmount}
+                          {orderResponse?.totalAmount?.[0]?.amount
+                            ? parseFloat(
+                                orderResponse?.totalAmount?.[0]?.amount
+                              ).toFixed(2)
+                            : parseFloat(orderResponse?.totalAmount).toFixed(2)}
                         </p>
                       </div>
                       <div className="pw-mt-5">
@@ -1339,7 +1355,26 @@ const _CheckoutInfo = ({
                           Cashback ganho
                         </p>
                         <p className="pw-text-sm pw-font-semibold">
-                          R${productCache?.cashback}
+                          R$
+                          {parseFloat(productCache?.cashback ?? '').toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="pw-mt-5">
+                        <p className="pw-text-sm pw-font-normal">
+                          Compra realizada em
+                        </p>
+                        <p className="pw-text-sm pw-font-semibold">
+                          {orderResponse?.createdAt
+                            ? format(
+                                new Date(
+                                  orderResponse?.createdAt ?? Date.now()
+                                ),
+                                'PPpp',
+                                {
+                                  locale: locale === 'pt-BR' ? ptBR : enUS,
+                                }
+                              )
+                            : null}
                         </p>
                       </div>
                       <div className="pw-mt-5">
@@ -1530,15 +1565,27 @@ const _CheckoutInfo = ({
                   changeQuantity={changeQuantity}
                   loading={isLoading}
                   status={checkoutStatus}
-                  deleteProduct={(id, variants) =>
+                  deleteProduct={(id, variants) => {
+                    gtag &&
+                      gtag('remove_from_cart', {
+                        value: parseFloat(
+                          prod?.prices?.find(
+                            (price) => price?.currencyId == currencyIdState
+                          )?.amount ?? '0'
+                        ).toString(),
+                        currency: prod?.prices?.find(
+                          (prodI) => prodI?.currencyId == currencyIdState
+                        )?.currency?.code,
+                        items: [{ item_id: id }],
+                      });
                     deleteProduct(
                       id,
                       prod?.prices?.find(
                         (price) => price?.currencyId == currencyIdState
                       )?.amount ?? '0',
                       variants
-                    )
-                  }
+                    );
+                  }}
                   id={prod?.id}
                   key={index}
                   image={prod?.images[0]?.thumb}

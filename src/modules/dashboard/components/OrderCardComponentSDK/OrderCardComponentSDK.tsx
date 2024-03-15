@@ -117,14 +117,16 @@ export const OrderCardComponentSDK = ({
                 <p className="pw-text-base pw-font-normal">Valor pago</p>
                 <p className="pw-text-base pw-font-semibold">
                   R$
-                  {receipt?.data?.cashback?.amount}
+                  {parseFloat(receipt?.data?.cashback?.amount).toFixed(2)}
                 </p>
               </div>
               <div className="pw-mt-5">
                 <p className="pw-text-base pw-font-normal">Cashback ganho</p>
                 <p className="pw-text-base pw-font-semibold">
                   {receipt?.data?.cashback?.currency?.symbol}{' '}
-                  {receipt?.data?.cashback?.cashbackAmount}
+                  {parseFloat(receipt?.data?.cashback?.cashbackAmount).toFixed(
+                    2
+                  )}
                 </p>
               </div>
               <div className="pw-mt-5">

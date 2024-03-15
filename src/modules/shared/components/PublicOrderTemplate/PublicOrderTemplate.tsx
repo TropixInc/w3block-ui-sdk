@@ -47,14 +47,14 @@ export const PublicOrderTemplate = () => {
             <p className="pw-text-base pw-font-normal">Valor pago</p>
             <p className="pw-text-base pw-font-semibold">
               R$
-              {data?.data?.cashback?.amount}
+              {parseFloat(data?.data?.cashback?.amount).toFixed(2)}
             </p>
           </div>
           <div className="pw-mt-5">
             <p className="pw-text-base pw-font-normal">Cashback ganho</p>
             <p className="pw-text-base pw-font-semibold">
               {data?.data?.cashback?.currency?.symbol}{' '}
-              {data?.data?.cashback?.cashbackAmount}
+              {parseFloat(data?.data?.cashback?.cashbackAmount).toFixed(2)}
             </p>
           </div>
           <div className="pw-mt-5">
