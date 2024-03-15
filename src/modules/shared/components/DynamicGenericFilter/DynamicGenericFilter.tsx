@@ -248,8 +248,8 @@ export const DynamicGenericFilter = ({
         return (
           <MultipleSelect
             classes={{
-              root: 'pw-w-full !pw-h-[42px] pw-relative pw-z-1 sm:pw-max-w-[270px]',
-              button: 'pw-h-[42px] pw-z-1',
+              root: 'pw-w-full !pw-h-11 pw-relative pw-z-1 sm:pw-max-w-[270px]',
+              button: 'pw-h-11 pw-z-1',
             }}
             name="status"
             placeholder={getPlaceholderForMultipleSelect(field?.value || '')}
