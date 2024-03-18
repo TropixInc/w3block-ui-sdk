@@ -124,7 +124,7 @@ const GenericSearchFilter = ({
 
   return (
     <div className={classNames('pw-relative pw-w-full', classes?.root)}>
-      <div className="pw-flex pw-w-full pw-items-center pw-h-[46px] pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-pl-4 pw-pr-1 pw-rounded-lg">
+      <div className="pw-flex pw-w-full pw-items-center pw-h-11 pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-pl-4 pw-pr-1 pw-rounded-lg">
         <SearchIcon className="pw-stroke-slate-500" />
         <input
           type="text"

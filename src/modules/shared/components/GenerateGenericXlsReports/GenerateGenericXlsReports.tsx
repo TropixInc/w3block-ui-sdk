@@ -129,7 +129,7 @@ export const GenerateGenericXlsReports = ({
   };
 
   return (
-    <div className="pw-w-full pw-h-[80px] pw-flex pw-flex-col pw-items-end pw-mb-2">
+    <div className="pw-w-full pw-flex pw-flex-col pw-items-end pw-mb-2">
       <OffpixButtonBase
         className="pw-px-4 !pw-py-2 pw-text-base"
         onClick={() => handleCallReportXls()}

@@ -27,10 +27,10 @@ import {
 } from '../../interface/ConfigGenericTable';
 import { Alert } from '../Alert';
 import { GenerateGenericXlsReports } from '../GenerateGenericXlsReports';
-import { GenericButtonActions } from '../GenericButtonActions';
 import { Pagination } from '../Pagination';
 import SmartGenericFilter from '../SmartGenericFilter/SmartGenericFilter';
 import { Spinner } from '../Spinner';
+import Line from './Line';
 
 interface GenericTableProps {
   config: ConfigGenericTable;
@@ -70,6 +70,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     dataSource,
     xlsReports,
     actions,
+    isLineExplansible,
     tableStyles,
     lineActions,
     externalFilterClasses,
@@ -77,8 +78,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     filtersTitle,
     filtersSubtitle,
     tableTitle,
+    expansibleComponent,
   } = config;
   const { config: configDynamic } = useDynamicApi();
+
   const isMobile = useIsMobile();
   const { companyId: tenantId } = useCompanyConfig();
   const { data: company } = useCompanyById(tenantId || '');
@@ -92,6 +95,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const [filterLabels, setFilterLabels] = useState<any | undefined>();
   const [apiUrl, setApiUrl] = useState<string>();
   const methods = useForm();
+  const [isUpdateList, setIsUpdateList] = useState(false);
   const truncate = useTruncate();
 
   useEffect(() => {
@@ -116,20 +120,33 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const tenantName = company?.data.id === companyId ? name : '';
 
   const [
-    { data, isLoading, isError },
+    { data, isLoading, isError, refetch, isFetched },
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
+    internalTypeAPI: dataSource?.urlContext,
     url: apiUrl ? apiUrl : dataSource?.url ?? '',
     isPublicApi: dataSource?.isPublicApi,
     ...paginationMapping[paginationType],
   });
 
+  useEffect(() => {
+    if (isUpdateList) refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUpdateList]);
+
+  useEffect(() => {
+    if (isFetched) setIsUpdateList(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetched]);
+
   const handleAction = (event: any, action: any, row: any) => {
     if (action && action.type == 'function') {
       event?.preventDefault();
       action.data(row);
-    } else {
+    } else if (action && action.type == 'navigate') {
       window.location.href = getHref(lineActions?.action, row);
+    } else {
+      null;
     }
   };
 
@@ -247,7 +264,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               <p>{truncateValue}</p>
               {value && (
                 <button onClick={() => handleCopy(value)}>
-                  <CopyIcon className="pw-stroke-blue1" />
+                  <CopyIcon className="pw-stroke-[#71b1ff]" />
                 </button>
               )}
             </div>
@@ -453,6 +470,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     setFilterLabels({});
   };
 
+  const handleCalcColumnSpan = () => {
+    let columnsLength = columns.filter((item) => item.header.label).length;
+
+    if (actions) columnsLength = columnsLength + 1;
+
+    return (columnsLength = columnsLength + 1);
+  };
+
   const renderClearFilterButton = () => {
     const filterValues = Object.values(filters || {});
     if (filterValues.some((item: any) => item?.length)) {
@@ -655,6 +680,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                         </th>
                       )
                     )}
+                  {actions || isLineExplansible ? (
+                    <th
+                      className={classNames(
+                        'pw-text-left pw-px-3 pw-w-[40px] pw-relative'
+                      )}
+                      scope="col"
+                    ></th>
+                  ) : null}
                 </tr>
               </thead>
               <div
@@ -692,64 +725,20 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               <tbody className="">
                 {!isLoading && _.get(data, localeItems ?? '', [])?.length
                   ? _.get(data, localeItems ?? '', []).map((item: any) => (
-                      <tr
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-                        key={(item as any).id}
-                        onClick={(e) =>
-                          handleAction(e, lineActions?.action, item)
-                        }
-                        className={classNames(
-                          tableStyles?.line ?? '',
-                          'pw-px-3 pw-items-center pw-gap-x-1 pw-h-[72px] pw-border-t sm:pw-w-full ',
-                          lineActions
-                            ? 'pw-cursor-pointer'
-                            : 'pw-cursor-default'
-                        )}
-                      >
-                        {columns
-                          .filter(({ header }) => header.label)
-                          .map(
-                            ({
-                              key,
-                              format,
-                              header,
-                              keyInCollection,
-                              moreInfos,
-                              hrefLink,
-                              linkLabel,
-                              isTranslatable,
-                              translatePrefix,
-                              isDynamicValue,
-                              columnStyles,
-                            }) => (
-                              <td
-                                key={key}
-                                className="pw-text-sm pw-text-left pw-px-3"
-                              >
-                                <div className={classNames(columnStyles, '')}>
-                                  {customizerValues(
-                                    item as any,
-                                    key,
-                                    format,
-                                    header.baseUrl,
-                                    keyInCollection,
-                                    moreInfos,
-                                    hrefLink,
-                                    linkLabel,
-                                    isTranslatable,
-                                    translatePrefix,
-                                    isDynamicValue
-                                  )}
-                                </div>
-                              </td>
-                            )
-                          )}
-                        <GenericButtonActions
-                          dataItem={item}
-                          actions={actions ?? []}
-                        />
-                      </tr>
+                      <Line
+                        columns={columns}
+                        customizerValues={customizerValues}
+                        handleAction={handleAction}
+                        handleCalcColumnSpan={handleCalcColumnSpan}
+                        item={item}
+                        tableStyles={tableStyles}
+                        actions={actions}
+                        isLineExplansible={isLineExplansible}
+                        key={item.id}
+                        lineActions={lineActions}
+                        expansibleComponent={expansibleComponent}
+                        setIsUpdateList={setIsUpdateList}
+                      />
                     ))
                   : null}
               </tbody>

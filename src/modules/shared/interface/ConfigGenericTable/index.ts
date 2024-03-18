@@ -93,6 +93,7 @@ export interface ColumnsTable {
   translatePrefix?: string;
   columnStyles?: string;
   isDynamicValue?: boolean;
+
   moreInfos?: {
     name?: string;
     cpf?: string;
@@ -105,7 +106,7 @@ export interface ColumnsTable {
     filter?: {
       type: FilterTableType;
       format: FormatFilterType;
-      filterClass?: string;
+      filterClass?: any;
       placeholder?: string;
       placement?: 'internal' | 'external';
       values?: {
@@ -128,6 +129,8 @@ export interface ConfigGenericTable {
   filtersTitle?: string;
   tableTitle?: string;
   filtersSubtitle?: string;
+  expansibleComponent?: any;
+  isLineExplansible?: boolean;
   paginationType?: 'default' | 'strapi';
   dataSource?: DataSource;
   localeItems?: string;

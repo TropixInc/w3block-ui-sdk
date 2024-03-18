@@ -99,7 +99,7 @@ export const DateFilter = ({
   };
 
   return (
-    <div className="pw-relative pw-flex pw-w-full pw-h-[46px] pw-flex-col pw-items-center pw-justify-center pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-px-4 pw-rounded-lg sm:pw-max-w-[350px]">
+    <div className="pw-relative pw-flex pw-w-full pw-h-11 pw-flex-col pw-items-center pw-justify-center pw-gap-x-2 pw-bg-white pw-border pw-border-slate-300 pw-px-4 pw-rounded-lg sm:pw-max-w-[350px]">
       <button
         className="pw-w-full pw-items-center pw-flex pw-justify-between pw-text-sm"
         onClick={() => setOpenCalendarModal(!openCalendarModal)}
