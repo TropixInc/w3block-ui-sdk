@@ -184,18 +184,20 @@ export const StatementComponentSDK = ({
               Comprador: {statement?.buyerName}
             </p>
           ) : (
-            <p className="pw-text-[#777E8F] pw-text-xs pw-font-medium">
-              tx: {statement?.txHash?.substring(0, 6)}
-              {'...'}
-              {statement?.txHash?.substring(
-                statement?.txHash?.length - 4,
-                statement?.txHash?.length
-              )}
-            </p>
+            <>
+              <p className="pw-text-[#777E8F] pw-text-xs pw-font-medium">
+                tx: {statement?.txHash?.substring(0, 6)}
+                {'...'}
+                {statement?.txHash?.substring(
+                  statement?.txHash?.length - 4,
+                  statement?.txHash?.length
+                )}
+              </p>
+              <button onClick={handleCopy}>
+                <CopyIcon className="pw-stroke-[#777E8F] pw-w-[13px] pw-h-[13px]" />
+              </button>
+            </>
           )}
-          <button onClick={handleCopy}>
-            <CopyIcon className="pw-stroke-[#777E8F] pw-w-[13px] pw-h-[13px]" />
-          </button>
         </div>
         {future && statement?.metadata?.operatorName && isAdmin ? (
           <div className="pw-flex pw-items-center pw-gap-2">
@@ -210,16 +212,32 @@ export const StatementComponentSDK = ({
           </span>
         )}
         {future ? (
-          <div className="pw-flex pw-items-center pw-gap-2">
-            <p className="pw-text-black pw-text-xs pw-font-medium">
-              {statement?.executeAt
-                ? 'Recebimento previsto para: ' +
-                  format(new Date(statement?.executeAt), 'PPP', {
-                    locale: locale === 'pt-BR' ? ptBR : enUS,
-                  })
-                : null}
-            </p>
-          </div>
+          <>
+            {statement?.metadata?.commerce?.deliverId ? (
+              <div className="pw-flex pw-items-center pw-gap-2">
+                <p className="pw-text-black pw-text-xs pw-font-medium">
+                  Compra: {statement?.metadata?.commerce?.deliverId}
+                </p>
+              </div>
+            ) : null}
+            {statement?.metadata?.amount ? (
+              <div className="pw-flex pw-items-center pw-gap-2">
+                <p className="pw-text-black pw-text-xs pw-font-medium">
+                  Valor pago: {statement?.metadata?.amount}
+                </p>
+              </div>
+            ) : null}
+            <div className="pw-flex pw-items-center pw-gap-2">
+              <p className="pw-text-black pw-text-xs pw-font-medium">
+                {statement?.executeAt
+                  ? 'Recebimento previsto para: ' +
+                    format(new Date(statement?.executeAt), 'PPP', {
+                      locale: locale === 'pt-BR' ? ptBR : enUS,
+                    })
+                  : null}
+              </p>
+            </div>
+          </>
         ) : null}
         <div>
           <span className="pw-text-black pw-text-sm pw-font-semibold">

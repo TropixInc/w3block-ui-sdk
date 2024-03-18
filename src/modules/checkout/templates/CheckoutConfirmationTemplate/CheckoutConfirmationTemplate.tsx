@@ -1,3 +1,4 @@
+import { useProfile } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useQuery } from '../../../shared/hooks/useQuery';
@@ -27,6 +28,11 @@ export const CheckoutConfirmationTemplate = ({
   const query = useQuery();
   const params = new URLSearchParams(query);
   const productIdsFromQueries = params.get('productIds');
+  const { data: profile } = useProfile();
+  const userRoles = profile?.data.roles || [];
+  const isCommerceReceiver = Boolean(
+    userRoles.find((e) => e === 'commerce.orderReceiver')
+  );
   useHasWallet({});
   if (!isAuthorized || isLoading) {
     return null;
@@ -39,14 +45,20 @@ export const CheckoutConfirmationTemplate = ({
   ) : (
     <>
       <CheckoutHeader onClick={returnTo} />
-      <CheckoutContainer
-        cart={cart}
-        productId={productId}
-        currencyId={currencyId}
-        proccedAction={proccedAction}
-        returnAction={returnTo}
-        checkoutStatus={CheckoutStatus.CONFIRMATION}
-      />
+      {isCommerceReceiver ? (
+        <div className="pw-w-full pw-h-[63.5vh] pw-flex pw-justify-center pw-items-center pw-font-bold pw-text-2xl pw-text-black">
+          Esse usuário não possui permissão para realizar uma compra
+        </div>
+      ) : (
+        <CheckoutContainer
+          cart={cart}
+          productId={productId}
+          currencyId={currencyId}
+          proccedAction={proccedAction}
+          returnAction={returnTo}
+          checkoutStatus={CheckoutStatus.CONFIRMATION}
+        />
+      )}
     </>
   );
 };

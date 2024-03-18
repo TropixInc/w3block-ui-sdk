@@ -24,6 +24,8 @@ export const useGetDeferred = (filter?: any, enabled?: boolean) => {
         .then((res) => res?.data),
     {
       enabled: !!companyId && enabled,
+      retry: false,
+      refetchOnWindowFocus: false,
     }
   );
 };

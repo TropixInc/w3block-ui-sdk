@@ -31,6 +31,8 @@ export const useGetDeferredByUserId = (
         .then((res) => res?.data),
     {
       enabled: !!userId && !!companyId && enabled,
+      retry: false,
+      refetchOnWindowFocus: false,
     }
   );
 };

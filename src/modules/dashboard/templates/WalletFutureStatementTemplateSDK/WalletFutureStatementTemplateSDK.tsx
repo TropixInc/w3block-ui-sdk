@@ -86,24 +86,31 @@ export const WalletFutureStatementTemplateSDK = () => {
   const { data: restaurants } = useGetApi({
     enabled: isAdmin,
   });
-
-  const xlsx = useGetXlsxDeferred(
-    {
-      sortBy: 'createdAt',
-      orderBy: 'DESC',
-      loyaltyId: loyaltyWalletDefined?.loyaltyId,
-      startDate: startDate ? new Date(startDate).toISOString() : '',
-      endDate: endDate ? new Date(endDate).toISOString() : '',
-      walletAddress: isAdmin
-        ? selectedRestaurant
-        : profile?.data?.mainWallet?.address ?? '',
-      rangeDateBy: selected ? selected : 'createdAt',
-    },
-    !!loyaltyWalletDefined
-  );
-
+  const { mutate: getXlsx } = useGetXlsxDeferred();
+  const [loadingDownload, setLoadingDownload] = useState(false);
   const initDowload = () => {
-    if (xlsx.data) fileDownload(xlsx.data?.data, 'relatorioExport.xlsx');
+    setLoadingDownload(true);
+    getXlsx(
+      {
+        sortBy: 'createdAt',
+        orderBy: 'DESC',
+        loyaltyId: loyaltyWalletDefined?.loyaltyId,
+        startDate: startDate ? new Date(startDate).toISOString() : '',
+        endDate: endDate ? new Date(endDate).toISOString() : '',
+        walletAddress: isAdmin
+          ? selectedRestaurant
+          : profile?.data?.mainWallet?.address ?? '',
+        rangeDateBy: selected ? selected : 'createdAt',
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.data) {
+            fileDownload(data?.data?.data, 'relatorioExport.xlsx');
+            setLoadingDownload(false);
+          }
+        },
+      }
+    );
   };
 
   const filterOptions = [
@@ -167,10 +174,14 @@ export const WalletFutureStatementTemplateSDK = () => {
           ) : null}
           <PixwayButton
             onClick={() => initDowload()}
-            disabled={!xlsx.data}
+            disabled={loadingDownload}
             className="!pw-py-2 !pw-px-[30px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl disabled:pw-opacity-50 disabled:!pw-bg-white"
           >
-            Baixar relatório
+            {loadingDownload ? (
+              <Spinner className="pw-h-5 pw-w-5" />
+            ) : (
+              'Baixar relatório'
+            )}
           </PixwayButton>
         </div>
       </div>

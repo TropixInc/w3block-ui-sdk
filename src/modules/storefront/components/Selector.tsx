@@ -51,14 +51,21 @@ export const Selector = ({
         {title}
       </p>
       {disabled ? (
-        <p
-          className={classNames(
-            classes?.value,
-            'pw-font-normal pw-text-base pw-text-[#35394C]'
-          )}
-        >
-          {value?.attributes?.name}
-        </p>
+        <div className="pw-flex pw-items-center pw-gap-3">
+          <img
+            alt="logo"
+            src={`https://cms.foodbusters.com.br${value?.attributes?.image?.data?.attributes?.formats?.thumbnail?.url}`}
+            className="pw-h-17 pw-w-17 pw-rounded-lg"
+          />
+          <p
+            className={classNames(
+              classes?.value,
+              'pw-font-normal pw-text-base pw-text-[#35394C]'
+            )}
+          >
+            {value?.attributes?.name}
+          </p>
+        </div>
       ) : (
         <Combobox
           disabled={disabled}
