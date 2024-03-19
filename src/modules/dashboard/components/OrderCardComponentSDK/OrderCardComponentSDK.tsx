@@ -3,7 +3,6 @@ import { lazy, useState } from 'react';
 
 import { format } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
-import { QRCodeSVG } from 'qrcode.react';
 
 import { CheckoutStatus } from '../../../checkout';
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
@@ -12,15 +11,13 @@ import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
 // import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
 import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react';
 import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
-import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
-import { Spinner } from '../../../shared/components/Spinner';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
-import { useGetPublicOrder } from '../../../shared/hooks/useGetPublicOrder/useGetPublicOrder';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useGetApi } from '../../hooks/useGetApi';
 import { PriceComponent } from '../PriceComponent/PriceComponent';
+import { ReceiptQRCode } from '../ReceiptQRCode/ReceiptQRCode';
 
 const ProductInfo = lazy(() =>
   import('../../../shared/components/ProductInfo/ProductInfo').then((mod) => ({
@@ -77,91 +74,6 @@ export const OrderCardComponentSDK = ({
   const [openReceipt, setOpenReceipt] = useState(false);
   const showCoinPaymentReceiptButton =
     defaultTheme?.configurations?.contentData?.showCoinPaymentReceiptButton;
-  const { data: receipt, isLoading } = useGetPublicOrder(
-    deliverId ?? '',
-    openReceipt
-  );
-  const ReceiptQRCode = ({
-    isOpen,
-    onClose,
-  }: {
-    isOpen: boolean;
-    onClose(): void;
-  }) => {
-    return (
-      <ModalBase
-        isOpen={isOpen}
-        onClose={onClose}
-        classes={{ classComplement: 'sm:!pw-p-8 !pw-p-4 !pw-min-w-[330px]' }}
-      >
-        {isLoading ? (
-          <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
-            <Spinner className="pw-h-13 pw-w-13" />
-          </div>
-        ) : (
-          <div>
-            <div className="pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px] pw-mx-auto">
-              <div>
-                <p className="pw-text-base pw-font-normal">Pagamento para</p>
-                <p className="pw-text-base pw-font-semibold">
-                  {receipt?.data?.destinationUserName}
-                </p>
-              </div>
-              <div className="pw-mt-5">
-                <p className="pw-text-base pw-font-normal">Quem pagou</p>
-                <p className="pw-text-base pw-font-semibold">
-                  {receipt?.data?.userFirstName}
-                </p>
-              </div>
-              <div className="pw-mt-5">
-                <p className="pw-text-base pw-font-normal">Valor pago</p>
-                <p className="pw-text-base pw-font-semibold">
-                  R$
-                  {parseFloat(receipt?.data?.cashback?.amount).toFixed(2)}
-                </p>
-              </div>
-              <div className="pw-mt-5">
-                <p className="pw-text-base pw-font-normal">Cashback ganho</p>
-                <p className="pw-text-base pw-font-semibold">
-                  {receipt?.data?.cashback?.currency?.symbol}{' '}
-                  {parseFloat(receipt?.data?.cashback?.cashbackAmount).toFixed(
-                    2
-                  )}
-                </p>
-              </div>
-              <div className="pw-mt-5">
-                <p className="pw-text-base pw-font-normal">
-                  Compra realizada em
-                </p>
-                <p className="pw-text-base pw-font-semibold">
-                  {receipt?.data?.createdAt
-                    ? format(
-                        new Date(receipt?.data?.createdAt ?? Date.now()),
-                        'PPpp',
-                        {
-                          locale: locale === 'pt-BR' ? ptBR : enUS,
-                        }
-                      )
-                    : null}
-                </p>
-              </div>
-              <div className="pw-mt-5">
-                <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
-                  <QRCodeSVG
-                    value={`${window?.location?.origin}/order/${receipt?.data?.deliverId}`}
-                    size={84}
-                  />
-                  <p className="pw-text-[20px] pw-font-semibold">
-                    {receipt?.data?.deliverId ?? ''}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </ModalBase>
-    );
-  };
 
   return (
     <div className="pw-p-6 pw-bg-white pw-rounded-xl pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-w-full">
@@ -368,6 +280,8 @@ export const OrderCardComponentSDK = ({
       <ReceiptQRCode
         isOpen={openReceipt}
         onClose={() => setOpenReceipt(false)}
+        deliverId={deliverId}
+        profile
       />
     </div>
   );

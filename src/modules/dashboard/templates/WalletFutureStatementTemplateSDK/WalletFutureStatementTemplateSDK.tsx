@@ -105,7 +105,7 @@ export const WalletFutureStatementTemplateSDK = () => {
       {
         onSuccess: (data) => {
           if (data?.data) {
-            fileDownload(data?.data?.data, 'relatorioExport.xlsx');
+            fileDownload(data?.data, 'relatorioExport.xlsx');
             setLoadingDownload(false);
           }
         },
@@ -114,7 +114,7 @@ export const WalletFutureStatementTemplateSDK = () => {
   };
 
   const filterOptions = [
-    { label: 'Data de Criação', value: 'createdAt' },
+    { label: 'Data de Compra', value: 'createdAt' },
     { label: 'Data de Recebimento', value: 'executeAt' },
   ];
 

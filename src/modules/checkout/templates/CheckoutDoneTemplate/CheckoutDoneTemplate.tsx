@@ -1,10 +1,10 @@
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+// import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+// import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
-import { CheckoutHeader } from '../../components/CheckoutHeader';
+// import { CheckoutHeader } from '../../components/CheckoutHeader';
 
 interface CheckoutDoneTemplateProps {
   returnTo?: () => void;
@@ -17,14 +17,14 @@ export const CheckoutDoneTemplate = ({
   productId,
   currencyId,
 }: CheckoutDoneTemplateProps) => {
-  const router = useRouterConnect();
+  // const router = useRouterConnect();
   const { isAuthorized, isLoading } = usePrivateRoute();
   useHasWallet({});
   return !isAuthorized || isLoading ? null : (
     <>
-      <CheckoutHeader
+      {/* <CheckoutHeader
         onClick={returnTo ? returnTo : () => router.push(PixwayAppRoutes.HOME)}
-      />
+      /> */}
       <CheckoutContainer
         productId={productId}
         currencyId={currencyId}

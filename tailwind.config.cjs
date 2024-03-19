@@ -40,6 +40,7 @@ module.exports = {
       poppins: ['Poppins', 'sans-serif'],
       nunito: ['Nunito', 'sans-serif'],
       montserrat: ['Montserrat', 'sans-serif'],
+      aeonik: ['Aeonik', 'sans-serif'],
     },
   },
   variants: {

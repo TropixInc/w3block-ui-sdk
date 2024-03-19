@@ -5,7 +5,7 @@ import { useQuery } from '../../../shared/hooks/useQuery';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutEmptyCart } from '../../components/CheckoutEmptyCart/CheckoutEmptyCart';
-import { CheckoutHeader } from '../../components/CheckoutHeader';
+// import { CheckoutHeader } from '../../components/CheckoutHeader';
 import { useCart } from '../../hooks/useCart';
 
 interface CheckoutConfirmationTemplateProps {
@@ -39,12 +39,12 @@ export const CheckoutConfirmationTemplate = ({
   }
   return (cart && !productsCart.length) || !productIdsFromQueries ? (
     <>
-      <CheckoutHeader onClick={returnTo} />
+      {/* <CheckoutHeader onClick={returnTo} /> */}
       <CheckoutEmptyCart />
     </>
   ) : (
     <>
-      <CheckoutHeader onClick={returnTo} />
+      {/* <CheckoutHeader onClick={returnTo} /> */}
       {isCommerceReceiver ? (
         <div className="pw-w-full pw-h-[63.5vh] pw-flex pw-justify-center pw-items-center pw-font-bold pw-text-2xl pw-text-black">
           Esse usuário não possui permissão para realizar uma compra

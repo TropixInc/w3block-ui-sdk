@@ -19,11 +19,13 @@ export const ContainerTextBeside = ({
   const logoToUse = logo ?? logoUrl;
   return (
     <div className="pw-w-full pw-flex pw-flex-col pw-items-center sm:pw-items-start sm:pw-max-w-[600px] pw-px-8 sm:pw-px-0">
-      <img
-        className="sm:pw-max-w-[300px] pw-w-full pw-h-full pw-max-w-[230px] pw-max-h-[60px] sm:pw-max-h-[120px] pw-object-contain"
-        src={logoToUse}
-        alt=""
-      />
+      <a href="/">
+        <img
+          className="sm:pw-max-w-[300px] pw-w-full pw-h-full pw-max-w-[230px] pw-max-h-[60px] sm:pw-max-h-[120px] pw-object-contain"
+          src={logoToUse}
+          alt=""
+        />
+      </a>
       <p
         style={{ color: textColor }}
         className="pw-text-[18px] pw-text-center sm:pw-text-left sm:pw-text-[55px] pw-font-poppins pw-font-[700] pw-leading-[23px] sm:pw-leading-[60px] pw-mt-[10px] sm:pw-mt-[20px]"

@@ -5,6 +5,7 @@ import { useCopyToClipboard } from 'react-use';
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 
+import { ReceiptQRCode } from '../../../dashboard/components/ReceiptQRCode/ReceiptQRCode';
 import PendingIcon from '../../assets/icons/clock.svg?react';
 import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import RejectIcon from '../../assets/icons/minusCircle.svg?react';
@@ -91,6 +92,31 @@ export const StatementComponentSDK = ({
         return 'Comissão por pagamento de indicado';
       }
       if (
+        (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+          ?.isFinalRecipient
+      ) {
+        return (
+          <p>
+            Crédito referente ao pagamento{' '}
+            <button
+              className="!pw-font-bold pw-underline"
+              onClick={() => setOpenReceipt(true)}
+            >
+              #
+              {
+                (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+                  ?.commerce?.deliverId
+              }
+            </button>{' '}
+            para{' '}
+            {
+              (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
+                ?.operatorName
+            }
+          </p>
+        );
+      }
+      if (
         (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
         'cashback_multilevel'
       ) {
@@ -155,6 +181,7 @@ export const StatementComponentSDK = ({
         );
     } else return '';
   };
+  const [openReceipt, setOpenReceipt] = useState(false);
   return (
     <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
       <div className="pw-flex pw-flex-col pw-items-start">
@@ -223,7 +250,8 @@ export const StatementComponentSDK = ({
             {statement?.metadata?.amount ? (
               <div className="pw-flex pw-items-center pw-gap-2">
                 <p className="pw-text-black pw-text-xs pw-font-medium">
-                  Valor pago: {statement?.metadata?.amount}
+                  Valor pago: R$
+                  {parseFloat(statement?.metadata?.amount).toFixed(2)}
                 </p>
               </div>
             ) : null}
@@ -274,6 +302,14 @@ export const StatementComponentSDK = ({
         ))}
         <div></div>
       </div>
+      <ReceiptQRCode
+        deliverId={
+          (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.commerce
+            ?.deliverId
+        }
+        isOpen={openReceipt}
+        onClose={() => setOpenReceipt(false)}
+      />
     </div>
   );
 };
