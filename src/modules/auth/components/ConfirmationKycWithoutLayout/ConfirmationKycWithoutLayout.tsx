@@ -117,6 +117,7 @@ export const ConfirmationKycWithoutLayout = () => {
                 {groupedInputs[res].map((res) => {
                   const value = () => {
                     const doc = getDocumentByInputId(res?.id);
+
                     const value = doc?.value;
                     const simpleValue = doc?.simpleValue;
                     const complexValue = doc?.complexValue;
@@ -129,11 +130,17 @@ export const ConfirmationKycWithoutLayout = () => {
                           : `Passaporte - ${(complexValue as any)?.document}`;
                       } else return '';
                     } else if (res?.type === 'simple_location') {
-                      if (complexValue) {
-                        return `${(complexValue as any)?.city}, ${
-                          (complexValue as any)?.region
-                        } / ${(complexValue as any)?.country}`;
-                      } else return '';
+                      if (_.has(res, 'data.placeType')) {
+                        if (complexValue) {
+                          return (complexValue as any)?.home;
+                        } else return '';
+                      } else {
+                        if (complexValue) {
+                          return `${(complexValue as any)?.city}, ${
+                            (complexValue as any)?.region
+                          } / ${(complexValue as any)?.country}`;
+                        } else return '';
+                      }
                     } else if (simpleValue) return simpleValue;
                     else return value;
                   };
@@ -146,7 +153,7 @@ export const ConfirmationKycWithoutLayout = () => {
                         <h3 className="pw-font-semibold pw-mt-[14px]">
                           {res.label}
                         </h3>
-                        <p className="pw-font-normal">{value()}</p>
+                        <p className="pw-font-normal pw-break-all">{value()}</p>
                       </div>
                     );
                 })}

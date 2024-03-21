@@ -49,9 +49,12 @@ const InputUrl = lazy(() =>
   }))
 );
 
+import _ from 'lodash';
+
 import InputDocuments from '../SmartInputs/InputDocuments';
 import InputImage from '../SmartInputs/InputImage/InputImage';
 import InputLocale from '../SmartInputs/InputLocale/InputLocale';
+import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
 
 interface SmartProps {
@@ -244,10 +247,24 @@ const SmartInputsController = ({
         return (
           <InputDocuments name={name} label={label} docValue={complexValue} />
         );
-      case DataTypesEnum.SimpleLocation:
-        return (
-          <InputLocale name={name} label={label} docValue={complexValue} />
-        );
+      case DataTypesEnum.SimpleLocation: {
+        if (_.has(selectData, 'placeType')) {
+          return (
+            <InputPlaces
+              name={name}
+              label={label}
+              docValue={complexValue}
+              placeType={_.get(selectData, 'placeType', '')}
+              placeCountry={_.get(selectData, 'placeCountry', '')}
+              placeholder={_.get(selectData, 'placeholder', '')}
+            />
+          );
+        } else {
+          return (
+            <InputLocale name={name} label={label} docValue={complexValue} />
+          );
+        }
+      }
     }
   };
   return <div>{renderInput()}</div>;

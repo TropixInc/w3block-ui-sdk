@@ -670,5 +670,6 @@
   "shared>unputLocale>selectContry": "Selecione um país",
   "shared>unputLocale>state": "Estado",
   "shared>cityAutoComplete>city": "Cidade",
-  "shared>cityAutoComplete>searchCity": "Buscar cidade"
+  "shared>cityAutoComplete>searchCity": "Buscar cidade",
+  "shared>inputPlaces>inputPlaceholder": "Busque por locais de interesse"
 }
