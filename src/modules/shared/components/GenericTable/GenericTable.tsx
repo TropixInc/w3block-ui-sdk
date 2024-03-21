@@ -120,7 +120,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const tenantName = company?.data.id === companyId ? name : '';
 
   const [
-    { data, isLoading, isError, refetch, isFetched },
+    { data, isLoading, isError, refetch },
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
     internalTypeAPI: dataSource?.urlContext,
@@ -130,14 +130,13 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   });
 
   useEffect(() => {
-    if (isUpdateList) refetch();
+    if (isUpdateList) {
+      refetch().finally(() => {
+        setIsUpdateList(false);
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdateList]);
-
-  useEffect(() => {
-    if (isFetched) setIsUpdateList(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetched]);
 
   const handleAction = (event: any, action: any, row: any) => {
     if (action && action.type == 'function') {
