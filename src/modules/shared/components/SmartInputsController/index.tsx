@@ -256,6 +256,7 @@ const SmartInputsController = ({
               docValue={complexValue}
               placeType={_.get(selectData, 'placeType', '')}
               placeCountry={_.get(selectData, 'placeCountry', '')}
+              placeholder={_.get(selectData, 'placeholder', '')}
             />
           );
         } else {

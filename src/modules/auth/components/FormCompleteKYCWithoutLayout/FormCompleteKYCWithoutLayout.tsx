@@ -116,8 +116,6 @@ const _FormCompleteKYCWithoutLayout = ({
 
     const validDocs = documents.filter((item) => item);
 
-    console.log(validDocs, 'validDocs');
-
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
       mutate(
@@ -158,11 +156,6 @@ const _FormCompleteKYCWithoutLayout = ({
                   query
                 );
               }
-            } else if (profilePage) {
-              router.pushConnect(
-                PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
-                router.query
-              );
             }
           },
         }

@@ -8,6 +8,7 @@ interface PlacesProps {
   docValue?: any;
   placeType?: string;
   placeCountry?: string;
+  placeholder?: string;
 }
 
 const InputPlaces = ({
@@ -16,6 +17,7 @@ const InputPlaces = ({
   docValue,
   placeCountry,
   placeType,
+  placeholder,
 }: PlacesProps) => {
   const [translate] = useTranslation();
   return (
@@ -26,7 +28,9 @@ const InputPlaces = ({
         apiValue={docValue?.placeId}
         type={placeType ?? 'food'}
         inputLabel={label}
-        inputPlaceholder={translate('shared>inputPlaces>inputPlaceholder')}
+        inputPlaceholder={
+          placeholder ?? translate('shared>inputPlaces>inputPlaceholder')
+        }
       />
     </div>
   );
