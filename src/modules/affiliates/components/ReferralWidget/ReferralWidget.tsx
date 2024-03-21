@@ -2,10 +2,16 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard, useLocation } from 'react-use';
 
+import { Disclosure } from '@headlessui/react';
+import classNames from 'classnames';
+import { QRCodeSVG } from 'qrcode.react';
+
 import { AuthButton } from '../../../auth/components/AuthButton';
+import ChevronDown from '../../../shared/assets/icons/arrowDown.svg?react';
 import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useProfileWithKYC } from '../../../shared/hooks/useProfileWithKYC/useProfileWithKYC';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface ReferralProps {
   baseSharedPath?: string;
@@ -17,12 +23,14 @@ export const ReferralWidget = ({
   shareMenssage,
 }: ReferralProps) => {
   const [translate] = useTranslation();
+  const theme = UseThemeConfig();
+  const showQrCode =
+    theme?.defaultTheme?.configurations?.contentData?.showAffiliateQrCode;
   const isMobile = useIsMobile();
   const { profile } = useProfileWithKYC();
   const { host } = useLocation();
   const [isCopied, setIsCopied] = useState(false);
   const [state, copyToClipboard] = useCopyToClipboard();
-
   const link = useMemo(() => {
     if (profile) {
       if ((profile as any).referralCode && baseSharedPath) {
@@ -74,6 +82,28 @@ export const ReferralWidget = ({
           <CopyIcon width={15} height={15} className="pw-stroke-slate-500" />
         </button>
       </div>
+      <Disclosure defaultOpen={showQrCode}>
+        {({ open }) => (
+          <>
+            <Disclosure.Button className="pw-flex pw-items-center pw-gap-3 pw-mt-5">
+              QR Code para o link de afiliado
+              <ChevronDown
+                className={classNames(
+                  'pw-stroke-[#000000]',
+                  open ? 'pw-rotate-180' : ''
+                )}
+              />
+            </Disclosure.Button>
+            <Disclosure.Panel>
+              <div className="pw-my-5">
+                <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-w-[280px] pw-mx-auto">
+                  <QRCodeSVG value={link} size={280} />
+                </div>
+              </div>
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
       <div className="pw-flex pw-gap-x-2 pw-flex-col  pw-mt-2 sm:pw-flex-row">
         <AuthButton
           variant="filled"

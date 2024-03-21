@@ -13,12 +13,18 @@ export const useGetXlsxDeferred = () => {
 
   return useMutation(
     [PixwayAPIRoutes.GET_DEFERRED_XLSX, companyId],
-    (filter?: any) => {
-      const cleaned = cleanObject(filter ?? {});
+    (params?: any) => {
+      const cleaned = cleanObject(params.filter ?? {});
       const queryString = new URLSearchParams(cleaned).toString();
+      const status = () => {
+        if (params.status === 'all')
+          return 'status=deferred&status=pending&status=started&status=success';
+        else if (params.status === 'success') return 'status=success';
+        else return 'status=deferred&status=pending&status=started';
+      };
       return axios.get(
         PixwayAPIRoutes.GET_DEFERRED_XLSX.replace('{companyId}', companyId) +
-          `?${queryString}&status=deferred&status=pending`,
+          `?${queryString}&${status()}`,
         { responseType: 'blob' }
       );
     }

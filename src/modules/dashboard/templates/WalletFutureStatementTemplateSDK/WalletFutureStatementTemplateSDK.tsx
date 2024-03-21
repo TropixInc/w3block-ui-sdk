@@ -1,4 +1,4 @@
-import { useMemo, useState, lazy } from 'react';
+import { useMemo, useState, lazy, useEffect } from 'react';
 
 import fileDownload from 'js-file-download';
 
@@ -6,7 +6,7 @@ import { useGetDeferred } from '../../../business/hooks/useGetDeferred';
 import { useGetDeferredByUserId } from '../../../business/hooks/useGetDeferredByUserId';
 import { useGetXlsxDeferred } from '../../../business/hooks/useGetXlsxDeferred';
 import { useProfile } from '../../../shared';
-import { DateFilter } from '../../../shared/components/DateFilter';
+import { DateFilterWithOptions } from '../../../shared/components/DateFilterWithOptions/DateFilterWithOptions';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { Selectinput } from '../../../shared/components/SelectInput/SelectInput';
 import { Spinner } from '../../../shared/components/Spinner';
@@ -50,6 +50,7 @@ export const WalletFutureStatementTemplateSDK = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState<
     string | undefined
   >('');
+  const [selectedStatus, setSelectedStatus] = useState<string | undefined>('');
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
     userRoles?.includes('admin') || userRoles?.includes('superAdmin')
@@ -65,7 +66,8 @@ export const WalletFutureStatementTemplateSDK = () => {
       endDate: endDate ? new Date(endDate).toISOString() : '',
       rangeDateBy: selected ? selected : 'createdAt',
     },
-    !!loyaltyWalletDefined && !isAdmin
+    !!loyaltyWalletDefined && !isAdmin,
+    selectedStatus
   );
 
   const { data: adminDeferred, isLoading: loadingAdminDeferred } =
@@ -80,7 +82,8 @@ export const WalletFutureStatementTemplateSDK = () => {
         rangeDateBy: selected ? selected : 'createdAt',
         walletAddress: selectedRestaurant,
       },
-      !!loyaltyWalletDefined && isAdmin
+      !!loyaltyWalletDefined && isAdmin,
+      selectedStatus
     );
 
   const { data: restaurants } = useGetApi({
@@ -92,15 +95,18 @@ export const WalletFutureStatementTemplateSDK = () => {
     setLoadingDownload(true);
     getXlsx(
       {
-        sortBy: 'createdAt',
-        orderBy: 'DESC',
-        loyaltyId: loyaltyWalletDefined?.loyaltyId,
-        startDate: startDate ? new Date(startDate).toISOString() : '',
-        endDate: endDate ? new Date(endDate).toISOString() : '',
-        walletAddress: isAdmin
-          ? selectedRestaurant
-          : profile?.data?.mainWallet?.address ?? '',
-        rangeDateBy: selected ? selected : 'createdAt',
+        filter: {
+          sortBy: 'createdAt',
+          orderBy: 'DESC',
+          loyaltyId: loyaltyWalletDefined?.loyaltyId,
+          startDate: startDate ? new Date(startDate).toISOString() : '',
+          endDate: endDate ? new Date(endDate).toISOString() : '',
+          walletAddress: isAdmin
+            ? selectedRestaurant
+            : profile?.data?.mainWallet?.address ?? '',
+          rangeDateBy: selected ? selected : 'createdAt',
+        },
+        status: selectedStatus,
       },
       {
         onSuccess: (data) => {
@@ -118,6 +124,12 @@ export const WalletFutureStatementTemplateSDK = () => {
     { label: 'Data de Recebimento', value: 'executeAt' },
   ];
 
+  const successOptions = [
+    { label: 'Agendados', value: 'deferred' },
+    { label: 'Recebidos', value: 'success' },
+    { label: 'Todos', value: 'all' },
+  ];
+
   const restaurantOptions = restaurants?.data?.data?.map(
     (res: { attributes: { name: string; walletAddress: string } }) => {
       return {
@@ -132,6 +144,17 @@ export const WalletFutureStatementTemplateSDK = () => {
     else return data;
   };
 
+  // const totalText = () => {
+  //   if (selectedStatus === 'all') return 'Total no periodo selecionado';
+  //   else if (selectedStatus === 'success')
+  //     return 'Total recebido no periodo selecionado';
+  //   else return 'Total a receber no periodo selecionado';
+  // };
+
+  useEffect(() => {
+    setActualPage(1);
+  }, [selected, selectedRestaurant, selectedStatus, startDate]);
+
   useGuardPagesWithOptions({
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
@@ -140,17 +163,25 @@ export const WalletFutureStatementTemplateSDK = () => {
   return (
     <InternalPagesLayoutBase>
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg">
-        <p className="pw-text-[23px] pw-font-[600]">Recebimentos futuros</p>
+        <p className="pw-text-[23px] pw-font-[600]">Recebimentos</p>
         <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
+          <Selectinput
+            options={successOptions ?? []}
+            selected={selectedStatus ?? ''}
+            onChange={setSelectedStatus}
+            placeholder="Agendados"
+            className="sm:pw-w-[150px] pw-w-full"
+            hideFirstOption
+          />
           <Selectinput
             options={filterOptions ?? []}
             selected={selected ?? ''}
             onChange={setSelected}
-            placeholder="Data de Criação"
+            placeholder="Data de Compra"
             className="sm:pw-w-[200px] pw-w-full"
             hideFirstOption
           />
-          <DateFilter
+          <DateFilterWithOptions
             onChangeStartDate={setStartDate}
             onChangeEndDate={setEndDate}
             defaultDate={defaultDate}
@@ -161,7 +192,6 @@ export const WalletFutureStatementTemplateSDK = () => {
             }}
             startDate={startDate as Date}
             endDate={endDate as Date}
-            placeholder={'Data'}
           />
           {isAdmin ? (
             <Selectinput
@@ -184,6 +214,10 @@ export const WalletFutureStatementTemplateSDK = () => {
             )}
           </PixwayButton>
         </div>
+        {/* <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 sm:pw-mx-0 pw-text-[23px] pw-font-[600]">
+          R${dataToUse()?.summary?.balance?.toFixed(2)}
+        </div>
+        <p className="pw-text-xs">{totalText()}</p> */}
       </div>
       <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
         {isLoading || loadingAdminDeferred ? (
@@ -191,33 +225,45 @@ export const WalletFutureStatementTemplateSDK = () => {
             <Spinner className="pw-h-10 pw-w-10" />
           </div>
         ) : dataToUse()?.items?.length ? (
-          dataToUse()?.items.map((item: any) => (
-            <StatementComponentSDK
-              future
-              isAdmin={isAdmin}
-              key={generateRandomUUID()}
-              statement={{
-                deliverId: item?.metadata?.deliverId ?? '',
-                buyerName: item?.metadata?.buyerName ?? '',
-                buyerEmail: item?.metadata?.buyerEmail ?? '',
-                executeAt: item?.executeAt ?? '',
-                pointsPrecision:
-                  loyaltyWalletDefined?.pointsPrecision ?? 'integer',
-                id: item?.id,
-                createdAt: new Date(item?.createdAt),
-                type: item?.type,
-                status: item?.status,
-                loyaltieTransactions: item?.loyaltiesTransactions,
-                amount: parseFloat(item?.request?.amount ?? item?.amount),
-                description: '',
-                currency: loyaltyWallet?.length
-                  ? loyaltyWallet[0]?.currency
-                  : '',
-                transactionType: 'receiving',
-                metadata: item?.metadata,
-              }}
-            />
-          ))
+          dataToUse()?.items.map((item: any) => {
+            return (
+              <StatementComponentSDK
+                future
+                isAdmin={isAdmin}
+                key={generateRandomUUID()}
+                statement={{
+                  deliverId: !item?.metadata?.length
+                    ? item?.metadata?.deliverId ?? ''
+                    : item?.metadata?.[0]?.deliverId ?? '',
+                  buyerName: !item?.metadata?.length
+                    ? item?.metadata?.buyerName ?? ''
+                    : item?.metadata?.[0]?.buyerName ?? '',
+                  buyerEmail: !item?.metadata?.length
+                    ? item?.metadata?.buyerEmail ?? ''
+                    : item?.metadata?.[0]?.buyerEmail ?? '',
+                  executeAt: selectedStatus?.includes('true')
+                    ? ''
+                    : item?.executeAt ?? '',
+                  pointsPrecision:
+                    loyaltyWalletDefined?.pointsPrecision ?? 'integer',
+                  id: item?.id,
+                  createdAt: new Date(item?.createdAt),
+                  type: item?.type,
+                  status: item?.status,
+                  loyaltieTransactions: item?.loyaltiesTransactions,
+                  amount: parseFloat(item?.request?.amount ?? item?.amount),
+                  description: '',
+                  currency: loyaltyWallet?.length
+                    ? loyaltyWallet[0]?.currency
+                    : '',
+                  transactionType: 'receiving',
+                  metadata: !item?.metadata?.length
+                    ? item?.metadata
+                    : item?.metadata[0],
+                }}
+              />
+            );
+          })
         ) : (
           <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
             Nenhum lançamento futuro

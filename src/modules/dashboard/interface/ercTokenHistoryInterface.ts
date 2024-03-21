@@ -5,6 +5,9 @@ import {
 
 export interface ErcTokenHistoryInterfaceResponse {
   items: Erc20TokenHistory[];
+  summary?: {
+    balance?: number;
+  };
   meta: Meta;
 }
 
