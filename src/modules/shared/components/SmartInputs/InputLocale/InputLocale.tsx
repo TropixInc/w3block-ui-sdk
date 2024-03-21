@@ -87,6 +87,7 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
         name={name}
         onChangeRegion={setRegion}
         apiValue={docValue?.placeId}
+        type="(cities)"
       />
     </div>
   );

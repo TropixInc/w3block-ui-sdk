@@ -15,9 +15,12 @@ interface Address {
 
 interface CityAutocompleteProps {
   country: string;
-  onChangeRegion: (value: string | undefined) => void;
+  onChangeRegion?: (value: string | undefined) => void;
   name: string;
   apiValue?: string;
+  type: string;
+  inputLabel?: string;
+  inputPlaceholder?: string;
 }
 
 function getAddressObject(address_components: any) {
@@ -68,6 +71,9 @@ const CityAutoComplete = ({
   onChangeRegion,
   name,
   apiValue,
+  type,
+  inputLabel,
+  inputPlaceholder,
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
   const divRef = useRef<HTMLDivElement>(null);
@@ -80,7 +86,7 @@ const CityAutoComplete = ({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
       options: {
         componentRestrictions: { country: country },
-        types: ['(cities)'],
+        types: [type],
       },
       language: 'pt-br',
       debounce: 400,
@@ -106,12 +112,27 @@ const CityAutoComplete = ({
         },
         (placeDetails: any) => {
           const components = getAddressObject(placeDetails.address_components);
-          setInputValue(`${components.city}, ${components.region}`);
-          onChangeRegion(components.region);
-          field.onChange({
-            inputId: name,
-            value: { ...components, placeId: placeId },
-          });
+
+          if (type === '(cities)') {
+            setInputValue(`${components.city}, ${components.region}`);
+            onChangeRegion && onChangeRegion(components.region);
+            field.onChange({
+              inputId: name,
+              value: { ...components, placeId: placeId },
+            });
+          } else {
+            setInputValue(
+              `${placeDetails.name} - ${placeDetails.formatted_address}`
+            );
+            field.onChange({
+              inputId: name,
+              value: {
+                ...components,
+                home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
+                placeId: placeId,
+              },
+            });
+          }
         }
       );
     }
@@ -129,6 +150,7 @@ const CityAutoComplete = ({
       return placePredictions.map((item) => {
         const option = item.terms.slice(0, -1);
         const labelOption = option.map((item: any) => item.value);
+
         return {
           label: labelOption.join(', '),
           value: item.place_id,
@@ -144,7 +166,7 @@ const CityAutoComplete = ({
   return (
     <div className="pw-mt-3 pw-relative">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
-        {translate('shared>cityAutoComplete>city')}
+        {inputLabel ?? translate('shared>cityAutoComplete>city')}
       </p>
       <FormItemContainer
         invalid={fieldState.invalid}
@@ -154,7 +176,9 @@ const CityAutoComplete = ({
           type="text"
           className="pw-w-full pw-outline-none pw-text-black"
           value={inputValue}
-          placeholder={translate('shared>cityAutoComplete>searchCity')}
+          placeholder={
+            inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
+          }
           onChange={(e) => onChangeInputValue(e.target.value)}
           disabled={!country.length}
         />
@@ -176,6 +200,7 @@ const CityAutoComplete = ({
                       className="pw-w-full pw-h-full pw-text-left"
                       onClick={(e) => {
                         setPlaceId(item.value);
+                        type !== '(cities)' && setInputValue(item.label);
                         setShowOptions(false);
                         e.preventDefault();
                       }}
