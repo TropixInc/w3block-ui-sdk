@@ -229,7 +229,11 @@ export const ContentCard = ({
                       }}
                       className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
                     >
-                      {product.category?.map((cat: any) => cat.label).join('/')}
+                      {product.category
+                        ?.map((cat: any) => {
+                          return _.get(datasource, cat.label ?? '', cat.label);
+                        })
+                        .join('/')}
                     </p>
                   )}
                   {showCardValue && (
@@ -370,7 +374,11 @@ export const ContentCard = ({
                 }}
                 className="pw-text-[#C63535] pw-font-semibold pw-text-sm pw-mt-2 pw-leading-5"
               >
-                {product.category?.map((cat: any) => cat.label).join('/')}
+                {product.category
+                  ?.map((cat: any) => {
+                    return _.get(datasource, cat.label ?? '', cat.label);
+                  })
+                  .join('/')}
               </p>
             )}
             {showCardValue && (

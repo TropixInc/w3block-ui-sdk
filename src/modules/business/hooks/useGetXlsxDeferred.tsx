@@ -18,8 +18,8 @@ export const useGetXlsxDeferred = () => {
       const queryString = new URLSearchParams(cleaned).toString();
       const status = () => {
         if (params.status === 'all')
-          return 'status=deferred&status=pending&status=started&status=success';
-        else if (params.status === 'success') return 'status=success';
+          return 'status=deferred&status=pending&status=started&status=pool';
+        else if (params.status === 'success') return 'status=pool';
         else return 'status=deferred&status=pending&status=started';
       };
       return axios.get(

@@ -19,8 +19,8 @@ export const useGetDeferred = (
   const queryString = new URLSearchParams(cleaned).toString();
   const statusQuery = () => {
     if (status === 'all')
-      return 'status=deferred&status=pending&status=started&status=success';
-    else if (status === 'success') return 'status=success';
+      return 'status=deferred&status=pending&status=started&status=pool';
+    else if (status === 'success') return 'status=pool';
     else return 'status=deferred&status=pending&status=started';
   };
   return useQuery(

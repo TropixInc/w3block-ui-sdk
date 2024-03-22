@@ -207,9 +207,20 @@ export const StatementComponentSDK = ({
         </div>
         <div className="pw-flex pw-items-center pw-gap-2">
           {future ? (
-            <p className="pw-text-black pw-text-xs pw-font-medium">
-              Comprador: {statement?.buyerName}
-            </p>
+            statement?.metadata?.action === 'split_payees' ? (
+              <div
+                className="pw-text-black pw-text-xs pw-font-medium"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    statement?.metadata?.description.replace('\n', '<br>') ??
+                    '',
+                }}
+              ></div>
+            ) : (
+              <p className="pw-text-black pw-text-xs pw-font-medium">
+                Comprador: {statement?.buyerName}
+              </p>
+            )
           ) : (
             <>
               <p className="pw-text-[#777E8F] pw-text-xs pw-font-medium">

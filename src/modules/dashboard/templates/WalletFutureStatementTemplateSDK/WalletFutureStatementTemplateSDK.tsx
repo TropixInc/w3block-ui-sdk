@@ -144,12 +144,12 @@ export const WalletFutureStatementTemplateSDK = () => {
     else return data;
   };
 
-  // const totalText = () => {
-  //   if (selectedStatus === 'all') return 'Total no periodo selecionado';
-  //   else if (selectedStatus === 'success')
-  //     return 'Total recebido no periodo selecionado';
-  //   else return 'Total a receber no periodo selecionado';
-  // };
+  const totalText = () => {
+    if (selectedStatus === 'all') return 'Total no periodo selecionado';
+    else if (selectedStatus === 'success')
+      return 'Total recebido no periodo selecionado';
+    else return 'Total a receber no periodo selecionado';
+  };
 
   useEffect(() => {
     setActualPage(1);
@@ -214,10 +214,10 @@ export const WalletFutureStatementTemplateSDK = () => {
             )}
           </PixwayButton>
         </div>
-        {/* <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 sm:pw-mx-0 pw-text-[23px] pw-font-[600]">
+        <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 sm:pw-mx-0 pw-text-[23px] pw-font-[600]">
           R${dataToUse()?.summary?.balance?.toFixed(2)}
         </div>
-        <p className="pw-text-xs">{totalText()}</p> */}
+        <p className="pw-text-xs">{totalText()}</p>
       </div>
       <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
         {isLoading || loadingAdminDeferred ? (
@@ -266,7 +266,7 @@ export const WalletFutureStatementTemplateSDK = () => {
           })
         ) : (
           <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
-            Nenhum lançamento futuro
+            Nenhum lançamento no periodo selecionado
           </div>
         )}
         {dataToUse()?.meta && (dataToUse()?.meta?.totalPages ?? 0) > 1 ? (
