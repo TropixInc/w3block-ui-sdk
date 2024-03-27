@@ -122,20 +122,17 @@ export const StatementComponentSDK = ({
       ) {
         return (
           <p>
-            Cashback no{' '}
-            <a
-              className="!pw-font-bold"
-              href={`/profile/orders?orderId=${
-                (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
-                  ?.commerce?.orderId
-              }`}
+            Cashback no pagamento{' '}
+            <button
+              className="!pw-font-bold pw-underline"
+              onClick={() => setOpenReceipt(true)}
             >
-              pagamento #
+              #
               {
                 (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
                   ?.commerce?.deliverId
               }
-            </a>{' '}
+            </button>{' '}
             para{' '}
             {
               (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
@@ -150,25 +147,26 @@ export const StatementComponentSDK = ({
       ) {
         return (
           <p>
-            Carga de Zuca para{' '}
-            <a
-              className="!pw-font-bold"
-              href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
+            Carga de Zuca para pagamento{' '}
+            <button
+              className="!pw-font-bold pw-underline"
+              onClick={() => setOpenReceipt(true)}
             >
-              pagamento #{statement?.commerce?.deliverId}
-            </a>{' '}
+              #{statement?.commerce?.deliverId}
+            </button>{' '}
             a {statement?.commerce?.destinationUserName}
           </p>
         );
       } else if (statement?.commerce) {
         return (
           <p>
-            <a
-              className="!pw-font-bold"
-              href={`/profile/orders?orderId=${statement?.commerce?.orderId}`}
+            Pagamento{' '}
+            <button
+              className="!pw-font-bold pw-underline"
+              onClick={() => setOpenReceipt(true)}
             >
-              Pagamento #{statement?.commerce?.deliverId}
-            </a>{' '}
+              #{statement?.commerce?.deliverId}
+            </button>{' '}
             no valor total de {statement?.commerce?.erc20PurchaseAmount} ZUCA
             para {statement?.commerce?.destinationUserName}
           </p>

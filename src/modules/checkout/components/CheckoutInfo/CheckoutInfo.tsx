@@ -1116,7 +1116,10 @@ const _CheckoutInfo = ({
                 </div>
                 {paymentAmount === '' ||
                 parseFloat(paymentAmount) === 0 ? null : (
-                  <CoinPaymentResume payments={orderPreview?.payments} />
+                  <CoinPaymentResume
+                    payments={orderPreview?.payments}
+                    loading={isLoading || isLoadingPreview}
+                  />
                 )}
               </>
             )}
@@ -1453,27 +1456,9 @@ const _CheckoutInfo = ({
     codeQr,
     statusResponse?.deliverId,
     coinError,
+    organizedLoyalties,
   ]);
 
-  useEffect(() => {
-    console.log('re-render input', {
-      orderPreview,
-      choosedPayment,
-      currencyIdState,
-      isLoadingPreview,
-      codeQr,
-      deliverId: statusResponse?.deliverId,
-      coinError,
-    });
-  }, [
-    orderPreview,
-    choosedPayment,
-    currencyIdState,
-    isLoadingPreview,
-    codeQr,
-    statusResponse?.deliverId,
-    coinError,
-  ]);
   const anchorCurrencyId = useMemo(() => {
     return orderPreview?.products && orderPreview?.products?.length
       ? orderPreview?.products
@@ -1483,6 +1468,13 @@ const _CheckoutInfo = ({
           ?.prices.find((price) => price?.anchorCurrencyId)?.anchorCurrencyId
       : '';
   }, [orderPreview]);
+
+  if (isCoinPayment && !organizedLoyalties.length)
+    return (
+      <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-6">
+        <Spinner />
+      </div>
+    );
 
   return requestError ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">

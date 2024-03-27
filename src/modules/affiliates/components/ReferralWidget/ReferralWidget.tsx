@@ -82,28 +82,6 @@ export const ReferralWidget = ({
           <CopyIcon width={15} height={15} className="pw-stroke-slate-500" />
         </button>
       </div>
-      <Disclosure defaultOpen={showQrCode}>
-        {({ open }) => (
-          <>
-            <Disclosure.Button className="pw-flex pw-items-center pw-gap-3 pw-mt-5">
-              QR Code para o link de afiliado
-              <ChevronDown
-                className={classNames(
-                  'pw-stroke-[#000000]',
-                  open ? 'pw-rotate-180' : ''
-                )}
-              />
-            </Disclosure.Button>
-            <Disclosure.Panel>
-              <div className="pw-my-5">
-                <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-w-[280px] pw-mx-auto">
-                  <QRCodeSVG value={link} size={280} />
-                </div>
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
       <div className="pw-flex pw-gap-x-2 pw-flex-col  pw-mt-2 sm:pw-flex-row">
         <AuthButton
           variant="filled"
@@ -133,6 +111,28 @@ export const ReferralWidget = ({
           {translate('affiliates>referrakWidget>shared')}
         </AuthButton>
       </div>
+      <Disclosure defaultOpen={showQrCode}>
+        {({ open }) => (
+          <>
+            <Disclosure.Button className="pw-flex pw-items-center pw-gap-3 pw-mt-5">
+              QR Code para o link de afiliado
+              <ChevronDown
+                className={classNames(
+                  'pw-stroke-[#000000]',
+                  open ? 'pw-rotate-180' : ''
+                )}
+              />
+            </Disclosure.Button>
+            <Disclosure.Panel>
+              <div className="pw-my-5">
+                <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-w-[280px] pw-mx-auto">
+                  <QRCodeSVG value={link} size={280} />
+                </div>
+              </div>
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
     </div>
   );
 };

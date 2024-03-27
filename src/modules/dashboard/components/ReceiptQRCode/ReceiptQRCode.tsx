@@ -19,7 +19,10 @@ export const ReceiptQRCode = ({
   profile?: boolean;
 }) => {
   const locale = useLocale();
-  const { data: receipt, isLoading } = useGetPublicOrder(deliverId ?? '', true);
+  const { data: receipt, isLoading } = useGetPublicOrder(
+    deliverId ?? '',
+    isOpen
+  );
   return (
     <ModalBase
       isOpen={isOpen}
@@ -53,7 +56,9 @@ export const ReceiptQRCode = ({
               </p>
             </div>
             <div className="pw-mt-5">
-              <p className="pw-text-base pw-font-normal">Cashback ganho</p>
+              <p className="pw-text-base pw-font-normal">
+                Cashback ganho pelo usuário
+              </p>
               <p className="pw-text-base pw-font-semibold">
                 {receipt?.data?.cashback?.currency?.symbol}{' '}
                 {parseFloat(receipt?.data?.cashback?.cashbackAmount).toFixed(2)}

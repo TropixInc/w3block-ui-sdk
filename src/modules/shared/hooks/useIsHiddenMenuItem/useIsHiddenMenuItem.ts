@@ -17,7 +17,6 @@ export const useIsHiddenMenuItem = (
   const internalMenuData = useMemo(() => {
     return defaultTheme?.configurations.styleData.internalMenu || {};
   }, [defaultTheme?.configurations.styleData.internalMenu]);
-
   return useCallback(
     (id: string) => {
       if (defaultTheme?.configurations.styleData.internalMenu) {
@@ -31,12 +30,14 @@ export const useIsHiddenMenuItem = (
           computedRole = 'operator';
         } else if (roles?.find((e: string) => e === 'loyaltyOperator')) {
           computedRole = 'loyaltyOperator';
+        } else if (roles?.find((e: string) => e === 'commerce.orderReceiver')) {
+          computedRole = 'commerce.orderReceiver';
         }
 
         if (hiddenOption) {
           return hiddenOption[computedRole];
         }
-      }
+      } else if (id === 'futureStatement') return true;
     },
     [defaultTheme, internalMenuData, roles]
   );

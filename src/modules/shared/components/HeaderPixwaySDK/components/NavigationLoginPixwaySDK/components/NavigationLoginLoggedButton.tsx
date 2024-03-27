@@ -14,7 +14,6 @@ import { useLoyaltiesInfo } from '../../../../../../business/hooks/useLoyaltiesI
 import { UseThemeConfig } from '../../../../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
 import DashboardIcon from '../../../../../assets/icons/dashboard.svg?react';
-import EyeIcon from '../../../../../assets/icons/eyeGold.svg?react';
 // import  HelpIcon  from '../../../../../assets/icons/helpIconGray.svg?react';
 import IntegrationIcon from '../../../../../assets/icons/integrationIconOutlined.svg?react';
 import LogoutIcon from '../../../../../assets/icons/logoutIconGray.svg?react';
@@ -244,7 +243,6 @@ const NavigationMenu = ({
   const defaultTabs = useDefaultMenuTabs(textColor ?? "black");
   const organizedWallets = useGetRightWallet()
   const [translate] = useTranslation();
-  const [showValue, setShowValue] = useState(false);
   const router = useRouterConnect();
   const menuTabs = _menuTabs ?? defaultTabs;
   const { mainWallet: wallet } = useUserWallet();
@@ -266,22 +264,12 @@ const NavigationMenu = ({
               ? translate('header>logged>pixwayBalance')
               : translate('header>logged>metamaskBalance')}
           </p>
-          <EyeIcon
-            onClick={() => setShowValue(!showValue)}
-            className="pw-ml-[6px] pw-cursor-pointer"
-          />
         </div>
         <div className="pw-flex pw-items-center">
-          {showValue ? (
-            <>
-              <CriptoValueComponent fontClass='pw-text-white pw-text-sm' crypto={true} value={organizedWallets[0].balance} code={chainIdToCode(
-                organizedWallets[0].chainId,
-                organizedWallets[0].currency
-              )} />
-            </>
-          ) : (
-            <p className="pw-font-[700] pw-text-xs">*****</p>
-          )}
+          <CriptoValueComponent pointsPrecision={organizedWallets[0].pointsPrecision} fontClass='pw-text-white pw-text-sm' crypto={true} value={organizedWallets[0].balance} code={chainIdToCode(
+            organizedWallets[0].chainId,
+            organizedWallets[0].currency
+          )} />
         </div>
       </div>
     ) : null
