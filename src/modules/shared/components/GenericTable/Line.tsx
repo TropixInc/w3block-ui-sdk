@@ -54,7 +54,6 @@ const Line = ({
       <tr
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         key={(item as any).id}
-        onClick={(e) => handleAction(e, lineActions?.action, item)}
         className={classNames(
           tableStyles?.line ?? '',
           'pw-px-3 pw-items-center pw-gap-x-1 pw-h-[72px] pw-border-t sm:pw-w-full ',
@@ -77,7 +76,11 @@ const Line = ({
               isDynamicValue,
               columnStyles,
             }) => (
-              <td key={key} className="pw-text-sm pw-text-left pw-px-3">
+              <td
+                key={key}
+                className="pw-text-sm pw-text-left pw-px-3"
+                onClick={(e) => handleAction(e, lineActions?.action, item)}
+              >
                 <div className={classNames(columnStyles, '')}>
                   {customizerValues(
                     item as any,
@@ -97,15 +100,19 @@ const Line = ({
             )
           )}
         {actions || isLineExplansible ? (
-          <td className="pw-text-sm pw-text-left pw-px-3 ">
+          <td className="pw-text-sm pw-text-left pw-px-3">
             <div className="pw-flex pw-items-center pw-gap-x-5">
-              <GenericButtonActions dataItem={item} actions={actions ?? []} />
-              <button
-                onClick={() => setOpenExpansible(!openExpansible)}
-                className="pw-cursor-pointer pw-w-5 pw-h-5"
-              >
-                <ArrowDown className="pw-stroke-brand-primary" />
-              </button>
+              {actions ? (
+                <GenericButtonActions dataItem={item} actions={actions ?? []} />
+              ) : null}
+              {isLineExplansible ? (
+                <button
+                  onClick={() => setOpenExpansible(!openExpansible)}
+                  className="pw-cursor-pointer pw-w-5 pw-h-5"
+                >
+                  <ArrowDown className="pw-stroke-brand-primary" />
+                </button>
+              ) : null}
             </div>
           </td>
         ) : null}

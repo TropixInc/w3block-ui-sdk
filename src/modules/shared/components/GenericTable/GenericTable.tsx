@@ -13,6 +13,7 @@ import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import MetamaskIcon from '../../assets/icons/metamask.svg?react';
 import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg?react';
 import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg?react';
+import { useRouterConnect } from '../../hooks';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useDynamicValueByTable } from '../../hooks/useDynamicValueByTable/useDynamicValueByTable';
@@ -81,7 +82,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     expansibleComponent,
   } = config;
   const { config: configDynamic } = useDynamicApi();
-
+  const router = useRouterConnect();
   const isMobile = useIsMobile();
   const { companyId: tenantId } = useCompanyConfig();
   const { data: company } = useCompanyById(tenantId || '');
@@ -113,7 +114,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns]);
+  }, []);
 
   const mainWalletAddress = company?.data?.operatorAddress ?? '';
 
@@ -143,7 +144,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       event?.preventDefault();
       action.data(row);
     } else if (action && action.type == 'navigate') {
-      window.location.href = getHref(lineActions?.action, row);
+      getHref(lineActions?.action, row);
     } else {
       null;
     }
@@ -157,7 +158,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           (item: string) => (url = url.replace(`{${item}}`, _.get(row, item)))
         );
 
-        return url;
+        router.pushConnect(url);
       }
     } else if (action && action.type == 'function') {
       return '';

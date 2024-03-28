@@ -52,10 +52,10 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             {translate('shared>unputLocale>contry')}
           </p>
-          <FormItemContainer className="pw-p-[0.6rem]">
+          <FormItemContainer className="pw-px-[0.6rem] pw-mb-3">
             <select
               onChange={(e) => setSelectCountry(e.target.value)}
-              className="pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
+              className="pw-max-h-[180px] pw-h-12 pw-w-full  pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
             >
               <option value={''}>
                 {translate('shared>unputLocale>selectContry')}

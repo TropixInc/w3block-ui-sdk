@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
@@ -74,6 +74,9 @@ interface SmartProps {
   selectData?: any;
   autofill?: boolean;
   inputSubtype?: string;
+  inputRequestable?: boolean;
+  inputsIdRequestReview?: Array<string>;
+  onChangeInputsIdRequestReview?: (value: Array<string>) => void;
 }
 
 export interface InputError {
@@ -108,8 +111,31 @@ const SmartInputsController = ({
   options,
   selectData,
   autofill = false,
+  inputRequestable,
+  inputsIdRequestReview,
+  onChangeInputsIdRequestReview,
 }: SmartProps) => {
   const [translate] = useTranslation();
+
+  const [checked, setChecked] = useState(false);
+
+  const onChangeChecked = () => {
+    if (checked) {
+      if ((inputsIdRequestReview ?? []).includes(name)) {
+        const removedInputId = (inputsIdRequestReview ?? []).filter(
+          (item) => item !== name
+        );
+        onChangeInputsIdRequestReview &&
+          onChangeInputsIdRequestReview(removedInputId);
+        setChecked(false);
+      }
+    } else {
+      onChangeInputsIdRequestReview &&
+        onChangeInputsIdRequestReview([...(inputsIdRequestReview ?? []), name]);
+      setChecked(true);
+    }
+  };
+
   const renderInput = () => {
     switch (type) {
       case DataTypesEnum.Cpf:
@@ -267,7 +293,22 @@ const SmartInputsController = ({
       }
     }
   };
-  return <div>{renderInput()}</div>;
+  return (
+    <div className="pw-flex pw-gap-x-2 pw-items-start">
+      {inputRequestable ? (
+        <input
+          type="checkbox"
+          className="pw-w-[18px] pw-h-[18px] pw-mt-1"
+          name={name}
+          value={name}
+          checked={checked}
+          onChange={() => onChangeChecked()}
+        />
+      ) : null}
+
+      <div className="pw-flex-1">{renderInput()}</div>
+    </div>
+  );
 };
 
 export default SmartInputsController;
