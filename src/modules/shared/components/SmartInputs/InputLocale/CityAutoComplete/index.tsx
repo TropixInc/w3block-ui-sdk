@@ -164,7 +164,7 @@ const CityAutoComplete = ({
   });
 
   return (
-    <div className="pw-mt-3 pw-relative">
+    <div className="pw-relative">
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {inputLabel ?? translate('shared>cityAutoComplete>city')}
       </p>

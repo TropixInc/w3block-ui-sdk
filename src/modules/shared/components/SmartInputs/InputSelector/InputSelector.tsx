@@ -140,13 +140,16 @@ export const InputSelector = ({
       <label className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </label>
-      <FormItemContainer className="pw-p-[0.6rem]">
+      <FormItemContainer className="!pw-px-4 pw-pt-1">
         {configData?.isMultiple ? (
           <MultipleSelect
             options={dynamicOptions}
             name={name}
             placeholder={getPlaceholderForMultipleSelect(field?.value || [])}
-            classes={{ button: '!pw-border-none', root: '-pw-mt-2' }}
+            classes={{
+              button: '!pw-border-none pw-h-[48px]',
+              root: '-pw-mt-2 ',
+            }}
             onChangeMultipleSelected={setMultipleSelected}
             multipleSelected={multipleSelected}
           />
@@ -154,7 +157,7 @@ export const InputSelector = ({
           <select
             name={name}
             onChange={(e) => handleTextChange(e.target.value)}
-            className="pw-max-h-[180px] pw-w-full pw-overflow-y-auto pw-text-black pw-outline-none"
+            className="pw-max-h-[180px] pw-h-[48px] pw-w-full pw-overflow-y-auto pw-bg-inherit pw-text-black pw-outline-none"
           >
             <option value="">Selecione uma opção</option>
             {type === DataTypesEnum.SimpleSelect

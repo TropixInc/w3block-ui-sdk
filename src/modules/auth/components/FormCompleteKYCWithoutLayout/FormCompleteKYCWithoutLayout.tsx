@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { DocumentDto, KycStatus } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
+import classNames from 'classnames';
 import _ from 'lodash';
 import { object } from 'yup';
 
@@ -37,6 +38,10 @@ interface Props {
   userKycStatus?: KycStatus;
   formTitle?: string;
   formFooter?: string;
+  keyPage?: boolean;
+  inputRequestable?: boolean;
+  inputsIdRequestReview?: Array<string>;
+  onChangeInputsIdRequestReview?: (value: Array<string>) => void;
 }
 
 interface ErrorProps {
@@ -51,6 +56,10 @@ const _FormCompleteKYCWithoutLayout = ({
   userKycStatus,
   formFooter,
   formTitle,
+  keyPage,
+  inputRequestable,
+  inputsIdRequestReview,
+  onChangeInputsIdRequestReview,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -58,23 +67,30 @@ const _FormCompleteKYCWithoutLayout = ({
   const { mutate, isSuccess, isError, isLoading, error } =
     usePostUsersDocuments();
   const slug = () => {
-    const querySlug = router.query.contextSlug;
-    if (contextSlug) return contextSlug;
-    else if (querySlug) return querySlug as string;
-    else return 'signup';
+    if (contextSlug) {
+      return contextSlug;
+    } else {
+      const querySlug = router.query.contextSlug ?? '';
+
+      if (querySlug) return querySlug as string;
+      else return 'signup';
+    }
   };
+  const { data: companyInfo } = useGetTenantInfoByHostname();
+
   const { data: kycContext } = useGetTenantContextBySlug(slug());
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
-  const { data: companyInfo } = useGetTenantInfoByHostname();
+
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
-  const step = router.query.step;
+  const step = router.query && router.query.step && router.query.step;
   const { data: tenantInputs, isLoading: isLoadingKyc } =
     useGetTenantInputsBySlug({
       slug: slug(),
     });
+
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
 
   const { data: documents } = useGetUsersDocuments({
@@ -84,7 +100,7 @@ const _FormCompleteKYCWithoutLayout = ({
       : '',
   });
 
-  const query = Object.keys(router.query).length > 0 ? router.query : '';
+  const query = Object.keys(router.query ?? {}).length > 0 ? router.query : '';
 
   const errorPost = error as AxiosError;
   const errorMessage = errorPost?.response?.data as ErrorProps;
@@ -150,6 +166,8 @@ const _FormCompleteKYCWithoutLayout = ({
                     router.query
                   );
                 }
+              } else if (keyPage) {
+                null;
               } else {
                 router.pushConnect(
                   PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
@@ -172,22 +190,17 @@ const _FormCompleteKYCWithoutLayout = ({
     else return tenantInputs?.data ?? [];
   };
 
-  const formState = router.query.formState as string;
+  const formState = router.query ? (router.query.formState as string) : '';
 
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
       <Spinner />
     </div>
   ) : tenantInputs?.data?.length ? (
-    <Box
-      className={
-        profilePage
-          ? '!pw-bg-none !pw-w-full !pw-py-0 !pw-max-w-[1000px] !pw-shadow-none'
-          : ''
-      }
-    >
+    keyPage ? (
       <FormProvider {...dynamicMethods}>
-        {reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
+        {!keyPage &&
+        reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
         reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
           <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
             <p className="pw-mt-2 pw-text-[#FF0505]">
@@ -226,6 +239,10 @@ const _FormCompleteKYCWithoutLayout = ({
           setUploadProgress={setUploadProgress}
           getDocumentByInputId={getDocumentByInputId}
           formState={formState}
+          inputRequestable={inputRequestable}
+          inputsIdRequestReview={inputsIdRequestReview}
+          onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
+          keyPage={keyPage}
         ></FormTemplate>
 
         {isSuccess && (
@@ -254,7 +271,7 @@ const _FormCompleteKYCWithoutLayout = ({
             {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
           </p>
         ) : null}
-        {profilePage || typeof formFooter === 'string' ? null : (
+        {profilePage || keyPage || typeof formFooter === 'string' ? null : (
           <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
             <button
               onClick={() =>
@@ -277,7 +294,106 @@ const _FormCompleteKYCWithoutLayout = ({
           ></div>
         )}
       </FormProvider>
-    </Box>
+    ) : (
+      <Box
+        className={classNames(
+          profilePage &&
+            '!pw-bg-none !pw-w-full !pw-py-0 !pw-max-w-[1000px] !pw-shadow-none'
+        )}
+      >
+        <FormProvider {...dynamicMethods}>
+          {reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
+          reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
+            <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
+              <p className="pw-mt-2 pw-text-[#FF0505]">
+                {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+              </p>
+            </div>
+          ) : null}
+          {renderSubtitle && typeof formTitle !== 'string' && (
+            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
+              {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
+            </p>
+          )}
+
+          {formTitle && (
+            <div
+              className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5"
+              dangerouslySetInnerHTML={{
+                __html: formTitle ?? '',
+              }}
+            ></div>
+          )}
+
+          <FormTemplate
+            isLoading={isLoading}
+            buttonDisabled={
+              !dynamicMethods.formState.isValid ||
+              isLoading ||
+              Boolean(
+                contextSlug === 'signup' &&
+                  (userKycStatus === KycStatus.Approved ||
+                    userKycStatus === KycStatus.Denied)
+              )
+            }
+            onSubmit={dynamicMethods.handleSubmit(onSubmit)}
+            tenantInputs={inputsToShow()}
+            setUploadProgress={setUploadProgress}
+            getDocumentByInputId={getDocumentByInputId}
+            formState={formState}
+          ></FormTemplate>
+
+          {isSuccess && (
+            <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
+              <div className="pw-p-3 pw-w-full pw-rounded-lg">
+                <p className="pw-text-green-300">
+                  {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
+                </p>
+              </div>
+            </Alert>
+          )}
+          {isError && (
+            <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+              <p className="pw-text-sm">{errorMessage?.message}</p>
+            </Alert>
+          )}
+          {uploadProgress && (
+            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+              {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
+            </p>
+          )}
+          {contextSlug === 'signup' &&
+          (userKycStatus === KycStatus.Approved ||
+            userKycStatus === KycStatus.Denied) ? (
+            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+              {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
+            </p>
+          ) : null}
+          {profilePage || keyPage || typeof formFooter === 'string' ? null : (
+            <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
+              <button
+                onClick={() =>
+                  signOut().then(() => {
+                    router.pushConnect(PixwayAppRoutes.HOME);
+                  })
+                }
+                className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
+              >
+                {translate('shared>exit')}
+              </button>{' '}
+              {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
+            </p>
+          )}
+          {formFooter && (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formFooter ?? '',
+              }}
+            ></div>
+          )}
+        </FormProvider>
+      </Box>
+    )
   ) : null;
 };
 
@@ -289,6 +405,10 @@ export const FormCompleteKYCWithoutLayout = ({
   userKycStatus,
   formFooter,
   formTitle,
+  keyPage,
+  inputRequestable,
+  inputsIdRequestReview,
+  onChangeInputsIdRequestReview,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -299,6 +419,10 @@ export const FormCompleteKYCWithoutLayout = ({
       userKycStatus={userKycStatus}
       formFooter={formFooter}
       formTitle={formTitle}
+      keyPage={keyPage}
+      inputRequestable={inputRequestable}
+      inputsIdRequestReview={inputsIdRequestReview}
+      onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
     />
   </TranslatableComponent>
 );
