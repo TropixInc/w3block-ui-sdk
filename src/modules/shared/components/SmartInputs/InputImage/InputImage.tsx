@@ -157,6 +157,10 @@ const InputImage = ({
         <p className="pw-text-base pw-font-medium pw-mb-2 pw-text-[#353945]">
           {subtitle}
         </p>
+        <div
+          className="pw-mt-5 pw-text-[#353945] pw-mb-2"
+          dangerouslySetInnerHTML={{ __html: instructions || '' }}
+        ></div>
         <FormItemContainer
           invalid={isError || mutateError || !field.value || fieldState.invalid}
           className="pw-max-w-[436px] pw-w-full"
@@ -206,11 +210,6 @@ const InputImage = ({
             ) : null}
           </div>
         )}
-
-        <div
-          className="pw-mt-5 pw-text-[#353945]"
-          dangerouslySetInnerHTML={{ __html: instructions || '' }}
-        ></div>
       </div>
     </div>
   );

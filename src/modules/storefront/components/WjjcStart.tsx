@@ -46,6 +46,7 @@ export const WjjcStart = () => {
     degree_2: '2º grau',
     degree_3: '3º grau',
     degree_4: '4º grau',
+    degree_5: '5º grau',
   };
 
   const title = () => {

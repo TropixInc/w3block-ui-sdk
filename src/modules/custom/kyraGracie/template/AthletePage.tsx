@@ -63,9 +63,15 @@ export const gradeMap = {
   degree_2: '2º Degree',
   degree_3: '3º Degree',
   degree_4: '4º Degree',
+  degree_5: '5º Degree',
 };
 
-export type Grade = 'degree_1' | 'degree_2' | 'degree_3' | 'degree_4';
+export type Grade =
+  | 'degree_1'
+  | 'degree_2'
+  | 'degree_3'
+  | 'degree_4'
+  | 'degree_5';
 
 export const AthletePage = () => {
   const { datasource, loading } = useDynamicApi();
@@ -138,6 +144,7 @@ export const AthletePage = () => {
     degree_2: secondDegree,
     degree_3: thirdDegree,
     degree_4: fourthDegree,
+    degree_5: fourthDegree,
   };
 
   const getPlaceholder = (): AthleteInterface => {
@@ -416,7 +423,7 @@ export const AthletePage = () => {
                                       res.type === 'grade')
                                       ? `https://pdf${
                                           !isProduction ? '.stg' : ''
-                                        }.w3block.io/certification/${
+                                        }.wjjc.io/certification/${
                                           respectiveToken?.contractAddress
                                         }/${respectiveToken?.chainId}/${
                                           respectiveToken?.tokenId
@@ -430,7 +437,7 @@ export const AthletePage = () => {
                                       res.type === 'grade')
                                       ? ''
                                       : 'pw-opacity-60'
-                                  } pw-text-black pw-font-bold pw-text-base pw-flex pw-items-center pw-gap-2`}
+                                  } pw-text-black pw-font-bold pw-text-base pw-flex sm:pw-flex-row pw-flex-col sm:pw-items-center pw-items-start pw-gap-2`}
                                 >
                                   <p>
                                     {`${

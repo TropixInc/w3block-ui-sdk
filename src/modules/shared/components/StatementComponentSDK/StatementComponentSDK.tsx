@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
+import { Disclosure } from '@headlessui/react';
+import classNames from 'classnames';
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 
+import { Grade, gradeMap } from '../../../custom';
 import { ReceiptQRCode } from '../../../dashboard/components/ReceiptQRCode/ReceiptQRCode';
+import ChevronDown from '../../../shared/assets/icons/arrowDown.svg?react';
 import PendingIcon from '../../assets/icons/clock.svg?react';
 import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import RejectIcon from '../../assets/icons/minusCircle.svg?react';
@@ -81,6 +85,13 @@ export const StatementComponentSDK = ({
   };
   const subtext = () => {
     if (!future) {
+      if (
+        statement?.loyaltieTransactions?.[0]?.metadata.action === 'split_payees'
+      ) {
+        return (
+          <WjjcText metadata={statement?.loyaltieTransactions?.[0]?.metadata} />
+        );
+      }
       if (
         (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]?.action ===
           'cashback_multilevel' &&
@@ -179,6 +190,103 @@ export const StatementComponentSDK = ({
         );
     } else return '';
   };
+
+  const shareText = (metadata: any) => {
+    if (metadata.action === 'split_payees') {
+      if (metadata.commerce?.type === 'master')
+        return 'Responsible Instructor’s Share';
+      if (metadata.commerce?.type === 'academy') return 'Academy’s Share';
+      if (metadata.commerce?.type === 'ambassador')
+        return 'Responsible Instructor Ambassador’s Share';
+      if (metadata.commerce?.type === 'ambassadorPool')
+        return 'Ambassador’s Share';
+      if (metadata.commerce?.type === 'grandMasterCouncil')
+        return 'Council of Grand Masters Member’s Share';
+    }
+    return '';
+  };
+
+  const WjjcText = ({ metadata }: { metadata: any }) =>
+    useMemo(() => {
+      const supportText = () => {
+        return (
+          <>
+            <Disclosure>
+              {({ open }) => (
+                <>
+                  <Disclosure.Button className="pw-flex pw-items-center pw-gap-3">
+                    {shareText(metadata)} - {metadata?.commerce?.share}% * R$
+                    {metadata?.commerce?.netValue} = R$
+                    {statement?.pointsPrecision == 'integer'
+                      ? statement?.amount?.toFixed(0)
+                      : statement?.amount?.toFixed(2)}
+                    <ChevronDown
+                      className={classNames(
+                        'pw-stroke-[#000000]',
+                        open ? 'pw-rotate-180' : ''
+                      )}
+                    />
+                  </Disclosure.Button>
+                  <Disclosure.Panel>
+                    <div className="pw-my-5">
+                      <p>
+                        <b>(a) Amount:</b> R$
+                        {parseFloat(metadata?.commerce?.price).toFixed(2)}
+                      </p>
+                      <p>
+                        <b>
+                          (b) Tax Provisioning (-{' '}
+                          {metadata?.commerce?.taxProvisioningFee || '14.25'}%):
+                        </b>{' '}
+                        -R${metadata?.commerce?.taxProvisioningFeeAmount}
+                      </p>
+                      <p>
+                        <b>
+                          (c) Payment Method Fee (-{' '}
+                          {metadata?.commerce?.paymentMethodFee || '2.49'}%):
+                        </b>{' '}
+                        -R${metadata?.commerce?.paymentMethodFeeAmount}
+                      </p>
+                      <p className="pw-my-5">
+                        <b>Net amount:</b> a + b + c = R$
+                        {metadata?.commerce?.netValue}
+                      </p>
+                      <p>
+                        {shareText(metadata)} - {metadata?.commerce?.share}% *{' '}
+                        Net amount
+                      </p>
+                    </div>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+          </>
+        );
+      };
+
+      if (metadata?.action === 'split_payees') {
+        if (metadata?.commerce?.isAffiliation) {
+          return (
+            <div className="pw-text-black pw-text-xs pw-font-medium">
+              <p>Affiliation - {metadata?.commerce?.athleteName}</p>
+              {supportText()}
+            </div>
+          );
+        }
+        return (
+          <div className="pw-text-black pw-text-xs pw-font-medium">
+            <p>
+              {gradeMap[metadata.commerce?.degree as Grade]}{' '}
+              {metadata.commerce?.beltColor} Belt Certification -{' '}
+              {metadata.commerce?.athleteName}
+            </p>
+            {supportText()}
+          </div>
+        );
+      }
+      return null;
+    }, [metadata]);
+
   const [openReceipt, setOpenReceipt] = useState(false);
   return (
     <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
@@ -206,14 +314,7 @@ export const StatementComponentSDK = ({
         <div className="pw-flex pw-items-center pw-gap-2">
           {future ? (
             statement?.metadata?.action === 'split_payees' ? (
-              <div
-                className="pw-text-black pw-text-xs pw-font-medium"
-                dangerouslySetInnerHTML={{
-                  __html:
-                    statement?.metadata?.description.replace('\n', '<br>') ??
-                    '',
-                }}
-              ></div>
+              <WjjcText metadata={statement.metadata} />
             ) : (
               <p className="pw-text-black pw-text-xs pw-font-medium">
                 Comprador: {statement?.buyerName}
@@ -287,7 +388,7 @@ export const StatementComponentSDK = ({
             {statement?.currency}
           </span>
         </div>
-        <div className="pw-text-left pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mt-1">
+        <div className="pw-text-left pw-text-zinc-700 pw-text-xs pw-font-medium pw-truncate pw-mt-1">
           {subtext()}
         </div>
       </div>
@@ -301,14 +402,18 @@ export const StatementComponentSDK = ({
             : null}
         </div>
         <div className="pw-mt-2"></div>
-        {statement?.loyaltieTransactions?.map((loyaltieTransaction) => (
-          <div
-            key={generateRandomUUID()}
-            className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate-2 pw-mb-1"
-          >
-            {loyaltieTransaction?.metadata?.description}
-          </div>
-        ))}
+        {statement?.metadata?.commerce?.action !== 'split_payees' &&
+          statement?.loyaltieTransactions?.map(
+            (loyaltieTransaction) =>
+              loyaltieTransaction.metadata.action !== 'split_payees' && (
+                <div
+                  key={generateRandomUUID()}
+                  className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate pw-mb-1"
+                >
+                  {loyaltieTransaction?.metadata?.description}
+                </div>
+              )
+          )}
         <div></div>
       </div>
       <ReceiptQRCode

@@ -39,6 +39,7 @@ export const useGetErcTokensHistory = (
         .then((res) => res.data),
     {
       enabled: !!loyaltyId && !!companyId && !!session?.id,
+      refetchOnWindowFocus: false,
     }
   );
 };
