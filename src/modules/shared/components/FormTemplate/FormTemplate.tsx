@@ -2,6 +2,7 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 import { DocumentEntityDto, TenantInputEntityDto } from '@w3block/sdk-id';
+import classNames from 'classnames';
 
 import { AuthButton } from '../../../auth/components/AuthButton';
 import SmartInputsController from '../SmartInputsController';
@@ -40,7 +41,11 @@ export const FormTemplate = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="pw-grid pw-grid-cols-2 pw-gap-x-6">
+      <div
+        className={classNames(
+          keyPage ? 'pw-grid pw-grid-cols-2 pw-gap-x-6' : ''
+        )}
+      >
         {tenantInputs &&
           tenantInputs?.map((item) => {
             const doc = getDocumentByInputId(item?.id);
