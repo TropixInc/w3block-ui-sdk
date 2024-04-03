@@ -671,5 +671,8 @@
   "shared>unputLocale>state": "Estado",
   "shared>cityAutoComplete>city": "Cidade",
   "shared>cityAutoComplete>searchCity": "Buscar cidade",
-  "shared>inputPlaces>inputPlaceholder": "Busque por locais de interesse"
+  "shared>inputPlaces>inputPlaceholder": "Busque por locais de interesse",
+  "storeFront>productPage>friendName": "Nome do seu amigo(a)",
+  "storeFront>productPage>message": "Mensagem",
+  "storeFront>productPage>maxChar": "(máx. 1000 caracteres)"
 }
