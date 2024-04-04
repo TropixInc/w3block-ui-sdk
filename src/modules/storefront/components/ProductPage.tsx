@@ -138,6 +138,7 @@ export const ProductPage = ({
   );
   const [quantity, setQuantity] = useState(1);
   const [receivedName, setReceivedName] = useState('');
+  const [isPossibleSend] = useState(false);
   const [message, setMessage] = useState('');
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
@@ -411,7 +412,7 @@ export const ProductPage = ({
             }),
           ],
           currencyId: currencyId.id ?? '',
-          giftPassRecipient: {
+          passShareCodeData: {
             name: receivedName,
             message: message,
           },
@@ -791,73 +792,75 @@ export const ProductPage = ({
                       ))
                     : null}
                 </div>
-                <div>
-                  <p className="pw-font-medium">Enviar como presente?</p>
-                  <div className="pw-mt-3 pw-flex pw-gap-x-4">
-                    <div className="pw-flex pw-gap-2 pw-items-center">
-                      <input
-                        type="radio"
-                        name="sendGift"
-                        checked={isSendGift}
-                        onChange={() => setIsSendGift(true)}
-                        id="yes"
-                        className="pw-w-5"
-                      />
-                      <label className="pw-cursor-pointer" htmlFor="yes">
-                        Sim
-                      </label>
-                    </div>
-                    <div className="pw-flex pw-gap-2 pw-items-center">
-                      <input
-                        type="radio"
-                        name="sendGift"
-                        checked={!isSendGift}
-                        onChange={() => setIsSendGift(false)}
-                        id="no"
-                      />
-                      <label className="pw-cursor-pointer" htmlFor="no">
-                        Não
-                      </label>
-                    </div>
-                  </div>
-
-                  {isSendGift ? (
-                    <div className="pw-mt-5 pw-flex pw-flex-col">
-                      <div className="pw-w-full pw-flex pw-flex-col">
-                        <label htmlFor="receivedName">
-                          {translate('storeFront>productPage>friendName')}
-                        </label>
+                {isPossibleSend ? (
+                  <div>
+                    <p className="pw-font-medium">Enviar como presente?</p>
+                    <div className="pw-mt-3 pw-flex pw-gap-x-4">
+                      <div className="pw-flex pw-gap-2 pw-items-center">
                         <input
-                          id="receivedName"
-                          required
-                          value={receivedName}
-                          onChange={(e) => setReceivedName(e.target.value)}
-                          type="text"
-                          className="pw-mt-1 pw-px-3 pw-py-2 pw-border pw-border-slate-500 pw-outline-none pw-rounded-lg pw-text-sm"
+                          type="radio"
+                          name="sendGift"
+                          checked={isSendGift}
+                          onChange={() => setIsSendGift(true)}
+                          id="yes"
+                          className="pw-w-5"
                         />
-                      </div>
-                      <div className="pw-mt-3 pw-w-full pw-flex pw-flex-col">
-                        <label htmlFor="message">
-                          <span>
-                            {translate('storeFront>productPage>message')}
-                          </span>
-                          <span className="pw-ml-1 pw-text-xs">
-                            {translate('storeFront>productPage>maxChar')}
-                          </span>
+                        <label className="pw-cursor-pointer" htmlFor="yes">
+                          Sim
                         </label>
-                        <textarea
-                          className="pw-mt-1 pw-px-3 pw-py-2 pw-border pw-border-slate-500 pw-outline-none pw-rounded-lg pw-text-sm"
-                          value={message}
-                          onChange={(e) => setMessage(e.target.value)}
-                          name="message"
-                          id="message"
-                          cols={30}
-                          rows={10}
-                        ></textarea>
+                      </div>
+                      <div className="pw-flex pw-gap-2 pw-items-center">
+                        <input
+                          type="radio"
+                          name="sendGift"
+                          checked={!isSendGift}
+                          onChange={() => setIsSendGift(false)}
+                          id="no"
+                        />
+                        <label className="pw-cursor-pointer" htmlFor="no">
+                          Não
+                        </label>
                       </div>
                     </div>
-                  ) : null}
-                </div>
+
+                    {isSendGift ? (
+                      <div className="pw-mt-5 pw-flex pw-flex-col">
+                        <div className="pw-w-full pw-flex pw-flex-col">
+                          <label htmlFor="receivedName">
+                            {translate('storeFront>productPage>friendName')}
+                          </label>
+                          <input
+                            id="receivedName"
+                            required
+                            value={receivedName}
+                            onChange={(e) => setReceivedName(e.target.value)}
+                            type="text"
+                            className="pw-mt-1 pw-px-3 pw-py-2 pw-border pw-border-slate-500 pw-outline-none pw-rounded-lg pw-text-sm"
+                          />
+                        </div>
+                        <div className="pw-mt-3 pw-w-full pw-flex pw-flex-col">
+                          <label htmlFor="message">
+                            <span>
+                              {translate('storeFront>productPage>message')}
+                            </span>
+                            <span className="pw-ml-1 pw-text-xs">
+                              {translate('storeFront>productPage>maxChar')}
+                            </span>
+                          </label>
+                          <textarea
+                            className="pw-mt-1 pw-px-3 pw-py-2 pw-border pw-border-slate-500 pw-outline-none pw-rounded-lg pw-text-sm"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            name="message"
+                            id="message"
+                            cols={30}
+                            rows={10}
+                          ></textarea>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
 
                 {actionButton &&
                 product?.stockAmount &&

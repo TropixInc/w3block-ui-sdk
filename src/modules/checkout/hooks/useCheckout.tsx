@@ -19,7 +19,7 @@ interface GetOrderPreviewPayload {
   currencyId?: string;
   companyId: string;
   couponCode?: string;
-  giftPassRecipient?: {
+  passShareCodeData?: {
     name: string;
     message: string;
   };
@@ -36,7 +36,7 @@ interface ProductToSendPayload {
   productTokenId?: string;
   variantIds?: string[];
   quantity?: number;
-  giftPassRecipient?: {
+  passShareCodeData?: {
     name: string;
     message: string;
   };
