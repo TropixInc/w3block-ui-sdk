@@ -51,6 +51,7 @@ const InputUrl = lazy(() =>
 
 import _ from 'lodash';
 
+import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
 import InputDocuments from '../SmartInputs/InputDocuments';
 import InputImage from '../SmartInputs/InputImage/InputImage';
 import InputLocale from '../SmartInputs/InputLocale/InputLocale';
@@ -256,6 +257,7 @@ const SmartInputsController = ({
             name={name}
             label={label}
             docValue={simpleValue}
+            configData={selectData}
           />
         );
       case DataTypesEnum.DynamicSelect:
@@ -272,6 +274,16 @@ const SmartInputsController = ({
       case DataTypesEnum.IdentificationDocument:
         return (
           <InputDocuments name={name} label={label} docValue={complexValue} />
+        );
+      case DataTypesEnum.Checkbox:
+        return (
+          <InputCheckbox
+            label={label}
+            name={name}
+            docValue={!!complexValue}
+            docStatus={docStatus}
+            configData={selectData}
+          />
         );
       case DataTypesEnum.SimpleLocation: {
         if (_.has(selectData, 'placeType')) {
@@ -305,7 +317,6 @@ const SmartInputsController = ({
           onChange={() => onChangeChecked()}
         />
       ) : null}
-
       <div className="pw-flex-1">{renderInput()}</div>
     </div>
   );

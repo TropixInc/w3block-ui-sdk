@@ -17,7 +17,7 @@ export const useGetDocuments = () => {
           PixwayAPIRoutes.GET_DOCUMENTS_BY_USER.replace(
             '{tenantId}',
             companyId
-          ).replace('{userId}', data?.id ?? '') + '?type=multiface_selfie'
+          ).replace('{userId}', data?.id ?? '')
         )
         .then((res) => res.data),
     {

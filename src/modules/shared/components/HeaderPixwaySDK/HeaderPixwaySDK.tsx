@@ -7,6 +7,7 @@ import { ThemeContext } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import { useGetDocuments } from '../../hooks/useGetDocuments';
 import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
 import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
@@ -93,6 +94,40 @@ const _HeaderPixwaySDK = ({
     } else setopenedLoginState(!openedloginState);
   };
 
+  const signUpsContexts = useMemo(() => {
+    if (contexts) {
+      const mainSignUp = contexts?.data?.items?.find(
+        ({ context }) => context?.slug === 'signup'
+      );
+      const alternativesSignUp = contexts?.data?.items?.filter(
+        (res) => (res.data as any)?.alternativeSignUp
+      );
+      if (mainSignUp) {
+        alternativesSignUp.push(mainSignUp);
+        return alternativesSignUp;
+      }
+      return alternativesSignUp;
+    }
+  }, [contexts]);
+  const signUpContextsIds = signUpsContexts?.map((res) => res.contextId);
+  const docs = useGetDocuments();
+  const isFilled = useMemo(() => {
+    const arr: any[] = [];
+    signUpContextsIds?.forEach((response) => {
+      if (
+        docs?.data?.items?.find(
+          (res: { contextId: string }) => res.contextId === response
+        )
+      )
+        arr.push(
+          docs?.data?.items?.find(
+            (res: { contextId: string }) => res.contextId === response
+          )
+        );
+    });
+    return arr;
+  }, [docs?.data?.items, signUpContextsIds]);
+
   const signupContext = useMemo(() => {
     if (contexts) {
       return contexts?.data?.items?.find(
@@ -114,7 +149,7 @@ const _HeaderPixwaySDK = ({
 
   useEffect(() => {
     if (profile) {
-      if (signupContext) {
+      if (signupContext && !isFilled.length) {
         if (!profile.data.verified && !isPasswordless) {
           router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
         } else if (
