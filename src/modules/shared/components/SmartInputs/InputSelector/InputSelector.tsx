@@ -5,6 +5,8 @@ import { useController } from 'react-hook-form';
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
 
+import { useRouterConnect } from '../../../hooks';
+import { useCheckWhitelistByUser } from '../../../hooks/useCheckWhitelistByUser/useCheckWhitelistByUser';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { MultipleSelect } from '../../MultipleSelect';
@@ -54,6 +56,7 @@ export const InputSelector = ({
   docValue,
 }: Props) => {
   const { field } = useController({ name });
+  const router = useRouterConnect();
   const [firstInput, setFirstInput] = useState(true);
   const [multipleSelected, setMultipleSelected] = useState<
     Array<string | undefined>
@@ -68,6 +71,31 @@ export const InputSelector = ({
       });
     }
   };
+  const whitelists = Object.values((configData as any)?.whereToSend).map(
+    (res) => (res as any)?.whitelistId
+  );
+  const { data: checkWhitelists } = useCheckWhitelistByUser(whitelists);
+  const hasAccess = checkWhitelists?.details?.find((res) => res.hasAccess);
+
+  useEffect(() => {
+    if (whitelists && hasAccess) {
+      router.pushConnect(
+        (
+          Object.values((configData as any)?.whereToSend).find(
+            (res) => (res as any).whitelistId === hasAccess?.whitelistId
+          ) as any
+        )?.link
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkWhitelists?.details, configData, whitelists]);
+
+  useEffect(() => {
+    if ((configData as any)?.isUserSelector && docValue) {
+      router.pushConnect((configData as any)?.whereToSend[docValue]?.link);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configData, docValue]);
 
   const [{ data }] = usePaginatedGenericApiGet({
     url: configData?.url ?? '',
