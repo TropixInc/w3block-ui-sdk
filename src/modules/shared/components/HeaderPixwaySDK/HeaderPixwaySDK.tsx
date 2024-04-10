@@ -9,7 +9,7 @@ import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useGetDocuments } from '../../hooks/useGetDocuments';
 import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
-import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
+// import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import TranslatableComponent from '../TranslatableComponent';
 import { NavigationTabsPixwaySDKTabs } from './components';
@@ -82,8 +82,8 @@ const _HeaderPixwaySDK = ({
   const { data: contexts } = useGetTenantContext();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
-  const { data: companyInfo } = useGetTenantInfoByHostname();
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+  // const { data: companyInfo } = useGetTenantInfoByHostname();
+  // const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const { logoUrl } = useCompanyConfig();
   const toggleMenuMemo = () => {
     if (openedMenu || openedTabs) {
@@ -149,10 +149,10 @@ const _HeaderPixwaySDK = ({
 
   useEffect(() => {
     if (profile) {
-      if (signupContext && !isFilled.length) {
-        if (!profile.data.verified && !isPasswordless) {
-          router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
-        } else if (
+      if (!profile.data.verified) {
+        router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
+      } else if (signupContext && !isFilled.length) {
+        if (
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active &&
           window?.location?.pathname !==

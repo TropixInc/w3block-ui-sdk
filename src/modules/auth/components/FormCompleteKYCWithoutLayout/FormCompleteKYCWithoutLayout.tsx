@@ -135,6 +135,7 @@ const _FormCompleteKYCWithoutLayout = ({
       const whereToSend = (tenantInputs?.data?.[0]?.data as any)?.whereToSend[
         validDocs[0].value
       ]?.link;
+
       const { contextId } = tenantInputs.data[0];
       mutate(
         {
@@ -247,6 +248,7 @@ const _FormCompleteKYCWithoutLayout = ({
           inputsIdRequestReview={inputsIdRequestReview}
           onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
           keyPage={keyPage}
+          profilePage={profilePage}
         ></FormTemplate>
 
         {isSuccess && (
@@ -345,6 +347,7 @@ const _FormCompleteKYCWithoutLayout = ({
             setUploadProgress={setUploadProgress}
             getDocumentByInputId={getDocumentByInputId}
             formState={formState}
+            profilePage={profilePage}
           ></FormTemplate>
 
           {isSuccess && (

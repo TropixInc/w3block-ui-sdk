@@ -258,6 +258,7 @@ const SmartInputsController = ({
             label={label}
             docValue={simpleValue}
             configData={selectData}
+            profilePage={profilePage}
           />
         );
       case DataTypesEnum.DynamicSelect:
@@ -269,6 +270,7 @@ const SmartInputsController = ({
             label={label}
             configData={selectData as InputDataDTO}
             docValue={simpleValue}
+            profilePage={profilePage}
           />
         );
       case DataTypesEnum.IdentificationDocument:
