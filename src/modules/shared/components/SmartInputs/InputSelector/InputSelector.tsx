@@ -74,21 +74,37 @@ export const InputSelector = ({
       });
     }
   };
-  const whitelists = (configData as any)?.whereToSend
-    ? Object.values((configData as any)?.whereToSend)?.map(
-        (res) => (res as any)?.whitelistId
-      )
-    : [];
+
+  const whitelists = () => {
+    const whitelistsArr: string[] = [];
+    if ((configData as any)?.whereToSend) {
+      Object.values((configData as any)?.whereToSend)?.forEach((res) => {
+        if ((res as any)?.whitelistId) {
+          whitelistsArr.push((res as any)?.whitelistId);
+        }
+      });
+    }
+    return whitelistsArr;
+  };
+
   const { data: checkWhitelists } = useCheckWhitelistByUser(
-    whitelists,
-    !!whitelists?.length
+    whitelists(),
+    !!whitelists()?.length
   );
   const hasAccess = checkWhitelists?.details?.filter((res) => res.hasAccess);
   const { data: docs } = useGetDocuments({ limit: 50 });
+
   useEffect(() => {
-    if (whitelists && hasAccess?.length && !profilePage) {
+    if (whitelists().length && hasAccess?.length && !profilePage) {
+      const redirect = () => {
+        if (router.query.callbackUrl?.length)
+          return router.query.callbackUrl as string;
+        if (router.query.callbackPath?.length)
+          return router.query.callbackPath as string;
+        return '/';
+      };
       let i = 0;
-      hasAccess?.forEach((res) => {
+      hasAccess?.every((res) => {
         const whereToSend = Object.values(
           (configData as any)?.whereToSend
         )?.find((d) => (d as any)?.whitelistId === res?.whitelistId);
@@ -100,14 +116,16 @@ export const InputSelector = ({
 
         if (!docsFilled.length) {
           router.pushConnect((whereToSend as any)?.link);
+          return false;
         } else {
           i++;
+          return true;
         }
       });
-      if (i === hasAccess?.length) router.pushConnect('/');
+      if (i === hasAccess?.length) router.pushConnect(redirect());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkWhitelists?.details, configData, whitelists]);
+  }, [checkWhitelists?.details, configData, whitelists(), docs]);
 
   const [{ data }] = usePaginatedGenericApiGet({
     url: configData?.url ?? '',
@@ -141,7 +159,11 @@ export const InputSelector = ({
   }, [data]);
 
   useEffect(() => {
-    if (firstInput && !(whitelists && hasAccess?.length) && !profilePage) {
+    if (
+      firstInput &&
+      !(whitelists().length && hasAccess?.length) &&
+      !profilePage
+    ) {
       field.onChange({ inputId: name, value: options[0].value });
       setFirstInput(false);
     }

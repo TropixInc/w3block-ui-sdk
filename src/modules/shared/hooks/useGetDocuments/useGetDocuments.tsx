@@ -30,6 +30,7 @@ export const useGetDocuments = (query?: QueryParams) => {
         .then((res) => res.data),
     {
       enabled: companyId != null && data != null,
+      refetchOnMount: 'always',
     }
   );
 };
