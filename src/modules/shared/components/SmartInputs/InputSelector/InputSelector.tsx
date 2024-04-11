@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
 import { useController } from 'react-hook-form';
+import { useDebounce } from 'react-use';
 
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
@@ -12,6 +13,7 @@ import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApi
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { MultipleSelect } from '../../MultipleSelect';
 import { InputDataDTO } from '../../SmartInputsController';
+import { Spinner } from '../../Spinner';
 
 export interface Options {
   label: string;
@@ -93,9 +95,54 @@ export const InputSelector = ({
   );
   const hasAccess = checkWhitelists?.details?.filter((res) => res.hasAccess);
   const { data: docs } = useGetDocuments({ limit: 50 });
+  const delay = router.query.delay
+    ? (router.query.delay as unknown as number)
+    : 0;
+
+  useDebounce(() => {
+    if (
+      whitelists().length &&
+      hasAccess?.length &&
+      !profilePage &&
+      delay !== 0
+    ) {
+      const redirect = () => {
+        if (router.query.callbackUrl?.length)
+          return router.query.callbackUrl as string;
+        if (router.query.callbackPath?.length)
+          return router.query.callbackPath as string;
+        return '/';
+      };
+      let i = 0;
+      hasAccess?.every((res) => {
+        const whereToSend = Object.values(
+          (configData as any)?.whereToSend
+        )?.find((d) => (d as any)?.whitelistId === res?.whitelistId);
+
+        const docsFilled = docs?.items?.filter(
+          (r: { contextId: string }) =>
+            r?.contextId === (whereToSend as any)?.contextId
+        );
+
+        if (!docsFilled.length) {
+          router.pushConnect((whereToSend as any)?.link);
+          return false;
+        } else {
+          i++;
+          return true;
+        }
+      });
+      if (i === hasAccess?.length) router.pushConnect(redirect());
+    }
+  }, delay);
 
   useEffect(() => {
-    if (whitelists().length && hasAccess?.length && !profilePage) {
+    if (
+      whitelists().length &&
+      hasAccess?.length &&
+      !profilePage &&
+      delay === 0
+    ) {
       const redirect = () => {
         if (router.query.callbackUrl?.length)
           return router.query.callbackUrl as string;
@@ -196,6 +243,14 @@ export const InputSelector = ({
       return 'Selecione';
     }
   };
+
+  if (router.query.delay) {
+    return (
+      <div className="pw-mb-6 pw-mx-auto pw-w-full">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="pw-mb-6">

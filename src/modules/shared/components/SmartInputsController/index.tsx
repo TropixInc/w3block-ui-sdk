@@ -285,6 +285,7 @@ const SmartInputsController = ({
             docValue={!!complexValue}
             docStatus={docStatus}
             configData={selectData}
+            hidenValidations
           />
         );
       case DataTypesEnum.SimpleLocation: {

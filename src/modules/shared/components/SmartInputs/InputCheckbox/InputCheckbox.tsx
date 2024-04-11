@@ -52,7 +52,7 @@ const InputCheckbox = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3 pw-w-full">
+    <div className={`${label === ' ' ? '-pw-mt-3' : ''} pw-mb-3 pw-w-full`}>
       <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </p>
