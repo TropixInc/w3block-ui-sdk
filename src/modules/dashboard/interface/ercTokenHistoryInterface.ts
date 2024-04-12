@@ -98,4 +98,5 @@ export interface Metadata2 {
   description: string;
   operatorUserId: string;
   action?: string;
+  operatorName?: string;
 }

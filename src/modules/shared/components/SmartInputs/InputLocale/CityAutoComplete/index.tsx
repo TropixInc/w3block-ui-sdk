@@ -83,7 +83,7 @@ const CityAutoComplete = ({
   const [showOptions, setShowOptions] = useState(false);
   const { placesService, placePredictions, getPlacePredictions } =
     usePlacesService({
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '',
       options: {
         componentRestrictions: { country: country },
         types: [type],
