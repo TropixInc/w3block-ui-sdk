@@ -2,6 +2,7 @@ import { lazy, useMemo, useState } from 'react';
 
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
+import _ from 'lodash';
 
 import {
   Erc20TokenHistory,
@@ -153,12 +154,21 @@ export const UserReportTemplate = () => {
           </div>
         ),
     },
+    {
+      key: 'operatorName',
+      name: 'Operador',
+      component: (item: Erc20TokenHistory) => (
+        <p className="pw-text-xs pw-text-slate-900 pw-font-medium">
+          {_.get(item, 'loyaltiesTransactions[0].metadata.operatorName', '')}
+        </p>
+      ),
+    },
 
     {
       key: '',
       name: 'Descrição',
       component: (item: Erc20TokenHistory) => (
-        <p className="pw-text-slate-500 pw-text-xs pw-font-regular pw-max-w-[300px]">
+        <p className="pw-text-slate-500 pw-text-xs pw-font-regular pw-min-w-[120px] pw-max-w-[300px]">
           {getTextToShow(item)}
         </p>
       ),
