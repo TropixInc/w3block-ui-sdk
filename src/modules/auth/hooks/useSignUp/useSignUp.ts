@@ -27,12 +27,15 @@ export const useSignUp = () => {
   return useMutation([PixwayAPIRoutes.USERS], async (payload: Payload) => {
     const signUpPayload = payload;
     const ut = utms;
-    if (utms.expires && utms?.expires > new Date().getTime()) {
-      signUpPayload.utmParams = ut;
+    if (ut) {
+      console.log('utm found in signup:', ut);
+    } else {
+      console.log('utm not found');
     }
     const sdk = await getSDK();
     return sdk.api.auth.signUp({
       ...signUpPayload,
+      utmParams: ut,
       tenantId: companyId,
     });
   });
