@@ -17,7 +17,6 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useDispatchGaEvent } from '../../../shared/hooks/useDispatchGaEvent/useDispatchGaEvent';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { useModalController } from '../../../shared/hooks/useModalController';
@@ -31,6 +30,7 @@ import { ThemeContext } from '../../../storefront';
 import { Selector } from '../../../storefront/components/Selector';
 import { Variants } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
+import { useTrack } from '../../../storefront/hooks/useTrack/useTrack';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import {
   ORDER_COMPLETED_INFO_KEY,
@@ -447,7 +447,7 @@ const _CheckoutInfo = ({
   );
 
   const isLoading = orderPreview == null;
-  const { gtag } = useDispatchGaEvent();
+  const track = useTrack();
   const beforeProcced = () => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION && orderPreview) {
       const orderProducts = isCart
@@ -539,15 +539,14 @@ const _CheckoutInfo = ({
         openModal();
         return;
       } else {
-        gtag &&
-          gtag('begin_checkout', {
-            value: orderPreview?.totalPrice,
-            currency: orderPreview?.currency?.code,
-            coupon: orderPreview?.appliedCoupon,
-            items: orderPreview?.products.map((res) => {
-              return { item_id: res.id };
-            }),
-          });
+        track('begin_checkout', {
+          value: orderPreview?.totalPrice,
+          currency: orderPreview?.currency?.code,
+          coupon: orderPreview?.appliedCoupon,
+          items: orderPreview?.products.map((res) => {
+            return { item_id: res.id };
+          }),
+        });
         router.pushConnect(
           PixwayAppRoutes.CHECKOUT_PAYMENT +
             '?' +
@@ -1558,18 +1557,17 @@ const _CheckoutInfo = ({
                   loading={isLoading}
                   status={checkoutStatus}
                   deleteProduct={(id, variants) => {
-                    gtag &&
-                      gtag('remove_from_cart', {
-                        value: parseFloat(
-                          prod?.prices?.find(
-                            (price) => price?.currencyId == currencyIdState
-                          )?.amount ?? '0'
-                        ).toString(),
-                        currency: prod?.prices?.find(
-                          (prodI) => prodI?.currencyId == currencyIdState
-                        )?.currency?.code,
-                        items: [{ item_id: id }],
-                      });
+                    track('remove_from_cart', {
+                      value: parseFloat(
+                        prod?.prices?.find(
+                          (price) => price?.currencyId == currencyIdState
+                        )?.amount ?? '0'
+                      ).toString(),
+                      currency: prod?.prices?.find(
+                        (prodI) => prodI?.currencyId == currencyIdState
+                      )?.currency?.code,
+                      items: [{ item_id: id }],
+                    });
                     deleteProduct(
                       id,
                       prod?.prices?.find(

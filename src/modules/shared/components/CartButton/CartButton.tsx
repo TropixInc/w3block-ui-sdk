@@ -1,8 +1,9 @@
 import { useCart } from '../../../checkout/hooks/useCart';
+import { useTrack } from '../../../storefront/hooks/useTrack/useTrack';
 import CartIcon from '../../assets/icons/shoppingCart.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
-import { useDispatchGaEvent } from '../../hooks/useDispatchGaEvent/useDispatchGaEvent';
+
 interface CartButtonProps {
   iconColor?: string;
   className?: string;
@@ -16,7 +17,7 @@ export const CartButton = ({
 }: CartButtonProps) => {
   const { cart, cartCurrencyId } = useCart();
   const { pushConnect } = useRouterConnect();
-  const { gtag } = useDispatchGaEvent();
+  const track = useTrack();
   const quantity = cart.length;
   const currencyId = cart.length
     ? cartCurrencyId?.id ?? cart[0].prices[0].currencyId
@@ -25,12 +26,11 @@ export const CartButton = ({
     <div
       style={{ borderColor: borderColor ?? 'black' }}
       onClick={() => {
-        gtag &&
-          gtag('view_cart', {
-            items: cart.map((rest) => {
-              return { item_id: rest.id };
-            }),
-          });
+        track('view_cart', {
+          items: cart.map((rest) => {
+            return { item_id: rest.id };
+          }),
+        });
         pushConnect(
           PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION +
             `?productIds=${cart
