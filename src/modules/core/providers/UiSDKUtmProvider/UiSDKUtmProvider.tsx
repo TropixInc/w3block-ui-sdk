@@ -31,7 +31,7 @@ export const UiSDKUtmProvider = ({
         });
       }
     } catch (err) {
-      console.log('not save utm');
+      console.log('error saving utm: ', err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
