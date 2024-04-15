@@ -32,11 +32,13 @@ export const UiSDKUtmProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
 
-  if (utm) {
-    console.log('utm saved: ', utm);
-  } else {
-    console.log('not save utm');
-  }
+  useEffect(() => {
+    if (utm) {
+      console.log('utm saved: ', utm);
+    } else {
+      console.log('not save utm');
+    }
+  }, [utm]);
 
   return (
     <UtmContext.Provider value={JSON.parse(utm ?? '{}')}>
