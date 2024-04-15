@@ -1,14 +1,10 @@
-import { lazy, useContext, useEffect, useMemo, useState } from 'react';
+import { lazy, useContext, useMemo, useState } from 'react';
 
-import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { ThemeContext } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
-import { useGetDocuments } from '../../hooks/useGetDocuments';
-import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
 // import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import TranslatableComponent from '../TranslatableComponent';
@@ -77,9 +73,6 @@ const _HeaderPixwaySDK = ({
   hasLogIn = true,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
-  const router = useRouterConnect();
-  const { data: profile } = useProfile();
-  const { data: contexts } = useGetTenantContext();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
   // const { data: companyInfo } = useGetTenantInfoByHostname();
@@ -94,48 +87,6 @@ const _HeaderPixwaySDK = ({
     } else setopenedLoginState(!openedloginState);
   };
 
-  const signUpsContexts = useMemo(() => {
-    if (contexts) {
-      const mainSignUp = contexts?.data?.items?.find(
-        ({ context }) => context?.slug === 'signup'
-      );
-      const alternativesSignUp = contexts?.data?.items?.filter(
-        (res) => (res.data as any)?.alternativeSignUp
-      );
-      if (mainSignUp) {
-        alternativesSignUp.push(mainSignUp);
-        return alternativesSignUp;
-      }
-      return alternativesSignUp;
-    }
-  }, [contexts]);
-  const signUpContextsIds = signUpsContexts?.map((res) => res.contextId);
-  const docs = useGetDocuments();
-  const isFilled = useMemo(() => {
-    const arr: any[] = [];
-    signUpContextsIds?.forEach((response) => {
-      if (
-        docs?.data?.items?.find(
-          (res: { contextId: string }) => res.contextId === response
-        )
-      )
-        arr.push(
-          docs?.data?.items?.find(
-            (res: { contextId: string }) => res.contextId === response
-          )
-        );
-    });
-    return arr;
-  }, [docs?.data?.items, signUpContextsIds]);
-
-  const signupContext = useMemo(() => {
-    if (contexts) {
-      return contexts?.data?.items?.find(
-        ({ context }) => context?.slug === 'signup'
-      );
-    }
-  }, [contexts]);
-
   const toggleTabsMemo = () => {
     if (openedLogin || openedloginState) {
       toggleMenuMemo();
@@ -144,27 +95,6 @@ const _HeaderPixwaySDK = ({
       toogleOpenedTabs();
     } else setOpenedTabs(!openedTabs);
   };
-
-  const query = Object.keys(router.query).length > 0 ? router.query : '';
-
-  useEffect(() => {
-    if (profile) {
-      if (!profile.data.verified) {
-        router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
-      } else if (signupContext && !isFilled.length) {
-        if (
-          profile?.data?.kycStatus === KycStatus.Pending &&
-          signupContext.active &&
-          window?.location?.pathname !==
-            PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION &&
-          window?.location?.pathname !== PixwayAppRoutes.SIGN_IN
-        ) {
-          router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, signupContext]);
 
   const defaultTabs = context?.defaultTheme?.header?.styleData?.tabs;
   const tabsToPass = tabs ? tabs : defaultTabs;

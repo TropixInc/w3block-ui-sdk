@@ -18,7 +18,7 @@ export const useGetDocuments = (query?: QueryParams) => {
   const { data } = usePixwaySession();
   const { companyId } = useCompanyConfig();
   return usePrivateQuery(
-    [PixwayAPIRoutes.GET_DOCUMENTS_BY_USER, companyId, data?.id],
+    [PixwayAPIRoutes.GET_DOCUMENTS_BY_USER, companyId, data?.id, query],
     () =>
       axios
         .get(
@@ -31,6 +31,10 @@ export const useGetDocuments = (query?: QueryParams) => {
     {
       enabled: companyId != null && data != null,
       refetchOnMount: 'always',
+      refetchOnWindowFocus: true,
+      keepPreviousData: false,
+      cacheTime: 0,
+      staleTime: 0,
     }
   );
 };

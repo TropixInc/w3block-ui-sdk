@@ -17,7 +17,7 @@ export const UserContext = createContext<UserContextProps>({});
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { data: profile } = useProfileWithouRedirect();
-  const { data } = useGetDocuments();
+  const { data } = useGetDocuments({ limit: 50 });
 
   const avatarSrc = useMemo(() => {
     return data?.items && data?.items.length
