@@ -12,6 +12,7 @@ import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStora
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
+// eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
 
 const CheckboxAlt = lazy(() =>
@@ -165,6 +166,7 @@ export const ProductPage = ({
       orderPreview?.products.map((val) => {
         return {
           id: product?.id,
+          name: product?.name,
           variantIds: Object.values(variants).map((value) => {
             if ((value as any).productId === product?.id)
               return (value as any).id;
@@ -174,7 +176,7 @@ export const ProductPage = ({
       }) ?? [];
     setCart([...cart, ...cartPreview]);
     track('add_to_cart', {
-      items: [{ item_id: product?.id }],
+      items: [{ item_id: product?.id, item_name: product?.name }],
       currency: product?.prices?.[0]?.currency?.code,
       value: product?.prices?.[0]?.amount,
     });

@@ -171,7 +171,7 @@ export const CheckoutPayment = () => {
                   value: data?.totalAmount,
                   currency: data?.currency?.code,
                   items: productCache?.products.map((res) => {
-                    return { item_id: res.id };
+                    return { item_id: res.id, item_name: res.name };
                   }),
                 });
                 clearInterval(interval);
@@ -448,7 +448,7 @@ export const CheckoutPayment = () => {
                   value: data?.totalAmount,
                   currency: data?.currency?.code,
                   items: productCache?.products.map((res) => {
-                    return { item_id: res.id };
+                    return { item_id: res.id, item_name: res.name };
                   }),
                 });
                 router.pushConnect(
