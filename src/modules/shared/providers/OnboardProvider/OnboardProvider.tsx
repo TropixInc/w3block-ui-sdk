@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
@@ -144,7 +145,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
         !!configData &&
         !path.includes('/auth/complete-kyc')
       ) {
-        setLoading(true);
+        console.log('refetch');
         refetch();
       }
     }
@@ -158,29 +159,38 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   ]);
 
   const checkWhite = useCallback(() => {
-    if (configData && docs?.items && hasAccess) {
-      setLoading(true);
-      let i = 0;
-      hasAccess?.every((res) => {
-        const whereToSend = Object.values(configData)?.find(
-          (d) => (d as any)?.whitelistId === res?.whitelistId
-        );
+    try {
+      if (configData && docs?.items && hasAccess) {
+        let i = 0;
+        hasAccess?.every((res) => {
+          const whereToSend = Object.values(configData)?.find(
+            (d) => (d as any)?.whitelistId === res?.whitelistId
+          );
 
-        const docsFilled = docs?.items?.filter(
-          (r: { contextId: string }) =>
-            r?.contextId === (whereToSend as any)?.contextId
-        );
+          const docsFilled = docs?.items?.filter(
+            (r: { contextId: string }) =>
+              r?.contextId === (whereToSend as any)?.contextId
+          );
 
-        if (docsFilled?.length === 0) {
-          pushConnect((whereToSend as any)?.link);
-          return false;
-        } else {
-          i++;
-          return true;
+          if (docsFilled?.length === 0) {
+            console.log('redirect');
+            pushConnect((whereToSend as any)?.link);
+            return false;
+          } else {
+            i++;
+            return true;
+          }
+        });
+        if (i === hasAccess?.length) {
+          console.log('concluded');
+          setLoading(false);
         }
-      });
-      if (i === hasAccess?.length) setLoading(false);
-    } else {
+      } else {
+        console.log('check else');
+        setLoading(false);
+      }
+    } catch {
+      console.log('error');
       setLoading(false);
     }
   }, [configData, docs?.items, hasAccess]);
@@ -201,7 +211,8 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
     if (
       profile &&
       profile?.data?.verified &&
-      !(profile?.data?.kycStatus === KycStatus.Pending) &&
+      (!(profile?.data?.kycStatus === KycStatus.Pending) ||
+        !signupContext?.active) &&
       !path.includes('/auth/complete-kyc')
     ) {
       checkWhite();
