@@ -378,6 +378,7 @@ const _CheckoutInfo = ({
                   id: val.id,
                   variantIds: val?.variants?.map((val) => val.values[0].id),
                   prices: val.prices,
+                  name: val.name,
                 };
               })
             );
@@ -544,7 +545,7 @@ const _CheckoutInfo = ({
           currency: orderPreview?.currency?.code,
           coupon: orderPreview?.appliedCoupon,
           items: orderPreview?.products.map((res) => {
-            return { item_id: res.id };
+            return { item_id: res.id, item_name: res.name };
           }),
         });
         router.pushConnect(
@@ -1566,7 +1567,7 @@ const _CheckoutInfo = ({
                       currency: prod?.prices?.find(
                         (prodI) => prodI?.currencyId == currencyIdState
                       )?.currency?.code,
-                      items: [{ item_id: id }],
+                      items: [{ item_id: id, item_name: prod.name }],
                     });
                     deleteProduct(
                       id,

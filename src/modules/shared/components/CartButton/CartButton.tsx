@@ -28,7 +28,7 @@ export const CartButton = ({
       onClick={() => {
         track('view_cart', {
           items: cart.map((rest) => {
-            return { item_id: rest.id };
+            return { item_id: rest.id, item_name: rest?.name };
           }),
         });
         pushConnect(
