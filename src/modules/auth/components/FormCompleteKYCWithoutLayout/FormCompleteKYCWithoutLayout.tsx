@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react';
+import { lazy, useContext, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import { object } from 'yup';
 
-import { useRouterConnect } from '../../../shared';
+import { OnboardContext, useProfile, useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { FormTemplate } from '../../../shared/components/FormTemplate';
 import { Spinner } from '../../../shared/components/Spinner';
@@ -92,7 +92,7 @@ const _FormCompleteKYCWithoutLayout = ({
     });
 
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
-
+  const { refetch } = useProfile();
   const { data: documents } = useGetUsersDocuments({
     userId: userId ?? '',
     contextId: tenantInputs?.data?.length
@@ -125,14 +125,22 @@ const _FormCompleteKYCWithoutLayout = ({
     resolver: yupResolver(dynamicSchema),
   });
 
+  const contextOnboard = useContext(OnboardContext);
+
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
-
     const documents = Object.values(dynamicValues);
-
     const validDocs = documents.filter((item) => item);
-
     if (tenantInputs?.data?.length && userId) {
+      const isUserSelector =
+        (tenantInputs?.data?.[0]?.data as any)?.isUserSelector ?? false;
+      const whereToSend =
+        typeof validDocs?.[0]?.value === 'string'
+          ? (tenantInputs?.data?.[0]?.data as any)?.whereToSend[
+              validDocs?.[0]?.value
+            ]?.link ?? ''
+          : '';
+
       const { contextId } = tenantInputs.data[0];
       mutate(
         {
@@ -146,6 +154,7 @@ const _FormCompleteKYCWithoutLayout = ({
         },
         {
           onSuccess: () => {
+            contextOnboard.setLoading(true);
             const steps = Object.keys(groupedInputs).length;
             if (steps && parseInt(step as string) < steps) {
               router.replace({
@@ -155,7 +164,10 @@ const _FormCompleteKYCWithoutLayout = ({
                 },
               });
             } else if (!profilePage) {
-              if (screenConfig?.skipConfirmation) {
+              refetch();
+              if (isUserSelector) {
+                router.pushConnect(whereToSend);
+              } else if (screenConfig?.skipConfirmation) {
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);
                 } else if (isPasswordless) {
@@ -243,6 +255,7 @@ const _FormCompleteKYCWithoutLayout = ({
           inputsIdRequestReview={inputsIdRequestReview}
           onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
           keyPage={keyPage}
+          profilePage={profilePage}
         ></FormTemplate>
 
         {isSuccess && (
@@ -341,6 +354,7 @@ const _FormCompleteKYCWithoutLayout = ({
             setUploadProgress={setUploadProgress}
             getDocumentByInputId={getDocumentByInputId}
             formState={formState}
+            profilePage={profilePage}
           ></FormTemplate>
 
           {isSuccess && (

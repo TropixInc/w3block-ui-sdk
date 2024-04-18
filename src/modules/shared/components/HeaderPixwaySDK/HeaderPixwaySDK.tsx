@@ -1,14 +1,11 @@
-import { lazy, useContext, useEffect, useMemo, useState } from 'react';
+import { lazy, useContext, useMemo, useState } from 'react';
 
-import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { ThemeContext } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useProfile, useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
-import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
-import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
+// import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import TranslatableComponent from '../TranslatableComponent';
 import { NavigationTabsPixwaySDKTabs } from './components';
@@ -76,13 +73,10 @@ const _HeaderPixwaySDK = ({
   hasLogIn = true,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
-  const router = useRouterConnect();
-  const { data: profile } = useProfile();
-  const { data: contexts } = useGetTenantContext();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
-  const { data: companyInfo } = useGetTenantInfoByHostname();
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+  // const { data: companyInfo } = useGetTenantInfoByHostname();
+  // const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const { logoUrl } = useCompanyConfig();
   const toggleMenuMemo = () => {
     if (openedMenu || openedTabs) {
@@ -93,14 +87,6 @@ const _HeaderPixwaySDK = ({
     } else setopenedLoginState(!openedloginState);
   };
 
-  const signupContext = useMemo(() => {
-    if (contexts) {
-      return contexts?.data?.items?.find(
-        ({ context }) => context?.slug === 'signup'
-      );
-    }
-  }, [contexts]);
-
   const toggleTabsMemo = () => {
     if (openedLogin || openedloginState) {
       toggleMenuMemo();
@@ -109,27 +95,6 @@ const _HeaderPixwaySDK = ({
       toogleOpenedTabs();
     } else setOpenedTabs(!openedTabs);
   };
-
-  const query = Object.keys(router.query).length > 0 ? router.query : '';
-
-  useEffect(() => {
-    if (profile) {
-      if (signupContext) {
-        if (!profile.data.verified && !isPasswordless) {
-          router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
-        } else if (
-          profile?.data?.kycStatus === KycStatus.Pending &&
-          signupContext.active &&
-          window?.location?.pathname !==
-            PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION &&
-          window?.location?.pathname !== PixwayAppRoutes.SIGN_IN
-        ) {
-          router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, signupContext]);
 
   const defaultTabs = context?.defaultTheme?.header?.styleData?.tabs;
   const tabsToPass = tabs ? tabs : defaultTabs;

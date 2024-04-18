@@ -21,6 +21,7 @@ interface Props {
   inputsIdRequestReview?: Array<string>;
   onChangeInputsIdRequestReview?: (value: Array<string>) => void;
   keyPage?: boolean;
+  profilePage?: boolean;
 }
 
 export const FormTemplate = ({
@@ -36,6 +37,7 @@ export const FormTemplate = ({
   inputsIdRequestReview,
   onChangeInputsIdRequestReview,
   keyPage,
+  profilePage,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
 
@@ -78,6 +80,7 @@ export const FormTemplate = ({
                   inputRequestable={inputRequestable}
                   inputsIdRequestReview={inputsIdRequestReview}
                   onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
+                  profilePage={profilePage}
                 />
               </div>
             );
