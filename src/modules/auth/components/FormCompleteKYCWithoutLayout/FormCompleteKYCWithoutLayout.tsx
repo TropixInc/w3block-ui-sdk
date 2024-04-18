@@ -132,15 +132,6 @@ const _FormCompleteKYCWithoutLayout = ({
     const documents = Object.values(dynamicValues);
     const validDocs = documents.filter((item) => item);
     if (tenantInputs?.data?.length && userId) {
-      const isUserSelector =
-        (tenantInputs?.data?.[0]?.data as any)?.isUserSelector ?? false;
-      const whereToSend =
-        typeof validDocs?.[0]?.value === 'string'
-          ? (tenantInputs?.data?.[0]?.data as any)?.whereToSend[
-              validDocs?.[0]?.value
-            ]?.link ?? ''
-          : '';
-
       const { contextId } = tenantInputs.data[0];
       mutate(
         {
@@ -165,9 +156,7 @@ const _FormCompleteKYCWithoutLayout = ({
               });
             } else if (!profilePage) {
               refetch();
-              if (isUserSelector) {
-                router.pushConnect(whereToSend);
-              } else if (screenConfig?.skipConfirmation) {
+              if (screenConfig?.skipConfirmation) {
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);
                 } else if (isPasswordless) {
