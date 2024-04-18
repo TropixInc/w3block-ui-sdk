@@ -57,7 +57,12 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   const hasAccess = useMemo(() => {
     return checkWhitelists?.details?.filter((res) => res.hasAccess);
   }, [checkWhitelists?.details]);
-  const { data: docs, refetch, isLoading } = useGetDocuments({ limit: 50 });
+  const {
+    data: docs,
+    refetch,
+    isLoading,
+    dataUpdatedAt,
+  } = useGetDocuments({ limit: 50 });
 
   const signUpsContexts = useMemo(() => {
     if (contexts) {
@@ -158,29 +163,37 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
     path,
   ]);
 
+  const filteredWhitelists = useMemo(() => {
+    if (configData && hasAccess) {
+      return configData?.filter(
+        (res: { whitelistId: string }) =>
+          hasAccess?.find((r) => r.whitelistId === res.whitelistId)?.hasAccess
+      );
+    }
+  }, [configData, hasAccess]);
+
   const checkWhite = useCallback(() => {
     try {
-      if (configData && docs?.items && hasAccess) {
+      if (filteredWhitelists && docs?.items && hasAccess) {
         let i = 0;
-        hasAccess?.every((res) => {
-          const whereToSend = Object.values(configData)?.find(
-            (d) => (d as any)?.whitelistId === res?.whitelistId
-          );
+        filteredWhitelists?.every(
+          (res: { contextId: string; slug: string }) => {
+            const docsFilled = docs?.items?.filter(
+              (r: { contextId: string }) => r?.contextId === res?.contextId
+            );
 
-          const docsFilled = docs?.items?.filter(
-            (r: { contextId: string }) =>
-              r?.contextId === (whereToSend as any)?.contextId
-          );
-
-          if (docsFilled?.length === 0) {
-            console.log('redirect');
-            pushConnect((whereToSend as any)?.link);
-            return false;
-          } else {
-            i++;
-            return true;
+            if (docsFilled?.length === 0) {
+              console.log('redirect');
+              pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                contextSlug: res?.slug,
+              });
+              return false;
+            } else {
+              i++;
+              return true;
+            }
           }
-        });
+        );
         if (i === hasAccess?.length) {
           console.log('concluded');
           setLoading(false);
@@ -193,13 +206,13 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
       console.log('error');
       setLoading(false);
     }
-  }, [configData, docs?.items, hasAccess]);
+  }, [filteredWhitelists, docs?.items, hasAccess, dataUpdatedAt]);
 
-  useEffect(() => {
-    if (path.includes('contextSlug=userselector')) {
-      checkWhite();
-    }
-  }, [checkWhite, path]);
+  // useEffect(() => {
+  //   if (path.includes('contextSlug=userselector')) {
+  //     checkWhite();
+  //   }
+  // }, [checkWhite, path]);
 
   useEffect(() => {
     if (path.includes('/auth')) {
@@ -215,6 +228,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
         !signupContext?.active) &&
       !path.includes('/auth/complete-kyc')
     ) {
+      console.log('trigg checkwhitelists');
       checkWhite();
     }
   }, [checkWhite]);
