@@ -60,6 +60,8 @@ import {
   CheckoutPaymentComponent,
   INPUTS_POSSIBLE,
 } from '../CheckoutPaymentComponent/CheckoutPaymentComponent';
+
+import _ from 'lodash';
 const CheckouResume = lazy(() =>
   import('../CheckoutResume/CheckoutResume').then((m) => ({
     default: m.CheckouResume,
@@ -167,13 +169,46 @@ export const CheckoutPayment = () => {
                 data.status == 'delivering' ||
                 data.status == 'waiting_delivery'
               ) {
-                track('purchase', {
-                  value: data?.totalAmount,
-                  currency: data?.currency?.code,
-                  items: productCache?.products.map((res) => {
-                    return { item_id: res.id, item_name: res.name };
-                  }),
-                });
+                try {
+                  if (
+                    productCache?.products[0].type === 'erc20' &&
+                    Boolean(
+                      _.get(
+                        productCache,
+                        'products[0].draftData.keyErc20LoyaltyId'
+                      )
+                    )
+                  ) {
+                    track('purchase', {
+                      currency:
+                        productCache?.choosedPayment?.currency?.code ?? '',
+                      value: data?.totalAmount,
+                      items: productCache?.products.map((res) => {
+                        return {
+                          item_id: res.id,
+                          item_variant: productCache?.destinationUser?.name,
+                          item_name: 'Zuca',
+                          quantity: 1,
+                          prices: productCache.totalPrice,
+                          value: data?.totalAmount,
+                          destination: productCache?.destinationUser?.name,
+                          payment_info: 'Pix',
+                        };
+                      }),
+                    });
+                  } else {
+                    track('purchase', {
+                      value: data?.totalAmount,
+                      currency: data?.currency?.code,
+                      items: productCache?.products.map((res) => {
+                        return { item_id: res.id, item_name: res.name };
+                      }),
+                    });
+                  }
+                } catch (err) {
+                  console.log('erro ao salvar o track', err);
+                }
+
                 clearInterval(interval);
                 setPoolStatus(false);
                 router.pushConnect(
@@ -444,13 +479,46 @@ export const CheckoutPayment = () => {
                 productCache.choosedPayment?.paymentMethod == 'credit_card' ||
                 isFree
               ) {
-                track('purchase', {
-                  value: data?.totalAmount,
-                  currency: data?.currency?.code,
-                  items: productCache?.products.map((res) => {
-                    return { item_id: res.id, item_name: res.name };
-                  }),
-                });
+                try {
+                  if (
+                    productCache?.products[0].type === 'erc20' &&
+                    Boolean(
+                      _.get(
+                        productCache,
+                        'products[0].draftData.keyErc20LoyaltyId'
+                      )
+                    )
+                  ) {
+                    track('purchase', {
+                      currency:
+                        productCache?.choosedPayment?.currency?.code ?? '',
+                      value: data?.totalAmount,
+                      items: productCache?.products.map((res) => {
+                        return {
+                          item_id: res.id,
+                          item_variant: productCache?.destinationUser?.name,
+                          item_name: 'Zuca',
+                          quantity: 1,
+                          prices: data?.totalAmount,
+                          value: data?.totalAmount,
+                          destination: productCache?.destinationUser?.name,
+                          payment_info: 'Cartão de credito',
+                        };
+                      }),
+                    });
+                  } else {
+                    track('purchase', {
+                      value: data?.totalAmount,
+                      currency: data?.currency?.code,
+                      items: productCache?.products.map((res) => {
+                        return { item_id: res.id, item_name: res.name };
+                      }),
+                    });
+                  }
+                } catch (err) {
+                  console.log('erro ao salvar o track', err);
+                }
+
                 router.pushConnect(
                   PixwayAppRoutes.CHECKOUT_COMPLETED,
                   router.query
@@ -498,7 +566,7 @@ export const CheckoutPayment = () => {
     }
   };
 
-  const [_, copyClp] = useCopyToClipboard();
+  const [, copyClp] = useCopyToClipboard();
 
   const stripePromise = useMemo(() => {
     if (isStripe != '' && stripeKey != '') {

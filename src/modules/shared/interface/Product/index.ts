@@ -39,6 +39,7 @@ export interface Product {
   variants?: Variants[];
   subtitle?: string;
   metadata?: any;
+  type?: string;
 }
 
 export interface Images {
