@@ -5,10 +5,12 @@ import { useController } from 'react-hook-form';
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
 
+import { useRouterConnect } from '../../../hooks';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { MultipleSelect } from '../../MultipleSelect';
 import { InputDataDTO } from '../../SmartInputsController';
+import { Spinner } from '../../Spinner';
 
 export interface Options {
   label: string;
@@ -22,6 +24,7 @@ interface Props {
   type: DataTypesEnum;
   configData?: InputDataDTO;
   docValue?: string;
+  profilePage?: boolean;
 }
 
 const paginationMapping = {
@@ -52,8 +55,10 @@ export const InputSelector = ({
   configData,
   type,
   docValue,
+  profilePage = false,
 }: Props) => {
   const { field } = useController({ name });
+  const router = useRouterConnect();
   const [firstInput, setFirstInput] = useState(true);
   const [multipleSelected, setMultipleSelected] = useState<
     Array<string | undefined>
@@ -101,7 +106,7 @@ export const InputSelector = ({
   }, [data]);
 
   useEffect(() => {
-    if (firstInput) {
+    if (firstInput && !profilePage) {
       field.onChange({ inputId: name, value: options[0].value });
       setFirstInput(false);
     }
@@ -134,6 +139,14 @@ export const InputSelector = ({
       return 'Selecione';
     }
   };
+
+  if (router.query.delay) {
+    return (
+      <div className="pw-mb-6 pw-mx-auto pw-w-full">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="pw-mb-6">

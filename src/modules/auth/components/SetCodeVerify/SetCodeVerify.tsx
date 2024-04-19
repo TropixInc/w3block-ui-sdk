@@ -30,7 +30,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const { query, pushConnect } = useRouterConnect();
   const { connectProxyPass } = useCompanyConfig();
   const email = (query.email as string) ?? '';
-  const { data: profile } = useProfile();
+  const { data: profile, refetch } = useProfile();
   const [translate] = useTranslation();
   const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
@@ -88,6 +88,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
           },
           {
             onSuccess: () => {
+              refetch();
               pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
             },
           }

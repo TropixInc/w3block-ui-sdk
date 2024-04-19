@@ -388,7 +388,7 @@ export const StatementComponentSDK = ({
             {statement?.currency}
           </span>
         </div>
-        <div className="pw-text-left pw-text-zinc-700 pw-text-xs pw-font-medium pw-truncate pw-mt-1">
+        <div className="pw-text-left pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-mt-1">
           {subtext()}
         </div>
       </div>

@@ -1471,7 +1471,7 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.4.23.tgz#e536a6dfd2f5f950d08c2e8ebcfe7e5329a851a1"
   integrity sha512-wBQ0gvf+SMwsCQOyusNw/GoXPV47WGd1xB5A1Pgzy0sQ3Bi5r5xm3n+92y3gCnB3MWqnRDdvfkRGxhKtbBRNgg==
 
-"@w3block/sdk-id@^0.1.70":
+"@w3block/sdk-id@^0.1.72":
   version "0.1.72"
   resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.72.tgz#5f506d0d4dc830c515321e23c53f5f5d51aca278"
   integrity sha512-41XIYzU1T26uH1WBZXyR2HyLXoSYqU2V1tPRv9ByzKjW2ObsO9gM5LX9YQQHMRS6y+y769EqIIvKK1NTjBU9iA==

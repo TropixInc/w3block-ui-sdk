@@ -88,4 +88,5 @@ export enum PixwayAPIRoutes {
   PUBLIC_ORDER_BY_DELIVERID = '/companies/{companyId}/orders/get-by-deliver-id/{deliverId}',
   GET_DEFERRED_XLSX = '/{companyId}/loyalties/users/deferred/xlsx',
   GET_DEFERRED = '/{companyId}/loyalties/users/deferred',
+  CHECK_WHITELIST_BY_USER = '/whitelists/{companyId}/check-user',
 }

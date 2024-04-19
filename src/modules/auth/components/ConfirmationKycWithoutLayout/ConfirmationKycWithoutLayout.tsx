@@ -141,6 +141,11 @@ export const ConfirmationKycWithoutLayout = () => {
                           } / ${(complexValue as any)?.country}`;
                         } else return '';
                       }
+                    } else if (res?.type === 'checkbox') {
+                      if (typeof complexValue === 'boolean') {
+                        return complexValue ? 'Aceito' : 'Não Aceito';
+                      }
+                      return value;
                     } else if (simpleValue) return simpleValue;
                     else return value;
                   };
