@@ -6,6 +6,7 @@ import { useDebounce, useInterval, useLocalStorage } from 'react-use';
 
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
+import _ from 'lodash';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { useProfile } from '../../../shared';
@@ -149,7 +150,7 @@ const _CheckoutInfo = ({
   const [choosedPayment, setChoosedPayment] = useState<
     PaymentMethodsAvaiable | undefined
   >();
-  const [orderResponse, _, deleteOrderKey] =
+  const [orderResponse, , deleteOrderKey] =
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   const [productVariants] = useLocalStorage<any>(PRODUCT_VARIANTS_INFO_KEY);
   const query = useQuery();
@@ -176,6 +177,7 @@ const _CheckoutInfo = ({
       ? utms.utm_campaign
       : ''
   );
+
   const { companyId } = useCompanyConfig();
   useEffect(() => {
     if (
@@ -540,14 +542,43 @@ const _CheckoutInfo = ({
         openModal();
         return;
       } else {
-        track('begin_checkout', {
-          value: orderPreview?.totalPrice,
-          currency: orderPreview?.currency?.code,
-          coupon: orderPreview?.appliedCoupon,
-          items: orderPreview?.products.map((res) => {
-            return { item_id: res.id, item_name: res.name };
-          }),
-        });
+        try {
+          if (
+            orderPreview?.products[0].type === 'erc20' &&
+            Boolean(
+              _.get(orderPreview, 'products[0].draftData.keyErc20LoyaltyId')
+            )
+          ) {
+            track('view_item', {
+              currency: orderPreview?.currency?.code,
+              value: orderPreview.totalPrice,
+              items: orderPreview?.products.map((res) => {
+                return {
+                  item_id: res.id,
+                  item_variant: destinationUser,
+                  item_name: 'Zuca',
+                  quantity: 1,
+                  prices: orderPreview.totalPrice,
+                  value: orderPreview.totalPrice,
+                  destination: destinationUser,
+                  payment_info: choosedPayment?.paymentMethod,
+                };
+              }),
+            });
+          } else {
+            track('begin_checkout', {
+              value: orderPreview?.totalPrice,
+              currency: orderPreview?.currency?.code,
+              coupon: orderPreview?.appliedCoupon,
+              items: orderPreview?.products.map((res) => {
+                return { item_id: res.id, item_name: res.name };
+              }),
+            });
+          }
+        } catch (err) {
+          console.log('erro ao salvar o track', err);
+        }
+
         router.pushConnect(
           PixwayAppRoutes.CHECKOUT_PAYMENT +
             '?' +
@@ -1558,17 +1589,22 @@ const _CheckoutInfo = ({
                   loading={isLoading}
                   status={checkoutStatus}
                   deleteProduct={(id, variants) => {
-                    track('remove_from_cart', {
-                      value: parseFloat(
-                        prod?.prices?.find(
-                          (price) => price?.currencyId == currencyIdState
-                        )?.amount ?? '0'
-                      ).toString(),
-                      currency: prod?.prices?.find(
-                        (prodI) => prodI?.currencyId == currencyIdState
-                      )?.currency?.code,
-                      items: [{ item_id: id, item_name: prod.name }],
-                    });
+                    try {
+                      track('remove_from_cart', {
+                        value: parseFloat(
+                          prod?.prices?.find(
+                            (price) => price?.currencyId == currencyIdState
+                          )?.amount ?? '0'
+                        ).toString(),
+                        currency: prod?.prices?.find(
+                          (prodI) => prodI?.currencyId == currencyIdState
+                        )?.currency?.code,
+                        items: [{ item_id: id, item_name: prod.name }],
+                      });
+                    } catch (err) {
+                      console.log('Erro ao salvar o track: ', err);
+                    }
+
                     deleteProduct(
                       id,
                       prod?.prices?.find(

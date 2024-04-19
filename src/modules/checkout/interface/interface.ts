@@ -106,6 +106,7 @@ export interface AvailableCreditCards {
 export interface PaymentMethodsAvaiable {
   paymentMethod: string;
   paymentProvider: string;
+  currency?: CurrencyResponse;
   inputs: string[];
   availableInstallments?: AvailableInstallmentInfo[];
   userCreditCards?: AvailableCreditCards[];
