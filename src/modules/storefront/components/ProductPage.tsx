@@ -175,11 +175,15 @@ export const ProductPage = ({
         };
       }) ?? [];
     setCart([...cart, ...cartPreview]);
-    track('add_to_cart', {
-      items: [{ item_id: product?.id, item_name: product?.name }],
-      currency: product?.prices?.[0]?.currency?.code,
-      value: product?.prices?.[0]?.amount,
-    });
+    try {
+      track('add_to_cart', {
+        items: [{ item_id: product?.id, item_name: product?.name }],
+        currency: product?.prices?.[0]?.currency?.code,
+        value: product?.prices?.[0]?.amount,
+      });
+    } catch (err) {
+      console.log('Erro ao salvar o track: ', err);
+    }
   };
 
   useEffect(() => {

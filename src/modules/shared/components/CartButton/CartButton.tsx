@@ -26,11 +26,16 @@ export const CartButton = ({
     <div
       style={{ borderColor: borderColor ?? 'black' }}
       onClick={() => {
-        track('view_cart', {
-          items: cart.map((rest) => {
-            return { item_id: rest.id, item_name: rest?.name };
-          }),
-        });
+        try {
+          track('view_cart', {
+            items: cart.map((rest) => {
+              return { item_id: rest.id, item_name: rest?.name };
+            }),
+          });
+        } catch (err) {
+          console.log('Erro ao salvar o track: ', err);
+        }
+
         pushConnect(
           PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION +
             `?productIds=${cart
