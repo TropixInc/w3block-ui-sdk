@@ -160,7 +160,13 @@ const _FormCompleteKYCWithoutLayout = ({
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);
                 } else if (isPasswordless) {
-                  router.pushConnect('/');
+                  if (router.query.callbackPath?.length) {
+                    router.pushConnect(router.query.callbackPath as string);
+                  } else if (router.query.callbackUrl?.length) {
+                    router.pushConnect(router.query.callbackUrl as string);
+                  } else {
+                    router.pushConnect('/');
+                  }
                 } else {
                   router.pushConnect(
                     PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,

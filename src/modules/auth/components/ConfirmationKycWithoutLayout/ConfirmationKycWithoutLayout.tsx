@@ -47,8 +47,15 @@ export const ConfirmationKycWithoutLayout = () => {
   const onContinue = () => {
     if (typeof storageData?.postKycUrl === 'string')
       router.pushConnect(storageData?.postKycUrl);
-    else if (isPasswordless) router.pushConnect('/');
-    else
+    else if (isPasswordless) {
+      if (router.query.callbackPath?.length) {
+        router.pushConnect(router.query.callbackPath as string);
+      } else if (router.query.callbackUrl?.length) {
+        router.pushConnect(router.query.callbackUrl as string);
+      } else {
+        router.pushConnect('/');
+      }
+    } else
       router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, router.query);
   };
 

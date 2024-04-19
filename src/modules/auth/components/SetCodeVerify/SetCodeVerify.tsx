@@ -89,7 +89,20 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
           {
             onSuccess: () => {
               refetch();
-              pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+              if (query.callbackPath?.length) {
+                pushConnect(query.callbackPath as string);
+              } else if (query.callbackUrl?.length) {
+                pushConnect(query.callbackUrl as string);
+              } else if (query.contextSlug?.length) {
+                pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                  ...query,
+                });
+              } else {
+                pushConnect('/');
+              }
+            },
+            onError() {
+              setError('Código inválido ou expirado');
             },
           }
         );
@@ -105,6 +118,13 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       setError('código inválido');
     }
   };
+  useEffect(() => {
+    mutate({
+      email: emailToUse,
+      verificationType: 'numeric',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailToUse]);
 
   return (
     <div className="pw-flex pw-flex-col pw-items-center">

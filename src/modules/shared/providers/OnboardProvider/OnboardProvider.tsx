@@ -116,7 +116,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
         !window?.location?.pathname.includes('/auth/verify-sign-up')
       ) {
         router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
-      } else if (signupContext) {
+      } else if (signupContext && isFilled.length === 0) {
         if (
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active &&
@@ -144,7 +144,6 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
     ) {
       if (
         whitelists?.length > 0 &&
-        !(whitelists?.length === isFilled.length - 1) &&
         hasAccess?.length &&
         hasAccess?.length > 0 &&
         !!configData &&
