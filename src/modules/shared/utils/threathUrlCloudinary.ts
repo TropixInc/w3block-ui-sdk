@@ -5,7 +5,7 @@ interface Props {
   InternalProps: {
     width?: number;
     height?: number;
-    quality?: 'best' | 'good' | 'eco' | 'low';
+    quality?: 'best' | 'good' | 'eco' | 'low' | 'no-compression';
     fit?: 'fill' | 'fit';
   };
 }
@@ -23,7 +23,11 @@ export const threathUrlCloudinary = ({
       url =
         groups[1] +
         `${width ? 'w_' + width : ''},${height ? 'h_' + height : ''},c_${fit}/${
-          quality ? 'q_auto:' + quality : 'q_auto'
+          quality
+            ? quality === 'no-compression'
+              ? ''
+              : 'q_auto:' + quality
+            : 'q_auto'
         },f_auto/` +
         groups[2];
     } else {
@@ -33,7 +37,13 @@ export const threathUrlCloudinary = ({
     if (groups) {
       url =
         groups[1] +
-        `c_scale/${quality ? 'q_auto:' + quality : 'q_auto'}/` +
+        `c_scale/${
+          quality
+            ? quality === 'no-compression'
+              ? ''
+              : 'q_auto:' + quality
+            : 'q_auto'
+        }/` +
         groups[2];
     } else {
       url = src;
@@ -43,7 +53,11 @@ export const threathUrlCloudinary = ({
       url =
         groups[1] +
         `${width ? 'w_' + width : ''}${height ? ',h_' + height : ''},c_${fit}/${
-          quality ? 'q_auto:' + quality : 'q_auto'
+          quality
+            ? quality === 'no-compression'
+              ? ''
+              : 'q_auto:' + quality
+            : 'q_auto'
         },f_auto/` +
         groups[2];
     } else {

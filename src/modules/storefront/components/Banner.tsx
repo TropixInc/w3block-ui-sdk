@@ -165,7 +165,9 @@ const Slide = ({
     secondaryButtonSize,
     titleWidth,
     imageRounded,
+    imageCompression,
   } = data;
+
   const { isDynamic, datasource } = useDynamicApi();
   const { text: title } = useDynamicString(titleRaw);
   const { text: subtitle } = useDynamicString(subtitleRaw);
@@ -184,7 +186,10 @@ const Slide = ({
 
   const bgUrlThreath = threathUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
-    InternalProps: { width: 1440, quality: 'best' },
+    InternalProps: {
+      width: 1440,
+      quality: imageCompression ? imageCompression : 'best',
+    },
   });
   const bg = `${
     overlay && overlayColor
@@ -195,6 +200,8 @@ const Slide = ({
       ? _.get(datasource, bgUrl?.assetUrl ?? '', bgUrlThreath)
       : bgUrlThreath
   }") no-repeat center`;
+
+  console.log(bg, 'bg');
 
   const getButtonPadding = (fontSize: string) => {
     if (fontSize == '12px') {
