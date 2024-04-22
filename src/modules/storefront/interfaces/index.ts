@@ -256,6 +256,7 @@ export interface SpecificBannerInfo {
   backgroundUrl?: AssetInterface;
   backgroundUrlMobile?: AssetInterface;
   sideImageUrl?: AssetInterface;
+  imageCompression?: 'best' | 'good' | 'eco' | 'no-compression';
   sideImagePosition?:
     | 'left-center'
     | 'right-center'
