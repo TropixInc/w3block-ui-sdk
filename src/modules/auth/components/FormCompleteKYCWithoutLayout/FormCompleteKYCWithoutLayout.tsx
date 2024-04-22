@@ -99,7 +99,7 @@ const _FormCompleteKYCWithoutLayout = ({
       ? tenantInputs?.data[0].contextId
       : '',
   });
-
+  const context = useContext(OnboardContext);
   const query = Object.keys(router.query ?? {}).length > 0 ? router.query : '';
 
   const errorPost = error as AxiosError;
@@ -156,6 +156,7 @@ const _FormCompleteKYCWithoutLayout = ({
               });
             } else if (!profilePage) {
               refetch();
+              context.refetchDocs();
               if (screenConfig?.skipConfirmation) {
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);

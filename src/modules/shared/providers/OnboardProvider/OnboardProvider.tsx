@@ -23,11 +23,14 @@ import { useRouterConnect } from '../../hooks/useRouterConnect/useRouterConnect'
 
 interface OnboardProps {
   setLoading: (bol: boolean) => void;
+  refetchDocs: () => void;
 }
 
 export const OnboardContext = createContext<OnboardProps>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setLoading: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  refetchDocs: () => {},
 });
 
 export const OnboardProvider = ({ children }: { children: ReactNode }) => {
@@ -109,32 +112,29 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [contexts]);
 
+  const path = useMemo(() => {
+    return router.asPath;
+  }, [router.asPath]);
+
   useEffect(() => {
     if (profile) {
-      if (
-        !profile.data.verified &&
-        !window?.location?.pathname.includes('/auth/verify-sign-up')
-      ) {
+      if (!profile.data.verified && !path.includes('/auth/verify-sign-up')) {
         router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
       } else if (signupContext && isFilled.length === 0) {
         if (
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active &&
-          !window?.location?.pathname.includes('/auth/complete-kyc') &&
-          !window?.location?.pathname.includes('/auth/verify-sign-up') &&
-          window?.location?.pathname !== PixwayAppRoutes.SIGN_IN
+          !path.includes('/auth/complete-kyc') &&
+          !path.includes('/auth/verify-sign-up') &&
+          path !== PixwayAppRoutes.SIGN_IN
         ) {
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
         }
       }
     }
-  }, [profile, signupContext]);
+  }, [profile, signupContext, path]);
 
   const { pushConnect } = router;
-
-  const path = useMemo(() => {
-    return router.asPath;
-  }, [router.asPath]);
 
   useEffect(() => {
     if (
@@ -151,6 +151,9 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
       ) {
         console.log('refetch');
         refetch();
+      } else if (!path.includes('/auth/complete-kyc')) {
+        console.log('setfalse');
+        setLoading(false);
       }
     }
   }, [
@@ -233,7 +236,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   }, [checkWhite]);
 
   return (
-    <OnboardContext.Provider value={{ setLoading }}>
+    <OnboardContext.Provider value={{ setLoading, refetchDocs: refetch }}>
       {loading || isLoading ? (
         <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
           <Spinner />
