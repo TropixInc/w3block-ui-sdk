@@ -36,7 +36,7 @@ export const OnboardContext = createContext<OnboardProps>({
 export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();
   const { data: theme } = useGetTheme();
-  const { data: profile } = useProfile();
+  const { data: profile, dataUpdatedAt: profileDataUpdatedAt } = useProfile();
   const { data: contexts } = useGetTenantContext();
   const [loading, setLoading] = useState(false);
   const query = Object.keys(router.query).length > 0 ? router.query : '';
@@ -118,21 +118,24 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (profile) {
-      if (!profile.data.verified && !path.includes('/auth/verify-sign-up')) {
+      if (
+        !profile.data.verified &&
+        !window.location.pathname.includes('/auth/verify-sign-up')
+      ) {
         router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
       } else if (signupContext && isFilled.length === 0) {
         if (
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext.active &&
-          !path.includes('/auth/complete-kyc') &&
-          !path.includes('/auth/verify-sign-up') &&
-          path !== PixwayAppRoutes.SIGN_IN
+          !window.location.pathname.includes('/auth/complete-kyc') &&
+          !window.location.pathname.includes('/auth/verify-sign-up') &&
+          window.location.pathname !== PixwayAppRoutes.SIGN_IN
         ) {
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
         }
       }
     }
-  }, [profile, signupContext, path]);
+  }, [profile, signupContext, profileDataUpdatedAt]);
 
   const { pushConnect } = router;
 
