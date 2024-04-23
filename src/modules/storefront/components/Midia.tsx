@@ -68,8 +68,6 @@ export const Midia = ({ data }: { data: MidiaData }) => {
   const isMobile = mediaUrlMobile && breakPointsMobile.includes(breakpoint);
   const bgUrl = isMobile ? mediaUrlMobile : mediaUrl;
 
-  console.log(imageCompression, 'imageCompression');
-
   return (
     <div
       id={`sf-${id}`}

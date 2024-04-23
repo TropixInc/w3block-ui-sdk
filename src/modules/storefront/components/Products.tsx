@@ -96,8 +96,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
     dynamicMaxItens,
   } = mergedContentData;
 
-  console.log(imageCompression, 'imageCompression');
-
   const { datasource } = useDynamicApi();
 
   const dynamicCardsData = useMemo(() => {
