@@ -12,8 +12,8 @@ import {
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import { useLocale } from '../../shared/hooks/useLocale';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { BannerWJJCData, SpecificBannerInfo } from '../interfaces';
@@ -74,6 +74,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
     titleTextShadow,
     titleMaxWidth,
     titleTextAlign,
+    imageCompression,
   } = data;
   const { isDynamic, datasource } = useDynamicApi();
   const { text: title } = useDynamicString(titleRaw);
@@ -92,9 +93,9 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
       ? backgroundUrlMobile
       : backgroundUrl;
 
-  const bgUrlThreath = threathUrlCloudinary({
+  const bgUrlThreath = composeUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
-    InternalProps: { width: 1440, quality: 'best' },
+    InternalProps: { width: 1440, quality: imageCompression ?? 'best' },
   });
   const bg = `${
     overlay && overlayColor

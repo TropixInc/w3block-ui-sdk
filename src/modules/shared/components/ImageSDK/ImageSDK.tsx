@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 
-import { threathUrlCloudinary } from '../../utils/threathUrlCloudinary';
+import { composeUrlCloudinary } from '../../utils/composeUrlCloudinary';
 import { isCloudinary, isVideo } from '../../utils/validators';
 
 interface ImageSDKProps extends ImageSDKInternalProps {
@@ -13,7 +13,7 @@ interface ImageSDKProps extends ImageSDKInternalProps {
 interface ImageSDKInternalProps {
   width?: number;
   height?: number;
-  quality?: 'best' | 'good' | 'eco' | 'low';
+  quality?: 'best' | 'good' | 'eco' | 'no-compression';
   fit?: 'fill' | 'fit';
 }
 
@@ -43,7 +43,7 @@ export const ImageSDK = ({
           alt={alt}
           className={className}
           ref={preImageRef}
-          src={threathUrlCloudinary({
+          src={composeUrlCloudinary({
             src: src?.replace('.mp4', '.png') ?? '',
             InternalProps: { width, height, quality, fit },
           })}
@@ -65,7 +65,7 @@ export const ImageSDK = ({
             }
           }}
           style={{ display: 'none' }}
-          src={threathUrlCloudinary({
+          src={composeUrlCloudinary({
             src: src ?? '',
             InternalProps: { width, height, quality, fit },
           })}
@@ -85,7 +85,7 @@ export const ImageSDK = ({
           src={
             isError
               ? imagePlaceholder
-              : threathUrlCloudinary({
+              : composeUrlCloudinary({
                   src: src ?? '',
                   InternalProps: { width, height, quality, fit },
                 })
@@ -106,7 +106,7 @@ export const ImageSDK = ({
           src={
             isError
               ? imagePlaceholder
-              : threathUrlCloudinary({
+              : composeUrlCloudinary({
                   src: src ?? '',
                   InternalProps: { width, height, quality, fit },
                 })

@@ -15,8 +15,8 @@ import {
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import {
@@ -77,6 +77,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
     cardProductOverlay,
     productOverlay,
     hasSpaceBetween,
+    imageCompression,
   } = mergedStyleData;
   const {
     moduleTitle,
@@ -94,6 +95,8 @@ export const Products = ({ data }: { data: ProductsData }) => {
     dynamicCardsPath,
     dynamicMaxItens,
   } = mergedContentData;
+
+  console.log(imageCompression, 'imageCompression');
 
   const { datasource } = useDynamicApi();
 
@@ -419,9 +422,12 @@ export const Products = ({ data }: { data: ProductsData }) => {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundImage: backgroundUrl?.assetUrl
-          ? `url('${threathUrlCloudinary({
+          ? `url('${composeUrlCloudinary({
               src: backgroundUrl?.assetUrl ?? '',
-              InternalProps: { width: 1440, quality: 'best' },
+              InternalProps: {
+                width: 1440,
+                quality: imageCompression ? imageCompression : 'best',
+              },
             })}')`
           : backgroundColor
           ? backgroundColor
