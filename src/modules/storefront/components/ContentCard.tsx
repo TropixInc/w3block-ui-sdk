@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import _ from 'lodash';
 
-import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
+import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import {
   CardTypesEnum,
   ProductsDataStyleData,
@@ -91,7 +91,7 @@ export const ContentCard = ({
                     )
                   }') `
                 : product.image?.assetUrl && showCardImage
-                ? `url('${threathUrlCloudinary({
+                ? `url('${composeUrlCloudinary({
                     src:
                       _.get(
                         datasource,

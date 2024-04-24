@@ -10,7 +10,7 @@ interface Props {
   };
 }
 
-export const threathUrlCloudinary = ({
+export const composeUrlCloudinary = ({
   src,
   InternalProps: { height, width, quality, fit = 'fill' },
 }: Props) => {

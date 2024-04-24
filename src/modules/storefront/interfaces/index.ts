@@ -444,6 +444,7 @@ export interface ProductsDataStyleData {
   backgroundSession?: boolean;
   backgroundColor?: string;
   backgroundUrl?: AssetInterface;
+  imageCompression?: 'best' | 'good' | 'eco' | 'no-compression';
   overlay?: boolean;
   overlayColor?: string;
   textOverImage?: boolean;
@@ -551,6 +552,7 @@ export interface MidiaData extends MainModuleThemeInterface {
     margin?: string;
     padding?: string;
     mediaUrl: AssetInterface;
+    imageCompression?: 'best' | 'good' | 'eco' | 'no-compression';
     mediaUrlMobile: AssetInterface;
     mediaLink: string;
     imageDisposition: string;
@@ -622,6 +624,7 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
     margin?: string;
     padding?: string;
     image?: AssetInterface;
+    imageCompression?: 'best' | 'good' | 'eco' | 'no-compression';
     textAlignment?: AlignmentEnum;
     titleColor?: string;
     contentColor?: string;

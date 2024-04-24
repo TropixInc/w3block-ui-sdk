@@ -46,6 +46,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     imageClass,
     imageContainerClass,
     containerClass,
+    imageCompression,
   } = mergedStyleData;
 
   const { title: titleInput, content: contentInput } = mergedContentData;
@@ -99,6 +100,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               }
               width={imageWidth ?? 500}
               height={imageHeight ?? 274}
+              quality={imageCompression}
             />
           </div>
 

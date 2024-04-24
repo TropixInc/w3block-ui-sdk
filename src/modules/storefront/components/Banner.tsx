@@ -16,8 +16,8 @@ import {
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
+import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
@@ -184,7 +184,7 @@ const Slide = ({
       ? backgroundUrlMobile
       : backgroundUrl;
 
-  const bgUrlThreath = threathUrlCloudinary({
+  const bgUrlThreath = composeUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
     InternalProps: {
       width: 1440,
@@ -200,8 +200,6 @@ const Slide = ({
       ? _.get(datasource, bgUrl?.assetUrl ?? '', bgUrlThreath)
       : bgUrlThreath
   }") no-repeat center`;
-
-  console.log(bg, 'bg');
 
   const getButtonPadding = (fontSize: string) => {
     if (fontSize == '12px') {

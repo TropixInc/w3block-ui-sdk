@@ -16,8 +16,8 @@ import {
   breakpointsEnum,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
 import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
+import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { threathUrlCloudinary } from '../../shared/utils/threathUrlCloudinary';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
@@ -170,6 +170,7 @@ const Slide = ({
     imageRounded,
     contentClass,
     spacing,
+    imageCompression,
   } = data;
   const { isDynamic, datasource } = useDynamicApi();
   const { text: title } = useDynamicString(titleRaw);
@@ -185,9 +186,9 @@ const Slide = ({
       ? backgroundUrlMobile
       : backgroundUrl;
 
-  const bgUrlThreath = threathUrlCloudinary({
+  const bgUrlThreath = composeUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
-    InternalProps: { width: 1440, quality: 'best' },
+    InternalProps: { width: 1440, quality: imageCompression ?? 'best' },
   });
   const bg = `${
     overlay && overlayColor

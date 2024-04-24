@@ -52,6 +52,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
     imageAlignment,
     margin,
     padding,
+    imageCompression,
   } = mergedStyleData;
 
   const layoutClass =
@@ -86,7 +87,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
             )}
             src={_.get(datasource, bgUrl?.assetUrl, bgUrl?.assetUrl)}
             width={1440}
-            quality="best"
+            quality={imageCompression}
           />
         </a>
       </div>
