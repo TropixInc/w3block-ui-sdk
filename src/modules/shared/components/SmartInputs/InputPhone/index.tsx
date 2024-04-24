@@ -7,6 +7,7 @@ import classNames from 'classnames';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
@@ -17,6 +18,7 @@ interface InputPhoneProps {
   docValue?: string;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
+  required?: boolean;
 }
 
 const InputPhone = ({
@@ -25,6 +27,7 @@ const InputPhone = ({
   docValue,
   docStatus,
   hidenValidations = false,
+  required,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -53,10 +56,10 @@ const InputPhone = ({
 
   return (
     <div className="pw-mb-2 pw-w-full">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
+      </LabelWithRequired>
+      <FormItemContainer invalid={fieldState.invalid}>
         <ReactInputMask
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           name={name}

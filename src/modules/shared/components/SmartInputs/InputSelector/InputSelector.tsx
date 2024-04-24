@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { useRouterConnect } from '../../../hooks';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { MultipleSelect } from '../../MultipleSelect';
 import { InputDataDTO } from '../../SmartInputsController';
 import { Spinner } from '../../Spinner';
@@ -25,6 +26,7 @@ interface Props {
   configData?: InputDataDTO;
   docValue?: string;
   profilePage?: boolean;
+  required?: boolean;
 }
 
 const paginationMapping = {
@@ -56,8 +58,9 @@ export const InputSelector = ({
   type,
   docValue,
   profilePage = false,
+  required,
 }: Props) => {
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
   const router = useRouterConnect();
   const [firstInput, setFirstInput] = useState(true);
   const [multipleSelected, setMultipleSelected] = useState<
@@ -150,10 +153,13 @@ export const InputSelector = ({
 
   return (
     <div className="pw-mb-6">
-      <label className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </label>
-      <FormItemContainer className="!pw-px-4 pw-pt-1">
+      </LabelWithRequired>
+      <FormItemContainer
+        className="!pw-px-4 pw-pt-1"
+        invalid={fieldState.invalid}
+      >
         {configData?.isMultiple ? (
           <MultipleSelect
             options={dynamicOptions}

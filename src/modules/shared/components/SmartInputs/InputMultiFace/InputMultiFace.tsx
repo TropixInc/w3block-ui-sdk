@@ -15,6 +15,7 @@ import UserIcon from '../../../assets/icons/userOutlined.svg?react';
 import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
+import LabelWithRequired from '../../LabelWithRequired';
 import { ModalBase } from '../../ModalBase';
 import { Selectinput } from '../../SelectInput/SelectInput';
 import { Spinner } from '../../Spinner';
@@ -29,12 +30,14 @@ interface InputMultiFaceProps {
   subtitle?: string;
   acceptTypesDocs: Array<string>;
   onChangeUploadProgess: (value: boolean) => void;
+  required?: boolean;
 }
 
 export const InputMultiFace = ({
   name,
   label,
   subtitle,
+  required,
 }: InputMultiFaceProps) => {
   const { companyId: tenantId } = useCompanyConfig();
   const { height, width } = useWindowSize();
@@ -135,9 +138,9 @@ export const InputMultiFace = ({
   return (
     <>
       <div className="">
-        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        <LabelWithRequired name={name} required={required}>
           {label}
-        </p>
+        </LabelWithRequired>
 
         <div className="pw-flex pw-gap-x-6 ">
           <div
