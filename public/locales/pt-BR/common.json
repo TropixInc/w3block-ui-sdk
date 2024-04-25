@@ -671,5 +671,6 @@
   "shared>unputLocale>state": "Estado",
   "shared>cityAutoComplete>city": "Cidade",
   "shared>cityAutoComplete>searchCity": "Buscar cidade",
-  "shared>inputPlaces>inputPlaceholder": "Busque por locais de interesse"
+  "shared>inputPlaces>inputPlaceholder": "Busque por locais de interesse",
+  "dashboard>OrderListComponentSDK>orderNotFound": "Você ainda não fez nenhuma compra"
 }

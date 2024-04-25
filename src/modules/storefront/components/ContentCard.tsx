@@ -55,6 +55,7 @@ export const ContentCard = ({
     textPadding,
     containerRadius,
     border,
+    objectFit,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
   const { datasource } = useDynamicApi();
@@ -102,7 +103,7 @@ export const ContentCard = ({
                   })}') `
                 : 'white',
               backgroundPosition: 'center',
-              backgroundSize: 'cover',
+              backgroundSize: objectFit ?? 'cover',
               backgroundRepeat: 'no-repeat',
               borderRadius:
                 format === 'rounded'

@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
 import { useGetOrders } from '../../../checkout/hooks/useGetOrders';
 import { useRouterConnect } from '../../../shared';
+import { Alert } from '../../../shared/components/Alert';
 const Pagination = lazy(() =>
   import('../../../shared/components/Pagination').then((mod) => ({
     default: mod.Pagination,
@@ -18,6 +20,7 @@ const OrderCardComponentSDK = lazy(() =>
 
 export const OrderListComponentSDK = () => {
   const [actualPage, setActualPage] = useState(1);
+  const [translate] = useTranslation();
   const router = useRouterConnect();
   const orderId = router?.query?.orderId;
   const { data, refetch } = useGetOrders({
@@ -45,6 +48,11 @@ export const OrderListComponentSDK = () => {
           />
         ) : (
           <>
+            {!orders.length && (
+              <Alert variant="information">
+                {translate('dashboard>OrderListComponentSDK>orderNotFound')}
+              </Alert>
+            )}
             {orders.map((order: any) => (
               <OrderCardComponentSDK
                 status={order.status}
@@ -57,13 +65,15 @@ export const OrderListComponentSDK = () => {
                 deliverId={order?.deliverId}
               />
             ))}
-            <Pagination
-              pagesQuantity={data?.data.meta.totalPages ?? 1}
-              currentPage={actualPage}
-              onChangePage={(n) => {
-                setActualPage(n);
-              }}
-            />
+            {orders.length ? (
+              <Pagination
+                pagesQuantity={data?.data.meta.totalPages ?? 1}
+                currentPage={actualPage}
+                onChangePage={(n) => {
+                  setActualPage(n);
+                }}
+              />
+            ) : null}
           </>
         )}
       </div>
