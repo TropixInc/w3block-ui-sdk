@@ -5,6 +5,7 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
@@ -15,6 +16,7 @@ interface InputCheckbox {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   configData?: object;
+  required?: boolean;
 }
 
 const InputCheckbox = ({
@@ -24,6 +26,7 @@ const InputCheckbox = ({
   docStatus,
   hidenValidations = false,
   configData,
+  required,
 }: InputCheckbox) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<boolean | undefined>();
@@ -53,11 +56,11 @@ const InputCheckbox = ({
 
   return (
     <div className={`${label === ' ' ? '-pw-mt-3' : ''} pw-mb-3 pw-w-full`}>
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </p>
+      </LabelWithRequired>
       <FormItemContainer
-        invalid={fieldState.invalid || !field.value}
+        invalid={fieldState.invalid}
         className="!pw-outline-none pw-flex pw-gap-2"
       >
         <input

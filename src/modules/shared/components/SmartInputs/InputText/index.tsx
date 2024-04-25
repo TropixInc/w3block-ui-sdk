@@ -5,6 +5,7 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
@@ -14,6 +15,7 @@ interface InputText {
   docValue?: string;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
+  required?: boolean;
 }
 
 const InputText = ({
@@ -22,6 +24,7 @@ const InputText = ({
   docValue,
   docStatus,
   hidenValidations = false,
+  required,
 }: InputText) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -50,10 +53,10 @@ const InputText = ({
 
   return (
     <div className="pw-mb-3 pw-w-full">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
+      </LabelWithRequired>
+      <FormItemContainer invalid={fieldState.invalid}>
         <input
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleTextChange(e.target.value)}

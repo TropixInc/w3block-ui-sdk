@@ -8,6 +8,7 @@ import { useClickAway } from 'react-use';
 import _ from 'lodash';
 
 import { FormItemContainer } from '../../../Form/FormItemContainer';
+import LabelWithRequired from '../../../LabelWithRequired';
 
 interface Address {
   [key: string]: string;
@@ -21,6 +22,7 @@ interface CityAutocompleteProps {
   type: string;
   inputLabel?: string;
   inputPlaceholder?: string;
+  required?: boolean;
 }
 
 function getAddressObject(address_components: any) {
@@ -74,6 +76,7 @@ const CityAutoComplete = ({
   type,
   inputLabel,
   inputPlaceholder,
+  required,
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
   const divRef = useRef<HTMLDivElement>(null);
@@ -165,16 +168,17 @@ const CityAutoComplete = ({
 
   return (
     <div className="pw-relative">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required} haveColon={false}>
         {inputLabel ?? translate('shared>cityAutoComplete>city')}
-      </p>
+      </LabelWithRequired>
+
       <FormItemContainer
         invalid={fieldState.invalid}
-        className="pw-p-[0.6rem] pw-h-11"
+        className="pw-p-[0.6rem] pw-mb-4"
       >
         <input
           type="text"
-          className="pw-w-full pw-outline-none pw-text-black"
+          className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
           value={inputValue}
           placeholder={
             inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')

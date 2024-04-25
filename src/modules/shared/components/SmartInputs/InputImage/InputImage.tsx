@@ -15,6 +15,7 @@ import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { Spinner } from '../../Spinner/Spinner';
 import InputStatus from '../InputStatus';
 
@@ -31,6 +32,7 @@ interface InputImageProps {
   imagePlaceholder?: string;
   instructions?: string;
   acceptTypes?: Array<string>;
+  required?: boolean;
 }
 
 const InputImage = ({
@@ -46,6 +48,7 @@ const InputImage = ({
   instructions,
   onChangeUploadProgess,
   acceptTypes,
+  required,
 }: InputImageProps) => {
   const [translate] = useTranslation();
   const [uploadedImage, setUploadedImage] = useState<string>();
@@ -141,9 +144,10 @@ const InputImage = ({
   return (
     <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
       <div className="pw-mb-3 pw-max-w-[504px] pw-w-full pw-flex pw-flex-col pw-items-center pw-justify-center pw-p-[30px]">
-        <p className="pw-text-6 pw-leading-[18px] pw-text-[#353945] pw-font-bold pw-mb-5">
+        <LabelWithRequired name={name} required={required}>
           Enviar foto
-        </p>
+        </LabelWithRequired>
+
         <p className="pw-text-base pw-leading-[18px] pw-text-[#353945] pw-font-medium pw-mb-5 pw-opacity-75">
           {title}
         </p>
@@ -162,7 +166,7 @@ const InputImage = ({
           dangerouslySetInnerHTML={{ __html: instructions || '' }}
         ></div>
         <FormItemContainer
-          invalid={isError || mutateError || !field.value || fieldState.invalid}
+          invalid={isError || mutateError || fieldState.invalid}
           className="pw-max-w-[436px] pw-w-full"
         >
           <div
