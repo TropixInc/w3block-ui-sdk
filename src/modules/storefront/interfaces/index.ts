@@ -472,6 +472,7 @@ export interface ProductsDataStyleData {
   productOverlay?: boolean;
   textPadding?: string;
   containerRadius?: string;
+  objectFit?: 'cover' | 'contain';
 }
 
 interface ComboBoxReturnInterface {

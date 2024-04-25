@@ -13,6 +13,8 @@ import _ from 'lodash';
 
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 
+import classNames from 'classnames';
+
 export const Card = ({
   product,
   config,
@@ -57,7 +59,12 @@ export const Card = ({
                 )
               : undefined
           }
-          className="pw-w-full pw-min-h-[230px] pw-h-full pw-object-cover pw-rounded-md"
+          className={classNames(
+            'pw-w-full pw-min-h-[230px] pw-h-full pw-rounded-md',
+            styleData.objectFit
+              ? `pw-object-${styleData.objectFit}`
+              : 'pw-object-cover'
+          )}
           quality="best"
           width={600}
         />
