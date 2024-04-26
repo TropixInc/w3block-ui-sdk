@@ -1,4 +1,4 @@
-import { CSSProperties, lazy } from 'react';
+import { CSSProperties, lazy, useMemo } from 'react';
 
 import _ from 'lodash';
 const ImageSDK = lazy(() =>
@@ -14,10 +14,17 @@ import { ImagePlusTextData } from '../interfaces';
 import './ImagePlusText.css';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
+import classNames from 'classnames';
+
+import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
+
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { datasource } = useDynamicApi();
+  const isMobile = useIsMobile();
   const { styleData, contentData, mobileStyleData, mobileContentData, id } =
     data;
+
+  console.log(data, 'data');
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
@@ -41,12 +48,11 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
     backgroundColor,
     overlay,
     overlayColor,
-    imageWidth,
-    imageHeight,
     imageClass,
     imageContainerClass,
     containerClass,
     imageCompression,
+    imageSize,
   } = mergedStyleData;
 
   const { title: titleInput, content: contentInput } = mergedContentData;
@@ -54,6 +60,18 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { text: content } = useDynamicString(contentInput);
 
   const isImageOnLeft = imagePosition === 'left' || imagePosition === undefined;
+
+  const imgClassSize = useMemo(() => {
+    if (isMobile) {
+      return '100%';
+    } else {
+      if (imageSize) {
+        return `${imageSize}%`;
+      } else {
+        return '260px';
+      }
+    }
+  }, [imageSize, isMobile]);
 
   return (
     <div
@@ -91,15 +109,15 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
           }
         >
           <div
-            className={`${imageContainerClass} pw-grid pw-place-items-center`}
+            className={classNames(
+              'pw-place-items-center',
+              imageContainerClass ?? ''
+            )}
+            style={{ width: imgClassSize }}
           >
             <ImageSDK
               src={_.get(datasource, image?.assetUrl ?? '', image?.assetUrl)}
-              className={
-                imageClass ?? 'pw-max-w-[260px] pw-max-h-[274px] pw-rounded-lg'
-              }
-              width={imageWidth ?? 500}
-              height={imageHeight ?? 274}
+              className={imageClass ?? 'pw-w-full pw-rounded-lg'}
               quality={imageCompression}
             />
           </div>

@@ -640,6 +640,7 @@ export interface ImagePlusTextData extends MainModuleThemeInterface {
     imageClass?: string;
     imageContainerClass?: string;
     containerClass?: string;
+    imageSize?: string;
   };
   contentData: {
     title?: string;
