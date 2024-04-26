@@ -60,8 +60,7 @@ const _ResetPasswordWithoutLayout = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const passwordSchema = usePasswordValidationSchema({});
-  const { mutate, isLoading, isSuccess, isExpired, isError } =
-    useChangePasswordAndSignIn();
+  const { mutate, isLoading, isExpired } = useChangePasswordAndSignIn();
   const { email, token, step } = router.query;
 
   const schema = object().shape({
@@ -84,18 +83,6 @@ const _ResetPasswordWithoutLayout = () => {
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
-
-  useEffect(() => {
-    if (isError && !isExpired && step !== Steps.ERROR.toString()) {
-      router.push({
-        query: {
-          ...router.query,
-          step: Steps.ERROR,
-        },
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isError, isExpired, step]);
 
   useEffect(() => {
     if (isExpired && step !== Steps.EXPIRED_PASSWORD.toString()) {
@@ -126,21 +113,30 @@ const _ResetPasswordWithoutLayout = () => {
     }
   }, [email, token, router]);
 
-  useEffect(() => {
-    if (isSuccess && step !== Steps.PASSWORD_CHANGED.toString()) {
-      router.push({
-        query: { ...router.query, step: Steps.PASSWORD_CHANGED },
-      });
-    }
-  }, [isSuccess, router, step]);
-
   const onSubmit = async ({ confirmation, password }: Form) => {
-    mutate({
-      confirmation,
-      password,
-      email: email as string,
-      token: decodeURIComponent((token as string) ?? ''),
-    });
+    mutate(
+      {
+        confirmation,
+        password,
+        email: email as string,
+        token: decodeURIComponent((token as string) ?? ''),
+      },
+      {
+        onSuccess() {
+          router.push({
+            query: { ...router.query, step: Steps.PASSWORD_CHANGED },
+          });
+        },
+        onError() {
+          router.push({
+            query: {
+              ...router.query,
+              step: Steps.ERROR,
+            },
+          });
+        },
+      }
+    );
   };
 
   if (step === Steps.EMAIL_SENT.toString())
@@ -156,7 +152,7 @@ const _ResetPasswordWithoutLayout = () => {
           router.push({
             query: {
               ...router.query,
-              step: 1,
+              step: 3,
             },
           });
         }}
