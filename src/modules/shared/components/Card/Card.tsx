@@ -15,6 +15,8 @@ import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 
 import classNames from 'classnames';
 
+import { composeUrlCloudinary } from '../../utils/composeUrlCloudinary';
+
 export const Card = ({
   product,
   config,
@@ -36,6 +38,7 @@ export const Card = ({
       return `/product/slug/${product.slug}`;
     }
   };
+
   return (
     <a
       href={linkToSend()}
@@ -52,11 +55,20 @@ export const Card = ({
         <ImageSDK
           src={
             product.images.length
-              ? _.get(
-                  datasource,
-                  product.images[0]?.thumb ?? '',
-                  product.images[0]?.thumb
-                )
+              ? composeUrlCloudinary({
+                  src:
+                    _.get(
+                      datasource,
+                      product.images[0]?.thumb ?? '',
+                      product.images[0]?.thumb
+                    ) ?? '',
+                  InternalProps: {
+                    width: 1440,
+                    quality: styleData.imageCardCompression
+                      ? styleData.imageCardCompression
+                      : 'best',
+                  },
+                })
               : undefined
           }
           className={classNames(

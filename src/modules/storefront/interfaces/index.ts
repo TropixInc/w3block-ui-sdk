@@ -473,6 +473,7 @@ export interface ProductsDataStyleData {
   textPadding?: string;
   containerRadius?: string;
   objectFit?: 'cover' | 'contain';
+  imageCardCompression?: 'best' | 'good' | 'eco' | 'no-compression';
 }
 
 interface ComboBoxReturnInterface {
