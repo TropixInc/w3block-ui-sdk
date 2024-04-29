@@ -16,6 +16,7 @@ import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
+import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 
@@ -26,6 +27,7 @@ interface SetCodeVerifyProps {
 const HOUR_IN_MS = 3600000;
 
 export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
+  const { signOut } = usePixwayAuthentication();
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
   const { query, pushConnect } = useRouterConnect();
   const { connectProxyPass } = useCompanyConfig();
@@ -206,6 +208,19 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
           </button>
           para enviar outro
         </Trans>
+      </p>
+      <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
+        <button
+          onClick={() =>
+            signOut().then(() => {
+              pushConnect(PixwayAppRoutes.HOME);
+            })
+          }
+          className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
+        >
+          {translate('shared>exit')}
+        </button>{' '}
+        {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
       </p>
     </div>
   );

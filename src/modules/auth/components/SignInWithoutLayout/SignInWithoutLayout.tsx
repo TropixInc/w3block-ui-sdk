@@ -107,12 +107,14 @@ export const SigInWithoutLayout = ({
     name: 'password',
   });
 
+  const skipWallet = defaultTheme?.configurations?.contentData?.skipWallet;
+
   const checkForCallbackUrl = () => {
-    if (profile && !profile.data.verified && !isPasswordless) {
+    if (profile && !profile.data.verified) {
       return PixwayAppRoutes.VERIfY_WITH_CODE;
     } else if (profile?.data.kycStatus === KycStatus.Pending) {
       return routerToAttachKyc;
-    } else if (!profile?.data.mainWallet && !isPasswordless) {
+    } else if (!profile?.data.mainWallet && !skipWallet) {
       return routeToAttachWallet;
     } else if (router.query.callbackPath) {
       return router.query.callbackPath as string;

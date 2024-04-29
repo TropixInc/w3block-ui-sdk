@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useGetTenantInfoByHostname } from '../useGetTenantInfoByHostname';
 import { usePixwaySession } from '../usePixwaySession';
 import { useProfile } from '../useProfile/useProfile';
 import { useRouterConnect } from '../useRouterConnect';
@@ -18,10 +18,11 @@ export const useHasWallet = ({
   const { data: session } = usePixwaySession();
   const { data: profile, isLoading, isSuccess } = useProfile();
   const router = useRouterConnect();
-  const { data: companyInfo } = useGetTenantInfoByHostname();
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+  const theme = UseThemeConfig();
+  const skipWallet =
+    theme.defaultTheme?.configurations?.contentData?.skipWallet;
   useEffect(() => {
-    if (!isPasswordless) {
+    if (!skipWallet) {
       if (onlyWithSession) {
         if (
           !profile?.data.mainWallet &&

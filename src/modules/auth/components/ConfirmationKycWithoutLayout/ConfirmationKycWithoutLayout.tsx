@@ -8,15 +8,16 @@ import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
-import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 export const ConfirmationKycWithoutLayout = () => {
   const router = useRouterConnect();
   const { data: profile } = useProfile();
-  const { data: companyInfo } = useGetTenantInfoByHostname();
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+  const theme = UseThemeConfig();
+  const skipWallet =
+    theme.defaultTheme?.configurations?.contentData?.skipWallet;
   const storageData = useGetStorageData(
     PRACTITIONER_DATA_INFO_KEY,
     router?.query?.sessionId as string
@@ -47,7 +48,7 @@ export const ConfirmationKycWithoutLayout = () => {
   const onContinue = () => {
     if (typeof storageData?.postKycUrl === 'string')
       router.pushConnect(storageData?.postKycUrl);
-    else if (isPasswordless) {
+    else if (skipWallet) {
       if (router.query.callbackPath?.length) {
         router.pushConnect(router.query.callbackPath as string);
       } else if (router.query.callbackUrl?.length) {

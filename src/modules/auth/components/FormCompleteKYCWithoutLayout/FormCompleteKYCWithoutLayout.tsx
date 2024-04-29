@@ -16,13 +16,13 @@ import TranslatableComponent from '../../../shared/components/TranslatableCompon
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
-import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignupForm';
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useGetReasonsRequiredReview } from '../../hooks/useGetReasonsRequiredReview';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 const Box = lazy(() =>
@@ -76,13 +76,14 @@ const _FormCompleteKYCWithoutLayout = ({
       else return 'signup';
     }
   };
-  const { data: companyInfo } = useGetTenantInfoByHostname();
 
   const { data: kycContext } = useGetTenantContextBySlug(slug());
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
 
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+  const theme = UseThemeConfig();
+  const skipWallet =
+    theme.defaultTheme?.configurations?.contentData?.skipWallet;
   const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
   const step = router.query && router.query.step && router.query.step;
@@ -160,7 +161,7 @@ const _FormCompleteKYCWithoutLayout = ({
               if (screenConfig?.skipConfirmation) {
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);
-                } else if (isPasswordless) {
+                } else if (skipWallet) {
                   if (router.query.callbackPath?.length) {
                     router.pushConnect(router.query.callbackPath as string);
                   } else if (router.query.callbackUrl?.length) {
