@@ -56,6 +56,7 @@ export const ContentCard = ({
     containerRadius,
     border,
     objectFit,
+    imageCardCompression,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
   const { datasource } = useDynamicApi();
@@ -99,7 +100,10 @@ export const ContentCard = ({
                         product.image.assetUrl,
                         product.image.assetUrl
                       ) ?? '',
-                    InternalProps: { width: 600, quality: 'best' },
+                    InternalProps: {
+                      width: 600,
+                      quality: imageCardCompression ?? 'best',
+                    },
                   })}') `
                 : 'white',
               backgroundPosition: 'center',
