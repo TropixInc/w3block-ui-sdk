@@ -24,8 +24,6 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData, id } =
     data;
 
-  console.log(data, 'data');
-
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
     mobileStyleData

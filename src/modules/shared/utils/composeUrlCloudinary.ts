@@ -26,9 +26,9 @@ export const composeUrlCloudinary = ({
           quality
             ? quality === 'no-compression'
               ? ''
-              : 'q_auto:' + quality
-            : 'q_auto'
-        },f_auto/` +
+              : 'q_auto:' + quality + ',f_auto/'
+            : 'q_auto,f_auto/'
+        }` +
         groups[2];
     } else {
       url = src;
@@ -56,9 +56,9 @@ export const composeUrlCloudinary = ({
           quality
             ? quality === 'no-compression'
               ? ''
-              : 'q_auto:' + quality
-            : 'q_auto'
-        },f_auto/` +
+              : 'q_auto:' + quality + ',f_auto/'
+            : 'q_auto,f_auto/'
+        }` +
         groups[2];
     } else {
       url = src;
