@@ -154,11 +154,10 @@ const _CheckoutInfo = ({
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   const [productVariants] = useLocalStorage<any>(PRODUCT_VARIANTS_INFO_KEY);
   const query = useQuery();
-  const params = new URLSearchParams(query);
-  const isCoinPayment = params.get('coinPayment')?.includes('true')
+  const isCoinPayment = router.query.coinPayment?.includes('true')
     ? true
     : false;
-  const destinationUser = params.get('destination');
+  const destinationUser = router.query.destination;
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
     currencyId

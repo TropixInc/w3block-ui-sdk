@@ -266,7 +266,7 @@ const NavigationMenu = ({
           </p>
         </div>
         <div className="pw-flex pw-items-center">
-          <CriptoValueComponent pointsPrecision={organizedWallets[0].pointsPrecision} fontClass='pw-text-white pw-text-sm' crypto={true} value={organizedWallets[0].balance} code={chainIdToCode(
+          <CriptoValueComponent pointsPrecision={organizedWallets[0].pointsPrecision} fontClass='pw-text-sm' crypto={true} value={organizedWallets[0].balance} code={chainIdToCode(
             organizedWallets[0].chainId,
             organizedWallets[0].currency
           )} />
