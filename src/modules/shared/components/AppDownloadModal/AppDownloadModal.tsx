@@ -27,7 +27,7 @@ export const AppDownloadModal = ({
 
   const androidLink =
     theme?.defaultTheme?.configurations?.contentData?.appDownload?.androidLink +
-    `&referrer=${utm.utm_campaign}---${utm.utm_source}`;
+    `&referrer=${utm?.utm_campaign}---${utm?.utm_source}`;
   const appleLink =
     theme?.defaultTheme?.configurations?.contentData?.appDownload?.appleLink;
 

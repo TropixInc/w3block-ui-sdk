@@ -83,10 +83,10 @@ const _HeaderPixwaySDK = ({
   const { logoUrl } = useCompanyConfig();
   useEffect(() => {
     if (context?.defaultTheme?.configurations?.contentData?.developerPreview) {
-      if (utm.utm_campaign === 'm2m' && query.testPreview?.includes('true')) {
+      if (utm?.utm_campaign === 'm2m' && query?.testPreview?.includes('true')) {
         setIsOpen(true);
       }
-    } else if (utm.utm_campaign === 'm2m') {
+    } else if (utm?.utm_campaign === 'm2m') {
       setIsOpen(true);
     }
   }, [
