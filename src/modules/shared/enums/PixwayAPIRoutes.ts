@@ -89,4 +89,5 @@ export enum PixwayAPIRoutes {
   GET_DEFERRED_XLSX = '/{companyId}/loyalties/users/deferred/xlsx',
   GET_DEFERRED = '/{companyId}/loyalties/users/deferred',
   CHECK_WHITELIST_BY_USER = '/whitelists/{companyId}/check-user',
+  GET_USER_BY_REFERRAL = '/users/{companyId}/by-referral-code/{referralCode}',
 }

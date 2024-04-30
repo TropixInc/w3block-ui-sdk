@@ -3,6 +3,7 @@ import { useCopyToClipboard } from 'react-use';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import downloadAndroid from '../../assets/images/downloadAndroid.png';
 import downloadApple from '../../assets/images/downloadApple.png';
+import { useGetUserByReferral } from '../../hooks/useGetUserByReferral/useGetUserByReferral';
 import { useUtms } from '../../hooks/useUtms/useUtms';
 import { getMobileOS } from '../../utils/getMobileOs';
 import { ModalBase } from '../ModalBase';
@@ -18,7 +19,7 @@ export const AppDownloadModal = ({
   const theme = UseThemeConfig();
   const os = getMobileOS();
   const [_, copy] = useCopyToClipboard();
-
+  const { data: referralUser } = useGetUserByReferral(utm?.utm_source);
   const onClickApple = () => {
     if ((document.getElementById('appCheckbox') as HTMLInputElement).checked) {
       copy(window?.location?.href);
@@ -34,6 +35,19 @@ export const AppDownloadModal = ({
   return (
     <ModalBase isOpen={isOpen} onClose={onClose}>
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
+        {referralUser ? (
+          <div className="pw-mb-5">
+            <p className="pw-font-bold pw-text-2xl">
+              {referralUser?.firstName}
+            </p>
+            <p className="pw-font-bold pw-text-base">
+              {
+                theme?.defaultTheme?.configurations?.contentData?.appDownload
+                  ?.referrelText
+              }
+            </p>
+          </div>
+        ) : null}
         <img
           src={
             theme?.defaultTheme?.configurations?.contentData?.appDownload?.logo
