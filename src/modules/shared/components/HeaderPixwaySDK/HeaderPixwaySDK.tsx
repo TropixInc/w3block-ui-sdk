@@ -1,12 +1,14 @@
-import { lazy, useContext, useMemo, useState } from 'react';
+import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 
 import { ThemeContext } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
-// import { useGetTenantInfoByHostname } from '../../hooks/useGetTenantInfoByHostname';
+import { useUtms } from '../../hooks/useUtms/useUtms';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
+import { AppDownloadModal } from '../AppDownloadModal';
 import TranslatableComponent from '../TranslatableComponent';
 import { NavigationTabsPixwaySDKTabs } from './components';
 const NavigationLoginPixwaySDK = lazy(() =>
@@ -73,11 +75,26 @@ const _HeaderPixwaySDK = ({
   hasLogIn = true,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
+  const utm = useUtms();
+  const { query } = useRouterConnect();
+  const [isOpen, setIsOpen] = useState(false);
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
-  // const { data: companyInfo } = useGetTenantInfoByHostname();
-  // const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const { logoUrl } = useCompanyConfig();
+  useEffect(() => {
+    if (context?.defaultTheme?.configurations?.contentData?.developerPreview) {
+      if (utm.utm_campaign === 'm2m' && query.testPreview?.includes('true')) {
+        setIsOpen(true);
+      }
+    } else if (utm.utm_campaign === 'm2m') {
+      setIsOpen(true);
+    }
+  }, [
+    context?.defaultTheme?.configurations?.contentData?.developerPreview,
+    query?.testPreview,
+    utm,
+  ]);
+
   const toggleMenuMemo = () => {
     if (openedMenu || openedTabs) {
       toggleTabsMemo();
@@ -268,6 +285,7 @@ const _HeaderPixwaySDK = ({
           </div>
         </div>
       </div>
+      <AppDownloadModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
   ) : null;
 };
