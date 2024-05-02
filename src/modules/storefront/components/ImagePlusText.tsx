@@ -132,7 +132,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
             </h3>
             <div
               style={{ color: contentColor }}
-              className="pw-text-[15px]"
+              className="pw-prose-sm dangerouslyHTML"
               dangerouslySetInnerHTML={{
                 __html: content ?? '',
               }}
