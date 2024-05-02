@@ -71,6 +71,7 @@
     "@mertasan/tailwindcss-variables": "^2.3.0",
     "@rollup/plugin-typescript": "^8.3.3",
     "@tailwindcss/line-clamp": "^0.4.0",
+    "@tailwindcss/typography": "^0.5.13",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/react-input-mask": "^3.0.2",

@@ -56,6 +56,7 @@ module.exports = {
     require('@mertasan/tailwindcss-variables'),
     require('tailwindcss-text-fill'),
     require('tailwindcss-autofill'),
+    require('@tailwindcss/typography'),
     require('@tailwindcss/line-clamp'),
   ],
 };
