@@ -103,6 +103,28 @@ const _HeaderPixwaySDK = ({
     utm,
   ]);
 
+  useEffect(() => {
+    if (context?.defaultTheme?.configurations?.contentData?.appDownload) {
+      if (
+        context?.defaultTheme?.configurations?.contentData?.developerPreview
+      ) {
+        if (
+          query?.testPreview?.includes('true') &&
+          query?.download?.includes('true')
+        ) {
+          setIsOpen(true);
+        }
+      } else if (query?.download?.includes('true')) {
+        setIsOpen(true);
+      }
+    }
+  }, [
+    context?.defaultTheme?.configurations?.contentData?.appDownload,
+    context?.defaultTheme?.configurations?.contentData?.developerPreview,
+    query?.download,
+    query?.testPreview,
+  ]);
+
   const toggleMenuMemo = () => {
     if (openedMenu || openedTabs) {
       toggleTabsMemo();

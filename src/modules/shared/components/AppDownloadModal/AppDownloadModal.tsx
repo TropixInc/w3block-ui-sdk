@@ -33,7 +33,11 @@ export const AppDownloadModal = ({
     theme?.defaultTheme?.configurations?.contentData?.appDownload?.appleLink;
 
   return (
-    <ModalBase isOpen={isOpen} onClose={onClose}>
+    <ModalBase
+      isOpen={isOpen}
+      onClose={onClose}
+      classes={{ classComplement: '!pw-z-[9999]' }}
+    >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
         {referralUser ? (
           <div className="pw-mb-5">
@@ -94,11 +98,19 @@ export const AppDownloadModal = ({
                 className="pw-max-h-[60px] pw-mx-auto pw-mb-5"
               />
             </a>
-            <div className="pw-border pw-border-[#DFDFDF] pw-my-6"></div>
-            <div className="pw-flex pw-item-center pw-justify-center pw-gap-2">
-              <input type="checkbox" defaultChecked={true} id="appCheckbox" />
-              Copiar link de indicação
-            </div>
+            {referralUser ? (
+              <>
+                <div className="pw-border pw-border-[#DFDFDF] pw-my-6"></div>
+                <div className="pw-flex pw-item-center pw-justify-center pw-gap-2">
+                  <input
+                    type="checkbox"
+                    defaultChecked={true}
+                    id="appCheckbox"
+                  />
+                  Copiar link de indicação
+                </div>
+              </>
+            ) : null}
           </>
         ) : null}
       </div>
