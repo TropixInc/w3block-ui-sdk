@@ -21,7 +21,10 @@ export const AppDownloadModal = ({
   const [_, copy] = useCopyToClipboard();
   const { data: referralUser } = useGetUserByReferral(utm?.utm_source);
   const onClickApple = () => {
-    if ((document.getElementById('appCheckbox') as HTMLInputElement).checked) {
+    if (
+      (document.getElementById('appCheckbox') as HTMLInputElement).checked &&
+      referralUser
+    ) {
       copy(
         `${window?.location?.protocol}//${window?.location?.hostname}/?utm_campaign=${utm.utm_campaign}&utm_source=${utm.utm_source}`
       );

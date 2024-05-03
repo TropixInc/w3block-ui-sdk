@@ -6,7 +6,6 @@ import { ThemeContext } from '../../../storefront/contexts';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
-import { useUtms } from '../../hooks/useUtms/useUtms';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import { AppDownloadModal } from '../AppDownloadModal';
 import TranslatableComponent from '../TranslatableComponent';
@@ -75,7 +74,6 @@ const _HeaderPixwaySDK = ({
   hasLogIn = true,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
-  const utm = useUtms();
   const { query } = useRouterConnect();
   const [isOpen, setIsOpen] = useState(false);
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -87,12 +85,12 @@ const _HeaderPixwaySDK = ({
         context?.defaultTheme?.configurations?.contentData?.developerPreview
       ) {
         if (
-          utm?.utm_campaign === 'm2m' &&
+          query?.utm_campaign === 'm2m' &&
           query?.testPreview?.includes('true')
         ) {
           setIsOpen(true);
         }
-      } else if (utm?.utm_campaign === 'm2m') {
+      } else if (query?.utm_campaign === 'm2m') {
         setIsOpen(true);
       }
     }
@@ -100,7 +98,7 @@ const _HeaderPixwaySDK = ({
     context?.defaultTheme?.configurations?.contentData?.appDownload,
     context?.defaultTheme?.configurations?.contentData?.developerPreview,
     query?.testPreview,
-    utm,
+    query?.utm_campaign,
   ]);
 
   useEffect(() => {
