@@ -86,7 +86,8 @@ export const StatementComponentSDK = ({
   const subtext = () => {
     if (!future) {
       if (
-        statement?.loyaltieTransactions?.[0]?.metadata.action === 'split_payees'
+        statement?.loyaltieTransactions?.[0]?.metadata?.action ===
+        'split_payees'
       ) {
         return (
           <WjjcText metadata={statement?.loyaltieTransactions?.[0]?.metadata} />
@@ -405,7 +406,7 @@ export const StatementComponentSDK = ({
         {statement?.metadata?.commerce?.action !== 'split_payees' &&
           statement?.loyaltieTransactions?.map(
             (loyaltieTransaction) =>
-              loyaltieTransaction.metadata.action !== 'split_payees' && (
+              loyaltieTransaction?.metadata?.action !== 'split_payees' && (
                 <div
                   key={generateRandomUUID()}
                   className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[300px] pw-truncate pw-mb-1"

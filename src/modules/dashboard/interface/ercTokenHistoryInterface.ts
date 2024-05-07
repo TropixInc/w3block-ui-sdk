@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Currency } from '../../shared';
 import {
   Erc20ActionStatus,
   Erc20ActionType,
@@ -52,6 +54,27 @@ export interface FromToInterface {
 export interface Metadata {
   confirmedAt: string;
   transaction: Transaction;
+  commerce?: Commerce;
+}
+
+export interface Commerce {
+  orderId: string;
+  payments?: PaymentsEntity[] | null;
+  deliverId: string;
+  productTokenId: string;
+  isErc20Purchase: boolean;
+  isLoyaltyPurchase: boolean;
+  payerWalletAddress: string;
+  destinationUserName: string;
+  erc20PurchaseAmount: string;
+  destinationWalletAddress: string;
+}
+
+export interface PaymentsEntity {
+  currency: Currency;
+  currencyId: string;
+  totalAmount: string;
+  currencyFullTotalAmount: string;
 }
 
 export interface Transaction {
@@ -86,17 +109,56 @@ export interface LoyaltiesTransaction {
   fromAddress: string;
   toAddress: string;
   amount: string;
-  metadata: Metadata2;
+  metadata?: Metadata2;
   executeAt: string;
   status: string;
   actionId: string;
+  parentMinterId?: null;
+  parentTransferId?: null;
   isWithdrawal: boolean;
+  poolAddress?: null;
+  sendEmail: boolean;
 }
 
 export interface Metadata2 {
-  ruleId?: string;
+  action: string;
+  amount: string;
+  ruleId: string;
+  buyerId: string;
+  commerce: Commerce1;
+  userName: string;
+  buyerName: string;
+  createdAt: string;
+  userEmail: string;
+  buyerEmail: string;
   description: string;
+  operatorName: string;
+  poolMetadata: PoolMetadata;
   operatorUserId: string;
-  action?: string;
-  operatorName?: string;
+  pointsCashback: string;
+  loyaltiesDeferredId: string;
+  isFinalRecipient?: boolean;
+  indirectCashbackLevel?: number | null;
+  indirectCashbackFromUserId?: string | null;
+}
+
+export interface Commerce1 {
+  orderId: string;
+  deliverId: string;
+  productTokenId: string;
+  destinationUserName: string;
+}
+
+export interface PoolMetadata {
+  amount: number;
+  amountLocked: number;
+  amountToMint: number;
+  poolAddressBalance: PoolAddressBalance;
+  availableToTransfer: number;
+}
+
+export interface PoolAddressBalance {
+  balance: string;
+  currency: string;
+  processing: string;
 }

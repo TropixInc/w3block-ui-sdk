@@ -18,23 +18,20 @@ const Pagination = lazy(() =>
   }))
 );
 
-const StatementComponentSDK = lazy(() =>
-  import(
-    '../../../shared/components/StatementComponentSDK/StatementComponentSDK'
-  ).then((mod) => ({
-    default: mod.StatementComponentSDK,
-  }))
-);
 import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { generateRandomUUID } from '../../../shared/utils/generateRamdomUUID';
+import {
+  StatementScreenTransaction,
+  getSubtransactions,
+} from '../../../shared/utils/getSubtransactions';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useGetErcTokensHistory } from '../../hooks/useGetErcTokensHistory';
+import { StatementComponent } from './StatementComponent';
 export const WalletStatementTemplateSDK = () => {
-  const { wallets, loyaltyWallet, mainWallet } = useUserWallet();
+  const { loyaltyWallet, mainWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
   const { data, isLoading } = useGetErcTokensHistory(
     loyaltyWallet.length ? loyaltyWallet[0].contractId : undefined,
@@ -47,6 +44,17 @@ export const WalletStatementTemplateSDK = () => {
   const { defaultTheme } = UseThemeConfig();
   const hideWallet =
     defaultTheme?.configurations?.contentData?.hideWalletAddress;
+
+  const subTransactions = useMemo(() => {
+    const arr: StatementScreenTransaction[] = [];
+    data?.items?.forEach((i) => {
+      const subs = getSubtransactions(i);
+      subs.forEach((t) => {
+        arr.push(t);
+      });
+    });
+    return arr;
+  }, [data?.items]);
 
   useGuardPagesWithOptions({
     needUser: true,
@@ -90,31 +98,12 @@ export const WalletStatementTemplateSDK = () => {
           <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
             <Spinner className="pw-h-10 pw-w-10" />
           </div>
-        ) : data?.items?.length ? (
-          data?.items.map((item: any) => (
-            <StatementComponentSDK
-              key={generateRandomUUID()}
-              statement={{
-                pointsPrecision:
-                  loyaltyWalletDefined?.pointsPrecision ?? 'integer',
-                id: item.id,
-                createdAt: new Date(item.createdAt),
-                type: item.type,
-                status: item.status,
-                loyaltieTransactions: item.loyaltiesTransactions,
-                amount: parseFloat(item.request.amount),
-                description: '',
-                currency: loyaltyWallet.length ? loyaltyWallet[0].currency : '',
-                transactionType: wallets?.some(
-                  (wallet) => wallet.address == item.request.to
-                )
-                  ? 'receiving'
-                  : 'sending',
-                commerce: item?.metadata?.commerce,
-                request: item?.request,
-                txHash: item?.txHash,
-                metadata: item?.metadata,
-              }}
+        ) : subTransactions?.length ? (
+          subTransactions.map((item) => (
+            <StatementComponent
+              key={item.actionId}
+              statement={item}
+              currency={loyaltyWallet?.length ? loyaltyWallet[0]?.currency : ''}
             />
           ))
         ) : (

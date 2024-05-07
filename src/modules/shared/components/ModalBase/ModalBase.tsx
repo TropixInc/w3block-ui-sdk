@@ -16,6 +16,7 @@ interface Props {
     dialogCard?: string;
     closeButton?: string;
     classComplement?: string;
+    backdrop?: string;
   };
   children?: ReactNode;
   ownClass?: string;
@@ -38,7 +39,7 @@ export const ModalBase = ({
   return isOpen ? (
     <>
       {backdrop &&
-        <Backdrop onClick={clickAway ? onClose : undefined} />
+        <Backdrop onClick={clickAway ? onClose : undefined} className={classes.backdrop}/>
       }
       <div
         className={

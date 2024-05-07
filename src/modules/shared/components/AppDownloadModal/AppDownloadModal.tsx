@@ -41,7 +41,7 @@ export const AppDownloadModal = ({
     <ModalBase
       isOpen={isOpen}
       onClose={onClose}
-      classes={{ classComplement: '!pw-z-[9999]' }}
+      classes={{ classComplement: '!pw-z-[9999]', backdrop: '!pw-z-[999]' }}
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
         {referralUser ? (
