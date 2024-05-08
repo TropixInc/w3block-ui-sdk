@@ -51,6 +51,7 @@ const InputUrl = lazy(() =>
 
 import _ from 'lodash';
 
+import ComplexPhone from '../SmartInputs/ComplexPhone';
 import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
 import InputDocuments from '../SmartInputs/InputDocuments';
 import InputImage from '../SmartInputs/InputImage/InputImage';
@@ -78,6 +79,7 @@ interface SmartProps {
   inputRequestable?: boolean;
   inputsIdRequestReview?: Array<string>;
   onChangeInputsIdRequestReview?: (value: Array<string>) => void;
+  isKeyPage?: boolean;
 }
 
 export interface InputError {
@@ -115,6 +117,7 @@ const SmartInputsController = ({
   inputRequestable,
   inputsIdRequestReview,
   onChangeInputsIdRequestReview,
+  isKeyPage,
 }: SmartProps) => {
   const [translate] = useTranslation();
 
@@ -170,7 +173,15 @@ const SmartInputsController = ({
           />
         );
       case DataTypesEnum.Phone:
-        return (
+        return isKeyPage ? (
+          <ComplexPhone
+            label={label}
+            name={name}
+            complexValue={complexValue}
+            docValue={simpleValue}
+            docStatus={docStatus}
+          />
+        ) : (
           <InputPhone
             label={label}
             name={name}
