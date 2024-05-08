@@ -81,6 +81,7 @@ export const FormTemplate = ({
                   inputsIdRequestReview={inputsIdRequestReview}
                   onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
                   profilePage={profilePage}
+                  isKeyPage={keyPage}
                 />
               </div>
             );
