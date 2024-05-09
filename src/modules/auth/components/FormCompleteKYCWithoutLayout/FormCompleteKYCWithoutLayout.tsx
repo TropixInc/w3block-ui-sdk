@@ -114,7 +114,8 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const validations = useGetValidationsTypesForSignup(
     tenantInputs?.data ?? [],
-    tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : ''
+    tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : '',
+    keyPage
   );
   const yupSchema = createSchemaSignupForm(validations);
 

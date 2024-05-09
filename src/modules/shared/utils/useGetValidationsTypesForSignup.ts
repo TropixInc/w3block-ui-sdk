@@ -40,7 +40,8 @@ const validateBirthdate = (
 
 export const useGetValidationsTypesForSignup = (
   values: Array<TenantInputEntityDto>,
-  valueContextId?: string
+  valueContextId?: string,
+  keyPage?: boolean
 ) => {
   const [translate] = useTranslation();
   const birthdateText = (age?: number) => {
@@ -132,34 +133,25 @@ export const useGetValidationsTypesForSignup = (
             yupKey: id,
             validations: object().shape({
               inputId: string(),
-              value: mandatory
-                ? yup
-                    .string()
-                    .test(
-                      'phone',
-                      translate(
-                        'auth>getValidationsTypesForSignup>insertValidPhone'
-                      ),
-                      (value) => {
-                        return value ? isValidPhoneNumber(value) : true;
-                      }
-                    )
-                    .required(
-                      translate(
-                        'auth>getValidationsTypesForSignup>insertYourPhone'
+              value:
+                !keyPage && mandatory
+                  ? yup
+                      .string()
+                      .test(
+                        'phone',
+                        translate(
+                          'auth>getValidationsTypesForSignup>insertValidPhone'
+                        ),
+                        (value) => {
+                          return value ? isValidPhoneNumber(value) : true;
+                        }
                       )
-                    )
-                : yup
-                    .string()
-                    .test(
-                      'phone',
-                      translate(
-                        'auth>getValidationsTypesForSignup>insertValidPhone'
-                      ),
-                      (value) => {
-                        return value ? isValidPhoneNumber(value) : true;
-                      }
-                    ),
+                      .required(
+                        translate(
+                          'auth>getValidationsTypesForSignup>insertYourPhone'
+                        )
+                      )
+                  : yup.array(),
             }),
           });
           break;
