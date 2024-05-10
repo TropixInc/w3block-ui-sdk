@@ -14,7 +14,6 @@ export const composeUrlCloudinary = ({
   src,
   InternalProps: { height, width, quality, fit = 'fill' },
 }: Props) => {
-  console.log(width, 'width');
   let url;
   const regexp = new RegExp('(.+/upload/)(.+)', 'g');
   const groups = regexp.exec(src);
