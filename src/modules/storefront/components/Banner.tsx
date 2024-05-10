@@ -187,6 +187,7 @@ const Slide = ({
   const bgUrlThreath = composeUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
     InternalProps: {
+      width: imageCompression === 'no-compression' ? undefined : 1920,
       quality: imageCompression ? imageCompression : 'best',
     },
   });

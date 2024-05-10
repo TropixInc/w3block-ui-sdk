@@ -95,7 +95,10 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
 
   const bgUrlThreath = composeUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
-    InternalProps: { quality: imageCompression ?? 'best' },
+    InternalProps: {
+      width: imageCompression === 'no-compression' ? undefined : 1920,
+      quality: imageCompression ?? 'best',
+    },
   });
   const bg = `${
     overlay && overlayColor

@@ -14,6 +14,7 @@ export const composeUrlCloudinary = ({
   src,
   InternalProps: { height, width, quality, fit = 'fill' },
 }: Props) => {
+  console.log(width, 'width');
   let url;
   const regexp = new RegExp('(.+/upload/)(.+)', 'g');
   const groups = regexp.exec(src);
@@ -22,7 +23,9 @@ export const composeUrlCloudinary = ({
     if (groups) {
       url =
         groups[1] +
-        `${width ? 'w_' + width : ''},${height ? 'h_' + height : ''},c_${fit}/${
+        `${width ? 'w_' + width : ''},${height ? 'h_' + height : ''},${
+          width || height ? 'c_' + fit : ''
+        }/${
           quality
             ? quality === 'no-compression'
               ? ''
@@ -52,7 +55,9 @@ export const composeUrlCloudinary = ({
     if (groups) {
       url =
         groups[1] +
-        `${width ? 'w_' + width : ''}${height ? ',h_' + height : ''},c_${fit}/${
+        `${width ? 'w_' + width : ''}${height ? ',h_' + height : ''},${
+          width || height ? 'c_' + fit : ''
+        }/${
           quality
             ? quality === 'no-compression'
               ? ''

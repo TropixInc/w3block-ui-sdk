@@ -86,7 +86,7 @@ export const Midia = ({ data }: { data: MidiaData }) => {
               '!pw-object-center pw-object-cover pw-w-full pw-h-full'
             )}
             src={_.get(datasource, bgUrl?.assetUrl, bgUrl?.assetUrl)}
-            width={1440}
+            width={imageCompression === 'no-compression' ? undefined : 1920}
             quality={imageCompression}
           />
         </a>
