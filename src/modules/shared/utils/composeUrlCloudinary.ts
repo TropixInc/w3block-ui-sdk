@@ -22,7 +22,9 @@ export const composeUrlCloudinary = ({
     if (groups) {
       url =
         groups[1] +
-        `${width ? 'w_' + width : ''},${height ? 'h_' + height : ''},c_${fit}/${
+        `${width ? 'w_' + width : ''},${height ? 'h_' + height : ''},${
+          width || height ? 'c_' + fit : ''
+        }/${
           quality
             ? quality === 'no-compression'
               ? ''
@@ -52,7 +54,9 @@ export const composeUrlCloudinary = ({
     if (groups) {
       url =
         groups[1] +
-        `${width ? 'w_' + width : ''}${height ? ',h_' + height : ''},c_${fit}/${
+        `${width ? 'w_' + width : ''}${height ? ',h_' + height : ''},${
+          width || height ? 'c_' + fit : ''
+        }/${
           quality
             ? quality === 'no-compression'
               ? ''

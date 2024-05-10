@@ -423,7 +423,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
           ? `url('${composeUrlCloudinary({
               src: backgroundUrl?.assetUrl ?? '',
               InternalProps: {
-                width: 1440,
+                width: imageCompression === 'no-compression' ? undefined : 600,
                 quality: imageCompression ? imageCompression : 'best',
               },
             })}')`
