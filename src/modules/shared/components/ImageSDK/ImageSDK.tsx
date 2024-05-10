@@ -45,7 +45,7 @@ export const ImageSDK = ({
           ref={preImageRef}
           src={composeUrlCloudinary({
             src: src?.replace('.mp4', '.png') ?? '',
-            InternalProps: { height, quality, fit },
+            InternalProps: { width, height, quality, fit },
           })}
         ></img>
         <video
