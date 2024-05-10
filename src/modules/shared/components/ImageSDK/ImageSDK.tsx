@@ -23,7 +23,6 @@ const imagePlaceholder =
 export const ImageSDK = ({
   src,
   className = '',
-  width,
   height,
   quality = 'good',
   fit = 'fill',
@@ -45,7 +44,7 @@ export const ImageSDK = ({
           ref={preImageRef}
           src={composeUrlCloudinary({
             src: src?.replace('.mp4', '.png') ?? '',
-            InternalProps: { width, height, quality, fit },
+            InternalProps: { height, quality, fit },
           })}
         ></img>
         <video
@@ -67,7 +66,7 @@ export const ImageSDK = ({
           style={{ display: 'none' }}
           src={composeUrlCloudinary({
             src: src ?? '',
-            InternalProps: { width, height, quality, fit },
+            InternalProps: { height, quality, fit },
           })}
         ></video>
       </>
@@ -87,7 +86,7 @@ export const ImageSDK = ({
               ? imagePlaceholder
               : composeUrlCloudinary({
                   src: src ?? '',
-                  InternalProps: { width, height, quality, fit },
+                  InternalProps: { height, quality, fit },
                 })
           }
         ></img>
@@ -108,7 +107,7 @@ export const ImageSDK = ({
               ? imagePlaceholder
               : composeUrlCloudinary({
                   src: src ?? '',
-                  InternalProps: { width, height, quality, fit },
+                  InternalProps: { height, quality, fit },
                 })
           }
         ></img>

@@ -101,7 +101,6 @@ export const ContentCard = ({
                         product.image.assetUrl
                       ) ?? '',
                     InternalProps: {
-                      width: 600,
                       quality: imageCardCompression ?? 'best',
                     },
                   })}') `

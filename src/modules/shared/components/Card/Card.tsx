@@ -63,7 +63,6 @@ export const Card = ({
                       product.images[0]?.thumb
                     ) ?? '',
                   InternalProps: {
-                    width: 1440,
                     quality: styleData.imageCardCompression
                       ? styleData.imageCardCompression
                       : 'best',
