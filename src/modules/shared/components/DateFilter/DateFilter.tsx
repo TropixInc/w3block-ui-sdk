@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useClickAway } from 'react-use';
 
 import { format } from 'date-fns';
 
@@ -38,7 +39,10 @@ export const DateFilter = ({
   placeholder,
 }: DateFilterProps) => {
   const [translate] = useTranslation();
+  const ref = useRef<HTMLDivElement>(null);
+
   const [openCalendarModal, setOpenCalendarModal] = useState(false);
+  useClickAway(ref, () => setOpenCalendarModal(false));
 
   const [isSelectingInterval, setIsSelectingInterval] = useState(false);
   const [startInterval, setStartInterval] = useState<Date | undefined>(
@@ -108,7 +112,10 @@ export const DateFilter = ({
         <ArrowDown className="pw-stroke-[#5682C3] pw-stroke-[3px]" />
       </button>
       {openCalendarModal ? (
-        <div className="pw-absolute pw-top-9 pw-w-full pw-z-20 pw-bg-white pw-px-4 pw-py-5 pw-shadow-[0px_4px_15px_#00000011] pw-border pw-border-[#B9D1F3] pw-rounded-lg">
+        <div
+          ref={ref}
+          className="pw-absolute pw-top-9 pw-min-w-[228px] pw-w-full pw-z-50 pw-bg-white pw-px-4 pw-py-5 pw-shadow-[0px_4px_15px_#00000011] pw-border pw-border-[#B9D1F3] pw-rounded-lg"
+        >
           <Calendar
             isSelectingInterval={isSelectingInterval}
             canSelectPastDay

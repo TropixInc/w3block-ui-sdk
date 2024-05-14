@@ -58,8 +58,8 @@ export const Selectinput = ({
         <ArrowDown className="pw-stroke-slate-600" />
       </div>
       {isOpened && !disabled && (
-        <div className="pw-relative  pw-h-full">
-          <div className="pw-absolute pw-max-h-[200px] pw-overflow-auto pw-bg-white pw-z-10 pw-border pw-border-slate-300 pw-rounded-lg pw-w-full pw-mt-1">
+        <div className="pw-relative pw-h-full">
+          <div className="pw-absolute pw-max-h-[200px] pw-overflow-auto pw-bg-white pw-z-50 pw-border pw-border-slate-300 pw-rounded-lg pw-w-full pw-mt-1">
             {hideFirstOption ? null : (
               <div
                 className="pw-p-3 pw-h-11 pw-text-sm pw-text-slate-800 pw-cursor-pointer hover:pw-bg-slate-100"
