@@ -2,13 +2,19 @@
 import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useTranslation } from 'react-i18next';
-import { useDebounce, useInterval, useLocalStorage } from 'react-use';
+import {
+  useCopyToClipboard,
+  useDebounce,
+  useInterval,
+  useLocalStorage,
+} from 'react-use';
 
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import _ from 'lodash';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { AuthButton } from '../../../auth/components/AuthButton';
 import { useProfile } from '../../../shared';
 import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
 import { Alert } from '../../../shared/components/Alert';
@@ -19,6 +25,7 @@ import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
+import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -109,6 +116,44 @@ export enum CheckoutStatus {
   MY_ORDER = 'MY_ORDER',
 }
 
+const mockPass = [
+  {
+    id: 'idi',
+    data: {
+      giftPassRecipient: {
+        name: 'Fernando',
+        message:
+          'Gostaria de te desejar feliz aniversário, lembrei de você e gostaria de te presentear com esse gift card para você aproveita o seu dia de forma mais feliz.',
+      },
+    },
+    user: {
+      name: 'Teste',
+      email: 'teste@teste.com',
+    },
+    tokenPass: {
+      imageUrl: '',
+      totalAmount: 'R$100,00',
+    },
+  },
+  {
+    id: 'idi',
+    data: {
+      giftPassRecipient: {
+        name: 'Fernando',
+        message: 'Gostaria de te desejar feliz aniversário',
+      },
+    },
+    user: {
+      name: 'Teste',
+      email: 'teste@teste.com',
+    },
+    tokenPass: {
+      imageUrl: '',
+      totalAmount: 'R$100,00',
+    },
+  },
+];
+
 interface CheckoutInfoProps {
   checkoutStatus?: CheckoutStatus;
   returnAction?: (query: string) => void;
@@ -126,6 +171,7 @@ const _CheckoutInfo = ({
   isCart = false,
 }: CheckoutInfoProps) => {
   const { datasource } = useDynamicApi();
+  const isMobile = useIsMobile();
   const context = useContext(ThemeContext);
   const hideCoupon =
     context?.defaultTheme?.configurations?.contentData?.checkoutConfig
@@ -180,6 +226,9 @@ const _CheckoutInfo = ({
   );
 
   const { companyId } = useCompanyConfig();
+  const [isCopied, setIsCopied] = useState(false);
+  const [state, copyToClipboard] = useCopyToClipboard();
+
   useEffect(() => {
     if (
       checkUtm &&
@@ -970,6 +1019,83 @@ const _CheckoutInfo = ({
     }
   };
 
+  const shareMenssage = 'olá, {sharedLink}';
+
+  const handleShared = () => {
+    if (shareMenssage) {
+      copyToClipboard(shareMenssage.replace('{shareLink}', ''));
+    } else {
+      copyToClipboard('link');
+    }
+
+    if (!state.error) setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 3000);
+  };
+
+  const onRenderGiftsCard = () => {
+    return (
+      <div className="pw-my-5 pw-flex pw-flex-wrap pw-gap-8">
+        {mockPass.map((pass, idx) => (
+          <div
+            key={pass.id + idx}
+            className="pw-w-full pw-max-w-[500px] pw-shadow-lg pw-flex pw-flex-col pw-items-center pw-px-6 pw-rounded-xl pw-border pw-border-[#E6E8EC]"
+          >
+            <div className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[20px]">
+              <img
+                className="pw-mt-6 pw-w-[250px] pw-h-[250px] pw-object-contain pw-rounded-lg sm:pw-w-[300px] sm:pw-h-[300px]"
+                src={pass.tokenPass.imageUrl}
+                alt=""
+              />
+              <p className="pw-mt-3 pw-font-semibold">Gift Card</p>
+              <p className="pw-mt-1 pw-text-[32px] pw-font-bold pw-mb-5">
+                {pass.tokenPass.totalAmount ?? ''}
+              </p>
+            </div>
+            <p className="pw-mt-3 pw-font-bold pw-text-base pw-text-center">{`Olá, ${pass?.data?.giftPassRecipient?.name}`}</p>
+            <p className="pw-font-semibold pw-text-base pw-text-center">
+              {translate('pass>sharedOrder>yourFriendSendGift', {
+                friendName: pass?.user?.name ?? pass?.user?.email ?? '',
+              })}
+            </p>
+            <p className="pw-mt-3 pw-text-base pw-text-center pw-h-[72px]">
+              {pass?.data?.giftPassRecipient?.message}
+            </p>
+            <div className="pw-w-full pw-justify-self-end">
+              <p className="pw-mt-4 pw-font-bold pw-text-center">
+                {translate('checkout>checkoutInfo>sendToFriend')}
+              </p>
+              <AuthButton className="pw-mt-3 pw-w-full">
+                <a
+                  target="_blank"
+                  href={
+                    isMobile
+                      ? `whatsapp://send?text=${encodeURIComponent('')}`
+                      : `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                          ''
+                        )}`
+                  }
+                  data-action="share/whatsapp/share"
+                  className="pw-p-0 pw-no-underline pw-w-[95%] pw-flex pw-items-center pw-justify-center"
+                  rel="noreferrer"
+                >
+                  Whatsapp
+                </a>
+              </AuthButton>
+              <AuthButton
+                onClick={() => handleShared()}
+                className="pw-mt-2 pw-mb-6 pw-w-full"
+              >
+                {isCopied
+                  ? 'copiado'
+                  : translate('affiliates>referrakWidget>shared')}
+              </AuthButton>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   const changeValue = (value: string) => {
     setPaymentAmount(value as string);
     if (automaxLoyalty) {
@@ -1501,6 +1627,8 @@ const _CheckoutInfo = ({
               )}
             </>
           )}
+
+          {onRenderGiftsCard()}
           {isCoinPayment || productCache?.isCoinPayment ? null : (
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
               {differentProducts.map((prod, index) => (

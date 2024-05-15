@@ -90,4 +90,5 @@ export enum PixwayAPIRoutes {
   GET_DEFERRED = '/{companyId}/loyalties/users/deferred',
   CHECK_WHITELIST_BY_USER = '/whitelists/{companyId}/check-user',
   GET_USER_BY_REFERRAL = '/users/{companyId}/by-referral-code/{referralCode}',
+  TOKEN_PASS_SHARE_CODE = '/token-pass-share-codes/tenants/{tenantId}/{code}',
 }
