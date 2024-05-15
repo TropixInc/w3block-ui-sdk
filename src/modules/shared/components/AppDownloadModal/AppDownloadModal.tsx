@@ -48,7 +48,9 @@ export const AppDownloadModal = ({
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
         {isLoading ? (
-          <Spinner className="pw-h-7 pw-w-7" />
+          <div className="pw-h-[350px] pw-flex pw-justify-center pw-items-center">
+            <Spinner className="pw-h-10 pw-w-10" />
+          </div>
         ) : (
           <>
             {referralUser ? (
