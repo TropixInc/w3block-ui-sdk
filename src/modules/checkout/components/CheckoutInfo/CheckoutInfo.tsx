@@ -37,6 +37,7 @@ import {
   ORDER_COMPLETED_INFO_KEY,
   PRACTITIONER_DATA_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
+  PRODUCT_IDS_INFO_KEY,
   PRODUCT_VARIANTS_INFO_KEY,
 } from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
@@ -121,7 +122,6 @@ const _CheckoutInfo = ({
   checkoutStatus = CheckoutStatus.FINISHED,
   returnAction,
   proccedAction,
-  productId,
   currencyId,
   isCart = false,
 }: CheckoutInfoProps) => {
@@ -158,7 +158,9 @@ const _CheckoutInfo = ({
     ? true
     : false;
   const destinationUser = router.query.destination;
-  const [productIds, setProductIds] = useState<string[] | undefined>(productId);
+  const [productIds, setProductIds] = useLocalStorage<string[] | undefined>(
+    PRODUCT_IDS_INFO_KEY
+  );
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
     currencyId
   );
@@ -373,21 +375,23 @@ const _CheckoutInfo = ({
             }
             setOrderPreview(data);
             setIsLoadingPreview(false);
-            setCart(
-              data.products.map((val) => {
-                return {
-                  id: val.id,
-                  variantIds: val?.variants?.map((val) => val.values[0].id),
-                  prices: val.prices,
-                  name: val.name,
-                };
-              })
-            );
-            cart.sort((a, b) => {
-              if (a.id > b.id) return -1;
-              if (a.id < b.id) return 1;
-              return 0;
-            });
+            if (isCart) {
+              setCart(
+                data.products.map((val) => {
+                  return {
+                    id: val.id,
+                    variantIds: val?.variants?.map((val) => val.values[0].id),
+                    prices: val.prices,
+                    name: val.name,
+                  };
+                })
+              );
+              cart.sort((a, b) => {
+                if (a.id > b.id) return -1;
+                if (a.id < b.id) return 1;
+                return 0;
+              });
+            }
             if (data.products.map((p) => p.id)?.length != productIds?.length) {
               setProductIds(data.products.map((p) => p.id));
               productIds?.sort((a, b) => {
@@ -620,19 +624,6 @@ const _CheckoutInfo = ({
           }
         });
       }
-      router.push(
-        isCart
-          ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
-          : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
-        {
-          query: {
-            productIds: newArray.join(','),
-            currencyId: orderPreview?.products[0].prices.find(
-              (price) => price.currencyId == currencyIdState
-            )?.currencyId,
-          },
-        }
-      );
       if (isCart) {
         cart.sort((a, b) => {
           if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
@@ -705,14 +696,6 @@ const _CheckoutInfo = ({
       if (!isCart) {
         let newArray: Array<string> = [];
         newArray = [...Array(quantity).fill(id)];
-        router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
-          query: {
-            productIds: newArray.join(','),
-            currencyId: orderPreview?.products[0].prices.find(
-              (price) => price.currencyId == currencyIdState
-            )?.currencyId,
-          },
-        });
         setProductIds(newArray);
         productIds?.sort((a, b) => {
           if (a > b) return -1;
@@ -747,14 +730,6 @@ const _CheckoutInfo = ({
             newIds.splice(ind, filteredProds?.length);
             let newArray: Array<string> = [];
             newArray = [...newIds, ...Array(quantity).fill(id)];
-            router.push(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
-              query: {
-                productIds: newArray.join(','),
-                currencyId: orderPreview?.products[0].prices.find(
-                  (price) => price.currencyId == currencyIdState
-                )?.currencyId,
-              },
-            });
             setProductIds(newArray);
             productIds?.sort((a, b) => {
               if (a > b) return -1;
@@ -816,20 +791,6 @@ const _CheckoutInfo = ({
         return true;
       }
     });
-
-    router.push(
-      isCart
-        ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
-        : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
-      {
-        query: {
-          productIds: filteredProds?.map((p) => p.id).join(','),
-          currencyId: orderPreview?.products[0].prices.find(
-            (price) => price.currencyId == currencyIdState
-          )?.currencyId,
-        },
-      }
-    );
     if (isCart) {
       setCart(filteredProds);
       cart.sort((a, b) => {

@@ -38,9 +38,7 @@ export const CartButton = ({
 
         pushConnect(
           PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION +
-            `?productIds=${cart
-              .map((p) => p.id)
-              .join(',')}&currencyId=${currencyId}`
+            `?currencyId=${currencyId}`
         );
       }}
       className={`pw-px-6 pw-order-2 pw-flex pw-cursor-pointer ${className}`}

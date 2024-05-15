@@ -8,7 +8,10 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
+import {
+  PRODUCT_IDS_INFO_KEY,
+  PRODUCT_VARIANTS_INFO_KEY,
+} from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
@@ -149,7 +152,9 @@ export const ProductPage = ({
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
-
+  const [__, setProductIds] = useLocalStorage<string[] | undefined>(
+    PRODUCT_IDS_INFO_KEY
+  );
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
       ? true
@@ -1057,11 +1062,10 @@ export const ProductPage = ({
                         onClick={() => {
                           if (product?.id && product.prices) {
                             setProductVariants({ ...variants });
+                            setProductIds(Array(quantity).fill(product.id));
                             pushConnect(
                               PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                                `?productIds=${Array(quantity)
-                                  .fill(product.id)
-                                  .join(',')}&currencyId=${currencyId?.id}`
+                                `?currencyId=${currencyId?.id}`
                             );
                           }
                         }}
