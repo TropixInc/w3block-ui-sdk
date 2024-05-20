@@ -1,11 +1,13 @@
-import { useProfile } from '../../../shared';
+import { useLocalStorage } from 'react-use';
+
+import { useProfile, useRouterConnect } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-import { useQuery } from '../../../shared/hooks/useQuery';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutEmptyCart } from '../../components/CheckoutEmptyCart/CheckoutEmptyCart';
 // import { CheckoutHeader } from '../../components/CheckoutHeader';
+import { PRODUCT_IDS_INFO_KEY } from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 
 interface CheckoutConfirmationTemplateProps {
@@ -25,9 +27,12 @@ export const CheckoutConfirmationTemplate = ({
 }: CheckoutConfirmationTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
   const { cart: productsCart } = useCart();
-  const query = useQuery();
-  const params = new URLSearchParams(query);
-  const productIdsFromQueries = params.get('productIds');
+  const { query } = useRouterConnect();
+  const productIdsFromQueries = query.productIds;
+  const [productIds] = useLocalStorage<string[] | undefined>(
+    PRODUCT_IDS_INFO_KEY
+  );
+  const isEmpty = !productIdsFromQueries && !productIds;
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
   const isCommerceReceiver = Boolean(
@@ -37,7 +42,7 @@ export const CheckoutConfirmationTemplate = ({
   if (!isAuthorized || isLoading) {
     return null;
   }
-  return (cart && !productsCart.length) || !productIdsFromQueries ? (
+  return (cart && !productsCart.length) || isEmpty ? (
     <>
       {/* <CheckoutHeader onClick={returnTo} /> */}
       <CheckoutEmptyCart />

@@ -46,7 +46,20 @@ interface Terms {
   title: string;
   description?: string;
 }
+
+export interface DataFields {
+  name: string;
+  label: string;
+  required: boolean;
+  type: 'text' | 'textarea';
+}
 export interface Product {
+  settings?: {
+    passShareCodeConfig?: {
+      enabled?: boolean;
+      dataFields?: DataFields[];
+    };
+  };
   canPurchase?: boolean;
   chainId?: number;
   htmlContent?: string;

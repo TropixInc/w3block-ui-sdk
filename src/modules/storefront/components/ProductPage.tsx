@@ -8,7 +8,11 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
+import {
+  GIFT_DATA_INFO_KEY,
+  PRODUCT_IDS_INFO_KEY,
+  PRODUCT_VARIANTS_INFO_KEY,
+} from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
@@ -70,6 +74,7 @@ import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/u
 import { useTrack } from '../hooks/useTrack/useTrack';
 import { ProductPageData } from '../interfaces';
 import { ProductVariants } from './ProductVariants';
+import { SendGiftForm } from './SendGiftForm';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -126,6 +131,7 @@ export const ProductPage = ({
   const { pushConnect } = useRouterConnect();
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
+  const [isSendGift, setIsSendGift] = useState(true);
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (quantityOpen) {
@@ -149,7 +155,11 @@ export const ProductPage = ({
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
-
+  const isPossibleSend = product?.settings?.passShareCodeConfig?.enabled;
+  const [__, setProductIds] = useLocalStorage<string[] | undefined>(
+    PRODUCT_IDS_INFO_KEY
+  );
+  const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
       ? true
@@ -413,6 +423,7 @@ export const ProductPage = ({
             }),
           ],
           currencyId: currencyId.id ?? '',
+          passShareCodeData: giftData,
           payments: [
             {
               currencyId: currencyId?.id ?? '',
@@ -789,7 +800,6 @@ export const ProductPage = ({
                       ))
                     : null}
                 </div>
-
                 {actionButton &&
                 product?.stockAmount &&
                 product?.stockAmount > 0 &&
@@ -900,7 +910,15 @@ export const ProductPage = ({
                     </p>
                   </>
                 ) : null}
-
+                {isPossibleSend ? (
+                  <SendGiftForm
+                    dataFields={
+                      product?.settings?.passShareCodeConfig?.dataFields ?? []
+                    }
+                    isSendGift={isSendGift}
+                    setIsSendGift={setIsSendGift}
+                  />
+                ) : null}
                 {/* {showCategory && product?.tags?.length ? (
                   <>
                     <p
@@ -935,7 +953,11 @@ export const ProductPage = ({
                       </p>
                       <button
                         onClick={handleClick}
-                        disabled={user && !product?.requirements ? true : false}
+                        disabled={
+                          user && !product?.requirements
+                            ? true
+                            : false || (isSendGift && !giftData)
+                        }
                         style={{
                           backgroundColor:
                             user && !product?.requirements
@@ -957,7 +979,9 @@ export const ProductPage = ({
                         <button
                           onClick={handleClick}
                           disabled={
-                            user && !product?.requirements ? true : false
+                            user && !product?.requirements
+                              ? true
+                              : false || (isSendGift && !giftData)
                           }
                           style={{
                             backgroundColor: 'none',
@@ -982,7 +1006,7 @@ export const ProductPage = ({
                           user &&
                           !product?.requirements
                             ? true
-                            : false
+                            : false || (isSendGift && !giftData)
                         }
                         style={{
                           backgroundColor:
@@ -1021,7 +1045,8 @@ export const ProductPage = ({
                             product?.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0 ||
                             currencyId?.crypto ||
-                            !termsChecked
+                            !termsChecked ||
+                            (isSendGift && !giftData)
                           }
                           onClick={addToCart}
                           style={{
@@ -1052,16 +1077,16 @@ export const ProductPage = ({
                         disabled={
                           product?.stockAmount == 0 ||
                           product?.canPurchaseAmount == 0 ||
-                          !termsChecked
+                          !termsChecked ||
+                          (isSendGift && !giftData)
                         }
                         onClick={() => {
                           if (product?.id && product.prices) {
                             setProductVariants({ ...variants });
+                            setProductIds(Array(quantity).fill(product.id));
                             pushConnect(
                               PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                                `?productIds=${Array(quantity)
-                                  .fill(product.id)
-                                  .join(',')}&currencyId=${currencyId?.id}`
+                                `?currencyId=${currencyId?.id}`
                             );
                           }
                         }}

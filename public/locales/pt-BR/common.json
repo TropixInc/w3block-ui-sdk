@@ -672,5 +672,15 @@
   "shared>cityAutoComplete>city": "Cidade",
   "shared>cityAutoComplete>searchCity": "Buscar cidade",
   "shared>inputPlaces>inputPlaceholder": "Busque por locais de interesse",
-  "dashboard>OrderListComponentSDK>orderNotFound": "Você ainda não fez nenhuma compra"
+  "dashboard>OrderListComponentSDK>orderNotFound": "Você ainda não fez nenhuma compra",
+  "storeFront>productPage>friendName": "Nome do seu amigo(a)",
+  "storeFront>productPage>message": "Mensagem",
+  "storeFront>productPage>maxChar": "(máx. 1000 caracteres)",
+  "pass>sharedOrder>yourFriendSendGift": "Seu amigo {{friendName}} acabou de te enviar esse gift card.",
+  "pass>sharedOrder>QRCode": "Apresente esse QRCODE ao garçom para usar o seu gift card na hora do pagamento da conta.",
+  "pass>sharedOrder>QRCodeUsage": "QRCODE para uso exclusivo e intransferível do recebedor.",
+  "pass>sharedOrder>nameUserPass": "Nome do utilizador",
+  "pass>sharedOrder>nameBuyer": "Nome do comprador",
+  "pass>sharedOrder>value": "Valor",
+  "checkout>checkoutInfo>sendToFriend": "Compartilhe com seu amigo(a)"
 }

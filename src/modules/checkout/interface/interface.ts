@@ -154,6 +154,7 @@ export interface CreateOrder {
   providerInputs?: unknown;
   utmParams?: UtmContextInterface;
   couponCode?: string;
+  passShareCodeData?: any;
   payments?: {
     currencyId: string;
     paymentMethod?: string;
@@ -216,6 +217,20 @@ export interface CreateOrderResponse {
     };
   }[];
   currency?: CurrencyResponse;
+  passShareCodeInfo?: {
+    status?: string;
+    codes?: {
+      code?: string;
+      status?: string;
+      productId?: string;
+      productTokenId?: string;
+    }[];
+    data?: {
+      message?: string;
+      destinationUserName?: string;
+      destinationUserEmail?: string;
+    };
+  };
 }
 
 export interface PaymentInfoInterface {
