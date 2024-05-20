@@ -9,6 +9,7 @@ import {
 } from 'react-use';
 
 import {
+  GIFT_DATA_INFO_KEY,
   PRODUCT_IDS_INFO_KEY,
   PRODUCT_VARIANTS_INFO_KEY,
 } from '../../checkout/config/keys/localStorageKey';
@@ -73,6 +74,7 @@ import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/u
 import { useTrack } from '../hooks/useTrack/useTrack';
 import { ProductPageData } from '../interfaces';
 import { ProductVariants } from './ProductVariants';
+import { SendGiftForm } from './SendGiftForm';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -141,9 +143,6 @@ export const ProductPage = ({
     PRODUCT_VARIANTS_INFO_KEY
   );
   const [quantity, setQuantity] = useState(1);
-  const [receivedName, setReceivedName] = useState('');
-  const [isPossibleSend] = useState(false);
-  const [message, setMessage] = useState('');
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
@@ -156,9 +155,11 @@ export const ProductPage = ({
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
+  const isPossibleSend = product?.settings?.passShareCodeConfig?.enabled;
   const [__, setProductIds] = useLocalStorage<string[] | undefined>(
     PRODUCT_IDS_INFO_KEY
   );
+  const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
       ? true
@@ -422,10 +423,7 @@ export const ProductPage = ({
             }),
           ],
           currencyId: currencyId.id ?? '',
-          passShareCodeData: {
-            name: receivedName,
-            message: message,
-          },
+          passShareCodeData: giftData,
           payments: [
             {
               currencyId: currencyId?.id ?? '',
@@ -802,76 +800,6 @@ export const ProductPage = ({
                       ))
                     : null}
                 </div>
-                {isPossibleSend ? (
-                  <div>
-                    <p className="pw-font-medium">Enviar como presente?</p>
-                    <div className="pw-mt-3 pw-flex pw-gap-x-4">
-                      <div className="pw-flex pw-gap-2 pw-items-center">
-                        <input
-                          type="radio"
-                          name="sendGift"
-                          checked={isSendGift}
-                          onChange={() => setIsSendGift(true)}
-                          id="yes"
-                          className="pw-w-5"
-                        />
-                        <label className="pw-cursor-pointer" htmlFor="yes">
-                          Sim
-                        </label>
-                      </div>
-                      <div className="pw-flex pw-gap-2 pw-items-center">
-                        <input
-                          type="radio"
-                          name="sendGift"
-                          checked={!isSendGift}
-                          onChange={() => setIsSendGift(false)}
-                          id="no"
-                        />
-                        <label className="pw-cursor-pointer" htmlFor="no">
-                          Não
-                        </label>
-                      </div>
-                    </div>
-
-                    {isSendGift ? (
-                      <div className="pw-mt-5 pw-flex pw-flex-col">
-                        <div className="pw-w-full pw-flex pw-flex-col">
-                          <label htmlFor="receivedName">
-                            {translate('storeFront>productPage>friendName')}
-                          </label>
-                          <input
-                            id="receivedName"
-                            required
-                            value={receivedName}
-                            onChange={(e) => setReceivedName(e.target.value)}
-                            type="text"
-                            className="pw-mt-1 pw-px-3 pw-py-2 pw-border pw-border-slate-500 pw-outline-none pw-rounded-lg pw-text-sm"
-                          />
-                        </div>
-                        <div className="pw-mt-3 pw-w-full pw-flex pw-flex-col">
-                          <label htmlFor="message">
-                            <span>
-                              {translate('storeFront>productPage>message')}
-                            </span>
-                            <span className="pw-ml-1 pw-text-xs">
-                              {translate('storeFront>productPage>maxChar')}
-                            </span>
-                          </label>
-                          <textarea
-                            className="pw-mt-1 pw-px-3 pw-py-2 pw-border pw-border-slate-500 pw-outline-none pw-rounded-lg pw-text-sm"
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            name="message"
-                            id="message"
-                            cols={30}
-                            rows={10}
-                          ></textarea>
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                ) : null}
-
                 {actionButton &&
                 product?.stockAmount &&
                 product?.stockAmount > 0 &&
@@ -982,7 +910,15 @@ export const ProductPage = ({
                     </p>
                   </>
                 ) : null}
-
+                {isPossibleSend ? (
+                  <SendGiftForm
+                    dataFields={
+                      product?.settings?.passShareCodeConfig?.dataFields ?? []
+                    }
+                    isSendGift={isSendGift}
+                    setIsSendGift={setIsSendGift}
+                  />
+                ) : null}
                 {/* {showCategory && product?.tags?.length ? (
                   <>
                     <p
@@ -1020,7 +956,7 @@ export const ProductPage = ({
                         disabled={
                           user && !product?.requirements
                             ? true
-                            : false || (isSendGift && !receivedName && !message)
+                            : false || (isSendGift && !giftData)
                         }
                         style={{
                           backgroundColor:
@@ -1045,8 +981,7 @@ export const ProductPage = ({
                           disabled={
                             user && !product?.requirements
                               ? true
-                              : false ||
-                                (isSendGift && (!receivedName || !message))
+                              : false || (isSendGift && !giftData)
                           }
                           style={{
                             backgroundColor: 'none',
@@ -1071,8 +1006,7 @@ export const ProductPage = ({
                           user &&
                           !product?.requirements
                             ? true
-                            : false ||
-                              (isSendGift && (!receivedName || !message))
+                            : false || (isSendGift && !giftData)
                         }
                         style={{
                           backgroundColor:
@@ -1112,7 +1046,7 @@ export const ProductPage = ({
                             product?.canPurchaseAmount == 0 ||
                             currencyId?.crypto ||
                             !termsChecked ||
-                            (isSendGift && (!receivedName || !message))
+                            (isSendGift && !giftData)
                           }
                           onClick={addToCart}
                           style={{
@@ -1144,7 +1078,7 @@ export const ProductPage = ({
                           product?.stockAmount == 0 ||
                           product?.canPurchaseAmount == 0 ||
                           !termsChecked ||
-                          (isSendGift && (!receivedName || !message))
+                          (isSendGift && !giftData)
                         }
                         onClick={() => {
                           if (product?.id && product.prices) {

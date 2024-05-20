@@ -1,5 +1,6 @@
 import {
   CurrencyResponse,
+  DataFields,
   Variants,
 } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 
@@ -40,6 +41,12 @@ export interface Product {
   subtitle?: string;
   metadata?: any;
   type?: string;
+  settings?: {
+    passShareCodeConfig?: {
+      enabled?: boolean;
+      dataFields?: DataFields[];
+    };
+  };
 }
 
 export interface Images {

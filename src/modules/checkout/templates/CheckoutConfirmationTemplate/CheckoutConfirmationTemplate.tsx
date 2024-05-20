@@ -28,12 +28,11 @@ export const CheckoutConfirmationTemplate = ({
   const { isAuthorized, isLoading } = usePrivateRoute();
   const { cart: productsCart } = useCart();
   const { query } = useRouterConnect();
-  const isCoinPayment = query.coinPayment?.includes('true') ? true : false;
   const productIdsFromQueries = query.productIds;
   const [productIds] = useLocalStorage<string[] | undefined>(
     PRODUCT_IDS_INFO_KEY
   );
-  const isEmpty = isCoinPayment ? !productIdsFromQueries : !productIds;
+  const isEmpty = !productIdsFromQueries && !productIds;
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
   const isCommerceReceiver = Boolean(

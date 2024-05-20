@@ -44,6 +44,7 @@ import { ThemeContext } from '../../../storefront';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useTrack } from '../../../storefront/hooks/useTrack/useTrack';
 import {
+  GIFT_DATA_INFO_KEY,
   ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
 } from '../../config/keys/localStorageKey';
@@ -120,6 +121,7 @@ export const CheckoutPayment = () => {
   const [productCache, setProductCache] = useLocalStorage<OrderPreviewCache>(
     PRODUCT_CART_INFO_KEY
   );
+  const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const track = useTrack();
   const { setCart } = useCart();
   const { data: session } = usePixwaySession();
@@ -387,6 +389,16 @@ export const CheckoutPayment = () => {
               '?' +
               query.split('?')[0],
             couponCode: orderInfo.couponCode,
+            passShareCodeData:
+              orderInfo?.products?.[0]?.settings?.passShareCodeConfig
+                ?.enabled && giftData
+                ? giftData === 'selfBuy'
+                  ? {
+                      destinationUserName: profile?.data?.data?.name,
+                      destinationUserEmail: profile?.data?.data?.email,
+                    }
+                  : giftData
+                : {},
             payments: orderInfo.isCoinPayment
               ? coinPayment?.length && coinPayment?.length > 0
                 ? isFree

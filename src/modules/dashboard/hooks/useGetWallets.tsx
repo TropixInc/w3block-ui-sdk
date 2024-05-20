@@ -39,7 +39,7 @@ export const useGetWallets = () => {
             wallets.push({
               id: wallet.id,
               address: wallet.address,
-              chainId: isProduction ? 137 : 80001,
+              chainId: isProduction ? 137 : 137,
               balance: '0',
               ownerId: wallet.ownerId,
               type: wallet.type == 'metamaks' ? 'metamask' : 'vault',

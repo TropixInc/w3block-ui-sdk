@@ -19,6 +19,7 @@ interface iQrCodeSection {
   size?: number;
   rootClassnames?: string;
   isRenderSecretCode?: boolean;
+  userId?: string;
 }
 
 export const QrCodeSection = ({
@@ -31,18 +32,19 @@ export const QrCodeSection = ({
   size = 300,
   rootClassnames,
   isRenderSecretCode = true,
+  userId,
 }: iQrCodeSection) => {
   const [codeQr, setCodeQr] = useState('');
   const { setNewCountdown: setQrCountDown, ...qrCountDown } = useCountdown();
   const [translate] = useTranslation();
 
   const { data: profile } = useProfile();
-
+  const idToUse = userId ? userId : profile?.data?.id;
   useEffect(() => {
     if (qrCountDown.seconds === 0 && secret !== undefined) {
       refetchSecret();
       setQrCountDown(add(new Date(), { seconds: 15 }));
-      setCodeQr(`${editionNumber},${profile?.data?.id},${secret},${benefitId}`);
+      setCodeQr(`${editionNumber},${idToUse},${secret},${benefitId}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrCountDown.isActive, secret]);
@@ -56,7 +58,11 @@ export const QrCodeSection = ({
         rootClassnames ?? ''
       )}
     >
-      <div className="pw-flex pw-flex-col pw-gap-[12px] sm:pw-gap-[16px] pw-p-[16px] sm:pw-px-[24px]">
+      <div
+        className={`pw-flex pw-flex-col ${
+          isRenderSecretCode ? 'pw-gap-[12px] sm:pw-gap-[16px]' : ''
+        } pw-p-[16px] sm:pw-px-[24px]`}
+      >
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
           {codeQr === '' ? (
             <div className="pw-w-[300px] pw-h-[300px] pw-flex pw-justify-center pw-items-center">
