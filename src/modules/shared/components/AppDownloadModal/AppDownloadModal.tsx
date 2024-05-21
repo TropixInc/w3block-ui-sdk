@@ -47,7 +47,7 @@ export const AppDownloadModal = ({
       classes={{ classComplement: '!pw-z-[9999]', backdrop: '!pw-z-[999]' }}
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
-        {isLoading ? (
+        {isLoading || (utm.utm_source && !referralUser) ? (
           <div className="pw-h-[350px] pw-flex pw-justify-center pw-items-center">
             <Spinner className="pw-h-10 pw-w-10" />
           </div>
