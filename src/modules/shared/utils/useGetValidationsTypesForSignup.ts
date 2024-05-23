@@ -223,6 +223,92 @@ export const useGetValidationsTypesForSignup = (
             }),
           });
           break;
+        case DataTypesEnum.SimpleLocation:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? object().shape({
+                    city: string().required(
+                      translate('auth>getValidationsTypesForSignup>insertText')
+                    ),
+                    country: string().required(
+                      translate('auth>getValidationsTypesForSignup>insertText')
+                    ),
+                    home: string(),
+                    placeId: string(),
+                    postal_code: string(),
+                    region: string().required(
+                      translate('auth>getValidationsTypesForSignup>insertText')
+                    ),
+                    street: string(),
+                  })
+                : object().shape({
+                    city: string(),
+                    country: string(),
+                    home: string(),
+                    placeId: string(),
+                    postal_code: string(),
+                    region: string(),
+                    street: string(),
+                  }),
+            }),
+          });
+          break;
+        case DataTypesEnum.IdentificationDocument:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? object().shape({
+                    docType: string().required(
+                      translate('auth>getValidationsTypesForSignup>insertText')
+                    ),
+                    document: string().required(
+                      translate('auth>getValidationsTypesForSignup>insertText')
+                    ),
+                  })
+                : object().shape({
+                    docType: string(),
+                    document: string(),
+                  }),
+            }),
+          });
+          break;
+        case DataTypesEnum.Checkbox:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? yup
+                    .boolean()
+                    .required(
+                      translate('auth>getValidationsTypesForSignup>insertText')
+                    )
+                : yup.boolean(),
+            }),
+          });
+          break;
+        case DataTypesEnum.SimpleSelect:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? string().required(
+                    translate('auth>getValidationsTypesForSignup>insertText')
+                  )
+                : string(),
+            }),
+          });
+          break;
       }
     });
 
