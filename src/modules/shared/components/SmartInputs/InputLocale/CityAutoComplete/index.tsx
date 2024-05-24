@@ -205,7 +205,7 @@ const CityAutoComplete = ({
       {showOptions ? (
         <div
           ref={divRef}
-          className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg pw-text-black pw-z-[999 ]"
+          className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg pw-text-black pw-z-[999]"
         >
           {placePredictions.length ? (
             <ul>
