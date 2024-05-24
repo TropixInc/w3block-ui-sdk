@@ -54,12 +54,12 @@ export const InputSelector = ({
   label,
   configData,
   type,
+  // profilePage = false,
   docValue,
-  profilePage = false,
 }: Props) => {
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
   const router = useRouterConnect();
-  const [firstInput, setFirstInput] = useState(true);
+  // const [firstInput, setFirstInput] = useState(true);
   const [multipleSelected, setMultipleSelected] = useState<
     Array<string | undefined>
   >([]);
@@ -105,13 +105,13 @@ export const InputSelector = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  useEffect(() => {
-    if (firstInput && !profilePage) {
-      field.onChange({ inputId: name, value: options[0].value });
-      setFirstInput(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   if (firstInput && !profilePage) {
+  //     field.onChange({ inputId: name, value: options[0].value });
+  //     setFirstInput(false);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const getPlaceholderForMultipleSelect = (selectedArray: any) => {
     if (
@@ -153,7 +153,10 @@ export const InputSelector = ({
       <label className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
         {label}
       </label>
-      <FormItemContainer className="!pw-px-4 pw-pt-1">
+      <FormItemContainer
+        invalid={fieldState.invalid}
+        className="!pw-px-4 pw-pt-1"
+      >
         {configData?.isMultiple ? (
           <MultipleSelect
             options={dynamicOptions}

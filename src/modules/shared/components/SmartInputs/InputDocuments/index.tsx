@@ -74,7 +74,7 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
           Documento de Identificação
         </p>
         <FormItemContainer
-          invalid={fieldState.invalid || !field.value}
+          invalid={fieldState.invalid}
           className="pw-p-[0.6rem]"
         >
           <select
@@ -103,7 +103,7 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
             Número do Documento
           </p>
           <FormItemContainer
-            invalid={fieldState.invalid || !field.value}
+            invalid={fieldState.invalid}
             className="pw-p-[0.6rem]"
           >
             {selectDocType === 'cpf' ? (

@@ -73,7 +73,7 @@ const InputEmail = ({
           {inputValue}
         </div>
       ) : (
-        <FormItemContainer invalid={fieldState.invalid || !field.value}>
+        <FormItemContainer invalid={fieldState.invalid}>
           <input
             disabled={autofill}
             name={name}

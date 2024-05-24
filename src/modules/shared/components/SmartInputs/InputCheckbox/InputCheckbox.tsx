@@ -57,7 +57,7 @@ const InputCheckbox = ({
         {label}
       </p>
       <FormItemContainer
-        invalid={fieldState.invalid || !field.value}
+        invalid={fieldState.invalid}
         className="!pw-outline-none pw-flex pw-gap-2"
       >
         <input

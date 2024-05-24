@@ -309,6 +309,20 @@ export const useGetValidationsTypesForSignup = (
             }),
           });
           break;
+        case DataTypesEnum.UserName:
+          arrayValid.push({
+            contextId: contextId,
+            yupKey: id,
+            validations: object().shape({
+              inputId: string(),
+              value: mandatory
+                ? string().required(
+                    translate('auth>getValidationsTypesForSignup>insertText')
+                  )
+                : string(),
+            }),
+          });
+          break;
       }
     });
 
