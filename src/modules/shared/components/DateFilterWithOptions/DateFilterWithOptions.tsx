@@ -134,7 +134,7 @@ export const DateFilterWithOptions = ({
   };
 
   return (
-    <div className="sm:pw-w-[300px] pw-w-full pw-relative">
+    <div className="sm:pw-w-[250px] pw-w-full pw-relative">
       <Selectinput
         className="pw-w-full"
         hideFirstOption
@@ -183,7 +183,7 @@ export const DateFilterWithOptions = ({
             </OffpixButtonBase>
             <OffpixButtonBase
               variant="filled"
-              className="pw-w-full pw-h-9 pw-flex pw-items-center pw-justify-center"
+              className="pw-w-full pw-h-9 pw-flex pw-items-center pw-justify-center pw-text-black"
               onClick={() => handleSelectDate()}
             >
               <p className="pw-text-sm pw-font-semibold">

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState, lazy, useEffect } from 'react';
 
 import fileDownload from 'js-file-download';
@@ -7,10 +8,13 @@ import { useGetDeferredByUserId } from '../../../business/hooks/useGetDeferredBy
 import { useGetXlsxDeferred } from '../../../business/hooks/useGetXlsxDeferred';
 import { useProfile } from '../../../shared';
 import { DateFilterWithOptions } from '../../../shared/components/DateFilterWithOptions/DateFilterWithOptions';
+import GenericSearchFilter from '../../../shared/components/GenericSearchFilter/GenericSearchFilter';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { Selectinput } from '../../../shared/components/SelectInput/SelectInput';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useGetUserByTenant } from '../../../shared/hooks/useGetUsersByTenant/useGetUsersByTenant';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { generateRandomUUID } from '../../../shared/utils/generateRamdomUUID';
@@ -38,6 +42,8 @@ const StatementComponentSDK = lazy(() =>
 
 export const WalletFutureStatementTemplateSDK = () => {
   const { loyaltyWallet } = useUserWallet();
+  const { companyId } = useCompanyConfig();
+  const [showOptions, setShowOptions] = useState(false);
   const [actualPage, setActualPage] = useState(1);
   const { data: profile } = useProfile();
   const loyaltyWalletDefined = useMemo(() => {
@@ -47,9 +53,7 @@ export const WalletFutureStatementTemplateSDK = () => {
   const [startDate, setStartDate] = useState<Date | string>();
   const [endDate, setEndDate] = useState<Date | string>();
   const [selected, setSelected] = useState<string | undefined>('');
-  const [selectedRestaurant, setSelectedRestaurant] = useState<
-    string | undefined
-  >('');
+  const [selectedWallet, setSelectedWallet] = useState<string | undefined>('');
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>('');
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
@@ -80,14 +84,14 @@ export const WalletFutureStatementTemplateSDK = () => {
         startDate: startDate ? new Date(startDate).toISOString() : '',
         endDate: endDate ? new Date(endDate).toISOString() : '',
         rangeDateBy: selected ? selected : 'createdAt',
-        walletAddress: selectedRestaurant,
+        walletAddress: selectedWallet,
       },
       !!loyaltyWalletDefined && isAdmin,
       selectedStatus
     );
 
   const { data: restaurants } = useGetApi({
-    enabled: isAdmin,
+    enabled: isAdmin && companyId === 'ef41dc3f-d9e4-4ca4-8270-673d68f4f490',
   });
   const { mutate: getXlsx } = useGetXlsxDeferred();
   const [loadingDownload, setLoadingDownload] = useState(false);
@@ -102,7 +106,7 @@ export const WalletFutureStatementTemplateSDK = () => {
           startDate: startDate ? new Date(startDate).toISOString() : '',
           endDate: endDate ? new Date(endDate).toISOString() : '',
           walletAddress: isAdmin
-            ? selectedRestaurant
+            ? selectedWallet
             : profile?.data?.mainWallet?.address ?? '',
           rangeDateBy: selected ? selected : 'createdAt',
         },
@@ -153,7 +157,25 @@ export const WalletFutureStatementTemplateSDK = () => {
 
   useEffect(() => {
     setActualPage(1);
-  }, [selected, selectedRestaurant, selectedStatus, startDate]);
+  }, [selected, selectedWallet, selectedStatus, startDate]);
+
+  const [search, setSearch] = useState('');
+  const { data: userData } = useGetUserByTenant({
+    enabled: isAdmin && companyId !== 'ef41dc3f-d9e4-4ca4-8270-673d68f4f490',
+    params: { search },
+  });
+
+  const userToShow = useMemo(() => {
+    const data = userData?.data?.items
+      .filter((res) => res?.mainWallet?.address)
+      .map((res) => {
+        return {
+          label: res?.name ?? res?.email,
+          value: res?.mainWallet?.address,
+        };
+      });
+    return data;
+  }, [userData?.data?.items]);
 
   useGuardPagesWithOptions({
     needUser: true,
@@ -163,7 +185,12 @@ export const WalletFutureStatementTemplateSDK = () => {
   return (
     <InternalPagesLayoutBase>
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg">
-        <p className="pw-text-[23px] pw-font-[600]">Recebimentos</p>
+        <p className="pw-text-[23px] pw-font-[600] pw-text-black">
+          Recebimentos
+        </p>
+        <p className="pw-text-[12px] pw-font-[400] pw-text-black">
+          Relatório geral de recebimentos dentro da plataforma
+        </p>
         <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
           <Selectinput
             options={successOptions ?? []}
@@ -194,30 +221,50 @@ export const WalletFutureStatementTemplateSDK = () => {
             endDate={endDate as Date}
           />
           {isAdmin ? (
-            <Selectinput
-              options={restaurantOptions ?? []}
-              selected={selectedRestaurant ?? ''}
-              onChange={setSelectedRestaurant}
-              placeholder="Restaurantes"
-              className="sm:pw-w-[250px] pw-w-full"
-            />
-          ) : null}
-          <PixwayButton
-            onClick={() => initDowload()}
-            disabled={loadingDownload}
-            className="!pw-py-2 !pw-px-[30px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl disabled:pw-opacity-50 disabled:!pw-bg-white"
-          >
-            {loadingDownload ? (
-              <Spinner className="pw-h-5 pw-w-5" />
+            companyId === 'ef41dc3f-d9e4-4ca4-8270-673d68f4f490' ? (
+              <Selectinput
+                options={restaurantOptions ?? []}
+                selected={selectedWallet ?? ''}
+                onChange={setSelectedWallet}
+                placeholder="Restaurantes"
+                className="sm:pw-w-[250px] pw-w-full"
+              />
             ) : (
-              'Baixar relatório'
-            )}
-          </PixwayButton>
+              <GenericSearchFilter
+                onSearch={setSearch}
+                search={search}
+                showResponseModal={showOptions}
+                onShowResponseModal={setShowOptions}
+                items={userToShow ?? []}
+                inputPlaceholder={'Buscar usuário'}
+                classes={{
+                  root: 'sm:!pw-w-[300px] !pw-w-full pw-h-11',
+                  input:
+                    'sm:!pw-w-[300px] !pw-w-full !pw-text-black !pw-placeholder-black pw-opacity-80',
+                }}
+                onSelectItemById={setSelectedWallet}
+              />
+            )
+          ) : null}
         </div>
-        <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 sm:pw-mx-0 pw-text-[23px] pw-font-[600]">
-          R${dataToUse()?.summary?.balance?.toFixed(2)}
+        <PixwayButton
+          onClick={() => initDowload()}
+          disabled={loadingDownload}
+          className="!pw-py-2 !pw-px-[30px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl disabled:pw-opacity-50 disabled:!pw-bg-white pw-mt-6"
+        >
+          {loadingDownload ? (
+            <Spinner className="pw-h-5 pw-w-5" />
+          ) : (
+            'Baixar relatório'
+          )}
+        </PixwayButton>
+        <div className="pw-mt-4 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 sm:pw-mx-0 pw-text-[23px] pw-font-[600] pw-text-black">
+          R$
+          {dataToUse()?.summary?.balance?.toFixed(2)
+            ? dataToUse()?.summary?.balance?.toFixed(2)
+            : '---'}
         </div>
-        <p className="pw-text-xs">{totalText()}</p>
+        <p className="pw-text-xs pw-text-black">{totalText()}</p>
       </div>
       <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
         {isLoading || loadingAdminDeferred ? (
@@ -265,7 +312,7 @@ export const WalletFutureStatementTemplateSDK = () => {
             );
           })
         ) : (
-          <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
+          <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center pw-text-black">
             Nenhum lançamento no periodo selecionado
           </div>
         )}
