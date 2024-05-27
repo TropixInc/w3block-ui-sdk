@@ -3,6 +3,7 @@ import { lazy, useMemo, useState } from 'react';
 import { PixwayAppRoutes } from '../../../../enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../../../hooks/usePixwaySession';
 import useTranslation from '../../../../hooks/useTranslation';
+
 const NavigationTabsPixwaySDKDesktop = lazy(() =>
   import('./components/NavigationTabsPixwaySDKDesktop').then((mod) => ({
     default: mod.NavigationTabsPixwaySDKDesktop,
@@ -26,6 +27,8 @@ export interface NavigationTabsPixwaySDKProps {
   fontFamily?: string;
   bgColor?: string;
   hasLogIn?: boolean;
+  bgSelectionColor?: string;
+  textSelectionColor?: string;
 }
 
 interface NavigationTabsClassNames {
@@ -51,6 +54,8 @@ export const NavigationTabsPixwaySDK = ({
   fontFamily,
   bgColor,
   hasLogIn = true,
+  bgSelectionColor,
+  textSelectionColor,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
@@ -95,6 +100,8 @@ export const NavigationTabsPixwaySDK = ({
           textColor={textColor}
           hasSignUp={hasSignUp}
           bgColor={bgColor}
+          bgSelectionColor={bgSelectionColor}
+          textSelectionColor={textSelectionColor}
         />
       </div>
       {session && tabs?.length === 0 ? null : (
@@ -116,6 +123,8 @@ export const NavigationTabsPixwaySDK = ({
             hasSignUp={hasSignUp}
             bgColor={bgColor}
             hasLogIn={hasLogIn}
+            bgSelectionColor={bgSelectionColor}
+            textSelectionColor={textSelectionColor}
           />
         </div>
       )}

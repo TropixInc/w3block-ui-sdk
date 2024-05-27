@@ -1,6 +1,12 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
-import ChevronLeft from '../../../../../assets/icons/chevronLeftFilled.svg?react';
+import {
+  ControlledMenu,
+  MenuItem,
+  SubMenu,
+  useClick,
+} from '@szhsin/react-menu';
+
 import ChevronRight from '../../../../../assets/icons/chevronRightFilled.svg?react';
 import CloseIcon from '../../../../../assets/icons/closeIconHeader.svg?react';
 import HamburguerIcon from '../../../../../assets/icons/headerHamburger.svg?react';
@@ -22,18 +28,69 @@ export const NavigationTabsPixwaySDKMobile = ({
   hasSignUp,
   hasLogIn = true,
   bgColor,
+  bgSelectionColor,
+  textSelectionColor,
 }: NavigationTabsPixwaySDKProps) => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
-  const [menuIndex, setMenuIndex] = useState(-1);
-  const [selectedTitle, setSelectedTitle] = useState('');
+  const ref = useRef(null);
+  const [isOpenSubmenu, setOpenSubmenu] = useState(false);
+  const anchorProps = useClick(isOpenSubmenu, setOpenSubmenu);
 
   const toggleTabsMemo = () => {
     if (toogleMenu) {
       toogleMenu();
     } else setOpenedTabs(!openedTabs);
+  };
+
+  const onRenderMenu = (item: any) => {
+    if (item.tabs) {
+      return item.tabs.map((subm: any, idx: any) => (
+        <SubMenu
+          menuStyle={{
+            backgroundColor: bgColor,
+            color: textColor,
+            padding: 0,
+          }}
+          key={item.name + idx}
+          itemProps={{ className: '!pw-p-0' }}
+          label={({ hover, open }) => (
+            <span
+              className="pw-block pw-p-[0.375rem_1.5rem] pw-w-full"
+              style={{
+                color: hover || open ? textSelectionColor : textColor,
+                backgroundColor: hover || open ? bgSelectionColor : '',
+                opacity: open ? 0.8 : 1,
+              }}
+            >
+              {item.name}
+            </span>
+          )}
+        >
+          {onRenderMenu(subm)}
+        </SubMenu>
+      ));
+    } else {
+      return (
+        <MenuItem href={item.router} className="!pw-p-0">
+          {({ hover }) => {
+            return (
+              <div
+                className="pw-block pw-p-[0.375rem_1.5rem] pw-w-full"
+                style={{
+                  backgroundColor: hover ? bgSelectionColor : '',
+                  color: hover ? textSelectionColor : textColor,
+                }}
+              >
+                <p>{item.name}</p>
+              </div>
+            );
+          }}
+        </MenuItem>
+      );
+    }
   };
 
   return !session || (tabs && tabs.length > 0) ? (
@@ -58,81 +115,73 @@ export const NavigationTabsPixwaySDKMobile = ({
         >
           {tabs?.map((tab, i) => {
             if (tab.tabs?.length) {
-              if (menuIndex === i)
-                return (
-                  <div>
-                    <p
-                      className="pw-text-black pw-text-lg pw-flex pw-items-center pw-gap-4"
-                      onClick={() => {
-                        setMenuIndex(-1);
-                        setSelectedTitle('');
-                      }}
-                    >
-                      <ChevronLeft className="pw-w-4 pw-h-4" /> {selectedTitle}
-                    </p>
-                    <hr />
-                    <div className="pw-top-8 pw-flex pw-justify-center">
-                      <div
-                        style={{ backgroundColor: bgColor }}
-                        className={`
-                        pw-py-4 pw-px-1
-                        pw-flex pw-flex-col pw-gap-4 pw-text-center pw-justify-center
-                      `}
-                      >
-                        {tab.tabs.map((t) => {
-                          return (
-                            <a
-                              style={{ color: textColor }}
-                              className={`pw-text-sm pw-font-semibold ${classNames?.tabClassName}`}
-                              key={t.name}
-                              href={t.router}
-                            >
-                              {t.name}
-                            </a>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                );
-
               return (
-                !selectedTitle && (
-                  <div>
-                    <span
-                      style={{ color: textColor }}
-                      className={`
-                      pw-text-sm pw-font-semibold
-                      pw-cursor-pointer pw-underline 
-                      pw-flex pw-items-center
-                      ${classNames?.tabClassName}
-                  `}
-                      onClick={() => {
-                        setMenuIndex(i);
-                        setSelectedTitle(tab.name);
-                      }}
-                    >
-                      {tab.name}
-
-                      <ChevronRight className="pw-w-4 pw-h-4" />
-                    </span>
-                  </div>
-                )
+                <>
+                  <button
+                    key={tab.name + i}
+                    style={{ color: textColor }}
+                    type="button"
+                    ref={ref}
+                    className="pw-flex pw-items-center pw-gap-x-2"
+                    {...anchorProps}
+                  >
+                    {tab.name}
+                    <ChevronRight
+                      className="pw-rotate-90 pw-w-3 pw-h-3"
+                      style={{ fill: textColor }}
+                    />
+                  </button>
+                  <ControlledMenu
+                    state={isOpenSubmenu ? 'open' : 'closed'}
+                    anchorRef={ref}
+                    onClose={() => setOpenSubmenu(false)}
+                    menuStyle={{ backgroundColor: bgColor }}
+                  >
+                    {tab.tabs.map((sub, idx) => {
+                      if (sub.tabs) {
+                        return onRenderMenu(sub);
+                      } else {
+                        return (
+                          <MenuItem
+                            key={sub.name + idx}
+                            href={sub.router}
+                            className="!pw-p-0"
+                          >
+                            {({ hover }) => {
+                              return (
+                                <div
+                                  className="pw-block pw-p-[0.375rem_1.5rem] pw-w-full"
+                                  style={{
+                                    backgroundColor: hover
+                                      ? bgSelectionColor
+                                      : '',
+                                    color: hover
+                                      ? textSelectionColor
+                                      : textColor,
+                                  }}
+                                >
+                                  <p>{sub.name}</p>
+                                </div>
+                              );
+                            }}
+                          </MenuItem>
+                        );
+                      }
+                    })}
+                  </ControlledMenu>
+                </>
               );
-            }
-
-            return (
-              !selectedTitle && (
+            } else {
+              return (
                 <a
                   style={{ color: textColor }}
-                  href={tab.router}
-                  className={`pw-font-semibold pw-text-sm ${classNames?.tabClassName}`}
                   key={tab.name}
+                  href={tab.router ?? ''}
                 >
                   {tab.name}
                 </a>
-              )
-            );
+              );
+            }
           })}
 
           {!session && hasLogIn && (

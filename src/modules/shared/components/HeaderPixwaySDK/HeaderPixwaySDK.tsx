@@ -48,6 +48,8 @@ interface HeaderPixwaySDKProps {
   logoLink?: string;
   standalone?: boolean;
   hasLogIn?: boolean;
+  bgSelectionColor?: string;
+  textSelectionColor?: string;
 }
 
 const _HeaderPixwaySDK = ({
@@ -72,6 +74,8 @@ const _HeaderPixwaySDK = ({
   logoLink,
   standalone = false,
   hasLogIn = true,
+  bgSelectionColor,
+  textSelectionColor,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
   const { query } = useRouterConnect();
@@ -196,6 +200,14 @@ const _HeaderPixwaySDK = ({
     context?.defaultTheme?.header?.styleData?.backgroundColor;
   const headerBgColor = bgColor ?? defaultBgColor;
 
+  const selectionBgColor =
+    bgSelectionColor ??
+    context?.defaultTheme?.header?.styleData?.bgSelectionColor;
+
+  const selectionTextColor =
+    textSelectionColor ??
+    context?.defaultTheme?.header?.styleData?.textSelectionColor;
+
   return context?.defaultTheme || standalone ? (
     <div
       id="sf-header"
@@ -241,6 +253,8 @@ const _HeaderPixwaySDK = ({
                     : 'Poppins') + ', sans-serif'
                 }
                 hasLogIn={hasLogIn}
+                bgSelectionColor={selectionBgColor}
+                textSelectionColor={selectionTextColor}
               />
             </div>
             <a
@@ -274,6 +288,8 @@ const _HeaderPixwaySDK = ({
                     : 'Poppins') + ', sans-serif'
                 }
                 hasLogIn={hasLogIn}
+                bgSelectionColor={bgSelectionColor}
+                textSelectionColor={textSelectionColor}
               />
             </div>
             {hasCart && (
