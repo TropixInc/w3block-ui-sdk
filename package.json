@@ -33,6 +33,7 @@
     "@metamask/detect-provider": "^2.0.0",
     "@stripe/react-stripe-js": "^1.13.0",
     "@stripe/stripe-js": "^1.41.0",
+    "@szhsin/react-menu": "^4.1.0",
     "@types/node": "18.11.18",
     "@w3block/sdk-id": "^0.1.72",
     "axios": "^0.27.2",

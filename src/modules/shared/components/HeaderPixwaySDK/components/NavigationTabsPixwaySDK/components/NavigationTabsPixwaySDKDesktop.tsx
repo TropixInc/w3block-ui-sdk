@@ -1,64 +1,145 @@
-import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
+import { useRef } from 'react';
+
+import {
+  ControlledMenu,
+  MenuItem,
+  SubMenu,
+  useHover,
+  useMenuState,
+} from '@szhsin/react-menu';
+
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
+import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
+import {
+  NavigationTabsPixwaySDKProps,
+  NavigationTabsPixwaySDKTabs,
+} from '../NavigationTabsPixwaySDK';
 
 export const NavigationTabsPixwaySDKDesktop = ({
   classNames,
   tabs,
   textColor = 'black',
   bgColor,
+  bgSelectionColor,
+  textSelectionColor,
 }: NavigationTabsPixwaySDKProps) => {
-  return (
-    <div className={`pw-flex pw-gap-x-[24px] ${classNames?.className}`}>
-      {tabs?.map((tab) => {
-        if (tab.tabs?.length) {
-          return (
-            <div key={tab.name} className="pw-relative pw-group">
-              <span
-                style={{ color: textColor }}
-                className={`pw-text-sm pw-font-semibold pw-cursor-pointer pw-underline ${classNames?.tabClassName}`}
-              >
-                {tab.name}
-              </span>
+  const ref = useRef(null);
+  const [menuState, toggle] = useMenuState({ transition: true });
+  const { anchorProps, hoverProps } = useHover(menuState.state, toggle);
 
-              <div className="pw-hidden group-hover:pw-block">
-                <div className="pw-top-8 pw-flex pw-justify-center">
-                  <div
-                    style={{ backgroundColor: bgColor }}
-                    className={`
-                      pw-absolute pw-z-10
-                      pw-py-4 pw-px-1 pw-rounded-2xl pw-w-[160px]
-                      pw-flex pw-flex-col pw-gap-4 pw-text-center pw-justify-center
-                      pw-drop-shadow-lg
-                  `}
-                  >
-                    {tab.tabs.map((t) => {
-                      return (
-                        <a
-                          style={{ color: textColor }}
-                          className={`pw-text-sm pw-font-semibold ${classNames?.tabClassName}`}
-                          key={t.name}
-                          href={t.router}
-                        >
-                          {t.name}
-                        </a>
-                      );
-                    })}
-                  </div>
-                </div>
+  const onRenderMenu = (item: NavigationTabsPixwaySDKTabs) => {
+    if (item.tabs) {
+      return item.tabs.map((subm, idx) => (
+        <SubMenu
+          menuStyle={{
+            backgroundColor: bgColor,
+            color: textColor,
+            padding: 0,
+          }}
+          key={item.name + idx}
+          itemProps={{ className: '!pw-p-0' }}
+          label={({ hover, open }) => (
+            <span
+              className="pw-block pw-p-[0.375rem_1.5rem] pw-w-full"
+              style={{
+                color: hover || open ? textSelectionColor : textColor,
+                backgroundColor: hover || open ? bgSelectionColor : '',
+                opacity: open ? 0.8 : 1,
+              }}
+            >
+              {item.name}
+            </span>
+          )}
+        >
+          {onRenderMenu(subm)}
+        </SubMenu>
+      ));
+    } else {
+      return (
+        <MenuItem href={item.router} className="!pw-p-0">
+          {({ hover }) => {
+            return (
+              <div
+                className="pw-block pw-p-[0.375rem_1.5rem] pw-w-full"
+                style={{
+                  backgroundColor: hover ? bgSelectionColor : '',
+                  color: hover ? textSelectionColor : textColor,
+                }}
+              >
+                <p>{item.name}</p>
               </div>
-            </div>
+            );
+          }}
+        </MenuItem>
+      );
+    }
+  };
+
+  return (
+    <div className={`pw-flex pw-gap-x-6 ${classNames?.className ?? ''}`}>
+      {tabs?.map((item) => {
+        if (item.tabs?.length) {
+          return (
+            <>
+              <div
+                className="pw-cursor-pointer pw-flex pw-gap-x-1 pw-items-center"
+                key={item.name}
+                ref={ref}
+                {...anchorProps}
+                style={{ color: textColor }}
+              >
+                {item.name}
+                <ArrowDown style={{ stroke: textColor }} />
+              </div>
+              <ControlledMenu
+                {...hoverProps}
+                {...menuState}
+                anchorRef={ref}
+                onClose={() => toggle(false)}
+                menuStyle={{ backgroundColor: bgColor }}
+              >
+                {item.tabs.map((sub, idx) => {
+                  if (sub.tabs) {
+                    return onRenderMenu(sub);
+                  } else {
+                    return (
+                      <MenuItem
+                        key={sub.name + idx}
+                        href={item.router}
+                        className="!pw-p-0"
+                      >
+                        {({ hover }) => {
+                          return (
+                            <div
+                              className="pw-block pw-p-[0.375rem_1.5rem] pw-w-full"
+                              style={{
+                                backgroundColor: hover ? bgSelectionColor : '',
+                                color: hover ? textSelectionColor : textColor,
+                              }}
+                            >
+                              <p>{item.name}</p>
+                            </div>
+                          );
+                        }}
+                      </MenuItem>
+                    );
+                  }
+                })}
+              </ControlledMenu>
+            </>
+          );
+        } else {
+          return (
+            <a
+              style={{ color: textColor }}
+              key={item.name}
+              href={item.router ?? ''}
+            >
+              {item.name}
+            </a>
           );
         }
-
-        return (
-          <a
-            style={{ color: textColor }}
-            className={`pw-text-sm pw-font-semibold ${classNames?.tabClassName}`}
-            key={tab.name}
-            href={tab.router}
-          >
-            {tab.name}
-          </a>
-        );
       })}
     </div>
   );
