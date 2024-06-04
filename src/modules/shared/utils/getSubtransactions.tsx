@@ -381,10 +381,10 @@ export function getSubtransactions(data: Erc20TokenHistory) {
         recipient: request?.metadata?.description,
         description:
           data?.type === 'minter'
-            ? 'Crédito'
+            ? `Crédito ${request.metadata.description}`
             : data?.type === 'burn'
-            ? 'Débito'
-            : 'Transferência',
+            ? `Débito ${request.metadata.description}`
+            : `Transfêrencia ${request.metadata.description}`,
       });
     }
   }

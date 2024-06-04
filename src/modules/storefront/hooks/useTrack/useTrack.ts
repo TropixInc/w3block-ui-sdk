@@ -7,7 +7,8 @@ export const useTrack = () => {
   const track = (evt: string, parameters: any) => {
     if (gtag) {
       gtag(evt, {
-        userId: user.data?.data.id ?? '',
+        userId: user?.data?.data?.id ?? '',
+        userEmail: user?.data?.data?.email ?? '',
         ...parameters,
       });
     }
