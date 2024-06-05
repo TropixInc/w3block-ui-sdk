@@ -4,7 +4,7 @@ import { useCopyToClipboard } from 'react-use';
 
 import { Disclosure } from '@headlessui/react';
 import classNames from 'classnames';
-import { format } from 'date-fns';
+import { format, getTime } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 
 import { Grade, gradeMap } from '../../../custom';
@@ -240,6 +240,16 @@ export const StatementComponent = ({
     }, [metadata]);
 
   const [openReceipt, setOpenReceipt] = useState(false);
+
+  const showScheduledAt = () => {
+    const diferenca = Math.abs(
+      getTime(Date.parse(statement.scheduledAt ?? '')) -
+        Date.parse(statement.createdAt ?? '')
+    );
+    const horas = diferenca / (1000 * 60 * 60);
+
+    return horas > 1;
+  };
   return (
     <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
       <div className="pw-flex pw-flex-col pw-items-start">
@@ -289,12 +299,26 @@ export const StatementComponent = ({
       <div className="pw-flex pw-flex-col pw-items-end">
         <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-bold">
           {' '}
-          {statement?.date
-            ? format(new Date(statement?.date ?? Date.now()), 'PPpp', {
+          {statement?.createdAt
+            ? format(Date.parse(statement?.createdAt ?? Date.now()), 'PPpp', {
                 locale: locale === 'pt-BR' ? ptBR : enUS,
               })
             : null}
         </div>
+        {showScheduledAt() ? (
+          <div className="pw-text-right pw-text-zinc-700 pw-text-xs">
+            Agendado em:{' '}
+            {statement?.scheduledAt
+              ? format(
+                  Date.parse(statement?.scheduledAt ?? Date.now()),
+                  'PPpp',
+                  {
+                    locale: locale === 'pt-BR' ? ptBR : enUS,
+                  }
+                )
+              : null}
+          </div>
+        ) : null}
       </div>
       <ReceiptQRCode
         deliverId={statement?.deliveryId}

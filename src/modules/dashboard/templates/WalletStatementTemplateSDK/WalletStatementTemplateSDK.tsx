@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState, lazy } from 'react';
 
 import { isAfter, isBefore } from 'date-fns';
@@ -57,8 +58,8 @@ export const WalletStatementTemplateSDK = () => {
       });
     });
     arr.sort(function (a: any, b: any) {
-      const dateA = Date.parse(a?.date);
-      const dateB = Date.parse(b?.date);
+      const dateA = Date.parse(a?.createdAt);
+      const dateB = Date.parse(b?.createdAt);
       if (isBefore(dateA, dateB)) return 1;
       if (isAfter(dateA, dateB)) return -1;
       return 0;
@@ -109,9 +110,9 @@ export const WalletStatementTemplateSDK = () => {
             <Spinner className="pw-h-10 pw-w-10" />
           </div>
         ) : subTransactions?.length ? (
-          subTransactions.map((item) => (
+          subTransactions.map((item, index) => (
             <StatementComponent
-              key={item.actionId}
+              key={item?.actionId ? item?.actionId + index : index}
               statement={item}
               currency={loyaltyWallet?.length ? loyaltyWallet[0]?.currency : ''}
             />
