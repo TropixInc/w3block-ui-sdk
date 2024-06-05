@@ -19,11 +19,15 @@ import {
 } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useModalController } from '../../../shared/hooks/useModalController';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
+import WithdrawModal from '../../components/WithdrawModal/WithdrawModal';
 
 const _WithdrawsTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
   const [translate] = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isOpen, openModal, closeModal } = useModalController();
 
   const configTable: ConfigGenericTable = {
     localeItems: 'data.items',
@@ -53,7 +57,7 @@ const _WithdrawsTemplateSDK = () => {
     },
     columns: [
       {
-        format: { type: FormatTypeColumn.USER },
+        format: { type: FormatTypeColumn.LOCALTIME },
         key: 'email',
         sortable: false,
         moreInfos: {
@@ -62,7 +66,7 @@ const _WithdrawsTemplateSDK = () => {
           phone: 'phone',
         },
         header: {
-          label: translate('contacts>NameAndStatusContact>user'),
+          label: 'Data',
         },
       },
       {
@@ -102,20 +106,29 @@ const _WithdrawsTemplateSDK = () => {
   };
 
   return (
-    <div className="pw-flex pw-flex-col pw-px-4 pw-py-5 pw-shadow-lg sm:pw-px-0 ">
-      <OffpixButtonBase className="pw-bg-blue-200" variant="filled">
-        Realizar saque
-      </OffpixButtonBase>
-      <GenericTable
-        config={configTable}
-        classes={{
-          grid: {
-            display: 'grid',
-            gridTemplateColumns: '1.4fr 1.6fr 0.7fr 1fr 1fr 0.2fr',
-          } as any,
-        }}
-      />
-    </div>
+    <>
+      <div className="pw-flex pw-flex-col pw-px-4 pw-pt-5 pw-shadow-lg sm:pw-px-0 ">
+        <div className="pw-flex pw-pr-5 pw-items-end pw-justify-end pw-w-full">
+          <OffpixButtonBase
+            className="pw-max-w-[320px] pw-w-full"
+            variant="filled"
+          >
+            Realizar saque
+          </OffpixButtonBase>
+        </div>
+
+        <GenericTable
+          config={configTable}
+          classes={{
+            grid: {
+              display: 'grid',
+              gridTemplateColumns: '1.4fr 1.6fr 0.7fr 1fr 1fr 0.2fr',
+            } as any,
+          }}
+        />
+      </div>
+      <WithdrawModal isOpen onClose={closeModal} />
+    </>
   );
 };
 
