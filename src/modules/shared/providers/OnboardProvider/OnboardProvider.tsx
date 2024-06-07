@@ -36,7 +36,11 @@ export const OnboardContext = createContext<OnboardProps>({
 export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();
   const { data: theme } = useGetTheme();
-  const { data: profile, dataUpdatedAt: profileDataUpdatedAt } = useProfile();
+  const {
+    data: profile,
+    dataUpdatedAt: profileDataUpdatedAt,
+    isLoading: isLoadingProfile,
+  } = useProfile();
   const { data: contexts } = useGetTenantContext();
   const [loading, setLoading] = useState(false);
   const query = Object.keys(router.query).length > 0 ? router.query : '';
@@ -52,7 +56,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
     }
     return whitelistsArr;
   }, [configData]);
-
+  const skipWallet = theme?.data?.configurations?.contentData?.skipWallet;
   const { data: checkWhitelists } = useCheckWhitelistByUser(
     whitelists,
     !!whitelists?.length
@@ -132,6 +136,21 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
           window.location.pathname !== PixwayAppRoutes.SIGN_IN
         ) {
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+        }
+      } else if (!skipWallet) {
+        if (
+          !profile?.data.mainWallet &&
+          !isLoadingProfile &&
+          router.isReady &&
+          !window.location.pathname.includes('/auth/complete-kyc') &&
+          !window.location.pathname.includes('/auth/verify-sign-up') &&
+          !window.location.pathname.includes(
+            '/auth/completeSignup/connectExternalWallet'
+          )
+        ) {
+          router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, {
+            callbackPath: window.location.href,
+          });
         }
       }
     }
