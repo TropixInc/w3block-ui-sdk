@@ -8,8 +8,6 @@ const InternalPagesLayoutBase = lazy(() =>
   }))
 );
 
-import { useTranslation } from 'react-i18next';
-
 import {
   ConfigGenericTable,
   FilterTableType,
@@ -25,8 +23,6 @@ import WithdrawModal from '../../components/WithdrawModal/WithdrawModal';
 
 const _WithdrawsTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
-  const [translate] = useTranslation();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isOpen, openModal, closeModal } = useModalController();
 
   const configTable: ConfigGenericTable = {
@@ -58,13 +54,8 @@ const _WithdrawsTemplateSDK = () => {
     columns: [
       {
         format: { type: FormatTypeColumn.LOCALTIME },
-        key: 'email',
+        key: 'createdAt',
         sortable: false,
-        moreInfos: {
-          name: 'name',
-          cpf: 'cpf',
-          phone: 'phone',
-        },
         header: {
           label: 'Data',
         },
@@ -79,17 +70,7 @@ const _WithdrawsTemplateSDK = () => {
           name: 'mainWallet.type',
         },
         header: {
-          label: translate('tokens>pass>create>partners>walletAddress'),
-        },
-      },
-      {
-        format: { type: FormatTypeColumn.LOCALTIME },
-        key: 'createdAt',
-        sortable: true,
-        sortableTamplate: 'sortBy=createdAt&orderBy={order}',
-        preferredSortable: true,
-        header: {
-          label: translate('contracts>listContracts>criationDate'),
+          label: 'Wallet',
         },
       },
       {
@@ -112,6 +93,7 @@ const _WithdrawsTemplateSDK = () => {
           <OffpixButtonBase
             className="pw-max-w-[320px] pw-w-full"
             variant="filled"
+            onClick={() => openModal()}
           >
             Realizar saque
           </OffpixButtonBase>
@@ -127,7 +109,7 @@ const _WithdrawsTemplateSDK = () => {
           }}
         />
       </div>
-      <WithdrawModal isOpen onClose={closeModal} />
+      <WithdrawModal isOpen={isOpen} onClose={closeModal} />
     </>
   );
 };

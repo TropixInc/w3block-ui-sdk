@@ -91,4 +91,5 @@ export enum PixwayAPIRoutes {
   CHECK_WHITELIST_BY_USER = '/whitelists/{companyId}/check-user',
   GET_USER_BY_REFERRAL = '/users/{companyId}/by-referral-code/{referralCode}',
   CONTACT_BY_TENANT = '/users/{companyId}',
+  WITHDRAWS_METHODS = '/users/{tenantId}/withdraw-accounts/{userId}',
 }
