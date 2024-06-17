@@ -148,9 +148,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
             '/auth/completeSignup/connectExternalWallet'
           )
         ) {
-          router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, {
-            callbackPath: window.location.href,
-          });
+          router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, query);
         }
       }
     }
