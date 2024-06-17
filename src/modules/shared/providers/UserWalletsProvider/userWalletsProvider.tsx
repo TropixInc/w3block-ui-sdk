@@ -153,7 +153,7 @@ const getChainIdBasedOnCoinType = (
   production: boolean
 ) => {
   if (coinType === CoinsType.MATIC) {
-    return production ? 137 : 80001;
+    return production ? 137 : 137;
   } else {
     return production ? 1 : 4;
   }

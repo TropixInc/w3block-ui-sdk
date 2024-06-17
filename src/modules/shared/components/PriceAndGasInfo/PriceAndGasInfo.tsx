@@ -31,6 +31,7 @@ interface PriceAndGasInfo {
   originalService?: string;
   loadingPreview?: boolean;
   payments?: PaymentsResponse[];
+  convertedPrice?: string;
 }
 
 const _PriceAndGasInfo = ({
@@ -47,6 +48,7 @@ const _PriceAndGasInfo = ({
   originalTotalPrice,
   loadingPreview = false,
   payments,
+  convertedPrice,
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
   const { defaultTheme } = UseThemeConfig();
@@ -245,6 +247,25 @@ const _PriceAndGasInfo = ({
             </div>
           )}
         </div>
+        {convertedPrice ? (
+          <div className="pw-flex pw-justify-between pw-mt-[6px]">
+            <p className="pw-font-[500] pw-text-xs pw-text-[#35394C]">
+              Valor para pagamento em real + taxas
+            </p>
+            {loading || loadingPreview ? (
+              <Shimmer className="pw-h-6 pw-w-17" />
+            ) : (
+              <div className="pw-flex pw-gap-2">
+                <CriptoValueComponent
+                  code={'BRL'}
+                  value={convertedPrice}
+                  showFree
+                  fontClass="pw-text-base pw-font-[500] !pw-text-[#35394C]"
+                />
+              </div>
+            )}
+          </div>
+        ) : null}
       </div>
     );
   } else
@@ -360,6 +381,25 @@ const _PriceAndGasInfo = ({
             </div>
           )}
         </div>
+        {convertedPrice ? (
+          <div className="pw-flex pw-justify-between pw-mt-[6px]">
+            <p className="pw-font-[500] pw-text-xs pw-text-[#35394C]">
+              Valor para pagamento em real + taxas
+            </p>
+            {loading || loadingPreview ? (
+              <Shimmer className="pw-h-6 pw-w-17" />
+            ) : (
+              <div className="pw-flex pw-gap-2">
+                <CriptoValueComponent
+                  code={'BRL'}
+                  value={convertedPrice}
+                  showFree
+                  fontClass="pw-text-base pw-font-[500] !pw-text-[#35394C]"
+                />
+              </div>
+            )}
+          </div>
+        ) : null}
       </div>
     );
 };
@@ -377,6 +417,7 @@ export const PriceAndGasInfo = ({
   originalService,
   originalTotalPrice,
   payments,
+  convertedPrice,
 }: PriceAndGasInfo) => {
   return (
     <TranslatableComponent>
@@ -393,6 +434,7 @@ export const PriceAndGasInfo = ({
         originalService={originalService}
         originalTotalPrice={originalTotalPrice}
         payments={payments}
+        convertedPrice={convertedPrice}
       />
     </TranslatableComponent>
   );

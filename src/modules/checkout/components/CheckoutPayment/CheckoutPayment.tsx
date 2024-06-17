@@ -17,20 +17,12 @@ import {
 
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import _ from 'lodash';
+import { QRCodeSVG } from 'qrcode.react';
 
 import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
 import Loading from '../../../shared/assets/icons/loading.svg?react';
 import { Alert } from '../../../shared/components/Alert';
-const Spinner = lazy(() =>
-  import('../../../shared/components/Spinner').then((m) => ({
-    default: m.Spinner,
-  }))
-);
-const WeblockButton = lazy(() =>
-  import('../../../shared/components/WeblockButton/WeblockButton').then(
-    (m) => ({ default: m.WeblockButton })
-  )
-);
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
@@ -61,7 +53,16 @@ import {
   INPUTS_POSSIBLE,
 } from '../CheckoutPaymentComponent/CheckoutPaymentComponent';
 
-import _ from 'lodash';
+const Spinner = lazy(() =>
+  import('../../../shared/components/Spinner').then((m) => ({
+    default: m.Spinner,
+  }))
+);
+const WeblockButton = lazy(() =>
+  import('../../../shared/components/WeblockButton/WeblockButton').then(
+    (m) => ({ default: m.WeblockButton })
+  )
+);
 const CheckouResume = lazy(() =>
   import('../CheckoutResume/CheckoutResume').then((m) => ({
     default: m.CheckouResume,
@@ -133,12 +134,15 @@ export const CheckoutPayment = () => {
         productCache?.choosedPayment?.paymentProvider == PaymentMethod.ASAAS &&
         parseFloat(productCache.totalPrice) !== 0
       ) {
+        setLoading(false);
         if (!installment) {
           setInstallment(
             productCache.choosedPayment?.availableInstallments?.[0]
           );
         }
-
+      } else if (
+        productCache?.choosedPayment?.paymentProvider === PaymentMethod.BRAZA
+      ) {
         setLoading(false);
       } else {
         setStayPooling(false);
@@ -526,7 +530,9 @@ export const CheckoutPayment = () => {
               } else {
                 const payment = data?.payments?.find(
                   (res) =>
-                    res?.currency?.id === '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+                    res?.currency?.id ===
+                      '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ||
+                    res?.currency?.id === '8c43ece8-99b0-4877-aed3-2170d2deb4bf'
                 );
                 if (payment?.paymentMethod === 'pix') {
                   setPixImage(payment?.publicData?.pix?.encodedImage ?? '');
@@ -535,7 +541,12 @@ export const CheckoutPayment = () => {
                   setOrderId(data.id);
                 }
 
-                setIframeLink(payment?.publicData?.paymentUrl ?? '');
+                setLoading(false);
+                setIframeLink(
+                  payment?.publicData?.paymentUrl ??
+                    payment?.publicData?.pix?.payload ??
+                    ''
+                );
               }
             }
             setSending(false);
@@ -596,7 +607,10 @@ export const CheckoutPayment = () => {
           />
         </div>
       );
-    } else if (productCache?.choosedPayment?.paymentProvider == 'asaas') {
+    } else if (
+      productCache?.choosedPayment?.paymentProvider == 'asaas' ||
+      productCache?.choosedPayment?.paymentProvider == 'braza'
+    ) {
       return (
         <div className="pw-container pw-mx-auto pw-h-full pw-px-0 sm:pw-px-4">
           {!iframeLink ? (
@@ -634,6 +648,7 @@ export const CheckoutPayment = () => {
               }
               userCreditCards={productCache?.choosedPayment?.userCreditCards}
               errorCode={errorCode}
+              quoteId={productCache?.choosedPayment?.providerData?.quoteId}
             />
           ) : (
             <div className="pw-bg-white pw-p-4 sm:pw-p-6 pw-flex pw-justify-center pw-items-center pw-shadow-brand-shadow pw-rounded-lg">
@@ -659,8 +674,14 @@ export const CheckoutPayment = () => {
                       <p className="pw-text-center pw-font-normal pw-text-black pw-mt-6">
                         Escaneie o QR Code abaixo para realizar o pagamento
                       </p>
-                      {pixImage && (
+                      {pixImage ? (
                         <img src={`data:image/png;base64, ${pixImage}`} />
+                      ) : (
+                        <QRCodeSVG
+                          value={String(pixPayload)}
+                          size={300}
+                          className="pw-my-6"
+                        />
                       )}
                       {pixPayload && (
                         <>
@@ -814,6 +835,10 @@ export const CheckoutPayment = () => {
                 orderResponse !== undefined
                   ? orderResponse.originalTotalAmount
                   : myOrderPreview?.originalTotalPrice
+              }
+              currency={productCache?.choosedPayment?.currency?.code}
+              convertedPrice={
+                productCache?.choosedPayment?.providerData?.brlAmount
               }
             />
           </div>

@@ -28,6 +28,8 @@ interface CheckoutResumeProps {
   isCoinPayment?: boolean;
   destinationUser?: string;
   payments?: PaymentsResponse[];
+  currency?: string;
+  convertedPrice?: string;
 }
 
 export const CheckouResume = ({
@@ -44,6 +46,8 @@ export const CheckouResume = ({
   isCoinPayment,
   destinationUser,
   payments,
+  currency,
+  convertedPrice,
 }: CheckoutResumeProps) => {
   return (
     <div>
@@ -102,6 +106,9 @@ export const CheckouResume = ({
         originalService={originalService}
         originalTotalPrice={originalTotalPrice}
         payments={payments}
+        currency={currency}
+        convertedPrice={convertedPrice}
+        name={currency}
       />
     </div>
   );

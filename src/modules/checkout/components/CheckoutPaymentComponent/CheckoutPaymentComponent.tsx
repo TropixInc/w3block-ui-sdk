@@ -60,6 +60,7 @@ interface CheckoutPaymentComponentProps {
   buttonLoadingText?: string;
   userCreditCards?: AvailableCreditCards[];
   errorCode?: string;
+  quoteId?: string;
 }
 
 export enum INPUTS_POSSIBLE {
@@ -76,6 +77,9 @@ export enum INPUTS_POSSIBLE {
   credit_card_id = 'credit_card_id',
   save_credit_card = 'save_credit_card',
   save_credit_card_name = 'save_credit_card_name',
+  phone = 'phone',
+  postal_code = 'postal_code',
+  quote_id = 'quote_id',
 }
 
 export const CheckoutPaymentComponent = ({
@@ -93,6 +97,7 @@ export const CheckoutPaymentComponent = ({
   buttonLoadingText,
   userCreditCards,
   errorCode,
+  quoteId,
 }: CheckoutPaymentComponentProps) => {
   const [value, setValue] = useState<any>({});
   const [sameCpf, setSameCpf] = useState(true);
@@ -244,7 +249,8 @@ export const CheckoutPaymentComponent = ({
         input !== INPUTS_POSSIBLE.installments &&
         input !== INPUTS_POSSIBLE.credit_card_id &&
         input !== INPUTS_POSSIBLE.save_credit_card &&
-        input !== INPUTS_POSSIBLE.save_credit_card_name
+        input !== INPUTS_POSSIBLE.save_credit_card_name &&
+        input !== INPUTS_POSSIBLE.quote_id
       ) {
         if (
           includeTwoCpfs &&
@@ -277,6 +283,15 @@ export const CheckoutPaymentComponent = ({
       });
     }
   }, [saveCard, saveAvailable]);
+
+  useEffect(() => {
+    if (quoteId) {
+      setValue({
+        ...value,
+        [INPUTS_POSSIBLE.quote_id]: quoteId,
+      });
+    }
+  }, [quoteId]);
 
   const [similarPayment, setSimilarPayment] = useState(false);
   const router = useRouterConnect();
