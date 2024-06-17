@@ -1,18 +1,19 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useMemo, useState } from 'react';
+import { CurrencyInput } from 'react-currency-mask';
 
-import { useGetErcTokensHistory } from '../../../dashboard/hooks/useGetErcTokensHistory';
-import { useProfile } from '../../../shared';
+import { useProfile, useRouterConnect } from '../../../shared';
 import Trash from '../../../shared/assets/icons/trash.svg?react';
-import { ModalBase } from '../../../shared/components/ModalBase';
+import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import useGetWithdrawsMethods from '../../hooks/useGetWithdrawsMethods/useGetWithdrawsMethods';
+import { useRequestWithdraw } from '../../hooks/useRequestWithdraw';
 import AddMethodModal from './AddMethodModal';
 import DeleteMethodModal from './DeleteMethodModal';
 
 interface ModalProps {
-  isOpen: boolean;
   onClose: () => void;
 }
 
@@ -26,33 +27,41 @@ export interface WithdrawMethodDTO {
   userId: string;
 }
 
-const WithdrawModal = ({ isOpen, onClose }: ModalProps) => {
+const WithdrawModal = ({ onClose }: ModalProps) => {
   const { data } = useProfile();
   const [modalType, setModalType] = useState<'add' | 'withdraw' | 'delete'>(
     'withdraw'
   );
   const [deleteItem, setDeleteItem] = useState<any | undefined>();
   const [accountValue, setAccountValue] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { loyaltyWallet, mainWallet } = useUserWallet();
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const { loyaltyWallet } = useUserWallet();
 
   const [{ data: withdrawsMethods, isLoading }] = useGetWithdrawsMethods(
     data?.data?.id ?? '',
     modalType
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: erc20, isLoading: isLoadingErc20 } = useGetErcTokensHistory(
-    loyaltyWallet.length ? loyaltyWallet[0].contractId : undefined,
-    { page: 1 }
-  );
+  const { mutate } = useRequestWithdraw();
+  const router = useRouterConnect();
+  const handleWithdraw = () => {
+    mutate({
+      amount: withdrawAmount,
+      memo: '',
+      fromWalletAddress: data?.data?.mainWallet?.address ?? '',
+      erc20ContractId: loyaltyWallet?.[0]?.contractId,
+      withdrawAccountId: accountValue,
+    });
+    onClose();
+    router.reload();
+  };
 
   const onHandleDeleteItem = (item: unknown) => {
     setDeleteItem(item);
     setModalType('delete');
   };
 
-  const NewWithdraw = () => {
+  const NewWithdraw = useMemo(() => {
     return (
       <div className="pw-w-full pw-text-slate-900 pw-px-4">
         <div className="pw-w-full">
@@ -61,16 +70,32 @@ const WithdrawModal = ({ isOpen, onClose }: ModalProps) => {
           </p>
           <div className="pw-mt-5 pw-flex pw-gap-3 pw-w-full">
             <div className="pw-w-full">
-              <input
-                className="pw-h-10 pw-px-3 pw-w-full pw-outline-none pw-border pw-border-slate-300 pw-rounded-md focus:pw-border-slate-500"
-                type="text"
+              <CurrencyInput
+                onChangeValue={(_, value) => {
+                  if (value) {
+                    setWithdrawAmount(value as string);
+                  }
+                }}
+                value={withdrawAmount}
+                hideSymbol
+                InputElement={
+                  <input
+                    className="pw-h-10 pw-px-3 pw-w-full pw-outline-none pw-border pw-border-slate-300 pw-rounded-md focus:pw-border-slate-500"
+                    placeholder="0,0"
+                    type="numeric"
+                  />
+                }
               />
+
               <p className="mt-1 pw-text-xs">
                 Saldo:{' '}
-                {`${loyaltyWallet[0].balance} ${loyaltyWallet[0].currency}`}
+                {`${loyaltyWallet?.[0]?.balance} ${loyaltyWallet?.[0]?.currency}`}
               </p>
             </div>
-            <OffpixButtonBase className="pw-px-3 pw-w-[150px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-base">
+            <OffpixButtonBase
+              onClick={() => setWithdrawAmount(loyaltyWallet?.[0]?.balance)}
+              className="sm:pw-px-3 pw-px-0 pw-w-[150px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-base"
+            >
               Sacar tudo
             </OffpixButtonBase>
           </div>
@@ -164,28 +189,49 @@ const WithdrawModal = ({ isOpen, onClose }: ModalProps) => {
             </div>
           )}
         </div>
-        <div className="pw-mt-5 pw-flex pw-gap-3">
+        <div className="pw-mt-5 pw-flex pw-gap-3 pw-pb-3">
           <OffpixButtonBase
             className="pw-text-base pw-w-full pw-h-12 pw-flex pw-justify-center pw-items-center"
             variant="outlined"
+            onClick={onClose}
           >
             Cancelar
           </OffpixButtonBase>
           <OffpixButtonBase
             className="pw-text-base pw-w-full pw-h-12 pw-flex pw-justify-center pw-items-center"
             variant="filled"
-            disabled={!withdrawsMethods?.data?.items.length}
+            disabled={
+              !withdrawsMethods?.data?.items.length ||
+              withdrawAmount === '' ||
+              accountValue === ''
+            }
+            onClick={handleWithdraw}
           >
             Confirmar
           </OffpixButtonBase>
         </div>
+        {!withdrawsMethods?.data?.items.length ? (
+          <div className="pw-mt-3">
+            <Alert variant="warning" className="pw-text-xs">
+              Você precisa ter pelo menos um método de pagamento registrado para
+              realizar o saque.
+            </Alert>
+          </div>
+        ) : null}
       </div>
     );
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    accountValue,
+    isLoading,
+    loyaltyWallet,
+    withdrawAmount,
+    withdrawsMethods?.data?.items,
+  ]);
 
   const onRenderModalType = () => {
     if (modalType === 'withdraw') {
-      return <NewWithdraw />;
+      return NewWithdraw;
     } else if (modalType === 'add') {
       return <AddMethodModal onChangeModalType={setModalType} />;
     } else if (modalType === 'delete') {
@@ -201,13 +247,15 @@ const WithdrawModal = ({ isOpen, onClose }: ModalProps) => {
   };
 
   return (
-    <ModalBase
-      isOpen={isOpen}
-      classes={{ dialogCard: 'pw-w-[320px] sm:!pw-w-[720px]' }}
-      onClose={onClose}
-    >
+    <div className="sm:pw-p-[40px] pw-p-0">
+      <button
+        className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black"
+        onClick={onClose}
+      >
+        {`<`} Voltar
+      </button>
       {onRenderModalType()}
-    </ModalBase>
+    </div>
   );
 };
 

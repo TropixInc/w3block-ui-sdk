@@ -92,4 +92,9 @@ export enum PixwayAPIRoutes {
   GET_USER_BY_REFERRAL = '/users/{companyId}/by-referral-code/{referralCode}',
   CONTACT_BY_TENANT = '/users/{companyId}',
   WITHDRAWS_METHODS = '/users/{tenantId}/withdraw-accounts/{userId}',
+  REQUEST_WITHDRAW = '/{companyId}/withdraws',
+  GET_SPECIFIC_WITHDRAW = '/{companyId}/withdraws/admin/{id}',
+  CONCLUDE_WITHDRAW = '/{companyId}/withdraws/admin/{id}/conclude',
+  ESCROW_WITHDRAW = '/{companyId}/withdraws/admin/{id}/escrow',
+  REFUSE_WITHDRAW = '/{companyId}/withdraws/admin/{id}/refuse',
 }

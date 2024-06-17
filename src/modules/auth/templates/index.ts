@@ -18,3 +18,4 @@ export * from './SignUpTemplate';
 export * from './SignInWithCodeTemplateSDK';
 export * from './ConfirmationKycTemplateSDK';
 export * from './WithdrawsTemplateSDK';
+export * from './WithdrawsAdminTemplateSDK';

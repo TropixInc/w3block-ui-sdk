@@ -152,6 +152,15 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       },
       {
         title:
+          internalMenuData['withdrawsAdmin']?.customLabel ||
+          'Relatório de saques',
+        id: 'withdrawsAdmin',
+        icon: <CardIcon width={17} height={17} />,
+        link: PixwayAppRoutes.WITHDRAWS_ADMIN,
+        isVisible: isAdmin && !isHidden('withdrawsAdmin'),
+      },
+      {
+        title:
           internalMenuData['affiliates']?.customLabel ||
           translate('shared>menu>affiliates'),
         id: 'affiliates',

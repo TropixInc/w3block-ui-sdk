@@ -31,6 +31,7 @@ interface InputImageProps {
   imagePlaceholder?: string;
   instructions?: string;
   acceptTypes?: Array<string>;
+  textTitle?: string;
 }
 
 const InputImage = ({
@@ -46,6 +47,7 @@ const InputImage = ({
   instructions,
   onChangeUploadProgess,
   acceptTypes,
+  textTitle,
 }: InputImageProps) => {
   const [translate] = useTranslation();
   const [uploadedImage, setUploadedImage] = useState<string>();
@@ -142,7 +144,7 @@ const InputImage = ({
     <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
       <div className="pw-mb-3 pw-max-w-[504px] pw-w-full pw-flex pw-flex-col pw-items-center pw-justify-center pw-p-[30px]">
         <p className="pw-text-6 pw-leading-[18px] pw-text-[#353945] pw-font-bold pw-mb-5">
-          Enviar foto
+          {textTitle ? textTitle : 'Enviar foto'}
         </p>
         <p className="pw-text-base pw-leading-[18px] pw-text-[#353945] pw-font-medium pw-mb-5 pw-opacity-75">
           {title}
