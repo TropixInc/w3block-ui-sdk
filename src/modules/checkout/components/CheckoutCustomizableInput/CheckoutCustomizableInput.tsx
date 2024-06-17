@@ -17,11 +17,6 @@ export const CheckoutCustomizableInput = ({
   errors,
   readonly = false,
 }: CheckoutCustomizableInputProps) => {
-  const unmask = () => {
-    if (type === INPUTS_POSSIBLE.cpf_cnpj || type === INPUTS_POSSIBLE.phone)
-      return true;
-    return false;
-  };
   return (
     <div className="pw-w-full">
       {type === INPUTS_POSSIBLE.credit_card_holder_name ||
@@ -53,7 +48,6 @@ export const CheckoutCustomizableInput = ({
           inputMode={type === INPUTS_POSSIBLE.cpf_cnpj ? 'numeric' : 'text'}
           readOnly={readonly}
           radix="."
-          unmask={unmask()}
           mask={getMask(type)}
           placeholder={getPlaceholder(type)}
           className="pw-full pw-border pw-border-slate-300 pw-rounded-lg pw-p-3 pw-text-sm pw-text-slate-700 pw-w-full"
@@ -112,7 +106,7 @@ const getMask = (type: INPUTS_POSSIBLE) => {
     case INPUTS_POSSIBLE.credit_card_holder_postal_code:
       return '00000-000';
     case INPUTS_POSSIBLE.phone:
-      return '+00 (00) 00000-0000';
+      return '(00) 00000-0000';
     case INPUTS_POSSIBLE.postal_code:
       return '00000-000';
     case INPUTS_POSSIBLE.cpf_cnpj:

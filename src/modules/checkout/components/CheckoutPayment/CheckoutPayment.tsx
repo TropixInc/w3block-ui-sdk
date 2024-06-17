@@ -339,6 +339,7 @@ export const CheckoutPayment = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createOrder = (val: any, allowSimilarPayment?: boolean) => {
     setLoading(true);
+    setStayPooling(false);
     const orderInfo = productCache;
     if (orderInfo && !iframeLink && !sending && session && profile) {
       setSending(true);
