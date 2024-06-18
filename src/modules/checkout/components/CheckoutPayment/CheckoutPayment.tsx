@@ -558,6 +558,20 @@ export const CheckoutPayment = () => {
           onError: (err: any) => {
             if (err.errorCode === 'similar-order-not-accepted') {
               setErrorCode(err.errorCode);
+            } else if (
+              err.errorCode ===
+              'braza-email-already-attached-to-other-cpf-error'
+            ) {
+              setRequestError(
+                'Este e-mail já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
+              );
+            } else if (
+              err.errorCode ===
+              'braza-phone-already-attached-to-other-cpf-error'
+            ) {
+              setRequestError(
+                'Este telefone já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
+              );
             } else {
               setRequestError(
                 err.message
