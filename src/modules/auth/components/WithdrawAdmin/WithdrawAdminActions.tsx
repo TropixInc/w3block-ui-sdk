@@ -7,9 +7,10 @@ import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 
 import { useRouterConnect } from '../../../shared';
-import InputImage from '../../../shared/components/SmartInputs/InputImage/InputImage';
+import InputWithdrawCommerce from '../../../shared/components/InputWithdrawCommerce/InputWithdrawCommerce';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import {
   useConcludeWithdraw,
@@ -52,7 +53,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
   const { mutate: refuseWithdraw } = useRefuseWithdraw();
   const { mutate: concludeWithdraw } = useConcludeWithdraw();
   const { mutate: escrowWithdraw } = useEscrowWithdraw();
-
+  const { loyaltyWallet } = useUserWallet();
   const dynamicMethods = useForm<DocumentDto>({
     shouldUnregister: false,
     mode: 'onChange',
@@ -144,15 +145,14 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               processo:
             </p>
             <FormProvider {...dynamicMethods}>
-              <InputImage
-                title={''}
+              <InputWithdrawCommerce
                 name="imageInput"
                 onChangeUploadProgess={setUploadingImage}
                 textTitle="Enviar comprovante"
               />
             </FormProvider>
           </div>
-          <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
+          <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-4">
             <OffpixButtonBase
               className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
               variant="outlined"
@@ -240,7 +240,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               </div>
               <div>
                 <p className="pw-font-semibold">Valor</p>
-                <p>R${parseFloat(data?.data?.amount).toFixed(2)}</p>
+                <p>
+                  {parseFloat(data?.data?.amount).toFixed(2)}{' '}
+                  {loyaltyWallet?.[0]?.currency}
+                </p>
               </div>
               <div>
                 <p className="pw-font-semibold">Status</p>
@@ -250,6 +253,18 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 <div>
                   <p className="pw-font-semibold">Motivo:</p>
                   <p>{data?.data?.reason}</p>
+                </div>
+              ) : null}
+              {data?.data?.receiptAsset?.directLink ? (
+                <div>
+                  <a
+                    href={data?.data?.receiptAsset?.directLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pw-font-semibold pw-underline"
+                  >
+                    Comprovante
+                  </a>
                 </div>
               ) : null}
             </div>
@@ -267,7 +282,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                     Recusar
                   </OffpixButtonBase>
                   <OffpixButtonBase
-                    className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
+                    className="pw-max-w-[200px] pw-w-full !pw-text-base !pw-py-2"
                     variant="filled"
                     onClick={handleContinue}
                   >

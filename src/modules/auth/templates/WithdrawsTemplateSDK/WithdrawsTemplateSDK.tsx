@@ -15,15 +15,21 @@ import {
   FormatTypeColumn,
   GenericTable,
   W3blockAPI,
+  useRouterConnect,
 } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
+import WithdrawInternal from '../../components/WithdrawInternal/WithdrawInternal';
 import WithdrawModal from '../../components/WithdrawModal/WithdrawModal';
 
 const _WithdrawsTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
   const [isOpen, setIsOpen] = useState(false);
+  const { query } = useRouterConnect();
+  const { loyaltyWallet } = useUserWallet();
+  const id = query.id as string;
   const configTable: ConfigGenericTable = {
     localeItems: 'data.items',
     isLineExplansible: false,
@@ -50,6 +56,13 @@ const _WithdrawsTemplateSDK = () => {
       header: '!pw-grid-cols-[18%_20%]',
       line: '!pw-grid-cols-[18%_20%]',
     },
+    lineActions: {
+      action: {
+        data: '/withdraws?id={id}',
+        replacedQuery: ['id'],
+        type: 'navigate',
+      },
+    },
     columns: [
       {
         format: { type: FormatTypeColumn.LOCALTIME },
@@ -74,7 +87,7 @@ const _WithdrawsTemplateSDK = () => {
           type: FormatTypeColumn.MAPPING,
           mapping: {
             pending: 'Pendente',
-            escrowing_resources: 'Retendo valor',
+            escrowing_resources: 'Pendente',
             ready_to_transfer_funds: 'Pendente',
             concluded: 'Concluído',
             failed: 'Falha',
@@ -94,19 +107,25 @@ const _WithdrawsTemplateSDK = () => {
     <>
       <div className="pw-flex pw-flex-col pw-px-4 pw-pt-5 pw-shadow-lg sm:pw-px-0 ">
         {isOpen ? (
-          <WithdrawModal onClose={() => setIsOpen(false)} />
+          <WithdrawModal
+            onClose={() => setIsOpen(false)}
+            balance={loyaltyWallet?.[0]?.balance}
+            contractId={loyaltyWallet?.[0]?.contractId}
+            currency={loyaltyWallet?.[0]?.currency}
+          />
+        ) : id ? (
+          <WithdrawInternal id={id} currency={loyaltyWallet?.[0]?.currency} />
         ) : (
           <>
             <div className="pw-flex pw-pr-5 pw-items-end pw-justify-end pw-w-full">
               <OffpixButtonBase
-                className="pw-max-w-[320px] pw-w-full"
+                className="sm:pw-px-3 pw-px-0 pw-w-[180px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-lg"
                 variant="filled"
                 onClick={() => setIsOpen(true)}
               >
                 Realizar saque
               </OffpixButtonBase>
             </div>
-
             <GenericTable
               config={configTable}
               classes={{

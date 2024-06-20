@@ -6,7 +6,6 @@ import { useProfile, useRouterConnect } from '../../../shared';
 import Trash from '../../../shared/assets/icons/trash.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import useGetWithdrawsMethods from '../../hooks/useGetWithdrawsMethods/useGetWithdrawsMethods';
 import { useRequestWithdraw } from '../../hooks/useRequestWithdraw';
@@ -15,6 +14,9 @@ import DeleteMethodModal from './DeleteMethodModal';
 
 interface ModalProps {
   onClose: () => void;
+  balance: string;
+  contractId: string;
+  currency: string;
 }
 
 export interface WithdrawMethodDTO {
@@ -27,7 +29,12 @@ export interface WithdrawMethodDTO {
   userId: string;
 }
 
-const WithdrawModal = ({ onClose }: ModalProps) => {
+const WithdrawModal = ({
+  onClose,
+  balance,
+  contractId,
+  currency,
+}: ModalProps) => {
   const { data } = useProfile();
   const [modalType, setModalType] = useState<'add' | 'withdraw' | 'delete'>(
     'withdraw'
@@ -35,7 +42,6 @@ const WithdrawModal = ({ onClose }: ModalProps) => {
   const [deleteItem, setDeleteItem] = useState<any | undefined>();
   const [accountValue, setAccountValue] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
-  const { loyaltyWallet } = useUserWallet();
 
   const [{ data: withdrawsMethods, isLoading }] = useGetWithdrawsMethods(
     data?.data?.id ?? '',
@@ -49,7 +55,7 @@ const WithdrawModal = ({ onClose }: ModalProps) => {
       amount: withdrawAmount,
       memo: '',
       fromWalletAddress: data?.data?.mainWallet?.address ?? '',
-      erc20ContractId: loyaltyWallet?.[0]?.contractId,
+      erc20ContractId: contractId,
       withdrawAccountId: accountValue,
     });
     onClose();
@@ -88,12 +94,11 @@ const WithdrawModal = ({ onClose }: ModalProps) => {
               />
 
               <p className="mt-1 pw-text-xs">
-                Saldo:{' '}
-                {`${loyaltyWallet?.[0]?.balance} ${loyaltyWallet?.[0]?.currency}`}
+                Saldo: {`${balance} ${currency}`}
               </p>
             </div>
             <OffpixButtonBase
-              onClick={() => setWithdrawAmount(loyaltyWallet?.[0]?.balance)}
+              onClick={() => setWithdrawAmount(balance)}
               className="sm:pw-px-3 pw-px-0 pw-w-[150px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-base"
             >
               Sacar tudo
@@ -102,13 +107,13 @@ const WithdrawModal = ({ onClose }: ModalProps) => {
         </div>
         <div className="pw-mt-5 ">
           <div className="pw-flex pw-justify-between pw-items-center">
-            <p>Métodos cadastrados</p>
-            <button
+            <p>Métodos de recebimento</p>
+            <OffpixButtonBase
               onClick={() => setModalType('add')}
-              className="pw-px-3 pw-py-2 pw-bg-blue-400 pw-rounded-md pw-text-white"
+              className="sm:pw-px-3 pw-px-0 pw-w-[150px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-base"
             >
               Novo método
-            </button>
+            </OffpixButtonBase>
           </div>
           {isLoading ? (
             <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
@@ -182,9 +187,9 @@ const WithdrawModal = ({ onClose }: ModalProps) => {
               </tbody>
             </table>
           ) : (
-            <div className="pw-mt-6 pw-w-full pw-px-3 pw-py-2 pw-bg-blue-400 pw-font-medium pw-rounded-md pw-text-white">
+            <div className="pw-mt-6 pw-w-full pw-px-3 pw-py-2 pw-font-medium pw-rounded-md pw-text-black">
               <p className="pw-text-center">
-                Não há métodos de pagamento cadastrados
+                Não há métodos de recebimento cadastrados
               </p>
             </div>
           )}
@@ -213,21 +218,15 @@ const WithdrawModal = ({ onClose }: ModalProps) => {
         {!withdrawsMethods?.data?.items.length ? (
           <div className="pw-mt-3">
             <Alert variant="warning" className="pw-text-xs">
-              Você precisa ter pelo menos um método de pagamento registrado para
-              realizar o saque.
+              Você precisa ter pelo menos um método de recebimento registrado
+              para realizar o saque.
             </Alert>
           </div>
         ) : null}
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    accountValue,
-    isLoading,
-    loyaltyWallet,
-    withdrawAmount,
-    withdrawsMethods?.data?.items,
-  ]);
+  }, [accountValue, isLoading, withdrawAmount, withdrawsMethods?.data?.items]);
 
   const onRenderModalType = () => {
     if (modalType === 'withdraw') {

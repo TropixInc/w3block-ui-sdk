@@ -115,7 +115,7 @@ const _WithdrawsAdminTemplateSDK = () => {
         }`}
       >
         <div className="pw-flex pw-justify-between">
-          <p className="pw-text-[23px] pw-font-[600]">Saques</p>
+          <p className="pw-text-[23px] pw-font-[600]">Relatório de Saques</p>
         </div>
       </div>
       <div className="pw-flex pw-flex-col pw-px-4 pw-py-5 pw-shadow-lg sm:pw-px-0">

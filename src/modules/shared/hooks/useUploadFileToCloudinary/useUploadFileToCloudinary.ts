@@ -91,7 +91,9 @@ export const useUploadFileToCloudinary = () => {
           formData.append('timestamp', timestamp.toString());
           formData.append('signature', signature);
           formData.append('public_id', publicId);
-          formData.append('upload_preset', uploadPreset as string);
+          if (uploadPreset) {
+            formData.append('upload_preset', uploadPreset as string);
+          }
 
           formData.append(
             'filename_override',

@@ -97,4 +97,5 @@ export enum PixwayAPIRoutes {
   CONCLUDE_WITHDRAW = '/{companyId}/withdraws/admin/{id}/conclude',
   ESCROW_WITHDRAW = '/{companyId}/withdraws/admin/{id}/escrow',
   REFUSE_WITHDRAW = '/{companyId}/withdraws/admin/{id}/refuse',
+  UPLOAD_ASSETS = '/{companyId}/assets',
 }

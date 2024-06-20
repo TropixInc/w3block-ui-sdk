@@ -34,7 +34,7 @@ const DeleteMethodModal = ({
   return (
     <div className="pw-text-slate-900">
       <p className="pw-text-center pw-text-xl pw-font-medium">
-        Deseja deletar médoto de pagamento?
+        Deseja deletar médoto de recebimento?
       </p>
       <div>
         <table className="pw-mt-5 pw-w-full">

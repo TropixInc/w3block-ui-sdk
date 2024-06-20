@@ -148,7 +148,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         id: 'withdraws',
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WITHDRAWS,
-        isVisible: (isUser || isAdmin) && !isHidden('withdraws'),
+        isVisible: isCommerceReceiver && !isHidden('withdraws'),
       },
       {
         title:

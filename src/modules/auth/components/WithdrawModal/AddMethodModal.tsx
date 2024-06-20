@@ -260,7 +260,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
   return (
     <div className="pw-w-full pw-text-slate-900">
       <p className="pw-text-center pw-text-xl pw-font-medium">
-        Cadastrar novo método de saque
+        Cadastrar método de recebimento
       </p>
       <div className="pw-mt-5">
         <p>Tipo</p>
