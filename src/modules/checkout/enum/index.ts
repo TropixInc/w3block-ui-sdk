@@ -3,6 +3,7 @@ export enum PaymentMethod {
   STRIPE = 'stripe',
   PAYPAL = 'paypal',
   ASAAS = 'asaas',
+  BRAZA = 'braza',
 }
 
 export enum OrderStatus {

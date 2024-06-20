@@ -80,6 +80,10 @@ const getPlaceholder = (type: INPUTS_POSSIBLE) => {
       return 'CEP do titular do cartão';
     case INPUTS_POSSIBLE.cpf_cnpj:
       return 'CPF/CNPJ do usuário';
+    case INPUTS_POSSIBLE.phone:
+      return 'Telefone';
+    case INPUTS_POSSIBLE.postal_code:
+      return 'CEP';
     case INPUTS_POSSIBLE.save_credit_card_name:
       return 'Como gostaria de chamar este cartão?';
     default:
@@ -100,6 +104,10 @@ const getMask = (type: INPUTS_POSSIBLE) => {
     case INPUTS_POSSIBLE.credit_card_holder_phone:
       return '(00) 00000-0000';
     case INPUTS_POSSIBLE.credit_card_holder_postal_code:
+      return '00000-000';
+    case INPUTS_POSSIBLE.phone:
+      return '(00) 00000-0000';
+    case INPUTS_POSSIBLE.postal_code:
       return '00000-000';
     case INPUTS_POSSIBLE.cpf_cnpj:
       return '000.000.000-00';

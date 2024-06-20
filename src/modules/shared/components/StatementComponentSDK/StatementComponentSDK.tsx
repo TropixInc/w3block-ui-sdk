@@ -312,6 +312,13 @@ export const StatementComponentSDK = ({
             </>
           )}
         </div>
+        {future && isAdmin && statement.metadata.userName ? (
+          <div className="pw-flex pw-items-center pw-gap-2">
+            <p className="pw-text-black pw-text-xs pw-font-semibold">
+              Destinatário: {statement.metadata.userName}
+            </p>
+          </div>
+        ) : null}
         <div className="pw-flex pw-items-center pw-gap-2">
           {future ? (
             statement?.metadata?.action === 'split_payees' ? (

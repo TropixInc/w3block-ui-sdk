@@ -189,7 +189,7 @@ export const WalletFutureStatementTemplateSDK = () => {
           Recebimentos
         </p>
         <p className="pw-text-[12px] pw-font-[400] pw-text-black">
-          Relatório geral de recebimentos dentro da plataforma
+          Relatório administrativo de recebimentos
         </p>
         <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
           <Selectinput

@@ -1,4 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState, lazy } from 'react';
+
+import { isAfter, isBefore } from 'date-fns';
+
+import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
+import { Spinner } from '../../../shared/components/Spinner';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
+import {
+  StatementScreenTransaction,
+  getSubtransactions,
+} from '../../../shared/utils/getSubtransactions';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
+import { useGetErcTokensHistory } from '../../hooks/useGetErcTokensHistory';
+import { StatementComponent } from './StatementComponent';
 
 const InternalPagesLayoutBase = lazy(() =>
   import(
@@ -18,18 +34,6 @@ const Pagination = lazy(() =>
   }))
 );
 
-import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
-import { Spinner } from '../../../shared/components/Spinner';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import {
-  StatementScreenTransaction,
-  getSubtransactions,
-} from '../../../shared/utils/getSubtransactions';
-import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
-import { useGetErcTokensHistory } from '../../hooks/useGetErcTokensHistory';
-import { StatementComponent } from './StatementComponent';
 export const WalletStatementTemplateSDK = () => {
   const { loyaltyWallet, mainWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
@@ -52,6 +56,13 @@ export const WalletStatementTemplateSDK = () => {
       subs.forEach((t) => {
         arr.push(t);
       });
+    });
+    arr.sort(function (a: any, b: any) {
+      const dateA = Date.parse(a?.createdAt);
+      const dateB = Date.parse(b?.createdAt);
+      if (isBefore(dateA, dateB)) return 1;
+      if (isAfter(dateA, dateB)) return -1;
+      return 0;
     });
     return arr;
   }, [data?.items]);
@@ -99,9 +110,9 @@ export const WalletStatementTemplateSDK = () => {
             <Spinner className="pw-h-10 pw-w-10" />
           </div>
         ) : subTransactions?.length ? (
-          subTransactions.map((item) => (
+          subTransactions.map((item, index) => (
             <StatementComponent
-              key={item.actionId}
+              key={item?.actionId ? item?.actionId + index : index}
               statement={item}
               currency={loyaltyWallet?.length ? loyaltyWallet[0]?.currency : ''}
             />
