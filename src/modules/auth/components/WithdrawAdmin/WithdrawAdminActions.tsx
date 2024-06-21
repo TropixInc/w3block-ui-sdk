@@ -274,13 +274,15 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               data?.data?.status === 'concluded' ||
               data?.data?.status === 'escrowing_resources' ? null : (
                 <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
-                  <OffpixButtonBase
-                    className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
-                    variant="outlined"
-                    onClick={() => setStep(2)}
-                  >
-                    Recusar
-                  </OffpixButtonBase>
+                  {data?.data?.status === 'ready_to_transfer_funds' ? null : (
+                    <OffpixButtonBase
+                      className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
+                      variant="outlined"
+                      onClick={() => setStep(2)}
+                    >
+                      Recusar
+                    </OffpixButtonBase>
+                  )}
                   <OffpixButtonBase
                     className="pw-max-w-[200px] pw-w-full !pw-text-base !pw-py-2"
                     variant="filled"
