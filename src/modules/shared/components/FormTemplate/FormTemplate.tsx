@@ -82,6 +82,7 @@ export const FormTemplate = ({
                   onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
                   profilePage={profilePage}
                   isKeyPage={keyPage}
+                  required={item.mandatory}
                 />
               </div>
             );

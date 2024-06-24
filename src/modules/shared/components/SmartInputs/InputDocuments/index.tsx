@@ -5,6 +5,7 @@ import ReactInputMask from 'react-input-mask';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 
 interface InputDocuments {
   label: string;
@@ -12,9 +13,15 @@ interface InputDocuments {
   docValue?: object;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
+  required?: boolean;
 }
 
-const InputDocuments = ({ name, docValue }: InputDocuments) => {
+const InputDocuments = ({
+  name,
+  docValue,
+  label,
+  required,
+}: InputDocuments) => {
   const { field, fieldState } = useController({ name });
   const [selectDocType, setSelectDocType] = useState<string | undefined>();
   const [document, setDocument] = useState<string | undefined>();
@@ -70,12 +77,13 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
   return (
     <div className="pw-mb-6 pw-w-full">
       <div className="pw-w-full">
-        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
-          Documento de Identificação
-        </p>
+        <LabelWithRequired name={name} required={required}>
+          {label ?? 'Documento de Identificação'}
+        </LabelWithRequired>
+
         <FormItemContainer
-          invalid={fieldState.invalid}
           className="pw-p-[0.6rem]"
+          invalid={fieldState?.invalid}
         >
           <select
             onChange={(e) => {
