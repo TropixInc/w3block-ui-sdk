@@ -17,7 +17,7 @@ interface MappedDTO {
 }
 
 const mappedKeys: MappedDTO = {
-  'accountInfo.key': 'Chave',
+  'accountInfo.key': 'Chave PIX',
   'accountInfo.ownerSsn': 'CPF ou CNPJ',
   'accountInfo.type': 'Tipo de conta',
   'accountInfo.bank': 'Banco',
@@ -33,7 +33,7 @@ const mapMessage = (message: string) => {
   if (key) {
     const value = mappedKeys[key];
     if (message.includes('is not a valid')) {
-      return `${value} invalido`;
+      return `${value} - campo invalido`;
     } else {
       return message.replace(key, value);
     }
@@ -79,7 +79,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
       try {
         mutate(payload);
       } catch (err) {
-        console.log((err as any).message, err, 'err');
+        console.log((err as any).message);
       }
     }
   };
@@ -132,9 +132,10 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             />
           </div>
           <div className="pw-mt-3">
-            <p>Chave</p>
+            <p>Chave PIX</p>
             <p className="pw-text-sm pw-text-slate-400">
-              Chaves CPF ou CNPJ devem ser apenas números, sem pontos ou espaços
+              Chaves CPF ou CNPJ devem conter apenas números, sem pontos ou
+              espaços
             </p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
