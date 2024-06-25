@@ -14,7 +14,6 @@ import { Spinner } from '../Spinner/Spinner';
 
 interface InputWithdrawCommerceProps {
   name: string;
-  hidenValidations?: boolean;
   onChangeUploadProgess: (value: boolean) => void;
   acceptTypes?: Array<string>;
   textTitle?: string;
@@ -22,7 +21,6 @@ interface InputWithdrawCommerceProps {
 
 const InputWithdrawCommerce = ({
   name,
-  hidenValidations = false,
   onChangeUploadProgess,
   acceptTypes,
   textTitle,
@@ -139,22 +137,21 @@ const InputWithdrawCommerce = ({
           </div>
         </FormItemContainer>
 
-        {!hidenValidations && (
-          <div className="mt-5">
-            {field.value || Boolean(fileRejections.length) ? (
-              <InputStatus
-                invalid={
-                  isError || mutateError || Boolean(fileRejections.length)
-                }
-                errorMessage={
-                  fileRejections.length
-                    ? translate('auth>inputFile>aceptFile')
-                    : ''
-                }
-              />
-            ) : null}
-          </div>
-        )}
+        <div className="pw-mt-1 pw-ml-1 pw-w-full">
+          {isError ||
+          mutateError ||
+          field.value ||
+          Boolean(fileRejections.length) ? (
+            <InputStatus
+              invalid={isError || mutateError || Boolean(fileRejections.length)}
+              errorMessage={
+                isError || mutateError || Boolean(fileRejections.length)
+                  ? 'Erro ao subir o arquivo'
+                  : ''
+              }
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );

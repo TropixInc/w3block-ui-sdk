@@ -29,6 +29,23 @@ export const useRequestWithdraw = () => {
   );
 };
 
+export const useGetSpecificWithdrawAdmin = (id: string) => {
+  const axios = useAxios(W3blockAPI.KEY);
+  const { companyId } = useCompanyConfig();
+
+  return usePrivateQuery(
+    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN],
+    () =>
+      axios.get(
+        PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN.replace(
+          '{companyId}',
+          companyId
+        ).replace('{id}', id)
+      ),
+    { enabled: !!id }
+  );
+};
+
 export const useGetSpecificWithdraw = (id: string) => {
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();

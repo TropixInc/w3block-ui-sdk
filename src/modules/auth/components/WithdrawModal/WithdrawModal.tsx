@@ -2,7 +2,7 @@
 import { useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 
-import { useProfile, useRouterConnect } from '../../../shared';
+import { useProfile } from '../../../shared';
 import Trash from '../../../shared/assets/icons/trash.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
@@ -36,9 +36,9 @@ const WithdrawModal = ({
   currency,
 }: ModalProps) => {
   const { data } = useProfile();
-  const [modalType, setModalType] = useState<'add' | 'withdraw' | 'delete'>(
-    'withdraw'
-  );
+  const [modalType, setModalType] = useState<
+    'add' | 'withdraw' | 'delete' | 'success' | 'error'
+  >('withdraw');
   const [deleteItem, setDeleteItem] = useState<any | undefined>();
   const [accountValue, setAccountValue] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
@@ -47,19 +47,25 @@ const WithdrawModal = ({
     data?.data?.id ?? '',
     modalType
   );
-
-  const { mutate } = useRequestWithdraw();
-  const router = useRouterConnect();
+  const { mutate, isLoading: isLoadingWithdraw } = useRequestWithdraw();
   const handleWithdraw = () => {
-    mutate({
-      amount: withdrawAmount,
-      memo: '',
-      fromWalletAddress: data?.data?.mainWallet?.address ?? '',
-      erc20ContractId: contractId,
-      withdrawAccountId: accountValue,
-    });
-    onClose();
-    router.reload();
+    mutate(
+      {
+        amount: withdrawAmount,
+        memo: '',
+        fromWalletAddress: data?.data?.mainWallet?.address ?? '',
+        erc20ContractId: contractId,
+        withdrawAccountId: accountValue,
+      },
+      {
+        onSuccess() {
+          setModalType('success');
+        },
+        onError() {
+          setModalType('error');
+        },
+      }
+    );
   };
 
   const onHandleDeleteItem = (item: unknown) => {
@@ -240,10 +246,33 @@ const WithdrawModal = ({
           itemForDelete={deleteItem}
         />
       );
+    } else if (modalType === 'error') {
+      return (
+        <div className="pw-mt-3">
+          <Alert variant="error" className="pw-text-base">
+            Erro ao realizar o pedido de saque, por favor tente novamente.
+          </Alert>
+        </div>
+      );
+    } else if (modalType === 'success') {
+      return (
+        <div className="pw-mt-3">
+          <Alert variant="success" className="pw-text-base">
+            Pedido de saque realizado com sucesso!
+          </Alert>
+        </div>
+      );
     } else {
       return <></>;
     }
   };
+
+  if (isLoadingWithdraw)
+    return (
+      <div className="pw-my-20 pw-w-full pw-flex pw-items-center pw-justify-center">
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className="sm:pw-p-[40px] pw-p-0">

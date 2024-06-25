@@ -93,11 +93,12 @@ export enum PixwayAPIRoutes {
   CONTACT_BY_TENANT = '/users/{companyId}',
   WITHDRAWS_METHODS = '/users/{tenantId}/withdraw-accounts/{userId}',
   REQUEST_WITHDRAW = '/{companyId}/withdraws',
-  GET_SPECIFIC_WITHDRAW = '/{companyId}/withdraws/admin/{id}',
+  GET_SPECIFIC_WITHDRAW = '/{companyId}/withdraws/{id}',
   CONCLUDE_WITHDRAW = '/{companyId}/withdraws/admin/{id}/conclude',
   ESCROW_WITHDRAW = '/{companyId}/withdraws/admin/{id}/escrow',
   REFUSE_WITHDRAW = '/{companyId}/withdraws/admin/{id}/refuse',
   UPLOAD_ASSETS = '/{companyId}/assets',
   SIGNIN_WITH_GOOGLE = '/auth/{companyId}/signin/google/code',
   GET_GOOGLE_URL = '/auth/{companyId}/signin/google',
+  GET_SPECIFIC_WITHDRAW_ADMIN = '/{companyId}/withdraws/admin/{id}',
 }
