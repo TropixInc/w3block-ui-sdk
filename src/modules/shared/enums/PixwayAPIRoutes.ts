@@ -98,4 +98,6 @@ export enum PixwayAPIRoutes {
   ESCROW_WITHDRAW = '/{companyId}/withdraws/admin/{id}/escrow',
   REFUSE_WITHDRAW = '/{companyId}/withdraws/admin/{id}/refuse',
   UPLOAD_ASSETS = '/{companyId}/assets',
+  SIGNIN_WITH_GOOGLE = '/auth/{companyId}/signin/google/code',
+  GET_GOOGLE_URL = '/auth/{companyId}/signin/google',
 }

@@ -89,11 +89,16 @@ export const AthletePage = () => {
   if (athleteData?.items?.length) {
     const certification = athleteData?.items[0]?.tokenData;
     if (groupByBelt['Vermelha']?.length) {
-      groupByBelt['Vermelha'].push({ ...certification, belt: 'Vermelha' });
+      groupByBelt['Vermelha']?.push({ ...certification, belt: 'Vermelha' });
     } else if (groupByBelt['Coral']?.length) {
-      groupByBelt['Coral'].push({ ...certification, belt: 'Coral' });
-    } else if (groupByBelt['Preta']?.length) {
-      groupByBelt['Preta'].push({ ...certification, belt: 'Preta' });
+      groupByBelt['Coral']?.push({ ...certification, belt: 'Coral' });
+    } else {
+      if (groupByBelt['Preta']?.length) {
+        groupByBelt['Preta']?.push({ ...certification, belt: 'Preta' });
+      } else {
+        const belt = { Preta: [{ ...certification, belt: 'Preta' }] };
+        Object.assign(groupByBelt, belt);
+      }
     }
   }
   const getBeltImage = (belt: BeltColor) => {
@@ -289,16 +294,12 @@ export const AthletePage = () => {
                           <Disclosure.Button
                             disabled={
                               respectiveBelt !== undefined ||
-                              (athleteData?.items?.length &&
-                                belt === 'Black') ||
                               groupByBelt[beltEnglishMap[belt as BeltEnglish]]
                                 ? false
                                 : true
                             }
                             className={`${
                               respectiveBelt !== undefined ||
-                              (athleteData?.items?.length &&
-                                belt === 'Black') ||
                               groupByBelt[beltEnglishMap[belt as BeltEnglish]]
                                 ? ''
                                 : 'pw-opacity-60'
@@ -311,7 +312,11 @@ export const AthletePage = () => {
                                 alt={''}
                               />
                               {date() !== '' ? `(${date()})` : ''}
-                              <p>{belt + ' Belt'}</p>
+                              <p>
+                                {belt === 'Coral'
+                                  ? 'Red and Black Belt'
+                                  : belt + ' Belt'}
+                              </p>
                             </div>
                             <ChevronDown
                               className={classNames(
@@ -337,7 +342,10 @@ export const AthletePage = () => {
                               };
 
                               const title = () => {
-                                if (res?.type === 'belt') return belt + ' Belt';
+                                if (res?.type === 'belt')
+                                  return belt === 'Coral'
+                                    ? 'Red and Black Belt'
+                                    : belt + ' Belt';
                                 else if (res?.type === 'championship')
                                   return res?.tournamentName ?? '';
                                 else if (res?.type === 'grade')

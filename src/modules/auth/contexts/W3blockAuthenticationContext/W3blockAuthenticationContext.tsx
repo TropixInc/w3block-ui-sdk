@@ -13,6 +13,12 @@ export interface IW3blockAuthenticationContext {
     email: string;
     tenantId: string;
   }) => Promise<any>;
+  signInWithGoogle?: (payload: {
+    companyId: string;
+    code: string;
+    referrer?: string;
+    callbackUrl?: string | undefined;
+  }) => Promise<any>;
 }
 
 export const W3blockAuthenticationContext = createContext(

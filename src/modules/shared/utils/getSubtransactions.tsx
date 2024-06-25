@@ -269,7 +269,9 @@ export function getSubtransactions(data: Erc20TokenHistory) {
               operatorName: metadata?.operatorName,
               type: StatementScreenTransactionType.RECEIVING,
               description: 'final_recipient',
-              value: parseFloat(loyalty?.amount).toFixed(2),
+              value: parseFloat(
+                metadata?.pointsCashback ?? loyalty?.amount
+              ).toFixed(2),
             });
           } else if (metadata?.action === 'cashback_multilevel') {
             subTransactions.push({
