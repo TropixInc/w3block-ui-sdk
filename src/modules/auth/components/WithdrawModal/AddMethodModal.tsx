@@ -4,12 +4,43 @@ import { useDebounce } from 'react-use';
 import { WithdrawAccountTypeEnum } from '@w3block/sdk-id';
 
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
+import { getNumbersFromString } from '../../../tokens/utils/getNumbersFromString';
 import { useCreateWithdrawMethod } from '../../hooks/useCreateWithdrawMethod/useCreateWithdrawMethod';
 
 interface PayloadDTO {
   type: WithdrawAccountTypeEnum;
   accountInfo: any;
 }
+
+interface MappedDTO {
+  [key: string]: string;
+}
+
+const mappedKeys: MappedDTO = {
+  'accountInfo.key': 'Chave',
+  'accountInfo.ownerSsn': 'CPF ou CNPJ',
+  'accountInfo.type': 'Tipo de conta',
+  'accountInfo.bank': 'Banco',
+  'accountInfo.agency': 'Agência',
+  'accountInfo.accountNumber': 'Número da conta',
+  'accountInfo.verificationNumber': 'Dígito',
+};
+
+const mapMessage = (message: string) => {
+  // Encontrar a chave correspondente no objeto mappedKeys
+  const key = Object.keys(mappedKeys).find((k) => message.includes(k));
+
+  if (key) {
+    const value = mappedKeys[key];
+    if (message.includes('is not a valid')) {
+      return `${value} invalido`;
+    } else {
+      return message.replace(key, value);
+    }
+  } else {
+    return message;
+  }
+};
 
 interface AddModalProps {
   onChangeModalType: (value: 'add' | 'withdraw' | 'delete') => void;
@@ -41,14 +72,14 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
     [payload]
   );
 
-  const { mutate, isSuccess } = useCreateWithdrawMethod();
+  const { mutate, isSuccess, error } = useCreateWithdrawMethod();
 
   const onCreateMethod = () => {
     if (isValidPayload) {
       try {
         mutate(payload);
       } catch (err) {
-        console.log((err as any).message);
+        console.log((err as any).message, err, 'err');
       }
     }
   };
@@ -59,8 +90,6 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
-
-  console.log(payload, 'payload');
 
   const renderContentModal = () => {
     if (typeMethod === 'pix') {
@@ -87,14 +116,16 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             <p>CPF ou CNPJ</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="number"
+              type="text"
+              placeholder="Digite apenas números"
+              value={payload.accountInfo.ownerSsn}
               onChange={(e) =>
                 setPayload({
                   ...payload,
                   type: WithdrawAccountTypeEnum.Pix,
                   accountInfo: {
                     ...payload.accountInfo,
-                    ownerSsn: e.target.value,
+                    ownerSsn: getNumbersFromString(e.target.value, false),
                   },
                 })
               }
@@ -102,6 +133,9 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
           </div>
           <div className="pw-mt-3">
             <p>Chave</p>
+            <p className="pw-text-sm pw-text-slate-400">
+              Chaves CPF ou CNPJ devem ser apenas números, sem pontos ou espaços
+            </p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
               type="text"
@@ -143,14 +177,16 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             <p>CPF ou CNPJ</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="number"
+              type="text"
+              placeholder="Digite apenas números"
+              value={payload.accountInfo.ownerSsn}
               onChange={(e) =>
                 setPayload({
                   ...payload,
                   type: WithdrawAccountTypeEnum.Bank,
                   accountInfo: {
                     ...payload.accountInfo,
-                    ownerSsn: e.target.value,
+                    ownerSsn: getNumbersFromString(e.target.value, false),
                   },
                 })
               }
@@ -199,14 +235,15 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             <p>Agência</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="number"
+              placeholder="Digite apenas números"
+              value={payload.accountInfo.agency}
               onChange={(e) =>
                 setPayload({
                   ...payload,
                   type: WithdrawAccountTypeEnum.Bank,
                   accountInfo: {
                     ...payload.accountInfo,
-                    agency: e.target.value,
+                    agency: getNumbersFromString(e.target.value, false),
                   },
                 })
               }
@@ -217,15 +254,20 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
               <p>Número da conta</p>
               <input
                 className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-                type="number"
+                type="text"
                 maxLength={10}
+                placeholder="Digite apenas números"
+                value={payload.accountInfo.accountNumber}
                 onChange={(e) =>
                   setPayload({
                     ...payload,
                     type: WithdrawAccountTypeEnum.Bank,
                     accountInfo: {
                       ...payload.accountInfo,
-                      accountNumber: e.target.value,
+                      accountNumber: getNumbersFromString(
+                        e.target.value,
+                        false
+                      ),
                     },
                   })
                 }
@@ -235,15 +277,19 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
               <p>Dígito</p>
               <input
                 className="pw-w-[64px] pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-                type="number"
+                type="text"
                 maxLength={2}
+                value={payload.accountInfo.verificationNumber}
                 onChange={(e) =>
                   setPayload({
                     ...payload,
                     type: WithdrawAccountTypeEnum.Bank,
                     accountInfo: {
                       ...payload.accountInfo,
-                      verificationNumber: e.target.value,
+                      verificationNumber: getNumbersFromString(
+                        e.target.value,
+                        false
+                      ),
                     },
                   })
                 }
@@ -278,6 +324,19 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
       </div>
 
       {renderContentModal()}
+
+      <div className="pw-mt-4">
+        {(error as any)?.response.data.message.map(
+          (msg: string, idx: number) => (
+            <p
+              className="pw-text-sm pw-font-semibold pw-text-red-600"
+              key={msg + idx}
+            >
+              {mapMessage(msg)}
+            </p>
+          )
+        )}
+      </div>
 
       <div className="pw-mt-5 pw-flex pw-gap-3">
         <OffpixButtonBase
