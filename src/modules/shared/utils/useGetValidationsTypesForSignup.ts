@@ -43,6 +43,7 @@ export const useGetValidationsTypesForSignup = (
   valueContextId?: string,
   keyPage?: boolean
 ) => {
+  console.log(keyPage, 'keypage');
   const [translate] = useTranslation();
   const birthdateText = (age?: number) => {
     if (age && age === 1) return `Você precisa ter ${age} ano ou mais`;
@@ -151,7 +152,19 @@ export const useGetValidationsTypesForSignup = (
                           'auth>getValidationsTypesForSignup>insertYourPhone'
                         )
                       )
-                  : yup.array(),
+                  : yup.array().of(
+                      yup
+                        .string()
+                        .test(
+                          'phone',
+                          translate(
+                            'auth>getValidationsTypesForSignup>insertValidPhone'
+                          ),
+                          (value) => {
+                            return value ? isValidPhoneNumber(value) : true;
+                          }
+                        )
+                    ),
             }),
           });
           break;

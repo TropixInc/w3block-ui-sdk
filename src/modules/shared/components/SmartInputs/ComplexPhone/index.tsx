@@ -37,20 +37,12 @@ const ComplexPhone = ({
   const error = fieldState?.error as unknown as InputError;
   const [morePhones, setMorePhones] = useState<Array<moreFones>>([]);
 
+  console.log(field, 'field');
+
   const handleChange = (value: string) => {
-    if (value) {
-      setInputValue(value);
-      if (!morePhones.length) {
-        field.onChange({ inputId: name, value: value });
-      }
-    } else {
-      setInputValue('');
-      if (!morePhones.length) {
-        field.onChange({
-          inputId: undefined,
-          value: undefined,
-        });
-      }
+    setInputValue(value);
+    if (!morePhones.length) {
+      field.onChange({ inputId: name, value: [value] });
     }
   };
 
