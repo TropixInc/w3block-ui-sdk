@@ -52,10 +52,6 @@ const WithdrawInternal = ({
           <>
             <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-gap-4 pw-mt-4">
               <div>
-                <p className="pw-font-semibold">Usuário</p>
-                <p>{data?.data?.user?.name ?? data?.data?.user?.email}</p>
-              </div>
-              <div>
                 <p className="pw-font-semibold">Pedido realizado em</p>
                 <p>
                   {format(

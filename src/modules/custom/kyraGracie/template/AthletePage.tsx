@@ -24,7 +24,7 @@ import fourthDegree from '../assets/4_degree.svg';
 import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';
 import brownBelt from '../assets/brown_belt.png';
-import coralBelt from '../assets/coral_belt.png';
+import redAndBlackBelt from '../assets/coral_belt.png';
 import grayBelt from '../assets/gray_belt.png';
 import grayBlackBelt from '../assets/gray_black_belt.png';
 import grayWhiteBelt from '../assets/gray_white_belt.png';
@@ -37,6 +37,7 @@ import orangeWhiteBelt from '../assets/orange_white_belt.png';
 import placeholderAvatar from '../assets/placeholderAvatar.png';
 import purpleBelt from '../assets/purple_belt.png';
 import redBelt from '../assets/red_belt.png';
+import redWhiteBelt from '../assets/red_white_belt.png';
 import star from '../assets/star.svg';
 import whiteBelt from '../assets/white_belt.png';
 import yellowBelt from '../assets/yellow_belt.png';
@@ -90,8 +91,16 @@ export const AthletePage = () => {
     const certification = athleteData?.items[0]?.tokenData;
     if (groupByBelt['Vermelha']?.length) {
       groupByBelt['Vermelha']?.push({ ...certification, belt: 'Vermelha' });
-    } else if (groupByBelt['Coral']?.length) {
-      groupByBelt['Coral']?.push({ ...certification, belt: 'Coral' });
+    } else if (groupByBelt['Vermelha e Branca']?.length) {
+      groupByBelt['Vermelha e Branca']?.push({
+        ...certification,
+        belt: 'Vermelha e Branca',
+      });
+    } else if (groupByBelt['Vermelha e Preta']?.length) {
+      groupByBelt['Vermelha e Preta']?.push({
+        ...certification,
+        belt: 'Vermelha e Preta',
+      });
     } else {
       if (groupByBelt['Preta']?.length) {
         groupByBelt['Preta']?.push({ ...certification, belt: 'Preta' });
@@ -137,8 +146,10 @@ export const AthletePage = () => {
         return brownBelt;
       case BeltColor.BLACK:
         return blackBelt;
-      case BeltColor.CORAL:
-        return coralBelt;
+      case BeltColor.RED_AND_BLACK:
+        return redAndBlackBelt;
+      case BeltColor.RED_AND_WHITE:
+        return redWhiteBelt;
       case BeltColor.RED:
         return redBelt;
     }
@@ -312,11 +323,7 @@ export const AthletePage = () => {
                                 alt={''}
                               />
                               {date() !== '' ? `(${date()})` : ''}
-                              <p>
-                                {belt === 'Coral'
-                                  ? 'Red and Black Belt'
-                                  : belt + ' Belt'}
-                              </p>
+                              <p>{belt + ' Belt'}</p>
                             </div>
                             <ChevronDown
                               className={classNames(
@@ -342,10 +349,7 @@ export const AthletePage = () => {
                               };
 
                               const title = () => {
-                                if (res?.type === 'belt')
-                                  return belt === 'Coral'
-                                    ? 'Red and Black Belt'
-                                    : belt + ' Belt';
+                                if (res?.type === 'belt') return belt + ' Belt';
                                 else if (res?.type === 'championship')
                                   return res?.tournamentName ?? '';
                                 else if (res?.type === 'grade')
