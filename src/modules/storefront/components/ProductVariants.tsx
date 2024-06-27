@@ -2,6 +2,8 @@
 import { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
+import { RadioGroup } from '@headlessui/react';
+
 import ArrowDown from '../../shared/assets/icons/arrowDown.svg?react';
 import { Variants } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 
@@ -9,18 +11,77 @@ interface Props {
   variants: Variants;
   onClick: (value: any) => void;
   productId: string;
+  type?: string;
+  borderColor?: string;
 }
 
-export const ProductVariants = ({ variants, onClick, productId }: Props) => {
+export const ProductVariants = ({
+  variants,
+  onClick,
+  productId,
+  type,
+  borderColor,
+}: Props) => {
   const [isOpened, setIsOpened] = useState(false);
   const [value, setValue] = useState(variants?.values?.[0]?.name ?? '');
-
+  const [variantsValue, setVariantsValue] = useState(variants?.values[0]);
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (isOpened) {
       setIsOpened(false);
     }
   });
+
+  const radioGroupComponent = () => {
+    return (
+      <RadioGroup
+        value={variantsValue}
+        onChange={(val) => {
+          const variant = {} as any;
+          variant[variants.id as any] = {
+            name: val.name,
+            label: variants.name,
+            id: val.id,
+            productId,
+            variantId: variants.id,
+          };
+          setValue(val.name);
+          setVariantsValue(val);
+          onClick({ ...variant });
+        }}
+        className="pw-mt-4"
+      >
+        <RadioGroup.Label className="pw-text-sm pw-text-black pw-mb-1">
+          {variants.name}
+        </RadioGroup.Label>
+        <div className="pw-flex pw-justify-start pw-items-center pw-gap-3">
+          {variants.values.map((val) => {
+            return (
+              <RadioGroup.Option
+                key={val.id}
+                value={val}
+                className={({ checked }) =>
+                  `pw-p-[10px_12px] pw-border pw-border-solid pw-rounded-[10px] pw-text-sm pw-font-semibold ${
+                    checked
+                      ? `pw-border-[${
+                          borderColor?.includes('rgba')
+                            ? borderColor.replaceAll(', ', ',_')
+                            : borderColor
+                        }]`
+                      : ''
+                  }`
+                }
+              >
+                <span>{val.name}</span>
+              </RadioGroup.Option>
+            );
+          })}
+        </div>
+      </RadioGroup>
+    );
+  };
+
+  if (type === 'radioGroup') return radioGroupComponent();
 
   return (
     <div ref={refToClickAway} className="pw-mt-4">
