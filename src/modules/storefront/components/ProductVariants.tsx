@@ -57,22 +57,15 @@ export const ProductVariants = ({
         <div className="pw-flex pw-justify-start pw-items-center pw-gap-3">
           {variants.values.map((val) => {
             return (
-              <RadioGroup.Option
-                key={val.id}
-                value={val}
-                className={({ checked }) =>
-                  `pw-p-[10px_12px] pw-border pw-border-solid pw-rounded-[10px] pw-text-sm pw-font-semibold ${
-                    checked
-                      ? `pw-border-[${
-                          borderColor?.includes('rgba')
-                            ? borderColor.replaceAll(', ', ',_')
-                            : borderColor
-                        }]`
-                      : ''
-                  }`
-                }
-              >
-                <span>{val.name}</span>
+              <RadioGroup.Option key={val.id} value={val}>
+                {({ checked }) => (
+                  <div
+                    className="pw-p-[10px_12px] pw-border pw-border-solid pw-rounded-[10px] pw-text-sm pw-font-semibold pw-cursor-pointer"
+                    style={{ borderColor: checked ? borderColor : '#DCDCDC' }}
+                  >
+                    <span>{val.name}</span>
+                  </div>
+                )}
               </RadioGroup.Option>
             );
           })}
