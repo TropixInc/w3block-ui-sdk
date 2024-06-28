@@ -96,9 +96,6 @@ const ComplexPhone = ({
     const phones = morePhones;
     const remnantsPhones = phones.filter((item) => item.name !== name);
 
-    console.log(phones, 'phones');
-    console.log(remnantsPhones, 'remand');
-
     setMorePhones(remnantsPhones);
     field.onChange({ inputId: name, value: remnantsPhones });
   };
