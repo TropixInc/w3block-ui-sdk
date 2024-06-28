@@ -43,16 +43,79 @@ export const useGetValidationsTypesForSignup = (
   valueContextId?: string,
   keyPage?: boolean
 ) => {
-  console.log(keyPage, 'keypage');
   const [translate] = useTranslation();
   const birthdateText = (age?: number) => {
     if (age && age === 1) return `Você precisa ter ${age} ano ou mais`;
     else if (age && age > 1) return `Você precisa ter ${age} anos ou mais`;
     else return 'Você precisa ter 18 anos ou mais';
   };
+
   const getValidations = useCallback(() => {
     const arrayValid: Array<ValidationsValues> = [];
     values.forEach(({ id, contextId, type, mandatory, data }) => {
+      const phoneValidations = () => {
+        if (keyPage) {
+          if (mandatory) {
+            return yup
+              .array()
+              .of(
+                yup
+                  .string()
+                  .test(
+                    'phone',
+                    translate(
+                      'auth>getValidationsTypesForSignup>insertValidPhone'
+                    ),
+                    (value) => {
+                      return value ? isValidPhoneNumber(value) : true;
+                    }
+                  )
+              )
+              .required(
+                translate('auth>getValidationsTypesForSignup>insertFile')
+              );
+          } else {
+            return yup.array().of(
+              yup
+                .string()
+                .test(
+                  'phone',
+                  translate(
+                    'auth>getValidationsTypesForSignup>insertValidPhone'
+                  ),
+                  (value) => {
+                    return value ? isValidPhoneNumber(value) : true;
+                  }
+                )
+            );
+          }
+        } else {
+          if (mandatory) {
+            return yup
+              .string()
+              .test(
+                'phone',
+                translate('auth>getValidationsTypesForSignup>insertValidPhone'),
+                (value) => {
+                  return value ? isValidPhoneNumber(value) : true;
+                }
+              )
+              .required(
+                translate('auth>getValidationsTypesForSignup>insertYourPhone')
+              );
+          } else {
+            return yup
+              .string()
+              .test(
+                'phone',
+                translate('auth>getValidationsTypesForSignup>insertValidPhone'),
+                (value) => {
+                  return value ? isValidPhoneNumber(value) : true;
+                }
+              );
+          }
+        }
+      };
       switch (type) {
         case DataTypesEnum.File || DataTypesEnum.MultifaceSelfie:
           arrayValid.push({
@@ -134,37 +197,7 @@ export const useGetValidationsTypesForSignup = (
             yupKey: id,
             validations: object().shape({
               inputId: string(),
-              value:
-                !keyPage && mandatory
-                  ? yup
-                      .string()
-                      .test(
-                        'phone',
-                        translate(
-                          'auth>getValidationsTypesForSignup>insertValidPhone'
-                        ),
-                        (value) => {
-                          return value ? isValidPhoneNumber(value) : true;
-                        }
-                      )
-                      .required(
-                        translate(
-                          'auth>getValidationsTypesForSignup>insertYourPhone'
-                        )
-                      )
-                  : yup.array().of(
-                      yup
-                        .string()
-                        .test(
-                          'phone',
-                          translate(
-                            'auth>getValidationsTypesForSignup>insertValidPhone'
-                          ),
-                          (value) => {
-                            return value ? isValidPhoneNumber(value) : true;
-                          }
-                        )
-                    ),
+              value: phoneValidations(),
             }),
           });
           break;

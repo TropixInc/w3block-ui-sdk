@@ -123,6 +123,8 @@ const SmartInputsController = ({
 }: SmartProps) => {
   const [translate] = useTranslation();
 
+  console.log(isKeyPage, 'isKeyPage');
+
   const [checked, setChecked] = useState(false);
 
   const onChangeChecked = () => {
