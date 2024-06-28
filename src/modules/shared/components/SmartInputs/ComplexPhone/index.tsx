@@ -38,19 +38,9 @@ const ComplexPhone = ({
   const [morePhones, setMorePhones] = useState<Array<moreFones>>([]);
 
   const handleChange = (value: string) => {
-    if (value) {
-      setInputValue(value);
-      if (!morePhones.length) {
-        field.onChange({ inputId: name, value: value });
-      }
-    } else {
-      setInputValue('');
-      if (!morePhones.length) {
-        field.onChange({
-          inputId: undefined,
-          value: undefined,
-        });
-      }
+    setInputValue(value);
+    if (!morePhones.length) {
+      field.onChange({ inputId: name, value: [value] });
     }
   };
 
@@ -82,7 +72,7 @@ const ComplexPhone = ({
         value: phonesValues,
       });
     } else {
-      field.onChange({ inputId: name, value: field.value });
+      field.onChange({ inputId: name, value: field?.value?.value });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [morePhones, inputValue]);
@@ -107,6 +97,7 @@ const ComplexPhone = ({
     const remnantsPhones = phones.filter((item) => item.name !== name);
 
     setMorePhones(remnantsPhones);
+    field.onChange({ inputId: name, value: remnantsPhones });
   };
 
   const onChangeMorePhones = (item: moreFones, value: string) => {

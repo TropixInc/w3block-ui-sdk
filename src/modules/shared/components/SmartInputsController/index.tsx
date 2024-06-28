@@ -80,6 +80,7 @@ interface SmartProps {
   inputsIdRequestReview?: Array<string>;
   onChangeInputsIdRequestReview?: (value: Array<string>) => void;
   isKeyPage?: boolean;
+  required?: boolean;
 }
 
 export interface InputError {
@@ -118,6 +119,7 @@ const SmartInputsController = ({
   inputsIdRequestReview,
   onChangeInputsIdRequestReview,
   isKeyPage,
+  required,
 }: SmartProps) => {
   const [translate] = useTranslation();
 
@@ -150,6 +152,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             profilePage={profilePage}
+            required={required}
           />
         );
       case DataTypesEnum.Text:
@@ -159,6 +162,7 @@ const SmartInputsController = ({
             name={name}
             docValue={simpleValue}
             docStatus={docStatus}
+            required={required}
           />
         );
 
@@ -170,6 +174,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             profilePage={profilePage}
+            required={required}
           />
         );
       case DataTypesEnum.Phone:
@@ -187,6 +192,7 @@ const SmartInputsController = ({
             name={name}
             docValue={simpleValue}
             docStatus={docStatus}
+            required={required}
           />
         );
       case DataTypesEnum.Email:
@@ -198,6 +204,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             autofill={autofill}
             hidenValidations={autofill}
+            required={required}
           />
         );
       case DataTypesEnum.Url:
@@ -207,6 +214,7 @@ const SmartInputsController = ({
             name={name}
             docValue={simpleValue}
             docStatus={docStatus}
+            required={required}
           />
         );
       case DataTypesEnum.File:
@@ -220,6 +228,7 @@ const SmartInputsController = ({
             openDocs={openDocs}
             acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
             onChangeUploadProgess={onChangeUploadProgess}
+            required={required}
           />
         );
 
@@ -235,6 +244,7 @@ const SmartInputsController = ({
             openDocs={openDocs}
             acceptTypes={selectData.acceptTypes || ['.png', '.jpeg', '.jpg']}
             onChangeUploadProgess={onChangeUploadProgess}
+            required={required}
           />
         );
 
@@ -249,6 +259,7 @@ const SmartInputsController = ({
             subtitle={translate('auth>smartInputsController>subtitleInputFile')}
             acceptTypesDocs={['.png', '.jpeg', '.jpg']}
             onChangeUploadProgess={onChangeUploadProgess}
+            required={required}
           />
         );
       case DataTypesEnum.UserName:
@@ -258,6 +269,7 @@ const SmartInputsController = ({
             name={name}
             docValue={simpleValue}
             docStatus={docStatus}
+            required={required}
           />
         );
       case DataTypesEnum.SimpleSelect:
@@ -270,6 +282,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             configData={selectData}
             profilePage={profilePage}
+            required={required}
           />
         );
       case DataTypesEnum.DynamicSelect:
@@ -282,11 +295,17 @@ const SmartInputsController = ({
             configData={selectData as InputDataDTO}
             docValue={simpleValue}
             profilePage={profilePage}
+            required={required}
           />
         );
       case DataTypesEnum.IdentificationDocument:
         return (
-          <InputDocuments name={name} label={label} docValue={complexValue} />
+          <InputDocuments
+            name={name}
+            label={label}
+            docValue={complexValue}
+            required={required}
+          />
         );
       case DataTypesEnum.Checkbox:
         return (
@@ -297,6 +316,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             configData={selectData}
             hidenValidations
+            required={required}
           />
         );
       case DataTypesEnum.SimpleLocation: {
@@ -309,11 +329,17 @@ const SmartInputsController = ({
               placeType={_.get(selectData, 'placeType', '')}
               placeCountry={_.get(selectData, 'placeCountry', '')}
               placeholder={_.get(selectData, 'placeholder', '')}
+              required={required}
             />
           );
         } else {
           return (
-            <InputLocale name={name} label={label} docValue={complexValue} />
+            <InputLocale
+              name={name}
+              label={label}
+              docValue={complexValue}
+              required={required}
+            />
           );
         }
       }

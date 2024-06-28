@@ -6,12 +6,14 @@ import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import CityAutoComplete from './CityAutoComplete';
 
 interface LocaleProps {
   label: string;
   name: string;
   docValue?: any;
+  required?: boolean;
 }
 
 const optionsLocale = [
@@ -33,7 +35,7 @@ const optionsLocale = [
   },
 ];
 
-const InputLocale = ({ name, label, docValue }: LocaleProps) => {
+const InputLocale = ({ name, label, docValue, required }: LocaleProps) => {
   const [selectCountry, setSelectCountry] = useState<string | undefined>();
   const [region, setRegion] = useState<string | undefined>();
   const [translate] = useTranslation();
@@ -47,7 +49,13 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
 
   return (
     <div className="pw-mb-7">
-      <p className="pw-text-lg pw-font-semibold pw-text-black">{label}</p>
+      <LabelWithRequired
+        classes={{ root: '!pw-text-lg' }}
+        name={name}
+        required={required}
+      >
+        {label}
+      </LabelWithRequired>
       <div className="pw-mt-2 pw-flex pw-gap-5">
         <div className="pw-w-full">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">

@@ -9,6 +9,7 @@ interface PlacesProps {
   placeType?: string;
   placeCountry?: string;
   placeholder?: string;
+  required?: boolean;
 }
 
 const InputPlaces = ({
@@ -18,6 +19,7 @@ const InputPlaces = ({
   placeCountry,
   placeType,
   placeholder,
+  required,
 }: PlacesProps) => {
   const [translate] = useTranslation();
   return (
@@ -31,6 +33,7 @@ const InputPlaces = ({
         inputPlaceholder={
           placeholder ?? translate('shared>inputPlaces>inputPlaceholder')
         }
+        required={required}
       />
     </div>
   );
