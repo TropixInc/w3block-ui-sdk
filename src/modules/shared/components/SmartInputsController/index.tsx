@@ -142,6 +142,8 @@ const SmartInputsController = ({
     }
   };
 
+  console.log(label, type);
+
   const renderInput = () => {
     switch (type) {
       case DataTypesEnum.Cpf:

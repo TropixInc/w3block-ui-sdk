@@ -77,7 +77,7 @@ const InputPhone = ({
           )}
         />
       </FormItemContainer>
-      <p className="mt-5 pw-h-[16px]">
+      <p className="pw-mt-[5px] pw-h-[16px]">
         {!hidenValidations && field.value && (
           <InputStatus
             invalid={fieldState.invalid}

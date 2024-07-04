@@ -187,10 +187,7 @@ const CityAutoComplete = ({
         {inputLabel ?? translate('shared>cityAutoComplete>city')}
       </LabelWithRequired>
 
-      <FormItemContainer
-        invalid={fieldState.invalid}
-        className="pw-p-[0.6rem] pw-mb-4"
-      >
+      <FormItemContainer invalid={fieldState.invalid} className="pw-p-[0.6rem]">
         <input
           type="text"
           className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
@@ -239,7 +236,7 @@ const CityAutoComplete = ({
           )}
         </div>
       ) : null}
-      <p className="mt-5 pw-h-[16px]">
+      <p className="pw-mt-[5px] pw-h-[16px]">
         {!hidenValidations && field.value && (
           <InputStatus
             invalid={fieldState.invalid}

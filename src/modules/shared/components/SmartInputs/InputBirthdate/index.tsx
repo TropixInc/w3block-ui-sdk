@@ -61,7 +61,7 @@ const InputBirthdate = ({
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
         />
       </FormItemContainer>
-      <p className="mt-5 pw-h-[16px]">
+      <p className="pw-mt-[5px] pw-h-[16px]">
         {field.value && (
           <InputStatus
             invalid={fieldState.invalid}

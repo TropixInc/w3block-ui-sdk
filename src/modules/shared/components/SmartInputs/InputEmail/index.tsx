@@ -90,7 +90,7 @@ const InputEmail = ({
           />
         </FormItemContainer>
       )}
-      <p className={`mt-5 ${!autofill && 'pw-h-[16px]'}`}>
+      <p className={`pw-mt-[5px] ${!autofill && 'pw-h-[16px]'}`}>
         {!hidenValidations && field.value && (
           <InputStatus
             invalid={fieldState.invalid}

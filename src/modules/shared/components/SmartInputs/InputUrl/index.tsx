@@ -72,7 +72,7 @@ const InputUrl = ({
         />
       </FormItemContainer>
       {!hidenValidations && (
-        <p className="mt-5">
+        <p className="pw-mt-[5px]">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}

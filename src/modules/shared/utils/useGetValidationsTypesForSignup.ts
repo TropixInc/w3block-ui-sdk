@@ -56,24 +56,22 @@ export const useGetValidationsTypesForSignup = (
       const phoneValidations = () => {
         if (keyPage) {
           if (mandatory) {
-            return yup
-              .array()
-              .of(
-                yup
-                  .string()
-                  .test(
-                    'phone',
-                    translate(
-                      'auth>getValidationsTypesForSignup>insertValidPhone'
-                    ),
-                    (value) => {
-                      return value ? isValidPhoneNumber(value) : true;
-                    }
-                  )
-              )
-              .required(
-                translate('auth>getValidationsTypesForSignup>insertFile')
-              );
+            return yup.array().of(
+              yup
+                .string()
+                .test(
+                  'phone',
+                  translate(
+                    'auth>getValidationsTypesForSignup>insertValidPhone'
+                  ),
+                  (value) => {
+                    return value ? isValidPhoneNumber(value) : true;
+                  }
+                )
+                .required(
+                  translate('auth>getValidationsTypesForSignup>insertYourPhone')
+                )
+            );
           } else {
             return yup.array().of(
               yup

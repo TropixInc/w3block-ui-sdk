@@ -79,7 +79,7 @@ const InputCheckbox = ({
         </a>
       </FormItemContainer>
       {!hidenValidations && (
-        <div className="mt-5">
+        <div className="pw-mt-[5px]">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}
