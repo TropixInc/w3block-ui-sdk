@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -144,7 +144,7 @@ export const ProductPage = ({
     defaultTheme?.configurations?.contentData?.productVariantsType;
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
-  const [isSendGift, setIsSendGift] = useState(true);
+
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (quantityOpen) {
@@ -168,7 +168,10 @@ export const ProductPage = ({
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
-  const isPossibleSend = product?.settings?.passShareCodeConfig?.enabled;
+  const isPossibleSend = useMemo(() => {
+    return product?.settings?.passShareCodeConfig?.enabled ?? false;
+  }, [product?.settings?.passShareCodeConfig?.enabled]);
+  const [isSendGift, setIsSendGift] = useState(isPossibleSend);
   const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
@@ -1128,7 +1131,8 @@ export const ProductPage = ({
                               product &&
                               (product?.stockAmount == 0 ||
                                 product?.canPurchaseAmount == 0 ||
-                                !termsChecked)
+                                !termsChecked ||
+                                (isSendGift && !giftData))
                                 ? '#DCDCDC'
                                 : buttonColor
                                 ? buttonColor
@@ -1137,7 +1141,8 @@ export const ProductPage = ({
                               product &&
                               (product?.stockAmount == 0 ||
                                 product?.canPurchaseAmount == 0 ||
-                                !termsChecked)
+                                !termsChecked ||
+                                (isSendGift && !giftData))
                                 ? '#777E8F'
                                 : buttonColor ?? '#0050FF',
                           }}

@@ -1035,7 +1035,8 @@ const _CheckoutInfo = ({
     }
   };
 
-  const shareMessage = 'olá, {sharedLink}';
+  const shareMessage =
+    'Olá seu amigo(a) acaba de te enviar um presente, {sharedLink}';
 
   const handleShared = () => {
     if (shareMessage) {
