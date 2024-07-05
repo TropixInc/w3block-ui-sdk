@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
+import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import _ from 'lodash';
@@ -36,7 +37,7 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
   const [selectCountry, setSelectCountry] = useState<string | undefined>();
   const [region, setRegion] = useState<string | undefined>();
   const [translate] = useTranslation();
-
+  const { fieldState } = useController({ name });
   useEffect(() => {
     if (docValue) {
       setSelectCountry(docValue.country);
@@ -52,7 +53,10 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             {translate('shared>unputLocale>contry')}
           </p>
-          <FormItemContainer className="pw-px-[0.6rem] pw-mb-3">
+          <FormItemContainer
+            invalid={fieldState.invalid}
+            className="pw-px-[0.6rem] pw-mb-3"
+          >
             <select
               onChange={(e) => setSelectCountry(e.target.value)}
               className="pw-max-h-[180px] pw-h-12 pw-w-full  pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
@@ -81,14 +85,16 @@ const InputLocale = ({ name, label, docValue }: LocaleProps) => {
           </div>
         ) : null}
       </div>
-      <CityAutoComplete
-        key={selectCountry}
-        country={selectCountry ?? ''}
-        name={name}
-        onChangeRegion={setRegion}
-        apiValue={docValue?.placeId}
-        type="(cities)"
-      />
+      {selectCountry ? (
+        <CityAutoComplete
+          key={selectCountry}
+          country={selectCountry ?? ''}
+          name={name}
+          onChangeRegion={setRegion}
+          apiValue={docValue?.placeId}
+          type="(cities)"
+        />
+      ) : null}
     </div>
   );
 };

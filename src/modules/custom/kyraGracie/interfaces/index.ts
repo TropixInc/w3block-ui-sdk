@@ -18,7 +18,8 @@ export const belts = [
   BeltColor.PURPLE,
   BeltColor.BROWN,
   BeltColor.BLACK,
-  BeltColor.CORAL,
+  BeltColor.RED_AND_BLACK,
+  BeltColor.RED_AND_WHITE,
   BeltColor.RED,
 ];
 
@@ -71,7 +72,8 @@ export const beltMap = {
   Roxa: 'Purple',
   Marrom: 'Brown',
   Preta: 'Black',
-  Coral: 'Coral',
+  'Vermelha e Preta': 'Red and Black',
+  'Vermelha e Branca': 'Red and White',
   Vermelha: 'Red',
 };
 
@@ -93,7 +95,8 @@ export const beltEnglishMap = {
   Purple: 'Roxa',
   Brown: 'Marrom',
   Black: 'Preta',
-  Coral: 'Coral',
+  'Red and Black': 'Vermelha e Preta',
+  'Red and White': 'Vermelha e Branca',
   Red: 'Vermelha',
 };
 
@@ -115,7 +118,8 @@ export type Belt =
   | 'Roxa'
   | 'Marrom'
   | 'Preta'
-  | 'Coral'
+  | 'Vermelha e Preta'
+  | 'Vermelha e Branca'
   | 'Vermelha';
 
 export type BeltEnglish =
@@ -136,5 +140,6 @@ export type BeltEnglish =
   | 'Purple'
   | 'Brown'
   | 'Black'
-  | 'Coral'
+  | 'Red and Black'
+  | 'Red and White'
   | 'Red';

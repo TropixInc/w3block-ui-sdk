@@ -15,7 +15,7 @@ interface InputDocuments {
 }
 
 const InputDocuments = ({ name, docValue }: InputDocuments) => {
-  const { field } = useController({ name });
+  const { field, fieldState } = useController({ name });
   const [selectDocType, setSelectDocType] = useState<string | undefined>();
   const [document, setDocument] = useState<string | undefined>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,7 +73,10 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
         <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
           Documento de Identificação
         </p>
-        <FormItemContainer className="pw-p-[0.6rem]">
+        <FormItemContainer
+          invalid={fieldState.invalid}
+          className="pw-p-[0.6rem]"
+        >
           <select
             onChange={(e) => {
               setSelectDocType(e.target.value);
@@ -99,7 +102,10 @@ const InputDocuments = ({ name, docValue }: InputDocuments) => {
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             Número do Documento
           </p>
-          <FormItemContainer className="pw-p-[0.6rem]">
+          <FormItemContainer
+            invalid={fieldState.invalid}
+            className="pw-p-[0.6rem]"
+          >
             {selectDocType === 'cpf' ? (
               <ReactInputMask
                 mask={'999.999.999-99'}

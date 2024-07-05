@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "1.13.23-alpha.0",
+  "version": "1.14.7",
   "type": "module",
   "files": [
     "dist"
@@ -33,8 +33,9 @@
     "@metamask/detect-provider": "^2.0.0",
     "@stripe/react-stripe-js": "^1.13.0",
     "@stripe/stripe-js": "^1.41.0",
+    "@szhsin/react-menu": "^4.1.0",
     "@types/node": "18.11.18",
-    "@w3block/sdk-id": "^0.1.72",
+    "@w3block/sdk-id": "^0.1.73",
     "axios": "^0.27.2",
     "card-validator": "^8.1.1",
     "classnames": "^2.3.1",

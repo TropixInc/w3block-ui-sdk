@@ -26,7 +26,8 @@ export interface StatementScreenTransaction {
   recipient: string | ReactElement;
   type: StatementScreenTransactionType;
   subtype?: StatementScreenTransactionSubType;
-  date: string; // this is set to string on purpose, so the ListItem can be a pure component and receive only primitive types
+  createdAt?: string; // this is set to string on purpose, so the ListItem can be a pure component and receive only primitive types
+  scheduledAt?: string;
   description: string;
   value: string;
   pending: boolean;
@@ -236,13 +237,14 @@ export function getSubtransactions(data: Erc20TokenHistory) {
             parentItemId,
             actionId: `${loyalty?.actionId}-${index}`,
             status: data?.status,
+            createdAt: data?.createdAt,
+            scheduledAt: metadata?.createdAt,
           };
           if (metadata.action === 'split_payees') {
             subTransactions.push({
               ...common,
               recipient: metadata?.buyerName,
               type: StatementScreenTransactionType.RECEIVING,
-              date: metadata?.createdAt,
               description: 'split_payees',
               metadata,
               value: parseFloat(metadata?.pointsCashback).toFixed(2),
@@ -256,7 +258,6 @@ export function getSubtransactions(data: Erc20TokenHistory) {
               ...common,
               recipient: metadata?.buyerName,
               type: StatementScreenTransactionType.RECEIVING,
-              date: metadata?.createdAt,
               description: 'comission',
               value: parseFloat(metadata?.pointsCashback).toFixed(2),
             });
@@ -267,9 +268,10 @@ export function getSubtransactions(data: Erc20TokenHistory) {
               recipient: metadata?.buyerName,
               operatorName: metadata?.operatorName,
               type: StatementScreenTransactionType.RECEIVING,
-              date: metadata?.createdAt,
               description: 'final_recipient',
-              value: parseFloat(loyalty?.amount).toFixed(2),
+              value: parseFloat(
+                metadata?.pointsCashback ?? loyalty?.amount
+              ).toFixed(2),
             });
           } else if (metadata?.action === 'cashback_multilevel') {
             subTransactions.push({
@@ -278,7 +280,6 @@ export function getSubtransactions(data: Erc20TokenHistory) {
               recipient: metadata?.operatorName,
               operatorName: metadata?.operatorName,
               type: StatementScreenTransactionType.RECEIVING,
-              date: metadata?.createdAt,
               description: 'cashback',
               value: parseFloat(metadata?.pointsCashback).toFixed(2),
             });
@@ -299,7 +300,7 @@ export function getSubtransactions(data: Erc20TokenHistory) {
                   : data?.type === 'burn'
                   ? StatementScreenTransactionSubType.ZUCA_DEBIT
                   : StatementScreenTransactionSubType.ZUCA_CREDIT,
-              date: data?.createdAt,
+              createdAt: data?.createdAt,
               value: parseFloat(loyalty?.amount).toFixed(2),
               recipient: metadata?.description,
               description: '',
@@ -376,15 +377,15 @@ export function getSubtransactions(data: Erc20TokenHistory) {
             : data?.type === 'burn'
             ? StatementScreenTransactionSubType.ZUCA_DEBIT
             : StatementScreenTransactionSubType.ZUCA_CREDIT,
-        date: data?.createdAt,
+        createdAt: data?.createdAt,
         value: parseFloat(request?.amount).toFixed(2),
         recipient: request?.metadata?.description,
         description:
           data?.type === 'minter'
-            ? 'Crédito'
+            ? `Crédito ${request.metadata.description}`
             : data?.type === 'burn'
-            ? 'Débito'
-            : 'Transferência',
+            ? `Débito ${request.metadata.description}`
+            : `Transfêrencia ${request.metadata.description}`,
       });
     }
   }

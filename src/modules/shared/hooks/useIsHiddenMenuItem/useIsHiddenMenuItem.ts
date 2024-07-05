@@ -36,8 +36,20 @@ export const useIsHiddenMenuItem = (
 
         if (hiddenOption) {
           return hiddenOption[computedRole];
+        } else if (id === 'futureStatement') {
+          return true;
+        } else if (id === 'withdraws') {
+          return true;
+        } else if (id === 'withdrawsAdmin') {
+          return true;
         }
-      } else if (id === 'futureStatement') return true;
+      } else if (id === 'futureStatement') {
+        return true;
+      } else if (id === 'withdraws') {
+        return true;
+      } else if (id === 'withdrawsAdmin') {
+        return true;
+      }
     },
     [defaultTheme, internalMenuData, roles]
   );

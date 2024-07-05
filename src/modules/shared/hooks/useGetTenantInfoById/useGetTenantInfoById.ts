@@ -9,6 +9,11 @@ interface HostInfo {
   isMain: true;
 }
 
+interface SignInConfigs {
+  enabled: boolean;
+  requireReferrer: boolean;
+  callbackUri: string;
+}
 export interface IcompanyInfo {
   id: string;
   name: string;
@@ -18,6 +23,8 @@ export interface IcompanyInfo {
     passwordless?: {
       enabled: boolean;
     };
+    googleSignIn: SignInConfigs;
+    appleSignIn: SignInConfigs;
   };
 }
 

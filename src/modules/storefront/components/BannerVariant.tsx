@@ -188,7 +188,10 @@ const Slide = ({
 
   const bgUrlThreath = composeUrlCloudinary({
     src: bgUrl?.assetUrl ?? '',
-    InternalProps: { width: 1440, quality: imageCompression ?? 'best' },
+    InternalProps: {
+      width: imageCompression === 'no-compression' ? undefined : 1920,
+      quality: imageCompression ?? 'best',
+    },
   });
   const bg = `${
     overlay && overlayColor

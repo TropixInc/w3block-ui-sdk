@@ -110,6 +110,15 @@ export interface PaymentMethodsAvaiable {
   inputs: string[];
   availableInstallments?: AvailableInstallmentInfo[];
   userCreditCards?: AvailableCreditCards[];
+  providerData?: {
+    brlAmount?: string;
+    feesAmount?: string;
+    iof?: string;
+    quoteId?: string;
+    usdAmount?: string;
+    usdQuote?: string;
+    usdVetQuote?: string;
+  };
 }
 export interface OrderPreviewCache {
   payments?: PaymentsResponse[];
@@ -133,6 +142,11 @@ export interface OrderPreviewCache {
   };
   isCoinPayment?: boolean;
   cashback?: string;
+  currency?: {
+    id?: string;
+    code?: string;
+    symbol?: string;
+  };
 }
 
 export interface OrderProductsInterface {

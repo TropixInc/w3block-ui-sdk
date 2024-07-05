@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ### [1.13.23-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.22...v1.13.23-alpha.0) (2024-05-20)
+### [1.14.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.6...v1.14.7) (2024-06-27)
+
+### [1.14.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.5...v1.14.6) (2024-06-27)
+
+### [1.14.5](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.4...v1.14.5) (2024-06-26)
+
+### [1.14.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.3...v1.14.4) (2024-06-25)
+
+### [1.14.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.2...v1.14.3) (2024-06-25)
+
+### [1.14.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.1...v1.14.2) (2024-06-21)
+
+### [1.14.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.0...v1.14.1) (2024-06-20)
+
+## [1.14.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.40...v1.14.0) (2024-06-20)
+
+### [1.13.40](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.39...v1.13.40) (2024-06-18)
+
+### [1.13.39](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.38...v1.13.39) (2024-06-17)
+
+### [1.13.38](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.37...v1.13.38) (2024-06-17)
+
+### [1.13.37](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.36...v1.13.37) (2024-06-17)
+
+### [1.13.36](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.35...v1.13.36) (2024-06-07)
+
+### [1.13.35](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.34...v1.13.35) (2024-06-05)
+
+### [1.13.34](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.33...v1.13.34) (2024-06-05)
+
+### [1.13.33](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.32...v1.13.33) (2024-06-04)
+
+### [1.13.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.31...v1.13.32) (2024-05-27)
+
+### [1.13.31](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.30...v1.13.31) (2024-05-24)
+
+### [1.13.30](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.29...v1.13.30) (2024-05-24)
+
+### [1.13.29](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.28...v1.13.29) (2024-05-24)
+
+### [1.13.28](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.27...v1.13.28) (2024-05-24)
+
+### [1.13.27](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.26...v1.13.27) (2024-05-23)
+
+### [1.13.26](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.25...v1.13.26) (2024-05-21)
+
+### [1.13.25](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.24...v1.13.25) (2024-05-15)
+
+### [1.13.24](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.23...v1.13.24) (2024-05-14)
+
+### [1.13.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.22...v1.13.23) (2024-05-10)
 
 ### [1.13.22](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.13.21...v1.13.22) (2024-05-09)
 

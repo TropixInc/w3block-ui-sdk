@@ -255,7 +255,7 @@ const Calendar = ({
 
         {currentMonthWeeks.map((week, weekIndex) => (
           <li key={`${year}-${month}-${weekIndex}`}>
-            <ul className="pw-grid pw-grid-cols-7 pw-h-full !pw-gap-x-0">
+            <ul className="pw-grid pw-grid-cols-7 pw-h-full !pw-gap-x-0 pw-text-black">
               {week.map((day, dayIndex) =>
                 day ? (
                   <DateCell

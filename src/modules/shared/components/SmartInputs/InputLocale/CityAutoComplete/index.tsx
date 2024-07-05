@@ -8,6 +8,8 @@ import { useClickAway } from 'react-use';
 import _ from 'lodash';
 
 import { FormItemContainer } from '../../../Form/FormItemContainer';
+import { InputError } from '../../../SmartInputsController';
+import InputStatus from '../../InputStatus';
 
 interface Address {
   [key: string]: string;
@@ -21,6 +23,7 @@ interface CityAutocompleteProps {
   type: string;
   inputLabel?: string;
   inputPlaceholder?: string;
+  hidenValidations?: boolean;
 }
 
 function getAddressObject(address_components: any) {
@@ -74,10 +77,12 @@ const CityAutoComplete = ({
   type,
   inputLabel,
   inputPlaceholder,
+  hidenValidations,
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
   const divRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<string | undefined>();
+  const error = fieldState?.error as unknown as InputError;
   const [translate] = useTranslation();
   const [placeId, setPlaceId] = useState<string | undefined>();
   const [showOptions, setShowOptions] = useState(false);
@@ -104,38 +109,48 @@ const CityAutoComplete = ({
     setInputValue(value);
     setShowOptions(Boolean(value));
   };
-  useEffect(() => {
-    if (placeId) {
-      placesService?.getDetails(
-        {
-          placeId: placeId,
-        },
-        (placeDetails: any) => {
-          const components = getAddressObject(placeDetails.address_components);
 
-          if (type === '(cities)') {
-            setInputValue(`${components.city}, ${components.region}`);
-            onChangeRegion && onChangeRegion(components.region);
-            field.onChange({
-              inputId: name,
-              value: { ...components, placeId: placeId },
-            });
-          } else {
-            setInputValue(
-              `${placeDetails.name} - ${placeDetails.formatted_address}`
-            );
-            field.onChange({
-              inputId: name,
-              value: {
-                ...components,
-                home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
-                placeId: placeId,
-              },
-            });
-          }
+  const getDetails = () =>
+    placesService?.getDetails(
+      {
+        placeId: placeId,
+      },
+      (placeDetails: any) => {
+        const components = getAddressObject(placeDetails.address_components);
+
+        if (type === '(cities)') {
+          setInputValue(`${components.city}, ${components.region}`);
+          onChangeRegion && onChangeRegion(components.region);
+          field.onChange({
+            inputId: name,
+            value: { ...components, placeId: placeId },
+          });
+        } else {
+          setInputValue(
+            `${placeDetails.name} - ${placeDetails.formatted_address}`
+          );
+          field.onChange({
+            inputId: name,
+            value: {
+              ...components,
+              home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
+              placeId: placeId,
+            },
+          });
         }
-      );
+      }
+    );
+
+  const resolveInput = () => {
+    if (placeId) {
+      getDetails();
+    } else {
+      setInputValue('');
     }
+  };
+
+  useEffect(() => {
+    getDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeId]);
 
@@ -181,12 +196,16 @@ const CityAutoComplete = ({
           }
           onChange={(e) => onChangeInputValue(e.target.value)}
           disabled={!country.length}
+          autoComplete="off"
+          onBlur={() => {
+            resolveInput();
+          }}
         />
       </FormItemContainer>
       {showOptions ? (
         <div
           ref={divRef}
-          className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg pw-text-black pw-z-50"
+          className="pw-max-h-[180px] pw-w-full pw-absolute pw-border pw-overflow-y-auto pw-border-[#94B8ED] pw-bg-white pw-p-2 pw-rounded-lg pw-text-black pw-z-[999]"
         >
           {placePredictions.length ? (
             <ul>
@@ -216,6 +235,14 @@ const CityAutoComplete = ({
           )}
         </div>
       ) : null}
+      <p className="mt-5 pw-h-[16px]">
+        {!hidenValidations && field.value && (
+          <InputStatus
+            invalid={fieldState.invalid}
+            errorMessage={error?.value?.message}
+          />
+        )}
+      </p>
     </div>
   );
 };

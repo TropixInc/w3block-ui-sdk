@@ -149,6 +149,24 @@ export const useDefaultMenuTabs = (textColor: string) => {
       isVisible: (isUser || isAdmin) && !isHidden('wallet'),
     },
     {
+      name:
+        internalMenuData['withdraws']?.customLabel ||
+        translate('components>menu>withdraws'),
+      id: 'withdraws',
+      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
+      route: PixwayAppRoutes.WITHDRAWS,
+      isVisible: isCommerceReceiver && !isHidden('withdraws'),
+    },
+    {
+      name:
+        internalMenuData['withdrawsAdmin']?.customLabel ||
+        'Relatório de saques',
+      id: 'withdrawsAdmin',
+      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
+      route: PixwayAppRoutes.WITHDRAWS_ADMIN,
+      isVisible: isAdmin && !isHidden('withdrawsAdmin'),
+    },
+    {
       name: internalMenuData['affiliates']?.customLabel || translate('shared>menu>affiliates'),
       id: 'affiliates',
       route: PixwayAppRoutes.AFFILIATES,

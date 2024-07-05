@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode, useEffect, useRef } from 'react';
+import { ChangeEvent, ReactNode, useRef } from 'react';
 import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
@@ -27,7 +27,7 @@ interface SearchUserProps {
   };
   onSelectItemById?: (value: string) => void;
   isFilterDependency?: boolean;
-  filters: any;
+  filters?: any;
   dependenciesKeys?: Array<string>;
 }
 
@@ -51,11 +51,6 @@ const GenericSearchFilter = ({
     onShowResponseModal && onShowResponseModal(show);
   };
 
-  useEffect(
-    () => (search ? onShowModal(true) : onShowModal(false)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]
-  );
   useClickAway(containerRef, () => {
     if (showResponseModal) onShowModal(false);
   });
@@ -64,6 +59,7 @@ const GenericSearchFilter = ({
     onShowModal(true);
     if (!e.target.value) {
       onSearch('');
+      onSelectItemById && onSelectItemById('');
       onShowModal(false);
     }
   };
@@ -90,7 +86,7 @@ const GenericSearchFilter = ({
         ref={containerRef}
       >
         {items?.length > 0 ? (
-          <ul className="pw-flex pw-flex-col pw-gap-y-3 pw-max-h-[220px] pw-overflow-y-auto">
+          <ul className="pw-flex pw-flex-col pw-gap-y-3 pw-max-h-[220px] pw-overflow-y-auto pw-text-black">
             {items.map((item) => (
               <li
                 className="hover:pw-bg-[#B9D1F3] pw-rounded-lg pw-p-2 pw-cursor-pointer"
@@ -116,7 +112,9 @@ const GenericSearchFilter = ({
             ))}
           </ul>
         ) : (
-          <p className="pw-text-center">{translate('token>pass>notResult')}</p>
+          <p className="pw-text-center pw-text-black">
+            {translate('token>pass>notResult')}
+          </p>
         )}
       </div>
     ) : null;

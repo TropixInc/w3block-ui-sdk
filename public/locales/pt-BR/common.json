@@ -682,5 +682,6 @@
   "pass>sharedOrder>nameUserPass": "Nome do utilizador",
   "pass>sharedOrder>nameBuyer": "Nome do comprador",
   "pass>sharedOrder>value": "Valor",
-  "checkout>checkoutInfo>sendToFriend": "Compartilhe com seu amigo(a)"
+  "checkout>checkoutInfo>sendToFriend": "Compartilhe com seu amigo(a)",
+  "components>menu>withdraws": "Saques"
 }

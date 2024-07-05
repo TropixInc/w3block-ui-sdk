@@ -339,7 +339,6 @@ const _FormCompleteKYCWithoutLayout = ({
           <FormTemplate
             isLoading={isLoading}
             buttonDisabled={
-              !dynamicMethods.formState.isValid ||
               isLoading ||
               Boolean(
                 contextSlug === 'signup' &&
@@ -362,6 +361,13 @@ const _FormCompleteKYCWithoutLayout = ({
                   {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
                 </p>
               </div>
+            </Alert>
+          )}
+          {!dynamicMethods.formState.isValid && (
+            <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+              <p className="pw-text-sm">
+                Por favor, verifique os campos em vermelho.
+              </p>
             </Alert>
           )}
           {isError && (

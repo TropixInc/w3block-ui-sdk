@@ -20,7 +20,11 @@ export const useGetUserByReferral = (referralCode?: string) => {
           ).replace('{referralCode}', referralCode ?? '')
         )
         .then((res) => res.data),
-    { enabled: typeof referralCode === 'string', retry: 2 }
+    {
+      enabled: typeof referralCode === 'string' && !!companyId,
+      retry: 2,
+      refetchOnWindowFocus: false,
+    }
   );
   return getUserByReferral;
 };

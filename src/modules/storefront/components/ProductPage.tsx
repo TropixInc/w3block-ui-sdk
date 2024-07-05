@@ -21,8 +21,13 @@ import {
 } from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
-import { OrderPreviewResponse } from '../../checkout/interface/interface';
+import {
+  AvailableInstallmentInfo,
+  OrderPreviewResponse,
+} from '../../checkout/interface/interface';
+// eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
+import { formatterCurrency } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -41,6 +46,7 @@ import useGetProductBySlug, {
   CurrencyResponse,
 } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { UseThemeConfig } from '../hooks/useThemeConfig/useThemeConfig';
 import { useTrack } from '../hooks/useTrack/useTrack';
 import { ProductPageData } from '../interfaces';
 import { ProductVariants } from './ProductVariants';
@@ -79,6 +85,7 @@ const Spinner = lazy(() =>
     default: mod.Spinner,
   }))
 );
+
 interface ProductPageProps {
   data: ProductPageData;
   params?: string[];
@@ -132,6 +139,9 @@ export const ProductPage = ({
 
   const [translate] = useTranslation();
   const { pushConnect } = useRouterConnect();
+  const { defaultTheme } = UseThemeConfig();
+  const variantsType =
+    defaultTheme?.configurations?.contentData?.productVariantsType;
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
   const [isSendGift, setIsSendGift] = useState(true);
@@ -189,7 +199,7 @@ export const ProductPage = ({
       track('add_to_cart', {
         items: [{ item_id: product?.id, item_name: product?.name }],
         currency: product?.prices?.[0]?.currency?.code,
-        value: product?.prices?.[0]?.amount,
+        value: orderPreview?.totalPrice,
       });
     } catch (err) {
       console.log('Erro ao salvar o track: ', err);
@@ -500,6 +510,24 @@ export const ProductPage = ({
     setTermsChecked(termsAria ?? true);
   };
 
+  function generateStringText(
+    installment: AvailableInstallmentInfo,
+    currency: string
+  ) {
+    return `${installment.amount}x de ${formatterCurrency(
+      currency,
+      String(installment?.installmentPrice)
+    )} ${
+      installment.interest && installment.interest != 0
+        ? `(${installment.interest}% de juros)`
+        : 'sem juros'
+    }`;
+  }
+
+  const providerWithInstallments = orderPreview?.providersForSelection?.find(
+    (res) => !!res.availableInstallments
+  );
+
   return (
     <div
       style={{
@@ -799,6 +827,25 @@ export const ProductPage = ({
                                     )?.amount ?? '0'
                               }
                             ></CriptoValueComponent>
+                            {providerWithInstallments?.availableInstallments
+                              ?.length ? (
+                              <p className="pw-text-sm pw-text-slate-700 pw-w-full pw-ml-1">
+                                {generateStringText(
+                                  providerWithInstallments
+                                    ?.availableInstallments[
+                                    providerWithInstallments
+                                      ?.availableInstallments.length - 1
+                                  ] ?? {
+                                    amount: 0,
+                                    finalPrice: '0',
+                                    installmentPrice: 20,
+                                    interest: 0,
+                                  },
+                                  providerWithInstallments?.currency?.code ??
+                                    'BRL'
+                                )}
+                              </p>
+                            ) : null}
                           </>
                         )
                       ) : (
@@ -807,7 +854,7 @@ export const ProductPage = ({
                     </p>
                   </>
                 )}
-                <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[250px] pw-w-full">
+                <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[350px] pw-w-full">
                   {product?.variants
                     ? product?.variants.map((val) => (
                         <ProductVariants
@@ -820,6 +867,8 @@ export const ProductPage = ({
                             });
                           }}
                           productId={product?.id}
+                          type={variantsType}
+                          borderColor={buttonColor ?? '#0050FF'}
                         />
                       ))
                     : null}

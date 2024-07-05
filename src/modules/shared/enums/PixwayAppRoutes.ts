@@ -54,4 +54,6 @@ export enum PixwayAppRoutes {
   COMPLETE_KYC_CONFIRMATION = '/auth/complete-kyc/confirmation',
   WALLET_FUTURE = '/wallet/statement/future',
   CARDS = '/profile/cards',
+  WITHDRAWS = '/withdraws',
+  WITHDRAWS_ADMIN = '/withdraws/admin',
 }

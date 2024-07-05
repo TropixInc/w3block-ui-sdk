@@ -18,7 +18,9 @@ export const PaymentAccordion = ({
 }: PaymentAccordionProps) => {
   const { text, description } = mapPaymentMethodToTextAndDescription(
     method.paymentMethod,
-    method.availableInstallments?.length ?? 0
+    method.availableInstallments?.length ?? 0,
+    method.paymentProvider,
+    method.providerData?.brlAmount
   );
 
   const MapPayementToIcon = () => {
@@ -67,7 +69,9 @@ export const PaymentAccordion = ({
 
 const mapPaymentMethodToTextAndDescription = (
   method: string,
-  installments?: number
+  installments?: number,
+  provider?: string,
+  convertedPrice?: string
 ) => {
   switch (method) {
     case 'credit_card':
@@ -92,7 +96,10 @@ const mapPaymentMethodToTextAndDescription = (
     case 'pix':
       return {
         text: 'Pix',
-        description: 'Aprovação imediata após o pagamento.',
+        description:
+          provider === 'braza'
+            ? `Valor para pagamento em real + taxas = R$${convertedPrice}`
+            : 'Aprovação imediata após o pagamento.',
       };
     default:
       return {
