@@ -1,5 +1,3 @@
-import { useLocalStorage } from 'react-use';
-
 import { useProfile, useRouterConnect } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
@@ -7,7 +5,6 @@ import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutEmptyCart } from '../../components/CheckoutEmptyCart/CheckoutEmptyCart';
 // import { CheckoutHeader } from '../../components/CheckoutHeader';
-import { PRODUCT_IDS_INFO_KEY } from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
 
 interface CheckoutConfirmationTemplateProps {
@@ -28,11 +25,8 @@ export const CheckoutConfirmationTemplate = ({
   const { isAuthorized, isLoading } = usePrivateRoute();
   const { cart: productsCart } = useCart();
   const { query } = useRouterConnect();
-  const productIdsFromQueries = query.productIds;
-  const [productIds] = useLocalStorage<string[] | undefined>(
-    PRODUCT_IDS_INFO_KEY
-  );
-  const isEmpty = !productIdsFromQueries && !productIds;
+  const productIdsFromQueries = query?.productIds;
+  const isEmpty = !productIdsFromQueries;
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
   const isCommerceReceiver = Boolean(

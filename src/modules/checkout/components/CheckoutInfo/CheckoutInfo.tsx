@@ -44,7 +44,6 @@ import {
   ORDER_COMPLETED_INFO_KEY,
   PRACTITIONER_DATA_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
-  PRODUCT_IDS_INFO_KEY,
   PRODUCT_VARIANTS_INFO_KEY,
 } from '../../config/keys/localStorageKey';
 import { useCart } from '../../hooks/useCart';
@@ -130,6 +129,7 @@ const _CheckoutInfo = ({
   returnAction,
   proccedAction,
   currencyId,
+  productId,
   isCart = false,
 }: CheckoutInfoProps) => {
   const { datasource } = useDynamicApi();
@@ -166,9 +166,7 @@ const _CheckoutInfo = ({
     ? true
     : false;
   const destinationUser = router.query.destination;
-  const [productIds, setProductIds, deleteProductKey] = useLocalStorage<
-    string[] | undefined
-  >(PRODUCT_IDS_INFO_KEY);
+  const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
     currencyId
   );
@@ -221,13 +219,6 @@ const _CheckoutInfo = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.localStorage]);
-
-  useEffect(() => {
-    if (checkoutStatus === CheckoutStatus.FINISHED) {
-      deleteProductKey();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkoutStatus]);
 
   useEffect(() => {
     if (
@@ -640,6 +631,19 @@ const _CheckoutInfo = ({
           }
         });
       }
+      router.push(
+        isCart
+          ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
+          : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
+        {
+          query: {
+            productIds: newArray.join(','),
+            currencyId: orderPreview?.products[0].prices.find(
+              (price) => price.currencyId == currencyIdState
+            )?.currencyId,
+          },
+        }
+      );
       if (isCart) {
         cart.sort((a, b) => {
           if (a.id > b.id || a.variantIds.toString() > b.variantIds.toString())
@@ -712,6 +716,14 @@ const _CheckoutInfo = ({
       if (!isCart) {
         let newArray: Array<string> = [];
         newArray = [...Array(quantity).fill(id)];
+        router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
+          query: {
+            productIds: newArray.join(','),
+            currencyId: orderPreview?.products[0].prices.find(
+              (price) => price.currencyId == currencyIdState
+            )?.currencyId,
+          },
+        });
         setProductIds(newArray);
         productIds?.sort((a, b) => {
           if (a > b) return -1;
@@ -746,6 +758,14 @@ const _CheckoutInfo = ({
             newIds.splice(ind, filteredProds?.length);
             let newArray: Array<string> = [];
             newArray = [...newIds, ...Array(quantity).fill(id)];
+            router.push(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
+              query: {
+                productIds: newArray.join(','),
+                currencyId: orderPreview?.products[0].prices.find(
+                  (price) => price.currencyId == currencyIdState
+                )?.currencyId,
+              },
+            });
             setProductIds(newArray);
             productIds?.sort((a, b) => {
               if (a > b) return -1;
@@ -807,6 +827,19 @@ const _CheckoutInfo = ({
         return true;
       }
     });
+    router.push(
+      isCart
+        ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
+        : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
+      {
+        query: {
+          productIds: filteredProds?.map((p) => p.id).join(','),
+          currencyId: orderPreview?.products[0].prices.find(
+            (price) => price.currencyId == currencyIdState
+          )?.currencyId,
+        },
+      }
+    );
     if (isCart) {
       setCart(filteredProds);
       cart.sort((a, b) => {

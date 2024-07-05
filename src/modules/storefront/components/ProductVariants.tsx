@@ -49,6 +49,8 @@ export const ProductVariants = ({ variants, onClick, productId }: Props) => {
                     variant[variants.id as any] = {
                       name: val.name,
                       label: variants.name,
+                      keyLabel: variants.keyLabel,
+                      keyValue: val.keyValue,
                       id: val.id,
                       productId,
                       variantId: variants.id,

@@ -99,10 +99,10 @@ const _SharedOrder = ({
             )}
             {initialStep === 2 ? null : (
               <div>
-                <p className="pw-mt-3 pw-mb-3 pw-text-[13px] pw-text-center">
+                <p className="pw-mt-3 pw-text-[13px] pw-text-center">
                   {translate('pass>sharedOrder>nameUserPass')}
                 </p>
-                <p className="pw-text-center pw-text-sm pw-font-semibold">
+                <p className="pw-text-center  pw-mb-3  pw-text-sm pw-font-semibold">
                   {pass?.data?.destinationUserName}
                 </p>
               </div>

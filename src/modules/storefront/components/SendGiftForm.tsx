@@ -22,7 +22,7 @@ export const SendGiftForm = ({
     deleteKey();
   }, []);
   return (
-    <div>
+    <div className="pw-mt-5">
       <p className="pw-font-medium">Enviar como presente?</p>
       <div className="pw-mt-3 pw-flex pw-gap-x-4">
         <div className="pw-flex pw-gap-2 pw-items-center">
@@ -59,7 +59,7 @@ export const SendGiftForm = ({
       </div>
 
       {isSendGift ? (
-        <div className="pw-mt-5 pw-flex pw-flex-col">
+        <div className="pw-mt-5 pw-flex pw-flex-col pw-gap-5">
           {dataFields.map((res, index) => {
             return (
               <div key={index} className="pw-w-full pw-flex pw-flex-col">

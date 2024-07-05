@@ -76,7 +76,15 @@ export interface Product {
   };
   endSaleAt?: string;
   id: string;
-  images: { assetId?: string; original?: string; thumb?: string }[];
+  images: {
+    assetId?: string;
+    original?: string;
+    thumb?: string;
+    variants?: {
+      keyLabel: string;
+      keyValue: string;
+    }[];
+  }[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: any;
   name: string;

@@ -8,16 +8,43 @@ import {
   useLocalStorage,
 } from 'react-use';
 
+import { Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 import {
   GIFT_DATA_INFO_KEY,
-  PRODUCT_IDS_INFO_KEY,
   PRODUCT_VARIANTS_INFO_KEY,
 } from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
 import { OrderPreviewResponse } from '../../checkout/interface/interface';
-// eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
+import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
+import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
+import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
+import useRouter from '../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
+import { useSessionUser } from '../../shared/hooks/useSessionUser';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useUtms } from '../../shared/hooks/useUtms/useUtms';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
+import useGetProductBySlug, {
+  CurrencyResponse,
+} from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { useTrack } from '../hooks/useTrack/useTrack';
+import { ProductPageData } from '../interfaces';
+import { ProductVariants } from './ProductVariants';
+import { SendGiftForm } from './SendGiftForm';
 
 const CheckboxAlt = lazy(() =>
   import('../../shared/components/CheckboxAlt/CheckboxAlt').then((mod) => ({
@@ -52,30 +79,6 @@ const Spinner = lazy(() =>
     default: mod.Spinner,
   }))
 );
-
-import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
-import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
-import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
-import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
-import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
-import useRouter from '../../shared/hooks/useRouter';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
-import { useSessionUser } from '../../shared/hooks/useSessionUser';
-import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms/useUtms';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-import useGetProductBySlug, {
-  CurrencyResponse,
-} from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { useTrack } from '../hooks/useTrack/useTrack';
-import { ProductPageData } from '../interfaces';
-import { ProductVariants } from './ProductVariants';
-import { SendGiftForm } from './SendGiftForm';
-
 interface ProductPageProps {
   data: ProductPageData;
   params?: string[];
@@ -156,9 +159,6 @@ export const ProductPage = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
   const isPossibleSend = product?.settings?.passShareCodeConfig?.enabled;
-  const [__, setProductIds] = useLocalStorage<string[] | undefined>(
-    PRODUCT_IDS_INFO_KEY
-  );
   const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
@@ -460,6 +460,8 @@ export const ProductPage = ({
           id: val.values[0].id,
           productId: product?.id,
           variantId: val.id,
+          keyLabel: val.keyLabel,
+          keyValue: val.values[0].keyValue,
         };
       });
       setVariants({ ...variant });
@@ -624,12 +626,34 @@ export const ProductPage = ({
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
           <div className="pw-w-full pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-12">
-              <ImageSDK
-                className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
-                src={product?.images?.[0]?.original ?? ''}
-                width={1200}
-                quality="best"
-              />
+              {product?.images && product?.images?.length > 1 ? (
+                <Swiper
+                  className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px]"
+                  modules={[Pagination]}
+                  pagination={{ clickable: true }}
+                >
+                  {product?.images.map((res) => {
+                    return (
+                      <SwiperSlide key={res.assetId}>
+                        <ImageSDK
+                          src={res?.original ?? ''}
+                          width={1200}
+                          quality="best"
+                          className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              ) : (
+                <ImageSDK
+                  src={product?.images?.[0]?.original ?? ''}
+                  width={1200}
+                  quality="best"
+                  className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+                />
+              )}
+
               <div className="pw-w-full">
                 {showProductName && (
                   <>
@@ -1083,10 +1107,11 @@ export const ProductPage = ({
                         onClick={() => {
                           if (product?.id && product.prices) {
                             setProductVariants({ ...variants });
-                            setProductIds(Array(quantity).fill(product.id));
                             pushConnect(
                               PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                                `?currencyId=${currencyId?.id}`
+                                `?productIds=${Array(quantity)
+                                  .fill(product.id)
+                                  .join(',')}&currencyId=${currencyId?.id}`
                             );
                           }
                         }}

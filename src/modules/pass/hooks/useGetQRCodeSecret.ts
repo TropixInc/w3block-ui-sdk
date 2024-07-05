@@ -14,7 +14,6 @@ interface SecretResponse {
 }
 
 const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
-  console.log(benefitId, editionNumber);
   const axios = useAxios(W3blockAPI.PASS);
   const { companyId: tenantId } = useCompanyConfig();
 
