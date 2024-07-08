@@ -171,8 +171,9 @@ export const ProductPage = ({
   const isPossibleSend = useMemo(() => {
     return product?.settings?.passShareCodeConfig?.enabled ?? false;
   }, [product?.settings?.passShareCodeConfig?.enabled]);
-  const [isSendGift, setIsSendGift] = useState(isPossibleSend);
-  const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
+  const [isSendGift, setIsSendGift] = useState(true);
+  const [giftData, setGiftData, deleteGiftKey] =
+    useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
       ? true
@@ -993,6 +994,9 @@ export const ProductPage = ({
                     }
                     isSendGift={isSendGift}
                     setIsSendGift={setIsSendGift}
+                    data={giftData}
+                    setData={setGiftData}
+                    deleteKey={deleteGiftKey}
                   />
                 ) : null}
                 {/* {showCategory && product?.tags?.length ? (
@@ -1032,7 +1036,8 @@ export const ProductPage = ({
                         disabled={
                           user && !product?.requirements
                             ? true
-                            : false || (isSendGift && !giftData)
+                            : false ||
+                              (isSendGift && !giftData && isPossibleSend)
                         }
                         style={{
                           backgroundColor:
@@ -1057,7 +1062,8 @@ export const ProductPage = ({
                           disabled={
                             user && !product?.requirements
                               ? true
-                              : false || (isSendGift && !giftData)
+                              : false ||
+                                (isSendGift && !giftData && isPossibleSend)
                           }
                           style={{
                             backgroundColor: 'none',
@@ -1082,7 +1088,8 @@ export const ProductPage = ({
                           user &&
                           !product?.requirements
                             ? true
-                            : false || (isSendGift && !giftData)
+                            : false ||
+                              (isSendGift && !giftData && isPossibleSend)
                         }
                         style={{
                           backgroundColor:
@@ -1122,7 +1129,7 @@ export const ProductPage = ({
                             product?.canPurchaseAmount == 0 ||
                             currencyId?.crypto ||
                             !termsChecked ||
-                            (isSendGift && !giftData)
+                            (isSendGift && !giftData && isPossibleSend)
                           }
                           onClick={addToCart}
                           style={{
@@ -1132,7 +1139,7 @@ export const ProductPage = ({
                               (product?.stockAmount == 0 ||
                                 product?.canPurchaseAmount == 0 ||
                                 !termsChecked ||
-                                (isSendGift && !giftData))
+                                (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
                                 : buttonColor
                                 ? buttonColor
@@ -1142,7 +1149,7 @@ export const ProductPage = ({
                               (product?.stockAmount == 0 ||
                                 product?.canPurchaseAmount == 0 ||
                                 !termsChecked ||
-                                (isSendGift && !giftData))
+                                (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
                                 : buttonColor ?? '#0050FF',
                           }}
@@ -1156,7 +1163,7 @@ export const ProductPage = ({
                           product?.stockAmount == 0 ||
                           product?.canPurchaseAmount == 0 ||
                           !termsChecked ||
-                          (isSendGift && !giftData)
+                          (isSendGift && !giftData && isPossibleSend)
                         }
                         onClick={() => {
                           if (product?.id && product.prices) {
