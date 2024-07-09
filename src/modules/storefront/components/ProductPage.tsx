@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -8,12 +8,49 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-import { PRODUCT_VARIANTS_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
+import { Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+import {
+  GIFT_DATA_INFO_KEY,
+  PRODUCT_VARIANTS_INFO_KEY,
+} from '../../checkout/config/keys/localStorageKey';
 import { useCart } from '../../checkout/hooks/useCart';
 import { useCheckout } from '../../checkout/hooks/useCheckout';
-import { OrderPreviewResponse } from '../../checkout/interface/interface';
+import {
+  AvailableInstallmentInfo,
+  OrderPreviewResponse,
+} from '../../checkout/interface/interface';
 // eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
+import { formatterCurrency } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
+import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
+import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
+import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
+import useRouter from '../../shared/hooks/useRouter';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
+import { useSessionUser } from '../../shared/hooks/useSessionUser';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useUtms } from '../../shared/hooks/useUtms/useUtms';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
+import useGetProductBySlug, {
+  CurrencyResponse,
+} from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { UseThemeConfig } from '../hooks/useThemeConfig/useThemeConfig';
+import { useTrack } from '../hooks/useTrack/useTrack';
+import { ProductPageData } from '../interfaces';
+import { ProductVariants } from './ProductVariants';
+import { SendGiftForm } from './SendGiftForm';
 
 const CheckboxAlt = lazy(() =>
   import('../../shared/components/CheckboxAlt/CheckboxAlt').then((mod) => ({
@@ -48,28 +85,6 @@ const Spinner = lazy(() =>
     default: mod.Spinner,
   }))
 );
-
-import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
-import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
-import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
-import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
-import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
-import useRouter from '../../shared/hooks/useRouter';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
-import { useSessionUser } from '../../shared/hooks/useSessionUser';
-import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms/useUtms';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-import useGetProductBySlug, {
-  CurrencyResponse,
-} from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { useTrack } from '../hooks/useTrack/useTrack';
-import { ProductPageData } from '../interfaces';
-import { ProductVariants } from './ProductVariants';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -124,8 +139,12 @@ export const ProductPage = ({
 
   const [translate] = useTranslation();
   const { pushConnect } = useRouterConnect();
+  const { defaultTheme } = UseThemeConfig();
+  const variantsType =
+    defaultTheme?.configurations?.contentData?.productVariantsType;
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
+
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (quantityOpen) {
@@ -149,7 +168,12 @@ export const ProductPage = ({
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
-
+  const isPossibleSend = useMemo(() => {
+    return product?.settings?.passShareCodeConfig?.enabled ?? false;
+  }, [product?.settings?.passShareCodeConfig?.enabled]);
+  const [isSendGift, setIsSendGift] = useState(true);
+  const [giftData, setGiftData, deleteGiftKey] =
+    useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
       ? true
@@ -413,6 +437,7 @@ export const ProductPage = ({
             }),
           ],
           currencyId: currencyId.id ?? '',
+          passShareCodeData: giftData,
           payments: [
             {
               currencyId: currencyId?.id ?? '',
@@ -449,6 +474,8 @@ export const ProductPage = ({
           id: val.values[0].id,
           productId: product?.id,
           variantId: val.id,
+          keyLabel: val.keyLabel,
+          keyValue: val.values[0].keyValue,
         };
       });
       setVariants({ ...variant });
@@ -486,6 +513,24 @@ export const ProductPage = ({
       .every((val) => val);
     setTermsChecked(termsAria ?? true);
   };
+
+  function generateStringText(
+    installment: AvailableInstallmentInfo,
+    currency: string
+  ) {
+    return `${installment.amount}x de ${formatterCurrency(
+      currency,
+      String(installment?.installmentPrice)
+    )} ${
+      installment.interest && installment.interest != 0
+        ? `(${installment.interest}% de juros)`
+        : 'sem juros'
+    }`;
+  }
+
+  const providerWithInstallments = orderPreview?.providersForSelection?.find(
+    (res) => !!res.availableInstallments
+  );
 
   return (
     <div
@@ -613,12 +658,34 @@ export const ProductPage = ({
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
           <div className="pw-w-full pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-12">
-              <ImageSDK
-                className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
-                src={product?.images?.[0]?.original ?? ''}
-                width={1200}
-                quality="best"
-              />
+              {product?.images && product?.images?.length > 1 ? (
+                <Swiper
+                  className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px]"
+                  modules={[Pagination]}
+                  pagination={{ clickable: true }}
+                >
+                  {product?.images.map((res) => {
+                    return (
+                      <SwiperSlide key={res.assetId}>
+                        <ImageSDK
+                          src={res?.original ?? ''}
+                          width={1200}
+                          quality="best"
+                          className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              ) : (
+                <ImageSDK
+                  src={product?.images?.[0]?.original ?? ''}
+                  width={1200}
+                  quality="best"
+                  className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+                />
+              )}
+
               <div className="pw-w-full">
                 {showProductName && (
                   <>
@@ -764,6 +831,25 @@ export const ProductPage = ({
                                     )?.amount ?? '0'
                               }
                             ></CriptoValueComponent>
+                            {providerWithInstallments?.availableInstallments
+                              ?.length ? (
+                              <p className="pw-text-sm pw-text-slate-700 pw-w-full pw-ml-1">
+                                {generateStringText(
+                                  providerWithInstallments
+                                    ?.availableInstallments[
+                                    providerWithInstallments
+                                      ?.availableInstallments.length - 1
+                                  ] ?? {
+                                    amount: 0,
+                                    finalPrice: '0',
+                                    installmentPrice: 20,
+                                    interest: 0,
+                                  },
+                                  providerWithInstallments?.currency?.code ??
+                                    'BRL'
+                                )}
+                              </p>
+                            ) : null}
                           </>
                         )
                       ) : (
@@ -772,7 +858,7 @@ export const ProductPage = ({
                     </p>
                   </>
                 )}
-                <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[250px] pw-w-full">
+                <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[350px] pw-w-full">
                   {product?.variants
                     ? product?.variants.map((val) => (
                         <ProductVariants
@@ -785,11 +871,12 @@ export const ProductPage = ({
                             });
                           }}
                           productId={product?.id}
+                          type={variantsType}
+                          borderColor={buttonColor ?? '#0050FF'}
                         />
                       ))
                     : null}
                 </div>
-
                 {actionButton &&
                 product?.stockAmount &&
                 product?.stockAmount > 0 &&
@@ -900,7 +987,18 @@ export const ProductPage = ({
                     </p>
                   </>
                 ) : null}
-
+                {isPossibleSend ? (
+                  <SendGiftForm
+                    dataFields={
+                      product?.settings?.passShareCodeConfig?.dataFields ?? []
+                    }
+                    isSendGift={isSendGift}
+                    setIsSendGift={setIsSendGift}
+                    data={giftData}
+                    setData={setGiftData}
+                    deleteKey={deleteGiftKey}
+                  />
+                ) : null}
                 {/* {showCategory && product?.tags?.length ? (
                   <>
                     <p
@@ -935,7 +1033,12 @@ export const ProductPage = ({
                       </p>
                       <button
                         onClick={handleClick}
-                        disabled={user && !product?.requirements ? true : false}
+                        disabled={
+                          user && !product?.requirements
+                            ? true
+                            : false ||
+                              (isSendGift && !giftData && isPossibleSend)
+                        }
                         style={{
                           backgroundColor:
                             user && !product?.requirements
@@ -957,7 +1060,10 @@ export const ProductPage = ({
                         <button
                           onClick={handleClick}
                           disabled={
-                            user && !product?.requirements ? true : false
+                            user && !product?.requirements
+                              ? true
+                              : false ||
+                                (isSendGift && !giftData && isPossibleSend)
                           }
                           style={{
                             backgroundColor: 'none',
@@ -982,7 +1088,8 @@ export const ProductPage = ({
                           user &&
                           !product?.requirements
                             ? true
-                            : false
+                            : false ||
+                              (isSendGift && !giftData && isPossibleSend)
                         }
                         style={{
                           backgroundColor:
@@ -1021,7 +1128,8 @@ export const ProductPage = ({
                             product?.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0 ||
                             currencyId?.crypto ||
-                            !termsChecked
+                            !termsChecked ||
+                            (isSendGift && !giftData && isPossibleSend)
                           }
                           onClick={addToCart}
                           style={{
@@ -1030,7 +1138,8 @@ export const ProductPage = ({
                               product &&
                               (product?.stockAmount == 0 ||
                                 product?.canPurchaseAmount == 0 ||
-                                !termsChecked)
+                                !termsChecked ||
+                                (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
                                 : buttonColor
                                 ? buttonColor
@@ -1039,7 +1148,8 @@ export const ProductPage = ({
                               product &&
                               (product?.stockAmount == 0 ||
                                 product?.canPurchaseAmount == 0 ||
-                                !termsChecked)
+                                !termsChecked ||
+                                (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
                                 : buttonColor ?? '#0050FF',
                           }}
@@ -1052,7 +1162,8 @@ export const ProductPage = ({
                         disabled={
                           product?.stockAmount == 0 ||
                           product?.canPurchaseAmount == 0 ||
-                          !termsChecked
+                          !termsChecked ||
+                          (isSendGift && !giftData && isPossibleSend)
                         }
                         onClick={() => {
                           if (product?.id && product.prices) {

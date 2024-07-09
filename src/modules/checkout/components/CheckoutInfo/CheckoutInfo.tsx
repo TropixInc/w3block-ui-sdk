@@ -2,13 +2,19 @@
 import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useTranslation } from 'react-i18next';
-import { useDebounce, useInterval, useLocalStorage } from 'react-use';
+import {
+  useCopyToClipboard,
+  useDebounce,
+  useInterval,
+  useLocalStorage,
+} from 'react-use';
 
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import _ from 'lodash';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { SharedOrder } from '../../../pass';
 import { useProfile } from '../../../shared';
 import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
 import { Alert } from '../../../shared/components/Alert';
@@ -19,6 +25,7 @@ import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
+import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -121,11 +128,12 @@ const _CheckoutInfo = ({
   checkoutStatus = CheckoutStatus.FINISHED,
   returnAction,
   proccedAction,
-  productId,
   currencyId,
+  productId,
   isCart = false,
 }: CheckoutInfoProps) => {
   const { datasource } = useDynamicApi();
+  const isMobile = useIsMobile();
   const context = useContext(ThemeContext);
   const hideCoupon =
     context?.defaultTheme?.configurations?.contentData?.checkoutConfig
@@ -178,6 +186,9 @@ const _CheckoutInfo = ({
   );
 
   const { companyId } = useCompanyConfig();
+  const [isCopied, setIsCopied] = useState(false);
+  const [__, copyToClipboard] = useCopyToClipboard();
+
   useEffect(() => {
     if (
       checkUtm &&
@@ -211,13 +222,11 @@ const _CheckoutInfo = ({
 
   useEffect(() => {
     if (
-      !productIds &&
-      !currencyIdState &&
+      (!productIds || !currencyIdState) &&
       checkoutStatus === CheckoutStatus.CONFIRMATION
     ) {
-      const params = new URLSearchParams(query);
-      const productIdsFromQueries = params.get('productIds');
-      const currencyIdFromQueries = params.get('currencyId');
+      const productIdsFromQueries = router?.query?.productIds as string;
+      const currencyIdFromQueries = router?.query?.currencyId as string;
       if (productIdsFromQueries) {
         setProductIds(productIdsFromQueries.split(','));
       }
@@ -244,7 +253,7 @@ const _CheckoutInfo = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
+  }, [query, productIds]);
 
   useEffect(() => {
     const params = new URLSearchParams(query);
@@ -373,21 +382,23 @@ const _CheckoutInfo = ({
             }
             setOrderPreview(data);
             setIsLoadingPreview(false);
-            setCart(
-              data.products.map((val) => {
-                return {
-                  id: val.id,
-                  variantIds: val?.variants?.map((val) => val.values[0].id),
-                  prices: val.prices,
-                  name: val.name,
-                };
-              })
-            );
-            cart.sort((a, b) => {
-              if (a.id > b.id) return -1;
-              if (a.id < b.id) return 1;
-              return 0;
-            });
+            if (isCart) {
+              setCart(
+                data.products.map((val) => {
+                  return {
+                    id: val.id,
+                    variantIds: val?.variants?.map((val) => val.values[0].id),
+                    prices: val.prices,
+                    name: val.name,
+                  };
+                })
+              );
+              cart.sort((a, b) => {
+                if (a.id > b.id) return -1;
+                if (a.id < b.id) return 1;
+                return 0;
+              });
+            }
             if (data.products.map((p) => p.id)?.length != productIds?.length) {
               setProductIds(data.products.map((p) => p.id));
               productIds?.sort((a, b) => {
@@ -816,7 +827,6 @@ const _CheckoutInfo = ({
         return true;
       }
     });
-
     router.push(
       isCart
         ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
@@ -938,37 +948,53 @@ const _CheckoutInfo = ({
   const [codeQr, setCodeQr] = useState('');
   const [error, setError] = useState('');
   useEffect(() => {
-    if (poolStatus && orderId !== '' && isCoinPayment) {
+    if (
+      poolStatus &&
+      orderId !== '' &&
+      (isCoinPayment || orderResponse?.passShareCodeInfo)
+    ) {
       validateOrderStatus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolStatus, isCoinPayment]);
+  }, [poolStatus, isCoinPayment, orderResponse?.passShareCodeInfo]);
 
   const validateOrderStatus = async () => {
-    if (poolStatus && orderId && isCoinPayment) {
+    if (
+      poolStatus &&
+      orderId &&
+      (isCoinPayment || orderResponse?.passShareCodeInfo)
+    ) {
       const interval = setInterval(() => {
         getStatus.mutate(
           { companyId, orderId },
           {
             onSuccess: (data: CreateOrderResponse) => {
-              if (data.status === 'pending' && countdown) {
-                setCountdown(false);
-              } else if (data.status === 'failed') {
-                setCountdown(false);
-                clearInterval(interval);
-                setPoolStatus(false);
-                setStatusResponse(data);
-                setError(data?.failReason ?? '');
-              } else if (
-                data.status == 'concluded' ||
-                data.status == 'delivering'
-              ) {
-                clearInterval(interval);
-                setPoolStatus(false);
-                setStatusResponse(data);
-                setCodeQr(
-                  `${window?.location?.origin}/order/${data.deliverId}`
-                );
+              if (isCoinPayment) {
+                if (data.status === 'pending' && countdown) {
+                  setCountdown(false);
+                } else if (data.status === 'failed') {
+                  setCountdown(false);
+                  clearInterval(interval);
+                  setPoolStatus(false);
+                  setStatusResponse(data);
+                  setError(data?.failReason ?? '');
+                } else if (
+                  data.status == 'concluded' ||
+                  data.status == 'delivering'
+                ) {
+                  clearInterval(interval);
+                  setPoolStatus(false);
+                  setStatusResponse(data);
+                  setCodeQr(
+                    `${window?.location?.origin}/order/${data.deliverId}`
+                  );
+                }
+              } else {
+                if (data?.passShareCodeInfo?.status == 'generated') {
+                  clearInterval(interval);
+                  setPoolStatus(false);
+                  setStatusResponse(data);
+                }
               }
             },
           }
@@ -1007,6 +1033,117 @@ const _CheckoutInfo = ({
     } else {
       return translate('tokens>tokenTransferController>goToMyTokens');
     }
+  };
+
+  const shareMessage = `Olá ${
+    orderResponse?.passShareCodeInfo?.data?.destinationUserName
+  } Seu amigo ${
+    profile?.data?.data?.name ?? ''
+  } acabou de te enviar esse gift card, ${
+    orderResponse?.passShareCodeInfo?.data?.message
+  } {sharedLink}`;
+
+  const handleShared = () => {
+    if (shareMessage) {
+      copyToClipboard(
+        shareMessage.replace(
+          '{sharedLink}',
+          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
+        )
+      );
+    } else {
+      copyToClipboard('link');
+    }
+    setTimeout(() => setIsCopied(false), 3000);
+  };
+
+  const onRenderGiftsCard = () => {
+    if (
+      orderResponse?.passShareCodeInfo?.data?.destinationUserEmail ===
+      profile?.data?.data?.email
+    )
+      return (
+        <SharedOrder
+          initialStep={2}
+          shareCode={statusResponse?.passShareCodeInfo?.codes?.[0]?.code}
+        />
+      );
+    else
+      return (
+        <div className="pw-my-5 pw-flex pw-flex-wrap pw-gap-8">
+          <div className="pw-w-full pw-max-w-[500px] pw-shadow-lg pw-flex pw-flex-col pw-items-center pw-p-6 pw-rounded-xl pw-border pw-border-[#E6E8EC]">
+            <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
+              Compra realizada com sucesso!
+            </p>
+            <div className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[20px]">
+              <img
+                className="pw-mt-6 pw-w-[250px] pw-h-[250px] pw-object-contain pw-rounded-lg sm:pw-w-[300px] sm:pw-h-[300px]"
+                src={
+                  statusResponse?.products?.[0]?.productToken?.product
+                    ?.images?.[0]?.thumb
+                }
+                alt=""
+              />
+              <p className="pw-mt-3 pw-font-semibold">Gift Card</p>
+              <p className="pw-mt-1 pw-text-[32px] pw-font-bold pw-mb-5">
+                {orderResponse?.totalAmount ?? ''}
+              </p>
+            </div>
+            <p className="pw-mt-3 pw-font-bold pw-text-base pw-text-center">{`Olá, ${orderResponse?.passShareCodeInfo?.data?.destinationUserName}`}</p>
+            <p className="pw-font-semibold pw-text-base pw-text-center">
+              {translate('pass>sharedOrder>yourFriendSendGift', {
+                friendName: profile?.data?.data?.name ?? '',
+              })}
+            </p>
+            <p className="pw-mt-3 pw-text-base pw-text-center pw-h-[72px]">
+              {orderResponse?.passShareCodeInfo?.data?.message}
+            </p>
+            <div className="pw-w-full pw-flex pw-flex-col pw-gap-[15px]">
+              <p className="pw-mt-4 pw-font-bold pw-text-center">
+                {translate('checkout>checkoutInfo>sendToFriend')}
+              </p>
+              <a
+                target="_blank"
+                className="pw-text-center !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+                href={
+                  isMobile
+                    ? `whatsapp://send?text=${encodeURIComponent(
+                        `${shareMessage.replace(
+                          '{sharedLink}',
+                          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
+                        )}`
+                      )}`
+                    : `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                        `${shareMessage.replace(
+                          '{sharedLink}',
+                          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
+                        )}`
+                      )}`
+                }
+                data-action="share/whatsapp/share"
+                rel="noreferrer"
+              >
+                Whatsapp
+              </a>
+              <PixwayButton
+                onClick={() => {
+                  setIsCopied(true);
+                  handleShared();
+                }}
+                style={{
+                  backgroundColor: '#0050FF',
+                  color: 'white',
+                }}
+                className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+              >
+                {isCopied
+                  ? 'Copiado!'
+                  : translate('affiliates>referrakWidget>shared')}
+              </PixwayButton>
+            </div>
+          </div>
+        </div>
+      );
   };
 
   const changeValue = (value: string) => {
@@ -1344,6 +1481,16 @@ const _CheckoutInfo = ({
           </>
         );
       case CheckoutStatus.FINISHED:
+        if (orderResponse?.passShareCodeInfo) {
+          if (statusResponse?.passShareCodeInfo?.status == 'generated')
+            return onRenderGiftsCard();
+          else
+            return (
+              <div>
+                <Spinner className="pw-h-10 pw-w-10" />
+              </div>
+            );
+        }
         return (
           <div className="pw-mt-4">
             {productCache?.isCoinPayment || isCoinPayment ? (
@@ -1487,6 +1634,7 @@ const _CheckoutInfo = ({
     statusResponse?.deliverId,
     coinError,
     organizedLoyalties,
+    isCopied,
   ]);
 
   const anchorCurrencyId = useMemo(() => {
@@ -1525,7 +1673,9 @@ const _CheckoutInfo = ({
     <>
       <div className="pw-flex pw-flex-col sm:pw-flex-row">
         <div className="pw-w-full lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
-          {isCoinPayment || productCache?.isCoinPayment ? null : (
+          {isCoinPayment ||
+          productCache?.isCoinPayment ||
+          orderResponse?.passShareCodeInfo ? null : (
             <>
               <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
                 Resumo da compra
@@ -1540,7 +1690,10 @@ const _CheckoutInfo = ({
               )}
             </>
           )}
-          {isCoinPayment || productCache?.isCoinPayment ? null : (
+
+          {isCoinPayment ||
+          productCache?.isCoinPayment ||
+          orderResponse?.passShareCodeInfo ? null : (
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
               {differentProducts.map((prod, index) => (
                 <ProductInfo

@@ -1,4 +1,5 @@
-import { lazy, useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -9,15 +10,19 @@ import classNames from 'classnames';
 import { object, string } from 'yup';
 
 import { Alert } from '../../../shared/components/Alert';
+import { Spinner } from '../../../shared/components/Spinner';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useGetGoogleRedirectLink } from '../../../shared/hooks/useGetGoogleRedirectLink';
 import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
+import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
+import GoogleIcon from '../../assets/icons/googleIcon.svg?react';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { AuthFooter } from '../AuthFooter';
@@ -59,9 +64,11 @@ export const SigInWithoutLayout = ({
 }: SignInWithoutLayoutProps) => {
   const { companyId } = useCompanyConfig();
   const { data: companyInfo } = useGetTenantInfoByHostname();
+  const googleLink = useGetGoogleRedirectLink();
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+  const haveGoogleSignIn = companyInfo?.configuration?.googleSignIn?.enabled;
   const [translate] = useTranslation();
-  const { signIn } = usePixwayAuthentication();
+  const { signIn, signInWithGoogle } = usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
     isPasswordless,
     messageConfig: {
@@ -77,10 +84,59 @@ export const SigInWithoutLayout = ({
     LocalStorageFields.AUTHENTICATION_CALLBACK,
     ''
   );
+  const query =
+    Object.keys(router.query).length > 0 &&
+    (profile?.data.kycStatus === KycStatus.Pending || !profile?.data.mainWallet)
+      ? router.query
+      : '';
+
   const queryString = new URLSearchParams(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (router.query as any) ?? {}
   ).toString();
+
+  const code = useMemo(() => {
+    return router?.query?.code as string;
+  }, [router]);
+
+  const isGoogleSignIn = useMemo(() => {
+    return router?.query?.scope?.includes('googleapis');
+  }, [router]);
+
+  const callback = useMemo(() => {
+    if (router?.query.callbackUrl?.length)
+      return router?.query.callbackUrl as string;
+    if (router?.query.callbackPath?.length)
+      return router?.query.callbackPath as string;
+    else if (router?.query.contextSlug?.length)
+      return (
+        PixwayAppRoutes.COMPLETE_KYC +
+        (queryString && queryString != '' ? '?' : '') +
+        queryString
+      );
+    else return '/';
+  }, [router]);
+
+  const utms = useUtms();
+  const [googleError, setGoogleError] = useState(false);
+  useEffect(() => {
+    if (code && isGoogleSignIn) {
+      signInWithGoogle &&
+        signInWithGoogle({
+          code,
+          companyId,
+          callbackUrl: callback,
+          referrer: utms.utm_source ?? undefined,
+        }).then((res) => {
+          if (!res.ok) {
+            setGoogleError(true);
+          } else {
+            router.pushConnect(callback);
+          }
+        });
+    }
+  }, [code, isGoogleSignIn]);
+
   const { defaultTheme } = UseThemeConfig();
   const postSigninURL =
     defaultTheme?.configurations?.contentData?.postSigninURL;
@@ -131,12 +187,6 @@ export const SigInWithoutLayout = ({
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
-  const query =
-    Object.keys(router.query).length > 0 &&
-    (profile?.data.kycStatus === KycStatus.Pending || !profile?.data.mainWallet)
-      ? router.query
-      : '';
-
   useEffect(() => {
     if (session && profile && !isPasswordless) {
       router.pushConnect(getRedirectUrl(), query);
@@ -161,7 +211,13 @@ export const SigInWithoutLayout = ({
     }
   };
 
-  if (isPasswordless)
+  if (code && isGoogleSignIn && !googleError)
+    return (
+      <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
+        <Spinner />
+      </div>
+    );
+  else if (isPasswordless)
     return <SignUpFormWithoutLayout title="Insira seu e-mail" />;
   else
     return (
@@ -242,6 +298,29 @@ export const SigInWithoutLayout = ({
                   </a>
                 </Trans>
               </p>
+            ) : null}
+            {haveGoogleSignIn ? (
+              <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
+                {googleError ? (
+                  <Alert variant="warning">
+                    Parece que você ainda não possui uma conta, por favor
+                    cadastre-se pela plataforma.
+                  </Alert>
+                ) : (
+                  <>
+                    <p className="pw-text-black">ou</p>
+                    <a
+                      className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
+                      href={googleLink}
+                    >
+                      <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
+                        <GoogleIcon />
+                      </div>
+                      <span>Sign in with Google</span>
+                    </a>
+                  </>
+                )}
+              </div>
             ) : null}
           </div>
           <AuthFooter />

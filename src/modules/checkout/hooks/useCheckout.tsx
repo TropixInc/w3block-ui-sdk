@@ -19,6 +19,10 @@ interface GetOrderPreviewPayload {
   currencyId?: string;
   companyId: string;
   couponCode?: string;
+  passShareCodeData?: {
+    name: string;
+    message: string;
+  };
   payments?: {
     currencyId?: string;
     amountType?: string;
@@ -32,6 +36,10 @@ interface ProductToSendPayload {
   productTokenId?: string;
   variantIds?: string[];
   quantity?: number;
+  passShareCodeData?: {
+    name: string;
+    message: string;
+  };
 }
 
 interface OrderPreviewPayload {

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import _ from 'lodash';
 
+import { ImageSDK } from '../../shared/components/ImageSDK';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
+import { isVideo } from '../../shared/utils/validators';
 import {
   CardTypesEnum,
   ProductsDataStyleData,
@@ -59,7 +61,7 @@ export const ContentCard = ({
     imageCardCompression,
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
-  const { datasource } = useDynamicApi();
+  const { datasource, isDynamic } = useDynamicApi();
   const linkToSend = () => {
     if (cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink && product.link && product.link != '')
@@ -144,6 +146,30 @@ export const ContentCard = ({
                 format === 'rounded' ? 'pw-rounded-full' : 'pw-rounded-[20px]'
               }`}
             >
+              {isVideo(
+                isDynamic
+                  ? _.get(
+                      datasource,
+                      product.image?.assetUrl ?? '',
+                      product.image?.assetUrl ?? ''
+                    )
+                  : product.image?.assetUrl ?? ''
+              ) && (
+                <ImageSDK
+                  src={
+                    isDynamic
+                      ? _.get(
+                          datasource,
+                          product.image?.assetUrl ?? '',
+                          product.image?.assetUrl ?? ''
+                        )
+                      : product.image?.assetUrl ?? ''
+                  }
+                  className={` pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
+                  width={1440}
+                  quality="best"
+                />
+              )}
               {txtOver && format != 'rounded' ? (
                 <div className="pw-flex pw-flex-col pw-justify-end pw-w-full pw-h-full pw-p-[24px]">
                   {showCardTitle && (

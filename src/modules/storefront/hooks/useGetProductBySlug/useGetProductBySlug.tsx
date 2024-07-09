@@ -46,7 +46,20 @@ interface Terms {
   title: string;
   description?: string;
 }
+
+export interface DataFields {
+  name: string;
+  label: string;
+  required: boolean;
+  type: 'text' | 'textarea';
+}
 export interface Product {
+  settings?: {
+    passShareCodeConfig?: {
+      enabled?: boolean;
+      dataFields?: DataFields[];
+    };
+  };
   canPurchase?: boolean;
   chainId?: number;
   htmlContent?: string;
@@ -63,7 +76,15 @@ export interface Product {
   };
   endSaleAt?: string;
   id: string;
-  images: { assetId?: string; original?: string; thumb?: string }[];
+  images: {
+    assetId?: string;
+    original?: string;
+    thumb?: string;
+    variants?: {
+      keyLabel: string;
+      keyValue: string;
+    }[];
+  }[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: any;
   name: string;
