@@ -187,7 +187,7 @@ const _CheckoutInfo = ({
 
   const { companyId } = useCompanyConfig();
   const [isCopied, setIsCopied] = useState(false);
-  const [state, copyToClipboard] = useCopyToClipboard();
+  const [__, copyToClipboard] = useCopyToClipboard();
 
   useEffect(() => {
     if (
@@ -1035,8 +1035,13 @@ const _CheckoutInfo = ({
     }
   };
 
-  const shareMessage =
-    'Olá seu amigo(a) acaba de te enviar um presente, {sharedLink}';
+  const shareMessage = `Olá ${
+    orderResponse?.passShareCodeInfo?.data?.destinationUserName
+  } Seu amigo ${
+    profile?.data?.data?.name ?? ''
+  } acabou de te enviar esse gift card, ${
+    orderResponse?.passShareCodeInfo?.data?.message
+  } {sharedLink}`;
 
   const handleShared = () => {
     if (shareMessage) {
@@ -1049,8 +1054,6 @@ const _CheckoutInfo = ({
     } else {
       copyToClipboard('link');
     }
-
-    if (!state.error) setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
   };
 
@@ -1076,8 +1079,8 @@ const _CheckoutInfo = ({
               <img
                 className="pw-mt-6 pw-w-[250px] pw-h-[250px] pw-object-contain pw-rounded-lg sm:pw-w-[300px] sm:pw-h-[300px]"
                 src={
-                  statusResponse?.products?.[0]?.productToken?.metadata
-                    ?.media?.[0]?.cached?.originalUrl
+                  statusResponse?.products?.[0]?.productToken?.product
+                    ?.images?.[0]?.thumb
                 }
                 alt=""
               />
@@ -1123,7 +1126,10 @@ const _CheckoutInfo = ({
                 Whatsapp
               </a>
               <PixwayButton
-                onClick={() => handleShared()}
+                onClick={() => {
+                  setIsCopied(true);
+                  handleShared();
+                }}
                 style={{
                   backgroundColor: '#0050FF',
                   color: 'white',
@@ -1628,6 +1634,7 @@ const _CheckoutInfo = ({
     statusResponse?.deliverId,
     coinError,
     organizedLoyalties,
+    isCopied,
   ]);
 
   const anchorCurrencyId = useMemo(() => {
