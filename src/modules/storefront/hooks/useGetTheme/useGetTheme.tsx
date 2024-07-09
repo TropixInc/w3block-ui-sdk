@@ -14,7 +14,7 @@ export const useGetTheme = (disabled = false) => {
     if (window) {
       setHref(window.location.href);
       //setHref('https://hashdex.stg.w3block.io/' + '?' + Date.now());
-      // setHref('https://foodbusters.stg.w3block.io/?' + Date.now());
+      //setHref('https://foodbusters.stg.w3block.io/?' + Date.now());
     }
   }, []);
 

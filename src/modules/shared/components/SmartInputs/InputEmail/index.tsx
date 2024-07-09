@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { useProfile } from '../../../hooks';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
@@ -17,6 +18,7 @@ interface InputEmailProps {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   autofill?: boolean;
+  required?: boolean;
 }
 
 const InputEmail = ({
@@ -26,6 +28,7 @@ const InputEmail = ({
   docStatus,
   hidenValidations = false,
   autofill = false,
+  required,
 }: InputEmailProps) => {
   const { field, fieldState } = useController({ name });
   const error = fieldState?.error as unknown as InputError;
@@ -61,9 +64,9 @@ const InputEmail = ({
 
   return (
     <div className="pw-mb-3 pw-w-full">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </p>
+      </LabelWithRequired>
       {autofill ? (
         <div
           className={classNames(
@@ -87,7 +90,7 @@ const InputEmail = ({
           />
         </FormItemContainer>
       )}
-      <p className={`mt-5 ${!autofill && 'pw-h-[16px]'}`}>
+      <p className={`pw-mt-[5px] ${!autofill && 'pw-h-[16px]'}`}>
         {!hidenValidations && field.value && (
           <InputStatus
             invalid={fieldState.invalid}

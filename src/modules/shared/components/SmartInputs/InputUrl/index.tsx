@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { isValidUrl } from '../../../utils/validators';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
@@ -16,6 +17,7 @@ interface InputUrlProps {
   docValue?: string;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
+  required?: boolean;
 }
 
 const InputUrl = ({
@@ -24,6 +26,7 @@ const InputUrl = ({
   docValue,
   docStatus,
   hidenValidations = false,
+  required,
 }: InputUrlProps) => {
   const { field, fieldState } = useController({ name });
   const error = fieldState?.error as unknown as InputError;
@@ -53,13 +56,10 @@ const InputUrl = ({
 
   return (
     <div className="pw-mb-3 pw-w-full">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </p>
-      <FormItemContainer
-        invalid={fieldState.invalid || !field.value}
-        className="pw-w-full"
-      >
+      </LabelWithRequired>
+      <FormItemContainer invalid={fieldState.invalid} className="pw-w-full">
         <input
           name={name}
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
@@ -72,7 +72,7 @@ const InputUrl = ({
         />
       </FormItemContainer>
       {!hidenValidations && (
-        <p className="mt-5">
+        <p className="pw-mt-[5px]">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}
