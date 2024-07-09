@@ -17,9 +17,11 @@ import { Spinner } from '../../components/Spinner';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useCheckWhitelistByUser } from '../../hooks/useCheckWhitelistByUser/useCheckWhitelistByUser';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useGetDocuments } from '../../hooks/useGetDocuments';
 import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenantContext';
 import { useRouterConnect } from '../../hooks/useRouterConnect/useRouterConnect';
+import { removeDoubleSlashesOnUrl } from '../../utils/removeDuplicateSlahes';
 
 interface OnboardProps {
   setLoading: (bol: boolean) => void;
@@ -119,6 +121,18 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   const path = useMemo(() => {
     return router.asPath;
   }, [router.asPath]);
+  const { connectProxyPass } = useCompanyConfig();
+  const callback = () => {
+    const url = removeDoubleSlashesOnUrl(
+      (location.hostname?.includes('localhost') ||
+      location.href?.includes('/connect/') ||
+      !connectProxyPass
+        ? '/'
+        : connectProxyPass) + path
+    );
+    if (router.query.callbackPath || router?.query?.callbackUrl) return query;
+    else return { callbackUrl: url };
+  };
 
   useEffect(() => {
     if (profile) {
@@ -126,7 +140,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
         !profile.data.verified &&
         !window.location.pathname.includes('/auth/verify-sign-up')
       ) {
-        router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, query);
+        router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, callback());
       } else if (signupContext && isFilled.length === 0) {
         if (
           profile?.data?.kycStatus === KycStatus.Pending &&
@@ -135,7 +149,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
           !window.location.pathname.includes('/auth/verify-sign-up') &&
           window.location.pathname !== PixwayAppRoutes.SIGN_IN
         ) {
-          router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+          router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, callback());
         }
       } else if (!skipWallet) {
         if (
@@ -148,7 +162,10 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
             '/auth/completeSignup/connectExternalWallet'
           )
         ) {
-          router.pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, query);
+          router.pushConnect(
+            PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+            callback()
+          );
         }
       }
     }
