@@ -8,6 +8,7 @@ import {
   FormatTypeColumn,
 } from '../../interface';
 import { GenericTable } from '../GenericTable';
+import RequestItemWrapper from '../RequestItemWrapper';
 
 const RequestsList = () => {
   const { companyId: tenantId } = useCompanyConfig();
@@ -42,7 +43,14 @@ const RequestsList = () => {
   ) => {
     if (data) {
       console.log(data, 'data');
-      return <p>teste</p>;
+      return (
+        <RequestItemWrapper
+          contextId={data.contextId}
+          onChangeIsRenderKycItem={setOpenExpansible}
+          slugContext={data.context.slug}
+          userId={data.userId}
+        />
+      );
     }
   };
 
