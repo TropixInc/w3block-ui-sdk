@@ -13,6 +13,7 @@ import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { useRequestSignInCode } from '../../hooks/useRequestSignInCode/useRequestSignInCode';
@@ -53,7 +54,9 @@ export const SignInWithCodeWithoutLayout = () => {
   };
 
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
-
+  const theme = UseThemeConfig();
+  const postSigninURL =
+    theme?.defaultTheme?.configurations?.contentData?.postSigninURL;
   useEffect(() => {
     if (isSuccess && !profile) {
       setNewCountdown(addMinutes(new Date(), 1));
@@ -80,6 +83,7 @@ export const SignInWithCodeWithoutLayout = () => {
                       pushConnect(query.callbackPath as string);
                     else if (query.contextSlug?.length)
                       pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+                    else if (postSigninURL) pushConnect(postSigninURL);
                     else pushConnect('/');
                   }
                 }

@@ -245,6 +245,7 @@ export interface CreateOrderResponse {
       destinationUserEmail?: string;
     };
   };
+  products: any;
 }
 
 export interface PaymentInfoInterface {

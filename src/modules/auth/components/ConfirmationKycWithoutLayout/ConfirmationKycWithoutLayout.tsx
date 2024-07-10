@@ -17,7 +17,7 @@ export const ConfirmationKycWithoutLayout = () => {
   const { data: profile } = useProfile();
   const theme = UseThemeConfig();
   const skipWallet =
-    theme.defaultTheme?.configurations?.contentData?.skipWallet;
+    theme?.defaultTheme?.configurations?.contentData?.skipWallet;
   const storageData = useGetStorageData(
     PRACTITIONER_DATA_INFO_KEY,
     router?.query?.sessionId as string

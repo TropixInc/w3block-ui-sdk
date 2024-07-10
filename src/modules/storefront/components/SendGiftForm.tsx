@@ -1,28 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { useLocalStorage } from 'react-use';
 
-import { GIFT_DATA_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { DataFields } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 
 interface Params {
   dataFields: DataFields[];
   isSendGift: boolean;
   setIsSendGift: Dispatch<SetStateAction<boolean>>;
+  data: any;
+  setData: Dispatch<any>;
+  deleteKey: () => void;
 }
 
 export const SendGiftForm = ({
   dataFields,
   isSendGift,
   setIsSendGift,
+  data,
+  setData,
+  deleteKey,
 }: Params) => {
-  const [data, setData, deleteKey] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   useEffect(() => {
     deleteKey();
   }, []);
   return (
-    <div className="pw-mt-5">
+    <div className="pw-mt-5 pw-text-black">
       <p className="pw-font-medium">Enviar como presente?</p>
       <div className="pw-mt-3 pw-flex pw-gap-x-4">
         <div className="pw-flex pw-gap-2 pw-items-center">
@@ -31,7 +34,7 @@ export const SendGiftForm = ({
             name="sendGift"
             checked={isSendGift}
             onChange={() => {
-              setData({});
+              deleteKey();
               setIsSendGift(true);
             }}
             id="yes"

@@ -8,6 +8,7 @@ import { useClickAway } from 'react-use';
 import _ from 'lodash';
 
 import { FormItemContainer } from '../../../Form/FormItemContainer';
+import LabelWithRequired from '../../../LabelWithRequired';
 import { InputError } from '../../../SmartInputsController';
 import InputStatus from '../../InputStatus';
 
@@ -24,6 +25,7 @@ interface CityAutocompleteProps {
   inputLabel?: string;
   inputPlaceholder?: string;
   hidenValidations?: boolean;
+  required?: boolean;
 }
 
 function getAddressObject(address_components: any) {
@@ -78,6 +80,7 @@ const CityAutoComplete = ({
   inputLabel,
   inputPlaceholder,
   hidenValidations,
+  required,
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
   const divRef = useRef<HTMLDivElement>(null);
@@ -180,16 +183,14 @@ const CityAutoComplete = ({
 
   return (
     <div className="pw-relative">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required} haveColon={false}>
         {inputLabel ?? translate('shared>cityAutoComplete>city')}
-      </p>
-      <FormItemContainer
-        invalid={fieldState.invalid}
-        className="pw-p-[0.6rem] pw-h-11"
-      >
+      </LabelWithRequired>
+
+      <FormItemContainer invalid={fieldState.invalid} className="pw-p-[0.6rem]">
         <input
           type="text"
-          className="pw-w-full pw-outline-none pw-text-black"
+          className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
           value={inputValue}
           placeholder={
             inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
@@ -235,7 +236,7 @@ const CityAutoComplete = ({
           )}
         </div>
       ) : null}
-      <p className="mt-5 pw-h-[16px]">
+      <p className="pw-mt-[5px] pw-h-[16px]">
         {!hidenValidations && field.value && (
           <InputStatus
             invalid={fieldState.invalid}

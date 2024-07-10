@@ -187,7 +187,7 @@ const _CheckoutInfo = ({
 
   const { companyId } = useCompanyConfig();
   const [isCopied, setIsCopied] = useState(false);
-  const [state, copyToClipboard] = useCopyToClipboard();
+  const [__, copyToClipboard] = useCopyToClipboard();
 
   useEffect(() => {
     if (
@@ -1035,8 +1035,13 @@ const _CheckoutInfo = ({
     }
   };
 
-  const shareMessage =
-    'Olá seu amigo(a) acaba de te enviar um presente, {sharedLink}';
+  const shareMessage = `Olá ${
+    orderResponse?.passShareCodeInfo?.data?.destinationUserName
+  } Seu amigo ${
+    profile?.data?.data?.name ?? ''
+  } acabou de te enviar esse gift card, ${
+    orderResponse?.passShareCodeInfo?.data?.message
+  } {sharedLink}`;
 
   const handleShared = () => {
     if (shareMessage) {
@@ -1049,8 +1054,6 @@ const _CheckoutInfo = ({
     } else {
       copyToClipboard('link');
     }
-
-    if (!state.error) setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
   };
 
@@ -1075,7 +1078,10 @@ const _CheckoutInfo = ({
             <div className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[20px]">
               <img
                 className="pw-mt-6 pw-w-[250px] pw-h-[250px] pw-object-contain pw-rounded-lg sm:pw-w-[300px] sm:pw-h-[300px]"
-                src={''}
+                src={
+                  statusResponse?.products?.[0]?.productToken?.product
+                    ?.images?.[0]?.thumb
+                }
                 alt=""
               />
               <p className="pw-mt-3 pw-font-semibold">Gift Card</p>
@@ -1096,32 +1102,34 @@ const _CheckoutInfo = ({
               <p className="pw-mt-4 pw-font-bold pw-text-center">
                 {translate('checkout>checkoutInfo>sendToFriend')}
               </p>
-              <PixwayButton className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]">
-                <a
-                  target="_blank"
-                  href={
-                    isMobile
-                      ? `whatsapp://send?text=${encodeURIComponent(
-                          `${shareMessage.replace(
-                            '{sharedLink}',
-                            `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
-                          )}`
+              <a
+                target="_blank"
+                className="pw-text-center !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+                href={
+                  isMobile
+                    ? `whatsapp://send?text=${encodeURIComponent(
+                        `${shareMessage.replace(
+                          '{sharedLink}',
+                          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
                         )}`
-                      : `https://api.whatsapp.com/send?text=${encodeURIComponent(
-                          `${shareMessage.replace(
-                            '{sharedLink}',
-                            `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
-                          )}`
+                      )}`
+                    : `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                        `${shareMessage.replace(
+                          '{sharedLink}',
+                          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
                         )}`
-                  }
-                  data-action="share/whatsapp/share"
-                  rel="noreferrer"
-                >
-                  Whatsapp
-                </a>
-              </PixwayButton>
+                      )}`
+                }
+                data-action="share/whatsapp/share"
+                rel="noreferrer"
+              >
+                Whatsapp
+              </a>
               <PixwayButton
-                onClick={() => handleShared()}
+                onClick={() => {
+                  setIsCopied(true);
+                  handleShared();
+                }}
                 style={{
                   backgroundColor: '#0050FF',
                   color: 'white',
@@ -1626,6 +1634,7 @@ const _CheckoutInfo = ({
     statusResponse?.deliverId,
     coinError,
     organizedLoyalties,
+    isCopied,
   ]);
 
   const anchorCurrencyId = useMemo(() => {

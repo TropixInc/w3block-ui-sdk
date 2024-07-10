@@ -15,6 +15,7 @@ import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useEmailProtectedLabel } from '../../hooks/useEmailProtectedLabel';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { useRequestConfirmationMail } from '../../hooks/useRequestConfirmationMail';
@@ -79,6 +80,9 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       ? PixwayAppRoutes.COMPLETE_SIGNUP
       : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
 
+  const theme = UseThemeConfig();
+  const postSigninURL =
+    theme?.defaultTheme?.configurations?.contentData?.postSigninURL;
   const sendCode = () => {
     const code = inputs.join('');
     if (code.length == 6) {
@@ -99,6 +103,8 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
                 pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                   ...query,
                 });
+              } else if (postSigninURL) {
+                pushConnect(postSigninURL);
               } else {
                 pushConnect('/');
               }

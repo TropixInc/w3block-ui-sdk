@@ -15,6 +15,7 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
+import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 import { useSignUp } from '../../hooks/useSignUp';
@@ -107,6 +108,10 @@ export const SignUpFormWithoutLayout = ({
     }
   }, [isSuccess]);
 
+  const theme = UseThemeConfig();
+  const postSigninURL =
+    theme?.defaultTheme?.configurations?.contentData?.postSigninURL;
+
   const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
     if (isPasswordless) {
@@ -129,6 +134,8 @@ export const SignUpFormWithoutLayout = ({
               router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                 ...router.query,
               });
+            } else if (postSigninURL) {
+              router.pushConnect(postSigninURL);
             } else {
               router.pushConnect('/');
             }

@@ -60,7 +60,7 @@ export const ProductVariants = ({
               <RadioGroup.Option key={val.id} value={val}>
                 {({ checked }) => (
                   <div
-                    className="pw-p-[10px_12px] pw-border pw-border-solid pw-rounded-[10px] pw-text-sm pw-font-semibold pw-cursor-pointer"
+                    className="pw-p-[10px_12px] pw-border pw-border-solid pw-rounded-[10px] pw-text-sm pw-font-semibold pw-cursor-pointer pw-text-black"
                     style={{ borderColor: checked ? borderColor : '#DCDCDC' }}
                   >
                     <span>{val.name}</span>

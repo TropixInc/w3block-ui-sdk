@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { getNumbersFromString } from '../../../../tokens/utils/getNumbersFromString';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
 
@@ -18,6 +19,7 @@ interface InputCPFProps {
   profilePage?: boolean;
   docValue?: string;
   docStatus?: UserDocumentStatus;
+  required?: boolean;
 }
 
 const InputCpf = ({
@@ -27,6 +29,7 @@ const InputCpf = ({
   docStatus,
   hidenValidations,
   profilePage,
+  required,
 }: InputCPFProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -59,10 +62,10 @@ const InputCpf = ({
 
   return (
     <div className="pw-mb-2 pw-w-full">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </p>
-      <FormItemContainer invalid={fieldState.invalid || !field.value}>
+      </LabelWithRequired>
+      <FormItemContainer invalid={fieldState.invalid}>
         <ReactInputMask
           readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
@@ -80,7 +83,7 @@ const InputCpf = ({
           inputMode="numeric"
         />
       </FormItemContainer>
-      <p className="mt-5 pw-h-[16px]">
+      <p className="pw-mt-[5px] pw-h-[16px]">
         {!hidenValidations && field.value && (
           <InputStatus
             invalid={fieldState.invalid}

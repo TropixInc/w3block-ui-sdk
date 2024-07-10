@@ -16,6 +16,7 @@ import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import LabelWithRequired from '../../LabelWithRequired';
 import { Spinner } from '../../Spinner/Spinner';
 import InputStatus from '../InputStatus';
 
@@ -30,6 +31,7 @@ interface InputFileProps {
   subtitle?: string;
   acceptTypesDocs: Array<string>;
   onChangeUploadProgess: (value: boolean) => void;
+  required?: boolean;
 }
 
 const InputFile = ({
@@ -43,6 +45,7 @@ const InputFile = ({
   subtitle,
   acceptTypesDocs,
   onChangeUploadProgess,
+  required,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -139,15 +142,13 @@ const InputFile = ({
 
   return (
     <div className="pw-mb-3 pw-w-full">
-      <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+      <LabelWithRequired name={name} required={required}>
         {label}
-      </p>
+      </LabelWithRequired>
       <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
         {subtitle}
       </p>
-      <FormItemContainer
-        invalid={isError || mutateError || !field.value || fieldState.invalid}
-      >
+      <FormItemContainer invalid={isError || mutateError || fieldState.invalid}>
         <div
           className={classNames(
             'pw-mt-1 pw-text-base pw-h-11 pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
@@ -177,7 +178,7 @@ const InputFile = ({
         </div>
       </FormItemContainer>
       {!hidenValidations && (
-        <div className="mt-5">
+        <div className="pw-mt-[5px]">
           {field.value || Boolean(fileRejections.length) ? (
             <InputStatus
               invalid={isError || mutateError || Boolean(fileRejections.length)}
