@@ -41,7 +41,10 @@ const _SharedOrder = ({
       return (
         <div className="pw-flex pw-flex-col pw-items-center">
           {isLoading ? (
-            <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+            <div className="pw-w-full pw-h-full pw-flex pw-flex-col pw-my-5 pw-gap-3 pw-justify-center pw-items-center">
+              <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
+                Aguarde enquanto carregamos o seu QR Code.
+              </p>
               <Spinner />
             </div>
           ) : (

@@ -9,6 +9,7 @@ const WeblockButton = lazy(() =>
   )
 );
 
+import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
@@ -133,7 +134,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailToUse]);
-
+  const [isOpenModal, setIsOpenModal] = useState(false);
   return (
     <div className="pw-flex pw-flex-col pw-items-center">
       <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-font-[700] pw-text-center">
@@ -217,17 +218,38 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       </p>
       <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
         <button
-          onClick={() =>
-            signOut().then(() => {
-              pushConnect(PixwayAppRoutes.HOME);
-            })
-          }
+          onClick={() => setIsOpenModal(true)}
           className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
         >
           {translate('shared>exit')}
         </button>{' '}
         {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
       </p>
+      <ModalBase isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
+        <div className="pw-mt-[20px]">
+          <p className="pw-text-black pw-text-center pw-font-bold">
+            Tem certeza que deseja abandonar o processo de cadastro?
+          </p>
+          <div>
+            <button
+              onClick={() => setIsOpenModal(false)}
+              className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full pw-border-[#0050FF] pw-text-black pw-mr-[10px]"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() =>
+                signOut().then(() => {
+                  pushConnect(PixwayAppRoutes.HOME);
+                })
+              }
+              className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-6 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-bg-[#0050FF] pw-text-white"
+            >
+              Continuar
+            </button>
+          </div>
+        </div>
+      </ModalBase>
     </div>
   );
 };

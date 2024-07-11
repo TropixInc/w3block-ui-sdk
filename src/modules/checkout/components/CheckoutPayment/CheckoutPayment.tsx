@@ -399,8 +399,8 @@ export const CheckoutPayment = () => {
                 ?.enabled && giftData
                 ? giftData === 'selfBuy'
                   ? {
-                      destinationUserName: profile?.data?.data?.name,
-                      destinationUserEmail: profile?.data?.data?.email,
+                      destinationUserName: profile?.data?.data?.name ?? '',
+                      destinationUserEmail: profile?.data?.data?.email ?? '',
                     }
                   : giftData
                 : {},
@@ -491,6 +491,7 @@ export const CheckoutPayment = () => {
             if (data.paymentProvider == PaymentMethod.STRIPE) {
               setIsStripe(data.paymentInfo.clientSecret ?? '');
               setStripeKey(data.paymentInfo.publicKey ?? '');
+              setLoading(false);
             } else {
               if (
                 productCache.choosedPayment?.paymentMethod == 'credit_card' ||
