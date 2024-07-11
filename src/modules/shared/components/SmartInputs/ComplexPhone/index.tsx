@@ -40,13 +40,23 @@ const ComplexPhone = ({
   useEffect(() => {
     if (complexValue) {
       field.onChange({ inputId: name, value: complexValue });
+    } else {
+      if (docValue) {
+        field.onChange({ inputId: name, value: [docValue] });
+      } else {
+        field.onChange({ inputId: name, value: [''] });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [complexValue]);
 
   const onAddMorePhones = () => {
-    const newValues = field.value.value;
-    field.onChange({ ...field.value, value: [...newValues, ''] });
+    const newValues = field?.value?.value;
+    if (newValues) {
+      field.onChange({ ...field?.value, value: [...newValues, ''] });
+    } else {
+      field.onChange({ ...field?.value, value: [''] });
+    }
   };
 
   const onRemovePhoneItem = (idx: number) => {
@@ -66,10 +76,10 @@ const ComplexPhone = ({
   return (
     <div className="pw-mb-4 pw-w-full">
       <div className="pw-w-full pw-mb-2">
-        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
+        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold">
           {label}
         </p>
-        {field?.value?.value.map((item: string, idx: number) => (
+        {field?.value?.value?.map((item: string, idx: number) => (
           <div key={idx} className="pw-mb-3">
             <div className="pw-w-full pw-flex pw-gap-2">
               <FormItemContainer className="pw-w-full">
@@ -115,7 +125,10 @@ const ComplexPhone = ({
       </div>
 
       <button
-        onClick={() => onAddMorePhones()}
+        onClick={(e) => {
+          e.preventDefault();
+          onAddMorePhones();
+        }}
         className="pw-px-4 pw-py-2 pw-flex pw-items-center pw-border pw-border-[#0050FF] pw-rounded-lg pw-text-sm pw-font-semibold pw-gap-2"
       >
         <span>+</span>
