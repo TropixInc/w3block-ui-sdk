@@ -6,8 +6,7 @@ import {
 import { useClickAway } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
-
-
+import { UserRoleEnum } from '@w3block/sdk-id/dist/types/enums';
 
 import { usePixwayAuthentication } from '../../../../../../auth/hooks/usePixwayAuthentication';
 import { useLoyaltiesInfo } from '../../../../../../business/hooks/useLoyaltiesInfo';
@@ -96,7 +95,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const { loyaltyWallet } = useUserWallet();
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
-  const isHidden = useIsHiddenMenuItem(userRoles);
+  const isHidden = useIsHiddenMenuItem(userRoles as Array<UserRoleEnum>);
   const isAdmin = Boolean(
     userRoles?.includes('admin') || userRoles?.includes('superAdmin') || userRoles?.includes('operator')
   );
