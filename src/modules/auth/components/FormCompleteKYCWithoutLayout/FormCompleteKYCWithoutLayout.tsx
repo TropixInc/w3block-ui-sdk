@@ -132,7 +132,20 @@ const _FormCompleteKYCWithoutLayout = ({
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
-    const validDocs = documents.filter((item) => item);
+
+    const validDocs = documents.filter((item) => {
+      if (Array.isArray(item?.value)) {
+        const filteredArray = item?.value?.filter(
+          (arrItem: string) => arrItem?.trim()?.length > 0
+        );
+        item.value = filteredArray;
+
+        return true;
+      } else {
+        return item?.value;
+      }
+    });
+
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
       mutate(

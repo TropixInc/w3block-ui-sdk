@@ -1,17 +1,10 @@
 import { useCallback, useMemo } from 'react';
 
+import { UserRoleEnum } from '@w3block/sdk-id';
+
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
-export const useIsHiddenMenuItem = (
-  roles: Array<
-    | 'user'
-    | 'superAdmin'
-    | 'admin'
-    | 'operator'
-    | 'loyaltyOperator'
-    | 'commerce.orderReceiver'
-  >
-) => {
+export const useIsHiddenMenuItem = (roles: Array<UserRoleEnum>) => {
   const { defaultTheme } = UseThemeConfig();
 
   const internalMenuData = useMemo(() => {
