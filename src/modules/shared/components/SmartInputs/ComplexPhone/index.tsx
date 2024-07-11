@@ -40,6 +40,12 @@ const ComplexPhone = ({
   useEffect(() => {
     if (complexValue) {
       field.onChange({ inputId: name, value: complexValue });
+    } else {
+      if (docValue) {
+        field.onChange({ inputId: name, value: [docValue] });
+      } else {
+        field.onChange({ inputId: name, value: [] });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [complexValue]);
@@ -69,7 +75,7 @@ const ComplexPhone = ({
         <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
           {label}
         </p>
-        {field?.value?.value.map((item: string, idx: number) => (
+        {field?.value?.value?.map((item: string, idx: number) => (
           <div key={idx} className="pw-mb-3">
             <div className="pw-w-full pw-flex pw-gap-2">
               <FormItemContainer className="pw-w-full">

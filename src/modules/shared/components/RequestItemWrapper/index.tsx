@@ -121,8 +121,8 @@ const RequestItemWrapper = ({
   const onRenderFooterItem = () => {
     if (isRequestReview) {
       return (
-        <div className="w-full flex flex-col items-end p-4">
-          <div className="w-full mt-2 sm:w-[50%]">
+        <div className="pw-w-full pw-flex pw-flex-col pw-items-end pw-p-4">
+          <div className="pw-w-full pw-mt-2 sm:pw-w-[50%]">
             <LabelWithRequired required>
               {translate('contacts>AprovationKYCForm>requestDocuments')}
             </LabelWithRequired>
@@ -131,32 +131,35 @@ const RequestItemWrapper = ({
               <textarea
                 cols={1}
                 rows={5}
-                className="!text-[#969696] leading-4 font-normal w-full outline-none bg-transparent py-4 px-[18px] autofill:bg-transparent"
+                className="!pw-text-[#969696] pw-leading-4 pw-font-normal pw-w-full pw-outline-none pw-bg-transparent pw-py-4 pw-px-[18px] autofill:pw-bg-transparent"
                 onChange={(e) => setReasonsReview(e.target.value)}
                 placeholder={translate('key>kycActionsModal>resons')}
               />
             </TokenizationFormItemContainer>
           </div>
           {isSuccesSendReview && (
-            <Alert variant="success" className="mt-3 w-full sm:w-[50%]">
+            <Alert
+              variant="success"
+              className="pw-mt-3 pw-w-full sm:pw-w-[50%]"
+            >
               {translate('tokens>tokenCreationGasController>success')}
             </Alert>
           )}
           {isErrorRequestReview && (
-            <Alert variant="error" className="mt-3 w-full sm:w-[50%]">
+            <Alert variant="error" className="pw-mt-3 pw-w-full sm:pw-w-[50%]">
               {translate('home>contactModal>error')}
             </Alert>
           )}
-          <div className="flex gap-x-3 w-full mt-4 justify-end">
+          <div className="pw-flex pw-gap-x-3 pw-w-full pw-mt-4 pw-justify-end">
             <OffpixButtonBase
-              className="px-4 h-10 flex justify-center items-center text-sm"
+              className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
               variant="outlined"
               onClick={() => onCancelRequestReview()}
             >
               {translate('components>cancelButton>cancel')}
             </OffpixButtonBase>
             <OffpixButtonBase
-              className="px-4 h-10 flex justify-center items-center text-sm"
+              className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
               variant="filled"
               onClick={() => onRequestReview()}
             >
@@ -167,7 +170,7 @@ const RequestItemWrapper = ({
       );
     } else if (isReproveContext) {
       return (
-        <div className="w-full flex flex-col items-end p-4">
+        <div className="pw-w-full pw-flex pw-flex-col pw-items-end pw-p-4">
           <div className="w-full mt-2 sm:w-[50%]">
             <LabelWithRequired required>
               {translate('contacts>headerContactDetails>reprove')}
@@ -177,32 +180,35 @@ const RequestItemWrapper = ({
               <textarea
                 cols={1}
                 rows={5}
-                className="!text-[#969696] leading-4 font-normal w-full outline-none bg-transparent py-4 px-[18px] autofill:bg-transparent"
+                className="!pw-text-[#969696] pw-leading-4 pw-font-normal pw-w-full pw-outline-none pw-bg-transparent pw-py-4 pw-px-[18px] autofill:pw-bg-transparent"
                 onChange={(e) => setReasonsReprove(e.target.value)}
                 placeholder={translate('key>kycActionsModal>resons')}
               />
             </TokenizationFormItemContainer>
           </div>
           {isSuccessReprove && (
-            <Alert variant="success" className="mt-3 w-full sm:w-[50%]">
+            <Alert
+              variant="success"
+              className="pw-mt-3 pw-w-full sm:pw-w-[50%]"
+            >
               {translate('tokens>tokenCreationGasController>success')}
             </Alert>
           )}
           {isRejectError && (
-            <Alert variant="error" className="mt-3 w-full sm:w-[50%]">
+            <Alert variant="error" className="pw-mt-3 pw-w-full sm:pw-w-[50%]">
               {translate('home>contactModal>error')}
             </Alert>
           )}
-          <div className="flex gap-x-3 w-full mt-4 justify-end">
+          <div className="pw-flex pw-gap-x-3 pw-w-full pw-mt-4 pw-justify-end">
             <OffpixButtonBase
-              className="px-4 h-10 flex justify-center items-center text-sm"
+              className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
               variant="outlined"
               onClick={() => onCancelReprove()}
             >
               {translate('components>cancelButton>cancel')}
             </OffpixButtonBase>
             <OffpixButtonBase
-              className="px-4 h-10 flex justify-center items-center text-sm !bg-[#e65356] !outline-[#E37C7E]"
+              className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm !pw-bg-[#e65356] !pw-outline-[#E37C7E]"
               variant="filled"
               disabled={Boolean(!reasonsReprove)}
               onClick={() => onRejectContext()}
@@ -214,35 +220,38 @@ const RequestItemWrapper = ({
       );
     } else {
       return (
-        <div className="w-full flex flex-col items-end">
+        <div className="pw-w-full pw-flex pw-flex-col pw-items-end">
           {isSuccesAproveKyc && (
-            <Alert variant="success" className="mt-3 w-full sm:w-[50%]">
+            <Alert
+              variant="success"
+              className="pw-mt-3 pw-w-full sm:pw-w-[50%]"
+            >
               {translate('tokens>tokenCreationGasController>success')}
             </Alert>
           )}
           {isErrorAproveKyc && (
-            <Alert variant="error" className="mt-3 w-full sm:w-[50%]">
+            <Alert variant="error" className="pw-mt-3 pw-w-full sm:pw-w-[50%]">
               {translate('home>contactModal>error')}
             </Alert>
           )}
-          <div className="w-full flex flex-col justify-end p-4 gap-6 sm:flex-row">
-            <div className="flex gap-6">
+          <div className="pw-w-full pw-flex pw-flex-col pw-justify-end pw-p-4 pw-gap-6 sm:pw-flex-row">
+            <div className="pw-flex pw-gap-6">
               <OffpixButtonBase
-                className="px-4 flex-1 h-10 flex justify-center items-center text-sm !outline-[#e65356] !text-[#e65356] hover:text-[#e65356] active:text-[#e65356] active:bg-[#e2686a31]"
+                className="pw-px-4 pw-flex-1 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm !pw-outline-[#e65356] !pw-text-[#e65356] hover:pw-text-[#e65356] active:pw-text-[#e65356] active:pw-bg-[#e2686a31]"
                 variant="outlined"
                 onClick={() => setIsReproveContext(true)}
               >
                 {translate('contacts>headerContactDetails>reprove')}
               </OffpixButtonBase>
               <OffpixButtonBase
-                className="px-4 h-10 flex justify-center items-center text-sm"
+                className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
                 onClick={() => setIsRequestReview(true)}
               >
                 {translate('contacts>AprovationKYCForm>requestDocuments')}
               </OffpixButtonBase>
             </div>
             <OffpixButtonBase
-              className="px-4 h-10 flex justify-center items-center text-sm"
+              className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
               variant="outlined"
               onClick={() => onAproveKyc()}
             >
@@ -255,9 +264,9 @@ const RequestItemWrapper = ({
   };
 
   return (
-    <div className="w-full">
-      <div className="border-t p-6 gap-y-3 w-full">
-        <div className="pw-w-full ">
+    <div className="pw-w-full">
+      <div className="pw-border-t pw-p-6 pw-gap-y-3 pw-w-full">
+        <div className="pw-w-full">
           <FormCompleteKYCWithoutLayout
             key={contextId}
             renderSubtitle={false}

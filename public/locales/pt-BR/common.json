@@ -684,5 +684,11 @@
   "pass>sharedOrder>nameBuyer": "Nome do comprador",
   "pass>sharedOrder>value": "Valor",
   "checkout>checkoutInfo>sendToFriend": "Compartilhe com seu amigo(a)",
-  "components>menu>withdraws": "Saques"
+  "components>menu>withdraws": "Saques",
+  "contacts>AprovationKYCForm>requestDocuments": "Solicitar revisão",
+  "key>kycActionsModal>resons": "Motivo",
+  "tokens>tokenCreationGasController>success": "Sua operação foi realizada com sucesso!",
+  "home>contactModal>sendButton": "Enviar",
+  "contacts>headerContactDetails>reprove": "Reprovar",
+  "contacts>headerContactDetails>approve": "Aprovar"
 }

@@ -123,6 +123,9 @@ const SmartInputsController = ({
 }: SmartProps) => {
   const [translate] = useTranslation();
 
+  console.log(simpleValue, 'simpleValue');
+  console.log(complexValue, 'complexValue');
+
   const [checked, setChecked] = useState(false);
 
   const onChangeChecked = () => {
