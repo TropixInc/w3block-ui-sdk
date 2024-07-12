@@ -39,6 +39,7 @@ import {
   GIFT_DATA_INFO_KEY,
   ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
+  STRIPE_ORDER_CACHE,
 } from '../../config/keys/localStorageKey';
 import { PaymentMethod } from '../../enum';
 import { useCart } from '../../hooks/useCart';
@@ -48,6 +49,7 @@ import {
   CreateOrderResponse,
   OrderPreviewCache,
   OrderPreviewResponse,
+  StripeCache,
 } from '../../interface/interface';
 import {
   CheckoutPaymentComponent,
@@ -122,6 +124,8 @@ export const CheckoutPayment = () => {
   const [productCache, setProductCache] = useLocalStorage<OrderPreviewCache>(
     PRODUCT_CART_INFO_KEY
   );
+  const [stripeOrderCache, setStripeOrderCache, deleteStripeCache] =
+    useLocalStorage<StripeCache>(STRIPE_ORDER_CACHE);
   const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const track = useTrack();
   const { setCart } = useCart();
@@ -130,6 +134,17 @@ export const CheckoutPayment = () => {
   const [installment, setInstallment] = useState<AvailableInstallmentInfo>();
   const [orderResponse, setOrderResponse] =
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
+
+  const compareDates = (date: Date) => {
+    const currentDate = new Date();
+    const timeDifference = Math.abs(
+      Date.parse(currentDate.toString()) - Date.parse(date.toString())
+    );
+    const minutesDifference = timeDifference / (1000 * 60);
+
+    return minutesDifference < 5;
+  };
+
   useEffect(() => {
     if (myOrderPreview) {
       if (
@@ -148,7 +163,26 @@ export const CheckoutPayment = () => {
         setLoading(false);
       } else {
         setStayPooling(false);
-        createOrder({});
+        if (
+          productCache?.choosedPayment?.paymentProvider === PaymentMethod.STRIPE
+        ) {
+          if (
+            stripeOrderCache &&
+            compareDates(stripeOrderCache?.timestamp) &&
+            productCache?.products?.map((val) => val?.id).toString() ===
+              stripeOrderCache?.productData
+                ?.map((val: { id: string }) => val?.id)
+                .toString() &&
+            productCache.cartPrice === stripeOrderCache.amount
+          ) {
+            setLoading(false);
+            setIsStripe(stripeOrderCache?.stripe?.clientSecret);
+            setStripeKey(stripeOrderCache?.stripe?.publicKey);
+          } else {
+            deleteStripeCache();
+            createOrder({});
+          }
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -488,7 +522,17 @@ export const CheckoutPayment = () => {
             setLoading(true);
             setOrderResponse(data);
             setStayPooling(false);
+            deleteStripeCache();
             if (data.paymentProvider == PaymentMethod.STRIPE) {
+              setStripeOrderCache({
+                productData: productCache.products,
+                amount: data.currencyAmount,
+                stripe: {
+                  clientSecret: data.paymentInfo.clientSecret ?? '',
+                  publicKey: data.paymentInfo.publicKey ?? '',
+                },
+                timestamp: new Date(),
+              });
               setIsStripe(data.paymentInfo.clientSecret ?? '');
               setStripeKey(data.paymentInfo.publicKey ?? '');
               setLoading(false);
