@@ -2,6 +2,7 @@
 import { ReactNode, lazy, useEffect, useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
+import { UserRoleEnum } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import { format } from 'date-fns/esm';
 
@@ -77,7 +78,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     userRoles.find((e: string) => e === 'commerce.orderReceiver')
   );
 
-  const isHidden = useIsHiddenMenuItem(userRoles);
+  const isHidden = useIsHiddenMenuItem(userRoles as Array<UserRoleEnum>);
 
   const { defaultTheme } = UseThemeConfig();
 

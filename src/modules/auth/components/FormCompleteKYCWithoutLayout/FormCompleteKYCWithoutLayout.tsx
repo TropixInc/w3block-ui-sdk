@@ -11,6 +11,7 @@ import { object } from 'yup';
 import { OnboardContext, useProfile, useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import { FormTemplate } from '../../../shared/components/FormTemplate';
+import { ModalBase } from '../../../shared/components/ModalBase';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -132,7 +133,20 @@ const _FormCompleteKYCWithoutLayout = ({
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
-    const validDocs = documents.filter((item) => item);
+
+    const validDocs = documents.filter((item) => {
+      if (Array.isArray(item?.value)) {
+        const filteredArray = item?.value?.filter(
+          (arrItem: string) => arrItem?.trim()?.length > 0
+        );
+        item.value = filteredArray;
+
+        return true;
+      } else {
+        return item?.value;
+      }
+    });
+
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
       mutate(
@@ -203,7 +217,7 @@ const _FormCompleteKYCWithoutLayout = ({
   console.log(tenantInputs, 'tenant');
 
   const formState = router.query ? (router.query.formState as string) : '';
-
+  const [isOpenModal, setIsOpenModal] = useState(false);
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
       <Spinner />
@@ -287,11 +301,7 @@ const _FormCompleteKYCWithoutLayout = ({
         {profilePage || keyPage || typeof formFooter === 'string' ? null : (
           <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
             <button
-              onClick={() =>
-                signOut().then(() => {
-                  router.pushConnect(PixwayAppRoutes.HOME);
-                })
-              }
+              onClick={() => setIsOpenModal(true)}
               className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
             >
               {translate('shared>exit')}
@@ -392,11 +402,7 @@ const _FormCompleteKYCWithoutLayout = ({
           {profilePage || keyPage || typeof formFooter === 'string' ? null : (
             <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
               <button
-                onClick={() =>
-                  signOut().then(() => {
-                    router.pushConnect(PixwayAppRoutes.HOME);
-                  })
-                }
+                onClick={() => setIsOpenModal(true)}
                 className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
               >
                 {translate('shared>exit')}
@@ -412,6 +418,29 @@ const _FormCompleteKYCWithoutLayout = ({
             ></div>
           )}
         </FormProvider>
+        <ModalBase isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
+          <div>
+            <p>Tem certeza que deseja abandonar o processo de cadastro?</p>
+            <div>
+              <button
+                onClick={() => setIsOpenModal(false)}
+                className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full pw-border-[#0050FF] pw-text-black"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() =>
+                  signOut().then(() => {
+                    router.pushConnect(PixwayAppRoutes.HOME);
+                  })
+                }
+                className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-bg-[#0050FF] pw-text-white"
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        </ModalBase>
       </Box>
     )
   ) : null;

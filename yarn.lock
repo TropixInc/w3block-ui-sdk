@@ -1346,9 +1346,9 @@
   "version" "3.4.31"
 
 "@w3block/sdk-id@^0.1.73":
-  "integrity" "sha512-A9N16bmAZoaq0ZXU3kUuUginCm6730/pxolcFiqrRWisfdYvbwgVPJtN9VMWwsE5SL0k2ZtsU/nVaVRzBwKwpQ=="
-  "resolved" "https://registry.npmjs.org/@w3block/sdk-id/-/sdk-id-0.1.73.tgz"
-  "version" "0.1.73"
+  version "0.1.73"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.73.tgz#1d1cbce6743f6d58fc90bcafd4d5b87be97c4bbd"
+  integrity sha512-A9N16bmAZoaq0ZXU3kUuUginCm6730/pxolcFiqrRWisfdYvbwgVPJtN9VMWwsE5SL0k2ZtsU/nVaVRzBwKwpQ==
   dependencies:
     "axios" "^0.24.0"
     "date-fns" "2.29.1"
