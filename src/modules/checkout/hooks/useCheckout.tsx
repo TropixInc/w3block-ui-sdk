@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import { AxiosError, AxiosResponse } from 'axios';
 
@@ -8,6 +8,8 @@ import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useUtms } from '../../shared/hooks/useUtms/useUtms';
 import {
+  CompleteOrderPayload,
+  CompletePaymentOrder,
   CreateOrder,
   CreateOrderPayload,
   CreateOrderResponse,
@@ -117,6 +119,34 @@ export const useCheckout = () => {
     }
   );
 
+  const completeOrderPayment = useMutation(
+    ({
+      companyId,
+      completeOrder,
+      orderId,
+    }: CompleteOrderPayload): Promise<CreateOrderResponse> => {
+      const cOrder = completeOrder;
+      return axios
+        .patch<
+          CreateOrderResponse,
+          AxiosResponse<CreateOrderResponse>,
+          CompletePaymentOrder
+        >(
+          PixwayAPIRoutes.COMPLETE_ORDER_PAYMENT.replace(
+            '{companyId}',
+            companyId
+          ).replace('{orderId}', orderId ?? ''),
+          cOrder
+        )
+        .then((res): CreateOrderResponse => {
+          return res.data as CreateOrderResponse;
+        })
+        .catch((err: AxiosError) => {
+          throw err.response?.data;
+        });
+    }
+  );
+
   const getStatus = useMutation(
     ({
       companyId,
@@ -141,8 +171,37 @@ export const useCheckout = () => {
     }
   );
 
+  const useGetOrderById = ({
+    companyId,
+    orderId,
+  }: {
+    companyId: string;
+    orderId: string;
+  }) => {
+    return useQuery(
+      [PixwayAPIRoutes.ORDER_BY_ID, companyId, orderId],
+      (): Promise<OrderPreviewResponse> =>
+        axios
+          .get(
+            PixwayAPIRoutes.ORDER_BY_ID.replace('{orderId}', orderId).replace(
+              '{companyId}',
+              companyId
+            ) + '?fetchNewestStatus=true'
+          )
+          .then((res): OrderPreviewResponse => {
+            return res.data as OrderPreviewResponse;
+          })
+    );
+  };
+
   return useMemo(() => {
-    return { getOrderPreview, createOrder, getStatus };
+    return {
+      getOrderPreview,
+      createOrder,
+      getStatus,
+      useGetOrderById,
+      completeOrderPayment,
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };

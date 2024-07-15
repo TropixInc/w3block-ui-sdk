@@ -40,6 +40,9 @@ export interface Product {
   subtitle?: string;
   metadata?: any;
   type?: string;
+  productToken: {
+    product: Product;
+  };
 }
 
 export interface Images {
