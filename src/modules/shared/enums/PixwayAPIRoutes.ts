@@ -102,4 +102,5 @@ export enum PixwayAPIRoutes {
   SIGNIN_WITH_GOOGLE = '/auth/{companyId}/signin/google/code',
   GET_GOOGLE_URL = '/auth/{companyId}/signin/google',
   GET_SPECIFIC_WITHDRAW_ADMIN = '/{companyId}/withdraws/admin/{id}',
+  COMPLETE_ORDER_PAYMENT = '/companies/{companyId}/orders/{orderId}/pay',
 }

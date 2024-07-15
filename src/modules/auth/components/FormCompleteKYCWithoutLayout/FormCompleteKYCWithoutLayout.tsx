@@ -1,4 +1,4 @@
-import { lazy, useContext, useState } from 'react';
+import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -43,6 +43,13 @@ interface Props {
   inputRequestable?: boolean;
   inputsIdRequestReview?: Array<string>;
   onChangeInputsIdRequestReview?: (value: Array<string>) => void;
+  productForm?: boolean;
+  handleProductForm?: () => void;
+  handleProductFormError?: () => void;
+  product?: {
+    quantity: number;
+    productId: string;
+  };
 }
 
 interface ErrorProps {
@@ -61,6 +68,10 @@ const _FormCompleteKYCWithoutLayout = ({
   inputRequestable,
   inputsIdRequestReview,
   onChangeInputsIdRequestReview,
+  productForm = false,
+  handleProductForm,
+  handleProductFormError,
+  product,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -133,20 +144,26 @@ const _FormCompleteKYCWithoutLayout = ({
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
-
-    const validDocs = documents.filter((item) => {
-      if (Array.isArray(item?.value)) {
-        const filteredArray = item?.value?.filter(
-          (arrItem: string) => arrItem?.trim()?.length > 0
-        );
-        item.value = filteredArray;
-
-        return true;
-      } else {
-        return item?.value;
-      }
-    });
-
+    const validDocs = documents.filter((item) => item);
+    const docsToUse = () => {
+      if (
+        tenantInputs?.data.some(
+          (val) => (val.type as any) === 'commerce_product'
+        ) &&
+        product
+      ) {
+        const productInput = [
+          {
+            inputId: tenantInputs?.data?.find(
+              (val) => (val.type as any) === 'commerce_product'
+            )?.id,
+            value: product,
+          },
+        ];
+        const newDocs = validDocs.concat(productInput);
+        return newDocs;
+      } else return validDocs;
+    };
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
       mutate(
@@ -155,13 +172,15 @@ const _FormCompleteKYCWithoutLayout = ({
           contextId,
           userId,
           documents: {
-            documents: validDocs,
+            documents: docsToUse(),
             currentStep: parseInt(step as string),
           },
         },
         {
           onSuccess: () => {
-            contextOnboard.setLoading(true);
+            if (!productForm) {
+              contextOnboard.setLoading(true);
+            }
             const steps = Object.keys(groupedInputs).length;
             if (steps && parseInt(step as string) < steps) {
               router.replace({
@@ -170,6 +189,8 @@ const _FormCompleteKYCWithoutLayout = ({
                   step: parseInt(step as string) + 1,
                 },
               });
+            } else if (productForm && handleProductForm) {
+              handleProductForm();
             } else if (!profilePage) {
               refetch();
               context.refetchDocs();
@@ -200,6 +221,11 @@ const _FormCompleteKYCWithoutLayout = ({
               }
             }
           },
+          onError() {
+            if (productForm && handleProductFormError) {
+              handleProductFormError();
+            }
+          },
         }
       );
     }
@@ -214,8 +240,12 @@ const _FormCompleteKYCWithoutLayout = ({
     else return tenantInputs?.data ?? [];
   };
 
-  const formState = router.query ? (router.query.formState as string) : '';
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const formState = useMemo(() => {
+    if (productForm) return 'initial';
+    else if (router.query.formState) return router.query.formState as string;
+    else return '';
+  }, [productForm, router.query.formState]);
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
       <Spinner />
@@ -456,6 +486,10 @@ export const FormCompleteKYCWithoutLayout = ({
   inputRequestable,
   inputsIdRequestReview,
   onChangeInputsIdRequestReview,
+  productForm,
+  handleProductForm,
+  handleProductFormError,
+  product,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -470,6 +504,10 @@ export const FormCompleteKYCWithoutLayout = ({
       inputRequestable={inputRequestable}
       inputsIdRequestReview={inputsIdRequestReview}
       onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
+      productForm={productForm}
+      handleProductForm={handleProductForm}
+      handleProductFormError={handleProductFormError}
+      product={product}
     />
   </TranslatableComponent>
 );

@@ -6,6 +6,8 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import LabelWithRequired from '../../LabelWithRequired';
+import { InputError } from '../../SmartInputsController';
+import InputStatus from '../InputStatus';
 
 interface InputDocuments {
   label: string;
@@ -21,10 +23,12 @@ const InputDocuments = ({
   docValue,
   label,
   required,
+  hidenValidations = false,
 }: InputDocuments) => {
   const { field, fieldState } = useController({ name });
   const [selectDocType, setSelectDocType] = useState<string | undefined>();
   const [document, setDocument] = useState<string | undefined>();
+  const error = fieldState?.error as unknown as InputError;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [apiSavedValue, setApiSavedValue] = useState<any>();
   const docTypeOptions = [
@@ -135,6 +139,16 @@ const InputDocuments = ({
             )}
           </FormItemContainer>
         </div>
+        {!hidenValidations && (
+          <div className="mt-5">
+            {field.value && (
+              <InputStatus
+                invalid={fieldState.invalid}
+                errorMessage={error?.value?.message}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
