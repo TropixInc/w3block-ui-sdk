@@ -86,8 +86,6 @@ const ComplexPhone = ({
     }
   }, [statusContext]);
 
-  console.log(statusContext, 'statusContext');
-
   return (
     <div className="pw-mb-4 pw-w-full">
       <div className="pw-w-full pw-mb-2">
