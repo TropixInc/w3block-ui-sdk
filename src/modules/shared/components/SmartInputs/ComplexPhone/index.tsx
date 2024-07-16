@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import ReactInputMask from 'react-input-mask';
 
-import { UserDocumentStatus } from '@w3block/sdk-id';
+import { UserContextStatus, UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
@@ -16,6 +16,7 @@ interface InputPhoneProps {
   complexValue?: any;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
+  statusContext?: UserContextStatus;
 }
 
 const ComplexPhone = ({
@@ -25,6 +26,7 @@ const ComplexPhone = ({
   docValue,
   hidenValidations,
   complexValue,
+  statusContext,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
 
@@ -73,6 +75,19 @@ const ComplexPhone = ({
     field.onChange({ inputId: name, value: newPhones });
   };
 
+  const hiddenButtons = useMemo(() => {
+    if (statusContext) {
+      return Boolean(
+        statusContext === UserContextStatus.Approved ||
+          statusContext === UserContextStatus.Denied
+      );
+    } else {
+      return false;
+    }
+  }, [statusContext]);
+
+  console.log(statusContext, 'statusContext');
+
   return (
     <div className="pw-mb-4 pw-w-full">
       <div className="pw-w-full pw-mb-2">
@@ -102,14 +117,14 @@ const ComplexPhone = ({
                   )}
                 />
               </FormItemContainer>
-              {idx === 0 ? null : (
+              {idx === 0 ? null : !hiddenButtons ? (
                 <button
                   onClick={() => onRemovePhoneItem(idx)}
                   className="pw-px-5 pw-h-[50px] pw-mt-[2px] pw-text-base pw-font-medium pw-rounded-lg pw-border pw-border-slate-500"
                 >
                   -
                 </button>
-              )}
+              ) : null}
             </div>
 
             <p className="pw-mt-[5px] pw-h-[16px]">
@@ -124,16 +139,18 @@ const ComplexPhone = ({
         ))}
       </div>
 
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          onAddMorePhones();
-        }}
-        className="pw-px-4 pw-py-2 pw-flex pw-items-center pw-border pw-border-[#0050FF] pw-rounded-lg pw-text-sm pw-font-semibold pw-gap-2"
-      >
-        <span>+</span>
-        <span>Adicionar telefone</span>
-      </button>
+      {!hiddenButtons ? (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            onAddMorePhones();
+          }}
+          className="pw-px-4 pw-py-2 pw-flex pw-items-center pw-border pw-border-[#0050FF] pw-rounded-lg pw-text-sm pw-font-semibold pw-gap-2"
+        >
+          <span>+</span>
+          <span>Adicionar telefone</span>
+        </button>
+      ) : null}
     </div>
   );
 };

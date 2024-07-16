@@ -1,7 +1,11 @@
 import { lazy, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { DataTypesEnum, UserDocumentStatus } from '@w3block/sdk-id';
+import {
+  DataTypesEnum,
+  UserContextStatus,
+  UserDocumentStatus,
+} from '@w3block/sdk-id';
 
 const InputBirthdate = lazy(() =>
   import('../SmartInputs/InputBirthdate').then((module) => ({
@@ -81,6 +85,7 @@ interface SmartProps {
   onChangeInputsIdRequestReview?: (value: Array<string>) => void;
   isKeyPage?: boolean;
   required?: boolean;
+  statusContext?: UserContextStatus;
 }
 
 export interface InputError {
@@ -120,6 +125,7 @@ const SmartInputsController = ({
   onChangeInputsIdRequestReview,
   isKeyPage,
   required,
+  statusContext,
 }: SmartProps) => {
   const [translate] = useTranslation();
 
@@ -185,6 +191,7 @@ const SmartInputsController = ({
             complexValue={complexValue}
             docValue={simpleValue}
             docStatus={docStatus}
+            statusContext={statusContext}
           />
         ) : (
           <InputPhone
