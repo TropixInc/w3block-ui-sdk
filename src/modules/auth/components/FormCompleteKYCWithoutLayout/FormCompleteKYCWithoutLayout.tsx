@@ -1,4 +1,4 @@
-import { lazy, useContext, useState } from 'react';
+import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -112,6 +112,12 @@ const _FormCompleteKYCWithoutLayout = ({
     userId,
     tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : ''
   );
+
+  const statusContext = useMemo(() => {
+    if (reasons && reasons?.data?.items) {
+      return reasons?.data?.items[0].status;
+    }
+  }, [reasons]);
 
   const validations = useGetValidationsTypesForSignup(
     tenantInputs?.data ?? [],
@@ -268,6 +274,7 @@ const _FormCompleteKYCWithoutLayout = ({
           onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
           keyPage={keyPage}
           profilePage={profilePage}
+          statusContext={statusContext}
         ></FormTemplate>
 
         {isSuccess && (
@@ -362,6 +369,7 @@ const _FormCompleteKYCWithoutLayout = ({
             getDocumentByInputId={getDocumentByInputId}
             formState={formState}
             profilePage={profilePage}
+            statusContext={statusContext}
           ></FormTemplate>
 
           {isSuccess && (
