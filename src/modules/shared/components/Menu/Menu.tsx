@@ -15,6 +15,7 @@ import DashboardIcon from '../../assets/icons/dashboard.svg?react';
 // import  HelpIcon  from '../../assets/icons/helpCircleOutlined.svg?react';
 import DashIcon from '../../assets/icons/dashOutlined.svg?react';
 //import  ImageIcon  from '../../assets/icons/imageOutlined.svg?react';
+import FormIcon from '../../assets/icons/form.svg?react';
 import IntegrationIcon from '../../assets/icons/integrationIconOutlined.svg?react';
 // import  HelpIcon  from '../../assets/icons/helpCircleOutlined.svg?react';
 import LogoutIcon from '../../assets/icons/logoutOutlined.svg?react';
@@ -222,9 +223,9 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           internalMenuData['requests']?.customLabel ||
           translate('components>menu>requests'),
         id: 'requests',
-        icon: <UserIcon width={17} height={17} />,
+        icon: <FormIcon width={17} height={17} />,
         link: PixwayAppRoutes.REQUESTS,
-        isVisible: true,
+        isVisible: isHidden('requests') === false,
       },
       {
         title: internalMenuData['cards']?.customLabel || 'Meus cartões',

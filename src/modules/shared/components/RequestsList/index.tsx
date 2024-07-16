@@ -42,7 +42,6 @@ const RequestsList = () => {
     setIsUpdateList: (value: boolean) => void
   ) => {
     if (data) {
-      console.log(data, 'data');
       return (
         <RequestItemWrapper
           contextId={data.contextId}
@@ -83,7 +82,7 @@ const RequestsList = () => {
       },
     },
     dataSource: {
-      url: `/users/${tenantId}/contexts/find`,
+      url: `/users/${tenantId}/contexts/find?contextType=form`,
       urlContext: W3blockAPI.ID,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,
@@ -105,7 +104,7 @@ const RequestsList = () => {
             format: FormatFilterType.SELECT,
             type: FilterTableType.DYNAMIC,
             data: {
-              url: `/tenant-context/${tenantId}`,
+              url: `/tenant-context/${tenantId}?type=form`,
               filterUrlContext: W3blockAPI.ID,
               parameters: {
                 itemsPath: 'data.items',
@@ -117,7 +116,7 @@ const RequestsList = () => {
             filterTemplate: 'contextId={context.description}',
             filterClass: { width: '30%' },
             placement: 'external',
-            placeholder: 'Selecione o context',
+            placeholder: 'Selecione o formulário',
           },
         },
       },
