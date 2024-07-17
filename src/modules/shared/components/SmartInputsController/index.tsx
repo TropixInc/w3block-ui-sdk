@@ -61,6 +61,7 @@ import InputDocuments from '../SmartInputs/InputDocuments';
 import InputImage from '../SmartInputs/InputImage/InputImage';
 import InputLocale from '../SmartInputs/InputLocale/InputLocale';
 import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
+import InputProducts from '../SmartInputs/InputProducts';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
 
 interface SmartProps {
@@ -349,6 +350,17 @@ const SmartInputsController = ({
             />
           );
         }
+      }
+      case DataTypesEnum.CommerceProduct: {
+        return (
+          <InputProducts
+            label={label}
+            name={name}
+            docValue={complexValue}
+            docStatus={docStatus}
+            required={required}
+          />
+        );
       }
     }
   };

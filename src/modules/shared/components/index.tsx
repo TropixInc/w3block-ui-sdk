@@ -15,3 +15,4 @@ export * from './RedirectTemplate';
 export * from './GenericTable';
 export * from './CardsListTemplate';
 export * from './PublicOrderTemplate';
+export * from './RequestsTemplate';
