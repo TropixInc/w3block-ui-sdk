@@ -82,7 +82,7 @@ const RequestsList = () => {
       },
     },
     dataSource: {
-      url: `/users/${tenantId}/contexts/find`,
+      url: `/users/${tenantId}/contexts/find?contextType=form`,
       urlContext: W3blockAPI.ID,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,
@@ -156,7 +156,7 @@ const RequestsList = () => {
         format: {
           type: FormatTypeColumn.LOCALDATEHOURTIME,
         },
-        key: 'context.createdAt',
+        key: 'createdAt',
         sortable: true,
         header: {
           label: 'Data de criação',
