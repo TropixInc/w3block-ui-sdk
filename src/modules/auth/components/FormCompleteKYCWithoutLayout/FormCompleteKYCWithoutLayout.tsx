@@ -214,8 +214,6 @@ const _FormCompleteKYCWithoutLayout = ({
     else return tenantInputs?.data ?? [];
   };
 
-  console.log(tenantInputs, 'tenant');
-
   const formState = router.query ? (router.query.formState as string) : '';
   const [isOpenModal, setIsOpenModal] = useState(false);
   return isLoadingKyc ? (

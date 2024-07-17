@@ -82,7 +82,7 @@ const RequestsList = () => {
       },
     },
     dataSource: {
-      url: `/users/${tenantId}/contexts/find?contextType=form`,
+      url: `/users/${tenantId}/contexts/find`,
       urlContext: W3blockAPI.ID,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,
