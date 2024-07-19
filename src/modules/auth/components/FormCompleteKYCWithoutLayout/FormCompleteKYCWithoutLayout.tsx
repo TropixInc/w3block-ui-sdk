@@ -115,7 +115,7 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const statusContext = useMemo(() => {
     if (reasons && reasons?.data?.items) {
-      return reasons?.data?.items[0].status;
+      return reasons?.data?.items[0]?.status;
     }
   }, [reasons]);
 
