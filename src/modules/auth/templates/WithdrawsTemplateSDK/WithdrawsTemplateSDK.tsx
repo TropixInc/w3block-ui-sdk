@@ -9,7 +9,6 @@ const InternalPagesLayoutBase = lazy(() =>
   }))
 );
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import {
   ConfigGenericTable,
   FilterTableType,
@@ -20,6 +19,7 @@ import {
 } from '../../../shared';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import WithdrawInternal from '../../components/WithdrawInternal/WithdrawInternal';
