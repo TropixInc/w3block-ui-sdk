@@ -1,8 +1,8 @@
 /* eslint-disable i18next/no-literal-string */
 import { useEffect } from 'react';
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import { Spinner } from '../../../shared/components/Spinner';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { useDeleMethodPayment } from '../../hooks/DeleteMethodPayment/useDeleMethodPayment';
 import { WithdrawMethodDTO } from './WithdrawModal';

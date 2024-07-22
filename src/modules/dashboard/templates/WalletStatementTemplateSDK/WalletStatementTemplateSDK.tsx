@@ -3,11 +3,11 @@ import { useMemo, useState, lazy } from 'react';
 
 import { isAfter, isBefore } from 'date-fns';
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import {
   StatementScreenTransaction,

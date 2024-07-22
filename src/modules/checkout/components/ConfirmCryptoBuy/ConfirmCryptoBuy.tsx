@@ -27,6 +27,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
@@ -34,7 +35,7 @@ import {
   createOrderResponse,
 } from '../../interface/interface';
 import { useMetamask } from '../../../core/metamask/hooks/useMetamask/useMetamask';
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
+
 const ErrorMessage = lazy(() =>
   import('../ErrorMessage/ErrorMessage').then((m) => ({
     default: m.ErrorMessage,

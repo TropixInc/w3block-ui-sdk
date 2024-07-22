@@ -5,9 +5,9 @@ const WeblockButton = lazy(() =>
 );
 import { lazy } from 'react';
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const CheckoutEmptyCart = () => {
   const { pushConnect } = useRouterConnect();

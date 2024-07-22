@@ -3,12 +3,12 @@ import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useGetPublicOrder } from '../../../shared/hooks/useGetPublicOrder/useGetPublicOrder';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import useTranslation from '../../../shared/hooks/useTranslation';
 export const ReceiptQRCode = ({
   isOpen,
   onClose,

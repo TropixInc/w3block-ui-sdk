@@ -5,7 +5,7 @@ const ModalBase = lazy(() =>
 );
 import { lazy } from 'react';
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface PayementCompletedModalProps {
   onClose?: () => void;

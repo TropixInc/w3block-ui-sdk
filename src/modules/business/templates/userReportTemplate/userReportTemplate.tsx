@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import _ from 'lodash';
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import {
   Erc20TokenHistory,
   FromToInterface,
@@ -15,6 +14,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useGetAllReportsAdmin } from '../../hooks/useGetAllReportsAdmin';
 import { useGetAllReportsByOperatorId } from '../../hooks/useGetAllReportsByOperatorId';
 import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';

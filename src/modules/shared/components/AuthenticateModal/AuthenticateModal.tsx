@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import { UseGetTemporaryUserCode } from '../../hooks/useGetTemporaryUserCode/useGetTemporaryUserCode';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
+import useTranslation from '../../hooks/useTranslation';
 import { ImageSDK } from '../ImageSDK';
 import { ModalBase } from '../ModalBase';
 import { Shimmer } from '../Shimmer';

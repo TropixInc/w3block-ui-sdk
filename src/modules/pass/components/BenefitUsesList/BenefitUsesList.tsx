@@ -13,7 +13,7 @@ const DataGridPagination = lazy(() =>
   }))
 );
 
-import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { ColumnType } from '../../../tokens/components/GenericTable';
 import TableHeader from '../../../tokens/components/TableHeader/TableHeader';
 import TableRows from '../../../tokens/components/TableRow/TableRow';
