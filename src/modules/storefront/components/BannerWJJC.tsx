@@ -114,19 +114,19 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
     if (datasource?.master?.data[0]?.attributes?.grandMaster) {
       return (
         <p className="pw-text-xs pw-font-bold pw-font-poppins pw-text-black pw-bg-[#FCFBD8] pw-rounded-[14px] pw-p-[5px_10px] pw-text-center pw-mt-5">
-          Grande Mestre
+          {translate('storefront>bannerWjjc>grandMaster')}
         </p>
       );
     } else if (datasource?.master?.data[0]?.attributes?.ambassador) {
       return (
         <p className="pw-text-xs pw-font-bold pw-font-poppins pw-text-black pw-bg-[#FCFBD8] pw-rounded-[14px] pw-p-[5px_10px] pw-text-center pw-mt-5">
-          Embaixador(a)
+          {translate('storefront>bannerWjjc>amabassador')}
         </p>
       );
     } else if (datasource?.master?.data[0]?.attributes?.master) {
       return (
         <p className="pw-text-xs pw-font-bold pw-font-poppins pw-text-black pw-bg-[#FCFBD8] pw-rounded-[14px] pw-p-[5px_10px] pw-text-center pw-mt-5">
-          Professor(a)
+          {translate('storefront>bannerWjjc>teacher')}
         </p>
       );
     } else return null;
@@ -139,7 +139,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
     if (currentBelt)
       return (
         <p className="pw-text-xs pw-font-bold pw-font-poppins pw-text-black pw-bg-[#FFFFFF] pw-rounded-[14px] pw-p-[5px_10px] pw-text-center pw-mt-5">
-          Faixa {currentBelt}
+          {translate('storefront>bannerWjjc>belt')} {currentBelt}
         </p>
       );
     else return null;
@@ -156,7 +156,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
       return (
         <div>
           {' '}
-          - Nomeado(a) por{' '}
+          - {translate('storefront>bannerWjjc>nominatedBy')}{' '}
           <a
             target="_blank"
             href={`/professor/${datasource?.master?.data[0]?.attributes?.masterCertificationAmbassador?.data?.attributes.slug}`}
@@ -165,7 +165,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
           >
             {ambassador}
           </a>{' '}
-          e condecorado(a) por{' '}
+          {translate('storefront>bannerWjjc>decoratedBy')}{' '}
           <a
             target="_blank"
             href={`/professor/${datasource?.master?.data[0]?.attributes?.masterCertificationGrandMaster?.data?.attributes.slug}`}
@@ -180,7 +180,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
       return (
         <div>
           {' '}
-          - Nomeado(a) por{' '}
+          - {translate('storefront>bannerWjjc>nominatedBy')}{' '}
           <a
             target="_blank"
             href={`/professor/${datasource?.master?.data[0]?.attributes?.masterCertificationAmbassador?.data?.attributes.slug}`}
@@ -195,7 +195,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
       return (
         <div>
           {' '}
-          - Condecorado(a) por{' '}
+          - {translate('storefront>bannerWjjc>decoratedBy')}{' '}
           <a
             target="_blank"
             href={`/professor/${datasource?.master?.data[0]?.attributes?.masterCertificationGrandMaster?.data?.attributes.slug}`}
@@ -306,7 +306,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                     {datasource?.master?.data[0]?.attributes?.birthdate && (
                       <div>
                         <p className="pw-font-normal pw-text-sm pw-font-poppins pw-text-black">
-                          Data de nascimento
+                          {translate('storefront>bannerWjjc>bithDate')}
                         </p>
                         <p className="pw-font-bold pw-text-lg pw-font-poppins pw-text-black">
                           {format(
@@ -326,7 +326,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                     ) && (
                       <div>
                         <p className="pw-font-normal pw-text-sm pw-font-poppins pw-text-black">
-                          Local de nascimento
+                          {translate('storefront>bannerWjjc>bithplace')}
                         </p>
                         <p className="pw-font-bold pw-text-lg pw-font-poppins pw-text-black">
                           {getPlace(
@@ -346,7 +346,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                     ) && (
                       <div>
                         <p className="pw-font-normal pw-text-sm pw-font-poppins pw-text-black">
-                          Residência
+                          {translate('storefront>bannerWjjc>residence')}
                         </p>
                         <p className="pw-font-bold pw-text-lg pw-font-poppins pw-text-black">
                           {getPlace(
@@ -394,7 +394,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
         {isMasterOrProfessor ? (
           <div className="pw-container pw-mx-auto sm:pw-p-[48px_0_0_0] pw-p-8 ">
             <h2 className="pw-text-black pw-font-semibold pw-text-2xl pw-font-poppins">
-              Instrutor(a) WJJC desde
+              {translate('storefront>bannerWjjc>instructorSince')}
             </h2>
             {datasource?.master?.data[0]?.attributes
               ?.masterCertificationDate && (
@@ -418,7 +418,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                   className="pw-p-[5px_24px_5px_24px] pw-bg-[#295BA6] pw-border-solid pw-border-[1px] pw-border-[#FFFFFF] pw-text-white pw-rounded-[16px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] pw-font-poppins pw-text-xs"
                   rel="noreferrer"
                 >
-                  Verificar certificação
+                  {translate('storefront>bannerWjjc>checkCertification')}
                 </a>
               ) : null}
               <a
@@ -427,7 +427,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                 className="pw-p-[5px_24px_5px_24px] pw-bg-[#295BA6] pw-border-solid pw-border-[1px] pw-border-[#FFFFFF] pw-text-white pw-rounded-[16px] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] pw-font-poppins pw-text-xs"
                 rel="noreferrer"
               >
-                Verificar histórico
+                {translate('storefront>bannerWjjc>checkHistory')}
               </a>
             </div>
           </div>

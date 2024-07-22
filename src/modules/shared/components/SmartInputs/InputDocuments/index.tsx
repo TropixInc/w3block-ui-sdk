@@ -4,6 +4,7 @@ import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
+import useTranslation from '../../../hooks/useTranslation';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import LabelWithRequired from '../../LabelWithRequired';
 
@@ -25,6 +26,7 @@ const InputDocuments = ({
   const { field, fieldState } = useController({ name });
   const [selectDocType, setSelectDocType] = useState<string | undefined>();
   const [document, setDocument] = useState<string | undefined>();
+  const [translate] = useTranslation();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [apiSavedValue, setApiSavedValue] = useState<any>();
   const docTypeOptions = [
@@ -108,7 +110,7 @@ const InputDocuments = ({
         </FormItemContainer>
         <div className="pw-w-full pw-mt-7">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
-            Número do Documento
+            {translate('shared>inputDocument>docNumber')}
           </p>
           <FormItemContainer
             invalid={fieldState.invalid}

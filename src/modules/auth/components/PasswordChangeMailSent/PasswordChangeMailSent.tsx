@@ -112,7 +112,7 @@ export const PasswordChangeMailSent = ({
           onClick={() => router.pushConnect(PixwayAppRoutes.SIGN_IN)}
           fullWidth
         >
-          Continuar
+          {translate('components>advanceButton>continue')}
         </AuthButton>
       </div>
 

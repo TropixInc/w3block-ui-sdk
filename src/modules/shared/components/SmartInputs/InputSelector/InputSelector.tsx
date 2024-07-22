@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 import { useRouterConnect } from '../../../hooks';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
+import useTranslation from '../../../hooks/useTranslation';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import LabelWithRequired from '../../LabelWithRequired';
 import { MultipleSelect } from '../../MultipleSelect';
@@ -62,6 +63,7 @@ export const InputSelector = ({
 }: Props) => {
   const { field, fieldState } = useController({ name });
   const router = useRouterConnect();
+  const [translate] = useTranslation();
   // const [firstInput, setFirstInput] = useState(true);
   const [multipleSelected, setMultipleSelected] = useState<
     Array<string | undefined>
@@ -178,7 +180,9 @@ export const InputSelector = ({
             onChange={(e) => handleTextChange(e.target.value)}
             className="pw-max-h-[180px] pw-h-[48px] pw-w-full pw-overflow-y-auto pw-bg-inherit pw-text-black pw-outline-none"
           >
-            <option value="">Selecione uma opção</option>
+            <option value="">
+              {translate('shared>inputSelector>selectOption')}
+            </option>
             {type === DataTypesEnum.SimpleSelect
               ? options.map((val) => (
                   <option

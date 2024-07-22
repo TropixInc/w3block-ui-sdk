@@ -6,6 +6,7 @@ import MetamaskIcon from '../../assets/icons/metamask.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import useTranslation from '../../hooks/useTranslation';
 import { useUserWallet } from '../../hooks/useUserWallet';
 import { getExtractLinkByChainId } from '../../utils/getCryptoChainId';
 const CriptoValueComponent = lazy(() =>
@@ -47,6 +48,7 @@ export const WalletCard = ({
   hideLoyaltyAuthentication = false,
 }: WalletCardProps) => {
   const { name } = useCompanyConfig();
+  const [translate] = useTranslation();
   const { push } = useRouterConnect();
   const { setAuthenticatePaymentModal } = useUserWallet();
   const chainLink = getExtractLinkByChainId(chainId ?? 137, address ?? '0x0');
@@ -100,11 +102,15 @@ export const WalletCard = ({
           href={chainId ? chainLink : PixwayAppRoutes.WALLET_RECEIPT}
           className="pw-flex pw-gap-2"
         >
-          <p className="pw-text-[12px] pw-font-[600] pw-text-black">Extrato</p>
+          <p className="pw-text-[12px] pw-font-[600] pw-text-black">
+            {translate('wallet>page>extract')}
+          </p>
           <ExtractIcon style={{ stroke: 'black' }} />
         </a>
       </div>
-      <p className=" pw-text-slate-900 pw-mt-3">Saldo</p>
+      <p className=" pw-text-slate-900 pw-mt-3">
+        {translate('header>logged>pixwayBalance')}
+      </p>
       <p className="pw-text-sm pw-text-slate-800 pw-font-[400]">{getName()}</p>
       <div className="pw-mt-4">
         <CriptoValueComponent
@@ -120,7 +126,7 @@ export const WalletCard = ({
           onClick={() => push(PixwayAppRoutes.ADD_FUNDS_TYPE)}
           className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
         >
-          Adicionar
+          {translate('shared>add')}
         </WeblockButton>
       ) : null}
       {type == 'loyalty' && !hideLoyaltyAuthentication && (
@@ -128,7 +134,7 @@ export const WalletCard = ({
           onClick={() => setAuthenticatePaymentModal?.(true)}
           className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
         >
-          Pontuar
+          {translate('shared>navigationLoginLoggedButton>toScore')}
         </WeblockButton>
       )}
     </div>

@@ -93,7 +93,7 @@ export const VerifySignUpTokenExpired = ({
         </div>
         {isError && (
           <p className="pw-mt-4 pw-text-sm pw-text-red-500">
-            Erro ao enviar código, por favor entre em contato com o suporte
+            {translate('auth>verifySignupTokenExpired>errorSendCode')}
           </p>
         )}
         <AuthFooter />

@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
@@ -15,6 +16,7 @@ import CopyIcon from '../../assets/icons/copyIconOutlined.svg?react';
 import RejectIcon from '../../assets/icons/minusCircle.svg?react';
 import ApprovedIcon from '../../assets/icons/plusCircle.svg?react';
 import { useLocale } from '../../hooks/useLocale';
+import useTranslation from '../../hooks/useTranslation';
 import {
   Erc20ActionStatus,
   Statement,
@@ -35,6 +37,7 @@ export const StatementComponentSDK = ({
   const locale = useLocale();
   const [state, copyToClipboard] = useCopyToClipboard();
   const [isCopied, setIsCopied] = useState(false);
+  const [translate] = useTranslation();
   const handleCopy = () => {
     copyToClipboard(statement?.txHash ?? '');
     if (!state.error) setIsCopied(true);
@@ -109,7 +112,7 @@ export const StatementComponentSDK = ({
       ) {
         return (
           <p>
-            Crédito referente ao pagamento{' '}
+            {translate('dashboard>statementComponent>creditReferPayment')}{' '}
             <button
               className="!pw-font-bold pw-underline"
               onClick={() => setOpenReceipt(true)}
@@ -120,7 +123,7 @@ export const StatementComponentSDK = ({
                   ?.commerce?.deliverId
               }
             </button>{' '}
-            para{' '}
+            {translate('dashboard>statementComponent>for')}{' '}
             {
               (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
                 ?.operatorName
@@ -134,7 +137,7 @@ export const StatementComponentSDK = ({
       ) {
         return (
           <p>
-            Cashback no pagamento{' '}
+            {translate('dashboard>statementComponent>cashbackInPayment')}
             <button
               className="!pw-font-bold pw-underline"
               onClick={() => setOpenReceipt(true)}
@@ -145,7 +148,7 @@ export const StatementComponentSDK = ({
                   ?.commerce?.deliverId
               }
             </button>{' '}
-            para{' '}
+            {translate('dashboard>statementComponent>for')}{' '}
             {
               (statement?.loyaltieTransactions?.[0]?.metadata as any)?.[0]
                 ?.operatorName
@@ -159,28 +162,31 @@ export const StatementComponentSDK = ({
       ) {
         return (
           <p>
-            Carga de Zuca para pagamento{' '}
+            {translate('dashboard>statementComponent>loadZucaPayment')}{' '}
             <button
               className="!pw-font-bold pw-underline"
               onClick={() => setOpenReceipt(true)}
             >
               #{statement?.commerce?.deliverId}
             </button>{' '}
-            a {statement?.commerce?.destinationUserName}
+            {translate('dashboard>statementComponent>for')}{' '}
+            {statement?.commerce?.destinationUserName}
           </p>
         );
       } else if (statement?.commerce) {
         return (
           <p>
-            Pagamento{' '}
+            {translate('checkout>components>checkoutInfo>payment')}{' '}
             <button
               className="!pw-font-bold pw-underline"
               onClick={() => setOpenReceipt(true)}
             >
               #{statement?.commerce?.deliverId}
             </button>{' '}
-            no valor total de {statement?.commerce?.erc20PurchaseAmount} ZUCA
-            para {statement?.commerce?.destinationUserName}
+            {translate('dashboard>statementComponent>inTotalValue')}{' '}
+            {statement?.commerce?.erc20PurchaseAmount} {'ZUCA'}{' '}
+            {translate('dashboard>statementComponent>for')}{' '}
+            {statement?.commerce?.destinationUserName}
           </p>
         );
       } else
@@ -296,7 +302,8 @@ export const StatementComponentSDK = ({
           {future ? (
             <>
               <p className="pw-text-sm pw-font-semibold pw-text-black">
-                Recibo de pagamento {statement?.deliverId}
+                {translate('shared>statementComponentSDK>receiptOfPayment')}{' '}
+                {statement?.deliverId}
               </p>
             </>
           ) : (
@@ -315,7 +322,8 @@ export const StatementComponentSDK = ({
         {future && isAdmin && statement.metadata.userName ? (
           <div className="pw-flex pw-items-center pw-gap-2">
             <p className="pw-text-black pw-text-xs pw-font-semibold">
-              Destinatário: {statement.metadata.userName}
+              {translate('checkout>checkoutResume>recipient')}:{' '}
+              {statement.metadata.userName}
             </p>
           </div>
         ) : null}
@@ -325,7 +333,8 @@ export const StatementComponentSDK = ({
               <WjjcText metadata={statement.metadata} />
             ) : (
               <p className="pw-text-black pw-text-xs pw-font-medium">
-                Comprador: {statement?.buyerName}
+                {translate('shared>statementComponentSDK>buyer')}:{' '}
+                {statement?.buyerName}
               </p>
             )
           ) : (
@@ -347,13 +356,14 @@ export const StatementComponentSDK = ({
         {future && statement?.metadata?.operatorName && isAdmin ? (
           <div className="pw-flex pw-items-center pw-gap-2">
             <p className="pw-text-black pw-text-xs pw-font-medium">
-              Para: {statement?.metadata?.operatorName}
+              {translate('dashboard>statementComponent>for')}:{' '}
+              {statement?.metadata?.operatorName}
             </p>
           </div>
         ) : null}
         {isCopied && (
           <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
-            Copiado!
+            {translate('components>menu>copied')}
           </span>
         )}
         {future ? (
@@ -361,14 +371,15 @@ export const StatementComponentSDK = ({
             {statement?.metadata?.commerce?.deliverId ? (
               <div className="pw-flex pw-items-center pw-gap-2">
                 <p className="pw-text-black pw-text-xs pw-font-medium">
-                  Compra: {statement?.metadata?.commerce?.deliverId}
+                  {translate('dashboardOrderCardComponentSDK>purchase')}:{' '}
+                  {statement?.metadata?.commerce?.deliverId}
                 </p>
               </div>
             ) : null}
             {statement?.metadata?.amount ? (
               <div className="pw-flex pw-items-center pw-gap-2">
                 <p className="pw-text-black pw-text-xs pw-font-medium">
-                  Valor pago: R$
+                  {translate('checkout>checkoutInfo>valuePaid')}: R$
                   {parseFloat(statement?.metadata?.amount).toFixed(2)}
                 </p>
               </div>

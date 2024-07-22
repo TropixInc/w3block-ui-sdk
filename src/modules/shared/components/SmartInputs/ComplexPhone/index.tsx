@@ -5,6 +5,7 @@ import ReactInputMask from 'react-input-mask';
 import { UserContextStatus, UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
+import useTranslation from '../../../hooks/useTranslation';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import InputStatus from '../InputStatus';
@@ -29,7 +30,7 @@ const ComplexPhone = ({
   statusContext,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
-
+  const [translate] = useTranslation();
   const error = fieldState?.error;
 
   useEffect(() => {
@@ -146,7 +147,7 @@ const ComplexPhone = ({
           className="pw-px-4 pw-py-2 pw-flex pw-items-center pw-border pw-border-[#0050FF] pw-rounded-lg pw-text-sm pw-font-semibold pw-gap-2"
         >
           <span>+</span>
-          <span>Adicionar telefone</span>
+          <span>{translate('shared>complexPhone>addPhone')}</span>
         </button>
       ) : null}
     </div>

@@ -1,3 +1,4 @@
+import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import { useProfile, useRouterConnect } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
@@ -23,6 +24,7 @@ export const CheckoutConfirmationTemplate = ({
   cart,
 }: CheckoutConfirmationTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
+  const [translate] = useTranslation();
   const { cart: productsCart } = useCart();
   const { query } = useRouterConnect();
   const productIdsFromQueries = query?.productIds;
@@ -46,7 +48,7 @@ export const CheckoutConfirmationTemplate = ({
       {/* <CheckoutHeader onClick={returnTo} /> */}
       {isCommerceReceiver ? (
         <div className="pw-w-full pw-h-[63.5vh] pw-flex pw-justify-center pw-items-center pw-font-bold pw-text-2xl pw-text-black">
-          Esse usuário não possui permissão para realizar uma compra
+          {translate('checkout>checkoutConfirmationTemplate>userCantPurchase')}
         </div>
       ) : (
         <CheckoutContainer

@@ -1,5 +1,7 @@
+/* eslint-disable i18next/no-literal-string */
 import { useEffect } from 'react';
 
+import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import { Spinner } from '../../../shared/components/Spinner';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { useDeleMethodPayment } from '../../hooks/DeleteMethodPayment/useDeleMethodPayment';
@@ -15,6 +17,7 @@ const DeleteMethodModal = ({
   itemForDelete,
 }: DeleteModalProps) => {
   const { mutate, isSuccess, isLoading } = useDeleMethodPayment();
+  const [tranlate] = useTranslation();
 
   const onDeleteMethod = (id: string) => {
     try {
@@ -34,17 +37,17 @@ const DeleteMethodModal = ({
   return (
     <div className="pw-text-slate-900">
       <p className="pw-text-center pw-text-xl pw-font-medium">
-        Deseja deletar médoto de recebimento?
+        {tranlate('auth>deleteMethodModal>deleteMethod')}
       </p>
       <div>
         <table className="pw-mt-5 pw-w-full">
           <thead className="pw-w-full">
             <tr className="pw-w-full">
               <th scope="col" className="pw-text-left">
-                Tipo
+                {tranlate('auth>addMethodModal>type')}
               </th>
               <th scope="col" className="pw-text-left">
-                Titular
+                {tranlate('auth>deleteMethodModal>holder')}
               </th>
               <th scope="col" className="pw-text-left">
                 Key
@@ -68,7 +71,7 @@ const DeleteMethodModal = ({
           className="pw-h-10 pw-w-full pw-flex pw-justify-center pw-items-center pw-px-4 pw-text-base"
           onClick={() => onChangeModalType('withdraw')}
         >
-          Cancelar
+          {tranlate('components>cancelMessage>cancel')}
         </OffpixButtonBase>
         <OffpixButtonBase
           onClick={() => onDeleteMethod(itemForDelete.id)}
@@ -78,7 +81,7 @@ const DeleteMethodModal = ({
           {isLoading ? (
             <Spinner className="pw-w-4 pw-h-4 !pw-border-[2px]" />
           ) : (
-            'Confirmar'
+            tranlate('shared>myProfile>confirm')
           )}
         </OffpixButtonBase>
       </div>

@@ -13,6 +13,7 @@ import { useRouterConnect } from '../../../shared';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import {
   AvailableCreditCards,
   AvailableInstallmentInfo,
@@ -105,6 +106,7 @@ export const CheckoutPaymentComponent = ({
   const [useSavedCard, setUseSavedCard] = useState(false);
   const [newCard, setNewCard] = useState(false);
   const [errors, setErrors] = useState<any>({});
+  const [translate] = useTranslation();
   const inputsObj = useMemo(
     () =>
       inputs.reduce((acc, input) => {
@@ -319,14 +321,10 @@ export const CheckoutPaymentComponent = ({
       >
         <div className="pw-p-8 pw-text-center pw-text-black">
           <p className="sm:pw-text-base pw-text-sm">
-            Você realizou uma compra de mesmo valor momentos atrás. Você pode
-            verificar na área de &quot;Minhas Compras&quot; se a sua compra
-            anterior foi finalizada.
+            {translate('checkout>checkoutPaymentComponent>verifyPurchase')}
           </p>
           <p className="pw-font-semibold pw-mt-2 sm:pw-text-base pw-text-sm">
-            Se realmente deseja seguir com a compra, marque a caixa
-            &quot;Confirmar compra de mesmo valor&quot; e clique no botão
-            &quot;Confirmar Compra&quot;
+            {translate('checkout>checkoutPaymentComponent>continuePurchase')}
           </p>
 
           <div className="pw-flex pw-flex-col pw-justify-around pw-mt-6">
@@ -334,14 +332,14 @@ export const CheckoutPaymentComponent = ({
               onClick={() => router.pushConnect(PixwayAppRoutes.MY_ORDERS)}
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl"
             >
-              Visualizar minhas compras
+              {translate('checkout>checkoutPaymentComponent>seePurchase')}
             </PixwayButton>
             <PixwayButton
               disabled={!agree}
               onClick={onContinue}
               className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 disabled:pw-opacity-50 disabled:!pw-bg-white hover:pw-shadow-xl"
             >
-              Confirmar compra
+              {translate('checkout>checkoutPaymentComponent>confirmPurchase')}
             </PixwayButton>
           </div>
           <div className="pw-flex sm:pw-gap-3 pw-gap-2 pw-items-center pw-justify-center pw-my-5 ">
@@ -356,7 +354,9 @@ export const CheckoutPaymentComponent = ({
               )}
             </div>
             <p className="sm:pw-text-base pw-text-xs pw-text-slate-600">
-              Confirmar compra de mesmo valor
+              {translate(
+                'checkout>checkoutPaymentComponent>confirmPurchaseSameValue'
+              )}
             </p>
           </div>
         </div>
@@ -531,7 +531,7 @@ export const CheckoutPaymentComponent = ({
                   )}
                 </div>
                 <p className="pw-text-sm pw-text-slate-600">
-                  O CPF do comprador é diferente do titular do cartão
+                  {translate('checkout>checkoutPaymentComponent>difenceInCPF')}
                 </p>
               </div>
               {!sameCpf && (
@@ -569,7 +569,7 @@ export const CheckoutPaymentComponent = ({
                   )}
                 </div>
                 <p className="pw-text-sm pw-text-slate-600">
-                  Desejo cadastrar esse cartão para futuras compras
+                  {translate('checkout>checkoutPaymentComponent>registerCard')}
                 </p>
               </div>
               {saveCard && (

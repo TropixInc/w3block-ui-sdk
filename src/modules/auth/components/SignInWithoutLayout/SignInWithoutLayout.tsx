@@ -303,12 +303,13 @@ export const SigInWithoutLayout = ({
               <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
                 {googleError ? (
                   <Alert variant="warning">
-                    Parece que você ainda não possui uma conta, por favor
-                    cadastre-se pela plataforma.
+                    {translate('auth>signWithoutLayout>notRegistration')}
                   </Alert>
                 ) : (
                   <>
-                    <p className="pw-text-black">ou</p>
+                    <p className="pw-text-black">
+                      {translate('auth>metamaskAppErrorModal>or')}
+                    </p>
                     <a
                       className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
                       href={googleLink}
@@ -316,7 +317,9 @@ export const SigInWithoutLayout = ({
                       <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
                         <GoogleIcon />
                       </div>
-                      <span>Sign in with Google</span>
+                      <span>
+                        {translate('auth>signWithoutLayout>signGoogle')}
+                      </span>
                     </a>
                   </>
                 )}

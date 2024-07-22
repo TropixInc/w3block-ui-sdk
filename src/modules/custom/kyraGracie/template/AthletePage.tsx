@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const Shimmer = lazy(() =>
   import('../../../shared/components/Shimmer').then((mod) => ({
@@ -6,6 +7,7 @@ const Shimmer = lazy(() =>
 );
 
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Disclosure } from '@headlessui/react';
 import classNames from 'classnames';
@@ -76,6 +78,7 @@ export type Grade =
 
 export const AthletePage = () => {
   const { datasource, loading } = useDynamicApi();
+  const [translate] = useTranslation();
   const { data, isLoading } = useGetAthlete(
     datasource?.athlete?.data[0]?.id ?? ''
   );
@@ -488,12 +491,10 @@ export const AthletePage = () => {
           <div className="pw-flex pw-justify-center pw-items-center pw-h-full pw-flex-col pw-min-h-[80vh] ">
             <div className="pw-max-w-[500px]">
               <h3 className="pw-text-[24px] pw-font-bold pw-text-center pw-text-slate-900">
-                Opps! não foi encontrado
+                {translate('custom>athletePage>notFound')}
               </h3>
               <p className="pw-text-[14px] pw-text-slate-600 pw-text-center">
-                Não conseguimos encontrar nenhum NFT relacionado ao
-                identificador do atleta, verifique novamente o número. Caso o
-                erro persista, entre em contato com o suporte.
+                {translate('custom>athletePage>notFoundExplain')}
               </p>
             </div>
           </div>

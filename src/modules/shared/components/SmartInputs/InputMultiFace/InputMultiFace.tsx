@@ -13,6 +13,7 @@ import {
 import { ErrorMessage } from '../../../../checkout/components/ErrorMessage/ErrorMessage';
 import UserIcon from '../../../assets/icons/userOutlined.svg?react';
 import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
+import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import LabelWithRequired from '../../LabelWithRequired';
@@ -42,6 +43,7 @@ export const InputMultiFace = ({
   const { companyId: tenantId } = useCompanyConfig();
   const { height, width } = useWindowSize();
   const { field } = useController({ name });
+  const [translate] = useTranslation();
   const [loading, setLoading] = useState(true);
   const [openWebcam, setOpenWebcam] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>();
@@ -233,13 +235,13 @@ export const InputMultiFace = ({
                       className="!pw-bg-white !pw-text-brand-primary"
                       onClick={() => retake()}
                     >
-                      Refazer
+                      {translate('shared>inputMultiface>redo')}
                     </WeblockButton>
                     <WeblockButton
                       className="!pw-text-white"
                       onClick={() => setOpenWebcam(false)}
                     >
-                      Usar selfie
+                      {translate('shared>inputMultiface>useSelfie')}
                     </WeblockButton>
                   </div>
                 </div>
@@ -319,7 +321,7 @@ export const InputMultiFace = ({
                               capture();
                             }}
                           >
-                            Tirar selfie
+                            {translate('shared>inputMultiface>makeSelfie')}
                           </WeblockButton>
                         </div>
                       )}

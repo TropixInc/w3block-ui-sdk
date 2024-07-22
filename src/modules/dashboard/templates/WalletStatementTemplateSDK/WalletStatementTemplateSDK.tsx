@@ -3,6 +3,7 @@ import { useMemo, useState, lazy } from 'react';
 
 import { isAfter, isBefore } from 'date-fns';
 
+import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -41,6 +42,7 @@ export const WalletStatementTemplateSDK = () => {
     loyaltyWallet.length ? loyaltyWallet[0].contractId : undefined,
     { page: actualPage }
   );
+  const [translate] = useTranslation();
   const loyaltyWalletDefined = useMemo(() => {
     return loyaltyWallet.length ? loyaltyWallet[0] : undefined;
   }, [loyaltyWallet]);
@@ -76,7 +78,9 @@ export const WalletStatementTemplateSDK = () => {
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
         <div className="pw-flex pw-justify-between">
           <div>
-            <p className="pw-text-[23px] pw-font-[600]">Extrato</p>
+            <p className="pw-text-[23px] pw-font-[600]">
+              {translate('"wallet>page>extract"')}
+            </p>
             {!hideWallet ? (
               <p className="pw-text-[#777E8F] pw-text-xs">
                 {mainWallet?.address}
@@ -98,8 +102,7 @@ export const WalletStatementTemplateSDK = () => {
             ) : null}
             <p className="pw-text-[#777E8F] pw-text-xs pw-flex pw-gap-1 pw-mt-2 pw-items-center">
               <PendingIcon className="pw-stroke-[#777E8F] pw-w-[12px] pw-h-[12px]" />
-              Créditos de cashback podem levar até duas horas para serem
-              computados em seu saldo.
+              {translate('dashboard>receiptQRCode>creditsTakeTwoHors')}
             </p>
           </div>
         </div>
@@ -119,7 +122,7 @@ export const WalletStatementTemplateSDK = () => {
           ))
         ) : (
           <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
-            Nenhum lançamento
+            {translate('dashboard>walletStatementTemplateSDK>releasesNotFound')}
           </div>
         )}
         {data?.meta && data?.meta?.totalPages > 1 ? (

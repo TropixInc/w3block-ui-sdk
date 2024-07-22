@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
@@ -1073,7 +1074,7 @@ const _CheckoutInfo = ({
         <div className="pw-my-5 pw-flex pw-flex-wrap pw-gap-8">
           <div className="pw-w-full pw-max-w-[500px] pw-shadow-lg pw-flex pw-flex-col pw-items-center pw-p-6 pw-rounded-xl pw-border pw-border-[#E6E8EC]">
             <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
-              Compra realizada com sucesso!
+              {translate('checkout>checkoutInfo>purchaseSucess')}
             </p>
             <div className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[20px]">
               <img
@@ -1137,7 +1138,7 @@ const _CheckoutInfo = ({
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
                 {isCopied
-                  ? 'Copiado!'
+                  ? translate('components>menu>copied')
                   : translate('affiliates>referrakWidget>shared')}
               </PixwayButton>
             </div>
@@ -1220,7 +1221,7 @@ const _CheckoutInfo = ({
                   />
                 )}
                 <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2 pw-font-poppins">
-                  Valor a pagar
+                  {translate('checkout>checkoutInfo>valueOfPay')}
                 </p>
                 <div className="pw-mb-8">
                   <div className="pw-flex pw-gap-3">
@@ -1242,7 +1243,7 @@ const _CheckoutInfo = ({
                   </div>
                   {automaxLoyalty ? (
                     <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2 pw-font-poppins">
-                      Saldo Zucas:{' '}
+                      {translate('wallet>page>balance')} Zucas:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
                       organizedLoyalties?.some(
@@ -1293,7 +1294,7 @@ const _CheckoutInfo = ({
             {hideCoupon ? null : (
               <>
                 <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                  Cupom
+                  {translate('checkout>checkoutInfo>coupon')}
                 </p>
                 <div className="pw-mb-8">
                   <div className="pw-flex pw-gap-3">
@@ -1308,20 +1309,21 @@ const _CheckoutInfo = ({
                       onClick={onSubmitCupom}
                       className="!pw-py-3 sm:!pw-px-[42px] !pw-px-0 sm:pw-flex-[0.1] pw-flex-[1] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
                     >
-                      Aplicar cupom
+                      {translate('checkout>checkoutInfo>applyCoupon')}
                     </PixwayButton>
                   </div>
                   {orderPreview?.appliedCoupon && (
                     <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
-                      Cupom <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
-                      aplicado com sucesso!
+                      {translate('checkout>checkoutInfo>coupon')}{' '}
+                      <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
+                      {translate('checkout>checkoutInfo>couponAppliedSucces')}
                     </p>
                   )}
                   {orderPreview?.appliedCoupon === null &&
                     couponCodeInput !== '' &&
                     couponCodeInput !== undefined && (
                       <p className="pw-text-red-500 pw-text-xs pw-mt-2">
-                        Cupom inválido ou expirado.
+                        {translate('checkout>checkoutInfo>invalidCoupon')}
                       </p>
                     )}
                 </div>
@@ -1348,8 +1350,8 @@ const _CheckoutInfo = ({
                 onSelectedPayemnt={setChoosedPayment}
                 title={
                   isCoinPayment
-                    ? 'Como deseja completar o seu pagamento?'
-                    : 'Métodos de pagamento'
+                    ? translate('checkout>checkoutInfo>howCompletePayment')
+                    : translate('checkout>checkoutInfo>paymentMethod')
                 }
                 titleClass={
                   isCoinPayment
@@ -1363,7 +1365,7 @@ const _CheckoutInfo = ({
                 {!automaxLoyalty ? (
                   <>
                     <p className="pw-font-[600] pw-text-sm pw-font-poppins pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                      Zucas (Saldo:{' '}
+                      Zucas ( {translate('wallet>page>balance')}:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
                       organizedLoyalties?.some(
@@ -1435,7 +1437,7 @@ const _CheckoutInfo = ({
                       variant="success"
                       className="!pw-text-black !pw-font-normal pw-mt-4 pw-font-poppins"
                     >
-                      Voce irá ganhar{' '}
+                      {translate('checkout>checkoutInfo>youWin')}{' '}
                       <b className="pw-mx-[4px]">
                         {isLoading || isLoadingPreview ? (
                           <Shimmer />
@@ -1443,7 +1445,7 @@ const _CheckoutInfo = ({
                           'R$' + orderPreview?.cashback?.cashbackAmount
                         )}
                       </b>{' '}
-                      em Zucas.
+                      {translate('checkout>checkoutInfo>inZucas')}
                     </Alert>
                   </>
                 )}
@@ -1501,26 +1503,30 @@ const _CheckoutInfo = ({
                   <>
                     {statusResponse?.deliverId ? (
                       <p className="pw-text-base pw-font-semibold pw-text-center pw-max-w-[350px] pw-text-black sm:pw-mx-0 pw-mx-auto">
-                        Pagamento realizado com sucesso!
+                        {translate('checkout>checkoutInfo>sucessPayment')}
                       </p>
                     ) : null}
                     <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px] sm:pw-mx-0 pw-mx-auto">
                       <div>
                         <p className="pw-text-sm pw-font-normal">
-                          Pagamento para
+                          {translate('checkout>checkoutInfo>paymentFor')}
                         </p>
                         <p className="pw-text-sm pw-font-semibold">
                           {productCache?.destinationUser?.name}
                         </p>
                       </div>
                       <div className="pw-mt-5">
-                        <p className="pw-text-sm pw-font-normal">Quem pagou</p>
+                        <p className="pw-text-sm pw-font-normal">
+                          {translate('checkout>checkoutInfo>WhoPaid')}
+                        </p>
                         <p className="pw-text-sm pw-font-semibold">
                           {profile?.data?.data?.name}
                         </p>
                       </div>
                       <div className="pw-mt-5">
-                        <p className="pw-text-sm pw-font-normal">Valor pago</p>
+                        <p className="pw-text-sm pw-font-normal">
+                          {translate('checkout>checkoutInfo>valuePaid')}
+                        </p>
                         <p className="pw-text-sm pw-font-semibold">
                           R$
                           {orderResponse?.totalAmount?.[0]?.amount
@@ -1532,7 +1538,7 @@ const _CheckoutInfo = ({
                       </div>
                       <div className="pw-mt-5">
                         <p className="pw-text-sm pw-font-normal">
-                          Cashback ganho
+                          {translate('checkout>checkoutInfo>cashbackEarned')}
                         </p>
                         <p className="pw-text-sm pw-font-semibold">
                           R$
@@ -1541,7 +1547,7 @@ const _CheckoutInfo = ({
                       </div>
                       <div className="pw-mt-5">
                         <p className="pw-text-sm pw-font-normal">
-                          Compra realizada em
+                          {translate('checkout>checkoutInfo>purchaseMadeOn')}
                         </p>
                         <p className="pw-text-sm pw-font-semibold">
                           {orderResponse?.createdAt
@@ -1568,7 +1574,9 @@ const _CheckoutInfo = ({
                         ) : (
                           <>
                             <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
-                              Aguardando confirmação do pagamento
+                              {translate(
+                                'checkout>checkoutInfo>waitConfirmationPayment'
+                              )}
                             </p>
                             <div className="pw-mt-5">
                               <Spinner className="pw-mx-auto" />
@@ -1658,14 +1666,13 @@ const _CheckoutInfo = ({
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
       <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
         <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
-          Houve um erro de comunicação com o servidor, entre em contato com
-          nosso suporte.
+          {translate('checkout>checkoutInfo>errorContactSuport')}
         </p>
         <WeblockButton
           className="pw-text-white pw-mt-6"
           onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
         >
-          Voltar para a home
+          {translate('checkout>checkoutInfo>goBackHome')}
         </WeblockButton>
       </div>
     </div>
@@ -1678,7 +1685,7 @@ const _CheckoutInfo = ({
           orderResponse?.passShareCodeInfo ? null : (
             <>
               <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
-                Resumo da compra
+                {translate('business>buySumarySDK>purchaseResume')}
               </p>
 
               {checkoutStatus == CheckoutStatus.FINISHED && (
@@ -1818,7 +1825,7 @@ const _CheckoutInfo = ({
               <div className="pw-flex pw-gap-2 pw-mt-2 pw-items-center">
                 <ValueChangeIcon />
                 <p className="pw-text-xs  pw-font-medium pw-text-[#777E8F]">
-                  *O valor do produto em{' '}
+                  *{translate('checkout>checkoutInfo>valueOfProductOn')}{' '}
                   {
                     orderPreview?.products
                       .find((prod) =>
@@ -1830,7 +1837,7 @@ const _CheckoutInfo = ({
                         (price) => price?.currencyId == currencyIdState
                       )?.currency?.symbol
                   }{' '}
-                  pode variar de acordo com a cotação desta moeda em{' '}
+                  {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
                   {
                     orderPreview?.products
                       .find((prod) =>

@@ -109,7 +109,7 @@ export const PassesDetail = () => {
       }
 
       const action = compareAsc(new Date(benefit.eventEndsAt), new Date()) ?
-        <Button variant='primary' onClick={() => handleAction()}>Validar</Button>
+        <Button variant='primary' onClick={() => handleAction()}>{translate('pass>PassesDetail>valid')}</Button>
         : null
 
       const BenefitName = () => {
@@ -230,7 +230,7 @@ export const PassesDetail = () => {
               {tokenPass?.data.name}
             </h3>
             <p className="pw-w-full pw-font-normal pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
-              <span className="pw-font-bold">Descrição:</span>
+              <span className="pw-font-bold">{translate('components>tokenCertificate>collectionDescriptionLabel')}:</span>
               <div
                 dangerouslySetInnerHTML={{
                   __html: tokenPass?.data.description ?? '',

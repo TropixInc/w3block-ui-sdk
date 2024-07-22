@@ -384,7 +384,7 @@ const _FormCompleteKYCWithoutLayout = ({
           {!dynamicMethods.formState.isValid && (
             <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
               <p className="pw-text-sm">
-                Por favor, verifique os campos em vermelho.
+                {translate('auth>formCompleteKYCWithoutLayout>verifyFieds')}
               </p>
             </Alert>
           )}
@@ -426,13 +426,17 @@ const _FormCompleteKYCWithoutLayout = ({
         </FormProvider>
         <ModalBase isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
           <div>
-            <p>Tem certeza que deseja abandonar o processo de cadastro?</p>
+            <p>
+              {translate(
+                'auth>formCompleteKYCWithoutLayout>confirmCancelRegistration'
+              )}
+            </p>
             <div>
               <button
                 onClick={() => setIsOpenModal(false)}
                 className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full pw-border-[#0050FF] pw-text-black"
               >
-                Cancelar
+                {translate('components>cancelMessage>cancel')}
               </button>
               <button
                 onClick={() =>
@@ -442,7 +446,7 @@ const _FormCompleteKYCWithoutLayout = ({
                 }
                 className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-bg-[#0050FF] pw-text-white"
               >
-                Continuar
+                {translate('components>advanceButton>continue')}
               </button>
             </div>
           </div>

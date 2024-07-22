@@ -9,6 +9,7 @@ const InternalPagesLayoutBase = lazy(() =>
   }))
 );
 
+import useTranslation from '../../../../../dist/src/modules/shared/hooks/useTranslation';
 import {
   ConfigGenericTable,
   FilterTableType,
@@ -27,6 +28,7 @@ import WithdrawModal from '../../components/WithdrawModal/WithdrawModal';
 const _WithdrawsTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
   const [isOpen, setIsOpen] = useState(false);
+  const [translate] = useTranslation();
   const { query } = useRouterConnect();
   const { loyaltyWallet } = useUserWallet();
   const id = query.id as string;
@@ -123,7 +125,7 @@ const _WithdrawsTemplateSDK = () => {
                 variant="filled"
                 onClick={() => setIsOpen(true)}
               >
-                Realizar saque
+                {translate('auth>withdrawModal>makeWithdraw')}
               </OffpixButtonBase>
             </div>
             <GenericTable

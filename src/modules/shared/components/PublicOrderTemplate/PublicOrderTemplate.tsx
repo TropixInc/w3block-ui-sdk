@@ -5,10 +5,12 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useRouterConnect } from '../../hooks';
 import { useGetPublicOrder } from '../../hooks/useGetPublicOrder/useGetPublicOrder';
 import { useLocale } from '../../hooks/useLocale';
+import useTranslation from '../../hooks/useTranslation';
 import { Spinner } from '../Spinner';
 
 export const PublicOrderTemplate = () => {
   const router = useRouterConnect();
+  const [translate] = useTranslation();
   const { data, isLoading, isError } = useGetPublicOrder(
     router?.query?.id as string,
     true
@@ -23,8 +25,9 @@ export const PublicOrderTemplate = () => {
   else if (isError)
     return (
       <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10 pw-h-[80vh] pw-text-lg pw-font-medium">
-        Não encontramos a compra {router?.query?.id}, por favor verifique o
-        código ou tente novamente mais tarde.
+        {translate('shared>publicOrderTemplate>purchaseNotFound', {
+          purchase: router?.query?.id,
+        })}
       </div>
     );
   else
@@ -32,33 +35,43 @@ export const PublicOrderTemplate = () => {
       <div className="pw-w-full pw-h-[80vh]">
         <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px] pw-mx-auto">
           <div>
-            <p className="pw-text-base pw-font-normal">Pagamento para</p>
+            <p className="pw-text-base pw-font-normal">
+              {translate('checkout>checkoutInfo>paymentFor')}
+            </p>
             <p className="pw-text-base pw-font-semibold">
               {data?.data?.destinationUserName}
             </p>
           </div>
           <div className="pw-mt-5">
-            <p className="pw-text-base pw-font-normal">Quem pagou</p>
+            <p className="pw-text-base pw-font-normal">
+              {translate('checkout>checkoutInfo>WhoPaid')}
+            </p>
             <p className="pw-text-base pw-font-semibold">
               {data?.data?.userFirstName}
             </p>
           </div>
           <div className="pw-mt-5">
-            <p className="pw-text-base pw-font-normal">Valor pago</p>
+            <p className="pw-text-base pw-font-normal">
+              {translate('checkout>checkoutInfo>valuePaid')}
+            </p>
             <p className="pw-text-base pw-font-semibold">
-              R$
+              {'R$'}
               {parseFloat(data?.data?.cashback?.amount).toFixed(2)}
             </p>
           </div>
           <div className="pw-mt-5">
-            <p className="pw-text-base pw-font-normal">Cashback ganho</p>
+            <p className="pw-text-base pw-font-normal">
+              {translate('checkout>checkoutInfo>cashbackEarned')}
+            </p>
             <p className="pw-text-base pw-font-semibold">
               {data?.data?.cashback?.currency?.symbol}{' '}
               {parseFloat(data?.data?.cashback?.cashbackAmount).toFixed(2)}
             </p>
           </div>
           <div className="pw-mt-5">
-            <p className="pw-text-base pw-font-normal">Compra realizada em</p>
+            <p className="pw-text-base pw-font-normal">
+              {translate('checkout>checkoutInfo>purchaseMadeOn')}
+            </p>
             <p className="pw-text-base pw-font-semibold">
               {data?.data?.createdAt
                 ? format(

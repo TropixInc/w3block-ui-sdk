@@ -566,7 +566,7 @@ export const ProductPage = ({
       {cartOpen && (
         <Alert variant="success" className="!pw-gap-3 pw-sticky pw-top-0">
           <Alert.Icon />
-          Produto adicionado ao carrinho!
+          {translate('storefront>productPage>addProductInCart')}
         </Alert>
       )}
       <ModalBase isOpen={isOpenRefresh} onClose={() => setIsOpenRefresh(false)}>
@@ -634,7 +634,7 @@ export const ProductPage = ({
                     setIsOpen(false);
                   }}
                 >
-                  Continuar
+                  {translate('components>advanceButton>continue')}
                 </button>
               )}
               <button
@@ -645,7 +645,7 @@ export const ProductPage = ({
                 className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                 onClick={() => setIsOpen(false)}
               >
-                Fechar
+                {translate('components>walletIntegration>close')}
               </button>
             </div>
           </>
@@ -713,7 +713,7 @@ export const ProductPage = ({
                       product?.prices?.length > 1 && (
                         <div className="">
                           <p className="pw-text-sm pw-text-black pw-font-[700] pw-mb-2">
-                            Pagar em:
+                            {translate('storefront>productPage>payIn')}:
                           </p>
                           <form className="pw-flex pw-gap-4" action="submit">
                             {product?.prices.map((price: any) => (
@@ -886,7 +886,7 @@ export const ProductPage = ({
                     <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
                       <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
                         <p className="pw-text-sm pw-text-black pw-mb-1">
-                          Quantidade
+                          {translate('storefront>productPage>quantity')}
                         </p>
                         <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
                           <p
@@ -1078,7 +1078,7 @@ export const ProductPage = ({
                           }}
                           className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
                         >
-                          Adicionar ao carrinho
+                          {translate('storefront>productPage>addCart')}
                         </button>
                       ) : null}
                       <button
@@ -1155,7 +1155,7 @@ export const ProductPage = ({
                           }}
                           className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full "
                         >
-                          {'Adicionar ao carrinho'}
+                          {translate('storefront>productPage>addCart')}
                         </button>
                       ) : null}
                       <button
@@ -1201,15 +1201,17 @@ export const ProductPage = ({
                             (price: any) => price.currencyId == currencyId?.id
                           )?.amount ?? '0'
                         ) === 0
-                          ? 'Quero!'
+                          ? translate('storefront>productPage>iWant')
                           : buttonText
                           ? buttonText
-                          : 'Comprar agora'}
+                          : translate('storefront>productPage>buyNow')}
                       </button>
                       {product?.canPurchaseAmount === 0 &&
                         !product?.hasWhitelistBlocker && (
                           <p className="pw-text-sm pw-text-gray-500 pw-font-medium pw-mt-4">
-                            * Limite de compra por usuário atingido
+                            {translate(
+                              'storefront>productPage>purchaseLimitPerUser'
+                            )}
                           </p>
                         )}
                     </div>
@@ -1219,13 +1221,13 @@ export const ProductPage = ({
                   (price: any) => price.currencyId == currencyId?.id
                 )?.anchorCurrencyId && (
                   <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
-                    *O valor do produto em{' '}
+                    *{translate('checkout>checkoutInfo>valueOfProductOn')}{' '}
                     {
                       product?.prices.find(
                         (price: any) => price.currencyId == currencyId?.id
                       )?.currency?.symbol
                     }{' '}
-                    pode variar de acordo com a cotação desta moeda em{' '}
+                    {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
                     {
                       product.prices.find(
                         (priceF) =>
@@ -1306,7 +1308,7 @@ export const ProductPage = ({
                 <span className="pw-border-[#E6E8EC] pw-block pw-border pw-border-solid pw-w-full pw-mx-auto" />
                 <div className="pw-mt-7 pw-text-[13px] pw-flex pw-justify-between">
                   <div>
-                    <p>Contract Address</p>
+                    <p>{'Contract Address'}</p>
                     {tokenData?.items?.[0]?.tokenCollection?.quantity && (
                       <p className="pw-mt-[10px]">
                         {translate('commerce>productPage>totalTokens')}
@@ -1318,8 +1320,8 @@ export const ProductPage = ({
                     <p className="pw-mt-[10px]">
                       {translate('commerce>productPage>soldTokens')}
                     </p>
-                    <p className="pw-mt-[10px]">Token Standard</p>
-                    <p className="pw-mt-[10px]">Chain</p>
+                    <p className="pw-mt-[10px]">{'Token Standard'}</p>
+                    <p className="pw-mt-[10px]">{'Chain'}</p>
                   </div>
                   <div
                     className={`pw-text-right ${
@@ -1344,7 +1346,7 @@ export const ProductPage = ({
                     )}
                     <p className="pw-mt-[10px]">{product?.stockAmount}</p>
                     <p className="pw-mt-[10px]">{tokensSold}</p>
-                    <p className="pw-mt-[10px]">ERC-721</p>
+                    <p className="pw-mt-[10px]">{'ERC-721'}</p>
                     <p className="pw-mt-[10px]">{chain()}</p>
                   </div>
                 </div>
