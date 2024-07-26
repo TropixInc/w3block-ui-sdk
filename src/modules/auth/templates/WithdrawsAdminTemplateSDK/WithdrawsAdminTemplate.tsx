@@ -20,10 +20,12 @@ import {
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import WithdrawAdminActions from '../../components/WithdrawAdmin/WithdrawAdminActions';
 
 const _WithdrawsAdminTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
+  const [translate] = useTranslation();
   const { query } = useRouterConnect();
   const id = query.id as string;
   const configTable: ConfigGenericTable = {
@@ -115,7 +117,9 @@ const _WithdrawsAdminTemplateSDK = () => {
         }`}
       >
         <div className="pw-flex pw-justify-between">
-          <p className="pw-text-[23px] pw-font-[600]">Relatório de Saques</p>
+          <p className="pw-text-[23px] pw-font-[600]">
+            {translate('auth>withdrawModal>withdrawReports')}
+          </p>
         </div>
       </div>
       <div className="pw-flex pw-flex-col pw-px-4 pw-py-5 pw-shadow-lg sm:pw-px-0">

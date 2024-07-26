@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useState } from 'react';
 
@@ -14,6 +15,7 @@ import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useGetApi } from '../../hooks/useGetApi';
 import { PriceComponent } from '../PriceComponent/PriceComponent';
@@ -60,6 +62,7 @@ export const OrderCardComponentSDK = ({
   const [opened, setOpened] = useState(startOpened);
   const { data: order } = useGetEspecificOrder(id, opened);
   const locale = useLocale();
+  const [translate] = useTranslation();
   const statusObj = getStatusText(status);
   const products = order?.data.products;
   const [infoOpened, setInfoOpened] = useState(false);
@@ -102,8 +105,9 @@ export const OrderCardComponentSDK = ({
                       {infoOpened && (
                         <div className="pw-absolute pw-z-10 pw-bg-white pw-p-2 pw-rounded-lg pw-shadow-md pw-w-[150px]">
                           <p className="pw-text-xs pw-text-slate-600 pw-font-normal">
-                            Sua compra está aguardando o processamento e
-                            confirmação do pagamento na blockchain.
+                            {translate(
+                              'dashboardOrderCardComponentSDK>yourPurchaseWaitingProcess'
+                            )}
                           </p>
                         </div>
                       )}
@@ -115,7 +119,7 @@ export const OrderCardComponentSDK = ({
           {status === OrderStatusEnum.PENDING && expiresIn && (
             <div className="pw-flex pw-gap-1">
               <p className="pw-text-xs pw-text-slate-500 pw-font-medium">
-                Expira as:{' '}
+                {translate('dashboardOrderCardComponentSDK>expiresAs')}:{' '}
               </p>
               <p className="pw-text-xs pw-text-slate-500">
                 {format(new Date(expiresIn ?? ''), 'H:mm d MMM, yyyy ')}
@@ -130,7 +134,8 @@ export const OrderCardComponentSDK = ({
           </p>
           {deliverId && (
             <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
-              Compra: <span className="pw-font-[700]">{deliverId}</span>{' '}
+              {translate('dashboardOrderCardComponentSDK>purchase')}:{' '}
+              <span className="pw-font-[700]">{deliverId}</span>{' '}
               {/* <span>
                 <CopyIcon className="pw-fill-[#295BA6] pw-text-xs pw-w-[12px] pw-h-[12px] pw-cursor-pointer" />
               </span> */}
@@ -141,7 +146,7 @@ export const OrderCardComponentSDK = ({
               onClick={() => setOpenReceipt(true)}
               className="pw-mt-1 !pw-py-[2px] !pw-px-[10px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl"
             >
-              Recibo QRCode
+              {translate('dashboardOrderCardComponentSDK>receiptCode')}
             </PixwayButton>
           )}
         </div>
@@ -149,7 +154,7 @@ export const OrderCardComponentSDK = ({
           {createdAt && (
             <div className="">
               <p className="pw-text-xs pw-font-[500] pw-text-[#353945] pw-text-right">
-                Pedido realizado em:
+                {translate('auth>withdrawAdminActions>requestMade')}:
               </p>
               <p className="pw-text-xs pw-font-[500] pw-text-[#353945]  pw-text-right">
                 {format(new Date(createdAt ?? ''), 'PPpp', {
@@ -260,7 +265,7 @@ export const OrderCardComponentSDK = ({
           {data?.data?.data?.[0]?.attributes?.name ? (
             <div className="pw-flex pw-justify-between pw-mt-6 pw-mb-2">
               <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
-                Destinatário
+                {translate('checkout>checkoutResume>recipient')}
               </p>
               <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
                 {' '}

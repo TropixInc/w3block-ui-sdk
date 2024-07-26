@@ -14,6 +14,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useGetAllReportsAdmin } from '../../hooks/useGetAllReportsAdmin';
 import { useGetAllReportsByOperatorId } from '../../hooks/useGetAllReportsByOperatorId';
 import { useLoyaltiesInfo } from '../../hooks/useLoyaltiesInfo';
@@ -53,6 +54,7 @@ export const UserReportTemplate = () => {
   const { data: loyaltyHistory } = useGetAllReportsByOperatorId({
     page: actualPage,
   });
+  const [translate] = useTranslation();
   const mainLoyaltie = useMemo(() => {
     if (loyalties.length > 0) {
       return loyalties[0];
@@ -207,7 +209,7 @@ export const UserReportTemplate = () => {
     <InternalPagesLayoutBase>
       <div className=" pw-p-6 pw-bg-white pw-rounded-[20px] pw-shadow pw-flex-col pw-justify-start pw-items-start">
         <div className=" pw-text-black pw-text-[23px] pw-font-semibold pw-leading-loose">
-          Fidelidade
+          {translate('business>userReportTemplate>fidelity')}
         </div>
         <ActionBusinessCardSDK
           title="Pagamento"
@@ -218,7 +220,7 @@ export const UserReportTemplate = () => {
         />
         <div className="pw-flex pw-justify-between pw-items-center pw-mt-8">
           <p className="pw-text-zinc-800 pw-text-lg pw-font-medium pw-leading-[23px]">
-            Relatório de uso
+            {translate('business>userReportTemplate>useReports')}
           </p>
         </div>
         <TableDefault

@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { UseGetTemporaryUserCode } from '../../hooks/useGetTemporaryUserCode/useGetTemporaryUserCode';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
+import useTranslation from '../../hooks/useTranslation';
 import { ImageSDK } from '../ImageSDK';
 import { ModalBase } from '../ModalBase';
 import { Shimmer } from '../Shimmer';
@@ -19,6 +20,7 @@ export const AuthenticateModal = ({
   const { profile } = useProfileWithKYC();
   const { data } = UseGetTemporaryUserCode();
   const isMobile = useIsMobile();
+  const [translate] = useTranslation();
 
   return (
     <ModalBase
@@ -31,7 +33,7 @@ export const AuthenticateModal = ({
           {isMobile ? `Olá, ${profile?.name}` : 'Autenticar'}
         </p>
         <p className="pw-text-black pw-text-sm pw-mt-4 pw-text-center">
-          Apresente esse código ao estabelecimento para efetuar seu pagamento.
+          {translate('shared>authenticateModal>presenteToEstablishmentPayment')}
         </p>
 
         <Suspense

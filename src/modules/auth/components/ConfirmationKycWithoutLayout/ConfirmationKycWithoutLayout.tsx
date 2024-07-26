@@ -10,10 +10,12 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 export const ConfirmationKycWithoutLayout = () => {
   const router = useRouterConnect();
+  const [translate] = useTranslation();
   const { data: profile } = useProfile();
   const theme = UseThemeConfig();
   const skipWallet =
@@ -71,29 +73,39 @@ export const ConfirmationKycWithoutLayout = () => {
       <Box>
         <div className="pw-flex pw-flex-col pw-items-center">
           <p className="pw-font-poppins sm:pw-text-[24px] pw-text-lg pw-text-[#35394C] pw-font-[700] pw-text-center pw-max-w-[369px]">
-            Confirme suas informações
+            {translate('auth>confirmationKycWithoutLayout>confirmInfos')}
           </p>
           {storageData?.certificate ? (
             <div className="pw-text-sm pw-font-poppins pw-text-black pw-text-left pw-flex pw-flex-col pw-items-start pw-justify-center pw-w-full pw-mt-5">
-              <h2 className="pw-font-semibold">Informações da certificação</h2>
-              <h3 className="pw-font-semibold pw-mt-[14px]">Nome completo</h3>
+              <h2 className="pw-font-semibold">
+                {translate(
+                  'auth>confirmationKycWithoutLayout>certificateInfos'
+                )}
+              </h2>
+              <h3 className="pw-font-semibold pw-mt-[14px]">
+                {translate('auth>confirmationKycWithoutLayout>fullName')}
+              </h3>
               <p className="pw-font-normal">{storageData?.certificate?.name}</p>
-              <h3 className="pw-font-semibold pw-mt-[14px]">Conquista</h3>
+              <h3 className="pw-font-semibold pw-mt-[14px]">
+                {translate('auth>confirmationKycWithoutLayout>conquest')}
+              </h3>
               <p className="pw-font-normal">
                 {storageData?.certificate?.title}
               </p>
               <h3 className="pw-font-semibold pw-mt-[14px]">
-                Nome do professor
+                {translate('auth>confirmationKycWithoutLayout>teacherName')}
               </h3>
               <p className="pw-font-normal">
                 {storageData?.certificate?.master}
               </p>
-              <h3 className="pw-font-semibold pw-mt-[14px]">Academia</h3>
+              <h3 className="pw-font-semibold pw-mt-[14px]">
+                {translate('auth>confirmationKycWithoutLayout>academy')}
+              </h3>
               <p className="pw-font-normal">
                 {storageData?.certificate?.academy}
               </p>
               <h3 className="pw-font-semibold pw-mt-[14px]">
-                Data da cerimônia
+                {translate('auth>confirmationKycWithoutLayout>cerimonyDate')}
               </h3>
               <p className="pw-font-normal">
                 {storageData?.certificate?.certificationDate}
@@ -105,7 +117,7 @@ export const ConfirmationKycWithoutLayout = () => {
             return (
               <div key={res} className="pw-w-full pw-mt-5">
                 <p className="pw-text-sm pw-font-semibold pw-font-poppins pw-text-black pw-text-left pw-w-full">
-                  Informações pessoais{' '}
+                  {translate('auth>confirmationKycWithoutLayout>personalInfos')}
                   {Object.keys(groupedInputs).length > 1
                     ? res + ' de ' + Object.keys(groupedInputs).length
                     : null}
@@ -119,7 +131,7 @@ export const ConfirmationKycWithoutLayout = () => {
                       })
                     }
                   >
-                    Editar
+                    {translate('auth>confirmationKycWithoutLayout>edit')}
                   </button>
                 </p>
                 {groupedInputs[res].map((res) => {
@@ -178,7 +190,7 @@ export const ConfirmationKycWithoutLayout = () => {
             className="pw-mt-4 pw-text-white"
             fullWidth={true}
           >
-            Continuar
+            {translate('components>advanceButton>continue')}
           </WeblockButton>
         </div>
       </Box>

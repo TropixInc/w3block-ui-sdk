@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useProfile, useRouterConnect } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { CheckoutStatus } from '../../components';
 import { CheckoutContainer } from '../../components/CheckoutContainer';
 import { CheckoutEmptyCart } from '../../components/CheckoutEmptyCart/CheckoutEmptyCart';
@@ -25,6 +26,7 @@ export const CheckoutConfirmationTemplate = ({
   cart,
 }: CheckoutConfirmationTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
+  const [translate] = useTranslation();
   const { cart: productsCart } = useCart();
   const router = useRouterConnect();
   const productIdsFromQueries = useMemo(() => {
@@ -51,7 +53,7 @@ export const CheckoutConfirmationTemplate = ({
       {/* <CheckoutHeader onClick={returnTo} /> */}
       {isCommerceReceiver ? (
         <div className="pw-w-full pw-h-[63.5vh] pw-flex pw-justify-center pw-items-center pw-font-bold pw-text-2xl pw-text-black">
-          Esse usuário não possui permissão para realizar uma compra
+          {translate('checkout>checkoutConfirmationTemplate>userCantPurchase')}
         </div>
       ) : (
         <CheckoutContainer

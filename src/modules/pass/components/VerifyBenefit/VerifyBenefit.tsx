@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
 import { useLockBodyScroll } from 'react-use';
@@ -78,7 +79,7 @@ export const VerifyBenefit = ({
                       className='pw-mt-5'
                       onClick={useBenefit}
                     >
-                      Confirmar utilização
+                      {translate('pass>verifyBenefit>confirmUsage')}
                     </Button>
                     <Button
                       className='pw-mt-5'

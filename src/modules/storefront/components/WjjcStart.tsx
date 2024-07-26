@@ -13,12 +13,14 @@ import { ContainerControllerSDK } from '../../shared/components/ContainerControl
 import { Shimmer } from '../../shared/components/Shimmer';
 import { WeblockButton } from '../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { ThemeContext } from '../contexts';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 export const WjjcStart = () => {
   const { datasource } = useDynamicApi();
+  const [translate] = useTranslation();
 
   const [_, setInfoData] = useLocalStorage(PRACTITIONER_DATA_INFO_KEY);
   const id = generateRandomUUID();
@@ -138,20 +140,22 @@ export const WjjcStart = () => {
       contentType={ContentTypeEnum.TEXT_LOGO}
       separation={false}
       textContainer={{
-        mainText: 'Formulário de certificação de praticantes',
-        subtitleText:
-          'Bem vindo(a) ao processo de certificação de praticantes da World Jiu-Jitsu Certifier (WJJC)',
-        auxiliarText:
-          'Confirme e preencha seus dados complementares para finalizar a sua graduaçao da WJJC.',
+        mainText: translate('storefront>wjjcStart>formCertification'),
+        subtitleText: translate(
+          'storefront>wjjcStart>welcomeProcessCertification'
+        ),
+        auxiliarText: translate('storefront>wjjcStart>confirmDataGraduation'),
       }}
       infoComponent={
         <Box>
           <div className="pw-flex pw-flex-col pw-items-center">
             <p className="pw-font-poppins sm:pw-text-[24px] pw-text-lg pw-text-[#35394C] pw-font-[700] pw-text-center pw-max-w-[369px]">
-              Confirme os dados da certificação do praticante
+              {translate('storefront>wjjcStart>confirmDataForCertification')}
             </p>
             <div className="pw-text-lg pw-font-poppins pw-text-black pw-text-left pw-flex pw-flex-col pw-items-start pw-justify-center pw-w-full pw-mt-5">
-              <h3 className="pw-font-semibold">Nome completo</h3>
+              <h3 className="pw-font-semibold">
+                {translate('auth>confirmationKycWithoutLayout>fullName')}
+              </h3>
               {firstLoading ? (
                 <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
               ) : (
@@ -159,13 +163,17 @@ export const WjjcStart = () => {
                   {datasource?.athlete?.data[0]?.attributes?.name}
                 </p>
               )}
-              <h3 className="pw-font-semibold pw-mt-5">Conquista</h3>
+              <h3 className="pw-font-semibold pw-mt-5">
+                {translate('auth>confirmationKycWithoutLayout>conquest')}
+              </h3>
               {firstLoading ? (
                 <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
               ) : (
                 <p className="pw-font-normal">{title()}</p>
               )}
-              <h3 className="pw-font-semibold pw-mt-5">Nome do professor</h3>
+              <h3 className="pw-font-semibold pw-mt-5">
+                {translate('auth>confirmationKycWithoutLayout>teacherName')}
+              </h3>
               {firstLoading ? (
                 <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
               ) : (
@@ -176,7 +184,9 @@ export const WjjcStart = () => {
                   }
                 </p>
               )}
-              <h3 className="pw-font-semibold pw-mt-5">Academia</h3>
+              <h3 className="pw-font-semibold pw-mt-5">
+                {translate('auth>confirmationKycWithoutLayout>academy')}
+              </h3>
               {firstLoading ? (
                 <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
               ) : (
@@ -187,7 +197,9 @@ export const WjjcStart = () => {
                   }
                 </p>
               )}
-              <h3 className="pw-font-semibold pw-mt-5">Data da cerimônia</h3>
+              <h3 className="pw-font-semibold pw-mt-5">
+                {translate('auth>confirmationKycWithoutLayout>cerimonyDate')}
+              </h3>
               {firstLoading ? (
                 <Shimmer className="pw-min-h-[22px] pw-min-w-[200px] pw-mt-3" />
               ) : (
@@ -199,11 +211,10 @@ export const WjjcStart = () => {
               className="pw-mt-5 pw-text-white"
               fullWidth={true}
             >
-              Continuar
+              {translate('components>advanceButton>continue')}
             </WeblockButton>
             <p className="pw-font-poppins pw-font-normal pw-text-black pw-text-xs pw-text-center pw-mt-2">
-              Caso alguma informação esteja incorreta, por favor entrar em
-              contato com o seu professor.
+              {translate('storefront>wjjcStart>caseIncorrectInfo')}
             </p>
           </div>
         </Box>

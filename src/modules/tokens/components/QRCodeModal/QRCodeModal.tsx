@@ -179,7 +179,7 @@ export const QRCodeModal = ({
 
       {editionId ? (
         <div className="pw-text-[#333333] pw-text-[13px] pw-leading-[15px] pw-text-center pw-flex pw-flex-col pw-mt-[16px] sm:pw-mt-[24px]">
-          <span className="pw-font-semibold">Identificador</span>
+          <span className="pw-font-semibold">{translate('tokens>qrCodeModal>identifier')}</span>
           <span className="pw-text-sm">{editionId}</span>
         </div>
       ) : null}

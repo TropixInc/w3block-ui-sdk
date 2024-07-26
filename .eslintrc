@@ -6,7 +6,8 @@
     "@typescript-eslint",
     "prettier",
     "eslint-plugin-import-helpers",
-    "import"
+    "import",
+    "i18next"
   ],
   "extends": [
     "eslint:recommended",
@@ -15,7 +16,9 @@
     // Uncomment the following lines to enable eslint-config-prettier
     // Is not enabled right now to avoid issues with the Next.js repo
     "plugin:prettier/recommended",
-    "prettier"
+    "prettier",
+    "plugin:i18next/recommended"
+    
   ],
   "env": {
     "es6": true,
@@ -29,6 +32,7 @@
     "react/jsx-uses-react": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/prop-types": "off",
+    "i18next/no-literal-string": 2,
     "prettier/prettier": [
       "error",
       {

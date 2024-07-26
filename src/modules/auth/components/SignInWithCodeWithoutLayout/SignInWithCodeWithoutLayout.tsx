@@ -111,10 +111,10 @@ export const SignInWithCodeWithoutLayout = () => {
   return (
     <div className="pw-flex pw-flex-col pw-items-center">
       <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-font-[700] pw-text-center">
-        Você já esteve por aqui
+        {translate('auth>signInWithCodeWithoutLayout>youBeenBefore')}
       </p>
       <p className="pw-text-[#353945] pw-mt-4 pw-mb-6 pw-text-center pw-text-[13px] pw-leading-[20px] pw-font-normal">
-        Enviamos um código para confirmar sua identidade
+        {translate('auth>signInWithCodeWithoutLayout>codeForConfirmIdentity')}
         <span className="pw-block">{formattedEmail}</span>
       </p>
       <div className="pw-flex pw-gap-x-2">

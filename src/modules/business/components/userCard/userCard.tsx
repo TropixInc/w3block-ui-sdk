@@ -7,6 +7,7 @@ import { lazy, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 
 import { Alert } from '../../../shared/components/Alert';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 const Shimmer = lazy(() =>
   import('../../../shared/components/Shimmer').then((mod) => ({
@@ -35,6 +36,7 @@ export const UserCard = ({
   setMaxValue,
 }: UserCardProps) => {
   const [error, setError] = useState(false);
+  const [translate] = useTranslation();
   return (
     <div className=" pw-w-full sm:pw-w-[300px] pw-p-5 pw-bg-white pw-rounded-2xl pw-shadow pw-border pw-border-zinc-100 pw-flex-col pw-justify-center pw-items-center pw-gap-3.5 pw-flex">
       {name && (
@@ -59,13 +61,15 @@ export const UserCard = ({
       <div className="pw-w-full pw-rounded-full pw-h-px pw-bg-zinc-200"></div>
       {balance && parseFloat(balance) == 0 ? (
         <p className="pw-text-center pw-text-red-600 pw-font-semibold pw-text-sm">
-          Usuário não possui saldo.
+          {translate('business>userCard>userNotBalance')}
         </p>
       ) : (
         <div>
           {balance ? (
             <p className="pw-text-center pw-text-zinc-700 pw-font-semibold pw-text-sm">
-              {currency} a ser utilizado
+              {translate('business>userCard>utilityBalance', {
+                currency: currency,
+              })}
             </p>
           ) : (
             <Shimmer className="pw-h-5 !pw-w-[150px] pw-rounded-full" />
@@ -94,7 +98,10 @@ export const UserCard = ({
           )}
           {balance && parseFloat(balance) != 0 ? (
             <div className="pw-flex pw-justify-between pw-text-slate-500 pw-text-sm pw-items-center pw-mt-3">
-              <p>Saldo: {parseFloat(balance).toFixed(2)}</p>
+              <p>
+                {translate('header>logged>pixwayBalance')}:{' '}
+                {parseFloat(balance).toFixed(2)}
+              </p>
               <button
                 onClick={() => {
                   setMaxValue();
@@ -102,13 +109,13 @@ export const UserCard = ({
                 }}
                 className="pw-p-[2px_10px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-zinc-600  pw-text-slate-800 pw-font-medium"
               >
-                Max
+                {translate('business>userCard>max')}
               </button>
             </div>
           ) : null}
           {error && (
             <Alert variant="atention" className="pw-mt-3">
-              Saldo Insuficiente
+              {translate('business>userCard>insufficientFunds')}
             </Alert>
           )}
         </div>

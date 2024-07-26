@@ -27,6 +27,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
@@ -34,6 +35,7 @@ import {
   createOrderResponse,
 } from '../../interface/interface';
 import { useMetamask } from '../../../core/metamask/hooks/useMetamask/useMetamask';
+
 const ErrorMessage = lazy(() =>
   import('../ErrorMessage/ErrorMessage').then((m) => ({
     default: m.ErrorMessage,
@@ -72,6 +74,7 @@ export const ConfirmCryptoBuy = ({
   const { sendSignedRequest, accounts, chainId } = useMetamask();
   const router = useRouterConnect();
   const { companyId, name } = useCompanyConfig();
+  const [translate] = useTranslation();
   const { createOrder } = useCheckout();
   const { data: profile } = useProfile();
   const productChainId = useMemo(() => {
@@ -243,7 +246,7 @@ export const ConfirmCryptoBuy = ({
             <div className="pw-px-3">
               <div className="pw-flex pw-gap-2 pw-w-ful pw-mt-1">
                 <p className="pw-text-black pw-font-semibold pw-text-sm ">
-                  Saldo:
+                  {translate('header>logged>pixwayBalance')}:
                 </p>
                 <CriptoValueComponent
                   fontClass="pw-text-sm"
@@ -284,7 +287,9 @@ export const ConfirmCryptoBuy = ({
 
               <>
                 <div className="pw-flex pw-justify-between">
-                  <p className="pw-text-black pw-text-sm ">Taxa de gás</p>
+                  <p className="pw-text-black pw-text-sm ">
+                    {translate('shared>components>gasPriceinfo')}
+                  </p>
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
@@ -294,7 +299,9 @@ export const ConfirmCryptoBuy = ({
                   />
                 </div>
                 <div className="pw-flex pw-justify-between pw-mt-1">
-                  <p className="pw-text-black pw-text-sm ">Taxa de serviço</p>
+                  <p className="pw-text-black pw-text-sm ">
+                    {translate('shared>components>servicePriceinfo')}
+                  </p>
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
@@ -304,7 +311,9 @@ export const ConfirmCryptoBuy = ({
                   />
                 </div>
                 <div className="pw-flex pw-justify-between pw-mt-1">
-                  <p className="pw-text-black pw-text-sm ">Valor total</p>
+                  <p className="pw-text-black pw-text-sm ">
+                    {translate('shared>components>price&gasInfo')}
+                  </p>
                   <CriptoValueComponent
                     fontClass="pw-text-sm"
                     size={13}
@@ -342,15 +351,14 @@ export const ConfirmCryptoBuy = ({
             tailwindBgColor="pw-bg-transparent"
             className="pw-w-full pw-mt-3 pw-text-slate-600 pw-bg-transparent pw-border !pw-border-slate-600 pw-shadow-none"
           >
-            Cancelar
+            {translate('components>cancelMessage>cancel')}
           </WeblockButton>
         </>
       ) : (
         <>
           <Spinner className="pw-h-[40px] pw-w-[40px] pw-mt-10" />
           <p className="pw-w-[250px] pw-text-center pw-text-xs pw-text-slate-500 pw-mt-4 pw-mb-4">
-            A transação pode demorar alguns segundos até ser completedada, por
-            favor espere.
+            {translate('checkout>corfirmCryptoBuy>pleaseWaitTransiction')}
           </p>
         </>
       )}

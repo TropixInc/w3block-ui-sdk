@@ -335,7 +335,7 @@ const NavigationMenu = ({
               onClick={() => setAuthenticatePaymentModal?.(true)}
               className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
             >
-              Pontuar
+              {translate('shared>navigationLoginLoggedButton>toScore')}
             </WeblockButton> : null}
 
         </div>

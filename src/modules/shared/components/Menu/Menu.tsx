@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable react/jsx-key */
 import { ReactNode, lazy, useEffect, useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';

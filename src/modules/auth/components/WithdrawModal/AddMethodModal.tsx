@@ -1,8 +1,10 @@
+/* eslint-disable i18next/no-literal-string */
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
 import { WithdrawAccountTypeEnum } from '@w3block/sdk-id';
 
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { getNumbersFromString } from '../../../tokens/utils/getNumbersFromString';
 import { useCreateWithdrawMethod } from '../../hooks/useCreateWithdrawMethod/useCreateWithdrawMethod';
@@ -53,6 +55,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
     accountInfo: {},
   });
   const [isValidPayload, setIsValidPayload] = useState(false);
+  const [translate] = useTranslation();
 
   useDebounce(
     () => {
@@ -96,7 +99,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
       return (
         <div>
           <div className="pw-mt-3">
-            <p>Nome</p>
+            <p>{translate('shared>myProfile>name')}</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
               type="text"
@@ -113,7 +116,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             />
           </div>
           <div className="pw-mt-3">
-            <p>CPF ou CNPJ</p>
+            <p>{translate('auth>addMethodModal>cpf')}</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
               type="text"
@@ -132,10 +135,9 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             />
           </div>
           <div className="pw-mt-3">
-            <p>Chave PIX</p>
+            <p>{translate('auth>addMethodModal>pixCode')}</p>
             <p className="pw-text-sm pw-text-slate-400">
-              Chaves CPF ou CNPJ devem conter apenas números, sem pontos ou
-              espaços
+              {translate('auth>addMethodModal>keyCPForCNPJ')}
             </p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
@@ -158,7 +160,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
       return (
         <div>
           <div className="pw-mt-3">
-            <p>Nome</p>
+            <p>{translate('shared>myProfile>name')}</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
               type="text"
@@ -175,7 +177,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             />
           </div>
           <div className="pw-mt-3">
-            <p>CPF ou CNPJ</p>
+            <p>{translate('auth>addMethodModal>cpf')}</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
               type="text"
@@ -194,7 +196,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             />
           </div>
           <div className="pw-mt-3">
-            <p>Tipo</p>
+            <p>{translate('auth>addMethodModal>type')}</p>
             <select
               name="accountType"
               onChange={(e) =>
@@ -209,14 +211,22 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
               }
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
             >
-              <option value="">Selecione...</option>
-              <option value="checking">Conta corrente</option>
-              <option value="saving">Conta poupança</option>
-              <option value="payment">Conta de pagamentos</option>
+              <option value="">
+                {translate('auth>addMethodModal>select')}...
+              </option>
+              <option value="checking">
+                {translate('auth>addMethodModal>checkingAccount')}
+              </option>
+              <option value="saving">
+                {translate('auth>addMethodModal>savingsAccount')}
+              </option>
+              <option value="payment">
+                {translate('auth>addMethodModal>paymentAccount')}
+              </option>
             </select>
           </div>
           <div className="pw-mt-3">
-            <p>Banco</p>
+            <p>{translate('auth>addMethodModal>bank')}</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
               type="text"
@@ -233,7 +243,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
             />
           </div>
           <div className="pw-mt-3">
-            <p>Agência</p>
+            <p>{translate('auth>addMethodModal>agency')}</p>
             <input
               className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
               placeholder="Digite apenas números"
@@ -252,7 +262,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
           </div>
           <div className="pw-flex pw-w-full pw-gap-x-3">
             <div className="pw-mt-3 pw-w-full">
-              <p>Número da conta</p>
+              <p>{translate('auth>addMethodModal>accountNumber')}</p>
               <input
                 className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
                 type="text"
@@ -275,7 +285,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
               />
             </div>
             <div className="pw-mt-3">
-              <p>Dígito</p>
+              <p>{translate('auth>addMethodModal>digit')}</p>
               <input
                 className="pw-w-[64px] pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
                 type="text"
@@ -307,10 +317,10 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
   return (
     <div className="pw-w-full pw-text-slate-900">
       <p className="pw-text-center pw-text-xl pw-font-medium">
-        Cadastrar método de recebimento
+        {translate('auth>addMethodModal>createPaymentMethod')}
       </p>
       <div className="pw-mt-5">
-        <p>Tipo</p>
+        <p>{translate('auth>addMethodModal>type')}</p>
         <select
           name="methodType"
           onChange={(e) =>
@@ -318,9 +328,11 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
           }
           className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
         >
-          <option value="">Selecione...</option>
+          <option value="">{translate('auth>addMethodModal>select')}...</option>
           <option value="pix">Pix</option>
-          <option value="bank">Conta bancária</option>
+          <option value="bank">
+            {translate('auth>addMethodModal>accountBank')}
+          </option>
         </select>
       </div>
 
@@ -345,7 +357,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
           variant="outlined"
           onClick={() => onChangeModalType('withdraw')}
         >
-          Cancelar
+          {translate('components>cancelMessage>cancel')}
         </OffpixButtonBase>
         <OffpixButtonBase
           className="pw-text-base pw-w-full pw-h-12 pw-flex pw-justify-center pw-items-center"
@@ -353,7 +365,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
           disabled={!isValidPayload}
           onClick={() => onCreateMethod()}
         >
-          Confirmar
+          {translate('shared>myProfile>confirm')}
         </OffpixButtonBase>
       </div>
     </div>

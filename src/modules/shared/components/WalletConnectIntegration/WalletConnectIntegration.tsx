@@ -190,7 +190,9 @@ const _WalletConnectIntegration = () => {
         {tenantsDataFiltered.length > 0 && (
           <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full">
             <p className="pw-text-base pw-font-poppins pw-font-medium">
-              Integrações disponíveis
+              {translate(
+                'shared>walletConnectIntegration>avaliableIntegration'
+              )}
             </p>
             <div className="pw-flex pw-gap-3">
               {tenantsDataFiltered.map(({ name, hosts, id }) => (
@@ -216,7 +218,7 @@ const _WalletConnectIntegration = () => {
         {integrationData.length > 0 && (
           <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full">
             <p className="pw-text-base pw-font-poppins pw-font-medium">
-              Integrações ativas
+              {translate('shared>walletConnectIntegration>activeIntegration')}
             </p>
             <div className="pw-flex pw-gap-3">
               {integrationData.map(({ name }) => (

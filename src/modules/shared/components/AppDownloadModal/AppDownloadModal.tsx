@@ -4,6 +4,7 @@ import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThem
 import downloadAndroid from '../../assets/images/downloadAndroid.png';
 import downloadApple from '../../assets/images/downloadApple.png';
 import { useGetUserByReferral } from '../../hooks/useGetUserByReferral/useGetUserByReferral';
+import useTranslation from '../../hooks/useTranslation';
 import { useUtms } from '../../hooks/useUtms/useUtms';
 import { getMobileOS } from '../../utils/getMobileOs';
 import { ModalBase } from '../ModalBase';
@@ -18,6 +19,7 @@ export const AppDownloadModal = ({
 }) => {
   const utm = useUtms();
   const theme = UseThemeConfig();
+  const [translate] = useTranslation();
   const os = getMobileOS();
   const [_, copy] = useCopyToClipboard();
   const { data: referralUser, isLoading } = useGetUserByReferral(
@@ -128,7 +130,7 @@ export const AppDownloadModal = ({
                         defaultChecked={true}
                         id="appCheckbox"
                       />
-                      Copiar link de indicação
+                      {translate('shared>appDownloadModal>copyIndicateLink')}
                     </div>
                   </>
                 ) : null}

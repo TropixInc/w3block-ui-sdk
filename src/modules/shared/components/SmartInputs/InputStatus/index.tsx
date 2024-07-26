@@ -19,7 +19,7 @@ const InputStatus = ({ invalid, errorMessage }: PropsInputStatus) => {
       return (
         <p className="pw-flex pw-items-center pw-gap-x-1">
           <CheckIcon className="pw-stroke-[#18ee4d] pw-w-3 pw-h-3" />
-          <span className="pw-text-xs pw-text-[#18ee4d]">Ok</span>
+          <span className="pw-text-xs pw-text-[#18ee4d]">{'Ok'}</span>
         </p>
       );
     }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import classNames from 'classnames';
 
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
+import useTranslation from '../../hooks/useTranslation';
 
 interface Props {
   label: string;
@@ -26,6 +27,7 @@ export const CheckboxAlt = ({
 }: Props) => {
   const [seeMore, setSeeMore] = useState(false);
   const isMobile = useIsMobile();
+  const [translate] = useTranslation();
   return (
     <div
       className={classNames(
@@ -61,7 +63,7 @@ export const CheckboxAlt = ({
                 className="pw-flex pw-justify-center pw-h-full pw-items-end pw-cursor-pointer pw-mt-2"
               >
                 <p className="pw-text-gray-500 pw-font-roboto pw-text-[13px] pw-underline">
-                  Veja menos
+                  {translate('shared>checkboxAlt>seeLess')}
                 </p>
               </div>
             </div>
@@ -81,7 +83,7 @@ export const CheckboxAlt = ({
               >
                 <div className="pw-flex pw-justify-center pw-h-full pw-items-end pw-cursor-pointer">
                   <p className="pw-text-gray-500 pw-font-roboto pw-text-[13px] pw-underline">
-                    Veja mais
+                    {translate('dashboard>EventCard>seeMore')}
                   </p>
                 </div>
               </div>

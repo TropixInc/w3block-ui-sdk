@@ -425,13 +425,16 @@ const _PassTemplate = ({
                   <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
                     {locale == 'en' ? (
                       <>
-                        Every {ordinal[locale][value.data.nthWeek]}{' '}
-                        {weekDay1[locale][value.data.weekday]} of the month
+                        {`Every ${ordinal[locale][value.data.nthWeek]} ${
+                          weekDay1[locale][value.data.weekday]
+                        } of the month`}
                       </>
                     ) : (
                       <>
-                        Toda {ordinal[locale][value.data.nthWeek]} semana do mês
-                        na {weekDay1[locale][value.data.weekday]}
+                        {`Toda ${
+                          ordinal[locale][value.data.nthWeek]
+                        } semana do mês
+                        na ${weekDay1[locale][value.data.weekday]}`}
                       </>
                     )}
                   </p>
@@ -741,7 +744,8 @@ const _PassTemplate = ({
                         {address?.state}
                       </div>
                       <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                        CEP: {address?.postalCode}
+                        {translate('tokens>passTemplate>postalCode')}:{' '}
+                        {address?.postalCode}
                       </div>
                     </div>
                     <div className="pw-flex pw-flex-col pw-gap-1">
@@ -837,13 +841,14 @@ const _PassTemplate = ({
                   <div className="pw-p-4">
                     {collectionData?.items.length === 0 ? (
                       <p className="pw-text-black pw-text-base pw-font-semibold">
-                        Você não possui nenhum token com este benefício.
+                        {translate('tokens>passTemplate>notTokenBenefit')}
                       </p>
                     ) : (
                       <>
                         <p className="pw-text-black pw-text-base pw-font-medium">
-                          Você possui mais de um token com{' '}
-                          <b>{benefit?.data.name}</b> disponível:{' '}
+                          {translate('tokens>passTemplate>moreTokensBenefit1')}{' '}
+                          <b>{benefit?.data.name}</b>{' '}
+                          {translate('tokens>passTemplate>moreTokensBenefit2')}:{' '}
                         </p>
                         {collectionData?.items.map((val) => {
                           return (
@@ -857,7 +862,11 @@ const _PassTemplate = ({
                               />
                               <div className="pw-flex pw-flex-col">
                                 <p className="pw-text-black pw-text-base pw-mb-2">
-                                  Edição: #{val.editionNumber}
+                                  {translate(
+                                    'tokens>tokenTransferController>edition'
+                                  )}
+                                  : {'#'}
+                                  {val.editionNumber}
                                 </p>
                                 <Button
                                   className="pw-w-full"

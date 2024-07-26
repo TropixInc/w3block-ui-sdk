@@ -5,6 +5,7 @@ const CriptoValueComponent = lazy(() =>
 );
 
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 
@@ -26,12 +27,13 @@ export const BuySummarySDK = ({
   currencyToPay,
   className = '',
 }: BuySummarySDKProps) => {
+  const [translate] = useTranslation();
   return (
     <div
       className={`pw-p-5 pw-rounded-2xl pw-shadow pw-border pw-border-zinc-100 ${className}`}
     >
       <p className="pw-text-lg pw-text-zinc-700 pw-font-medium pw-leading-6">
-        Resumo da compra
+        {translate('business>buySumarySDK>purchaseResume')}
       </p>
       <BuySumarryEntries
         className="pw-mt-[24px]"

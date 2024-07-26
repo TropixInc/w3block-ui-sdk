@@ -245,7 +245,7 @@ export const TokenDetailsCard = ({
             {passData?.data.rules && (
               <>
                 <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
-                  Regras de uso:
+                  {translate('tokens>tokenDetailsCard>usageRules')}:
                 </p>
                 <div
                   className="pw-text-black pw-font-normal pw-text-[14px] pw-leading-[21px]"

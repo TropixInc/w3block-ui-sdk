@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import { lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -250,7 +251,7 @@ const _PriceAndGasInfo = ({
         {convertedPrice ? (
           <div className="pw-flex pw-justify-between pw-mt-[6px]">
             <p className="pw-font-[500] pw-text-xs pw-text-[#35394C]">
-              Valor para pagamento em real + taxas
+              {translate('shared>priceAndGasInfo>valueInBLR')}
             </p>
             {loading || loadingPreview ? (
               <Shimmer className="pw-h-6 pw-w-17" />
@@ -384,7 +385,7 @@ const _PriceAndGasInfo = ({
         {convertedPrice ? (
           <div className="pw-flex pw-justify-between pw-mt-[6px]">
             <p className="pw-font-[500] pw-text-xs pw-text-[#35394C]">
-              Valor para pagamento em real + taxas
+              {translate('shared>priceAndGasInfo>valueInBLR')}
             </p>
             {loading || loadingPreview ? (
               <Shimmer className="pw-h-6 pw-w-17" />

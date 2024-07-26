@@ -181,7 +181,9 @@ const _W3blockFooter = ({
 
       {styleData?.w3blockSignature && (
         <div className="pw-w-full pw-py-[14px] pw-flex pw-justify-center pw-itens-center pw-place-items-center pw-h-[14px] pw-bg-white pw-font-medium pw-text-xs">
-          <p>Copyright {new Date().getFullYear()} -</p>
+          <p>
+            {'Copyright'} {new Date().getFullYear()} -
+          </p>
           <W3blockLogo className="pw-h-20px" />
         </div>
       )}

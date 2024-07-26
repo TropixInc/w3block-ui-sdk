@@ -13,6 +13,7 @@ const DataGridPagination = lazy(() =>
   }))
 );
 
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { ColumnType } from '../../../tokens/components/GenericTable';
 import TableHeader from '../../../tokens/components/TableHeader/TableHeader';
 import TableRows from '../../../tokens/components/TableRow/TableRow';
@@ -34,6 +35,7 @@ const BenefitUsesList = ({ benefitId }: Props) => {
   const { data: benefitUses, isLoading } = useGetBenefitUses({
     query: { benefitId, page },
   });
+  const [translate] = useTranslation();
 
   const columns: ColumnType<DataTable, keyof DataTable>[] = [
     { key: 'name', header: 'Nome' },
@@ -59,7 +61,7 @@ const BenefitUsesList = ({ benefitId }: Props) => {
   if (benefitUses?.items && benefitUses?.items?.length < 1)
     return (
       <div className="pw-w-full pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-text-left ">
-        Nenhum uso
+        {translate('pass>benefitUsesList>noUse')}
       </div>
     );
   else

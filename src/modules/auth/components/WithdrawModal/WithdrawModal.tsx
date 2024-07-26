@@ -6,6 +6,7 @@ import { useProfile } from '../../../shared';
 import Trash from '../../../shared/assets/icons/trash.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { Spinner } from '../../../shared/components/Spinner';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import useGetWithdrawsMethods from '../../hooks/useGetWithdrawsMethods/useGetWithdrawsMethods';
 import { useRequestWithdraw } from '../../hooks/useRequestWithdraw';
@@ -42,6 +43,7 @@ const WithdrawModal = ({
   const [deleteItem, setDeleteItem] = useState<any | undefined>();
   const [accountValue, setAccountValue] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [translate] = useTranslation();
 
   const [{ data: withdrawsMethods, isLoading }] = useGetWithdrawsMethods(
     data?.data?.id ?? '',
@@ -78,7 +80,7 @@ const WithdrawModal = ({
       <div className="pw-w-full pw-text-slate-900 pw-px-4">
         <div className="pw-w-full">
           <p className="pw-text-center pw-text-xl pw-font-medium">
-            Realizar saque
+            {translate('auth>withdrawModal>makeWithdraw')}
           </p>
           <div className="pw-mt-5 pw-flex pw-gap-3 pw-w-full">
             <div className="pw-w-full">
@@ -100,25 +102,26 @@ const WithdrawModal = ({
               />
 
               <p className="mt-1 pw-text-xs">
-                Saldo: {`${balance} ${currency}`}
+                {translate('header>logged>pixwayBalance')}:{' '}
+                {`${balance} ${currency}`}
               </p>
             </div>
             <OffpixButtonBase
               onClick={() => setWithdrawAmount(balance)}
               className="sm:pw-px-3 pw-px-0 pw-w-[150px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-base"
             >
-              Sacar tudo
+              {translate('auth>withdrawModal>withdrawAll')}
             </OffpixButtonBase>
           </div>
         </div>
         <div className="pw-mt-5 ">
           <div className="pw-flex pw-justify-between pw-items-center">
-            <p>Métodos de recebimento</p>
+            <p>{translate('auth>withdrawModal>receivingMethods')}</p>
             <OffpixButtonBase
               onClick={() => setModalType('add')}
               className="sm:pw-px-3 pw-px-0 pw-w-[150px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-base"
             >
-              Novo método
+              {translate('auth>withdrawModal>newMethod')}
             </OffpixButtonBase>
           </div>
           {isLoading ? (
@@ -133,13 +136,13 @@ const WithdrawModal = ({
                     {''}
                   </th>
                   <th scope="col" className="pw-text-left">
-                    Tipo
+                    {translate('auth>addMethodModal>type')}
                   </th>
                   <th scope="col" className="pw-text-left">
-                    Titular
+                    {translate('auth>deleteMethodModal>holder')}
                   </th>
                   <th scope="col" className="pw-text-left">
-                    Conta
+                    {translate('auth>withdrawModal>account')}
                   </th>
                   <th scope="col" className="pw-text-left">
                     {''}
@@ -163,7 +166,7 @@ const WithdrawModal = ({
                       <label htmlFor={(item as WithdrawMethodDTO)?.id}>
                         {(item as WithdrawMethodDTO)?.type === 'pix'
                           ? 'Pix'
-                          : 'Conta bancária'}
+                          : translate('auth>addMethodModal>accountBank')}
                       </label>
                     </td>
                     <td>
@@ -195,7 +198,7 @@ const WithdrawModal = ({
           ) : (
             <div className="pw-mt-6 pw-w-full pw-px-3 pw-py-2 pw-font-medium pw-rounded-md pw-text-black">
               <p className="pw-text-center">
-                Não há métodos de recebimento cadastrados
+                {translate('auth>withdrawModal>methodsNotFound')}
               </p>
             </div>
           )}
@@ -206,7 +209,7 @@ const WithdrawModal = ({
             variant="outlined"
             onClick={onClose}
           >
-            Cancelar
+            {translate('components>cancelMessage>cancel')}
           </OffpixButtonBase>
           <OffpixButtonBase
             className="pw-text-base pw-w-full pw-h-12 pw-flex pw-justify-center pw-items-center"
@@ -218,14 +221,13 @@ const WithdrawModal = ({
             }
             onClick={handleWithdraw}
           >
-            Confirmar
+            {translate('shared>myProfile>confirm')}
           </OffpixButtonBase>
         </div>
         {!withdrawsMethods?.data?.items.length ? (
           <div className="pw-mt-3">
             <Alert variant="warning" className="pw-text-xs">
-              Você precisa ter pelo menos um método de recebimento registrado
-              para realizar o saque.
+              {translate('auth>withdrawModal>methodsNotFoundInfo')}
             </Alert>
           </div>
         ) : null}
@@ -250,7 +252,7 @@ const WithdrawModal = ({
       return (
         <div className="pw-mt-3">
           <Alert variant="error" className="pw-text-base">
-            Erro ao realizar o pedido de saque, por favor tente novamente.
+            {translate('auth>withdrawModal>withdrawError')}
           </Alert>
         </div>
       );
@@ -258,7 +260,7 @@ const WithdrawModal = ({
       return (
         <div className="pw-mt-3">
           <Alert variant="success" className="pw-text-base">
-            Pedido de saque realizado com sucesso!
+            {translate('auth>withdrawModal>withdrawSucess')}
           </Alert>
         </div>
       );
@@ -280,7 +282,7 @@ const WithdrawModal = ({
         className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black"
         onClick={onClose}
       >
-        {`<`} Voltar
+        {`<`} {translate('shared>back')}
       </button>
       {onRenderModalType()}
     </div>

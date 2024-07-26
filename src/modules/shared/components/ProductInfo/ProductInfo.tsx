@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { lazy, useState } from 'react';
@@ -218,7 +219,7 @@ export const ProductInfo = ({
           </div>
         )}
         <p className="pw-text-[13px] pw-font-[400] pw-text-[#35394C]">
-          Quantidade: {quantity}
+          {translate('shared>productInfo>quantity', { quantity: quantity })}
         </p>
       </div>
       <div>

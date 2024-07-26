@@ -9,6 +9,7 @@ import {
 import classNames from 'classnames';
 
 import { AuthButton } from '../../../auth/components/AuthButton';
+import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import SmartInputsController from '../SmartInputsController';
 import { Spinner } from '../Spinner';
@@ -47,7 +48,7 @@ export const FormTemplate = ({
   statusContext,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
-
+  const [translate] = useTranslation();
   return (
     <form onSubmit={onSubmit}>
       <div
@@ -101,10 +102,7 @@ export const FormTemplate = ({
       {statusContext === UserContextStatus.Approved ||
       statusContext === UserContextStatus.Denied ? (
         <div>
-          <Alert>
-            Formulários aprovados ou reprovados não podem ser editados. Por
-            favor, clique em solicitar revisão para realizar uma nova edição
-          </Alert>
+          <Alert>{translate('shared>formTemplate>formApprovedNotEdit')}</Alert>
         </div>
       ) : null}
 

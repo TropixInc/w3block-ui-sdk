@@ -6,6 +6,7 @@ import * as openpgp from 'openpgp';
 
 import { Alert } from '../../../shared/components/Alert';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { DecryptModal } from '../DecryptModal/DecryptModal';
 
 export interface TextFieldDisplayClasses {
@@ -32,6 +33,7 @@ export const TextFieldEncrypted = ({
   const [isOpen, setIsOpen] = useState(false);
   const [decryptedText, setDecryptedText] = useState(value);
   const [decrypted, setIsDecrypted] = useState(false);
+  const [translate] = useTranslation();
   const [error, setError] = useState('');
   const decryptText = async (e: any) => {
     e.preventDefault();
@@ -98,7 +100,7 @@ export const TextFieldEncrypted = ({
               setIsDecrypted(false);
             }}
           >
-            Criptografar
+            {translate('tokens>textFieldEncrypted>encrypt')}
           </WeblockButton>
         ) : (
           <WeblockButton
@@ -108,13 +110,13 @@ export const TextFieldEncrypted = ({
               setError('');
             }}
           >
-            Descriptografar
+            {translate('tokens>decryptModal>decrypt')}
           </WeblockButton>
         )}
         {error !== '' && (
           <Alert variant="error">
             <Alert.Icon></Alert.Icon>
-            <p>Chave incorreta</p>
+            <p>{translate('tokens>textFieldEncrypted>incorrectKey')}</p>
           </Alert>
         )}
       </div>

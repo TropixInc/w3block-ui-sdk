@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import { lazy, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 

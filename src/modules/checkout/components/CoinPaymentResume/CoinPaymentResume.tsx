@@ -1,6 +1,8 @@
+/* eslint-disable i18next/no-literal-string */
 import { PaymentsResponse } from '../../../checkout/interface/interface';
 import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { Shimmer } from '../../../shared/components/Shimmer';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface CoinPaymentResume {
@@ -10,6 +12,7 @@ interface CoinPaymentResume {
 
 export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
   const { defaultTheme } = UseThemeConfig();
+  const [translate] = useTranslation();
   const coinPaymentCurrencyId =
     defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
     '9e5c87cb-22ca-4550-8f09-f2272203410b';
@@ -24,7 +27,7 @@ export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
   return (
     <div className="pw-mb-8 !pw-font-poppins">
       <h1 className="pw-font-normal pw-text-base pw-mb-4">
-        Forma de pagamento
+        {translate('checkout>coinPaymentResume>paymentForm')}
       </h1>
       <div className="pw-flex pw-justify-between pw-px-5">
         <p className="pw-text-base pw-text-[#35394C] pw-font-[400]">Zucas:</p>
@@ -44,7 +47,9 @@ export const CoinPaymentResume = ({ payments, loading }: CoinPaymentResume) => {
         )}
       </div>
       <div className="pw-flex pw-justify-between pw-px-5 pw-font-semibold">
-        <p className="pw-text-base pw-text-[#35394C">Complemento:</p>
+        <p className="pw-text-base pw-text-[#35394C">
+          {translate('checkout>coinPaymentResume>complement')}:
+        </p>
         {loading ? (
           <Shimmer />
         ) : (
