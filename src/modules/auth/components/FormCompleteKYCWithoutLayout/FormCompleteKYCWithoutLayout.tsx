@@ -135,7 +135,6 @@ const _FormCompleteKYCWithoutLayout = ({
   });
 
   const contextOnboard = useContext(OnboardContext);
-
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
@@ -179,7 +178,9 @@ const _FormCompleteKYCWithoutLayout = ({
             } else if (!profilePage) {
               refetch();
               context.refetchDocs();
-              if (screenConfig?.skipConfirmation) {
+              if (keyPage) {
+                null;
+              } else if (screenConfig?.skipConfirmation) {
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);
                 } else if (skipWallet) {
@@ -196,8 +197,6 @@ const _FormCompleteKYCWithoutLayout = ({
                     router.query
                   );
                 }
-              } else if (keyPage) {
-                null;
               } else {
                 router.pushConnect(
                   PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
