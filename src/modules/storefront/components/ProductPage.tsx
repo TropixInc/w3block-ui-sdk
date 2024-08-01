@@ -174,6 +174,9 @@ export const ProductPage = ({
   const [isSendGift, setIsSendGift] = useState(true);
   const [giftData, setGiftData, deleteGiftKey] =
     useLocalStorage<any>(GIFT_DATA_INFO_KEY);
+  const productKycRequirement = useMemo(() => {
+    return product?.requirements?.requireKycContext?.slug;
+  }, [product?.requirements?.requireKycContext?.slug]);
   const openModal =
     router.query.openModal?.includes('true') && !product?.canPurchase
       ? true
@@ -531,6 +534,41 @@ export const ProductPage = ({
   const providerWithInstallments = orderPreview?.providersForSelection?.find(
     (res) => !!res.availableInstallments
   );
+
+  const handleButtonText = () => {
+    if (
+      parseFloat(
+        product?.prices.find((price: any) => price.currencyId == currencyId?.id)
+          ?.amount ?? '0'
+      ) === 0
+    )
+      return 'Quero';
+    else if (productKycRequirement) return 'Tenho interesse!';
+    else if (buttonText) return buttonText;
+    else return 'Comprar agora';
+  };
+
+  const handleBuyClick = () => {
+    if (product?.id && product.prices) {
+      setProductVariants({ ...variants });
+      if (productKycRequirement)
+        pushConnect(
+          PixwayAppRoutes.CHECKOUT_FORM +
+            `?productIds=${Array(quantity)
+              .fill(product.id)
+              .join(',')}&currencyId=${
+              currencyId?.id
+            }&contextSlug=${productKycRequirement}`
+        );
+      else
+        pushConnect(
+          PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+            `?productIds=${Array(quantity)
+              .fill(product.id)
+              .join(',')}&currencyId=${currencyId?.id}`
+        );
+    }
+  };
 
   return (
     <div
@@ -1122,7 +1160,9 @@ export const ProductPage = ({
                 ) : (
                   actionButton && (
                     <div className="pw-flex pw-flex-col">
-                      {!currencyId?.crypto && hasCart ? (
+                      {!currencyId?.crypto &&
+                      hasCart &&
+                      !productKycRequirement ? (
                         <button
                           disabled={
                             product?.stockAmount == 0 ||
@@ -1165,17 +1205,7 @@ export const ProductPage = ({
                           !termsChecked ||
                           (isSendGift && !giftData && isPossibleSend)
                         }
-                        onClick={() => {
-                          if (product?.id && product.prices) {
-                            setProductVariants({ ...variants });
-                            pushConnect(
-                              PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-                                `?productIds=${Array(quantity)
-                                  .fill(product.id)
-                                  .join(',')}&currencyId=${currencyId?.id}`
-                            );
-                          }
-                        }}
+                        onClick={handleBuyClick}
                         style={{
                           backgroundColor:
                             product &&
@@ -1196,15 +1226,7 @@ export const ProductPage = ({
                         }}
                         className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
-                        {parseFloat(
-                          product?.prices.find(
-                            (price: any) => price.currencyId == currencyId?.id
-                          )?.amount ?? '0'
-                        ) === 0
-                          ? 'Quero!'
-                          : buttonText
-                          ? buttonText
-                          : 'Comprar agora'}
+                        {handleButtonText()}
                       </button>
                       {product?.canPurchaseAmount === 0 &&
                         !product?.hasWhitelistBlocker && (

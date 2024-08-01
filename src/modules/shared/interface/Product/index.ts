@@ -47,6 +47,9 @@ export interface Product {
       dataFields?: DataFields[];
     };
   };
+  productToken: {
+    product: Product;
+  };
 }
 
 export interface Images {
