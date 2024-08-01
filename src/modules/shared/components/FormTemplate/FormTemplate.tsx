@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
-import { DocumentEntityDto, TenantInputEntityDto } from '@w3block/sdk-id';
+import {
+  DocumentEntityDto,
+  TenantInputEntityDto,
+  UserContextStatus,
+} from '@w3block/sdk-id';
 import classNames from 'classnames';
 
 import { AuthButton } from '../../../auth/components/AuthButton';
+import { Alert } from '../Alert';
 import SmartInputsController from '../SmartInputsController';
 import { Spinner } from '../Spinner';
 
@@ -22,6 +27,7 @@ interface Props {
   onChangeInputsIdRequestReview?: (value: Array<string>) => void;
   keyPage?: boolean;
   profilePage?: boolean;
+  statusContext?: UserContextStatus;
 }
 
 export const FormTemplate = ({
@@ -38,6 +44,7 @@ export const FormTemplate = ({
   onChangeInputsIdRequestReview,
   keyPage,
   profilePage,
+  statusContext,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
 
@@ -83,6 +90,7 @@ export const FormTemplate = ({
                   profilePage={profilePage}
                   isKeyPage={keyPage}
                   required={item.mandatory}
+                  statusContext={statusContext}
                 />
               </div>
             );
@@ -90,10 +98,24 @@ export const FormTemplate = ({
       </div>
 
       {children}
+      {statusContext === UserContextStatus.Approved ||
+      statusContext === UserContextStatus.Denied ? (
+        <div>
+          <Alert>
+            Formulários aprovados ou reprovados não podem ser editados. Por
+            favor, clique em solicitar revisão para realizar uma nova edição
+          </Alert>
+        </div>
+      ) : null}
+
       <AuthButton
         type="submit"
         className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-        disabled={buttonDisabled}
+        disabled={
+          buttonDisabled ||
+          statusContext === UserContextStatus.Approved ||
+          statusContext === UserContextStatus.Denied
+        }
       >
         {isLoading ? (
           <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />

@@ -72,7 +72,7 @@ const InputLocale = ({ name, label, docValue, required }: LocaleProps) => {
               <option value={''}>
                 {translate('shared>unputLocale>selectContry')}
               </option>
-              {optionsLocale.map((val) => (
+              {optionsLocale?.map((val) => (
                 <option
                   selected={docValue ? docValue.country === val.value : false}
                   key={val.value}

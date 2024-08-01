@@ -124,6 +124,12 @@ const _FormCompleteKYCWithoutLayout = ({
     tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : ''
   );
 
+  const statusContext = useMemo(() => {
+    if (reasons && reasons?.data?.items) {
+      return reasons?.data?.items[0]?.status;
+    }
+  }, [reasons]);
+
   const validations = useGetValidationsTypesForSignup(
     tenantInputs?.data ?? [],
     tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : '',
@@ -140,7 +146,6 @@ const _FormCompleteKYCWithoutLayout = ({
   });
 
   const contextOnboard = useContext(OnboardContext);
-
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
@@ -194,7 +199,9 @@ const _FormCompleteKYCWithoutLayout = ({
             } else if (!profilePage) {
               refetch();
               context.refetchDocs();
-              if (screenConfig?.skipConfirmation) {
+              if (keyPage) {
+                null;
+              } else if (screenConfig?.skipConfirmation) {
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);
                 } else if (skipWallet) {
@@ -211,8 +218,6 @@ const _FormCompleteKYCWithoutLayout = ({
                     router.query
                   );
                 }
-              } else if (keyPage) {
-                null;
               } else {
                 router.pushConnect(
                   PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
@@ -298,6 +303,7 @@ const _FormCompleteKYCWithoutLayout = ({
           onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
           keyPage={keyPage}
           profilePage={profilePage}
+          statusContext={statusContext}
         ></FormTemplate>
 
         {isSuccess && (
@@ -392,6 +398,7 @@ const _FormCompleteKYCWithoutLayout = ({
             getDocumentByInputId={getDocumentByInputId}
             formState={formState}
             profilePage={profilePage}
+            statusContext={statusContext}
           ></FormTemplate>
 
           {isSuccess && (

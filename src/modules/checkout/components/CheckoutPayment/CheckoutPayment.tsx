@@ -39,6 +39,7 @@ import {
   GIFT_DATA_INFO_KEY,
   ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
+  STRIPE_ORDER_CACHE,
 } from '../../config/keys/localStorageKey';
 import { PaymentMethod } from '../../enum';
 import { useCart } from '../../hooks/useCart';
@@ -48,6 +49,7 @@ import {
   CreateOrderResponse,
   OrderPreviewCache,
   OrderPreviewResponse,
+  StripeCache,
 } from '../../interface/interface';
 import {
   CheckoutPaymentComponent,
@@ -84,7 +86,6 @@ const ErrorMessage = lazy(() =>
 export const CheckoutPayment = () => {
   const {
     createOrder: createOrderHook,
-    completeOrderPayment,
     getOrderPreview,
     getStatus,
   } = useCheckout();
@@ -123,6 +124,8 @@ export const CheckoutPayment = () => {
   const [productCache, setProductCache] = useLocalStorage<OrderPreviewCache>(
     PRODUCT_CART_INFO_KEY
   );
+  const [stripeOrderCache, setStripeOrderCache, deleteStripeCache] =
+    useLocalStorage<StripeCache>(STRIPE_ORDER_CACHE);
   const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
   const track = useTrack();
   const { setCart } = useCart();
@@ -131,6 +134,17 @@ export const CheckoutPayment = () => {
   const [installment, setInstallment] = useState<AvailableInstallmentInfo>();
   const [orderResponse, setOrderResponse] =
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
+
+  const compareDates = (date: Date) => {
+    const currentDate = new Date();
+    const timeDifference = Math.abs(
+      Date.parse(currentDate.toString()) - Date.parse(date.toString())
+    );
+    const minutesDifference = timeDifference / (1000 * 60);
+
+    return minutesDifference < 5;
+  };
+
   useEffect(() => {
     if (myOrderPreview) {
       if (
@@ -149,7 +163,26 @@ export const CheckoutPayment = () => {
         setLoading(false);
       } else {
         setStayPooling(false);
-        createOrder({});
+        if (
+          productCache?.choosedPayment?.paymentProvider === PaymentMethod.STRIPE
+        ) {
+          if (
+            stripeOrderCache &&
+            compareDates(stripeOrderCache?.timestamp) &&
+            productCache?.products?.map((val) => val?.id).toString() ===
+              stripeOrderCache?.productData
+                ?.map((val: { id: string }) => val?.id)
+                .toString() &&
+            productCache.cartPrice === stripeOrderCache.amount
+          ) {
+            setLoading(false);
+            setIsStripe(stripeOrderCache?.stripe?.clientSecret);
+            setStripeKey(stripeOrderCache?.stripe?.publicKey);
+          } else {
+            deleteStripeCache();
+            createOrder({});
+          }
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -344,10 +377,6 @@ export const CheckoutPayment = () => {
     setLoading(true);
     setStayPooling(false);
     const orderInfo = productCache;
-    const orderId = router?.query?.orderId as string;
-    const completePayment = router?.query?.completePayment?.includes('true')
-      ? true
-      : false;
     if (orderInfo && !iframeLink && !sending && session && profile) {
       setSending(true);
       const inputs = { ...val };
@@ -374,226 +403,52 @@ export const CheckoutPayment = () => {
           return orderInfo?.destinationUser?.walletAddress;
         else return profile.data?.data.mainWallet?.address ?? '';
       };
-      if (orderId && completePayment) {
-        completeOrderPayment.mutate(
-          {
-            companyId,
-            completeOrder: {
-              successUrl:
-                appBaseUrl +
-                PixwayAppRoutes.MY_TOKENS +
-                '?' +
-                query.split('?')[0],
-              payments: [
-                {
-                  currencyId: orderInfo.currencyId,
-                  paymentMethod: orderInfo.choosedPayment?.paymentMethod,
-                  paymentProvider: orderInfo.choosedPayment?.paymentProvider,
-                  providerInputs: orderInfo.choosedPayment?.inputs
-                    ? {
-                        ...inputs,
-                        transparent_checkout:
-                          orderInfo.choosedPayment?.inputs?.includes(
-                            'transparent_checkout'
-                          ),
-                      }
-                    : undefined,
-                  amountType: 'percentage',
-                  amount: '100',
-                },
-              ],
-            },
-            orderId,
-          },
-          {
-            onSuccess: (data: CreateOrderResponse) => {
-              setLoading(true);
-              setOrderResponse(data);
-              setStayPooling(false);
-              if (data.paymentProvider == PaymentMethod.STRIPE) {
-                setIsStripe(data.paymentInfo.clientSecret ?? '');
-                setStripeKey(data.paymentInfo.publicKey ?? '');
-              } else {
-                if (
-                  productCache.choosedPayment?.paymentMethod == 'credit_card' ||
-                  isFree
-                ) {
-                  try {
-                    if (
-                      productCache?.products[0].type === 'erc20' &&
-                      Boolean(
-                        _.get(
-                          productCache,
-                          'products[0].draftData.keyErc20LoyaltyId'
-                        )
-                      )
-                    ) {
-                      track('purchase', {
-                        currency:
-                          productCache?.choosedPayment?.currency?.code ?? '',
-                        value: data?.totalAmount,
-                        items: productCache?.products.map((res) => {
-                          return {
-                            item_id: res.id,
-                            item_variant: productCache?.destinationUser?.name,
-                            item_name: 'Zuca',
-                            quantity: 1,
-                            prices: data?.totalAmount,
-                            value: data?.totalAmount,
-                            destination: productCache?.destinationUser?.name,
-                            payment_info: 'Cartão de credito',
-                          };
-                        }),
-                      });
-                    } else {
-                      track('purchase', {
-                        value: data?.totalAmount,
-                        currency: data?.currency?.code,
-                        items: productCache?.products.map((res) => {
-                          return { item_id: res.id, item_name: res.name };
-                        }),
-                      });
-                    }
-                  } catch (err) {
-                    console.log('erro ao salvar o track', err);
-                  }
-
-                  router.pushConnect(
-                    PixwayAppRoutes.CHECKOUT_COMPLETED,
-                    router.query
-                  );
-                } else {
-                  const payment = data?.payments?.find(
-                    (res) =>
-                      res?.currency?.id ===
-                        '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ||
-                      res?.currency?.id ===
-                        '8c43ece8-99b0-4877-aed3-2170d2deb4bf'
-                  );
-                  if (payment?.paymentMethod === 'pix') {
-                    setPixImage(payment?.publicData?.pix?.encodedImage ?? '');
-                    setPixPayload(payment?.publicData?.pix?.payload ?? '');
-                    setPoolStatus(true);
-                    setOrderId(data.id);
-                  }
-
-                  setLoading(false);
-                  setIframeLink(
-                    payment?.publicData?.paymentUrl ??
-                      payment?.publicData?.pix?.payload ??
-                      ''
-                  );
+      createOrderHook.mutate(
+        {
+          companyId,
+          createOrder: {
+            acceptSimilarOrderInShortPeriod: allowSimilarPayment,
+            orderProducts: orderInfo.orderProducts,
+            signedGasFee: orderInfo.signedGasFee,
+            currencyId: orderInfo.currencyId,
+            paymentMethod: orderInfo.choosedPayment?.paymentMethod,
+            providerInputs: orderInfo.choosedPayment?.inputs
+              ? {
+                  ...inputs,
+                  transparent_checkout:
+                    orderInfo.choosedPayment?.inputs?.includes(
+                      'transparent_checkout'
+                    ),
                 }
-              }
-              setSending(false);
-              if (router.query.cart && router.query.cart == 'true') {
-                setCart([]);
-              }
-            },
-            onError: (err: any) => {
-              if (err.errorCode === 'similar-order-not-accepted') {
-                setErrorCode(err.errorCode);
-              } else if (
-                err.errorCode ===
-                'braza-email-already-attached-to-other-cpf-error'
-              ) {
-                setRequestError(
-                  'Este e-mail já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
-                );
-              } else if (
-                err.errorCode ===
-                'braza-phone-already-attached-to-other-cpf-error'
-              ) {
-                setRequestError(
-                  'Este telefone já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
-                );
-              } else {
-                setRequestError(
-                  err.message
-                    .toString()
-                    .includes('Informe o endereço do titular do cartão.')
-                    ? 'Por favor, insira um CEP válido.'
-                    : err.message.toString()
-                );
-              }
-              logError && logError(err);
-              setSending(false);
-              setLoading(false);
-            },
-          }
-        );
-      } else {
-        createOrderHook.mutate(
-          {
-            companyId,
-            createOrder: {
-              acceptSimilarOrderInShortPeriod: allowSimilarPayment,
-              orderProducts: orderInfo.orderProducts,
-              signedGasFee: orderInfo.signedGasFee,
-              currencyId: orderInfo.currencyId,
-              paymentMethod: orderInfo.choosedPayment?.paymentMethod,
-              providerInputs: orderInfo.choosedPayment?.inputs
-                ? {
-                    ...inputs,
-                    transparent_checkout:
-                      orderInfo.choosedPayment?.inputs?.includes(
-                        'transparent_checkout'
-                      ),
-                  }
-                : undefined,
-              destinationWalletAddress: destinationWalletAddress(),
-              successUrl:
-                appBaseUrl +
-                PixwayAppRoutes.MY_TOKENS +
-                '?' +
-                query.split('?')[0],
-              couponCode: orderInfo.couponCode,
-              passShareCodeData:
-                orderInfo?.products?.[0]?.settings?.passShareCodeConfig
-                  ?.enabled && giftData
-                  ? giftData === 'selfBuy'
-                    ? {
-                        destinationUserName: profile?.data?.data?.name ?? '',
-                        destinationUserEmail: profile?.data?.data?.email ?? '',
-                      }
-                    : giftData
-                  : {},
-              payments: orderInfo.isCoinPayment
-                ? coinPayment?.length && coinPayment?.length > 0
-                  ? isFree
-                    ? [
-                        {
-                          currencyId: coinPaymentCurrencyId,
-                          paymentMethod: 'crypto',
-                          amountType: 'percentage',
-                          amount: '100',
-                        },
-                      ]
-                    : [
-                        {
-                          currencyId: orderInfo.currencyId,
-                          paymentMethod:
-                            orderInfo.choosedPayment?.paymentMethod,
-                          paymentProvider:
-                            orderInfo.choosedPayment?.paymentProvider,
-                          providerInputs: orderInfo.choosedPayment?.inputs
-                            ? {
-                                ...inputs,
-                                transparent_checkout:
-                                  orderInfo.choosedPayment?.inputs?.includes(
-                                    'transparent_checkout'
-                                  ),
-                              }
-                            : undefined,
-                          amountType: 'all_remaining',
-                        },
-                        {
-                          currencyId: coinPaymentCurrencyId,
-                          paymentMethod: 'crypto',
-                          amountType: 'fixed',
-                          amount: coinPayment?.[0]?.totalPrice,
-                        },
-                      ]
+              : undefined,
+            destinationWalletAddress: destinationWalletAddress(),
+            successUrl:
+              appBaseUrl +
+              PixwayAppRoutes.MY_TOKENS +
+              '?' +
+              query.split('?')[0],
+            couponCode: orderInfo.couponCode,
+            passShareCodeData:
+              orderInfo?.products?.[0]?.settings?.passShareCodeConfig
+                ?.enabled && giftData
+                ? giftData === 'selfBuy'
+                  ? {
+                      destinationUserName: profile?.data?.data?.name ?? '',
+                      destinationUserEmail: profile?.data?.data?.email ?? '',
+                    }
+                  : giftData
+                : {},
+            payments: orderInfo.isCoinPayment
+              ? coinPayment?.length && coinPayment?.length > 0
+                ? isFree
+                  ? [
+                      {
+                        currencyId: coinPaymentCurrencyId,
+                        paymentMethod: 'crypto',
+                        amountType: 'percentage',
+                        amount: '100',
+                      },
+                    ]
                   : [
                       {
                         currencyId: orderInfo.currencyId,
@@ -615,7 +470,7 @@ export const CheckoutPayment = () => {
                         currencyId: coinPaymentCurrencyId,
                         paymentMethod: 'crypto',
                         amountType: 'fixed',
-                        amount: '0',
+                        amount: coinPayment?.[0]?.totalPrice,
                       },
                     ]
                 : [
@@ -633,130 +488,162 @@ export const CheckoutPayment = () => {
                               ),
                           }
                         : undefined,
-                      amountType: 'percentage',
-                      amount: '100',
+                      amountType: 'all_remaining',
                     },
-                  ],
-            },
+                    {
+                      currencyId: coinPaymentCurrencyId,
+                      paymentMethod: 'crypto',
+                      amountType: 'fixed',
+                      amount: '0',
+                    },
+                  ]
+              : [
+                  {
+                    currencyId: orderInfo.currencyId,
+                    paymentMethod: orderInfo.choosedPayment?.paymentMethod,
+                    paymentProvider: orderInfo.choosedPayment?.paymentProvider,
+                    providerInputs: orderInfo.choosedPayment?.inputs
+                      ? {
+                          ...inputs,
+                          transparent_checkout:
+                            orderInfo.choosedPayment?.inputs?.includes(
+                              'transparent_checkout'
+                            ),
+                        }
+                      : undefined,
+                    amountType: 'percentage',
+                    amount: '100',
+                  },
+                ],
           },
-          {
-            onSuccess: (data: CreateOrderResponse) => {
-              setLoading(true);
-              setOrderResponse(data);
-              setStayPooling(false);
-              if (data.paymentProvider == PaymentMethod.STRIPE) {
-                setIsStripe(data.paymentInfo.clientSecret ?? '');
-                setStripeKey(data.paymentInfo.publicKey ?? '');
-              } else {
-                if (
-                  productCache.choosedPayment?.paymentMethod == 'credit_card' ||
-                  isFree
-                ) {
-                  try {
-                    if (
-                      productCache?.products[0].type === 'erc20' &&
-                      Boolean(
-                        _.get(
-                          productCache,
-                          'products[0].draftData.keyErc20LoyaltyId'
-                        )
-                      )
-                    ) {
-                      track('purchase', {
-                        currency:
-                          productCache?.choosedPayment?.currency?.code ?? '',
-                        value: data?.totalAmount,
-                        items: productCache?.products.map((res) => {
-                          return {
-                            item_id: res.id,
-                            item_variant: productCache?.destinationUser?.name,
-                            item_name: 'Zuca',
-                            quantity: 1,
-                            prices: data?.totalAmount,
-                            value: data?.totalAmount,
-                            destination: productCache?.destinationUser?.name,
-                            payment_info: 'Cartão de credito',
-                          };
-                        }),
-                      });
-                    } else {
-                      track('purchase', {
-                        value: data?.totalAmount,
-                        currency: data?.currency?.code,
-                        items: productCache?.products.map((res) => {
-                          return { item_id: res.id, item_name: res.name };
-                        }),
-                      });
-                    }
-                  } catch (err) {
-                    console.log('erro ao salvar o track', err);
-                  }
-
-                  router.pushConnect(
-                    PixwayAppRoutes.CHECKOUT_COMPLETED,
-                    router.query
-                  );
-                } else {
-                  const payment = data?.payments?.find(
-                    (res) =>
-                      res?.currency?.id ===
-                        '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ||
-                      res?.currency?.id ===
-                        '8c43ece8-99b0-4877-aed3-2170d2deb4bf'
-                  );
-                  if (payment?.paymentMethod === 'pix') {
-                    setPixImage(payment?.publicData?.pix?.encodedImage ?? '');
-                    setPixPayload(payment?.publicData?.pix?.payload ?? '');
-                    setPoolStatus(true);
-                    setOrderId(data.id);
-                  }
-
-                  setLoading(false);
-                  setIframeLink(
-                    payment?.publicData?.paymentUrl ??
-                      payment?.publicData?.pix?.payload ??
-                      ''
-                  );
-                }
-              }
-              setSending(false);
-              if (router.query.cart && router.query.cart == 'true') {
-                setCart([]);
-              }
-            },
-            onError: (err: any) => {
-              if (err.errorCode === 'similar-order-not-accepted') {
-                setErrorCode(err.errorCode);
-              } else if (
-                err.errorCode ===
-                'braza-email-already-attached-to-other-cpf-error'
-              ) {
-                setRequestError(
-                  'Este e-mail já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
-                );
-              } else if (
-                err.errorCode ===
-                'braza-phone-already-attached-to-other-cpf-error'
-              ) {
-                setRequestError(
-                  'Este telefone já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
-                );
-              } else {
-                setRequestError(
-                  err.message
-                    .toString()
-                    .includes('Informe o endereço do titular do cartão.')
-                    ? 'Por favor, insira um CEP válido.'
-                    : err.message.toString()
-                );
-              }
-              logError && logError(err);
-              setSending(false);
+        },
+        {
+          onSuccess: (data: CreateOrderResponse) => {
+            setLoading(true);
+            setOrderResponse(data);
+            setStayPooling(false);
+            deleteStripeCache();
+            if (data.paymentProvider == PaymentMethod.STRIPE) {
+              setStripeOrderCache({
+                productData: productCache.products,
+                amount: data.currencyAmount,
+                stripe: {
+                  clientSecret: data.paymentInfo.clientSecret ?? '',
+                  publicKey: data.paymentInfo.publicKey ?? '',
+                },
+                timestamp: new Date(),
+              });
+              setIsStripe(data.paymentInfo.clientSecret ?? '');
+              setStripeKey(data.paymentInfo.publicKey ?? '');
               setLoading(false);
-            },
-          }
-        );
-      }
+            } else {
+              if (
+                productCache.choosedPayment?.paymentMethod == 'credit_card' ||
+                isFree
+              ) {
+                try {
+                  if (
+                    productCache?.products[0].type === 'erc20' &&
+                    Boolean(
+                      _.get(
+                        productCache,
+                        'products[0].draftData.keyErc20LoyaltyId'
+                      )
+                    )
+                  ) {
+                    track('purchase', {
+                      currency:
+                        productCache?.choosedPayment?.currency?.code ?? '',
+                      value: data?.totalAmount,
+                      items: productCache?.products.map((res) => {
+                        return {
+                          item_id: res.id,
+                          item_variant: productCache?.destinationUser?.name,
+                          item_name: 'Zuca',
+                          quantity: 1,
+                          prices: data?.totalAmount,
+                          value: data?.totalAmount,
+                          destination: productCache?.destinationUser?.name,
+                          payment_info: 'Cartão de credito',
+                        };
+                      }),
+                    });
+                  } else {
+                    track('purchase', {
+                      value: data?.totalAmount,
+                      currency: data?.currency?.code,
+                      items: productCache?.products.map((res) => {
+                        return { item_id: res.id, item_name: res.name };
+                      }),
+                    });
+                  }
+                } catch (err) {
+                  console.log('erro ao salvar o track', err);
+                }
+
+                router.pushConnect(
+                  PixwayAppRoutes.CHECKOUT_COMPLETED,
+                  router.query
+                );
+              } else {
+                const payment = data?.payments?.find(
+                  (res) =>
+                    res?.currency?.id ===
+                      '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ||
+                    res?.currency?.id === '8c43ece8-99b0-4877-aed3-2170d2deb4bf'
+                );
+                if (payment?.paymentMethod === 'pix') {
+                  setPixImage(payment?.publicData?.pix?.encodedImage ?? '');
+                  setPixPayload(payment?.publicData?.pix?.payload ?? '');
+                  setPoolStatus(true);
+                  setOrderId(data.id);
+                }
+
+                setLoading(false);
+                setIframeLink(
+                  payment?.publicData?.paymentUrl ??
+                    payment?.publicData?.pix?.payload ??
+                    ''
+                );
+              }
+            }
+            setSending(false);
+            if (router.query.cart && router.query.cart == 'true') {
+              setCart([]);
+            }
+          },
+          onError: (err: any) => {
+            if (err.errorCode === 'similar-order-not-accepted') {
+              setErrorCode(err.errorCode);
+            } else if (
+              err.errorCode ===
+              'braza-email-already-attached-to-other-cpf-error'
+            ) {
+              setRequestError(
+                'Este e-mail já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
+              );
+            } else if (
+              err.errorCode ===
+              'braza-phone-already-attached-to-other-cpf-error'
+            ) {
+              setRequestError(
+                'Este telefone já foi vinculado a outro CPF em uma compra anterior. Por favor, utilize o mesmo CPF ou crie uma nova conta.'
+              );
+            } else {
+              setRequestError(
+                err.message
+                  .toString()
+                  .includes('Informe o endereço do titular do cartão.')
+                  ? 'Por favor, insira um CEP válido.'
+                  : err.message.toString()
+              );
+            }
+            logError && logError(err);
+            setSending(false);
+            setLoading(false);
+          },
+        }
+      );
     } else if (!session || !profile) {
       router.pushConnect(PixwayAppRoutes.SIGN_IN + query);
     }
