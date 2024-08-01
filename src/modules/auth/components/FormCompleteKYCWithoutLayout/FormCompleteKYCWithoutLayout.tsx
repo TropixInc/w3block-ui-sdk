@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -118,14 +119,16 @@ const _FormCompleteKYCWithoutLayout = ({
       return reasons?.data?.items[0]?.status;
     }
   }, [reasons]);
-
+  const inputsToShow = useMemo(() => {
+    if (step) return groupedInputs[step as string];
+    else return tenantInputs?.data ?? [];
+  }, [step, tenantInputs?.data]);
   const validations = useGetValidationsTypesForSignup(
-    tenantInputs?.data ?? [],
-    tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : '',
+    inputsToShow ?? [],
+    inputsToShow?.length ? inputsToShow?.[0].contextId : '',
     keyPage
   );
   const yupSchema = createSchemaSignupForm(validations);
-
   const dynamicSchema = object().shape(yupSchema);
 
   const dynamicMethods = useForm<DocumentDto>({
@@ -155,18 +158,41 @@ const _FormCompleteKYCWithoutLayout = ({
 
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
+      const inputApprover = tenantInputs.data.find(
+        (val) => (val?.data as any)?.approver
+      );
+      const approver = validDocs.find(
+        (val) => val.inputId === inputApprover?.id
+      );
+      const value = () => {
+        if (
+          (kycContext?.data as any)?.requireSpecificApprover &&
+          inputApprover &&
+          approver
+        ) {
+          return {
+            documents: validDocs,
+            currentStep: parseInt(step as string),
+            approverUserId: '5806ab00-4bec-478d-93d1-575fa309d1ca',
+            userContextId: router?.query?.userContextId ?? undefined,
+          };
+        } else {
+          return {
+            documents: validDocs,
+            currentStep: parseInt(step as string),
+            userContextId: router?.query?.userContextId ?? undefined,
+          };
+        }
+      };
       mutate(
         {
           tenantId,
           contextId,
           userId,
-          documents: {
-            documents: validDocs,
-            currentStep: parseInt(step as string),
-          },
+          documents: value(),
         },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
             contextOnboard.setLoading(true);
             const steps = Object.keys(groupedInputs).length;
             if (steps && parseInt(step as string) < steps) {
@@ -174,6 +200,8 @@ const _FormCompleteKYCWithoutLayout = ({
                 query: {
                   contextSlug: slug(),
                   step: parseInt(step as string) + 1,
+                  userContextId:
+                    router?.query?.userContextId ?? (data.data as any).id,
                 },
               });
             } else if (!profilePage) {
@@ -214,11 +242,6 @@ const _FormCompleteKYCWithoutLayout = ({
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
-
-  const inputsToShow = () => {
-    if (step) return groupedInputs[step as string];
-    else return tenantInputs?.data ?? [];
-  };
 
   const formState = router.query ? (router.query.formState as string) : '';
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -265,7 +288,7 @@ const _FormCompleteKYCWithoutLayout = ({
             )
           }
           onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-          tenantInputs={inputsToShow()}
+          tenantInputs={inputsToShow}
           setUploadProgress={setUploadProgress}
           getDocumentByInputId={getDocumentByInputId}
           formState={formState}
@@ -364,7 +387,7 @@ const _FormCompleteKYCWithoutLayout = ({
               )
             }
             onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-            tenantInputs={inputsToShow()}
+            tenantInputs={inputsToShow}
             setUploadProgress={setUploadProgress}
             getDocumentByInputId={getDocumentByInputId}
             formState={formState}

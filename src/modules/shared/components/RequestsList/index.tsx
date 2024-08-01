@@ -48,6 +48,7 @@ const RequestsList = () => {
           onChangeIsRenderKycItem={setOpenExpansible}
           slugContext={data.context.slug}
           userId={data.userId}
+          userContextId={data.id}
         />
       );
     }

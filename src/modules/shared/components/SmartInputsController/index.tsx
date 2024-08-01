@@ -104,6 +104,9 @@ export interface InputDataDTO {
   isPublicApi?: boolean;
   paginationType?: 'external' | 'internal';
   isMultiple?: boolean;
+  disableParams?: boolean;
+  search?: boolean;
+  searchType?: string;
 }
 
 const SmartInputsController = ({
@@ -358,6 +361,18 @@ const SmartInputsController = ({
             name={name}
             docValue={complexValue}
             docStatus={docStatus}
+            required={required}
+          />
+        );
+      }
+      case DataTypesEnum.Date: {
+        return (
+          <InputBirthdate
+            label={label}
+            name={name}
+            docValue={simpleValue}
+            docStatus={docStatus}
+            profilePage={profilePage}
             required={required}
           />
         );

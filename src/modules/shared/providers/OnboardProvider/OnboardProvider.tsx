@@ -131,7 +131,11 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
         : connectProxyPass) + path
     );
     if (router.query.callbackPath || router?.query?.callbackUrl) return query;
-    else return { callbackUrl: url };
+    else if (
+      !location.href?.includes('/auth/signUp') &&
+      !location.href?.includes('/auth/signIn')
+    )
+      return { callbackUrl: url };
   };
 
   useEffect(() => {
