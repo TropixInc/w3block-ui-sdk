@@ -1,13 +1,8 @@
-import { lazy } from 'react';
 import { useController } from 'react-hook-form';
 
 import classNames from 'classnames';
 
-const TextField = lazy(() =>
-  import('../../../shared/components/Form/TextField').then((m) => ({
-    default: m.TextField,
-  }))
-);
+import { TextField } from '../../../shared/components/Form/TextField';
 
 interface AuthTextFieldProps {
   name: string;
