@@ -29,9 +29,11 @@ export const usePaginatedGenericApiGet = ({
     (params) => {
       const newParams = outputMap ? outputMap(params) : params;
       if (isPublicApi) {
-        return axios.get(url, { params: { ...newParams } });
+        return axios.get(url, { params: { ...newParams, search: search } });
       } else {
-        return internalAxios.get(url, { params: { ...newParams } });
+        return internalAxios.get(url, {
+          params: { ...newParams, search: search },
+        });
       }
     },
 

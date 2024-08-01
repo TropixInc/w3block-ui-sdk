@@ -235,7 +235,12 @@ const _CheckoutInfo = ({
       }
     } else {
       const preview = productCache;
-      setCurrencyIdState(preview?.currencyId);
+      const currencyIdFromQueries = router?.query?.currencyId as string;
+      if (preview) {
+        setCurrencyIdState(preview?.currencyId);
+      } else if (currencyIdFromQueries) {
+        setCurrencyIdState(currencyIdFromQueries);
+      }
       if (preview && preview?.products?.length > 0) {
         setOrderPreview({
           ...orderPreview,
@@ -285,7 +290,6 @@ const _CheckoutInfo = ({
         return utms.utm_campaign;
       } else return '';
     };
-
     if (
       productIds &&
       currencyIdState &&
@@ -415,7 +419,6 @@ const _CheckoutInfo = ({
       );
     }
   };
-
   useDebounce(
     () => {
       getOrderPreviewFn(couponCodeInput);
@@ -631,17 +634,15 @@ const _CheckoutInfo = ({
           }
         });
       }
-      router.push(
+      router.pushConnect(
         isCart
           ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
           : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
         {
-          query: {
-            productIds: newArray.join(','),
-            currencyId: orderPreview?.products[0].prices.find(
-              (price) => price.currencyId == currencyIdState
-            )?.currencyId,
-          },
+          productIds: newArray.join(','),
+          currencyId: orderPreview?.products[0].prices.find(
+            (price) => price.currencyId == currencyIdState
+          )?.currencyId,
         }
       );
       if (isCart) {
@@ -716,13 +717,11 @@ const _CheckoutInfo = ({
       if (!isCart) {
         let newArray: Array<string> = [];
         newArray = [...Array(quantity).fill(id)];
-        router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
-          query: {
-            productIds: newArray.join(','),
-            currencyId: orderPreview?.products[0].prices.find(
-              (price) => price.currencyId == currencyIdState
-            )?.currencyId,
-          },
+        router.pushConnect(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
+          productIds: newArray.join(','),
+          currencyId: orderPreview?.products[0].prices.find(
+            (price) => price.currencyId == currencyIdState
+          )?.currencyId,
         });
         setProductIds(newArray);
         productIds?.sort((a, b) => {
@@ -758,13 +757,11 @@ const _CheckoutInfo = ({
             newIds.splice(ind, filteredProds?.length);
             let newArray: Array<string> = [];
             newArray = [...newIds, ...Array(quantity).fill(id)];
-            router.push(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
-              query: {
-                productIds: newArray.join(','),
-                currencyId: orderPreview?.products[0].prices.find(
-                  (price) => price.currencyId == currencyIdState
-                )?.currencyId,
-              },
+            router.pushConnect(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
+              productIds: newArray.join(','),
+              currencyId: orderPreview?.products[0].prices.find(
+                (price) => price.currencyId == currencyIdState
+              )?.currencyId,
             });
             setProductIds(newArray);
             productIds?.sort((a, b) => {
@@ -827,17 +824,15 @@ const _CheckoutInfo = ({
         return true;
       }
     });
-    router.push(
+    router.pushConnect(
       isCart
         ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
         : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
       {
-        query: {
-          productIds: filteredProds?.map((p) => p.id).join(','),
-          currencyId: orderPreview?.products[0].prices.find(
-            (price) => price.currencyId == currencyIdState
-          )?.currencyId,
-        },
+        productIds: filteredProds?.map((p) => p.id).join(','),
+        currencyId: orderPreview?.products[0].prices.find(
+          (price) => price.currencyId == currencyIdState
+        )?.currencyId,
       }
     );
     if (isCart) {
@@ -1455,7 +1450,7 @@ const _CheckoutInfo = ({
                   returnAction
                     ? () => returnAction(query)
                     : () => {
-                        router.push(PixwayAppRoutes.HOME);
+                        router.pushConnect(PixwayAppRoutes.HOME);
                       }
                 }
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"

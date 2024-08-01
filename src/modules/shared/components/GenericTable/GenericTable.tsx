@@ -236,6 +236,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           timeZone: 'UTC',
         });
       }
+      case FormatTypeColumn.LOCALDATEHOURTIME: {
+        const date = _.get(item, itemKey, '--');
+        return new Date(date).toLocaleString(locale.language);
+      }
       case FormatTypeColumn.MONEY: {
         const symbol = _.get(item, format.currencySymbolKey ?? '', '-');
         const value = _.get(item, itemKey, '');

@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.14.17-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.16...v1.14.17-alpha.0) (2024-07-15)
 
+### [1.14.22](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.21...v1.14.22) (2024-07-31)
+
+### [1.14.21](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.20...v1.14.21) (2024-07-24)
+
+### [1.14.20](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.19...v1.14.20) (2024-07-19)
+
+### [1.14.19](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.18...v1.14.19) (2024-07-17)
+
+### [1.14.18](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17...v1.14.18) (2024-07-16)
+
+### [1.14.17](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.16...v1.14.17) (2024-07-15)
+
 ### [1.14.16](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.15...v1.14.16) (2024-07-11)
 
 ### [1.14.15](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.14...v1.14.15) (2024-07-11)

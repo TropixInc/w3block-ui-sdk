@@ -125,6 +125,16 @@ export interface PaymentMethodsAvaiable {
     usdVetQuote?: string;
   };
 }
+
+export interface StripeCache {
+  productData: Product[];
+  amount: string;
+  stripe: {
+    clientSecret: string;
+    publicKey: string;
+  };
+  timestamp: Date;
+}
 export interface OrderPreviewCache {
   payments?: PaymentsResponse[];
   currencyId: string;

@@ -14,6 +14,7 @@ import { UseThemeConfig } from '../../../../../../storefront/hooks/useThemeConfi
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
 import DashboardIcon from '../../../../../assets/icons/dashboard.svg?react';
 // import  HelpIcon  from '../../../../../assets/icons/helpIconGray.svg?react';
+import FormIcon from '../../../../../assets/icons/form.svg?react';
 import IntegrationIcon from '../../../../../assets/icons/integrationIconOutlined.svg?react';
 import LogoutIcon from '../../../../../assets/icons/logoutIconGray.svg?react';
 import MyOrdersIcon from "../../../../../assets/icons/myOrders.svg?react"
@@ -203,6 +204,15 @@ export const useDefaultMenuTabs = (textColor: string) => {
       route: PixwayAppRoutes.MY_PROFILE,
       icon: <UserIcon style={{ color: textColor, stroke: textColor }} />,
       isVisible: (isUser || isAdmin) && !isHidden('myProfile'),
+    },
+    {
+      name:
+        internalMenuData['requests']?.customLabel ||
+        translate('components>menu>requests'),
+      id: 'requests',
+      icon: <FormIcon style={{ color: textColor, fill: textColor, stroke: textColor }} width={17} height={17} />,
+      route: PixwayAppRoutes.REQUESTS,
+      isVisible: isHidden('requests') === false,
     },
     {
       name: internalMenuData['cards']?.customLabel || 'Meus cartões',

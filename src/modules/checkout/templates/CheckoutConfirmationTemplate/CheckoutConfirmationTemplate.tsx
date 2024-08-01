@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { useProfile, useRouterConnect } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
@@ -24,8 +26,11 @@ export const CheckoutConfirmationTemplate = ({
 }: CheckoutConfirmationTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
   const { cart: productsCart } = useCart();
-  const { query } = useRouterConnect();
-  const productIdsFromQueries = query?.productIds;
+  const router = useRouterConnect();
+  const productIdsFromQueries = useMemo(() => {
+    if (router?.query?.productIds) return router?.query?.productIds;
+    else return '';
+  }, [router?.query?.productIds]);
   const isEmpty = !productIdsFromQueries;
   const { data: profile } = useProfile();
   const userRoles = profile?.data.roles || [];
