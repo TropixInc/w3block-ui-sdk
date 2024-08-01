@@ -1,15 +1,11 @@
-import { ChangeEvent, lazy, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import classNames from 'classnames';
 
 import PasswordIconShow from '../../../../shared/assets/icons/eyeIcon.svg?react';
 import PasswordIconHide from '../../../../shared/assets/icons/eyeIconCrossed.svg?react';
-const FormItemContainer = lazy(() =>
-  import('../FormItemContainer').then((module) => ({
-    default: module.FormItemContainer,
-  }))
-);
+import { FormItemContainer } from '../FormItemContainer';
 
 interface TextFieldProps {
   name: string;

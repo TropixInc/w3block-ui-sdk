@@ -1,13 +1,8 @@
-import { ReactNode, lazy } from 'react';
+import { ReactNode } from 'react';
 import { FieldError, useController } from 'react-hook-form';
 
 import { HeadlessFormController } from '../../../shared/components/HeadlessFormController/HeadlessFormController';
-
-const AuthValidationTip = lazy(() =>
-  import('../AuthValidationTip').then((m) => ({
-    default: m.AuthValidationTip,
-  }))
-);
+import { AuthValidationTip } from '../AuthValidationTip';
 
 export type AuthFormControllerRenderTipsFunction = (args: {
   isDirty: boolean;
