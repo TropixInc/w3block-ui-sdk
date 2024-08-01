@@ -46,6 +46,7 @@ export const AuthPasswordTips = ({
 }: Props) => {
   const [translate] = useTranslation();
   const { field, fieldState } = useController({ name: passwordFieldName });
+
   const {
     passwordHasCapitalizedLetter,
     passwordHasMinEightNumbers,
