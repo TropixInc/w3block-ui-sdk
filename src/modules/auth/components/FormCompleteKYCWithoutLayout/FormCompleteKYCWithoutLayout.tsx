@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -130,13 +132,18 @@ const _FormCompleteKYCWithoutLayout = ({
     }
   }, [reasons]);
 
+  const inputsToShow = useMemo(() => {
+    if (step) return groupedInputs[step as string];
+    else return tenantInputs?.data ?? [];
+  }, [step, tenantInputs?.data]);
+
   const validations = useGetValidationsTypesForSignup(
-    tenantInputs?.data ?? [],
-    tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : '',
+    inputsToShow ?? [],
+    inputsToShow?.length ? inputsToShow?.[0].contextId : '',
     keyPage
   );
-  const yupSchema = createSchemaSignupForm(validations);
 
+  const yupSchema = createSchemaSignupForm(validations);
   const dynamicSchema = object().shape(yupSchema);
 
   const dynamicMethods = useForm<DocumentDto>({
@@ -150,6 +157,7 @@ const _FormCompleteKYCWithoutLayout = ({
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
     const validDocs = documents.filter((item) => item);
+
     const docsToUse = () => {
       if (
         tenantInputs?.data.some(
@@ -169,20 +177,44 @@ const _FormCompleteKYCWithoutLayout = ({
         return newDocs;
       } else return validDocs;
     };
+
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
+      const inputApprover = tenantInputs.data.find(
+        (val) => (val?.data as any)?.approver
+      );
+      const approver = docsToUse().find(
+        (val) => val.inputId === inputApprover?.id
+      );
+      const value = () => {
+        if (
+          (kycContext?.data as any)?.requireSpecificApprover &&
+          inputApprover &&
+          approver
+        ) {
+          return {
+            documents: docsToUse(),
+            currentStep: parseInt(step as string),
+            approverUserId: approver?.value?.userId ?? undefined,
+            userContextId: router?.query?.userContextId ?? undefined,
+          };
+        } else {
+          return {
+            documents: docsToUse(),
+            currentStep: parseInt(step as string),
+            userContextId: router?.query?.userContextId ?? undefined,
+          };
+        }
+      };
       mutate(
         {
           tenantId,
           contextId,
           userId,
-          documents: {
-            documents: docsToUse(),
-            currentStep: parseInt(step as string),
-          },
+          documents: value(),
         },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
             if (!productForm) {
               contextOnboard.setLoading(true);
             }
@@ -192,6 +224,8 @@ const _FormCompleteKYCWithoutLayout = ({
                 query: {
                   contextSlug: slug(),
                   step: parseInt(step as string) + 1,
+                  userContextId:
+                    router?.query?.userContextId ?? (data.data as any).id,
                 },
               });
             } else if (productForm && handleProductForm) {
@@ -240,17 +274,12 @@ const _FormCompleteKYCWithoutLayout = ({
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
 
-  const inputsToShow = () => {
-    if (step) return groupedInputs[step as string];
-    else return tenantInputs?.data ?? [];
-  };
-
-  const [isOpenModal, setIsOpenModal] = useState(false);
   const formState = useMemo(() => {
     if (productForm) return 'initial';
     else if (router.query.formState) return router.query.formState as string;
     else return '';
   }, [productForm, router.query.formState]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
       <Spinner />
@@ -294,7 +323,7 @@ const _FormCompleteKYCWithoutLayout = ({
             )
           }
           onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-          tenantInputs={inputsToShow()}
+          tenantInputs={inputsToShow}
           setUploadProgress={setUploadProgress}
           getDocumentByInputId={getDocumentByInputId}
           formState={formState}
@@ -393,7 +422,7 @@ const _FormCompleteKYCWithoutLayout = ({
               )
             }
             onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-            tenantInputs={inputsToShow()}
+            tenantInputs={inputsToShow}
             setUploadProgress={setUploadProgress}
             getDocumentByInputId={getDocumentByInputId}
             formState={formState}

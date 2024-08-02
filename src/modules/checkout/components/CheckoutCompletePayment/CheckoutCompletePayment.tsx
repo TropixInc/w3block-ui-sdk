@@ -15,11 +15,13 @@ import { ThemeContext } from '../../../storefront';
 import { useTrack } from '../../../storefront/hooks/useTrack/useTrack';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import {
+  ORDER_COMPLETED_INFO_KEY,
   PRODUCT_CART_INFO_KEY,
   PRODUCT_VARIANTS_INFO_KEY,
 } from '../../config/keys/localStorageKey';
 import { useCheckout } from '../../hooks/useCheckout';
 import {
+  CreateOrderResponse,
   OrderPreviewCache,
   OrderPreviewResponse,
   PaymentMethodsAvaiable,
@@ -96,12 +98,16 @@ const _CheckoutCompletePayment = ({
   );
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const [productVariants] = useLocalStorage<any>(PRODUCT_VARIANTS_INFO_KEY);
+  const [, , deleteOrderKey] = useLocalStorage<CreateOrderResponse>(
+    ORDER_COMPLETED_INFO_KEY
+  );
   const query = useQuery();
   const destinationUser = router.query.destination;
   const [requestError, setRequestError] = useState(false);
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
       deleteKey();
+      deleteOrderKey();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.localStorage]);
@@ -182,7 +188,14 @@ const _CheckoutCompletePayment = ({
             pID.productToken?.product?.prices.find(
               (price) =>
                 price.currencyId == orderData?.totalAmount?.[0]?.currencyId
-            )?.amount ?? '0',
+            )?.amount ??
+            orderPreview?.products
+              .find((val) => val.id === pID.productToken?.product.id)
+              ?.prices.find(
+                (val) =>
+                  val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+              )?.amount ??
+            '0',
           variantIds: productVariants
             ? Object.values(productVariants).map((value) => {
                 if ((value as any).productId === pID.productToken?.product?.id)
@@ -193,7 +206,7 @@ const _CheckoutCompletePayment = ({
       });
       setProductCache({
         payments: orderPreview.payments,
-        products: orderPreview.products,
+        products: orderData.products.map((prod) => prod.productToken.product),
         orderProducts,
         currencyId: orderData?.totalAmount?.[0]?.currencyId || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
@@ -586,7 +599,15 @@ const _CheckoutCompletePayment = ({
                     (price) =>
                       price?.currencyId ==
                       orderData?.totalAmount?.[0]?.currencyId
-                  )?.amount ?? '0'
+                  )?.amount ??
+                    orderPreview?.products
+                      .find((val) => val.id === prod.id)
+                      ?.prices.find(
+                        (val) =>
+                          val.currencyId ===
+                          orderData?.totalAmount?.[0]?.currencyId
+                      )?.amount ??
+                    '0'
                 ).toString()}
                 originalPrice={parseFloat(
                   prod?.prices?.find(

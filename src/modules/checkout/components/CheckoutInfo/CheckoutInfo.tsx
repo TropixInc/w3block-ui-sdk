@@ -1859,7 +1859,7 @@ const _CheckoutInfo = ({
             orderPreview?.products && orderPreview?.products.length
               ? (orderPreview?.products[0].prices.find(
                   (price) => price.currencyId == currencyIdState
-                )?.currency.code as CurrencyEnum)
+                )?.currency?.code as CurrencyEnum)
               : CurrencyEnum.BRL
           }
         />

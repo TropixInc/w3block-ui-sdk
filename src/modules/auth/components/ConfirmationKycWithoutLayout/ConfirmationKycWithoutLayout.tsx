@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
+
 import _ from 'lodash';
 
 import { PRACTITIONER_DATA_INFO_KEY } from '../../../checkout/config/keys/localStorageKey';
 import { useProfile, useRouterConnect } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
+import { SelectorRead } from '../../../shared/components/SmartInputs/SelectorRead/SelectorRead';
+import { InputDataDTO } from '../../../shared/components/SmartInputsController';
 import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
+import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
@@ -39,14 +44,18 @@ export const ConfirmationKycWithoutLayout = () => {
       : '',
   });
 
+  const { data: context } = useGetTenantContextBySlug(slug());
+
   function getDocumentByInputId(inputId: string) {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
 
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
-
+  const [confirmation, setConfirmation] = useState(false);
   const onContinue = () => {
-    if (typeof storageData?.postKycUrl === 'string')
+    if ((context?.data as any)?.data?.concludedScreen && !confirmation) {
+      setConfirmation(true);
+    } else if (typeof storageData?.postKycUrl === 'string')
       router.pushConnect(storageData?.postKycUrl);
     else if (skipWallet) {
       if (router.query.callbackPath?.length) {
@@ -65,6 +74,26 @@ export const ConfirmationKycWithoutLayout = () => {
       <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
         <Spinner />
       </div>
+    );
+  else if (confirmation && (context?.data as any)?.data?.concludedScreen)
+    return (
+      <Box>
+        <div className="pw-flex pw-flex-col pw-items-center">
+          <div
+            className="pw-w-full"
+            dangerouslySetInnerHTML={{
+              __html: (context?.data as any)?.data?.concludedScreen,
+            }}
+          ></div>
+          <WeblockButton
+            onClick={onContinue}
+            className="pw-mt-4 pw-text-white"
+            fullWidth={true}
+          >
+            Fechar
+          </WeblockButton>
+        </div>
+      </Box>
     );
   else
     return (
@@ -154,6 +183,13 @@ export const ConfirmationKycWithoutLayout = () => {
                         return complexValue ? 'Aceito' : 'Não Aceito';
                       }
                       return value;
+                    } else if (res?.type === 'dynamic_select') {
+                      return (
+                        <SelectorRead
+                          configData={res.data as InputDataDTO}
+                          docValue={complexValue ?? simpleValue}
+                        />
+                      );
                     } else if (simpleValue) return simpleValue;
                     else return value;
                   };

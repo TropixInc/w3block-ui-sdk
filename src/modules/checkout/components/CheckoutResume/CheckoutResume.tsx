@@ -30,6 +30,7 @@ interface CheckoutResumeProps {
   payments?: PaymentsResponse[];
   currency?: string;
   convertedPrice?: string;
+  productPreview?: Product[];
 }
 
 export const CheckouResume = ({
@@ -48,6 +49,7 @@ export const CheckouResume = ({
   payments,
   currency,
   convertedPrice,
+  productPreview,
 }: CheckoutResumeProps) => {
   return (
     <div>
@@ -65,7 +67,11 @@ export const CheckouResume = ({
             }
             price={
               product?.prices?.find((price) => price?.currencyId == currencyId)
-                ?.amount ?? '0'
+                ?.amount ??
+              productPreview
+                ?.find((val) => val.id === product.id)
+                ?.prices.find((val) => val.currencyId === currencyId)?.amount ??
+              '0'
             }
             stockAmount={0}
             originalPrice={
