@@ -846,9 +846,9 @@ export const CheckoutPayment = () => {
           {!iframeLink ? (
             <CheckoutPaymentComponent
               currency={
-                productCache.products[0].prices.find(
-                  (price) => price.currencyId == productCache.currencyId
-                )?.currency.name ?? 'BRL'
+                productCache.products?.[0]?.prices.find(
+                  (price) => price?.currencyId == productCache?.currencyId
+                )?.currency?.name ?? 'BRL'
               }
               installments={productCache.choosedPayment?.availableInstallments}
               instalment={installment}
@@ -1070,6 +1070,7 @@ export const CheckoutPayment = () => {
               convertedPrice={
                 productCache?.choosedPayment?.providerData?.brlAmount
               }
+              productPreview={myOrderPreview?.products}
             />
           </div>
           <div className="pw-order-2 sm:pw-order-1 pw-flex-1">

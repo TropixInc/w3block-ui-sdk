@@ -107,6 +107,7 @@ export interface InputDataDTO {
   disableParams?: boolean;
   search?: boolean;
   searchType?: string;
+  approverPath?: string;
 }
 
 const SmartInputsController = ({
@@ -304,7 +305,7 @@ const SmartInputsController = ({
             name={name}
             label={label}
             configData={selectData as InputDataDTO}
-            docValue={simpleValue}
+            docValue={complexValue ?? simpleValue}
             profilePage={profilePage}
             required={required}
           />

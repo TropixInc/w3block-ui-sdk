@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, ReactNode, useRef } from 'react';
 import { useClickAway } from 'react-use';
 
@@ -8,7 +9,7 @@ import useTranslation from '../../hooks/useTranslation';
 
 export interface Option {
   label: string;
-  value: string;
+  value: string | any;
   icon?: ReactNode;
   disabled?: boolean;
 }

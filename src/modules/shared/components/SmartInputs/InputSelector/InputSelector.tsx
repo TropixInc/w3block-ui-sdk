@@ -24,7 +24,7 @@ interface Props {
   label: string;
   type: DataTypesEnum;
   configData?: InputDataDTO;
-  docValue?: string;
+  docValue?: string | object | undefined;
   profilePage?: boolean;
   required?: boolean;
 }
@@ -66,11 +66,11 @@ export const InputSelector = ({
   const [multipleSelected, setMultipleSelected] = useState<
     Array<string | undefined>
   >([]);
-  const handleTextChange = (value: string) => {
+  const handleTextChange = (value: any) => {
     if (value) {
-      field.onChange({ inputId: name, value: value.toString() });
+      field?.onChange({ inputId: name, value: value });
     } else {
-      field.onChange({
+      field?.onChange({
         inputId: undefined,
         value: undefined,
       });
@@ -96,7 +96,7 @@ export const InputSelector = ({
   });
   useEffect(() => {
     if (multipleSelected.length) {
-      field.onChange({
+      field?.onChange({
         inputId: name,
         value: JSON.stringify({ values: multipleSelected }),
       });
@@ -108,10 +108,19 @@ export const InputSelector = ({
     if (data) {
       const response = _.get(data, configData?.responsePath || '', []);
       if (response.length) {
-        return response.map((item) => ({
-          label: _.get(item, configData?.labelPath || '', ''),
-          value: _.get(item, configData?.valuePath || '', ''),
-        }));
+        if (configData?.approverPath) {
+          return response.map((item) => ({
+            label: _.get(item, configData?.labelPath || '', ''),
+            value: {
+              id: _.get(item, configData?.valuePath || '', '').toString(),
+              userId: _.get(item, configData?.approverPath || '', ''),
+            },
+          }));
+        } else
+          return response.map((item) => ({
+            label: _.get(item, configData?.labelPath || '', ''),
+            value: _.get(item, configData?.valuePath || '', '').toString(),
+          }));
       } else return [];
     } else return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,7 +144,9 @@ export const InputSelector = ({
 
       if (jsonValues.values.length > 0) {
         const selected = (jsonValues.values as Array<string>).map((item) => {
-          return dynamicOptions?.find(({ value }) => value === item);
+          return (dynamicOptions as any)?.find(
+            (value: any) => value.value === item
+          );
         });
 
         if (selected.length > 0) {
@@ -154,16 +165,18 @@ export const InputSelector = ({
 
   useEffect(() => {
     if (docValue && dynamicOptions) {
-      const value = dynamicOptions.find(
-        (val) => val.value.toString() === docValue
-      )?.label;
+      const value = (dynamicOptions as any).find((val: any) => {
+        if (configData?.approverPath) {
+          return val.value.id === (docValue as any).id;
+        } else return val.value === docValue;
+      })?.label;
       setInputValue(value);
     }
-  }, [docValue, dynamicOptions]);
+  }, [configData?.approverPath, docValue, dynamicOptions]);
 
   useEffect(() => {
     if (docValue) {
-      field.onChange({ inputId: name, value: docValue });
+      field?.onChange({ inputId: name, value: docValue });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
@@ -183,7 +196,7 @@ export const InputSelector = ({
           {label}
         </LabelWithRequired>
         <FormItemContainer
-          invalid={fieldState.invalid}
+          invalid={fieldState?.invalid}
           className="pw-p-[0.6rem]"
         >
           <input
@@ -242,7 +255,7 @@ export const InputSelector = ({
         </LabelWithRequired>
         <FormItemContainer
           className="!pw-p-[0.6rem]"
-          invalid={fieldState.invalid}
+          invalid={fieldState?.invalid}
         >
           {configData?.isMultiple ? (
             <MultipleSelect
@@ -278,8 +291,8 @@ export const InputSelector = ({
                   ))
                 : dynamicOptions.map((val) => (
                     <option
-                      key={val.value}
-                      value={val.value}
+                      key={val.value.toString()}
+                      value={val.value.toString()}
                       selected={docValue === val.value}
                       className="!pw-p-0"
                     >

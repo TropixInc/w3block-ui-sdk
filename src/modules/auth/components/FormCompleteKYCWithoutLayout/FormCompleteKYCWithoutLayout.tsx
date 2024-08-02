@@ -196,7 +196,7 @@ const _FormCompleteKYCWithoutLayout = ({
           return {
             documents: docsToUse(),
             currentStep: parseInt(step as string),
-            approverUserId: '5806ab00-4bec-478d-93d1-575fa309d1ca',
+            approverUserId: approver?.value?.userId ?? undefined,
             userContextId: router?.query?.userContextId ?? undefined,
           };
         } else {

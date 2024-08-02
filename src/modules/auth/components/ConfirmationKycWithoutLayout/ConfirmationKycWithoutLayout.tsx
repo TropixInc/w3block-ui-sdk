@@ -6,6 +6,8 @@ import _ from 'lodash';
 import { PRACTITIONER_DATA_INFO_KEY } from '../../../checkout/config/keys/localStorageKey';
 import { useProfile, useRouterConnect } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
+import { SelectorRead } from '../../../shared/components/SmartInputs/SelectorRead/SelectorRead';
+import { InputDataDTO } from '../../../shared/components/SmartInputsController';
 import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -181,6 +183,13 @@ export const ConfirmationKycWithoutLayout = () => {
                         return complexValue ? 'Aceito' : 'Não Aceito';
                       }
                       return value;
+                    } else if (res?.type === 'dynamic_select') {
+                      return (
+                        <SelectorRead
+                          configData={res.data as InputDataDTO}
+                          docValue={complexValue ?? simpleValue}
+                        />
+                      );
                     } else if (simpleValue) return simpleValue;
                     else return value;
                   };
