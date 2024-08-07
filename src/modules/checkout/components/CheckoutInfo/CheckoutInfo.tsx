@@ -1767,7 +1767,11 @@ const _CheckoutInfo = ({
                   price={parseFloat(
                     prod?.prices?.find(
                       (price) => price?.currencyId == currencyIdState
-                    )?.amount ?? '0'
+                    )?.amount ??
+                      productCache?.orderProducts?.find(
+                        (val) => val?.productId === prod?.id
+                      )?.expectedPrice ??
+                      '0'
                   ).toString()}
                   originalPrice={parseFloat(
                     prod?.prices?.find(

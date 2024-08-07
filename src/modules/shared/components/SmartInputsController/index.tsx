@@ -6,7 +6,16 @@ import {
   UserContextStatus,
   UserDocumentStatus,
 } from '@w3block/sdk-id';
+import _ from 'lodash';
 
+import ComplexPhone from '../SmartInputs/ComplexPhone';
+import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
+import InputDocuments from '../SmartInputs/InputDocuments';
+import InputImage from '../SmartInputs/InputImage/InputImage';
+import InputLocale from '../SmartInputs/InputLocale/InputLocale';
+import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
+import InputProducts from '../SmartInputs/InputProducts';
+import { Options } from '../SmartInputs/InputSelector/InputSelector';
 const InputBirthdate = lazy(() =>
   import('../SmartInputs/InputBirthdate').then((module) => ({
     default: module.default,
@@ -52,18 +61,6 @@ const InputUrl = lazy(() =>
     default: module.default,
   }))
 );
-
-import _ from 'lodash';
-
-import ComplexPhone from '../SmartInputs/ComplexPhone';
-import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
-import InputDocuments from '../SmartInputs/InputDocuments';
-import InputImage from '../SmartInputs/InputImage/InputImage';
-import InputLocale from '../SmartInputs/InputLocale/InputLocale';
-import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
-import InputProducts from '../SmartInputs/InputProducts';
-import { Options } from '../SmartInputs/InputSelector/InputSelector';
-
 interface SmartProps {
   type: DataTypesEnum;
   label: string;
@@ -133,7 +130,6 @@ const SmartInputsController = ({
   statusContext,
 }: SmartProps) => {
   const [translate] = useTranslation();
-
   const [checked, setChecked] = useState(false);
 
   const onChangeChecked = () => {

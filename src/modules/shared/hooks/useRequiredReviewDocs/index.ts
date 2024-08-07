@@ -9,6 +9,7 @@ interface MutationProps {
   contextId: string;
   inputIds: Array<string>;
   reason: string;
+  userContextId: string;
 }
 
 export const useRequiredReviewDocs = () => {
@@ -17,14 +18,20 @@ export const useRequiredReviewDocs = () => {
 
   return useMutation(
     [PixwayAPIRoutes.REQUEST_REVIEW_KYC, tenantId],
-    async ({ contextId, inputIds, reason, userId }: MutationProps) => {
+    async ({
+      contextId,
+      inputIds,
+      reason,
+      userId,
+      userContextId,
+    }: MutationProps) => {
       const sdk = await getSdk();
 
       return sdk.api.users.requireReviewTenantContextByUserId(
         tenantId ?? '',
         userId,
         contextId,
-        { inputIds: inputIds, reason: reason }
+        { inputIds: inputIds, reason: reason, userContextId: userContextId }
       );
     }
   );

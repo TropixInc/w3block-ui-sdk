@@ -8,6 +8,7 @@ interface Props {
   userId: string;
   contextId: string;
   resons?: string;
+  userContextId?: string;
 }
 
 const useRejectKYC = () => {
@@ -23,7 +24,7 @@ const useRejectKYC = () => {
         tenantId ?? '',
         body.userId,
         body.contextId,
-        { reason: body.resons }
+        { reason: body.resons, userContextId: body.userContextId }
       );
     },
     {

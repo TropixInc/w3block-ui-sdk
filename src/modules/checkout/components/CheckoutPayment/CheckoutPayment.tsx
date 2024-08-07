@@ -327,7 +327,6 @@ export const CheckoutPayment = () => {
                 : undefined,
               gasFee: data.gasFee,
               clientServiceFee: data.clientServiceFee,
-              cartPrice: data.cartPrice,
             });
             setMyOrderPreview(data);
           },
@@ -1070,7 +1069,7 @@ export const CheckoutPayment = () => {
               convertedPrice={
                 productCache?.choosedPayment?.providerData?.brlAmount
               }
-              productPreview={myOrderPreview?.products}
+              productPreview={productCache}
             />
           </div>
           <div className="pw-order-2 sm:pw-order-1 pw-flex-1">

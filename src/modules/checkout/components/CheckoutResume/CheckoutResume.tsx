@@ -12,7 +12,7 @@ const ProductInfo = lazy(() =>
 );
 
 import { Product } from '../../../shared/interface/Product';
-import { PaymentsResponse } from '../../interface/interface';
+import { OrderPreviewCache, PaymentsResponse } from '../../interface/interface';
 
 interface CheckoutResumeProps {
   products: Product[];
@@ -30,7 +30,7 @@ interface CheckoutResumeProps {
   payments?: PaymentsResponse[];
   currency?: string;
   convertedPrice?: string;
-  productPreview?: Product[];
+  productPreview?: OrderPreviewCache;
 }
 
 export const CheckouResume = ({
@@ -68,9 +68,9 @@ export const CheckouResume = ({
             price={
               product?.prices?.find((price) => price?.currencyId == currencyId)
                 ?.amount ??
-              productPreview
-                ?.find((val) => val.id === product.id)
-                ?.prices.find((val) => val.currencyId === currencyId)?.amount ??
+              productPreview?.orderProducts.find(
+                (val) => val.productId === product.id
+              )?.expectedPrice ??
               '0'
             }
             stockAmount={0}

@@ -60,6 +60,7 @@ const RequestItemWrapper = ({
         userId,
         inputIds: inputsIdRequestReview,
         reason: reasonsReview ?? '',
+        userContextId: userContextId,
       });
     }
   };
@@ -80,6 +81,7 @@ const RequestItemWrapper = ({
       userId: userId,
       contextId: contextId,
       resons: reasonsReprove,
+      userContextId: userContextId,
     });
   };
 
@@ -116,7 +118,9 @@ const RequestItemWrapper = ({
 
   useEffect(() => {
     if (isSuccesAproveKyc) {
-      onChangeIsRenderKycItem(false);
+      setTimeout(() => {
+        onChangeIsRenderKycItem(false);
+      }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccesAproveKyc]);
@@ -280,6 +284,7 @@ const RequestItemWrapper = ({
             inputRequestable={isRequestReview}
             inputsIdRequestReview={inputsIdRequestReview}
             onChangeInputsIdRequestReview={setInputsIdRequestReview}
+            userContextId={userContextId}
           />
         </div>
       </div>

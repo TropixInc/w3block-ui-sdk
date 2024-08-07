@@ -16,6 +16,7 @@ export interface Options {
 interface Props {
   configData?: InputDataDTO;
   docValue?: string | object | undefined;
+  options: Options[];
 }
 
 const paginationMapping = {
@@ -39,11 +40,7 @@ const paginationMapping = {
   },
 };
 
-export const SelectorRead = ({
-  configData,
-  // profilePage = false,
-  docValue,
-}: Props) => {
+export const SelectorRead = ({ configData, options, docValue }: Props) => {
   const router = useRouterConnect();
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [{ data }] = usePaginatedGenericApiGet({
@@ -87,6 +84,15 @@ export const SelectorRead = ({
       setInputValue(value);
     }
   }, [configData?.approverPath, docValue, dynamicOptions]);
+
+  useEffect(() => {
+    if (docValue && options.length) {
+      const value = options?.find((val) => {
+        return val.value === docValue;
+      })?.label;
+      setInputValue(value);
+    }
+  }, [docValue, options]);
 
   if (router.query.delay) {
     return (

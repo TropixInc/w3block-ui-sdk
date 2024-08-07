@@ -52,6 +52,7 @@ interface Props {
     quantity: number;
     productId: string;
   };
+  userContextId?: string;
 }
 
 interface ErrorProps {
@@ -74,6 +75,7 @@ const _FormCompleteKYCWithoutLayout = ({
   handleProductForm,
   handleProductFormError,
   product,
+  userContextId,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -196,13 +198,15 @@ const _FormCompleteKYCWithoutLayout = ({
             documents: docsToUse(),
             currentStep: parseInt(step as string),
             approverUserId: approver?.value?.userId ?? undefined,
-            userContextId: router?.query?.userContextId ?? undefined,
+            userContextId:
+              userContextId ?? router?.query?.userContextId ?? undefined,
           };
         } else {
           return {
             documents: docsToUse(),
             currentStep: parseInt(step as string),
-            userContextId: router?.query?.userContextId ?? undefined,
+            userContextId:
+              userContextId ?? router?.query?.userContextId ?? undefined,
           };
         }
       };
@@ -271,9 +275,11 @@ const _FormCompleteKYCWithoutLayout = ({
   };
 
   function getDocumentByInputId(inputId: string) {
-    return documents?.data.find((doc) => doc.inputId === inputId);
+    return documents?.data.find(
+      (doc) =>
+        doc.inputId === inputId && (doc as any)?.userContextId === userContextId
+    );
   }
-
   const formState = useMemo(() => {
     if (productForm) return 'initial';
     else if (router.query.formState) return router.query.formState as string;
@@ -526,6 +532,7 @@ export const FormCompleteKYCWithoutLayout = ({
   handleProductForm,
   handleProductFormError,
   product,
+  userContextId,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -544,6 +551,7 @@ export const FormCompleteKYCWithoutLayout = ({
       handleProductForm={handleProductForm}
       handleProductFormError={handleProductFormError}
       product={product}
+      userContextId={userContextId}
     />
   </TranslatableComponent>
 );

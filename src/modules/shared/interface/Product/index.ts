@@ -50,6 +50,8 @@ export interface Product {
   productToken: {
     product: Product;
   };
+  currencyAmount?: string;
+  originalCurrencyAmount?: string;
 }
 
 export interface Images {

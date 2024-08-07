@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
+import { useInterval } from 'react-use';
 
 import _ from 'lodash';
 
@@ -11,6 +12,7 @@ import { InputDataDTO } from '../../../shared/components/SmartInputsController';
 import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useGetOrderByKyc } from '../../../shared/hooks/useGetOrderByKyc/useGetOrderByKyc';
 import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
 import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
@@ -50,11 +52,41 @@ export const ConfirmationKycWithoutLayout = () => {
     return documents?.data.find((doc) => doc.inputId === inputId);
   }
 
+  const [awaitProduct, setAwaitProduct] = useState(false);
+  const [poolStatus, setPoolStatus] = useState(false);
+  useInterval(() => {
+    if (poolStatus) {
+      validateOrderStatus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, 3000);
+  const { mutate: getStatus } = useGetOrderByKyc();
+  const validateOrderStatus = () => {
+    if (poolStatus) {
+      const interval = setInterval(() => {
+        getStatus(
+          { kycUserContextId: router?.query?.userContextId as string },
+          {
+            onSuccess: (data) => {
+              clearInterval(interval);
+              if (data?.data?.id) {
+                router.pushConnect(`/checkout/pay/${data?.data?.id}`);
+              }
+            },
+            onError: () => {
+              clearInterval(interval);
+            },
+          }
+        );
+      }, 3000);
+    }
+  };
+
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
-  const [confirmation, setConfirmation] = useState(false);
   const onContinue = () => {
-    if ((context?.data as any)?.data?.concludedScreen && !confirmation) {
-      setConfirmation(true);
+    if ((context?.data as any)?.data?.postKyc === 'awaitProduct') {
+      setPoolStatus(true);
+      setAwaitProduct(true);
     } else if (typeof storageData?.postKycUrl === 'string')
       router.pushConnect(storageData?.postKycUrl);
     else if (skipWallet) {
@@ -62,6 +94,10 @@ export const ConfirmationKycWithoutLayout = () => {
         router.pushConnect(router.query.callbackPath as string);
       } else if (router.query.callbackUrl?.length) {
         router.pushConnect(router.query.callbackUrl as string);
+      } else if ((context?.data as any)?.data?.screenConfig?.postKycUrl) {
+        router.pushConnect(
+          (context?.data as any)?.data?.screenConfig?.postKycUrl
+        );
       } else {
         router.pushConnect('/');
       }
@@ -75,23 +111,14 @@ export const ConfirmationKycWithoutLayout = () => {
         <Spinner />
       </div>
     );
-  else if (confirmation && (context?.data as any)?.data?.concludedScreen)
+  else if (awaitProduct)
     return (
       <Box>
-        <div className="pw-flex pw-flex-col pw-items-center">
-          <div
-            className="pw-w-full"
-            dangerouslySetInnerHTML={{
-              __html: (context?.data as any)?.data?.concludedScreen,
-            }}
-          ></div>
-          <WeblockButton
-            onClick={onContinue}
-            className="pw-mt-4 pw-text-white"
-            fullWidth={true}
-          >
-            Fechar
-          </WeblockButton>
+        <div className="pw-w-full pw-flex pw-flex-col pw-gap-4 pw-items-center pw-justify-center">
+          <p className="pw-text-black pw-font-semibold pw-text-lg">
+            Estamos gerando o seu pedido.
+          </p>
+          <Spinner />
         </div>
       </Box>
     );
@@ -183,11 +210,15 @@ export const ConfirmationKycWithoutLayout = () => {
                         return complexValue ? 'Aceito' : 'Não Aceito';
                       }
                       return value;
-                    } else if (res?.type === 'dynamic_select') {
+                    } else if (
+                      res?.type === 'dynamic_select' ||
+                      res?.type === 'simple_select'
+                    ) {
                       return (
                         <SelectorRead
-                          configData={res.data as InputDataDTO}
+                          configData={res?.data as InputDataDTO}
                           docValue={complexValue ?? simpleValue}
+                          options={res?.options ?? []}
                         />
                       );
                     } else if (simpleValue) return simpleValue;

@@ -113,7 +113,7 @@ const CityAutoComplete = ({
     setShowOptions(Boolean(value));
   };
 
-  const getDetails = () =>
+  const getDetails = () => {
     placesService?.getDetails(
       {
         placeId: placeId,
@@ -143,6 +143,7 @@ const CityAutoComplete = ({
         }
       }
     );
+  };
 
   const resolveInput = () => {
     if (placeId) {
@@ -161,6 +162,7 @@ const CityAutoComplete = ({
     if (apiValue) {
       setPlaceId(apiValue);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiValue]);
 
   const options = () => {

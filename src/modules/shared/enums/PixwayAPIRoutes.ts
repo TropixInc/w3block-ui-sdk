@@ -108,4 +108,5 @@ export enum PixwayAPIRoutes {
   REJECT_KYC = '/users/{tenantId}/contexts/{userId}/{contextId}/reject',
   KYC_LIST = 'customer-infos/{tenantId}/search',
   CONTEXT_BY_USER_ID = '/users/{tenantId}/contexts/{userId}',
+  GET_ODER_BY_KYC = '/companies/{companyId}/orders/get-by-kyc-user-context-id/{kycUserContextId}',
 }

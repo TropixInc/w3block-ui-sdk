@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useContext, useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
@@ -11,7 +11,6 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { Product } from '../../../shared/interface/Product';
-import { ThemeContext } from '../../../storefront';
 import { useTrack } from '../../../storefront/hooks/useTrack/useTrack';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import {
@@ -74,7 +73,6 @@ const _CheckoutCompletePayment = ({
   proccedAction,
 }: CheckoutCompletePaymentProps) => {
   const { datasource } = useDynamicApi();
-  const context = useContext(ThemeContext);
   const router = useRouterConnect();
   const { useGetOrderById, getOrderPreview } = useCheckout();
   const { companyId } = useCompanyConfig();
@@ -88,8 +86,9 @@ const _CheckoutCompletePayment = ({
     orderId: orderDataId ?? '',
   });
   const [translate] = useTranslation();
-  const [productCache, setProductCache, deleteKey] =
-    useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
+  const [, setProductCache, deleteKey] = useLocalStorage<OrderPreviewCache>(
+    PRODUCT_CART_INFO_KEY
+  );
   const [choosedPayment, setChoosedPayment] = useState<
     PaymentMethodsAvaiable | undefined
   >();
@@ -146,13 +145,25 @@ const _CheckoutCompletePayment = ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onSuccess: (data: OrderPreviewResponse) => {
           if (data && data.providersForSelection?.length && !choosedPayment) {
-            setChoosedPayment(data.providersForSelection[0]);
+            setChoosedPayment(
+              (
+                orderData?.providersForSelection?.find(
+                  (val: any) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                ) as any
+              )?.providers?.[0]
+            );
           }
           if (choosedPayment && choosedPayment.paymentMethod == 'credit_card') {
             setChoosedPayment({
               ...choosedPayment,
-              availableInstallments: data.providersForSelection?.find(
-                (val) =>
+              availableInstallments: (
+                orderData?.providersForSelection?.find(
+                  (val: any) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                ) as any
+              ).providers?.find(
+                (val: any) =>
                   val.paymentMethod == choosedPayment.paymentMethod &&
                   val.paymentProvider == choosedPayment.paymentProvider
               )?.availableInstallments,
@@ -189,12 +200,10 @@ const _CheckoutCompletePayment = ({
               (price) =>
                 price.currencyId == orderData?.totalAmount?.[0]?.currencyId
             )?.amount ??
-            orderPreview?.products
-              .find((val) => val.id === pID.productToken?.product.id)
-              ?.prices.find(
-                (val) =>
-                  val.currencyId === orderData?.totalAmount?.[0]?.currencyId
-              )?.amount ??
+            orderData?.products.find(
+              (val) =>
+                val?.productToken?.product?.id === pID.productToken?.product?.id
+            )?.currencyAmount ??
             '0',
           variantIds: productVariants
             ? Object.values(productVariants).map((value) => {
@@ -205,7 +214,40 @@ const _CheckoutCompletePayment = ({
         };
       });
       setProductCache({
-        payments: orderPreview.payments,
+        payments: [
+          {
+            currency: orderPreview.currency,
+            gasFee: (orderData?.gasFee as any)?.find(
+              (val: any) =>
+                val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+            )?.amount,
+            amount: orderData?.currencyAmount?.find(
+              (val) =>
+                val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+            )?.amount,
+            originalAmount: orderData?.originalCurrencyAmount?.find(
+              (val) =>
+                val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+            )?.amount,
+            totalPrice: orderData?.totalAmount?.[0]?.amount,
+            originalTotalPrice: orderData?.originalTotalAmount?.find(
+              (val) =>
+                val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+            )?.amount,
+            clientServiceFee: (orderData?.clientServiceFee as any)?.find(
+              (val: any) =>
+                val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+            )?.amount,
+            originalClientServiceFee: (
+              orderData?.originalClientServiceFee as any
+            )?.find(
+              (val: any) =>
+                val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+            )?.amount,
+            cartPrice: '0',
+            originalCartPrice: '0',
+          },
+        ],
         products: orderData.products.map((prod) => prod.productToken.product),
         orderProducts,
         currencyId: orderData?.totalAmount?.[0]?.currencyId || '',
@@ -217,12 +259,21 @@ const _CheckoutCompletePayment = ({
             parseFloat(orderPreview?.gasFee?.amount || '0').toString() || '0',
           signature: orderPreview.gasFee?.signature ?? '',
         },
-        cartPrice: parseFloat(orderPreview?.cartPrice || '0').toString() || '0',
+        cartPrice:
+          parseFloat(orderData?.totalAmount?.[0]?.amount || '0').toString() ||
+          '0',
         choosedPayment: choosedPayment,
         couponCode: orderPreview.appliedCoupon,
-        originalCartPrice: orderPreview?.originalCartPrice ?? '',
-        originalClientServiceFee: orderPreview?.originalClientServiceFee ?? '',
-        originalTotalPrice: orderPreview?.originalTotalPrice ?? '',
+        originalCartPrice: orderData?.originalTotalAmount?.[0]?.amount ?? '',
+        originalClientServiceFee:
+          (orderData?.originalClientServiceFee as any)?.find(
+            (val: any) =>
+              val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+          )?.amount ?? '',
+        originalTotalPrice:
+          orderData?.originalTotalAmount?.find(
+            (val) => val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+          )?.amount ?? '',
         destinationUser: {
           walletAddress: datasource?.master?.data.filter(
             (e: { attributes: { slug: string | null } }) =>
@@ -373,39 +424,50 @@ const _CheckoutCompletePayment = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderData]);
 
-  const onClickButton = () => {
-    if (
-      context?.defaultTheme?.configurations?.contentData?.checkoutConfig
-        ?.actionButton?.link
-    ) {
-      router.pushConnect(
-        context?.defaultTheme?.configurations?.contentData?.checkoutConfig
-          ?.actionButton?.link
-      );
-    } else {
-      router.pushConnect(PixwayAppRoutes.MY_TOKENS);
-    }
-  };
-
-  const buttonText = () => {
-    if (
-      context?.defaultTheme?.configurations?.contentData?.checkoutConfig
-        ?.actionButton?.label
-    ) {
-      return context?.defaultTheme?.configurations?.contentData?.checkoutConfig
-        ?.actionButton?.label;
-    } else {
-      return translate('tokens>tokenTransferController>goToMyTokens');
-    }
-  };
-
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
         return (
           <>
             <PriceAndGasInfo
-              payments={orderPreview?.payments}
+              currency={orderData?.totalAmount?.[0]?.currencyId}
+              gasFee={
+                (orderData?.gasFee as any)?.find(
+                  (val: any) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                )?.amount
+              }
+              price={
+                orderData?.currencyAmount?.find(
+                  (val) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                )?.amount
+              }
+              originalPrice={
+                orderData?.originalCurrencyAmount?.find(
+                  (val) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                )?.amount
+              }
+              totalPrice={orderData?.totalAmount?.[0]?.amount}
+              originalTotalPrice={
+                orderData?.originalTotalAmount?.find(
+                  (val) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                )?.amount
+              }
+              service={
+                (orderData?.clientServiceFee as any)?.find(
+                  (val: any) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                )?.amount
+              }
+              originalService={
+                (orderData?.originalClientServiceFee as any)?.find(
+                  (val: any) =>
+                    val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                )?.amount
+              }
               name={
                 orderData?.products && orderData?.products?.length
                   ? orderData?.products[0]?.productToken?.product?.prices.find(
@@ -422,10 +484,12 @@ const _CheckoutCompletePayment = ({
               loadingPreview={isLoadingPreview}
               methodSelected={choosedPayment ?? ({} as PaymentMethodsAvaiable)}
               methods={
-                orderPreview?.payments?.filter(
-                  (e) =>
-                    e.currencyId === orderData?.totalAmount?.[0]?.currencyId
-                )[0]?.providersForSelection ?? []
+                (
+                  orderData?.providersForSelection?.find(
+                    (val: any) =>
+                      val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+                  ) as any
+                )?.providers ?? []
               }
               onSelectedPayemnt={setChoosedPayment}
               title={'Métodos de pagamento'}
@@ -448,42 +512,6 @@ const _CheckoutCompletePayment = ({
               </PixwayButton>
             </div>
           </>
-        );
-      case CheckoutStatus.FINISHED:
-        return (
-          <div className="pw-mt-4">
-            <p className="pw-text-xs pw-text-[#353945] ">
-              {typeof context?.defaultTheme?.configurations?.contentData
-                ?.checkoutConfig?.message === 'string'
-                ? context?.defaultTheme?.configurations?.contentData
-                    ?.checkoutConfig?.message
-                : translate(
-                    'checkout>components>CheckoutCompletePayment>infoAboutProcessing'
-                  )}
-            </p>
-            <PriceAndGasInfo
-              name={
-                productCache?.products && productCache?.products?.length
-                  ? productCache?.products[0]?.prices?.find(
-                      (price) =>
-                        price?.currencyId ==
-                        (router?.query?.currencyId as string)
-                    )?.currency?.name
-                  : 'BRL'
-              }
-              loading={isLoading}
-              className="pw-mt-4"
-              payments={productCache?.payments}
-            />
-            <div className={`pw-flex pw-justify-start`}>
-              <PixwayButton
-                onClick={onClickButton}
-                className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
-              >
-                {buttonText()}
-              </PixwayButton>
-            </div>
-          </div>
         );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -600,13 +628,9 @@ const _CheckoutCompletePayment = ({
                       price?.currencyId ==
                       orderData?.totalAmount?.[0]?.currencyId
                   )?.amount ??
-                    orderPreview?.products
-                      .find((val) => val.id === prod.id)
-                      ?.prices.find(
-                        (val) =>
-                          val.currencyId ===
-                          orderData?.totalAmount?.[0]?.currencyId
-                      )?.amount ??
+                    orderData?.products.find(
+                      (val) => val?.productToken?.product?.id === prod.id
+                    )?.currencyAmount ??
                     '0'
                 ).toString()}
                 originalPrice={parseFloat(
@@ -614,7 +638,10 @@ const _CheckoutCompletePayment = ({
                     (price) =>
                       price?.currencyId ==
                       orderData?.totalAmount?.[0]?.currencyId
-                  )?.originalAmount ?? '0'
+                  )?.originalAmount ??
+                    orderData?.products.find((val) => val.id === prod.id)
+                      ?.originalCurrencyAmount ??
+                    '0'
                 ).toString()}
                 variants={prod?.variants}
                 anchorCurrencyAmount={parseFloat(

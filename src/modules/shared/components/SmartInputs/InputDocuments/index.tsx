@@ -73,9 +73,14 @@ const InputDocuments = ({
 
   useEffect(() => {
     if (apiSavedValue) {
+      field.onChange({
+        inputId: name,
+        value: apiSavedValue,
+      });
       setSelectDocType(apiSavedValue.docType);
       setDocument(apiSavedValue.document);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiSavedValue]);
 
   return (

@@ -50,6 +50,18 @@ export interface OrderPreviewResponse {
     currencyId?: string;
   }[];
   status?: string;
+  currencyAmount?: {
+    amount?: string;
+    currencyId?: string;
+  }[];
+  originalCurrencyAmount?: {
+    amount?: string;
+    currencyId?: string;
+  }[];
+  originalTotalAmount?: {
+    amount?: string;
+    currencyId?: string;
+  }[];
 }
 
 export interface ProductErrorInterface {
