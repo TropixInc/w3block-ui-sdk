@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.24](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17-alpha.4...v1.14.24) (2024-08-08)
+
+
+### Features
+
+* added new types of kyc ([169acde](https://github.com/TropixInc/w3block-ui-sdk/commit/169acde6dee336e48a69e2874caa01e3fdd29615))
+
+### [1.14.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17-alpha.1...v1.14.23) (2024-08-01)
+
 ### [1.14.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.22...v1.14.23) (2024-08-01)
 ### [1.14.17-alpha.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17-alpha.3...v1.14.17-alpha.4) (2024-08-08)
 
