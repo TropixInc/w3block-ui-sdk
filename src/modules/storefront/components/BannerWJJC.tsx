@@ -334,7 +334,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                               ?.placeOfBirth?.city,
                             translate(
                               datasource?.master?.data[0]?.attributes
-                                ?.placeOfResidence?.country
+                                ?.placeOfBirth?.country
                             )
                           )}
                         </p>

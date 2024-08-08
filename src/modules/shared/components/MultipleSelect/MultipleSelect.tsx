@@ -160,7 +160,7 @@ export const MultipleSelect = ({
           <>
             <Listbox.Button
               className={classNames(
-                'pw-relative pw-w-full pw-h-10 pw-border pw-text-left pw-px-[14px] pw-text-[15px] pw-leading-[18px] pw-z-10',
+                'pw-relative pw-w-full pw-h-10 pw-border pw-text-left pw-px-[14px] pw-text-[14px] pw-leading-[18px] pw-z-10',
                 disabled
                   ? '!pw-border-[#D1D1D1] pw-bg-[#F4F4F4] pw-text-[#969696] pw-cursor-not-allowed'
                   : 'pw-border-[#B9D1F3] pw-bg-white pw-text-black pw-cursor-pointer',

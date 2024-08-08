@@ -20,7 +20,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
-import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
+import { useGetUserContextId } from '../../../shared/hooks/useGetUserContextId/useGetUserContextId';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignupForm';
@@ -110,11 +110,9 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
   const { refetch } = useProfile();
-  const { data: documents } = useGetUsersDocuments({
+  const { data: documents } = useGetUserContextId({
     userId: userId ?? '',
-    contextId: tenantInputs?.data?.length
-      ? tenantInputs?.data[0].contextId
-      : '',
+    userContextId: userContextId ?? '',
   });
   const context = useContext(OnboardContext);
   const query = Object.keys(router.query ?? {}).length > 0 ? router.query : '';
@@ -163,14 +161,14 @@ const _FormCompleteKYCWithoutLayout = ({
     const docsToUse = () => {
       if (
         tenantInputs?.data.some(
-          (val) => (val.type as any) === 'commerce_product'
+          (val: any) => (val.type as any) === 'commerce_product'
         ) &&
         product
       ) {
         const productInput = [
           {
             inputId: tenantInputs?.data?.find(
-              (val) => (val.type as any) === 'commerce_product'
+              (val: any) => (val.type as any) === 'commerce_product'
             )?.id,
             value: product,
           },
@@ -183,10 +181,10 @@ const _FormCompleteKYCWithoutLayout = ({
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
       const inputApprover = tenantInputs.data.find(
-        (val) => (val?.data as any)?.approver
+        (val: any) => (val?.data as any)?.approver
       );
       const approver = docsToUse().find(
-        (val) => val.inputId === inputApprover?.id
+        (val: any) => val.inputId === inputApprover?.id
       );
       const value = () => {
         if (
@@ -197,7 +195,7 @@ const _FormCompleteKYCWithoutLayout = ({
           return {
             documents: docsToUse(),
             currentStep: parseInt(step as string),
-            approverUserId: approver?.value?.userId ?? undefined,
+            approverUserId: (approver as any)?.value?.userId ?? undefined,
             userContextId:
               userContextId ?? router?.query?.userContextId ?? undefined,
           };
@@ -275,8 +273,8 @@ const _FormCompleteKYCWithoutLayout = ({
   };
 
   function getDocumentByInputId(inputId: string) {
-    return documents?.data.find(
-      (doc) =>
+    return documents?.data.documents.find(
+      (doc: any) =>
         doc.inputId === inputId && (doc as any)?.userContextId === userContextId
     );
   }

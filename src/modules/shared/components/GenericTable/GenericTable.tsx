@@ -511,7 +511,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               </p>
             ) : null}
             {filtersSubtitle ? (
-              <p className="pw-text-[15px] pw-font-semibold pw-mb-2">
+              <p className="pw-text-[14px] pw-font-semibold pw-mb-2">
                 {filtersSubtitle}
               </p>
             ) : null}

@@ -90,8 +90,8 @@ const RequestsList = () => {
     },
     tableStyles: {
       root: { width: '100%' },
-      header: '!pw-grid-cols-[18%_20%]',
-      line: '!pw-grid-cols-[18%_20%]',
+      header: '!pw-grid-cols-[18%_20%] !pw-text-black',
+      line: '!pw-grid-cols-[18%_20%] !pw-text-black',
     },
 
     columns: [
