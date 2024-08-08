@@ -100,7 +100,7 @@ const RequestsList = () => {
         key: 'context.description',
         sortable: false,
         header: {
-          label: 'Nome',
+          label: 'Tipo',
           filter: {
             format: FormatFilterType.SELECT,
             type: FilterTableType.DYNAMIC,

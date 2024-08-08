@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -113,37 +113,45 @@ const CityAutoComplete = ({
     setShowOptions(Boolean(value));
   };
 
-  const getDetails = () => {
-    placesService?.getDetails(
-      {
-        placeId: placeId,
-      },
-      (placeDetails: any) => {
-        const components = getAddressObject(placeDetails.address_components);
+  const getDetails = useCallback(() => {
+    if (placeId && placesService) {
+      try {
+        placesService?.getDetails(
+          {
+            placeId: placeId,
+          },
+          (placeDetails: any) => {
+            const components = getAddressObject(
+              placeDetails.address_components
+            );
 
-        if (type === '(cities)') {
-          setInputValue(`${components.city}, ${components.region}`);
-          onChangeRegion && onChangeRegion(components.region);
-          field.onChange({
-            inputId: name,
-            value: { ...components, placeId: placeId },
-          });
-        } else {
-          setInputValue(
-            `${placeDetails.name} - ${placeDetails.formatted_address}`
-          );
-          field.onChange({
-            inputId: name,
-            value: {
-              ...components,
-              home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
-              placeId: placeId,
-            },
-          });
-        }
+            if (type === '(cities)') {
+              setInputValue(`${components.city}, ${components.region}`);
+              onChangeRegion && onChangeRegion(components.region);
+              field.onChange({
+                inputId: name,
+                value: { ...components, placeId: placeId },
+              });
+            } else {
+              setInputValue(
+                `${placeDetails.name} - ${placeDetails.formatted_address}`
+              );
+              field.onChange({
+                inputId: name,
+                value: {
+                  ...components,
+                  home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
+                  placeId: placeId,
+                },
+              });
+            }
+          }
+        );
+      } catch (err) {
+        console.log(err);
       }
-    );
-  };
+    }
+  }, [placeId, placesService]);
 
   const resolveInput = () => {
     if (placeId) {
@@ -154,9 +162,8 @@ const CityAutoComplete = ({
   };
 
   useEffect(() => {
-    getDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placeId]);
+    if (placeId) getDetails();
+  }, [placeId, getDetails]);
 
   useEffect(() => {
     if (apiValue) {
