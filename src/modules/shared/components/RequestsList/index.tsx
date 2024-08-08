@@ -83,7 +83,7 @@ const RequestsList = () => {
       },
     },
     dataSource: {
-      url: `/users/${tenantId}/contexts/find?contextType=form&sortBy=createdAt&orderBy=DESC`,
+      url: `/users/${tenantId}/contexts/find?contextType=form&excludeSelfContexts=true&sortBy=createdAt&orderBy=DESC`,
       urlContext: W3blockAPI.ID,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,

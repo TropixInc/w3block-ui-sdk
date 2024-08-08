@@ -26,7 +26,6 @@ import useTranslation from '../../../shared/hooks/useTranslation';
 import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignupForm';
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
-import { useGetReasonsRequiredReview } from '../../hooks/useGetReasonsRequiredReview';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 const Box = lazy(() =>
   import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
@@ -53,6 +52,7 @@ interface Props {
     productId: string;
   };
   userContextId?: string;
+  hideComplexPhone?: boolean;
 }
 
 interface ErrorProps {
@@ -76,6 +76,7 @@ const _FormCompleteKYCWithoutLayout = ({
   handleProductFormError,
   product,
   userContextId,
+  hideComplexPhone,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -120,17 +121,11 @@ const _FormCompleteKYCWithoutLayout = ({
   const errorPost = error as AxiosError;
   const errorMessage = errorPost?.response?.data as ErrorProps;
 
-  const { data: reasons } = useGetReasonsRequiredReview(
-    tenantId,
-    userId,
-    tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : ''
-  );
-
   const statusContext = useMemo(() => {
-    if (reasons && reasons?.data?.items) {
-      return reasons?.data?.items[0]?.status;
+    if (documents && documents?.data?.status) {
+      return documents?.data?.status;
     }
-  }, [reasons]);
+  }, [documents]);
 
   const inputsToShow = useMemo(() => {
     if (step) return groupedInputs[step as string];
@@ -292,11 +287,11 @@ const _FormCompleteKYCWithoutLayout = ({
     keyPage ? (
       <FormProvider {...dynamicMethods}>
         {!keyPage &&
-        reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
-        reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
+        documents?.data?.logs?.at(-1)?.reason &&
+        documents?.data?.logs?.at(-1)?.inputIds.length ? (
           <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
             <p className="pw-mt-2 pw-text-[#FF0505]">
-              {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+              {documents?.data?.logs.at(-1)?.reason}
             </p>
           </div>
         ) : null}
@@ -337,6 +332,7 @@ const _FormCompleteKYCWithoutLayout = ({
           keyPage={keyPage}
           profilePage={profilePage}
           statusContext={statusContext}
+          hideComplexPhone={hideComplexPhone}
         ></FormTemplate>
 
         {isSuccess && (
@@ -392,11 +388,11 @@ const _FormCompleteKYCWithoutLayout = ({
         )}
       >
         <FormProvider {...dynamicMethods}>
-          {reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
-          reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
+          {documents?.data?.logs?.at(-1)?.reason &&
+          documents?.data?.logs?.at(-1)?.inputIds.length ? (
             <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
               <p className="pw-mt-2 pw-text-[#FF0505]">
-                {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+                {documents?.data?.logs.at(-1)?.reason}
               </p>
             </div>
           ) : null}
@@ -432,6 +428,7 @@ const _FormCompleteKYCWithoutLayout = ({
             formState={formState}
             profilePage={profilePage}
             statusContext={statusContext}
+            hideComplexPhone={hideComplexPhone}
           ></FormTemplate>
 
           {isSuccess && (

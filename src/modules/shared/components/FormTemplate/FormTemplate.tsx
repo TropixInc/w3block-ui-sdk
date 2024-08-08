@@ -28,6 +28,7 @@ interface Props {
   keyPage?: boolean;
   profilePage?: boolean;
   statusContext?: UserContextStatus;
+  hideComplexPhone?: boolean;
 }
 
 export const FormTemplate = ({
@@ -45,6 +46,7 @@ export const FormTemplate = ({
   keyPage,
   profilePage,
   statusContext,
+  hideComplexPhone,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
 
@@ -91,6 +93,7 @@ export const FormTemplate = ({
                   isKeyPage={keyPage}
                   required={item.mandatory}
                   statusContext={statusContext}
+                  hideComplexPhone={hideComplexPhone}
                 />
               </div>
             );

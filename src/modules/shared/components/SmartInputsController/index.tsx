@@ -84,6 +84,7 @@ interface SmartProps {
   isKeyPage?: boolean;
   required?: boolean;
   statusContext?: UserContextStatus;
+  hideComplexPhone?: boolean;
 }
 
 export interface InputError {
@@ -128,6 +129,7 @@ const SmartInputsController = ({
   isKeyPage,
   required,
   statusContext,
+  hideComplexPhone = false,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const [checked, setChecked] = useState(false);
@@ -185,7 +187,7 @@ const SmartInputsController = ({
           />
         );
       case DataTypesEnum.Phone:
-        return isKeyPage ? (
+        return isKeyPage && !hideComplexPhone ? (
           <ComplexPhone
             label={label}
             name={name}
