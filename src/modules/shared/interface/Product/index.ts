@@ -47,6 +47,11 @@ export interface Product {
       dataFields?: DataFields[];
     };
   };
+  productToken: {
+    product: Product;
+  };
+  currencyAmount?: string;
+  originalCurrencyAmount?: string;
 }
 
 export interface Images {

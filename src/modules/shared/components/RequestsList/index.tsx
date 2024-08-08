@@ -48,6 +48,7 @@ const RequestsList = () => {
           onChangeIsRenderKycItem={setOpenExpansible}
           slugContext={data.context.slug}
           userId={data.userId}
+          userContextId={data.id}
         />
       );
     }
@@ -82,7 +83,7 @@ const RequestsList = () => {
       },
     },
     dataSource: {
-      url: `/users/${tenantId}/contexts/find?contextType=form`,
+      url: `/users/${tenantId}/contexts/find?contextType=form&sortBy=createdAt&orderBy=DESC`,
       urlContext: W3blockAPI.ID,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,
@@ -99,7 +100,7 @@ const RequestsList = () => {
         key: 'context.description',
         sortable: false,
         header: {
-          label: 'Nome',
+          label: 'Tipo',
           filter: {
             format: FormatFilterType.SELECT,
             type: FilterTableType.DYNAMIC,

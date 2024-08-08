@@ -6,7 +6,16 @@ import {
   UserContextStatus,
   UserDocumentStatus,
 } from '@w3block/sdk-id';
+import _ from 'lodash';
 
+import ComplexPhone from '../SmartInputs/ComplexPhone';
+import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
+import InputDocuments from '../SmartInputs/InputDocuments';
+import InputImage from '../SmartInputs/InputImage/InputImage';
+import InputLocale from '../SmartInputs/InputLocale/InputLocale';
+import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
+import InputProducts from '../SmartInputs/InputProducts';
+import { Options } from '../SmartInputs/InputSelector/InputSelector';
 const InputBirthdate = lazy(() =>
   import('../SmartInputs/InputBirthdate').then((module) => ({
     default: module.default,
@@ -52,18 +61,6 @@ const InputUrl = lazy(() =>
     default: module.default,
   }))
 );
-
-import _ from 'lodash';
-
-import ComplexPhone from '../SmartInputs/ComplexPhone';
-import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
-import InputDocuments from '../SmartInputs/InputDocuments';
-import InputImage from '../SmartInputs/InputImage/InputImage';
-import InputLocale from '../SmartInputs/InputLocale/InputLocale';
-import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
-import InputProducts from '../SmartInputs/InputProducts';
-import { Options } from '../SmartInputs/InputSelector/InputSelector';
-
 interface SmartProps {
   type: DataTypesEnum;
   label: string;
@@ -104,6 +101,10 @@ export interface InputDataDTO {
   isPublicApi?: boolean;
   paginationType?: 'external' | 'internal';
   isMultiple?: boolean;
+  disableParams?: boolean;
+  search?: boolean;
+  searchType?: string;
+  approverPath?: string;
 }
 
 const SmartInputsController = ({
@@ -129,7 +130,6 @@ const SmartInputsController = ({
   statusContext,
 }: SmartProps) => {
   const [translate] = useTranslation();
-
   const [checked, setChecked] = useState(false);
 
   const onChangeChecked = () => {
@@ -301,7 +301,7 @@ const SmartInputsController = ({
             name={name}
             label={label}
             configData={selectData as InputDataDTO}
-            docValue={simpleValue}
+            docValue={complexValue ?? simpleValue}
             profilePage={profilePage}
             required={required}
           />
@@ -358,6 +358,18 @@ const SmartInputsController = ({
             name={name}
             docValue={complexValue}
             docStatus={docStatus}
+            required={required}
+          />
+        );
+      }
+      case DataTypesEnum.Date: {
+        return (
+          <InputBirthdate
+            label={label}
+            name={name}
+            docValue={simpleValue}
+            docStatus={docStatus}
+            profilePage={profilePage}
             required={required}
           />
         );

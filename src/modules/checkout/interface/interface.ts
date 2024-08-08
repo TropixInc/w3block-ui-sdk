@@ -45,6 +45,23 @@ export interface OrderPreviewResponse {
   };
   payments?: PaymentsResponse[];
   currency?: CurrencyResponse;
+  totalAmount?: {
+    amount?: string;
+    currencyId?: string;
+  }[];
+  status?: string;
+  currencyAmount?: {
+    amount?: string;
+    currencyId?: string;
+  }[];
+  originalCurrencyAmount?: {
+    amount?: string;
+    currencyId?: string;
+  }[];
+  originalTotalAmount?: {
+    amount?: string;
+    currencyId?: string;
+  }[];
 }
 
 export interface ProductErrorInterface {
@@ -190,6 +207,23 @@ export interface CreateOrder {
   acceptSimilarOrderInShortPeriod?: boolean;
 }
 
+export interface CompletePaymentOrder {
+  successUrl?: string;
+  payments?: {
+    currencyId: string;
+    paymentMethod?: string;
+    paymentProvider?: string;
+    providerInputs?: unknown;
+    amountType?: string;
+    amount?: string;
+  }[];
+}
+export interface CompleteOrderPayload {
+  companyId: string;
+  completeOrder: CompletePaymentOrder;
+  orderId?: string;
+}
+
 export interface CreateOrderProduct {
   productId: string;
   productTokenId?: string;
@@ -273,4 +307,5 @@ export interface PixInterface {
 export interface CreateOrderPayload {
   companyId: string;
   createOrder: CreateOrder;
+  orderId?: string;
 }
