@@ -19,6 +19,7 @@ interface KycItemProps {
   slugContext: string;
   userContextId: string;
   onChangeIsRenderKycItem: (value: boolean) => void;
+  setIsUpdateList: (value: boolean) => void;
 }
 
 const RequestItemWrapper = ({
@@ -27,6 +28,7 @@ const RequestItemWrapper = ({
   onChangeIsRenderKycItem,
   slugContext,
   userContextId,
+  setIsUpdateList,
 }: KycItemProps) => {
   const [translate] = useTranslation();
 
@@ -108,6 +110,7 @@ const RequestItemWrapper = ({
       setTimeout(() => {
         onCancelRequestReview();
         setIsSuccessSendReview(false);
+        setIsUpdateList(true);
       }, 800);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,6 +123,7 @@ const RequestItemWrapper = ({
         onCancelReprove();
         onChangeIsRenderKycItem(false);
         setIsSuccessReprove(false);
+        setIsUpdateList(true);
       }, 800);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,6 +133,7 @@ const RequestItemWrapper = ({
     if (isSuccesAproveKyc) {
       setTimeout(() => {
         onChangeIsRenderKycItem(false);
+        setIsUpdateList(true);
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -528,6 +528,7 @@ export const FormCompleteKYCWithoutLayout = ({
   handleProductFormError,
   product,
   userContextId,
+  hideComplexPhone,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -547,6 +548,7 @@ export const FormCompleteKYCWithoutLayout = ({
       handleProductFormError={handleProductFormError}
       product={product}
       userContextId={userContextId}
+      hideComplexPhone={hideComplexPhone}
     />
   </TranslatableComponent>
 );

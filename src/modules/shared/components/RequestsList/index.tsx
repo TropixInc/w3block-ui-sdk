@@ -49,6 +49,7 @@ const RequestsList = () => {
           slugContext={data.context.slug}
           userId={data.userId}
           userContextId={data.id}
+          setIsUpdateList={setIsUpdateList}
         />
       );
     }
