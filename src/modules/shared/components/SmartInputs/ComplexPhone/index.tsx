@@ -17,6 +17,7 @@ interface InputPhoneProps {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   statusContext?: UserContextStatus;
+  hideAddButton?: boolean;
 }
 
 const ComplexPhone = ({
@@ -27,6 +28,7 @@ const ComplexPhone = ({
   hidenValidations,
   complexValue,
   statusContext,
+  hideAddButton = false,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
 
@@ -137,7 +139,7 @@ const ComplexPhone = ({
         ))}
       </div>
 
-      {!hiddenButtons ? (
+      {hiddenButtons || hideAddButton ? null : (
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -148,7 +150,7 @@ const ComplexPhone = ({
           <span>+</span>
           <span>Adicionar telefone</span>
         </button>
-      ) : null}
+      )}
     </div>
   );
 };

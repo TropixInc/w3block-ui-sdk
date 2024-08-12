@@ -307,7 +307,7 @@ const RequestItemWrapper = ({
             inputsIdRequestReview={inputsIdRequestReview}
             onChangeInputsIdRequestReview={setInputsIdRequestReview}
             userContextId={userContextId}
-            hideComplexPhone
+            hideComplexPhone={true}
           />
         </div>
       </div>

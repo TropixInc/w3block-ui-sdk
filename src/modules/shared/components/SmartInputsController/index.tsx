@@ -187,13 +187,14 @@ const SmartInputsController = ({
           />
         );
       case DataTypesEnum.Phone:
-        return isKeyPage && !hideComplexPhone ? (
+        return isKeyPage ? (
           <ComplexPhone
             label={label}
             name={name}
             complexValue={complexValue}
             docValue={simpleValue}
             docStatus={docStatus}
+            hideAddButton={hideComplexPhone}
             statusContext={statusContext}
           />
         ) : (

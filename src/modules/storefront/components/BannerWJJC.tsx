@@ -394,12 +394,15 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
         {isMasterOrProfessor ? (
           <div className="pw-container pw-mx-auto sm:pw-p-[48px_0_0_0] pw-p-8 ">
             <h2 className="pw-text-black pw-font-semibold pw-text-2xl pw-font-poppins">
-              Instrutor(a) WJJC desde
+              Instrutor(a) WJJC{' '}
+              {datasource?.master?.data[0]?.attributes
+                ?.masterCertificationDate && 'desde'}
             </h2>
-            {datasource?.master?.data[0]?.attributes
-              ?.masterCertificationDate && (
-              <p className="pw-text-black pw-font-medium pw-text-sm pw-font-poppins pw-mt-5 pw-flex">
-                {format(
+
+            <p className="pw-text-black pw-font-medium pw-text-sm pw-font-poppins pw-mt-5 pw-flex">
+              {datasource?.master?.data[0]?.attributes
+                ?.masterCertificationDate &&
+                format(
                   Date.parse(
                     datasource?.master?.data[0]?.attributes
                       ?.masterCertificationDate + 'T12:00:00' ?? ''
@@ -407,9 +410,8 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                   'P',
                   { locale: locale === 'pt-BR' ? ptBR : enUS }
                 )}
-                {showNomination()}
-              </p>
-            )}
+              {showNomination()}
+            </p>
             <div className="pw-flex pw-gap-4 pw-mt-5">
               {athleteData?.items.length ? (
                 <a
