@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { useRouterConnect } from '../../../hooks';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import { FormItemContainer } from '../../Form/FormItemContainer';
+import { ImageSDK } from '../../ImageSDK';
 import LabelWithRequired from '../../LabelWithRequired';
 import { MultipleSelect } from '../../MultipleSelect';
 import { InputDataDTO } from '../../SmartInputsController';
@@ -111,6 +112,8 @@ export const InputSelector = ({
         if (configData?.approverPath) {
           return response.map((item) => ({
             label: _.get(item, configData?.labelPath || '', ''),
+            subtitle: _.get(item, configData?.subtitlePath || '', ''),
+            image: _.get(item, configData?.imagePath || '', ''),
             value: {
               id: _.get(item, configData?.valuePath || '', '').toString(),
               userId: _.get(item, configData?.approverPath || '', ''),
@@ -119,6 +122,8 @@ export const InputSelector = ({
         } else
           return response.map((item) => ({
             label: _.get(item, configData?.labelPath || '', ''),
+            subtitle: _.get(item, configData?.subtitlePath || '', ''),
+            image: _.get(item, configData?.imagePath || '', ''),
             value: _.get(item, configData?.valuePath || '', '').toString(),
           }));
       } else return [];
@@ -226,7 +231,7 @@ export const InputSelector = ({
                       className="pw-px-3 pw-py-2 pw-cursor-pointer pw-rounded-md hover:pw-bg-[#94B8ED]"
                     >
                       <button
-                        className="pw-w-full pw-h-full pw-text-left"
+                        className="pw-w-full pw-h-full pw-text-left pw-flex pw-items-center pw-gap-2"
                         onClick={(e) => {
                           handleTextChange(item.value);
                           setInputValue(item.label);
@@ -234,7 +239,25 @@ export const InputSelector = ({
                           e.preventDefault();
                         }}
                       >
-                        {item.label}
+                        {(item as any).image ? (
+                          <ImageSDK
+                            alt="avatarImage"
+                            src={`${
+                              configData?.imageBase + (item as any).image
+                            }`}
+                            height={30}
+                            width={24}
+                            className="pw-w-[24px] pw-h-[30px] pw-rounded-sm"
+                          />
+                        ) : null}
+                        <p>
+                          {item.label}
+                          {(item as any).subtitle ? (
+                            <span className="pw-text-xs pw-text-[#676767]">
+                              {(item as any).subtitle}
+                            </span>
+                          ) : null}
+                        </p>
                       </button>
                     </li>
                   );

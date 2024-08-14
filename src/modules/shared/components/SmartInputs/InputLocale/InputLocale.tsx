@@ -14,6 +14,7 @@ interface LocaleProps {
   name: string;
   docValue?: any;
   required?: boolean;
+  hideRegion?: boolean;
 }
 
 const optionsLocale = [
@@ -35,7 +36,13 @@ const optionsLocale = [
   },
 ];
 
-const InputLocale = ({ name, label, docValue, required }: LocaleProps) => {
+const InputLocale = ({
+  name,
+  label,
+  docValue,
+  required,
+  hideRegion = false,
+}: LocaleProps) => {
   const [selectCountry, setSelectCountry] = useState<string | undefined>();
   const [region, setRegion] = useState<string | undefined>();
   const [translate] = useTranslation();
@@ -84,7 +91,7 @@ const InputLocale = ({ name, label, docValue, required }: LocaleProps) => {
             </select>
           </FormItemContainer>
         </div>
-        {region ? (
+        {region && !hideRegion ? (
           <div className="pw-w-[160px]">
             <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
               {translate('shared>unputLocale>state')}

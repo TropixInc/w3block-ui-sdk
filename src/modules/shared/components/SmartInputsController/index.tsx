@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -16,6 +17,7 @@ import InputLocale from '../SmartInputs/InputLocale/InputLocale';
 import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
 import InputProducts from '../SmartInputs/InputProducts';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
+import { Separator } from '../SmartInputs/Separator/Separator';
 const InputBirthdate = lazy(() =>
   import('../SmartInputs/InputBirthdate').then((module) => ({
     default: module.default,
@@ -106,6 +108,9 @@ export interface InputDataDTO {
   search?: boolean;
   searchType?: string;
   approverPath?: string;
+  subtitlePath?: string;
+  imagePath?: string;
+  imageBase?: string;
 }
 
 const SmartInputsController = ({
@@ -349,6 +354,7 @@ const SmartInputsController = ({
               name={name}
               label={label}
               docValue={complexValue}
+              hideRegion={(selectData as any)?.hideRegion}
               required={required}
             />
           );
@@ -374,6 +380,17 @@ const SmartInputsController = ({
             docStatus={docStatus}
             profilePage={profilePage}
             required={required}
+          />
+        );
+      }
+      case DataTypesEnum.Separator: {
+        return (
+          <Separator
+            marginBottom={(selectData as any)?.marginBottom}
+            marginTop={(selectData as any)?.marginTop}
+            showLine={(selectData as any)?.showLine}
+            text={(selectData as any)?.text}
+            textAbove={(selectData as any)?.textAbove}
           />
         );
       }
