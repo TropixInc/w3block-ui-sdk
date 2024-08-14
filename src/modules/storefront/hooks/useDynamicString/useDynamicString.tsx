@@ -25,3 +25,19 @@ export const useDynamicString = (input: string | undefined) => {
     return { text, loaded, loading };
   }, [datasource, input, isDynamic, loading]);
 };
+
+export const getDynamicString = (input: string | undefined, data: any) => {
+  const replacements = Array?.from(
+    (input ?? '')?.matchAll(new RegExp(/\{(.*?)\}/g))
+  );
+  let text = input ?? '';
+  let loaded = true;
+  replacements?.forEach((item) => {
+    const [q, key] = item;
+    const [namespace] = (key || '').split('.');
+    const hasFirstLoad = _.get(data, namespace);
+    if (loaded && !hasFirstLoad) loaded = false;
+    text = text.replace(q, _.get(data, key, ''));
+  });
+  return { text, loaded };
+};

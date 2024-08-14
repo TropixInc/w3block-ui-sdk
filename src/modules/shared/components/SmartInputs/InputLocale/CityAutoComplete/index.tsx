@@ -206,7 +206,7 @@ const CityAutoComplete = ({
           }
           onChange={(e) => onChangeInputValue(e.target.value)}
           disabled={!country.length}
-          autoComplete="off"
+          autoComplete="new-password"
           onBlur={() => {
             resolveInput();
           }}

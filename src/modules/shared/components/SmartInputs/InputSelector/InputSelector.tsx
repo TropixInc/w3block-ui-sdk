@@ -5,6 +5,7 @@ import { useController } from 'react-hook-form';
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
 
+import { getDynamicString } from '../../../../storefront/hooks/useDynamicString/useDynamicString';
 import { useRouterConnect } from '../../../hooks';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import { FormItemContainer } from '../../Form/FormItemContainer';
@@ -96,7 +97,7 @@ export const InputSelector = ({
     searchType: configData?.searchType,
   });
   useEffect(() => {
-    if (multipleSelected.length) {
+    if (multipleSelected?.length) {
       field?.onChange({
         inputId: name,
         value: JSON.stringify({ values: multipleSelected }),
@@ -104,28 +105,39 @@ export const InputSelector = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [multipleSelected]);
-
   const dynamicOptions = useMemo(() => {
     if (data) {
       const response = _.get(data, configData?.responsePath || '', []);
-      if (response.length) {
+      if (response?.length) {
         if (configData?.approverPath) {
-          return response.map((item) => ({
-            label: _.get(item, configData?.labelPath || '', ''),
-            subtitle: _.get(item, configData?.subtitlePath || '', ''),
-            image: _.get(item, configData?.imagePath || '', ''),
-            value: {
-              id: _.get(item, configData?.valuePath || '', '').toString(),
-              userId: _.get(item, configData?.approverPath || '', ''),
-            },
-          }));
+          return response.map((item) => {
+            const { text: subtitle } = getDynamicString(
+              configData?.subtitlePath,
+              item
+            );
+            return {
+              label: _.get(item, configData?.labelPath || '', ''),
+              subtitle: subtitle,
+              image: _.get(item, configData?.imagePath || '', ''),
+              value: {
+                id: _.get(item, configData?.valuePath || '', '').toString(),
+                userId: _.get(item, configData?.approverPath || '', ''),
+              },
+            };
+          });
         } else
-          return response.map((item) => ({
-            label: _.get(item, configData?.labelPath || '', ''),
-            subtitle: _.get(item, configData?.subtitlePath || '', ''),
-            image: _.get(item, configData?.imagePath || '', ''),
-            value: _.get(item, configData?.valuePath || '', '').toString(),
-          }));
+          return response.map((item) => {
+            const { text: subtitle } = getDynamicString(
+              configData?.subtitlePath,
+              item
+            );
+            return {
+              label: _.get(item, configData?.labelPath || '', ''),
+              subtitle: subtitle,
+              image: _.get(item, configData?.imagePath || '', ''),
+              value: _.get(item, configData?.valuePath || '', '').toString(),
+            };
+          });
       } else return [];
     } else return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,18 +155,18 @@ export const InputSelector = ({
     if (
       selectedArray.value &&
       selectedArray.value !== 'Option value' &&
-      multipleSelected.length > 0
+      multipleSelected?.length > 0
     ) {
       const jsonValues = JSON.parse(selectedArray.value);
 
-      if (jsonValues.values.length > 0) {
+      if (jsonValues?.values?.length > 0) {
         const selected = (jsonValues.values as Array<string>).map((item) => {
           return (dynamicOptions as any)?.find(
             (value: any) => value.value === item
           );
         });
 
-        if (selected.length > 0) {
+        if (selected?.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return (selected as Array<any>).map(({ label }) => label).join(', ');
         } else {
@@ -210,7 +222,7 @@ export const InputSelector = ({
             value={inputValue}
             placeholder={'Selecione uma opção'}
             onChange={(e) => onChangeInputValue(e.target.value)}
-            autoComplete="off"
+            autoComplete="new-password"
           />
         </FormItemContainer>
         {showOptions ? (
@@ -222,7 +234,7 @@ export const InputSelector = ({
               <div className="pw-mb-6 pw-mx-auto pw-w-full">
                 <Spinner />
               </div>
-            ) : dynamicOptions.length ? (
+            ) : dynamicOptions?.length ? (
               <ul>
                 {dynamicOptions?.map((item) => {
                   return (
@@ -250,7 +262,7 @@ export const InputSelector = ({
                             className="pw-w-[24px] pw-h-[30px] pw-rounded-sm"
                           />
                         ) : null}
-                        <p>
+                        <p className="pw-flex pw-flex-col">
                           {item.label}
                           {(item as any).subtitle ? (
                             <span className="pw-text-xs pw-text-[#676767]">

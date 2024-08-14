@@ -221,7 +221,7 @@ const _FormCompleteKYCWithoutLayout = ({
             }
             const steps = Object.keys(groupedInputs).length;
             if (steps && parseInt(step as string) < steps) {
-              router.replace({
+              router.push({
                 query: {
                   contextSlug: slug(),
                   step: parseInt(step as string) + 1,
