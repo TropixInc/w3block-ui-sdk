@@ -386,11 +386,21 @@ const SmartInputsController = ({
       case DataTypesEnum.Separator: {
         return (
           <Separator
-            marginBottom={(selectData as any)?.marginBottom}
-            marginTop={(selectData as any)?.marginTop}
-            showLine={(selectData as any)?.showLine}
-            text={(selectData as any)?.text}
-            textAbove={(selectData as any)?.textAbove}
+            widgetType={(selectData as any)?.widgetType}
+            separatorConfig={{
+              marginBottom: (selectData as any)?.marginBottom,
+              marginTop: (selectData as any)?.marginTop,
+              showLine: (selectData as any)?.showLine,
+              text: (selectData as any)?.text,
+              textAbove: (selectData as any)?.textAbove,
+            }}
+            redirectConfig={{
+              bgColor: (selectData as any)?.bgColor,
+              link: (selectData as any)?.link,
+              target: (selectData as any)?.target,
+              text: (selectData as any)?.text,
+              textColor: (selectData as any)?.textColor,
+            }}
           />
         );
       }

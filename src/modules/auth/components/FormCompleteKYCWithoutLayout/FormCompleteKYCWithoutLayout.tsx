@@ -53,6 +53,7 @@ interface Props {
   };
   userContextId?: string;
   hideComplexPhone?: boolean;
+  hideContinue?: boolean;
 }
 
 interface ErrorProps {
@@ -77,6 +78,7 @@ const _FormCompleteKYCWithoutLayout = ({
   product,
   userContextId,
   hideComplexPhone,
+  hideContinue,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -337,6 +339,7 @@ const _FormCompleteKYCWithoutLayout = ({
           profilePage={profilePage}
           statusContext={statusContext}
           hideComplexPhone={hideComplexPhone}
+          hideContinue={hideContinue}
         ></FormTemplate>
 
         {isSuccess && (
@@ -433,6 +436,7 @@ const _FormCompleteKYCWithoutLayout = ({
             profilePage={profilePage}
             statusContext={statusContext}
             hideComplexPhone={hideComplexPhone}
+            hideContinue={hideContinue}
           ></FormTemplate>
 
           {isSuccess && (
@@ -489,7 +493,9 @@ const _FormCompleteKYCWithoutLayout = ({
         </FormProvider>
         <ModalBase isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
           <div>
-            <p>Tem certeza que deseja abandonar o processo de cadastro?</p>
+            <p className="pw-text-black">
+              Tem certeza que deseja abandonar o processo de cadastro?
+            </p>
             <div>
               <button
                 onClick={() => setIsOpenModal(false)}
@@ -533,6 +539,7 @@ export const FormCompleteKYCWithoutLayout = ({
   product,
   userContextId,
   hideComplexPhone,
+  hideContinue,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -553,6 +560,7 @@ export const FormCompleteKYCWithoutLayout = ({
       product={product}
       userContextId={userContextId}
       hideComplexPhone={hideComplexPhone}
+      hideContinue={hideContinue}
     />
   </TranslatableComponent>
 );

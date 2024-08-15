@@ -29,6 +29,7 @@ interface Props {
   profilePage?: boolean;
   statusContext?: UserContextStatus;
   hideComplexPhone?: boolean;
+  hideContinue?: boolean;
 }
 
 export const FormTemplate = ({
@@ -47,6 +48,7 @@ export const FormTemplate = ({
   profilePage,
   statusContext,
   hideComplexPhone,
+  hideContinue,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
 
@@ -110,24 +112,25 @@ export const FormTemplate = ({
           </Alert>
         </div>
       ) : null}
-
-      <AuthButton
-        type="submit"
-        className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-        disabled={
-          buttonDisabled ||
-          statusContext === UserContextStatus.Approved ||
-          statusContext === UserContextStatus.Denied
-        }
-      >
-        {isLoading ? (
-          <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
-        ) : keyPage ? (
-          'Salvar'
-        ) : (
-          'Continuar'
-        )}
-      </AuthButton>
+      {hideContinue ? null : (
+        <AuthButton
+          type="submit"
+          className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
+          disabled={
+            buttonDisabled ||
+            statusContext === UserContextStatus.Approved ||
+            statusContext === UserContextStatus.Denied
+          }
+        >
+          {isLoading ? (
+            <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
+          ) : keyPage ? (
+            'Salvar'
+          ) : (
+            'Continuar'
+          )}
+        </AuthButton>
+      )}
     </form>
   );
 };
