@@ -176,6 +176,7 @@ const RequestsList = () => {
           },
         },
         key: 'status',
+        initialSortParameter: 'created',
         sortable: false,
         header: {
           label: 'Situação',
