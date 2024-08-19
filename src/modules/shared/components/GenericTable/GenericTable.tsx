@@ -153,12 +153,13 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const getHref = (action: any, row: any) => {
     if (action && action.type == 'navigate') {
       let url = action.data;
+
       if (action.replacedQuery) {
         action.replacedQuery.forEach(
           (item: string) => (url = url.replace(`{${item}}`, _.get(row, item)))
         );
 
-        router.pushConnect(url);
+        router.pushConnect(url ?? '');
       }
     } else if (action && action.type == 'function') {
       return '';
@@ -208,7 +209,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, sort]);
+  }, [filters, sort, dataSource?.url]);
 
   const handleCopy = (hash: string) => {
     navigator.clipboard.writeText(hash || '');
@@ -246,15 +247,19 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         return `${symbol}${Number(value).toFixed(2)}`;
       }
       case FormatTypeColumn.MAPPING: {
-        const value = _.get(item, itemKey, '');
-        const formatedValue = _.get(
-          format.mapping,
-          value,
-          format.mapping.default
-        );
-        const dynamicValue = getValue(formatedValue, item);
+        if (typeof format.mapping === 'function') {
+          return format.mapping(item);
+        } else {
+          const value = _.get(item, itemKey, '');
+          const formatedValue = _.get(
+            format.mapping,
+            value,
+            format.mapping.default
+          );
+          const dynamicValue = getValue(formatedValue, item);
 
-        return dynamicValue ? dynamicValue : formatedValue || value;
+          return dynamicValue ? dynamicValue : formatedValue || value;
+        }
       }
       case FormatTypeColumn.HASH: {
         const value = _.get(item, itemKey, '');
