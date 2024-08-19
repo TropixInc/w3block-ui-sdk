@@ -4,6 +4,7 @@ import { Popover } from 'react-tiny-popover';
 import _ from 'lodash';
 
 import Dots from '../../assets/icons/dotsVerficalFilled.svg?react';
+import { useRouterConnect } from '../../hooks';
 
 interface ButtonProps {
   dataItem: any;
@@ -12,7 +13,7 @@ interface ButtonProps {
 
 export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const router = useRouterConnect();
   const renderOptions = useMemo(() => {
     return actions.filter((item) =>
       item.conditions ? item.conditions(dataItem) : true
@@ -23,19 +24,21 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
     if (action && action.type == 'function') {
       event?.preventDefault();
       action.data(dataItem);
+    } else if (action && action.type == 'navigate') {
+      getHref(action, dataItem);
     }
   };
 
-  const getHref = (action: any) => {
+  const getHref = (action: any, row: any) => {
     if (action && action.type == 'navigate') {
       let url = action.data;
+
       if (action.replacedQuery) {
         action.replacedQuery.forEach(
-          (item: string) =>
-            (url = url.replace(`{${item}}`, _.get(dataItem, item)))
+          (item: string) => (url = url.replace(`{${item}}`, _.get(row, item)))
         );
 
-        return url;
+        router.pushConnect(url ?? '');
       }
     } else if (action && action.type == 'function') {
       return '';
@@ -55,7 +58,6 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
             <a
               key={item.label + index}
               onClick={(e) => handleAction(e, item.action)}
-              href={getHref(item.action)}
               className="pw-w-full pw-block pw-text-sm pw-text-left pw-p-3 hover:pw-bg-[#9cc2f7]"
             >
               {item.label}
