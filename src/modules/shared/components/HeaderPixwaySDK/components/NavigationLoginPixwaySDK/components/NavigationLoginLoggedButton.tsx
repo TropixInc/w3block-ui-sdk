@@ -151,11 +151,11 @@ export const useDefaultMenuTabs = (textColor: string) => {
     {
       name:
         internalMenuData['withdraws']?.customLabel ||
-        translate('components>menu>withdraws'),
+        translate('components>menu>withdraws'), 
       id: 'withdraws',
       icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
       route: PixwayAppRoutes.WITHDRAWS,
-      isVisible: isCommerceReceiver && !isHidden('withdraws'),
+      isVisible: isHidden('withdraws') === false,
     },
     {
       name:
