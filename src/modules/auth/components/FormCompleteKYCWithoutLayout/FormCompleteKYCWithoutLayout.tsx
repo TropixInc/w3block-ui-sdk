@@ -21,11 +21,13 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
 import { useGetUserContextId } from '../../../shared/hooks/useGetUserContextId/useGetUserContextId';
+import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignupForm';
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
+import { useGetReasonsRequiredReview } from '../../hooks/useGetReasonsRequiredReview';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 const Box = lazy(() =>
   import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
@@ -113,21 +115,46 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
   const { refetch } = useProfile();
-  const { data: documents } = useGetUserContextId({
+
+  const { data: userContext } = useGetUserContextId({
     userId: userId ?? '',
     userContextId: userContextId ?? '',
   });
+  const { data: documents } = useGetUsersDocuments({
+    userId: userId ?? '',
+    contextId: tenantInputs?.data?.length
+      ? tenantInputs?.data[0].contextId
+      : '',
+  });
+
+  const docsToUse = useMemo(() => {
+    if (userContext && userContext?.data?.documents) {
+      return userContext?.data?.documents;
+    } else return documents?.data;
+  }, [userContext, documents]);
+
   const context = useContext(OnboardContext);
   const query = Object.keys(router.query ?? {}).length > 0 ? router.query : '';
 
   const errorPost = error as AxiosError;
   const errorMessage = errorPost?.response?.data as ErrorProps;
 
+  const { data: reasons } = useGetReasonsRequiredReview(
+    tenantId,
+    userId,
+    tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : ''
+  );
+
+  const reasonsToUse = useMemo(() => {
+    if (userContext && userContext?.data) return userContext?.data;
+    else if (reasons?.data?.items) return reasons?.data?.items?.[0];
+  }, [userContext, reasons]);
+
   const statusContext = useMemo(() => {
-    if (documents && documents?.data?.status) {
-      return documents?.data?.status;
+    if (reasonsToUse && reasonsToUse?.status) {
+      return reasonsToUse?.status;
     }
-  }, [documents]);
+  }, [reasonsToUse]);
 
   const inputsToShow = useMemo(() => {
     if (step) return groupedInputs[step as string];
@@ -177,10 +204,10 @@ const _FormCompleteKYCWithoutLayout = ({
 
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
-      const inputApprover = tenantInputs.data.find(
+      const inputApprover = tenantInputs.data?.find(
         (val: any) => (val?.data as any)?.approver
       );
-      const approver = docsToUse().find(
+      const approver = docsToUse()?.find(
         (val: any) => val.inputId === inputApprover?.id
       );
       const value = () => {
@@ -274,9 +301,11 @@ const _FormCompleteKYCWithoutLayout = ({
   };
 
   function getDocumentByInputId(inputId: string) {
-    return documents?.data.documents.find(
-      (doc: any) =>
-        doc.inputId === inputId && (doc as any)?.userContextId === userContextId
+    return docsToUse?.find((doc: any) =>
+      userContext
+        ? doc.inputId === inputId &&
+          (doc as any)?.userContextId === userContextId
+        : doc.inputId === inputId
     );
   }
   const formState = useMemo(() => {
@@ -293,11 +322,11 @@ const _FormCompleteKYCWithoutLayout = ({
     keyPage ? (
       <FormProvider {...dynamicMethods}>
         {!keyPage &&
-        documents?.data?.logs?.at(-1)?.reason &&
-        documents?.data?.logs?.at(-1)?.inputIds.length ? (
+        reasonsToUse?.logs?.at(-1)?.reason &&
+        reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
           <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
             <p className="pw-mt-2 pw-text-[#FF0505]">
-              {documents?.data?.logs.at(-1)?.reason}
+              {reasonsToUse?.logs.at(-1)?.reason}
             </p>
           </div>
         ) : null}
@@ -395,11 +424,11 @@ const _FormCompleteKYCWithoutLayout = ({
         )}
       >
         <FormProvider {...dynamicMethods}>
-          {documents?.data?.logs?.at(-1)?.reason &&
-          documents?.data?.logs?.at(-1)?.inputIds.length ? (
+          {reasonsToUse?.logs?.at(-1)?.reason &&
+          reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
             <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
               <p className="pw-mt-2 pw-text-[#FF0505]">
-                {documents?.data?.logs.at(-1)?.reason}
+                {reasonsToUse?.logs.at(-1)?.reason}
               </p>
             </div>
           ) : null}
