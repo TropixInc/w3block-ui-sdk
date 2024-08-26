@@ -16,6 +16,7 @@ interface InputBirthdate {
   docStatus?: UserDocumentStatus;
   profilePage?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputBirthdate = ({
@@ -25,6 +26,7 @@ const InputBirthdate = ({
   docStatus,
   profilePage,
   required,
+  readonly,
 }: InputBirthdate) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -54,7 +56,8 @@ const InputBirthdate = ({
           type="date"
           readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
-            profilePage
+            profilePage ||
+            readonly
           }
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}

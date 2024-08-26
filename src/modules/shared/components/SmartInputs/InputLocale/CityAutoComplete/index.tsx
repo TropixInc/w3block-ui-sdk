@@ -26,6 +26,7 @@ interface CityAutocompleteProps {
   inputPlaceholder?: string;
   hidenValidations?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 function getAddressObject(address_components: any) {
@@ -81,6 +82,7 @@ const CityAutoComplete = ({
   inputPlaceholder,
   hidenValidations,
   required,
+  readonly,
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
   const divRef = useRef<HTMLDivElement>(null);
@@ -206,6 +208,7 @@ const CityAutoComplete = ({
           }
           onChange={(e) => onChangeInputValue(e.target.value)}
           disabled={!country.length}
+          readOnly={readonly}
           autoComplete="new-password"
           onBlur={() => {
             resolveInput();

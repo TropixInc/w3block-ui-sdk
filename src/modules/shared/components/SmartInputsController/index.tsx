@@ -87,6 +87,7 @@ interface SmartProps {
   required?: boolean;
   statusContext?: UserContextStatus;
   hideComplexPhone?: boolean;
+  readonly?: boolean;
 }
 
 export interface InputError {
@@ -135,6 +136,7 @@ const SmartInputsController = ({
   required,
   statusContext,
   hideComplexPhone = false,
+  readonly,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const [checked, setChecked] = useState(false);
@@ -167,6 +169,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Text:
@@ -177,6 +180,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
 
@@ -189,6 +193,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Phone:
@@ -201,6 +206,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             hideAddButton={hideComplexPhone}
             statusContext={statusContext}
+            readonly={readonly}
           />
         ) : (
           <InputPhone
@@ -209,6 +215,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Email:
@@ -221,6 +228,7 @@ const SmartInputsController = ({
             autofill={autofill}
             hidenValidations={autofill}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Url:
@@ -231,6 +239,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.File:
@@ -245,6 +254,7 @@ const SmartInputsController = ({
             acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
             onChangeUploadProgess={onChangeUploadProgess}
             required={required}
+            readonly={readonly}
           />
         );
 
@@ -261,6 +271,7 @@ const SmartInputsController = ({
             acceptTypes={selectData.acceptTypes || ['.png', '.jpeg', '.jpg']}
             onChangeUploadProgess={onChangeUploadProgess}
             required={required}
+            readonly={readonly}
           />
         );
 
@@ -286,6 +297,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.SimpleSelect:
@@ -299,6 +311,7 @@ const SmartInputsController = ({
             configData={selectData}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.DynamicSelect:
@@ -312,6 +325,7 @@ const SmartInputsController = ({
             docValue={complexValue ?? simpleValue}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.IdentificationDocument:
@@ -321,6 +335,7 @@ const SmartInputsController = ({
             label={label}
             docValue={complexValue}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Checkbox:
@@ -333,6 +348,7 @@ const SmartInputsController = ({
             configData={selectData}
             hidenValidations
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.SimpleLocation: {
@@ -346,6 +362,7 @@ const SmartInputsController = ({
               placeCountry={_.get(selectData, 'placeCountry', '')}
               placeholder={_.get(selectData, 'placeholder', '')}
               required={required}
+              readonly={readonly}
             />
           );
         } else {
@@ -356,6 +373,7 @@ const SmartInputsController = ({
               docValue={complexValue}
               hideRegion={(selectData as any)?.hideRegion}
               required={required}
+              readonly={readonly}
             />
           );
         }
@@ -380,6 +398,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       }

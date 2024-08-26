@@ -20,6 +20,7 @@ interface KycItemProps {
   userContextId: string;
   onChangeIsRenderKycItem: (value: boolean) => void;
   setIsUpdateList: (value: boolean) => void;
+  readonly?: boolean;
 }
 
 const RequestItemWrapper = ({
@@ -29,6 +30,7 @@ const RequestItemWrapper = ({
   slugContext,
   userContextId,
   setIsUpdateList,
+  readonly,
 }: KycItemProps) => {
   const [translate] = useTranslation();
 
@@ -308,6 +310,7 @@ const RequestItemWrapper = ({
             onChangeInputsIdRequestReview={setInputsIdRequestReview}
             userContextId={userContextId}
             hideComplexPhone={true}
+            readonly={readonly}
           />
         </div>
       </div>

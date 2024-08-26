@@ -18,6 +18,7 @@ interface InputPhoneProps {
   hidenValidations?: boolean;
   statusContext?: UserContextStatus;
   hideAddButton?: boolean;
+  readonly?: boolean;
 }
 
 const ComplexPhone = ({
@@ -29,6 +30,7 @@ const ComplexPhone = ({
   complexValue,
   statusContext,
   hideAddButton = false,
+  readonly,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
 
@@ -100,7 +102,8 @@ const ComplexPhone = ({
               <FormItemContainer className="pw-w-full">
                 <ReactInputMask
                   readOnly={
-                    docStatus && validateIfStatusKycIsReadonly(docStatus)
+                    (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+                    readonly
                   }
                   name={item}
                   value={item}

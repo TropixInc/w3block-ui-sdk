@@ -56,6 +56,7 @@ interface Props {
   userContextId?: string;
   hideComplexPhone?: boolean;
   hideContinue?: boolean;
+  readonly?: boolean;
 }
 
 interface ErrorProps {
@@ -81,6 +82,7 @@ const _FormCompleteKYCWithoutLayout = ({
   userContextId,
   hideComplexPhone,
   hideContinue,
+  readonly,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -369,6 +371,7 @@ const _FormCompleteKYCWithoutLayout = ({
           statusContext={statusContext}
           hideComplexPhone={hideComplexPhone}
           hideContinue={hideContinue}
+          readonly={readonly}
         ></FormTemplate>
 
         {isSuccess && (
@@ -466,6 +469,7 @@ const _FormCompleteKYCWithoutLayout = ({
             statusContext={statusContext}
             hideComplexPhone={hideComplexPhone}
             hideContinue={hideContinue}
+            readonly={readonly}
           ></FormTemplate>
 
           {isSuccess && (
@@ -569,6 +573,7 @@ export const FormCompleteKYCWithoutLayout = ({
   userContextId,
   hideComplexPhone,
   hideContinue,
+  readonly,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -590,6 +595,7 @@ export const FormCompleteKYCWithoutLayout = ({
       userContextId={userContextId}
       hideComplexPhone={hideComplexPhone}
       hideContinue={hideContinue}
+      readonly={readonly}
     />
   </TranslatableComponent>
 );

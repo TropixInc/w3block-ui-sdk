@@ -29,6 +29,7 @@ interface Props {
   docValue?: string | object | undefined;
   profilePage?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const paginationMapping = {
@@ -61,6 +62,7 @@ export const InputSelector = ({
   // profilePage = false,
   docValue,
   required,
+  readonly,
 }: Props) => {
   const { field, fieldState } = useController({ name });
   const router = useRouterConnect();
@@ -222,6 +224,7 @@ export const InputSelector = ({
             value={inputValue}
             placeholder={'Selecione uma opção'}
             onChange={(e) => onChangeInputValue(e.target.value)}
+            readOnly={readonly}
             autoComplete="new-password"
           />
         </FormItemContainer>
@@ -307,6 +310,7 @@ export const InputSelector = ({
           ) : (
             <select
               name={name}
+              disabled={readonly}
               onChange={(e) => handleTextChange(e.target.value)}
               className="pw-max-h-[180px] pw-h-[32px] pw-w-full pw-overflow-y-auto pw-bg-inherit pw-text-black pw-outline-none"
             >

@@ -30,6 +30,7 @@ interface Props {
   statusContext?: UserContextStatus;
   hideComplexPhone?: boolean;
   hideContinue?: boolean;
+  readonly?: boolean;
 }
 
 export const FormTemplate = ({
@@ -49,6 +50,7 @@ export const FormTemplate = ({
   statusContext,
   hideComplexPhone,
   hideContinue,
+  readonly,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
 
@@ -96,6 +98,7 @@ export const FormTemplate = ({
                   required={item.mandatory}
                   statusContext={statusContext}
                   hideComplexPhone={hideComplexPhone}
+                  readonly={readonly}
                 />
               </div>
             );

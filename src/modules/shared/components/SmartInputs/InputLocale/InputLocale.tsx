@@ -15,6 +15,7 @@ interface LocaleProps {
   docValue?: any;
   required?: boolean;
   hideRegion?: boolean;
+  readonly?: boolean;
 }
 
 const optionsLocale = [
@@ -42,6 +43,7 @@ const InputLocale = ({
   docValue,
   required,
   hideRegion = false,
+  readonly,
 }: LocaleProps) => {
   const [selectCountry, setSelectCountry] = useState<string | undefined>();
   const [region, setRegion] = useState<string | undefined>();
@@ -74,6 +76,7 @@ const InputLocale = ({
           >
             <select
               onChange={(e) => setSelectCountry(e.target.value)}
+              disabled={readonly}
               className="pw-max-h-[180px] pw-h-12 pw-w-full  pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
             >
               <option value={''}>
@@ -108,6 +111,7 @@ const InputLocale = ({
           onChangeRegion={setRegion}
           apiValue={docValue?.placeId}
           type="(cities)"
+          readonly={readonly}
         />
       ) : null}
     </div>
