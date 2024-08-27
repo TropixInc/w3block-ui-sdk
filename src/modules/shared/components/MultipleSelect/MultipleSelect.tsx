@@ -152,7 +152,7 @@ export const MultipleSelect = ({
     >
       <Listbox
         as="div"
-        className="pw-relative pw-w-full"
+        className="pw-relative pw-w-full pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#94B8ED] pw-outline-1"
         value={value}
         disabled={disabled}
       >
@@ -172,7 +172,9 @@ export const MultipleSelect = ({
               )}
               onClick={() => (!disabled ? setIsOpen(!isOpen) : null)}
             >
-              <span className="pw-block pw-truncate">{placeholder}</span>
+              <div className="pw-block pw-truncate pw-max-w-[410px]">
+                {placeholder}
+              </div>
 
               <ArrowDownOutlined
                 className={classNames(

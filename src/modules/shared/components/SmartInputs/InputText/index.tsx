@@ -65,7 +65,7 @@ const InputText = ({
         />
       </FormItemContainer>
       {!hidenValidations && (
-        <div className="pw-mt-[5px]">
+        <div className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}

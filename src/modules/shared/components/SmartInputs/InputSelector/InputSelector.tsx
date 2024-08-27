@@ -10,8 +10,9 @@ import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApi
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import LabelWithRequired from '../../LabelWithRequired';
 import { MultipleSelect } from '../../MultipleSelect';
-import { InputDataDTO } from '../../SmartInputsController';
+import { InputDataDTO, InputError } from '../../SmartInputsController';
 import { Spinner } from '../../Spinner';
+import InputStatus from '../InputStatus';
 
 export interface Options {
   label: string;
@@ -27,6 +28,7 @@ interface Props {
   docValue?: string | object | undefined;
   profilePage?: boolean;
   required?: boolean;
+  hidenValidations?: boolean;
 }
 
 const paginationMapping = {
@@ -59,8 +61,10 @@ export const InputSelector = ({
   // profilePage = false,
   docValue,
   required,
+  hidenValidations,
 }: Props) => {
   const { field, fieldState } = useController({ name });
+  const error = fieldState?.error as unknown as InputError;
   const router = useRouterConnect();
   // const [firstInput, setFirstInput] = useState(true);
   const [multipleSelected, setMultipleSelected] = useState<
@@ -255,6 +259,7 @@ export const InputSelector = ({
         </LabelWithRequired>
         <FormItemContainer
           className="!pw-p-[0.6rem]"
+          disableClasses={configData?.isMultiple}
           invalid={fieldState?.invalid}
         >
           {configData?.isMultiple ? (
@@ -264,7 +269,7 @@ export const InputSelector = ({
               placeholder={getPlaceholderForMultipleSelect(field?.value || [])}
               classes={{
                 button: '!pw-border-none pw-h-[48px]',
-                root: '-pw-mt-2 ',
+                root: '!pw-mb-2',
               }}
               onChangeMultipleSelected={setMultipleSelected}
               multipleSelected={multipleSelected}
@@ -302,6 +307,16 @@ export const InputSelector = ({
             </select>
           )}
         </FormItemContainer>
+        {!hidenValidations && (
+          <div className="pw-mt-[5px] pw-h-[16px]">
+            {field.value && (
+              <InputStatus
+                invalid={fieldState.invalid}
+                errorMessage={error?.value?.message}
+              />
+            )}
+          </div>
+        )}
       </div>
     );
   }

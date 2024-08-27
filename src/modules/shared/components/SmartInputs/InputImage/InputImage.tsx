@@ -201,7 +201,7 @@ const InputImage = ({
         </FormItemContainer>
 
         {!hidenValidations && (
-          <div className="pw-mt-[5px]">
+          <div className="pw-mt-[5px] pw-h-[16px]">
             {field.value || Boolean(fileRejections.length) ? (
               <InputStatus
                 invalid={

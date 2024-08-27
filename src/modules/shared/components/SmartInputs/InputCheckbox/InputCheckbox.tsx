@@ -55,7 +55,7 @@ const InputCheckbox = ({
   }, [docValue]);
 
   return (
-    <div className={`${label === ' ' ? '-pw-mt-3' : ''} pw-mb-3 pw-w-full`}>
+    <div className={`${label === ' ' ? '-pw-mt-6' : ''} pw-mb-6 pw-w-full`}>
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
@@ -79,7 +79,7 @@ const InputCheckbox = ({
         </a>
       </FormItemContainer>
       {!hidenValidations && (
-        <div className="pw-mt-[5px]">
+        <div className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}
