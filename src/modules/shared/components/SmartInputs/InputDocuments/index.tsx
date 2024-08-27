@@ -16,6 +16,7 @@ interface InputDocuments {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputDocuments = ({
@@ -24,6 +25,7 @@ const InputDocuments = ({
   label,
   required,
   hidenValidations = false,
+  readonly,
 }: InputDocuments) => {
   const { field, fieldState } = useController({ name });
   const [selectDocType, setSelectDocType] = useState<string | undefined>();
@@ -99,6 +101,7 @@ const InputDocuments = ({
               setSelectDocType(e.target.value);
               setDocument('');
             }}
+            disabled={readonly}
             className="pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
           >
             <option value={''}>Selecione o tipo de documento..</option>
@@ -133,12 +136,14 @@ const InputDocuments = ({
                 placeholder="Digite apenas números"
                 className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
                 inputMode="numeric"
+                readOnly={readonly}
               />
             ) : (
               <input
                 name={name}
                 onChange={(e) => handleChange(e.target.value)}
                 value={document}
+                readOnly={readonly}
                 className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
               />
             )}

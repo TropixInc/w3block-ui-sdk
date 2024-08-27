@@ -20,6 +20,7 @@ interface InputCPFProps {
   docValue?: string;
   docStatus?: UserDocumentStatus;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputCpf = ({
@@ -30,6 +31,7 @@ const InputCpf = ({
   hidenValidations,
   profilePage,
   required,
+  readonly,
 }: InputCPFProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -69,7 +71,8 @@ const InputCpf = ({
         <ReactInputMask
           readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
-            profilePage
+            profilePage ||
+            readonly
           }
           mask={'999.999.999-99'}
           maskChar={''}

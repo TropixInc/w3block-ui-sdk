@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -16,6 +17,7 @@ import InputLocale from '../SmartInputs/InputLocale/InputLocale';
 import InputPlaces from '../SmartInputs/InputPlaces/InputPlaces';
 import InputProducts from '../SmartInputs/InputProducts';
 import { Options } from '../SmartInputs/InputSelector/InputSelector';
+import { Separator } from '../SmartInputs/Separator/Separator';
 const InputBirthdate = lazy(() =>
   import('../SmartInputs/InputBirthdate').then((module) => ({
     default: module.default,
@@ -84,6 +86,8 @@ interface SmartProps {
   isKeyPage?: boolean;
   required?: boolean;
   statusContext?: UserContextStatus;
+  hideComplexPhone?: boolean;
+  readonly?: boolean;
 }
 
 export interface InputError {
@@ -105,6 +109,9 @@ export interface InputDataDTO {
   search?: boolean;
   searchType?: string;
   approverPath?: string;
+  subtitlePath?: string;
+  imagePath?: string;
+  imageBase?: string;
 }
 
 const SmartInputsController = ({
@@ -128,6 +135,8 @@ const SmartInputsController = ({
   isKeyPage,
   required,
   statusContext,
+  hideComplexPhone = false,
+  readonly,
 }: SmartProps) => {
   const [translate] = useTranslation();
   const [checked, setChecked] = useState(false);
@@ -160,6 +169,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Text:
@@ -170,6 +180,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
 
@@ -182,6 +193,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Phone:
@@ -192,7 +204,9 @@ const SmartInputsController = ({
             complexValue={complexValue}
             docValue={simpleValue}
             docStatus={docStatus}
+            hideAddButton={hideComplexPhone}
             statusContext={statusContext}
+            readonly={readonly}
           />
         ) : (
           <InputPhone
@@ -201,6 +215,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Email:
@@ -213,6 +228,7 @@ const SmartInputsController = ({
             autofill={autofill}
             hidenValidations={autofill}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Url:
@@ -223,6 +239,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.File:
@@ -237,6 +254,7 @@ const SmartInputsController = ({
             acceptTypesDocs={['.png', '.jpeg', '.jpg', '.pdf']}
             onChangeUploadProgess={onChangeUploadProgess}
             required={required}
+            readonly={readonly}
           />
         );
 
@@ -253,6 +271,7 @@ const SmartInputsController = ({
             acceptTypes={selectData.acceptTypes || ['.png', '.jpeg', '.jpg']}
             onChangeUploadProgess={onChangeUploadProgess}
             required={required}
+            readonly={readonly}
           />
         );
 
@@ -278,6 +297,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.SimpleSelect:
@@ -291,6 +311,7 @@ const SmartInputsController = ({
             configData={selectData}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.DynamicSelect:
@@ -304,6 +325,7 @@ const SmartInputsController = ({
             docValue={complexValue ?? simpleValue}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.IdentificationDocument:
@@ -313,6 +335,7 @@ const SmartInputsController = ({
             label={label}
             docValue={complexValue}
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.Checkbox:
@@ -325,6 +348,7 @@ const SmartInputsController = ({
             configData={selectData}
             hidenValidations
             required={required}
+            readonly={readonly}
           />
         );
       case DataTypesEnum.SimpleLocation: {
@@ -338,6 +362,7 @@ const SmartInputsController = ({
               placeCountry={_.get(selectData, 'placeCountry', '')}
               placeholder={_.get(selectData, 'placeholder', '')}
               required={required}
+              readonly={readonly}
             />
           );
         } else {
@@ -346,7 +371,9 @@ const SmartInputsController = ({
               name={name}
               label={label}
               docValue={complexValue}
+              hideRegion={(selectData as any)?.hideRegion}
               required={required}
+              readonly={readonly}
             />
           );
         }
@@ -371,6 +398,28 @@ const SmartInputsController = ({
             docStatus={docStatus}
             profilePage={profilePage}
             required={required}
+            readonly={readonly}
+          />
+        );
+      }
+      case DataTypesEnum.Separator: {
+        return (
+          <Separator
+            widgetType={(selectData as any)?.widgetType}
+            separatorConfig={{
+              marginBottom: (selectData as any)?.marginBottom,
+              marginTop: (selectData as any)?.marginTop,
+              showLine: (selectData as any)?.showLine,
+              text: (selectData as any)?.text,
+              textAbove: (selectData as any)?.textAbove,
+            }}
+            redirectConfig={{
+              bgColor: (selectData as any)?.bgColor,
+              link: (selectData as any)?.link,
+              target: (selectData as any)?.target,
+              text: (selectData as any)?.text,
+              textColor: (selectData as any)?.textColor,
+            }}
           />
         );
       }

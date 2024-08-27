@@ -31,6 +31,7 @@ interface InputMultiFaceProps {
   acceptTypesDocs: Array<string>;
   onChangeUploadProgess: (value: boolean) => void;
   required?: boolean;
+  readonly?: boolean;
 }
 
 export const InputMultiFace = ({

@@ -146,7 +146,7 @@ export const ProductInfo = ({
           </p>
         )}
         {subtitle && (
-          <div className="pw-flex pw-gap-1">
+          <div className="pw-flex pw-gap-1 -pw-mt-2 pw-mb-2">
             <p className="pw-text-xs pw-text-black">{subtitle}</p>
           </div>
         )}

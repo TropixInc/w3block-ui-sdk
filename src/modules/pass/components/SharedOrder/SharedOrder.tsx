@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'react-use';
@@ -9,6 +10,7 @@ import { useRouterConnect } from '../../../shared';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { QrCodeSection } from '../../../tokens/components/PassTemplate/QrCodeSection';
+import { usePublicTokenData } from '../../../tokens/hooks/usePublicTokenData';
 import { useGetTokenSharedCode } from '../../hooks/useGetTokenSharedCode';
 
 const _SharedOrder = ({
@@ -32,6 +34,12 @@ const _SharedOrder = ({
     code as string,
     initialStep === 2 && !selfBuy ? true : 5
   );
+  const { data: publicTokenResponse } = usePublicTokenData({
+    contractAddress: pass?.tokenPass?.contractAddress,
+    chainId: pass?.tokenPass?.chainId,
+    tokenId: pass?.editionNumber,
+  });
+
   const [__, copyToClipboard] = useCopyToClipboard();
   const hasExpired =
     !pass?.benefits?.[0]?.secret ||
@@ -143,10 +151,18 @@ const _SharedOrder = ({
                 </div>
                 <div>
                   <p className="pw-mt-3 pw-mb-0 pw-text-[13px] pw-text-center">
-                    {translate('pass>sharedOrder>value')}
+                    {
+                      publicTokenResponse?.data?.dynamicInformation
+                        ?.publishedTokenTemplate?.value?.config?.label
+                    }
                   </p>
                   <p className="pw-text-center pw-text-sm pw-font-semibold pw-mb-8">
-                    {pass?.tokenMetadata?.value ?? ''}
+                    {(
+                      publicTokenResponse?.data?.dynamicInformation
+                        ?.publishedTokenTemplate?.value?.config as any
+                    )?.options.find(
+                      (val: any) => val.value === pass?.tokenMetadata?.value
+                    )?.label ?? ''}
                   </p>
                 </div>
               </>

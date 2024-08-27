@@ -68,7 +68,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               image={token?.metadata.image}
               name={token?.title}
               id={token.id.tokenId}
-              chainId={wallet?.chainId ?? 80001}
+              chainId={wallet?.chainId ?? 137}
               contractAddress={''}
               proccessing={true}
               editionId={''}
@@ -133,7 +133,7 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
 
   const tokens = ethNFTsResponse?.data?.items
     ? ethNFTsResponse?.data.items.map((nft: any) =>
-        mapNFTToToken(nft, wallet?.chainId || 80001)
+        mapNFTToToken(nft, wallet?.chainId || 137)
       )
     : [];
 

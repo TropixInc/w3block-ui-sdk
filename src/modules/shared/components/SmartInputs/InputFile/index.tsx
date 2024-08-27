@@ -32,6 +32,7 @@ interface InputFileProps {
   acceptTypesDocs: Array<string>;
   onChangeUploadProgess: (value: boolean) => void;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputFile = ({
@@ -46,6 +47,7 @@ const InputFile = ({
   acceptTypesDocs,
   onChangeUploadProgess,
   required,
+  readonly,
 }: InputFileProps) => {
   const [translate] = useTranslation();
 
@@ -157,7 +159,10 @@ const InputFile = ({
         >
           <input
             {...getInputProps()}
-            readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+            readOnly={
+              (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+              readonly
+            }
           />
           <FileIcon className="pw-w-4" />
           {isLoadingUpload || isLoadingAsset ? (

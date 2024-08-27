@@ -17,6 +17,7 @@ interface InputCheckbox {
   hidenValidations?: boolean;
   configData?: object;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputCheckbox = ({
@@ -27,6 +28,7 @@ const InputCheckbox = ({
   hidenValidations = false,
   configData,
   required,
+  readonly,
 }: InputCheckbox) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<boolean | undefined>();
@@ -67,6 +69,7 @@ const InputCheckbox = ({
           type="checkbox"
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleValueChange(e.target.checked)}
+          disabled={readonly}
           checked={inputValue}
         />
         <a

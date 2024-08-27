@@ -34,7 +34,7 @@ export const useProcessingTokens = () => {
           PixwayAPIRoutes.METADATA_PROCESSING.replace(
             '{address}',
             wallet?.address ?? ''
-          ).replace('{chainId}', (wallet?.chainId ?? 80001).toString())
+          ).replace('{chainId}', (wallet?.chainId ?? 137).toString())
         )
         .then((data) => data.data),
     {

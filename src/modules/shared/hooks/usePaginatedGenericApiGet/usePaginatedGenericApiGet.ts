@@ -28,6 +28,7 @@ export const usePaginatedGenericApiGet = ({
   searchType,
 }: GenericProps) => {
   const internalAxios = useAxios(internalTypeAPI || W3blockAPI.ID);
+
   return usePaginatedQuery(
     [url, search ?? ''],
     (params) => {

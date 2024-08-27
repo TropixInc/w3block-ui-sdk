@@ -49,6 +49,8 @@ const RequestsList = () => {
           slugContext={data.context.slug}
           userId={data.userId}
           userContextId={data.id}
+          setIsUpdateList={setIsUpdateList}
+          readonly={data?.tenantContext?.data?.approverReadOnly}
         />
       );
     }
@@ -83,15 +85,15 @@ const RequestsList = () => {
       },
     },
     dataSource: {
-      url: `/users/${tenantId}/contexts/find?contextType=form&sortBy=createdAt&orderBy=DESC`,
+      url: `/users/${tenantId}/contexts/find?contextType=form&excludeSelfContexts=true&sortBy=createdAt&orderBy=DESC`,
       urlContext: W3blockAPI.ID,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,
     },
     tableStyles: {
       root: { width: '100%' },
-      header: '!pw-grid-cols-[18%_20%]',
-      line: '!pw-grid-cols-[18%_20%]',
+      header: '!pw-grid-cols-[18%_20%] !pw-text-black',
+      line: '!pw-grid-cols-[18%_20%] !pw-text-black',
     },
 
     columns: [
@@ -175,6 +177,7 @@ const RequestsList = () => {
           },
         },
         key: 'status',
+        initialSortParameter: 'created',
         sortable: false,
         header: {
           label: 'Situação',

@@ -20,6 +20,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
+import { useGetUserContextId } from '../../../shared/hooks/useGetUserContextId/useGetUserContextId';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -53,6 +54,9 @@ interface Props {
     productId: string;
   };
   userContextId?: string;
+  hideComplexPhone?: boolean;
+  hideContinue?: boolean;
+  readonly?: boolean;
 }
 
 interface ErrorProps {
@@ -76,6 +80,9 @@ const _FormCompleteKYCWithoutLayout = ({
   handleProductFormError,
   product,
   userContextId,
+  hideComplexPhone,
+  hideContinue,
+  readonly,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -110,12 +117,24 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
   const { refetch } = useProfile();
+
+  const { data: userContext } = useGetUserContextId({
+    userId: userId ?? '',
+    userContextId: userContextId ?? '',
+  });
   const { data: documents } = useGetUsersDocuments({
     userId: userId ?? '',
     contextId: tenantInputs?.data?.length
       ? tenantInputs?.data[0].contextId
       : '',
   });
+
+  const docsToUse = useMemo(() => {
+    if (userContext && userContext?.data?.documents) {
+      return userContext?.data?.documents;
+    } else return documents?.data;
+  }, [userContext, documents]);
+
   const context = useContext(OnboardContext);
   const query = Object.keys(router.query ?? {}).length > 0 ? router.query : '';
 
@@ -128,11 +147,16 @@ const _FormCompleteKYCWithoutLayout = ({
     tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : ''
   );
 
+  const reasonsToUse = useMemo(() => {
+    if (userContext && userContext?.data) return userContext?.data;
+    else if (reasons?.data?.items) return reasons?.data?.items?.[0];
+  }, [userContext, reasons]);
+
   const statusContext = useMemo(() => {
-    if (reasons && reasons?.data?.items) {
-      return reasons?.data?.items[0]?.status;
+    if (reasonsToUse && reasonsToUse?.status) {
+      return reasonsToUse?.status;
     }
-  }, [reasons]);
+  }, [reasonsToUse]);
 
   const inputsToShow = useMemo(() => {
     if (step) return groupedInputs[step as string];
@@ -163,14 +187,14 @@ const _FormCompleteKYCWithoutLayout = ({
     const docsToUse = () => {
       if (
         tenantInputs?.data.some(
-          (val) => (val.type as any) === 'commerce_product'
+          (val: any) => (val.type as any) === 'commerce_product'
         ) &&
         product
       ) {
         const productInput = [
           {
             inputId: tenantInputs?.data?.find(
-              (val) => (val.type as any) === 'commerce_product'
+              (val: any) => (val.type as any) === 'commerce_product'
             )?.id,
             value: product,
           },
@@ -182,11 +206,11 @@ const _FormCompleteKYCWithoutLayout = ({
 
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
-      const inputApprover = tenantInputs.data.find(
-        (val) => (val?.data as any)?.approver
+      const inputApprover = tenantInputs.data?.find(
+        (val: any) => (val?.data as any)?.approver
       );
-      const approver = docsToUse().find(
-        (val) => val.inputId === inputApprover?.id
+      const approver = docsToUse()?.find(
+        (val: any) => val.inputId === inputApprover?.id
       );
       const value = () => {
         if (
@@ -197,16 +221,20 @@ const _FormCompleteKYCWithoutLayout = ({
           return {
             documents: docsToUse(),
             currentStep: parseInt(step as string),
-            approverUserId: approver?.value?.userId ?? undefined,
+            approverUserId: (approver as any)?.value?.userId ?? undefined,
             userContextId:
-              userContextId ?? router?.query?.userContextId ?? undefined,
+              userContextId ??
+              (router?.query?.userContextId as string) ??
+              undefined,
           };
         } else {
           return {
             documents: docsToUse(),
             currentStep: parseInt(step as string),
             userContextId:
-              userContextId ?? router?.query?.userContextId ?? undefined,
+              userContextId ??
+              (router?.query?.userContextId as string) ??
+              undefined,
           };
         }
       };
@@ -224,7 +252,7 @@ const _FormCompleteKYCWithoutLayout = ({
             }
             const steps = Object.keys(groupedInputs).length;
             if (steps && parseInt(step as string) < steps) {
-              router.replace({
+              router.push({
                 query: {
                   contextSlug: slug(),
                   step: parseInt(step as string) + 1,
@@ -275,9 +303,11 @@ const _FormCompleteKYCWithoutLayout = ({
   };
 
   function getDocumentByInputId(inputId: string) {
-    return documents?.data.find(
-      (doc) =>
-        doc.inputId === inputId && (doc as any)?.userContextId === userContextId
+    return docsToUse?.find((doc: any) =>
+      userContext
+        ? doc.inputId === inputId &&
+          (doc as any)?.userContextId === userContextId
+        : doc.inputId === inputId
     );
   }
   const formState = useMemo(() => {
@@ -294,11 +324,11 @@ const _FormCompleteKYCWithoutLayout = ({
     keyPage ? (
       <FormProvider {...dynamicMethods}>
         {!keyPage &&
-        reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
-        reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
+        reasonsToUse?.logs?.at(-1)?.reason &&
+        reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
           <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
             <p className="pw-mt-2 pw-text-[#FF0505]">
-              {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+              {reasonsToUse?.logs.at(-1)?.reason}
             </p>
           </div>
         ) : null}
@@ -339,6 +369,9 @@ const _FormCompleteKYCWithoutLayout = ({
           keyPage={keyPage}
           profilePage={profilePage}
           statusContext={statusContext}
+          hideComplexPhone={hideComplexPhone}
+          hideContinue={hideContinue}
+          readonly={readonly}
         ></FormTemplate>
 
         {isSuccess && (
@@ -394,11 +427,11 @@ const _FormCompleteKYCWithoutLayout = ({
         )}
       >
         <FormProvider {...dynamicMethods}>
-          {reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
-          reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
+          {reasonsToUse?.logs?.at(-1)?.reason &&
+          reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
             <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
               <p className="pw-mt-2 pw-text-[#FF0505]">
-                {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+                {reasonsToUse?.logs.at(-1)?.reason}
               </p>
             </div>
           ) : null}
@@ -434,6 +467,9 @@ const _FormCompleteKYCWithoutLayout = ({
             formState={formState}
             profilePage={profilePage}
             statusContext={statusContext}
+            hideComplexPhone={hideComplexPhone}
+            hideContinue={hideContinue}
+            readonly={readonly}
           ></FormTemplate>
 
           {isSuccess && (
@@ -490,7 +526,9 @@ const _FormCompleteKYCWithoutLayout = ({
         </FormProvider>
         <ModalBase isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
           <div>
-            <p>Tem certeza que deseja abandonar o processo de cadastro?</p>
+            <p className="pw-text-black">
+              Tem certeza que deseja abandonar o processo de cadastro?
+            </p>
             <div>
               <button
                 onClick={() => setIsOpenModal(false)}
@@ -533,6 +571,9 @@ export const FormCompleteKYCWithoutLayout = ({
   handleProductFormError,
   product,
   userContextId,
+  hideComplexPhone,
+  hideContinue,
+  readonly,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -552,6 +593,9 @@ export const FormCompleteKYCWithoutLayout = ({
       handleProductFormError={handleProductFormError}
       product={product}
       userContextId={userContextId}
+      hideComplexPhone={hideComplexPhone}
+      hideContinue={hideContinue}
+      readonly={readonly}
     />
   </TranslatableComponent>
 );

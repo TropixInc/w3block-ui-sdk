@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { UserContextStatus } from '@w3block/sdk-id';
+
 import { FormCompleteKYCWithoutLayout } from '../../../auth';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import TokenizationFormItemContainer from '../../../tokens/components/TokenizationFormItemContainer/TokenizationFormItemContainer';
 import useApproveKYC from '../../hooks/useApproveKYC';
+import { useGetUserContextId } from '../../hooks/useGetUserContextId/useGetUserContextId';
 import useRejectKYC from '../../hooks/useRejectKYC';
 import { useRequiredReviewDocs } from '../../hooks/useRequiredReviewDocs';
 import { Alert } from '../Alert';
@@ -16,6 +19,8 @@ interface KycItemProps {
   slugContext: string;
   userContextId: string;
   onChangeIsRenderKycItem: (value: boolean) => void;
+  setIsUpdateList: (value: boolean) => void;
+  readonly?: boolean;
 }
 
 const RequestItemWrapper = ({
@@ -24,6 +29,8 @@ const RequestItemWrapper = ({
   onChangeIsRenderKycItem,
   slugContext,
   userContextId,
+  setIsUpdateList,
+  readonly,
 }: KycItemProps) => {
   const [translate] = useTranslation();
 
@@ -35,6 +42,12 @@ const RequestItemWrapper = ({
   const [isSuccessReprove, setIsSuccessReprove] = useState(false);
   const [inputsIdRequestReview, setInputsIdRequestReview] =
     useState<Array<string>>();
+
+  const { data: documents } = useGetUserContextId({
+    userId: userId ?? '',
+    userContextId: userContextId ?? '',
+  });
+
   const {
     mutate: onSendRequestReview,
     isSuccess: isSucessRequestReview,
@@ -99,6 +112,7 @@ const RequestItemWrapper = ({
       setTimeout(() => {
         onCancelRequestReview();
         setIsSuccessSendReview(false);
+        setIsUpdateList(true);
       }, 800);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,6 +125,7 @@ const RequestItemWrapper = ({
         onCancelReprove();
         onChangeIsRenderKycItem(false);
         setIsSuccessReprove(false);
+        setIsUpdateList(true);
       }, 800);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,6 +135,7 @@ const RequestItemWrapper = ({
     if (isSuccesAproveKyc) {
       setTimeout(() => {
         onChangeIsRenderKycItem(false);
+        setIsUpdateList(true);
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -243,13 +259,17 @@ const RequestItemWrapper = ({
           )}
           <div className="pw-w-full pw-flex pw-flex-col pw-justify-end pw-p-4 pw-gap-6 sm:pw-flex-row">
             <div className="pw-flex pw-gap-6">
-              <OffpixButtonBase
-                className="pw-px-4 pw-flex-1 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm !pw-outline-[#e65356] !pw-text-[#e65356] hover:pw-text-[#e65356] active:pw-text-[#e65356] active:pw-bg-[#e2686a31]"
-                variant="outlined"
-                onClick={() => setIsReproveContext(true)}
-              >
-                {translate('contacts>headerContactDetails>reprove')}
-              </OffpixButtonBase>
+              {(documents?.data?.status === UserContextStatus.Approved ||
+                documents?.data?.status === UserContextStatus.Denied) &&
+              documents?.data?.context?.type === 'form' ? null : (
+                <OffpixButtonBase
+                  className="pw-px-4 pw-flex-1 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm !pw-outline-[#e65356] !pw-text-[#e65356] hover:pw-text-[#e65356] active:pw-text-[#e65356] active:pw-bg-[#e2686a31]"
+                  variant="outlined"
+                  onClick={() => setIsReproveContext(true)}
+                >
+                  {translate('contacts>headerContactDetails>reprove')}
+                </OffpixButtonBase>
+              )}
               <OffpixButtonBase
                 className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
                 onClick={() => setIsRequestReview(true)}
@@ -257,13 +277,17 @@ const RequestItemWrapper = ({
                 {translate('contacts>AprovationKYCForm>requestDocuments')}
               </OffpixButtonBase>
             </div>
-            <OffpixButtonBase
-              className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
-              variant="outlined"
-              onClick={() => onAproveKyc()}
-            >
-              {translate('contacts>headerContactDetails>approve')}
-            </OffpixButtonBase>
+            {(documents?.data?.status === UserContextStatus.Approved ||
+              documents?.data?.status === UserContextStatus.Denied) &&
+            documents?.data?.context?.type === 'form' ? null : (
+              <OffpixButtonBase
+                className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
+                variant="outlined"
+                onClick={() => onAproveKyc()}
+              >
+                {translate('contacts>headerContactDetails>approve')}
+              </OffpixButtonBase>
+            )}
           </div>
         </div>
       );
@@ -285,6 +309,8 @@ const RequestItemWrapper = ({
             inputsIdRequestReview={inputsIdRequestReview}
             onChangeInputsIdRequestReview={setInputsIdRequestReview}
             userContextId={userContextId}
+            hideComplexPhone={true}
+            readonly={readonly}
           />
         </div>
       </div>

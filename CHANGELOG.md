@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.39](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.38...v1.14.39) (2024-08-27)
+
+### [1.14.38](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.37...v1.14.38) (2024-08-27)
+
+### [1.14.37](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.36...v1.14.37) (2024-08-22)
+
+### [1.14.36](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.35...v1.14.36) (2024-08-20)
+
+### [1.14.35](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.34...v1.14.35) (2024-08-20)
+
+### [1.14.34](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.33...v1.14.34) (2024-08-20)
+
+### [1.14.33](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.32...v1.14.33) (2024-08-19)
+
+### [1.14.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.31...v1.14.32) (2024-08-16)
+
+### [1.14.31](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.30...v1.14.31) (2024-08-15)
+
+### [1.14.30](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.29...v1.14.30) (2024-08-14)
+
+### [1.14.29](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.28...v1.14.29) (2024-08-14)
+
+### [1.14.28](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.27...v1.14.28) (2024-08-12)
+
+### [1.14.27](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.26...v1.14.27) (2024-08-12)
+
+### [1.14.26](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.25...v1.14.26) (2024-08-08)
+
+### [1.14.25](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.24...v1.14.25) (2024-08-08)
+
+### [1.14.24](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17-alpha.4...v1.14.24) (2024-08-08)
+
+
+### Features
+
+* added new types of kyc ([169acde](https://github.com/TropixInc/w3block-ui-sdk/commit/169acde6dee336e48a69e2874caa01e3fdd29615))
+
+### [1.14.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17-alpha.1...v1.14.23) (2024-08-01)
+
+### [1.14.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.22...v1.14.23) (2024-08-01)
 ### [1.14.17-alpha.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17-alpha.3...v1.14.17-alpha.4) (2024-08-08)
 
 ### [1.14.17-alpha.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.14.17-alpha.2...v1.14.17-alpha.3) (2024-08-07)
