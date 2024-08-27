@@ -50,6 +50,7 @@ const RequestsList = () => {
           userId={data.userId}
           userContextId={data.id}
           setIsUpdateList={setIsUpdateList}
+          readonly={data?.tenantContext?.data?.approverReadOnly}
         />
       );
     }
