@@ -163,11 +163,15 @@ export const InputSelector = ({
 
       if (jsonValues?.values?.length > 0) {
         const selected = (jsonValues.values as Array<string>).map((item) => {
-          return (dynamicOptions as any)?.find(
-            (value: any) => value.value === item
-          );
+          if (type === DataTypesEnum.DynamicSelect)
+            return (dynamicOptions as any)?.find(
+              (value: any) => value.value === item
+            );
+          else
+            return options?.find((value: any) => {
+              return value.value === item;
+            });
         });
-
         if (selected?.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return (selected as Array<any>).map(({ label }) => label).join(', ');
@@ -297,7 +301,9 @@ export const InputSelector = ({
         >
           {configData?.isMultiple ? (
             <MultipleSelect
-              options={dynamicOptions}
+              options={
+                type === DataTypesEnum.SimpleSelect ? options : dynamicOptions
+              }
               name={name}
               placeholder={getPlaceholderForMultipleSelect(field?.value || [])}
               classes={{
