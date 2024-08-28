@@ -919,5 +919,10 @@
 "checkout>orderCardComponentSDK>fail": "Fail", 
 "checkout>orderCardComponentSDK>pendingPayment": "Pending payment", 
 "storefront>bannerWjjc>instructor": "WJJC Instructor", 
-"storefront>bannerWjjc>since": "since"
+"storefront>bannerWjjc>since": "since",
+"checkout>checkoutCompleteOrderTemplate>finalizedPurshase": "Finalize Order",
+"auth>confirmationKycWithoutLayout>generateOrder": "We are generating your order.",
+"checkout>checkoutCompletePayment>orderExpiredPleaseFormAgain": "This purchase order has expired, please submit the purchase intent form again",
+"checkout>checkoutForm>successApply": "successfully applied",
+"checkout>checkoutForm>successSendForm": "Your purchase form has been submitted successfully, please wait while we review the purchase order."
 }
