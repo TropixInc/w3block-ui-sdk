@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import { useState } from 'react';
 
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';

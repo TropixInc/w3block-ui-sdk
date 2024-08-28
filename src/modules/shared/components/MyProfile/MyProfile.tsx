@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import { lazy } from 'react';
 
 import { useProfile } from '../../hooks/useProfile';

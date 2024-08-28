@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard, useLocation } from 'react-use';
@@ -115,7 +116,7 @@ export const ReferralWidget = ({
         {({ open }) => (
           <>
             <Disclosure.Button className="pw-flex pw-items-center pw-gap-3 pw-mt-5">
-              QR Code para o link de afiliado
+              <span>{translate('affiliates>referralWidget>QRCode')}</span>
               <ChevronDown
                 className={classNames(
                   'pw-stroke-[#000000]',

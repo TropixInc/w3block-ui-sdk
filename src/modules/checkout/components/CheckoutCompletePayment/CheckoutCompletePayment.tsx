@@ -508,7 +508,9 @@ const _CheckoutCompletePayment = ({
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
               >
-                Finalizar pedido
+                {translate(
+                  'checkout>checkoutCompleteOrderTemplate>finalizedPurshase'
+                )}
               </PixwayButton>
             </div>
           </>
@@ -522,14 +524,15 @@ const _CheckoutCompletePayment = ({
       <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
         <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
           <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
-            Esse pedido de compra está expirado, por favor envie novamente o
-            formulário de intenção de compra
+            {translate(
+              'checkout>checkoutCompletePayment>orderExpiredPleaseFormAgain'
+            )}
           </p>
           <WeblockButton
             className="pw-text-white pw-mt-6"
             onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
           >
-            Voltar para a home
+            {translate('checkout>checkoutInfo>goBackHome')}
           </WeblockButton>
         </div>
       </div>
@@ -539,14 +542,13 @@ const _CheckoutCompletePayment = ({
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
       <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
         <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
-          Houve um erro de comunicação com o servidor, entre em contato com
-          nosso suporte.
+          {translate('checkout>checkoutInfo>errorContactSuport')}
         </p>
         <WeblockButton
           className="pw-text-white pw-mt-6"
           onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
         >
-          Voltar para a home
+          {translate('checkout>checkoutInfo>goBackHome')}
         </WeblockButton>
       </div>
     </div>
@@ -556,7 +558,7 @@ const _CheckoutCompletePayment = ({
         <div className="pw-w-full lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
           <>
             <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
-              Resumo da compra
+              {translate('business>buySumarySDK>purchaseResume')}
             </p>
 
             {checkoutStatus == CheckoutStatus.FINISHED && (

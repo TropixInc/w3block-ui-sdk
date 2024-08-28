@@ -5,6 +5,7 @@ import { Combobox, Transition } from '@headlessui/react';
 import { isBefore, isAfter } from 'date-fns';
 
 import ArrowDown from '../../../shared/assets/icons/arrowDown.svg?react';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { AvailableCreditCards } from '../../interface/interface';
 
 interface Props {
@@ -23,6 +24,7 @@ export const CardsSelector = ({ data, onChange, disabled }: Props) => {
     return 0;
   });
   const [value, setValue] = useState(sortedData[0]);
+  const [translate] = useTranslation();
 
   return (
     <div className="pw-relative">
@@ -77,14 +79,17 @@ export const CardsSelector = ({ data, onChange, disabled }: Props) => {
               </Combobox.Option>
             ))}
             <Combobox.Option
-              value={{ id: 'newCard', text: 'Pagar com outro cartão' }}
+              value={{
+                id: 'newCard',
+                text: translate('checkout>cardSelector>payOtherCard'),
+              }}
               className={({ active }) =>
                 `pw-p-3 pw-truncate ${
                   active ? 'pw-bg-gray-300' : 'pw-bg-white'
                 }`
               }
             >
-              Pagar com outro cartão
+              {translate('checkout>cardSelector>payOtherCard')}
             </Combobox.Option>
           </Combobox.Options>
         </Transition>

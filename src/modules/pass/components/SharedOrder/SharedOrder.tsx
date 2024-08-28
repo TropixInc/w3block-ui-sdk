@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable i18next/no-literal-string */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'react-use';
@@ -51,7 +51,7 @@ const _SharedOrder = ({
           {isLoading ? (
             <div className="pw-w-full pw-h-full pw-flex pw-flex-col pw-my-5 pw-gap-3 pw-justify-center pw-items-center">
               <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
-                Aguarde enquanto carregamos o seu QR Code.
+                {translate('pass>sharedOrder>waitLoadCode')}
               </p>
               <Spinner />
             </div>
@@ -106,11 +106,11 @@ const _SharedOrder = ({
               <div className="pw-w-full pw-h-full pw-flex pw-flex-col pw-my-5 pw-gap-3 pw-justify-center pw-items-center">
                 {!selfBuy ? (
                   <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
-                    Seu QR Code estará disponível em alguns minutos.
+                    {translate('pass>sharedOrder>codeAvaliableInFewMinutes')}
                   </p>
                 ) : (
                   <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
-                    Seu QR Code está carregando.
+                    {translate('pass>sharedOrder>loadingCode')}
                   </p>
                 )}
                 <Spinner />
@@ -181,9 +181,9 @@ const _SharedOrder = ({
                   }}
                   className="pw-underline pw-text-blue-600"
                 >
-                  Copie este link
+                  {translate('pass>sharedOrder>copyLink')}
                 </button>{' '}
-                para poder acessar seu QR Code a qualquer momento no futuro.
+                {translate('pass>sharedOrder>codeInFuture')}
               </p>
             )
           ) : (
@@ -192,12 +192,12 @@ const _SharedOrder = ({
               onClick={() => setTypeComponent(1)}
               className="pw-mt-7 pw-px-10 !pw-bg-white"
             >
-              Fechar
+              {translate('components>walletIntegration>close')}
             </AuthButton>
           )}
           {isCopied && (
             <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
-              Copiado!
+              {translate('components>menu>copied')}
             </span>
           )}
         </div>

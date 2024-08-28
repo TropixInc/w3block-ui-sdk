@@ -156,7 +156,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
             rel="noreferrer"
           >
             <p className="pw-text-center pw-text-white pw-font-medium pw-text-[11px] pw-mr-[6px]">
-              Powered by
+              {'Powered by'}
             </p>
             <WeblockLogo width={56} height={16} />
           </a>

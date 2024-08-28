@@ -15,11 +15,13 @@ const Spinner = lazy(() =>
   }))
 );
 
+import useTranslation from '../../hooks/useTranslation';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _RedirectTemplate = () => {
   const router = useRouterConnect();
   const user = useSessionUser();
+  const [translate] = useTranslation();
   const productId = (router.query.productId as string) ?? '';
   const purchaseRequiredModalContent =
     (router.query.purchaseRequiredModalContent as string) ?? '';
@@ -50,7 +52,7 @@ const _RedirectTemplate = () => {
                 onClick={() => window.close()}
                 className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
               >
-                Fechar
+                {translate('components>walletIntegration>close')}
               </button>
               {purchaseRequiredModalContent !== '' && productId !== '' ? (
                 <button
@@ -64,7 +66,7 @@ const _RedirectTemplate = () => {
                   }
                   className="pw-px-[24px] pw-h-[33px] pw-bg-[#0050FF] pw-text-white pw-border-[#0050FF] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
                 >
-                  Continuar
+                  {translate('components>advanceButton>continue')}
                 </button>
               ) : null}
             </div>
@@ -72,7 +74,7 @@ const _RedirectTemplate = () => {
         ) : (
           <>
             <h1 className="pw-font-bold pw-text-3xl pw-text-black pw-mb-5">
-              Redirecionando
+              {translate('shared>redirectTemplate>redirecting')}
             </h1>
             <Spinner className="!pw-h-20 !pw-w-20" />
           </>

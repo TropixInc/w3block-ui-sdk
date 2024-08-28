@@ -15,7 +15,7 @@ export const InternalPageTitle = ({
           {title && (
             <div>
               <p className=" pw-font-normal pw-text-sm pw-text-[#777E8F]">
-                Token Pass
+                {'Token Pass'}
               </p>
               <p className="pw-font-bold pw-text-2xl pw-leading-9 pw-text-black">
                 {title}

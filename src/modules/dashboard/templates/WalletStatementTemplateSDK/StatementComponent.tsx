@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
@@ -15,6 +16,7 @@ import CopyIcon from '../../../shared/assets/icons/copyIconOutlined.svg?react';
 import RejectIcon from '../../../shared/assets/icons/minusCircle.svg?react';
 import ApprovedIcon from '../../../shared/assets/icons/plusCircle.svg?react';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { Erc20ActionStatus } from '../../../shared/interface/Statement/Statement';
 import {
   StatementScreenTransaction,
@@ -32,6 +34,7 @@ export const StatementComponent = ({
 }: StatementComponentProps) => {
   const locale = useLocale();
   const [state, copyToClipboard] = useCopyToClipboard();
+  const [translate] = useTranslation();
   const [isCopied, setIsCopied] = useState(false);
   const handleCopy = () => {
     copyToClipboard(statement?.hash ?? '');
@@ -91,55 +94,60 @@ export const StatementComponent = ({
     if (statement?.description === 'final_recipient') {
       return (
         <p>
-          Crédito referente ao pagamento{' '}
+          {translate('dashboard>statementComponent>creditReferPayment')}{' '}
           <button
             className="!pw-font-bold pw-underline"
             onClick={() => setOpenReceipt(true)}
           >
             #{statement.deliveryId}
           </button>{' '}
-          para {statement.operatorName}
+          {translate('dashboard>statementComponent>for')}{' '}
+          {statement.operatorName}
         </p>
       );
     }
     if (statement?.description === 'cashback') {
       return (
         <p>
-          Cashback no pagamento{' '}
+          {translate('dashboard>statementComponent>cashbackInPayment')}{' '}
           <button
             className="!pw-font-bold pw-underline"
             onClick={() => setOpenReceipt(true)}
           >
             #{statement.deliveryId}
           </button>{' '}
-          para {statement.operatorName}
+          {translate('dashboard>statementComponent>for')}{' '}
+          {statement.operatorName}
         </p>
       );
     } else if (statement?.description === 'credit_purchase') {
       return (
         <p>
-          Carga de Zuca para pagamento{' '}
+          {translate('dashboard>statementComponent>loadZucaPayment')}{' '}
           <button
             className="!pw-font-bold pw-underline"
             onClick={() => setOpenReceipt(true)}
           >
             #{statement?.metadata?.commerce?.deliverId}
           </button>{' '}
-          a {statement?.metadata?.commerce?.destinationUserName}
+          {translate('dashboard>statementComponent>for')}{' '}
+          {statement?.metadata?.commerce?.destinationUserName}
         </p>
       );
     } else if (statement?.description === 'payment') {
       return (
         <p>
-          Pagamento{' '}
+          {translate('checkout>components>checkoutInfo>payment')}{' '}
           <button
             className="!pw-font-bold pw-underline"
             onClick={() => setOpenReceipt(true)}
           >
             #{statement?.metadata?.commerce?.deliverId}
           </button>{' '}
-          no valor total de {statement?.metadata?.commerce?.erc20PurchaseAmount}{' '}
-          ZUCA para {statement?.metadata?.commerce?.destinationUserName}
+          {translate('dashboard>statementComponent>inTotalValue')}{' '}
+          {statement?.metadata?.commerce?.erc20PurchaseAmount} ZUCA{' '}
+          {translate('dashboard>statementComponent>for')}{' '}
+          {statement?.metadata?.commerce?.destinationUserName}
         </p>
       );
     } else return statement?.description ?? '';
@@ -278,7 +286,7 @@ export const StatementComponent = ({
         </div>
         {isCopied && (
           <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
-            Copiado!
+            {translate('components>menu>copied')}
           </span>
         )}
         <div>
@@ -307,7 +315,7 @@ export const StatementComponent = ({
         </div>
         {showScheduledAt() ? (
           <div className="pw-text-right pw-text-zinc-700 pw-text-xs">
-            Agendado em:{' '}
+            {translate('dashboard>statementComponent>scheduledOn')}:{' '}
             {statement?.scheduledAt
               ? format(
                   Date.parse(statement?.scheduledAt ?? Date.now()),

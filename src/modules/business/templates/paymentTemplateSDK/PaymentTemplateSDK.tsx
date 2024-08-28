@@ -8,6 +8,7 @@ import './index.css';
 
 import { Spinner } from '../../../shared/components/Spinner';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { PaymentFailedModal } from '../../components/paymentFailedModal/PaymentFailedModal';
 import { useCreatePayment } from '../../hooks/useCreatePayment';
 import { useGetPaymentPreview } from '../../hooks/useGetPaymentPreview';
@@ -65,6 +66,7 @@ export const PaymentTemplateSDK = () => {
   const { mutate: getUserBalance } = useGetUserBalance();
   const { mutate: getPaymentPreview } = useGetPaymentPreview();
   const { mutate: createPayment } = useCreatePayment();
+  const [translate] = useTranslation();
 
   const loyaltieToUse = useMemo(() => {
     return loyalties && loyalties.length ? loyalties[0] : undefined;
@@ -197,11 +199,11 @@ export const PaymentTemplateSDK = () => {
     <InternalPagesLayoutBase>
       <div className="pw-p-6 pw-bg-white pw-rounded-[20px] pw-shadow ">
         <p className="pw-text-black pw-text-[23px] pw-font-semibold pw-leading-loose">
-          Pagamento
+          {translate('checkout>components>checkoutInfo>payment')}
         </p>
         <div className="pw-p-4 pw-rounded-2xl pw-border-zinc-100 pw-shadow pw-border">
           <p className="pw-text-sm pw-text-zinc-700 pw-font-semibold">
-            Valor a ser pago
+            {translate('business>paymentTemplateSDK>valuePayment')}
           </p>
           <CurrencyInput
             onChangeValue={(_, value) => {
@@ -220,7 +222,7 @@ export const PaymentTemplateSDK = () => {
         <div className="pw-flex-col sm:pw-flex-row pw-flex first-letter pw-gap-[32px] pw-mt-[32px]">
           <div className="pw-p-4 pw-flex-1 pw-rounded-2xl pw-shadow pw-border pw-border-zinc-100 pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[20px]">
             <p className="pw-text-zinc-700 pw-text-sm sm:pw-text-lg pw-font-medium pw-leading-[23px] pw-max-w-[260px] pw-text-center">
-              Por favor solicite o código ao cliente e digite abaixo:
+              {translate('business>paymentTemplateSDK>pleaseClientCode')}
             </p>
             <div>
               <div className="pw-flex pw-justify-center pw-items-center pw-gap-2">
@@ -251,7 +253,7 @@ export const PaymentTemplateSDK = () => {
               className=" pw-px-12 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-zinc-300  "
             >
               <p className="pw-text-center pw-text-slate-500 pw-text-xs pw-font-medium">
-                Verificar
+                {translate('business>paymentTemplateSDK>verify')}
               </p>
             </button>
           </div>
@@ -282,7 +284,9 @@ export const PaymentTemplateSDK = () => {
         {cahsbackPoints && parseInt(cahsbackPoints) != 0 ? (
           <div className="pw-flex pw-justify-between pw-items-center pw-p-6 pw-bg-green-100 pw-rounded-2xl pw-mt-8">
             <p className="pw-text-gray-700 pw-text-sm">
-              Total de {userInfo.currency} a ser creditado
+              {translate('business>paymentTemplateSDK>totalCreditCurrency', {
+                currency: userInfo?.currency,
+              })}
             </p>
             <p className="pw-text-gray-700 pw-text-sm pw-font-semibold">
               {cahsbackPoints} {userInfo.currency}

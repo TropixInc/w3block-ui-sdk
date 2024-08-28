@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import React, { useState, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { useProfile, useRouterConnect } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
@@ -6,6 +8,7 @@ import { CheckoutCompletePayment } from '../../components/CheckoutCompletePaymen
 
 export const CheckoutCompleteOrderTemplate = () => {
   const { isAuthorized, isLoading } = usePrivateRoute();
+  const [translate] = useTranslation();
   const router = useRouterConnect();
   const orderId = router?.query?.orderId as string;
   const status =
@@ -25,7 +28,7 @@ export const CheckoutCompleteOrderTemplate = () => {
     <>
       {isCommerceReceiver ? (
         <div className="pw-w-full pw-h-[63.5vh] pw-flex pw-justify-center pw-items-center pw-font-bold pw-text-2xl pw-text-black">
-          Esse usuário não possui permissão para realizar uma compra
+          {translate('checkout>checkoutConfirmationTemplate>userCantPurchase')}
         </div>
       ) : (
         <div className="pw-flex pw-flex-col pw-h-full pw-min-h-[72.4vh] pw-px-4 lg:pw-px-0 pw-bg-[#F7F7F7]">

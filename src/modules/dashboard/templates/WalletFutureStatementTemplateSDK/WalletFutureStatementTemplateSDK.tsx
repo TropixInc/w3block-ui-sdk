@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState, lazy, useEffect } from 'react';
 
@@ -16,6 +17,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetUserByTenant } from '../../../shared/hooks/useGetUsersByTenant/useGetUsersByTenant';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { generateRandomUUID } from '../../../shared/utils/generateRamdomUUID';
 import { useGetApi } from '../../hooks/useGetApi';
@@ -41,6 +43,7 @@ const StatementComponentSDK = lazy(() =>
 );
 
 export const WalletFutureStatementTemplateSDK = () => {
+  const [translate] = useTranslation();
   const { loyaltyWallet } = useUserWallet();
   const { companyId } = useCompanyConfig();
   const [showOptions, setShowOptions] = useState(false);
@@ -186,10 +189,12 @@ export const WalletFutureStatementTemplateSDK = () => {
     <InternalPagesLayoutBase>
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg">
         <p className="pw-text-[23px] pw-font-[600] pw-text-black">
-          Recebimentos
+          {translate('dashboard>walletFutureStatementTemplateSDK>receipts')}
         </p>
         <p className="pw-text-[12px] pw-font-[400] pw-text-black">
-          Relatório administrativo de recebimentos
+          {translate(
+            'dashboard>walletFutureStatementTemplateSDK>reportsAdminReceipts'
+          )}
         </p>
         <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
           <Selectinput
@@ -255,7 +260,9 @@ export const WalletFutureStatementTemplateSDK = () => {
           {loadingDownload ? (
             <Spinner className="pw-h-5 pw-w-5" />
           ) : (
-            'Baixar relatório'
+            translate(
+              'dashboard>walletFutureStatementTemplateSDK>dowloadReports'
+            )
           )}
         </PixwayButton>
         <div className="pw-mt-4 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 sm:pw-mx-0 pw-text-[23px] pw-font-[600] pw-text-black">
@@ -313,7 +320,9 @@ export const WalletFutureStatementTemplateSDK = () => {
           })
         ) : (
           <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center pw-text-black">
-            Nenhum lançamento no periodo selecionado
+            {translate(
+              'dashboard>walletFutureStatementTemplateSDK>releasesNotFound'
+            )}
           </div>
         )}
         {dataToUse()?.meta && (dataToUse()?.meta?.totalPages ?? 0) > 1 ? (

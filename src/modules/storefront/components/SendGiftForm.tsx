@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
+import useTranslation from '../../shared/hooks/useTranslation';
 import { DataFields } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 
 interface Params {
@@ -21,12 +22,15 @@ export const SendGiftForm = ({
   setData,
   deleteKey,
 }: Params) => {
+  const [translate] = useTranslation();
   useEffect(() => {
     deleteKey();
   }, []);
   return (
     <div className="pw-mt-5 pw-text-black">
-      <p className="pw-font-medium">Enviar como presente?</p>
+      <p className="pw-font-medium">
+        {translate('storefront>sendGiftForm>sendGift')}
+      </p>
       <div className="pw-mt-3 pw-flex pw-gap-x-4">
         <div className="pw-flex pw-gap-2 pw-items-center">
           <input
@@ -41,7 +45,7 @@ export const SendGiftForm = ({
             className="pw-w-5"
           />
           <label className="pw-cursor-pointer" htmlFor="yes">
-            Sim
+            {translate('shared>yes')}
           </label>
         </div>
         <div className="pw-flex pw-gap-2 pw-items-center">
@@ -56,7 +60,7 @@ export const SendGiftForm = ({
             id="no"
           />
           <label className="pw-cursor-pointer" htmlFor="no">
-            Não
+            {translate('shared>no')}
           </label>
         </div>
       </div>

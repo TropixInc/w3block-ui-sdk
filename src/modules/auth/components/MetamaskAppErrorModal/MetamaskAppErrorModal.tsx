@@ -41,7 +41,9 @@ export const MetamaskAppErrorModal = ({
             ( {translate('connectWallet>metamaskError>app>copyUrl')} ).
           </span>
         </p>
-        <p className="pw-text-xs pw-mt-2 pw-text-center">ou</p>
+        <p className="pw-text-xs pw-mt-2 pw-text-center">
+          {translate('auth>metamaskAppErrorModal>or')}
+        </p>
         <p className="pw-text-xs pw-text-center pw-font-poppins pw-border pw-border-brand-primary pw-rounded-lg pw-px-4 pw-py-4 pw-mt-2">
           {translate('connectWallet>metamaskError>app>secondSuggestion')}
         </p>
