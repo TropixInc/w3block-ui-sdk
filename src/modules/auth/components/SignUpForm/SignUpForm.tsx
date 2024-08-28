@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { Trans } from 'react-i18next';
+import { useDebounce } from 'react-use';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
-import { boolean, object, string } from 'yup';
+import { object, string } from 'yup';
 
 import { Alert } from '../../../shared/components/Alert';
+import LabelWithRequired from '../../../shared/components/LabelWithRequired';
 import { Link } from '../../../shared/components/Link';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -14,11 +14,11 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRout
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { AuthButton } from '../AuthButton';
-import { AuthCheckbox } from '../AuthCheckbox';
 import { AuthFooter } from '../AuthFooter';
 import { AuthLayoutBase, AuthLayoutBaseClasses } from '../AuthLayoutBase';
-import { AuthPasswordTips } from '../AuthPasswordTips';
-import { AuthTextController } from '../AuthTextController';
+import PasswordInput from '../PasswordInput';
+import { PasswordTips } from '../PasswordTips';
+import { SignCheckbox } from '../SignCheckbox';
 import { SignUpFormData } from './interface';
 
 interface Props {
@@ -44,37 +44,61 @@ export const SignUpForm = ({
   const router = useRouterConnect();
   const passwordSchema = usePasswordValidationSchema({});
   const [translate] = useTranslation();
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [acceptsPolicyTerms, setAcceptsPolicyTerms] = useState(false);
+  const [acceptsTermsOfUse, setAcceptsTermsOfUse] = useState(false);
+  const [errorPassword, setErrorPassword] = useState<Array<string>>([]);
+  const [isErrorConfirmPassword, setIsErrorConfirmPassword] = useState(false);
 
   const schema = object().shape({
     email: string().email(),
     password: passwordSchema,
-    confirmation: string()
-      .required(translate('auth>signUp>confirmationRequired'))
-      .test(
-        'Ok',
-        translate('auth>signUp>passwordConfirmation'),
-        (value, context) => value === context.parent.password
-      ),
-    acceptsPolicyTerms: boolean().required().isTrue(),
-    acceptsTermsOfUse: boolean().required().isTrue(),
   });
 
-  const methods = useForm<SignUpFormData>({
-    defaultValues: {
-      confirmation: '',
-      email: email ?? '',
-      password: '',
-      acceptsPolicyTerms: false,
-      acceptsTermsOfUse: false,
+  useDebounce(
+    () => {
+      const data = {
+        email,
+        password,
+      };
+
+      schema
+        .validate(data)
+        .then(() => {
+          setErrorPassword([]);
+        })
+        .catch((err) => {
+          setErrorPassword(err.errors);
+        });
     },
-    mode: 'onChange',
-    resolver: yupResolver(schema),
-  });
+    400,
+    [password]
+  );
 
-  useEffect(() => {
-    if (email) methods.setValue('email', email);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [email]);
+  useDebounce(
+    () => {
+      if (confirmPassword.length) {
+        if (confirmPassword !== password) {
+          setIsErrorConfirmPassword(true);
+        } else {
+          setIsErrorConfirmPassword(false);
+        }
+      }
+    },
+    400,
+    [confirmPassword]
+  );
+
+  const handleSubmit = () => {
+    onSubmit({
+      acceptsPolicyTerms: acceptsPolicyTerms,
+      acceptsTermsOfUse: acceptsTermsOfUse,
+      confirmation: confirmPassword,
+      password: password,
+      email: email ?? '',
+    });
+  };
 
   return (
     <AuthLayoutBase
@@ -96,75 +120,113 @@ export const SignUpForm = ({
           <Alert.Icon /> <span className="pw-text-xs">{error}</span>
         </Alert>
       ) : null}
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="sm:pw-mt-6">
-          <AuthTextController
+      <div>
+        <div className="pw-mt-4">
+          <LabelWithRequired>
+            {translate('home>contactModal>email')}
+          </LabelWithRequired>
+          <input
+            type="text"
             disabled={Boolean(email)}
-            name="email"
-            label={translate('home>contactModal>email')}
-            className="pw-mb-3"
+            value={email}
+            className="pw-mt-1 pw-mb-3 pw-text-base pw-font-normal pw-w-full pw-outline-none pw-border pw-border-stone-800 pw-rounded-lg pw-bg-transparent pw-opacity-40 !pw-px-[10px] !pw-py-[14px] placeholder:!pw-text-[#777E8F] !pw-leading-[18px] disabled:pw-text-[#353945] disabled:pw-bg-[#EFEFEF] pw-text-fill-[#353945] autofill:pw-bg-transparent autofill:pw-shadow-[0_0_0_30px_#ffffff_inset] focus:pw-outline-none"
             placeholder={translate('companyAuth>newPassword>enterYourEmail')}
           />
-          <AuthTextController
-            name="password"
-            label={translate('companyAuth>newPassword>passwordFieldLabel')}
-            className="pw-mb-3"
+        </div>
+        <div className="pw-mt-4">
+          <LabelWithRequired required>
+            {translate('companyAuth>newPassword>passwordFieldLabel')}
+          </LabelWithRequired>
+          <PasswordInput
+            onChangeValue={setPassword}
             placeholder={translate('companyAuth>newPassword>enterYourPassword')}
-            type="password"
+            value={password}
           />
-          <AuthTextController
-            name="confirmation"
-            label={translate(
+          {password.length
+            ? errorPassword?.map((item) => (
+                <p
+                  className="pw-mt-[2px] pw-font-medium pw-text-xs pw-text-red-600"
+                  key={item}
+                >
+                  {item}
+                </p>
+              ))
+            : null}
+        </div>
+        <div className="pw-mt-4">
+          <LabelWithRequired required>
+            {translate(
               'companyAuth>newPassword>passwordConfirmationFieldLabel'
             )}
-            className="pw-mb-6"
+          </LabelWithRequired>
+          <PasswordInput
+            onChangeValue={setConfirmPassword}
             placeholder={translate(
               'companyAuth>newPassword>passwordConfirmationFieldLabel'
             )}
-            type="password"
+            value={confirmPassword}
           />
+          {isErrorConfirmPassword ? (
+            <p className="pw-mt-[2px] pw-font-medium pw-text-xs pw-text-red-600">
+              {translate(
+                'signUpForm>passwordConfirmationValidation>passwordDoesntMatch'
+              )}
+            </p>
+          ) : null}
+        </div>
 
-          <AuthPasswordTips passwordFieldName="password" className="pw-mb-6" />
+        <PasswordTips value={password} className="pw-mt-3 pw-mb-6" />
 
-          <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
-            <AuthCheckbox
-              name="acceptsTermsOfUse"
-              label="Aceito os"
-              keyTrans="companyAuth>signUp>acceptTermsOfUse"
-              linkText="Termos de uso"
-              redirectLink={termsRedirect}
-            />
-            <AuthCheckbox
-              name="acceptsPolicyTerms"
-              keyTrans="companyAuth>signUp>acceptPrivacyPolicy"
-              linkText="Política de Privacidade"
-              label="Aceito os"
-              redirectLink={privacyRedirect}
-            />
-          </div>
+        <div className="pw-flex pw-flex-col pw-gap-y-[4.5px] pw-mb-[26px]">
+          <SignCheckbox
+            name="acceptsTermsOfUse"
+            label="Aceito os"
+            keyTrans="companyAuth>signUp>acceptTermsOfUse"
+            linkText="Termos de uso"
+            redirectLink={termsRedirect}
+            onChangeValue={setAcceptsTermsOfUse}
+            value={acceptsTermsOfUse}
+          />
+          <SignCheckbox
+            name="acceptsPolicyTerms"
+            keyTrans="companyAuth>signUp>acceptPrivacyPolicy"
+            linkText="Política de Privacidade"
+            label="Aceito os"
+            redirectLink={privacyRedirect}
+            onChangeValue={setAcceptsPolicyTerms}
+            value={acceptsPolicyTerms}
+          />
+        </div>
 
-          <AuthButton
-            type="submit"
-            fullWidth
-            className="pw-mb-1"
-            disabled={isLoading || !methods.formState.isValid}
-          >
-            {translate('components>advanceButton>continue')}
-          </AuthButton>
-          <p className="pw-font-poppins pw-text-[13px] pw-leading-[19.5px] pw-text-center pw-mb-[27px]">
-            <Trans i18nKey={'auth>signUpForm>alreadyHaveAccount'}>
-              Já possui uma conta?
-              <Link
-                className="pw-text-brand-primary pw-underline"
-                href={router.routerToHref(PixwayAppRoutes.SIGN_IN)}
-              >
-                Login
-              </Link>
-            </Trans>
-          </p>
-          <AuthFooter />
-        </form>
-      </FormProvider>
+        <AuthButton
+          type="submit"
+          fullWidth
+          className="pw-mb-1"
+          onClick={() => handleSubmit()}
+          disabled={
+            isLoading ||
+            Boolean(errorPassword.length) ||
+            isErrorConfirmPassword ||
+            !acceptsPolicyTerms ||
+            !acceptsTermsOfUse ||
+            !email?.length
+          }
+        >
+          {translate('components>advanceButton>continue')}
+        </AuthButton>
+        <p className="pw-font-poppins pw-text-[13px] pw-leading-[19.5px] pw-text-center pw-mb-[27px]">
+          <Trans i18nKey={'auth>signUpForm>alreadyHaveAccount'}>
+            Já possui uma conta?
+            <Link
+              className="pw-text-brand-primary pw-underline"
+              href={router.routerToHref(PixwayAppRoutes.SIGN_IN)}
+            >
+              Login
+            </Link>
+          </Trans>
+        </p>
+        <AuthFooter />
+      </div>
     </AuthLayoutBase>
   );
 };
