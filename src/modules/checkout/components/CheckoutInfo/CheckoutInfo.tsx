@@ -1,5 +1,5 @@
 /* eslint-disable i18next/no-literal-string */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable i18next/no-literal-string */
 import { lazy, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useTranslation } from 'react-i18next';
@@ -236,7 +236,12 @@ const _CheckoutInfo = ({
       }
     } else {
       const preview = productCache;
-      setCurrencyIdState(preview?.currencyId);
+      const currencyIdFromQueries = router?.query?.currencyId as string;
+      if (preview) {
+        setCurrencyIdState(preview?.currencyId);
+      } else if (currencyIdFromQueries) {
+        setCurrencyIdState(currencyIdFromQueries);
+      }
       if (preview && preview?.products?.length > 0) {
         setOrderPreview({
           ...orderPreview,
@@ -286,7 +291,6 @@ const _CheckoutInfo = ({
         return utms.utm_campaign;
       } else return '';
     };
-
     if (
       productIds &&
       currencyIdState &&
@@ -416,7 +420,6 @@ const _CheckoutInfo = ({
       );
     }
   };
-
   useDebounce(
     () => {
       getOrderPreviewFn(couponCodeInput);
@@ -428,9 +431,7 @@ const _CheckoutInfo = ({
   const [coinError, setCoinError] = useState('');
   const payWithCoin = () => {
     if (parseFloat(coinAmountPayment) > parseFloat(paymentAmount)) {
-      setCoinError(
-        'O quantidade de moedas utilizadas não pode ser maior que o valor a pagar'
-      );
+      setCoinError(translate('checkout>checkoutInfo>coinError'));
       return false;
     }
     if (
@@ -440,7 +441,7 @@ const _CheckoutInfo = ({
           ?.balance
       )
     ) {
-      setCoinError('Você não possui saldo suficiente');
+      setCoinError(translate('business>userCard>insufficientFunds'));
       return false;
     } else {
       setCoinError('');
@@ -632,17 +633,15 @@ const _CheckoutInfo = ({
           }
         });
       }
-      router.push(
+      router.pushConnect(
         isCart
           ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
           : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
         {
-          query: {
-            productIds: newArray.join(','),
-            currencyId: orderPreview?.products[0].prices.find(
-              (price) => price.currencyId == currencyIdState
-            )?.currencyId,
-          },
+          productIds: newArray.join(','),
+          currencyId: orderPreview?.products[0].prices.find(
+            (price) => price.currencyId == currencyIdState
+          )?.currencyId,
         }
       );
       if (isCart) {
@@ -717,13 +716,11 @@ const _CheckoutInfo = ({
       if (!isCart) {
         let newArray: Array<string> = [];
         newArray = [...Array(quantity).fill(id)];
-        router.push(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
-          query: {
-            productIds: newArray.join(','),
-            currencyId: orderPreview?.products[0].prices.find(
-              (price) => price.currencyId == currencyIdState
-            )?.currencyId,
-          },
+        router.pushConnect(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
+          productIds: newArray.join(','),
+          currencyId: orderPreview?.products[0].prices.find(
+            (price) => price.currencyId == currencyIdState
+          )?.currencyId,
         });
         setProductIds(newArray);
         productIds?.sort((a, b) => {
@@ -759,13 +756,11 @@ const _CheckoutInfo = ({
             newIds.splice(ind, filteredProds?.length);
             let newArray: Array<string> = [];
             newArray = [...newIds, ...Array(quantity).fill(id)];
-            router.push(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
-              query: {
-                productIds: newArray.join(','),
-                currencyId: orderPreview?.products[0].prices.find(
-                  (price) => price.currencyId == currencyIdState
-                )?.currencyId,
-              },
+            router.pushConnect(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
+              productIds: newArray.join(','),
+              currencyId: orderPreview?.products[0].prices.find(
+                (price) => price.currencyId == currencyIdState
+              )?.currencyId,
             });
             setProductIds(newArray);
             productIds?.sort((a, b) => {
@@ -828,17 +823,15 @@ const _CheckoutInfo = ({
         return true;
       }
     });
-    router.push(
+    router.pushConnect(
       isCart
         ? PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION
         : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
       {
-        query: {
-          productIds: filteredProds?.map((p) => p.id).join(','),
-          currencyId: orderPreview?.products[0].prices.find(
-            (price) => price.currencyId == currencyIdState
-          )?.currencyId,
-        },
+        productIds: filteredProds?.map((p) => p.id).join(','),
+        currencyId: orderPreview?.products[0].prices.find(
+          (price) => price.currencyId == currencyIdState
+        )?.currencyId,
       }
     );
     if (isCart) {
@@ -1024,7 +1017,7 @@ const _CheckoutInfo = ({
 
   const buttonText = () => {
     if (error !== '' && statusResponse?.status === 'failed') {
-      return 'Tentar novamente';
+      return translate('components>walletIntegration>tryAgain');
     } else if (
       context?.defaultTheme?.configurations?.contentData?.checkoutConfig
         ?.actionButton?.label
@@ -1036,20 +1029,18 @@ const _CheckoutInfo = ({
     }
   };
 
-  const shareMessage = `Olá ${
+  const shareMessage = `${translate('checkout>checkoutInfo>hello')} ${
     orderResponse?.passShareCodeInfo?.data?.destinationUserName
-  } Seu amigo ${
-    profile?.data?.data?.name ?? ''
-  } acabou de te enviar esse gift card, ${
-    orderResponse?.passShareCodeInfo?.data?.message
-  } {sharedLink}`;
+  } ${translate('pass>sharedOrder>yourFriendSendGift', {
+    friendName: profile?.data?.data?.name ?? '',
+  })}, ${orderResponse?.passShareCodeInfo?.data?.message} {sharedLink}`;
 
-  const handleShared = () => {
+  const handleShared = (code: string) => {
     if (shareMessage) {
       copyToClipboard(
         shareMessage.replace(
           '{sharedLink}',
-          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
+          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${code}`
         )
       );
     } else {
@@ -1064,10 +1055,15 @@ const _CheckoutInfo = ({
       profile?.data?.data?.email
     )
       return (
-        <SharedOrder
-          initialStep={2}
-          shareCode={statusResponse?.passShareCodeInfo?.codes?.[0]?.code}
-        />
+        <div className="pw-flex pw-flex-col pw-gap-2">
+          {statusResponse?.passShareCodeInfo?.codes?.map((code) => (
+            <SharedOrder
+              key={code?.code}
+              initialStep={2}
+              shareCode={code?.code}
+            />
+          ))}
+        </div>
       );
     else
       return (
@@ -1089,58 +1085,81 @@ const _CheckoutInfo = ({
               <p className="pw-mt-1 pw-text-[32px] pw-font-bold pw-mb-5">
                 {orderResponse?.totalAmount ?? ''}
               </p>
-            </div>
-            <p className="pw-mt-3 pw-font-bold pw-text-base pw-text-center">{`Olá, ${orderResponse?.passShareCodeInfo?.data?.destinationUserName}`}</p>
-            <p className="pw-font-semibold pw-text-base pw-text-center">
-              {translate('pass>sharedOrder>yourFriendSendGift', {
-                friendName: profile?.data?.data?.name ?? '',
-              })}
-            </p>
-            <p className="pw-mt-3 pw-text-base pw-text-center pw-h-[72px]">
-              {orderResponse?.passShareCodeInfo?.data?.message}
-            </p>
-            <div className="pw-w-full pw-flex pw-flex-col pw-gap-[15px]">
-              <p className="pw-mt-4 pw-font-bold pw-text-center">
-                {translate('checkout>checkoutInfo>sendToFriend')}
+              {statusResponse?.passShareCodeInfo?.codes?.map((code) => (
+                <div
+                  key={code?.code}
+                  className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-border pw-border-[#E6E8EC] pw-p-5 pw-rounded-[20px]"
+                >
+                  <img
+                    className="pw-mt-6 pw-w-[250px] pw-h-[250px] pw-object-contain pw-rounded-lg sm:pw-w-[300px] sm:pw-h-[300px]"
+                    src={
+                      statusResponse?.products?.[0]?.productToken?.product
+                        ?.images?.[0]?.thumb
+                    }
+                    alt=""
+                  />
+                  <p className="pw-mt-3 pw-font-semibold">Gift Card</p>
+                  <p className="pw-mt-1 pw-text-[32px] pw-font-bold pw-mb-5">
+                    R$
+                    {(
+                      parseFloat(orderResponse?.totalAmount) /
+                      (statusResponse?.passShareCodeInfo?.codes?.length ?? 1)
+                    ).toFixed(2) ?? ''}
+                  </p>
+                  <div className="pw-w-full pw-flex pw-flex-col pw-gap-[15px]">
+                    <p className="pw-mt-4 pw-font-bold pw-text-center">
+                      {translate('checkout>checkoutInfo>sendToFriend')}
+                    </p>
+                    <a
+                      target="_blank"
+                      className="pw-text-center !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+                      href={
+                        isMobile
+                          ? `whatsapp://send?text=${encodeURIComponent(
+                              `${shareMessage.replace(
+                                '{sharedLink}',
+                                `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${code?.code}`
+                              )}`
+                            )}`
+                          : `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                              `${shareMessage.replace(
+                                '{sharedLink}',
+                                `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${code?.code}`
+                              )}`
+                            )}`
+                      }
+                      data-action="share/whatsapp/share"
+                      rel="noreferrer"
+                    >
+                      Whatsapp
+                    </a>
+                    <PixwayButton
+                      onClick={() => {
+                        setIsCopied(true);
+                        handleShared(code?.code ?? '');
+                      }}
+                      style={{
+                        backgroundColor: '#0050FF',
+                        color: 'white',
+                      }}
+                      className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
+                    >
+                      {isCopied
+                        ? translate('components>menu>copied')
+                        : translate('affiliates>referrakWidget>shared')}
+                    </PixwayButton>
+                  </div>
+                </div>
+              ))}
+              <p className="pw-mt-3 pw-font-bold pw-text-base pw-text-center">{`Olá, ${orderResponse?.passShareCodeInfo?.data?.destinationUserName}`}</p>
+              <p className="pw-font-semibold pw-text-base pw-text-center">
+                {translate('pass>sharedOrder>yourFriendSendGift', {
+                  friendName: profile?.data?.data?.name ?? '',
+                })}
               </p>
-              <a
-                target="_blank"
-                className="pw-text-center !pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
-                href={
-                  isMobile
-                    ? `whatsapp://send?text=${encodeURIComponent(
-                        `${shareMessage.replace(
-                          '{sharedLink}',
-                          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
-                        )}`
-                      )}`
-                    : `https://api.whatsapp.com/send?text=${encodeURIComponent(
-                        `${shareMessage.replace(
-                          '{sharedLink}',
-                          `${window?.location?.protocol}//${window?.location?.hostname}/pass/share/${statusResponse?.passShareCodeInfo?.codes?.[0]?.code}`
-                        )}`
-                      )}`
-                }
-                data-action="share/whatsapp/share"
-                rel="noreferrer"
-              >
-                Whatsapp
-              </a>
-              <PixwayButton
-                onClick={() => {
-                  setIsCopied(true);
-                  handleShared();
-                }}
-                style={{
-                  backgroundColor: '#0050FF',
-                  color: 'white',
-                }}
-                className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
-              >
-                {isCopied
-                  ? translate('components>menu>copied')
-                  : translate('affiliates>referrakWidget>shared')}
-              </PixwayButton>
+              <p className="pw-mt-3 pw-text-base pw-text-center pw-h-[72px]">
+                {orderResponse?.passShareCodeInfo?.data?.message}
+              </p>
             </div>
           </div>
         </div>
@@ -1201,7 +1220,7 @@ const _CheckoutInfo = ({
                   <Selector
                     disabled={!editableDestination}
                     data={datasource?.master?.data}
-                    title="Você vai pagar para"
+                    title={translate('checkout>checkoutInfo>youPayFor')}
                     initialValue={
                       datasource?.master?.data.filter(
                         (e: { attributes: { slug: string | null } }) =>
@@ -1301,7 +1320,9 @@ const _CheckoutInfo = ({
                     <input
                       name="couponCode"
                       id="couponCode"
-                      placeholder="Código do cupom"
+                      placeholder={translate(
+                        'checkout>checkoutInfo>couponCode'
+                      )}
                       className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3] focus:pw-outline-none"
                       defaultValue={couponCodeInput}
                     />
@@ -1457,7 +1478,7 @@ const _CheckoutInfo = ({
                   returnAction
                     ? () => returnAction(query)
                     : () => {
-                        router.push(PixwayAppRoutes.HOME);
+                        router.pushConnect(PixwayAppRoutes.HOME);
                       }
                 }
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] pw-border pw-border-[#DCDCDC] !pw-rounded-full hover:pw-bg-[#EFEFEF] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
@@ -1779,7 +1800,11 @@ const _CheckoutInfo = ({
                   price={parseFloat(
                     prod?.prices?.find(
                       (price) => price?.currencyId == currencyIdState
-                    )?.amount ?? '0'
+                    )?.amount ??
+                      productCache?.orderProducts?.find(
+                        (val) => val?.productId === prod?.id
+                      )?.expectedPrice ??
+                      '0'
                   ).toString()}
                   originalPrice={parseFloat(
                     prod?.prices?.find(
@@ -1871,7 +1896,7 @@ const _CheckoutInfo = ({
             orderPreview?.products && orderPreview?.products.length
               ? (orderPreview?.products[0].prices.find(
                   (price) => price.currencyId == currencyIdState
-                )?.currency.code as CurrencyEnum)
+                )?.currency?.code as CurrencyEnum)
               : CurrencyEnum.BRL
           }
         />

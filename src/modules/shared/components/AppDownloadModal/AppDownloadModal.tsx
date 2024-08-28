@@ -47,6 +47,7 @@ export const AppDownloadModal = ({
       isOpen={isOpen}
       onClose={onClose}
       classes={{ classComplement: '!pw-z-[9999]', backdrop: '!pw-z-[999]' }}
+      hideCloseButton
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
         {isLoading || (utm.utm_source && !referralUser) ? (

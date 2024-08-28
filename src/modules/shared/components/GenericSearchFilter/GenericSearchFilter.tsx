@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, ReactNode, useRef } from 'react';
 import { useClickAway } from 'react-use';
 
@@ -8,7 +9,7 @@ import useTranslation from '../../hooks/useTranslation';
 
 export interface Option {
   label: string;
-  value: string;
+  value: string | any;
   icon?: ReactNode;
   disabled?: boolean;
 }
@@ -82,7 +83,7 @@ const GenericSearchFilter = ({
   const renderResponseItems = () => {
     return showResponseModal ? (
       <div
-        className="pw-absolute pw-bg-white pw-z-50 pw-w-full pw-mt-1 pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-p-[14px]"
+        className="pw-absolute pw-bg-white pw-z-50 pw-w-full pw-mt-1 pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-p-[14px] pw-text-[14px]"
         ref={containerRef}
       >
         {items?.length > 0 ? (
@@ -131,7 +132,7 @@ const GenericSearchFilter = ({
           disabled={isFilterDependency && !onDisabledInput()}
           onChange={(e) => handleSearchChange(e)}
           className={classNames(
-            'pw-text-[15px] pw-text-slate-300 placeholder:pw-text-slate-300 pw-w-full focus:pw-outline-none disabled:pw-opacity-30',
+            'pw-text-[14px] pw-text-slate-300 placeholder:pw-text-slate-300 pw-w-full focus:pw-outline-none disabled:pw-opacity-30',
             classes?.input ?? ''
           )}
         />

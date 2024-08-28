@@ -10,6 +10,7 @@ interface PlacesProps {
   placeCountry?: string;
   placeholder?: string;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputPlaces = ({
@@ -20,6 +21,7 @@ const InputPlaces = ({
   placeType,
   placeholder,
   required,
+  readonly,
 }: PlacesProps) => {
   const [translate] = useTranslation();
   return (
@@ -34,6 +36,7 @@ const InputPlaces = ({
           placeholder ?? translate('shared>inputPlaces>inputPlaceholder')
         }
         required={required}
+        readonly={readonly}
       />
     </div>
   );

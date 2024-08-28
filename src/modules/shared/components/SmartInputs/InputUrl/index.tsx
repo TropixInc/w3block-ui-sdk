@@ -18,6 +18,7 @@ interface InputUrlProps {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputUrl = ({
@@ -27,6 +28,7 @@ const InputUrl = ({
   docStatus,
   hidenValidations = false,
   required,
+  readonly,
 }: InputUrlProps) => {
   const { field, fieldState } = useController({ name });
   const error = fieldState?.error as unknown as InputError;
@@ -62,7 +64,9 @@ const InputUrl = ({
       <FormItemContainer invalid={fieldState.invalid} className="pw-w-full">
         <input
           name={name}
-          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+          readOnly={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+          }
           type="text"
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}

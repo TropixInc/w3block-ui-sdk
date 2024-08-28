@@ -111,6 +111,9 @@ export interface Product {
     purchaseRequiredModalContent: string;
     requirementModalPendingContent: string;
     requirementModalNoPurchaseAvailable: string;
+    requireKycContext?: {
+      slug?: string;
+    };
   };
   hasWhitelistBlocker?: boolean;
   variants?: Variants[];

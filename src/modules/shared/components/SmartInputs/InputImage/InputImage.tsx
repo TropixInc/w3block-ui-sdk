@@ -34,6 +34,7 @@ interface InputImageProps {
   acceptTypes?: Array<string>;
   textTitle?: string;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputImage = ({
@@ -51,6 +52,7 @@ const InputImage = ({
   acceptTypes,
   textTitle,
   required,
+  readonly,
 }: InputImageProps) => {
   const [translate] = useTranslation();
   const [uploadedImage, setUploadedImage] = useState<string>();
@@ -180,7 +182,10 @@ const InputImage = ({
             <input
               {...getInputProps()}
               className="pw-w-full"
-              readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+              readOnly={
+                (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+                readonly
+              }
             />
             {isLoadingUpload || isLoadingAsset ? (
               <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
@@ -201,7 +206,7 @@ const InputImage = ({
         </FormItemContainer>
 
         {!hidenValidations && (
-          <div className="pw-mt-[5px]">
+          <div className="pw-mt-[5px] pw-h-[16px]">
             {field.value || Boolean(fileRejections.length) ? (
               <InputStatus
                 invalid={

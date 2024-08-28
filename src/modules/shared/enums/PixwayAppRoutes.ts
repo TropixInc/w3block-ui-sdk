@@ -57,4 +57,5 @@ export enum PixwayAppRoutes {
   WITHDRAWS = '/withdraws',
   WITHDRAWS_ADMIN = '/withdraws/admin',
   REQUESTS = '/requests',
+  CHECKOUT_FORM = '/checkout/form',
 }

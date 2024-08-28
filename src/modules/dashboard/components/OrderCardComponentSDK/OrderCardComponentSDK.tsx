@@ -7,6 +7,7 @@ import { ptBR, enUS } from 'date-fns/locale';
 
 import { CheckoutStatus } from '../../../checkout';
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
+import { useRouterConnect } from '../../../shared';
 import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
 import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
 // import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
@@ -60,10 +61,11 @@ export const OrderCardComponentSDK = ({
   startOpened = false,
 }: OrderCardComponentSDKProps) => {
   const [opened, setOpened] = useState(startOpened);
+  const { pushConnect } = useRouterConnect();
   const { data: order } = useGetEspecificOrder(id, opened);
   const locale = useLocale();
   const [translate] = useTranslation();
-  const statusObj = getStatusText(status);
+
   const products = order?.data.products;
   const [infoOpened, setInfoOpened] = useState(false);
   const { data } = useGetApi({
@@ -78,77 +80,140 @@ export const OrderCardComponentSDK = ({
   const showCoinPaymentReceiptButton =
     defaultTheme?.configurations?.contentData?.showCoinPaymentReceiptButton;
 
+  const getStatusText = (status: OrderStatusEnum) => {
+    switch (status) {
+      case OrderStatusEnum.CANCELLED:
+        return {
+          title: translate('checkout>orderCardComponentSDK>cancel'),
+          color: '#ED4971',
+          icon: <XIcon />,
+        };
+      case OrderStatusEnum.CONCLUDED:
+        return {
+          title: translate('checkout>orderCardComponentSDK>completed'),
+          color: '#295BA6',
+          icon: <CheckIcon className="pw-stroke-blue-700" />,
+        };
+      case OrderStatusEnum.CONFIRMING_PAYMENT:
+        return {
+          title: translate('checkout>orderCardComponentSDK>waitingPayment'),
+          color: '#295BA6',
+        };
+      case OrderStatusEnum.DELIVERING:
+        return {
+          title: translate('checkout>orderCardComponentSDK>delivering'),
+          color: '#295BA6',
+        };
+      case OrderStatusEnum.WAITING_DELIERY:
+        return {
+          title: translate('checkout>orderCardComponentSDK>delivering'),
+          color: '#295BA6',
+        };
+      case OrderStatusEnum.EXPIRED:
+        return {
+          title: translate('checkout>orderCardComponentSDK>expired'),
+          color: '#ED4971',
+          icon: <XIcon className="pw-stroke-[#ED4971]" />,
+        };
+      case OrderStatusEnum.FAILED:
+        return {
+          title: translate('checkout>orderCardComponentSDK>fail'),
+          color: '#ED4971',
+          icon: <XIcon />,
+        };
+      case OrderStatusEnum.PENDING:
+        return {
+          title: translate('checkout>orderCardComponentSDK>pendentPayment'),
+          color: '#353945',
+        };
+      default:
+        break;
+    }
+  };
+
+  const statusObj = getStatusText(status);
+
   return (
     <div className="pw-p-6 pw-bg-white pw-rounded-xl pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-w-full">
       <div className="pw-flex pw-justify-between">
-        <div className="">
-          <p
-            style={{ color: statusObj?.color }}
-            className="pw-text-sm pw-font-bold pw-flex pw-gap-1 pw-items-center"
-          >
-            {statusObj?.icon && <span>{statusObj?.icon}</span>}
+        <div>
+          <div className="">
+            <p
+              style={{ color: statusObj?.color }}
+              className="pw-text-sm pw-font-bold pw-flex pw-gap-1 pw-items-center"
+            >
+              {statusObj?.icon && <span>{statusObj?.icon}</span>}
 
-            {statusObj?.title}
-            {paymentProvider == 'crypto' &&
-              status == OrderStatusEnum.PENDING && (
-                <>
-                  <div
-                    onMouseEnter={() => {
-                      if (!infoOpened) setInfoOpened(true);
-                    }}
-                    onMouseLeave={() => {
-                      if (infoOpened) setInfoOpened(false);
-                    }}
-                  >
-                    <InfoIcon className="pw-w-[14px] pw-h-[14px]" />
-                    <div className="pw-relative">
-                      {infoOpened && (
-                        <div className="pw-absolute pw-z-10 pw-bg-white pw-p-2 pw-rounded-lg pw-shadow-md pw-w-[150px]">
-                          <p className="pw-text-xs pw-text-slate-600 pw-font-normal">
-                            {translate(
-                              'dashboardOrderCardComponentSDK>yourPurchaseWaitingProcess'
-                            )}
-                          </p>
-                        </div>
-                      )}
+              {statusObj?.title}
+              {paymentProvider == 'crypto' &&
+                status == OrderStatusEnum.PENDING && (
+                  <>
+                    <div
+                      onMouseEnter={() => {
+                        if (!infoOpened) setInfoOpened(true);
+                      }}
+                      onMouseLeave={() => {
+                        if (infoOpened) setInfoOpened(false);
+                      }}
+                    >
+                      <InfoIcon className="pw-w-[14px] pw-h-[14px]" />
+                      <div className="pw-relative">
+                        {infoOpened && (
+                          <div className="pw-absolute pw-z-10 pw-bg-white pw-p-2 pw-rounded-lg pw-shadow-md pw-w-[150px]">
+                            <p className="pw-text-xs pw-text-slate-600 pw-font-normal">
+                              {translate(
+                                'dashboardOrderCardComponentSDK>yourPurchaseWaitingProcess'
+                              )}
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
-          </p>
-          {status === OrderStatusEnum.PENDING && expiresIn && (
-            <div className="pw-flex pw-gap-1">
-              <p className="pw-text-xs pw-text-slate-500 pw-font-medium">
-                {translate('dashboardOrderCardComponentSDK>expiresAs')}:{' '}
-              </p>
-              <p className="pw-text-xs pw-text-slate-500">
-                {format(new Date(expiresIn ?? ''), 'H:mm d MMM, yyyy ')}
-              </p>
-            </div>
-          )}
-          <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
-            ID: {id}{' '}
-            {/* <span>
+                  </>
+                )}
+            </p>
+            {status === OrderStatusEnum.PENDING && expiresIn && (
+              <div className="pw-flex pw-gap-1">
+                <p className="pw-text-xs pw-text-slate-500 pw-font-medium">
+                  {translate('dashboardOrderCardComponentSDK>expiresAs')}:{' '}
+                </p>
+                <p className="pw-text-xs pw-text-slate-500">
+                  {format(new Date(expiresIn ?? ''), 'H:mm d MMM, yyyy ')}
+                </p>
+              </div>
+            )}
+            <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
+              ID: {id}{' '}
+              {/* <span>
               <CopyIcon className="pw-fill-[#295BA6] pw-text-xs pw-w-[12px] pw-h-[12px] pw-cursor-pointer" />
             </span> */}
-          </p>
-          {deliverId && (
-            <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
-              {translate('dashboardOrderCardComponentSDK>purchase')}:{' '}
-              <span className="pw-font-[700]">{deliverId}</span>{' '}
-              {/* <span>
+            </p>
+            {deliverId && (
+              <p className="pw-text-xs pw-font-[500] pw-text-black pw-flex pw-gap-x-1">
+                {translate('dashboardOrderCardComponentSDK>purchase')}:{' '}
+                <span className="pw-font-[700]">{deliverId}</span>{' '}
+                {/* <span>
                 <CopyIcon className="pw-fill-[#295BA6] pw-text-xs pw-w-[12px] pw-h-[12px] pw-cursor-pointer" />
               </span> */}
-            </p>
-          )}
-          {deliverId && showCoinPaymentReceiptButton && (
+              </p>
+            )}
+            {deliverId && showCoinPaymentReceiptButton && (
+              <PixwayButton
+                onClick={() => setOpenReceipt(true)}
+                className="pw-mt-1 !pw-py-[2px] !pw-px-[10px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl"
+              >
+                {translate('dashboardOrderCardComponentSDK>receiptCode')}
+              </PixwayButton>
+            )}
+          </div>
+          {status === OrderStatusEnum.CONFIRMING_PAYMENT ? (
             <PixwayButton
-              onClick={() => setOpenReceipt(true)}
+              onClick={() => pushConnect(`/checkout/pay/${id}`)}
               className="pw-mt-1 !pw-py-[2px] !pw-px-[10px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl"
             >
               {translate('dashboardOrderCardComponentSDK>receiptCode')}
             </PixwayButton>
-          )}
+          ) : null}
         </div>
         <div className="pw-flex pw-items-center pw-gap-x-2 pw-justify-end">
           {createdAt && (
@@ -257,7 +322,7 @@ export const OrderCardComponentSDK = ({
                       }
                       anchorCurrencyAmount="0"
                       metadata={prod?.metadata}
-                      subtitle={prod?.subtitle}
+                      subtitle={prod?.subtitle ?? prod?.productToken?.subtitle}
                     />
                   ))
               : null}
@@ -290,35 +355,4 @@ export const OrderCardComponentSDK = ({
       />
     </div>
   );
-};
-
-const getStatusText = (status: OrderStatusEnum) => {
-  switch (status) {
-    case OrderStatusEnum.CANCELLED:
-      return { title: 'Cancelado', color: '#ED4971', icon: <XIcon /> };
-    case OrderStatusEnum.CONCLUDED:
-      return {
-        title: 'Finalizado',
-        color: '#295BA6',
-        icon: <CheckIcon className="pw-stroke-blue-700" />,
-      };
-    case OrderStatusEnum.CONFIRMING_PAYMENT:
-      return { title: 'Confirmando o pagamento', color: '#295BA6' };
-    case OrderStatusEnum.DELIVERING:
-      return { title: 'Entregando', color: '#295BA6' };
-    case OrderStatusEnum.WAITING_DELIERY:
-      return { title: 'Entregando', color: '#295BA6' };
-    case OrderStatusEnum.EXPIRED:
-      return {
-        title: 'Expirado',
-        color: '#ED4971',
-        icon: <XIcon className="pw-stroke-[#ED4971]" />,
-      };
-    case OrderStatusEnum.FAILED:
-      return { title: 'Falha', color: '#ED4971', icon: <XIcon /> };
-    case OrderStatusEnum.PENDING:
-      return { title: 'Pagamento pendente', color: '#353945' };
-    default:
-      break;
-  }
 };

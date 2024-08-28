@@ -25,6 +25,8 @@ export const useIsHiddenMenuItem = (roles: Array<UserRoleEnum>) => {
           computedRole = 'loyaltyOperator';
         } else if (roles?.find((e: string) => e === 'commerce.orderReceiver')) {
           computedRole = 'commerce.orderReceiver';
+        } else if (roles?.find((e: string) => e === 'kyc.approver')) {
+          computedRole = 'kyc.approver';
         }
 
         if (hiddenOption) {

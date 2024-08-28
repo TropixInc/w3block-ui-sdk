@@ -14,6 +14,7 @@ interface FormItemContainerProps {
   invalid?: boolean;
   disabled?: boolean;
   theme?: FormItemContainerTheme;
+  disableClasses?: boolean;
 }
 
 const defaultTheme: FormItemContainerTheme = {
@@ -27,21 +28,32 @@ export const FormItemContainer = forwardRef<
   FormItemContainerProps
 >(
   (
-    { children, className = '', invalid = false, disabled = false, theme = {} },
+    {
+      children,
+      className = '',
+      invalid = false,
+      disabled = false,
+      theme = {},
+      disableClasses,
+    },
     ref
   ) => {
     return (
       <div
         ref={ref}
-        className={classNames(
-          'pw-rounded-lg pw-outline pw-transition-all pw-duration-200',
-          theme.default ?? defaultTheme.default ?? '',
-          className,
-          invalid
-            ? theme.invalid ?? defaultTheme.invalid ?? ''
-            : 'pw-outline-[#94B8ED] pw-outline-1',
-          disabled ? theme.disabled ?? defaultTheme.disabled : ''
-        )}
+        className={
+          disableClasses
+            ? ''
+            : classNames(
+                'pw-rounded-lg pw-outline pw-transition-all pw-duration-200',
+                theme.default ?? defaultTheme.default ?? '',
+                className,
+                invalid
+                  ? theme.invalid ?? defaultTheme.invalid ?? ''
+                  : 'pw-outline-[#94B8ED] pw-outline-1',
+                disabled ? theme.disabled ?? defaultTheme.disabled : ''
+              )
+        }
       >
         {children}
       </div>

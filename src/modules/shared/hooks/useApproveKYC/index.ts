@@ -7,6 +7,7 @@ import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 interface Props {
   userId: string;
   contextId: string;
+  userContextId: string;
 }
 
 const useApproveKYC = () => {
@@ -22,7 +23,7 @@ const useApproveKYC = () => {
         tenantId ?? '',
         body.userId,
         body.contextId,
-        { reason: '' }
+        { reason: '', userContextId: body.userContextId }
       );
     },
     {

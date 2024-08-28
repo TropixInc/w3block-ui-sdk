@@ -102,9 +102,12 @@ export enum PixwayAPIRoutes {
   SIGNIN_WITH_GOOGLE = '/auth/{companyId}/signin/google/code',
   GET_GOOGLE_URL = '/auth/{companyId}/signin/google',
   GET_SPECIFIC_WITHDRAW_ADMIN = '/{companyId}/withdraws/admin/{id}',
+  COMPLETE_ORDER_PAYMENT = '/companies/{companyId}/orders/{orderId}/pay',
   REQUEST_REVIEW_KYC = '/users/{tenantId}/contexts/{userId}/{contextId}/require-review',
   APROVE_KYC = '/users/{tenantId}/contexts/{userId}/{contextId}/approve',
   REJECT_KYC = '/users/{tenantId}/contexts/{userId}/{contextId}/reject',
   KYC_LIST = 'customer-infos/{tenantId}/search',
   CONTEXT_BY_USER_ID = '/users/{tenantId}/contexts/{userId}',
+  GET_ODER_BY_KYC = '/companies/{companyId}/orders/get-by-kyc-user-context-id/{kycUserContextId}',
+  GET_USER_CONTEXT_ID = '/users/{companyId}/contexts/{userId}/{userContextId}',
 }

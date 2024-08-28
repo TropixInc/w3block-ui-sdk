@@ -29,6 +29,9 @@ interface Props {
   keyPage?: boolean;
   profilePage?: boolean;
   statusContext?: UserContextStatus;
+  hideComplexPhone?: boolean;
+  hideContinue?: boolean;
+  readonly?: boolean;
 }
 
 export const FormTemplate = ({
@@ -46,6 +49,9 @@ export const FormTemplate = ({
   keyPage,
   profilePage,
   statusContext,
+  hideComplexPhone,
+  hideContinue,
+  readonly,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
   const [translate] = useTranslation();
@@ -92,6 +98,8 @@ export const FormTemplate = ({
                   isKeyPage={keyPage}
                   required={item.mandatory}
                   statusContext={statusContext}
+                  hideComplexPhone={hideComplexPhone}
+                  readonly={readonly}
                 />
               </div>
             );
@@ -105,24 +113,25 @@ export const FormTemplate = ({
           <Alert>{translate('shared>formTemplate>formApprovedNotEdit')}</Alert>
         </div>
       ) : null}
-
-      <AuthButton
-        type="submit"
-        className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
-        disabled={
-          buttonDisabled ||
-          statusContext === UserContextStatus.Approved ||
-          statusContext === UserContextStatus.Denied
-        }
-      >
-        {isLoading ? (
-          <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
-        ) : keyPage ? (
-          'Salvar'
-        ) : (
-          'Continuar'
-        )}
-      </AuthButton>
+      {hideContinue ? null : (
+        <AuthButton
+          type="submit"
+          className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
+          disabled={
+            buttonDisabled ||
+            statusContext === UserContextStatus.Approved ||
+            statusContext === UserContextStatus.Denied
+          }
+        >
+          {isLoading ? (
+            <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
+          ) : keyPage ? (
+            'Salvar'
+          ) : (
+            'Continuar'
+          )}
+        </AuthButton>
+      )}
     </form>
   );
 };

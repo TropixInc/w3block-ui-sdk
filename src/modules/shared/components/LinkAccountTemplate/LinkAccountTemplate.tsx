@@ -53,7 +53,7 @@ const _LinkAccountTemplate = () => {
   const tokens =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ethNFTsResponse?.data.items.map((nft: any) =>
-      mapNFTToToken(nft, wallet?.chainId || 80001)
+      mapNFTToToken(nft, wallet?.chainId || 137)
     ) || [];
 
   const collections = productCollectionId.split('|');

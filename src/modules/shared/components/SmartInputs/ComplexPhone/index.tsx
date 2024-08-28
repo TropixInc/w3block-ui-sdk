@@ -18,6 +18,8 @@ interface InputPhoneProps {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   statusContext?: UserContextStatus;
+  hideAddButton?: boolean;
+  readonly?: boolean;
 }
 
 const ComplexPhone = ({
@@ -28,6 +30,8 @@ const ComplexPhone = ({
   hidenValidations,
   complexValue,
   statusContext,
+  hideAddButton = false,
+  readonly,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
   const [translate] = useTranslation();
@@ -99,7 +103,8 @@ const ComplexPhone = ({
               <FormItemContainer className="pw-w-full">
                 <ReactInputMask
                   readOnly={
-                    docStatus && validateIfStatusKycIsReadonly(docStatus)
+                    (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+                    readonly
                   }
                   name={item}
                   value={item}
@@ -138,7 +143,7 @@ const ComplexPhone = ({
         ))}
       </div>
 
-      {!hiddenButtons ? (
+      {hiddenButtons || hideAddButton ? null : (
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -149,7 +154,7 @@ const ComplexPhone = ({
           <span>+</span>
           <span>{translate('shared>complexPhone>addPhone')}</span>
         </button>
-      ) : null}
+      )}
     </div>
   );
 };

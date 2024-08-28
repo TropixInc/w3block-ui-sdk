@@ -14,7 +14,7 @@ import InputStatus from '../InputStatus';
 interface InputPhoneProps {
   label: string;
   name: string;
-
+  readonly?: boolean;
   docValue?: string;
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
@@ -28,6 +28,7 @@ const InputPhone = ({
   docStatus,
   hidenValidations = false,
   required,
+  readonly,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -61,7 +62,9 @@ const InputPhone = ({
       </LabelWithRequired>
       <FormItemContainer invalid={fieldState.invalid}>
         <ReactInputMask
-          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+          readOnly={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+          }
           name={name}
           value={inputValue}
           onChange={(e) => handleChange(e.target.value)}

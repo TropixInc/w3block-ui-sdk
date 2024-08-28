@@ -48,6 +48,9 @@ const RequestsList = () => {
           onChangeIsRenderKycItem={setOpenExpansible}
           slugContext={data.context.slug}
           userId={data.userId}
+          userContextId={data.id}
+          setIsUpdateList={setIsUpdateList}
+          readonly={data?.tenantContext?.data?.approverReadOnly}
         />
       );
     }
@@ -82,15 +85,15 @@ const RequestsList = () => {
       },
     },
     dataSource: {
-      url: `/users/${tenantId}/contexts/find?contextType=form`,
+      url: `/users/${tenantId}/contexts/find?contextType=form&excludeSelfContexts=true&sortBy=createdAt&orderBy=DESC`,
       urlContext: W3blockAPI.ID,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,
     },
     tableStyles: {
       root: { width: '100%' },
-      header: '!pw-grid-cols-[18%_20%]',
-      line: '!pw-grid-cols-[18%_20%]',
+      header: '!pw-grid-cols-[18%_20%] !pw-text-black',
+      line: '!pw-grid-cols-[18%_20%] !pw-text-black',
     },
 
     columns: [
@@ -99,7 +102,7 @@ const RequestsList = () => {
         key: 'context.description',
         sortable: false,
         header: {
-          label: 'Nome',
+          label: 'Tipo',
           filter: {
             format: FormatFilterType.SELECT,
             type: FilterTableType.DYNAMIC,
@@ -174,6 +177,7 @@ const RequestsList = () => {
           },
         },
         key: 'status',
+        initialSortParameter: 'created',
         sortable: false,
         header: {
           label: 'Situação',

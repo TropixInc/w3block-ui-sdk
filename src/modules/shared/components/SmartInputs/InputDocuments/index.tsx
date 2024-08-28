@@ -7,6 +7,8 @@ import { UserDocumentStatus } from '@w3block/sdk-id';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import LabelWithRequired from '../../LabelWithRequired';
+import { InputError } from '../../SmartInputsController';
+import InputStatus from '../InputStatus';
 
 interface InputDocuments {
   label: string;
@@ -15,6 +17,7 @@ interface InputDocuments {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputDocuments = ({
@@ -22,11 +25,14 @@ const InputDocuments = ({
   docValue,
   label,
   required,
+  hidenValidations = false,
+  readonly,
 }: InputDocuments) => {
   const { field, fieldState } = useController({ name });
   const [selectDocType, setSelectDocType] = useState<string | undefined>();
   const [document, setDocument] = useState<string | undefined>();
   const [translate] = useTranslation();
+  const error = fieldState?.error as unknown as InputError;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [apiSavedValue, setApiSavedValue] = useState<any>();
   const docTypeOptions = [
@@ -71,9 +77,14 @@ const InputDocuments = ({
 
   useEffect(() => {
     if (apiSavedValue) {
+      field.onChange({
+        inputId: name,
+        value: apiSavedValue,
+      });
       setSelectDocType(apiSavedValue.docType);
       setDocument(apiSavedValue.document);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiSavedValue]);
 
   return (
@@ -92,6 +103,7 @@ const InputDocuments = ({
               setSelectDocType(e.target.value);
               setDocument('');
             }}
+            disabled={readonly}
             className="pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
           >
             <option value={''}>Selecione o tipo de documento..</option>
@@ -126,17 +138,29 @@ const InputDocuments = ({
                 placeholder="Digite apenas números"
                 className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
                 inputMode="numeric"
+                readOnly={readonly}
               />
             ) : (
               <input
                 name={name}
                 onChange={(e) => handleChange(e.target.value)}
                 value={document}
+                readOnly={readonly}
                 className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
               />
             )}
           </FormItemContainer>
         </div>
+        {!hidenValidations && (
+          <div className="mt-5">
+            {field.value && (
+              <InputStatus
+                invalid={fieldState.invalid}
+                errorMessage={error?.value?.message}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

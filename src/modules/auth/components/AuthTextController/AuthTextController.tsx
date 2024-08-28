@@ -1,12 +1,7 @@
-import { lazy } from 'react';
-
 import AuthFormController, {
   AuthFormControllerRenderTipsFunction,
 } from '../AuthFormController/AuthFormController';
-
-const AuthTextField = lazy(() =>
-  import('../AuthTextField').then((m) => ({ default: m.AuthTextField }))
-);
+import { AuthTextField } from '../AuthTextField';
 
 interface AuthTextControllerProps {
   className?: string;

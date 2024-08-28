@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import isAfter from 'date-fns/isAfter';
 
@@ -8,29 +8,11 @@ import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { AuthLayoutBaseClasses } from '../../components/AuthLayoutBase';
-const CompleteSignUpSuccess = lazy(() =>
-  import('../../components/CompleteSignUpSuccess').then((m) => ({
-    default: m.CompleteSignUpSuccess,
-  }))
-);
-const SignUpForm = lazy(() =>
-  import('../../components/SignUpForm').then((m) => ({
-    default: m.SignUpForm,
-  }))
-);
-
-const VerifySignUpMailSent = lazy(() =>
-  import('../../components/VerifySignUpMailSent').then((m) => ({
-    default: m.VerifySignUpMailSent,
-  }))
-);
-
-const VerifySignUpTokenExpired = lazy(() =>
-  import('../../components/VerifySignUpTokenExpired').then((m) => ({
-    default: m.VerifySignUpTokenExpired,
-  }))
-);
+import { CompleteSignUpSuccess } from '../../components/CompleteSignUpSuccess';
+import { SignUpForm } from '../../components/SignUpForm';
 import { SignUpFormData } from '../../components/SignUpForm/interface';
+import { VerifySignUpMailSent } from '../../components/VerifySignUpMailSent';
+import { VerifySignUpTokenExpired } from '../../components/VerifySignUpTokenExpired';
 import { useChangePassword } from '../../hooks/useChangePassword';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
 

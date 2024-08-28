@@ -12,6 +12,8 @@ interface GenericProps {
   isPublicApi?: boolean;
   enabled?: boolean;
   internalTypeAPI?: W3blockAPI;
+  disableParams?: boolean;
+  searchType?: string;
 }
 
 export const usePaginatedGenericApiGet = ({
@@ -22,14 +24,27 @@ export const usePaginatedGenericApiGet = ({
   isPublicApi,
   enabled = true,
   internalTypeAPI,
+  disableParams = false,
+  searchType,
 }: GenericProps) => {
   const internalAxios = useAxios(internalTypeAPI || W3blockAPI.ID);
+
   return usePaginatedQuery(
     [url, search ?? ''],
     (params) => {
       const newParams = outputMap ? outputMap(params) : params;
       if (isPublicApi) {
-        return axios.get(url, { params: { ...newParams, search: search } });
+        if (disableParams) {
+          if (searchType)
+            return axios.get(url, {
+              params: { [searchType]: search },
+            });
+          else
+            return axios.get(url, {
+              params: { search: search },
+            });
+        } else
+          return axios.get(url, { params: { ...newParams, search: search } });
       } else {
         return internalAxios.get(url, {
           params: { ...newParams, search: search },

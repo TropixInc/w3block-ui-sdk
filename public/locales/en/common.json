@@ -906,5 +906,18 @@
 "wallet>tokenTransferProcessModal>p2": "For transparency purposes, we inform you that the action you are about to complete does not depend exclusively on our tokenization platform, but rather on the blockchain network in which your tokens are registered and, consequently, on the traffic system that this network operates.",
 "wallet>tokenTransferProcessModal>p3": "Therefore, your transfer will be completed as soon as the blockchain network finishes processing your tokens and this action cannot be undone under any circumstances, either manually or automatically, so that no important information regarding your assets is lost or damaged along the way.",
 "wallet>tokenTransferProcessModal>proceedButton": "Continue",
-"wallet>tokenTransferProcessModal>title": "Token transfer process"
+"wallet>tokenTransferProcessModal>title": "Token transfer process",
+"checkout>checkoutInfo>coinError": "The amount of coins used cannot be greater than the amount to be paid",
+"checkout>checkoutInfo>hello": "Hello",
+"checkout>checkoutInfo>youPayFor": "You will pay for",
+"checkout>checkoutInfo>couponCode": "Coupon Code",
+"checkout>orderCardComponentSDK>completed": "Finalized",
+"checkout>orderCardComponentSDK>waitingPayment": "Waiting for payment",
+"checkout>orderCardComponentSDK>delivering": "Delivering",
+"checkout>orderCardComponentSDK>expired": "Expired",
+"checkout>orderCardComponentSDK>cancel": "Cancelled", 
+"checkout>orderCardComponentSDK>fail": "Fail", 
+"checkout>orderCardComponentSDK>pendingPayment": "Pending payment", 
+"storefront>bannerWjjc>instructor": "WJJC Instructor", 
+"storefront>bannerWjjc>since": "since"
 }

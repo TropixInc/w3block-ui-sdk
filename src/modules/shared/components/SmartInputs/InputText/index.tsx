@@ -16,6 +16,7 @@ interface InputText {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputText = ({
@@ -25,6 +26,7 @@ const InputText = ({
   docStatus,
   hidenValidations = false,
   required,
+  readonly,
 }: InputText) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -58,14 +60,16 @@ const InputText = ({
       </LabelWithRequired>
       <FormItemContainer invalid={fieldState.invalid}>
         <input
-          readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+          readOnly={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+          }
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
           className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
         />
       </FormItemContainer>
       {!hidenValidations && (
-        <div className="pw-mt-[5px]">
+        <div className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}

@@ -468,7 +468,7 @@ export const CheckoutPaymentComponent = ({
             </div>
           )}
           <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
-            {installments && installments.length > 0 && (
+            {installments && installments.length > 1 && (
               <CheckoutInstalments
                 installments={installments}
                 value={instalment}
@@ -600,7 +600,7 @@ export const CheckoutPaymentComponent = ({
       ) : (
         <>
           <div className="pw-flex pw-flex-col pw-gap-3 pw-mt-4">
-            {installments && installments.length > 0 && (
+            {installments && installments.length > 1 && (
               <CheckoutInstalments
                 installments={installments}
                 value={instalment}

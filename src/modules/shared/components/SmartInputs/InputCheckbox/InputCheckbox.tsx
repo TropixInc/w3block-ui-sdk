@@ -17,6 +17,7 @@ interface InputCheckbox {
   hidenValidations?: boolean;
   configData?: object;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputCheckbox = ({
@@ -27,6 +28,7 @@ const InputCheckbox = ({
   hidenValidations = false,
   configData,
   required,
+  readonly,
 }: InputCheckbox) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<boolean | undefined>();
@@ -55,7 +57,7 @@ const InputCheckbox = ({
   }, [docValue]);
 
   return (
-    <div className={`${label === ' ' ? '-pw-mt-3' : ''} pw-mb-3 pw-w-full`}>
+    <div className={`${label === ' ' ? '-pw-mt-6' : ''} pw-mb-6 pw-w-full`}>
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
@@ -67,6 +69,7 @@ const InputCheckbox = ({
           type="checkbox"
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
           onChange={(e) => handleValueChange(e.target.checked)}
+          disabled={readonly}
           checked={inputValue}
         />
         <a
@@ -79,7 +82,7 @@ const InputCheckbox = ({
         </a>
       </FormItemContainer>
       {!hidenValidations && (
-        <div className="pw-mt-[5px]">
+        <div className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (
             <InputStatus
               invalid={fieldState.invalid}

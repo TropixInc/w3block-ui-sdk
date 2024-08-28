@@ -139,6 +139,7 @@ export const CompleteKYCTemplateSDK = ({
               userId={profile?.data?.id}
               formFooter={screenConfig?.form?.footer}
               formTitle={screenConfig?.form?.title}
+              hideContinue={screenConfig?.form?.hideContinue}
             />
           }
         />

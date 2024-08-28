@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -18,6 +20,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantContextBySlug } from '../../../shared/hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../../shared/hooks/useGetTenantInputs/useGetTenantInputsBySlug';
+import { useGetUserContextId } from '../../../shared/hooks/useGetUserContextId/useGetUserContextId';
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -43,6 +46,17 @@ interface Props {
   inputRequestable?: boolean;
   inputsIdRequestReview?: Array<string>;
   onChangeInputsIdRequestReview?: (value: Array<string>) => void;
+  productForm?: boolean;
+  handleProductForm?: () => void;
+  handleProductFormError?: () => void;
+  product?: {
+    quantity: number;
+    productId: string;
+  };
+  userContextId?: string;
+  hideComplexPhone?: boolean;
+  hideContinue?: boolean;
+  readonly?: boolean;
 }
 
 interface ErrorProps {
@@ -61,6 +75,14 @@ const _FormCompleteKYCWithoutLayout = ({
   inputRequestable,
   inputsIdRequestReview,
   onChangeInputsIdRequestReview,
+  productForm = false,
+  handleProductForm,
+  handleProductFormError,
+  product,
+  userContextId,
+  hideComplexPhone,
+  hideContinue,
+  readonly,
 }: Props) => {
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
@@ -95,12 +117,24 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
   const { refetch } = useProfile();
+
+  const { data: userContext } = useGetUserContextId({
+    userId: userId ?? '',
+    userContextId: userContextId ?? '',
+  });
   const { data: documents } = useGetUsersDocuments({
     userId: userId ?? '',
     contextId: tenantInputs?.data?.length
       ? tenantInputs?.data[0].contextId
       : '',
   });
+
+  const docsToUse = useMemo(() => {
+    if (userContext && userContext?.data?.documents) {
+      return userContext?.data?.documents;
+    } else return documents?.data;
+  }, [userContext, documents]);
+
   const context = useContext(OnboardContext);
   const query = Object.keys(router.query ?? {}).length > 0 ? router.query : '';
 
@@ -113,19 +147,29 @@ const _FormCompleteKYCWithoutLayout = ({
     tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : ''
   );
 
+  const reasonsToUse = useMemo(() => {
+    if (userContext && userContext?.data) return userContext?.data;
+    else if (reasons?.data?.items) return reasons?.data?.items?.[0];
+  }, [userContext, reasons]);
+
   const statusContext = useMemo(() => {
-    if (reasons && reasons?.data?.items) {
-      return reasons?.data?.items[0].status;
+    if (reasonsToUse && reasonsToUse?.status) {
+      return reasonsToUse?.status;
     }
-  }, [reasons]);
+  }, [reasonsToUse]);
+
+  const inputsToShow = useMemo(() => {
+    if (step) return groupedInputs[step as string];
+    else return tenantInputs?.data ?? [];
+  }, [step, tenantInputs?.data]);
 
   const validations = useGetValidationsTypesForSignup(
-    tenantInputs?.data ?? [],
-    tenantInputs?.data?.length ? tenantInputs?.data[0].contextId : '',
+    inputsToShow ?? [],
+    inputsToShow?.length ? inputsToShow?.[0].contextId : '',
     keyPage
   );
-  const yupSchema = createSchemaSignupForm(validations);
 
+  const yupSchema = createSchemaSignupForm(validations);
   const dynamicSchema = object().shape(yupSchema);
 
   const dynamicMethods = useForm<DocumentDto>({
@@ -135,51 +179,95 @@ const _FormCompleteKYCWithoutLayout = ({
   });
 
   const contextOnboard = useContext(OnboardContext);
-
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
+    const validDocs = documents.filter((item) => item);
 
-    const validDocs = documents.filter((item) => {
-      if (Array.isArray(item?.value)) {
-        const filteredArray = item?.value?.filter(
-          (arrItem: string) => arrItem?.trim()?.length > 0
-        );
-        item.value = filteredArray;
-
-        return true;
-      } else {
-        return item?.value;
-      }
-    });
+    const docsToUse = () => {
+      if (
+        tenantInputs?.data.some(
+          (val: any) => (val.type as any) === 'commerce_product'
+        ) &&
+        product
+      ) {
+        const productInput = [
+          {
+            inputId: tenantInputs?.data?.find(
+              (val: any) => (val.type as any) === 'commerce_product'
+            )?.id,
+            value: product,
+          },
+        ];
+        const newDocs = validDocs.concat(productInput);
+        return newDocs;
+      } else return validDocs;
+    };
 
     if (tenantInputs?.data?.length && userId) {
       const { contextId } = tenantInputs.data[0];
+      const inputApprover = tenantInputs.data?.find(
+        (val: any) => (val?.data as any)?.approver
+      );
+      const approver = docsToUse()?.find(
+        (val: any) => val.inputId === inputApprover?.id
+      );
+      const value = () => {
+        if (
+          (kycContext?.data as any)?.requireSpecificApprover &&
+          inputApprover &&
+          approver
+        ) {
+          return {
+            documents: docsToUse(),
+            currentStep: parseInt(step as string),
+            approverUserId: (approver as any)?.value?.userId ?? undefined,
+            userContextId:
+              userContextId ??
+              (router?.query?.userContextId as string) ??
+              undefined,
+          };
+        } else {
+          return {
+            documents: docsToUse(),
+            currentStep: parseInt(step as string),
+            userContextId:
+              userContextId ??
+              (router?.query?.userContextId as string) ??
+              undefined,
+          };
+        }
+      };
       mutate(
         {
           tenantId,
           contextId,
           userId,
-          documents: {
-            documents: validDocs,
-            currentStep: parseInt(step as string),
-          },
+          documents: value(),
         },
         {
-          onSuccess: () => {
-            contextOnboard.setLoading(true);
+          onSuccess: (data) => {
+            if (!productForm) {
+              contextOnboard.setLoading(true);
+            }
             const steps = Object.keys(groupedInputs).length;
             if (steps && parseInt(step as string) < steps) {
-              router.replace({
+              router.push({
                 query: {
                   contextSlug: slug(),
                   step: parseInt(step as string) + 1,
+                  userContextId:
+                    router?.query?.userContextId ?? (data.data as any).id,
                 },
               });
+            } else if (productForm && handleProductForm) {
+              handleProductForm();
             } else if (!profilePage) {
               refetch();
               context.refetchDocs();
-              if (screenConfig?.skipConfirmation) {
+              if (keyPage) {
+                null;
+              } else if (screenConfig?.skipConfirmation) {
                 if (typeof screenConfig?.postKycUrl === 'string') {
                   router.pushConnect(screenConfig?.postKycUrl);
                 } else if (skipWallet) {
@@ -196,8 +284,6 @@ const _FormCompleteKYCWithoutLayout = ({
                     router.query
                   );
                 }
-              } else if (keyPage) {
-                null;
               } else {
                 router.pushConnect(
                   PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
@@ -206,21 +292,29 @@ const _FormCompleteKYCWithoutLayout = ({
               }
             }
           },
+          onError() {
+            if (productForm && handleProductFormError) {
+              handleProductFormError();
+            }
+          },
         }
       );
     }
   };
 
   function getDocumentByInputId(inputId: string) {
-    return documents?.data.find((doc) => doc.inputId === inputId);
+    return docsToUse?.find((doc: any) =>
+      userContext
+        ? doc.inputId === inputId &&
+          (doc as any)?.userContextId === userContextId
+        : doc.inputId === inputId
+    );
   }
-
-  const inputsToShow = () => {
-    if (step) return groupedInputs[step as string];
-    else return tenantInputs?.data ?? [];
-  };
-
-  const formState = router.query ? (router.query.formState as string) : '';
+  const formState = useMemo(() => {
+    if (productForm) return 'initial';
+    else if (router.query.formState) return router.query.formState as string;
+    else return '';
+  }, [productForm, router.query.formState]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
@@ -230,11 +324,11 @@ const _FormCompleteKYCWithoutLayout = ({
     keyPage ? (
       <FormProvider {...dynamicMethods}>
         {!keyPage &&
-        reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
-        reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
+        reasonsToUse?.logs?.at(-1)?.reason &&
+        reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
           <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
             <p className="pw-mt-2 pw-text-[#FF0505]">
-              {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+              {reasonsToUse?.logs.at(-1)?.reason}
             </p>
           </div>
         ) : null}
@@ -265,7 +359,7 @@ const _FormCompleteKYCWithoutLayout = ({
             )
           }
           onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-          tenantInputs={inputsToShow()}
+          tenantInputs={inputsToShow}
           setUploadProgress={setUploadProgress}
           getDocumentByInputId={getDocumentByInputId}
           formState={formState}
@@ -275,6 +369,9 @@ const _FormCompleteKYCWithoutLayout = ({
           keyPage={keyPage}
           profilePage={profilePage}
           statusContext={statusContext}
+          hideComplexPhone={hideComplexPhone}
+          hideContinue={hideContinue}
+          readonly={readonly}
         ></FormTemplate>
 
         {isSuccess && (
@@ -330,11 +427,11 @@ const _FormCompleteKYCWithoutLayout = ({
         )}
       >
         <FormProvider {...dynamicMethods}>
-          {reasons?.data?.items?.[0]?.logs?.at(-1)?.reason &&
-          reasons?.data?.items?.[0]?.logs?.at(-1)?.inputIds.length ? (
+          {reasonsToUse?.logs?.at(-1)?.reason &&
+          reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
             <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
               <p className="pw-mt-2 pw-text-[#FF0505]">
-                {reasons?.data.items?.[0]?.logs.at(-1)?.reason}
+                {reasonsToUse?.logs.at(-1)?.reason}
               </p>
             </div>
           ) : null}
@@ -364,12 +461,15 @@ const _FormCompleteKYCWithoutLayout = ({
               )
             }
             onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-            tenantInputs={inputsToShow()}
+            tenantInputs={inputsToShow}
             setUploadProgress={setUploadProgress}
             getDocumentByInputId={getDocumentByInputId}
             formState={formState}
             profilePage={profilePage}
             statusContext={statusContext}
+            hideComplexPhone={hideComplexPhone}
+            hideContinue={hideContinue}
+            readonly={readonly}
           ></FormTemplate>
 
           {isSuccess && (
@@ -468,6 +568,14 @@ export const FormCompleteKYCWithoutLayout = ({
   inputRequestable,
   inputsIdRequestReview,
   onChangeInputsIdRequestReview,
+  productForm,
+  handleProductForm,
+  handleProductFormError,
+  product,
+  userContextId,
+  hideComplexPhone,
+  hideContinue,
+  readonly,
 }: Props) => (
   <TranslatableComponent>
     <_FormCompleteKYCWithoutLayout
@@ -482,6 +590,14 @@ export const FormCompleteKYCWithoutLayout = ({
       inputRequestable={inputRequestable}
       inputsIdRequestReview={inputsIdRequestReview}
       onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
+      productForm={productForm}
+      handleProductForm={handleProductForm}
+      handleProductFormError={handleProductFormError}
+      product={product}
+      userContextId={userContextId}
+      hideComplexPhone={hideComplexPhone}
+      hideContinue={hideContinue}
+      readonly={readonly}
     />
   </TranslatableComponent>
 );

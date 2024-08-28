@@ -19,6 +19,7 @@ interface InputEmailProps {
   hidenValidations?: boolean;
   autofill?: boolean;
   required?: boolean;
+  readonly?: boolean;
 }
 
 const InputEmail = ({
@@ -29,6 +30,7 @@ const InputEmail = ({
   hidenValidations = false,
   autofill = false,
   required,
+  readonly,
 }: InputEmailProps) => {
   const { field, fieldState } = useController({ name });
   const error = fieldState?.error as unknown as InputError;
@@ -80,7 +82,10 @@ const InputEmail = ({
           <input
             disabled={autofill}
             name={name}
-            readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
+            readOnly={
+              (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+              readonly
+            }
             onChange={(e) => handleChange(e.target.value)}
             value={inputValue}
             type="email"
