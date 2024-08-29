@@ -24,6 +24,7 @@ import { useGetUserContextId } from '../../../shared/hooks/useGetUserContextId/u
 import { useGetUsersDocuments } from '../../../shared/hooks/useGetUsersDocuments';
 import { usePostUsersDocuments } from '../../../shared/hooks/usePostUsersDocuments/usePostUsersDocuments';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { createSchemaSignupForm } from '../../../shared/utils/createSchemaSignupForm';
 import { useGetValidationsTypesForSignup } from '../../../shared/utils/useGetValidationsTypesForSignup';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
@@ -177,7 +178,7 @@ const _FormCompleteKYCWithoutLayout = ({
     mode: 'onChange',
     resolver: yupResolver(dynamicSchema),
   });
-
+  const utms = useUtms();
   const contextOnboard = useContext(OnboardContext);
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
@@ -222,6 +223,7 @@ const _FormCompleteKYCWithoutLayout = ({
             documents: docsToUse(),
             currentStep: parseInt(step as string),
             approverUserId: (approver as any)?.value?.userId ?? undefined,
+            utmParams: utms ? { ...utms } : undefined,
             userContextId:
               userContextId ??
               (router?.query?.userContextId as string) ??
@@ -231,6 +233,7 @@ const _FormCompleteKYCWithoutLayout = ({
           return {
             documents: docsToUse(),
             currentStep: parseInt(step as string),
+            utmParams: utms ? { ...utms } : undefined,
             userContextId:
               userContextId ??
               (router?.query?.userContextId as string) ??

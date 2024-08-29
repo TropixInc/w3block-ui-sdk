@@ -152,7 +152,11 @@ export const MultipleSelect = ({
     >
       <Listbox
         as="div"
-        className="pw-relative pw-w-full pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#94B8ED] pw-outline-1"
+        className={`pw-relative pw-w-full ${
+          disabled
+            ? '!pw-bg-white'
+            : 'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#94B8ED] pw-outline-1'
+        }`}
         value={value}
         disabled={disabled}
       >

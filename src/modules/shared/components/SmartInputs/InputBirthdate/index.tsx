@@ -17,6 +17,7 @@ interface InputBirthdate {
   profilePage?: boolean;
   required?: boolean;
   readonly?: boolean;
+  hidenValidations?: boolean;
 }
 
 const InputBirthdate = ({
@@ -27,6 +28,7 @@ const InputBirthdate = ({
   profilePage,
   required,
   readonly,
+  hidenValidations,
 }: InputBirthdate) => {
   const { field, fieldState } = useController({ name });
   const [inputValue, setInputValue] = useState<string | undefined>();
@@ -51,7 +53,7 @@ const InputBirthdate = ({
         {label}
       </LabelWithRequired>
 
-      <FormItemContainer invalid={fieldState.invalid}>
+      <FormItemContainer disableClasses={readonly} invalid={fieldState.invalid}>
         <input
           type="date"
           readOnly={
@@ -61,17 +63,17 @@ const InputBirthdate = ({
           }
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
-          className="pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
+          className="pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent focus:pw-outline-none"
         />
       </FormItemContainer>
-      <p className="pw-mt-[5px] pw-h-[16px]">
-        {field.value && (
+      {!hidenValidations && field.value && (
+        <p className="pw-mt-[5px] pw-h-[16px]">
           <InputStatus
             invalid={fieldState.invalid}
             errorMessage={error?.value?.message}
           />
-        )}
-      </p>
+        </p>
+      )}
     </div>
   );
 };

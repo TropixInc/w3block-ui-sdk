@@ -16,12 +16,14 @@ interface Params {
     textColor?: string;
     link?: string;
   };
+  className?: string;
 }
 
 export const Separator = ({
   redirectConfig,
   separatorConfig,
   widgetType,
+  className,
 }: Params) => {
   if (widgetType === 'redirect') return <Redirect {...redirectConfig} />;
   else
@@ -31,6 +33,7 @@ export const Separator = ({
           marginBottom: separatorConfig.marginBottom,
           marginTop: separatorConfig.marginTop,
         }}
+        className={className}
       >
         {separatorConfig.textAbove && separatorConfig.text ? (
           <p className="pw-flex pw-gap-x-2 pw-items-center pw-text-[18px] pw-w-auto pw-leading-[15px] pw-text-[#353945] pw-font-semibold pw-mb-5">

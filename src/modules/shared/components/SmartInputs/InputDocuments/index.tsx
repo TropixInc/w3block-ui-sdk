@@ -93,6 +93,7 @@ const InputDocuments = ({
         </LabelWithRequired>
 
         <FormItemContainer
+          disableClasses={readonly}
           className="pw-p-[0.6rem]"
           invalid={fieldState?.invalid}
         >
@@ -123,6 +124,7 @@ const InputDocuments = ({
             Número do Documento
           </p>
           <FormItemContainer
+            disableClasses={readonly}
             invalid={fieldState.invalid}
             className="pw-p-[0.6rem]"
           >

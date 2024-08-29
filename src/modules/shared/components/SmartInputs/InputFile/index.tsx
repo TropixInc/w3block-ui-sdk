@@ -50,7 +50,6 @@ const InputFile = ({
   readonly,
 }: InputFileProps) => {
   const [translate] = useTranslation();
-
   const { field, fieldState } = useController({ name });
   const [file, setFile] = useState<File | undefined>();
   const { companyId: tenantId } = useCompanyConfig();
@@ -91,7 +90,9 @@ const InputFile = ({
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
     accept: acceptTypesDocs,
-    disabled: validateIfStatusKycIsReadonly(docStatus as UserDocumentStatus),
+    disabled:
+      validateIfStatusKycIsReadonly(docStatus as UserDocumentStatus) ||
+      readonly,
   });
 
   useEffect(() => {
@@ -150,10 +151,13 @@ const InputFile = ({
       <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
         {subtitle}
       </p>
-      <FormItemContainer invalid={isError || mutateError || fieldState.invalid}>
+      <FormItemContainer
+        disableClasses={readonly}
+        invalid={isError || mutateError || fieldState.invalid}
+      >
         <div
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-11 pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
+            'pw-mt-1 pw-text-base pw-h-11 pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
           )}
           {...getRootProps()}
         >

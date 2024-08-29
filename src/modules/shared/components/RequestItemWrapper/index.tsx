@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { UserContextStatus } from '@w3block/sdk-id';
 
 import { FormCompleteKYCWithoutLayout } from '../../../auth';
+import { UtmContextInterface } from '../../../core/context/UtmContext';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import TokenizationFormItemContainer from '../../../tokens/components/TokenizationFormItemContainer/TokenizationFormItemContainer';
 import useApproveKYC from '../../hooks/useApproveKYC';
+import { useGetUserByReferral } from '../../hooks/useGetUserByReferral/useGetUserByReferral';
 import { useGetUserContextId } from '../../hooks/useGetUserContextId/useGetUserContextId';
 import useRejectKYC from '../../hooks/useRejectKYC';
 import { useRequiredReviewDocs } from '../../hooks/useRequiredReviewDocs';
@@ -21,6 +23,7 @@ interface KycItemProps {
   onChangeIsRenderKycItem: (value: boolean) => void;
   setIsUpdateList: (value: boolean) => void;
   readonly?: boolean;
+  utmParams?: UtmContextInterface;
 }
 
 const RequestItemWrapper = ({
@@ -31,6 +34,7 @@ const RequestItemWrapper = ({
   userContextId,
   setIsUpdateList,
   readonly,
+  utmParams,
 }: KycItemProps) => {
   const [translate] = useTranslation();
 
@@ -42,6 +46,11 @@ const RequestItemWrapper = ({
   const [isSuccessReprove, setIsSuccessReprove] = useState(false);
   const [inputsIdRequestReview, setInputsIdRequestReview] =
     useState<Array<string>>();
+
+  const { data: referralUser } = useGetUserByReferral({
+    referralCode: utmParams?.utm_source,
+    enabled: !!utmParams,
+  });
 
   const { data: documents } = useGetUserContextId({
     userId: userId ?? '',
@@ -296,6 +305,12 @@ const RequestItemWrapper = ({
 
   return (
     <div className="pw-w-full">
+      {utmParams ? (
+        <div className="pw-p-6">
+          <p>Campanha: {utmParams?.utm_campaign}</p>
+          <p>Indicação de {referralUser?.firstName}</p>
+        </div>
+      ) : null}
       <div className="pw-border-t pw-p-6 pw-gap-y-3 pw-w-full">
         <div className="pw-w-full">
           <FormCompleteKYCWithoutLayout

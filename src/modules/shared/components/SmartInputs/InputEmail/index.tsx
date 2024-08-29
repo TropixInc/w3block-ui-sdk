@@ -78,7 +78,10 @@ const InputEmail = ({
           {inputValue}
         </div>
       ) : (
-        <FormItemContainer invalid={fieldState.invalid}>
+        <FormItemContainer
+          disableClasses={readonly}
+          invalid={fieldState.invalid}
+        >
           <input
             disabled={autofill}
             name={name}
@@ -90,19 +93,19 @@ const InputEmail = ({
             value={inputValue}
             type="email"
             className={classNames(
-              'pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+              'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
             )}
           />
         </FormItemContainer>
       )}
-      <p className={`pw-mt-[5px] ${!autofill && 'pw-h-[16px]'}`}>
-        {!hidenValidations && field.value && (
+      {!hidenValidations && field.value && (
+        <p className={`pw-mt-[5px] ${!autofill && 'pw-h-[16px]'}`}>
           <InputStatus
             invalid={fieldState.invalid}
             errorMessage={error?.value?.message}
           />
-        )}
-      </p>
+        </p>
+      )}
     </div>
   );
 };

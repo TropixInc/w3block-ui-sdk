@@ -20,9 +20,9 @@ export const AppDownloadModal = ({
   const theme = UseThemeConfig();
   const os = getMobileOS();
   const [_, copy] = useCopyToClipboard();
-  const { data: referralUser, isLoading } = useGetUserByReferral(
-    utm?.utm_source
-  );
+  const { data: referralUser, isLoading } = useGetUserByReferral({
+    referralCode: utm?.utm_source,
+  });
   const onClickApple = () => {
     if (
       (document.getElementById('appCheckbox') as HTMLInputElement).checked &&

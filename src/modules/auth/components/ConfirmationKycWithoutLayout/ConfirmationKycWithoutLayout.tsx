@@ -8,6 +8,7 @@ import { PRACTITIONER_DATA_INFO_KEY } from '../../../checkout/config/keys/localS
 import { useProfile, useRouterConnect } from '../../../shared';
 import { Box } from '../../../shared/components/Box/Box';
 import { SelectorRead } from '../../../shared/components/SmartInputs/SelectorRead/SelectorRead';
+import { Separator } from '../../../shared/components/SmartInputs/Separator/Separator';
 import { InputDataDTO } from '../../../shared/components/SmartInputsController';
 import { Spinner } from '../../../shared/components/Spinner';
 import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockButton';
@@ -181,7 +182,6 @@ export const ConfirmationKycWithoutLayout = () => {
                 {groupedInputs[res].map((res) => {
                   const value = () => {
                     const doc = getDocumentByInputId(res?.id);
-
                     const value = doc?.value;
                     const simpleValue = doc?.simpleValue;
                     const complexValue = doc?.complexValue;
@@ -219,7 +219,40 @@ export const ConfirmationKycWithoutLayout = () => {
                           configData={res?.data as InputDataDTO}
                           docValue={complexValue ?? simpleValue}
                           options={res?.options ?? []}
+                          type={res?.type}
                         />
+                      );
+                    } else if (res?.type === 'separator') {
+                      return (
+                        <Separator
+                          widgetType={(res?.data as any)?.widgetType}
+                          separatorConfig={{
+                            marginBottom: (res?.data as any)?.marginBottom,
+                            marginTop: (res?.data as any)?.marginTop,
+                            showLine: (res?.data as any)?.showLine,
+                            text: (res?.data as any)?.text,
+                            textAbove: (res?.data as any)?.textAbove,
+                          }}
+                          redirectConfig={{
+                            bgColor: (res?.data as any)?.bgColor,
+                            link: (res?.data as any)?.link,
+                            target: (res?.data as any)?.target,
+                            text: (res?.data as any)?.text,
+                            textColor: (res?.data as any)?.textColor,
+                          }}
+                          className="!pw-mb-0"
+                        />
+                      );
+                    } else if (res.type === 'image' || res.type === 'file') {
+                      return (
+                        <a
+                          href={doc?.asset?.directLink as string}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="pw-text-blue-500 pw-underline"
+                        >
+                          Arquivo
+                        </a>
                       );
                     } else if (simpleValue) return simpleValue;
                     else return value;

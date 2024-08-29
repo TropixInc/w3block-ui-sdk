@@ -51,6 +51,7 @@ const RequestsList = () => {
           userContextId={data.id}
           setIsUpdateList={setIsUpdateList}
           readonly={data?.tenantContext?.data?.approverReadOnly}
+          utmParams={data?.utmParams}
         />
       );
     }

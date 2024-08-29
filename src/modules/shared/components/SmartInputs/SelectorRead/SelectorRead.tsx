@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
 
+import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
 
 import { useRouterConnect } from '../../../hooks';
@@ -17,6 +18,7 @@ interface Props {
   configData?: InputDataDTO;
   docValue?: string | object | undefined;
   options: Options[];
+  type?: DataTypesEnum;
 }
 
 const paginationMapping = {
@@ -40,7 +42,12 @@ const paginationMapping = {
   },
 };
 
-export const SelectorRead = ({ configData, options, docValue }: Props) => {
+export const SelectorRead = ({
+  configData,
+  options,
+  docValue,
+  type,
+}: Props) => {
   const router = useRouterConnect();
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [{ data }] = usePaginatedGenericApiGet({
@@ -74,25 +81,54 @@ export const SelectorRead = ({ configData, options, docValue }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  const getPlaceholderForMultipleSelect = (selectedArray: any) => {
+    const selected = (selectedArray as Array<string>).map((item) => {
+      if (type === DataTypesEnum.DynamicSelect)
+        return (dynamicOptions as any)?.find(
+          (value: any) => value.value === item
+        );
+      else
+        return options?.find((value: any) => {
+          return value.value === item;
+        });
+    });
+    if (selected?.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (selected as Array<any>).map(({ label }) => label).join(', ');
+    } else {
+      return 'Selecione';
+    }
+  };
+
   useEffect(() => {
     if (docValue && dynamicOptions) {
-      const value = (dynamicOptions as any).find((val: any) => {
-        if (configData?.approverPath) {
-          return val.value.id === (docValue as any).id;
-        } else return val.value === docValue;
-      })?.label;
-      setInputValue(value);
+      const value = () => {
+        if (configData?.isMultiple) {
+          const jsonValues = JSON.parse(docValue as string);
+          return getPlaceholderForMultipleSelect(jsonValues?.values);
+        } else
+          return (dynamicOptions as any).find((val: any) => {
+            if (configData?.approverPath) {
+              return val.value.id === (docValue as any).id;
+            } else return val.value === docValue;
+          })?.label;
+      };
+      setInputValue(value());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [configData?.approverPath, docValue, dynamicOptions]);
 
   useEffect(() => {
     if (docValue && options.length) {
-      const value = options?.find((val) => {
-        return val.value === docValue;
-      })?.label;
+      const value = configData?.isMultiple
+        ? getPlaceholderForMultipleSelect(docValue)
+        : options?.find((val) => {
+            return val.value === docValue;
+          })?.label;
       setInputValue(value);
     }
-  }, [docValue, options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configData?.isMultiple, docValue, options]);
 
   if (router.query.delay) {
     return (

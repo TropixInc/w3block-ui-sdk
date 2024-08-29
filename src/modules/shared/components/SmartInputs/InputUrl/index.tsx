@@ -61,7 +61,11 @@ const InputUrl = ({
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <FormItemContainer invalid={fieldState.invalid} className="pw-w-full">
+      <FormItemContainer
+        disableClasses={readonly}
+        invalid={fieldState.invalid}
+        className="pw-w-full"
+      >
         <input
           name={name}
           readOnly={
@@ -71,7 +75,7 @@ const InputUrl = ({
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-12 pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+            'pw-text-base pw-h-12 pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
           )}
         />
       </FormItemContainer>

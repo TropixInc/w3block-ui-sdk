@@ -6,7 +6,6 @@ import {
   TenantInputEntityDto,
   UserContextStatus,
 } from '@w3block/sdk-id';
-import classNames from 'classnames';
 
 import { AuthButton } from '../../../auth/components/AuthButton';
 import { Alert } from '../Alert';
@@ -53,14 +52,9 @@ export const FormTemplate = ({
   readonly,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
-
   return (
     <form onSubmit={onSubmit}>
-      <div
-        className={classNames(
-          keyPage ? 'pw-grid pw-grid-cols-2 pw-gap-x-6' : ''
-        )}
-      >
+      <div>
         {tenantInputs &&
           tenantInputs?.map((item) => {
             const doc = getDocumentByInputId(item?.id);
@@ -88,6 +82,7 @@ export const FormTemplate = ({
                   docFileValue={
                     isInitial ? undefined : doc?.asset?.directLink ?? ''
                   }
+                  openDocs={!!doc?.asset?.directLink}
                   onChangeUploadProgess={setUploadProgress}
                   selectData={item.data}
                   inputRequestable={inputRequestable}

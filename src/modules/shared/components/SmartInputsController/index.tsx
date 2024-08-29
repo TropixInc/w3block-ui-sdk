@@ -140,7 +140,6 @@ const SmartInputsController = ({
 }: SmartProps) => {
   const [translate] = useTranslation();
   const [checked, setChecked] = useState(false);
-
   const onChangeChecked = () => {
     if (checked) {
       if ((inputsIdRequestReview ?? []).includes(name)) {
@@ -170,6 +169,7 @@ const SmartInputsController = ({
             profilePage={profilePage}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.Text:
@@ -181,6 +181,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
 
@@ -194,6 +195,7 @@ const SmartInputsController = ({
             profilePage={profilePage}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.Phone:
@@ -207,6 +209,7 @@ const SmartInputsController = ({
             hideAddButton={hideComplexPhone}
             statusContext={statusContext}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         ) : (
           <InputPhone
@@ -216,6 +219,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.Email:
@@ -226,7 +230,7 @@ const SmartInputsController = ({
             docValue={simpleValue}
             docStatus={docStatus}
             autofill={autofill}
-            hidenValidations={autofill}
+            hidenValidations={autofill || readonly}
             required={required}
             readonly={readonly}
           />
@@ -240,6 +244,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.File:
@@ -255,6 +260,7 @@ const SmartInputsController = ({
             onChangeUploadProgess={onChangeUploadProgess}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
 
@@ -272,6 +278,7 @@ const SmartInputsController = ({
             onChangeUploadProgess={onChangeUploadProgess}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
 
@@ -298,6 +305,7 @@ const SmartInputsController = ({
             docStatus={docStatus}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.SimpleSelect:
@@ -307,11 +315,12 @@ const SmartInputsController = ({
             options={options ?? []}
             name={name}
             label={label}
-            docValue={simpleValue}
+            docValue={complexValue ?? simpleValue}
             configData={selectData}
             profilePage={profilePage}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.DynamicSelect:
@@ -326,6 +335,7 @@ const SmartInputsController = ({
             profilePage={profilePage}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.IdentificationDocument:
@@ -336,6 +346,7 @@ const SmartInputsController = ({
             docValue={complexValue}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       case DataTypesEnum.Checkbox:
@@ -399,6 +410,7 @@ const SmartInputsController = ({
             profilePage={profilePage}
             required={required}
             readonly={readonly}
+            hidenValidations={readonly}
           />
         );
       }

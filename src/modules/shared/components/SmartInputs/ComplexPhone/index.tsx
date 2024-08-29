@@ -99,7 +99,10 @@ const ComplexPhone = ({
         {field?.value?.value?.map((item: string, idx: number) => (
           <div key={idx} className="pw-mb-3">
             <div className="pw-w-full pw-flex pw-gap-2">
-              <FormItemContainer className="pw-w-full">
+              <FormItemContainer
+                disableClasses={readonly}
+                className="pw-w-full"
+              >
                 <ReactInputMask
                   readOnly={
                     (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
@@ -116,7 +119,7 @@ const ComplexPhone = ({
                   }
                   maskChar={''}
                   className={classNames(
-                    'pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+                    'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
                   )}
                 />
               </FormItemContainer>
@@ -130,14 +133,14 @@ const ComplexPhone = ({
               ) : null}
             </div>
 
-            <p className="pw-mt-[5px] pw-h-[16px]">
-              {!hidenValidations && field.value && (
+            {!hidenValidations && field.value && (
+              <p className="pw-mt-[5px] pw-h-[16px]">
                 <InputStatus
                   invalid={Boolean((error as any)?.value[idx]?.message)}
                   errorMessage={(error as any)?.value[idx]?.message}
                 />
-              )}
-            </p>
+              </p>
+            )}
           </div>
         ))}
       </div>

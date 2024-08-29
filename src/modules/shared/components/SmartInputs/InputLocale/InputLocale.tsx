@@ -71,6 +71,7 @@ const InputLocale = ({
             {translate('shared>unputLocale>contry')}
           </p>
           <FormItemContainer
+            disableClasses={readonly}
             invalid={fieldState.invalid}
             className="pw-px-[0.6rem] pw-mb-3"
           >
@@ -112,6 +113,7 @@ const InputLocale = ({
           apiValue={docValue?.placeId}
           type="(cities)"
           readonly={readonly}
+          hidenValidations={readonly}
         />
       ) : null}
     </div>

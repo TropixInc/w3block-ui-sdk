@@ -93,24 +93,41 @@ export const InputSelector = ({
     setInputValue(value);
     setShowOptions(Boolean(value));
   };
+
+  const valueToUse = useMemo(() => {
+    if (configData?.approverPath) return (docValue as any)?.id;
+    else return docValue;
+  }, [configData?.approverPath, docValue]);
+
   const [{ data, isLoading }] = usePaginatedGenericApiGet({
     url: configData?.url ?? '',
     isPublicApi: configData?.isPublicApi,
     ...paginationMapping[configData?.paginationType || 'internal'],
     enabled: Boolean(configData && configData.url),
     disableParams: configData?.disableParams,
-    search: searchValue,
-    searchType: configData?.searchType,
+    search: docValue && configData?.search ? valueToUse : searchValue,
+    searchType:
+      docValue && configData?.search
+        ? 'filters[id][$eqi]'
+        : configData?.searchType,
   });
+
   useEffect(() => {
     if (multipleSelected?.length) {
-      field?.onChange({
-        inputId: name,
-        value: JSON.stringify({ values: multipleSelected }),
-      });
+      if (type === DataTypesEnum.SimpleSelect) {
+        field?.onChange({
+          inputId: name,
+          value: multipleSelected,
+        });
+      } else
+        field?.onChange({
+          inputId: name,
+          value: JSON.stringify({ values: multipleSelected }),
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [multipleSelected]);
+
   const dynamicOptions = useMemo(() => {
     if (data) {
       const response = _.get(data, configData?.responsePath || '', []);
@@ -157,16 +174,39 @@ export const InputSelector = ({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
+  const getPlaceholderForMultipleSelectWithValue = (selectedArray: any) => {
+    const selected = (selectedArray as Array<string>).map((item) => {
+      if (type === DataTypesEnum.DynamicSelect)
+        if (dynamicOptions.length) {
+          return (dynamicOptions as any)?.find(
+            (value: any) => value.value === item
+          );
+        } else return [];
+      else
+        return options?.find((value: any) => {
+          return value.value === item;
+        });
+    });
+    if (selected?.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (selected as Array<any>)?.map(({ label }) => label).join(', ');
+    } else {
+      return 'Selecione';
+    }
+  };
+
   const getPlaceholderForMultipleSelect = (selectedArray: any) => {
     if (
       selectedArray.value &&
       selectedArray.value !== 'Option value' &&
       multipleSelected?.length > 0
     ) {
-      const jsonValues = JSON.parse(selectedArray.value);
-
-      if (jsonValues?.values?.length > 0) {
-        const selected = (jsonValues.values as Array<string>).map((item) => {
+      const jsonValues =
+        type === DataTypesEnum.SimpleSelect
+          ? selectedArray.value
+          : JSON.parse(selectedArray.value)?.values;
+      if (jsonValues?.length > 0) {
+        const selected = (jsonValues as Array<string>).map((item) => {
           if (type === DataTypesEnum.DynamicSelect)
             return (dynamicOptions as any)?.find(
               (value: any) => value.value === item
@@ -176,7 +216,7 @@ export const InputSelector = ({
               return value.value === item;
             });
         });
-        if (selected?.length > 0) {
+        if (selected && selected?.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return (selected as Array<any>).map(({ label }) => label).join(', ');
         } else {
@@ -193,9 +233,9 @@ export const InputSelector = ({
   useEffect(() => {
     if (docValue && dynamicOptions) {
       const value = (dynamicOptions as any).find((val: any) => {
-        if (configData?.approverPath) {
-          return val.value.id === (docValue as any).id;
-        } else return val.value === docValue;
+        if (configData?.approverPath && val?.value?.id) {
+          return val?.value?.id === (docValue as any)?.id;
+        } else return val?.value === docValue;
       })?.label;
       setInputValue(value);
     }
@@ -207,6 +247,18 @@ export const InputSelector = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
+
+  const placeholder = useMemo(() => {
+    if (configData?.isMultiple) {
+      if (docValue) {
+        if (type === DataTypesEnum.DynamicSelect) {
+          const jsonValues = JSON.parse(docValue as string);
+          return getPlaceholderForMultipleSelectWithValue(jsonValues?.values);
+        } else return getPlaceholderForMultipleSelectWithValue(docValue);
+      } else return getPlaceholderForMultipleSelect(field?.value || []);
+    } else return 'Selecione';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configData?.isMultiple, docValue, field?.value, dynamicOptions]);
 
   if (router.query.delay) {
     return (
@@ -223,6 +275,7 @@ export const InputSelector = ({
           {label}
         </LabelWithRequired>
         <FormItemContainer
+          disableClasses={readonly}
           invalid={fieldState?.invalid}
           className="pw-p-[0.6rem]"
         >
@@ -301,7 +354,7 @@ export const InputSelector = ({
         </LabelWithRequired>
         <FormItemContainer
           className="!pw-p-[0.6rem]"
-          disableClasses={configData?.isMultiple}
+          disableClasses={configData?.isMultiple || readonly}
           invalid={fieldState?.invalid}
         >
           {configData?.isMultiple ? (
@@ -310,13 +363,14 @@ export const InputSelector = ({
                 type === DataTypesEnum.SimpleSelect ? options : dynamicOptions
               }
               name={name}
-              placeholder={getPlaceholderForMultipleSelect(field?.value || [])}
+              placeholder={placeholder ?? 'Selecione'}
               classes={{
                 button: '!pw-border-none pw-h-[48px]',
                 root: '!pw-mb-2',
               }}
               onChangeMultipleSelected={setMultipleSelected}
               multipleSelected={multipleSelected}
+              disabled={readonly}
             />
           ) : (
             <select
@@ -353,7 +407,11 @@ export const InputSelector = ({
           )}
         </FormItemContainer>
         {!hidenValidations && (
-          <div className="pw-mt-[5px] pw-h-[16px]">
+          <div
+            className={`${
+              configData?.isMultiple ? 'pw-mt-[20px]' : 'pw-mt-[5px]'
+            } pw-h-[16px]`}
+          >
             {field.value && (
               <InputStatus
                 invalid={fieldState.invalid}

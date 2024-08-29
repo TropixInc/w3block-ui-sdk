@@ -5,7 +5,13 @@ import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 
-export const useGetUserByReferral = (referralCode?: string) => {
+export const useGetUserByReferral = ({
+  referralCode,
+  enabled = true,
+}: {
+  referralCode?: string;
+  enabled?: boolean;
+}) => {
   const axios = useAxios(W3blockAPI.ID);
   const { companyId } = useCompanyConfig();
 
@@ -21,7 +27,7 @@ export const useGetUserByReferral = (referralCode?: string) => {
         )
         .then((res) => res.data),
     {
-      enabled: typeof referralCode === 'string' && !!companyId,
+      enabled: typeof referralCode === 'string' && !!companyId && enabled,
       retry: 2,
       refetchOnWindowFocus: false,
     }

@@ -37,6 +37,7 @@ const InputPlaces = ({
         }
         required={required}
         readonly={readonly}
+        hidenValidations={readonly}
       />
     </div>
   );

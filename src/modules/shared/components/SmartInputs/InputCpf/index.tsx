@@ -67,7 +67,7 @@ const InputCpf = ({
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <FormItemContainer invalid={fieldState.invalid}>
+      <FormItemContainer disableClasses={readonly} invalid={fieldState.invalid}>
         <ReactInputMask
           readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
@@ -81,19 +81,19 @@ const InputCpf = ({
           value={inputValue}
           placeholder="Digite apenas números"
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full pw-px-[10px] pw-outline-none'
+            'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full pw-px-[10px] pw-outline-none'
           )}
           inputMode="numeric"
         />
       </FormItemContainer>
-      <p className="pw-mt-[5px] pw-h-[16px]">
-        {!hidenValidations && field.value && (
+      {!hidenValidations && field.value && (
+        <p className="pw-mt-[5px] pw-h-[16px]">
           <InputStatus
             invalid={fieldState.invalid}
             errorMessage={error?.value?.message}
           />
-        )}
-      </p>
+        </p>
+      )}
     </div>
   );
 };

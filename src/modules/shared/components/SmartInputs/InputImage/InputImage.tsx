@@ -170,12 +170,13 @@ const InputImage = ({
           dangerouslySetInnerHTML={{ __html: instructions || '' }}
         ></div>
         <FormItemContainer
+          disableClasses={readonly}
           invalid={isError || mutateError || fieldState.invalid}
           className="pw-max-w-[436px] pw-w-full"
         >
           <div
             className={classNames(
-              'pw-mt-1 pw-text-base pw-h-11 pw-max-w-[436px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full pw-shadow-[0_4px_15px_#00000012] !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
+              'pw-mt-1 pw-text-base pw-h-11 pw-max-w-[436px] pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
             )}
             {...getRootProps()}
           >
