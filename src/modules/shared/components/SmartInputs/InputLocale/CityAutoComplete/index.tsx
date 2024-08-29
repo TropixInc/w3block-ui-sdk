@@ -248,7 +248,7 @@ const CityAutoComplete = ({
               })}
             </ul>
           ) : (
-            <p>Não há resultados</p>
+            <p>{translate('shared>inputLocale>notResults')}</p>
           )}
         </div>
       ) : null}

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useContext, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDebounce, useLocalStorage } from 'react-use';
 
 import _ from 'lodash';
@@ -65,6 +66,7 @@ const _CheckoutForm = ({
   isCart = false,
 }: CheckoutFormProps) => {
   const { data: profile } = useProfile();
+  const [translate] = useTranslation();
   const [checkoutStatus, setCheckoutStatus] = useState<CheckoutStatus>(
     CheckoutStatus.CONFIRMATION
   );
@@ -656,14 +658,14 @@ const _CheckoutForm = ({
         {hideCoupon ? null : (
           <>
             <p className="pw-font-[600] pw-text-lg pw-text-[#35394C] pw-mt-5 pw-mb-2">
-              Cupom
+              {translate('checkout>checkoutInfo>coupon')}
             </p>
             <div className="pw-mb-8">
               <div className="pw-flex pw-gap-3">
                 <input
                   name="couponCode"
                   id="couponCode"
-                  placeholder="Código do cupom"
+                  placeholder={translate('checkout>checkoutInfo>couponCode')}
                   className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-flex-[0.3] focus:pw-outline-none"
                   defaultValue={couponCodeInput}
                 />
@@ -671,20 +673,21 @@ const _CheckoutForm = ({
                   onClick={onSubmitCupom}
                   className="!pw-py-3 sm:!pw-px-[42px] !pw-px-0 sm:pw-flex-[0.1] pw-flex-[1] !pw-bg-[#EFEFEF] !pw-text-xs !pw-text-[#383857] !pw-border !pw-border-[#DCDCDC] !pw-rounded-full hover:pw-shadow-xl disabled:hover:pw-shadow-none"
                 >
-                  Aplicar cupom
+                  {translate('checkout>checkoutInfo>applyCoupon')}
                 </PixwayButton>
               </div>
               {orderPreview?.appliedCoupon && (
                 <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
-                  Cupom <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
-                  aplicado com sucesso!
+                  {translate('checkout>checkoutInfo>coupon')}{' '}
+                  <b>&apos;{orderPreview?.appliedCoupon}&apos;</b>{' '}
+                  {translate('checkout>checkoutForm>successApply')}!
                 </p>
               )}
               {orderPreview?.appliedCoupon === null &&
                 couponCodeInput !== '' &&
                 couponCodeInput !== undefined && (
                   <p className="pw-text-red-500 pw-text-xs pw-mt-2">
-                    Cupom inválido ou expirado.
+                    {translate('checkout>checkoutInfo>invalidCoupon')}
                   </p>
                 )}
             </div>
@@ -727,36 +730,35 @@ const _CheckoutForm = ({
       : '';
   }, [orderPreview]);
 
-  if (checkoutStatus === CheckoutStatus.FINISHED)
+  if (checkoutStatus === CheckoutStatus.FINISHED) {
     return (
       <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
         <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
           <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
-            Seu formulário de compra foi enviado com sucesso, por favor aguarde
-            enquanto analisamos o pedido de compra.
+            {translate('checkout>checkoutForm>successSendForm')}
           </p>
           <WeblockButton
             className="pw-text-white pw-mt-6"
             onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
           >
-            Voltar para a home
+            {translate('checkout>checkoutInfo>goBackHome')}
           </WeblockButton>
         </div>
       </div>
     );
+  }
 
   return requestError ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
       <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
         <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
-          Houve um erro de comunicação com o servidor, entre em contato com
-          nosso suporte.
+          {translate('checkout>checkoutInfo>errorContactSuport')}
         </p>
         <WeblockButton
           className="pw-text-white pw-mt-6"
           onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
         >
-          Voltar para a home
+          {translate('checkout>checkoutInfo>goBackHome')}
         </WeblockButton>
       </div>
     </div>
@@ -765,7 +767,7 @@ const _CheckoutForm = ({
       <div className="pw-flex pw-flex-col sm:pw-flex-row">
         <div className="pw-w-full lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
           <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
-            Resumo da compra
+            {translate('business>buySumarySDK>purchaseResume')}
           </p>
 
           <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
@@ -891,7 +893,8 @@ const _CheckoutForm = ({
               <div className="pw-flex pw-gap-2 pw-mt-2 pw-items-center">
                 <ValueChangeIcon />
                 <p className="pw-text-xs  pw-font-medium pw-text-[#777E8F]">
-                  *O valor do produto em{' '}
+                  {'*'}
+                  {translate('checkout>checkoutInfo>valueOfProductOn')}{' '}
                   {
                     orderPreview?.products
                       .find((prod) =>
@@ -903,7 +906,7 @@ const _CheckoutForm = ({
                         (price) => price?.currencyId == currencyIdState
                       )?.currency?.symbol
                   }{' '}
-                  pode variar de acordo com a cotação desta moeda em{' '}
+                  {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
                   {
                     orderPreview?.products
                       .find((prod) =>

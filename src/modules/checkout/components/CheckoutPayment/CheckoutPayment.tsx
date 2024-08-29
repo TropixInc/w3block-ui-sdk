@@ -825,14 +825,14 @@ export const CheckoutPayment = () => {
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
           <Spinner className="pw-h-13 pw-w-13" />
           <h1 className="pw-text-2xl pw-text-black pw-mt-4">
-            Finalizando Pedido
+            {translate('checkout>checkoutPayment>finalizingOrder')}
           </h1>
         </div>
       ) : (
         <div className="pw-h-screen pw-flex pw-items-center pw-justify-center">
           <ErrorMessage
             title={requestError.toString()}
-            message="Caso o problema persista entre em contato com o suporte"
+            message={translate('checkout>checkoutInfo>errorContactSuport')}
           />
         </div>
       );
@@ -872,8 +872,8 @@ export const CheckoutPayment = () => {
               inputs={productCache?.choosedPayment?.inputs as INPUTS_POSSIBLE[]}
               buttonLoadingText={
                 productCache?.choosedPayment?.paymentMethod == 'pix'
-                  ? 'Gerando pagamento'
-                  : 'Finalizando compra'
+                  ? translate('checkout>checkoutPayment>generatePayment')
+                  : translate('checkout>checkoutPayment>finalizingPurchase')
               }
               userCreditCards={productCache?.choosedPayment?.userCreditCards}
               errorCode={errorCode}
@@ -891,17 +891,23 @@ export const CheckoutPayment = () => {
                   ) : (
                     <>
                       <p className="pw-text-center pw-max-w-[450px] pw-text-slate-500 pw-text-sm pw-font-[500] pw-mx-auto pw-mt-4">
-                        Após a conclusão do pagamento, em alguns minutos você
-                        poderá visualizar os itens comprados em sua carteira.
+                        {translate(
+                          'checkout>checkoutPayment>deliveryItemsExplain'
+                        )}
                       </p>
                       {isActive && (
                         <div className="pw-flex pw-gap-2 pw-text-black pw-font-bold pw-mt-6">
-                          <p>Essa compra expira em:</p>
+                          <p>
+                            {translate(
+                              'checkout>checkoutPayment>purchaseExpireOn'
+                            )}
+                            :
+                          </p>
                           {minutes}:{seconds < 10 ? '0' + seconds : seconds}
                         </div>
                       )}
                       <p className="pw-text-center pw-font-normal pw-text-black pw-mt-6">
-                        Escaneie o QR Code abaixo para realizar o pagamento
+                        {translate('checkout>checkoutPayment>scanCode')}
                       </p>
                       {pixImage ? (
                         <img src={`data:image/png;base64, ${pixImage}`} />
@@ -915,7 +921,7 @@ export const CheckoutPayment = () => {
                       {pixPayload && (
                         <>
                           <p className="pw-text-center pw-text-xs pw-text-slate-600">
-                            Caso prefira copie o código abaixo
+                            {translate('checkout>checkoutPayment>copyCode')}
                           </p>
                           <p
                             onClick={() => {
@@ -933,7 +939,7 @@ export const CheckoutPayment = () => {
                           {copied && (
                             <Alert variant="success" className="!pw-gap-3">
                               <Alert.Icon />
-                              Código copiado!
+                              {translate('checkout>checkoutPayment>codeCopied')}
                             </Alert>
                           )}
                         </>
@@ -959,8 +965,7 @@ export const CheckoutPayment = () => {
             <>
               {productCache?.choosedPayment?.paymentMethod === 'pix' && (
                 <p className="pw-text-center pw-max-w-[450px] pw-text-sm pw-mx-auto pw-mt-4">
-                  Após a conclusão do pagamento, em alguns minutos você poderá
-                  visualizar os itens comprados em sua carteira.
+                  {translate('checkout>checkoutPayment>deliveryItemsExplain')}
                 </p>
               )}
 
@@ -982,7 +987,9 @@ export const CheckoutPayment = () => {
               />
               {isActive && (
                 <div className="pw-flex pw-gap-2 pw-text-black pw-font-bold pw-mt-6">
-                  <p>Essa compra expira em:</p>
+                  <p>
+                    {translate('checkout>checkoutPayment>purchaseExpireOn')}:
+                  </p>
                   {minutes}:{seconds < 10 ? '0' + seconds : seconds}
                 </div>
               )}
@@ -1080,8 +1087,7 @@ export const CheckoutPayment = () => {
               <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
                 <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center pw-mx-auto">
                   <p className="pw-font-bold pw-text-black pw-text-center pw-mb-6">
-                    Houve um erro de comunicação com o servidor, entre em
-                    contato com nosso suporte.
+                    {translate('checkout>checkoutInfo>errorContactSuport')}
                   </p>
                   <ErrorMessage
                     title={requestError.toString()}
@@ -1091,7 +1097,7 @@ export const CheckoutPayment = () => {
                     className="pw-text-white pw-mt-4"
                     onClick={() => router.pushConnect(PixwayAppRoutes.HOME)}
                   >
-                    Voltar para a home
+                    {translate('checkout>checkoutInfo>goBackHome')}
                   </WeblockButton>
                 </div>
               </div>

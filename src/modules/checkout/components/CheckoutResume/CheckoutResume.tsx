@@ -11,6 +11,7 @@ const ProductInfo = lazy(() =>
   }))
 );
 
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { Product } from '../../../shared/interface/Product';
 import { OrderPreviewCache, PaymentsResponse } from '../../interface/interface';
 
@@ -51,6 +52,7 @@ export const CheckouResume = ({
   convertedPrice,
   productPreview,
 }: CheckoutResumeProps) => {
+  const [translate] = useTranslation();
   return (
     <div>
       {!isCoinPayment ? (
@@ -94,7 +96,7 @@ export const CheckouResume = ({
       ) : (
         <div className="pw-flex pw-justify-between pw-px-4">
           <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
-            Destinatário
+            {translate('checkout>checkoutResume>recipient')}
           </p>
           <p className="pw-text-sm pw-font-[600] pw-text-[#35394C]">
             {destinationUser}

@@ -188,7 +188,7 @@ const _PublicTokenTemplateSDK = ({
               rel="noreferrer"
             >
               <p className="pw-font-roboto pw-font-[500] pw-text-[#045CE0]">
-                Mintado por W3block
+                {translate('components>genericMessages>mintedBy')}
               </p>
               <ExternalLinkIcon className="pw-stroke-[#045CE0]" />
             </a>

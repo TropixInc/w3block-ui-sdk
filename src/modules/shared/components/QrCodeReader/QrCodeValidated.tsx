@@ -90,7 +90,7 @@ export const QrCodeValidated = ({
                 </div>
               ) : (
                 <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                  Online
+                  {'Online'}
                 </div>
               )}
             </div>
@@ -101,10 +101,10 @@ export const QrCodeValidated = ({
             {translate('token>pass>user')}
           </div>
           <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-            Username: {userName}
+            {'Username:'} {userName}
           </div>
           <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
-            E-mail: {userEmail}
+            {'E-mail:'} {userEmail}
           </div>
         </div>
         <div className='pw-col'>

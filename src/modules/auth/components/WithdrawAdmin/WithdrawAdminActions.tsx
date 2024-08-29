@@ -11,6 +11,7 @@ import { Alert } from '../../../shared/components/Alert';
 import InputWithdrawCommerce from '../../../shared/components/InputWithdrawCommerce/InputWithdrawCommerce';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import {
@@ -49,6 +50,7 @@ const statusMapping = {
 const WithdrawAdminActions = ({ id }: { id: string }) => {
   const router = useRouterConnect();
   const locale = useLocale();
+  const [translate] = useTranslation();
   const [step, setStep] = useState<Steps>(1);
   const [reason, setReason] = useState('');
   const [_, setUploadingImage] = useState(false);
@@ -72,7 +74,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
       return (
         <div>
           <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-mt-4">
-            <p>Por favor informe o motivo da recusa:</p>
+            <p>{translate('auth>withdrawAdminActions>infoRefuse')}</p>
             <textarea
               onChange={(evt) => setReason(evt.target.value)}
               className="pw-p-[12px_20px] pw-h-[150px] pw-border-[2px] pw-border-[#ccc] pw-border-solid pw-rounded-md pw-bg-[#f8f8f8] pw-text-base pw-resize-none pw-w-full"
@@ -84,7 +86,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               variant="outlined"
               onClick={() => setStep(1)}
             >
-              Cancelar
+              {translate('components>cancelMessage>cancel')}
             </OffpixButtonBase>
             <OffpixButtonBase
               className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
@@ -109,7 +111,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 }
               }}
             >
-              Confirmar
+              {translate('shared>myProfile>confirm')}
             </OffpixButtonBase>
           </div>
         </div>
@@ -118,7 +120,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
       return (
         <div>
           <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-mt-4">
-            <p>Deseja reter os fundos para seguir com a transferência?</p>
+            <p>{translate('auth>withdrawAdminActions>holdFounds')}</p>
           </div>
           <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
             <OffpixButtonBase
@@ -126,7 +128,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               variant="outlined"
               onClick={() => setStep(1)}
             >
-              Cancelar
+              {translate('components>cancelMessage>cancel')}
             </OffpixButtonBase>
             <OffpixButtonBase
               className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
@@ -152,7 +154,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 );
               }}
             >
-              Confirmar
+              {translate('shared>myProfile>confirm')}
             </OffpixButtonBase>
           </div>
         </div>
@@ -161,10 +163,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
       return (
         <div>
           <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-mt-4">
-            <p>
-              Por favor anexe o comprovante de transferência para concluir o
-              processo:
-            </p>
+            <p>{translate('auth>withdrawAdminActions>proofTransfer')}</p>
             <FormProvider {...dynamicMethods}>
               <InputWithdrawCommerce
                 name="imageInput"
@@ -182,7 +181,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 (dynamicMethods as any).setValue('imageInput', undefined);
               }}
             >
-              Cancelar
+              {translate('components>cancelMessage>cancel')}
             </OffpixButtonBase>
             <OffpixButtonBase
               className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
@@ -207,7 +206,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 }
               }}
             >
-              Confirmar
+              {translate('shared>myProfile>confirm')}
             </OffpixButtonBase>
           </div>
         </div>
@@ -239,7 +238,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
           className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
           onClick={() => router.push('/withdraws/admin')}
         >
-          {`<`} Voltar
+          {`<`} {translate('shared>back')}
         </button>
         <Alert variant="error" className="pw-text-base">
           {error}
@@ -253,7 +252,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
           className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
           onClick={() => router.push('/withdraws/admin')}
         >
-          {`<`} Voltar
+          {`<`} {translate('shared>back')}
         </button>
         <Alert variant="success" className="pw-text-base">
           {success}
@@ -268,7 +267,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
             className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
             onClick={() => router.push('/withdraws/admin')}
           >
-            {`<`} Voltar
+            {`<`} {translate('shared>back')}
           </button>
           {isLoading ||
           isLoadingConclude ||
@@ -281,11 +280,15 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
             <>
               <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-gap-4 pw-mt-4">
                 <div>
-                  <p className="pw-font-semibold">Usuário</p>
+                  <p className="pw-font-semibold">
+                    {translate('token>pass>user')}
+                  </p>
                   <p>{data?.data?.user?.name ?? data?.data?.user?.email}</p>
                 </div>
                 <div>
-                  <p className="pw-font-semibold">Pedido realizado em</p>
+                  <p className="pw-font-semibold">
+                    {translate('auth>withdrawAdminActions>requestMade')}
+                  </p>
                   <p>
                     {format(
                       new Date(data?.data?.createdAt ?? Date.now()),
@@ -297,19 +300,25 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                   </p>
                 </div>
                 <div>
-                  <p className="pw-font-semibold">Valor</p>
+                  <p className="pw-font-semibold">
+                    {translate('pass>sharedOrder>value')}
+                  </p>
                   <p>
                     {parseFloat(data?.data?.amount).toFixed(2)}{' '}
                     {loyaltyWallet?.[0]?.currency}
                   </p>
                 </div>
                 <div>
-                  <p className="pw-font-semibold">Status</p>
+                  <p className="pw-font-semibold">
+                    {translate('token>pass>status')}
+                  </p>
                   <p>{statusMapping[data?.data?.status as Status]}</p>
                 </div>
                 {data?.data?.status === 'refused' ? (
                   <div>
-                    <p className="pw-font-semibold">Motivo:</p>
+                    <p className="pw-font-semibold">
+                      {translate('key>kycActionsModal>resons')}:
+                    </p>
                     <p>{data?.data?.reason}</p>
                   </div>
                 ) : null}
@@ -321,7 +330,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                       rel="noreferrer"
                       className="pw-font-semibold pw-underline"
                     >
-                      Comprovante
+                      {translate('auth>withdrawAdminActions>proof')}
                     </a>
                   </div>
                 ) : null}
@@ -338,7 +347,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                         variant="outlined"
                         onClick={() => setStep(2)}
                       >
-                        Recusar
+                        {translate('auth>withdrawAdminActions>refuse')}
                       </OffpixButtonBase>
                     )}
                     <OffpixButtonBase
@@ -356,8 +365,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               {data?.data?.status === 'escrowing_resources' ? (
                 <div className="pw-flex pw-justify-center pw-items-center pw-text-black pw-mt-5">
                   <p className="pw-font-semibold">
-                    Retendo recursos, por favor aguarde para realizar a
-                    transferência...
+                    {translate('auth>withdrawAdminActions>pleaseWaitHoldFunds')}
                   </p>
                 </div>
               ) : null}

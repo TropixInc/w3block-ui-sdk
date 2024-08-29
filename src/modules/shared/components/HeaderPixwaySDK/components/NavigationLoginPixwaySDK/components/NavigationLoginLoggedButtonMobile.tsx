@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import { useRef, useState } from 'react';
 import { useClickAway, useCopyToClipboard } from 'react-use';
 
@@ -248,7 +249,7 @@ export const NavigationLoginLoggedButtonMobile = ({
                 onClick={() => setAuthenticatePaymentModal?.(true)}
                 className="!pw-text-white !pw-py-[10px] !pw-px-[24px] pw-mt-4 pw-w-full"
               >
-                Pontuar
+                {translate('shared>navigationLoginLoggedButton>toScore')}
               </WeblockButton>
             ) : null}
           </div>

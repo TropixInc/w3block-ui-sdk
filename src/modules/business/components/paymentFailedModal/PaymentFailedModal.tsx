@@ -6,6 +6,7 @@ const ModalBase = lazy(() =>
 import { lazy } from 'react';
 
 import { Alert } from '../../../shared/components/Alert';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface PaymentFailedModalProps {
   onClose?: () => void;
@@ -16,6 +17,7 @@ export const PaymentFailedModal = ({
   onClose,
   isOpen,
 }: PaymentFailedModalProps) => {
+  const [translate] = useTranslation();
   return (
     <ModalBase isOpen={isOpen ?? false} onClose={onClose!} clickAway={false}>
       <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-py-8">
@@ -23,13 +25,13 @@ export const PaymentFailedModal = ({
           variant="error"
           className="pw-text-lg pw-text-center pw-font-[600] pw-text-zinc-900 pw-mb-10"
         >
-          Erro ao enviar transação. Por favor, tente novamente.
+          {translate('business>paymentFailedModal>transactionError')}
         </Alert>
         <button
           onClick={() => onClose?.()}
           className="pw-px-6 pw-py-[6px] pw-bg-blue-800 pw-rounded-full pw-shadow pw-border-b pw-border-white pw-text-white pw-text-xs pw-font-medium"
         >
-          Voltar
+          {translate('token>commerceTemplate>back')}
         </button>
       </div>
     </ModalBase>

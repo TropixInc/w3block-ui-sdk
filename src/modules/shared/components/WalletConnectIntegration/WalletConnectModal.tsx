@@ -80,11 +80,12 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFirst_zovsup.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Entre no canal do PrimeSea no Discord
+                {translate('shared>walletConnectModal>joinPrimeseaChannel')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                Entre no Discord do PrimeSea e procure pelo canal “Superfície”.
-                Leia o texto e clique em “Entendi”.
+                {translate(
+                  'shared>walletConnectModal>joinPrimeseaChannelSurface'
+                )}
               </p>
               <div className="pw-w-[144px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#295BA6]" />
@@ -105,12 +106,12 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultSecond_ytyhpn.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Ainda no discord do PrimeSea
+                {translate('shared>walletConnectModal>stillDiscordPrimesea')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                Logo em seguida irá habilitar o canal “Conecte-se” em “Conecte
-                seu Token” e então clique em “Lets go”. Uma nova mensagem será
-                mostrada para você, clique no “Conectar Wallet”.
+                {translate(
+                  'shared>walletConnectModal>discordPrimeseaStepsExplain'
+                )}
               </p>
               <div className="pw-w-[144px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#88ABDF]" />
@@ -131,11 +132,12 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultThird_bi4red.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Você será redirecionado para o Collab.Land
+                {translate('shared>walletConnectModal>redirectCollab')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                No Collab.Land, clique em “WalletConnect”. Copie o código que
-                aparecer.
+                {translate(
+                  'shared>walletConnectModal>copyCodeWalletConnectInCollab'
+                )}
               </p>
               <div className="pw-w-[144px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#88ABDF]" />
@@ -156,10 +158,10 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFourth_mno4mx.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Irá abrir uma janela
+                {translate('shared>walletConnectModal>willOpenWindow')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                Nessa janela, clique em “copiar código”.
+                {translate('shared>walletConnectModal>clickCopyCode')}
               </p>
               <div className="pw-w-[144px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#88ABDF]" />
@@ -180,11 +182,10 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFifth_fjvwjj.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Agora é hora de sincronizar com a WalletConnect
+                {translate('shared>walletConnectModal>nowSyncWalletConnect')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                Aqui em Integração, na parte de Sincronizar WalletConnect,
-                clique em “Sincronizar” e cole o código copiado do Collab.Land.
+                {translate('shared>walletConnectModal>hereIntegrationSyncCode')}
               </p>
               <div className="pw-w-[144px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#88ABDF]" />
@@ -316,11 +317,12 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFirst_zovsup.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Entre no canal do PrimeSea no Discord
+                {translate('shared>walletConnectModal>joinPrimeseaChannel')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                Entre no Discord do PrimeSea e procure pelo canal “Superfície”.
-                Leia o texto e clique em “Entendi”.
+                {translate(
+                  'shared>walletConnectModal>joinPrimeseaChannelSurface'
+                )}
               </p>
               <div className="pw-w-[112px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#295BA6]" />
@@ -340,12 +342,12 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultSecond_ytyhpn.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Ainda no discord do PrimeSea
+                {translate('shared>walletConnectModal>stillDiscordPrimesea')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                Logo em seguida irá habilitar o canal “Conecte-se” em “Conecte
-                seu Token” e então clique em “Lets go”. Uma nova mensagem será
-                mostrada para você, clique no “Conectar Wallet”.
+                {translate(
+                  'shared>walletConnectModal>discordPrimeseaStepsExplain'
+                )}
               </p>
               <div className="pw-w-[112px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#88ABDF]" />
@@ -365,10 +367,10 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/metamaskThird_knp4h3.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Você será redirecionado para o Collab.Land
+                {translate('shared>walletConnectModal>redirectCollab')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                No Collab.Land, clique em “MetaMask”.
+                {translate('shared>walletConnectModal>clickInMetamask')}
               </p>
               <div className="pw-w-[112px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#88ABDF]" />
@@ -388,10 +390,10 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
                 src="https://res.cloudinary.com/tropix/image/upload/v1683207269/assets/vaultFourth_mno4mx.png"
               />
               <p className="pw-text-base pw-font-medium pw-font-poppins pw-text-[#295BA6] pw-mt-6">
-                Siga os passos da sua MetaMask
+                {translate('shared>walletConnectModal>followMetamaskSteps')}
               </p>
               <p className="pw-text-sm pw-font-normal pw-font-poppins pw-text-[#777E8F] pw-mb-6">
-                Após seguir os passos, espere sua MetaMask conectar.
+                {translate('shared>walletConnectModal>waitConectMetamask')}
               </p>
               <div className="pw-w-[112px] pw-h-[16px] pw-mx-auto pw-flex pw-justify-center pw-gap-3">
                 <div className="pw-w-[16px] pw-h-[16px] pw-rounded-full pw-bg-[#88ABDF]" />

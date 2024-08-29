@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import classNames from 'classnames';
 
 import W3blockLogoWhite from '../../assets/icons/w3block_logo_white.svg';

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { useProfile } from '../../../shared';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
@@ -18,6 +20,7 @@ export const CheckoutFormTemplate = ({
   cart,
 }: CheckoutFormTemplateProps) => {
   const { isAuthorized, isLoading } = usePrivateRoute();
+  const [translate] = useTranslation();
   const { cart: productsCart } = useCart();
   const query = useQuery();
   const params = new URLSearchParams(query);
@@ -41,7 +44,7 @@ export const CheckoutFormTemplate = ({
       {/* <CheckoutHeader onClick={returnTo} /> */}
       {isCommerceReceiver ? (
         <div className="pw-w-full pw-h-[63.5vh] pw-flex pw-justify-center pw-items-center pw-font-bold pw-text-2xl pw-text-black">
-          Esse usuário não possui permissão para realizar uma compra
+          {translate('checkout>checkoutConfirmationTemplate>userCantPurchase')}
         </div>
       ) : (
         <div className="pw-flex pw-flex-col pw-h-full pw-min-h-[72.4vh] pw-px-4 lg:pw-px-0 pw-bg-[#F7F7F7]">

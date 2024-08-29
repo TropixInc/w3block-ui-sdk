@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { getDynamicString } from '../../../../storefront/hooks/useDynamicString/useDynamicString';
 import { useRouterConnect } from '../../../hooks';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
+import useTranslation from '../../../hooks/useTranslation';
 import { FormItemContainer } from '../../Form/FormItemContainer';
 import { ImageSDK } from '../../ImageSDK';
 import LabelWithRequired from '../../LabelWithRequired';
@@ -70,6 +71,7 @@ export const InputSelector = ({
   const { field, fieldState } = useController({ name });
   const error = fieldState?.error as unknown as InputError;
   const router = useRouterConnect();
+  const [translate] = useTranslation();
   // const [firstInput, setFirstInput] = useState(true);
   const [multipleSelected, setMultipleSelected] = useState<
     Array<string | undefined>
@@ -283,7 +285,7 @@ export const InputSelector = ({
             type="text"
             className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
             value={inputValue}
-            placeholder={'Selecione uma opção'}
+            placeholder={translate('shared>inputSelector>selectOption')}
             onChange={(e) => onChangeInputValue(e.target.value)}
             readOnly={readonly}
             autoComplete="new-password"
@@ -340,7 +342,7 @@ export const InputSelector = ({
                 })}
               </ul>
             ) : (
-              <p>Não há resultados</p>
+              <p>{translate('shared>inputLocale>notResults')}</p>
             )}
           </div>
         ) : null}
@@ -380,7 +382,7 @@ export const InputSelector = ({
               className="pw-max-h-[180px] pw-h-[32px] pw-w-full pw-overflow-y-auto pw-bg-inherit pw-text-black pw-outline-none"
             >
               <option className="!pw-p-0" value="">
-                Selecione uma opção
+                {translate('shared>inputSelector>selectOption')}
               </option>
               {type === DataTypesEnum.SimpleSelect
                 ? options.map((val) => (
