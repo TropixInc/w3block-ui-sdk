@@ -75,11 +75,15 @@ export const CompleteKYCTemplateSDK = ({
   const { data: kycContext } = useGetTenantContextBySlug(slug());
   const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
   const { status } = usePixwaySession();
-  const query = Object.keys(router.query).length > 0 ? router.query : '';
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.pushConnect(PixwayAppRoutes.SIGN_IN, query);
+      router.pushConnect(PixwayAppRoutes.SIGN_IN, {
+        callbackUrl:
+          PixwayAppRoutes.COMPLETE_KYC +
+          '?' +
+          new URLSearchParams(router.query as any).toString(),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);

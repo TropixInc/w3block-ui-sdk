@@ -153,7 +153,7 @@ const RequestItemWrapper = ({
   const onRenderFooterItem = () => {
     if (isRequestReview) {
       return (
-        <div className="pw-w-full pw-flex pw-flex-col pw-items-end pw-p-4">
+        <div className="pw-w-full pw-flex pw-flex-col pw-items-start pw-p-6">
           <div className="pw-w-full pw-mt-2 sm:pw-w-[50%]">
             <LabelWithRequired required>
               {translate('contacts>AprovationKYCForm>requestDocuments')}
@@ -202,7 +202,7 @@ const RequestItemWrapper = ({
       );
     } else if (isReproveContext) {
       return (
-        <div className="pw-w-full pw-flex pw-flex-col pw-items-end pw-p-4">
+        <div className="pw-w-full pw-flex pw-flex-col pw-items-start pw-p-6">
           <div className="w-full mt-2 sm:w-[50%]">
             <LabelWithRequired required>
               {translate('contacts>headerContactDetails>reprove')}
@@ -252,7 +252,7 @@ const RequestItemWrapper = ({
       );
     } else {
       return (
-        <div className="pw-w-full pw-flex pw-flex-col pw-items-end">
+        <div className="pw-w-full pw-flex pw-flex-col pw-items-start">
           {isSuccesAproveKyc && (
             <Alert
               variant="success"
@@ -307,12 +307,18 @@ const RequestItemWrapper = ({
     <div className="pw-w-full">
       {utmParams ? (
         <div className="pw-p-6">
-          <p>Campanha: {utmParams?.utm_campaign}</p>
-          <p>Indicação de {referralUser?.firstName}</p>
+          <p>
+            {translate('components>requestItemWrapper>campaign')}:{' '}
+            {utmParams?.utm_campaign}
+          </p>
+          <p>
+            {translate('components>requestItemWrapper>recommendation')}{' '}
+            {referralUser?.firstName}
+          </p>
         </div>
       ) : null}
       <div className="pw-border-t pw-p-6 pw-gap-y-3 pw-w-full">
-        <div className="pw-w-full">
+        <div className="pw-max-w-[600px] pw-p-5 pw-border pw-rounded-lg pw-border-solid">
           <FormCompleteKYCWithoutLayout
             key={contextId}
             renderSubtitle={false}

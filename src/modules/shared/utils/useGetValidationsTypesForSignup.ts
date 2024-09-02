@@ -3,7 +3,7 @@ import { isValidPhoneNumber } from 'react-phone-number-input';
 
 import { DataTypesEnum, TenantInputEntityDto } from '@w3block/sdk-id';
 import { cpf } from 'cpf-cnpj-validator';
-import { AnySchema, array, object, string } from 'yup';
+import { AnySchema, object, string } from 'yup';
 import * as yup from 'yup';
 
 import useTranslation from '../hooks/useTranslation';
@@ -332,15 +332,10 @@ export const useGetValidationsTypesForSignup = (
           validations: object().shape({
             inputId: string(),
             value: mandatory
-              ? array()
-                  .of(string())
-                  .required(
-                    translate('auth>getValidationsTypesForSignup>insertText')
-                  ) ||
-                string().required(
+              ? string().required(
                   translate('auth>getValidationsTypesForSignup>insertText')
                 )
-              : array().of(string()) || string(),
+              : string(),
           }),
         });
         break;

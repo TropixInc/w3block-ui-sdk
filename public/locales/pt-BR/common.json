@@ -925,5 +925,7 @@
   "checkout>checkoutCompletePayment>orderExpiredPleaseFormAgain": "Esse pedido de compra está expirado, por favor envie novamente o formulário de intenção de compra",
   "checkout>checkoutForm>successApply": "aplicado com sucesso",
   "checkout>checkoutForm>successSendForm": "Seu formulário de compra foi enviado com sucesso, por favor aguarde enquanto analisamos o pedido de compra.",
-  "components>confirmationKyc>file": "Arquivo"
+  "components>confirmationKyc>file": "Arquivo",
+  "components>requestItemWrapper>campaign": "Campanha",
+  "components>requestItemWrapper>recommendation": "Indicação de"
  }

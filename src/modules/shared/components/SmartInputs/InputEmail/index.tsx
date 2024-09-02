@@ -93,7 +93,8 @@ const InputEmail = ({
             value={inputValue}
             type="email"
             className={classNames(
-              'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent'
+              'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent',
+              `${readonly ? '' : 'pw-px-[10px]'}`
             )}
           />
         </FormItemContainer>

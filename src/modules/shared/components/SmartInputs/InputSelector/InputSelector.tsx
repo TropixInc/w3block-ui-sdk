@@ -116,16 +116,16 @@ export const InputSelector = ({
 
   useEffect(() => {
     if (multipleSelected?.length) {
-      if (type === DataTypesEnum.SimpleSelect) {
-        field?.onChange({
-          inputId: name,
-          value: multipleSelected,
-        });
-      } else
-        field?.onChange({
-          inputId: name,
-          value: JSON.stringify({ values: multipleSelected }),
-        });
+      // if (type === DataTypesEnum.SimpleSelect) {
+      //   field?.onChange({
+      //     inputId: name,
+      //     value: multipleSelected,
+      //   });
+      // } else
+      field?.onChange({
+        inputId: name,
+        value: JSON.stringify({ values: multipleSelected }),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [multipleSelected]);
@@ -204,9 +204,10 @@ export const InputSelector = ({
       multipleSelected?.length > 0
     ) {
       const jsonValues =
-        type === DataTypesEnum.SimpleSelect
-          ? selectedArray.value
-          : JSON.parse(selectedArray.value)?.values;
+        // type === DataTypesEnum.SimpleSelect
+        //   ? selectedArray.value
+        //   :
+        JSON.parse(selectedArray.value)?.values;
       if (jsonValues?.length > 0) {
         const selected = (jsonValues as Array<string>).map((item) => {
           if (type === DataTypesEnum.DynamicSelect)
@@ -233,7 +234,7 @@ export const InputSelector = ({
   };
 
   useEffect(() => {
-    if (docValue && dynamicOptions) {
+    if (docValue && dynamicOptions.length) {
       const value = (dynamicOptions as any).find((val: any) => {
         if (configData?.approverPath && val?.value?.id) {
           return val?.value?.id === (docValue as any)?.id;
@@ -256,7 +257,8 @@ export const InputSelector = ({
         if (type === DataTypesEnum.DynamicSelect) {
           const jsonValues = JSON.parse(docValue as string);
           return getPlaceholderForMultipleSelectWithValue(jsonValues?.values);
-        } else return getPlaceholderForMultipleSelectWithValue(docValue);
+        } else if (typeof docValue === 'string') return docValue;
+        else return getPlaceholderForMultipleSelectWithValue(docValue);
       } else return getPlaceholderForMultipleSelect(field?.value || []);
     } else return 'Selecione';
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -81,7 +81,8 @@ const InputCpf = ({
           value={inputValue}
           placeholder="Digite apenas números"
           className={classNames(
-            'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full pw-px-[10px] pw-outline-none'
+            'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none',
+            `${readonly ? '' : 'pw-px-[10px]'}`
           )}
           inputMode="numeric"
         />

@@ -101,7 +101,7 @@ export const SelectorRead = ({
   };
 
   useEffect(() => {
-    if (docValue && dynamicOptions) {
+    if (docValue && dynamicOptions.length) {
       const value = () => {
         if (configData?.isMultiple) {
           const jsonValues = JSON.parse(docValue as string);
@@ -120,11 +120,12 @@ export const SelectorRead = ({
 
   useEffect(() => {
     if (docValue && options.length) {
-      const value = configData?.isMultiple
-        ? getPlaceholderForMultipleSelect(docValue)
-        : options?.find((val) => {
-            return val.value === docValue;
-          })?.label;
+      const value =
+        configData?.isMultiple && typeof docValue !== 'string'
+          ? getPlaceholderForMultipleSelect(docValue)
+          : options?.find((val) => {
+              return val.value === docValue;
+            })?.label;
       setInputValue(value);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

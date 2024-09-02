@@ -174,6 +174,8 @@ export const SigInWithoutLayout = ({
       return routeToAttachWallet;
     } else if (router.query.callbackPath) {
       return router.query.callbackPath as string;
+    } else if (router.query.callbackUrl) {
+      return router.query.callbackUrl as string;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');

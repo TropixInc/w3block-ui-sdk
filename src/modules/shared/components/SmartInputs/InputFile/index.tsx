@@ -157,7 +157,8 @@ const InputFile = ({
       >
         <div
           className={classNames(
-            'pw-mt-1 pw-text-base pw-h-11 pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent pw-px-[10px] autofill:pw-bg-transparent disabled:pw-cursor-default'
+            'pw-mt-1 pw-text-base pw-h-11 pw-flex pw-gap-x-2 pw-items-center pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent disabled:pw-cursor-default',
+            `${readonly ? '' : 'pw-px-[10px]'}`
           )}
           {...getRootProps()}
         >
