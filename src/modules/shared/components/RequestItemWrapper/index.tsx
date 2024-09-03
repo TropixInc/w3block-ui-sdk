@@ -266,7 +266,7 @@ const RequestItemWrapper = ({
               {translate('home>contactModal>error')}
             </Alert>
           )}
-          <div className="pw-w-full pw-flex pw-flex-col pw-justify-end pw-p-4 pw-gap-6 sm:pw-flex-row">
+          <div className="pw-w-full pw-flex pw-flex-col pw-justify-start pw-p-6 pw-gap-6 sm:pw-flex-row">
             <div className="pw-flex pw-gap-6">
               {(documents?.data?.status === UserContextStatus.Approved ||
                 documents?.data?.status === UserContextStatus.Denied) &&

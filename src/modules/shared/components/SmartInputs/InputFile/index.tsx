@@ -144,7 +144,7 @@ const InputFile = ({
   }, [fileRejections.length]);
 
   return (
-    <div className="pw-mb-3 pw-w-full">
+    <div className="pw-mb-4 pw-w-full">
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
@@ -178,7 +178,13 @@ const InputFile = ({
             <p className="!pw-text-[13px] pw-text-[#777E8F] pw-ml-2 pw-w-[90%]  pw-text-base pw-leading-4 pw-font-normal pw-line-clamp-1">
               {openDocs ? (
                 <a href={docValue} target="_blank" rel="noreferrer">
-                  {docValue}
+                  {openDocs ? (
+                    <span className="pw-text-blue-500 pw-underline">
+                      {translate('components>inputFile>openFile')}
+                    </span>
+                  ) : (
+                    docValue
+                  )}
                 </a>
               ) : (
                 renderName()

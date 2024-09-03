@@ -88,7 +88,7 @@ const InputDocuments = ({
   }, [apiSavedValue]);
 
   return (
-    <div className="pw-mb-6 pw-w-full">
+    <div className="pw-mb-4 pw-w-full">
       <div className="pw-w-full">
         <LabelWithRequired name={name} required={required}>
           {label ?? 'Documento de Identificação'}
@@ -105,7 +105,9 @@ const InputDocuments = ({
               setDocument('');
             }}
             disabled={readonly}
-            className="pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
+            className={`pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black pw-mt-1 ${
+              readonly ? 'pw-appearance-none' : ''
+            }`}
           >
             <option value={''}>Selecione o tipo de documento..</option>
             {docTypeOptions.map((val) => (
@@ -121,7 +123,7 @@ const InputDocuments = ({
             ))}
           </select>
         </FormItemContainer>
-        <div className="pw-w-full pw-mt-7">
+        <div className="pw-w-full pw-mt-4">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             {translate('shared>inputDocument>docNumber')}
           </p>

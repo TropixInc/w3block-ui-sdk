@@ -252,12 +252,14 @@ const CityAutoComplete = ({
           )}
         </div>
       ) : null}
-      {!hidenValidations && field.value && (
+      {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
-          <InputStatus
-            invalid={fieldState.invalid}
-            errorMessage={error?.value?.message}
-          />
+          {field.value && (
+            <InputStatus
+              invalid={fieldState.invalid}
+              errorMessage={error?.value?.message}
+            />
+          )}
         </p>
       )}
     </div>

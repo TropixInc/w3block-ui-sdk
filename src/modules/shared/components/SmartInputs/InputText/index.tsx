@@ -54,7 +54,7 @@ const InputText = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3 pw-w-full">
+    <div className="pw-mb-4 pw-w-full">
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>

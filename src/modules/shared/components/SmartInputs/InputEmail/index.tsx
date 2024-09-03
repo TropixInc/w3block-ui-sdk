@@ -65,7 +65,7 @@ const InputEmail = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-3 pw-w-full">
+    <div className="pw-mb-4 pw-w-full">
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
@@ -99,12 +99,14 @@ const InputEmail = ({
           />
         </FormItemContainer>
       )}
-      {!hidenValidations && field.value && (
+      {!hidenValidations && (
         <p className={`pw-mt-[5px] ${!autofill && 'pw-h-[16px]'}`}>
-          <InputStatus
-            invalid={fieldState.invalid}
-            errorMessage={error?.value?.message}
-          />
+          {field.value && (
+            <InputStatus
+              invalid={fieldState.invalid}
+              errorMessage={error?.value?.message}
+            />
+          )}
         </p>
       )}
     </div>

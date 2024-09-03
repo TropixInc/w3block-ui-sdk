@@ -135,12 +135,14 @@ const ComplexPhone = ({
               ) : null}
             </div>
 
-            {!hidenValidations && field.value && (
+            {!hidenValidations && (
               <p className="pw-mt-[5px] pw-h-[16px]">
-                <InputStatus
-                  invalid={Boolean((error as any)?.value[idx]?.message)}
-                  errorMessage={(error as any)?.value[idx]?.message}
-                />
+                {field.value && (
+                  <InputStatus
+                    invalid={Boolean((error as any)?.value[idx]?.message)}
+                    errorMessage={(error as any)?.value[idx]?.message}
+                  />
+                )}
               </p>
             )}
           </div>

@@ -92,7 +92,11 @@ export const ConfirmationKycWithoutLayout = () => {
       setAwaitProduct(true);
     } else if (typeof storageData?.postKycUrl === 'string')
       router.pushConnect(storageData?.postKycUrl);
-    else if (skipWallet) {
+    else if ((context?.data as any)?.data?.screenConfig?.postKycUrl) {
+      router.pushConnect(
+        (context?.data as any)?.data?.screenConfig?.postKycUrl
+      );
+    } else if (skipWallet) {
       if (router.query.callbackPath?.length) {
         router.pushConnect(router.query.callbackPath as string);
       } else if (router.query.callbackUrl?.length) {
@@ -174,7 +178,7 @@ export const ConfirmationKycWithoutLayout = () => {
             return (
               <div key={res} className="pw-w-full pw-mt-5">
                 <p className="pw-text-sm pw-font-semibold pw-font-poppins pw-text-black pw-text-left pw-w-full">
-                  {translate('auth>confirmationKycWithoutLayout>personalInfos')}
+                  {translate('auth>confirmationKycWithoutLayout>personalInfos')}{' '}
                   {Object.keys(groupedInputs).length > 1
                     ? res + ' de ' + Object.keys(groupedInputs).length
                     : null}

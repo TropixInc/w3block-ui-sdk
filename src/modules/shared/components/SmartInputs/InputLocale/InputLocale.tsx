@@ -57,7 +57,7 @@ const InputLocale = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-7">
+    <div className="pw-mb-4">
       <LabelWithRequired
         classes={{ root: '!pw-text-lg' }}
         name={name}
@@ -73,12 +73,14 @@ const InputLocale = ({
           <FormItemContainer
             disableClasses={readonly}
             invalid={fieldState.invalid}
-            className="pw-px-[0.6rem] pw-mb-3"
+            className={`pw-px-[0.6rem] pw-mb-3`}
           >
             <select
               onChange={(e) => setSelectCountry(e.target.value)}
               disabled={readonly}
-              className="pw-max-h-[180px] pw-h-12 pw-w-full  pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black"
+              className={`pw-max-h-[180px]  pw-w-full  pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black ${
+                readonly ? 'pw-appearance-none pw-h-8 pw-mb-3' : 'pw-h-12'
+              }`}
             >
               <option value={''}>
                 {translate('shared>unputLocale>selectContry')}

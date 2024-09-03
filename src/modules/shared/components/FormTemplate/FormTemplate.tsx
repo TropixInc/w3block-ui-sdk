@@ -109,7 +109,7 @@ export const FormTemplate = ({
           <Alert>{translate('shared>formTemplate>formApprovedNotEdit')}</Alert>
         </div>
       ) : null}
-      {hideContinue ? null : (
+      {hideContinue || readonly ? null : (
         <AuthButton
           type="submit"
           className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"

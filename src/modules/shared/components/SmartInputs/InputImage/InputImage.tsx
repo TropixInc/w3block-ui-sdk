@@ -147,7 +147,7 @@ const InputImage = ({
 
   return (
     <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
-      <div className="pw-mb-3 pw-max-w-[504px] pw-w-full pw-flex pw-flex-col pw-items-center pw-justify-center pw-p-[30px]">
+      <div className="pw-mb-4 pw-max-w-[504px] pw-w-full pw-flex pw-flex-col pw-items-center pw-justify-center pw-p-[30px]">
         <LabelWithRequired name={name} required={required}>
           {textTitle ? textTitle : 'Enviar foto'}
         </LabelWithRequired>

@@ -48,7 +48,7 @@ const InputBirthdate = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-2">
+    <div className="pw-mb-4">
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
@@ -68,12 +68,14 @@ const InputBirthdate = ({
           } autofill:pw-bg-transparent focus:pw-outline-none`}
         />
       </FormItemContainer>
-      {!hidenValidations && field.value && (
+      {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
-          <InputStatus
-            invalid={fieldState.invalid}
-            errorMessage={error?.value?.message}
-          />
+          {field.value && (
+            <InputStatus
+              invalid={fieldState.invalid}
+              errorMessage={error?.value?.message}
+            />
+          )}
         </p>
       )}
     </div>

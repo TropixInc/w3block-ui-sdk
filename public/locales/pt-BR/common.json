@@ -927,5 +927,6 @@
   "checkout>checkoutForm>successSendForm": "Seu formulário de compra foi enviado com sucesso, por favor aguarde enquanto analisamos o pedido de compra.",
   "components>confirmationKyc>file": "Arquivo",
   "components>requestItemWrapper>campaign": "Campanha",
-  "components>requestItemWrapper>recommendation": "Indicação de"
+  "components>requestItemWrapper>recommendation": "Indicação de",
+  "components>inputFile>openFile": "Abrir arquivo"
  }

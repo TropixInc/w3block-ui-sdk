@@ -78,7 +78,10 @@ export const InputSelector = ({
   >([]);
   const handleTextChange = (value: any) => {
     if (value) {
-      field?.onChange({ inputId: name, value: value });
+      field?.onChange({
+        inputId: name,
+        value: configData?.approverPath ? JSON.parse(value) : value,
+      });
     } else {
       field?.onChange({
         inputId: undefined,
@@ -352,7 +355,7 @@ export const InputSelector = ({
     );
   } else {
     return (
-      <div className="pw-mb-6">
+      <div className="pw-mb-4">
         <LabelWithRequired name={name} required={required}>
           {label}
         </LabelWithRequired>
@@ -381,7 +384,9 @@ export const InputSelector = ({
               name={name}
               disabled={readonly}
               onChange={(e) => handleTextChange(e.target.value)}
-              className="pw-max-h-[180px] pw-h-[32px] pw-w-full pw-overflow-y-auto pw-bg-inherit pw-text-black pw-outline-none"
+              className={`pw-max-h-[180px] pw-h-[32px] pw-w-full pw-overflow-y-auto pw-bg-inherit pw-text-black pw-outline-none ${
+                readonly ? 'pw-appearance-none' : ''
+              }`}
             >
               <option className="!pw-p-0" value="">
                 {translate('shared>inputSelector>selectOption')}
@@ -400,8 +405,16 @@ export const InputSelector = ({
                 : dynamicOptions.map((val) => (
                     <option
                       key={val.value.toString()}
-                      value={val.value.toString()}
-                      selected={docValue === val.value}
+                      value={
+                        typeof val.value === 'string'
+                          ? val.value
+                          : JSON.stringify(val.value)
+                      }
+                      selected={
+                        typeof docValue === 'string'
+                          ? docValue === val.value
+                          : (docValue as any)?.id === (val.value as any)?.id
+                      }
                       className="!pw-p-0"
                     >
                       {val.label}
