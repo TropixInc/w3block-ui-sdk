@@ -928,5 +928,7 @@
   "components>confirmationKyc>file": "Arquivo",
   "components>requestItemWrapper>campaign": "Campanha",
   "components>requestItemWrapper>recommendation": "Indicação de",
-  "components>inputFile>openFile": "Abrir arquivo"
+  "components>inputFile>openFile": "Abrir arquivo",
+  "components>requestItemWrapper>code": "Código da indicação",
+  "components>requestItemWrapper>request": "É preciso escolher ao menos um campo para enviar a revisão"
  }

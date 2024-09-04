@@ -169,6 +169,9 @@ const RequestItemWrapper = ({
               />
             </TokenizationFormItemContainer>
           </div>
+          <Alert variant="warning" className="pw-mt-3 pw-w-full sm:pw-w-[50%]">
+            {translate('components>requestItemWrapper>request')}
+          </Alert>
           {isSuccesSendReview && (
             <Alert
               variant="success"
@@ -182,7 +185,7 @@ const RequestItemWrapper = ({
               {translate('home>contactModal>error')}
             </Alert>
           )}
-          <div className="pw-flex pw-gap-x-3 pw-w-full pw-mt-4 pw-justify-end">
+          <div className="pw-flex pw-gap-x-3 pw-w-full pw-mt-4 pw-justify-start">
             <OffpixButtonBase
               className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
               variant="outlined"
@@ -231,7 +234,7 @@ const RequestItemWrapper = ({
               {translate('home>contactModal>error')}
             </Alert>
           )}
-          <div className="pw-flex pw-gap-x-3 pw-w-full pw-mt-4 pw-justify-end">
+          <div className="pw-flex pw-gap-x-3 pw-w-full pw-mt-4 pw-justify-start">
             <OffpixButtonBase
               className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
               variant="outlined"
@@ -305,20 +308,24 @@ const RequestItemWrapper = ({
 
   return (
     <div className="pw-w-full">
-      {utmParams ? (
-        <div className="pw-p-6">
-          <p>
-            {translate('components>requestItemWrapper>campaign')}:{' '}
-            {utmParams?.utm_campaign}
-          </p>
-          <p>
-            {translate('components>requestItemWrapper>recommendation')}{' '}
-            {referralUser?.firstName}
-          </p>
-        </div>
-      ) : null}
       <div className="pw-border-t pw-p-6 pw-gap-y-3 pw-w-full">
         <div className="pw-max-w-[600px] pw-p-5 pw-border pw-rounded-lg pw-border-solid">
+          {utmParams ? (
+            <div className="pw-pb-6">
+              <p>
+                {translate('components>requestItemWrapper>campaign')}:{' '}
+                {utmParams?.utm_campaign}
+              </p>
+              <p>
+                {translate('components>requestItemWrapper>code')}:{' '}
+                <b>{utmParams?.utm_source}</b>
+              </p>
+              <p>
+                {translate('components>requestItemWrapper>recommendation')}{' '}
+                <b>{referralUser?.firstName ?? '[não identificado]'}</b>
+              </p>
+            </div>
+          ) : null}
           <FormCompleteKYCWithoutLayout
             key={contextId}
             renderSubtitle={false}
