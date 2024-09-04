@@ -112,6 +112,9 @@ export const SignUpFormWithoutLayout = ({
   const postSigninURL =
     theme?.defaultTheme?.configurations?.contentData?.postSigninURL;
 
+  const skipWallet =
+    theme?.defaultTheme?.configurations?.contentData?.skipWallet;
+
   const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
     if (isPasswordless) {
@@ -335,6 +338,8 @@ export const SignUpFormWithoutLayout = ({
     <VerifySignUpWithCodeWithoutLayout
       emailLocal={emailLocal}
       password={methods.getValues('password')}
+      postSigninURL={postSigninURL}
+      skipWallet={skipWallet}
     />
   );
 };

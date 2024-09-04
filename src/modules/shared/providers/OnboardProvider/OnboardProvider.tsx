@@ -151,6 +151,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
           signupContext.active &&
           !window.location.pathname.includes('/auth/complete-kyc') &&
           !window.location.pathname.includes('/auth/verify-sign-up') &&
+          !window.location.pathname.includes('/auth/signUp') &&
           window.location.pathname !== PixwayAppRoutes.SIGN_IN
         ) {
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, callback());

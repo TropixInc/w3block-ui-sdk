@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import { KycStatus } from '@w3block/sdk-id';
 import addMinutes from 'date-fns/addMinutes';
 
 import { Alert } from '../../../shared/components/Alert';
@@ -10,7 +9,6 @@ import { WeblockButton } from '../../../shared/components/WeblockButton/WeblockB
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import { useGetTenantContext } from '../../../shared/hooks/useGetTenantContext/useGetTenantContext';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -22,11 +20,15 @@ import { useVerifySignUp } from '../../hooks/useVerifySignUp';
 interface VerifySignUpWithCodeWithoutLayoutProps {
   emailLocal?: string;
   password?: string;
+  skipWallet?: boolean;
+  postSigninURL?: string;
 }
 
 export const VerifySignUpWithCodeWithoutLayout = ({
   emailLocal,
   password,
+  skipWallet,
+  postSigninURL,
 }: VerifySignUpWithCodeWithoutLayoutProps) => {
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
   const { query, pushConnect } = useRouterConnect();
@@ -72,26 +74,6 @@ export const VerifySignUpWithCodeWithoutLayout = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, reset, profile]);
 
-  const { data: contexts } = useGetTenantContext();
-  const signupContext = useMemo(() => {
-    if (contexts) {
-      return contexts?.data?.items?.find(
-        ({ context }) => context?.slug === 'signup'
-      );
-    }
-  }, [contexts]);
-  const [redirect, setRedirect] = useState(false);
-  useEffect(() => {
-    if (redirect) {
-      if (
-        profile?.data?.kycStatus === KycStatus.Pending &&
-        signupContext?.active
-      )
-        pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
-      else pushConnect(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET, query);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, signupContext]);
   const [remainLoading, setRemainLoading] = useState(false);
   const sendCode = () => {
     const code = inputs.join('');
@@ -106,7 +88,22 @@ export const VerifySignUpWithCodeWithoutLayout = ({
               signIn({ email: emailToUse, password, companyId }).then(
                 (data) => {
                   if (data.error === null) {
-                    setRedirect(true);
+                    if (query.callbackPath?.length) {
+                      pushConnect(query.callbackPath as string);
+                    } else if (query.callbackUrl?.length) {
+                      pushConnect(query.callbackUrl as string);
+                    } else if (query.contextSlug?.length) {
+                      pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                        ...query,
+                      });
+                    } else if (postSigninURL) {
+                      pushConnect(postSigninURL);
+                    } else if (!skipWallet)
+                      pushConnect(
+                        PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
+                        query
+                      );
+                    else pushConnect('/');
                   }
                 }
               );
@@ -159,7 +156,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
       ) : null}
 
       <WeblockButton
-        disabled={inputs.some((i) => i == '') || isLoadingVerify || redirect}
+        disabled={inputs.some((i) => i == '') || isLoadingVerify}
         onClick={sendCode}
         className="pw-mt-4 pw-text-white"
         fullWidth={true}
