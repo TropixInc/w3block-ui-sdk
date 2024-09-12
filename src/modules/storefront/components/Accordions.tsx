@@ -2,6 +2,7 @@ import { CSSProperties } from 'react';
 
 import ArrowDownIcon from '../../shared/assets/icons/chevronDownOutlined.svg?react';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { AccordionsData, SpecificContentAccordion } from '../interfaces';
 import './Accordions.css';
@@ -57,6 +58,7 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
     backgroundColor,
   } = styleData;
 
+  const { text: title } = useDynamicString(contentData.title);
   return (
     <details
       className="pw-box-border pw-min-h-20 pw-shadow-[0_4px_11px_rgba(0,0,0,0.15)] pw-rounded-2xl pw-px-8 pw-py-[22px]"
@@ -75,7 +77,7 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
           } as CSSProperties
         }
       >
-        {contentData.title}
+        {title}
         <div
           style={
             {

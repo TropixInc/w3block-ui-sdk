@@ -1,21 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CSSProperties, lazy } from 'react';
 
+import classNames from 'classnames';
+import _ from 'lodash';
+
+import { useDynamicString } from '../../../storefront/hooks/useDynamicString';
 import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { CardTypesEnum, ProductsData } from '../../../storefront/interfaces';
+import './Card.css';
+import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
+import { composeUrlCloudinary } from '../../utils/composeUrlCloudinary';
+
 const ImageSDK = lazy(() =>
   import('../../../shared/components/ImageSDK/ImageSDK').then((module) => ({
     default: module.ImageSDK,
   }))
 );
-
-import './Card.css';
-import _ from 'lodash';
-
-import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
-
-import classNames from 'classnames';
-
-import { composeUrlCloudinary } from '../../utils/composeUrlCloudinary';
 
 export const Card = ({
   product,
@@ -29,6 +29,8 @@ export const Card = ({
 }) => {
   const { styleData, contentData } = config;
   const { datasource } = useDynamicApi();
+  const { text: title } = useDynamicString(product.name);
+  const { text: description } = useDynamicString(product.description);
   const linkToSend = () => {
     if (contentData.cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink) {
@@ -116,7 +118,7 @@ export const Card = ({
           }}
           className="pw-line-clamp-2 pw-min-h-[36px] pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
         >
-          {_.get(datasource, product.name ?? '', product.name)}
+          {title}
         </p>
       )}
       {styleData.showCardDescription && (
@@ -146,7 +148,7 @@ export const Card = ({
           }}
           className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px] pw-mt-2 pw-text-sm pw-leading-5"
         >
-          {_.get(datasource, product.description ?? '', product.description)}
+          {description}
         </p>
       )}
       {styleData.showCardCategory && (

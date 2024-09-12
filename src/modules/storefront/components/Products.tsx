@@ -30,6 +30,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
+import { useDynamicString } from '../hooks/useDynamicString';
 const Card = lazy(() =>
   import('../../shared/components/Card').then((module) => ({
     default: module.Card,
@@ -97,7 +98,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
   } = mergedContentData;
 
   const { datasource } = useDynamicApi();
-
+  const { text: title } = useDynamicString(moduleTitle);
   const dynamicCardsData = useMemo(() => {
     if (dynamicCards == true && contentCards && contentCards.length > 0) {
       const itemsToRender = _.get(datasource, dynamicCardsPath ?? '', []).slice(
@@ -463,7 +464,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
               alignmentTextClass
             )}
           >
-            {moduleTitle}
+            {title}
           </h2>
         )}
         <div className="pw-flex pw-justify-center pw-pt-10">

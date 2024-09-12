@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { isVideo } from '../../shared/utils/validators';
+import { useDynamicString } from '../hooks/useDynamicString';
 import {
   CardTypesEnum,
   ProductsDataStyleData,
@@ -62,6 +63,8 @@ export const ContentCard = ({
   } = config;
   const txtOver = textOverImage != undefined ? textOverImage : true;
   const { datasource, isDynamic } = useDynamicApi();
+  const { text: title } = useDynamicString(product.title);
+  const { text: description } = useDynamicString(product.description);
   const linkToSend = () => {
     if (cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink && product.link && product.link != '')
@@ -199,7 +202,7 @@ export const ContentCard = ({
                       }}
                       className="pw-line-clamp-2 pw-text-sm pw-font-[400] pw-mt-2 pw-leading-5"
                     >
-                      {_.get(datasource, product.title ?? '', product.title)}
+                      {title}
                     </p>
                   )}
                   {showCardDescription && (
@@ -229,11 +232,7 @@ export const ContentCard = ({
                       }}
                       className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
                     >
-                      {_.get(
-                        datasource,
-                        product.description ?? '',
-                        product.description
-                      )}
+                      {description}
                     </p>
                   )}
                   {showCardCategory && (
@@ -340,7 +339,7 @@ export const ContentCard = ({
                 }}
                 className="pw-line-clamp-2 pw-font-[400] pw-mt-2 "
               >
-                {_.get(datasource, product.title ?? '', product.title)}
+                {title}
               </p>
             )}
             {showCardDescription && (
@@ -372,11 +371,7 @@ export const ContentCard = ({
                 }}
                 className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-mt-2 pw-text-sm pw-leading-5"
               >
-                {_.get(
-                  datasource,
-                  product.description ?? '',
-                  product.description
-                )}
+                {description}
               </p>
             )}
             {showCardCategory && (
