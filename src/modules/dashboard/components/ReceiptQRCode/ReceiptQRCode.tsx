@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable i18next/no-literal-string */
+import { useMemo } from 'react';
+
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
@@ -6,6 +9,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { Spinner } from '../../../shared/components/Spinner';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetPublicOrder } from '../../../shared/hooks/useGetPublicOrder/useGetPublicOrder';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -26,6 +30,27 @@ export const ReceiptQRCode = ({
     deliverId ?? '',
     isOpen
   );
+
+  const { companyId } = useCompanyConfig();
+  const value = useMemo(() => {
+    const payments = receipt?.data?.payments;
+    if (companyId === 'ef41dc3f-d9e4-4ca4-8270-673d68f4f490') {
+      const values = payments?.map((res: any) => parseFloat(res.amount));
+      const total = values?.reduce(function (acc: any, cur: any) {
+        return acc + cur;
+      }, 0);
+      return 'R$' + total?.toFixed(2);
+    }
+    const arr: any[] = [];
+    payments?.forEach((res: any) => {
+      if (res.amount !== '0') {
+        const val = res.currency.symbol + parseFloat(res.amount).toFixed(2);
+        arr.push(val);
+      }
+    });
+    const finalValue = arr.join(' + ');
+    return finalValue;
+  }, [companyId, receipt?.data?.payments]);
   return (
     <ModalBase
       isOpen={isOpen}
@@ -59,10 +84,7 @@ export const ReceiptQRCode = ({
               <p className="pw-text-base pw-font-normal">
                 {translate('checkout>checkoutInfo>valuePaid')}
               </p>
-              <p className="pw-text-base pw-font-semibold">
-                R$
-                {parseFloat(receipt?.data?.cashback?.amount).toFixed(2)}
-              </p>
+              <p className="pw-text-base pw-font-semibold">{value}</p>
             </div>
             <div className="pw-mt-5">
               <p className="pw-text-base pw-font-normal">
