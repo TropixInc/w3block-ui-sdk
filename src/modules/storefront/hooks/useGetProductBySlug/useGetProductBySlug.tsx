@@ -104,6 +104,7 @@ export interface Product {
     keyCollectionId: string;
     productId: string;
     requirementCTALabel: string;
+    requirementCTAAction: string;
     requirementDescription: string;
     requirementModalContent: string;
     autoCloseOnSuccess: boolean;

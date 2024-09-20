@@ -360,11 +360,21 @@ export const ProductPage = ({
   const handleClick = () => {
     if (product?.requirements) {
       if (user) {
-        setIsOpen(true);
+        if (product?.requirements?.requirementCTAAction) {
+          pushConnect(product?.requirements?.requirementCTAAction);
+        } else {
+          setIsOpen(true);
+        }
       } else {
-        pushConnect(PixwayAppRoutes.SIGN_IN, {
-          callbackPath: window.location.href + '?openModal=true',
-        });
+        if (product?.requirements?.requirementCTAAction) {
+          pushConnect(PixwayAppRoutes.SIGN_IN, {
+            callbackPath: window.location.href,
+          });
+        } else {
+          pushConnect(PixwayAppRoutes.SIGN_IN, {
+            callbackPath: window.location.href + '?openModal=true',
+          });
+        }
       }
     } else {
       pushConnect(PixwayAppRoutes.SIGN_IN, {
