@@ -91,11 +91,13 @@ const CityAutoComplete = ({
   const [translate] = useTranslation();
   const [placeId, setPlaceId] = useState<string | undefined>();
   const [showOptions, setShowOptions] = useState(false);
+  const [placeNumber, setPlaceNumber] = useState('');
+  const [placeCompliment, setPlaceCompliment] = useState('');
   const { placesService, placePredictions, getPlacePredictions } =
     usePlacesService({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '',
       options: {
-        componentRestrictions: { country: country },
+        componentRestrictions: { country: country ? country : '' },
         types: [type],
       },
       language: 'pt-br',
@@ -133,6 +135,16 @@ const CityAutoComplete = ({
               field.onChange({
                 inputId: name,
                 value: { ...components, placeId: placeId },
+              });
+            } else if (type === 'postal_code') {
+              setInputValue(`${placeDetails.formatted_address}`);
+              field.onChange({
+                inputId: name,
+                value: {
+                  ...components,
+                  home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
+                  placeId: placeId,
+                },
               });
             } else {
               setInputValue(
@@ -262,6 +274,54 @@ const CityAutoComplete = ({
           )}
         </p>
       )}
+
+      {type === 'postal_code' ? (
+        <div className="pw-flex pw-gap-x-2">
+          <div className="pw-w-full sm:pw-max-w-[255px]">
+            <LabelWithRequired required={required} haveColon={false}>
+              {translate('shared>inputCompletedAddress>enterPlaceNumber')}
+            </LabelWithRequired>
+
+            <FormItemContainer
+              disableClasses={readonly}
+              invalid={fieldState.invalid}
+              className="pw-p-[0.6rem]"
+            >
+              <input
+                type="text"
+                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+                value={placeNumber}
+                placeholder={translate(
+                  'shared>inputCompletedAddress>enterPlaceNumber'
+                )}
+                onChange={(e) => setPlaceNumber(e.target.value)}
+                readOnly={readonly}
+              />
+            </FormItemContainer>
+          </div>
+          <div className="pw-flex-1">
+            <LabelWithRequired haveColon={false}>
+              {translate('shared>inputCompletedAddress>enterCompliment')}
+            </LabelWithRequired>
+            <FormItemContainer
+              disableClasses={readonly}
+              invalid={fieldState.invalid}
+              className="pw-p-[0.6rem]"
+            >
+              <input
+                type="text"
+                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+                value={placeCompliment}
+                placeholder={translate(
+                  'shared>inputCompletedAddress>compliment'
+                )}
+                onChange={(e) => setPlaceCompliment(e.target.value)}
+                readOnly={readonly}
+              />
+            </FormItemContainer>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };
