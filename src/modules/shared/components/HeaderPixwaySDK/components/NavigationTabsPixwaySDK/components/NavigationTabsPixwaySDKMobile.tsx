@@ -1,11 +1,6 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
-import {
-  ControlledMenu,
-  MenuItem,
-  SubMenu,
-  useClick,
-} from '@szhsin/react-menu';
+import { Menu, MenuButton, MenuItem, SubMenu } from '@szhsin/react-menu';
 
 import ChevronRight from '../../../../../assets/icons/chevronRightFilled.svg?react';
 import CloseIcon from '../../../../../assets/icons/closeIconHeader.svg?react';
@@ -35,9 +30,7 @@ export const NavigationTabsPixwaySDKMobile = ({
   const router = useRouterConnect();
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const { data: session } = usePixwaySession();
-  const ref = useRef(null);
   const [isOpenSubmenu, setOpenSubmenu] = useState(false);
-  const anchorProps = useClick(isOpenSubmenu, setOpenSubmenu);
 
   const toggleTabsMemo = () => {
     if (toogleMenu) {
@@ -54,7 +47,7 @@ export const NavigationTabsPixwaySDKMobile = ({
             color: textColor,
             padding: 0,
           }}
-          key={item.name + idx}
+          key={subm.name.trim() + idx}
           itemProps={{ className: '!pw-p-0' }}
           label={({ hover, open }) => (
             <span
@@ -65,7 +58,7 @@ export const NavigationTabsPixwaySDKMobile = ({
                 opacity: open ? 0.8 : 1,
               }}
             >
-              {item.name}
+              {subm.name}
             </span>
           )}
         >
@@ -113,29 +106,23 @@ export const NavigationTabsPixwaySDKMobile = ({
           style={{ backgroundColor: bgColor }}
           className="pw-flex pw-flex-col pw-absolute pw-top-[90px] pw-left-0 pw-w-screen pw-z-30 pw-shadow-inner pw-py-8 pw-items-center pw-gap-y-4"
         >
-          {tabs?.map((tab, i) => {
+          {tabs?.map((tab) => {
             if (tab.tabs?.length) {
               return (
                 <>
-                  <button
-                    key={tab.name + i}
-                    style={{ color: textColor }}
-                    type="button"
-                    ref={ref}
-                    className="pw-flex pw-items-center pw-gap-x-2"
-                    {...anchorProps}
-                  >
-                    {tab.name}
-                    <ChevronRight
-                      className="pw-rotate-90 pw-w-3 pw-h-3"
-                      style={{ fill: textColor }}
-                    />
-                  </button>
-                  <ControlledMenu
-                    state={isOpenSubmenu ? 'open' : 'closed'}
-                    anchorRef={ref}
-                    onClose={() => setOpenSubmenu(false)}
+                  <Menu
+                    onClick={() => setOpenSubmenu(!isOpenSubmenu)}
                     menuStyle={{ backgroundColor: bgColor }}
+                    title={tab.name}
+                    menuButton={
+                      <MenuButton className="pw-flex pw-gap-x-3 pw-items-center">
+                        <span>{tab.name}</span>
+                        <ChevronRight
+                          className="pw-rotate-90 pw-w-3 pw-h-3"
+                          style={{ fill: textColor }}
+                        />
+                      </MenuButton>
+                    }
                   >
                     {tab.tabs.map((sub, idx) => {
                       if (sub.tabs) {
@@ -143,7 +130,7 @@ export const NavigationTabsPixwaySDKMobile = ({
                       } else {
                         return (
                           <MenuItem
-                            key={sub.name + idx}
+                            key={sub.name.trim() + idx}
                             href={sub.router}
                             className="!pw-p-0"
                           >
@@ -168,14 +155,14 @@ export const NavigationTabsPixwaySDKMobile = ({
                         );
                       }
                     })}
-                  </ControlledMenu>
+                  </Menu>
                 </>
               );
             } else {
               return (
                 <a
                   style={{ color: textColor }}
-                  key={tab.name}
+                  key={tab.name.trim()}
                   href={tab.router ?? ''}
                 >
                   {tab.name}
