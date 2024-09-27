@@ -29,6 +29,7 @@ const SubmenuItem = ({
   textSelectionColor,
 }: SubmenuItemProps) => {
   const ref = useRef(null);
+
   const [menuState, toggle] = useMenuState({ transition: true });
   const { anchorProps, hoverProps } = useHover(menuState.state, toggle);
   const onRenderMenu = (item: NavigationTabsPixwaySDKTabs) => {
@@ -78,6 +79,7 @@ const SubmenuItem = ({
       );
     }
   };
+
   return (
     <>
       <div
@@ -104,7 +106,7 @@ const SubmenuItem = ({
             return (
               <MenuItem
                 key={sub.name + idx}
-                href={item.router}
+                href={sub.router}
                 className="!pw-p-0"
               >
                 {({ hover }) => {
