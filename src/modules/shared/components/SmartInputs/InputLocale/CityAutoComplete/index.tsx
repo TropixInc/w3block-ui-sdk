@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useClickAway } from 'react-use';
+import { useClickAway, useDebounce } from 'react-use';
 
 import _ from 'lodash';
 
@@ -20,7 +20,7 @@ interface CityAutocompleteProps {
   country: string;
   onChangeRegion?: (value: string | undefined) => void;
   name: string;
-  apiValue?: string;
+  apiValue?: any;
   type: string;
   inputLabel?: string;
   inputPlaceholder?: string;
@@ -33,7 +33,7 @@ function getAddressObject(address_components: any) {
   const ShouldBeComponent = {
     home: ['street_number'],
     postal_code: ['postal_code'],
-    street: ['street_address', 'route'],
+    street_address_1: ['street_address', 'route'],
     region: [
       'administrative_area_level_1',
       'administrative_area_level_2',
@@ -55,7 +55,7 @@ function getAddressObject(address_components: any) {
   const address = {
     home: '',
     postal_code: '',
-    street: '',
+    street_address_1: '',
     region: '',
     city: '',
     country: '',
@@ -117,6 +117,32 @@ const CityAutoComplete = ({
     setShowOptions(Boolean(value));
   };
 
+  useDebounce(
+    () => {
+      if (type === 'postal_code') {
+        field.onChange({
+          ...field.value,
+          value: { ...field?.value?.value, street_number: placeNumber },
+        });
+      }
+    },
+    500,
+    [placeNumber]
+  );
+
+  useDebounce(
+    () => {
+      if (type === 'postal_code') {
+        field.onChange({
+          ...field.value,
+          value: { ...field?.value?.value, street_address_2: placeCompliment },
+        });
+      }
+    },
+    500,
+    [placeCompliment]
+  );
+
   const getDetails = useCallback(() => {
     if (placeId && placesService) {
       try {
@@ -142,7 +168,7 @@ const CityAutoComplete = ({
                 inputId: name,
                 value: {
                   ...components,
-                  home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
+                  home: `${placeDetails.formatted_address}`,
                   placeId: placeId,
                 },
               });
@@ -181,7 +207,13 @@ const CityAutoComplete = ({
 
   useEffect(() => {
     if (apiValue) {
-      setPlaceId(apiValue);
+      if (type === 'postal_code') {
+        setPlaceId(apiValue?.placeId);
+        setPlaceNumber(apiValue?.street_number);
+        setPlaceCompliment(apiValue?.street_address_2);
+      } else {
+        setPlaceId(apiValue);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiValue]);
@@ -276,7 +308,7 @@ const CityAutoComplete = ({
       )}
 
       {type === 'postal_code' ? (
-        <div className="pw-flex pw-gap-x-2">
+        <div className="pw-flex pw-gap-x-2 pw-mt-2">
           <div className="pw-w-full sm:pw-max-w-[255px]">
             <LabelWithRequired required={required} haveColon={false}>
               {translate('shared>inputCompletedAddress>enterPlaceNumber')}

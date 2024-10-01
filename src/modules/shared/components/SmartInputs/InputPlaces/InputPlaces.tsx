@@ -28,11 +28,11 @@ const InputPlaces = ({
 
   return (
     <div>
-      {placeType === 'postal_code' ? (
+      {placeType === 'full_address' ? (
         <InputCompletedAddress
           name={name}
-          apiValue={docValue?.placeId}
-          type={placeType ?? 'food'}
+          apiValue={docValue}
+          type={'postal_code'}
           inputLabel={label}
           inputPlaceholder={
             placeholder ?? translate('shared>inputPlaces>inputPlaceholder')

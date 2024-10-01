@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { countries } from '../../../utils/countries';
@@ -9,7 +9,7 @@ import CityAutoComplete from '../InputLocale/CityAutoComplete';
 interface InputCompletedAddressProps {
   onChangeRegion?: (value: string | undefined) => void;
   name: string;
-  apiValue?: string;
+  apiValue?: any;
   type: string;
   inputLabel?: string;
   inputPlaceholder?: string;
@@ -31,6 +31,13 @@ const InputCompletedAddress = ({
 }: InputCompletedAddressProps) => {
   const [translate] = useTranslation();
   const [country, setCountry] = useState('');
+
+  useEffect(() => {
+    if (apiValue) {
+      setCountry(apiValue?.country);
+    }
+  }, [apiValue]);
+
   return (
     <div className="pw-mt-4">
       <LabelWithRequired name={name} required={required} haveColon={false}>
