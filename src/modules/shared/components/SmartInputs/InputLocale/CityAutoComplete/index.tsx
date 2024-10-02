@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useClickAway } from 'react-use';
+import { useClickAway, useDebounce } from 'react-use';
 
 import _ from 'lodash';
 
@@ -20,7 +20,7 @@ interface CityAutocompleteProps {
   country: string;
   onChangeRegion?: (value: string | undefined) => void;
   name: string;
-  apiValue?: string;
+  apiValue?: any;
   type: string;
   inputLabel?: string;
   inputPlaceholder?: string;
@@ -33,7 +33,7 @@ function getAddressObject(address_components: any) {
   const ShouldBeComponent = {
     home: ['street_number'],
     postal_code: ['postal_code'],
-    street: ['street_address', 'route'],
+    street_address_1: ['street_address', 'route'],
     region: [
       'administrative_area_level_1',
       'administrative_area_level_2',
@@ -55,7 +55,7 @@ function getAddressObject(address_components: any) {
   const address = {
     home: '',
     postal_code: '',
-    street: '',
+    street_address_1: '',
     region: '',
     city: '',
     country: '',
@@ -88,17 +88,19 @@ const CityAutoComplete = ({
   const divRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<string | undefined>();
   const error = fieldState?.error as unknown as InputError;
-  const [translate] = useTranslation();
+  const [translate, locale] = useTranslation();
   const [placeId, setPlaceId] = useState<string | undefined>();
   const [showOptions, setShowOptions] = useState(false);
+  const [placeNumber, setPlaceNumber] = useState('');
+  const [placeCompliment, setPlaceCompliment] = useState('');
   const { placesService, placePredictions, getPlacePredictions } =
     usePlacesService({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '',
       options: {
-        componentRestrictions: { country: country },
+        componentRestrictions: { country: country ? country : '' },
         types: [type],
       },
-      language: 'pt-br',
+      language: locale.language ?? 'pt-BR',
       debounce: 400,
     });
 
@@ -114,6 +116,32 @@ const CityAutoComplete = ({
     setInputValue(value);
     setShowOptions(Boolean(value));
   };
+
+  useDebounce(
+    () => {
+      if (type === 'postal_code') {
+        field.onChange({
+          ...field.value,
+          value: { ...field?.value?.value, street_number: placeNumber },
+        });
+      }
+    },
+    500,
+    [placeNumber]
+  );
+
+  useDebounce(
+    () => {
+      if (type === 'postal_code') {
+        field.onChange({
+          ...field.value,
+          value: { ...field?.value?.value, street_address_2: placeCompliment },
+        });
+      }
+    },
+    500,
+    [placeCompliment]
+  );
 
   const getDetails = useCallback(() => {
     if (placeId && placesService) {
@@ -133,6 +161,16 @@ const CityAutoComplete = ({
               field.onChange({
                 inputId: name,
                 value: { ...components, placeId: placeId },
+              });
+            } else if (type === 'postal_code') {
+              setInputValue(`${placeDetails.formatted_address}`);
+              field.onChange({
+                inputId: name,
+                value: {
+                  ...components,
+                  home: `${placeDetails.formatted_address}`,
+                  placeId: placeId,
+                },
               });
             } else {
               setInputValue(
@@ -169,7 +207,13 @@ const CityAutoComplete = ({
 
   useEffect(() => {
     if (apiValue) {
-      setPlaceId(apiValue);
+      if (type === 'postal_code') {
+        setPlaceId(apiValue?.placeId);
+        setPlaceNumber(apiValue?.street_number);
+        setPlaceCompliment(apiValue?.street_address_2);
+      } else {
+        setPlaceId(apiValue);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiValue]);
@@ -262,6 +306,54 @@ const CityAutoComplete = ({
           )}
         </p>
       )}
+
+      {type === 'postal_code' ? (
+        <div className="pw-flex pw-gap-x-2 pw-mt-2">
+          <div className="pw-w-full sm:pw-max-w-[255px]">
+            <LabelWithRequired required={required} haveColon={false}>
+              {translate('shared>inputCompletedAddress>enterPlaceNumber')}
+            </LabelWithRequired>
+
+            <FormItemContainer
+              disableClasses={readonly}
+              invalid={fieldState.invalid}
+              className="pw-p-[0.6rem]"
+            >
+              <input
+                type="text"
+                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+                value={placeNumber}
+                placeholder={translate(
+                  'shared>inputCompletedAddress>enterPlaceNumber'
+                )}
+                onChange={(e) => setPlaceNumber(e.target.value)}
+                readOnly={readonly}
+              />
+            </FormItemContainer>
+          </div>
+          <div className="pw-flex-1">
+            <LabelWithRequired haveColon={false}>
+              {translate('shared>inputCompletedAddress>enterCompliment')}
+            </LabelWithRequired>
+            <FormItemContainer
+              disableClasses={readonly}
+              invalid={fieldState.invalid}
+              className="pw-p-[0.6rem]"
+            >
+              <input
+                type="text"
+                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+                value={placeCompliment}
+                placeholder={translate(
+                  'shared>inputCompletedAddress>compliment'
+                )}
+                onChange={(e) => setPlaceCompliment(e.target.value)}
+                readOnly={readonly}
+              />
+            </FormItemContainer>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };
