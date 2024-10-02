@@ -932,7 +932,7 @@
   "components>requestItemWrapper>code": "Código da indicação",
   "components>requestItemWrapper>request": "É preciso escolher ao menos um campo para enviar a revisão",
   "shared>inputCompletedAddress>selectCountry": "Selecione o país",
-  "shared>inputCompletedAddress>enterZipCode": "Digite o código postal",
+  "shared>inputCompletedAddress>enterZipCode": "Pesquisar endereço por CEP",
   "shared>inputCompletedAddress>enterPlaceNumber": "Digite o número do endereço",
   "shared>inputCompletedAddress>zipCode": "Código postal",
   "shared>inputCompletedAddress>enterCompliment": "Digite o complemento",

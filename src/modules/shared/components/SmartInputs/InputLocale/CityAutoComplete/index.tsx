@@ -88,7 +88,7 @@ const CityAutoComplete = ({
   const divRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<string | undefined>();
   const error = fieldState?.error as unknown as InputError;
-  const [translate] = useTranslation();
+  const [translate, locale] = useTranslation();
   const [placeId, setPlaceId] = useState<string | undefined>();
   const [showOptions, setShowOptions] = useState(false);
   const [placeNumber, setPlaceNumber] = useState('');
@@ -100,7 +100,7 @@ const CityAutoComplete = ({
         componentRestrictions: { country: country ? country : '' },
         types: [type],
       },
-      language: 'pt-br',
+      language: locale.language ?? 'pt-BR',
       debounce: 400,
     });
 
