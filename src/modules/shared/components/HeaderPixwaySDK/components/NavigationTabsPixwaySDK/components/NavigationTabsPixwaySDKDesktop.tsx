@@ -1,3 +1,5 @@
+import { getI18nString } from '../../../../../../storefront/hooks/useDynamicString';
+import { useLocale } from '../../../../../hooks/useLocale';
 import { NavigationTabsPixwaySDKProps } from '../NavigationTabsPixwaySDK';
 import SubmenuItem from './SubmenuItem';
 
@@ -9,9 +11,11 @@ export const NavigationTabsPixwaySDKDesktop = ({
   bgSelectionColor,
   textSelectionColor,
 }: NavigationTabsPixwaySDKProps) => {
+  const locale = useLocale();
   return (
     <div className={`pw-flex pw-gap-x-6 ${classNames?.className ?? ''}`}>
       {tabs?.map((item, idx) => {
+        const { text: name } = getI18nString(item.name, locale);
         if (item.tabs?.length) {
           return (
             <SubmenuItem
@@ -30,7 +34,7 @@ export const NavigationTabsPixwaySDKDesktop = ({
               key={item.name}
               href={item.router ?? ''}
             >
-              {item.name}
+              {name}
             </a>
           );
         }

@@ -47,7 +47,6 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
   const alignmentTextClass = alignmentsText[alignment ?? AlignmentEnum.LEFT];
 
   const { datasource } = useDynamicApi();
-
   const { text: title } = useDynamicString(titleInput);
   const { text: content } = useDynamicString(textInput);
 

@@ -119,7 +119,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
     datasource,
     contentCards,
   ]);
-
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.COMMERCE);
   useEffect(() => {

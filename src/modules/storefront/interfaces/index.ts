@@ -57,6 +57,7 @@ export interface DynamicApiModuleInterface {
   apis: {
     apiName: string;
     url: string;
+    strapiLocalization?: boolean;
   }[];
 }
 
@@ -74,6 +75,7 @@ export interface MainModuleThemeInterface {
   styleData?: any;
   contentData?: any;
   deviceType?: 'none' | 'mobile' | 'desktop';
+  languageType?: string;
   mobileStyleData?: any;
   mobileContentData?: any;
 }

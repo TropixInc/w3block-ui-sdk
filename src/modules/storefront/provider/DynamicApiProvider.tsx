@@ -8,12 +8,14 @@ import {
 } from 'react';
 
 import { DynamicApiModuleInterface } from '../interfaces';
+import { processLocalizations } from '../utils/processLocalizations';
 
 export interface DynamicApiContextInterface {
   config?: DynamicApiModuleInterface;
   datasource: any;
   isDynamic: boolean;
   loading?: boolean;
+  strapiLocalization?: boolean;
 }
 
 const DynamicApiContext = createContext<DynamicApiContextInterface>({
@@ -35,7 +37,11 @@ export const DynamicApiProvider = ({
 
   const getApis = useMemo(
     () => async () => {
-      const makeApiCall = async (url: string, apiName: string) => {
+      const makeApiCall = async (
+        url: string,
+        apiName: string,
+        strapiLocalization?: boolean
+      ) => {
         const getIndex = new RegExp(/{(\w+)}*/g).exec(url)?.length
           ? new RegExp(/{(\w+)}*/g).exec(url)?.slice(1)
           : '';
@@ -51,14 +57,22 @@ export const DynamicApiProvider = ({
 
         const response = await fetch(newUrlApi);
         const data = await response.json();
-        setDatasource((prev: any) => ({ ...prev, [apiName]: data }));
+        if (strapiLocalization) {
+          const reviewdData = processLocalizations(data?.data);
+          setDatasource((prev: any) => ({
+            ...prev,
+            [apiName]: { ...data, data: reviewdData },
+          }));
+        } else {
+          setDatasource((prev: any) => ({ ...prev, [apiName]: data }));
+        }
       };
 
       if (dynamicModule?.apis.length) {
         setLoading(true);
         await Promise.all(
           dynamicModule?.apis.map(async (api) => {
-            await makeApiCall(api.url, api.apiName);
+            await makeApiCall(api.url, api.apiName, api.strapiLocalization);
           })
         );
         setLoading(false);
@@ -81,6 +95,7 @@ export const DynamicApiProvider = ({
         isDynamic: dynamicModule != undefined,
         config: dynamicModule,
         loading,
+        strapiLocalization: dynamicModule?.apis?.[0]?.strapiLocalization,
       }}
     >
       {children}

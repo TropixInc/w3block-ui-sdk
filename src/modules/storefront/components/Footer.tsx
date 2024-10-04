@@ -9,7 +9,9 @@ import TelegramIcon from '../../shared/assets/icons/message.svg?react';
 import TwitterIcon from '../../shared/assets/icons/twitter.svg?react';
 import WeblockLogo from '../../shared/assets/icons/w3block_logo_white.svg?react';
 import WhatsappIcon from '../../shared/assets/icons/whatsapp.svg?react';
+import { useLocale } from '../../shared/hooks/useLocale';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { getI18nString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import { FooterData } from '../interfaces';
 
@@ -23,7 +25,7 @@ type SVG = React.FunctionComponent<
 
 export const Footer = ({ data }: { data: FooterData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
-
+  const locale = useLocale();
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
     mobileStyleData
@@ -88,22 +90,25 @@ export const Footer = ({ data }: { data: FooterData }) => {
       >
         <div className="pw-pb-6 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-pt-10">
           <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
-            {menuLinks?.map(({ label, value }) => (
-              <a
-                key={label}
-                href={value}
-                className="footer-menu"
-                style={
-                  {
-                    textDecoration: 'none',
-                    '--footer-menu-color': menuLinksColor,
-                    '--footer-menu-hover-color': menuLinksHoverColor,
-                  } as CSSProperties
-                }
-              >
-                {label}
-              </a>
-            ))}
+            {menuLinks?.map(({ label, value }) => {
+              const { text: pageTitle } = getI18nString(label, locale);
+              return (
+                <a
+                  key={label}
+                  href={value}
+                  className="footer-menu"
+                  style={
+                    {
+                      textDecoration: 'none',
+                      '--footer-menu-color': menuLinksColor,
+                      '--footer-menu-hover-color': menuLinksHoverColor,
+                    } as CSSProperties
+                  }
+                >
+                  {pageTitle}
+                </a>
+              );
+            })}
           </div>
 
           <div className="pw-w-full pw-bg-[#ffffffaa] pw-h-[1px] pw-my-[10px]" />
