@@ -8,6 +8,7 @@ import { useRouterConnect } from '../../hooks';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { AttachWalletProvider } from '../../providers/AttachWalletProvider/AttachWalletProvider';
 import { AppDownloadModal } from '../AppDownloadModal';
+import { LanguageSelector } from '../LanguageSelector';
 import TranslatableComponent from '../TranslatableComponent';
 import { NavigationTabsPixwaySDKTabs } from './components';
 const NavigationLoginPixwaySDK = lazy(() =>
@@ -208,6 +209,9 @@ const _HeaderPixwaySDK = ({
     textSelectionColor ??
     context?.defaultTheme?.header?.styleData?.textSelectionColor;
 
+  const lang =
+    context?.defaultTheme?.configurations.contentData?.i18nJson?.locales;
+
   return context?.defaultTheme || standalone ? (
     <div
       id="sf-header"
@@ -267,7 +271,6 @@ const _HeaderPixwaySDK = ({
               {LogoToShow}
             </a>
           </div>
-
           <div className="pw-flex pw-items-center">
             <div className="pw-order-1 sm:pw-order-1 pw-hidden sm:pw-block">
               <NavigationTabsPixwaySDK
@@ -305,8 +308,20 @@ const _HeaderPixwaySDK = ({
                 className="sm:pw-border-l sm:pw-ml-4"
               />
             )}
+            {lang?.length > 1 ? (
+              <div
+                style={{ backgroundColor: bgColor }}
+                className="pw-flex pw-items-center pw-gap-2 pw-ml-1 sm:pw-border-l sm:pw-ml-4 pw-order-3 sm:pw-order-3 pw-cursor-pointer"
+              >
+                <LanguageSelector
+                  bgColor={bgColor ?? ''}
+                  textColor={textColor}
+                  fontFamily={fontFamily ?? ''}
+                />
+              </div>
+            ) : null}
             {hasLogIn && (
-              <div className="pw-order-3 sm:pw-order-3 sm:pw-border-l sm:pw-ml-3">
+              <div className="pw-order-4 sm:pw-order-4 sm:pw-border-l sm:pw-ml-3">
                 <NavigationLoginPixwaySDK
                   backgroundColor={headerBgColor}
                   hasSignUp={hasSignUp}

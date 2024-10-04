@@ -10,7 +10,9 @@ import {
 
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import { getI18nString } from '../../../../../../storefront/hooks/useDynamicString';
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
+import { useLocale } from '../../../../../hooks/useLocale';
 import { NavigationTabsPixwaySDKTabs } from '../NavigationTabsPixwaySDK';
 
 interface SubmenuItemProps {
@@ -29,10 +31,12 @@ const SubmenuItem = ({
   textSelectionColor,
 }: SubmenuItemProps) => {
   const ref = useRef(null);
-
+  const locale = useLocale();
+  const { text: itemName } = getI18nString(item.name, locale);
   const [menuState, toggle] = useMenuState({ transition: true });
   const { anchorProps, hoverProps } = useHover(menuState.state, toggle);
   const onRenderMenu = (item: NavigationTabsPixwaySDKTabs) => {
+    const { text: menuName } = getI18nString(item.name, locale);
     if (item.tabs) {
       return item.tabs.map((subm, idx) => (
         <SubMenu
@@ -52,7 +56,7 @@ const SubmenuItem = ({
                 opacity: open ? 0.8 : 1,
               }}
             >
-              {item.name}
+              {menuName}
             </span>
           )}
         >
@@ -71,7 +75,7 @@ const SubmenuItem = ({
                   color: hover ? textSelectionColor : textColor,
                 }}
               >
-                <p>{item.name}</p>
+                <p>{menuName}</p>
               </div>
             );
           }}
@@ -89,7 +93,7 @@ const SubmenuItem = ({
         {...anchorProps}
         style={{ color: textColor }}
       >
-        {item.name}
+        {itemName}
         <ArrowDown style={{ stroke: textColor }} />
       </div>
       <ControlledMenu
@@ -100,6 +104,7 @@ const SubmenuItem = ({
         menuStyle={{ backgroundColor: bgColor }}
       >
         {item?.tabs?.map((sub, idx) => {
+          const { text: subName } = getI18nString(sub.name, locale);
           if (sub.tabs) {
             return onRenderMenu(sub);
           } else {
@@ -118,7 +123,7 @@ const SubmenuItem = ({
                         color: hover ? textSelectionColor : textColor,
                       }}
                     >
-                      <p>{sub.name}</p>
+                      <p>{subName}</p>
                     </div>
                   );
                 }}

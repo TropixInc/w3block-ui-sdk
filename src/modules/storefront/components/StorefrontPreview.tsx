@@ -17,6 +17,7 @@ import {
   breakpointsEnum,
   useBreakpoints,
 } from '../../shared/hooks/useBreakpoints/useBreakpoints';
+import { useLocale } from '../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useUserWallet } from '../../shared/hooks/useUserWallet';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
@@ -103,6 +104,7 @@ export const StorefrontPreview = ({
   children,
 }: StorefrontPreviewProps) => {
   const context = useContext(ThemeContext);
+  const locale = useLocale();
   const { setMainCoin } = useUserWallet();
   const { asPath, pushConnect } = useRouterConnect();
   const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
@@ -340,6 +342,12 @@ export const StorefrontPreview = ({
                     if (
                       item.deviceType == 'mobile' &&
                       !mobileBreakpoints.includes(breakpoint)
+                    )
+                      return null;
+                    if (
+                      item.languageType &&
+                      locale !== item.languageType &&
+                      item.languageType !== 'all'
                     )
                       return null;
 
