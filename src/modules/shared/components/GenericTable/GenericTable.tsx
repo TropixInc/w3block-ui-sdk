@@ -17,6 +17,7 @@ import { useRouterConnect } from '../../hooks';
 import { useCompanyById } from '../../hooks/useCompanyById';
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useDynamicValueByTable } from '../../hooks/useDynamicValueByTable/useDynamicValueByTable';
+import { useGetUserByWallet } from '../../hooks/useGetUserByWallet';
 import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import useTranslation from '../../hooks/useTranslation';
@@ -97,6 +98,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const [apiUrl, setApiUrl] = useState<string>();
   const methods = useForm();
   const [isUpdateList, setIsUpdateList] = useState(false);
+  const { fetchUserByWallet } = useGetUserByWallet();
   const truncate = useTruncate();
 
   useEffect(() => {
@@ -380,6 +382,42 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
           >
             {linkLabel}
           </a>
+        );
+      }
+
+      case FormatTypeColumn.USER_BY_HASH: {
+        const address = _.get(item, itemKey);
+        const value = fetchUserByWallet(address);
+        const truncateValue = `${truncate(address || '', {
+          maxCharacters: 8,
+        })}${(address ?? '').slice(-4)}`;
+
+        return (value?.data as any)?.data?.owner?.email ? (
+          <div>
+            <div className="pw-flex pw-items-center pw-gap-x-1">
+              <p>{truncateValue}</p>
+              {value && (
+                <button onClick={() => handleCopy(address)}>
+                  <CopyIcon className="pw-stroke-[#71b1ff]" />
+                </button>
+              )}
+            </div>
+            <p className="pw-text-xs pw-opacity-60">
+              {(value?.data as any)?.data?.owner?.email}
+            </p>
+            <p className="pw-text-xs pw-opacity-60">
+              {(value?.data as any)?.data?.owner?.name}
+            </p>
+          </div>
+        ) : (
+          <div className="pw-flex pw-items-center pw-gap-x-1">
+            <p>{truncateValue}</p>
+            {value && (
+              <button onClick={() => handleCopy(address)}>
+                <CopyIcon className="pw-stroke-[#71b1ff]" />
+              </button>
+            )}
+          </div>
         );
       }
 
