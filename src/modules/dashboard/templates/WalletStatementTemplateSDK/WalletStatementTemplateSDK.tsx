@@ -79,7 +79,7 @@ export const WalletStatementTemplateSDK = () => {
         <div className="pw-flex pw-justify-between">
           <div>
             <p className="pw-text-[23px] pw-font-[600]">
-              {translate('"wallet>page>extract"')}
+              {translate('wallet>page>extract')}
             </p>
             {!hideWallet ? (
               <p className="pw-text-[#777E8F] pw-text-xs">

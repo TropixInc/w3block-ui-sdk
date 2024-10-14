@@ -936,5 +936,6 @@
   "shared>inputCompletedAddress>enterPlaceNumber": "Digite o número do endereço",
   "shared>inputCompletedAddress>zipCode": "Código postal",
   "shared>inputCompletedAddress>enterCompliment": "Digite o complemento",
-  "shared>inputCompletedAddress>compliment": "Complemento"
+  "shared>inputCompletedAddress>compliment": "Complemento",
+  "shared>baseSelect>notFound": "Sem resultados"
  }

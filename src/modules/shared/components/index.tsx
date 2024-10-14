@@ -16,3 +16,5 @@ export * from './GenericTable';
 export * from './CardsListTemplate';
 export * from './PublicOrderTemplate';
 export * from './RequestsTemplate';
+export * from './Buttons';
+export * from './BaseSelect';
