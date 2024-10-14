@@ -17,6 +17,7 @@ export enum FormatTypeColumn {
   WALLET = 'wallet',
   LINK = 'link',
   LOCALDATEHOURTIME = 'localDateHourTime',
+  USER_BY_HASH = 'userByHash',
 }
 
 export enum FormatFilterType {
