@@ -12,6 +12,8 @@ export interface Option {
   value: string | any;
   icon?: ReactNode;
   disabled?: boolean;
+  image?: string;
+  subtitle?: string;
 }
 
 interface SearchUserProps {

@@ -26,6 +26,7 @@ export enum FormatFilterType {
   SEARCH = 'search',
   LOCALDATE = 'localDate',
   NUMBER = 'number',
+  WALLET = 'wallet',
 }
 
 export interface TableStylesClasses {

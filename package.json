@@ -38,6 +38,7 @@
     "@w3block/sdk-id": "^0.1.81",
     "axios": "^0.27.2",
     "card-validator": "^8.1.1",
+    "class-validator": "^0.14.1",
     "classnames": "^2.3.1",
     "cpf-cnpj-validator": "^1.0.3",
     "date-fns": "2.29.1",
@@ -67,6 +68,7 @@
     "react-webcam": "^7.0.1",
     "socket.io-client": "^4.6.1",
     "swiper": "^8.4.5",
+    "validator": "^13.12.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

@@ -11,7 +11,7 @@ export const useGetUserByWallet = () => {
   const fetchUserByWallet = (address: string): QueryObserverResult => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useQuery(
-      [PixwayAPIRoutes.TENANT_CONTEXT_BY_SLUG, tenantId, address],
+      [PixwayAPIRoutes.USER_BY_WALLET, tenantId, address],
       async () => {
         const sdk = await getSDK();
         return await sdk.api.users.findByAddress(tenantId, address, {

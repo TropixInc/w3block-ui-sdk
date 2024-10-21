@@ -20,6 +20,7 @@ import {
 import { DateFilter } from '../DateFilter/DateFilter';
 import { DynamicGenericFilter } from '../DynamicGenericFilter/DynamicGenericFilter';
 import { Option } from '../GenericSearchFilter/GenericSearchFilter';
+import { GenericWalletFilter } from '../GenericWalletFilter';
 import { MultipleSelect } from '../MultipleSelect';
 import NumberRange from '../NumberRange/NumberRange';
 
@@ -84,6 +85,7 @@ const SmartGenericFilter = ({
   const [selected, setSelected] = useState<string | undefined>('');
   const [searchSelectedItem, setSearchSelectedItem] = useState<string>();
   const [searchStaticValue, setSearchStaticValue] = useState<string>();
+  const [walletFilter, setWalletFilter] = useState('');
   const [translate] = useTranslation();
   const [multSelected, setMultSelected] = useState<Array<string> | undefined>(
     []
@@ -244,6 +246,29 @@ const SmartGenericFilter = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterTemplate, selected]);
 
+  console.log(filters, 'filters');
+
+  useEffect(() => {
+    if (FormatFilterType.WALLET) {
+      if (walletFilter) {
+        console.log(filterTemplate, 'filterTemplate');
+        console.log(itemKey, 'itemKey');
+        onChangeFilter &&
+          onChangeFilter({
+            ...filters,
+            [itemKey ?? '']: filterTemplate?.replace(
+              `{${itemKey}}`,
+              walletFilter ?? ''
+            ),
+          });
+
+        onCloseFilters(undefined);
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterTemplate, walletFilter]);
+
   useEffect(() => {
     if (FormatFilterType.SEARCH) {
       if (searchSelectedItem) {
@@ -392,6 +417,15 @@ const SmartGenericFilter = ({
               onChange={(e) => setSearchStaticValue(e.target.value)}
             />
           </div>
+        );
+      }
+      case FormatFilterType.WALLET: {
+        return (
+          <GenericWalletFilter
+            onChangeWallet={setWalletFilter}
+            wallet={walletFilter}
+            placeholder={filterPlaceholder}
+          />
         );
       }
       case FormatFilterType.NUMBER: {
