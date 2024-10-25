@@ -17,3 +17,4 @@ export * from './CardsListTemplate';
 export * from './PublicOrderTemplate';
 export * from './RequestsTemplate';
 export * from './GenericWalletFilter';
+export * from './BaseTabs';
