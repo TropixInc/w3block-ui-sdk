@@ -5,3 +5,4 @@ export * from './PassesList';
 export * from './PassesDetail';
 export * from './BenefitDetails';
 export * from './SharedOrder';
+export * from './ConfigTimeModal';

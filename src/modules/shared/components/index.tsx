@@ -18,3 +18,5 @@ export * from './PublicOrderTemplate';
 export * from './RequestsTemplate';
 export * from './Buttons';
 export * from './BaseSelect';
+export * from './GenericWalletFilter';
+export * from './BaseTabs';

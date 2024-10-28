@@ -345,8 +345,7 @@ export const CheckoutPayment = () => {
     if (
       isFree &&
       orderResponse == undefined &&
-      isCoinPayment &&
-      productCache?.totalPrice === ''
+      (productCache?.totalPrice === '' || productCache?.totalPrice === '0')
     ) {
       createOrder({});
     }
