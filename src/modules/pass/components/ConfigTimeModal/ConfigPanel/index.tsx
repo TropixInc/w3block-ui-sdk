@@ -39,8 +39,12 @@ export const ConfigPanel = ({
 
   const handleAddTime = () => {
     const newItem = { start: '', end: '' };
-    const updatedItems = [...panelItems, newItem];
-    onChangePanelItems(updatedItems);
+    if (panelItems?.length) {
+      const updatedItems = [...panelItems, newItem];
+      onChangePanelItems(updatedItems);
+    } else {
+      onChangePanelItems([newItem]);
+    }
   };
 
   const handleDeleteItem = (index: number) => {
@@ -51,10 +55,10 @@ export const ConfigPanel = ({
   return (
     <div className="pw-w-full pw-flex pw-flex-col pw-items-center pw-px-6 pw-mt-6">
       <p className="pw-text-lg pw-font-medium">{weekday[activeDay]}</p>
-      <p className="pw-text-sm pw-opacity-80">
+      <p className="pw-text-sm pw-opacity-80 pw-mb-2">
         {translate('pass>configPanel>configTimeForDay')}
       </p>
-      {panelItems.map((item, index: number) => (
+      {panelItems?.map((item, index: number) => (
         <TimeItem
           key={index}
           index={index}
