@@ -924,5 +924,6 @@
 "auth>confirmationKycWithoutLayout>generateOrder": "We are generating your order.",
 "checkout>checkoutCompletePayment>orderExpiredPleaseFormAgain": "This purchase order has expired, please submit the purchase intent form again",
 "checkout>checkoutForm>successApply": "successfully applied",
-"checkout>checkoutForm>successSendForm": "Your purchase form has been submitted successfully, please wait while we review the purchase order."
+"checkout>checkoutForm>successSendForm": "Your purchase form has been submitted successfully, please wait while we review the purchase order.",
+  "checkout>checkoutInfo>valueOfPay2": "Amount to buy"
 }
