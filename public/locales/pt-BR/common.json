@@ -952,5 +952,6 @@
   "loyalty>shared>loyaltyDescription": "Se em uso de programa de fidelidade, a descrição será exibida no extrato do usuário",
   "loyalty>shared>sucess": "As operações de mintagem e transferência de ERC-20 podem demorar de alguns minutos a até algumas horas para serem concluídas.",
   "contacts>clientsInterface>errorAlert": "Houve um erro ao resgatar seus contatos. Se o problema persistir, contate seu administrador.",
-  "shared>baseSelect>notFound": "Sem resultados"
+  "shared>baseSelect>notFound": "Sem resultados",
+  "checkout>checkoutInfo>valueOfPay2": "Valor para comprar"
  }
