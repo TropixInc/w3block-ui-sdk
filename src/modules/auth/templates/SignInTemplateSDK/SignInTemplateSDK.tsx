@@ -73,6 +73,7 @@ export const SignInTemplateSDK = ({
     return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
+  const hasSignUpTheme = context?.defaultTheme?.header?.styleData?.hasSignUp;
 
   return (
     <TranslatableComponent>
@@ -92,7 +93,7 @@ export const SignInTemplateSDK = ({
           infoComponent={
             <Box>
               <SigInWithoutLayout
-                hasSignUp={hasSignUp}
+                hasSignUp={hasSignUpTheme ?? hasSignUp}
                 defaultRedirectRoute={defaultRedirectRoute}
               ></SigInWithoutLayout>
             </Box>

@@ -289,45 +289,47 @@ export const SigInWithoutLayout = ({
               {translate('loginPage>formSubmitButton>signIn')}
             </AuthButton>
             {hasSignUp ? (
-              <p className="pw-text-[13px] pw-font-normal pw-leading-5 pw-text-[#383857] pw-text-center">
-                <Trans i18nKey={'auth>signIn>signUpCTA'}>
-                  Não tem conta ainda?
-                  <a
-                    href={router.routerToHref(
-                      PixwayAppRoutes.SIGN_UP + '?' + queryString
-                    )}
-                    className="pw-text-brand-primary pw-underline"
-                  >
-                    Cadastre-se.
-                  </a>
-                </Trans>
-              </p>
-            ) : null}
-            {haveGoogleSignIn ? (
-              <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
-                {googleError ? (
-                  <Alert variant="warning">
-                    {translate('auth>signWithoutLayout>notRegistration')}
-                  </Alert>
-                ) : (
-                  <>
-                    <p className="pw-text-black">
-                      {translate('auth>metamaskAppErrorModal>or')}
-                    </p>
+              <>
+                <p className="pw-text-[13px] pw-font-normal pw-leading-5 pw-text-[#383857] pw-text-center">
+                  <Trans i18nKey={'auth>signIn>signUpCTA'}>
+                    Não tem conta ainda?
                     <a
-                      className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
-                      href={googleLink}
+                      href={router.routerToHref(
+                        PixwayAppRoutes.SIGN_UP + '?' + queryString
+                      )}
+                      className="pw-text-brand-primary pw-underline"
                     >
-                      <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
-                        <GoogleIcon />
-                      </div>
-                      <span>
-                        {translate('auth>signWithoutLayout>signGoogle')}
-                      </span>
+                      Cadastre-se.
                     </a>
-                  </>
-                )}
-              </div>
+                  </Trans>
+                </p>
+                {haveGoogleSignIn ? (
+                  <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
+                    {googleError ? (
+                      <Alert variant="warning">
+                        {translate('auth>signWithoutLayout>notRegistration')}
+                      </Alert>
+                    ) : (
+                      <>
+                        <p className="pw-text-black">
+                          {translate('auth>metamaskAppErrorModal>or')}
+                        </p>
+                        <a
+                          className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
+                          href={googleLink}
+                        >
+                          <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
+                            <GoogleIcon />
+                          </div>
+                          <span>
+                            {translate('auth>signWithoutLayout>signGoogle')}
+                          </span>
+                        </a>
+                      </>
+                    )}
+                  </div>
+                ) : null}
+              </>
             ) : null}
           </div>
           <AuthFooter />
