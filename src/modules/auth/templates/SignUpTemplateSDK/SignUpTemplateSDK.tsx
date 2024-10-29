@@ -89,6 +89,7 @@ export const SignUpTemplateSDK = ({
     return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
+  const hasSignUpTheme = context?.defaultTheme?.header?.styleData?.hasSignUp;
   return (
     <TranslatableComponent>
       <div
@@ -112,7 +113,7 @@ export const SignUpTemplateSDK = ({
                 email={email}
                 onSubmit={onSubmit}
                 isLoading={isLoading}
-                hasSignUp={hasSignUp}
+                hasSignUp={hasSignUpTheme ?? hasSignUp}
                 error={error}
                 privacyRedirect={style?.privacyPolicy ?? privacyRedirect}
                 termsRedirect={style?.termsOfUse ?? termsRedirect}
