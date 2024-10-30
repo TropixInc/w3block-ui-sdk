@@ -523,7 +523,15 @@ const _CheckoutInfo = ({
           });
       setProductCache({
         payments: orderPreview.payments,
-        products: orderPreview.products,
+        products:
+          orderPreview.products.length == 1
+            ? [
+                {
+                  ...orderPreview.products?.[0],
+                  quantity: paymentAmount ?? '1',
+                },
+              ]
+            : orderPreview.products,
         orderProducts,
         currencyId: currencyIdState || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
@@ -1237,9 +1245,8 @@ const _CheckoutInfo = ({
         <IMaskInput
           inputMode="numeric"
           type="number"
-          mask={Number}
+          mask={/^\d+$/}
           radix="."
-          scale={0}
           value={paymentAmount}
           onAccept={(e) => changeValue(e)}
           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
@@ -1313,7 +1320,7 @@ const _CheckoutInfo = ({
                     }}
                   />
                 )}
-                <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2 pw-font-poppins">
+                <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2">
                   {isErc20 && !isCoinPayment
                     ? translate('checkout>checkoutInfo>valueOfPay2') +
                       ' ' +

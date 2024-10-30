@@ -60,6 +60,9 @@ export const CheckouResume = ({
           <ProductInfo
             className="pw-bg-white pw-rounded-lg pw-border pw-border-slate-200"
             key={product?.id}
+            quantity={
+              product?.quantity ? parseFloat(product?.quantity) : undefined
+            }
             image={product?.images[0]?.thumb}
             name={product?.name}
             id={product?.id}
@@ -91,6 +94,7 @@ export const CheckouResume = ({
                 ?.anchorCurrency?.symbol ?? ''
             }
             metadata={product?.metadata}
+            disableQuantity
           />
         ))
       ) : (

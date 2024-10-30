@@ -52,6 +52,7 @@ export interface Product {
   };
   currencyAmount?: string;
   originalCurrencyAmount?: string;
+  quantity?: string;
 }
 
 export interface Images {
