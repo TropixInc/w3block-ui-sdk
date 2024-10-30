@@ -971,5 +971,6 @@
   "pass>configTimeModal>sunday": "Domingo",
   "pass>timeItem>start": "Inicio",
   "pass>timeItem>end": "Fim",
-  "pass>configPanel>addTime": "Adicionar periodo"
+  "pass>configPanel>addTime": "Adicionar periodo",
+  "checkout>checkoutInfo>valueOfPay2": "Quantidade de"
  }

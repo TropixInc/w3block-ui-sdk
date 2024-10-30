@@ -1,8 +1,18 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable i18next/no-literal-string */
 /* eslint-disable i18next/no-literal-string */
-import { lazy, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  lazy,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useTranslation } from 'react-i18next';
+import { IMaskInput } from 'react-imask';
 import {
   useCopyToClipboard,
   useDebounce,
@@ -185,7 +195,7 @@ const _CheckoutInfo = ({
       ? utms.utm_campaign
       : ''
   );
-
+  const isErc20 = orderPreview?.products?.[0]?.type === 'erc20';
   const { companyId } = useCompanyConfig();
   const [isCopied, setIsCopied] = useState(false);
   const [__, copyToClipboard] = useCopyToClipboard();
@@ -498,10 +508,11 @@ const _CheckoutInfo = ({
               : {
                   quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                   productId: pID.id,
-                  expectedPrice:
-                    pID.prices.find(
-                      (price) => price.currencyId == currencyIdState
-                    )?.amount ?? '0',
+                  expectedPrice: isErc20
+                    ? orderPreview?.totalPrice ?? '0'
+                    : pID.prices.find(
+                        (price) => price.currencyId == currencyIdState
+                      )?.amount ?? '0',
                   variantIds: productVariants
                     ? Object.values(productVariants).map((value) => {
                         if ((value as any).productId === pID.id)
@@ -512,7 +523,15 @@ const _CheckoutInfo = ({
           });
       setProductCache({
         payments: orderPreview.payments,
-        products: orderPreview.products,
+        products:
+          orderPreview.products.length == 1
+            ? [
+                {
+                  ...orderPreview.products?.[0],
+                  quantity: paymentAmount ?? '1',
+                },
+              ]
+            : orderPreview.products,
         orderProducts,
         currencyId: currencyIdState || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
@@ -1166,41 +1185,103 @@ const _CheckoutInfo = ({
       );
   };
 
-  const changeValue = (value: string) => {
-    setPaymentAmount(value as string);
-    if (automaxLoyalty) {
-      if (
-        organizedLoyalties &&
-        organizedLoyalties?.length > 0 &&
-        organizedLoyalties?.some(
-          (wallet) =>
-            wallet?.type == 'loyalty' &&
-            wallet?.balance &&
-            parseFloat(wallet?.balance ?? '0') > 0
-        )
-      ) {
-        const balance = parseFloat(
-          organizedLoyalties.find(
+  const changeValue = useCallback(
+    (value: string) => {
+      setPaymentAmount(value as string);
+      if (automaxLoyalty) {
+        if (
+          organizedLoyalties &&
+          organizedLoyalties?.length > 0 &&
+          organizedLoyalties?.some(
             (wallet) =>
               wallet?.type == 'loyalty' &&
               wallet?.balance &&
               parseFloat(wallet?.balance ?? '0') > 0
-          )?.balance ?? '0'
-        );
-        if (balance < parseFloat(value))
-          setCoinAmountPayment(balance.toFixed(2));
-        else if (balance > parseFloat(value) || balance == parseFloat(value))
-          setCoinAmountPayment(value);
-      } else setCoinAmountPayment('');
+          )
+        ) {
+          const balance = parseFloat(
+            organizedLoyalties.find(
+              (wallet) =>
+                wallet?.type == 'loyalty' &&
+                wallet?.balance &&
+                parseFloat(wallet?.balance ?? '0') > 0
+            )?.balance ?? '0'
+          );
+          if (balance < parseFloat(value))
+            setCoinAmountPayment(balance.toFixed(2));
+          else if (balance > parseFloat(value) || balance == parseFloat(value))
+            setCoinAmountPayment(value);
+        } else setCoinAmountPayment('');
+      }
+    },
+    [automaxLoyalty, organizedLoyalties]
+  );
+
+  const decimals = (orderPreview?.products?.[0] as any)?.requirements
+    ?.erc20Decimals;
+  const erc20decimals = useMemo(() => {
+    if (decimals === undefined) return 'currencyMask';
+    if (decimals === 0) return 'integer';
+    if (decimals === 1 || decimals >= 3) return 'decimal';
+    else return 'currencyMask';
+  }, [decimals]);
+
+  const Erc20Input = useMemo(() => {
+    if (erc20decimals === 'decimal') {
+      return (
+        <IMaskInput
+          inputMode="numeric"
+          radix="."
+          mask={Number}
+          scale={decimals}
+          value={paymentAmount}
+          onAccept={(e) => changeValue(e)}
+          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
+          placeholder={'0.0'}
+        />
+      );
+    } else if (erc20decimals === 'integer') {
+      return (
+        <IMaskInput
+          inputMode="numeric"
+          type="number"
+          mask={/^\d+$/}
+          radix="."
+          value={paymentAmount}
+          onAccept={(e) => changeValue(e)}
+          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
+          placeholder={'0'}
+        />
+      );
+    } else {
+      return (
+        <CurrencyInput
+          onChangeValue={(_, value) => {
+            if (value) {
+              changeValue(value as string);
+            }
+          }}
+          value={paymentAmount}
+          hideSymbol={isErc20 && !isCoinPayment}
+          InputElement={
+            <input
+              inputMode="numeric"
+              className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
+              placeholder={isErc20 && !isCoinPayment ? '0.00' : 'R$ 0,00'}
+            />
+          }
+        />
+      );
     }
-  };
+  }, [changeValue, erc20decimals, isCoinPayment, isErc20, paymentAmount]);
+
   const locale = useLocale();
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
       case CheckoutStatus.CONFIRMATION:
         return (
           <>
-            {!isCoinPayment && (
+            {!isCoinPayment && !isErc20 && (
               <PriceAndGasInfo
                 payments={orderPreview?.payments}
                 name={
@@ -1214,9 +1295,9 @@ const _CheckoutInfo = ({
                 className="pw-mt-4"
               />
             )}
-            {isCoinPayment && (
+            {(isCoinPayment || isErc20) && (
               <>
-                {datasource?.master?.data && (
+                {datasource?.master?.data && destinationUser && (
                   <Selector
                     disabled={!editableDestination}
                     data={datasource?.master?.data}
@@ -1239,27 +1320,15 @@ const _CheckoutInfo = ({
                     }}
                   />
                 )}
-                <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2 pw-font-poppins">
-                  {translate('checkout>checkoutInfo>valueOfPay')}
+                <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2">
+                  {isErc20 && !isCoinPayment
+                    ? translate('checkout>checkoutInfo>valueOfPay2') +
+                      ' ' +
+                      orderPreview?.products?.[0]?.name
+                    : translate('checkout>checkoutInfo>valueOfPay')}
                 </p>
                 <div className="pw-mb-8">
-                  <div className="pw-flex pw-gap-3">
-                    <CurrencyInput
-                      onChangeValue={(_, value) => {
-                        if (value) {
-                          changeValue(value as string);
-                        }
-                      }}
-                      value={paymentAmount}
-                      InputElement={
-                        <input
-                          inputMode="numeric"
-                          className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
-                          placeholder="R$ 0,0"
-                        />
-                      }
-                    />
-                  </div>
+                  <div className="pw-flex pw-gap-3">{Erc20Input}</div>
                   {automaxLoyalty ? (
                     <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2 pw-font-poppins">
                       {translate('wallet>page>balance')} Zucas:{' '}
@@ -1302,7 +1371,8 @@ const _CheckoutInfo = ({
                   ) : null}
                 </div>
                 {paymentAmount === '' ||
-                parseFloat(paymentAmount) === 0 ? null : (
+                parseFloat(paymentAmount) === 0 ||
+                !isCoinPayment ? null : (
                   <CoinPaymentResume
                     payments={orderPreview?.payments}
                     loading={isLoading || isLoadingPreview}
@@ -1349,6 +1419,20 @@ const _CheckoutInfo = ({
                     )}
                 </div>
               </>
+            )}
+            {!isCoinPayment && isErc20 && (
+              <PriceAndGasInfo
+                payments={orderPreview?.payments}
+                name={
+                  orderPreview?.products && orderPreview?.products?.length
+                    ? orderPreview?.products[0]?.prices.find(
+                        (price) => price?.currency?.id == currencyIdState
+                      )?.currency?.name
+                    : 'BRL'
+                }
+                loading={isLoading || isLoadingPreview}
+                className="pw-my-4"
+              />
             )}
             {parseFloat(
               orderPreview?.payments?.filter(
@@ -1656,6 +1740,8 @@ const _CheckoutInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     orderPreview,
+    erc20decimals,
+    decimals,
     choosedPayment,
     currencyIdState,
     isLoadingPreview,
@@ -1703,6 +1789,7 @@ const _CheckoutInfo = ({
         <div className="pw-w-full lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
           {isCoinPayment ||
           productCache?.isCoinPayment ||
+          isErc20 ||
           orderResponse?.passShareCodeInfo ? null : (
             <>
               <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
@@ -1721,6 +1808,7 @@ const _CheckoutInfo = ({
 
           {isCoinPayment ||
           productCache?.isCoinPayment ||
+          isErc20 ||
           orderResponse?.passShareCodeInfo ? null : (
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
               {differentProducts.map((prod, index) => (

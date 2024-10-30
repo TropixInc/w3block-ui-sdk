@@ -329,7 +329,7 @@ export const ProductInfo = ({
                 ) : (
                   currency
                 )}
-                {price}
+                {parseFloat(price).toFixed(2).replace('.', ',')}
               </p>
             )}
           </div>
@@ -380,41 +380,47 @@ export const ProductInfo = ({
                   </p>
                 )}
 
-                <input
-                  type="number"
-                  id={`quantityValue${index}`}
-                  disabled={loading || loadingPreview || disableQuantity}
-                  value={qnt}
-                  onChange={() => {
-                    const inputValue = parseFloat(
-                      (
-                        document.getElementById(
-                          'quantityValue' + index
-                        ) as HTMLInputElement
-                      ).value
-                    );
-                    if (canPurchaseAmount && inputValue > canPurchaseAmount) {
-                      setError(
-                        `Limite máximo de ${canPurchaseAmount} unidades`
+                {disableQuantity ? (
+                  <p className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center pw-w-[30px]">
+                    x{qnt}
+                  </p>
+                ) : (
+                  <input
+                    type="number"
+                    id={`quantityValue${index}`}
+                    disabled={loading || loadingPreview || disableQuantity}
+                    value={qnt}
+                    onChange={() => {
+                      const inputValue = parseFloat(
+                        (
+                          document.getElementById(
+                            'quantityValue' + index
+                          ) as HTMLInputElement
+                        ).value
                       );
-                      setQnt(canPurchaseAmount);
-                      changeQuantity?.(
-                        null,
-                        id,
-                        variants ?? [],
-                        canPurchaseAmount
-                      );
-                    } else if (inputValue > 0) {
-                      setError('');
-                      setQnt(inputValue);
-                      changeQuantity?.(null, id, variants ?? [], inputValue);
-                    } else if (inputValue < 1) {
-                      setQnt(1);
-                      changeQuantity?.(null, id, variants ?? [], 1);
-                    }
-                  }}
-                  className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center pw-w-[30px]"
-                ></input>
+                      if (canPurchaseAmount && inputValue > canPurchaseAmount) {
+                        setError(
+                          `Limite máximo de ${canPurchaseAmount} unidades`
+                        );
+                        setQnt(canPurchaseAmount);
+                        changeQuantity?.(
+                          null,
+                          id,
+                          variants ?? [],
+                          canPurchaseAmount
+                        );
+                      } else if (inputValue > 0) {
+                        setError('');
+                        setQnt(inputValue);
+                        changeQuantity?.(null, id, variants ?? [], inputValue);
+                      } else if (inputValue < 1) {
+                        setQnt(1);
+                        changeQuantity?.(null, id, variants ?? [], 1);
+                      }
+                    }}
+                    className="pw-text-sm pw-font-[600] pw-text-[#353945] pw-text-center pw-w-[30px]"
+                  ></input>
+                )}
               </div>
 
               {status == CheckoutStatus.CONFIRMATION && !disableQuantity && (
