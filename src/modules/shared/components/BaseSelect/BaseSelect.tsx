@@ -127,8 +127,8 @@ const MultipleSelect = ({
         as="div"
         className={`pw-relative pw-w-full ${
           disabled
-            ? '!pw-bg-white'
-            : 'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#94B8ED] pw-outline-1'
+            ? '!pw-bg-[#E9ECEF] !pw-outline-[#CED4DA]'
+            : 'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#CED4DA] focus:pw-outline-[#6EA8FE] focus:pw-shadow-[4px_#6EA8FE] pw-outline-1'
         }`}
         value={value}
         disabled={disabled}
@@ -193,11 +193,11 @@ const MultipleSelect = ({
                               'pw-w-[16px] pw-h-[16px] pw-border pw-rounded-[4px] pw-shrink-0',
                               disabled
                                 ? 'pw-border-[#D1D1D1]'
-                                : 'pw-border-[#94B8ED]'
+                                : 'pw-border-[#CED4DA]'
                             )}
                           >
                             {selected && (
-                              <CheckBoxIcon className="pw-w-[16px] pw-h-[16px] pw-stroke-[#94B8ED] pw-shrink-0" />
+                              <CheckBoxIcon className="pw-w-[16px] pw-h-[16px] pw-stroke-[#CED4DA] pw-shrink-0" />
                             )}
                           </div>
                           <div className="pw-text-left pw-flex pw-items-center pw-gap-2">
@@ -266,8 +266,8 @@ const SearchSelect = ({
         <div
           className={`pw-relative pw-w-full ${
             disabled
-              ? '!pw-bg-white'
-              : `${classes.root} pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#94B8ED] pw-outline-1`
+              ? '!pw-bg-[#E9ECEF] pw-outline-[#CED4DA]'
+              : `${classes.root} pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#CED4DA] focus:pw-outline-[#6EA8FE] focus:pw-shadow-[4px_#6EA8FE] pw-outline-1`
           }`}
         >
           <Combobox.Button
@@ -382,8 +382,8 @@ const SimpleSelect = ({
         as="div"
         className={`pw-relative pw-w-full ${
           disabled
-            ? '!pw-bg-white'
-            : 'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#94B8ED] pw-outline-1'
+            ? '!pw-bg-[#E9ECEF] pw-outline-[#CED4DA]'
+            : 'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 pw-outline-[#CED4DA] focus:pw-outline-[#6EA8FE] focus:pw-shadow-[4px_#6EA8FE] pw-outline-1'
         }`}
         value={value}
         disabled={disabled}
