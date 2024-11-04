@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
+import classNames from 'classnames';
+
 import DeleteIcon from '../../../../../shared/assets/icons/x-circle.svg?react';
 import LabelWithRequired from '../../../../../shared/components/LabelWithRequired';
 
@@ -12,6 +14,7 @@ interface TimeItemProps {
     newItem: { start: string; end: string }
   ) => void;
   onDeleteItem: (index: number) => void;
+  isChangePanelItems?: boolean;
 }
 
 export const TimeItem = ({
@@ -20,6 +23,7 @@ export const TimeItem = ({
   end,
   onUpdateItem,
   onDeleteItem,
+  isChangePanelItems = true,
 }: TimeItemProps) => {
   const [translate] = useTranslation();
 
@@ -50,25 +54,39 @@ export const TimeItem = ({
           {translate('pass>timeItem>start')}
         </LabelWithRequired>
         <input
-          className="!pw-outline-none !pw-text-[#969696] pw-w-full pw-border pw-px-4 pw-rounded-lg pw-border-[#94B8ED] !pw-h-[48px] !pw-text-sm !pw-leading-4 !pw-bg-transparent pw-mb-2"
+          className={classNames(
+            '!pw-outline-none  pw-w-full  pw-rounded-lg  !pw-text-sm !pw-leading-4 !pw-bg-transparent pw-mb-2',
+            isChangePanelItems
+              ? 'pw-border-[#94B8ED] pw-border pw-px-4 !pw-h-[48px] !pw-text-[#969696]'
+              : 'pw-border-none pw-text-slate-700'
+          )}
           type="time"
           value={start}
+          disabled={!isChangePanelItems}
           onChange={handleStartChange}
         />
       </div>
       <div className="pw-w-full">
         <LabelWithRequired>{translate('pass>timeItem>end')}</LabelWithRequired>
         <input
-          className="!pw-outline-none !pw-text-[#969696] pw-w-full pw-border pw-px-4 pw-rounded-lg pw-border-[#94B8ED] !pw-h-[48px] !pw-text-sm !pw-leading-4 !pw-bg-transparent pw-mb-2"
+          className={classNames(
+            '!pw-outline-none  pw-w-full  pw-rounded-lg !pw-text-sm !pw-leading-4 !pw-bg-transparent pw-mb-2',
+            isChangePanelItems
+              ? 'pw-border-[#94B8ED] pw-border pw-px-4 !pw-h-[48px] !pw-text-[#969696]'
+              : 'pw-border-none pw-text-slate-700'
+          )}
           type="time"
           min={start}
+          disabled={!isChangePanelItems}
           value={end}
           onChange={handleEndChange}
         />
       </div>
-      <button onClick={() => onDeleteItem(index)}>
-        <DeleteIcon className="pw-w-5 pw-h-5 pw-stroke-red-500" />
-      </button>
+      {isChangePanelItems ? (
+        <button onClick={() => onDeleteItem(index)}>
+          <DeleteIcon className="pw-w-5 pw-h-5 pw-stroke-red-500" />
+        </button>
+      ) : null}
     </div>
   );
 };

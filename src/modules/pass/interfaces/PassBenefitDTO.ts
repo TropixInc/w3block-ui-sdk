@@ -28,6 +28,7 @@ export interface PassBenefitDTO {
   tokenPassId: string;
   status: BenefitStatus;
   allowSelfUse: boolean;
+  linkRules?: string;
   tokenPassBenefitAddresses?: BenefitAddress[];
 }
 

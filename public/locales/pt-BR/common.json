@@ -971,5 +971,14 @@
   "pass>configTimeModal>sunday": "Domingo",
   "pass>timeItem>start": "Inicio",
   "pass>timeItem>end": "Fim",
-  "pass>configPanel>addTime": "Adicionar periodo"
+  "pass>configPanel>addTime": "Adicionar periodo",
+  "pass>configPanel>timeNotFound": "Não há horários disponíveis para o beneficio nesse dia",
+  "constructor>passBenefit>limitUsages": "Limite de uso",
+  "constructor>passBenefit>indeterminate": "Indeterminado",
+  "constructor>passBenefit>eventStartAt": "Válido a partir de",
+  "constructor>passBenefit>eventEndAt": "Válido até",
+  "constructor>passBenefit>linkUrl": "Link com detalhes",
+  "constructor>passBenefit>detailsRules": "Regras detalhadas",
+  "constructor>passBenefit>avaliableTime": "Horários disponíveis"
+
  }
