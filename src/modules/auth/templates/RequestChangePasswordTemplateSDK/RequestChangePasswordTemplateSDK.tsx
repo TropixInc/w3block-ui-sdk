@@ -43,6 +43,7 @@ export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
     return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
+  const hasSignUpTheme = context?.defaultTheme?.header?.styleData?.hasSignUp;
   return (
     <TranslatableComponent>
       <div
@@ -64,7 +65,9 @@ export const RequestChangePasswordTemplateSDK = (props: AllAuthPageProps) => {
           extraBy={props.extraBy}
           infoComponent={
             <Box>
-              <RequestPasswordChangeWithoutLayout hasSignUp={props.hasSignUp} />
+              <RequestPasswordChangeWithoutLayout
+                hasSignUp={hasSignUpTheme ?? props.hasSignUp}
+              />
             </Box>
           }
         />

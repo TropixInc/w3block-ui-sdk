@@ -980,5 +980,5 @@
   "constructor>passBenefit>linkUrl": "Link com detalhes",
   "constructor>passBenefit>detailsRules": "Regras detalhadas",
   "constructor>passBenefit>avaliableTime": "Horários disponíveis",
-  "checkout>checkoutInfo>valueOfPay2": "Valor para comprar"
+  "checkout>checkoutInfo>valueOfPay2": "Quantidade de"
  }

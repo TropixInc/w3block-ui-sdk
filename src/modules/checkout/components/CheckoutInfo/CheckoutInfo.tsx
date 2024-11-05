@@ -523,7 +523,15 @@ const _CheckoutInfo = ({
           });
       setProductCache({
         payments: orderPreview.payments,
-        products: orderPreview.products,
+        products:
+          orderPreview.products.length == 1
+            ? [
+                {
+                  ...orderPreview.products?.[0],
+                  quantity: paymentAmount ?? '1',
+                },
+              ]
+            : orderPreview.products,
         orderProducts,
         currencyId: currencyIdState || '',
         signedGasFee: orderPreview?.gasFee?.signature || '',
@@ -1214,7 +1222,7 @@ const _CheckoutInfo = ({
   const erc20decimals = useMemo(() => {
     if (decimals === undefined) return 'currencyMask';
     if (decimals === 0) return 'integer';
-    if (decimals === 1 || decimals === 3) return 'decimal';
+    if (decimals === 1 || decimals >= 3) return 'decimal';
     else return 'currencyMask';
   }, [decimals]);
 
@@ -1224,7 +1232,8 @@ const _CheckoutInfo = ({
         <IMaskInput
           inputMode="numeric"
           radix="."
-          mask={/^[0-9.]*$/}
+          mask={Number}
+          scale={decimals}
           value={paymentAmount}
           onAccept={(e) => changeValue(e)}
           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
@@ -1236,9 +1245,8 @@ const _CheckoutInfo = ({
         <IMaskInput
           inputMode="numeric"
           type="number"
+          mask={/^\d+$/}
           radix="."
-          unmask
-          mask={Number}
           value={paymentAmount}
           onAccept={(e) => changeValue(e)}
           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
@@ -1312,9 +1320,11 @@ const _CheckoutInfo = ({
                     }}
                   />
                 )}
-                <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2 pw-font-poppins">
+                <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2">
                   {isErc20 && !isCoinPayment
-                    ? translate('checkout>checkoutInfo>valueOfPay2')
+                    ? translate('checkout>checkoutInfo>valueOfPay2') +
+                      ' ' +
+                      orderPreview?.products?.[0]?.name
                     : translate('checkout>checkoutInfo>valueOfPay')}
                 </p>
                 <div className="pw-mb-8">
