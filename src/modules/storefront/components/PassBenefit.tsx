@@ -6,6 +6,7 @@ import useGetPassBenefitById from '../../pass/hooks/useGetPassBenefitById';
 import useGetPassById from '../../pass/hooks/useGetPassById';
 import LabelWithRequired from '../../shared/components/LabelWithRequired';
 import { Spinner } from '../../shared/components/Spinner';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { PassBenefitData } from '../interfaces';
 
 interface PassBenefitProps {
@@ -32,11 +33,15 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
     avaliableTime,
   } = data.styleData;
 
+  const { text: benefitIdDynamic } = useDynamicString(benefitId);
+
+  console.log(benefitIdDynamic, 'benefitIdDynamic');
+
   const {
     data: benefit,
     isSuccess: isBenefitSucceed,
     isLoading: isLoadingBenefit,
-  } = useGetPassBenefitById(benefitId ?? '');
+  } = useGetPassBenefitById(benefitIdDynamic ?? '');
 
   const { data: tokenPass } = useGetPassById(benefit?.data?.tokenPassId ?? '');
 
@@ -57,6 +62,14 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
           </p>
         ) : null}
 
+        {collectionImage && tokenPass?.data?.imageUrl ? (
+          <img
+            className="pw-mt-2 pw-rounded-lg pw-w-full"
+            src={tokenPass?.data?.imageUrl}
+            alt=""
+          />
+        ) : null}
+
         {passName && tokenPass?.data?.name ? (
           <div className="pw-flex pw-gap-x-2 pw-items-center">
             <LabelWithRequired>
@@ -68,31 +81,28 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
           </div>
         ) : null}
         {passDescription && tokenPass?.data?.description ? (
-          <div className="pw-flex pw-gap-x-2 pw-items-center">
+          <div className="">
             <LabelWithRequired>
               <span className="pw-text-base">
                 {translate('commerce>productPage>description')}
               </span>
             </LabelWithRequired>
-            <p className="pw-text-slate-700">{tokenPass?.data?.description}</p>
+            <p className="pw-text-slate-700 pw-mt-1">
+              {tokenPass?.data?.description}
+            </p>
           </div>
         ) : null}
         {passRules && tokenPass?.data?.rules ? (
-          <div className="pw-flex pw-gap-x-2 pw-items-center">
+          <div className="">
             <LabelWithRequired>
               <span className="pw-text-base">
                 {translate('token>pass>rules')}
               </span>
             </LabelWithRequired>
-            <p className="pw-text-slate-700">{tokenPass?.data?.rules}</p>
+            <p className="pw-text-slate-700 pw-mt-1">
+              {tokenPass?.data?.rules}
+            </p>
           </div>
-        ) : null}
-        {collectionImage && tokenPass?.data?.imageUrl ? (
-          <img
-            className="pw-mt-2 pw-rounded-lg"
-            src={tokenPass?.data?.imageUrl}
-            alt=""
-          />
         ) : null}
       </div>
       {isLoadingBenefit ? <Spinner /> : null}
@@ -105,24 +115,28 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
           ) : null}
 
           {benefitDescription && benefit?.data?.description ? (
-            <div className="pw-flex pw-gap-x-2 pw-items-center">
+            <div className="">
               <LabelWithRequired>
                 <span className="pw-text-base">
                   {translate('commerce>productPage>description')}
                 </span>
               </LabelWithRequired>
-              <p className="pw-text-slate-700">{benefit?.data?.description}</p>
+              <p className="pw-text-slate-700 pw-mt-1">
+                {benefit?.data?.description}
+              </p>
             </div>
           ) : null}
 
           {benefitRules && benefit?.data?.rules ? (
-            <div className="pw-flex pw-gap-x-2 pw-items-center">
+            <div className="">
               <LabelWithRequired>
                 <span className="pw-text-base">
                   {translate('token>pass>rules')}
                 </span>
               </LabelWithRequired>
-              <p className="pw-text-slate-700">{benefit?.data?.rules}</p>
+              <p className="pw-text-slate-700 pw-mt-1">
+                {benefit?.data?.rules}
+              </p>
             </div>
           ) : null}
 
