@@ -41,11 +41,11 @@ export const getButtonClassNames = ({
 }: GetButtonClassNameArgs) => {
   return classNames(
     className,
-    'pw-flex pw-items-center pw-justify-center pw-text-center pw-rounded-[8px] pw-font-[400] pw-p-[6px_12px]',
+    'pw-flex pw-items-center pw-justify-center pw-text-center pw-rounded-[8px] pw-font-[400] pw-p-[6px_18px]',
     fullWidth ? '!pw-w-full !pw-max-w-full' : '',
-    size === 'large' && 'pw-text-lg pw-h-[46px] pw-max-w-[179px]',
-    size === 'medium' && 'pw-text-base pw-h-[36px] pw-max-w-[155px]',
-    size === 'small' && 'pw-text-sm pw-h-[26px] pw-max-w-[141px]',
+    size === 'large' && 'pw-text-lg pw-h-[48px]',
+    size === 'medium' && 'pw-text-base pw-h-[32px]',
+    size === 'small' && 'pw-text-sm pw-h-[24px]',
     variantType === 'primary' &&
       'pw-bg-[#0050FF] hover:pw-bg-[#0034A3] disabled:pw-opacity-[65%]',
     variantType === 'secondary' &&
@@ -69,7 +69,7 @@ export const getButtonClassNames = ({
 export const BaseButton = ({
   className = '',
   type = 'button',
-  size = 'large',
+  size = 'medium',
   children,
   fullWidth = false,
   variant = 'filled',

@@ -7,7 +7,7 @@ import { useClickAway, useDebounce } from 'react-use';
 
 import _ from 'lodash';
 
-import { FormItemContainer } from '../../../Form/FormItemContainer';
+import { BaseInput } from '../../../BaseInput';
 import LabelWithRequired from '../../../LabelWithRequired';
 import { InputError } from '../../../SmartInputsController';
 import InputStatus from '../../InputStatus';
@@ -242,14 +242,15 @@ const CityAutoComplete = ({
         {inputLabel ?? translate('shared>cityAutoComplete>city')}
       </LabelWithRequired>
 
-      <FormItemContainer
+      <BaseInput
         disableClasses={readonly}
         invalid={fieldState.invalid}
-        className="pw-p-[0.6rem]"
+        valid={!!field?.value && !fieldState.invalid}
+        disabled={readonly}
       >
         <input
           type="text"
-          className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+          className={`pw-w-full pw-h-full focus:pw-outline-none`}
           value={inputValue}
           placeholder={
             inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
@@ -262,7 +263,7 @@ const CityAutoComplete = ({
             resolveInput();
           }}
         />
-      </FormItemContainer>
+      </BaseInput>
       {showOptions ? (
         <div
           ref={divRef}
@@ -314,14 +315,15 @@ const CityAutoComplete = ({
               {translate('shared>inputCompletedAddress>enterPlaceNumber')}
             </LabelWithRequired>
 
-            <FormItemContainer
+            <BaseInput
               disableClasses={readonly}
               invalid={fieldState.invalid}
-              className="pw-p-[0.6rem]"
+              valid={!!field?.value && !fieldState.invalid}
+              disabled={readonly}
             >
               <input
                 type="text"
-                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+                className={`pw-w-full pw-h-full focus:pw-outline-none`}
                 value={placeNumber}
                 placeholder={translate(
                   'shared>inputCompletedAddress>enterPlaceNumber'
@@ -329,20 +331,21 @@ const CityAutoComplete = ({
                 onChange={(e) => setPlaceNumber(e.target.value)}
                 readOnly={readonly}
               />
-            </FormItemContainer>
+            </BaseInput>
           </div>
           <div className="pw-flex-1">
             <LabelWithRequired haveColon={false}>
               {translate('shared>inputCompletedAddress>enterCompliment')}
             </LabelWithRequired>
-            <FormItemContainer
+            <BaseInput
               disableClasses={readonly}
               invalid={fieldState.invalid}
-              className="pw-p-[0.6rem]"
+              valid={!!field?.value && !fieldState.invalid}
+              disabled={readonly}
             >
               <input
                 type="text"
-                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+                className={`pw-w-full pw-h-full focus:pw-outline-none`}
                 value={placeCompliment}
                 placeholder={translate(
                   'shared>inputCompletedAddress>compliment'
@@ -350,7 +353,7 @@ const CityAutoComplete = ({
                 onChange={(e) => setPlaceCompliment(e.target.value)}
                 readOnly={readonly}
               />
-            </FormItemContainer>
+            </BaseInput>
           </div>
         </div>
       ) : null}

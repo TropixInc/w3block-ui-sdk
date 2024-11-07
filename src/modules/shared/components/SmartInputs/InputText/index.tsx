@@ -4,7 +4,7 @@ import { useController } from 'react-hook-form';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
 import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -58,18 +58,23 @@ const InputText = ({
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <FormItemContainer disableClasses={readonly} invalid={fieldState.invalid}>
+      <BaseInput
+        disableClasses={readonly}
+        invalid={fieldState.invalid}
+        valid={!!field?.value && !fieldState.invalid}
+        disabled={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
+      >
         <input
           readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
           }
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
-          className={`pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-bg-transparent ${
-            readonly ? '' : 'pw-px-[10px]'
-          } autofill:pw-bg-transparent focus:pw-outline-none`}
+          className={`pw-w-full pw-h-full focus:pw-outline-none`}
         />
-      </FormItemContainer>
+      </BaseInput>
       {!hidenValidations && (
         <div className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (

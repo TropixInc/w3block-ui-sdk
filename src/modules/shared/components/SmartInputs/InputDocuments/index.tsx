@@ -5,7 +5,7 @@ import ReactInputMask from 'react-input-mask';
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
 import useTranslation from '../../../hooks/useTranslation';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
 import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -94,10 +94,11 @@ const InputDocuments = ({
           {label ?? 'Documento de Identificação'}
         </LabelWithRequired>
 
-        <FormItemContainer
+        <BaseInput
           disableClasses={readonly}
-          className="pw-p-[0.6rem]"
-          invalid={fieldState?.invalid}
+          invalid={fieldState.invalid}
+          valid={!!field?.value && !fieldState.invalid}
+          disabled={readonly}
         >
           <select
             onChange={(e) => {
@@ -105,9 +106,7 @@ const InputDocuments = ({
               setDocument('');
             }}
             disabled={readonly}
-            className={`pw-max-h-[180px] pw-w-full pw-h-6 pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black pw-mt-1 ${
-              readonly ? 'pw-appearance-none' : ''
-            }`}
+            className={`pw-w-full pw-h-full focus:pw-outline-none`}
           >
             <option value={''}>Selecione o tipo de documento..</option>
             {docTypeOptions.map((val) => (
@@ -122,15 +121,16 @@ const InputDocuments = ({
               </option>
             ))}
           </select>
-        </FormItemContainer>
+        </BaseInput>
         <div className="pw-w-full pw-mt-4">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             {translate('shared>inputDocument>docNumber')}
           </p>
-          <FormItemContainer
+          <BaseInput
             disableClasses={readonly}
             invalid={fieldState.invalid}
-            className="pw-p-[0.6rem]"
+            valid={!!field?.value && !fieldState.invalid}
+            disabled={readonly}
           >
             {selectDocType === 'cpf' ? (
               <ReactInputMask
@@ -140,7 +140,7 @@ const InputDocuments = ({
                 onChange={(e) => handleChange(e.target.value)}
                 value={document}
                 placeholder="Digite apenas números"
-                className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
+                className={`pw-w-full pw-h-full focus:pw-outline-none`}
                 inputMode="numeric"
                 readOnly={readonly}
               />
@@ -153,7 +153,7 @@ const InputDocuments = ({
                 className="pw-mt-1 pw-text-base pw-text-[#969696] pw-leading-4 pw-w-full pw-outline-none"
               />
             )}
-          </FormItemContainer>
+          </BaseInput>
         </div>
         {!hidenValidations && (
           <div className="mt-5">

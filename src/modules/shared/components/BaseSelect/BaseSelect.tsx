@@ -294,7 +294,7 @@ const SearchSelect = ({
           >
             <Combobox.Options
               static
-              className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-w-[500px] pw-overflow-y-scroll pw-z-50"
+              className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-h-[300px] pw-overflow-y-scroll pw-z-50"
             >
               {options.length === 0 && searchValue !== '' ? (
                 <Combobox.Option
@@ -412,7 +412,7 @@ const SimpleSelect = ({
             >
               <Listbox.Options
                 static
-                className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-w-[500px] pw-overflow-y-scroll pw-z-50"
+                className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-h-[300px] pw-overflow-y-scroll pw-z-50"
               >
                 {options.map((option, index) => {
                   return (

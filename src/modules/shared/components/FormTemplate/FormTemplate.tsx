@@ -7,9 +7,9 @@ import {
   UserContextStatus,
 } from '@w3block/sdk-id';
 
-import { AuthButton } from '../../../auth/components/AuthButton';
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
+import { BaseButton } from '../Buttons';
 import SmartInputsController from '../SmartInputsController';
 import { Spinner } from '../Spinner';
 
@@ -110,9 +110,10 @@ export const FormTemplate = ({
         </div>
       ) : null}
       {hideContinue || readonly ? null : (
-        <AuthButton
+        <BaseButton
           type="submit"
-          className="pw-w-full pw-mt-5 pw-flex pw-items-center pw-justify-center"
+          className="pw-mt-5"
+          fullWidth
           disabled={
             buttonDisabled ||
             statusContext === UserContextStatus.Approved ||
@@ -126,7 +127,7 @@ export const FormTemplate = ({
           ) : (
             'Continuar'
           )}
-        </AuthButton>
+        </BaseButton>
       )}
     </form>
   );

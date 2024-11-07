@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import classNames from 'classnames';
 
 import { isValidUrl } from '../../../utils/validators';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
 import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -61,10 +60,13 @@ const InputUrl = ({
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <FormItemContainer
+      <BaseInput
         disableClasses={readonly}
         invalid={fieldState.invalid}
-        className="pw-w-full"
+        valid={!!field?.value && !fieldState.invalid}
+        disabled={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
       >
         <input
           name={name}
@@ -74,12 +76,9 @@ const InputUrl = ({
           type="text"
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}
-          className={classNames(
-            'pw-text-base pw-h-12 pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent',
-            `${readonly ? '' : 'pw-px-[10px]'}`
-          )}
+          className={`pw-w-full pw-h-full focus:pw-outline-none`}
         />
-      </FormItemContainer>
+      </BaseInput>
       {!hidenValidations && (
         <p className="pw-mt-[5px]">
           {field.value && (

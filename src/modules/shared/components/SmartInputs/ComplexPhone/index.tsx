@@ -3,11 +3,10 @@ import { useController } from 'react-hook-form';
 import ReactInputMask from 'react-input-mask';
 
 import { UserContextStatus, UserDocumentStatus } from '@w3block/sdk-id';
-import classNames from 'classnames';
 
 import useTranslation from '../../../hooks/useTranslation';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
 import InputStatus from '../InputStatus';
 
 interface InputPhoneProps {
@@ -100,9 +99,14 @@ const ComplexPhone = ({
         {field?.value?.value?.map((item: string, idx: number) => (
           <div key={idx} className="pw-mb-3">
             <div className="pw-w-full pw-flex pw-gap-2">
-              <FormItemContainer
+              <BaseInput
                 disableClasses={readonly}
-                className="pw-w-full"
+                invalid={fieldState.invalid}
+                valid={!!field?.value && !fieldState.invalid}
+                disabled={
+                  (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+                  readonly
+                }
               >
                 <ReactInputMask
                   readOnly={
@@ -119,12 +123,9 @@ const ComplexPhone = ({
                       : '+99 99 99999-9999'
                   }
                   maskChar={''}
-                  className={classNames(
-                    'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent',
-                    `${readonly ? '' : 'pw-px-[10px]'}`
-                  )}
+                  className={`pw-w-full pw-h-full focus:pw-outline-none`}
                 />
-              </FormItemContainer>
+              </BaseInput>
               {idx === 0 ? null : !hiddenButtons ? (
                 <button
                   onClick={() => onRemovePhoneItem(idx)}

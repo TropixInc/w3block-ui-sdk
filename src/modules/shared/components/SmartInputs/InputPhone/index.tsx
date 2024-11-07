@@ -3,10 +3,9 @@ import { useController } from 'react-hook-form';
 import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import classNames from 'classnames';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
 import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -60,7 +59,14 @@ const InputPhone = ({
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <FormItemContainer disableClasses={readonly} invalid={fieldState.invalid}>
+      <BaseInput
+        disableClasses={readonly}
+        invalid={fieldState.invalid}
+        valid={!!field?.value && !fieldState.invalid}
+        disabled={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
+      >
         <ReactInputMask
           readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
@@ -75,12 +81,9 @@ const InputPhone = ({
               : '+99 99 99999-9999'
           }
           maskChar={''}
-          className={classNames(
-            'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent',
-            `${readonly ? '' : 'pw-px-[10px]'}`
-          )}
+          className={`pw-w-full pw-h-full focus:pw-outline-none`}
         />
-      </FormItemContainer>
+      </BaseInput>
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (

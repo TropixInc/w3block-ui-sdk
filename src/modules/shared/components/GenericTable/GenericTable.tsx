@@ -620,7 +620,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   })}
               </div>
               <div
-                className="pw-mt-1 pw-w-full sm:pw-mt-1 sm:pw-ml-1 sm:pw-max-w-[200px]"
+                className="pw-mt-1 pw-w-full sm:pw-mt-0 sm:pw-ml-1 sm:pw-max-w-[200px]"
                 style={externalFilterClasses?.buttonsContainer}
               >
                 {xlsReports?.url && (

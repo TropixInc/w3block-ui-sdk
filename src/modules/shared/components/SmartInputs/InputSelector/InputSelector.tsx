@@ -9,7 +9,7 @@ import { getDynamicString } from '../../../../storefront/hooks/useDynamicString/
 import { useRouterConnect } from '../../../hooks';
 import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
 import useTranslation from '../../../hooks/useTranslation';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
 import { ImageSDK } from '../../ImageSDK';
 import LabelWithRequired from '../../LabelWithRequired';
 import { MultipleSelect } from '../../MultipleSelect';
@@ -281,21 +281,22 @@ export const InputSelector = ({
         <LabelWithRequired name={name} required={required}>
           {label}
         </LabelWithRequired>
-        <FormItemContainer
+        <BaseInput
           disableClasses={readonly}
-          invalid={fieldState?.invalid}
-          className="pw-p-[0.6rem]"
+          invalid={fieldState.invalid}
+          valid={!!field?.value && !fieldState.invalid}
+          disabled={readonly}
         >
           <input
             type="text"
-            className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
+            className={`pw-w-full pw-h-full focus:pw-outline-none`}
             value={inputValue}
             placeholder={translate('shared>inputSelector>selectOption')}
             onChange={(e) => onChangeInputValue(e.target.value)}
             readOnly={readonly}
             autoComplete="new-password"
           />
-        </FormItemContainer>
+        </BaseInput>
         {showOptions ? (
           <div
             ref={divRef}
@@ -359,10 +360,11 @@ export const InputSelector = ({
         <LabelWithRequired name={name} required={required}>
           {label}
         </LabelWithRequired>
-        <FormItemContainer
-          className="!pw-p-[0.6rem]"
-          disableClasses={configData?.isMultiple || readonly}
-          invalid={fieldState?.invalid}
+        <BaseInput
+          disableClasses={readonly}
+          invalid={fieldState.invalid}
+          valid={!!field?.value && !fieldState.invalid}
+          disabled={readonly}
         >
           {configData?.isMultiple ? (
             <MultipleSelect
@@ -384,9 +386,7 @@ export const InputSelector = ({
               name={name}
               disabled={readonly}
               onChange={(e) => handleTextChange(e.target.value)}
-              className={`pw-max-h-[180px] pw-h-[32px] pw-w-full pw-overflow-y-auto pw-bg-inherit pw-text-black pw-outline-none ${
-                readonly ? 'pw-appearance-none' : ''
-              }`}
+              className={`pw-w-full pw-h-full focus:pw-outline-none`}
             >
               <option className="!pw-p-0" value="">
                 {translate('shared>inputSelector>selectOption')}
@@ -422,7 +422,7 @@ export const InputSelector = ({
                   ))}
             </select>
           )}
-        </FormItemContainer>
+        </BaseInput>
         {!hidenValidations && (
           <div
             className={`${
