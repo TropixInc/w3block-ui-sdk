@@ -70,7 +70,7 @@ const InputBirthdate = ({
           }
           onChange={(e) => handleTextChange(e.target.value)}
           value={inputValue}
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
+          className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
         />
       </BaseInput>
       {!hidenValidations && (

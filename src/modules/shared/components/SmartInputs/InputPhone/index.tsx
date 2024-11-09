@@ -81,7 +81,7 @@ const InputPhone = ({
               : '+99 99 99999-9999'
           }
           maskChar={''}
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
+          className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
         />
       </BaseInput>
       {!hidenValidations && (

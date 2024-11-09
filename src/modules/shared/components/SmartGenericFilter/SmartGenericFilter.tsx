@@ -409,9 +409,9 @@ const SmartGenericFilter = ({
       }
       case FormatFilterType.SEARCH: {
         return (
-          <BaseInput className="!pw-h-[44px]">
+          <BaseInput>
             <input
-              className="pw-w-full pw-h-full focus:pw-outline-none pw-outline-none"
+              className="pw-w-full pw-flex pw-h-full focus:pw-outline-none pw-outline-none"
               type="text"
               placeholder={filterPlaceholder ?? 'Buscar'}
               value={searchStaticValue}

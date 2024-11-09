@@ -106,7 +106,7 @@ const InputDocuments = ({
               setDocument('');
             }}
             disabled={readonly}
-            className={`pw-w-full pw-h-full focus:pw-outline-none`}
+            className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
           >
             <option value={''}>Selecione o tipo de documento..</option>
             {docTypeOptions.map((val) => (
@@ -140,7 +140,7 @@ const InputDocuments = ({
                 onChange={(e) => handleChange(e.target.value)}
                 value={document}
                 placeholder="Digite apenas números"
-                className={`pw-w-full pw-h-full focus:pw-outline-none`}
+                className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
                 inputMode="numeric"
                 readOnly={readonly}
               />

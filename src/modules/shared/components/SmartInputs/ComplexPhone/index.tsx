@@ -7,6 +7,7 @@ import { UserContextStatus, UserDocumentStatus } from '@w3block/sdk-id';
 import useTranslation from '../../../hooks/useTranslation';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
 import { BaseInput } from '../../BaseInput';
+import { BaseButton } from '../../Buttons';
 import InputStatus from '../InputStatus';
 
 interface InputPhoneProps {
@@ -123,7 +124,7 @@ const ComplexPhone = ({
                       : '+99 99 99999-9999'
                   }
                   maskChar={''}
-                  className={`pw-w-full pw-h-full focus:pw-outline-none`}
+                  className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
                 />
               </BaseInput>
               {idx === 0 ? null : !hiddenButtons ? (
@@ -151,16 +152,15 @@ const ComplexPhone = ({
       </div>
 
       {hiddenButtons || hideAddButton ? null : (
-        <button
+        <BaseButton
           onClick={(e) => {
             e.preventDefault();
             onAddMorePhones();
           }}
-          className="pw-px-4 pw-py-2 pw-flex pw-items-center pw-border pw-border-[#0050FF] pw-rounded-lg pw-text-sm pw-font-semibold pw-gap-2"
         >
           <span>+</span>
           <span>{translate('shared>complexPhone>addPhone')}</span>
-        </button>
+        </BaseButton>
       )}
     </div>
   );

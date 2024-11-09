@@ -23,7 +23,7 @@ const LabelWithRequired = ({
     <div
       className={classNames(
         classes.root || '',
-        'pw-flex pw-gap-x-2 pw-items-center pw-text-[15px] pw-w-auto pw-leading-[15px] pw-text-[#353945] pw-font-semibold pw-mb-1'
+        'pw-flex pw-gap-x-2 pw-items-center pw-text-[15px] pw-w-auto pw-leading-[15px] pw-text-[#353945] pw-font-medium pw-mb-1'
       )}
     >
       <label htmlFor={name} className={classNames('block select-none')}>

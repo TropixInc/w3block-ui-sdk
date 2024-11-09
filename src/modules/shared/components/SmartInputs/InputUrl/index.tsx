@@ -76,7 +76,7 @@ const InputUrl = ({
           type="text"
           value={url}
           onChange={(e) => onChangeUrl(e.target.value)}
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
+          className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
         />
       </BaseInput>
       {!hidenValidations && (

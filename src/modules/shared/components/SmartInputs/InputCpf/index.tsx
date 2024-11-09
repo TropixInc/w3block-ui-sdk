@@ -86,7 +86,7 @@ const InputCpf = ({
           onChange={(e) => handleChange(e.target.value)}
           value={inputValue}
           placeholder="Digite apenas números"
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
+          className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
           inputMode="numeric"
         />
       </BaseInput>

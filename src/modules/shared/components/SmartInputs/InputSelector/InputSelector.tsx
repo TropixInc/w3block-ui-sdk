@@ -289,7 +289,7 @@ export const InputSelector = ({
         >
           <input
             type="text"
-            className={`pw-w-full pw-h-full focus:pw-outline-none`}
+            className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             value={inputValue}
             placeholder={translate('shared>inputSelector>selectOption')}
             onChange={(e) => onChangeInputValue(e.target.value)}
@@ -375,7 +375,7 @@ export const InputSelector = ({
               placeholder={placeholder ?? 'Selecione'}
               classes={{
                 button: '!pw-border-none pw-h-[48px]',
-                root: '!pw-mb-2',
+                root: '!pw-mb-2 pw-flex',
               }}
               onChangeMultipleSelected={setMultipleSelected}
               multipleSelected={multipleSelected}
@@ -386,7 +386,7 @@ export const InputSelector = ({
               name={name}
               disabled={readonly}
               onChange={(e) => handleTextChange(e.target.value)}
-              className={`pw-w-full pw-h-full focus:pw-outline-none`}
+              className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             >
               <option className="!pw-p-0" value="">
                 {translate('shared>inputSelector>selectOption')}

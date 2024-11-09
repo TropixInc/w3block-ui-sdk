@@ -247,10 +247,11 @@ const CityAutoComplete = ({
         invalid={fieldState.invalid}
         valid={!!field?.value && !fieldState.invalid}
         disabled={readonly}
+        className="pw-mb-2"
       >
         <input
           type="text"
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
+          className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
           value={inputValue}
           placeholder={
             inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
@@ -323,7 +324,7 @@ const CityAutoComplete = ({
             >
               <input
                 type="text"
-                className={`pw-w-full pw-h-full focus:pw-outline-none`}
+                className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
                 value={placeNumber}
                 placeholder={translate(
                   'shared>inputCompletedAddress>enterPlaceNumber'
@@ -345,7 +346,7 @@ const CityAutoComplete = ({
             >
               <input
                 type="text"
-                className={`pw-w-full pw-h-full focus:pw-outline-none`}
+                className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
                 value={placeCompliment}
                 placeholder={translate(
                   'shared>inputCompletedAddress>compliment'
