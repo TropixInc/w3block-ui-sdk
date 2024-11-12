@@ -41,6 +41,7 @@ import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { useUtms } from '../../shared/hooks/useUtms/useUtms';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
 import useGetProductBySlug, {
   CurrencyResponse,
@@ -570,13 +571,24 @@ export const ProductPage = ({
               currencyId?.id
             }&contextSlug=${productKycRequirement}`
         );
-      else
-        pushConnect(
-          PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-            `?productIds=${Array(quantity)
-              .fill(product.id)
-              .join(',')}&currencyId=${currencyId?.id}`
-        );
+      else {
+        if (giftData) {
+          const id = generateRandomUUID();
+          setGiftData({ [id]: { ...giftData } });
+          pushConnect(
+            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+              `?productIds=${Array(quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${currencyId?.id}&sessionId=${id}`
+          );
+        } else
+          pushConnect(
+            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+              `?productIds=${Array(quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${currencyId?.id}`
+          );
+      }
     }
   };
 

@@ -26,6 +26,7 @@ import { Alert } from '../../../shared/components/Alert';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGetStorageData';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useLogError } from '../../../shared/hooks/useLogError';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -127,7 +128,10 @@ export const CheckoutPayment = () => {
   );
   const [stripeOrderCache, setStripeOrderCache, deleteStripeCache] =
     useLocalStorage<StripeCache>(STRIPE_ORDER_CACHE);
-  const [giftData] = useLocalStorage<any>(GIFT_DATA_INFO_KEY);
+  const giftData = useGetStorageData(
+    GIFT_DATA_INFO_KEY,
+    router?.query?.sessionId as string
+  );
   const track = useTrack();
   const { setCart } = useCart();
   const { data: session } = usePixwaySession();

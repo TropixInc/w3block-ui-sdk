@@ -1052,7 +1052,7 @@ const _CheckoutInfo = ({
     orderResponse?.passShareCodeInfo?.data?.destinationUserName
   } ${translate('pass>sharedOrder>yourFriendSendGift', {
     friendName: profile?.data?.data?.name ?? '',
-  })}, ${orderResponse?.passShareCodeInfo?.data?.message} {sharedLink}`;
+  })}, ${orderResponse?.passShareCodeInfo?.data?.message ?? ''} {sharedLink}`;
 
   const handleShared = (code: string) => {
     if (shareMessage) {
@@ -1091,19 +1091,7 @@ const _CheckoutInfo = ({
             <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
               {translate('checkout>checkoutInfo>purchaseSucess')}
             </p>
-            <div className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[20px]">
-              <img
-                className="pw-mt-6 pw-w-[250px] pw-h-[250px] pw-object-contain pw-rounded-lg sm:pw-w-[300px] sm:pw-h-[300px]"
-                src={
-                  statusResponse?.products?.[0]?.productToken?.product
-                    ?.images?.[0]?.thumb
-                }
-                alt=""
-              />
-              <p className="pw-mt-3 pw-font-semibold">Gift Card</p>
-              <p className="pw-mt-1 pw-text-[32px] pw-font-bold pw-mb-5">
-                {orderResponse?.totalAmount ?? ''}
-              </p>
+            <div className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-text-black">
               {statusResponse?.passShareCodeInfo?.codes?.map((code) => (
                 <div
                   key={code?.code}
