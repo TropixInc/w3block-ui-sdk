@@ -70,7 +70,6 @@ export const SignUpFormWithoutLayout = ({
   privacyRedirect = 'https://w3block.io/en/privacy-policy',
   termsRedirect = 'https://w3block.io/en/terms',
   title,
-  hasSignUp = true,
 }: Props) => {
   const { data: companyInfo } = useGetTenantInfoByHostname();
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
@@ -96,9 +95,6 @@ export const SignUpFormWithoutLayout = ({
   } = useSignUp();
 
   const { signInAfterSignUp } = usePixwayAuthentication();
-  useEffect(() => {
-    if (!hasSignUp) router.pushConnect(PixwayAppRoutes.SIGN_IN);
-  }, [hasSignUp]);
 
   const queryString = new URLSearchParams(router.query as any).toString();
 
