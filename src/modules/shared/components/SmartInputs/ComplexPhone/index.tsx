@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { useController } from 'react-hook-form';
-import ReactInputMask from 'react-input-mask';
 
 import { UserContextStatus, UserDocumentStatus } from '@w3block/sdk-id';
 
@@ -108,25 +107,21 @@ const ComplexPhone = ({
                   (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
                   readonly
                 }
-              >
-                <ReactInputMask
-                  readOnly={
-                    (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
-                    readonly
-                  }
-                  name={item}
-                  value={item}
-                  onChange={(e) => onChangeMorePhones(idx, e.target.value)}
-                  placeholder="+XX XX XXXXX XXXX"
-                  mask={
-                    item && item?.length <= 16
-                      ? '+99 99 9999-99999'
-                      : '+99 99 99999-9999'
-                  }
-                  maskChar={''}
-                  className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
-                />
-              </BaseInput>
+                readOnly={
+                  (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+                  readonly
+                }
+                name={item}
+                value={item}
+                onChange={(e) => onChangeMorePhones(idx, e.target.value)}
+                placeholder="+XX XX XXXXX XXXX"
+                mask={
+                  item && item?.length <= 16
+                    ? '+99 99 9999-99999'
+                    : '+99 99 99999-9999'
+                }
+                maskChar={''}
+              />
               {idx === 0 ? null : !hiddenButtons ? (
                 <button
                   onClick={() => onRemovePhoneItem(idx)}

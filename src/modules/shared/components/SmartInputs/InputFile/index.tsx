@@ -15,7 +15,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { BaseInput } from '../../BaseInput';
+import { BaseInputLayout } from '../../BaseInput';
 import LabelWithRequired from '../../LabelWithRequired';
 import { Spinner } from '../../Spinner/Spinner';
 import InputStatus from '../InputStatus';
@@ -151,7 +151,7 @@ const InputFile = ({
       <p className="pw-text-[13px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1 pw-opacity-75">
         {subtitle}
       </p>
-      <BaseInput
+      <BaseInputLayout
         disableClasses={readonly}
         invalid={isError || mutateError || fieldState.invalid}
         valid={!!field?.value && !fieldState.invalid}
@@ -197,7 +197,7 @@ const InputFile = ({
             </p>
           )}
         </div>
-      </BaseInput>
+      </BaseInputLayout>
       {!hidenValidations && (
         <div className="pw-mt-[5px] pw-h-[16px]">
           {field.value || Boolean(fileRejections.length) ? (

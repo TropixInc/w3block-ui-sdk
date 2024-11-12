@@ -8,11 +8,11 @@ import _ from 'lodash';
 
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import CheckBoxIcon from '../../assets/icons/checkOutlined.svg?react';
-import { BaseInput } from '../BaseInput';
+import { BaseInputLayout, BaseInputProps } from '../BaseInput';
 import { Option } from '../GenericSearchFilter/GenericSearchFilter';
 import { ImageSDK } from '../ImageSDK';
 
-interface Props {
+interface Props extends Partial<BaseInputProps> {
   options: Array<Option>;
   multiple?: boolean;
   search?: boolean;
@@ -31,7 +31,6 @@ interface Props {
   searchValue?: string;
   onChangeValue?: (value: any) => void;
   value?: any;
-  onFocus?: React.FocusEventHandler<HTMLButtonElement>;
 }
 
 const MultipleSelect = ({
@@ -43,7 +42,7 @@ const MultipleSelect = ({
   translatePrefix,
   onChangeValue,
   value,
-  onFocus,
+  ...props
 }: Props) => {
   const [translate] = useTranslation();
   const displayValue =
@@ -67,9 +66,8 @@ const MultipleSelect = ({
       >
         {() => (
           <>
-            <BaseInput disabled={disabled}>
+            <BaseInputLayout {...props} disabled={disabled}>
               <Listbox.Button
-                onFocus={onFocus}
                 className={classNames(
                   'pw-flex pw-justify-between pw-items-center pw-w-full pw-text-black focus:pw-outline-none',
                   classes.button ?? ''
@@ -80,7 +78,7 @@ const MultipleSelect = ({
                 </div>
                 <ArrowDown className="pw-stroke-black" />
               </Listbox.Button>
-            </BaseInput>
+            </BaseInputLayout>
 
             <Transition
               as={Fragment}
@@ -181,6 +179,7 @@ const SearchSelect = ({
   onChangeValue,
   placeholder,
   multiple = false,
+  ...props
 }: Props) => {
   const [translate] = useTranslation();
 
@@ -199,7 +198,7 @@ const SearchSelect = ({
         }}
       >
         <div className={`pw-relative pw-w-full`}>
-          <BaseInput disabled={disabled}>
+          <BaseInputLayout {...props} disabled={disabled}>
             <Combobox.Button
               className={`${classes.button} pw-flex pw-outline-none pw-justify-between pw-items-center pw-w-full`}
             >
@@ -214,7 +213,7 @@ const SearchSelect = ({
               ></Combobox.Input>
               <ArrowDown className="pw-stroke-black" />
             </Combobox.Button>
-          </BaseInput>
+          </BaseInputLayout>
 
           <Transition
             as={Fragment}
@@ -330,6 +329,7 @@ const SimpleSelect = ({
   translatePrefix,
   onChangeValue,
   value,
+  ...props
 }: Props) => {
   const [translate] = useTranslation();
   const displayValue = useMemo(() => {
@@ -355,7 +355,7 @@ const SimpleSelect = ({
       >
         {() => (
           <>
-            <BaseInput disabled={disabled}>
+            <BaseInputLayout {...props} disabled={disabled}>
               <Listbox.Button
                 className={classNames(
                   'pw-flex pw-justify-between pw-items-center pw-h-full pw-w-full pw-text-black focus:pw-outline-none',
@@ -367,7 +367,7 @@ const SimpleSelect = ({
                 </div>
                 <ArrowDown className="pw-stroke-black" />
               </Listbox.Button>
-            </BaseInput>
+            </BaseInputLayout>
 
             <Transition
               as={Fragment}
