@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { UseGenericApiGet } from '../../hooks/UseGenericApiGet/UseGenericApiGet';
 import { useGetGenericXlsReports } from '../../hooks/useGetGenericXlsReports';
+import { BaseButton } from '../Buttons';
 import { Spinner } from '../Spinner/Spinner';
 
 interface XlsReportsProps {
@@ -23,7 +23,6 @@ export const GenerateGenericXlsReports = ({
   filters,
   observerUrlReport,
   sort,
-  styleClass,
 }: XlsReportsProps) => {
   const [translate] = useTranslation();
   const [urlReports, setUrlReports] = useState<string>('');
@@ -130,12 +129,7 @@ export const GenerateGenericXlsReports = ({
 
   return (
     <div className="pw-w-full pw-flex pw-flex-col pw-items-end pw-mb-2">
-      <OffpixButtonBase
-        className="pw-px-4 !pw-py-2 pw-text-base"
-        onClick={() => handleCallReportXls()}
-        disabled={isXlsLoading}
-        styleClass={styleClass}
-      >
+      <BaseButton onClick={() => handleCallReportXls()} disabled={isXlsLoading}>
         {isXlsLoading ? (
           <div className="pw-flex pw-items-center pw-justify-center pw-gap-x-2">
             <Spinner className="pw-w-4 pw-h-4 !pw-border-2" />
@@ -144,7 +138,7 @@ export const GenerateGenericXlsReports = ({
         ) : (
           <p>{translate('key>salesReportsTemplate>exportReport')}</p>
         )}
-      </OffpixButtonBase>
+      </BaseButton>
 
       {Boolean(downloadLink) && (
         <button

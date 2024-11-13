@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import _ from 'lodash';
 
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseSelect } from '../../BaseSelect';
 import LabelWithRequired from '../../LabelWithRequired';
 import CityAutoComplete from './CityAutoComplete';
 
@@ -48,7 +47,6 @@ const InputLocale = ({
   const [selectCountry, setSelectCountry] = useState<string | undefined>();
   const [region, setRegion] = useState<string | undefined>();
   const [translate] = useTranslation();
-  const { fieldState } = useController({ name });
   useEffect(() => {
     if (docValue) {
       setSelectCountry(docValue.country);
@@ -58,44 +56,22 @@ const InputLocale = ({
 
   return (
     <div className="pw-mb-4">
-      <LabelWithRequired
-        classes={{ root: '!pw-text-lg' }}
-        name={name}
-        required={required}
-      >
+      <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <div className="pw-mt-2 pw-flex pw-gap-5">
+      <div className="pw-my-2 pw-flex pw-gap-5">
         <div className="pw-w-full">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             {translate('shared>unputLocale>contry')}
           </p>
-          <FormItemContainer
-            disableClasses={readonly}
-            invalid={fieldState.invalid}
-            className={`pw-px-[0.6rem] pw-mb-3`}
-          >
-            <select
-              onChange={(e) => setSelectCountry(e.target.value)}
-              disabled={readonly}
-              className={`pw-max-h-[180px]  pw-w-full  pw-overflow-y-auto pw-bg-white pw-outline-none pw-text-black ${
-                readonly ? 'pw-appearance-none pw-h-8 pw-mb-3' : 'pw-h-12'
-              }`}
-            >
-              <option value={''}>
-                {translate('shared>unputLocale>selectContry')}
-              </option>
-              {optionsLocale?.map((val) => (
-                <option
-                  selected={docValue ? docValue.country === val.value : false}
-                  key={val.value}
-                  value={val.value}
-                >
-                  {val.label}
-                </option>
-              ))}
-            </select>
-          </FormItemContainer>
+          <BaseSelect
+            options={optionsLocale}
+            placeholder={translate('shared>unputLocale>selectContry')}
+            value={
+              optionsLocale.find((res) => res.value === selectCountry)?.label
+            }
+            onChangeValue={(e) => setSelectCountry(e)}
+          />
         </div>
         {region && !hideRegion ? (
           <div className="pw-w-[160px]">

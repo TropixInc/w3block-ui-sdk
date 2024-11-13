@@ -17,6 +17,7 @@ import {
   FilterTableType,
   FormatFilterType,
 } from '../../interface/ConfigGenericTable';
+import { BaseInput } from '../BaseInput';
 import { DateFilter } from '../DateFilter/DateFilter';
 import { DynamicGenericFilter } from '../DynamicGenericFilter/DynamicGenericFilter';
 import { Option } from '../GenericSearchFilter/GenericSearchFilter';
@@ -408,15 +409,12 @@ const SmartGenericFilter = ({
       }
       case FormatFilterType.SEARCH: {
         return (
-          <div className="pw-w-full pw-min-w-[200px] pw-h-11 pw-rounded-lg pw-border pw-border-slate-300">
-            <input
-              className="pw-w-full pw-h-[40px] pw-rounded-lg pw-outline-none pw-px-2"
-              type="text"
-              placeholder={filterPlaceholder ?? 'Buscar'}
-              value={searchStaticValue}
-              onChange={(e) => setSearchStaticValue(e.target.value)}
-            />
-          </div>
+          <BaseInput
+            type="text"
+            placeholder={filterPlaceholder ?? 'Buscar'}
+            value={searchStaticValue}
+            onChange={(e) => setSearchStaticValue(e.target.value)}
+          />
         );
       }
       case FormatFilterType.WALLET: {

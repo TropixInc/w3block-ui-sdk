@@ -1,13 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import { useController } from 'react-hook-form';
-import ReactInputMask from 'react-input-mask';
 
 import { UserContextStatus, UserDocumentStatus } from '@w3block/sdk-id';
-import classNames from 'classnames';
 
 import useTranslation from '../../../hooks/useTranslation';
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
+import { BaseButton } from '../../Buttons';
 import InputStatus from '../InputStatus';
 
 interface InputPhoneProps {
@@ -100,31 +99,29 @@ const ComplexPhone = ({
         {field?.value?.value?.map((item: string, idx: number) => (
           <div key={idx} className="pw-mb-3">
             <div className="pw-w-full pw-flex pw-gap-2">
-              <FormItemContainer
+              <BaseInput
                 disableClasses={readonly}
-                className="pw-w-full"
-              >
-                <ReactInputMask
-                  readOnly={
-                    (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
-                    readonly
-                  }
-                  name={item}
-                  value={item}
-                  onChange={(e) => onChangeMorePhones(idx, e.target.value)}
-                  placeholder="+XX XX XXXXX XXXX"
-                  mask={
-                    item && item?.length <= 16
-                      ? '+99 99 9999-99999'
-                      : '+99 99 99999-9999'
-                  }
-                  maskChar={''}
-                  className={classNames(
-                    'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent',
-                    `${readonly ? '' : 'pw-px-[10px]'}`
-                  )}
-                />
-              </FormItemContainer>
+                invalid={fieldState.invalid}
+                valid={!!field?.value && !fieldState.invalid}
+                disabled={
+                  (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+                  readonly
+                }
+                readOnly={
+                  (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+                  readonly
+                }
+                name={item}
+                value={item}
+                onChange={(e) => onChangeMorePhones(idx, e.target.value)}
+                placeholder="+XX XX XXXXX XXXX"
+                mask={
+                  item && item?.length <= 16
+                    ? '+99 99 9999-99999'
+                    : '+99 99 99999-9999'
+                }
+                maskChar={''}
+              />
               {idx === 0 ? null : !hiddenButtons ? (
                 <button
                   onClick={() => onRemovePhoneItem(idx)}
@@ -150,16 +147,15 @@ const ComplexPhone = ({
       </div>
 
       {hiddenButtons || hideAddButton ? null : (
-        <button
+        <BaseButton
           onClick={(e) => {
             e.preventDefault();
             onAddMorePhones();
           }}
-          className="pw-px-4 pw-py-2 pw-flex pw-items-center pw-border pw-border-[#0050FF] pw-rounded-lg pw-text-sm pw-font-semibold pw-gap-2"
         >
           <span>+</span>
           <span>{translate('shared>complexPhone>addPhone')}</span>
-        </button>
+        </BaseButton>
       )}
     </div>
   );

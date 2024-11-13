@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { countries } from '../../../utils/countries';
+import { BaseSelect } from '../../BaseSelect';
 import LabelWithRequired from '../../LabelWithRequired';
-import { Selectinput } from '../../SelectInput/SelectInput';
 import CityAutoComplete from '../InputLocale/CityAutoComplete';
 
 interface InputCompletedAddressProps {
@@ -31,6 +31,7 @@ const InputCompletedAddress = ({
 }: InputCompletedAddressProps) => {
   const [translate] = useTranslation();
   const [country, setCountry] = useState('');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (apiValue) {
@@ -38,17 +39,28 @@ const InputCompletedAddress = ({
     }
   }, [apiValue]);
 
+  const countriesFiltered = useMemo(() => {
+    if (search !== '')
+      return countries.filter((res) =>
+        res.label.toLowerCase().includes(search.toLowerCase())
+      );
+    else return countries;
+  }, [search]);
+
   return (
     <div className="pw-mt-4">
       <LabelWithRequired name={name} required={required} haveColon={false}>
         {inputLabel}
       </LabelWithRequired>
-      <Selectinput
-        options={countries ?? []}
-        selected={country ?? ''}
-        onChange={setCountry}
-        className="pw-w-full !pw-h-14"
+      <BaseSelect
+        options={countriesFiltered}
+        value={country}
+        search
+        searchValue={search}
+        setSearch={setSearch}
+        onChangeValue={(e) => setCountry(e)}
         placeholder={translate('shared>inputCompletedAddress>selectCountry')}
+        classes={{ root: 'pw-mb-2' }}
       />
       {country ? (
         <CityAutoComplete
