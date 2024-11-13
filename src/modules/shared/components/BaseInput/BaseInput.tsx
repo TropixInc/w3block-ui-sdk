@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
-import ReactInputMask, { Props } from 'react-input-mask';
+import ReactInputMask from 'react-input-mask';
 
 import classNames from 'classnames';
 
@@ -17,7 +17,8 @@ interface BaseInputTheme {
   medium?: string;
   large?: string;
 }
-export interface BaseInputProps extends Partial<Props> {
+export interface BaseInputProps
+  extends Partial<React.InputHTMLAttributes<HTMLInputElement>> {
   className?: string;
   invalid?: boolean;
   valid?: boolean;
@@ -31,6 +32,10 @@ export interface BaseInputProps extends Partial<Props> {
   };
   searchIcon?: boolean;
   onBlur?: () => void;
+  mask?: string | Array<string | RegExp>;
+  maskChar?: string | null | undefined;
+  maskPlaceholder?: string | null | undefined;
+  alwaysShowMask?: boolean | undefined;
 }
 interface BaseInputLayoutProps extends Partial<BaseInputProps> {
   children?: ReactNode;
