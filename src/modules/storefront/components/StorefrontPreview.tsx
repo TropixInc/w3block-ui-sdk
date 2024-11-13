@@ -30,6 +30,7 @@ import {
   Theme,
 } from '../interfaces';
 import { DynamicApiProvider } from '../provider/DynamicApiProvider';
+import { PassBenefit } from './PassBenefit';
 
 const Page404 = lazy(() =>
   import('./404').then((m) => ({ default: m.Page404 }))
@@ -380,6 +381,12 @@ export const StorefrontPreview = ({
                             data={{ ...theme.GridItemArea, ...item }}
                           />
                         );
+                      case ModulesType.PASS_BENEFIT:
+                        return (
+                          <PassBenefit
+                            data={{ ...theme.passBenefit, ...item }}
+                          />
+                        );
                       case ModulesType.MIDIA:
                         return <Midia data={{ ...theme.midia, ...item }} />;
                       case ModulesType.TABLE:
@@ -394,6 +401,7 @@ export const StorefrontPreview = ({
                         return (
                           <BannerWJJC data={{ ...theme.bannerWjjc, ...item }} />
                         );
+
                       default:
                         break;
                     }
