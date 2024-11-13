@@ -10,9 +10,11 @@ export interface BaseButtonProps extends HTMLAttributes<HTMLButtonElement> {
   onBlur?: () => void;
   fullWidth?: boolean;
   type?: 'submit' | 'button' | 'reset';
+  size?: BaseButtonSize;
   disabled?: boolean;
   className?: string;
-  variant?: OffpixButtonVariant;
+  variant?: BaseButtonVariants;
+  variantType?: BaseButtonVariantsType;
   form?: string;
   link?: {
     href: string;
@@ -23,51 +25,97 @@ export interface BaseButtonProps extends HTMLAttributes<HTMLButtonElement> {
 
 type GetButtonClassNameArgs = Pick<
   BaseButtonProps,
-  'className' | 'fullWidth' | 'variant'
+  'className' | 'fullWidth' | 'variant' | 'variantType' | 'size'
 >;
+
+type BaseButtonSize = 'small' | 'large' | 'medium';
+type BaseButtonVariants = 'filled' | 'outlined';
+type BaseButtonVariantsType = 'primary' | 'secondary' | 'terciary';
 
 export const getButtonClassNames = ({
   className,
   fullWidth,
   variant,
+  variantType,
+  size,
 }: GetButtonClassNameArgs) => {
   return classNames(
     className,
-    'text-center py-4 rounded-lg font-semibold text-[24px] leading-[28px] disabled:hover:shadow-none',
-    fullWidth ? 'w-full' : '',
-    variant === 'filled' &&
-      'text-white bg-blue1 hover:bg-blue2 hover:shadow-[0px_4px_11px_#00000026] disabled:bg-grey1 disabled:hover:bg-grey1 disabled:text-grey2 active:bg-blue3',
+    'pw-flex pw-items-center pw-justify-center pw-text-center pw-rounded-[8px] pw-font-[400] pw-p-[6px_18px]',
+    fullWidth ? '!pw-w-full !pw-max-w-full' : '',
+    size === 'large' && 'pw-text-lg pw-h-[48px]',
+    size === 'medium' && 'pw-text-base pw-h-[32px]',
+    size === 'small' && 'pw-text-sm pw-h-[24px]',
+    variantType === 'primary' &&
+      'pw-bg-[#0050FF] pw-outline-[#0050FF] hover:pw-bg-[#0034A3] disabled:pw-opacity-[65%]',
+    variantType === 'secondary' &&
+      'pw-bg-[#FF5500] pw-outline-[#FF5500] hover:pw-bg-[#CC4400] disabled:pw-opacity-[65%]',
+    variantType === 'terciary' &&
+      'pw-bg-gradient-to-r pw-from-[#0050FF] pw-to-[#00E9E7] hover:pw-from-[#00E9E7] hover:pw-to-[#0050FF] disabled:pw-opacity-[65%]',
+    variant === 'filled' && 'pw-text-white',
+    variant === 'outlined' && 'pw-text-black pw-outline pw-outline-1',
     variant === 'outlined' &&
-      'outline outline-1 outline-blue1 bg-[transparent] text-blue1 hover:bg-[transparent] hover:text-blue2 hover:outline-blue2 hover:shadow-[0px_4px_11px_#00000026] transition-all duration-200 disabled:bg-[transparent] disabled:hover:bg-[transparent] disabled:text-grey2 disabled:hover:text-grey2 disabled:outline-grey1 disabled:hover:outline-grey1  active:bg-[#E9F0FB] active:text-blue3 active:outline-blue3',
-    variant === 'link' &&
-      'bg-[transparent] text-blue1 hover:bg-[transparent] hover:text-blue2 transition-all duration-200 disabled:bg-[transparent] disabled:hover:bg-[transparent] disabled:text-grey2 disabled:hover:text-grey2 active:bg-[#E9F0FB] active:text-blue3'
+      variantType === 'primary' &&
+      '!pw-bg-white hover:!pw-bg-[#E7F1FF] pw-outline-[#0050FF] hover:pw-outline-[#0034A3]',
+    variant === 'outlined' &&
+      variantType === 'secondary' &&
+      '!pw-bg-white hover:!pw-bg-[#FFE5D0] pw-outline-[#FF5500] hover:pw-outline-[#CC4400]',
+    variant === 'outlined' &&
+      variantType === 'terciary' &&
+      '!pw-outline-none !pw-p-[1px]'
   );
 };
 
 export const BaseButton = ({
   className = '',
   type = 'button',
+  size = 'medium',
   children,
   fullWidth = false,
   variant = 'filled',
+  variantType = 'primary',
   link,
   ...props
 }: BaseButtonProps) =>
   link?.href ? (
     <a
-      className={getButtonClassNames({ className, fullWidth, variant })}
+      className={getButtonClassNames({
+        className,
+        fullWidth,
+        variant,
+        variantType,
+        size,
+      })}
       href={link?.href}
       target={link.target}
     >
-      {children}
+      {variantType === 'terciary' && variant === 'outlined' ? (
+        <div className="pw-flex pw-h-full pw-w-full pw-items-center pw-justify-center pw-rounded-[8px] pw-bg-white hover:!pw-bg-[#E7F1FF] pw-p-[5px_11px]">
+          {children}
+        </div>
+      ) : (
+        children
+      )}
     </a>
   ) : (
     <button
-      className={getButtonClassNames({ className, fullWidth, variant })}
+      className={getButtonClassNames({
+        className,
+        fullWidth,
+        variant,
+        variantType,
+        size,
+      })}
       type={type}
       {...props}
     >
-      {children}
+      {variantType === 'terciary' && variant === 'outlined' ? (
+        <div className="pw-flex pw-h-full pw-w-full pw-items-center pw-justify-center pw-rounded-[8px]">
+          {children}
+        </div>
+      ) : (
+        children
+      )}
     </button>
   );
 type PrimaryButtonSize = 'small' | 'big' | 'full';

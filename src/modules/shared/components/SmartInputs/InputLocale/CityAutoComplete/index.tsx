@@ -7,7 +7,7 @@ import { useClickAway, useDebounce } from 'react-use';
 
 import _ from 'lodash';
 
-import { FormItemContainer } from '../../../Form/FormItemContainer';
+import { BaseInput } from '../../../BaseInput';
 import LabelWithRequired from '../../../LabelWithRequired';
 import { InputError } from '../../../SmartInputsController';
 import InputStatus from '../../InputStatus';
@@ -242,27 +242,24 @@ const CityAutoComplete = ({
         {inputLabel ?? translate('shared>cityAutoComplete>city')}
       </LabelWithRequired>
 
-      <FormItemContainer
+      <BaseInput
         disableClasses={readonly}
         invalid={fieldState.invalid}
-        className="pw-p-[0.6rem]"
-      >
-        <input
-          type="text"
-          className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
-          value={inputValue}
-          placeholder={
-            inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
-          }
-          onChange={(e) => onChangeInputValue(e.target.value)}
-          disabled={!country.length}
-          readOnly={readonly}
-          autoComplete="new-password"
-          onBlur={() => {
-            resolveInput();
-          }}
-        />
-      </FormItemContainer>
+        valid={!!field?.value && !fieldState.invalid}
+        disabled={readonly || !country.length}
+        className="pw-mb-2"
+        type="text"
+        value={inputValue}
+        placeholder={
+          inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
+        }
+        onChange={(e) => onChangeInputValue(e.target.value)}
+        readOnly={readonly}
+        autoComplete="new-password"
+        onBlur={() => {
+          resolveInput();
+        }}
+      />
       {showOptions ? (
         <div
           ref={divRef}
@@ -314,43 +311,35 @@ const CityAutoComplete = ({
               {translate('shared>inputCompletedAddress>enterPlaceNumber')}
             </LabelWithRequired>
 
-            <FormItemContainer
+            <BaseInput
               disableClasses={readonly}
               invalid={fieldState.invalid}
-              className="pw-p-[0.6rem]"
-            >
-              <input
-                type="text"
-                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
-                value={placeNumber}
-                placeholder={translate(
-                  'shared>inputCompletedAddress>enterPlaceNumber'
-                )}
-                onChange={(e) => setPlaceNumber(e.target.value)}
-                readOnly={readonly}
-              />
-            </FormItemContainer>
+              valid={!!field?.value && !fieldState.invalid}
+              disabled={readonly}
+              type="text"
+              value={placeNumber}
+              placeholder={translate(
+                'shared>inputCompletedAddress>enterPlaceNumber'
+              )}
+              onChange={(e) => setPlaceNumber(e.target.value)}
+              readOnly={readonly}
+            />
           </div>
           <div className="pw-flex-1">
             <LabelWithRequired haveColon={false}>
               {translate('shared>inputCompletedAddress>enterCompliment')}
             </LabelWithRequired>
-            <FormItemContainer
+            <BaseInput
               disableClasses={readonly}
               invalid={fieldState.invalid}
-              className="pw-p-[0.6rem]"
-            >
-              <input
-                type="text"
-                className="pw-w-full pw-py-1 pw-outline-none pw-text-black"
-                value={placeCompliment}
-                placeholder={translate(
-                  'shared>inputCompletedAddress>compliment'
-                )}
-                onChange={(e) => setPlaceCompliment(e.target.value)}
-                readOnly={readonly}
-              />
-            </FormItemContainer>
+              valid={!!field?.value && !fieldState.invalid}
+              disabled={readonly}
+              type="text"
+              value={placeCompliment}
+              placeholder={translate('shared>inputCompletedAddress>compliment')}
+              onChange={(e) => setPlaceCompliment(e.target.value)}
+              readOnly={readonly}
+            />
           </div>
         </div>
       ) : null}

@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import classNames from 'classnames';
 
 import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { FormItemContainer } from '../../Form/FormItemContainer';
+import { BaseInput } from '../../BaseInput';
 import LabelWithRequired from '../../LabelWithRequired';
 import { InputError } from '../../SmartInputsController';
 import InputStatus from '../InputStatus';
@@ -60,27 +58,27 @@ const InputPhone = ({
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <FormItemContainer disableClasses={readonly} invalid={fieldState.invalid}>
-        <ReactInputMask
-          readOnly={
-            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
-          }
-          name={name}
-          value={inputValue}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder="+XX XX XXXXX XXXX"
-          mask={
-            inputValue && inputValue?.length <= 16
-              ? '+99 99 9999-99999'
-              : '+99 99 99999-9999'
-          }
-          maskChar={''}
-          className={classNames(
-            'pw-text-base pw-h-[48px] pw-text-[#969696] pw-leading-4 pw-w-full !pw-rounded-lg pw-outline-none pw-bg-transparent autofill:pw-bg-transparent',
-            `${readonly ? '' : 'pw-px-[10px]'}`
-          )}
-        />
-      </FormItemContainer>
+      <BaseInput
+        disableClasses={readonly}
+        invalid={fieldState.invalid}
+        valid={!!field?.value && !fieldState.invalid}
+        disabled={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
+        readOnly={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
+        name={name}
+        value={inputValue}
+        onChange={(e) => handleChange(e.target.value)}
+        placeholder="+XX XX XXXXX XXXX"
+        mask={
+          inputValue && inputValue?.length <= 16
+            ? '+99 99 9999-99999'
+            : '+99 99 99999-9999'
+        }
+        maskChar={''}
+      />
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (
