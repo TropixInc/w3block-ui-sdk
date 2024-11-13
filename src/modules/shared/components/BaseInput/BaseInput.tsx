@@ -67,7 +67,7 @@ export const BaseInputLayout = ({
         disableClasses
           ? classNames(className)
           : classNames(
-              'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 focus:!pw-outline-[#9EC5FE] pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative',
+              'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 focus:!pw-outline-[#9EC5FE] pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white',
               theme.default ?? defaultTheme.default ?? '',
               valid ? theme.valid ?? defaultTheme.valid ?? '' : '',
               className,
@@ -133,7 +133,7 @@ export const BaseInput = ({
       disabled={disabled}
       variant={variant}
     >
-      <div className="pw-flex pw-items-center pw-gap-2">
+      <div className="pw-flex pw-items-center pw-gap-2 pw-w-full pw-h-full pw-bg-white">
         {searchIcon ? (
           <SearchIcon className="pw-stroke-black pw-w-5 pw-pb-[2px]" />
         ) : null}
