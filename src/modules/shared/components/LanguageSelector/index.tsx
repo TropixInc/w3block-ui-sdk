@@ -134,9 +134,15 @@ export const LanguageSelector = ({
   });
 
   const code = () => {
-    if ((userLocale as string) === 'en') return 'us';
-    if ((userLocale as string) === 'pt-BR') return 'br';
-    else return userLocale as string;
+    if (userLocale) {
+      if ((userLocale as string) === 'en') return 'us';
+      if ((userLocale as string) === 'pt-BR') return 'br';
+      else return userLocale as string;
+    } else {
+      if ((i18n.language as string) === 'en') return 'us';
+      if ((i18n.language as string) === 'pt-BR') return 'br';
+      else return i18n.language as string;
+    }
   };
 
   return (
