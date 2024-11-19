@@ -19,7 +19,7 @@ export const CountryFlag = ({
   width?: number;
   height?: number;
 }) => {
-  const lowerCode = code.toLowerCase();
+  const lowerCode = code?.toLowerCase();
   const fileCode = lowerCode === 'uk' ? 'gb' : lowerCode;
 
   const flagUrl = `${baseUrl}${fileCode}.svg`;
@@ -61,17 +61,17 @@ const Menu = ({
         <div className="pw-mt-[10px]">
           {languages.map((lang: { value: string; label: string }) => {
             const code = () => {
-              if (lang.value === 'en') return 'us';
-              if (lang.value === 'pt-BR') return 'br';
-              else return lang.value;
+              if (lang?.value === 'en') return 'us';
+              if (lang?.value === 'pt-BR') return 'br';
+              else return lang?.value ?? '';
             };
             return (
               <button
                 onClick={() => {
-                  handleLang(lang.value);
+                  handleLang(lang?.value);
                   setMenu(false);
                 }}
-                key={lang.value}
+                key={lang?.value}
                 className="pw-flex pw-items-center pw-gap-x-2 pw-py-[8px] pw-cursor-pointer pw-stroke-[#383857] hover:pw-bg-opacity-30"
               >
                 <CountryFlag code={code()} height={30} width={30} />
@@ -82,7 +82,7 @@ const Menu = ({
                       (fontFamily ? fontFamily : 'Poppins') + ', sans-serif',
                   }}
                 >
-                  {lang.label}
+                  {lang?.label}
                 </p>
               </button>
             );
@@ -109,14 +109,14 @@ export const LanguageSelector = ({
 
   const languages = useMemo(() => {
     const lang =
-      context?.defaultTheme?.configurations.contentData?.i18nJson?.locales;
+      context?.defaultTheme?.configurations?.contentData?.i18nJson?.locales;
     if (lang?.length > 0) {
       const newArr = lang?.map((res: { label: any; code: any }) => {
-        return { label: res.label, value: res.code };
+        return { label: res?.label, value: res?.code };
       });
       return newArr;
     } else return [];
-  }, [context?.defaultTheme?.configurations.contentData?.i18nJson?.locales]);
+  }, [context?.defaultTheme?.configurations?.contentData?.i18nJson?.locales]);
 
   const handleLang = (lang: string) => {
     i18n?.changeLanguage(lang).then(() => {
