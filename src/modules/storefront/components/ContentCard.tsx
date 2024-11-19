@@ -74,7 +74,7 @@ export const ContentCard = ({
           : _.get(datasource, product.link ?? '', product.link);
       else return undefined;
     } else {
-      return `/product/slug/${product.link}`;
+      return `/item/${product.link}`;
     }
   };
 
