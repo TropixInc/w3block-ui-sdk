@@ -46,7 +46,7 @@ export enum PixwayAppRoutes {
   BENEFIT_DETAILS = '/tokens/benefit-details/{benefitId}',
   COMPLETE_KYC = '/auth/complete-kyc',
   MY_ORDERS = '/profile/orders',
-  PRODUCT_PAGE = '/product/slug/{slug}',
+  PRODUCT_PAGE = '/item/{slug}',
   LOYALTY_PAYMENT = '/business/loyalty/payment',
   LOYALTY_REPORT = '/business/loyalty/report',
   AFFILIATES = '/affiliates',
