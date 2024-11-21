@@ -61,7 +61,7 @@ const Menu = ({
         <div className="pw-mt-[10px]">
           {languages.map((lang: { value: string; label: string }) => {
             const code = () => {
-              if (lang?.value === 'en') return 'us';
+              if (lang?.value === 'en' || lang?.value === 'en-US') return 'us';
               if (lang?.value === 'pt-BR') return 'br';
               else return lang?.value ?? '';
             };
@@ -135,11 +135,16 @@ export const LanguageSelector = ({
 
   const code = () => {
     if (userLocale) {
-      if ((userLocale as string) === 'en') return 'us';
+      if ((userLocale as string) === 'en' || (userLocale as string) === 'en-US')
+        return 'us';
       if ((userLocale as string) === 'pt-BR') return 'br';
       else return userLocale as string;
     } else {
-      if ((i18n.language as string) === 'en') return 'us';
+      if (
+        (i18n.language as string) === 'en' ||
+        (i18n.language as string) === 'en-US'
+      )
+        return 'us';
       if ((i18n.language as string) === 'pt-BR') return 'br';
       else return i18n.language as string;
     }
