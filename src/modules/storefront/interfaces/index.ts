@@ -27,6 +27,7 @@ export type TemplateData = {
     | GenericTableData
     | BannerVariantData
     | BannerWJJCData
+    | PassBenefitData
   )[];
 };
 
@@ -48,6 +49,7 @@ export type Theme = {
   table?: GenericTableData;
   bannerVariant?: MainModuleThemeInterface;
   bannerWjjc?: MainModuleThemeInterface;
+  passBenefit?: MainModuleThemeInterface;
 };
 
 export interface DynamicApiModuleInterface {
@@ -617,6 +619,25 @@ export interface AccordionsData extends MainModuleThemeInterface {
   mobileContentData: AccordionsData['contentData'];
 }
 
+export interface PassBenefitData extends MainModuleThemeInterface {
+  type: ModulesType.PASS_BENEFIT;
+  styleData: {
+    benefitId?: string;
+    collectionName?: boolean;
+    passName?: boolean;
+    passDescription?: boolean;
+    passRules?: boolean;
+    collectionImage?: boolean;
+    benefitName?: boolean;
+    benefitDescription?: boolean;
+    benefitRules?: boolean;
+    limitUsages?: boolean;
+    eventValidity?: boolean;
+    links?: boolean;
+    avaliableTime?: boolean;
+  };
+}
+
 export interface SpecificContentAccordion {
   title?: string;
   content?: string;
@@ -700,6 +721,7 @@ export enum ModulesType {
   CONTENT_CARD = 'Content Card',
   BUTTON = 'Button',
   BANNER_WJJC = 'BannerWJJC',
+  PASS_BENEFIT = 'Pass - Benefício',
 }
 
 export interface GetPageInfoInterface {

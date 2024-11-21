@@ -210,7 +210,7 @@ const _HeaderPixwaySDK = ({
     context?.defaultTheme?.header?.styleData?.textSelectionColor;
 
   const lang =
-    context?.defaultTheme?.configurations.contentData?.i18nJson?.locales;
+    context?.defaultTheme?.configurations?.contentData?.i18nJson?.locales;
 
   return context?.defaultTheme || standalone ? (
     <div

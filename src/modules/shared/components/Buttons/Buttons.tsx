@@ -47,9 +47,9 @@ export const getButtonClassNames = ({
     size === 'medium' && 'pw-text-base pw-h-[32px]',
     size === 'small' && 'pw-text-sm pw-h-[24px]',
     variantType === 'primary' &&
-      'pw-bg-[#0050FF] hover:pw-bg-[#0034A3] disabled:pw-opacity-[65%]',
+      'pw-bg-[#0050FF] pw-outline-[#0050FF] hover:pw-bg-[#0034A3] disabled:pw-opacity-[65%]',
     variantType === 'secondary' &&
-      'pw-bg-[#FF5500] hover:pw-bg-[#CC4400] disabled:pw-opacity-[65%]',
+      'pw-bg-[#FF5500] pw-outline-[#FF5500] hover:pw-bg-[#CC4400] disabled:pw-opacity-[65%]',
     variantType === 'terciary' &&
       'pw-bg-gradient-to-r pw-from-[#0050FF] pw-to-[#00E9E7] hover:pw-from-[#00E9E7] hover:pw-to-[#0050FF] disabled:pw-opacity-[65%]',
     variant === 'filled' && 'pw-text-white',

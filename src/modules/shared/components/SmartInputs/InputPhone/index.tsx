@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
@@ -66,24 +65,20 @@ const InputPhone = ({
         disabled={
           (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
         }
-      >
-        <ReactInputMask
-          readOnly={
-            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
-          }
-          name={name}
-          value={inputValue}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder="+XX XX XXXXX XXXX"
-          mask={
-            inputValue && inputValue?.length <= 16
-              ? '+99 99 9999-99999'
-              : '+99 99 99999-9999'
-          }
-          maskChar={''}
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
-        />
-      </BaseInput>
+        readOnly={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
+        name={name}
+        value={inputValue}
+        onChange={(e) => handleChange(e.target.value)}
+        placeholder="+XX XX XXXXX XXXX"
+        mask={
+          inputValue && inputValue?.length <= 16
+            ? '+99 99 9999-99999'
+            : '+99 99 99999-9999'
+        }
+        maskChar={''}
+      />
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (

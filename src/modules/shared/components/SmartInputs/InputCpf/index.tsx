@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import ReactInputMask from 'react-input-mask';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 
@@ -73,23 +72,19 @@ const InputCpf = ({
         disabled={
           (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
         }
-      >
-        <ReactInputMask
-          readOnly={
-            (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
-            profilePage ||
-            readonly
-          }
-          mask={'999.999.999-99'}
-          maskChar={''}
-          name={name}
-          onChange={(e) => handleChange(e.target.value)}
-          value={inputValue}
-          placeholder="Digite apenas números"
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
-          inputMode="numeric"
-        />
-      </BaseInput>
+        readOnly={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+          profilePage ||
+          readonly
+        }
+        mask={'999.999.999-99'}
+        maskChar={''}
+        name={name}
+        onChange={(e) => handleChange(e.target.value)}
+        value={inputValue}
+        placeholder="Digite apenas números"
+        inputMode="numeric"
+      />
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (

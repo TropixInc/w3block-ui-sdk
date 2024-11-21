@@ -83,22 +83,18 @@ const InputEmail = ({
           invalid={fieldState.invalid}
           valid={!!field?.value && !fieldState.invalid}
           disabled={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+            readonly ||
+            autofill
+          }
+          name={name}
+          readOnly={
             (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
           }
-        >
-          <input
-            disabled={autofill}
-            name={name}
-            readOnly={
-              (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
-              readonly
-            }
-            onChange={(e) => handleChange(e.target.value)}
-            value={inputValue}
-            type="email"
-            className={`pw-w-full pw-h-full focus:pw-outline-none`}
-          />
-        </BaseInput>
+          onChange={(e) => handleChange(e.target.value)}
+          value={inputValue}
+          type="email"
+        />
       )}
       {!hidenValidations && (
         <p className={`pw-mt-[5px] ${!autofill && 'pw-h-[16px]'}`}>

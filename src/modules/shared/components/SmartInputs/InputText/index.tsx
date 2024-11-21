@@ -65,16 +65,12 @@ const InputText = ({
         disabled={
           (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
         }
-      >
-        <input
-          readOnly={
-            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
-          }
-          onChange={(e) => handleTextChange(e.target.value)}
-          value={inputValue}
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
-        />
-      </BaseInput>
+        readOnly={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
+        onChange={(e) => handleTextChange(e.target.value)}
+        value={inputValue}
+      />
       {!hidenValidations && (
         <div className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (

@@ -246,24 +246,20 @@ const CityAutoComplete = ({
         disableClasses={readonly}
         invalid={fieldState.invalid}
         valid={!!field?.value && !fieldState.invalid}
-        disabled={readonly}
-      >
-        <input
-          type="text"
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
-          value={inputValue}
-          placeholder={
-            inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
-          }
-          onChange={(e) => onChangeInputValue(e.target.value)}
-          disabled={!country.length}
-          readOnly={readonly}
-          autoComplete="new-password"
-          onBlur={() => {
-            resolveInput();
-          }}
-        />
-      </BaseInput>
+        disabled={readonly || !country.length}
+        className="pw-mb-2"
+        type="text"
+        value={inputValue}
+        placeholder={
+          inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
+        }
+        onChange={(e) => onChangeInputValue(e.target.value)}
+        readOnly={readonly}
+        autoComplete="new-password"
+        onBlur={() => {
+          resolveInput();
+        }}
+      />
       {showOptions ? (
         <div
           ref={divRef}
@@ -320,18 +316,14 @@ const CityAutoComplete = ({
               invalid={fieldState.invalid}
               valid={!!field?.value && !fieldState.invalid}
               disabled={readonly}
-            >
-              <input
-                type="text"
-                className={`pw-w-full pw-h-full focus:pw-outline-none`}
-                value={placeNumber}
-                placeholder={translate(
-                  'shared>inputCompletedAddress>enterPlaceNumber'
-                )}
-                onChange={(e) => setPlaceNumber(e.target.value)}
-                readOnly={readonly}
-              />
-            </BaseInput>
+              type="text"
+              value={placeNumber}
+              placeholder={translate(
+                'shared>inputCompletedAddress>enterPlaceNumber'
+              )}
+              onChange={(e) => setPlaceNumber(e.target.value)}
+              readOnly={readonly}
+            />
           </div>
           <div className="pw-flex-1">
             <LabelWithRequired haveColon={false}>
@@ -342,18 +334,12 @@ const CityAutoComplete = ({
               invalid={fieldState.invalid}
               valid={!!field?.value && !fieldState.invalid}
               disabled={readonly}
-            >
-              <input
-                type="text"
-                className={`pw-w-full pw-h-full focus:pw-outline-none`}
-                value={placeCompliment}
-                placeholder={translate(
-                  'shared>inputCompletedAddress>compliment'
-                )}
-                onChange={(e) => setPlaceCompliment(e.target.value)}
-                readOnly={readonly}
-              />
-            </BaseInput>
+              type="text"
+              value={placeCompliment}
+              placeholder={translate('shared>inputCompletedAddress>compliment')}
+              onChange={(e) => setPlaceCompliment(e.target.value)}
+              readOnly={readonly}
+            />
           </div>
         </div>
       ) : null}

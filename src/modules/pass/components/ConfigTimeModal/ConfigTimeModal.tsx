@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { BaseTabs, TabDTO } from '../../../shared';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
-import { ConfigPanel } from './ConfigPanel';
+import { ConfigTimeComponent } from '../ConfigTimeComponent';
+
+interface TimeDTO {
+  [key: string]: Array<{ start: string; end: string }>;
+}
 
 interface ConfigTimeModalProps {
   isOpen: boolean;
@@ -17,10 +20,8 @@ interface ConfigTimeModalProps {
     closeButton?: string;
     dialogCard?: string;
   };
-  advancedTimeConfig: { [key: string]: Array<{ start: string; end: string }> };
-  onChangeTimeAdvanced: (value: {
-    [key: string]: Array<{ start: string; end: string }>;
-  }) => void;
+  advancedTimeConfig: TimeDTO;
+  onChangeTimeAdvanced: (value: TimeDTO) => void;
 }
 
 export const ConfigTimeModal = ({
@@ -32,18 +33,15 @@ export const ConfigTimeModal = ({
 }: ConfigTimeModalProps) => {
   const [translate] = useTranslation();
   const [activeTab, setActiveTab] = useState('mon');
-  const [internalTimeConfig, setInternalTimeConfig] =
-    useState(advancedTimeConfig);
-
-  const configTabs: Array<TabDTO> = [
-    { name: translate('pass>configTimeModal>mon'), value: 'mon' },
-    { name: translate('pass>configTimeModal>tue'), value: 'tue' },
-    { name: translate('pass>configTimeModal>wed'), value: 'wed' },
-    { name: translate('pass>configTimeModal>thu'), value: 'thu' },
-    { name: translate('pass>configTimeModal>fri'), value: 'fri' },
-    { name: translate('pass>configTimeModal>sat'), value: 'sat' },
-    { name: translate('pass>configTimeModal>sun'), value: 'sun' },
-  ];
+  const [internalTimeConfig, setInternalTimeConfig] = useState<TimeDTO>({
+    mon: [{ end: '', start: '' }],
+    tue: [{ end: '', start: '' }],
+    wed: [{ end: '', start: '' }],
+    thu: [{ end: '', start: '' }],
+    fri: [{ end: '', start: '' }],
+    sat: [{ end: '', start: '' }],
+    sun: [{ end: '', start: '' }],
+  });
 
   const handleChangePanelItems = (
     updatedItems: Array<{ start: string; end: string }>
@@ -90,6 +88,10 @@ export const ConfigTimeModal = ({
     onClose();
   };
 
+  useEffect(() => {
+    setInternalTimeConfig(advancedTimeConfig);
+  }, [advancedTimeConfig]);
+
   return (
     <ModalBase
       isOpen={isOpen}
@@ -105,17 +107,10 @@ export const ConfigTimeModal = ({
       }}
     >
       <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-8">
-        <p className="pw-text-xl pw-font-medium">
-          {translate('pass>configTimeModal>addConfigTimes')}
-        </p>
-        <BaseTabs
-          tabs={configTabs}
+        <ConfigTimeComponent
           activeTab={activeTab}
           onChangeActiveTab={setActiveTab}
-        />
-        <ConfigPanel
-          activeDay={activeTab}
-          panelItems={internalTimeConfig[activeTab]}
+          panelItems={internalTimeConfig?.[activeTab ?? '']}
           onChangePanelItems={handleChangePanelItems}
         />
         <div className="pw-mt-8 pw-w-full pw-flex pw-gap-x-3 pw-px-4">

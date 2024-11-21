@@ -60,19 +60,15 @@ const InputBirthdate = ({
         disabled={
           (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
         }
-      >
-        <input
-          type="date"
-          readOnly={
-            (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
-            profilePage ||
-            readonly
-          }
-          onChange={(e) => handleTextChange(e.target.value)}
-          value={inputValue}
-          className={`pw-w-full pw-h-full focus:pw-outline-none`}
-        />
-      </BaseInput>
+        type="date"
+        readOnly={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
+          profilePage ||
+          readonly
+        }
+        onChange={(e) => handleTextChange(e.target.value)}
+        value={inputValue}
+      />
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (
