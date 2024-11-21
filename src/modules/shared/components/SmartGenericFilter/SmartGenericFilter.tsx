@@ -409,15 +409,12 @@ const SmartGenericFilter = ({
       }
       case FormatFilterType.SEARCH: {
         return (
-          <BaseInput>
-            <input
-              className="pw-w-full pw-flex pw-h-full focus:pw-outline-none pw-outline-none"
-              type="text"
-              placeholder={filterPlaceholder ?? 'Buscar'}
-              value={searchStaticValue}
-              onChange={(e) => setSearchStaticValue(e.target.value)}
-            />
-          </BaseInput>
+          <BaseInput
+            type="text"
+            placeholder={filterPlaceholder ?? 'Buscar'}
+            value={searchStaticValue}
+            onChange={(e) => setSearchStaticValue(e.target.value)}
+          />
         );
       }
       case FormatFilterType.WALLET: {

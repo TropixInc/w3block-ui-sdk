@@ -67,18 +67,14 @@ const InputUrl = ({
         disabled={
           (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
         }
-      >
-        <input
-          name={name}
-          readOnly={
-            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
-          }
-          type="text"
-          value={url}
-          onChange={(e) => onChangeUrl(e.target.value)}
-          className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
-        />
-      </BaseInput>
+        name={name}
+        readOnly={
+          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+        }
+        type="text"
+        value={url}
+        onChange={(e) => onChangeUrl(e.target.value)}
+      />
       {!hidenValidations && (
         <p className="pw-mt-[5px]">
           {field.value && (
