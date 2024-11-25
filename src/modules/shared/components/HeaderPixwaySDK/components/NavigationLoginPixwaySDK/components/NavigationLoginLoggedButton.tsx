@@ -190,6 +190,14 @@ export const useDefaultMenuTabs = (textColor: string) => {
         (isCommerceReceiver || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0 && !isHidden('futureStatement'),
     },
     {
+      name: internalMenuData['staking']?.customLabel || 'Recompensas',
+      id: 'staking',
+      icon: <WalletIcon width={17} height={17} style={{ color: textColor, stroke: textColor }} />,
+      route: PixwayAppRoutes.STAKING,
+      isVisible:
+        !isHidden('staking') && hasLoyalty,
+    },
+    {
       name: internalMenuData['myOrders']?.customLabel ||
         translate('header>components>defaultTab>myOrders'),
       id: 'myOrders',

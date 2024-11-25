@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import _ from 'lodash';
 
 import { useLocale } from '../../../shared/hooks/useLocale';
+import { IThemeContext } from '../../contexts';
 import { useDynamicApi } from '../../provider/DynamicApiProvider';
 import { modifyStringPath } from '../../utils/modifyStringPath';
 import { unescapeHtml } from '../../utils/unescapeHtml';
@@ -116,8 +117,11 @@ export const getDynamicString = (input: string | undefined, data: any) => {
   return { text, loaded };
 };
 
-export const getI18nString = (input: string | undefined, locale: string) => {
-  const theme = UseThemeConfig();
+export const getI18nString = (
+  input: string | undefined,
+  locale: string,
+  theme: IThemeContext
+) => {
   const i18nJson =
     theme?.defaultTheme?.configurations?.contentData?.i18nJson?.values;
   const i18nLocales = theme?.defaultTheme?.configurations?.contentData?.i18nJson

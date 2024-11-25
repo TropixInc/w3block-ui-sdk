@@ -58,4 +58,5 @@ export enum PixwayAppRoutes {
   WITHDRAWS_ADMIN = '/withdraws/admin',
   REQUESTS = '/requests',
   CHECKOUT_FORM = '/checkout/form',
+  STAKING = '/staking',
 }

@@ -20,7 +20,8 @@ export const CountryFlag = ({
   height?: number;
 }) => {
   const lowerCode = code?.toLowerCase();
-  const fileCode = lowerCode === 'uk' ? 'gb' : lowerCode;
+  const fileCode =
+    lowerCode === 'uk' || lowerCode === 'en-gb' ? 'gb' : lowerCode;
 
   const flagUrl = `${baseUrl}${fileCode}.svg`;
 
