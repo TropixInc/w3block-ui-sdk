@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "1.15.14",
+  "version": "1.15.15",
   "type": "module",
   "files": [
     "dist"
