@@ -47,7 +47,12 @@ const MultipleSelect = ({
   const [translate] = useTranslation();
   const displayValue =
     value && value?.length > 0
-      ? value.map((res: any) => res?.label ?? res).join(', ')
+      ? value
+          .map(
+            (res: any) =>
+              res?.label ?? options?.find((e) => e.value === res)?.label ?? res
+          )
+          .join(', ')
       : undefined;
   return (
     <div
