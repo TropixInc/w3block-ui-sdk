@@ -3,6 +3,7 @@ import { ReactElement } from 'react';
 import { isArray } from 'lodash';
 
 import { Erc20TokenHistory } from '../../dashboard/interface/ercTokenHistoryInterface';
+import { Theme } from '../../storefront/interfaces';
 import { Erc20ActionStatus } from '../interface/Statement/Statement';
 
 export enum StatementScreenTransactionType {
@@ -35,6 +36,8 @@ export interface StatementScreenTransaction {
   metadata?: any;
   status?: Erc20ActionStatus;
   operatorName?: string;
+  orderId?: string;
+  payments?: string;
 }
 
 export interface Metadata {
@@ -218,7 +221,10 @@ export interface PoolAddressBalance {
   processing: string;
 }
 
-export function getSubtransactions(data: Erc20TokenHistory) {
+export function getSubtransactions(
+  data: Erc20TokenHistory,
+  theme?: Theme | null
+) {
   const pending = data?.status !== 'success' && data?.status !== 'external';
   const hash = data?.txHash || data?.txId || '-';
   const parentItemId = data?.id;
@@ -336,18 +342,38 @@ export function getSubtransactions(data: Erc20TokenHistory) {
           amounts.push(parseFloat(p?.totalAmount).toFixed(2));
         }
       });
-      subTransactions.push({
-        ...transactionFragment,
-        value:
-          amounts?.length === 2
-            ? `${parseFloat(
-                commerce?.payments?.[0]?.currencyFullTotalAmount ?? ''
-              ).toFixed(2)} (${amounts[0]} +${amounts[1]})`
-            : amounts[0],
-
-        recipient: commerce?.destinationUserName,
-        description: 'payment',
+      const payments = commerce?.payments?.map((res) => {
+        return res.totalAmount + ' ' + res.currency.code;
       });
+      if (
+        theme?.configurations?.contentData?.multipaymentStatementFormat ===
+        'zuca'
+      ) {
+        subTransactions.push({
+          ...transactionFragment,
+          value:
+            amounts?.length === 2
+              ? `${parseFloat(
+                  commerce?.payments?.[0]?.currencyFullTotalAmount ?? ''
+                ).toFixed(2)} (${amounts[0]} +${amounts[1]})`
+              : amounts[0],
+
+          recipient: commerce?.destinationUserName,
+          description: 'payment',
+        });
+      } else {
+        subTransactions.push({
+          ...transactionFragment,
+          createdAt: data?.createdAt,
+          orderId: commerce?.orderId,
+          value: data?.request?.amount,
+          payments: `${
+            payments && payments?.length > 1 ? `(${payments?.join(' + ')})` : ''
+          }`,
+          recipient: commerce?.destinationUserName,
+          description: 'paymentDefault',
+        });
+      }
     } else {
       subTransactions.push({
         ...transactionFragment,
@@ -358,9 +384,9 @@ export function getSubtransactions(data: Erc20TokenHistory) {
       });
     }
   } else {
-    const { request } = data;
+    const { request, metadata } = data;
     // transactions that dont fit other criteria and don't have a description are filtered out
-    if (request?.metadata?.description) {
+    if (request?.metadata?.description || metadata?.description) {
       subTransactions.push({
         parentItemId,
         hash,
@@ -379,13 +405,19 @@ export function getSubtransactions(data: Erc20TokenHistory) {
             : StatementScreenTransactionSubType.ZUCA_CREDIT,
         createdAt: data?.createdAt,
         value: parseFloat(request?.amount).toFixed(2),
-        recipient: request?.metadata?.description,
+        recipient: request?.metadata?.description ?? metadata?.description,
         description:
           data?.type === 'minter'
-            ? `Crédito ${request.metadata.description}`
+            ? `Crédito ${
+                request?.metadata?.description ?? metadata?.description
+              }`
             : data?.type === 'burn'
-            ? `Débito ${request.metadata.description}`
-            : `Transfêrencia ${request.metadata.description}`,
+            ? `Débito ${
+                request?.metadata?.description ?? metadata?.description
+              }`
+            : `Transfêrencia ${
+                request?.metadata?.description ?? metadata?.description
+              }`,
       });
     }
   }

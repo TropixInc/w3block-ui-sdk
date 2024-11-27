@@ -1819,6 +1819,7 @@ const _CheckoutInfo = ({
     coinError,
     organizedLoyalties,
     isCopied,
+    paymentComplement,
   ]);
 
   const anchorCurrencyId = useMemo(() => {

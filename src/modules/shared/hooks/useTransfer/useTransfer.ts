@@ -16,11 +16,13 @@ export const useTransfer = () => {
       from,
       amount,
       id,
+      description,
     }: {
       to: string;
       from: string;
       amount: string;
       id: string;
+      description: string;
     }) =>
       axios
         .patch(
@@ -28,7 +30,7 @@ export const useTransfer = () => {
             '{companyId}',
             companyId ?? ''
           ).replace('{id}', id ?? ''),
-          { to, from, amount }
+          { to, from, amount, metadata: { description } }
         )
         .then((data) => data.data)
   );

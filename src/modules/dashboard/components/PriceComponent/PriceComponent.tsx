@@ -1,13 +1,10 @@
 /* eslint-disable i18next/no-literal-string */
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PaymentsResponse } from '../../../checkout/interface/interface';
 import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { Shimmer } from '../../../shared/components/Shimmer';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import useRouter from '../../../shared/hooks/useRouter';
-import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface PriceComponent {
   className?: string;
@@ -24,31 +21,15 @@ const _PriceComponent = ({
   payments,
 }: PriceComponent) => {
   const [translate] = useTranslation();
-  const router = useRouter();
-  const { defaultTheme } = UseThemeConfig();
-  const coinPaymentCurrencyId = useMemo(() => {
-    return (
-      router.query?.cryptoCurrencyId ??
-      defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId
-    );
-  }, [
-    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId,
-    router.query?.cryptoCurrencyId,
-  ]);
+
   const coinPayment = () => {
     if (payments?.length === 1) return payments[0];
-    else
-      return payments?.filter(
-        (e) => e?.currencyId === coinPaymentCurrencyId
-      )[0];
+    else return payments?.filter((e) => e?.currency?.crypto)[0];
   };
 
   const payment = () => {
     if (payments?.length === 1) return payments[0];
-    else
-      return payments?.filter(
-        (e) => e?.currencyId !== coinPaymentCurrencyId
-      )[0];
+    else return payments?.filter((e) => !e?.currency?.crypto)[0];
   };
 
   return (
@@ -78,7 +59,7 @@ const _PriceComponent = ({
               code={payment()?.currency?.code}
               symbol={payment()?.currency?.symbol}
               value={
-                coinPayment()?.currencyId === coinPaymentCurrencyId &&
+                coinPayment()?.currency?.crypto &&
                 payments &&
                 payments?.length > 1
                   ? ((parseFloat(payment()?.amount ?? '') +
@@ -96,12 +77,14 @@ const _PriceComponent = ({
           </div>
         )}
       </div>
-      {coinPayment()?.currencyId === coinPaymentCurrencyId &&
+      {coinPayment()?.currency?.crypto &&
       parseFloat(coinPayment()?.amount ?? '') > 0 &&
       payments &&
       payments?.length > 1 ? (
         <div className="pw-flex pw-justify-between pw-mt-2">
-          <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">Zucas</p>
+          <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
+            {coinPayment()?.currency?.symbol}
+          </p>
           {loading || loadingPreview ? (
             <Shimmer />
           ) : (
@@ -219,7 +202,7 @@ const _PriceComponent = ({
               code={payment()?.currency?.code}
               symbol={payment()?.currency?.symbol}
               value={
-                coinPayment()?.currencyId === coinPaymentCurrencyId
+                coinPayment()?.currency?.crypto
                   ? payment()?.originalTotalAmount ?? ''
                   : payment()?.fullOrderTotalAmount ?? ''
               }

@@ -62,12 +62,14 @@ export const TransferModal = ({
     if (data && transferInfo) {
       const items = _.get(data, transferInfo.itemsPath, []);
 
-      const arrOptions = items?.map((item: any) => ({
-        value: _.get(item, transferInfo.suggestionWalletPath, ''),
-        label: _.get(item, transferInfo.suggestionWalletLabel, ''),
-      }));
+      const arrOptions = items?.length
+        ? items?.map((item: any) => ({
+            value: _.get(item, transferInfo.suggestionWalletPath, ''),
+            label: _.get(item, transferInfo.suggestionWalletLabel, ''),
+          }))
+        : [];
 
-      return arrOptions.filter((item: any) => item.value);
+      return arrOptions?.filter((item: any) => item.value);
     } else return [];
   }, [data, transferInfo]);
 
@@ -92,7 +94,13 @@ export const TransferModal = ({
             </Alert>
           </div>
           <div className="pw-flex pw-justify-center pw-gap-5 pw-mt-8">
-            <BaseButton onClick={onClose} variant="outlined">
+            <BaseButton
+              onClick={() => {
+                onClose();
+                setStep(1);
+              }}
+              variant="outlined"
+            >
               {'Fechar'}
             </BaseButton>
             {result === 'error' ? (
@@ -142,7 +150,7 @@ export const TransferModal = ({
                 <>
                   <p className="pw-font-semibold">
                     {
-                      'Tem certeza que deseja transferir para a seguinte carteira?'
+                      'Tem certeza que deseja transferir para o seguinte destinatário?'
                     }
                   </p>{' '}
                   <p>
@@ -151,7 +159,9 @@ export const TransferModal = ({
                         (res: any) => res.value === walletToTransfer
                       ).label
                     }
-                    : {walletToTransfer}
+                    {transferInfo?.mode === 'walletSuggestions'
+                      ? null
+                      : `: ${walletToTransfer}`}
                   </p>
                 </>
               )}
@@ -182,6 +192,9 @@ export const TransferModal = ({
                       amount: String(paymentAmount),
                       from: wallet,
                       id: contractId,
+                      description: options?.find(
+                        (res: any) => res.value === walletToTransfer
+                      ).label,
                     },
                     {
                       onSuccess() {

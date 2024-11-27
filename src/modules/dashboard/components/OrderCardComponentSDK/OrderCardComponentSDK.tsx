@@ -66,7 +66,6 @@ export const OrderCardComponentSDK = ({
   const { data: order } = useGetEspecificOrder(id, opened);
   const locale = useLocale();
   const [translate] = useTranslation();
-
   const products = order?.data.products;
   const [infoOpened, setInfoOpened] = useState(false);
   const { data } = useGetApi({

@@ -85,13 +85,21 @@ export const UserReportTemplate = () => {
 
   const getTextToShow = (erc: Erc20TokenHistory): string => {
     if (
-      erc.from == null &&
-      erc.request.metadata &&
-      Array.isArray(erc.request.metadata)
+      erc?.from == null &&
+      erc?.request?.metadata &&
+      Array.isArray(erc?.request?.metadata)
     ) {
-      return `${erc.request.metadata[0].description} - Gerado pelo operador ${erc.request.metadata[0].operatorName}`;
-    } else if (erc.request.metadata && erc.from != null) {
-      return `${erc.request.metadata.description} - Feito pelo usuário ${erc.from.user_name}`;
+      return `${erc?.request?.metadata?.[0]?.description} ${
+        erc?.request?.metadata?.[0]?.operatorName
+          ? `- Gerado pelo operador ${erc?.request?.metadata?.[0]?.operatorName}`
+          : ''
+      }`;
+    } else if (erc?.request?.metadata && erc?.from != null) {
+      return `${erc?.request?.metadata?.description} ${
+        erc?.from?.user_name
+          ? `- Feito pelo usuário ${erc?.from?.user_name}`
+          : ''
+      }`;
     } else {
       return '';
     }

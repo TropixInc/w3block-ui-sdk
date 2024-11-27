@@ -54,7 +54,7 @@ export const WalletStatementTemplateSDK = () => {
   const subTransactions = useMemo(() => {
     const arr: StatementScreenTransaction[] = [];
     data?.items?.forEach((i) => {
-      const subs = getSubtransactions(i);
+      const subs = getSubtransactions(i, defaultTheme);
       subs.forEach((t) => {
         arr.push(t);
       });

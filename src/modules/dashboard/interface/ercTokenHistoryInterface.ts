@@ -55,6 +55,7 @@ export interface Metadata {
   confirmedAt: string;
   transaction: Transaction;
   commerce?: Commerce;
+  description?: string;
 }
 
 export interface Commerce {
