@@ -992,5 +992,6 @@
   "storefront>products>alphabetical": "Alfabética",
   "storefront>products>highestPrice": "Maior Preço",
   "storefront>products>lowestPrice": "Menor Preço",
-  "storefront>products>sorting": "Ordenação"
+  "storefront>products>sorting": "Ordenação",
+  "shared>navigationLoginLoggedButton>toTransfer": "Transferir"
  }

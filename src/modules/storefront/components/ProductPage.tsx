@@ -175,6 +175,9 @@ export const ProductPage = ({
   const [isSendGift, setIsSendGift] = useState(true);
   const [giftData, setGiftData, deleteGiftKey] =
     useLocalStorage<any>(GIFT_DATA_INFO_KEY);
+  useEffect(() => {
+    deleteGiftKey();
+  }, []);
   const productKycRequirement = useMemo(() => {
     return product?.requirements?.requireKycContext?.slug;
   }, [product?.requirements?.requireKycContext?.slug]);
@@ -581,13 +584,27 @@ export const ProductPage = ({
                 .fill(product.id)
                 .join(',')}&currencyId=${currencyId?.id}&sessionId=${id}`
           );
-        } else
+        } else if (
+          product?.settings?.acceptMultipleCurrenciesPurchase &&
+          product?.prices?.some((res) => res?.currency?.crypto)
+        ) {
+          pushConnect(
+            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+              `?productIds=${Array(quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${currencyId?.id}&cryptoCurrencyId=${
+                product?.prices?.find((res) => res?.currency?.crypto)
+                  ?.currencyId
+              }`
+          );
+        } else {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${currencyId?.id}`
           );
+        }
       }
     }
   };

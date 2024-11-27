@@ -21,6 +21,8 @@ export const WalletHeaderSDK = ({ title = 'Carteira' }: { title?: string }) => {
     defaultTheme?.configurations?.contentData?.hideLoyaltyAuthentication;
   const hideWallet =
     defaultTheme?.configurations?.contentData?.hideWalletAddress;
+  const showTransferButton =
+    defaultTheme?.configurations?.contentData?.walletTransfer?.enabled;
   return (
     <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
       <div className="pw-flex pw-justify-between">
@@ -94,6 +96,7 @@ export const WalletHeaderSDK = ({ title = 'Carteira' }: { title?: string }) => {
                     currency={wallet?.currency}
                     chainId={wallet?.chainId}
                     hideLoyaltyAuthentication={hideLoyaltyAuthentication}
+                    showTransferButton={showTransferButton}
                   />{' '}
                 </SwiperSlide>
               ))}

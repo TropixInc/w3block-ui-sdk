@@ -339,9 +339,11 @@ const SimpleSelect = ({
   const [translate] = useTranslation();
   const displayValue = useMemo(() => {
     if (value?.label) return value?.label;
+    else if (options.some((res) => res.value === value))
+      return options.find((res) => res.value === value)?.label;
     else if (typeof value === 'string' && value != '') return value;
     else return placeholder;
-  }, [placeholder, value]);
+  }, [options, placeholder, value]);
   return (
     <div
       className={classNames(
@@ -367,7 +369,7 @@ const SimpleSelect = ({
                   classes.button ?? ''
                 )}
               >
-                <div className="pw-text-base pw-leading-4 pw-flex pw-items-center pw-pr-2">
+                <div className="pw-text-base pw-leading-4 pw-flex pw-items-center pw-pr-2 pw-truncate">
                   {displayValue}
                 </div>
                 <ArrowDown className="pw-stroke-black" />

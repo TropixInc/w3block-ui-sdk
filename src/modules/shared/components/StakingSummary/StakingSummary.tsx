@@ -136,7 +136,7 @@ export const StakingSummary = () => {
             </div>
           </div>
         </div>
-        <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
+        <div className="pw-p-[20px] pw-mt-8 pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
           <BaseTable<SummaryDto>
             columns={columns}
             rows={data?.data?.items}
