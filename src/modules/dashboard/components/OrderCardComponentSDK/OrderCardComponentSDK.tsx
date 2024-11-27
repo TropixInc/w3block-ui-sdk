@@ -1,6 +1,6 @@
 /* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 
 import { format } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
@@ -16,6 +16,7 @@ import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { CurrencyEnum } from '../../../shared/enums/Currency';
 import { useLocale } from '../../../shared/hooks/useLocale';
+import useRouter from '../../../shared/hooks/useRouter';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { useGetApi } from '../../hooks/useGetApi';
@@ -73,9 +74,16 @@ export const OrderCardComponentSDK = ({
     enabled: opened,
   });
   const { defaultTheme } = UseThemeConfig();
-  const coinPaymentCurrencyId =
-    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
-    '9e5c87cb-22ca-4550-8f09-f2272203410b';
+  const router = useRouter();
+  const coinPaymentCurrencyId = useMemo(() => {
+    return (
+      router.query?.cryptoCurrencyId ??
+      defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId
+    );
+  }, [
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId,
+    router.query?.cryptoCurrencyId,
+  ]);
   const [openReceipt, setOpenReceipt] = useState(false);
   const showCoinPaymentReceiptButton =
     defaultTheme?.configurations?.contentData?.showCoinPaymentReceiptButton;

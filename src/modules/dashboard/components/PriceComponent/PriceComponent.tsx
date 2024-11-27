@@ -1,10 +1,12 @@
 /* eslint-disable i18next/no-literal-string */
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PaymentsResponse } from '../../../checkout/interface/interface';
 import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { Shimmer } from '../../../shared/components/Shimmer';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import useRouter from '../../../shared/hooks/useRouter';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface PriceComponent {
@@ -22,10 +24,17 @@ const _PriceComponent = ({
   payments,
 }: PriceComponent) => {
   const [translate] = useTranslation();
+  const router = useRouter();
   const { defaultTheme } = UseThemeConfig();
-  const coinPaymentCurrencyId =
-    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
-    '9e5c87cb-22ca-4550-8f09-f2272203410b';
+  const coinPaymentCurrencyId = useMemo(() => {
+    return (
+      router.query?.cryptoCurrencyId ??
+      defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId
+    );
+  }, [
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId,
+    router.query?.cryptoCurrencyId,
+  ]);
   const coinPayment = () => {
     if (payments?.length === 1) return payments[0];
     else
