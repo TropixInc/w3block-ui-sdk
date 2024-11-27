@@ -271,6 +271,8 @@ export const StorefrontPreview = ({
     dynamicApi,
   };
 
+  console.log(theme, 'theme');
+
   return (
     <Suspense
       fallback={

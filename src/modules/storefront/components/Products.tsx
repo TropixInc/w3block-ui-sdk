@@ -31,6 +31,7 @@ import 'swiper/css/navigation';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
 import { useDynamicString } from '../hooks/useDynamicString';
+import { BaseSelect } from '../../shared';
 const Card = lazy(() =>
   import('../../shared/components/Card').then((module) => ({
     default: module.Card,
@@ -54,10 +55,32 @@ export const Products = ({ data }: { data: ProductsData }) => {
     contentData,
     mobileContentData
   );
+  const [translate] = useTranslation();
+
+  const optionsSorting = [
+    {
+      label: translate('storefront>products>relevance'),
+      value: 'relevance',
+    },
+    {
+      label: translate('storefront>products>alphabetical'),
+      value: 'name',
+    },
+    {
+      label: translate('storefront>products>highestPrice'),
+      value: 'highestPrice',
+    },
+    {
+      label: translate('storefront>products>lowestPrice'),
+      value: 'lowestPrice',
+    },
+  ];
 
   const [products, setProducts] = useState<Product[]>([]);
   const [error, __] = useState('');
-  const [translate] = useTranslation();
+
+  console.log(contentData, 'contentData');
+
   const breakpoint = useBreakpoints();
   const {
     layoutDisposition,
@@ -95,7 +118,11 @@ export const Products = ({ data }: { data: ProductsData }) => {
     dynamicCards,
     dynamicCardsPath,
     dynamicMaxItens,
+    allowSorting,
+    defaultSorting,
   } = mergedContentData;
+
+  const [sort, setSort] = useState(defaultSorting ?? '');
 
   const { datasource } = useDynamicApi();
   const { text: title } = useDynamicString(moduleTitle);
@@ -121,12 +148,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
   ]);
   const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.COMMERCE);
-  useEffect(() => {
-    if (cardType == CardTypesEnum.DYNAMIC) {
-      callApiForDynamicProducts();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardSearch, cardType, breakpoint, totalRows, itensPerLine, companyId]);
 
   const quantityOfItemsGrid = () => {
     if (breakpoint == breakpointsEnum.XS) {
@@ -155,22 +176,65 @@ export const Products = ({ data }: { data: ProductsData }) => {
       ? gridMaxItemsTotal
       : carouselMaxItems;
 
-  const callApiForDynamicProducts = () => {
-    const limit = carouselSize;
-    if (companyId)
-      axios
-        .get(
-          `/companies/${companyId}/products?limit=${limit}&${
+  useEffect(() => {
+    if (cardType == CardTypesEnum.DYNAMIC) {
+      if (sort === 'name') {
+        callApiForDynamicProducts(
+          `/companies/${companyId}/products?limit={limit}&sortBy=name&orderBy=ASC&${
             cardSearch && cardSearch.length > 0
               ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
               : ''
           }`
-        )
-        .then((response) => {
-          if (response) {
-            setProducts(response.data.items);
-          }
-        });
+        );
+      } else if (sort === 'relevance') {
+        callApiForDynamicProducts(
+          `/companies/${companyId}/products?limit={limit}&sortBy=relevance&orderBy=DESC&${
+            cardSearch && cardSearch.length > 0
+              ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+              : ''
+          }`
+        );
+      } else if (sort === 'lowestPrice') {
+        callApiForDynamicProducts(
+          `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=ASC&sortByPriceCurrencyId=${
+            mergedContentData.currencyId ?? ''
+          }&${
+            cardSearch && cardSearch.length > 0
+              ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+              : ''
+          }`
+        );
+      } else if (sort === 'highestPrice') {
+        callApiForDynamicProducts(
+          `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=DESC&&sortByPriceCurrencyId=${
+            mergedContentData.currencyId ?? ''
+          }&${
+            cardSearch && cardSearch.length > 0
+              ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+              : ''
+          }`
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    cardSearch,
+    cardType,
+    breakpoint,
+    totalRows,
+    itensPerLine,
+    companyId,
+    sort,
+  ]);
+
+  const callApiForDynamicProducts = (url: string) => {
+    const limit = carouselSize;
+    if (companyId)
+      axios.get(url.replace('{limit}', limit.toString())).then((response) => {
+        if (response) {
+          setProducts(response.data.items);
+        }
+      });
   };
 
   const clampedProducts = products?.slice(0, carouselSize);
@@ -222,7 +286,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     prices: [
                       {
                         amount: p?.value ?? '',
-                        currency: { symbol: 'R$' ?? '' },
+                        currency: { symbol: 'R$' },
                       },
                     ],
                   }}
@@ -348,7 +412,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     prices: [
                       {
                         amount: p?.value ?? '',
-                        currency: { symbol: 'R$' ?? '' },
+                        currency: { symbol: 'R$' },
                       },
                     ],
                   }}
@@ -436,36 +500,53 @@ export const Products = ({ data }: { data: ProductsData }) => {
       }}
     >
       <div className="pw-container pw-mx-auto pw-pb-10 sm:!pw-px-0">
-        {moduleTitle && moduleTitle != '' && (
-          <h2
-            style={{
-              color: moduleTitleColor ?? 'black',
-              fontFamily: moduleFontFamily ?? '',
-              fontSize:
-                (moduleFontSize && moduleFontSize != '' && moduleFontSize != '0'
-                  ? moduleFontSize
-                  : 36) + (moduleFontSizeType == 'rem' ? 'rem' : 'px'),
-              fontWeight: moduleFontBold ? 'bold' : 'normal',
-              fontStyle: moduleFontItalic ? 'italic' : 'normal',
-              lineHeight:
-                moduleFontSize &&
-                moduleFontSize != '' &&
-                moduleFontSize != '0' &&
-                moduleFontSizeType != 'rem'
-                  ? (
-                      parseInt(moduleFontSize) -
-                      parseInt(moduleFontSize) * 0.05
-                    ).toFixed(0) + 'px'
-                  : 'auto',
-            }}
-            className={classNames(
-              'pw-font-semibold pw-text-lg pw-pt-10 pw-w-full',
-              alignmentTextClass
-            )}
-          >
-            {title}
-          </h2>
-        )}
+        <div className="pw-flex pw-pt-10 pw-justify-between">
+          {moduleTitle && moduleTitle != '' ? (
+            <h2
+              style={{
+                color: moduleTitleColor ?? 'black',
+                fontFamily: moduleFontFamily ?? '',
+                fontSize:
+                  (moduleFontSize &&
+                  moduleFontSize != '' &&
+                  moduleFontSize != '0'
+                    ? moduleFontSize
+                    : 36) + (moduleFontSizeType == 'rem' ? 'rem' : 'px'),
+                fontWeight: moduleFontBold ? 'bold' : 'normal',
+                fontStyle: moduleFontItalic ? 'italic' : 'normal',
+                lineHeight:
+                  moduleFontSize &&
+                  moduleFontSize != '' &&
+                  moduleFontSize != '0' &&
+                  moduleFontSizeType != 'rem'
+                    ? (
+                        parseInt(moduleFontSize) -
+                        parseInt(moduleFontSize) * 0.05
+                      ).toFixed(0) + 'px'
+                    : 'auto',
+              }}
+              className={classNames(
+                'pw-font-semibold pw-text-lg pw-w-full',
+                alignmentTextClass
+              )}
+            >
+              {title}
+            </h2>
+          ) : (
+            <></>
+          )}
+          <div className="">
+            {allowSorting ? (
+              <BaseSelect
+                options={optionsSorting}
+                value={sort}
+                onChangeValue={(e) => setSort(e)}
+                placeholder={translate('storefront>products>sorting')}
+              />
+            ) : null}
+          </div>
+        </div>
+
         <div className="pw-flex pw-justify-center pw-pt-10">
           {layoutDisposition === CardLayoutDisposition.GRID ? (
             <GridProducts />
