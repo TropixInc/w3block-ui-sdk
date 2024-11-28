@@ -79,8 +79,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, __] = useState('');
 
-  console.log(contentData, 'contentData');
-
   const breakpoint = useBreakpoints();
   const {
     layoutDisposition,
@@ -170,7 +168,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
   };
 
   const gridMaxItemsTotal = quantityOfItemsGrid() * (totalRows ? totalRows : 2);
-  const carouselMaxItems = (itensPerLine ? itensPerLine : 4) * (totalRows ?? 2);
+  const carouselMaxItems = 50;
   const carouselSize =
     layoutDisposition === CardLayoutDisposition.GRID
       ? gridMaxItemsTotal
@@ -206,7 +204,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
         );
       } else if (sort === 'highestPrice') {
         callApiForDynamicProducts(
-          `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=DESC&&sortByPriceCurrencyId=${
+          `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=DESC&sortByPriceCurrencyId=${
             mergedContentData.currencyId ?? ''
           }&${
             cardSearch && cardSearch.length > 0
@@ -225,6 +223,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
     itensPerLine,
     companyId,
     sort,
+    mergedContentData.currencyId,
   ]);
 
   const callApiForDynamicProducts = (url: string) => {
@@ -236,8 +235,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
         }
       });
   };
-
-  const clampedProducts = products?.slice(0, carouselSize);
 
   const GridProducts = () => {
     return (
@@ -297,7 +294,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 />
               ))
           : format === 'product'
-          ? clampedProducts?.map((p) => (
+          ? products?.map((p) => (
               <Card
                 key={p.id}
                 product={p}
@@ -307,7 +304,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 }}
               />
             ))
-          : clampedProducts?.map((p) => (
+          : products?.map((p) => (
               <ContentCard
                 key={p.id}
                 product={{
@@ -424,7 +421,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
               </SwiperSlide>
             ))
           : format === 'product'
-          ? clampedProducts?.map((p) => (
+          ? products?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
                 <Card
                   key={p.id}
@@ -436,7 +433,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 />
               </SwiperSlide>
             ))
-          : clampedProducts?.map((p) => (
+          : products?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
                 <ContentCard
                   key={p.id}
