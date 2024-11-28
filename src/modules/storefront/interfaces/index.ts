@@ -405,6 +405,9 @@ export interface ProductsData extends MainModuleThemeInterface {
     dynamicCards?: boolean;
     dynamicCardsPath?: string;
     dynamicMaxItens?: number;
+    allowSorting?: boolean;
+    defaultSorting?: string;
+    currencyId?: string;
   };
   mobileStyleData: ProductsDataStyleData;
   mobileContentData: ProductsData['contentData'];

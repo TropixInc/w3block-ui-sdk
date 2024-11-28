@@ -247,13 +247,9 @@ const SmartGenericFilter = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterTemplate, selected]);
 
-  console.log(filters, 'filters');
-
   useEffect(() => {
     if (FormatFilterType.WALLET) {
       if (walletFilter) {
-        console.log(filterTemplate, 'filterTemplate');
-        console.log(itemKey, 'itemKey');
         onChangeFilter &&
           onChangeFilter({
             ...filters,

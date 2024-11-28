@@ -988,5 +988,10 @@
   "staking>summary>error": "Erro ao resgatar, por favor tente novamente.",
   "staking>summary>deliverying": "Valor sendo entregue:",
   "staking>summary>subtitle": "Estes são as recompensas disponíveis na sua conta. Você pode resgatar essas recompensas, transformando-as em pontos que podem ser trocados por produtos e serviços disponíveis no nosso catálogo. Caso os lançamentos não sejam resgatados, eles podem expirar. Fique atento ao prazo de validade de cada um deles.",
+  "storefront>products>relevance": "Relevância",
+  "storefront>products>alphabetical": "Alfabética",
+  "storefront>products>highestPrice": "Maior Preço",
+  "storefront>products>lowestPrice": "Menor Preço",
+  "storefront>products>sorting": "Ordenação",
   "shared>navigationLoginLoggedButton>toTransfer": "Transferir"
  }
