@@ -35,6 +35,7 @@ interface WalletCardProps {
   pointsPrecision?: 'decimal' | 'integer';
   address?: string;
   hideLoyaltyAuthentication?: boolean;
+  showTransferButton?: boolean;
 }
 
 export const WalletCard = ({
@@ -46,11 +47,12 @@ export const WalletCard = ({
   pointsPrecision = 'integer',
   address,
   hideLoyaltyAuthentication = false,
+  showTransferButton = false,
 }: WalletCardProps) => {
   const { name } = useCompanyConfig();
   const [translate] = useTranslation();
   const { push } = useRouterConnect();
-  const { setAuthenticatePaymentModal } = useUserWallet();
+  const { setAuthenticatePaymentModal, setTransferModal } = useUserWallet();
   const chainLink = getExtractLinkByChainId(chainId ?? 137, address ?? '0x0');
   const getIcon = () => {
     switch (type) {
@@ -135,6 +137,14 @@ export const WalletCard = ({
           className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
         >
           {translate('shared>navigationLoginLoggedButton>toScore')}
+        </WeblockButton>
+      )}
+      {type == 'loyalty' && showTransferButton && (
+        <WeblockButton
+          onClick={() => setTransferModal?.(true)}
+          className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"
+        >
+          {translate('shared>navigationLoginLoggedButton>toTransfer')}
         </WeblockButton>
       )}
     </div>

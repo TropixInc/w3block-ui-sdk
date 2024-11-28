@@ -173,9 +173,6 @@ const _CheckoutInfo = ({
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   const [productVariants] = useLocalStorage<any>(PRODUCT_VARIANTS_INFO_KEY);
   const query = useQuery();
-  const isCoinPayment = router.query.coinPayment?.includes('true')
-    ? true
-    : false;
   const destinationUser = router.query.destination;
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -184,6 +181,16 @@ const _CheckoutInfo = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
+  const acceptMultipleCurrenciesPurchase = useMemo(() => {
+    return (
+      orderPreview?.products?.filter(
+        (res) => res?.settings?.acceptMultipleCurrenciesPurchase
+      )?.length === orderPreview?.products?.length
+    );
+  }, [orderPreview?.products]);
+  const isCoinPayment =
+    (router.query.coinPayment?.includes('true') ? true : false) ||
+    acceptMultipleCurrenciesPurchase;
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const utms = useUtms();
   const [checkUtm, setCheckUtm] = useState(true);
@@ -285,9 +292,24 @@ const _CheckoutInfo = ({
   );
 
   const { defaultTheme } = UseThemeConfig();
-  const coinPaymentCurrencyId =
-    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
-    '9e5c87cb-22ca-4550-8f09-f2272203410b';
+  const coinPaymentCurrencyId = useMemo(() => {
+    return (
+      router.query?.cryptoCurrencyId ??
+      defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId
+    );
+  }, [
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId,
+    router.query?.cryptoCurrencyId,
+  ]);
+  const paymentComplement = useMemo(() => {
+    return (
+      parseFloat(
+        orderPreview?.payments?.filter(
+          (e) => e?.currencyId !== coinPaymentCurrencyId
+        )[0].totalPrice ?? ''
+      ) !== 0
+    );
+  }, [coinPaymentCurrencyId, orderPreview?.payments]);
   const getOrderPreviewFn = (couponCode?: string) => {
     const coupon = () => {
       if (couponCode) {
@@ -559,6 +581,10 @@ const _CheckoutInfo = ({
           )[0]?.attributes?.name,
         },
         isCoinPayment,
+        acceptMultipleCurrenciesPurchase,
+        cryptoCurrencyId: orderPreview?.payments?.find(
+          (res) => res?.currency?.crypto
+        )?.currencyId,
         cashback: orderPreview.cashback?.cashbackAmount,
       });
     }
@@ -1261,7 +1287,14 @@ const _CheckoutInfo = ({
         />
       );
     }
-  }, [changeValue, erc20decimals, isCoinPayment, isErc20, paymentAmount]);
+  }, [
+    changeValue,
+    decimals,
+    erc20decimals,
+    isCoinPayment,
+    isErc20,
+    paymentAmount,
+  ]);
 
   const locale = useLocale();
   const _ButtonsToShow = useMemo(() => {
@@ -1309,17 +1342,22 @@ const _CheckoutInfo = ({
                   />
                 )}
                 <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                  {isErc20 && !isCoinPayment
+                  {acceptMultipleCurrenciesPurchase
+                    ? null
+                    : isErc20 && !isCoinPayment
                     ? translate('checkout>checkoutInfo>valueOfPay2') +
                       ' ' +
                       orderPreview?.products?.[0]?.name
                     : translate('checkout>checkoutInfo>valueOfPay')}
                 </p>
                 <div className="pw-mb-8">
-                  <div className="pw-flex pw-gap-3">{Erc20Input}</div>
+                  {acceptMultipleCurrenciesPurchase ? null : (
+                    <div className="pw-flex pw-gap-3">{Erc20Input}</div>
+                  )}
                   {automaxLoyalty ? (
                     <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2 pw-font-poppins">
-                      {translate('wallet>page>balance')} Zucas:{' '}
+                      {translate('wallet>page>balance')}{' '}
+                      {organizedLoyalties?.[0]?.currency}:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
                       organizedLoyalties?.some(
@@ -1364,6 +1402,7 @@ const _CheckoutInfo = ({
                   <CoinPaymentResume
                     payments={orderPreview?.payments}
                     loading={isLoading || isLoadingPreview}
+                    currency={organizedLoyalties?.[0]?.currency}
                   />
                 )}
               </>
@@ -1458,7 +1497,8 @@ const _CheckoutInfo = ({
                 {!automaxLoyalty ? (
                   <>
                     <p className="pw-font-[600] pw-text-sm pw-font-poppins pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                      Zucas ( {translate('wallet>page>balance')}:{' '}
+                      {organizedLoyalties?.[0]?.currency} ({' '}
+                      {translate('wallet>page>balance')}:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
                       organizedLoyalties?.some(
@@ -1508,7 +1548,10 @@ const _CheckoutInfo = ({
                           defaultValue={coinAmountPayment}
                           InputElement={
                             <input
-                              disabled={paymentAmount === '' || automaxLoyalty}
+                              disabled={
+                                (paymentAmount === '' || automaxLoyalty) &&
+                                !acceptMultipleCurrenciesPurchase
+                              }
                               className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
                               placeholder="0,0"
                             />
@@ -1516,6 +1559,41 @@ const _CheckoutInfo = ({
                         />
                       </div>
                     </div>
+                  </>
+                ) : null}
+                {acceptMultipleCurrenciesPurchase ? (
+                  <>
+                    <CoinPaymentResume
+                      payments={orderPreview?.payments}
+                      loading={isLoading || isLoadingPreview}
+                      currency={organizedLoyalties?.[0]?.currency}
+                    />
+                    {paymentComplement ? (
+                      <PaymentMethodsComponent
+                        loadingPreview={isLoadingPreview}
+                        methodSelected={
+                          choosedPayment ?? ({} as PaymentMethodsAvaiable)
+                        }
+                        methods={
+                          orderPreview?.payments?.filter(
+                            (e) => e.currencyId === currencyIdState
+                          )[0]?.providersForSelection ?? []
+                        }
+                        onSelectedPayemnt={setChoosedPayment}
+                        title={
+                          isCoinPayment
+                            ? translate(
+                                'checkout>checkoutInfo>howCompletePayment'
+                              )
+                            : translate('checkout>checkoutInfo>paymentMethod')
+                        }
+                        titleClass={
+                          isCoinPayment
+                            ? '!pw-font-[400] pw-font-poppins !pw-text-base'
+                            : ''
+                        }
+                      />
+                    ) : null}
                   </>
                 ) : null}
                 {!payWithCoin() ? (
@@ -1563,7 +1641,8 @@ const _CheckoutInfo = ({
                   isLoadingPreview ||
                   !payWithCoin() ||
                   (isCoinPayment &&
-                    (paymentAmount === '' || parseFloat(paymentAmount) === 0))
+                    (paymentAmount === '' || parseFloat(paymentAmount) === 0) &&
+                    !acceptMultipleCurrenciesPurchase)
                 }
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
@@ -1588,7 +1667,9 @@ const _CheckoutInfo = ({
         }
         return (
           <div className="pw-mt-4">
-            {productCache?.isCoinPayment || isCoinPayment ? (
+            {(productCache?.isCoinPayment || isCoinPayment) &&
+            (!productCache?.acceptMultipleCurrenciesPurchase ||
+              !acceptMultipleCurrenciesPurchase) ? (
               <>
                 {error !== '' && statusResponse?.status === 'failed' ? (
                   <Alert variant="error">{error}</Alert>
@@ -1738,6 +1819,7 @@ const _CheckoutInfo = ({
     coinError,
     organizedLoyalties,
     isCopied,
+    paymentComplement,
   ]);
 
   const anchorCurrencyId = useMemo(() => {
@@ -1794,8 +1876,8 @@ const _CheckoutInfo = ({
             </>
           )}
 
-          {isCoinPayment ||
-          productCache?.isCoinPayment ||
+          {(isCoinPayment && !acceptMultipleCurrenciesPurchase) ||
+          (productCache?.isCoinPayment && !acceptMultipleCurrenciesPurchase) ||
           isErc20 ||
           orderResponse?.passShareCodeInfo ? null : (
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">

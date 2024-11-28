@@ -15,6 +15,7 @@ import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import CopyIcon from '../../../shared/assets/icons/copyIconOutlined.svg?react';
 import RejectIcon from '../../../shared/assets/icons/minusCircle.svg?react';
 import ApprovedIcon from '../../../shared/assets/icons/plusCircle.svg?react';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Erc20ActionStatus } from '../../../shared/interface/Statement/Statement';
@@ -149,6 +150,15 @@ export const StatementComponent = ({
           {translate('dashboard>statementComponent>for')}{' '}
           {statement?.metadata?.commerce?.destinationUserName}
         </p>
+      );
+    } else if (statement?.description === 'paymentDefault') {
+      return (
+        <a
+          href={PixwayAppRoutes.MY_ORDERS + `?orderId=${statement?.orderId}`}
+          className="pw-underline"
+        >
+          Pagamento de compra
+        </a>
       );
     } else return statement?.description ?? '';
   };
@@ -299,6 +309,13 @@ export const StatementComponent = ({
           <span className="pw-text-black pw-text-[13px] pw-font-normal">
             {currency}
           </span>
+          {statement.description === 'paymentDefault' &&
+          statement.payments !== '' ? (
+            <span className="pw-text-black pw-text-sm pw-font-normal">
+              {' '}
+              {statement.payments}
+            </span>
+          ) : null}
         </div>
         <div className="pw-text-left pw-text-zinc-700 pw-text-xs pw-font-medium pw-max-w-[500px] pw-mt-1">
           {subtext()}

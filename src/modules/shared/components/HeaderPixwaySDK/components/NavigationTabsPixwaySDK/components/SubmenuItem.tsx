@@ -11,6 +11,7 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { getI18nString } from '../../../../../../storefront/hooks/useDynamicString';
+import { UseThemeConfig } from '../../../../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import ArrowDown from '../../../../../assets/icons/arrowDown.svg?react';
 import { useLocale } from '../../../../../hooks/useLocale';
 import { NavigationTabsPixwaySDKTabs } from '../NavigationTabsPixwaySDK';
@@ -32,11 +33,12 @@ const SubmenuItem = ({
 }: SubmenuItemProps) => {
   const ref = useRef(null);
   const locale = useLocale();
-  const { text: itemName } = getI18nString(item.name, locale);
+  const theme = UseThemeConfig();
+  const { text: itemName } = getI18nString(item.name, locale, theme);
   const [menuState, toggle] = useMenuState({ transition: true });
   const { anchorProps, hoverProps } = useHover(menuState.state, toggle);
   const onRenderMenu = (item: NavigationTabsPixwaySDKTabs) => {
-    const { text: menuName } = getI18nString(item.name, locale);
+    const { text: menuName } = getI18nString(item.name, locale, theme);
     if (item.tabs) {
       return item.tabs.map((subm, idx) => (
         <SubMenu
@@ -104,7 +106,7 @@ const SubmenuItem = ({
         menuStyle={{ backgroundColor: bgColor }}
       >
         {item?.tabs?.map((sub, idx) => {
-          const { text: subName } = getI18nString(sub.name, locale);
+          const { text: subName } = getI18nString(sub.name, locale, theme);
           if (sub.tabs) {
             return onRenderMenu(sub);
           } else {

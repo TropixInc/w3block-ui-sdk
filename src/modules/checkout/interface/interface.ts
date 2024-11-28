@@ -168,6 +168,8 @@ export interface OrderPreviewCache {
     name: string;
   };
   isCoinPayment?: boolean;
+  acceptMultipleCurrenciesPurchase?: boolean;
+  cryptoCurrencyId?: string;
   cashback?: string;
   currency?: {
     id?: string;

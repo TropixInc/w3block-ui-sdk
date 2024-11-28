@@ -35,8 +35,6 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
 
   const { text: benefitIdDynamic } = useDynamicString(benefitId);
 
-  console.log(benefitIdDynamic, 'benefitIdDynamic');
-
   const {
     data: benefit,
     isSuccess: isBenefitSucceed,

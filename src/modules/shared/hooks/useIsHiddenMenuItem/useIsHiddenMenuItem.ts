@@ -37,12 +37,16 @@ export const useIsHiddenMenuItem = (roles: Array<UserRoleEnum>) => {
           return true;
         } else if (id === 'withdrawsAdmin') {
           return true;
+        } else if (id === 'staking') {
+          return true;
         }
       } else if (id === 'futureStatement') {
         return true;
       } else if (id === 'withdraws') {
         return true;
       } else if (id === 'withdrawsAdmin') {
+        return true;
+      } else if (id === 'staking') {
         return true;
       }
     },

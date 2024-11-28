@@ -13,8 +13,8 @@ import { useLocale } from '../../shared/hooks/useLocale';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { getI18nString } from '../hooks/useDynamicString';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
+import { UseThemeConfig } from '../hooks/useThemeConfig/useThemeConfig';
 import { FooterData } from '../interfaces';
-
 import './Footer.css';
 
 type SVG = React.FunctionComponent<
@@ -26,6 +26,7 @@ type SVG = React.FunctionComponent<
 export const Footer = ({ data }: { data: FooterData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
   const locale = useLocale();
+  const theme = UseThemeConfig();
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
     styleData,
     mobileStyleData
@@ -91,7 +92,7 @@ export const Footer = ({ data }: { data: FooterData }) => {
         <div className="pw-pb-6 pw-justify-center pw-items-center pw-max-w-[1440px] pw-w-full pw-pt-10">
           <div className="pw-w-full pw-font-semibold pw-text-sm pw-gap-2 sm:pw-gap-[26px] pw-flex pw-items-center pw-justify-center pw-flex-col sm:pw-flex-row">
             {menuLinks?.map(({ label, value }) => {
-              const { text: pageTitle } = getI18nString(label, locale);
+              const { text: pageTitle } = getI18nString(label, locale, theme);
               return (
                 <a
                   key={label}

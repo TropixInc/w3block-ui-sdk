@@ -6,4 +6,6 @@ export interface Currency {
   updatedAt: string;
   name: CurrencyEnum;
   crypto: boolean;
+  code?: string;
+  symbol?: string;
 }

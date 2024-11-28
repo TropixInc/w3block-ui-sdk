@@ -55,6 +55,7 @@ export interface DataFields {
 }
 export interface Product {
   settings?: {
+    acceptMultipleCurrenciesPurchase?: boolean;
     passShareCodeConfig?: {
       enabled?: boolean;
       dataFields?: DataFields[];

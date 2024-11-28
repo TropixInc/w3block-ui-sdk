@@ -356,9 +356,15 @@ export const CheckoutPayment = () => {
   }, 4000);
 
   const { defaultTheme } = UseThemeConfig();
-  const coinPaymentCurrencyId =
-    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
-    '9e5c87cb-22ca-4550-8f09-f2272203410b';
+  const coinPaymentCurrencyId = useMemo(() => {
+    return (
+      router.query?.cryptoCurrencyId ??
+      defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId
+    );
+  }, [
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId,
+    router.query?.cryptoCurrencyId,
+  ]);
 
   const isFree = useMemo(() => {
     // if (orderResponse !== undefined)
@@ -648,7 +654,8 @@ export const CheckoutPayment = () => {
                         amountType: 'all_remaining',
                       },
                       {
-                        currencyId: coinPaymentCurrencyId,
+                        currencyId:
+                          orderInfo.cryptoCurrencyId ?? coinPaymentCurrencyId,
                         paymentMethod: 'crypto',
                         amountType: 'fixed',
                         amount: '0',
@@ -1035,7 +1042,9 @@ export const CheckoutPayment = () => {
           <div className="pw-order-1 sm:pw-order-2 pw-w-full sm:pw-w-[40%]">
             <CheckouResume
               payments={productCache?.payments}
-              isCoinPayment={isCoinPayment}
+              isCoinPayment={
+                isCoinPayment && !productCache?.acceptMultipleCurrenciesPurchase
+              }
               destinationUser={productCache?.destinationUser?.name}
               price={
                 orderResponse !== undefined
