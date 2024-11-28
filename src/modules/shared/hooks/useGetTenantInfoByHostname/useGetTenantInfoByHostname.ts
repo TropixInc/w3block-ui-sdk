@@ -13,7 +13,7 @@ export const useGetTenantInfoByHostname = () => {
   const hostname =
     process.env.NEXT_PUBLIC_ENVIRONMENT != 'development' &&
     process.env.NEXT_PUBLIC_ENVIRONMENT != 'production'
-      ? 'foodbusters.stg.w3block.io'
+      ? 'vinaeden.com'
       : location;
   const apiUrl =
     baseUrl + PixwayAPIRoutes.TENANT_BY_HOSTNAME + '?hostname=' + hostname;
