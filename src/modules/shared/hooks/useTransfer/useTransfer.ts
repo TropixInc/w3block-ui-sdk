@@ -30,7 +30,7 @@ export const useTransfer = () => {
             '{companyId}',
             companyId ?? ''
           ).replace('{id}', id ?? ''),
-          { to, from, amount, metadata: { description } }
+          { to, from, amount, metadata: { description }, sendEmail: true }
         )
         .then((data) => data.data)
   );

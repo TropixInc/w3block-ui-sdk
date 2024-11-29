@@ -577,7 +577,9 @@ export const ProductPage = ({
       else {
         if (giftData) {
           const id = generateRandomUUID();
-          setGiftData({ [id]: { ...giftData } });
+          setGiftData({
+            [id]: giftData === 'selfBuy' ? giftData : { ...giftData },
+          });
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)
