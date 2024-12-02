@@ -175,9 +175,6 @@ export const ProductPage = ({
   const [isSendGift, setIsSendGift] = useState(true);
   const [giftData, setGiftData, deleteGiftKey] =
     useLocalStorage<any>(GIFT_DATA_INFO_KEY);
-  useEffect(() => {
-    deleteGiftKey();
-  }, []);
   const productKycRequirement = useMemo(() => {
     return product?.requirements?.requireKycContext?.slug;
   }, [product?.requirements?.requireKycContext?.slug]);
