@@ -309,7 +309,7 @@ export function getSubtransactions(
               createdAt: data?.createdAt,
               value: parseFloat(loyalty?.amount).toFixed(2),
               recipient: metadata?.description,
-              description: '',
+              description: metadata?.description,
             });
           }
         });

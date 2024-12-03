@@ -176,37 +176,47 @@ export const Products = ({ data }: { data: ProductsData }) => {
 
   useEffect(() => {
     if (cardType == CardTypesEnum.DYNAMIC) {
-      if (sort === 'name') {
+      if (sort) {
+        if (sort === 'name') {
+          callApiForDynamicProducts(
+            `/companies/${companyId}/products?limit={limit}&sortBy=name&orderBy=ASC&${
+              cardSearch && cardSearch.length > 0
+                ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+                : ''
+            }`
+          );
+        } else if (sort === 'relevance') {
+          callApiForDynamicProducts(
+            `/companies/${companyId}/products?limit={limit}&sortBy=relevance&orderBy=DESC&${
+              cardSearch && cardSearch.length > 0
+                ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+                : ''
+            }`
+          );
+        } else if (sort === 'lowestPrice') {
+          callApiForDynamicProducts(
+            `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=ASC&sortByPriceCurrencyId=${
+              mergedContentData.currencyId ?? ''
+            }&${
+              cardSearch && cardSearch.length > 0
+                ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+                : ''
+            }`
+          );
+        } else if (sort === 'highestPrice') {
+          callApiForDynamicProducts(
+            `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=DESC&sortByPriceCurrencyId=${
+              mergedContentData.currencyId ?? ''
+            }&${
+              cardSearch && cardSearch.length > 0
+                ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
+                : ''
+            }`
+          );
+        }
+      } else {
         callApiForDynamicProducts(
-          `/companies/${companyId}/products?limit={limit}&sortBy=name&orderBy=ASC&${
-            cardSearch && cardSearch.length > 0
-              ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
-              : ''
-          }`
-        );
-      } else if (sort === 'relevance') {
-        callApiForDynamicProducts(
-          `/companies/${companyId}/products?limit={limit}&sortBy=relevance&orderBy=DESC&${
-            cardSearch && cardSearch.length > 0
-              ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
-              : ''
-          }`
-        );
-      } else if (sort === 'lowestPrice') {
-        callApiForDynamicProducts(
-          `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=ASC&sortByPriceCurrencyId=${
-            mergedContentData.currencyId ?? ''
-          }&${
-            cardSearch && cardSearch.length > 0
-              ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
-              : ''
-          }`
-        );
-      } else if (sort === 'highestPrice') {
-        callApiForDynamicProducts(
-          `/companies/${companyId}/products?limit={limit}&sortBy=price&orderBy=DESC&sortByPriceCurrencyId=${
-            mergedContentData.currencyId ?? ''
-          }&${
+          `/companies/${companyId}/products?limit={limit}&${
             cardSearch && cardSearch.length > 0
               ? `${cardSearch?.map((cs) => `tagIds=${cs.value}`).join('&')}`
               : ''

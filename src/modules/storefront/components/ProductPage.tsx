@@ -175,9 +175,6 @@ export const ProductPage = ({
   const [isSendGift, setIsSendGift] = useState(true);
   const [giftData, setGiftData, deleteGiftKey] =
     useLocalStorage<any>(GIFT_DATA_INFO_KEY);
-  useEffect(() => {
-    deleteGiftKey();
-  }, []);
   const productKycRequirement = useMemo(() => {
     return product?.requirements?.requireKycContext?.slug;
   }, [product?.requirements?.requireKycContext?.slug]);
@@ -577,7 +574,9 @@ export const ProductPage = ({
       else {
         if (giftData) {
           const id = generateRandomUUID();
-          setGiftData({ [id]: { ...giftData } });
+          setGiftData({
+            [id]: giftData === 'selfBuy' ? giftData : { ...giftData },
+          });
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)

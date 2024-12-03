@@ -633,7 +633,7 @@
   "pass>sharedOrder>QRCodeUsage": "QRCODE para uso exclusivo e intransferível do recebedor.",
   "pass>sharedOrder>value": "Valor",
   "pass>sharedOrder>waitLoadCode": "Aguarde enquanto carregamos o seu QR Code.",
-  "pass>sharedOrder>yourFriendSendGift": "Seu amigo {{friendName}} acabou de te enviar esse gift card.",
+  "pass>sharedOrder>yourFriendSendGift": "Seu amigo {{friendName}} acabou de te enviar esse gift card",
   "pass>verifyBenefit>confirmUsage": "Confirmar utilização",
   "poll>achievedLimit>noTokens": "Tokens esgotados!",
   "poll>achievedLimit>textNoTokens": "O limite de tokens disponíveis para essa palestra já foi atingido. Por favor, fique atento às próximas palestras e tente novamente.",
