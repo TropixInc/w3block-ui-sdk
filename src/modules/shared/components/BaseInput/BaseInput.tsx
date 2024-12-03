@@ -36,6 +36,7 @@ export interface BaseInputProps
   maskChar?: string | null | undefined;
   maskPlaceholder?: string | null | undefined;
   alwaysShowMask?: boolean | undefined;
+  readonly?: boolean;
 }
 interface BaseInputLayoutProps extends Partial<BaseInputProps> {
   children?: ReactNode;
@@ -60,6 +61,7 @@ export const BaseInputLayout = ({
   disableClasses,
   variant = 'medium',
   children,
+  readonly,
 }: BaseInputLayoutProps) => {
   return (
     <div
@@ -67,7 +69,7 @@ export const BaseInputLayout = ({
         disableClasses
           ? classNames(className)
           : classNames(
-              'pw-rounded-lg pw-outline pw-transition-all pw-duration-200 focus:!pw-outline-[#9EC5FE] pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white',
+              'pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white',
               theme.default ?? defaultTheme.default ?? '',
               valid ? theme.valid ?? defaultTheme.valid ?? '' : '',
               className,
@@ -77,7 +79,10 @@ export const BaseInputLayout = ({
               disabled ? theme.disabled ?? defaultTheme.disabled : '',
               variant === 'large' ? defaultTheme.large : '',
               variant === 'medium' ? defaultTheme.medium : '',
-              variant === 'small' ? defaultTheme.small : ''
+              variant === 'small' ? defaultTheme.small : '',
+              readonly
+                ? '!pw-outline-none focus:!pw-outline-none'
+                : '!pw-outline focus:!pw-outline-[#9EC5FE]'
             )
       }
     >
@@ -120,6 +125,7 @@ export const BaseInput = ({
   searchIcon,
   mask,
   type = 'text',
+  readonly = false,
   ...props
 }: BaseInputProps) => {
   const [isShowingPassword, setIsShowingPassword] = useState(false);
@@ -132,6 +138,7 @@ export const BaseInput = ({
       theme={theme}
       disabled={disabled}
       variant={variant}
+      readonly={readonly}
     >
       <div className="pw-flex pw-items-center pw-gap-2 pw-w-full pw-h-full pw-bg-white">
         {searchIcon ? (
