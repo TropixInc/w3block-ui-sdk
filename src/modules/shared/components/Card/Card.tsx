@@ -37,7 +37,7 @@ export const Card = ({
         return _.get(datasource, product.slug, product.slug);
       }
     } else {
-      return `/product/slug/${product.slug}`;
+      return `/item/${product.slug}`;
     }
   };
 

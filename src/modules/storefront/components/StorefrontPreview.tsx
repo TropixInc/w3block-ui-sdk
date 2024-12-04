@@ -7,7 +7,7 @@ import {
   useState,
   Suspense,
 } from 'react';
-import { useEffectOnce } from 'react-use';
+import { useEffectOnce, useLocation } from 'react-use';
 
 import classNames from 'classnames';
 
@@ -30,6 +30,7 @@ import {
   Theme,
 } from '../interfaces';
 import { DynamicApiProvider } from '../provider/DynamicApiProvider';
+import { getProductSlug } from '../utils/getProductSlug';
 import { PassBenefit } from './PassBenefit';
 
 const Page404 = lazy(() =>
@@ -107,10 +108,12 @@ export const StorefrontPreview = ({
   const context = useContext(ThemeContext);
   const locale = useLocale();
   const { setMainCoin } = useUserWallet();
+  const { host } = useLocation();
   const { asPath, pushConnect } = useRouterConnect();
   const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
   const [themeListener, setThemeListener] = useState<Theme | null>();
   const [currentHighlight, setCurrentHighlight] = useState('');
+  const productSlug = getProductSlug(host + asPath);
   const listener = ({
     data,
   }: MessageEvent<{
@@ -219,9 +222,6 @@ export const StorefrontPreview = ({
   const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
 
   if (!themeContext) return null;
-  const isProductPage =
-    (asPath || '').includes('/product/slug') &&
-    params?.[params?.length - 1] != 'slug';
   const theme = { ...context?.defaultTheme, ...themeListener };
 
   const configStyleData = theme.configurations?.styleData;
@@ -307,7 +307,7 @@ export const StorefrontPreview = ({
             <Page404 />
           ) : (
             <>
-              {isProductPage && (
+              {productSlug && (
                 <ProductPage
                   hasCart={mergedConfigStyleData.hasCart}
                   params={params}
@@ -329,7 +329,7 @@ export const StorefrontPreview = ({
               ) : (
                 <div
                   className={classNames(
-                    `${!isProductPage ? 'pw-min-h-[calc(100vh-150px)]' : ''}`
+                    `${!productSlug ? 'pw-min-h-[calc(100vh-150px)]' : ''}`
                   )}
                 >
                   {data.modules?.map((item) => {

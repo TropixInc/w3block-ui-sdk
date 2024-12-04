@@ -31,6 +31,7 @@ interface Props extends Partial<BaseInputProps> {
   searchValue?: string;
   onChangeValue?: (value: any) => void;
   value?: any;
+  readonly?: boolean;
 }
 
 const MultipleSelect = ({
@@ -334,6 +335,7 @@ const SimpleSelect = ({
   translatePrefix,
   onChangeValue,
   value,
+  readonly,
   ...props
 }: Props) => {
   const [translate] = useTranslation();
@@ -362,17 +364,18 @@ const SimpleSelect = ({
       >
         {() => (
           <>
-            <BaseInputLayout {...props} disabled={disabled}>
+            <BaseInputLayout {...props} readonly={readonly} disabled={disabled}>
               <Listbox.Button
                 className={classNames(
                   'pw-flex pw-justify-between pw-items-center pw-h-full pw-w-full pw-text-black focus:pw-outline-none',
-                  classes.button ?? ''
+                  classes.button ?? '',
+                  readonly ? '!pw-outline-white' : ''
                 )}
               >
                 <div className="pw-text-base pw-leading-4 pw-flex pw-items-center pw-pr-2 pw-truncate">
                   {displayValue}
                 </div>
-                <ArrowDown className="pw-stroke-black" />
+                {readonly ? null : <ArrowDown className="pw-stroke-black" />}
               </Listbox.Button>
             </BaseInputLayout>
 
