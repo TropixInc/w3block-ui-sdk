@@ -147,7 +147,7 @@ export const BaseInput = ({
         {mask ? (
           <ReactInputMask
             className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
-            mask={mask}
+            mask={mask as string}
             {...props}
           />
         ) : (
