@@ -195,7 +195,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
       icon: <WalletIcon width={17} height={17} style={{ color: textColor, stroke: textColor }} />,
       route: PixwayAppRoutes.STAKING,
       isVisible:
-        !isHidden('staking') && hasLoyalty,
+        !isHidden('staking') && loyaltyWallet && loyaltyWallet.length > 0,
     },
     {
       name: internalMenuData['myOrders']?.customLabel ||

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CSSProperties, lazy } from 'react';
 
 import { Pagination } from 'swiper';

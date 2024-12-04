@@ -206,7 +206,8 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         id: 'staking',
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.STAKING,
-        isVisible: !isHidden('staking') && hasLoyalty,
+        isVisible:
+          !isHidden('staking') && loyaltyWallet && loyaltyWallet.length > 0,
       },
       {
         title:
