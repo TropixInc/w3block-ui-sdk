@@ -37,6 +37,8 @@ export interface BaseInputProps
   maskPlaceholder?: string | null | undefined;
   alwaysShowMask?: boolean | undefined;
   readonly?: boolean;
+  textarea?: boolean;
+  fullWidth?: boolean;
 }
 interface BaseInputLayoutProps extends Partial<BaseInputProps> {
   children?: ReactNode;
@@ -62,6 +64,8 @@ export const BaseInputLayout = ({
   variant = 'medium',
   children,
   readonly,
+  textarea,
+  fullWidth,
 }: BaseInputLayoutProps) => {
   return (
     <div
@@ -70,6 +74,7 @@ export const BaseInputLayout = ({
           ? classNames(className)
           : classNames(
               'pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white',
+              fullWidth ? 'pw-w-full' : '',
               theme.default ?? defaultTheme.default ?? '',
               valid ? theme.valid ?? defaultTheme.valid ?? '' : '',
               className,
@@ -77,9 +82,21 @@ export const BaseInputLayout = ({
                 ? theme.invalid ?? defaultTheme.invalid ?? ''
                 : 'pw-outline-[#94B8ED] pw-outline-1',
               disabled ? theme.disabled ?? defaultTheme.disabled : '',
-              variant === 'large' ? defaultTheme.large : '',
-              variant === 'medium' ? defaultTheme.medium : '',
-              variant === 'small' ? defaultTheme.small : '',
+              variant === 'large'
+                ? textarea
+                  ? 'pw-text-[14px]'
+                  : defaultTheme.large
+                : '',
+              variant === 'medium'
+                ? textarea
+                  ? 'pw-text-[16px]'
+                  : defaultTheme.medium
+                : '',
+              variant === 'small'
+                ? textarea
+                  ? 'pw-text-[20px]'
+                  : defaultTheme.small
+                : '',
               readonly
                 ? '!pw-outline-none focus:!pw-outline-none'
                 : '!pw-outline focus:!pw-outline-[#9EC5FE]'
@@ -126,6 +143,8 @@ export const BaseInput = ({
   mask,
   type = 'text',
   readonly = false,
+  textarea,
+  fullWidth,
   ...props
 }: BaseInputProps) => {
   const [isShowingPassword, setIsShowingPassword] = useState(false);
@@ -139,6 +158,8 @@ export const BaseInput = ({
       disabled={disabled}
       variant={variant}
       readonly={readonly}
+      textarea={textarea}
+      fullWidth={fullWidth}
     >
       <div className="pw-flex pw-items-center pw-gap-2 pw-w-full pw-h-full pw-bg-white">
         {searchIcon ? (
@@ -149,6 +170,14 @@ export const BaseInput = ({
             className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             mask={mask as string}
             {...props}
+          />
+        ) : textarea ? (
+          <textarea
+            name={props.name}
+            id={props.id}
+            disabled={disabled}
+            readOnly={readonly}
+            className="pw-w-full pw-flex pw-h-full pw-bg-white focus:pw-outline-none pw-outline-none"
           />
         ) : (
           <input
