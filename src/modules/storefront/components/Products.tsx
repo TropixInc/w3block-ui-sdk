@@ -246,6 +246,44 @@ export const Products = ({ data }: { data: ProductsData }) => {
       });
   };
 
+  const onGetCurrencySymbol = (
+    selectedCurrency: string,
+    itemPriceArray: Array<any>
+  ) => {
+    if (selectedCurrency) {
+      const findedPrice = itemPriceArray.find(
+        (price) => price.currency.id === selectedCurrency
+      );
+
+      if (findedPrice) {
+        return findedPrice.currency.symbol;
+      } else {
+        return itemPriceArray[0].currency.symbol;
+      }
+    } else {
+      return itemPriceArray[0].currency.symbol;
+    }
+  };
+
+  const onGetPriceCurrency = (
+    selectedCurrency: string,
+    itemPriceArray: Array<any>
+  ) => {
+    if (selectedCurrency) {
+      const findedPrice = itemPriceArray.find(
+        (price) => price.currency.id === selectedCurrency
+      );
+
+      if (findedPrice) {
+        return findedPrice.amount;
+      } else {
+        return itemPriceArray[0].amount;
+      }
+    } else {
+      return itemPriceArray[0].amount;
+    }
+  };
+
   const GridProducts = () => {
     return (
       <div
@@ -292,8 +330,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     ],
                     prices: [
                       {
-                        amount: p?.value ?? '',
-                        currency: { symbol: 'R$' },
+                        amount:
+                          onGetPriceCurrency(
+                            mergedContentData.currencyId ?? '',
+                            p?.prices
+                          ) ?? '',
+                        currency: onGetCurrencySymbol(
+                          mergedContentData.currencyId ?? '',
+                          p?.prices
+                        ),
                       },
                     ],
                   }}
@@ -319,7 +364,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 key={p.id}
                 product={{
                   title: p?.name ?? '',
-                  value: p?.prices?.[0]?.amount ?? '',
+                  value:
+                    onGetPriceCurrency(
+                      mergedContentData.currencyId ?? '',
+                      p?.prices
+                    ) ?? '',
+                  symbol: onGetCurrencySymbol(
+                    mergedContentData.currencyId ?? '',
+                    p?.prices
+                  ),
                   hasLink: p?.hasLink,
                   id: p?.id ?? '',
                   link: p?.slug ?? '',
@@ -418,8 +471,17 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     ],
                     prices: [
                       {
-                        amount: p?.value ?? '',
-                        currency: { symbol: 'R$' },
+                        amount:
+                          onGetPriceCurrency(
+                            mergedContentData.currencyId ?? '',
+                            p?.prices
+                          ) ?? '',
+                        currency: {
+                          symbol: onGetCurrencySymbol(
+                            mergedContentData.currencyId ?? '',
+                            p?.prices
+                          ),
+                        },
                       },
                     ],
                   }}
@@ -449,7 +511,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   key={p.id}
                   product={{
                     title: p?.name ?? '',
-                    value: p?.prices?.[0]?.amount ?? '',
+                    value:
+                      onGetPriceCurrency(
+                        mergedContentData.currencyId ?? '',
+                        p?.prices
+                      ) ?? '',
+                    symbol: onGetCurrencySymbol(
+                      mergedContentData.currencyId ?? '',
+                      p?.prices
+                    ),
                     hasLink: p?.hasLink,
                     id: p?.id ?? '',
                     link: p?.slug ?? '',
@@ -543,7 +613,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
             <></>
           )}
           <div className="">
-            {allowSorting ? (
+            {cardType == 'dynamic' && allowSorting ? (
               <BaseSelect
                 options={optionsSorting}
                 value={sort}
