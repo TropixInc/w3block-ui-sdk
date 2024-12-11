@@ -43,6 +43,25 @@ const ContentCard = lazy(() =>
   }))
 );
 
+const getPreferredSymbol = (
+  selectedCurrency: string,
+  itemPriceArray: Array<any>
+) => {
+  if (selectedCurrency) {
+    const preferredCurrency = itemPriceArray.find(
+      (price) => price.currency.id === selectedCurrency
+    );
+
+    if (preferredCurrency) {
+      return preferredCurrency.currency.symbol;
+    } else {
+      return itemPriceArray[0]?.currency.symbol;
+    }
+  } else {
+    return itemPriceArray[0]?.currency.symbol;
+  }
+};
+
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData, id } =
     data;
@@ -246,25 +265,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
       });
   };
 
-  const onGetCurrencySymbol = (
-    selectedCurrency: string,
-    itemPriceArray: Array<any>
-  ) => {
-    if (selectedCurrency) {
-      const findedPrice = itemPriceArray.find(
-        (price) => price.currency.id === selectedCurrency
-      );
-
-      if (findedPrice) {
-        return findedPrice.currency.symbol;
-      } else {
-        return itemPriceArray[0].currency.symbol;
-      }
-    } else {
-      return itemPriceArray[0].currency.symbol;
-    }
-  };
-
   const onGetPriceCurrency = (
     selectedCurrency: string,
     itemPriceArray: Array<any>
@@ -335,7 +335,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                             mergedContentData.currencyId ?? '',
                             p?.prices
                           ) ?? '',
-                        currency: onGetCurrencySymbol(
+                        currency: getPreferredSymbol(
                           mergedContentData.currencyId ?? '',
                           p?.prices
                         ),
@@ -369,7 +369,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                       mergedContentData.currencyId ?? '',
                       p?.prices
                     ) ?? '',
-                  symbol: onGetCurrencySymbol(
+                  symbol: getPreferredSymbol(
                     mergedContentData.currencyId ?? '',
                     p?.prices
                   ),
@@ -477,7 +477,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                             p?.prices
                           ) ?? '',
                         currency: {
-                          symbol: onGetCurrencySymbol(
+                          symbol: getPreferredSymbol(
                             mergedContentData.currencyId ?? '',
                             p?.prices
                           ),
@@ -516,7 +516,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                         mergedContentData.currencyId ?? '',
                         p?.prices
                       ) ?? '',
-                    symbol: onGetCurrencySymbol(
+                    symbol: getPreferredSymbol(
                       mergedContentData.currencyId ?? '',
                       p?.prices
                     ),
