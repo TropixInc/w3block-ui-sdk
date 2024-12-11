@@ -62,6 +62,25 @@ const getPreferredSymbol = (
   }
 };
 
+const getPreferredCurrency = (
+  selectedCurrency: string,
+  itemPriceArray: Array<any>
+) => {
+  if (selectedCurrency) {
+    const preferredCurrency = itemPriceArray.find(
+      (price) => price.currency.id === selectedCurrency
+    );
+
+    if (preferredCurrency) {
+      return preferredCurrency.amount;
+    } else {
+      return itemPriceArray[0]?.amount;
+    }
+  } else {
+    return itemPriceArray[0]?.amount;
+  }
+};
+
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData, id } =
     data;
@@ -265,25 +284,6 @@ export const Products = ({ data }: { data: ProductsData }) => {
       });
   };
 
-  const onGetPriceCurrency = (
-    selectedCurrency: string,
-    itemPriceArray: Array<any>
-  ) => {
-    if (selectedCurrency) {
-      const findedPrice = itemPriceArray.find(
-        (price) => price.currency.id === selectedCurrency
-      );
-
-      if (findedPrice) {
-        return findedPrice.amount;
-      } else {
-        return itemPriceArray[0].amount;
-      }
-    } else {
-      return itemPriceArray[0].amount;
-    }
-  };
-
   const GridProducts = () => {
     return (
       <div
@@ -331,7 +331,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     prices: [
                       {
                         amount:
-                          onGetPriceCurrency(
+                          getPreferredCurrency(
                             mergedContentData.currencyId ?? '',
                             p?.prices
                           ) ?? '',
@@ -365,7 +365,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 product={{
                   title: p?.name ?? '',
                   value:
-                    onGetPriceCurrency(
+                    getPreferredCurrency(
                       mergedContentData.currencyId ?? '',
                       p?.prices
                     ) ?? '',
@@ -472,7 +472,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     prices: [
                       {
                         amount:
-                          onGetPriceCurrency(
+                          getPreferredCurrency(
                             mergedContentData.currencyId ?? '',
                             p?.prices
                           ) ?? '',
@@ -512,7 +512,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   product={{
                     title: p?.name ?? '',
                     value:
-                      onGetPriceCurrency(
+                      getPreferredCurrency(
                         mergedContentData.currencyId ?? '',
                         p?.prices
                       ) ?? '',
