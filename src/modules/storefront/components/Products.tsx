@@ -43,6 +43,44 @@ const ContentCard = lazy(() =>
   }))
 );
 
+const getPreferredSymbol = (
+  selectedCurrency: string,
+  itemPriceArray: Array<any>
+) => {
+  if (selectedCurrency) {
+    const preferredCurrency = itemPriceArray.find(
+      (price) => price.currency.id === selectedCurrency
+    );
+
+    if (preferredCurrency) {
+      return preferredCurrency.currency.symbol;
+    } else {
+      return itemPriceArray[0]?.currency.symbol;
+    }
+  } else {
+    return itemPriceArray[0]?.currency.symbol;
+  }
+};
+
+const getPreferredCurrency = (
+  selectedCurrency: string,
+  itemPriceArray: Array<any>
+) => {
+  if (selectedCurrency) {
+    const preferredCurrency = itemPriceArray.find(
+      (price) => price.currency.id === selectedCurrency
+    );
+
+    if (preferredCurrency) {
+      return preferredCurrency.amount;
+    } else {
+      return itemPriceArray[0]?.amount;
+    }
+  } else {
+    return itemPriceArray[0]?.amount;
+  }
+};
+
 export const Products = ({ data }: { data: ProductsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData, id } =
     data;
@@ -292,8 +330,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     ],
                     prices: [
                       {
-                        amount: p?.value ?? '',
-                        currency: { symbol: 'R$' },
+                        amount:
+                          getPreferredCurrency(
+                            mergedContentData.currencyId ?? '',
+                            p?.prices
+                          ) ?? '',
+                        currency: getPreferredSymbol(
+                          mergedContentData.currencyId ?? '',
+                          p?.prices
+                        ),
                       },
                     ],
                   }}
@@ -319,7 +364,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
                 key={p.id}
                 product={{
                   title: p?.name ?? '',
-                  value: p?.prices?.[0]?.amount ?? '',
+                  value:
+                    getPreferredCurrency(
+                      mergedContentData.currencyId ?? '',
+                      p?.prices
+                    ) ?? '',
+                  symbol: getPreferredSymbol(
+                    mergedContentData.currencyId ?? '',
+                    p?.prices
+                  ),
                   hasLink: p?.hasLink,
                   id: p?.id ?? '',
                   link: p?.slug ?? '',
@@ -418,8 +471,17 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     ],
                     prices: [
                       {
-                        amount: p?.value ?? '',
-                        currency: { symbol: 'R$' },
+                        amount:
+                          getPreferredCurrency(
+                            mergedContentData.currencyId ?? '',
+                            p?.prices
+                          ) ?? '',
+                        currency: {
+                          symbol: getPreferredSymbol(
+                            mergedContentData.currencyId ?? '',
+                            p?.prices
+                          ),
+                        },
                       },
                     ],
                   }}
@@ -449,7 +511,15 @@ export const Products = ({ data }: { data: ProductsData }) => {
                   key={p.id}
                   product={{
                     title: p?.name ?? '',
-                    value: p?.prices?.[0]?.amount ?? '',
+                    value:
+                      getPreferredCurrency(
+                        mergedContentData.currencyId ?? '',
+                        p?.prices
+                      ) ?? '',
+                    symbol: getPreferredSymbol(
+                      mergedContentData.currencyId ?? '',
+                      p?.prices
+                    ),
                     hasLink: p?.hasLink,
                     id: p?.id ?? '',
                     link: p?.slug ?? '',
@@ -543,7 +613,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
             <></>
           )}
           <div className="">
-            {allowSorting ? (
+            {cardType == 'dynamic' && allowSorting ? (
               <BaseSelect
                 options={optionsSorting}
                 value={sort}

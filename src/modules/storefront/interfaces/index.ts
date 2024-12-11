@@ -499,6 +499,7 @@ export interface SpecificContentCard {
   overlay?: boolean;
   cardOverlayColor?: string;
   basePath?: string;
+  symbol?: string;
 }
 
 export interface ParagraphData extends MainModuleThemeInterface {
