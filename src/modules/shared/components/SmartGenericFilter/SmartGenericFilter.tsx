@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { lazy, useEffect, useRef, useState } from 'react';
 import { useController } from 'react-hook-form';
 import { useClickAway, useDebounce } from 'react-use';
@@ -5,13 +6,7 @@ import { useClickAway, useDebounce } from 'react-use';
 import _, { isArray } from 'lodash';
 
 import { W3blockAPI } from '../../enums/W3blockAPI';
-
-const SelectInput = lazy(() =>
-  import('../SelectInput/SelectInput').then((module) => ({
-    default: module.Selectinput,
-  }))
-);
-
+import useTranslation from '../../hooks/useTranslation';
 import {
   FilterParameters,
   FilterTableType,
@@ -25,7 +20,11 @@ import { GenericWalletFilter } from '../GenericWalletFilter';
 import { MultipleSelect } from '../MultipleSelect';
 import NumberRange from '../NumberRange/NumberRange';
 
-import { useTranslation } from 'react-i18next';
+const SelectInput = lazy(() =>
+  import('../SelectInput/SelectInput').then((module) => ({
+    default: module.Selectinput,
+  }))
+);
 
 interface GenericFilterDto {
   filterType: FilterTableType | undefined;

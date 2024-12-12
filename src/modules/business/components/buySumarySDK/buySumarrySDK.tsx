@@ -5,9 +5,9 @@ const CriptoValueComponent = lazy(() =>
 );
 
 import { lazy } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { CurrencyEnum } from '../../../shared/enums/Currency';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface BuySummarySDKProps {
   totalValue?: string;

@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
@@ -53,6 +53,7 @@ import { useGetTenantContext } from '../../hooks/useGetTenantContext/useGetTenan
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
+import useTranslation from '../../hooks/useTranslation';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {

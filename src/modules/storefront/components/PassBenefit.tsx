@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { ConfigTimeComponent } from '../../pass/components/ConfigTimeComponent';
 import useGetPassBenefitById from '../../pass/hooks/useGetPassBenefitById';
 import useGetPassById from '../../pass/hooks/useGetPassById';
 import LabelWithRequired from '../../shared/components/LabelWithRequired';
 import { Spinner } from '../../shared/components/Spinner';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { useDynamicString } from '../hooks/useDynamicString';
 import { PassBenefitData } from '../interfaces';
 

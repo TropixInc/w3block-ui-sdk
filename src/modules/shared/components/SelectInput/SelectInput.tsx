@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
+import useTranslation from '../../hooks/useTranslation';
 
 interface SelectInputProps {
   options: { value: string; label: string }[];

@@ -11,7 +11,6 @@ import {
   useState,
 } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
-import { useTranslation } from 'react-i18next';
 import { IMaskInput } from 'react-imask';
 import {
   useCopyToClipboard,
@@ -42,6 +41,7 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { Product } from '../../../shared/interface/Product';
 import { useGetRightWallet } from '../../../shared/utils/getRightWallet';

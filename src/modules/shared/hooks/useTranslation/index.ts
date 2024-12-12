@@ -9,14 +9,10 @@ const useTranslation = () => {
   const theme = UseThemeConfig();
   const [translateI18n, i18n] = translateFn;
   const translate = (path: string, obj?: any) => {
-    const str = getI18nString(path, i18n.language, theme);
-    if (str?.text === path) {
-      if (str?.text?.indexOf('&&') === 0) {
-        const str2 = path.slice(2, path.length);
-        return translateI18n(str2, obj);
-      } else {
-        return translateI18n(path, obj);
-      }
+    const newStr = '&&' + path;
+    const str = getI18nString(newStr, i18n.language, theme);
+    if (str?.text === newStr) {
+      return translateI18n(path, obj);
     }
     return str?.text as string;
   };

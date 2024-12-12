@@ -1,18 +1,7 @@
 import { lazy, useContext, useMemo } from 'react';
 
 import { ContentTypeEnum } from '../../../poll/enums/contentType';
-const Box = lazy(() =>
-  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
-);
-
 import { ContainerControllerClasses } from '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
-const ContainerControllerSDK = lazy(() =>
-  import(
-    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
-  ).then((module) => ({
-    default: module.ContainerControllerSDK,
-  }))
-);
 import { ContainerTextBesideProps } from '../../../shared/components/ContainerTextBeside/ContainerTextBeside';
 import { ExtraBy } from '../../../shared/components/PoweredBy/PoweredBy';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
@@ -31,6 +20,17 @@ const ConnectExternalWalletWithoutLayout = lazy(() =>
     })
   )
 );
+const Box = lazy(() =>
+  import('../../../shared/components/Box/Box').then((m) => ({ default: m.Box }))
+);
+const ContainerControllerSDK = lazy(() =>
+  import(
+    '../../../shared/components/ContainerControllerSDK/ContainerControllerSDK'
+  ).then((module) => ({
+    default: module.ContainerControllerSDK,
+  }))
+);
+
 interface ConnectWalletTemplateSDKProps {
   bgColor?: string;
   infoPosition?: position;

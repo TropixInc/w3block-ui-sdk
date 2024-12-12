@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useController } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useClickAway } from 'react-use';
 
 import { Listbox, Transition } from '@headlessui/react';
@@ -9,6 +8,7 @@ import _ from 'lodash';
 
 import ArrowDownOutlined from '../../assets/icons/arrowDown.svg?react';
 import CheckBoxIcon from '../../assets/icons/checkOutlined.svg?react';
+import useTranslation from '../../hooks/useTranslation';
 import { Option } from '../GenericSearchFilter/GenericSearchFilter';
 
 interface Props {

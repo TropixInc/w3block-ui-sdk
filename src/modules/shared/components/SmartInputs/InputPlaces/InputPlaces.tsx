@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import useTranslation from '../../../hooks/useTranslation';
 import InputCompletedAddress from '../InputCompletedAddress';
 import CityAutoComplete from '../InputLocale/CityAutoComplete';
 

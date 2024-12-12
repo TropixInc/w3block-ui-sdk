@@ -1,6 +1,5 @@
-import { useTranslation } from 'react-i18next';
-
 import { BaseTabs, TabDTO } from '../../../shared';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { ConfigPanel } from '../ConfigTimeModal/ConfigPanel';
 
 interface ConfigComponentProps {

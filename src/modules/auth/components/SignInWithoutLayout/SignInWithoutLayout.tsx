@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,6 +20,7 @@ import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import GoogleIcon from '../../assets/icons/googleIcon.svg?react';

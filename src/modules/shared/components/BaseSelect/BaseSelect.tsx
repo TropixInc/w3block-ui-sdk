@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Combobox, Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
@@ -8,6 +7,7 @@ import _ from 'lodash';
 
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import CheckBoxIcon from '../../assets/icons/checkOutlined.svg?react';
+import useTranslation from '../../hooks/useTranslation';
 import { BaseInputLayout, BaseInputProps } from '../BaseInput';
 import { Option } from '../GenericSearchFilter/GenericSearchFilter';
 import { ImageSDK } from '../ImageSDK';

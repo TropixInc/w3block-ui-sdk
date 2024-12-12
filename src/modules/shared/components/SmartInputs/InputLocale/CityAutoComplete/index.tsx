@@ -1,12 +1,13 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useClickAway, useDebounce } from 'react-use';
 
 import _ from 'lodash';
 
+import useTranslation from '../../../../hooks/useTranslation';
 import { BaseInput } from '../../../BaseInput';
 import LabelWithRequired from '../../../LabelWithRequired';
 import { InputError } from '../../../SmartInputsController';
@@ -191,6 +192,7 @@ const CityAutoComplete = ({
         console.log(err);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeId, placesService]);
 
   const resolveInput = () => {

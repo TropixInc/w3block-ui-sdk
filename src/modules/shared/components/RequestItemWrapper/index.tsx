@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { UserContextStatus } from '@w3block/sdk-id';
 
@@ -12,6 +11,7 @@ import { useGetUserByReferral } from '../../hooks/useGetUserByReferral/useGetUse
 import { useGetUserContextId } from '../../hooks/useGetUserContextId/useGetUserContextId';
 import useRejectKYC from '../../hooks/useRejectKYC';
 import { useRequiredReviewDocs } from '../../hooks/useRequiredReviewDocs';
+import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import LabelWithRequired from '../LabelWithRequired';
 

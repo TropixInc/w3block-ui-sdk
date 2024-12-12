@@ -1,7 +1,6 @@
-import { useTranslation } from 'react-i18next';
-
 import PlusIcon from '../../../../shared/assets/icons/plusCircle.svg?react';
 import { Alert } from '../../../../shared/components/Alert';
+import useTranslation from '../../../../shared/hooks/useTranslation';
 import { OffpixButtonBase } from '../../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { TimeItem } from './TimeItem';
 

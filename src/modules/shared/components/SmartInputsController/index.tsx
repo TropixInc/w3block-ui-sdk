@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import {
   DataTypesEnum,
@@ -9,6 +8,7 @@ import {
 } from '@w3block/sdk-id';
 import _ from 'lodash';
 
+import useTranslation from '../../hooks/useTranslation';
 import ComplexPhone from '../SmartInputs/ComplexPhone';
 import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
 import InputDocuments from '../SmartInputs/InputDocuments';

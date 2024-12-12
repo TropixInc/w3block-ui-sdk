@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -5,13 +6,13 @@ import {
   FieldValues,
   useController,
 } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useDebounce } from 'react-use';
 
 import _ from 'lodash';
 
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
+import useTranslation from '../../hooks/useTranslation';
 import {
   FilterParameters,
   FormatFilterType,

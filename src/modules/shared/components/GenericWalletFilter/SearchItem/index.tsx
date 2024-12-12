@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
 import { OffpixButtonBase } from '../../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { useGetUserByTenant } from '../../../hooks/useGetUsersByTenant';
+import useTranslation from '../../../hooks/useTranslation';
 import { Alert } from '../../Alert';
 import { BaseSelect } from '../../BaseSelect';
 import { Option } from '../../GenericSearchFilter/GenericSearchFilter';

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
 import { ModalBase } from '../../../shared/components/ModalBase';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { ConfigTimeComponent } from '../ConfigTimeComponent';
 

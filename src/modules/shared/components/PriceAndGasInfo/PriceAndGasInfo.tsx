@@ -1,6 +1,5 @@
 /* eslint-disable i18next/no-literal-string */
 import { lazy, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 const CriptoValueComponent = lazy(() =>
   import('../CriptoValueComponent/CriptoValueComponent').then((module) => ({
@@ -16,6 +15,7 @@ const Shimmer = lazy(() =>
 import { PaymentsResponse } from '../../../checkout/interface/interface';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import useRouter from '../../hooks/useRouter';
+import useTranslation from '../../hooks/useTranslation';
 import { GasFee } from '../../interface/GasFee';
 import TranslatableComponent from '../TranslatableComponent';
 

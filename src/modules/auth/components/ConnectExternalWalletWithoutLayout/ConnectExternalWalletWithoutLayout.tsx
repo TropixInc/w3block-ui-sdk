@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useMemo, lazy } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans } from 'react-i18next';
 // import { useQueryClient } from 'react-query';
 
 import MetamaskLogo from '../../../shared/assets/icons/metamask.svg?react';
@@ -17,6 +17,7 @@ import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useToken } from '../../../shared/hooks/useToken';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useWallets } from '../../../shared/hooks/useWallets/useWallets';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { WalletsOptions } from '../../../storefront/interfaces';
@@ -271,7 +272,7 @@ const _ConnectExternalWalletWithoutLayout = ({
     );
   }
   return (
-    <div>
+    <div className="pw-text-black">
       {step === Step.CONNECT_TO_METAMASK ? (
         <div className="pw-mt-6">
           <ConnectToMetamaskButton

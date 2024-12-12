@@ -1,10 +1,10 @@
 /* eslint-disable i18next/no-literal-string */
-import { useTranslation } from 'react-i18next';
 
 import { PaymentsResponse } from '../../../checkout/interface/interface';
 import { CriptoValueComponent } from '../../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { Shimmer } from '../../../shared/components/Shimmer';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface PriceComponent {
   className?: string;

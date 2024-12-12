@@ -1,8 +1,7 @@
-import { useTranslation } from 'react-i18next';
-
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface CheckoutHeaderProps {
   onClick?: (query: string) => void;
