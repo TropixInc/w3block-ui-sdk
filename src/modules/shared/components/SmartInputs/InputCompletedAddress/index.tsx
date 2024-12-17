@@ -31,7 +31,7 @@ const InputCompletedAddress = ({
   required,
 }: InputCompletedAddressProps) => {
   const [translate] = useTranslation();
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState<{ value: string; label: string }>();
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -65,10 +65,10 @@ const InputCompletedAddress = ({
       />
       {country ? (
         <CityAutoComplete
-          country={country ?? ''}
+          country={country.value ?? ''}
           name={name}
           apiValue={apiValue}
-          type={type ?? 'food'}
+          type={type}
           inputLabel={translate('shared>inputCompletedAddress>enterZipCode')}
           inputPlaceholder={translate('shared>inputCompletedAddress>zipCode')}
           required={required}
