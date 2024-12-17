@@ -249,7 +249,7 @@ const CityAutoComplete = ({
         invalid={fieldState.invalid}
         valid={!!field?.value && !fieldState.invalid}
         disabled={readonly || !country.length}
-        className="pw-mb-2"
+        className="pw-mb-2 !pw-text-black"
         type="text"
         value={inputValue}
         placeholder={
@@ -276,7 +276,7 @@ const CityAutoComplete = ({
                     className="pw-px-3 pw-py-2 pw-cursor-pointer pw-rounded-md hover:pw-bg-[#94B8ED]"
                   >
                     <button
-                      className="pw-w-full pw-h-full pw-text-left"
+                      className="pw-w-full pw-h-full pw-text-left !pw-text-black"
                       onClick={(e) => {
                         setPlaceId(item.value);
                         type !== '(cities)' && setInputValue(item.label);
@@ -320,6 +320,7 @@ const CityAutoComplete = ({
               disabled={readonly}
               type="text"
               value={placeNumber}
+              className="!pw-text-black"
               placeholder={translate(
                 'shared>inputCompletedAddress>enterPlaceNumber'
               )}
@@ -335,6 +336,7 @@ const CityAutoComplete = ({
               disableClasses={readonly}
               invalid={fieldState.invalid}
               valid={!!field?.value && !fieldState.invalid}
+              className="!pw-text-black"
               disabled={readonly}
               type="text"
               value={placeCompliment}

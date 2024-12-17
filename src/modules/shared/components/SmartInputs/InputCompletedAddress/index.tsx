@@ -31,7 +31,7 @@ const InputCompletedAddress = ({
   required,
 }: InputCompletedAddressProps) => {
   const [translate] = useTranslation();
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState<{ value: string; label: string }>();
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -59,13 +59,13 @@ const InputCompletedAddress = ({
         search
         searchValue={search}
         setSearch={setSearch}
-        onChangeValue={(e) => setCountry(e.value)}
+        onChangeValue={(e) => setCountry(e)}
         placeholder={translate('shared>inputCompletedAddress>selectCountry')}
         classes={{ root: 'pw-mb-2' }}
       />
       {country ? (
         <CityAutoComplete
-          country={country ?? ''}
+          country={country.value ?? ''}
           name={name}
           apiValue={apiValue}
           type={type}
