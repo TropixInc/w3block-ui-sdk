@@ -59,7 +59,7 @@ const InputCompletedAddress = ({
         search
         searchValue={search}
         setSearch={setSearch}
-        onChangeValue={(e) => setCountry(e)}
+        onChangeValue={(e) => setCountry(e.value)}
         placeholder={translate('shared>inputCompletedAddress>selectCountry')}
         classes={{ root: 'pw-mb-2' }}
       />
@@ -68,7 +68,7 @@ const InputCompletedAddress = ({
           country={country ?? ''}
           name={name}
           apiValue={apiValue}
-          type={type ?? 'food'}
+          type={type}
           inputLabel={translate('shared>inputCompletedAddress>enterZipCode')}
           inputPlaceholder={translate('shared>inputCompletedAddress>zipCode')}
           required={required}
