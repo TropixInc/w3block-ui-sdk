@@ -20,12 +20,14 @@ const ImageSDK = lazy(() =>
 export const Card = ({
   product,
   config,
+  dynamic = false,
 }: {
   product: Product;
   config: {
     styleData: ProductsData['styleData'];
     contentData: ProductsData['contentData'];
   };
+  dynamic?: boolean;
 }) => {
   const { styleData, contentData } = config;
   const { datasource } = useDynamicApi();
@@ -57,23 +59,25 @@ export const Card = ({
         <ImageSDK
           src={
             product.images.length
-              ? composeUrlCloudinary({
-                  src:
-                    _.get(
-                      datasource,
-                      product.images[0]?.thumb ?? '',
-                      product.images[0]?.thumb
-                    ) ?? '',
-                  InternalProps: {
-                    width:
-                      styleData.imageCardCompression === 'no-compression'
-                        ? undefined
-                        : 800,
-                    quality: styleData.imageCardCompression
-                      ? styleData.imageCardCompression
-                      : 'best',
-                  },
-                })
+              ? dynamic
+                ? composeUrlCloudinary({
+                    src:
+                      _.get(
+                        datasource,
+                        product.images[0]?.thumb ?? '',
+                        product.images[0]?.thumb
+                      ) ?? '',
+                    InternalProps: {
+                      width:
+                        styleData.imageCardCompression === 'no-compression'
+                          ? undefined
+                          : 800,
+                      quality: styleData.imageCardCompression
+                        ? styleData.imageCardCompression
+                        : 'best',
+                    },
+                  })
+                : product.images[0]?.thumb ?? ''
               : undefined
           }
           className={classNames(

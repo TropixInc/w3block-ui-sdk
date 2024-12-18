@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { BaseSelect } from '../../shared';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import {
@@ -17,6 +18,7 @@ import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
 import {
@@ -30,8 +32,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
-import { useDynamicString } from '../hooks/useDynamicString';
-import { BaseSelect } from '../../shared';
+
 const Card = lazy(() =>
   import('../../shared/components/Card').then((module) => ({
     default: module.Card,
@@ -48,17 +49,17 @@ const getPreferredSymbol = (
   itemPriceArray: Array<any>
 ) => {
   if (selectedCurrency) {
-    const preferredCurrency = itemPriceArray.find(
-      (price) => price.currency.id === selectedCurrency
+    const preferredCurrency = itemPriceArray?.find(
+      (price) => price?.currency?.id === selectedCurrency
     );
 
     if (preferredCurrency) {
-      return preferredCurrency.currency.symbol;
+      return preferredCurrency?.currency?.symbol;
     } else {
-      return itemPriceArray[0]?.currency.symbol;
+      return itemPriceArray?.[0]?.currency?.symbol;
     }
   } else {
-    return itemPriceArray[0]?.currency.symbol;
+    return itemPriceArray?.[0]?.currency?.symbol;
   }
 };
 
@@ -67,17 +68,17 @@ const getPreferredCurrency = (
   itemPriceArray: Array<any>
 ) => {
   if (selectedCurrency) {
-    const preferredCurrency = itemPriceArray.find(
-      (price) => price.currency.id === selectedCurrency
+    const preferredCurrency = itemPriceArray?.find(
+      (price) => price?.currency?.id === selectedCurrency
     );
 
     if (preferredCurrency) {
-      return preferredCurrency.amount;
+      return preferredCurrency?.amount;
     } else {
-      return itemPriceArray[0]?.amount;
+      return itemPriceArray?.[0]?.amount;
     }
   } else {
-    return itemPriceArray[0]?.amount;
+    return itemPriceArray?.[0]?.amount;
   }
 };
 
@@ -309,6 +310,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
               .map((p) => (
                 <Card
+                  dynamic
                   key={p?.id}
                   product={{
                     tags:
@@ -450,6 +452,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
           ? dynamicCardsData?.map((p) => (
               <SwiperSlide key={p.id} className="pw-flex pw-justify-center">
                 <Card
+                  dynamic
                   key={p?.id}
                   product={{
                     name: p?.title ?? '',
