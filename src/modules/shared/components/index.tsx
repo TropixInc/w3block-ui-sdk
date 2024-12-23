@@ -22,3 +22,4 @@ export * from './GenericWalletFilter';
 export * from './BaseTabs';
 export * from './BaseInput';
 export * from './StakingSummary';
+export * from './BaseTable';
