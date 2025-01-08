@@ -65,7 +65,7 @@ export const usePaginatedQuery = <QueryData>(
   PaginatedQueryConfig & QueryConfig<any, any, any> = {}
 ): usePaginatedQueryReturnValue<QueryData> => {
   const router = useRouterConnect();
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   const defineInitialPage = () => {
     if (disableUrl) {
@@ -134,11 +134,13 @@ export const usePaginatedQuery = <QueryData>(
         {
           ...rest,
           onSuccess: ({ data }) => {
-            if (inputMap(data).totalPages !== totalPages) {
-              setTotalPages(inputMap(data).totalPages);
-            }
+            if (totalPages) {
+              if (inputMap(data)?.totalPages !== totalPages) {
+                setTotalPages(inputMap(data)?.totalPages ?? 1);
+              }
+            } else setTotalPages(1);
 
-            if (page && page > inputMap(data).totalPages && !disableUrl) {
+            if (page && page > inputMap(data)?.totalPages && !disableUrl) {
               router.replace({
                 query: {
                   ...router.query,
@@ -158,11 +160,11 @@ export const usePaginatedQuery = <QueryData>(
         {
           ...rest,
           onSuccess: ({ data }) => {
-            if (inputMap(data).totalPages !== totalPages) {
-              setTotalPages(inputMap(data).totalPages);
+            if (inputMap(data)?.totalPages !== totalPages) {
+              setTotalPages(inputMap(data)?.totalPages ?? 1);
             }
 
-            if (page && page > inputMap(data).totalPages && !disableUrl) {
+            if (page && page > inputMap(data)?.totalPages && !disableUrl) {
               router.replace({
                 query: {
                   ...router.query,
