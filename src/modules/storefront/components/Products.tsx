@@ -580,7 +580,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
       }}
     >
       <div className="pw-container pw-mx-auto pw-pb-10 sm:!pw-px-0">
-        <div className="pw-flex pw-pt-10 pw-justify-between">
+        <div className="pw-flex pw-w-full pw-flex-wrap pw-pt-10 pw-justify-between pw-flex-col sm:pw-flex-row">
           {moduleTitle && moduleTitle != '' ? (
             <h2
               style={{
@@ -606,7 +606,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     : 'auto',
               }}
               className={classNames(
-                'pw-font-semibold pw-text-lg pw-w-full',
+                'pw-font-semibold pw-text-lg pw-flex-1',
                 alignmentTextClass
               )}
             >
@@ -615,7 +615,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
           ) : (
             <></>
           )}
-          <div className="">
+          <div className="pw-max-w-[210px] pw-mt-6 sm:pw-mt-0">
             {cardType == 'dynamic' && allowSorting ? (
               <BaseSelect
                 options={optionsSorting}
