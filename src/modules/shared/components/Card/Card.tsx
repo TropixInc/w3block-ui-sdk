@@ -33,6 +33,7 @@ export const Card = ({
   const { datasource } = useDynamicApi();
   const { text: title } = useDynamicString(product.name);
   const { text: description } = useDynamicString(product.description);
+  const { text: buttonText } = useDynamicString(styleData.cardButtonText);
   const linkToSend = () => {
     if (contentData.cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink) {
@@ -242,7 +243,7 @@ export const Card = ({
           }
           className="pw-w-full pw-border pw-mt-2 pw-border-solid pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button pw-text-xs"
         >
-          {styleData.cardButtonText ?? 'Comprar agora'}
+          {buttonText ?? 'Comprar agora'}
         </button>
       )}
     </a>
