@@ -236,7 +236,7 @@ const _HeaderPixwaySDK = ({
           headerClassName ?? ''
         )}
       >
-        <div className="pw-flex pw-justify-between pw-py-5 pw-items-center">
+        <div className="pw-flex pw-justify-between pw-py-5 pw-items-center pw-px-6">
           <div className="pw-flex pw-items-center pw-justify-start pw-gap-x-4 pw-pl-4">
             <div className="sm:pw-hidden">
               <NavigationTabsPixwaySDK
