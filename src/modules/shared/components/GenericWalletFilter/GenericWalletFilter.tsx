@@ -49,6 +49,7 @@ export const GenericWalletFilter = ({
         isOpen={isOpenUserModal}
         onClose={closeModal}
         handleChangeWallet={onChangeWallet}
+        wallet={wallet}
       />
     </div>
   );

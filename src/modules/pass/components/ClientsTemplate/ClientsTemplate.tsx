@@ -62,14 +62,14 @@ export const ClientTemplate = () => {
 
   useDebounce(
     () => {
-      const filter = searchTerm.toLowerCase();
+      const filter = searchTerm?.toLowerCase();
       const filteredData = dataMoked.filter(
         (item) =>
-          (item.name.toLowerCase().includes(filter) ||
-            item.id.toLowerCase().includes(filter)) &&
+          (item?.name?.toLowerCase()?.includes(filter) ||
+            item?.id?.toLowerCase()?.includes(filter)) &&
           Boolean(
             statusFilter.find(
-              (e) => e.toLowerCase() === item.status.toLowerCase()
+              (e) => e?.toLowerCase() === item?.status?.toLowerCase()
             )
           )
       );

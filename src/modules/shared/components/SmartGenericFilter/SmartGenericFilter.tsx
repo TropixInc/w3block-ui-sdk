@@ -109,6 +109,12 @@ const SmartGenericFilter = ({
         setStartDate(undefined);
       }
     }
+
+    if (filterFormat === FormatFilterType.WALLET) {
+      if (!_.get(filterLabels, itemKey || '')) {
+        setWalletFilter('');
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterLabels]);
 

@@ -36,8 +36,8 @@ export const Selector = ({
       ? data
       : data.filter((res: { attributes: { name: string } }) => {
           return res.attributes.name
-            .toLowerCase()
-            .includes(query.toLowerCase());
+            ?.toLowerCase()
+            ?.includes(query?.toLowerCase());
         });
 
   return (

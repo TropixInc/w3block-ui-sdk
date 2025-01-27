@@ -147,15 +147,15 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
 
   useDebounce(
     () => {
-      const filter = searchTerm.toLowerCase();
+      const filter = searchTerm?.toLowerCase();
       const filteredData = tableData?.filter(
         (item) =>
-          (item.name.toLowerCase().includes(filter) ||
-            item.type.toLowerCase().includes(filter)) &&
+          (item?.name?.toLowerCase()?.includes(filter) ||
+            item?.type?.toLowerCase()?.includes(filter)) &&
           Boolean(
             statusFilter.find(
               (e) =>
-                e.toLowerCase() === item?.status?.props?.status?.toLowerCase()
+                e?.toLowerCase() === item?.status?.props?.status?.toLowerCase()
             )
           )
       );

@@ -16,7 +16,7 @@ export class Format {
       else if (value === 'true') return true;
       else if (value === 'false') return false;
     } else if (isHexString(value)) {
-      return value.toLowerCase();
+      return value?.toLowerCase();
     } else if (typeof value === 'string') {
       return value;
     } else if (Format.isBigNumber(value)) {
