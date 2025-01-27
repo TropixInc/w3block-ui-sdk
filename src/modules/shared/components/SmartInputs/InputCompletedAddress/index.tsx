@@ -43,7 +43,7 @@ const InputCompletedAddress = ({
   const countriesFiltered = useMemo(() => {
     if (search !== '')
       return countries.filter((res) =>
-        res.label.toLowerCase().includes(search.toLowerCase())
+        res?.label?.toLowerCase()?.includes(search?.toLowerCase())
       );
     else return countries;
   }, [search]);

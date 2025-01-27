@@ -49,6 +49,7 @@ export const useGetPageModules = (disabled = false) => {
         !query?.preview &&
         !disabled,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

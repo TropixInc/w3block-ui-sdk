@@ -137,7 +137,7 @@ export const ConfirmCryptoBuy = ({
     if (
       wallet?.type == 'metamask' &&
       (window as any).ethereum?.selectedAddress?.toLowerCase() !=
-        wallet?.address.toLowerCase()
+        wallet?.address?.toLowerCase()
     ) {
       setErr('Conta selecionada não é a mesma da carteira');
       setErrMessage(
@@ -223,7 +223,8 @@ export const ConfirmCryptoBuy = ({
   };
 
   const sameAccount = useMemo(
-    () => hasWallet && accounts?.toLowerCase() == wallet?.address.toLowerCase(),
+    () =>
+      hasWallet && accounts?.toLowerCase() == wallet?.address?.toLowerCase(),
     [hasWallet, accounts, wallet?.address]
   );
   const sameChainId = hasWallet && productChainId == chainId;
