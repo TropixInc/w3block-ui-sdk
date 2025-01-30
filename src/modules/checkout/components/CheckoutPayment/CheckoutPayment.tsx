@@ -315,6 +315,7 @@ export const CheckoutPayment = () => {
               currencyId: productCache.currencyId,
               amountType: 'percentage',
               amount: '100',
+              paymentMethod: productCache?.choosedPayment?.paymentMethod,
             },
           ],
           currencyId: productCache.currencyId,

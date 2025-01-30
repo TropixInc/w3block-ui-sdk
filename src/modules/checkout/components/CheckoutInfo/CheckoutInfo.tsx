@@ -376,6 +376,7 @@ const _CheckoutInfo = ({
                   {
                     currencyId: currencyIdState,
                     amountType: 'all_remaining',
+                    paymentMethod: choosedPayment?.paymentMethod,
                   },
                   {
                     currencyId: coinPaymentCurrencyId,
@@ -389,6 +390,7 @@ const _CheckoutInfo = ({
                     currencyId: currencyIdState,
                     amountType: 'percentage',
                     amount: '100',
+                    paymentMethod: choosedPayment?.paymentMethod,
                   },
                 ],
           currencyId: currencyIdState,
@@ -452,6 +454,16 @@ const _CheckoutInfo = ({
       );
     }
   };
+
+  useEffect(() => {
+    if (
+      checkoutStatus == CheckoutStatus.CONFIRMATION &&
+      choosedPayment?.paymentMethod
+    )
+      getOrderPreviewFn(couponCodeInput);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [choosedPayment?.paymentMethod]);
+
   useDebounce(
     () => {
       getOrderPreviewFn(couponCodeInput);
