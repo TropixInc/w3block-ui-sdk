@@ -28,26 +28,28 @@ export const PaymentMethodsComponent = ({
   title = 'Métodos de pagamento',
   titleClass,
 }: PaymentMethodsComponentProps) => {
-  return (
-    <div className={`${className}`}>
-      <p
-        className={classNames(
-          titleClass,
-          'pw-text-[18px] pw-font-[700] pw-text-[#35394C]'
-        )}
-      >
-        {title}
-      </p>
-      {methods.map((method) => (
-        <PaymentAccordion
-          selected={methodSelected.paymentMethod === method.paymentMethod}
-          setSelected={onSelectedPayemnt}
-          className="pw-mt-3"
-          key={method.paymentMethod}
-          method={method}
-          loadingPreview={loadingPreview}
-        />
-      ))}
-    </div>
-  );
+  if (methods.length > 0)
+    return (
+      <div className={`${className}`}>
+        <p
+          className={classNames(
+            titleClass,
+            'pw-text-[18px] pw-font-[700] pw-text-[#35394C]'
+          )}
+        >
+          {title}
+        </p>
+        {methods.map((method) => (
+          <PaymentAccordion
+            selected={methodSelected.paymentMethod === method.paymentMethod}
+            setSelected={onSelectedPayemnt}
+            className="pw-mt-3"
+            key={method.paymentMethod}
+            method={method}
+            loadingPreview={loadingPreview}
+          />
+        ))}
+      </div>
+    );
+  else return null;
 };

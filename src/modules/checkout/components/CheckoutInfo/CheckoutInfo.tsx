@@ -1992,6 +1992,9 @@ const _CheckoutInfo = ({
                       (price) => price?.currencyId == currencyIdState
                     )?.anchorCurrency?.symbol ?? ''
                   }
+                  promotionDescription={
+                    prod?.promotions?.[0]?.publicDescription
+                  }
                 />
               ))}
             </div>
