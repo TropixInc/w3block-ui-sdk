@@ -236,7 +236,8 @@ export const Card = ({
             {
               boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.26)',
               color: styleData.cardButtonTextColor ?? 'white',
-              '--products-button-hover-color': styleData.cardButtonHoverColor,
+              '--products-button-hover-color':
+                styleData.cardButtonHoverColor ?? styleData.cardButtonColor,
               '--products-button-bg-color':
                 styleData.cardButtonColor ?? '#295BA6',
             } as CSSProperties
