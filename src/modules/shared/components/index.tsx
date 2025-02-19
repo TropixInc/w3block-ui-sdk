@@ -23,3 +23,5 @@ export * from './BaseTabs';
 export * from './BaseInput';
 export * from './StakingSummary';
 export * from './BaseTable';
+export * from './ContainerControllerSDK';
+export * from './SmartInputsController';

@@ -1,4 +1,10 @@
-import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import {
+  ChangeEventHandler,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useState,
+} from 'react';
 import ReactInputMask from 'react-input-mask';
 
 import classNames from 'classnames';
@@ -39,6 +45,7 @@ export interface BaseInputProps
   readonly?: boolean;
   textarea?: boolean;
   fullWidth?: boolean;
+  textareaHeight?: number;
 }
 interface BaseInputLayoutProps extends Partial<BaseInputProps> {
   children?: ReactNode;
@@ -145,6 +152,7 @@ export const BaseInput = ({
   readonly = false,
   textarea,
   fullWidth,
+  textareaHeight,
   ...props
 }: BaseInputProps) => {
   const [isShowingPassword, setIsShowingPassword] = useState(false);
@@ -177,6 +185,10 @@ export const BaseInput = ({
             id={props.id}
             disabled={disabled}
             readOnly={readonly}
+            onChange={
+              props.onChange as unknown as ChangeEventHandler<HTMLTextAreaElement>
+            }
+            style={{ height: `${textareaHeight}px` }}
             className="pw-w-full pw-flex pw-h-full pw-bg-white focus:pw-outline-none pw-outline-none"
           />
         ) : (

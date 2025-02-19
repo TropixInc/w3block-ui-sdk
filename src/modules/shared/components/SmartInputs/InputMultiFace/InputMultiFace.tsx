@@ -30,7 +30,7 @@ interface InputMultiFaceProps {
   docStatus?: UserDocumentStatus;
   subtitle?: string;
   acceptTypesDocs: Array<string>;
-  onChangeUploadProgess: (value: boolean) => void;
+  onChangeUploadProgess?: (value: boolean) => void;
   required?: boolean;
   readonly?: boolean;
 }

@@ -28,7 +28,7 @@ interface InputImageProps {
   hidenValidations?: boolean;
   openDocs?: boolean;
   subtitle?: string;
-  onChangeUploadProgess: (value: boolean) => void;
+  onChangeUploadProgess?: (value: boolean) => void;
   imagePlaceholder?: string;
   instructions?: string;
   acceptTypes?: Array<string>;
@@ -97,7 +97,8 @@ const InputImage = ({
   });
 
   useEffect(() => {
-    onChangeUploadProgess(isLoadingUpload || isLoadingAsset);
+    onChangeUploadProgess &&
+      onChangeUploadProgess(isLoadingUpload || isLoadingAsset);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoadingUpload, isLoadingAsset]);
 
