@@ -2,6 +2,7 @@ import { useMutation } from 'react-query';
 
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
+import { handleNetworkException } from '../../utils/handleNetworkException';
 import { useAxios } from '../useAxios';
 
 interface Response {
@@ -23,11 +24,19 @@ export const useAcceptIntegrationToken = () => {
   const axios = useAxios(W3blockAPI.ID);
 
   const _acceptIntegrationToken = async ({ token, tenantId }: Params) => {
-    const res = await axios.post<Response>(
-      PixwayAPIRoutes.ACCEPT_INTEGRATION_TOKEN.replace('{tenantId}', tenantId),
-      { token }
-    );
-    return res.data;
+    try {
+      const res = await axios.post<Response>(
+        PixwayAPIRoutes.ACCEPT_INTEGRATION_TOKEN.replace(
+          '{tenantId}',
+          tenantId
+        ),
+        { token }
+      );
+      return res.data;
+    } catch (err) {
+      console.error('Erro ao aceitar o token de integração:', err);
+      throw handleNetworkException(err);
+    }
   };
 
   return useMutation(_acceptIntegrationToken);

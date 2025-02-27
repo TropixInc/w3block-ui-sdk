@@ -5,6 +5,7 @@ import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { MetadataApiInterface } from '../../../shared/interface/metadata/metadata';
+import { handleNetworkException } from '../../../shared/utils/handleNetworkException';
 
 export enum BeltColor {
   WHITE = 'White',
@@ -44,16 +45,17 @@ export interface AthleteInterface {
 
 const address = '0xda859035c78cfa6423cf9388e23e72db1ad2c583';
 const chainId = '1284';
+
 export const useGetAthlete = (id: string) => {
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();
   const filter = { athleteIdentification: Number(id) };
 
   return useQuery(
-    [PixwayAPIRoutes.METADATA_BY_ADDRESS_AND_CHAINID, address, companyId, id],
-    () =>
-      axios
-        .get(
+    [PixwayAPIRoutes.METADATA_BY_ADDRESS_AND_CHAINID, companyId, id],
+    async () => {
+      try {
+        const response = await axios.get(
           PixwayAPIRoutes.METADATA_BY_ADDRESS_AND_CHAINID.replace(
             '{companyId}',
             companyId
@@ -61,11 +63,15 @@ export const useGetAthlete = (id: string) => {
             .replace('{address}', address)
             .replace('{chainId}', chainId) +
             `?metadataFilter=${encodeURI(JSON.stringify(filter))}&limit=30`
-        )
-        .then(
-          (data): { items: MetadataApiInterface<AthleteInterface>[] } =>
-            data.data
-        ),
+        );
+        return response.data as {
+          items: MetadataApiInterface<AthleteInterface>[];
+        };
+      } catch (error) {
+        console.error('Erro ao buscar dados do atleta:', error);
+        throw handleNetworkException(error);
+      }
+    },
     {
       enabled: id != undefined && id != '',
       refetchOnWindowFocus: false,

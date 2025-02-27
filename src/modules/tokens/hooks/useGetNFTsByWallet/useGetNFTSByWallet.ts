@@ -3,6 +3,7 @@ import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { usePaginatedQuery } from '../../../shared/hooks/usePaginatedQuery';
 import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+import { handleNetworkException } from '../../../shared/utils/handleNetworkException';
 
 interface Media {
   raw: string;
@@ -58,13 +59,20 @@ export const useGetNFTSByWallet = (chainId: number | undefined) => {
 
   return usePaginatedQuery<NFTByWalletDTO>(
     [PixwayAPIRoutes.NFTS_BY_WALLET, address as string, chainId!],
-    () => {
-      return axios.get(
-        PixwayAPIRoutes.NFTS_BY_WALLET.replace(
-          '{chainId}',
-          chainId!.toString()
-        ).replace('{address}', address as string) + '?onlyMintedByWeblock=true'
-      );
+    async () => {
+      try {
+        const response = await axios.get(
+          PixwayAPIRoutes.NFTS_BY_WALLET.replace(
+            '{chainId}',
+            chainId!.toString()
+          ).replace('{address}', address as string) +
+            '?onlyMintedByWeblock=true'
+        );
+        return response;
+      } catch (err) {
+        console.error('Erro ao buscar NFTs por wallet:', err);
+        throw handleNetworkException(err);
+      }
     },
     {
       enabled: address != undefined && chainId != undefined,

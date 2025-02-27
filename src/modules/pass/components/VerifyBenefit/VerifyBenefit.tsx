@@ -80,12 +80,14 @@ export const VerifyBenefit = ({
                   <ErrorBox customError={errorUseBenefit} />
                   <div className='pw-flex pw-flex-col'>
                     <Button
+                      disabled={isLoading}
                       className='pw-mt-5'
                       onClick={useBenefit}
                     >
                       {translate('pass>verifyBenefit>confirmUsage')}
                     </Button>
                     <Button
+                      disabled={isLoading}
                       className='pw-mt-5'
                       variant='secondary'
                       onClick={onClose}
