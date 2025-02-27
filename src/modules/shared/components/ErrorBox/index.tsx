@@ -7,7 +7,7 @@ import { Alert } from '../Alert';
 interface Props {
   formErrors?: FieldErrors;
   submitCount?: number;
-  customError?: { message: string; type: string };
+  customError?: any;
   generalFieldMessage?: string;
   generalServerMessage?: string;
 }

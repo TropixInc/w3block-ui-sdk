@@ -102,8 +102,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const { fetchUserByWallet } = useGetUserByWallet();
   const truncate = useTruncate();
 
-  console.log('RODOU SDK');
-
   useEffect(() => {
     const itemSorteble = columns.filter((item) => item.sortable);
     const preferSortable = itemSorteble.find((item) => item.preferredSortable);

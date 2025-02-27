@@ -12,6 +12,7 @@ import EyeIcon from '../../../shared/assets/icons/eyeIcon.svg?react';
 import EyeCrossedIcon from '../../../shared/assets/icons/eyeIconCrossed.svg?react';
 import MetamaskIcon from '../../../shared/assets/icons/metamask.svg?react';
 import WalletIcon from '../../../shared/assets/icons/walletOutlined.svg?react';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { Chip } from './Chip';
@@ -30,12 +31,16 @@ export const BaseTemplate = ({
 }) => {
   const [translate] = useTranslation();
   const [showValue, toggleShowValue] = useToggle(false);
-  const { data: profile } = useProfile();
+  const { data: profile, error: errorProfile } = useProfile();
   const { mainWallet: wallet } = useUserWallet();
   const walletBalance = wallet?.balance ?? '0';
   const isLoading = wallet == undefined;
 
-  return (
+  return errorProfile ? (
+    <>
+      <ErrorBox customError={errorProfile as any} />
+    </>
+  ) : (
     <div
       className={classNames(
         classes?.modal
