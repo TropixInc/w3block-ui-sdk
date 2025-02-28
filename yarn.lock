@@ -995,15 +995,11 @@
     "postcss-selector-parser" "6.0.10"
 
 "@tanstack/react-virtual@^3.0.0-beta.60":
-  "integrity" "sha512-CchF0NlLIowiM2GxtsoKBkXA4uqSnY2KvnXo+kyUFD4a4ll6+J0qzoRsUPMwXV/H26lRsxgJIr/YmjYum2oEjg=="
-  "resolved" "https://registry.npmjs.org/@tanstack/react-virtual/-/react-virtual-3.13.0.tgz"
   "version" "3.13.0"
   dependencies:
     "@tanstack/virtual-core" "3.13.0"
 
 "@tanstack/virtual-core@3.13.0":
-  "integrity" "sha512-NBKJP3OIdmZY3COJdWkSonr50FMVIi+aj5ZJ7hI/DTpEKg2RMfo/KvP8A3B/zOSpMgIe52B5E2yn7rryULzA6g=="
-  "resolved" "https://registry.npmjs.org/@tanstack/virtual-core/-/virtual-core-3.13.0.tgz"
   "version" "3.13.0"
 
 "@types/argparse@1.0.38":
@@ -3922,8 +3918,6 @@
     "css-in-js-utils" "^3.1.0"
 
 "input-format@^0.3.10":
-  "integrity" "sha512-gHMrgrbCgmT4uK5Um5eVDUohuV9lcs95ZUUN9Px2Y0VIfjTzT2wF8Q3Z4fwLFm7c5Z2OXCm53FHoovj6SlOKdg=="
-  "resolved" "https://registry.npmjs.org/input-format/-/input-format-0.3.14.tgz"
   "version" "0.3.14"
   dependencies:
     "prop-types" "^15.8.1"
@@ -5700,8 +5694,6 @@
   "version" "8.1.4"
 
 "react-transition-state@^2.1.2":
-  "integrity" "sha512-OucQRyIpeq5g1/5qSBJH4p4U+SzYEoB3MsAXXz3ty116rPqG4jhwrzInImZ2gFi4XOffeLu6HNCZvkCM3DKaeg=="
-  "resolved" "https://registry.npmjs.org/react-transition-state/-/react-transition-state-2.3.0.tgz"
   "version" "2.3.0"
 
 "react-universal-interface@^0.6.2":
@@ -6554,8 +6546,6 @@
   "version" "5.0.7"
 
 "stylis@^4.3.0":
-  "integrity" "sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ=="
-  "resolved" "https://registry.npmjs.org/stylis/-/stylis-4.3.6.tgz"
   "version" "4.3.6"
 
 "sucrase@^3.35.0":
