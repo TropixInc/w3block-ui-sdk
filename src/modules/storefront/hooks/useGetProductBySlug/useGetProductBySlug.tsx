@@ -5,6 +5,7 @@ import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
+import { handleNetworkException } from '../../../shared/utils/handleNetworkException';
 
 export type ProductPrice = {
   amount: string;
@@ -140,16 +141,19 @@ const useGetProductBySlug = (slug?: string) => {
 
   return useQuery<Product>(
     [PixwayAPIRoutes.PRODUCT_BY_SLUG, companyId as string],
-
-    () =>
-      axios
-        .get(
+    async () => {
+      try {
+        const response = await axios.get(
           PixwayAPIRoutes.PRODUCT_BY_SLUG.replace(
             '{companyId}',
             companyId ?? ''
           ).replace('{slug}', slug ?? '')
-        )
-        .then((data) => data.data),
+        );
+        return response.data;
+      } catch (error) {
+        throw handleNetworkException(error);
+      }
+    },
     {
       enabled:
         Boolean(slug) && slug != '' && slug != undefined && status != 'loading',
@@ -157,5 +161,4 @@ const useGetProductBySlug = (slug?: string) => {
     }
   );
 };
-
 export default useGetProductBySlug;

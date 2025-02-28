@@ -9,6 +9,7 @@ import {
   FromToInterface,
 } from '../../../dashboard/interface/ercTokenHistoryInterface';
 import UserIcon from '../../../shared/assets/icons/userOutlined.svg?react';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { TableHeaderItem } from '../../../shared/components/TableDefault/TableDefault';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
@@ -50,10 +51,13 @@ export const UserReportTemplate = () => {
   const [actualPage, setActualPage] = useState(1);
   useGuardPagesWithOptions({ needBusiness: true, needUser: true });
   const { loyalties } = useLoyaltiesInfo();
-  const { data: adminHistory } = useGetAllReportsAdmin({ page: actualPage });
-  const { data: loyaltyHistory } = useGetAllReportsByOperatorId({
+  const { data: adminHistory, error: errorAdmin } = useGetAllReportsAdmin({
     page: actualPage,
   });
+  const { data: loyaltyHistory, error: errorLoyaltyHistory } =
+    useGetAllReportsByOperatorId({
+      page: actualPage,
+    });
   const [translate] = useTranslation();
   const mainLoyaltie = useMemo(() => {
     if (loyalties.length > 0) {
@@ -213,7 +217,13 @@ export const UserReportTemplate = () => {
       return loyaltyHistory;
     } else return { items: [], meta: { totalPages: 1 } };
   }, [loyaltyHistory, adminHistory]);
-  return (
+
+  return errorLoyaltyHistory || errorAdmin ? (
+    <>
+      <ErrorBox customError={errorLoyaltyHistory} />
+      <ErrorBox customError={errorAdmin} />
+    </>
+  ) : (
     <InternalPagesLayoutBase>
       <div className=" pw-p-6 pw-bg-white pw-rounded-[20px] pw-shadow pw-flex-col pw-justify-start pw-items-start">
         <div className=" pw-text-black pw-text-[23px] pw-font-semibold pw-leading-loose">

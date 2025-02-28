@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { W3blockAPI } from '../../enums';
+import { handleNetworkException } from '../../utils/handleNetworkException';
 import { useAxios } from '../useAxios';
 import { usePaginatedQuery } from '../usePaginatedQuery';
 
@@ -31,27 +32,36 @@ export const usePaginatedGenericApiGet = ({
 
   return usePaginatedQuery(
     [url, search ?? ''],
-    (params) => {
-      const newParams = outputMap ? outputMap(params) : params;
-      if (isPublicApi) {
-        if (disableParams) {
-          if (searchType)
-            return axios.get(url, {
-              params: { [searchType]: search },
+    async (params) => {
+      try {
+        const newParams = outputMap ? outputMap(params) : params;
+
+        if (isPublicApi) {
+          if (disableParams) {
+            if (searchType) {
+              return await axios.get(url, {
+                params: { [searchType]: search },
+              });
+            } else {
+              return await axios.get(url, {
+                params: { search: search },
+              });
+            }
+          } else {
+            return await axios.get(url, {
+              params: { ...newParams, search: search },
             });
-          else
-            return axios.get(url, {
-              params: { search: search },
-            });
-        } else
-          return axios.get(url, { params: { ...newParams, search: search } });
-      } else {
-        return internalAxios.get(url, {
-          params: { ...newParams, search: search },
-        });
+          }
+        } else {
+          return await internalAxios.get(url, {
+            params: { ...newParams, search: search },
+          });
+        }
+      } catch (error) {
+        console.error('Error during API request:', error);
+        throw handleNetworkException(error);
       }
     },
-
     {
       enabled: Boolean(url && enabled),
       refetchOnWindowFocus: false,

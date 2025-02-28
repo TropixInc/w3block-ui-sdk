@@ -4,6 +4,7 @@ import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 import { cleanObject } from '../../shared/utils/validators';
 import { ErcTokenHistoryInterfaceResponse } from '../interface/ercTokenHistoryInterface';
 
@@ -16,6 +17,7 @@ export const useGetErcTokensHistory = (
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();
   const { data: session } = usePixwaySession();
+
   return usePrivateQuery(
     [
       PixwayAPIRoutes.GET_ERC_TOKENS_BY_LOYALTY_ID,
@@ -24,9 +26,9 @@ export const useGetErcTokensHistory = (
       companyId,
       session?.id,
     ],
-    (): Promise<ErcTokenHistoryInterfaceResponse> =>
-      axios
-        .get<ErcTokenHistoryInterfaceResponse>(
+    async (): Promise<ErcTokenHistoryInterfaceResponse> => {
+      try {
+        const response = await axios.get<ErcTokenHistoryInterfaceResponse>(
           PixwayAPIRoutes.GET_ERC_TOKENS_BY_LOYALTY_ID.replace(
             '{userId}',
             session?.id ?? ''
@@ -35,8 +37,12 @@ export const useGetErcTokensHistory = (
             .replace('{loyaltyId}', loyaltyId!) +
             '?' +
             queryString
-        )
-        .then((res) => res.data),
+        );
+        return response.data;
+      } catch (error) {
+        throw handleNetworkException(error);
+      }
+    },
     {
       enabled: !!loyaltyId && !!companyId && !!session?.id,
       refetchOnWindowFocus: false,

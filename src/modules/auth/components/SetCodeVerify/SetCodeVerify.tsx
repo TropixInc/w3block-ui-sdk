@@ -88,6 +88,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const sendCode = () => {
     setError('');
     const code = inputs.join('');
+
     if (code.length == 6) {
       if (profile) {
         mutateVerify(
@@ -97,6 +98,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
           },
           {
             onSuccess: (data) => {
+              console.log(data, 'data success');
               refetch();
               if (data?.data?.verified) {
                 if (query.callbackPath?.length) {
@@ -140,6 +142,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailToUse]);
+
   const [isOpenModal, setIsOpenModal] = useState(false);
   return (
     <div className="pw-flex pw-flex-col pw-items-center">

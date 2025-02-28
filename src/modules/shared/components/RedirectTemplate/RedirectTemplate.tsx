@@ -16,6 +16,7 @@ const Spinner = lazy(() =>
 );
 
 import useTranslation from '../../hooks/useTranslation';
+import { ErrorBox } from '../ErrorBox';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _RedirectTemplate = () => {
@@ -25,7 +26,7 @@ const _RedirectTemplate = () => {
   const productId = (router.query.productId as string) ?? '';
   const purchaseRequiredModalContent =
     (router.query.purchaseRequiredModalContent as string) ?? '';
-  const { data: product } = useGetProductById(productId);
+  const { data: product, error: errorProduct } = useGetProductById(productId);
 
   useEffect(() => {
     if (!user) {
@@ -47,29 +48,33 @@ const _RedirectTemplate = () => {
                 __html: purchaseRequiredModalContent,
               }}
             ></div>
-            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-around pw-items-center">
-              <button
-                onClick={() => window.close()}
-                className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-              >
-                {translate('components>walletIntegration>close')}
-              </button>
-              {purchaseRequiredModalContent !== '' && productId !== '' ? (
+            {errorProduct ? (
+              <ErrorBox />
+            ) : (
+              <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-around pw-items-center">
                 <button
-                  onClick={() =>
-                    router.pushConnect(
-                      PixwayAppRoutes.PRODUCT_PAGE.replace(
-                        '{slug}',
-                        product?.slug ?? ''
-                      )
-                    )
-                  }
-                  className="pw-px-[24px] pw-h-[33px] pw-bg-[#0050FF] pw-text-white pw-border-[#0050FF] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                  onClick={() => window.close()}
+                  className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
                 >
-                  {translate('components>advanceButton>continue')}
+                  {translate('components>walletIntegration>close')}
                 </button>
-              ) : null}
-            </div>
+                {purchaseRequiredModalContent !== '' && productId !== '' ? (
+                  <button
+                    onClick={() =>
+                      router.pushConnect(
+                        PixwayAppRoutes.PRODUCT_PAGE.replace(
+                          '{slug}',
+                          product?.slug ?? ''
+                        )
+                      )
+                    }
+                    className="pw-px-[24px] pw-h-[33px] pw-bg-[#0050FF] pw-text-white pw-border-[#0050FF] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+                  >
+                    {translate('components>advanceButton>continue')}
+                  </button>
+                ) : null}
+              </div>
+            )}
           </Box>
         ) : (
           <>

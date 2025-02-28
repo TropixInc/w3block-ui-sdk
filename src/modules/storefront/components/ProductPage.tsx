@@ -28,6 +28,7 @@ import {
 // eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
 import { formatterCurrency } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
+import { ErrorBox } from '../../shared/components/ErrorBox';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -166,6 +167,7 @@ export const ProductPage = ({
     isSuccess,
     refetch,
     isLoading,
+    error: errorProduct,
   } = useGetProductBySlug(params?.[params.length - 1]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
@@ -608,7 +610,9 @@ export const ProductPage = ({
     }
   };
 
-  return (
+  return errorProduct ? (
+    <ErrorBox customError={errorProduct} />
+  ) : (
     <div
       style={{
         margin: convertSpacingToCSS(margin),

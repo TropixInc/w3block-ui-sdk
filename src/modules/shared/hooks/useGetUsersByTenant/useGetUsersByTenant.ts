@@ -2,6 +2,7 @@ import { UserRoleEnum, WalletStatus, WalletTypes } from '@w3block/sdk-id';
 
 import { W3blockAPI } from '../../enums';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
+import { handleNetworkException } from '../../utils/handleNetworkException';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 import { usePrivateQuery } from '../usePrivateQuery';
@@ -54,22 +55,29 @@ export const useGetUserByTenant = ({
   const axios = useAxios(W3blockAPI.ID);
   const { companyId } = useCompanyConfig();
 
-  params?.limit &&
-    params?.limit > 50 &&
-    console.error('Error params: ', 'Limit must not be greater than 50');
+  if (params?.limit && params.limit > 50) {
+    console.error('Error params: Limit must not be greater than 50');
+  }
 
   return usePrivateQuery(
     [PixwayAPIRoutes.CONTACT_BY_TENANT, params?.search],
-    () =>
-      axios.get<{ items: UserDto[] }>(
-        PixwayAPIRoutes.CONTACT_BY_TENANT.replace(
-          '{companyId}',
-          companyId ?? ''
-        ),
-        {
-          params: params,
-        }
-      ),
-    { enabled: enabled }
+    async () => {
+      try {
+        const response = await axios.get<{ items: UserDto[] }>(
+          PixwayAPIRoutes.CONTACT_BY_TENANT.replace(
+            '{companyId}',
+            companyId ?? ''
+          ),
+          { params }
+        );
+
+        return response;
+      } catch (err) {
+        console.error('Erro ao buscar usuários por tenant:', err);
+
+        throw handleNetworkException(err);
+      }
+    },
+    { enabled }
   );
 };

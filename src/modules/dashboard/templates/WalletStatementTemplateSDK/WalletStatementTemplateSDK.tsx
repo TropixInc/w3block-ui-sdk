@@ -6,6 +6,7 @@ import { isAfter, isBefore } from 'date-fns';
 
 import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
 import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
@@ -40,7 +41,7 @@ const Pagination = lazy(() =>
 export const WalletStatementTemplateSDK = () => {
   const { loyaltyWallet, mainWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
-  const { data, isLoading } = useGetErcTokensHistory(
+  const { data, isLoading, error } = useGetErcTokensHistory(
     loyaltyWallet.length ? loyaltyWallet[0].contractId : undefined,
     { page: actualPage }
   );
@@ -131,34 +132,42 @@ export const WalletStatementTemplateSDK = () => {
           </div>
         </div>
       </div>
-      <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
-        {isLoading ? (
-          <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
-            <Spinner className="pw-h-10 pw-w-10" />
-          </div>
-        ) : subTransactions?.length ? (
-          subTransactions.map((item, index) => (
-            <StatementComponent
-              key={item?.actionId ? item?.actionId + index : index}
-              statement={item}
-              currency={loyaltyWallet?.length ? loyaltyWallet[0]?.currency : ''}
-            />
-          ))
-        ) : (
-          <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
-            {translate('dashboard>walletStatementTemplateSDK>releasesNotFound')}
-          </div>
-        )}
-        {data?.meta && data?.meta?.totalPages > 1 ? (
-          <div className="pw-mt-4">
-            <Pagination
-              pagesQuantity={data?.meta.totalPages ?? 0}
-              currentPage={actualPage}
-              onChangePage={setActualPage}
-            />
-          </div>
-        ) : null}
-      </div>
+      {error ? (
+        <ErrorBox customError={error} />
+      ) : (
+        <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
+          {isLoading ? (
+            <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
+              <Spinner className="pw-h-10 pw-w-10" />
+            </div>
+          ) : subTransactions?.length ? (
+            subTransactions.map((item, index) => (
+              <StatementComponent
+                key={item?.actionId ? item?.actionId + index : index}
+                statement={item}
+                currency={
+                  loyaltyWallet?.length ? loyaltyWallet[0]?.currency : ''
+                }
+              />
+            ))
+          ) : (
+            <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
+              {translate(
+                'dashboard>walletStatementTemplateSDK>releasesNotFound'
+              )}
+            </div>
+          )}
+          {data?.meta && data?.meta?.totalPages > 1 ? (
+            <div className="pw-mt-4">
+              <Pagination
+                pagesQuantity={data?.meta.totalPages ?? 0}
+                currentPage={actualPage}
+                onChangePage={setActualPage}
+              />
+            </div>
+          ) : null}
+        </div>
+      )}
     </InternalPagesLayoutBase>
   );
 };

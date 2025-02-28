@@ -2,6 +2,7 @@
 import UserIcon from '../../../assets/icons/usersOutlined.svg?react';
 import { useGetUserByWalletAddress } from '../../../hooks/useGetUserByWalletAddress';
 import useTranslation from '../../../hooks/useTranslation';
+import { ErrorBox } from '../../ErrorBox';
 import { Spinner } from '../../Spinner';
 
 interface UserByWalletInputProps {
@@ -21,11 +22,13 @@ export const UserByWalletInput = ({
 }: UserByWalletInputProps) => {
   const [translate] = useTranslation();
 
-  const { data, isLoading } = useGetUserByWalletAddress(
+  const { data, isLoading, error } = useGetUserByWalletAddress(
     walletValid ? wallet : ''
   );
 
-  return (
+  return error ? (
+    <ErrorBox customError={error as any} />
+  ) : (
     <div>
       <div className="pw-w-full pw-flex pw-gap-x-2">
         <input

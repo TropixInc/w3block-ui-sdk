@@ -4,6 +4,7 @@ import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 
 export interface PaymentPreviewDTO {
   loyaltyId: string;
@@ -15,13 +16,20 @@ export interface PaymentPreviewDTO {
 export const useGetPaymentPreview = () => {
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();
-  const data = useMutation((data: PaymentPreviewDTO) =>
-    axios
-      .patch(
-        PixwayAPIRoutes.GET_LOYALTY_PREVIEW.replace('{companyId}', companyId),
+
+  return useMutation(async (data: PaymentPreviewDTO) => {
+    try {
+      const response = await axios.patch(
+        PixwayAPIRoutes.GET_LOYALTY_PREVIEW.replace(
+          '{companyId}',
+          companyId ?? ''
+        ),
         data
-      )
-      .then((res) => res.data)
-  );
-  return data;
+      );
+      return response.data;
+    } catch (err) {
+      console.error('Erro ao obter pré-visualização do pagamento:', err);
+      throw handleNetworkException(err);
+    }
+  });
 };

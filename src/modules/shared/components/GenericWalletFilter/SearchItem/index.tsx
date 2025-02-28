@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { OffpixButtonBase } from '../../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { useGetUserByTenant } from '../../../hooks/useGetUsersByTenant';
 import useTranslation from '../../../hooks/useTranslation';
-import { Alert } from '../../Alert';
 import { BaseSelect } from '../../BaseSelect';
+import { ErrorBox } from '../../ErrorBox';
 import { Option } from '../../GenericSearchFilter/GenericSearchFilter';
 
 interface SearchItemProps {
@@ -26,7 +26,11 @@ export const SearchItem = ({
   const [translate] = useTranslation();
   const [selectedOption, setSelectedOption] = useState<Option>();
 
-  const { data: contacts, isError } = useGetUserByTenant({
+  const {
+    data: contacts,
+    isError,
+    error,
+  } = useGetUserByTenant({
     enabled: Boolean(onSearch.length > 2),
     params: { search: onSearch },
   });
@@ -86,11 +90,7 @@ export const SearchItem = ({
           placeholder={translate('loyalty>shared>searchPerUser')}
           classes={{ button: 'w-full' }}
         />
-        {isError ? (
-          <Alert className="pw-mt-2" variant="error">
-            {translate('contacts>clientsInterface>errorAlert')}
-          </Alert>
-        ) : null}
+        {isError ? <ErrorBox customError={error as any} /> : null}
         <div className="pw-mt-2 pw-flex pw-gap-x-3 pw-w-full pw-justify-end">
           <OffpixButtonBase
             onClick={onCancel}

@@ -6,6 +6,7 @@ import { useDebounce } from 'react-use';
 
 import './index.css';
 
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -62,10 +63,13 @@ export const PaymentTemplateSDK = () => {
   const [codeError, setCodeError] = useState<string>('');
   const [userInfo, setUserInfo] = useState<UserInfoInterface>({});
   useGuardPagesWithOptions({ needBusiness: true, needUser: true });
-  const { mutate } = useGetUserByCode();
-  const { mutate: getUserBalance } = useGetUserBalance();
-  const { mutate: getPaymentPreview } = useGetPaymentPreview();
-  const { mutate: createPayment } = useCreatePayment();
+  const { mutate, error } = useGetUserByCode();
+  const { mutate: getUserBalance, error: errorGetUserBalance } =
+    useGetUserBalance();
+  const { mutate: getPaymentPreview, error: errorGetPaymentPreview } =
+    useGetPaymentPreview();
+  const { mutate: createPayment, error: errorCreatePayment } =
+    useCreatePayment();
   const [translate] = useTranslation();
 
   const loyaltieToUse = useMemo(() => {
@@ -248,6 +252,8 @@ export const PaymentTemplateSDK = () => {
               )}
             </div>
 
+            <ErrorBox customError={error as any} />
+
             <button
               onClick={handleVerification}
               className=" pw-px-12 pw-py-[5px] pw-bg-zinc-100 pw-rounded-[48px] pw-border pw-border-zinc-300  "
@@ -257,6 +263,7 @@ export const PaymentTemplateSDK = () => {
               </p>
             </button>
           </div>
+          <ErrorBox customError={errorGetUserBalance as any} />
           <UserCard
             onChangeValue={setValueToUse}
             valueToUse={valueToUse}
@@ -274,6 +281,7 @@ export const PaymentTemplateSDK = () => {
             }
           />
         </div>
+        <ErrorBox customError={errorGetPaymentPreview as any} />
         <BuySummarySDK
           className="pw-mt-[32px]"
           totalValue={valueToPay.toString()}
@@ -293,6 +301,7 @@ export const PaymentTemplateSDK = () => {
             </p>
           </div>
         ) : null}
+        <ErrorBox customError={errorCreatePayment as any} />
         <div className="pw-flex pw-justify-end pw-mt-[32px]">
           <button
             disabled={

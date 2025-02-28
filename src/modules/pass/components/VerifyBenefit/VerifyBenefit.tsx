@@ -3,8 +3,9 @@
 /* eslint-disable prettier/prettier */
 import { useLockBodyScroll } from 'react-use';
 
-import  ErrorIcon  from '../../../shared/assets/icons/errorIconRed.svg?react';
+import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg?react';
 import { CloseButton } from '../../../shared/components/CloseButton';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../../../tokens/components/Button';
@@ -20,6 +21,7 @@ interface iProps {
   isLoadingInfo?: boolean;
   tokenPassBenefitAddresses?: BenefitAddress[];
   error?: boolean;
+  errorUseBenefit?: any;
   user?: {
     name?: string,
     email?: string,
@@ -36,6 +38,7 @@ export const VerifyBenefit = ({
   tokenPassBenefitAddresses,
   error,
   user,
+  errorUseBenefit,
 }: iProps) => {
   useLockBodyScroll(hasOpen);
   const [translate] = useTranslation();
@@ -74,14 +77,17 @@ export const VerifyBenefit = ({
                       {data?.tokenPassBenefit?.name ?? data?.name}
                     </p>
                   </div>
+                  <ErrorBox customError={errorUseBenefit} />
                   <div className='pw-flex pw-flex-col'>
                     <Button
+                      disabled={isLoading}
                       className='pw-mt-5'
                       onClick={useBenefit}
                     >
                       {translate('pass>verifyBenefit>confirmUsage')}
                     </Button>
                     <Button
+                      disabled={isLoading}
                       className='pw-mt-5'
                       variant='secondary'
                       onClick={onClose}

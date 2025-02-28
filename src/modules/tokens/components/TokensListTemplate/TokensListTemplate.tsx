@@ -12,6 +12,7 @@ const Pagination = lazy(() =>
   }))
 );
 
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
@@ -128,7 +129,7 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
 
   const { mainWallet: wallet } = useUserWallet();
 
-  const [{ data: ethNFTsResponse, isLoading: isLoadingETH }] =
+  const [{ data: ethNFTsResponse, isLoading: isLoadingETH, error: errorEth }] =
     useGetNFTSByWallet(wallet?.chainId);
 
   const tokens = ethNFTsResponse?.data?.items
@@ -137,7 +138,9 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
       )
     : [];
 
-  return isLoading || !isAuthorized ? null : (
+  return isLoading || !isAuthorized ? null : errorEth ? (
+    <ErrorBox customError={errorEth} />
+  ) : (
     <TranslatableComponent>
       {withLayout ? (
         <InternalPagesLayoutBase>

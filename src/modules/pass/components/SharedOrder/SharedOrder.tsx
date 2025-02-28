@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 import { AuthButton } from '../../../auth/components/AuthButton';
 import { useRouterConnect } from '../../../shared';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -31,15 +32,17 @@ const _SharedOrder = ({
     data: pass,
     isLoading,
     refetch,
+    error,
   } = useGetTokenSharedCode(
     code as string,
     initialStep === 2 && !selfBuy ? true : 5
   );
-  const { data: publicTokenResponse } = usePublicTokenData({
-    contractAddress: pass?.tokenPass?.contractAddress,
-    chainId: pass?.tokenPass?.chainId,
-    tokenId: pass?.editionNumber,
-  });
+  const { data: publicTokenResponse, error: errorPublicToken } =
+    usePublicTokenData({
+      contractAddress: pass?.tokenPass?.contractAddress,
+      chainId: pass?.tokenPass?.chainId,
+      tokenId: pass?.editionNumber,
+    });
 
   const [__, copyToClipboard] = useCopyToClipboard();
   const hasExpired =
@@ -150,22 +153,26 @@ const _SharedOrder = ({
                     {pass?.user?.name ?? pass?.user?.email ?? ''}
                   </p>
                 </div>
-                <div>
-                  <p className="pw-mt-3 pw-mb-0 pw-text-[13px] pw-text-center">
-                    {
-                      publicTokenResponse?.data?.dynamicInformation
-                        ?.publishedTokenTemplate?.value?.config?.label
-                    }
-                  </p>
-                  <p className="pw-text-center pw-text-sm pw-font-semibold pw-mb-8">
-                    {(
-                      publicTokenResponse?.data?.dynamicInformation
-                        ?.publishedTokenTemplate?.value?.config as any
-                    )?.options.find(
-                      (val: any) => val.value === pass?.tokenMetadata?.value
-                    )?.label ?? ''}
-                  </p>
-                </div>
+                {errorPublicToken ? (
+                  <ErrorBox customError={errorPublicToken} />
+                ) : (
+                  <div>
+                    <p className="pw-mt-3 pw-mb-0 pw-text-[13px] pw-text-center">
+                      {
+                        publicTokenResponse?.data?.dynamicInformation
+                          ?.publishedTokenTemplate?.value?.config?.label
+                      }
+                    </p>
+                    <p className="pw-text-center pw-text-sm pw-font-semibold pw-mb-8">
+                      {(
+                        publicTokenResponse?.data?.dynamicInformation
+                          ?.publishedTokenTemplate?.value?.config as any
+                      )?.options.find(
+                        (val: any) => val.value === pass?.tokenMetadata?.value
+                      )?.label ?? ''}
+                    </p>
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -206,7 +213,9 @@ const _SharedOrder = ({
     }
   };
 
-  return (
+  return error ? (
+    <ErrorBox customError={error} />
+  ) : (
     <div className="pw-mt-10 pw-w-full pw-mb-8 pw-flex pw-justify-center pw-text-black">
       <div className="pw-mx-auto pw-w-[580px] pw-shadow-lg pw-border pw-border-[#dddddd71] pw-flex pw-justify-center pw-items-center pw-rounded-[20px] pw-p-8">
         {renderComponent(typeComponent)}

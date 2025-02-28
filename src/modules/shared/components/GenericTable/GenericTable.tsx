@@ -28,6 +28,7 @@ import {
   FormatTypeColumn,
 } from '../../interface/ConfigGenericTable';
 import { Alert } from '../Alert';
+import { ErrorBox } from '../ErrorBox';
 import { GenerateGenericXlsReports } from '../GenerateGenericXlsReports';
 import { Pagination } from '../Pagination';
 import SmartGenericFilter from '../SmartGenericFilter/SmartGenericFilter';
@@ -123,7 +124,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const tenantName = company?.data.id === companyId ? name : '';
 
   const [
-    { data, isLoading, isError, refetch },
+    { data, isLoading, isError, refetch, error },
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
     internalTypeAPI: dataSource?.urlContext,
@@ -543,7 +544,9 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     } else return null;
   };
 
-  return (
+  return isError ? (
+    <ErrorBox customError={error as any} />
+  ) : (
     <div className="pw-w-full pw-mt-20">
       <FormProvider {...methods}>
         <div className="pw-text-black">
@@ -792,220 +795,6 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             </table>
           </div>
         </div>
-
-        {/*         <div
-          className={classNames(
-            'pw-w-full pw-overflow-auto',
-            classes?.root ?? ''
-          )}
-          style={tableStyles?.root as any}
-        >
-          {tableTitle ? (
-            <p className="pw-text-[22px] pw-font-semibold pw-mt-5 pw-mb-4">
-              {tableTitle}
-            </p>
-          ) : null}
-
-          <div
-            style={classes?.grid as any}
-            className={classNames(
-              'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-3 pw-gap-x-2 !pw-border-b-0 pw-rounded-t-2xl pw-w-[800px] pw-text-sm pw-items-center pw-grid sm:pw-w-full',
-              tableStyles?.header ?? ''
-            )}
-          >
-            {columns
-              .filter(({ header }) => header.label)
-              .map(({ sortable, header, key, sortableTamplate }) => (
-                <div key={key} className="pw-w-full pw-relative">
-                  <div className="pw-flex pw-items-center pw-justify-between">
-                    <p
-                      className={classNames(
-                        'pw-font-semibold pw-text-left pw-flex pw-flex-col pw-text-sm',
-                        header.filter ? 'pw-w-[70%]' : 'pw-w-full'
-                      )}
-                    >
-                      <span>{header.label}</span>
-                      {header.filter?.placement !== 'external' ? (
-                        <span className="pw-text-xs pw-font-normal pw-opacity-90 pw-line-clamp-2">
-                          {renderFilterValues(
-                            (filterLabels as any)?.[key],
-                            header.filter?.format,
-                            header.filter?.values
-                          )}
-                        </span>
-                      ) : null}
-                    </p>
-                    <div className="pw-flex pw-gap-x-1 pw-items-center">
-                      {sortable ? (
-                        <div className="pw-relative pw-z-20">
-                          <button
-                            className={classNames(
-                              'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
-                              sort.includes(key)
-                                ? 'pw-bg-blue1'
-                                : 'pw-opacity-80'
-                            )}
-                            onClick={() => onHandleSort(sortableTamplate ?? '')}
-                          >
-                            <ArrowDown
-                              className={classNames(
-                                sort.includes(key)
-                                  ? 'pw-stroke-white'
-                                  : 'pw-stroke-blue1',
-                                sort.includes('ASC')
-                                  ? 'pw-rotate-180'
-                                  : 'pw-rotate-0'
-                              )}
-                            />
-                          </button>
-                        </div>
-                      ) : null}
-                      {header.filter?.placement !== 'external' ? (
-                        <>
-                          {(filterLabels as any)?.[key]?.length ? (
-                            <button
-                              className="pw-w-6 pw-h-6"
-                              onClick={() => onClearFilter(key)}
-                            >
-                              <ClearFilter className="pw-stroke-2 pw-stroke-red-500 pw-w-5 pw-h-5" />
-                            </button>
-                          ) : null}
-                          {header.filter ? (
-                            <div>
-                              <button
-                                className={classNames(
-                                  'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px]',
-                                  (filterLabels as any)[key]?.length
-                                    ? 'pw-bg-blue1'
-                                    : 'pw-opacity-80'
-                                )}
-                                onClick={() => setIsShowFilterKey(key)}
-                              >
-                                <FilterIcon
-                                  className={classNames(
-                                    (filterLabels as any)[key]?.length
-                                      ? 'pw-stroke-white'
-                                      : 'pw-stroke-blue1'
-                                  )}
-                                />
-                              </button>
-                            </div>
-                          ) : null}
-                        </>
-                      ) : null}
-                    </div>
-                  </div>
-                  <div className="pw-absolute pw-w-full">
-                    <SmartGenericFilter
-                      filterType={header.filter?.type}
-                      filterFormat={header.filter?.format}
-                      filterOptions={header.filter?.values}
-                      itemShowFilterKey={isShowFilterKey}
-                      itemKey={key}
-                      filters={filters}
-                      onChangeFilter={setFilters}
-                      onCloseFilters={setIsShowFilterKey}
-                      filterLabels={filterLabels}
-                      onChangeFilterLabels={setFilterLabels}
-                      filterTemplate={
-                        header.filter?.replacedFilterTemplate
-                          ? header.filter?.replacedFilterTemplate
-                          : header.filter?.filterTemplate
-                      }
-                      filterOptionsUrl={header.filter?.data?.url}
-                      filterContext={header.filter?.data?.filterUrlContext}
-                      dynamicFilterParameters={header.filter?.data?.parameters}
-                      filterPlaceholder={header.filter?.placeholder}
-                      isPublicFilterApi={header.filter?.data?.isPublicFilterApi}
-                      isFilterDependency={
-                        header.filter?.data?.parameters?.isFilterDependency
-                      }
-                      filterDependencies={
-                        header.filter?.data?.parameters?.dependencies
-                      }
-                    />
-                  </div>
-                </div>
-              ))}
-          </div>
-
-          {isLoading && (
-            <div className="pw-w-full pw-flex pw-py-10 pw-items-center pw-justify-center">
-              <Spinner />
-            </div>
-          )}
-
-          {!isLoading && _.get(data, localeItems ?? '', [])?.length ? (
-            <div className="pw-h-auto pw-w-[800px] pw-border pw-border-t-0 pw-rounded-b-2xl sm:pw-w-full">
-              {_.get(data, localeItems ?? '', []).map((item: any) => (
-                <a
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  key={(item as any).id}
-                  onClick={(e) => handleAction(e, lineActions?.action, item)}
-                  href={getHref(lineActions?.action, item)}
-                  style={classes?.grid as any}
-                  className={classNames(
-                    'pw-w-[800px] pw-grid  pw-px-3 pw-items-center pw-gap-x-2 pw-py-[19px] pw-border-t sm:pw-w-full ',
-                    tableStyles?.line ?? '',
-                    lineActions ? 'pw-cursor-pointer' : 'pw-cursor-default'
-                  )}
-                >
-                  {columns
-                    .filter(({ header }) => header.label)
-                    .map(
-                      ({
-                        key,
-                        format,
-                        header,
-                        keyInCollection,
-                        moreInfos,
-                        hrefLink,
-                        linkLabel,
-                        isTranslatable,
-                        translatePrefix,
-                      }) => (
-                        <p key={key} className="pw-text-sm pw-text-left">
-                          <span>
-                            {customizerValues(
-                              item as any,
-                              key,
-                              format,
-                              header.baseUrl,
-                              keyInCollection,
-                              moreInfos,
-                              hrefLink,
-                              linkLabel,
-                              isTranslatable,
-                              translatePrefix
-                            )}
-                          </span>
-                        </p>
-                      )
-                    )}
-                  <GenericButtonActions
-                    dataItem={item}
-                    actions={actions ?? []}
-                  />
-                </a>
-              ))}
-            </div>
-          ) : null}
-          {!isLoading &&
-            !_.get(data, localeItems ?? '', [])?.length &&
-            !isError && (
-              <Alert
-                variant="information"
-                className="pw-bg-[#eee] pw-text-[#999]"
-              >
-                {translate('token>pass>notResult')}
-              </Alert>
-            )}
-          {isError && (
-            <Alert variant="error" className="pw-mt-5">
-              {translate('contact>inviteContactTemplate>error')}
-            </Alert>
-          )}
-        </div> */}
 
         {totalItems && totalPages && totalPages > 1 ? (
           <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10 pw-mt-2">

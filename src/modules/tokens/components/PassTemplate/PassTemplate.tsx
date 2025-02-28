@@ -17,6 +17,7 @@ import {
 import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
 import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
 import InfoCircledIcon from '../../../shared/assets/icons/informationCircled.svg?react';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
@@ -167,21 +168,26 @@ const _PassTemplate = ({
     data: benefit,
     isSuccess: isBenefitSucceed,
     isLoading: isLoadingBenefit,
+    error: errorBenefit,
   } = useGetPassBenefitById(benefitId);
 
-  const { data: collectionData, isLoading: collectionLoading } =
-    useGetCollectionMetadata({
-      id: benefit?.data.tokenPassId ?? '',
-      query: {
-        limit: 50,
-        walletAddresses: [profile?.data.mainWallet?.address ?? ''],
-      },
-    });
+  const {
+    data: collectionData,
+    isLoading: collectionLoading,
+    error: errorCollectionData,
+  } = useGetCollectionMetadata({
+    id: benefit?.data.tokenPassId ?? '',
+    query: {
+      limit: 50,
+      walletAddresses: [profile?.data.mainWallet?.address ?? ''],
+    },
+  });
 
   const {
     data: publicTokenResponse,
     isSuccess: isTokenSucceed,
     isLoading: isLoadingToken,
+    error: errorPublicToken,
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
     chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
@@ -196,11 +202,14 @@ const _PassTemplate = ({
     }
   }, [isTokenSucceed, publicTokenResponse?.data?.edition?.currentNumber]);
 
-  const { data: benefitsResponse, isLoading: isLoadingBenefitsResponse } =
-    useGetBenefitsByEditionNumber({
-      tokenPassId: publicTokenResponse?.data?.group?.collectionId ?? '',
-      editionNumber: +editionNumber,
-    });
+  const {
+    data: benefitsResponse,
+    isLoading: isLoadingBenefitsResponse,
+    error: errorBenefitsResponse,
+  } = useGetBenefitsByEditionNumber({
+    tokenPassId: publicTokenResponse?.data?.group?.collectionId ?? '',
+    editionNumber: +editionNumber,
+  });
 
   const benefitData = benefitsResponse?.data.find(
     (e) => e.id === benefit?.data.id
@@ -220,6 +229,7 @@ const _PassTemplate = ({
     isLoading: isUseLoading,
     isSuccess: isUseSuccess,
     isError: isUseError,
+    error: errorSelfUser,
   } = usePostSelfUseBenefit();
 
   useEffect(() => {
@@ -508,7 +518,12 @@ const _PassTemplate = ({
     );
   }
   if (tokenId) {
-    return (
+    return errorBenefit || errorBenefitsResponse ? (
+      <>
+        <ErrorBox customError={errorBenefit} />
+        <ErrorBox customError={errorBenefitsResponse} />
+      </>
+    ) : (
       <div className="pw-mx-[22px] sm:pw-mx-0 ">
         <div className="pw-bg-white pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
           <div
@@ -627,11 +642,13 @@ const _PassTemplate = ({
                     )}
                 </div>
               </div>
+              <ErrorBox customError={errorPublicToken} />
               {!isSecretError &&
                 !isInactive &&
                 !isUnavaible &&
                 isBenefitSucceed &&
-                isTokenSucceed && (
+                isTokenSucceed &&
+                !errorPublicToken && (
                   <QrCodeSection
                     hasExpired={hasExpired}
                     editionNumber={
@@ -644,32 +661,36 @@ const _PassTemplate = ({
                     refetchSecret={refetchSecret}
                   />
                 )}
-              <div className="pw-w-full pw-flex pw-flex-col pw-pt-[16px] pw-px-[16px]">
-                <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px]">
-                  {benefit?.data?.eventEndsAt
-                    ? translate('token>pass>useThisTokenUntil')
-                    : translate('token>pass>useThisTokenFrom')}
-                  <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                    {benefit?.data?.eventStartsAt &&
-                      format(
-                        new Date(benefit?.data?.eventStartsAt),
-                        'dd/MM/yyyy'
-                      )}
-                    {benefit?.data?.eventEndsAt &&
-                      translate('token>pass>until') +
+              {errorBenefit ? (
+                <ErrorBox customError={errorBenefit} />
+              ) : (
+                <div className="pw-w-full pw-flex pw-flex-col pw-pt-[16px] pw-px-[16px]">
+                  <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px]">
+                    {benefit?.data?.eventEndsAt
+                      ? translate('token>pass>useThisTokenUntil')
+                      : translate('token>pass>useThisTokenFrom')}
+                    <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                      {benefit?.data?.eventStartsAt &&
                         format(
-                          new Date(benefit?.data?.eventEndsAt),
+                          new Date(benefit?.data?.eventStartsAt),
                           'dd/MM/yyyy'
                         )}
-                  </span>
-                </div>
-                {benefit?.data?.checkIn && (
-                  <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
-                    {translate('token>pass>checkinAvaibleAt')}
-                    {renderCheckInTime()}
+                      {benefit?.data?.eventEndsAt &&
+                        translate('token>pass>until') +
+                          format(
+                            new Date(benefit?.data?.eventEndsAt),
+                            'dd/MM/yyyy'
+                          )}
+                    </span>
                   </div>
-                )}
-              </div>
+                  {benefit?.data?.checkIn && (
+                    <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
+                      {translate('token>pass>checkinAvaibleAt')}
+                      {renderCheckInTime()}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -700,6 +721,7 @@ const _PassTemplate = ({
                 tokenPassBenefitAddresses={
                   benefitData?.tokenPassBenefitAddresses
                 }
+                errorUseBenefit={errorSelfUser}
               />
             </>
           )}
@@ -790,7 +812,13 @@ const _PassTemplate = ({
       </div>
     );
   } else {
-    return (
+    return errorBenefit || errorCollectionData || errorBenefitsResponse ? (
+      <>
+        <ErrorBox customError={errorBenefit} />
+        <ErrorBox customError={errorCollectionData} />
+        <ErrorBox customError={errorBenefitsResponse} />
+      </>
+    ) : (
       <div className="pw-px-4 sm:pw-px-0">
         {collectionLoading || collectionData?.items.length === 1 ? (
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">

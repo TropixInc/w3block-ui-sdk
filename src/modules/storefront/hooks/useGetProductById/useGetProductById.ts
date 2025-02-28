@@ -4,6 +4,7 @@ import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { handleNetworkException } from '../../../shared/utils/handleNetworkException';
 import { Product } from '../useGetProductBySlug/useGetProductBySlug';
 
 const useGetProductById = (productId?: string) => {
@@ -12,18 +13,23 @@ const useGetProductById = (productId?: string) => {
 
   return useQuery<Product>(
     [PixwayAPIRoutes.PRODUCT_BY_ID, companyId as string],
-
-    () =>
-      axios
-        .get(
+    async () => {
+      try {
+        const response = await axios.get(
           PixwayAPIRoutes.PRODUCT_BY_ID.replace(
             '{companyId}',
             companyId ?? ''
           ).replace('{productId}', productId ?? '')
-        )
-        .then((data) => data.data),
+        );
+        return response.data;
+      } catch (error) {
+        console.error('Erro ao obter o produto:', error);
+        throw handleNetworkException(error);
+      }
+    },
     {
-      enabled: Boolean(productId) && productId != '' && productId != undefined,
+      enabled:
+        Boolean(productId) && productId !== '' && productId !== undefined,
       refetchOnWindowFocus: false,
     }
   );

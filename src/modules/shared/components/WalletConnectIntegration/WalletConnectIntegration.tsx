@@ -30,14 +30,18 @@ const WalletConnectModal = lazy(() =>
   }))
 );
 
+import { ErrorBox } from '../ErrorBox';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _WalletConnectIntegration = () => {
-  const { data: profile } = useProfile();
-  const { data: integrations } = useIntegrations();
-  const { data: tenantIntegrations } = useGetAvailableIntegrations();
-  const { data: userIntegrations } = useGetUserIntegrations();
-  const { data: currentTenant } = useGetCurrentTenantInfo();
+  const { data: profile, error: errorProfile } = useProfile();
+  const { data: integrations, error: errorIntegrations } = useIntegrations();
+  const { data: tenantIntegrations, error: errorTenantIntegrations } =
+    useGetAvailableIntegrations();
+  const { data: userIntegrations, error: errorUserIntegrations } =
+    useGetUserIntegrations();
+  const { data: currentTenant, error: errorCurrentTenant } =
+    useGetCurrentTenantInfo();
 
   const [translate] = useTranslation();
   const { mainWallet: wallet } = useUserWallet();
@@ -137,7 +141,19 @@ const _WalletConnectIntegration = () => {
     (value) => !integrationData.some((res) => res.id === value.id)
   );
 
-  return (
+  return errorProfile ||
+    errorIntegrations ||
+    errorTenantIntegrations ||
+    errorUserIntegrations ||
+    errorCurrentTenant ? (
+    <>
+      <ErrorBox customError={errorProfile} />
+      <ErrorBox customError={errorIntegrations} />
+      <ErrorBox customError={errorTenantIntegrations} />
+      <ErrorBox customError={errorUserIntegrations} />
+      <ErrorBox customError={errorCurrentTenant} />
+    </>
+  ) : (
     <>
       <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
         <div className="pw-flex  pw-justify-center pw-items-center pw-w-full">

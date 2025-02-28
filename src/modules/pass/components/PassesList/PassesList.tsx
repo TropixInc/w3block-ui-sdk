@@ -1,6 +1,7 @@
 import { lazy, useState } from 'react';
 
 import { InternalPagesLayoutBase, useProfile } from '../../../shared';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { TypeError } from '../../../shared/components/QrCodeReader/QrCodeError';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -51,7 +52,7 @@ const PassCard = lazy(() =>
   }))
 );
 const _PassesList = () => {
-  const { data, isLoading } = useGetPassByUser();
+  const { data, isLoading, error: errorGetPass } = useGetPassByUser();
   const [translate] = useTranslation();
   const passes = data?.data?.items || [];
   const [qrCodeData, setQrCodeData] = useState('');
@@ -66,6 +67,7 @@ const _PassesList = () => {
     data: verifyBenefit,
     isLoading: verifyLoading,
     isError: verifyError,
+    error: errorVerifyBenefit,
   } = useVerifyBenefit({
     benefitId: benefitId,
     secret: secret,
@@ -77,17 +79,22 @@ const _PassesList = () => {
     ({ id }) => id === verifyBenefit?.data?.tokenPassBenefit?.tokenPass?.id
   );
 
-  const { data: benefitByPass } = useGetPassBenefits({
-    chainId: filteredPass?.chainId,
-    contractAddress: filteredPass?.contractAddress,
-  });
+  const { data: benefitByPass, error: errorBenefitByPass } = useGetPassBenefits(
+    {
+      chainId: filteredPass?.chainId,
+      contractAddress: filteredPass?.contractAddress,
+    }
+  );
 
   const benefitById = benefitByPass?.data?.items?.find(
     ({ id }) => id === benefitId
   );
 
-  const { mutate: registerUse, isLoading: registerLoading } =
-    usePostBenefitRegisterUse();
+  const {
+    mutate: registerUse,
+    isLoading: registerLoading,
+    error: errorPostBenefit,
+  } = usePostBenefitRegisterUse();
 
   const verifyBenefitUse = (qrCodeData: string) => {
     const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
@@ -147,6 +154,7 @@ const _PassesList = () => {
         >
           {translate('token>pass>scanQRCode')}
         </Button>
+        <ErrorBox customError={errorGetPass as any} />
         <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
           {passes?.map((passes) => {
             return (
@@ -164,40 +172,50 @@ const _PassesList = () => {
           })}
         </ul>
       </div>
-      <>
-        <QrCodeReader
-          hasOpen={showScan}
-          returnValue={(e) => verifyBenefitUse(e)}
-          onClose={() => setOpenScan(false)}
-        />
-        <QrCodeValidated
-          hasOpen={showSuccess}
-          onClose={() => setShowSuccess(false)}
-          validateAgain={() => setOpenScan(true)}
-          name={verifyBenefit?.data?.tokenPassBenefit?.name}
-          type={verifyBenefit?.data?.tokenPassBenefit?.type}
-          tokenPassBenefitAddresses={benefitById?.tokenPassBenefitAddresses}
-          userEmail={verifyBenefit?.data?.user?.email}
-          userName={verifyBenefit?.data?.user?.name}
-        />
-        <QrCodeError
-          hasOpen={showError}
-          onClose={() => setShowError(false)}
-          validateAgain={() => setOpenScan(true)}
-          type={errorType}
-          error={error}
-        />
-        <VerifyBenefit
-          hasOpen={showVerify}
-          error={verifyError}
-          isLoading={registerLoading}
-          isLoadingInfo={verifyLoading}
-          onClose={() => setShowVerify(false)}
-          useBenefit={() => validateBenefitUse(qrCodeData)}
-          data={verifyBenefit?.data}
-          tokenPassBenefitAddresses={benefitById?.tokenPassBenefitAddresses}
-        />
-      </>
+      {errorVerifyBenefit ? (
+        <ErrorBox customError={errorVerifyBenefit as any} />
+      ) : (
+        <>
+          <QrCodeReader
+            hasOpen={showScan}
+            returnValue={(e) => verifyBenefitUse(e)}
+            onClose={() => setOpenScan(false)}
+          />
+          {errorBenefitByPass ? (
+            <ErrorBox customError={errorBenefitByPass} />
+          ) : (
+            <QrCodeValidated
+              hasOpen={showSuccess}
+              onClose={() => setShowSuccess(false)}
+              validateAgain={() => setOpenScan(true)}
+              name={verifyBenefit?.data?.tokenPassBenefit?.name}
+              type={verifyBenefit?.data?.tokenPassBenefit?.type}
+              tokenPassBenefitAddresses={benefitById?.tokenPassBenefitAddresses}
+              userEmail={verifyBenefit?.data?.user?.email}
+              userName={verifyBenefit?.data?.user?.name}
+            />
+          )}
+
+          <QrCodeError
+            hasOpen={showError}
+            onClose={() => setShowError(false)}
+            validateAgain={() => setOpenScan(true)}
+            type={errorType}
+            error={error}
+          />
+          <VerifyBenefit
+            hasOpen={showVerify}
+            error={verifyError}
+            isLoading={registerLoading}
+            isLoadingInfo={verifyLoading}
+            onClose={() => setShowVerify(false)}
+            useBenefit={() => validateBenefitUse(qrCodeData)}
+            errorUseBenefit={errorPostBenefit}
+            data={verifyBenefit?.data}
+            tokenPassBenefitAddresses={benefitById?.tokenPassBenefitAddresses}
+          />
+        </>
+      )}
     </BaseTemplate>
   );
 };
