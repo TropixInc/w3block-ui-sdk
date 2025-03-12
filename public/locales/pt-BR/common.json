@@ -999,5 +999,7 @@
   "checkout>currencyAnalyze>chooseCurrency": "Os produtos do seu carrinho podem ser comprados juntos nas seguintes moedas, por favor escolha uma para continuar:",
   "checkout>currencyAnalyze>continue": "Continuar",
   "checkout>increaseCurrency>continue": "Para concluir a compra, você precisa permitir a transação na sua carteira.",
-  "checkout>increaseCurrency>cancel": "Cancelar"
+  "checkout>increaseCurrency>cancel": "Cancelar",
+  "checkout>increaseCurrency>processing": "Estamos processando sua solicitação, por favor aguarde..."
  }
+ 
