@@ -5,7 +5,7 @@ import {
   SetStateAction,
   useState,
 } from 'react';
-import ReactInputMask from 'react-input-mask';
+/* import ReactInputMask from 'react-input-mask'; */
 
 import classNames from 'classnames';
 
@@ -174,12 +174,13 @@ export const BaseInput = ({
           <SearchIcon className="pw-stroke-black pw-w-5 pw-pb-[2px]" />
         ) : null}
         {mask ? (
-          <ReactInputMask
+          <></>
+        ) : /*   <ReactInputMask
             className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             mask={mask as string}
             {...props}
-          />
-        ) : textarea ? (
+          /> */
+        textarea ? (
           <textarea
             name={props.name}
             id={props.id}
