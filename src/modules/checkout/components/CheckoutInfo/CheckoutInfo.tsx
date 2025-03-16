@@ -23,7 +23,7 @@ import _ from 'lodash';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { SharedOrder } from '../../../pass';
-import { useProfile } from '../../../shared';
+import { BaseSelect, useProfile } from '../../../shared';
 import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { Shimmer } from '../../../shared/components/Shimmer';
@@ -251,6 +251,9 @@ const _CheckoutInfo = ({
       }
       if (currencyIdFromQueries && !isCart) {
         setCurrencyIdState(currencyIdFromQueries);
+      }
+      if (isCart && cartCurrencyId) {
+        setCurrencyIdState(cartCurrencyId.id);
       }
     } else {
       const preview = productCache;
@@ -1325,6 +1328,14 @@ const _CheckoutInfo = ({
     paymentAmount,
   ]);
 
+  const {
+    commonCurrencies,
+    hasCommonCurrencies,
+    productsWithoutCommonCurrencies,
+  } = useMemo(() => analyzeCurrenciesInCart(cart), [cart]);
+
+  const [currVal, setCurrVal] = useState(cartCurrencyId?.id);
+
   const locale = useLocale();
   const _ButtonsToShow = useMemo(() => {
     switch (checkoutStatus) {
@@ -1490,6 +1501,32 @@ const _CheckoutInfo = ({
                 className="pw-my-4"
               />
             )}
+            {isCart && hasCommonCurrencies && commonCurrencies.length > 1 ? (
+              <div className="pw-container pw-mx-auto pw-mb-8">
+                <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-start">
+                  <p className="pw-font-bold pw-text-black pw-text-left pw-mb-4">
+                    {translate('checkout>currencyAnalyze>chooseCurrency')}
+                  </p>
+                  <div className="">
+                    <form className="pw-flex pw-gap-4" action="submit">
+                      <BaseSelect
+                        options={commonCurrencies.map((res) => {
+                          return { value: res.id, label: res.symbol };
+                        })}
+                        value={currVal}
+                        onChangeValue={(e) => {
+                          setCurrVal(e);
+                          setCurrencyIdState(e as string);
+                          setCartCurrencyId?.(
+                            commonCurrencies.find((res) => res.id === e)
+                          );
+                        }}
+                      />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            ) : null}
             {parseFloat(
               orderPreview?.payments?.filter(
                 (e) => e.currencyId === currencyIdState
@@ -1912,11 +1949,6 @@ const _CheckoutInfo = ({
       }, 6000);
     }
   };
-  const {
-    commonCurrencies,
-    hasCommonCurrencies,
-    productsWithoutCommonCurrencies,
-  } = useMemo(() => analyzeCurrenciesInCart(cart), [cart]);
 
   const { mainWallet: wallet } = useUserWallet();
 
@@ -1945,51 +1977,6 @@ const _CheckoutInfo = ({
             }}
           >
             {translate('checkout>currencyAnalyze>emptyCart')}
-          </WeblockButton>
-        </div>
-      </div>
-    );
-  else if (isCart && hasCommonCurrencies && commonCurrencies.length > 1)
-    return (
-      <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
-        <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
-          <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
-            {translate('checkout>currencyAnalyze>chooseCurrency')}
-          </p>
-          <div className="">
-            <form className="pw-flex pw-gap-4" action="submit">
-              {commonCurrencies?.map((currency) => (
-                <div key={currency.id} className="pw-flex pw-gap-2">
-                  <input
-                    onChange={() => {
-                      setCurrencyIdState?.(currency?.id);
-                      setCartCurrencyId?.(currency);
-                    }}
-                    checked={currency.id === currencyIdState}
-                    name="currency"
-                    value={currency.id}
-                    type="radio"
-                  />
-                  <p className="pw-text-base pw-text-slate-600 pw-font-[600]">
-                    {currency?.symbol}
-                  </p>
-                </div>
-              ))}
-            </form>
-          </div>
-          <WeblockButton
-            className="pw-text-white pw-mt-6"
-            onClick={() => {
-              getOrderPreviewFn(
-                couponCodeInput,
-                () => {
-                  null;
-                },
-                true
-              );
-            }}
-          >
-            {translate('checkout>currencyAnalyze>continue')}
           </WeblockButton>
         </div>
       </div>
