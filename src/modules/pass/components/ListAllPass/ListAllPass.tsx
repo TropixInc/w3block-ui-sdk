@@ -167,14 +167,14 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
   );
 
   const handleStatusFilter = (filter: string) => {
-    const filterLowerCase = filter.toLocaleLowerCase();
+    const filterLowerCase = filter?.toLocaleLowerCase();
     const hasFilter = statusFilter.find(
-      (e) => e.toLocaleLowerCase() === filterLowerCase
+      (e) => e?.toLocaleLowerCase() === filterLowerCase
     );
 
     if (hasFilter) {
       const filtered = statusFilter.filter(
-        (e) => e.toLocaleLowerCase() !== filterLowerCase
+        (e) => e?.toLocaleLowerCase() !== filterLowerCase
       );
       setStatusFilter(filtered);
     } else {

@@ -154,7 +154,7 @@ const _WalletConnectIntegration = () => {
                 </p>
                 <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
                   {translate('components>walletIntegration>syncDate', {
-                    date: sincDate.toLocaleDateString(),
+                    date: sincDate?.toLocaleDateString(),
                   })}
                 </p>
               </>

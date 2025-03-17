@@ -58,7 +58,7 @@ export const Filters = ({
             <div className="pw-flex pw-gap-2">
               {validStatus.map(({ key, statusColor }) => {
                 const isChecked = status.find(
-                  (e) => e.toLocaleLowerCase() === key.toLocaleLowerCase()
+                  (e) => e?.toLocaleLowerCase() === key?.toLocaleLowerCase()
                 );
 
                 return (

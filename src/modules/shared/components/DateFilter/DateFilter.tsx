@@ -91,7 +91,7 @@ export const DateFilter = ({
       }
     } else if (typeOfCalendar === CalendarType.SINGLE) {
       if (selectedDate) {
-        return selectedDate.toLocaleDateString();
+        return selectedDate?.toLocaleDateString();
       } else {
         return placeholder
           ? placeholder

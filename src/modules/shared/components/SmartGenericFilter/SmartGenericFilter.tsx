@@ -200,8 +200,8 @@ const SmartGenericFilter = ({
         onChangeFilterLabels({
           ...filterLabels,
           [itemKey ?? '']: [
-            startDate.toLocaleDateString(),
-            endDate.toLocaleDateString(),
+            startDate?.toLocaleDateString(),
+            endDate?.toLocaleDateString(),
           ],
         });
 

@@ -159,7 +159,7 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
                 </span>
               </LabelWithRequired>
               <p className="pw-text-slate-700">
-                {new Date(benefit?.data?.eventStartsAt).toLocaleString()}
+                {new Date(benefit?.data?.eventStartsAt)?.toLocaleString()}
               </p>
             </div>
           ) : null}
@@ -172,7 +172,7 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
                 </span>
               </LabelWithRequired>
               <p className="pw-text-slate-700">
-                {new Date(benefit?.data?.eventEndsAt).toLocaleString()}
+                {new Date(benefit?.data?.eventEndsAt)?.toLocaleString()}
               </p>
             </div>
           ) : null}
