@@ -439,8 +439,8 @@ export const TokenTransferController = ({
                   <ContentProcess
                     startProcess={currentStep === Steps.PROCESSING_STEP_MODAL}
                     wallet={toAddress.value}
-                    tokenList={successfulTransfers.data}
-                    isSuccess={successfulTransfers.data.status === 'success'}
+                    tokenList={successfulTransfers?.data}
+                    isSuccess={successfulTransfers?.data?.status === 'success'}
                   />
                 )
               )}

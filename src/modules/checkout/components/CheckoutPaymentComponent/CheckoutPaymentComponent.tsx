@@ -9,7 +9,7 @@ import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
-import { useRouterConnect } from '../../../shared';
+import { BaseButton, useRouterConnect } from '../../../shared';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
@@ -38,13 +38,6 @@ const Spinner = lazy(() =>
   import('../../../shared/components/Spinner').then((m) => ({
     default: m.Spinner,
   }))
-);
-const WeblockButton = lazy(() =>
-  import('../../../shared/components/WeblockButton/WeblockButton').then(
-    (m) => ({
-      default: m.WeblockButton,
-    })
-  )
 );
 interface CheckoutPaymentComponentProps {
   inputs: INPUTS_POSSIBLE[];
@@ -621,12 +614,7 @@ export const CheckoutPaymentComponent = ({
         </>
       )}
       <div className="pw-flex pw-justify-end pw-mt-6">
-        <WeblockButton
-          disabled={loading}
-          onClick={() => validateBeforeProcced()}
-          tailwindBgColor=""
-          className="!pw-text-white !pw-bg-[#295BA6]"
-        >
+        <BaseButton disabled={loading} onClick={() => validateBeforeProcced()}>
           {loading ? (
             <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
               <Spinner className="pw-h-5 pw-w-5" />
@@ -635,7 +623,7 @@ export const CheckoutPaymentComponent = ({
           ) : (
             buttonText
           )}
-        </WeblockButton>
+        </BaseButton>
       </div>
       <DeleteModal
         isOpen={similarPayment}

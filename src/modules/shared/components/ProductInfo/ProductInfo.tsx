@@ -48,6 +48,7 @@ interface ProductInfoProps {
   anchorCurrencyAmount?: string;
   anchorCurrencySymbol?: string;
   metadata?: any;
+  promotionDescription?: string;
 }
 
 export const ProductInfo = ({
@@ -74,6 +75,7 @@ export const ProductInfo = ({
   anchorCurrencyAmount,
   anchorCurrencySymbol,
   metadata,
+  promotionDescription,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const [error, setError] = useState('');
@@ -149,6 +151,13 @@ export const ProductInfo = ({
         {subtitle && (
           <div className="pw-flex pw-gap-1 -pw-mt-2 pw-mb-2">
             <p className="pw-text-xs pw-text-black">{subtitle}</p>
+          </div>
+        )}
+        {promotionDescription && (
+          <div className="pw-flex pw-gap-1 -pw-mt-2 pw-mb-2">
+            <p className="pw-text-[12px] pw-font-[400] pw-text-slate-500">
+              {promotionDescription}
+            </p>
           </div>
         )}
         <div className="pw-flex pw-flex-col pw-gap-1 -pw-mt-2 pw-mb-2 pw-opacity-50">
@@ -265,6 +274,13 @@ export const ProductInfo = ({
         {subtitle && (
           <div className="pw-flex pw-gap-1 -pw-mt-2 pw-mb-2">
             <p className="pw-text-xs pw-text-black">{subtitle}</p>
+          </div>
+        )}
+        {promotionDescription && (
+          <div className="pw-flex pw-gap-1 -pw-mt-2 pw-mb-2">
+            <p className="pw-text-[12px] pw-font-[400] pw-text-slate-500">
+              {promotionDescription}
+            </p>
           </div>
         )}
         <div className="pw-flex pw-flex-col pw-gap-1 -pw-mt-2 pw-mb-2 pw-opacity-50">

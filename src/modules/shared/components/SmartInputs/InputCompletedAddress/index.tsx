@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
+import useTranslation from '../../../hooks/useTranslation';
 import { countries } from '../../../utils/countries';
 import { BaseSelect } from '../../BaseSelect';
 import LabelWithRequired from '../../LabelWithRequired';
@@ -30,7 +31,7 @@ const InputCompletedAddress = ({
   required,
 }: InputCompletedAddressProps) => {
   const [translate] = useTranslation();
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState<{ value: string; label: string }>();
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const InputCompletedAddress = ({
   const countriesFiltered = useMemo(() => {
     if (search !== '')
       return countries.filter((res) =>
-        res.label.toLowerCase().includes(search.toLowerCase())
+        res?.label?.toLowerCase()?.includes(search?.toLowerCase())
       );
     else return countries;
   }, [search]);
@@ -64,10 +65,10 @@ const InputCompletedAddress = ({
       />
       {country ? (
         <CityAutoComplete
-          country={country ?? ''}
+          country={country.value ?? ''}
           name={name}
           apiValue={apiValue}
-          type={type ?? 'food'}
+          type={type}
           inputLabel={translate('shared>inputCompletedAddress>enterZipCode')}
           inputPlaceholder={translate('shared>inputCompletedAddress>zipCode')}
           required={required}

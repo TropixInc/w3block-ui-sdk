@@ -6,6 +6,7 @@ import { BusinessProviderSDK } from '../../../business/providers/businessProvide
 import { useGetWallets } from '../../../dashboard/hooks/useGetWallets';
 import { CoinsType } from '../../../storefront/interfaces';
 import { AuthenticateModal } from '../../components/AuthenticateModal/AuthenticateModal';
+import { TransferModal } from '../../components/TransferModal';
 import { useGetBalancesForWallets } from '../../hooks/useBalance';
 import { useIsProduction } from '../../hooks/useIsProduction';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
@@ -19,6 +20,7 @@ interface UserWalletsContextInterface {
   setMainCoin?: (coin: CoinsType) => void;
   mainWallet?: WalletSimple;
   setAuthenticatePaymentModal?: (value: boolean) => void;
+  setTransferModal?: (value: boolean) => void;
   loyaltyWallet: WalletLoyalty[];
 }
 
@@ -57,6 +59,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const isProduction = useIsProduction();
   const [authenticatePaymentModal, setAuthenticatePaymentModal] =
     useState<boolean>(false);
+  const [transferModal, setTransferModal] = useState<boolean>(false);
   const getWalletsbalance = useGetBalancesForWallets();
   const { data, isSuccess } = useGetWallets();
   useEffect(() => {
@@ -136,6 +139,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
         setMainCoin: setCoinType,
         mainWallet: mainWallet,
         setAuthenticatePaymentModal,
+        setTransferModal,
         loyaltyWallet,
       }}
     >
@@ -143,6 +147,12 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
       <AuthenticateModal
         isOpen={authenticatePaymentModal}
         onClose={() => setAuthenticatePaymentModal(false)}
+      />
+      <TransferModal
+        isOpen={transferModal}
+        onClose={() => setTransferModal(false)}
+        wallet={mainWallet?.address ?? ''}
+        contractId={loyaltyWallet?.[0]?.contractId}
       />
     </UserWalletsContext.Provider>
   );

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { UserContextStatus } from '@w3block/sdk-id';
 
@@ -12,6 +11,7 @@ import { useGetUserByReferral } from '../../hooks/useGetUserByReferral/useGetUse
 import { useGetUserContextId } from '../../hooks/useGetUserContextId/useGetUserContextId';
 import useRejectKYC from '../../hooks/useRejectKYC';
 import { useRequiredReviewDocs } from '../../hooks/useRequiredReviewDocs';
+import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import LabelWithRequired from '../LabelWithRequired';
 
@@ -156,7 +156,7 @@ const RequestItemWrapper = ({
         <div className="pw-w-full pw-flex pw-flex-col pw-items-start pw-p-6">
           <div className="pw-w-full pw-mt-2 sm:pw-w-[50%]">
             <LabelWithRequired required>
-              {translate('contacts>AprovationKYCForm>requestDocuments')}
+              {translate('contacts>ApprovalKYCForm>requestDocuments')}
             </LabelWithRequired>
 
             <TokenizationFormItemContainer>
@@ -286,7 +286,7 @@ const RequestItemWrapper = ({
                 className="pw-px-4 pw-h-10 pw-flex pw-justify-center pw-items-center pw-text-sm"
                 onClick={() => setIsRequestReview(true)}
               >
-                {translate('contacts>AprovationKYCForm>requestDocuments')}
+                {translate('contacts>ApprovalKYCForm>requestDocuments')}
               </OffpixButtonBase>
             </div>
             {(documents?.data?.status === UserContextStatus.Approved ||

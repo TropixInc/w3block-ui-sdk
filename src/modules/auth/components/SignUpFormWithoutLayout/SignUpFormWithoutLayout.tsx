@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
@@ -14,6 +14,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';

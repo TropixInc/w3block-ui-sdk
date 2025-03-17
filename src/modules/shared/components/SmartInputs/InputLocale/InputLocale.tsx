@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import _ from 'lodash';
 
+import useTranslation from '../../../hooks/useTranslation';
 import { BaseSelect } from '../../BaseSelect';
 import LabelWithRequired from '../../LabelWithRequired';
 import CityAutoComplete from './CityAutoComplete';

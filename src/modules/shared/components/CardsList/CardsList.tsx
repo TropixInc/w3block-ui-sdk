@@ -65,7 +65,7 @@ const CardComponent = ({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="pw-rounded-lg pw-border pw-border-slate-300 pw-p-5 pw-w-full pw-flex pw-flex-col pw-gap-1 pw-items-start">
-      {getCardBrandIcon(brand.toLocaleLowerCase())}
+      {getCardBrandIcon(brand?.toLocaleLowerCase())}
       <p className="pw-font-bold">{name}</p>
       <p>
         {'**** **** ****'} {lastNumbers}

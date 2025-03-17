@@ -9,6 +9,7 @@ const WeblockButton = lazy(() =>
   )
 );
 
+import { Alert } from '../../../shared/components/Alert';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
@@ -85,6 +86,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const postSigninURL =
     theme?.defaultTheme?.configurations?.contentData?.postSigninURL;
   const sendCode = () => {
+    setError('');
     const code = inputs.join('');
     if (code.length == 6) {
       if (profile) {
@@ -94,20 +96,24 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             token: code,
           },
           {
-            onSuccess: () => {
+            onSuccess: (data) => {
               refetch();
-              if (query.callbackPath?.length) {
-                pushConnect(query.callbackPath as string);
-              } else if (query.callbackUrl?.length) {
-                pushConnect(query.callbackUrl as string);
-              } else if (query.contextSlug?.length) {
-                pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-                  ...query,
-                });
-              } else if (postSigninURL) {
-                pushConnect(postSigninURL);
+              if (data?.data?.verified) {
+                if (query.callbackPath?.length) {
+                  pushConnect(query.callbackPath as string);
+                } else if (query.callbackUrl?.length) {
+                  pushConnect(query.callbackUrl as string);
+                } else if (query.contextSlug?.length) {
+                  pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                    ...query,
+                  });
+                } else if (postSigninURL) {
+                  pushConnect(postSigninURL);
+                } else {
+                  pushConnect('/');
+                }
               } else {
-                pushConnect('/');
+                setError('Código inválido ou expirado');
               }
             },
             onError() {
@@ -164,9 +170,11 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
           />
         ))}
       </div>
-      <div className="pw-flex pw-w-full">
-        <p className="pw-text-xs pw-text-red-500 pw-font-poppins">{error}</p>
-      </div>
+      {error !== '' ? (
+        <Alert variant="error" className="pw-mt-2">
+          {error}
+        </Alert>
+      ) : null}
 
       <WeblockButton
         disabled={inputs.some((i) => i == '')}
@@ -177,18 +185,20 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         {translate('components>advanceButton>continue')}
       </WeblockButton>
 
-      <button
-        disabled={isLoading || isActive}
-        className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
-        onClick={() =>
-          mutate({
-            email: emailToUse,
-            verificationType: 'numeric',
-          })
-        }
-      >
-        {translate('auth>mailStep>resentCodeButton')}
-      </button>
+      {isLoading || isActive ? null : (
+        <button
+          disabled={isLoading || isActive}
+          className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
+          onClick={() =>
+            mutate({
+              email: emailToUse,
+              verificationType: 'numeric',
+            })
+          }
+        >
+          {translate('auth>mailStep>resentCodeButton')}
+        </button>
+      )}
       {isActive ? (
         <p className="pw-text-[#353945] pw-text-[13px] pw-leading-[15.85px] pw-text-center pw-mt-[18px]">
           {translate('auth>setCode>cooldownTimeMessage', {

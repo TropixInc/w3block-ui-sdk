@@ -1,6 +1,6 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import _ from 'lodash';
@@ -10,6 +10,7 @@ import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { Product } from '../../../shared/interface/Product';
 import { useTrack } from '../../../storefront/hooks/useTrack/useTrack';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';

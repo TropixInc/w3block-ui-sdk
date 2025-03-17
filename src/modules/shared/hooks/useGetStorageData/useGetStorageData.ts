@@ -7,11 +7,11 @@ export const useGetStorageData = (infoKey: string, id?: string) => {
   const [data] = useLocalStorage<any>(infoKey);
   const { query } = useRouterConnect();
   const queryId = query.sessionId;
-  if (id) {
-    const specificData = data[id];
-    return specificData;
-  } else if (queryId) {
-    const specificData = data[queryId as string];
-    return specificData;
-  } else return data;
+  if (data) {
+    if (id && data[id]) {
+      return data[id];
+    } else if (queryId && data[queryId as string]) {
+      return data[queryId as string];
+    } else return data;
+  }
 };

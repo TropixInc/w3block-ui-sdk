@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import ptBR from 'date-fns/esm/locale/pt-BR';
 import format from 'date-fns/format';
@@ -12,6 +11,7 @@ import { ChainScan } from '../../../shared/enums/ChainId';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { SmartDataDisplayer } from '../../components/SmartDataDisplayer';
 import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
 import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';

@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable i18next/no-literal-string */
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'react-use';
 
 import _ from 'lodash';
@@ -9,6 +9,7 @@ import { AuthButton } from '../../../auth/components/AuthButton';
 import { useRouterConnect } from '../../../shared';
 import { Spinner } from '../../../shared/components/Spinner';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { QrCodeSection } from '../../../tokens/components/PassTemplate/QrCodeSection';
 import { usePublicTokenData } from '../../../tokens/hooks/usePublicTokenData';
 import { useGetTokenSharedCode } from '../../hooks/useGetTokenSharedCode';

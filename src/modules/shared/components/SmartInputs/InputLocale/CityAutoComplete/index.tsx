@@ -1,12 +1,13 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useClickAway, useDebounce } from 'react-use';
 
 import _ from 'lodash';
 
+import useTranslation from '../../../../hooks/useTranslation';
 import { BaseInput } from '../../../BaseInput';
 import LabelWithRequired from '../../../LabelWithRequired';
 import { InputError } from '../../../SmartInputsController';
@@ -191,6 +192,7 @@ const CityAutoComplete = ({
         console.log(err);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeId, placesService]);
 
   const resolveInput = () => {
@@ -247,7 +249,7 @@ const CityAutoComplete = ({
         invalid={fieldState.invalid}
         valid={!!field?.value && !fieldState.invalid}
         disabled={readonly || !country.length}
-        className="pw-mb-2"
+        className="pw-mb-2 !pw-text-black"
         type="text"
         value={inputValue}
         placeholder={
@@ -274,7 +276,7 @@ const CityAutoComplete = ({
                     className="pw-px-3 pw-py-2 pw-cursor-pointer pw-rounded-md hover:pw-bg-[#94B8ED]"
                   >
                     <button
-                      className="pw-w-full pw-h-full pw-text-left"
+                      className="pw-w-full pw-h-full pw-text-left !pw-text-black"
                       onClick={(e) => {
                         setPlaceId(item.value);
                         type !== '(cities)' && setInputValue(item.label);
@@ -318,6 +320,7 @@ const CityAutoComplete = ({
               disabled={readonly}
               type="text"
               value={placeNumber}
+              className="!pw-text-black"
               placeholder={translate(
                 'shared>inputCompletedAddress>enterPlaceNumber'
               )}
@@ -333,6 +336,7 @@ const CityAutoComplete = ({
               disableClasses={readonly}
               invalid={fieldState.invalid}
               valid={!!field?.value && !fieldState.invalid}
+              className="!pw-text-black"
               disabled={readonly}
               type="text"
               value={placeCompliment}

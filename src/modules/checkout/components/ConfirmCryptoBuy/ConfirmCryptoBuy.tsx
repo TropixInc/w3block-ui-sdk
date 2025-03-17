@@ -1,6 +1,24 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 
+import { useMetamask } from '../../../core/metamask/hooks/useMetamask/useMetamask';
 import { useSocket } from '../../../core/metamask/hooks/useSocket/useSocket';
+import {
+  ERROR_STATUS,
+  metamaskErrors,
+} from '../../../core/metamask/providers/MetamaskProviderUiSDK';
+import { PixwayButton } from '../../../shared/components/PixwayButton';
+import { CurrencyEnum } from '../../../shared/enums/Currency';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
+import { useCheckout } from '../../hooks/useCheckout';
+import {
+  OrderPreviewCache,
+  createOrderResponse,
+} from '../../interface/interface';
 const CriptoValueComponent = lazy(() =>
   import(
     '../../../shared/components/CriptoValueComponent/CriptoValueComponent'
@@ -18,24 +36,6 @@ const WeblockButton = lazy(() =>
     (m) => ({ default: m.WeblockButton })
   )
 );
-import {
-  ERROR_STATUS,
-  metamaskErrors,
-} from '../../../core/metamask/providers/MetamaskProviderUiSDK';
-import { CurrencyEnum } from '../../../shared/enums/Currency';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
-import useTranslation from '../../../shared/hooks/useTranslation';
-import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { useCheckout } from '../../hooks/useCheckout';
-import {
-  OrderPreviewCache,
-  createOrderResponse,
-} from '../../interface/interface';
-import { useMetamask } from '../../../core/metamask/hooks/useMetamask/useMetamask';
-
 const ErrorMessage = lazy(() =>
   import('../ErrorMessage/ErrorMessage').then((m) => ({
     default: m.ErrorMessage,
@@ -133,11 +133,60 @@ export const ConfirmCryptoBuy = ({
     }
   };
 
-  const buyWithVault = () => {
+  const [similarPayment, setSimilarPayment] = useState(false);
+
+  const AllowSamePurchase = ({ onContinue }: { onContinue(): void }) => {
+    const [agree, setAgree] = useState(false);
+    return (
+      <div className="pw-p-8 pw-text-center pw-text-black">
+        <p className="sm:pw-text-base pw-text-sm">
+          {translate('checkout>checkoutPaymentComponent>verifyPurchase')}
+        </p>
+        <p className="pw-font-semibold pw-mt-2 sm:pw-text-base pw-text-sm">
+          {translate('checkout>checkoutPaymentComponent>continuePurchase')}
+        </p>
+
+        <div className="pw-flex pw-flex-col pw-justify-around pw-mt-6">
+          <PixwayButton
+            onClick={() => router.pushConnect(PixwayAppRoutes.MY_ORDERS)}
+            className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 hover:pw-shadow-xl"
+          >
+            {translate('checkout>checkoutPaymentComponent>seePurchase')}
+          </PixwayButton>
+          <PixwayButton
+            disabled={!agree}
+            onClick={onContinue}
+            className="pw-mt-4 !pw-py-3 !pw-px-[42px] !pw-bg-white !pw-text-xs !pw-text-black pw-border pw-border-slate-800 !pw-rounded-full hover:pw-bg-slate-500 disabled:pw-opacity-50 disabled:!pw-bg-white hover:pw-shadow-xl"
+          >
+            {translate('checkout>checkoutPaymentComponent>confirmPurchase')}
+          </PixwayButton>
+        </div>
+        <div className="pw-flex sm:pw-gap-3 pw-gap-2 pw-items-center pw-justify-center pw-my-5 ">
+          <div
+            onClick={() => {
+              setAgree(!agree);
+            }}
+            className="pw-flex pw-w-[18px] pw-h-[18px] pw-rounded-sm pw-border-slate-400 pw-border pw-justify-center pw-items-center"
+          >
+            {agree && (
+              <div className="pw-w-[10px] pw-h-[10px] pw-bg-blue-600 pw-rounded-sm"></div>
+            )}
+          </div>
+          <p className="sm:pw-text-base pw-text-xs pw-text-slate-600">
+            {translate(
+              'checkout>checkoutPaymentComponent>confirmPurchaseSameValue'
+            )}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  const buyWithVault = (allowSimilarPayment?: boolean) => {
     if (
       wallet?.type == 'metamask' &&
       (window as any).ethereum?.selectedAddress?.toLowerCase() !=
-        wallet?.address.toLowerCase()
+        wallet?.address?.toLowerCase()
     ) {
       setErr('Conta selecionada não é a mesma da carteira');
       setErrMessage(
@@ -181,6 +230,7 @@ export const ConfirmCryptoBuy = ({
             signedGasFee: orderInfo.signedGasFee,
             currencyId: orderInfo.currencyId,
             destinationWalletAddress: wallet?.address ?? '',
+            acceptSimilarOrderInShortPeriod: allowSimilarPayment ?? false,
           },
         },
         {
@@ -195,17 +245,15 @@ export const ConfirmCryptoBuy = ({
           },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onError(e: any) {
-            if (
-              e?.response.data?.message.includes(
-                'already have one pending order based'
-              )
-            ) {
+            if (e?.message.includes('already have one pending order based')) {
               setErr(
                 'Já existe uma compra aguardando a assinatura da metamask'
               );
               setErrMessage(
                 'Para realizar esta nova compra, aguarde alguns minutos até a expiração da tentativa anterior e tente novamente.'
               );
+            } else if (e?.errorCode === 'similar-order-not-accepted') {
+              setSimilarPayment(true);
             } else {
               setErr('Erro inesperado');
               setErrMessage(
@@ -223,10 +271,22 @@ export const ConfirmCryptoBuy = ({
   };
 
   const sameAccount = useMemo(
-    () => hasWallet && accounts?.toLowerCase() == wallet?.address.toLowerCase(),
+    () =>
+      hasWallet && accounts?.toLowerCase() == wallet?.address?.toLowerCase(),
     [hasWallet, accounts, wallet?.address]
   );
   const sameChainId = hasWallet && productChainId == chainId;
+
+  if (similarPayment) {
+    return (
+      <AllowSamePurchase
+        onContinue={() => {
+          setSimilarPayment(false);
+          buyWithVault(true);
+        }}
+      />
+    );
+  }
   return (
     <div className="pw-flex pw-justify-center pw-flex-col pw-items-center">
       <p className="pw-text-[24px] pw-text-center pw-font-bold pw-text-black">

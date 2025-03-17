@@ -20,7 +20,12 @@ export const CountryFlag = ({
   height?: number;
 }) => {
   const lowerCode = code?.toLowerCase();
-  const fileCode = lowerCode === 'uk' ? 'gb' : lowerCode;
+  const fileCode = useMemo(() => {
+    if (lowerCode.includes('pt')) return 'br';
+    else if (lowerCode.includes('en') || lowerCode.includes('uk')) return 'us';
+    else if (lowerCode.includes('-')) return lowerCode.split('-')[1];
+    else return lowerCode;
+  }, [lowerCode]);
 
   const flagUrl = `${baseUrl}${fileCode}.svg`;
 
@@ -60,11 +65,6 @@ const Menu = ({
       >
         <div className="pw-mt-[10px]">
           {languages.map((lang: { value: string; label: string }) => {
-            const code = () => {
-              if (lang?.value === 'en') return 'us';
-              if (lang?.value === 'pt-BR') return 'br';
-              else return lang?.value ?? '';
-            };
             return (
               <button
                 onClick={() => {
@@ -74,7 +74,7 @@ const Menu = ({
                 key={lang?.value}
                 className="pw-flex pw-items-center pw-gap-x-2 pw-py-[8px] pw-cursor-pointer pw-stroke-[#383857] hover:pw-bg-opacity-30"
               >
-                <CountryFlag code={code()} height={30} width={30} />
+                <CountryFlag code={lang?.value} height={30} width={30} />
                 <p
                   className="pw-font-[400] pw-text-xs"
                   style={{
@@ -133,18 +133,6 @@ export const LanguageSelector = ({
     if (menu) setMenu(false);
   });
 
-  const code = () => {
-    if (userLocale) {
-      if ((userLocale as string) === 'en') return 'us';
-      if ((userLocale as string) === 'pt-BR') return 'br';
-      else return userLocale as string;
-    } else {
-      if ((i18n.language as string) === 'en') return 'us';
-      if ((i18n.language as string) === 'pt-BR') return 'br';
-      else return i18n.language as string;
-    }
-  };
-
   return (
     <>
       <div className="pw-py-[0.27rem] pw-mr-1" ref={ref}>
@@ -153,7 +141,11 @@ export const LanguageSelector = ({
             onClick={() => setMenu(!menu)}
             className="pw-ml-5 pw-flex pw-items-center pw-gap-[6px] pw-cursor-pointer"
           >
-            <CountryFlag code={code()} height={30} width={30} />
+            <CountryFlag
+              code={(userLocale as string) || i18n.language}
+              height={30}
+              width={30}
+            />
             <ArrowDown
               style={{
                 stroke: textColor,

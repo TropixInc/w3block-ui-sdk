@@ -264,7 +264,7 @@ export const MetamaskProviderUiSDK = ({
         signature,
       }
     ).then((resp) => {
-      if (resp.data.statusCode < 200 || resp.data.statusCode > 300) {
+      if (resp?.data?.statusCode < 200 || resp?.data?.statusCode > 300) {
         throw new Error(resp.data.message);
       }
     });

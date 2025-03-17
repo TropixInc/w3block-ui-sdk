@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Combobox, Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
@@ -8,6 +7,7 @@ import _ from 'lodash';
 
 import ArrowDown from '../../assets/icons/arrowDown.svg?react';
 import CheckBoxIcon from '../../assets/icons/checkOutlined.svg?react';
+import useTranslation from '../../hooks/useTranslation';
 import { BaseInputLayout, BaseInputProps } from '../BaseInput';
 import { Option } from '../GenericSearchFilter/GenericSearchFilter';
 import { ImageSDK } from '../ImageSDK';
@@ -31,6 +31,7 @@ interface Props extends Partial<BaseInputProps> {
   searchValue?: string;
   onChangeValue?: (value: any) => void;
   value?: any;
+  readonly?: boolean;
 }
 
 const MultipleSelect = ({
@@ -47,7 +48,12 @@ const MultipleSelect = ({
   const [translate] = useTranslation();
   const displayValue =
     value && value?.length > 0
-      ? value.map((res: any) => res?.label ?? res).join(', ')
+      ? value
+          .map(
+            (res: any) =>
+              res?.label ?? options?.find((e) => e.value === res)?.label ?? res
+          )
+          .join(', ')
       : undefined;
   return (
     <div
@@ -329,14 +335,17 @@ const SimpleSelect = ({
   translatePrefix,
   onChangeValue,
   value,
+  readonly,
   ...props
 }: Props) => {
   const [translate] = useTranslation();
   const displayValue = useMemo(() => {
     if (value?.label) return value?.label;
+    else if (options.some((res) => res.value === value))
+      return options.find((res) => res.value === value)?.label;
     else if (typeof value === 'string' && value != '') return value;
     else return placeholder;
-  }, [placeholder, value]);
+  }, [options, placeholder, value]);
   return (
     <div
       className={classNames(
@@ -355,17 +364,18 @@ const SimpleSelect = ({
       >
         {() => (
           <>
-            <BaseInputLayout {...props} disabled={disabled}>
+            <BaseInputLayout {...props} readonly={readonly} disabled={disabled}>
               <Listbox.Button
                 className={classNames(
                   'pw-flex pw-justify-between pw-items-center pw-h-full pw-w-full pw-text-black focus:pw-outline-none',
-                  classes.button ?? ''
+                  classes.button ?? '',
+                  readonly ? '!pw-outline-white' : ''
                 )}
               >
-                <div className="pw-text-base pw-leading-4 pw-flex pw-items-center pw-pr-2">
+                <div className="pw-text-base pw-leading-4 pw-flex pw-items-center pw-pr-2 pw-truncate">
                   {displayValue}
                 </div>
-                <ArrowDown className="pw-stroke-black" />
+                {readonly ? null : <ArrowDown className="pw-stroke-black" />}
               </Listbox.Button>
             </BaseInputLayout>
 

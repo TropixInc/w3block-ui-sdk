@@ -191,7 +191,7 @@ export const ProductPage = ({
     setProductVariants({ ...variants });
     setCartCurrencyId?.(currencyId);
     const cartPreview =
-      orderPreview?.products.map((val) => {
+      orderPreview?.products.map(() => {
         return {
           id: product?.id,
           name: product?.name,
@@ -199,7 +199,7 @@ export const ProductPage = ({
             if ((value as any).productId === product?.id)
               return (value as any).id;
           }),
-          prices: val.prices,
+          prices: product?.prices,
         };
       }) ?? [];
     setCart([...cart, ...cartPreview]);
@@ -574,20 +574,36 @@ export const ProductPage = ({
       else {
         if (giftData) {
           const id = generateRandomUUID();
-          setGiftData({ [id]: { ...giftData } });
+          setGiftData({
+            [id]: giftData === 'selfBuy' ? giftData : { ...giftData },
+          });
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${currencyId?.id}&sessionId=${id}`
           );
-        } else
+        } else if (
+          product?.settings?.acceptMultipleCurrenciesPurchase &&
+          product?.prices?.some((res) => res?.currency?.crypto)
+        ) {
+          pushConnect(
+            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+              `?productIds=${Array(quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${currencyId?.id}&cryptoCurrencyId=${
+                product?.prices?.find((res) => res?.currency?.crypto)
+                  ?.currencyId
+              }`
+          );
+        } else {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${currencyId?.id}`
           );
+        }
       }
     }
   };
@@ -1182,14 +1198,11 @@ export const ProductPage = ({
                 ) : (
                   actionButton && (
                     <div className="pw-flex pw-flex-col">
-                      {!currencyId?.crypto &&
-                      hasCart &&
-                      !productKycRequirement ? (
+                      {hasCart && !productKycRequirement ? (
                         <button
                           disabled={
                             product?.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0 ||
-                            currencyId?.crypto ||
                             !termsChecked ||
                             (isSendGift && !giftData && isPossibleSend)
                           }

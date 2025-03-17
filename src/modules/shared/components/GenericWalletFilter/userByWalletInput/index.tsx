@@ -1,7 +1,7 @@
-import { useTranslation } from 'react-i18next';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import UserIcon from '../../../assets/icons/usersOutlined.svg?react';
 import { useGetUserByWalletAddress } from '../../../hooks/useGetUserByWalletAddress';
+import useTranslation from '../../../hooks/useTranslation';
 import { Spinner } from '../../Spinner';
 
 interface UserByWalletInputProps {

@@ -7,7 +7,6 @@ const Shimmer = lazy(() =>
 );
 
 import { lazy } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Disclosure } from '@headlessui/react';
 import classNames from 'classnames';
@@ -18,6 +17,7 @@ import { groupBy } from 'lodash';
 import ChevronDown from '../../../../modules/shared/assets/icons/arrowDown.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import firstDegree from '../assets/1_degree.svg';
 import secondDegree from '../assets/2_degree.svg';
@@ -377,9 +377,9 @@ export const AthletePage = () => {
                                   )
                                     return (
                                       res?.instructor?.data?.attributes?.name +
-                                        ', ' +
-                                        res?.academy?.data?.attributes?.name ??
-                                      ''
+                                      ', ' +
+                                      (res?.academy?.data?.attributes?.name ??
+                                        '')
                                     );
                                   else return '';
                                 } else if (res?.type === 'championship')

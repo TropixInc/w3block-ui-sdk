@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
 import { OffpixButtonBase } from '../../../../tokens/components/DisplayCards/OffpixButtonBase';
 import { useGetUserByTenant } from '../../../hooks/useGetUsersByTenant';
+import useTranslation from '../../../hooks/useTranslation';
 import { Alert } from '../../Alert';
 import { BaseSelect } from '../../BaseSelect';
 import { Option } from '../../GenericSearchFilter/GenericSearchFilter';
@@ -13,12 +13,14 @@ interface SearchItemProps {
   isOpen: boolean;
   onClose: () => void;
   handleChangeWallet: (value: string) => void;
+  wallet: string;
 }
 
 export const SearchItem = ({
   isOpen,
   onClose,
   handleChangeWallet,
+  wallet,
 }: SearchItemProps) => {
   const [onSearch, setOnSearch] = useState('');
   const [translate] = useTranslation();
@@ -33,6 +35,14 @@ export const SearchItem = ({
     setSelectedOption(undefined);
     onClose();
   };
+
+  useEffect(() => {
+    if (!wallet) {
+      setOnSearch('');
+      setSelectedOption(undefined);
+      handleChangeWallet('');
+    }
+  }, [wallet]);
 
   const options = useMemo(() => {
     if (contacts?.data?.items) {

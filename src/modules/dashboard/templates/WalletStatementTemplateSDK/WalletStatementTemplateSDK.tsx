@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState, lazy } from 'react';
+import { useCopyToClipboard } from 'react-use';
 
 import { isAfter, isBefore } from 'date-fns';
 
 import PendingIcon from '../../../shared/assets/icons/clock.svg?react';
+import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
 import { Spinner } from '../../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
@@ -43,6 +45,13 @@ export const WalletStatementTemplateSDK = () => {
     { page: actualPage }
   );
   const [translate] = useTranslation();
+  const [copied, setCopied] = useState<boolean>(false);
+  const [_, setCopy] = useCopyToClipboard();
+  const copyAddress = (address: string) => {
+    setCopied(true);
+    setCopy(address || '');
+    setTimeout(() => setCopied(false), 5000);
+  };
   const loyaltyWalletDefined = useMemo(() => {
     return loyaltyWallet.length ? loyaltyWallet[0] : undefined;
   }, [loyaltyWallet]);
@@ -54,7 +63,7 @@ export const WalletStatementTemplateSDK = () => {
   const subTransactions = useMemo(() => {
     const arr: StatementScreenTransaction[] = [];
     data?.items?.forEach((i) => {
-      const subs = getSubtransactions(i);
+      const subs = getSubtransactions(i, defaultTheme);
       subs.forEach((t) => {
         arr.push(t);
       });
@@ -82,9 +91,24 @@ export const WalletStatementTemplateSDK = () => {
               {translate('wallet>page>extract')}
             </p>
             {!hideWallet ? (
-              <p className="pw-text-[#777E8F] pw-text-xs">
-                {mainWallet?.address}
-              </p>
+              <div
+                onClick={() => copyAddress(mainWallet?.address || '')}
+                className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
+              >
+                <p className="pw-text-xs pw-text-[#777E8F] pw-font-[400] pw-cursor-pointer">
+                  {mainWallet?.address || '-'}
+                </p>
+                <CopyIcon />
+                {copied ? (
+                  <div className="pw-relative">
+                    <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2 pw-absolute pw-bg-slate-300 pw-shadow-md pw-rounded-md pw-right-0 pw-top-3 pw-p-1">
+                      <p className="pw-text-sm pw-text-[#353945]">
+                        {translate('components>menu>copied')}
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             ) : null}
             {loyaltyWalletDefined ? (
               <div className="pw-mt-[14px]">

@@ -1,5 +1,4 @@
 import { ReactNode, lazy, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 const CertificateIssuanceController = lazy(() =>
   import('../../../shared/components/CertificateIssuanceController').then(
@@ -14,6 +13,7 @@ const TokenTransferController = lazy(() =>
 );
 
 import { useModalController } from '../../../shared/hooks/useModalController';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import {
   ITokenActionContext,
   TokenActionsContext,

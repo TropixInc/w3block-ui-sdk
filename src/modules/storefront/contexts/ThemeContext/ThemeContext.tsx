@@ -14,14 +14,14 @@ import { Theme, TemplateData, GetPageInfoInterface } from '../../interfaces';
 
 export const ThemeContext = createContext<IThemeContext | null>(null);
 export interface IThemeContext {
-  defaultTheme: Theme | null;
+  defaultTheme?: Theme | null;
   setDefaultTheme?: (Theme: Theme) => void;
-  pageTheme: TemplateData | null;
-  setPageName: Dispatch<SetStateAction<string>>;
-  isError: boolean;
-  isThemeError: boolean;
-  isThemeSuccess: boolean;
-  setPageTheme: (TemplateData: TemplateData) => void;
+  pageTheme?: TemplateData | null;
+  setPageName?: Dispatch<SetStateAction<string>>;
+  isError?: boolean;
+  isThemeError?: boolean;
+  isThemeSuccess?: boolean;
+  setPageTheme?: (TemplateData: TemplateData) => void;
   pageInfo?: GetPageInfoInterface;
 }
 

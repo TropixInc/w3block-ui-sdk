@@ -20,17 +20,20 @@ const ImageSDK = lazy(() =>
 export const Card = ({
   product,
   config,
+  dynamic = false,
 }: {
   product: Product;
   config: {
     styleData: ProductsData['styleData'];
     contentData: ProductsData['contentData'];
   };
+  dynamic?: boolean;
 }) => {
   const { styleData, contentData } = config;
   const { datasource } = useDynamicApi();
   const { text: title } = useDynamicString(product.name);
   const { text: description } = useDynamicString(product.description);
+  const { text: buttonText } = useDynamicString(styleData.cardButtonText);
   const linkToSend = () => {
     if (contentData.cardType == CardTypesEnum.CONTENT) {
       if (product.hasLink) {
@@ -57,23 +60,25 @@ export const Card = ({
         <ImageSDK
           src={
             product.images.length
-              ? composeUrlCloudinary({
-                  src:
-                    _.get(
-                      datasource,
-                      product.images[0]?.thumb ?? '',
-                      product.images[0]?.thumb
-                    ) ?? '',
-                  InternalProps: {
-                    width:
-                      styleData.imageCardCompression === 'no-compression'
-                        ? undefined
-                        : 800,
-                    quality: styleData.imageCardCompression
-                      ? styleData.imageCardCompression
-                      : 'best',
-                  },
-                })
+              ? dynamic
+                ? composeUrlCloudinary({
+                    src:
+                      _.get(
+                        datasource,
+                        product.images[0]?.thumb ?? '',
+                        product.images[0]?.thumb
+                      ) ?? '',
+                    InternalProps: {
+                      width:
+                        styleData.imageCardCompression === 'no-compression'
+                          ? undefined
+                          : 800,
+                      quality: styleData.imageCardCompression
+                        ? styleData.imageCardCompression
+                        : 'best',
+                    },
+                  })
+                : product.images[0]?.thumb ?? ''
               : undefined
           }
           className={classNames(
@@ -231,14 +236,15 @@ export const Card = ({
             {
               boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.26)',
               color: styleData.cardButtonTextColor ?? 'white',
-              '--products-button-hover-color': styleData.cardButtonHoverColor,
+              '--products-button-hover-color':
+                styleData.cardButtonHoverColor ?? styleData.cardButtonColor,
               '--products-button-bg-color':
                 styleData.cardButtonColor ?? '#295BA6',
             } as CSSProperties
           }
           className="pw-w-full pw-border pw-mt-2 pw-border-solid pw-border-b pw-border-white pw-py-2 pw-font-medium pw-rounded-[48px] product-card-button pw-text-xs"
         >
-          {styleData.cardButtonText ?? 'Comprar agora'}
+          {buttonText ?? 'Comprar agora'}
         </button>
       )}
     </a>

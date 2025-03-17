@@ -62,14 +62,14 @@ export const ClientTemplate = () => {
 
   useDebounce(
     () => {
-      const filter = searchTerm.toLowerCase();
+      const filter = searchTerm?.toLowerCase();
       const filteredData = dataMoked.filter(
         (item) =>
-          (item.name.toLowerCase().includes(filter) ||
-            item.id.toLowerCase().includes(filter)) &&
+          (item?.name?.toLowerCase()?.includes(filter) ||
+            item?.id?.toLowerCase()?.includes(filter)) &&
           Boolean(
             statusFilter.find(
-              (e) => e.toLowerCase() === item.status.toLowerCase()
+              (e) => e?.toLowerCase() === item?.status?.toLowerCase()
             )
           )
       );
@@ -81,14 +81,14 @@ export const ClientTemplate = () => {
   );
 
   const handleStatusFilter = (filter: string) => {
-    const filterLowerCase = filter.toLocaleLowerCase();
+    const filterLowerCase = filter?.toLocaleLowerCase();
     const hasFilter = statusFilter.find(
-      (e) => e.toLocaleLowerCase() === filterLowerCase
+      (e) => e?.toLocaleLowerCase() === filterLowerCase
     );
 
     if (hasFilter) {
       const filtered = statusFilter.filter(
-        (e) => e.toLocaleLowerCase() !== filterLowerCase
+        (e) => e?.toLocaleLowerCase() !== filterLowerCase
       );
       setStatusFilter(filtered);
     } else {

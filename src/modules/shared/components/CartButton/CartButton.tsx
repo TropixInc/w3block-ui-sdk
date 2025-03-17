@@ -15,13 +15,11 @@ export const CartButton = ({
   className = '',
   borderColor,
 }: CartButtonProps) => {
-  const { cart, cartCurrencyId } = useCart();
+  const { cart } = useCart();
   const { pushConnect } = useRouterConnect();
   const track = useTrack();
   const quantity = cart.length;
-  const currencyId = cart.length
-    ? cartCurrencyId?.id ?? cart[0].prices[0].currencyId
-    : '';
+
   return (
     <div
       style={{ borderColor: borderColor ?? 'black' }}
@@ -38,9 +36,7 @@ export const CartButton = ({
 
         pushConnect(
           PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION +
-            `?productIds=${cart
-              .map((p) => p.id)
-              .join(',')}&currencyId=${currencyId}`
+            `?productIds=${cart.map((p) => p.id).join(',')}`
         );
       }}
       className={`pw-px-6 pw-order-2 pw-flex pw-cursor-pointer ${className}`}

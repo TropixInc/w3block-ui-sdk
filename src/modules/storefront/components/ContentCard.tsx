@@ -442,7 +442,9 @@ export const ContentCard = ({
                 }}
                 className="pw-font-bold pw-text-lg pw-mt-2"
               >
-                <span className="pw-text-sm pw-pr-2">{'R$'}</span>
+                <span className="pw-text-sm pw-pr-2">
+                  {_.get(datasource, product.symbol ?? '', product.symbol)}
+                </span>
                 {_.get(datasource, product.value ?? '', product.value)}
               </p>
             )}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { lazy, useEffect, useRef, useState } from 'react';
 import { useController } from 'react-hook-form';
 import { useClickAway, useDebounce } from 'react-use';
@@ -5,13 +6,7 @@ import { useClickAway, useDebounce } from 'react-use';
 import _, { isArray } from 'lodash';
 
 import { W3blockAPI } from '../../enums/W3blockAPI';
-
-const SelectInput = lazy(() =>
-  import('../SelectInput/SelectInput').then((module) => ({
-    default: module.Selectinput,
-  }))
-);
-
+import useTranslation from '../../hooks/useTranslation';
 import {
   FilterParameters,
   FilterTableType,
@@ -25,7 +20,11 @@ import { GenericWalletFilter } from '../GenericWalletFilter';
 import { MultipleSelect } from '../MultipleSelect';
 import NumberRange from '../NumberRange/NumberRange';
 
-import { useTranslation } from 'react-i18next';
+const SelectInput = lazy(() =>
+  import('../SelectInput/SelectInput').then((module) => ({
+    default: module.Selectinput,
+  }))
+);
 
 interface GenericFilterDto {
   filterType: FilterTableType | undefined;
@@ -108,6 +107,12 @@ const SmartGenericFilter = ({
     if (filterFormat === FormatFilterType.LOCALDATE) {
       if (!_.get(filterLabels, itemKey || '')) {
         setStartDate(undefined);
+      }
+    }
+
+    if (filterFormat === FormatFilterType.WALLET) {
+      if (!_.get(filterLabels, itemKey || '')) {
+        setWalletFilter('');
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -195,8 +200,8 @@ const SmartGenericFilter = ({
         onChangeFilterLabels({
           ...filterLabels,
           [itemKey ?? '']: [
-            startDate.toLocaleDateString(),
-            endDate.toLocaleDateString(),
+            startDate?.toLocaleDateString(),
+            endDate?.toLocaleDateString(),
           ],
         });
 
@@ -247,13 +252,9 @@ const SmartGenericFilter = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterTemplate, selected]);
 
-  console.log(filters, 'filters');
-
   useEffect(() => {
     if (FormatFilterType.WALLET) {
       if (walletFilter) {
-        console.log(filterTemplate, 'filterTemplate');
-        console.log(itemKey, 'itemKey');
         onChangeFilter &&
           onChangeFilter({
             ...filters,

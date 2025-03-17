@@ -10,7 +10,7 @@ import {
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { BaseButton } from '../Buttons';
-import SmartInputsController from '../SmartInputsController';
+import { SmartInputsController } from '../SmartInputsController';
 import { Spinner } from '../Spinner';
 
 interface Props {

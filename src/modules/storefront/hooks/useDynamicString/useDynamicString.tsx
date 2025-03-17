@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocalStorage } from 'react-use';
 
 import _ from 'lodash';
 
-import { useLocale } from '../../../shared/hooks/useLocale';
+import { IThemeContext } from '../../contexts';
 import { useDynamicApi } from '../../provider/DynamicApiProvider';
 import { modifyStringPath } from '../../utils/modifyStringPath';
 import { unescapeHtml } from '../../utils/unescapeHtml';
@@ -13,9 +15,9 @@ export const useDynamicString = (input: string | undefined) => {
   const { isDynamic, datasource, loading, strapiLocalization } =
     useDynamicApi();
   const theme = UseThemeConfig();
-  const locale = useLocale();
-  const i18nJson =
-    theme?.defaultTheme?.configurations?.contentData?.i18nJson?.values;
+  const [, i18n] = useTranslation();
+  const [userLocale] = useLocalStorage('userLocale');
+  const locale = (userLocale as string) || i18n.language;
   const i18nLocales = theme?.defaultTheme?.configurations?.contentData?.i18nJson
     ?.locales as Array<any>;
   return useMemo(() => {
@@ -23,26 +25,8 @@ export const useDynamicString = (input: string | undefined) => {
       const inputToUse = input?.includes('&amp;&amp;')
         ? unescapeHtml(input)
         : input;
-      const findItem = i18nJson?.find(
-        (res: any) => res.jsonString === inputToUse
-      );
-      if (findItem) {
-        const value = findItem[locale];
-        if (value) return { text: value, loaded: true, loading: false };
-        else {
-          let value = '';
-          i18nLocales.some((val) => {
-            const string = findItem[val?.code];
-            if (string) {
-              value = string;
-              return true;
-            } else false;
-          });
-          if (value !== '')
-            return { text: value, loaded: true, loading: false };
-          else return { text: input, loaded: true, loading: false };
-        }
-      } else return { text: input, loaded: true, loading: false };
+      const value = getI18nString(inputToUse, locale, theme);
+      return value;
     }
     // not dynamic, bypass
     if (!isDynamic) return { text: input, loaded: true, loading: false };
@@ -92,11 +76,11 @@ export const useDynamicString = (input: string | undefined) => {
     input,
     isDynamic,
     loading,
-    i18nJson,
     locale,
-    i18nLocales,
+    theme,
     datasource,
     strapiLocalization,
+    i18nLocales,
   ]);
 };
 
@@ -116,29 +100,69 @@ export const getDynamicString = (input: string | undefined, data: any) => {
   return { text, loaded };
 };
 
-export const getI18nString = (input: string | undefined, locale: string) => {
-  const theme = UseThemeConfig();
+export const getI18nString = (
+  input: string | undefined,
+  locale: string,
+  theme: IThemeContext
+) => {
   const i18nJson =
     theme?.defaultTheme?.configurations?.contentData?.i18nJson?.values;
   const i18nLocales = theme?.defaultTheme?.configurations?.contentData?.i18nJson
     ?.locales as Array<any>;
-  if (input?.includes('&&')) {
-    const findItem = i18nJson?.find((res: any) => res.jsonString === input);
+  if (input?.includes('&&') || input?.includes('&amp;&amp;')) {
+    const inputToUse = input?.includes('&amp;&amp;')
+      ? unescapeHtml(input)
+      : input;
+    const findItem = i18nJson?.find(
+      (res: any) => res.jsonString === inputToUse
+    );
     if (findItem) {
-      const value = findItem[locale];
-      if (value) return { text: value, loaded: true, loading: false };
-      else {
-        let value = '';
-        i18nLocales.some((val) => {
-          const string = findItem[val?.code];
-          if (string) {
-            value = string;
-            return true;
-          } else false;
-        });
-        if (value !== '') return { text: value, loaded: true, loading: false };
-        else return { text: input, loaded: true, loading: false };
+      const exactMatch = findItem[locale];
+      if (exactMatch) {
+        return { text: exactMatch, loaded: true, loading: false };
       }
+
+      const baseLanguage = locale.split('-')[0];
+      let relatedMatch = '';
+
+      i18nLocales.some((val) => {
+        const localeCode = val?.code;
+        if (localeCode?.startsWith(baseLanguage + '-')) {
+          const string = findItem[localeCode];
+          if (string) {
+            relatedMatch = string;
+            return true;
+          }
+        }
+        return false;
+      });
+
+      if (relatedMatch) {
+        return { text: relatedMatch, loaded: true, loading: false };
+      }
+
+      const baseLanguageMatch = i18nLocales.find(
+        (val) => val?.code === baseLanguage
+      );
+      if (baseLanguageMatch && findItem[baseLanguage]) {
+        return { text: findItem[baseLanguage], loaded: true, loading: false };
+      }
+
+      let anyTranslation = '';
+      i18nLocales.some((val) => {
+        const string = findItem[val?.code];
+        if (string) {
+          anyTranslation = string;
+          return true;
+        }
+        return false;
+      });
+
+      return {
+        text: anyTranslation || input,
+        loaded: true,
+        loading: false,
+      };
     } else return { text: input, loaded: true, loading: false };
   }
   return { text: input, loaded: true, loading: false };

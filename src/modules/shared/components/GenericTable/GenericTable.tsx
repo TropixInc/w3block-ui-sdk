@@ -235,13 +235,13 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
       case FormatTypeColumn.LOCALTIME: {
         const date = _.get(item, itemKey, '--');
 
-        return new Date(date).toLocaleDateString(locale.language, {
+        return new Date(date)?.toLocaleDateString(locale.language, {
           timeZone: 'UTC',
         });
       }
       case FormatTypeColumn.LOCALDATEHOURTIME: {
         const date = _.get(item, itemKey, '--');
-        return new Date(date).toLocaleString(locale.language);
+        return new Date(date)?.toLocaleString(locale.language);
       }
       case FormatTypeColumn.MONEY: {
         const symbol = _.get(item, format.currencySymbolKey ?? '', '-');
@@ -560,7 +560,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             ) : null}
             <div
               style={externalFilterClasses?.wrapper}
-              className="pw-w-full sm:pw-flex sm:pw-justify-between"
+              className="pw-w-full sm:pw-flex sm:pw-justify-between pw-mb-3"
             >
               <div
                 style={externalFilterClasses?.root}

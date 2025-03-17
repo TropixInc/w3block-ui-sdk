@@ -1,6 +1,6 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useContext, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDebounce, useLocalStorage } from 'react-use';
 
 import _ from 'lodash';
@@ -16,6 +16,7 @@ import { useGetStorageData } from '../../../shared/hooks/useGetStorageData/useGe
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { Product } from '../../../shared/interface/Product';
 import { ThemeContext } from '../../../storefront';

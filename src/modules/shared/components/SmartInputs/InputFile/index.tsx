@@ -30,7 +30,7 @@ interface InputFileProps {
   openDocs?: boolean;
   subtitle?: string;
   acceptTypesDocs: Array<string>;
-  onChangeUploadProgess: (value: boolean) => void;
+  onChangeUploadProgess?: (value: boolean) => void;
   required?: boolean;
   readonly?: boolean;
 }
@@ -96,7 +96,8 @@ const InputFile = ({
   });
 
   useEffect(() => {
-    onChangeUploadProgess(isLoadingUpload || isLoadingAsset);
+    onChangeUploadProgess &&
+      onChangeUploadProgess(isLoadingUpload || isLoadingAsset);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoadingUpload, isLoadingAsset]);
 

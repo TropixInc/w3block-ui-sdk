@@ -190,6 +190,14 @@ export const useDefaultMenuTabs = (textColor: string) => {
         (isCommerceReceiver || isAdmin) && loyaltyWallet && loyaltyWallet.length > 0 && !isHidden('futureStatement'),
     },
     {
+      name: internalMenuData['staking']?.customLabel || 'Recompensas',
+      id: 'staking',
+      icon: <WalletIcon width={17} height={17} style={{ color: textColor, stroke: textColor }} />,
+      route: PixwayAppRoutes.STAKING,
+      isVisible:
+        !isHidden('staking') && loyaltyWallet && loyaltyWallet.length > 0,
+    },
+    {
       name: internalMenuData['myOrders']?.customLabel ||
         translate('header>components>defaultTab>myOrders'),
       id: 'myOrders',
@@ -307,7 +315,7 @@ const NavigationMenu = ({
       <div
         style={{ backgroundColor, color: textColor }}
         className={`pw-absolute pw-mt-[1.68rem] ${organizedWallets.length ? 'pw-right-[-16px]' : ''
-          } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md`}
+          } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md -pw-left-[95px]`}
       >
         {organizedWallets.length ? <WithWallet /> : null}
 

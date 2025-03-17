@@ -35,6 +35,7 @@ export interface OrderPreviewResponse {
   providersForSelection?: PaymentMethodsAvaiable[];
   appliedCoupon?: string;
   originalCartPrice?: string;
+  currencyAllowanceState?: string;
   originalClientServiceFee?: string;
   originalTotalPrice?: string;
   variants?: Variants[];
@@ -168,6 +169,8 @@ export interface OrderPreviewCache {
     name: string;
   };
   isCoinPayment?: boolean;
+  acceptMultipleCurrenciesPurchase?: boolean;
+  cryptoCurrencyId?: string;
   cashback?: string;
   currency?: {
     id?: string;
@@ -235,6 +238,7 @@ export interface CreateOrderResponse {
   companyId: string;
   createdAt: string;
   currencyAmount: string;
+  currencyAllowanceState?: string;
   currencyId: string;
   deliverDate: string;
   destinationWalletAddress: string;

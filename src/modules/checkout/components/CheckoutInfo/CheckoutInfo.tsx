@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable i18next/no-literal-string */
-/* eslint-disable i18next/no-literal-string */
 import {
   lazy,
   useCallback,
@@ -11,7 +9,6 @@ import {
   useState,
 } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
-import { useTranslation } from 'react-i18next';
 import { IMaskInput } from 'react-imask';
 import {
   useCopyToClipboard,
@@ -26,7 +23,7 @@ import _ from 'lodash';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { SharedOrder } from '../../../pass';
-import { useProfile } from '../../../shared';
+import { BaseSelect, useProfile } from '../../../shared';
 import ValueChangeIcon from '../../../shared/assets/icons/icon-up-down.svg?react';
 import { Alert } from '../../../shared/components/Alert';
 import { Shimmer } from '../../../shared/components/Shimmer';
@@ -42,6 +39,8 @@ import { useModalController } from '../../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
 import { useQuery } from '../../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import useTranslation from '../../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { Product } from '../../../shared/interface/Product';
 import { useGetRightWallet } from '../../../shared/utils/getRightWallet';
@@ -66,7 +65,9 @@ import {
   PaymentMethodsAvaiable,
   ProductErrorInterface,
 } from '../../interface/interface';
+import { analyzeCurrenciesInCart } from '../../utils/analyzeCurrenciesInCart';
 import { CoinPaymentResume } from '../CoinPaymentResume/CoinPaymentResume';
+import { IncreaseCurrencyAllowance } from '../IncreaseCurrencyAllowance';
 
 const WeblockButton = lazy(() =>
   import('../../../shared/components/WeblockButton/WeblockButton').then(
@@ -162,7 +163,7 @@ const _CheckoutInfo = ({
   const [requestError, setRequestError] = useState(false);
   const { getOrderPreview, getStatus } = useCheckout();
   const [translate] = useTranslation();
-  const { setCart, cart } = useCart();
+  const { setCart, cart, setCartCurrencyId, cartCurrencyId } = useCart();
   const [productErros, setProductErros] = useState<ProductErrorInterface[]>([]);
   const [productCache, setProductCache, deleteKey] =
     useLocalStorage<OrderPreviewCache>(PRODUCT_CART_INFO_KEY);
@@ -173,9 +174,6 @@ const _CheckoutInfo = ({
     useLocalStorage<CreateOrderResponse>(ORDER_COMPLETED_INFO_KEY);
   const [productVariants] = useLocalStorage<any>(PRODUCT_VARIANTS_INFO_KEY);
   const query = useQuery();
-  const isCoinPayment = router.query.coinPayment?.includes('true')
-    ? true
-    : false;
   const destinationUser = router.query.destination;
   const [productIds, setProductIds] = useState<string[] | undefined>(productId);
   const [currencyIdState, setCurrencyIdState] = useState<string | undefined>(
@@ -184,6 +182,16 @@ const _CheckoutInfo = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
+  const acceptMultipleCurrenciesPurchase = useMemo(() => {
+    return (
+      orderPreview?.products?.filter(
+        (res) => res?.settings?.acceptMultipleCurrenciesPurchase
+      )?.length === orderPreview?.products?.length
+    );
+  }, [orderPreview?.products]);
+  const isCoinPayment =
+    (router.query.coinPayment?.includes('true') ? true : false) ||
+    acceptMultipleCurrenciesPurchase;
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const utms = useUtms();
   const [checkUtm, setCheckUtm] = useState(true);
@@ -241,15 +249,18 @@ const _CheckoutInfo = ({
       if (productIdsFromQueries) {
         setProductIds(productIdsFromQueries.split(','));
       }
-      if (currencyIdFromQueries) {
+      if (currencyIdFromQueries && !isCart) {
         setCurrencyIdState(currencyIdFromQueries);
+      }
+      if (isCart && cartCurrencyId) {
+        setCurrencyIdState(cartCurrencyId.id);
       }
     } else {
       const preview = productCache;
       const currencyIdFromQueries = router?.query?.currencyId as string;
       if (preview) {
         setCurrencyIdState(preview?.currencyId);
-      } else if (currencyIdFromQueries) {
+      } else if (currencyIdFromQueries && !isCart) {
         setCurrencyIdState(currencyIdFromQueries);
       }
       if (preview && preview?.products?.length > 0) {
@@ -274,7 +285,7 @@ const _CheckoutInfo = ({
   useEffect(() => {
     const params = new URLSearchParams(query);
     const currencyIdFromQueries = params.get('currencyId');
-    if (currencyIdFromQueries) {
+    if (currencyIdFromQueries && !isCart) {
       setCurrencyIdState(currencyIdFromQueries);
     }
   }, [query]);
@@ -285,10 +296,29 @@ const _CheckoutInfo = ({
   );
 
   const { defaultTheme } = UseThemeConfig();
-  const coinPaymentCurrencyId =
-    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId ??
-    '9e5c87cb-22ca-4550-8f09-f2272203410b';
-  const getOrderPreviewFn = (couponCode?: string) => {
+  const coinPaymentCurrencyId = useMemo(() => {
+    return (
+      router.query?.cryptoCurrencyId ??
+      defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId
+    );
+  }, [
+    defaultTheme?.configurations?.contentData?.coinPaymentCurrencyId,
+    router.query?.cryptoCurrencyId,
+  ]);
+  const paymentComplement = useMemo(() => {
+    return (
+      parseFloat(
+        orderPreview?.payments?.filter(
+          (e) => e?.currencyId !== coinPaymentCurrencyId
+        )[0].totalPrice ?? ''
+      ) !== 0
+    );
+  }, [coinPaymentCurrencyId, orderPreview?.payments]);
+  const getOrderPreviewFn = (
+    couponCode?: string,
+    onSuccess?: (data: OrderPreviewResponse) => void,
+    changeCart?: boolean
+  ) => {
     const coupon = () => {
       if (couponCode) {
         return couponCode;
@@ -354,6 +384,7 @@ const _CheckoutInfo = ({
                   {
                     currencyId: currencyIdState,
                     amountType: 'all_remaining',
+                    paymentMethod: choosedPayment?.paymentMethod,
                   },
                   {
                     currencyId: coinPaymentCurrencyId,
@@ -367,6 +398,7 @@ const _CheckoutInfo = ({
                     currencyId: currencyIdState,
                     amountType: 'percentage',
                     amount: '100',
+                    paymentMethod: choosedPayment?.paymentMethod,
                   },
                 ],
           currencyId: currencyIdState,
@@ -376,6 +408,7 @@ const _CheckoutInfo = ({
         {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess: (data: OrderPreviewResponse) => {
+            onSuccess && onSuccess(data);
             if (data && data.providersForSelection?.length && !choosedPayment) {
               setChoosedPayment(data.providersForSelection[0]);
             }
@@ -397,7 +430,12 @@ const _CheckoutInfo = ({
             }
             setOrderPreview(data);
             setIsLoadingPreview(false);
-            if (isCart) {
+            if (
+              isCart &&
+              (changeCart ||
+                !hasCommonCurrencies ||
+                commonCurrencies.length == 1)
+            ) {
               setCart(
                 data.products.map((val) => {
                   return {
@@ -430,6 +468,16 @@ const _CheckoutInfo = ({
       );
     }
   };
+
+  useEffect(() => {
+    if (
+      checkoutStatus == CheckoutStatus.CONFIRMATION &&
+      choosedPayment?.paymentMethod
+    )
+      getOrderPreviewFn(couponCodeInput);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [choosedPayment?.paymentMethod]);
+
   useDebounce(
     () => {
       getOrderPreviewFn(couponCodeInput);
@@ -559,6 +607,10 @@ const _CheckoutInfo = ({
           )[0]?.attributes?.name,
         },
         isCoinPayment,
+        acceptMultipleCurrenciesPurchase,
+        cryptoCurrencyId: orderPreview?.payments?.find(
+          (res) => res?.currency?.crypto
+        )?.currencyId,
         cashback: orderPreview.cashback?.cashbackAmount,
       });
     }
@@ -658,9 +710,11 @@ const _CheckoutInfo = ({
           : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
         {
           productIds: newArray.join(','),
-          currencyId: orderPreview?.products[0].prices.find(
-            (price) => price.currencyId == currencyIdState
-          )?.currencyId,
+          currencyId: isCart
+            ? cartCurrencyId?.id
+            : orderPreview?.products[0].prices.find(
+                (price) => price.currencyId == currencyIdState
+              )?.currencyId,
         }
       );
       if (isCart) {
@@ -777,9 +831,11 @@ const _CheckoutInfo = ({
             newArray = [...newIds, ...Array(quantity).fill(id)];
             router.pushConnect(PixwayAppRoutes.CHECKOUT_CART_CONFIRMATION, {
               productIds: newArray.join(','),
-              currencyId: orderPreview?.products[0].prices.find(
-                (price) => price.currencyId == currencyIdState
-              )?.currencyId,
+              currencyId: isCart
+                ? cartCurrencyId?.id
+                : orderPreview?.products[0].prices.find(
+                    (price) => price.currencyId == currencyIdState
+                  )?.currencyId,
             });
             setProductIds(newArray);
             productIds?.sort((a, b) => {
@@ -848,9 +904,11 @@ const _CheckoutInfo = ({
         : PixwayAppRoutes.CHECKOUT_CONFIRMATION,
       {
         productIds: filteredProds?.map((p) => p.id).join(','),
-        currencyId: orderPreview?.products[0].prices.find(
-          (price) => price.currencyId == currencyIdState
-        )?.currencyId,
+        currencyId: isCart
+          ? cartCurrencyId?.id
+          : orderPreview?.products[0].prices.find(
+              (price) => price.currencyId == currencyIdState
+            )?.currencyId,
       }
     );
     if (isCart) {
@@ -1105,9 +1163,9 @@ const _CheckoutInfo = ({
                     }
                     alt=""
                   />
-                  <p className="pw-mt-3 pw-font-semibold">Gift Card</p>
+                  <p className="pw-mt-3 pw-font-semibold">{'Gift Card'}</p>
                   <p className="pw-mt-1 pw-text-[32px] pw-font-bold pw-mb-5">
-                    R$
+                    {'R$'}
                     {(
                       parseFloat(orderResponse?.totalAmount) /
                       (statusResponse?.passShareCodeInfo?.codes?.length ?? 1)
@@ -1138,7 +1196,7 @@ const _CheckoutInfo = ({
                       data-action="share/whatsapp/share"
                       rel="noreferrer"
                     >
-                      Whatsapp
+                      {'Whatsapp'}
                     </a>
                     <PixwayButton
                       onClick={() => {
@@ -1261,7 +1319,22 @@ const _CheckoutInfo = ({
         />
       );
     }
-  }, [changeValue, erc20decimals, isCoinPayment, isErc20, paymentAmount]);
+  }, [
+    changeValue,
+    decimals,
+    erc20decimals,
+    isCoinPayment,
+    isErc20,
+    paymentAmount,
+  ]);
+
+  const {
+    commonCurrencies,
+    hasCommonCurrencies,
+    productsWithoutCommonCurrencies,
+  } = useMemo(() => analyzeCurrenciesInCart(cart), [cart]);
+
+  const [currVal, setCurrVal] = useState(cartCurrencyId?.id);
 
   const locale = useLocale();
   const _ButtonsToShow = useMemo(() => {
@@ -1309,17 +1382,22 @@ const _CheckoutInfo = ({
                   />
                 )}
                 <p className="pw-font-[400] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                  {isErc20 && !isCoinPayment
+                  {acceptMultipleCurrenciesPurchase
+                    ? null
+                    : isErc20 && !isCoinPayment
                     ? translate('checkout>checkoutInfo>valueOfPay2') +
                       ' ' +
                       orderPreview?.products?.[0]?.name
                     : translate('checkout>checkoutInfo>valueOfPay')}
                 </p>
                 <div className="pw-mb-8">
-                  <div className="pw-flex pw-gap-3">{Erc20Input}</div>
+                  {acceptMultipleCurrenciesPurchase ? null : (
+                    <div className="pw-flex pw-gap-3">{Erc20Input}</div>
+                  )}
                   {automaxLoyalty ? (
                     <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2 pw-font-poppins">
-                      {translate('wallet>page>balance')} Zucas:{' '}
+                      {translate('wallet>page>balance')}{' '}
+                      {organizedLoyalties?.[0]?.currency}:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
                       organizedLoyalties?.some(
@@ -1364,6 +1442,7 @@ const _CheckoutInfo = ({
                   <CoinPaymentResume
                     payments={orderPreview?.payments}
                     loading={isLoading || isLoadingPreview}
+                    currency={organizedLoyalties?.[0]?.currency}
                   />
                 )}
               </>
@@ -1422,6 +1501,32 @@ const _CheckoutInfo = ({
                 className="pw-my-4"
               />
             )}
+            {isCart && hasCommonCurrencies && commonCurrencies.length > 1 ? (
+              <div className="pw-container pw-mx-auto pw-mb-8">
+                <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-start">
+                  <p className="pw-font-bold pw-text-black pw-text-left pw-mb-4">
+                    {translate('checkout>currencyAnalyze>chooseCurrency')}
+                  </p>
+                  <div className="">
+                    <form className="pw-flex pw-gap-4" action="submit">
+                      <BaseSelect
+                        options={commonCurrencies.map((res) => {
+                          return { value: res.id, label: res.symbol };
+                        })}
+                        value={currVal}
+                        onChangeValue={(e) => {
+                          setCurrVal(e);
+                          setCurrencyIdState(e as string);
+                          setCartCurrencyId?.(
+                            commonCurrencies.find((res) => res.id === e)
+                          );
+                        }}
+                      />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            ) : null}
             {parseFloat(
               orderPreview?.payments?.filter(
                 (e) => e.currencyId === currencyIdState
@@ -1458,7 +1563,8 @@ const _CheckoutInfo = ({
                 {!automaxLoyalty ? (
                   <>
                     <p className="pw-font-[600] pw-text-sm pw-font-poppins pw-text-[#35394C] pw-mt-5 pw-mb-2">
-                      Zucas ( {translate('wallet>page>balance')}:{' '}
+                      {organizedLoyalties?.[0]?.currency} ({' '}
+                      {translate('wallet>page>balance')}:{' '}
                       {organizedLoyalties &&
                       organizedLoyalties?.length > 0 &&
                       organizedLoyalties?.some(
@@ -1508,7 +1614,10 @@ const _CheckoutInfo = ({
                           defaultValue={coinAmountPayment}
                           InputElement={
                             <input
-                              disabled={paymentAmount === '' || automaxLoyalty}
+                              disabled={
+                                (paymentAmount === '' || automaxLoyalty) &&
+                                !acceptMultipleCurrenciesPurchase
+                              }
                               className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
                               placeholder="0,0"
                             />
@@ -1516,6 +1625,41 @@ const _CheckoutInfo = ({
                         />
                       </div>
                     </div>
+                  </>
+                ) : null}
+                {acceptMultipleCurrenciesPurchase ? (
+                  <>
+                    <CoinPaymentResume
+                      payments={orderPreview?.payments}
+                      loading={isLoading || isLoadingPreview}
+                      currency={organizedLoyalties?.[0]?.currency}
+                    />
+                    {paymentComplement ? (
+                      <PaymentMethodsComponent
+                        loadingPreview={isLoadingPreview}
+                        methodSelected={
+                          choosedPayment ?? ({} as PaymentMethodsAvaiable)
+                        }
+                        methods={
+                          orderPreview?.payments?.filter(
+                            (e) => e.currencyId === currencyIdState
+                          )[0]?.providersForSelection ?? []
+                        }
+                        onSelectedPayemnt={setChoosedPayment}
+                        title={
+                          isCoinPayment
+                            ? translate(
+                                'checkout>checkoutInfo>howCompletePayment'
+                              )
+                            : translate('checkout>checkoutInfo>paymentMethod')
+                        }
+                        titleClass={
+                          isCoinPayment
+                            ? '!pw-font-[400] pw-font-poppins !pw-text-base'
+                            : ''
+                        }
+                      />
+                    ) : null}
                   </>
                 ) : null}
                 {!payWithCoin() ? (
@@ -1563,7 +1707,8 @@ const _CheckoutInfo = ({
                   isLoadingPreview ||
                   !payWithCoin() ||
                   (isCoinPayment &&
-                    (paymentAmount === '' || parseFloat(paymentAmount) === 0))
+                    (paymentAmount === '' || parseFloat(paymentAmount) === 0) &&
+                    !acceptMultipleCurrenciesPurchase)
                 }
                 onClick={beforeProcced}
                 className="!pw-py-3 !pw-px-[42px] !pw-bg-[#295BA6] !pw-text-xs !pw-text-[#FFFFFF] pw-border pw-border-[#295BA6] !pw-rounded-full hover:pw-bg-[#295BA6] hover:pw-shadow-xl disabled:pw-bg-[#A5A5A5] disabled:pw-text-[#373737] active:pw-bg-[#EFEFEF]"
@@ -1588,7 +1733,9 @@ const _CheckoutInfo = ({
         }
         return (
           <div className="pw-mt-4">
-            {productCache?.isCoinPayment || isCoinPayment ? (
+            {(productCache?.isCoinPayment || isCoinPayment) &&
+            (!productCache?.acceptMultipleCurrenciesPurchase ||
+              !acceptMultipleCurrenciesPurchase) ? (
               <>
                 {error !== '' && statusResponse?.status === 'failed' ? (
                   <Alert variant="error">{error}</Alert>
@@ -1621,7 +1768,7 @@ const _CheckoutInfo = ({
                           {translate('checkout>checkoutInfo>valuePaid')}
                         </p>
                         <p className="pw-text-sm pw-font-semibold">
-                          R$
+                          {'R$'}
                           {orderResponse?.totalAmount?.[0]?.amount
                             ? parseFloat(
                                 orderResponse?.totalAmount?.[0]?.amount
@@ -1634,7 +1781,7 @@ const _CheckoutInfo = ({
                           {translate('checkout>checkoutInfo>cashbackEarned')}
                         </p>
                         <p className="pw-text-sm pw-font-semibold">
-                          R$
+                          {'R$'}
                           {parseFloat(productCache?.cashback ?? '').toFixed(2)}
                         </p>
                       </div>
@@ -1738,6 +1885,7 @@ const _CheckoutInfo = ({
     coinError,
     organizedLoyalties,
     isCopied,
+    paymentComplement,
   ]);
 
   const anchorCurrencyId = useMemo(() => {
@@ -1750,7 +1898,90 @@ const _CheckoutInfo = ({
       : '';
   }, [orderPreview]);
 
-  if (isCoinPayment && !organizedLoyalties.length)
+  const [poolCurrencyAllowanceStatus, setPoolCurrencyAllowanceStatus] =
+    useState(false);
+  const [currencyAllowanceCountdown, setCurrencyAllowanceCountdown] =
+    useState(true);
+  const [currencyAllowanceStatusResponse, setCurrencyAllowanceStatusResponse] =
+    useState<OrderPreviewResponse>();
+  const [timestamp, setTimestamp] = useState(0);
+  const [resetError, setResetError] = useState(false);
+  const currencyAllowanceState = useMemo(() => {
+    if (currencyAllowanceStatusResponse) {
+      return currencyAllowanceStatusResponse?.currencyAllowanceState;
+    } else {
+      return orderPreview?.currencyAllowanceState;
+    }
+  }, [currencyAllowanceStatusResponse, orderPreview?.currencyAllowanceState]);
+
+  useEffect(() => {
+    if (poolCurrencyAllowanceStatus) {
+      validateCurrencyAllowanceStatus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolCurrencyAllowanceStatus]);
+
+  const validateCurrencyAllowanceStatus = async () => {
+    if (poolCurrencyAllowanceStatus) {
+      const interval = setInterval(() => {
+        getOrderPreviewFn(couponCodeInput, (data) => {
+          if (
+            Date.now() - timestamp > 30 * 1000 &&
+            (data?.currencyAllowanceState === 'required' ||
+              data?.currencyAllowanceState === 'processing')
+          ) {
+            setResetError(true);
+            clearInterval(interval);
+            setPoolCurrencyAllowanceStatus(false);
+            setCurrencyAllowanceCountdown(false);
+          } else if (
+            data?.currencyAllowanceState === 'processing' &&
+            currencyAllowanceCountdown
+          ) {
+            setCurrencyAllowanceCountdown(false);
+          } else if (data?.currencyAllowanceState === 'allowed') {
+            clearInterval(interval);
+            setPoolCurrencyAllowanceStatus(false);
+            setCurrencyAllowanceStatusResponse(data);
+            setCurrencyAllowanceCountdown(false);
+          }
+        });
+      }, 6000);
+    }
+  };
+
+  const { mainWallet: wallet } = useUserWallet();
+
+  const canBuy = useMemo(
+    () =>
+      parseFloat(wallet?.balance ?? '0') <
+      parseFloat(orderPreview?.totalPrice ?? '0'),
+    [orderPreview?.totalPrice, wallet]
+  );
+
+  if (productsWithoutCommonCurrencies.length && isCart)
+    return (
+      <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
+        <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
+          <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
+            {translate('checkout>currencyAnalyze>cantBuy')}
+          </p>
+          {productsWithoutCommonCurrencies.map((product) => {
+            return <p key={product.id}>{`- ${product.name}`}</p>;
+          })}
+          <WeblockButton
+            className="pw-text-white pw-mt-6"
+            onClick={() => {
+              router.pushConnect(PixwayAppRoutes.HOME);
+              setCart([]);
+            }}
+          >
+            {translate('checkout>currencyAnalyze>emptyCart')}
+          </WeblockButton>
+        </div>
+      </div>
+    );
+  else if (isCoinPayment && !organizedLoyalties.length)
     return (
       <div className="pw-w-full pw-flex pw-justify-center pw-items-center pw-mt-6">
         <Spinner />
@@ -1794,8 +2025,8 @@ const _CheckoutInfo = ({
             </>
           )}
 
-          {isCoinPayment ||
-          productCache?.isCoinPayment ||
+          {(isCoinPayment && !acceptMultipleCurrenciesPurchase) ||
+          (productCache?.isCoinPayment && !acceptMultipleCurrenciesPurchase) ||
           isErc20 ||
           orderResponse?.passShareCodeInfo ? null : (
             <div className="pw-border pw-bg-white pw-border-[rgba(0,0,0,0.2)] pw-rounded-2xl pw-overflow-hidden">
@@ -1898,6 +2129,9 @@ const _CheckoutInfo = ({
                       (price) => price?.currencyId == currencyIdState
                     )?.anchorCurrency?.symbol ?? ''
                   }
+                  promotionDescription={
+                    prod?.promotions?.[0]?.publicDescription
+                  }
                 />
               ))}
             </div>
@@ -1962,20 +2196,34 @@ const _CheckoutInfo = ({
         onClose={closeModal}
         isOpen={isOpen}
       >
-        <ConfirmCryptoBuy
-          orderInfo={productCache}
-          onClose={closeModal}
-          totalPrice={orderPreview?.totalPrice ?? '0'}
-          gasPrice={orderPreview?.gasFee?.amount ?? '0'}
-          serviceFee={orderPreview?.clientServiceFee ?? ''}
-          code={
-            orderPreview?.products && orderPreview?.products.length
-              ? (orderPreview?.products[0].prices.find(
-                  (price) => price.currencyId == currencyIdState
-                )?.currency?.code as CurrencyEnum)
-              : CurrencyEnum.BRL
-          }
-        />
+        {(currencyAllowanceState === 'required' ||
+          currencyAllowanceState === 'processing') &&
+        canBuy ? (
+          <IncreaseCurrencyAllowance
+            onClose={closeModal}
+            onContinue={() => setTimestamp(Date.now())}
+            onSuccess={() => setPoolCurrencyAllowanceStatus(true)}
+            resetError={resetError}
+            currencyAllowanceState={currencyAllowanceState}
+            currencyId={currencyIdState ?? ''}
+            targetAmount={orderPreview?.totalPrice ?? '0'}
+          />
+        ) : (
+          <ConfirmCryptoBuy
+            orderInfo={productCache}
+            onClose={closeModal}
+            totalPrice={orderPreview?.totalPrice ?? '0'}
+            gasPrice={orderPreview?.gasFee?.amount ?? '0'}
+            serviceFee={orderPreview?.clientServiceFee ?? ''}
+            code={
+              orderPreview?.products && orderPreview?.products.length
+                ? (orderPreview?.products[0].prices.find(
+                    (price) => price.currencyId == currencyIdState
+                  )?.currency?.code as CurrencyEnum)
+                : CurrencyEnum.BRL
+            }
+          />
+        )}
       </ModalBase>
     </>
   );

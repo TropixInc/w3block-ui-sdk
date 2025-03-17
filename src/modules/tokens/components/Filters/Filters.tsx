@@ -58,7 +58,7 @@ export const Filters = ({
             <div className="pw-flex pw-gap-2">
               {validStatus.map(({ key, statusColor }) => {
                 const isChecked = status.find(
-                  (e) => e.toLocaleLowerCase() === key.toLocaleLowerCase()
+                  (e) => e?.toLocaleLowerCase() === key?.toLocaleLowerCase()
                 );
 
                 return (
@@ -68,7 +68,7 @@ export const Filters = ({
                       'pw-flex pw-gap-2 pw-items-center pw-justify-center pw-cursor-pointer',
                       isChecked ? 'pw-text-[#777E8F]' : 'pw-text-[#DCDCDC]'
                     )}
-                    onClick={() => setStatus(key.toLowerCase())}
+                    onClick={() => setStatus(key?.toLowerCase())}
                   >
                     {isChecked ? (
                       <div className="pw-relative pw-h-[12.75px] pw-w-[12.75px] pw-border-[1.4px] pw-border-[#295BA6] pw-rounded-sm">

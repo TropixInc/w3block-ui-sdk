@@ -40,14 +40,14 @@ export const GasModalHeader = ({
   const gasPricePaidInBRL =
     convertedGasPrice < 0.01
       ? 'R$ 0,01'
-      : convertedGasPrice.toLocaleString('pt-BR', {
+      : convertedGasPrice?.toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         });
   const gasPricePaidInUSD =
     convertedGasPrice < 0.01
       ? '$ 0.01'
-      : convertedGasPrice.toLocaleString('en-US', {
+      : convertedGasPrice?.toLocaleString('en-US', {
           style: 'currency',
           currency: 'USD',
         });

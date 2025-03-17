@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable i18next/no-literal-string */
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard, useLocation } from 'react-use';
 
 import { Disclosure } from '@headlessui/react';
@@ -12,6 +12,7 @@ import ChevronDown from '../../../shared/assets/icons/arrowDown.svg?react';
 import CopyIcon from '../../../shared/assets/icons/copy.svg?react';
 import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
 import { useProfileWithKYC } from '../../../shared/hooks/useProfileWithKYC/useProfileWithKYC';
+import useTranslation from '../../../shared/hooks/useTranslation';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 
 interface ReferralProps {

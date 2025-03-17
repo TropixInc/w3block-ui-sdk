@@ -114,6 +114,9 @@ export const StorefrontPreview = ({
   const [themeListener, setThemeListener] = useState<Theme | null>();
   const [currentHighlight, setCurrentHighlight] = useState('');
   const productSlug = getProductSlug(host + asPath);
+
+  console.log('CONTEXT');
+
   const listener = ({
     data,
   }: MessageEvent<{

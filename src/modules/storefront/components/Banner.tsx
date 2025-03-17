@@ -173,6 +173,8 @@ const Slide = ({
   const { text: subtitle } = useDynamicString(subtitleRaw);
   const { text: primaryLink } = useDynamicString(buttonLink);
   const { text: secondaryLink } = useDynamicString(secondaryButtonLink);
+  const { text: primaryText } = useDynamicString(buttonText);
+  const { text: secondaryText } = useDynamicString(secondaryButtonText);
   const rowAlignmentClass = rowAlignments[textAligment ?? AlignmentEnum.LEFT];
   const columnAlignmentClass =
     columnAlignments[textAligment ?? AlignmentEnum.LEFT];
@@ -423,7 +425,7 @@ const Slide = ({
                       : undefined
                   }
                 >
-                  {buttonText ?? 'Saiba mais'}
+                  {primaryText ?? 'Saiba mais'}
                 </a>
               )}
               {secondaryActionButton && (
@@ -447,7 +449,7 @@ const Slide = ({
                       : undefined
                   }
                 >
-                  {secondaryButtonText ?? 'Saiba mais'}
+                  {secondaryText ?? 'Saiba mais'}
                 </a>
               )}
             </div>

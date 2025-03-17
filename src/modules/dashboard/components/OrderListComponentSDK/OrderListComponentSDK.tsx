@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrder';
 import { useGetOrders } from '../../../checkout/hooks/useGetOrders';
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
+import useTranslation from '../../../shared/hooks/useTranslation';
 const Pagination = lazy(() =>
   import('../../../shared/components/Pagination').then((mod) => ({
     default: mod.Pagination,

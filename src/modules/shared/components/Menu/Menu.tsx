@@ -202,6 +202,14 @@ const _Menu = ({ tabs, className }: MenuProps) => {
           !isHidden('futureStatement'),
       },
       {
+        title: internalMenuData['staking']?.customLabel || 'Recompensas',
+        id: 'staking',
+        icon: <CardIcon width={17} height={17} />,
+        link: PixwayAppRoutes.STAKING,
+        isVisible:
+          !isHidden('staking') && loyaltyWallet && loyaltyWallet.length > 0,
+      },
+      {
         title:
           internalMenuData['myOrders']?.customLabel ||
           translate('header>components>defaultTab>myOrders'),

@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
-
 import { KycStatus } from '@w3block/sdk-id';
+
+import useTranslation from '../../hooks/useTranslation';
 
 interface KYCStatusProps {
   status: KycStatus;

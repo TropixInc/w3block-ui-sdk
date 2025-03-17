@@ -42,6 +42,7 @@ export interface Product {
   metadata?: any;
   type?: string;
   settings?: {
+    acceptMultipleCurrenciesPurchase?: boolean;
     passShareCodeConfig?: {
       enabled?: boolean;
       dataFields?: DataFields[];
