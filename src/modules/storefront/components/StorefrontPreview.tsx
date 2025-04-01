@@ -115,8 +115,6 @@ export const StorefrontPreview = ({
   const [currentHighlight, setCurrentHighlight] = useState('');
   const productSlug = getProductSlug(host + asPath);
 
-  console.log('CONTEXT');
-
   const listener = ({
     data,
   }: MessageEvent<{
@@ -137,6 +135,7 @@ export const StorefrontPreview = ({
       setCurrentHighlight(data?.highlight);
     }
   };
+
   useEffect(() => {
     if (!currentHighlight) return;
     document.getElementById(currentHighlight)?.classList?.add('highlighted');
@@ -224,7 +223,7 @@ export const StorefrontPreview = ({
   const breakpoint = useBreakpoints();
   const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
 
-  if (!themeContext) return null;
+  if (!themeContext) return <div>TESTEEEEEEE</div>;
   const theme = { ...context?.defaultTheme, ...themeListener };
 
   const configStyleData = theme.configurations?.styleData;
