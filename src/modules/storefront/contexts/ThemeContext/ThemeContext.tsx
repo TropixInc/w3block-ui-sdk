@@ -38,35 +38,44 @@ export const ThemeProvider = ({
   upperPage?: TemplateData | null;
   upperPageInfo?: GetPageInfoInterface | undefined;
 }) => {
-  const [defaultTheme, setDefaultTheme] = useState<Theme | null>(null);
-  const [pageInfo, setPageInfo] = useState<GetPageInfoInterface | undefined>();
-  const [pageTheme, setPageTheme] = useState<TemplateData | null>(null);
+  const [defaultTheme, setDefaultTheme] = useState<Theme | null | any>(
+    upperTheme ? upperTheme : {}
+  );
+  const [pageInfo, setPageInfo] = useState<
+    GetPageInfoInterface | undefined | any
+  >(upperPageInfo ? upperPageInfo : {});
+  const [pageTheme, setPageTheme] = useState<TemplateData | null | any>(
+    upperPage ? upperPage : {}
+  );
   const [pageThemeSession, setPageThemeSession] =
     useSessionStorage<TemplateData | null>(BASE_THEME_KEY);
   const [_, setPageName] = useState('');
-  useEffect(() => {
+  /*   useEffect(() => {
     if (upperTheme) {
       setDefaultTheme(upperTheme);
     }
-  }, [upperTheme]);
-  useEffect(() => {
+  }, [upperTheme]); */
+  /* useEffect(() => {
     if (upperPage) {
       setPageTheme(upperPage);
     }
-  }, [upperPage]);
-  useEffect(() => {
+  }, [upperPage]); */
+  /*   useEffect(() => {
     if (upperPageInfo) {
       setPageInfo(upperPageInfo);
     }
-  }, [upperPageInfo]);
+  }, [upperPageInfo]); */
+
   const {
     data: theme,
     isError: isThemeError,
     isSuccess: isThemeSuccess,
   } = useGetTheme(upperTheme ? true : false);
+
   const { data: pageModules, isError } = useGetPageModules(
     upperPage ? true : false
   );
+
   useEffect(() => {
     if (theme) {
       setDefaultTheme(theme.data);
