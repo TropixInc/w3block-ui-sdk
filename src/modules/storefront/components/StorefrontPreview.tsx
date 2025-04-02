@@ -110,8 +110,8 @@ export const StorefrontPreview = ({
   const { setMainCoin } = useUserWallet();
   const { host } = useLocation();
   const { asPath, pushConnect } = useRouterConnect();
-  const [currentPage, setCurrentPage] = useState<TemplateData | null>(null);
-  const [themeListener, setThemeListener] = useState<Theme | null>();
+  const [currentPage, setCurrentPage] = useState<TemplateData | null | any>({});
+  const [themeListener, setThemeListener] = useState<Theme | null | any>({});
   const [currentHighlight, setCurrentHighlight] = useState('');
   const productSlug = getProductSlug(host + asPath);
 
@@ -334,7 +334,7 @@ export const StorefrontPreview = ({
                     `${!productSlug ? 'pw-min-h-[calc(100vh-150px)]' : ''}`
                   )}
                 >
-                  {data.modules?.map((item) => {
+                  {(data as TemplateData)?.modules?.map((item) => {
                     if (item.deviceType == 'none') return null;
 
                     if (
