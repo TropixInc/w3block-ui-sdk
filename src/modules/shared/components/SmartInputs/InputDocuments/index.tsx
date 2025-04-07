@@ -81,8 +81,8 @@ const InputDocuments = ({
         inputId: name,
         value: apiSavedValue,
       });
-      setSelectDocType(apiSavedValue.docType);
-      setDocument(apiSavedValue.document);
+      setSelectDocType(apiSavedValue?.docType);
+      setDocument(apiSavedValue?.document);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiSavedValue]);
@@ -103,7 +103,7 @@ const InputDocuments = ({
             setDocument('');
           }}
           options={docTypeOptions}
-          value={apiSavedValue.docType}
+          value={apiSavedValue?.docType}
           placeholder="Selecione o tipo de documento.."
         />
         <div className="pw-w-full pw-mt-4">

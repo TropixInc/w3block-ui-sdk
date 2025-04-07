@@ -194,7 +194,7 @@ export const InputSelector = ({
             setMultipleSelected(e);
           }
         }}
-        value={docValue}
+        value={docValue ?? field?.value}
         multiple={configData?.isMultiple}
         search={configData?.search}
         searchValue={searchValue}
