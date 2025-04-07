@@ -1305,6 +1305,7 @@ export const ProductPage = ({
                           onChange={() => onChangeCheckbox()}
                           key={val.title}
                           label={val.title}
+                          link={val.link}
                           description={val.description}
                           className="pw-mt-3"
                         />

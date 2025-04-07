@@ -45,6 +45,7 @@ export interface Variants {
 interface Terms {
   title: string;
   description?: string;
+  link?: string;
 }
 
 export interface DataFields {
