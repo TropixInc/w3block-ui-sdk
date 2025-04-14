@@ -3,8 +3,8 @@ import {
   isBigNumberish,
   BigNumber,
 } from '@ethersproject/bignumber/lib/bignumber';
-import { isHexString } from 'ethers/lib/utils';
-
+import { isHexString, parseUnits } from 'ethers/lib/utils';
+const oneBigNumber: BigNumber = parseUnits('1', 12);
 export class Format {
   static from(value: any) {
     if (value === null || value === undefined) {
@@ -20,7 +20,7 @@ export class Format {
     } else if (typeof value === 'string') {
       return value;
     } else if (Format.isBigNumber(value)) {
-      return BigNumber.from(value);
+      return BigNumber.from(value).div(oneBigNumber);
     } else if (Array.isArray(value)) {
       return Format.fromArray(value);
     } else if (typeof value === 'object') {

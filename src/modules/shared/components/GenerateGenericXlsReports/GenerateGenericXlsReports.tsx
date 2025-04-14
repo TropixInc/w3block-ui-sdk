@@ -54,8 +54,8 @@ export const GenerateGenericXlsReports = ({
   });
 
   useEffect(() => {
-    if (isSuccess && reportXls && reportXls.data.status !== 'failed') {
-      setXlsUrl(xlsUrl?.replace('{exportId}', reportXls.data.id));
+    if (isSuccess && reportXls && reportXls?.data?.status !== 'failed') {
+      setXlsUrl(xlsUrl?.replace('{exportId}', reportXls?.data?.id));
       setEnableGetReport(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,15 +85,15 @@ export const GenerateGenericXlsReports = ({
 
   useEffect(() => {
     if (
-      reportXls?.data.status === 'failed' ||
-      donwloadReport?.data.status === 'failed'
+      reportXls?.data?.status === 'failed' ||
+      donwloadReport?.data?.status === 'failed'
     ) {
       setXlsLoading(false);
       setEnableGetReport(false);
       setUrlReports('');
       setDownloadLink('');
     }
-  }, [donwloadReport?.data.status, reportXls?.data.status]);
+  }, [donwloadReport?.data?.status, reportXls?.data?.status]);
 
   const handleCallReportXls = () => {
     const arrFilters = Object.values(filters);
@@ -130,10 +130,14 @@ export const GenerateGenericXlsReports = ({
   };
 
   return (
-    <div className="pw-w-full pw-flex pw-flex-col pw-items-end pw-mb-2">
-      <BaseButton onClick={() => handleCallReportXls()} disabled={isXlsLoading}>
+    <div className="pw-w-full pw-relative pw-flex pw-flex-col pw-items-end pw-mb-2">
+      <BaseButton
+        onClick={() => handleCallReportXls()}
+        disabled={isXlsLoading}
+        className="pw-h-[44px] pw-min-w-[150px]"
+      >
         {isXlsLoading ? (
-          <div className="pw-flex pw-items-center pw-justify-center pw-gap-x-2">
+          <div className="pw-flex pw-items-center pw-justify-center pw-gap-x-2 ">
             <Spinner className="pw-w-4 pw-h-4 !pw-border-2" />
             <p>{translate('tokens>generateGenericXlsReports>await')}</p>
           </div>
@@ -145,7 +149,7 @@ export const GenerateGenericXlsReports = ({
       {Boolean(downloadLink) && (
         <button
           onClick={() => onHandleDownload()}
-          className="pw-block pw-mt-2 pw-underline pw-text-blue1 hover:pw-drop-shadow sm:-pw-left-20"
+          className="pw-block pw-mt-2 pw-underline pw-text-blue1 pw-absolute hover:pw-drop-shadow sm:-pw-left-[3rem] sm:!pw-top-[40px]"
         >
           {translate('key>salesReportsTemplate>download')}
         </button>

@@ -151,10 +151,15 @@ export const Card = ({
                   ).toFixed(0) + 'px'
                 : 'auto',
           }}
-          className="pw-text-[#7E7E7E] pw-line-clamp-2 pw-min-h-[36px] pw-mt-2 pw-text-sm pw-leading-5"
-        >
-          {description}
-        </p>
+          dangerouslySetInnerHTML={{
+            __html: description ?? '',
+          }}
+          className={`pw-text-[#7E7E7E] ${
+            /<[a-z][\s\S]*?>|<\/[a-z][\s\S]*?>/i.test(description)
+              ? ''
+              : 'pw-line-clamp-2'
+          } pw-min-h-[36px] pw-mt-2 pw-text-sm pw-leading-5`}
+        ></p>
       )}
       {styleData.showCardCategory && (
         <p

@@ -563,7 +563,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
             ) : null}
             <div
               style={externalFilterClasses?.wrapper}
-              className="pw-w-full sm:pw-flex sm:pw-justify-between"
+              className="pw-w-full sm:pw-flex sm:pw-justify-between pw-mb-3"
             >
               <div
                 style={externalFilterClasses?.root}

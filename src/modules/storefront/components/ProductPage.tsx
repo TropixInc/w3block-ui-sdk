@@ -193,7 +193,7 @@ export const ProductPage = ({
     setProductVariants({ ...variants });
     setCartCurrencyId?.(currencyId);
     const cartPreview =
-      orderPreview?.products.map((val) => {
+      orderPreview?.products.map(() => {
         return {
           id: product?.id,
           name: product?.name,
@@ -201,7 +201,7 @@ export const ProductPage = ({
             if ((value as any).productId === product?.id)
               return (value as any).id;
           }),
-          prices: val.prices,
+          prices: product?.prices,
         };
       }) ?? [];
     setCart([...cart, ...cartPreview]);
@@ -1202,14 +1202,11 @@ export const ProductPage = ({
                 ) : (
                   actionButton && (
                     <div className="pw-flex pw-flex-col">
-                      {!currencyId?.crypto &&
-                      hasCart &&
-                      !productKycRequirement ? (
+                      {hasCart && !productKycRequirement ? (
                         <button
                           disabled={
                             product?.stockAmount == 0 ||
                             product?.canPurchaseAmount == 0 ||
-                            currencyId?.crypto ||
                             !termsChecked ||
                             (isSendGift && !giftData && isPossibleSend)
                           }
@@ -1312,6 +1309,7 @@ export const ProductPage = ({
                           onChange={() => onChangeCheckbox()}
                           key={val.title}
                           label={val.title}
+                          link={val.link}
                           description={val.description}
                           className="pw-mt-3"
                         />

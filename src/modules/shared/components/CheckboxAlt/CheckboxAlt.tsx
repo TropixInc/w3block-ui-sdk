@@ -9,6 +9,7 @@ interface Props {
   label: string;
   id: string;
   description?: string;
+  link?: string;
   onChange: () => void;
   className?: string;
   classes?: {
@@ -24,6 +25,7 @@ export const CheckboxAlt = ({
   id,
   onChange,
   description,
+  link,
 }: Props) => {
   const [seeMore, setSeeMore] = useState(false);
   const isMobile = useIsMobile();
@@ -39,14 +41,17 @@ export const CheckboxAlt = ({
         <input
           className={classNames(
             classes?.root ?? '',
-            'pw-border pw-bg-white pw-border-[#94B8ED] pw-w-5 pw-h-5 pw-rounded-[4px] pw-cursor-pointer pw-flex pw-items-center pw-justify-center pw-shrink-0'
+            'pw-border pw-bg-white pw-border-[#94B8ED] pw-w-5 pw-h-5 pw-rounded-[4px] pw-cursor-pointer pw-flex pw-items-center pw-justify-center pw-shrink-0',
+            link ? 'pw-underline' : ''
           )}
           id={id}
           name={id}
           type="checkbox"
           onChange={onChange}
         ></input>
-        {label}
+        <a href={link} target="_blank" rel="noreferrer">
+          {label}
+        </a>
       </label>
       {description && description.length >= 120 ? (
         <>

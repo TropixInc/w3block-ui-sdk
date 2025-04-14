@@ -71,11 +71,13 @@ export const InputSelector = ({
   const router = useRouterConnect();
   const [translate] = useTranslation();
   // const [firstInput, setFirstInput] = useState(true);
+  const [selectedValue, setSelectedValue] = useState<string | undefined>();
   const [multipleSelected, setMultipleSelected] = useState<
     Array<string | undefined>
   >([]);
   const handleTextChange = (value: any) => {
     if (value) {
+      setSelectedValue(value);
       field?.onChange({
         inputId: name,
         value: configData?.approverPath ? JSON.parse(value) : value,
@@ -194,7 +196,7 @@ export const InputSelector = ({
             setMultipleSelected(e);
           }
         }}
-        value={docValue}
+        value={selectedValue ?? multipleSelected.join(', ') ?? docValue}
         multiple={configData?.isMultiple}
         search={configData?.search}
         searchValue={searchValue}
