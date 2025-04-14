@@ -5,6 +5,7 @@ import { useGetEspecificOrder } from '../../../checkout/hooks/useGetEspecificOrd
 import { useGetOrders } from '../../../checkout/hooks/useGetOrders';
 import { useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import useTranslation from '../../../shared/hooks/useTranslation';
 const Pagination = lazy(() =>
   import('../../../shared/components/Pagination').then((mod) => ({
@@ -23,10 +24,17 @@ export const OrderListComponentSDK = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const orderId = router?.query?.orderId;
-  const { data, refetch } = useGetOrders({
+  const {
+    data,
+    refetch,
+    error: errorOrders,
+  } = useGetOrders({
     page: actualPage,
   });
-  const { data: order } = useGetEspecificOrder(orderId as string, !!orderId);
+  const { data: order, error: errorOrder } = useGetEspecificOrder(
+    orderId as string,
+    !!orderId
+  );
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,16 +44,22 @@ export const OrderListComponentSDK = () => {
     <div className="pw-mt-7 pw-px-4">
       <div className="pw-gap-6 pw-flex pw-flex-col">
         {orderId ? (
-          <OrderCardComponentSDK
-            status={order?.data?.status}
-            id={order?.data?.id}
-            createdAt={order?.data?.createdAt}
-            expiresIn={order?.data?.expiresIn}
-            paymentProvider={order?.data?.paymentProvider}
-            productsRes={order?.data?.products}
-            deliverId={order?.data?.deliverId}
-            startOpened
-          />
+          errorOrder ? (
+            <ErrorBox customError={errorOrder} />
+          ) : (
+            <OrderCardComponentSDK
+              status={order?.data?.status}
+              id={order?.data?.id}
+              createdAt={order?.data?.createdAt}
+              expiresIn={order?.data?.expiresIn}
+              paymentProvider={order?.data?.paymentProvider}
+              productsRes={order?.data?.products}
+              deliverId={order?.data?.deliverId}
+              startOpened
+            />
+          )
+        ) : errorOrders ? (
+          <ErrorBox customError={errorOrders} />
         ) : (
           <>
             {!orders.length && (

@@ -6,6 +6,7 @@ import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useProfileWithKYC } from '../../shared/hooks/useProfileWithKYC/useProfileWithKYC';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 import { cleanObject } from '../../shared/utils/validators';
 import { useLoyaltiesInfo } from './useLoyaltiesInfo';
 
@@ -16,21 +17,27 @@ export const useGetAllReportsAdmin = (filter: any) => {
   const axios = useAxios(W3blockAPI.KEY);
   const cleaned = cleanObject(filter ?? {});
   const queryString = new URLSearchParams(cleaned).toString();
+
   return useQuery(
     [
       PixwayAPIRoutes.GET_ERC_TOKENS_BY_LOYALTY_ID_ADMIN,
       queryString,
       companyId,
     ],
-    (): Promise<ErcTokenHistoryInterfaceResponse> =>
-      axios
-        .get(
+    async (): Promise<ErcTokenHistoryInterfaceResponse> => {
+      try {
+        const response = await axios.get(
           PixwayAPIRoutes.GET_ERC_TOKENS_BY_LOYALTY_ID_ADMIN.replace(
             '{companyId}',
             companyId
           ).replace('{loyaltyId}', loyalties[0].contractId) + `?${queryString}`
-        )
-        .then((res) => res.data),
+        );
+        return response.data;
+      } catch (err) {
+        console.error('Erro ao buscar relatórios de admin:', err);
+        throw handleNetworkException(err);
+      }
+    },
     {
       enabled:
         loyalties.length > 0 &&

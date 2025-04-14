@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 
+import { handleNetworkException } from '../../utils/handleNetworkException';
 import { useCompanyConfig } from '../useCompanyConfig';
 import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { useProfile } from '../useProfile';
@@ -13,9 +14,13 @@ export const useGetTenantContext = () => {
   return useQuery(
     [PixwayAPIRoutes.TENANT_CONTEXT, tenantId],
     async () => {
-      const sdk = await getSDK();
-
-      return await sdk.api.tenantContext.findTenantContext(tenantId);
+      try {
+        const sdk = await getSDK();
+        return await sdk.api.tenantContext.findTenantContext(tenantId);
+      } catch (error) {
+        console.error('Erro ao buscar o contexto do tenant:', error);
+        throw handleNetworkException(error);
+      }
     },
     {
       enabled: Boolean(tenantId && profile),

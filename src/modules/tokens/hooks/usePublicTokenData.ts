@@ -5,6 +5,7 @@ import { AxiosResponse } from 'axios';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 import { DynamicFormConfiguration } from '../interfaces/DynamicFormConfiguration';
 import { DynamicFormFieldValue } from '../interfaces/DynamicFormFieldValue';
 import { getPublicTokenDataQueryKey } from '../utils/getPublicTokenDataQueryKey';
@@ -79,17 +80,24 @@ export const usePublicTokenData = ({
       rfid,
       tokenId,
     }),
-    () =>
-      axios.get<PublicTokenPageDTO>(
-        rfid
+    async () => {
+      try {
+        const endpoint = rfid
           ? PixwayAPIRoutes.METADATA_BY_RFID.replace('{rfid}', rfid)
           : PixwayAPIRoutes.METADATA_BY_CHAINADDRESS_AND_TOKENID.replace(
               '{contractAddress}',
               contractAddress ?? ''
             )
               .replace('{tokenId}', tokenId ?? '')
-              .replace('{chainId}', chainId ?? '')
-      ),
+              .replace('{chainId}', chainId ?? '');
+
+        const response = await axios.get<PublicTokenPageDTO>(endpoint);
+        return response;
+      } catch (err) {
+        console.error('Erro ao buscar dados públicos do token:', err);
+        throw handleNetworkException(err);
+      }
+    },
     {
       staleTime: Infinity,
       enabled:

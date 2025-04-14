@@ -110,6 +110,7 @@ export const SignInWithCodeWithoutLayout = () => {
 
   return (
     <div className="pw-flex pw-flex-col pw-items-center">
+      {'TESTE'}
       <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-font-[700] pw-text-center">
         {translate('auth>signInWithCodeWithoutLayout>youBeenBefore')}
       </p>

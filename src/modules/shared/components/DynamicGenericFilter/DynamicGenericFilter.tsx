@@ -17,6 +17,7 @@ import {
   FilterParameters,
   FormatFilterType,
 } from '../../interface/ConfigGenericTable';
+import { ErrorBox } from '../ErrorBox';
 import GenericSearchFilter from '../GenericSearchFilter/GenericSearchFilter';
 import { MultipleSelect } from '../MultipleSelect';
 
@@ -132,7 +133,7 @@ export const DynamicGenericFilter = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFilterDependency, filters, filterDependencies]);
 
-  const [{ data }] = usePaginatedGenericApiGet({
+  const [{ data, error }] = usePaginatedGenericApiGet({
     url: (isFilterDependency ? dependencyUrl : filterOptionsUrl) ?? '',
     isPublicApi: isPublicFilterApi,
     search: searchValue,
@@ -266,7 +267,9 @@ export const DynamicGenericFilter = ({
     }
   };
 
-  return (
+  return error ? (
+    <ErrorBox customError={error as any} />
+  ) : (
     <div className="pw-w-full pw-min-h-10 pw-flex pw-flex-col pw-items-center pw-justify-center">
       {format && renderFilter(format)}
     </div>

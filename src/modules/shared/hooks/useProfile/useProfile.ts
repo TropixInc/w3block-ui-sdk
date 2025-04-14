@@ -3,6 +3,7 @@ import { useMutation } from 'react-query';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
+import { handleNetworkException } from '../../utils/handleNetworkException';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 import { useGetTenantInfoByHostname } from '../useGetTenantInfoByHostname';
@@ -25,11 +26,19 @@ export const useProfile = () => {
   const getW3blockIdSDK = useGetW3blockIdSDK();
   const { data: companyInfo } = useGetTenantInfoByHostname();
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
+
   const router = useRouterConnect();
+
   return usePrivateQuery(
     [PixwayAPIRoutes.GET_PROFILE],
     async () => {
-      return (await getW3blockIdSDK()).api.users.getProfileByUserLogged();
+      try {
+        const sdk = await getW3blockIdSDK();
+        return await sdk.api.users.getProfileByUserLogged();
+      } catch (err) {
+        console.error('Erro ao obter perfil do usuário:', err);
+        throw handleNetworkException(err);
+      }
     },
     {
       retry: 1,

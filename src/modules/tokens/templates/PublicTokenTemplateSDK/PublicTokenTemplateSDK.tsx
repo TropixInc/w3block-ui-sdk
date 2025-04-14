@@ -5,6 +5,7 @@ import ptBR from 'date-fns/esm/locale/pt-BR';
 import format from 'date-fns/format';
 
 import ExternalLinkIcon from '../../../shared/assets/icons/externalLink.svg?react';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { ChainScan } from '../../../shared/enums/ChainId';
@@ -38,6 +39,7 @@ const _PublicTokenTemplateSDK = ({
     isSuccess,
     isLoading,
     isError,
+    error: errorPublicTokenResponse,
   } = usePublicTokenData({
     contractAddress: contractAddress ?? contractAddressQ,
     chainId: chainId ?? chainIdQ,
@@ -74,7 +76,9 @@ const _PublicTokenTemplateSDK = ({
     return '';
   };
 
-  return (
+  return errorPublicTokenResponse ? (
+    <ErrorBox customError={errorPublicTokenResponse} />
+  ) : (
     <div className="pw-min-h-[90%] pw-container pw-mx-auto pw-px-4 pw-py-10 ">
       <ContentArea title="Categoria do produto">
         <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4">

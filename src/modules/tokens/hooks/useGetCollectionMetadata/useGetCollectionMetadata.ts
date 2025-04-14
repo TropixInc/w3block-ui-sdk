@@ -7,6 +7,7 @@ import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { QueryParams } from '../../../shared/hooks/usePaginatedQuery';
 import { MetadataApiInterface } from '../../../shared/interface/metadata/metadata';
+import { handleNetworkException } from '../../../shared/utils/handleNetworkException';
 
 interface Response {
   items: MetadataApiInterface<any>[];
@@ -38,15 +39,20 @@ export const useGetCollectionMetadata = ({
 
   return useQuery(
     [PixwayAPIRoutes.METADATA_BY_COLLECTION_ID, companyId, id],
-    () =>
-      axios
-        .get<Response>(
+    async () => {
+      try {
+        const response = await axios.get<Response>(
           PixwayAPIRoutes.METADATA_BY_COLLECTION_ID.replace(
             '{companyId}',
             companyId
           ).replace('{collectionId}', id) + queryString
-        )
-        .then((res) => res.data),
+        );
+        return response.data;
+      } catch (error) {
+        console.error('Erro ao buscar metadados da coleção:', error);
+        throw handleNetworkException(error);
+      }
+    },
     {
       enabled: id != undefined && id != '' && enabled,
       refetchOnWindowFocus: false,

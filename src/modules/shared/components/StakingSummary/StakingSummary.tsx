@@ -14,6 +14,7 @@ import { useUserWallet } from '../../hooks/useUserWallet';
 import { Alert } from '../Alert';
 import { BaseTable, ColumnDef } from '../BaseTable';
 import { BaseButton } from '../Buttons';
+import { ErrorBox } from '../ErrorBox';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
@@ -21,7 +22,7 @@ import TranslatableComponent from '../TranslatableComponent';
 export const StakingSummary = () => {
   const [page, setPage] = useState(1);
   const [translate] = useTranslation();
-  const { data, isLoading } = useStakingSummary({ page });
+  const { data, isLoading, error: errorStaking } = useStakingSummary({ page });
   const { loyaltyWallet } = useUserWallet();
   const coinSymbol = loyaltyWallet?.[0]?.currency;
   const {
@@ -29,6 +30,7 @@ export const StakingSummary = () => {
     isLoading: isLoadingRedeem,
     isSuccess,
     isError,
+    error: errorRedeemStaking,
   } = useRedeemStaking();
   const columns = [
     {
@@ -79,7 +81,10 @@ export const StakingSummary = () => {
     },
   ] satisfies ColumnDef<SummaryDto>[];
   useHasWallet({});
-  return (
+
+  return errorStaking ? (
+    <ErrorBox customError={errorStaking} />
+  ) : (
     <TranslatableComponent>
       <InternalPagesLayoutBase>
         <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-text-black pw-shadow-md pw-rounded-lg pw-overflow-hidden">
@@ -109,6 +114,7 @@ export const StakingSummary = () => {
                   </p>
                 ) : null}
               </div>
+              <ErrorBox customError={errorRedeemStaking} />
               <BaseButton
                 onClick={() => mutate()}
                 disabled={
