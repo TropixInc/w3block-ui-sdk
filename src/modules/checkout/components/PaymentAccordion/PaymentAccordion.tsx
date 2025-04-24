@@ -101,6 +101,12 @@ const mapPaymentMethodToTextAndDescription = (
             ? `Valor para pagamento em real + taxas = R$${convertedPrice}`
             : 'Aprovação imediata após o pagamento.',
       };
+    case 'transfer':
+      return {
+        text: 'Transferência',
+        description:
+          'Após a finalização do pedido, você receberá um email com mais informações para pagamento',
+      };
     default:
       return {
         text: '',
