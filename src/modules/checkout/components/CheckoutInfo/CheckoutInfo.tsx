@@ -340,6 +340,7 @@ const _CheckoutInfo = ({
       setIsLoadingPreview(true);
       getOrderPreview.mutate(
         {
+          selectBestPrice: true,
           productIds: isCart
             ? cart.map((p) => {
                 const payload = {

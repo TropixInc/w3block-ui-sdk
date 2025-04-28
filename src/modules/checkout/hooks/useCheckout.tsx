@@ -31,6 +31,7 @@ interface GetOrderPreviewPayload {
     amount?: string;
     paymentMethod?: string;
   }[];
+  selectBestPrice?: boolean;
 }
 
 interface ProductToSendPayload {
@@ -55,6 +56,7 @@ interface OrderPreviewPayload {
     amount?: string;
     paymentMethod?: string;
   }[];
+  selectBestPrice?: boolean;
 }
 
 export const useCheckout = () => {
@@ -67,6 +69,7 @@ export const useCheckout = () => {
       couponCode,
       payments,
       currencyId,
+      selectBestPrice,
     }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
         (pId): ProductToSendPayload => {
@@ -94,6 +97,7 @@ export const useCheckout = () => {
         acceptIncompleteCart: true,
         couponCode,
         payments,
+        selectBestPrice,
       });
       return preview.data;
     }

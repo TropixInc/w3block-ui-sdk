@@ -570,6 +570,7 @@ export const CheckoutPayment = () => {
           {
             companyId,
             createOrder: {
+              selectBestPrice: true,
               acceptSimilarOrderInShortPeriod: allowSimilarPayment,
               orderProducts: orderInfo.orderProducts,
               signedGasFee: orderInfo.signedGasFee,

@@ -208,6 +208,7 @@ export interface CreateOrder {
     amount?: string;
   }[];
   acceptSimilarOrderInShortPeriod?: boolean;
+  selectBestPrice?: boolean;
 }
 
 export interface CompletePaymentOrder {

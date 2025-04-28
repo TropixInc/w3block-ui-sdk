@@ -25,3 +25,4 @@ export * from './StakingSummary';
 export * from './BaseTable';
 export * from './ContainerControllerSDK';
 export * from './SmartInputsController';
+export * from './ProductResale';
