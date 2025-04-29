@@ -138,7 +138,11 @@ export const InputSelector = ({
             return {
               label: _.get(item, configData?.labelPath || '', ''),
               subtitle: subtitle,
-              image: _.get(item, configData?.imagePath || '', ''),
+              image:
+                _.get(item, configData?.imagePath || '', '') !== ''
+                  ? configData?.imageBase +
+                    _.get(item, configData?.imagePath || '', '')
+                  : _.get(item, configData?.imagePath || '', ''),
               value: {
                 id: _.get(item, configData?.valuePath || '', '').toString(),
                 userId: _.get(item, configData?.approverPath || '', ''),
@@ -154,7 +158,11 @@ export const InputSelector = ({
             return {
               label: _.get(item, configData?.labelPath || '', ''),
               subtitle: subtitle,
-              image: _.get(item, configData?.imagePath || '', ''),
+              image:
+                _.get(item, configData?.imagePath || '', '') !== ''
+                  ? configData?.imageBase +
+                    _.get(item, configData?.imagePath || '', '')
+                  : _.get(item, configData?.imagePath || '', ''),
               value: _.get(item, configData?.valuePath || '', '').toString(),
             };
           });
@@ -162,7 +170,7 @@ export const InputSelector = ({
     } else return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-
+  console.log(dynamicOptions);
   useEffect(() => {
     if (docValue) {
       field?.onChange({ inputId: name, value: docValue });
@@ -179,7 +187,7 @@ export const InputSelector = ({
   }
 
   return (
-    <div className="pw-mb-4">
+    <div>
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
@@ -190,13 +198,13 @@ export const InputSelector = ({
         disabled={readonly}
         options={type === DataTypesEnum.SimpleSelect ? options : dynamicOptions}
         onChangeValue={(e) => {
-          if (type === DataTypesEnum.SimpleSelect) {
-            handleTextChange(e);
-          } else {
+          if (configData?.isMultiple) {
             setMultipleSelected(e);
+          } else {
+            handleTextChange(e);
           }
         }}
-        value={selectedValue ?? multipleSelected.join(', ') ?? docValue}
+        value={selectedValue ?? multipleSelected?.join(', ') ?? docValue}
         multiple={configData?.isMultiple}
         search={configData?.search}
         searchValue={searchValue}

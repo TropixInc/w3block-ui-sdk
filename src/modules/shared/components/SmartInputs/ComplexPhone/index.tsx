@@ -91,7 +91,7 @@ const ComplexPhone = ({
   }, [statusContext]);
 
   return (
-    <div className="pw-mb-4 pw-w-full">
+    <div className="pw-w-full">
       <div className="pw-w-full pw-mb-2">
         <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold">
           {label}

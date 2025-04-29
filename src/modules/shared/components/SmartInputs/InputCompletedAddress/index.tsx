@@ -49,20 +49,22 @@ const InputCompletedAddress = ({
   }, [search]);
 
   return (
-    <div className="pw-mt-4">
-      <LabelWithRequired name={name} required={required} haveColon={false}>
-        {inputLabel}
-      </LabelWithRequired>
-      <BaseSelect
-        options={countriesFiltered}
-        value={country}
-        search
-        searchValue={search}
-        setSearch={setSearch}
-        onChangeValue={(e) => setCountry(e)}
-        placeholder={translate('shared>inputCompletedAddress>selectCountry')}
-        classes={{ root: 'pw-mb-2' }}
-      />
+    <div className="pw-flex pw-flex-col pw-gap-5 pw-mb-3">
+      <div>
+        <LabelWithRequired name={name} required={required} haveColon={false}>
+          {inputLabel}
+        </LabelWithRequired>
+        <BaseSelect
+          options={countriesFiltered}
+          value={country}
+          search
+          searchValue={search}
+          setSearch={setSearch}
+          onChangeValue={(e) => setCountry(e)}
+          placeholder={translate('shared>inputCompletedAddress>selectCountry')}
+          classes={{ root: 'pw-mb-2' }}
+        />
+      </div>
       {country ? (
         <CityAutoComplete
           country={country.value ?? ''}

@@ -55,11 +55,11 @@ const InputLocale = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-4">
+    <div>
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <div className="pw-my-2 pw-flex pw-gap-5">
+      <div className="pw-my-2 pw-flex pw-gap-4">
         <div className="pw-w-full">
           <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-1">
             {translate('shared>unputLocale>contry')}
@@ -82,18 +82,20 @@ const InputLocale = ({
           </div>
         ) : null}
       </div>
-      {selectCountry ? (
-        <CityAutoComplete
-          key={selectCountry}
-          country={selectCountry ?? ''}
-          name={name}
-          onChangeRegion={setRegion}
-          apiValue={docValue?.placeId}
-          type="(cities)"
-          readonly={readonly}
-          hidenValidations={readonly}
-        />
-      ) : null}
+      <div className="pw-mt-4">
+        {selectCountry ? (
+          <CityAutoComplete
+            key={selectCountry}
+            country={selectCountry ?? ''}
+            name={name}
+            onChangeRegion={setRegion}
+            apiValue={docValue?.placeId}
+            type="(cities)"
+            readonly={readonly}
+            hidenValidations={readonly}
+          />
+        ) : null}
+      </div>
     </div>
   );
 };
