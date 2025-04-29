@@ -1000,6 +1000,8 @@
   "checkout>currencyAnalyze>continue": "Continuar",
   "checkout>increaseCurrency>continue": "Para concluir a compra, você precisa permitir a transação na sua carteira.",
   "checkout>increaseCurrency>cancel": "Cancelar",
-  "checkout>increaseCurrency>processing": "Estamos processando sua solicitação, por favor aguarde..."
+  "checkout>increaseCurrency>processing": "Estamos processando sua solicitação, por favor aguarde...",
+  "pages>mysales>mysales": "Minhas vendas",
+  "pages>mysales>resale": "Colocar à venda"
  }
  

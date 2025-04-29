@@ -442,10 +442,10 @@ export const ProductPage = ({
       setIsLoading(true);
       getOrderPreview.mutate(
         {
-          selectBestPrice: true,
           productIds: [
             ...Array(quantity).fill({
               productId: product.id,
+              selectBestPrice: product?.type === 'erc20' ? true : undefined,
               variantIds: variants
                 ? Object.values(variants).map((value) => {
                     if ((value as any).productId === product.id)

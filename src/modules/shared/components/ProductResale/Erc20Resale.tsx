@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
 import useTranslation from '../../hooks/useTranslation';
@@ -18,31 +18,18 @@ export const Erc20Resale = () => {
     quantity?: number;
     currency?: string;
   }>();
-  const [amountValue, setAmountValue] = useState<string>('');
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setAmountValue(value);
-
-    if (value === '') {
-      setConfig({ ...config, quantity: undefined });
-    } else {
-      const numero = parseFloat(value);
-      if (!isNaN(numero)) {
-        setConfig({ ...config, quantity: numero * 100 });
-      }
-    }
-  };
-
-  const { mutate } = usePostProductResale();
-  const [error, setError] = useState<string | null>(null);
+  const [value, setValue] = useState(0);
+  const { mutate, isLoading } = usePostProductResale();
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const handleSubmit = () => {
     if (config?.price && config?.quantity) {
+      setError('');
       mutate(
         {
           productId: '58770c8d-0916-4490-b17f-61bb27635323',
           config: {
-            amount: config?.quantity.toString(),
+            amount: value.toString(),
             prices: [
               {
                 amount: config?.price.toString(),
@@ -56,12 +43,20 @@ export const Erc20Resale = () => {
           onSuccess() {
             setSuccess(true);
           },
-          onSettled(_, error: any) {
-            setError(error?.response?.data?.message.join(', '));
+          onError(res: any) {
+            setError(res?.response?.data?.message);
           },
         }
       );
     }
+  };
+
+  const increment = () => {
+    setValue(value + 100);
+  };
+
+  const decrement = () => {
+    setValue(value - 100);
   };
 
   return (
@@ -76,19 +71,30 @@ export const Erc20Resale = () => {
               <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
                 {'Quantidade'}
               </label>
-              <BaseInput
-                value={amountValue}
-                onChange={(e) => handleInputChange(e)}
-                type="number"
-                className="pw-w-full"
-              />
+              <div className="pw-flex pw-gap-3">
+                <BaseInput
+                  value={value}
+                  onChange={(e) => setValue(parseFloat(e.target.value))}
+                  type="number"
+                  className="pw-w-full"
+                />
+                <div className="pw-flex pw-gap-2">
+                  <button
+                    onClick={decrement}
+                    className="pw-text-black pw-border pw-border-solid pw-font-bold pw-px-4 pw-rounded-lg pw-h-[32px]"
+                    disabled={value === 0}
+                  >
+                    -
+                  </button>
+                  <button
+                    onClick={increment}
+                    className="pw-text-black pw-border pw-border-solid pw-font-bold pw-px-4 pw-rounded-lg pw-h-[32px]"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
               <p className="pw-text-[10px] pw-text-gray-500">{'x100'}</p>
-              {config?.quantity ? (
-                <p className="pw-text-[10px] pw-text-gray-500">
-                  {'Quantidade sendo vendida: '}
-                  {config?.quantity}
-                </p>
-              ) : null}
             </div>
             <div>
               <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
@@ -126,7 +132,7 @@ export const Erc20Resale = () => {
               <h1 className="pw-font-normal pw-text-base pw-mb-4 pw-text-black">
                 {'Resumo'}
               </h1>
-              {config?.price && config?.currency && config?.quantity ? (
+              {config?.price && config?.currency && value ? (
                 <div className={`pw-w-full`}>
                   <div className="pw-flex pw-justify-between">
                     <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
@@ -135,9 +141,7 @@ export const Erc20Resale = () => {
                     <div className="pw-flex pw-gap-2">
                       <CriptoValueComponent
                         code={'BRL'}
-                        value={
-                          (config.price * config.quantity) as unknown as string
-                        }
+                        value={(config.price * value) as unknown as string}
                         fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
                       />
                     </div>
@@ -150,9 +154,7 @@ export const Erc20Resale = () => {
                     <div className="pw-flex pw-gap-2">
                       <CriptoValueComponent
                         code={'BRL'}
-                        value={
-                          (config.price * config.quantity) as unknown as string
-                        }
+                        value={(config.price * value) as unknown as string}
                         fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
                       />
                     </div>
@@ -164,13 +166,13 @@ export const Erc20Resale = () => {
         </div>
         <div className="pw-mt-5 pw-w-full pw-flex pw-justify-end">
           <div className="pw-flex pw-flex-col pw-gap-2">
-            {error && <Alert variant="error">{error}</Alert>}
+            {error !== '' ? <Alert variant="error">{error}</Alert> : null}
             {success ? (
               <Alert variant="success">
                 {'Produto colocado a venda com sucesso!'}
               </Alert>
             ) : (
-              <BaseButton onClick={handleSubmit}>
+              <BaseButton disabled={isLoading} onClick={handleSubmit}>
                 {'Colocar à venda'}
               </BaseButton>
             )}

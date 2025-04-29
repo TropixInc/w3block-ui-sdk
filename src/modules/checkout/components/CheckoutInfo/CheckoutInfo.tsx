@@ -340,7 +340,6 @@ const _CheckoutInfo = ({
       setIsLoadingPreview(true);
       getOrderPreview.mutate(
         {
-          selectBestPrice: true,
           productIds: isCart
             ? cart.map((p) => {
                 const payload = {
@@ -359,6 +358,7 @@ const _CheckoutInfo = ({
                         paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                       productId: p,
                       productTokenId: tokenId,
+                      selectBestPrice: true,
                       variantIds: productVariants
                         ? Object.values(productVariants).map((value) => {
                             if ((value as any).productId === p)
@@ -370,6 +370,7 @@ const _CheckoutInfo = ({
                       quantity:
                         paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                       productId: p,
+                      selectBestPrice: true,
                       variantIds: productVariants
                         ? Object.values(productVariants).map((value) => {
                             if ((value as any).productId === p)
@@ -540,6 +541,7 @@ const _CheckoutInfo = ({
             )?.tokenId;
             return tokenId
               ? {
+                  selectBestPrice: pID?.type === 'erc20' ? true : undefined,
                   quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                   productId: pID.id,
                   productTokenId: tokenId,
@@ -555,6 +557,7 @@ const _CheckoutInfo = ({
                     : [],
                 }
               : {
+                  selectBestPrice: pID?.type === 'erc20' ? true : undefined,
                   quantity: paymentAmount != '' ? parseFloat(paymentAmount) : 1,
                   productId: pID.id,
                   expectedPrice: isErc20
@@ -598,11 +601,11 @@ const _CheckoutInfo = ({
         originalClientServiceFee: orderPreview?.originalClientServiceFee ?? '',
         originalTotalPrice: orderPreview?.originalTotalPrice ?? '',
         destinationUser: {
-          walletAddress: datasource?.master?.data.filter(
+          walletAddress: datasource?.master?.data?.filter(
             (e: { attributes: { slug: string | null } }) =>
               e.attributes.slug === destinationUser
           )[0]?.attributes?.walletAddress,
-          name: datasource?.master?.data.filter(
+          name: datasource?.master?.data?.filter(
             (e: { attributes: { slug: string | null } }) =>
               e.attributes.slug === destinationUser
           )[0]?.attributes?.name,

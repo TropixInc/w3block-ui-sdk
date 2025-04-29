@@ -150,6 +150,15 @@ export const useDefaultMenuTabs = (textColor: string) => {
     },
     {
       name:
+        internalMenuData['mySales']?.customLabel ||
+        translate('pages>mysales>mysales'),
+      id: 'mySales',
+      icon: <MyOrdersIcon />,
+      route: PixwayAppRoutes.MY_SALES,
+      isVisible: isHidden('mySales') === false,
+    },
+    {
+      name:
         internalMenuData['withdraws']?.customLabel ||
         translate('components>menu>withdraws'), 
       id: 'withdraws',

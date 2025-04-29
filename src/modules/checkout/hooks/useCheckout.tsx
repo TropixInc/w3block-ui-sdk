@@ -36,6 +36,7 @@ interface GetOrderPreviewPayload {
 
 interface ProductToSendPayload {
   productId: string;
+  selectBestPrice?: boolean;
   productTokenId?: string;
   variantIds?: string[];
   quantity?: number;
@@ -69,7 +70,6 @@ export const useCheckout = () => {
       couponCode,
       payments,
       currencyId,
-      selectBestPrice,
     }: GetOrderPreviewPayload) => {
       const products: ProductToSendPayload[] = productIds.map(
         (pId): ProductToSendPayload => {
@@ -79,11 +79,13 @@ export const useCheckout = () => {
                 productTokenId: pId?.productTokenId,
                 variantIds: pId.variantIds,
                 quantity: pId.quantity,
+                selectBestPrice: pId.selectBestPrice,
               }
             : {
                 productId: pId.productId,
                 variantIds: pId.variantIds,
                 quantity: pId.quantity,
+                selectBestPrice: pId.selectBestPrice,
               };
         }
       );
@@ -97,7 +99,6 @@ export const useCheckout = () => {
         acceptIncompleteCart: true,
         couponCode,
         payments,
-        selectBestPrice,
       });
       return preview.data;
     }

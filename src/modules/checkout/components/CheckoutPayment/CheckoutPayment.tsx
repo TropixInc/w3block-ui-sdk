@@ -302,11 +302,13 @@ export const CheckoutPayment = () => {
                   productTokenId: p?.productTokenId ?? '',
                   variantIds: p.variantIds,
                   quantity: p.quantity,
+                  selectBestPrice: p.selectBestPrice,
                 }
               : {
                   productId: p.productId,
                   variantIds: p.variantIds,
                   quantity: p.quantity,
+                  selectBestPrice: p.selectBestPrice,
                 };
             return payload;
           }),
@@ -570,7 +572,6 @@ export const CheckoutPayment = () => {
           {
             companyId,
             createOrder: {
-              selectBestPrice: true,
               acceptSimilarOrderInShortPeriod: allowSimilarPayment,
               orderProducts: orderInfo.orderProducts,
               signedGasFee: orderInfo.signedGasFee,

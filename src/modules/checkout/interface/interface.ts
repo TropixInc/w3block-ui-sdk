@@ -177,6 +177,7 @@ export interface OrderPreviewCache {
     code?: string;
     symbol?: string;
   };
+  selectBestPrice?: boolean;
 }
 
 export interface OrderProductsInterface {
@@ -185,6 +186,7 @@ export interface OrderProductsInterface {
   variantIds?: string[];
   quantity?: number;
   productTokenId?: string;
+  selectBestPrice?: boolean;
 }
 
 export interface CreateOrder {
@@ -232,6 +234,7 @@ export interface CreateOrderProduct {
   productId: string;
   productTokenId?: string;
   expectedPrice: string;
+  selectBestPrice?: boolean;
 }
 
 export interface CreateOrderResponse {
