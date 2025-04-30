@@ -1010,6 +1010,8 @@
   "pages>productResale>summary": "Resumo",
   "pages>productResale>subtotal": "Subtotal",
   "pages>productResale>success": "Produto colocado a venda com sucesso!",
-  "pages>checkout>batchSize": "Você só pode comprar em quantidades multiplas de {{batchSize}}"
+  "pages>checkout>batchSize": "Você só pode comprar em quantidades multiplas de {{batchSize}}",
+  "checkout>checkoutInfo>paymentAnalysis": "Pagamento em análise",
+  "checkout>checkoutInfo>infoAboutAnalysis": "Seu pedido foi recebido e está sendo analisado, iremos entrar em contato para a efetuação do pagamento."
  }
  

@@ -10,12 +10,13 @@ import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import { useGetPublicOrder } from '../../hooks/useGetPublicOrder/useGetPublicOrder';
 import { useLocale } from '../../hooks/useLocale';
 import useTranslation from '../../hooks/useTranslation';
+import { ErrorBox } from '../ErrorBox';
 import { Spinner } from '../Spinner';
 
 export const PublicOrderTemplate = () => {
   const router = useRouterConnect();
   const [translate] = useTranslation();
-  const { data, isLoading, isError } = useGetPublicOrder(
+  const { data, isLoading, isError, error } = useGetPublicOrder(
     router?.query?.id as string,
     true
   );
@@ -55,7 +56,9 @@ export const PublicOrderTemplate = () => {
       </div>
     );
   else
-    return (
+    return isError ? (
+      <ErrorBox customError={error} />
+    ) : (
       <div className="pw-w-full pw-h-[80vh]">
         <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px] pw-mx-auto">
           <div>

@@ -20,6 +20,7 @@ const Spinner = lazy(() =>
   }))
 );
 import { Alert } from '../Alert';
+import { ErrorBox } from '../ErrorBox';
 import TranslatableComponent from '../TranslatableComponent';
 import useTranslation from '../../hooks/useTranslation';
 
@@ -44,12 +45,18 @@ const _LinkAccountTemplate = () => {
   const linkMessage = (router.query.linkMessage as string) ?? '';
   const purchaseRequiredModalContent =
     (router.query.purchaseRequiredModalContent as string) ?? '';
-  const { data: profile } = useProfile();
-  const { mutate: acceptIntegration, isLoading } = useAcceptIntegrationToken();
+  const { data: profile, error: errorProfile } = useProfile();
+  const {
+    mutate: acceptIntegration,
+    isLoading,
+    error: errorAcceptIntegration,
+  } = useAcceptIntegrationToken();
   const [step, setSteps] = useState('');
   const [translate] = useTranslation();
   const { mainWallet: wallet } = useUserWallet();
-  const [{ data: ethNFTsResponse }] = useGetNFTSByWallet(wallet?.chainId);
+  const [{ data: ethNFTsResponse, error: errorEthNFT }] = useGetNFTSByWallet(
+    wallet?.chainId
+  );
   const tokens =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ethNFTsResponse?.data.items.map((nft: any) =>
@@ -90,7 +97,9 @@ const _LinkAccountTemplate = () => {
           </>
         );
       case Steps.SUCCESS:
-        return (
+        return errorEthNFT ? (
+          <ErrorBox customError={errorEthNFT} />
+        ) : (
           <>
             {productId !== '' ? (
               userHasProduct ? (
@@ -185,14 +194,17 @@ const _LinkAccountTemplate = () => {
                 )?
               </p>
             )}
+            <ErrorBox customError={errorAcceptIntegration} />
             <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
               <button
+                disabled={isLoading}
                 onClick={handleClose}
                 className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
               >
                 {translate('shared>no')}
               </button>
               <button
+                disabled={isLoading}
                 onClick={handleAccept}
                 className="pw-px-[24px] pw-h-[33px] pw-bg-brand-primary pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs pw-text-white"
               >
@@ -242,7 +254,11 @@ const _LinkAccountTemplate = () => {
       }
     );
   };
-  return (
+  return errorProfile ? (
+    <>
+      <ErrorBox customError={errorProfile} />
+    </>
+  ) : (
     <div className="pw-w-screen pw-min-h-screen pw-bg-[#EFEFEF]">
       <div className="pw-w-full pw-pt-32 pw-px-5">
         <Box className="pw-mx-auto">

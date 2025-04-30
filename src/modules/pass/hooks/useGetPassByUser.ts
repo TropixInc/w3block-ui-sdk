@@ -4,6 +4,7 @@ import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 
 export interface PassByUser {
   tokenName: string;
@@ -37,13 +38,20 @@ const useGetPassByUser = () => {
 
   return usePrivateQuery(
     [PixwayAPIRoutes.PASS_BY_USER],
-    () =>
-      axios.get<Response>(
-        PixwayAPIRoutes.PASS_BY_USER.replace(
-          '{tenantId}',
-          tenantId ?? ''
-        ).replaceAll('{userId}', profile?.data?.id ?? '')
-      ),
+    async () => {
+      try {
+        const response = await axios.get<Response>(
+          PixwayAPIRoutes.PASS_BY_USER.replace(
+            '{tenantId}',
+            tenantId ?? ''
+          ).replaceAll('{userId}', profile?.data?.id ?? '')
+        );
+        return response;
+      } catch (err) {
+        console.error('Erro ao buscar passes do usuário:', err);
+        throw handleNetworkException(err);
+      }
+    },
     {
       enabled: isAdmin,
     }

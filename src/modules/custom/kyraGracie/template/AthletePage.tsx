@@ -15,6 +15,7 @@ import { ptBR } from 'date-fns/locale';
 import { groupBy } from 'lodash';
 
 import ChevronDown from '../../../../modules/shared/assets/icons/arrowDown.svg?react';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import useTranslation from '../../../shared/hooks/useTranslation';
@@ -79,9 +80,11 @@ export type Grade =
 export const AthletePage = () => {
   const { datasource, loading } = useDynamicApi();
   const [translate] = useTranslation();
-  const { data, isLoading } = useGetAthlete(
-    datasource?.athlete?.data[0]?.id ?? ''
-  );
+  const {
+    data: dataGetAthlet,
+    isLoading,
+    error,
+  } = useGetAthlete(datasource?.athlete?.data[0]?.id ?? '');
   const isProduction = useIsProduction();
   const titles = datasource?.athlete?.data[0]?.attributes?.titles;
   const { data: athleteData } = useGetAthleteByAddress(
@@ -196,7 +199,7 @@ export const AthletePage = () => {
     return '';
   };
 
-  if ((loading || isLoading) && (!datasource || !data))
+  if ((loading || isLoading) && (!datasource || !dataGetAthlet))
     return (
       <div className="pw-w-full pw-h-[30rem]">
         <Spinner className="pw-m-auto pw-w-[40px] pw-h-[40px] pw-opacity-50 pw-mt-[20%]" />
@@ -390,8 +393,8 @@ export const AthletePage = () => {
                                   );
                                 else return '';
                               };
-                              const respectiveToken = data?.items?.find(
-                                (item: any) => {
+                              const respectiveToken =
+                                dataGetAthlet?.items?.find((item: any) => {
                                   if (typeof res.degree === 'string')
                                     return (
                                       item?.tokenData?.degree === res.degree &&
@@ -399,8 +402,7 @@ export const AthletePage = () => {
                                     );
                                   else
                                     return item?.tokenData?.beltColor === belt;
-                                }
-                              );
+                                });
 
                               if (res?.instructorIdentification) {
                                 return (
@@ -423,7 +425,9 @@ export const AthletePage = () => {
                                 );
                               }
 
-                              return (
+                              return error ? (
+                                <ErrorBox customError={error} />
+                              ) : (
                                 <a
                                   target={`${
                                     respectiveToken &&

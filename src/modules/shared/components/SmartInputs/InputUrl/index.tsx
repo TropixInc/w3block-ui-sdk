@@ -56,7 +56,7 @@ const InputUrl = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-4 pw-w-full">
+    <div className="pw-w-full">
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>

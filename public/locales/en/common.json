@@ -992,5 +992,14 @@
 "wallet>tokenTransferProcessModal>p2": "For transparency purposes, we inform you that the action you are about to complete does not depend exclusively on our tokenization platform, but rather on the blockchain network in which your tokens are registered and, consequently, on the traffic system that this network operates.",
 "wallet>tokenTransferProcessModal>p3": "Therefore, your transfer will be completed as soon as the blockchain network finishes processing your tokens and this action cannot be undone under any circumstances, either manually or automatically, so that no important information regarding your assets is lost or damaged along the way.",
 "wallet>tokenTransferProcessModal>proceedButton": "Continue",
-"wallet>tokenTransferProcessModal>title": "Token transfer process"
+"wallet>tokenTransferProcessModal>title": "Token transfer process",
+"checkout>currencyAnalyze>cantBuy": "The following products can't be bought together, please empty your cart to continue.",
+"checkout>currencyAnalyze>emptyCart": "Empty cart and go back to home",
+"checkout>currencyAnalyze>chooseCurrency": "The products in your cart can be bought together on the following currencies, please choose one to continue:",
+"checkout>currencyAnalyze>continue": "Continue",
+"checkout>increaseCurrency>continue": "To finish you purchase you need to allow the transaction on your wallet.",
+"checkout>increaseCurrency>cancel": "Cancel",
+"checkout>increaseCurrency>processing": "We're processing your request, please wait...",
+"checkout>checkoutInfo>paymentAnalysis": "Payment under analysis",
+"checkout>checkoutInfo>infoAboutAnalysis": "Your request is being analyzed by our team. We will notify you as soon as possible to finish your purchase."
 }

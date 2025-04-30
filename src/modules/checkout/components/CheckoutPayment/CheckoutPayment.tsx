@@ -169,6 +169,11 @@ export const CheckoutPayment = () => {
       } else {
         setStayPooling(false);
         if (
+          productCache?.choosedPayment?.paymentProvider ===
+          PaymentMethod.TRANSFER
+        ) {
+          createOrder({});
+        } else if (
           productCache?.choosedPayment?.paymentProvider === PaymentMethod.STRIPE
         ) {
           if (
@@ -707,7 +712,8 @@ export const CheckoutPayment = () => {
               } else {
                 if (
                   productCache.choosedPayment?.paymentMethod == 'credit_card' ||
-                  isFree
+                  isFree ||
+                  productCache?.choosedPayment?.paymentMethod === 'transfer'
                 ) {
                   try {
                     if (
@@ -833,7 +839,7 @@ export const CheckoutPayment = () => {
   };
 
   const WichPaymentMethod = () => {
-    if (isFree) {
+    if (isFree || productCache?.choosedPayment?.paymentMethod === 'transfer') {
       return !requestError ? (
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
           <Spinner className="pw-h-13 pw-w-13" />

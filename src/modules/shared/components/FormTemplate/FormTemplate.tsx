@@ -56,7 +56,7 @@ export const FormTemplate = ({
   const [translate] = useTranslation();
   return (
     <form onSubmit={onSubmit}>
-      <div>
+      <div className="pw-flex pw-flex-col pw-gap-4">
         {tenantInputs &&
           tenantInputs?.map((item) => {
             const doc = getDocumentByInputId(item?.id);

@@ -6,6 +6,7 @@ import { UseGenericApiGet } from '../../hooks/UseGenericApiGet/UseGenericApiGet'
 import { useGetGenericXlsReports } from '../../hooks/useGetGenericXlsReports';
 import useTranslation from '../../hooks/useTranslation';
 import { BaseButton } from '../Buttons';
+import { ErrorBox } from '../ErrorBox';
 import { Spinner } from '../Spinner/Spinner';
 
 interface XlsReportsProps {
@@ -31,24 +32,26 @@ export const GenerateGenericXlsReports = ({
   const [xlsUrl, setXlsUrl] = useState<string>('');
   const [downloadLink, setDownloadLink] = useState<string>('');
   const [enableGetReport, setEnableGetReport] = useState(false);
-  const [error, setError] = useState(false);
 
   const {
     data: reportXls,
     isSuccess,
     isError,
+    error,
   } = UseGenericApiGet({
     url: urlReports ?? '',
     context: context,
   });
 
-  const { data: donwloadReport, isError: isErrorXls } = useGetGenericXlsReports(
-    {
-      url: xlsUrl ?? '',
-      context: context,
-      enabled: enableGetReport,
-    }
-  );
+  const {
+    data: donwloadReport,
+    isError: isErrorXls,
+    error: errorXls,
+  } = useGetGenericXlsReports({
+    url: xlsUrl ?? '',
+    context: context,
+    enabled: enableGetReport,
+  });
 
   useEffect(() => {
     if (isSuccess && reportXls && reportXls?.data?.status !== 'failed') {
@@ -73,7 +76,6 @@ export const GenerateGenericXlsReports = ({
 
   useEffect(() => {
     if (isErrorXls || isError) {
-      setError(true);
       setXlsLoading(false);
       setEnableGetReport(false);
       setUrlReports('');
@@ -86,7 +88,6 @@ export const GenerateGenericXlsReports = ({
       reportXls?.data?.status === 'failed' ||
       donwloadReport?.data?.status === 'failed'
     ) {
-      setError(true);
       setXlsLoading(false);
       setEnableGetReport(false);
       setUrlReports('');
@@ -154,11 +155,8 @@ export const GenerateGenericXlsReports = ({
         </button>
       )}
 
-      {error && (
-        <p className="pw-block pw-mt-2 pw-text-red-400">
-          {translate('home>contactModal>error')}
-        </p>
-      )}
+      <ErrorBox customError={error as any} />
+      <ErrorBox customError={errorXls as any} />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 import { cleanObject } from '../../shared/utils/validators';
 
 export const useGetDeferredByUserId = (
@@ -18,23 +19,29 @@ export const useGetDeferredByUserId = (
   const axios = useAxios(W3blockAPI.KEY);
   const cleaned = cleanObject(filter ?? {});
   const queryString = new URLSearchParams(cleaned).toString();
+
   const statusQuery = () => {
     if (status === 'all')
       return 'status=deferred&status=pending&status=started&status=pool';
     else if (status === 'success') return 'status=pool';
     else return 'status=deferred&status=pending&status=started';
   };
+
   return useQuery(
     [PixwayAPIRoutes.GET_DEFERRED_BY_USER_ID, queryString, companyId, status],
-    (): Promise<ErcTokenHistoryInterfaceResponse> =>
-      axios
-        .get(
+    async (): Promise<ErcTokenHistoryInterfaceResponse> => {
+      try {
+        const response = await axios.get(
           PixwayAPIRoutes.GET_DEFERRED_BY_USER_ID.replace(
             '{companyId}',
             companyId
           ).replace('{userId}', userId) + `?${queryString}&${statusQuery()}`
-        )
-        .then((res) => res?.data),
+        );
+        return response?.data;
+      } catch (error) {
+        throw handleNetworkException(error);
+      }
+    },
     {
       enabled: !!userId && !!companyId && enabled,
       retry: false,

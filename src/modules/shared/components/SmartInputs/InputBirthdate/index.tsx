@@ -48,7 +48,7 @@ const InputBirthdate = ({
   }, [docValue]);
 
   return (
-    <div className="pw-mb-4">
+    <div>
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>

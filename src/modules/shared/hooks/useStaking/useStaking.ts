@@ -2,6 +2,7 @@ import { useMutation } from 'react-query';
 
 import { W3blockAPI } from '../../enums';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
+import { handleNetworkException } from '../../utils/handleNetworkException';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 import { QueryParams } from '../usePaginatedQuery';
@@ -39,6 +40,7 @@ export const useStakingSummary = (query?: QueryParams) => {
   const { data: session } = usePixwaySession();
   const { companyId } = useCompanyConfig();
   const { loyaltyWallet } = useUserWallet();
+
   const defaultQuery: QueryParams = {
     page: 1,
     limit: 10,
@@ -50,6 +52,7 @@ export const useStakingSummary = (query?: QueryParams) => {
   const queryString =
     '?' +
     new URLSearchParams(defaultQuery as Record<string, string>).toString();
+
   return usePrivateQuery(
     [
       companyId,
@@ -57,15 +60,22 @@ export const useStakingSummary = (query?: QueryParams) => {
       PixwayAPIRoutes.STAKING_SUMMARY,
       query,
     ],
-    () =>
-      axios.get(
-        PixwayAPIRoutes.STAKING_SUMMARY.replace('{companyId}', companyId)
-          .replace('{userId}', session?.id ?? '')
-          .replace(
-            '{loyaltyId}',
-            loyaltyWallet?.length > 0 ? loyaltyWallet?.[0]?.loyaltyId : ''
-          ) + queryString
-      ),
+    async () => {
+      try {
+        const response = await axios.get(
+          PixwayAPIRoutes.STAKING_SUMMARY.replace('{companyId}', companyId)
+            .replace('{userId}', session?.id ?? '')
+            .replace(
+              '{loyaltyId}',
+              loyaltyWallet?.length > 0 ? loyaltyWallet?.[0]?.loyaltyId : ''
+            ) + queryString
+        );
+        return response;
+      } catch (error) {
+        console.error('Erro ao obter o resumo de staking:', error);
+        throw handleNetworkException(error);
+      }
+    },
     {
       enabled: !!companyId && !!session?.id,
     }
@@ -80,14 +90,21 @@ export const useRedeemStaking = () => {
 
   return useMutation(
     [companyId, loyaltyWallet, PixwayAPIRoutes.REDEEM_STAKING],
-    () =>
-      axios.patch(
-        PixwayAPIRoutes.REDEEM_STAKING.replace('{companyId}', companyId)
-          .replace('{userId}', session?.id ?? '')
-          .replace(
-            '{loyaltyId}',
-            loyaltyWallet.length > 0 ? loyaltyWallet?.[0]?.loyaltyId : ''
-          )
-      )
+    async () => {
+      try {
+        const response = await axios.patch(
+          PixwayAPIRoutes.REDEEM_STAKING.replace('{companyId}', companyId)
+            .replace('{userId}', session?.id ?? '')
+            .replace(
+              '{loyaltyId}',
+              loyaltyWallet.length > 0 ? loyaltyWallet?.[0]?.loyaltyId : ''
+            )
+        );
+        return response;
+      } catch (error) {
+        console.error('Erro ao resgatar staking:', error);
+        throw handleNetworkException(error);
+      }
+    }
   );
 };
