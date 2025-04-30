@@ -57,6 +57,11 @@ export interface DataFields {
 }
 export interface Product {
   settings?: {
+    resaleConfig?: {
+      batchSize?: number;
+      currencyIds?: string[];
+      priceLimits?: { max?: string; min?: string; currencyId?: string }[];
+    };
     acceptMultipleCurrenciesPurchase?: boolean;
     passShareCodeConfig?: {
       enabled?: boolean;
@@ -122,6 +127,7 @@ export interface Product {
   hasWhitelistBlocker?: boolean;
   variants?: Variants[];
   terms?: Terms[];
+  type?: string;
 }
 
 export interface ProductsResponse {

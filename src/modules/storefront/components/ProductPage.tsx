@@ -217,7 +217,10 @@ export const ProductPage = ({
   };
 
   useEffect(() => {
-    if (isSuccess) setCurrencyId(product?.prices[0]?.currency ?? undefined);
+    if (isSuccess)
+      setCurrencyId(
+        product?.prices[0]?.currency ?? '65fe1119-6ec0-4b78-8d30-cb989914bdcb'
+      );
   }, [product, isSuccess]);
 
   const tokensSold =
@@ -431,7 +434,7 @@ export const ProductPage = ({
       window.removeEventListener('message', handleMessage);
     };
   }, [handleMessage]);
-
+  const batchSize = product?.settings?.resaleConfig?.batchSize;
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
   const { getOrderPreview } = useCheckout();
@@ -444,6 +447,8 @@ export const ProductPage = ({
           productIds: [
             ...Array(quantity).fill({
               productId: product.id,
+              quantity: batchSize ?? 1,
+              selectBestPrice: product?.type === 'erc20' ? true : undefined,
               variantIds: variants
                 ? Object.values(variants).map((value) => {
                     if ((value as any).productId === product.id)
@@ -452,11 +457,12 @@ export const ProductPage = ({
                 : [],
             }),
           ],
-          currencyId: currencyId.id ?? '',
+          currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
           passShareCodeData: giftData,
           payments: [
             {
-              currencyId: currencyId?.id ?? '',
+              currencyId:
+                currencyId?.id ?? (currencyId as unknown as string) ?? '',
               amountType: 'percentage',
               amount: '100',
             },
@@ -570,7 +576,7 @@ export const ProductPage = ({
             `?productIds=${Array(quantity)
               .fill(product.id)
               .join(',')}&currencyId=${
-              currencyId?.id
+              currencyId?.id ?? (currencyId as unknown as string) ?? ''
             }&contextSlug=${productKycRequirement}`
         );
       else {
@@ -583,7 +589,9 @@ export const ProductPage = ({
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)
                 .fill(product.id)
-                .join(',')}&currencyId=${currencyId?.id}&sessionId=${id}`
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }&sessionId=${id}`
           );
         } else if (
           product?.settings?.acceptMultipleCurrenciesPurchase &&
@@ -593,17 +601,30 @@ export const ProductPage = ({
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)
                 .fill(product.id)
-                .join(',')}&currencyId=${currencyId?.id}&cryptoCurrencyId=${
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }&cryptoCurrencyId=${
                 product?.prices?.find((res) => res?.currency?.crypto)
                   ?.currencyId
               }`
+          );
+        } else if (batchSize) {
+          pushConnect(
+            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+              `?productIds=${Array(quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }&batchSize=${batchSize}`
           );
         } else {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
               `?productIds=${Array(quantity)
                 .fill(product.id)
-                .join(',')}&currencyId=${currencyId?.id}`
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }`
           );
         }
       }

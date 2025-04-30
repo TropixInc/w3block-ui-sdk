@@ -31,10 +31,12 @@ interface GetOrderPreviewPayload {
     amount?: string;
     paymentMethod?: string;
   }[];
+  selectBestPrice?: boolean;
 }
 
 interface ProductToSendPayload {
   productId: string;
+  selectBestPrice?: boolean;
   productTokenId?: string;
   variantIds?: string[];
   quantity?: number;
@@ -55,6 +57,7 @@ interface OrderPreviewPayload {
     amount?: string;
     paymentMethod?: string;
   }[];
+  selectBestPrice?: boolean;
 }
 
 export const useCheckout = () => {
@@ -76,11 +79,13 @@ export const useCheckout = () => {
                 productTokenId: pId?.productTokenId,
                 variantIds: pId.variantIds,
                 quantity: pId.quantity,
+                selectBestPrice: pId.selectBestPrice,
               }
             : {
                 productId: pId.productId,
                 variantIds: pId.variantIds,
                 quantity: pId.quantity,
+                selectBestPrice: pId.selectBestPrice,
               };
         }
       );
