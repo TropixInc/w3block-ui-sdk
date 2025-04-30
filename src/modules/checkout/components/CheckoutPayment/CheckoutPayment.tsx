@@ -307,11 +307,13 @@ export const CheckoutPayment = () => {
                   productTokenId: p?.productTokenId ?? '',
                   variantIds: p.variantIds,
                   quantity: p.quantity,
+                  selectBestPrice: p.selectBestPrice,
                 }
               : {
                   productId: p.productId,
                   variantIds: p.variantIds,
                   quantity: p.quantity,
+                  selectBestPrice: p.selectBestPrice,
                 };
             return payload;
           }),

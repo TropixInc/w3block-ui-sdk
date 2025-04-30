@@ -146,6 +146,15 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       },
       {
         title:
+          internalMenuData['mySales']?.customLabel ||
+          translate('pages>mysales>mysales'),
+        id: 'mySales',
+        icon: <MyOrdersIcon />,
+        link: PixwayAppRoutes.MY_SALES,
+        isVisible: isHidden('mySales') === false,
+      },
+      {
+        title:
           internalMenuData['withdraws']?.customLabel ||
           translate('components>menu>withdraws'),
         id: 'withdraws',
