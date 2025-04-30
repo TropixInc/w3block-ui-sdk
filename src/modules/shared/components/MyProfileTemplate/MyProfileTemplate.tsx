@@ -54,20 +54,28 @@ import { useHasWallet } from '../../hooks/useHasWallet';
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import useTranslation from '../../hooks/useTranslation';
+import { ErrorBox } from '../ErrorBox';
 import TranslatableComponent from '../TranslatableComponent';
 
 const _MyProfileTemplate = () => {
-  const { mutate } = useRequestConfirmationMail();
+  const {
+    mutate,
+    error: erroMutate,
+    isLoading: isLoadingMutate,
+  } = useRequestConfirmationMail();
   useHasWallet({});
   const [translate] = useTranslation();
-  const { data: profile } = useProfile();
+  const { data: profile, error: errorProfile } = useProfile();
   const { connectProxyPass } = useCompanyConfig();
   const { status } = usePixwaySession();
   const email = profile?.data?.email ?? '';
   const callbackPath = connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP;
   const [isOpen, setIsOpen] = useState(false);
-  const { data: tenantContext, isLoading: isLoadingTenantContext } =
-    useGetTenantContext();
+  const {
+    data: tenantContext,
+    isLoading: isLoadingTenantContext,
+    error: errorTenantContext,
+  } = useGetTenantContext();
 
   const contextsActivated = useMemo(() => {
     if (!isLoadingTenantContext && tenantContext) {
@@ -115,7 +123,9 @@ const _MyProfileTemplate = () => {
               </p>
             </div>
           </div>
+          <ErrorBox customError={erroMutate} />
           <PixwayButton
+            disabled={isLoadingMutate}
             onClick={handleConfirm}
             className={classNames(
               '!pw-font-medium !pw-p-[5px_24px] !pw-text-xs !pw-leading-[18px] !pw-rounded-full !pw-shadow-[0_2px_4px_#00000042] pw-border-b pw-border-b-[#FFFFFF] pw-cursor-pointer !pw-bg-[#ED4971]',
@@ -142,51 +152,59 @@ const _MyProfileTemplate = () => {
             <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
               <Menu />
             </div>
-            <div className="pw-w-full">
-              <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-                <MyProfile />
-              </div>
-              <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-                {isLoadingTenantContext ? (
-                  <div className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-center pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
-                    <Spinner />
-                  </div>
+            {errorProfile ? (
+              <ErrorBox customError={errorProfile} />
+            ) : (
+              <div className="pw-w-full">
+                <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
+                  <MyProfile />
+                </div>
+                {errorTenantContext ? (
+                  <ErrorBox customError={errorTenantContext} />
                 ) : (
-                  profile &&
-                  contextsActivated?.length &&
-                  contextsActivated.map(({ contextId, context, data }) =>
-                    (data as any)?.profileScreen?.hidden ? null : (
-                      <div
-                        key={contextId}
-                        className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]"
-                      >
-                        <div className="pw-w-full pw-flex pw-justify-between">
-                          <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
-                            {translate('auth>myProfileTemplate>moreInfos')} -{' '}
-                            {context?.description}
-                          </p>
-                          {context?.slug === 'signup' && (
-                            <KYCStatus status={profile?.data?.kycStatus} />
-                          )}
-                        </div>
-
-                        <div className="pw-w-full">
-                          <FormCompleteKYCWithoutLayout
-                            key={contextId}
-                            renderSubtitle={false}
-                            userId={profile?.data.id}
-                            contextId={contextId}
-                            contextSlug={context?.slug}
-                            userKycStatus={profile?.data?.kycStatus}
-                            profilePage
-                          />
-                        </div>
+                  <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
+                    {isLoadingTenantContext ? (
+                      <div className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-center pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
+                        <Spinner />
                       </div>
-                    )
-                  )
+                    ) : (
+                      profile &&
+                      contextsActivated?.length &&
+                      contextsActivated.map(({ contextId, context, data }) =>
+                        (data as any)?.profileScreen?.hidden ? null : (
+                          <div
+                            key={contextId}
+                            className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]"
+                          >
+                            <div className="pw-w-full pw-flex pw-justify-between">
+                              <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
+                                {translate('auth>myProfileTemplate>moreInfos')}{' '}
+                                - {context?.description}
+                              </p>
+                              {context?.slug === 'signup' && (
+                                <KYCStatus status={profile?.data?.kycStatus} />
+                              )}
+                            </div>
+
+                            <div className="pw-w-full">
+                              <FormCompleteKYCWithoutLayout
+                                key={contextId}
+                                renderSubtitle={false}
+                                userId={profile?.data.id}
+                                contextId={contextId}
+                                contextSlug={context?.slug}
+                                userKycStatus={profile?.data?.kycStatus}
+                                profilePage
+                              />
+                            </div>
+                          </div>
+                        )
+                      )
+                    )}
+                  </div>
                 )}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

@@ -57,7 +57,7 @@ const InputCheckbox = ({
   }, [docValue]);
 
   return (
-    <div className={`${label === ' ' ? '-pw-mt-6' : ''} pw-mb-6 pw-w-full`}>
+    <div className={`${label === ' ' ? '-pw-mt-2' : ''} pw-mb-2 pw-w-full`}>
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>

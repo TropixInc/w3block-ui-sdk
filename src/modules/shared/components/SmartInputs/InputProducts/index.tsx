@@ -21,7 +21,7 @@ const InputProducts = ({
   const { data: product } = useGetProductById(docValue?.productId ?? '');
 
   return product ? (
-    <div className="pw-mb-7">
+    <div>
       <LabelWithRequired name={name} required={required} haveColon={false}>
         {label}
       </LabelWithRequired>

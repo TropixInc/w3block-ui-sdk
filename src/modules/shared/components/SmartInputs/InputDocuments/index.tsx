@@ -81,14 +81,14 @@ const InputDocuments = ({
         inputId: name,
         value: apiSavedValue,
       });
-      setSelectDocType(apiSavedValue.docType);
-      setDocument(apiSavedValue.document);
+      setSelectDocType(apiSavedValue?.docType);
+      setDocument(apiSavedValue?.document);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiSavedValue]);
 
   return (
-    <div className="pw-mb-4 pw-w-full">
+    <div className="pw-w-full">
       <div className="pw-w-full">
         <LabelWithRequired name={name} required={required}>
           {label ?? 'Documento de Identificação'}
@@ -103,7 +103,7 @@ const InputDocuments = ({
             setDocument('');
           }}
           options={docTypeOptions}
-          value={apiSavedValue.docType}
+          value={selectDocType ?? apiSavedValue?.docType}
           placeholder="Selecione o tipo de documento.."
         />
         <div className="pw-w-full pw-mt-4">

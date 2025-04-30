@@ -9,6 +9,7 @@ import { useGetDeferredByUserId } from '../../../business/hooks/useGetDeferredBy
 import { useGetXlsxDeferred } from '../../../business/hooks/useGetXlsxDeferred';
 import { useProfile } from '../../../shared';
 import { DateFilterWithOptions } from '../../../shared/components/DateFilterWithOptions/DateFilterWithOptions';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import GenericSearchFilter from '../../../shared/components/GenericSearchFilter/GenericSearchFilter';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { Selectinput } from '../../../shared/components/SelectInput/SelectInput';
@@ -62,7 +63,7 @@ export const WalletFutureStatementTemplateSDK = () => {
   const isAdmin = Boolean(
     userRoles?.includes('admin') || userRoles?.includes('superAdmin')
   );
-  const { data, isLoading } = useGetDeferredByUserId(
+  const { data, isLoading, error } = useGetDeferredByUserId(
     profile?.data?.id ?? '',
     {
       page: actualPage,
@@ -77,21 +78,24 @@ export const WalletFutureStatementTemplateSDK = () => {
     selectedStatus
   );
 
-  const { data: adminDeferred, isLoading: loadingAdminDeferred } =
-    useGetDeferred(
-      {
-        page: actualPage,
-        sortBy: 'createdAt',
-        orderBy: 'DESC',
-        loyaltyId: loyaltyWalletDefined?.loyaltyId,
-        startDate: startDate ? new Date(startDate).toISOString() : '',
-        endDate: endDate ? new Date(endDate).toISOString() : '',
-        rangeDateBy: selected ? selected : 'createdAt',
-        walletAddress: selectedWallet,
-      },
-      !!loyaltyWalletDefined && isAdmin,
-      selectedStatus
-    );
+  const {
+    data: adminDeferred,
+    isLoading: loadingAdminDeferred,
+    error: errorAdminDeferred,
+  } = useGetDeferred(
+    {
+      page: actualPage,
+      sortBy: 'createdAt',
+      orderBy: 'DESC',
+      loyaltyId: loyaltyWalletDefined?.loyaltyId,
+      startDate: startDate ? new Date(startDate).toISOString() : '',
+      endDate: endDate ? new Date(endDate).toISOString() : '',
+      rangeDateBy: selected ? selected : 'createdAt',
+      walletAddress: selectedWallet,
+    },
+    !!loyaltyWalletDefined && isAdmin,
+    selectedStatus
+  );
 
   const { data: restaurants } = useGetApi({
     enabled: isAdmin && companyId === 'ef41dc3f-d9e4-4ca4-8270-673d68f4f490',
@@ -185,7 +189,12 @@ export const WalletFutureStatementTemplateSDK = () => {
     redirectPage: PixwayAppRoutes.SIGN_IN,
   });
 
-  return (
+  return error || errorAdminDeferred ? (
+    <>
+      <ErrorBox customError={error} />
+      <ErrorBox customError={errorAdminDeferred} />
+    </>
+  ) : (
     <InternalPagesLayoutBase>
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg">
         <p className="pw-text-[23px] pw-font-[600] pw-text-black">

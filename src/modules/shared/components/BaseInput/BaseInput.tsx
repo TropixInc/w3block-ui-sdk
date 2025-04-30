@@ -80,7 +80,7 @@ export const BaseInputLayout = ({
         disableClasses
           ? classNames(className)
           : classNames(
-              'pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white',
+              'pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white pw-text-black',
               fullWidth ? 'pw-w-full' : '',
               theme.default ?? defaultTheme.default ?? '',
               valid ? theme.valid ?? defaultTheme.valid ?? '' : '',
@@ -169,7 +169,7 @@ export const BaseInput = ({
       textarea={textarea}
       fullWidth={fullWidth}
     >
-      <div className="pw-flex pw-items-center pw-gap-2 pw-w-full pw-h-full pw-bg-white">
+      <div className="pw-flex pw-items-center pw-gap-2 pw-w-full pw-h-full pw-bg-white pw-text-black">
         {searchIcon ? (
           <SearchIcon className="pw-stroke-black pw-w-5 pw-pb-[2px]" />
         ) : null}

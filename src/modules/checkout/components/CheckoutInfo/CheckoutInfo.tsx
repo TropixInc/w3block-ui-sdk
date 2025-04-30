@@ -1147,7 +1147,9 @@ const _CheckoutInfo = ({
         <div className="pw-my-5 pw-flex pw-flex-wrap pw-gap-8">
           <div className="pw-w-full pw-max-w-[500px] pw-shadow-lg pw-flex pw-flex-col pw-items-center pw-p-6 pw-rounded-xl pw-border pw-border-[#E6E8EC]">
             <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
-              {translate('checkout>checkoutInfo>purchaseSucess')}
+              {productCache?.choosedPayment?.paymentMethod === 'transfer'
+                ? translate('checkout>checkoutInfo>paymentAnalysis')
+                : translate('checkout>checkoutInfo>purchaseSucess')}
             </p>
             <div className="pw-w-full pw-max-w-[386px] pw-mt-5 pw-flex pw-flex-col pw-items-center pw-text-black">
               {statusResponse?.passShareCodeInfo?.codes?.map((code) => (
@@ -1743,7 +1745,10 @@ const _CheckoutInfo = ({
                   <>
                     {statusResponse?.deliverId ? (
                       <p className="pw-text-base pw-font-semibold pw-text-center pw-max-w-[350px] pw-text-black sm:pw-mx-0 pw-mx-auto">
-                        {translate('checkout>checkoutInfo>sucessPayment')}
+                        {productCache?.choosedPayment?.paymentMethod ===
+                        'transfer'
+                          ? translate('checkout>checkoutInfo>paymentAnalysis')
+                          : translate('checkout>checkoutInfo>sucessPayment')}
                       </p>
                     ) : null}
                     <div className="pw-rounded-xl pw-p-5 pw-border pw-border-[#DCDCDC] pw-text-black pw-text-center pw-mt-5 pw-max-w-[350px] sm:pw-mx-0 pw-mx-auto">
@@ -1835,6 +1840,8 @@ const _CheckoutInfo = ({
                     ?.checkoutConfig?.message === 'string'
                     ? context?.defaultTheme?.configurations?.contentData
                         ?.checkoutConfig?.message
+                    : productCache?.choosedPayment?.paymentMethod === 'transfer'
+                    ? translate('checkout>checkoutInfo>infoAboutAnalysis')
                     : translate(
                         'checkout>components>checkoutInfo>infoAboutProcessing'
                       )}
@@ -2017,9 +2024,11 @@ const _CheckoutInfo = ({
 
               {checkoutStatus == CheckoutStatus.FINISHED && (
                 <p className="pw-font-[700] pw-text-[#295BA6] pw-text-2xl pw-mb-6 pw-mt-2">
-                  {translate(
-                    'checkout>components>checkoutInfo>proccessingBlockchain'
-                  )}
+                  {productCache?.choosedPayment?.paymentMethod === 'transfer'
+                    ? translate('checkout>checkoutInfo>paymentAnalysis')
+                    : translate(
+                        'checkout>components>checkoutInfo>proccessingBlockchain'
+                      )}
                 </p>
               )}
             </>

@@ -4,6 +4,7 @@ import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 
 interface Payload {
   userId: string;
@@ -18,14 +19,21 @@ const usePostBenefitRegisterUse = () => {
 
   return useMutation(
     [PixwayAPIRoutes.PASS_BENEFIT_REGISTER_USE],
-    (body: Payload) =>
-      axios.post<any>(
-        PixwayAPIRoutes.PASS_BENEFIT_REGISTER_USE.replace(
-          '{tenantId}',
-          tenantId ?? ''
-        ).replace('{id}', body.benefitId),
-        body
-      )
+    async (body: Payload) => {
+      try {
+        const response = await axios.post<any>(
+          PixwayAPIRoutes.PASS_BENEFIT_REGISTER_USE.replace(
+            '{tenantId}',
+            tenantId ?? ''
+          ).replace('{id}', body.benefitId),
+          body
+        );
+        return response;
+      } catch (err) {
+        console.error('Erro ao registrar uso do benefício:', err);
+        throw handleNetworkException(err);
+      }
+    }
   );
 };
 
