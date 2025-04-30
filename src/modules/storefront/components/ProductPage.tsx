@@ -432,7 +432,7 @@ export const ProductPage = ({
       window.removeEventListener('message', handleMessage);
     };
   }, [handleMessage]);
-
+  const batchSize = product?.settings?.resaleConfig?.batchSize;
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
   const { getOrderPreview } = useCheckout();
@@ -445,6 +445,7 @@ export const ProductPage = ({
           productIds: [
             ...Array(quantity).fill({
               productId: product.id,
+              quantity: batchSize ?? 1,
               selectBestPrice: product?.type === 'erc20' ? true : undefined,
               variantIds: variants
                 ? Object.values(variants).map((value) => {
@@ -604,6 +605,15 @@ export const ProductPage = ({
                 product?.prices?.find((res) => res?.currency?.crypto)
                   ?.currencyId
               }`
+          );
+        } else if (batchSize) {
+          pushConnect(
+            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+              `?productIds=${Array(quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }&batchSize=${batchSize}`
           );
         } else {
           pushConnect(

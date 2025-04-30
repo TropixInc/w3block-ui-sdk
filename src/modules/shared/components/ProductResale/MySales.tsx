@@ -34,7 +34,9 @@ export const MySales = () => {
     defaultTheme?.configurations?.contentData?.hideWalletAddress;
 
   const hasErc20 = productsResale?.items?.some((res) => res.type === 'erc20');
-
+  const erc20Product = productsResale?.items?.find(
+    (res) => res.type === 'erc20'
+  );
   useGuardPagesWithOptions({
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
@@ -83,8 +85,12 @@ export const MySales = () => {
                     fontClass="pw-text-black pw-text-lg pw-font-bold pw-leading-[23px]"
                   />
                 </div>
-                {hasErc20 ? (
-                  <BaseButton link={{ href: PixwayAppRoutes.RESALE }}>
+                {hasErc20 && erc20Product ? (
+                  <BaseButton
+                    link={{
+                      href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}&batchSize=${erc20Product?.settings?.resaleConfig?.batchSize}`,
+                    }}
+                  >
                     {translate('pages>mysales>resale')}
                   </BaseButton>
                 ) : null}

@@ -160,7 +160,8 @@ const _CheckoutInfo = ({
   const router = useRouterConnect();
   const profile = useProfile();
   const { isOpen, openModal, closeModal } = useModalController();
-  const [requestError, setRequestError] = useState(false);
+  const [requestError, setRequestError] = useState('');
+  const [requestErrorCode, setRequestErrorCode] = useState('');
   const { getOrderPreview, getStatus } = useCheckout();
   const [translate] = useTranslation();
   const { setCart, cart, setCartCurrencyId, cartCurrencyId } = useCart();
@@ -230,6 +231,13 @@ const _CheckoutInfo = ({
   const [coinAmountPayment, setCoinAmountPayment] = useState('');
   const { data: session } = usePixwaySession();
   const token = session ? (session.accessToken as string) : null;
+  const batchSize = router?.query?.batchSize as string;
+
+  useEffect(() => {
+    if (batchSize) {
+      setPaymentAmount(batchSize + ',00');
+    }
+  }, [batchSize]);
 
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
@@ -319,6 +327,8 @@ const _CheckoutInfo = ({
     onSuccess?: (data: OrderPreviewResponse) => void,
     changeCart?: boolean
   ) => {
+    setRequestErrorCode('');
+    setRequestError('');
     const coupon = () => {
       if (couponCode) {
         return couponCode;
@@ -463,8 +473,10 @@ const _CheckoutInfo = ({
               });
             }
           },
-          onError: () => {
-            setRequestError(true);
+          onError: (e: any) => {
+            console.log('error', e);
+            setRequestErrorCode(e?.response?.data?.errorCode);
+            setRequestError(e?.response?.data?.message);
           },
         }
       );
@@ -1396,7 +1408,14 @@ const _CheckoutInfo = ({
                 </p>
                 <div className="pw-mb-8">
                   {acceptMultipleCurrenciesPurchase ? null : (
-                    <div className="pw-flex pw-gap-3">{Erc20Input}</div>
+                    <div>
+                      <div className="pw-flex pw-gap-3">{Erc20Input}</div>
+                      {batchSize ? (
+                        <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
+                          {translate('pages>checkout>batchSize', { batchSize })}
+                        </p>
+                      ) : null}
+                    </div>
                   )}
                   {automaxLoyalty ? (
                     <p className="pw-text-sm pw-text-[#35394C] pw-font-[400] pw-mt-2 pw-font-poppins">
@@ -1722,6 +1741,12 @@ const _CheckoutInfo = ({
                   : 'Finalizar pedido'}
               </PixwayButton>
             </div>
+            {requestError !== '' &&
+            requestErrorCode === 'resale-purchase-batch-size-error' ? (
+              <Alert className="pw-mt-3" variant="error">
+                {requestError}
+              </Alert>
+            ) : null}
           </>
         );
       case CheckoutStatus.FINISHED:
@@ -1890,6 +1915,8 @@ const _CheckoutInfo = ({
     organizedLoyalties,
     isCopied,
     paymentComplement,
+    requestError,
+    requestErrorCode,
   ]);
 
   const anchorCurrencyId = useMemo(() => {
@@ -1992,11 +2019,13 @@ const _CheckoutInfo = ({
       </div>
     );
 
-  return requestError ? (
+  return requestError !== '' &&
+    requestErrorCode !== 'resale-purchase-batch-size-error' ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
       <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
         <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">
-          {translate('checkout>checkoutInfo>errorContactSuport')}
+          {requestError ??
+            translate('checkout>checkoutInfo>errorContactSuport')}
         </p>
         <WeblockButton
           className="pw-text-white pw-mt-6"

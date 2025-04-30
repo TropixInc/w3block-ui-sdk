@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { useRouterConnect } from '../../hooks';
+import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
@@ -9,10 +12,14 @@ import { BaseButton } from '../Buttons';
 import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
 import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds/InternalPageHeaderWithFunds';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
+import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
 
 export const Erc20Resale = () => {
   const [translate] = useTranslation();
+  const router = useRouterConnect();
+  const id = router?.query?.id as string;
+  const batchSize = router?.query?.batchSize as string;
   const [config, setConfig] = useState<{
     price?: number;
     quantity?: number;
@@ -23,11 +30,11 @@ export const Erc20Resale = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const handleSubmit = () => {
-    if (config?.price && config?.quantity) {
+    if (config?.price && value && config?.currency) {
       setError('');
       mutate(
         {
-          productId: '58770c8d-0916-4490-b17f-61bb27635323',
+          productId: id,
           config: {
             amount: value.toString(),
             prices: [
@@ -52,24 +59,28 @@ export const Erc20Resale = () => {
   };
 
   const increment = () => {
-    setValue(value + 100);
+    setValue(value + parseFloat(batchSize ?? '1'));
   };
 
   const decrement = () => {
-    setValue(value - 100);
+    setValue(value - parseFloat(batchSize ?? '1'));
   };
 
+  useGuardPagesWithOptions({
+    needUser: true,
+    redirectPage: PixwayAppRoutes.SIGN_IN,
+  });
   return (
     <TranslatableComponent>
       <InternalPagesLayoutBase>
         <InternalpageHeaderWithFunds
-          title={`Venda de Erc20`}
+          title={translate('pages>productResale>erc20Sell')}
         ></InternalpageHeaderWithFunds>
         <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-[34px] pw-mt-8 pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
           <div className="pw-w-full pw-flex pw-flex-col pw-gap-3">
             <div>
               <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
-                {'Quantidade'}
+                {translate('pages>productResale>quantity')}
               </label>
               <div className="pw-flex pw-gap-3">
                 <BaseInput
@@ -94,11 +105,13 @@ export const Erc20Resale = () => {
                   </button>
                 </div>
               </div>
-              <p className="pw-text-[10px] pw-text-gray-500">{'x100'}</p>
+              <p className="pw-text-[10px] pw-text-gray-500">
+                {`x${batchSize ?? '1'}`}
+              </p>
             </div>
             <div>
               <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
-                {'Moeda'}
+                {translate('pages>productResale>currency')}
               </label>
               <BaseSelect
                 value={config?.currency}
@@ -115,7 +128,7 @@ export const Erc20Resale = () => {
             </div>
             <div>
               <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
-                {'Valor por unidade'}
+                {translate('pages>productResale>value')}
               </label>
               <BaseInput
                 value={config?.price}
@@ -130,13 +143,13 @@ export const Erc20Resale = () => {
           <div className="pw-w-full">
             <div className="pw-mb-8">
               <h1 className="pw-font-normal pw-text-base pw-mb-4 pw-text-black">
-                {'Resumo'}
+                {translate('pages>productResale>summary')}
               </h1>
               {config?.price && config?.currency && value ? (
                 <div className={`pw-w-full`}>
                   <div className="pw-flex pw-justify-between">
                     <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
-                      {'Subtotal'}
+                      {translate('pages>productResale>subtotal')}
                     </p>
                     <div className="pw-flex pw-gap-2">
                       <CriptoValueComponent
@@ -169,11 +182,15 @@ export const Erc20Resale = () => {
             {error !== '' ? <Alert variant="error">{error}</Alert> : null}
             {success ? (
               <Alert variant="success">
-                {'Produto colocado a venda com sucesso!'}
+                {translate('pages>productResale>success')}
               </Alert>
             ) : (
               <BaseButton disabled={isLoading} onClick={handleSubmit}>
-                {'Colocar à venda'}
+                {isLoading ? (
+                  <Spinner className="pw-w-5 pw-h-5" />
+                ) : (
+                  translate('pages>mysales>resale')
+                )}
               </BaseButton>
             )}
           </div>

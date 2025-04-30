@@ -1002,6 +1002,14 @@
   "checkout>increaseCurrency>cancel": "Cancelar",
   "checkout>increaseCurrency>processing": "Estamos processando sua solicitação, por favor aguarde...",
   "pages>mysales>mysales": "Minhas vendas",
-  "pages>mysales>resale": "Colocar à venda"
+  "pages>mysales>resale": "Colocar à venda",
+  "pages>productResale>erc20Sell": "Venda de Erc20",
+  "pages>productResale>quantity": "Quantidade",
+  "pages>productResale>currency": "Moeda",
+  "pages>productResale>value": "Valor por unidade",
+  "pages>productResale>summary": "Resumo",
+  "pages>productResale>subtotal": "Subtotal",
+  "pages>productResale>success": "Produto colocado a venda com sucesso!",
+  "pages>checkout>batchSize": "Você só pode comprar em quantidades multiplas de {{batchSize}}"
  }
  
