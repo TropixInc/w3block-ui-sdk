@@ -117,4 +117,5 @@ export enum PixwayAPIRoutes {
   INCREASE_CURRENCY_ALLOWANCE = '/companies/{companyId}/currencies/{currencyId}/increase-allowance',
   POST_PRODUCT_RESALE = '/companies/{companyId}/products-resale/{productId}',
   GET_PRODUCT_RESALE = '/companies/{companyId}/products-resale',
+  GET_PRODUCT_RESALE_BY_ID = '/companies/{companyId}/products-resale/{productId}',
 }

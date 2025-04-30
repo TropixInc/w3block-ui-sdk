@@ -88,7 +88,7 @@ export const MySales = () => {
                 {hasErc20 && erc20Product ? (
                   <BaseButton
                     link={{
-                      href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}&batchSize=${erc20Product?.settings?.resaleConfig?.batchSize}`,
+                      href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}`,
                     }}
                   >
                     {translate('pages>mysales>resale')}
