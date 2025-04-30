@@ -146,7 +146,7 @@ export const ProductPage = ({
     defaultTheme?.configurations?.contentData?.productVariantsType;
   const { setCart, cart, setCartCurrencyId } = useCart();
   const [currencyId, setCurrencyId] = useState<CurrencyResponse>();
-  console.log('currencyId', currencyId);
+
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
     if (quantityOpen) {

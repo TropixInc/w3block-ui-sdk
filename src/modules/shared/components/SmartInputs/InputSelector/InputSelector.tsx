@@ -170,7 +170,7 @@ export const InputSelector = ({
     } else return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-  console.log(dynamicOptions);
+
   useEffect(() => {
     if (docValue) {
       field?.onChange({ inputId: name, value: docValue });
