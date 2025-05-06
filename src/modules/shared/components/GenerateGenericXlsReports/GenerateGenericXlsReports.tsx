@@ -44,7 +44,7 @@ export const GenerateGenericXlsReports = ({
   });
 
   const {
-    data: donwloadReport,
+    data: downloadReport,
     isError: isErrorXls,
     error: errorXls,
   } = useGetGenericXlsReports({
@@ -62,10 +62,10 @@ export const GenerateGenericXlsReports = ({
   }, [isSuccess, reportXls]);
 
   useEffect(() => {
-    if (donwloadReport?.data?.asset?.directLink) {
-      setDownloadLink(donwloadReport?.data?.asset?.directLink);
+    if (downloadReport?.asset?.directLink) {
+      setDownloadLink(downloadReport?.asset?.directLink);
     }
-  }, [donwloadReport?.data?.asset?.directLink]);
+  }, [downloadReport?.asset?.directLink]);
 
   useEffect(() => {
     if (downloadLink) {
@@ -86,14 +86,14 @@ export const GenerateGenericXlsReports = ({
   useEffect(() => {
     if (
       reportXls?.data?.status === 'failed' ||
-      donwloadReport?.data?.status === 'failed'
+      downloadReport?.data?.status === 'failed'
     ) {
       setXlsLoading(false);
       setEnableGetReport(false);
       setUrlReports('');
       setDownloadLink('');
     }
-  }, [donwloadReport?.data?.status, reportXls?.data?.status]);
+  }, [downloadReport?.data?.status, reportXls?.data?.status]);
 
   const handleCallReportXls = () => {
     const arrFilters = Object.values(filters);

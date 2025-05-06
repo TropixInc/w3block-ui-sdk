@@ -1411,7 +1411,40 @@ const _CheckoutInfo = ({
                 <div className="pw-mb-8">
                   {acceptMultipleCurrenciesPurchase ? null : (
                     <div>
-                      <div className="pw-flex pw-gap-3">{Erc20Input}</div>
+                      <div className="pw-flex pw-gap-3">
+                        <div>{Erc20Input}</div>
+                        {batchSize ? (
+                          <div className="pw-flex pw-gap-2">
+                            <button
+                              onClick={() =>
+                                setPaymentAmount(
+                                  (
+                                    parseFloat(paymentAmount) -
+                                    parseFloat(batchSize)
+                                  ).toString() + ',00'
+                                )
+                              }
+                              className="pw-text-black pw-border pw-border-solid pw-font-bold pw-px-4 pw-rounded-lg pw-h-[42px]"
+                              disabled={parseFloat(paymentAmount) === 0}
+                            >
+                              -
+                            </button>
+                            <button
+                              onClick={() =>
+                                setPaymentAmount(
+                                  (
+                                    parseFloat(paymentAmount) +
+                                    parseFloat(batchSize)
+                                  ).toString() + ',00'
+                                )
+                              }
+                              className="pw-text-black pw-border pw-border-solid pw-font-bold pw-px-4 pw-rounded-lg pw-h-[42px]"
+                            >
+                              +
+                            </button>
+                          </div>
+                        ) : null}
+                      </div>
                       {batchSize ? (
                         <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
                           {translate('pages>checkout>batchSize', { batchSize })}
@@ -1514,6 +1547,7 @@ const _CheckoutInfo = ({
             )}
             {!isCoinPayment && isErc20 && (
               <PriceAndGasInfo
+                isErc20
                 payments={orderPreview?.payments}
                 name={
                   orderPreview?.products && orderPreview?.products?.length
@@ -1887,7 +1921,11 @@ const _CheckoutInfo = ({
                   }
                   loading={isLoading}
                   className="pw-mt-4"
-                  payments={productCache?.payments}
+                  payments={
+                    orderResponse
+                      ? orderResponse?.payments
+                      : productCache?.payments
+                  }
                 />
               </>
             )}

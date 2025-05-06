@@ -24,7 +24,9 @@ export interface PaymentsResponse {
   originalTotalAmount?: string;
   originalAmount?: string;
   fullOrderTotalAmount?: string;
+  totalAmount?: string;
 }
+
 export interface OrderPreviewResponse {
   products: Product[];
   cartPrice?: string;
@@ -264,9 +266,7 @@ export interface CreateOrderResponse {
   deliverId: string;
   failReason?: string;
   payments?: {
-    currency?: {
-      id?: string;
-    };
+    currency?: CurrencyResponse;
     currencyId: string;
     paymentMethod?: string;
     paymentProvider?: string;

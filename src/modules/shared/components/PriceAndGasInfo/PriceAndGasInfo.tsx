@@ -34,6 +34,7 @@ interface PriceAndGasInfo {
   loadingPreview?: boolean;
   payments?: PaymentsResponse[];
   convertedPrice?: string;
+  isErc20?: boolean;
 }
 
 const _PriceAndGasInfo = ({
@@ -51,6 +52,7 @@ const _PriceAndGasInfo = ({
   loadingPreview = false,
   payments,
   convertedPrice,
+  isErc20 = false,
 }: PriceAndGasInfo) => {
   const [translate] = useTranslation();
   const router = useRouter();
@@ -109,8 +111,8 @@ const _PriceAndGasInfo = ({
                         )) as unknown as string)
                     : parseFloat(payment()?.cartPrice ?? '') === 0 &&
                       parseFloat(payment()?.totalPrice ?? '') !== 0
-                    ? payment()?.totalPrice ?? ''
-                    : payment()?.cartPrice ?? ''
+                    ? payment()?.totalPrice ?? payment()?.totalAmount ?? ''
+                    : payment()?.cartPrice ?? payment()?.totalAmount ?? ''
                 }
                 crypto={payment()?.currency?.crypto}
                 fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
@@ -176,7 +178,8 @@ const _PriceAndGasInfo = ({
             </div>
           )}
 
-        {parseFloat((payment()?.gasFee as GasFee)?.amount ?? '') == 0 ? null : (
+        {parseFloat((payment()?.gasFee as GasFee)?.amount ?? '') == 0 ||
+        payment()?.gasFee === '0' ? null : (
           <div className="pw-flex pw-justify-between pw-mt-2">
             <div className="pw-flex pw-gap-x-1">
               <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
@@ -200,7 +203,10 @@ const _PriceAndGasInfo = ({
         <div className="pw-w-full pw-h-[1px] pw-bg-[#777E8F] pw-my-2"></div>
         <div className="pw-flex pw-justify-between">
           <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">
-            {translate('shared>components>price&gasInfo')}
+            {isErc20
+              ? translate('pages>checkout>erc20BuyTotal')
+              : translate('shared>components>price&gasInfo')}{' '}
+            {/* Total Amount */}
           </p>
           {loading || loadingPreview ? (
             <Shimmer className="pw-h-6 pw-w-17" />
@@ -218,7 +224,7 @@ const _PriceAndGasInfo = ({
                 )}
               <CriptoValueComponent
                 code={name}
-                value={payment()?.totalPrice ?? ''}
+                value={payment()?.totalPrice ?? payment()?.totalAmount ?? ''}
                 showFree
                 crypto={payment()?.currency?.crypto}
                 fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
@@ -244,6 +250,11 @@ const _PriceAndGasInfo = ({
               </div>
             )}
           </div>
+        ) : null}
+        {isErc20 ? (
+          <p className="pw-text-gray-500 pw-text-xs pw-mt-1">
+            {translate('pages>checkout>erc20Buy')}
+          </p>
         ) : null}
       </div>
     );
@@ -397,6 +408,7 @@ export const PriceAndGasInfo = ({
   originalTotalPrice,
   payments,
   convertedPrice,
+  isErc20,
 }: PriceAndGasInfo) => {
   return (
     <TranslatableComponent>
@@ -414,6 +426,7 @@ export const PriceAndGasInfo = ({
         originalTotalPrice={originalTotalPrice}
         payments={payments}
         convertedPrice={convertedPrice}
+        isErc20={isErc20}
       />
     </TranslatableComponent>
   );

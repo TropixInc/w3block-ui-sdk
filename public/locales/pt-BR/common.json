@@ -1013,6 +1013,8 @@
   "pages>checkout>batchSize": "Você só pode comprar em quantidades multiplas de {{batchSize}}",
   "checkout>checkoutInfo>paymentAnalysis": "Pagamento em análise",
   "checkout>checkoutInfo>infoAboutAnalysis": "Seu pedido foi recebido e está sendo analisado, iremos entrar em contato para a efetuação do pagamento.",
-  "pages>resale>goToSales": "Acompanhar minhas vendas"
+  "pages>resale>goToSales": "Acompanhar minhas vendas",
+  "pages>checkout>erc20Buy": "*Sua compra pode ser fechada em um valor inferior a este, conforme oscilações de preço desta moeda",
+  "pages>checkout>erc20BuyTotal": "Valor total máximo*"
  }
  
