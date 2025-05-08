@@ -10,6 +10,7 @@ import _ from 'lodash';
 
 import useTranslation from '../../hooks/useTranslation';
 import ComplexPhone from '../SmartInputs/ComplexPhone';
+import { IframeInput } from '../SmartInputs/Iframe';
 import InputCheckbox from '../SmartInputs/InputCheckbox/InputCheckbox';
 import InputDocuments from '../SmartInputs/InputDocuments';
 import InputImage from '../SmartInputs/InputImage/InputImage';
@@ -434,6 +435,9 @@ export const SmartInputsController = ({
             }}
           />
         );
+      }
+      case DataTypesEnum.Iframe: {
+        return <IframeInput docValue={simpleValue} />;
       }
     }
   };

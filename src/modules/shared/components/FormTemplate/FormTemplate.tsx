@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import {
+  DataTypesEnum,
   DocumentEntityDto,
   TenantInputEntityDto,
   UserContextStatus,
@@ -54,6 +63,27 @@ export const FormTemplate = ({
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
   const [translate] = useTranslation();
+  const [completed, setCompleted] = useState(false);
+  const handleMessage = useCallback((e: MessageEvent<any>) => {
+    if (e.data === 'form-completed') {
+      setCompleted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [handleMessage]);
+
+  const disableButton = useMemo(() => {
+    const hasIframe = tenantInputs?.some(
+      (item) => item.type === DataTypesEnum.Iframe
+    );
+    return hasIframe && !completed;
+  }, [completed, tenantInputs]);
+
   return (
     <form onSubmit={onSubmit}>
       <div className="pw-flex pw-flex-col pw-gap-4">
@@ -116,6 +146,7 @@ export const FormTemplate = ({
           fullWidth
           disabled={
             buttonDisabled ||
+            disableButton ||
             statusContext === UserContextStatus.Approved ||
             statusContext === UserContextStatus.Denied
           }
