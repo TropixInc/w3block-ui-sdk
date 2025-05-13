@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import UserIcon from '../../../assets/icons/usersOutlined.svg?react';
+import { useCompanyById } from '../../../hooks/useCompanyById';
+import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
 import { useGetUserByWalletAddress } from '../../../hooks/useGetUserByWalletAddress';
 import useTranslation from '../../../hooks/useTranslation';
 import { ErrorBox } from '../../ErrorBox';
@@ -21,12 +23,14 @@ export const UserByWalletInput = ({
   walletValid,
 }: UserByWalletInputProps) => {
   const [translate] = useTranslation();
+  const { companyId, name } = useCompanyConfig();
+  const { data: company } = useCompanyById(companyId);
 
   const { data, isLoading, error } = useGetUserByWalletAddress(
     walletValid ? wallet : ''
   );
 
-  return error ? (
+  return error && (error as any).statusCode !== 404 ? (
     <ErrorBox customError={error as any} />
   ) : (
     <div>
@@ -58,6 +62,15 @@ export const UserByWalletInput = ({
           {translate('loyalty>shared>invalidWallet')}
         </p>
       )}
+      {error && Number((error as any)?.statusCode) === 404 ? (
+        <p className="pw-text-sm pw-font-medium pw-opacity-70">
+          {wallet === company?.data?.defaultOwnerAddress
+            ? `${translate('shared>GenericWalletFilter>keyWallet')} ${
+                name ? '- ' + name : ''
+              }`
+            : translate('shared>GenericWalletFilter>walletNotFound')}
+        </p>
+      ) : null}
     </div>
   );
 };
