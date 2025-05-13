@@ -26,6 +26,7 @@ export const useGetUserByWalletAddress = (address: string) => {
       enabled: Boolean(tenantId && address),
       cacheTime: 60 * 60 * 60 * 2,
       refetchOnWindowFocus: false,
+      retry: 1,
     }
   );
 };
