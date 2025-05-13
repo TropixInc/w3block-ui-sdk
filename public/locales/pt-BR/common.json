@@ -1017,6 +1017,8 @@
   "pages>checkout>erc20Buy": "*Sua compra pode ser fechada em um valor inferior a este, conforme oscilações de preço desta moeda",
   "pages>checkout>erc20BuyTotal": "Valor total máximo*",
   "shared>GenericWalletFilter>keyWallet": "Carteira Key",
-  "shared>GenericWalletFilter>walletNotFound": "Carteira não registrada no sistema"
+  "shared>GenericWalletFilter>walletNotFound": "Carteira não registrada no sistema",
+  "pages>productResale>completeBankDetails": "Para começar a vender você precisa preencher seus dados bancários.",
+  "pages>productResale>goToComplete": "Completar dados"
  }
  

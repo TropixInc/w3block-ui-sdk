@@ -3,9 +3,12 @@ import { CurrencyInput } from 'react-currency-mask';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
+import { useGetContextByUserId } from '../../hooks/useGetContextByUserId/useGetContextByUserId';
 import { useGetResaleById } from '../../hooks/useGetResaleById/useGetResaleById';
+import { useGetTenantContextBySlug } from '../../hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
+import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { BaseInput } from '../BaseInput';
@@ -95,6 +98,41 @@ export const Erc20Resale = () => {
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
   });
+
+  const { profile } = useProfileWithKYC();
+  const { data: context } = useGetTenantContextBySlug('bankdetails');
+  const { data } = useGetContextByUserId(
+    profile?.id ?? '',
+    (context?.data as any)?.contextId
+  );
+
+  if (
+    data?.data?.items?.length === 0 ||
+    data?.data?.items?.[0]?.status === 'denied'
+  ) {
+    return (
+      <TranslatableComponent>
+        <InternalPagesLayoutBase>
+          <div className="pw-flex pw-flex-col pw-mt-5 pw-px-4 pw-gap-2 pw-justify-center pw-items-center">
+            <Alert variant="error">
+              {translate('pages>productResale>completeBankDetails')}
+            </Alert>
+            <BaseButton
+              link={{
+                href: data?.data?.items?.[0]?.id
+                  ? PixwayAppRoutes.COMPLETE_KYC +
+                    `?contextSlug=bankdetails&userContextId=${data?.data?.items?.[0]?.id}`
+                  : PixwayAppRoutes.COMPLETE_KYC + '?contextSlug=bankdetails',
+              }}
+            >
+              {translate('pages>productResale>goToComplete')}
+            </BaseButton>
+          </div>
+        </InternalPagesLayoutBase>
+      </TranslatableComponent>
+    );
+  }
+
   return (
     <TranslatableComponent>
       <InternalPagesLayoutBase>
@@ -104,7 +142,7 @@ export const Erc20Resale = () => {
           })}
         ></InternalpageHeaderWithFunds>
         {success ? (
-          <div className="pw-flex pw-flex-col pw-mt-5 pw-gap-2 pw-justify-center pw-items-center">
+          <div className="pw-flex pw-flex-col pw-mt-5 pw-px-4 pw-gap-2 pw-justify-center pw-items-center">
             <Alert variant="success">
               {translate('pages>productResale>success')}
             </Alert>
