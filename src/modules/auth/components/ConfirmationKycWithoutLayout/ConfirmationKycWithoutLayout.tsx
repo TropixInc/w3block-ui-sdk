@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useInterval } from 'react-use';
 
+import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
 
 import { PRACTITIONER_DATA_INFO_KEY } from '../../../checkout/config/keys/localStorageKey';
@@ -84,8 +85,18 @@ export const ConfirmationKycWithoutLayout = () => {
       }, 3000);
     }
   };
-
-  const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
+  const inputsFiltered = useMemo(
+    () =>
+      tenantInputs?.data?.filter(
+        (input) =>
+          !(
+            input.type === DataTypesEnum.Checkbox &&
+            (input?.data as any)?.hidden
+          )
+      ),
+    [tenantInputs?.data]
+  );
+  const groupedInputs = _.groupBy(inputsFiltered, 'step');
   const onContinue = () => {
     if ((context?.data as any)?.data?.postKyc === 'awaitProduct') {
       setPoolStatus(true);
