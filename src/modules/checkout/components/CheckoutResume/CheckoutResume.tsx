@@ -121,6 +121,7 @@ export const CheckouResume = ({
         currency={currency}
         convertedPrice={convertedPrice}
         name={currency}
+        isErc20={products?.[0]?.type === 'erc20'}
       />
     </div>
   );

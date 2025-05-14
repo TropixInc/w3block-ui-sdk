@@ -1069,7 +1069,11 @@ export const CheckoutPayment = () => {
                   ? orderResponse.currencyId
                   : productCache?.currencyId ?? ''
               }
-              products={productCache?.products ?? []}
+              products={
+                orderResponse !== undefined
+                  ? orderResponse?.products
+                  : productCache?.products ?? []
+              }
               gasFee={
                 orderResponse !== undefined
                   ? orderResponse.gasFee
