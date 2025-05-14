@@ -837,7 +837,7 @@ export const CheckoutPayment = () => {
   const concluded = (val: any, allowSimilarPayment?: boolean) => {
     createOrder(val, allowSimilarPayment);
   };
-
+  const isErc20 = productCache?.products?.[0]?.type === 'erc20';
   const WichPaymentMethod = () => {
     if (isFree || productCache?.choosedPayment?.paymentMethod === 'transfer') {
       return !requestError ? (
@@ -1070,7 +1070,7 @@ export const CheckoutPayment = () => {
                   : productCache?.currencyId ?? ''
               }
               products={
-                orderResponse !== undefined
+                orderResponse !== undefined && isErc20
                   ? orderResponse?.products
                   : productCache?.products ?? []
               }
