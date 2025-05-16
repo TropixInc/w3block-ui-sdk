@@ -232,12 +232,16 @@ const _CheckoutInfo = ({
   const { data: session } = usePixwaySession();
   const token = session ? (session.accessToken as string) : null;
   const batchSize = router?.query?.batchSize as string;
-
+  const quantity = router?.query?.quantity as string;
   useEffect(() => {
     if (batchSize) {
-      setPaymentAmount(batchSize + ',00');
+      if (quantity) {
+        setPaymentAmount(quantity + ',00');
+      } else {
+        setPaymentAmount(batchSize + ',00');
+      }
     }
-  }, [batchSize]);
+  }, [batchSize, quantity]);
 
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
