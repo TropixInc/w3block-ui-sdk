@@ -13,6 +13,7 @@ export const IframeInput = ({ docValue }: Params) => {
         src={docValue}
         className="pw-w-full pw-h-full"
         style={{ minHeight: '500px' }}
+        allow="autoplay; camera; microphone"
       />
     );
   }

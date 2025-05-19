@@ -139,14 +139,13 @@ export const FormTemplate = ({
           <Alert>{translate('shared>formTemplate>formApprovedNotEdit')}</Alert>
         </div>
       ) : null}
-      {hideContinue || readonly ? null : (
+      {hideContinue || readonly || disableButton ? null : (
         <BaseButton
           type="submit"
           className="pw-mt-5"
           fullWidth
           disabled={
             buttonDisabled ||
-            disableButton ||
             statusContext === UserContextStatus.Approved ||
             statusContext === UserContextStatus.Denied
           }

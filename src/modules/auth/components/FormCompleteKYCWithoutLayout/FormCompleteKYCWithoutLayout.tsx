@@ -494,13 +494,16 @@ const _FormCompleteKYCWithoutLayout = ({
               </div>
             </Alert>
           )}
-          {!dynamicMethods.formState.isValid && (
-            <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
-              <p className="pw-text-sm">
-                {translate('auth>formCompleteKYCWithoutLayout>verifyFieds')}
-              </p>
-            </Alert>
-          )}
+          {!dynamicMethods.formState.isValid &&
+            !inputsFiltered?.some(
+              (res) => res.type === DataTypesEnum.Iframe
+            ) && (
+              <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+                <p className="pw-text-sm">
+                  {translate('auth>formCompleteKYCWithoutLayout>verifyFieds')}
+                </p>
+              </Alert>
+            )}
           {isError && (
             <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
               <p className="pw-text-sm">{errorMessage?.message}</p>
