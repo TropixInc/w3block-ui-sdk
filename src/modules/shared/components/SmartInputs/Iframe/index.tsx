@@ -19,7 +19,7 @@ export const IframeInput = ({ docValue }: Params) => {
           style={{ minHeight: '500px' }}
           allow="autoplay; camera; microphone; gyroscope; magnetometer; geolocation; accelerometer; ambient-light-sensor"
         />
-        <div className="pw-mt-3">{iframeURL}</div>
+        <div className="pw-mt-3 pw-break-all pw-text-black">{iframeURL}</div>
       </>
     );
   }
