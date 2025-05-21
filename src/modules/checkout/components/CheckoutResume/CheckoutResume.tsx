@@ -56,7 +56,7 @@ export const CheckouResume = ({
   return (
     <div>
       {!isCoinPayment ? (
-        products.map((product: Product) => (
+        products?.map((product: Product) => (
           <ProductInfo
             className="pw-bg-white pw-rounded-lg pw-border pw-border-slate-200"
             key={product?.id}
@@ -121,6 +121,7 @@ export const CheckouResume = ({
         currency={currency}
         convertedPrice={convertedPrice}
         name={currency}
+        isErc20={products?.[0]?.type === 'erc20'}
       />
     </div>
   );

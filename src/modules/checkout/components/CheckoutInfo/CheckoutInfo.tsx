@@ -232,12 +232,16 @@ const _CheckoutInfo = ({
   const { data: session } = usePixwaySession();
   const token = session ? (session.accessToken as string) : null;
   const batchSize = router?.query?.batchSize as string;
-
+  const quantity = router?.query?.quantity as string;
   useEffect(() => {
     if (batchSize) {
-      setPaymentAmount(batchSize + ',00');
+      if (quantity) {
+        setPaymentAmount(quantity + ',00');
+      } else {
+        setPaymentAmount(batchSize + ',00');
+      }
     }
-  }, [batchSize]);
+  }, [batchSize, quantity]);
 
   useEffect(() => {
     if (checkoutStatus == CheckoutStatus.CONFIRMATION) {
@@ -474,8 +478,9 @@ const _CheckoutInfo = ({
             }
           },
           onError: (e: any) => {
-            console.log('error', e);
-            setRequestErrorCode(e?.response?.data?.errorCode);
+            setRequestErrorCode(
+              e?.response?.data?.errorCode ?? e?.response?.data?.error
+            );
             setRequestError(e?.response?.data?.message);
           },
         }
@@ -1778,7 +1783,8 @@ const _CheckoutInfo = ({
               </PixwayButton>
             </div>
             {requestError !== '' &&
-            requestErrorCode === 'resale-purchase-batch-size-error' ? (
+            (requestErrorCode === 'resale-purchase-batch-size-error' ||
+              requestErrorCode === 'Not Found') ? (
               <Alert className="pw-mt-3" variant="error">
                 {requestError}
               </Alert>
@@ -2065,7 +2071,8 @@ const _CheckoutInfo = ({
     );
 
   return requestError !== '' &&
-    requestErrorCode !== 'resale-purchase-batch-size-error' ? (
+    requestErrorCode !== 'resale-purchase-batch-size-error' &&
+    requestErrorCode !== 'Not Found' ? (
     <div className="pw-container pw-mx-auto pw-pt-10 sm:pw-pt-15">
       <div className="pw-max-w-[600px] pw-flex pw-flex-col pw-justify-center pw-items-center">
         <p className="pw-font-bold pw-text-black pw-text-center pw-px-4">

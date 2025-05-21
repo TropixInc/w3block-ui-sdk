@@ -837,7 +837,7 @@ export const CheckoutPayment = () => {
   const concluded = (val: any, allowSimilarPayment?: boolean) => {
     createOrder(val, allowSimilarPayment);
   };
-
+  const isErc20 = productCache?.products?.[0]?.type === 'erc20';
   const WichPaymentMethod = () => {
     if (isFree || productCache?.choosedPayment?.paymentMethod === 'transfer') {
       return !requestError ? (
@@ -1050,7 +1050,11 @@ export const CheckoutPayment = () => {
         <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-6 pw-px-4 sm:pw-px-0">
           <div className="pw-order-1 sm:pw-order-2 pw-w-full sm:pw-w-[40%]">
             <CheckouResume
-              payments={productCache?.payments}
+              payments={
+                orderResponse !== undefined
+                  ? orderResponse?.payments
+                  : productCache?.payments
+              }
               isCoinPayment={
                 isCoinPayment && !productCache?.acceptMultipleCurrenciesPurchase
               }
@@ -1065,7 +1069,11 @@ export const CheckoutPayment = () => {
                   ? orderResponse.currencyId
                   : productCache?.currencyId ?? ''
               }
-              products={productCache?.products ?? []}
+              products={
+                orderResponse !== undefined && isErc20
+                  ? orderResponse?.products
+                  : productCache?.products ?? []
+              }
               gasFee={
                 orderResponse !== undefined
                   ? orderResponse.gasFee

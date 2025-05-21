@@ -1014,8 +1014,6 @@
   "checkout>checkoutInfo>paymentAnalysis": "Pagamento em análise",
   "checkout>checkoutInfo>infoAboutAnalysis": "Seu pedido foi recebido e está sendo analisado, iremos entrar em contato para a efetuação do pagamento.",
   "pages>resale>goToSales": "Acompanhar minhas vendas",
-  "pages>checkout>erc20Buy": "*Sua compra pode ser fechada em um valor inferior a este, conforme oscilações de preço desta moeda",
-  "pages>checkout>erc20BuyTotal": "Valor total máximo*",
   "dashboard>MySalesListComponent>salesNotFound": "Você não fez nenhuma venda ainda.",
   "pages>mysales>resale>totalSold": "Total vendido",
   "pages>mysales>resale>totalWaiting": "Total à receber",
@@ -1033,6 +1031,12 @@
   "pages>mysales>resale>fillData": "Preencher dados",
   "pages>mysales>resale>subtotal": "Subtotal",
   "pages>mysales>resale>fees": "Taxas",
-  "pages>mysales>resale>total": "Total recebido"
- } 
+  "pages>mysales>resale>total": "Total recebido",
+  "pages>checkout>erc20Buy": "*Dada a natureza dinâmica das operações de compra e venda, o valor a ser efetivamente pago pode ser inferior ao anunciado durante a finalização da compra.",
+  "pages>checkout>erc20BuyTotal": "Valor total máximo*",
+  "shared>GenericWalletFilter>keyWallet": "Carteira Key",
+  "shared>GenericWalletFilter>walletNotFound": "Carteira não registrada no sistema",
+  "pages>productResale>completeBankDetails": "Para começar a vender você precisa preencher seus dados bancários.",
+  "pages>productResale>goToComplete": "Completar dados"
+ }
  

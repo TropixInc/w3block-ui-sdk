@@ -4,7 +4,7 @@ import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { DocumentDto, KycStatus } from '@w3block/sdk-id';
+import { DataTypesEnum, DocumentDto, KycStatus } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -115,8 +115,18 @@ const _FormCompleteKYCWithoutLayout = ({
     useGetTenantInputsBySlug({
       slug: slug(),
     });
-
-  const groupedInputs = _.groupBy(tenantInputs?.data, 'step');
+  const inputsFiltered = useMemo(
+    () =>
+      tenantInputs?.data?.filter(
+        (input) =>
+          !(
+            input.type === DataTypesEnum.Checkbox &&
+            (input?.data as any)?.hidden
+          )
+      ),
+    [tenantInputs?.data]
+  );
+  const groupedInputs = _.groupBy(inputsFiltered, 'step');
   const { refetch } = useProfile();
 
   const { data: userContext } = useGetUserContextId({
@@ -161,8 +171,8 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const inputsToShow = useMemo(() => {
     if (step) return groupedInputs[step as string];
-    else return tenantInputs?.data ?? [];
-  }, [step, tenantInputs?.data]);
+    else return inputsFiltered ?? [];
+  }, [step, inputsFiltered]);
 
   const validations = useGetValidationsTypesForSignup(
     inputsToShow ?? [],
@@ -484,13 +494,16 @@ const _FormCompleteKYCWithoutLayout = ({
               </div>
             </Alert>
           )}
-          {!dynamicMethods.formState.isValid && (
-            <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
-              <p className="pw-text-sm">
-                {translate('auth>formCompleteKYCWithoutLayout>verifyFieds')}
-              </p>
-            </Alert>
-          )}
+          {!dynamicMethods.formState.isValid &&
+            !inputsFiltered?.some(
+              (res) => res.type === DataTypesEnum.Iframe
+            ) && (
+              <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+                <p className="pw-text-sm">
+                  {translate('auth>formCompleteKYCWithoutLayout>verifyFieds')}
+                </p>
+              </Alert>
+            )}
           {isError && (
             <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
               <p className="pw-text-sm">{errorMessage?.message}</p>

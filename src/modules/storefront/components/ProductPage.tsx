@@ -169,6 +169,7 @@ export const ProductPage = ({
     isLoading,
     error: errorProduct,
   } = useGetProductBySlug(params?.[params.length - 1]);
+  const isErc20 = product?.type === 'erc20';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
   const isPossibleSend = useMemo(() => {
@@ -434,7 +435,12 @@ export const ProductPage = ({
       window.removeEventListener('message', handleMessage);
     };
   }, [handleMessage]);
-  const batchSize = product?.settings?.resaleConfig?.batchSize;
+  const batchSize = useMemo(() => {
+    return product?.settings?.resaleConfig?.batchSize;
+  }, [product?.settings?.resaleConfig?.batchSize]);
+  useEffect(() => {
+    if (batchSize) setQuantity(batchSize);
+  }, [batchSize]);
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
   const { getOrderPreview } = useCheckout();
@@ -445,9 +451,9 @@ export const ProductPage = ({
       getOrderPreview.mutate(
         {
           productIds: [
-            ...Array(quantity).fill({
+            ...Array(isErc20 ? 1 : quantity).fill({
               productId: product.id,
-              quantity: batchSize ?? 1,
+              quantity: isErc20 ? quantity ?? 1 : 1,
               selectBestPrice: product?.type === 'erc20' ? true : undefined,
               variantIds: variants
                 ? Object.values(variants).map((value) => {
@@ -573,7 +579,7 @@ export const ProductPage = ({
       if (productKycRequirement)
         pushConnect(
           PixwayAppRoutes.CHECKOUT_FORM +
-            `?productIds=${Array(quantity)
+            `?productIds=${Array(isErc20 ? 1 : quantity)
               .fill(product.id)
               .join(',')}&currencyId=${
               currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -587,7 +593,7 @@ export const ProductPage = ({
           });
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
+              `?productIds=${Array(isErc20 ? 1 : quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -599,7 +605,7 @@ export const ProductPage = ({
         ) {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
+              `?productIds=${Array(isErc20 ? 1 : quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -609,18 +615,29 @@ export const ProductPage = ({
               }`
           );
         } else if (batchSize) {
-          pushConnect(
-            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
-                .fill(product.id)
-                .join(',')}&currencyId=${
-                currencyId?.id ?? (currencyId as unknown as string) ?? ''
-              }&batchSize=${batchSize}`
-          );
+          if (quantity > batchSize) {
+            pushConnect(
+              PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                `?productIds=${Array(isErc20 ? 1 : quantity)
+                  .fill(product.id)
+                  .join(',')}&currencyId=${
+                  currencyId?.id ?? (currencyId as unknown as string) ?? ''
+                }&batchSize=${batchSize}&quantity=${quantity}`
+            );
+          } else {
+            pushConnect(
+              PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                `?productIds=${Array(isErc20 ? 1 : quantity)
+                  .fill(product.id)
+                  .join(',')}&currencyId=${
+                  currencyId?.id ?? (currencyId as unknown as string) ?? ''
+                }&batchSize=${batchSize}`
+            );
+          }
         } else {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
+              `?productIds=${Array(isErc20 ? 1 : quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -880,12 +897,14 @@ export const ProductPage = ({
                             ) : null}
                             <CriptoValueComponent
                               dontShow={
-                                parseFloat(
-                                  product?.prices.find(
-                                    (price: any) =>
-                                      price.currencyId == currencyId?.id
-                                  )?.amount ?? '0'
-                                ) === 0
+                                isErc20
+                                  ? false
+                                  : parseFloat(
+                                      product?.prices.find(
+                                        (price: any) =>
+                                          price.currencyId == currencyId?.id
+                                      )?.amount ?? '0'
+                                    ) === 0
                               }
                               showFree
                               size={24}
@@ -993,7 +1012,15 @@ export const ProductPage = ({
                           <p
                             onClick={() => {
                               if (quantity > 1) {
-                                setQuantity(quantity - 1);
+                                if (
+                                  isErc20 &&
+                                  batchSize &&
+                                  quantity > batchSize
+                                ) {
+                                  setQuantity(quantity - batchSize);
+                                } else {
+                                  setQuantity(quantity - 1);
+                                }
                               }
                             }}
                             className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
@@ -1051,13 +1078,24 @@ export const ProductPage = ({
                                 quantity < product?.canPurchaseAmount &&
                                 quantity < product?.stockAmount
                               ) {
-                                setQuantity(quantity + 1);
+                                if (isErc20 && batchSize) {
+                                  setQuantity(quantity + batchSize);
+                                } else {
+                                  setQuantity(quantity + 1);
+                                }
                               }
                             }}
                           >
                             +
                           </p>
                         </div>
+                        {batchSize ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>checkout>batchSize', {
+                              batchSize,
+                            })}
+                          </p>
+                        ) : null}
                       </div>
                       {orderPreview && orderPreview?.products?.length > 1 ? (
                         isLoadingValue ? (
