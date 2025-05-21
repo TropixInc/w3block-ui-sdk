@@ -6,6 +6,7 @@ import { useRouterConnect } from '../../hooks';
 import { useGetContextByUserId } from '../../hooks/useGetContextByUserId/useGetContextByUserId';
 import { useGetResaleById } from '../../hooks/useGetResaleById/useGetResaleById';
 import { useGetTenantContextBySlug } from '../../hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
+import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
 import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
 import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
@@ -32,8 +33,20 @@ export const Erc20Resale = () => {
   }>();
   const [value, setValue] = useState(0);
   const { mutate, isLoading } = usePostProductResale();
+  const isEdit = (router?.query?.edit as string) === 'true';
+  const { data: forSaleErc20 } = useGetUserForSaleErc20(isEdit);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  useEffect(() => {
+    if (forSaleErc20?.data?.items.length && isEdit) {
+      setValue(parseFloat(forSaleErc20?.data?.items?.[0]?.tokenData?.amount));
+      setConfig({
+        price: parseFloat(forSaleErc20?.data?.items?.[0]?.prices?.[0]?.amount),
+        quantity: parseFloat(forSaleErc20?.data?.items?.[0]?.tokenData?.amount),
+        currency: forSaleErc20?.data?.items[0]?.prices?.[0]?.currencyId,
+      });
+    }
+  }, [forSaleErc20?.data?.items, isEdit]);
   const handleSubmit = () => {
     if (config?.price && value && config?.currency) {
       setError('');
@@ -277,6 +290,8 @@ export const Erc20Resale = () => {
                 <BaseButton disabled={isLoading} onClick={handleSubmit}>
                   {isLoading ? (
                     <Spinner className="pw-w-5 pw-h-5" />
+                  ) : isEdit ? (
+                    translate('pages>mysales>resale>editSale')
                   ) : (
                     translate('pages>mysales>resale')
                   )}

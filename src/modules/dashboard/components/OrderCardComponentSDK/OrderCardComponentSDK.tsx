@@ -66,10 +66,10 @@ export const OrderCardComponentSDK = ({
   const { data: order } = useGetEspecificOrder(id, opened);
   const locale = useLocale();
   const [translate] = useTranslation();
-  const products = order?.data.products;
+  const products = order?.products;
   const [infoOpened, setInfoOpened] = useState(false);
   const { data } = useGetApi({
-    address: order?.data?.destinationWalletAddress,
+    address: order?.destinationWalletAddress,
     enabled: opened,
   });
   const { defaultTheme } = UseThemeConfig();
@@ -274,8 +274,8 @@ export const OrderCardComponentSDK = ({
                   .map((prod: any, index: number) => (
                     <ProductInfo
                       currency={
-                        order?.data?.payments?.length > 1
-                          ? order?.data?.payments?.find(
+                        order?.payments?.length > 1
+                          ? order?.payments?.find(
                               (res: { currencyId: string }) =>
                                 res.currencyId !== coinPaymentCurrencyId
                             )?.currency?.symbol ?? CurrencyEnum.BRL
@@ -346,8 +346,8 @@ export const OrderCardComponentSDK = ({
             </div>
           ) : null}
           <PriceComponent
-            payments={order?.data?.payments}
-            name={order?.data?.currency?.code ?? CurrencyEnum.BRL}
+            payments={order?.payments}
+            name={order?.currency?.code ?? CurrencyEnum.BRL}
             className={`${
               data?.data?.data?.[0]?.attributes?.name ? '' : 'pw-mt-6'
             }`}
