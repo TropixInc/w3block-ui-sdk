@@ -1448,10 +1448,10 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.5.13.tgz#87b309a6379c22b926e696893237826f64339b6f"
   integrity sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==
 
-"@w3block/sdk-id@^0.1.81":
-  version "0.1.83"
-  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.83.tgz#d2fa037c5d16ef795d40f800b95511d54fb8e5f3"
-  integrity sha512-QkrsgjCYOfbklv95hdpf6BsuHEwUN4kCADwbWtJ1sRgiC6vXX8yjp04Wn287yRGsNoVKI8OfCH4H1CiHZ7bh1Q==
+"@w3block/sdk-id@^0.1.89":
+  version "0.1.89"
+  resolved "https://registry.yarnpkg.com/@w3block/sdk-id/-/sdk-id-0.1.89.tgz#d765088b40b8a280e89ca64d2b71fa37920a90b2"
+  integrity sha512-OzycX8qx/5Ru1X4aYE9kMi/WZ8esMgIPN3iP1rOw8534yaZkm6lYJKQr40tLGvqAZMkPjX9MXXV2qqrWTJ7CeA==
   dependencies:
     axios "^0.24.0"
     date-fns "2.29.1"

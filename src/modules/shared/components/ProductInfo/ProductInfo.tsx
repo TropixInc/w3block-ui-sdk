@@ -49,6 +49,7 @@ interface ProductInfoProps {
   anchorCurrencySymbol?: string;
   metadata?: any;
   promotionDescription?: string;
+  totalValue?: string;
 }
 
 export const ProductInfo = ({
@@ -76,6 +77,7 @@ export const ProductInfo = ({
   anchorCurrencySymbol,
   metadata,
   promotionDescription,
+  totalValue,
 }: ProductInfoProps) => {
   const [translate] = useTranslation();
   const [error, setError] = useState('');
@@ -241,7 +243,9 @@ export const ProductInfo = ({
           ) : (
             currency
           )}{' '}
-          {(parseFloat(price) * (quantity ?? 1)).toFixed(2)}
+          {totalValue
+            ? parseFloat(totalValue).toFixed(2)
+            : (parseFloat(price) * (quantity ?? 1)).toFixed(2)}
         </p>
       </div>
     </div>

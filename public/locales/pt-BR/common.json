@@ -1015,6 +1015,24 @@
   "checkout>checkoutInfo>infoAboutAnalysis": "Seu pedido foi recebido e está sendo analisado, iremos entrar em contato para a efetuação do pagamento.",
   "pages>resale>goToSales": "Acompanhar minhas vendas",
   "pages>checkout>erc20Buy": "*Sua compra pode ser fechada em um valor inferior a este, conforme oscilações de preço desta moeda",
-  "pages>checkout>erc20BuyTotal": "Valor total máximo*"
- }
+  "pages>checkout>erc20BuyTotal": "Valor total máximo*",
+  "dashboard>MySalesListComponent>salesNotFound": "Você não fez nenhuma venda ainda.",
+  "pages>mysales>resale>totalSold": "Total vendido",
+  "pages>mysales>resale>totalWaiting": "Total à receber",
+  "pages>mysales>resale>info": "*Seus pagamentos são depositados na conta informada diariamente.",
+  "pages>mysales>resale>sales": "Vendas",
+  "pages>mysales>resale>concludedSales": "Vendas concluídas",
+  "pages>mysales>resale>totalForSale": "Total à venda",
+  "pages>mysales>resale>value": "Valor unitário",
+  "pages>mysales>resale>bankDetails": "Dados bancários",
+  "pages>mysales>resale>editDetails": "Editar dados",
+  "pages>mysales>resale>editSale": "Editar venda",
+  "pages>mysales>resale>removeSale": "Remover venda",
+  "pages>mysales>resale>fillBankDetails": "É necessário preencher seus dados bancários para começar a receber suas vendas",
+  "pages>mysales>resale>fillExtraDetails": "São necessários dados adicionais para terminar seu registro como revendedor",
+  "pages>mysales>resale>fillData": "Preencher dados",
+  "pages>mysales>resale>subtotal": "Subtotal",
+  "pages>mysales>resale>fees": "Taxas",
+  "pages>mysales>resale>total": "Total recebido"
+ } 
  

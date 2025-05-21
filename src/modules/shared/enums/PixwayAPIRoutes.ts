@@ -118,4 +118,8 @@ export enum PixwayAPIRoutes {
   POST_PRODUCT_RESALE = '/companies/{companyId}/products-resale/{productId}',
   GET_PRODUCT_RESALE = '/companies/{companyId}/products-resale',
   GET_PRODUCT_RESALE_BY_ID = '/companies/{companyId}/products-resale/{productId}',
+  GET_USER_RESALE_SUMMARY = '/companies/{companyId}/users/{userId}/resales/summary',
+  GET_USER_RESALE = '/companies/{companyId}/users/{userId}/resales',
+  GET_USER_FORSALE_ERC20 = '/companies/{companyId}/users/{userId}/resales/for-sale/erc20',
+  DELETE_PRODUCT_RESALE = '/companies/{companyId}/products-resale/{productId}',
 }

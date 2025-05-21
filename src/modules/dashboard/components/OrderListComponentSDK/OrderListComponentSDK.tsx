@@ -39,7 +39,7 @@ export const OrderListComponentSDK = () => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actualPage]);
-  const orders = data?.data?.items ?? [];
+  const orders = data?.items ?? [];
   return (
     <div className="pw-mt-7 pw-px-4">
       <div className="pw-gap-6 pw-flex pw-flex-col">
@@ -81,7 +81,7 @@ export const OrderListComponentSDK = () => {
             ))}
             {orders.length ? (
               <Pagination
-                pagesQuantity={data?.data.meta.totalPages ?? 1}
+                pagesQuantity={data?.meta?.totalPages ?? 1}
                 currentPage={actualPage}
                 onChangePage={(n) => {
                   setActualPage(n);
