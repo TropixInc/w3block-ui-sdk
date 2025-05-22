@@ -1016,11 +1016,11 @@
   "pages>resale>goToSales": "Acompanhar minhas vendas",
   "dashboard>MySalesListComponent>salesNotFound": "Você não fez nenhuma venda ainda.",
   "pages>mysales>resale>totalSold": "Total vendido",
-  "pages>mysales>resale>totalWaiting": "Total à receber",
+  "pages>mysales>resale>totalWaiting": "Total a receber",
   "pages>mysales>resale>info": "*Seus pagamentos são depositados na conta informada diariamente.",
   "pages>mysales>resale>sales": "Vendas",
   "pages>mysales>resale>concludedSales": "Vendas concluídas",
-  "pages>mysales>resale>totalForSale": "Total à venda",
+  "pages>mysales>resale>totalForSale": "Total a venda",
   "pages>mysales>resale>value": "Valor unitário",
   "pages>mysales>resale>bankDetails": "Dados bancários",
   "pages>mysales>resale>editDetails": "Editar dados",
@@ -1037,6 +1037,10 @@
   "shared>GenericWalletFilter>keyWallet": "Carteira Key",
   "shared>GenericWalletFilter>walletNotFound": "Carteira não registrada no sistema",
   "pages>productResale>completeBankDetails": "Para começar a vender você precisa preencher seus dados bancários.",
-  "pages>productResale>goToComplete": "Completar dados"
+  "pages>productResale>goToComplete": "Completar dados",
+  "pages>mysales>resale>newsale": "Cadastrar nova venda",
+  "pages>iframe>continue": "Ao finalizar, clique aqui para continuar.",
+  "pages>iframe>click": "clique aqui",
+  "pages>mysales>fillBankDetails": "Por favor, preencha seus dados bancários antes de cadastrar uma venda"
  }
  

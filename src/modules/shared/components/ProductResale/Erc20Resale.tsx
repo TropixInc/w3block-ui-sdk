@@ -215,6 +215,7 @@ export const Erc20Resale = () => {
                 <div>
                   <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
                     {translate('pages>productResale>value')}
+                    {'(R$)'}
                   </label>
                   <CurrencyInput
                     onChangeValue={(_, value) => {
@@ -251,35 +252,41 @@ export const Erc20Resale = () => {
                   <h1 className="pw-font-normal pw-text-base pw-mb-4 pw-text-black">
                     {translate('pages>productResale>summary')}
                   </h1>
-                  {config?.price && config?.currency && value ? (
-                    <div className={`pw-w-full`}>
-                      <div className="pw-flex pw-justify-between">
-                        <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
-                          {translate('pages>productResale>subtotal')}
-                        </p>
-                        <div className="pw-flex pw-gap-2">
-                          <CriptoValueComponent
-                            code={'BRL'}
-                            value={(config.price * value) as unknown as string}
-                            fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
-                          />
-                        </div>
-                      </div>
-                      <div className="pw-w-full pw-h-[1px] pw-bg-[#777E8F] pw-my-2"></div>
-                      <div className="pw-flex pw-justify-between">
-                        <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">
-                          {translate('shared>components>price&gasInfo')}
-                        </p>
-                        <div className="pw-flex pw-gap-2">
-                          <CriptoValueComponent
-                            code={'BRL'}
-                            value={(config.price * value) as unknown as string}
-                            fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
-                          />
-                        </div>
+                  <div className={`pw-w-full`}>
+                    <div className="pw-flex pw-justify-between">
+                      <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
+                        {translate('pages>productResale>subtotal')}
+                      </p>
+                      <div className="pw-flex pw-gap-2">
+                        <CriptoValueComponent
+                          code={'BRL'}
+                          value={
+                            config?.price && value
+                              ? ((config?.price * value) as unknown as string)
+                              : '--'
+                          }
+                          fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+                        />
                       </div>
                     </div>
-                  ) : null}
+                    <div className="pw-w-full pw-h-[1px] pw-bg-[#777E8F] pw-my-2"></div>
+                    <div className="pw-flex pw-justify-between">
+                      <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">
+                        {translate('shared>components>price&gasInfo')}
+                      </p>
+                      <div className="pw-flex pw-gap-2">
+                        <CriptoValueComponent
+                          code={'BRL'}
+                          value={
+                            config?.price && value
+                              ? ((config?.price * value) as unknown as string)
+                              : '--'
+                          }
+                          fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

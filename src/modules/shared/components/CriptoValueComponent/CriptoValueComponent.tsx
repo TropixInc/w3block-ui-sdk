@@ -68,7 +68,9 @@ export const CriptoValueComponent = ({
         style={textColor ? { color: textColor } : {}}
         className={`pw-font-semibold pw-text-black ${fontClass}`}
       >
-        {parseFloat(value) === 0 && showFree
+        {Number.isNaN(parseFloat(value))
+          ? value
+          : parseFloat(value) === 0 && showFree
           ? translate('commerce>checkout>free')
           : crypto
           ? getCryptoValueByCode()

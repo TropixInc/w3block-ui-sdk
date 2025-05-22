@@ -36,8 +36,14 @@ const InputCompletedAddress = ({
 
   useEffect(() => {
     if (apiValue) {
-      setCountry(apiValue?.country);
+      setCountry({
+        value: apiValue?.country,
+        label:
+          countriesFiltered?.find((res) => res.value === apiValue?.country)
+            ?.label ?? '',
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiValue]);
 
   const countriesFiltered = useMemo(() => {

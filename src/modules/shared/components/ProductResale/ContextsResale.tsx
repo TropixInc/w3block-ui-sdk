@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useProfile } from '../../hooks';
 import { useGetContextByUserId } from '../../hooks/useGetContextByUserId/useGetContextByUserId';
@@ -16,11 +18,14 @@ export const ContextsResale = ({ contextId, slug }: Params) => {
     profile?.data?.data?.id ?? '',
     contextId
   );
-  const context = data?.data?.items?.[0];
+  const context = useMemo(() => {
+    return data?.data?.items?.[0];
+  }, [data?.data?.items]);
+
   if (
     context?.status === 'draft' ||
     context?.status === 'requiredReview' ||
-    !context
+    (!context && slug === 'bankdetails')
   ) {
     return slug === 'bankdetails' ? (
       <div className="pw-flex pw-flex-col pw-w-full pw-gap-2 pw-p-4 pw-justify-center pw-items-start pw-bg-[#FFF9E3] pw-text-[#EEA109] pw-rounded-lg">

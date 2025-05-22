@@ -19,6 +19,7 @@ import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGe
 import { useGetUserResaleSummary } from '../../hooks/useGetUserResaleSummary/useGetUserResaleSummary';
 import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { useUserWallet } from '../../hooks/useUserWallet';
+import { Alert } from '../Alert';
 import { BaseButton } from '../Buttons';
 import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
@@ -146,7 +147,9 @@ export const MySales = () => {
               {translate('pages>mysales>resale>totalSold')}
             </p>
             {'R$'}
-            {summary?.data?.saleSummaryByCurrency?.[0]?.totalValue}
+            {parseFloat(
+              summary?.data?.saleSummaryByCurrency?.[0]?.netValue ?? '0'
+            ).toFixed(2)}
           </div>
           <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
             <p className="pw-text-sm pw-opacity-80">
@@ -218,7 +221,7 @@ export const MySales = () => {
                     link={{
                       href:
                         PixwayAppRoutes.COMPLETE_KYC +
-                        `?contextSlug=bankdetails&userContextId=${userContext?.data?.items?.[0]?.id}`,
+                        `?contextSlug=bankdetails&userContextId=${userContext?.data?.id}`,
                     }}
                     className="pw-mt-4 pw-w-max"
                   >
@@ -274,7 +277,8 @@ export const MySales = () => {
                             <p className="pw-text-sm pw-opacity-80">
                               {translate('pages>mysales>resale>value')}
                             </p>
-                            {'R$'} {res?.prices?.[0]?.amount}
+                            {'R$'}{' '}
+                            {parseFloat(res?.prices?.[0]?.amount).toFixed(2)}
                           </div>
                         </div>
                         <div className="pw-flex pw-justify-between pw-mt-6 pw-gap-4 pw-text-black">
@@ -302,13 +306,22 @@ export const MySales = () => {
                     );
                   })
                 ) : (
-                  <BaseButton
-                    link={{
-                      href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}`,
-                    }}
-                  >
-                    {translate('pages>mysales>resale')}
-                  </BaseButton>
+                  <>
+                    {!context?.data?.items?.length ? (
+                      <Alert variant="information">
+                        {translate('pages>mysales>fillBankDetails')}
+                      </Alert>
+                    ) : (
+                      <BaseButton
+                        link={{
+                          href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}`,
+                        }}
+                        className="pw-w-max"
+                      >
+                        {translate('pages>mysales>resale>newsale')}
+                      </BaseButton>
+                    )}
+                  </>
                 )}
               </div>
             </Tab.Panel>

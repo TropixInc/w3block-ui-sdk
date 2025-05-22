@@ -48,6 +48,11 @@ export const useGetUserForSaleErc20 = (enabled?: boolean) => {
         throw handleNetworkException(err);
       }
     },
-    { enabled }
+    {
+      enabled:
+        enabled &&
+        profile?.data?.data?.id !== '' &&
+        profile?.data?.data?.id !== undefined,
+    }
   );
 };

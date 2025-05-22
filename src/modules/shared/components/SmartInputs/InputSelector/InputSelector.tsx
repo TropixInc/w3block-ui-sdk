@@ -173,6 +173,9 @@ export const InputSelector = ({
 
   useEffect(() => {
     if (docValue) {
+      if (!configData?.isMultiple) {
+        setSelectedValue(docValue as string);
+      }
       field?.onChange({ inputId: name, value: docValue });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

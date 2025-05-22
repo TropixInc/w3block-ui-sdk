@@ -1015,7 +1015,7 @@
 "pages>mysales>resale>value": "Value per coin",
 "pages>mysales>resale>bankDetails": "Bank details",
 "pages>mysales>resale>editDetails": "Edit details",
-"pages>mysales>resale>editSale": "Editar sale",
+"pages>mysales>resale>editSale": "Edit sale",
 "pages>mysales>resale>removeSale": "Remove sale",
 "pages>mysales>resale>fillBankDetails": "It's required to fill in your bank details to start receiving your sales",
 "pages>mysales>resale>fillExtraDetails": "Additional data is required to complete your registration as a reseller",
@@ -1024,5 +1024,7 @@
 "pages>mysales>resale>fees": "Fees",
 "pages>mysales>resale>total": "Total received",
 "shared>GenericWalletFilter>keyWallet": "Key Wallet",
-"shared>GenericWalletFilter>walletNotFound": "Wallet not registered in the system"
+"shared>GenericWalletFilter>walletNotFound": "Wallet not registered in the system",
+"pages>mysales>fillBankDetails": "Please, fill in your bank details before starting to sell your coins.",
+"pages>mysales>resale>newsale": "Create new sale"
 }

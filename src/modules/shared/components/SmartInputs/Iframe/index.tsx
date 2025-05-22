@@ -6,8 +6,6 @@ interface Params {
 
 export const IframeInput = ({ docValue }: Params) => {
   const iframeRef = useRef(null);
-  const iframe = document?.getElementById('iframe-kyc') as HTMLIFrameElement;
-  const iframeURL = iframe?.src;
   if (docValue) {
     return (
       <>
@@ -19,7 +17,16 @@ export const IframeInput = ({ docValue }: Params) => {
           style={{ minHeight: '500px' }}
           allow="autoplay; camera; microphone; gyroscope; magnetometer; geolocation; accelerometer; ambient-light-sensor"
         />
-        <div className="pw-mt-3 pw-break-all pw-text-black">{iframeURL}</div>
+        <button
+          type="submit"
+          className="pw-mt-3 pw-break-all pw-text-black pw-text-center pw-text-sm"
+        >
+          {'Ao finalizar, '}
+          <span className="pw-underline pw-text-blue-500">
+            {'clique aqui '}
+          </span>
+          {'para continuar'}
+        </button>
       </>
     );
   }

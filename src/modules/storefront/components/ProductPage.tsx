@@ -1011,19 +1011,19 @@ export const ProductPage = ({
                         <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
                           <p
                             onClick={() => {
-                              if (quantity > 1) {
-                                if (
-                                  isErc20 &&
-                                  batchSize &&
-                                  quantity > batchSize
-                                ) {
+                              if (isErc20 && batchSize) {
+                                if (quantity > batchSize) {
                                   setQuantity(quantity - batchSize);
-                                } else {
-                                  setQuantity(quantity - 1);
                                 }
+                              } else if (quantity > 1) {
+                                setQuantity(quantity - 1);
                               }
                             }}
                             className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                              quantity === batchSize
+                                ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
+                                : ''
+                            } ${
                               quantity && quantity > 1
                                 ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
                                 : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'

@@ -1430,7 +1430,11 @@ const _CheckoutInfo = ({
                                 )
                               }
                               className="pw-text-black pw-border pw-border-solid pw-font-bold pw-px-4 pw-rounded-lg pw-h-[42px]"
-                              disabled={parseFloat(paymentAmount) === 0}
+                              disabled={
+                                parseFloat(paymentAmount) === 0 ||
+                                parseFloat(paymentAmount) ===
+                                  parseFloat(batchSize)
+                              }
                             >
                               -
                             </button>
@@ -1442,6 +1446,14 @@ const _CheckoutInfo = ({
                                     parseFloat(batchSize)
                                   ).toString() + ',00'
                                 )
+                              }
+                              disabled={
+                                orderPreview?.products?.[0]?.canPurchaseAmount
+                                  ? parseFloat(paymentAmount) +
+                                      parseFloat(batchSize) >
+                                    orderPreview?.products?.[0]
+                                      ?.canPurchaseAmount
+                                  : false
                               }
                               className="pw-text-black pw-border pw-border-solid pw-font-bold pw-px-4 pw-rounded-lg pw-h-[42px]"
                             >
@@ -2093,7 +2105,6 @@ const _CheckoutInfo = ({
         <div className="pw-w-full lg:pw-px-[60px] pw-px-0 pw-mt-6 sm:pw-mt-0">
           {isCoinPayment ||
           productCache?.isCoinPayment ||
-          isErc20 ||
           orderResponse?.passShareCodeInfo ? null : (
             <>
               <p className="pw-text-[18px] pw-font-[700] pw-text-[#35394C]">
