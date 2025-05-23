@@ -146,15 +146,6 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       },
       {
         title:
-          internalMenuData['mySales']?.customLabel ||
-          translate('pages>mysales>mysales'),
-        id: 'mySales',
-        icon: <MyOrdersIcon />,
-        link: PixwayAppRoutes.MY_SALES,
-        isVisible: isHidden('mySales') === false,
-      },
-      {
-        title:
           internalMenuData['withdraws']?.customLabel ||
           translate('components>menu>withdraws'),
         id: 'withdraws',
@@ -226,6 +217,15 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         link: PixwayAppRoutes.MY_ORDERS,
         icon: <MyOrdersIcon />,
         isVisible: (isUser || isAdmin) && !isHidden('myOrders'),
+      },
+      {
+        title:
+          internalMenuData['mySales']?.customLabel ||
+          translate('pages>mysales>mysales'),
+        id: 'mySales',
+        icon: <MyOrdersIcon />,
+        link: PixwayAppRoutes.MY_SALES,
+        isVisible: isHidden('mySales') === false,
       },
       {
         title:

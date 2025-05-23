@@ -1066,6 +1066,14 @@ export const ProductPage = ({
                             className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                               product?.canPurchaseAmount &&
                               product?.stockAmount &&
+                              quantity + (batchSize ?? 0) >
+                                product?.canPurchaseAmount &&
+                              quantity + (batchSize ?? 0) > product?.stockAmount
+                                ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
+                                : ''
+                            } ${
+                              product?.canPurchaseAmount &&
+                              product?.stockAmount &&
                               quantity < product?.canPurchaseAmount &&
                               quantity < product?.stockAmount
                                 ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
@@ -1079,7 +1087,13 @@ export const ProductPage = ({
                                 quantity < product?.stockAmount
                               ) {
                                 if (isErc20 && batchSize) {
-                                  setQuantity(quantity + batchSize);
+                                  if (
+                                    quantity + batchSize <
+                                      product?.canPurchaseAmount &&
+                                    quantity + batchSize < product?.stockAmount
+                                  ) {
+                                    setQuantity(quantity + batchSize);
+                                  }
                                 } else {
                                   setQuantity(quantity + 1);
                                 }
@@ -1089,6 +1103,16 @@ export const ProductPage = ({
                             +
                           </p>
                         </div>
+                        {product?.canPurchaseAmount &&
+                        quantity + (batchSize ?? 0) >
+                          product?.canPurchaseAmount &&
+                        quantity + (batchSize ?? 0) > product?.stockAmount ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>product>reachStock', {
+                              product: product?.name,
+                            })}
+                          </p>
+                        ) : null}
                         {batchSize ? (
                           <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
                             {translate('pages>checkout>batchSize', {

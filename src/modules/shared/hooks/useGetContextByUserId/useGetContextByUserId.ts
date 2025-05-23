@@ -4,7 +4,7 @@ import { useCompanyConfig } from '../useCompanyConfig';
 import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { usePrivateQuery } from '../usePrivateQuery';
 
-export const useGetContextByUserId = (userId: string, contextId: string) => {
+export const useGetContextByUserId = (userId: string, contextId?: string) => {
   const { companyId } = useCompanyConfig();
   const getSdk = useGetW3blockIdSDK();
 
@@ -16,7 +16,7 @@ export const useGetContextByUserId = (userId: string, contextId: string) => {
         const response = await sdk.api.users.findUsersContextByUserId(
           companyId as string,
           userId,
-          { contextId: contextId }
+          { contextId }
         );
 
         return response;
@@ -26,6 +26,6 @@ export const useGetContextByUserId = (userId: string, contextId: string) => {
         throw handleNetworkException(err);
       }
     },
-    { enabled: Boolean(userId && contextId) }
+    { enabled: Boolean(userId) }
   );
 };

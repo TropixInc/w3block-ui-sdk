@@ -150,15 +150,6 @@ export const useDefaultMenuTabs = (textColor: string) => {
     },
     {
       name:
-        internalMenuData['mySales']?.customLabel ||
-        translate('pages>mysales>mysales'),
-      id: 'mySales',
-      icon: <MyOrdersIcon />,
-      route: PixwayAppRoutes.MY_SALES,
-      isVisible: isHidden('mySales') === false,
-    },
-    {
-      name:
         internalMenuData['withdraws']?.customLabel ||
         translate('components>menu>withdraws'), 
       id: 'withdraws',
@@ -213,6 +204,15 @@ export const useDefaultMenuTabs = (textColor: string) => {
       route: PixwayAppRoutes.MY_ORDERS,
       icon: <MyOrdersIcon style={{ color: textColor, stroke: textColor }} />,
       isVisible: (isUser || isAdmin) && !isHidden('myOrders'),
+    },
+    {
+      name:
+        internalMenuData['mySales']?.customLabel ||
+        translate('pages>mysales>mysales'),
+      id: 'mySales',
+      icon: <MyOrdersIcon style={{ color: textColor, stroke: textColor }} />,
+      route: PixwayAppRoutes.MY_SALES,
+      isVisible: isHidden('mySales') === false,
     },
     {
       name: internalMenuData['myProfile']?.customLabel ||

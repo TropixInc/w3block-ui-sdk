@@ -17,16 +17,18 @@ export const IframeInput = ({ docValue }: Params) => {
           style={{ minHeight: '500px' }}
           allow="autoplay; camera; microphone; gyroscope; magnetometer; geolocation; accelerometer; ambient-light-sensor"
         />
-        <button
-          type="submit"
-          className="pw-mt-3 pw-break-all pw-text-black pw-text-center pw-text-sm"
-        >
-          {'Ao finalizar, '}
-          <span className="pw-underline pw-text-blue-500">
-            {'clique aqui '}
-          </span>
-          {'para continuar'}
-        </button>
+        <div className="pw-flex pw-justify-end">
+          <button
+            type="submit"
+            className="pw-mt-3 pw-break-all pw-text-black pw-font-semibold pw-text-right pw-text-sm"
+          >
+            {'Ao finalizar, '}
+            <span className="pw-underline pw-text-blue-500">
+              {'clique aqui'}
+            </span>
+            {' para continuar'}
+          </button>
+        </div>
       </>
     );
   }

@@ -1041,5 +1041,9 @@
 "pages>productResale>completeBankDetails": "To start selling you need to fill in your bank details.",
 "pages>productResale>goToComplete": "Fill in your bank details",
 "pages>iframe>continue": "When you finish, click here to continue.",
-"pages>iframe>click": "click here"
+"pages>iframe>click": "click here",
+"pages>mysales>resale>saveSale": "Save sale",
+"pages>product>reachStock": "*You've reached the maximum number of {{product}} you can buy.",
+"pages>resale>maximumValue": "Maximum value:",
+"pages>resale>minimumValue": "Minimum value:"
 }

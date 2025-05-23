@@ -5,16 +5,13 @@ import { useDebounce } from 'react-use';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
-import { useGetContextByUserId } from '../../hooks/useGetContextByUserId/useGetContextByUserId';
 import {
   ProductResaleResponse,
   useGetResaleById,
 } from '../../hooks/useGetResaleById/useGetResaleById';
-import { useGetTenantContextBySlug } from '../../hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
 import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
-import { useProfileWithKYC } from '../../hooks/useProfileWithKYC/useProfileWithKYC';
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { BaseInput } from '../BaseInput';
@@ -84,6 +81,19 @@ export const Erc20Resale = () => {
     [value, config?.price]
   );
 
+  const options = useMemo(() => {
+    return (
+      productResale?.product?.settings?.resaleConfig?.currencyIds?.map(
+        (res) => {
+          return {
+            value: res,
+            label: res === '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ? 'R$' : '$',
+          };
+        }
+      ) ?? []
+    );
+  }, [productResale?.product?.settings?.resaleConfig?.currencyIds]);
+
   const handleSubmit = () => {
     if (config?.price && value && config?.currency) {
       setError('');
@@ -96,7 +106,9 @@ export const Erc20Resale = () => {
               {
                 amount: config?.price.toString(),
                 currencyId:
-                  config?.currency ?? '65fe1119-6ec0-4b78-8d30-cb989914bdcb',
+                  config?.currency ??
+                  options?.[0]?.value ??
+                  '65fe1119-6ec0-4b78-8d30-cb989914bdcb',
               },
             ],
           },
@@ -125,19 +137,6 @@ export const Erc20Resale = () => {
     setValue(value - batchSize);
   };
 
-  const options = useMemo(() => {
-    return (
-      productResale?.product?.settings?.resaleConfig?.currencyIds?.map(
-        (res) => {
-          return {
-            value: res,
-            label: res === '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ? 'R$' : '$',
-          };
-        }
-      ) ?? []
-    );
-  }, [productResale?.product?.settings?.resaleConfig?.currencyIds]);
-
   useEffect(() => {
     if (options.length === 1) {
       setConfig({ ...config, currency: options[0].value });
@@ -148,40 +147,6 @@ export const Erc20Resale = () => {
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
   });
-
-  const { profile } = useProfileWithKYC();
-  const { data: context } = useGetTenantContextBySlug('bankdetails');
-  const { data } = useGetContextByUserId(
-    profile?.id ?? '',
-    (context?.data as any)?.contextId
-  );
-
-  if (
-    data?.data?.items?.length === 0 ||
-    data?.data?.items?.[0]?.status === 'denied'
-  ) {
-    return (
-      <TranslatableComponent>
-        <InternalPagesLayoutBase>
-          <div className="pw-flex pw-flex-col pw-mt-5 pw-px-4 pw-gap-2 pw-justify-center pw-items-center">
-            <Alert variant="error">
-              {translate('pages>productResale>completeBankDetails')}
-            </Alert>
-            <BaseButton
-              link={{
-                href: data?.data?.items?.[0]?.id
-                  ? PixwayAppRoutes.COMPLETE_KYC +
-                    `?contextSlug=bankdetails&userContextId=${data?.data?.items?.[0]?.id}`
-                  : PixwayAppRoutes.COMPLETE_KYC + '?contextSlug=bankdetails',
-              }}
-            >
-              {translate('pages>productResale>goToComplete')}
-            </BaseButton>
-          </div>
-        </InternalPagesLayoutBase>
-      </TranslatableComponent>
-    );
-  }
 
   return (
     <TranslatableComponent>
@@ -237,22 +202,26 @@ export const Erc20Resale = () => {
                     </p>
                   ) : null}
                 </div>
-                <div>
-                  <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
-                    {translate('pages>productResale>currency')}
-                  </label>
-                  <BaseSelect
-                    value={config?.currency}
-                    readOnly={options.length === 1}
-                    options={options}
-                    onChangeValue={(e) => setConfig({ ...config, currency: e })}
-                    className="pw-w-full"
-                  />
-                </div>
+                {options.length > 1 ? (
+                  <div>
+                    <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
+                      {translate('pages>productResale>currency')}
+                    </label>
+                    <BaseSelect
+                      value={config?.currency}
+                      readOnly={options.length === 1}
+                      options={options}
+                      onChangeValue={(e) =>
+                        setConfig({ ...config, currency: e })
+                      }
+                      className="pw-w-full"
+                    />
+                  </div>
+                ) : null}
                 <div>
                   <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
                     {translate('pages>productResale>value')}
-                    {'(R$)'}
+                    {' (R$)'}
                   </label>
                   <CurrencyInput
                     onChangeValue={(_, value) => {
@@ -274,10 +243,12 @@ export const Erc20Resale = () => {
                     }
                   />
                   <p className="pw-text-[12px] pw-text-gray-500">
-                    {`Valor mínimo: R$${parseFloat(
+                    {`${translate('pages>resale>minimumValue')} R$${parseFloat(
                       productResale?.product?.settings?.resaleConfig
                         ?.priceLimits?.[0]?.min ?? '0'
-                    ).toFixed(2)}, Valor máximo: R$${parseFloat(
+                    ).toFixed(2)}, ${translate(
+                      'pages>resale>maximumValue'
+                    )} R$${parseFloat(
                       productResale?.product?.settings?.resaleConfig
                         ?.priceLimits?.[0]?.max ?? '0'
                     ).toFixed(2)} `}
@@ -368,7 +339,7 @@ export const Erc20Resale = () => {
                   {isLoading ? (
                     <Spinner className="pw-w-5 pw-h-5" />
                   ) : isEdit ? (
-                    translate('pages>mysales>resale>editSale')
+                    translate('pages>mysales>resale>saveSale')
                   ) : (
                     translate('pages>mysales>resale')
                   )}

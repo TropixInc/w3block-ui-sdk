@@ -1451,8 +1451,11 @@ const _CheckoutInfo = ({
                                 orderPreview?.products?.[0]?.canPurchaseAmount
                                   ? parseFloat(paymentAmount) +
                                       parseFloat(batchSize) >
-                                    orderPreview?.products?.[0]
-                                      ?.canPurchaseAmount
+                                      orderPreview?.products?.[0]
+                                        ?.canPurchaseAmount &&
+                                    parseFloat(paymentAmount) +
+                                      parseFloat(batchSize) >
+                                      orderPreview?.products?.[0]?.stockAmount
                                   : false
                               }
                               className="pw-text-black pw-border pw-border-solid pw-font-bold pw-px-4 pw-rounded-lg pw-h-[42px]"
@@ -1462,6 +1465,17 @@ const _CheckoutInfo = ({
                           </div>
                         ) : null}
                       </div>
+                      {orderPreview?.products?.[0]?.canPurchaseAmount &&
+                      parseFloat(paymentAmount) + parseFloat(batchSize ?? '0') >
+                        orderPreview?.products?.[0]?.canPurchaseAmount &&
+                      parseFloat(paymentAmount) + parseFloat(batchSize ?? '0') >
+                        orderPreview?.products?.[0]?.stockAmount ? (
+                        <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                          {translate('pages>product>reachStock', {
+                            product: orderPreview?.products?.[0]?.name,
+                          })}
+                        </p>
+                      ) : null}
                       {batchSize ? (
                         <p className="pw-text-gray-500 pw-text-xs pw-mt-2">
                           {translate('pages>checkout>batchSize', { batchSize })}
