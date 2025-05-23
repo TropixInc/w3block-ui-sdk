@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 
 import { W3blockAPI } from '../../enums';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
@@ -8,10 +8,11 @@ import { useCompanyConfig } from '../useCompanyConfig';
 
 interface Params {
   id: string;
-  enabled?: boolean;
+  amount?: string;
+  price?: string;
 }
 
-interface Response {
+export interface ProductResaleResponse {
   product: Product;
   resaleMetadata: {
     prices: {
@@ -20,28 +21,35 @@ interface Response {
       minPrice: string;
       recommendedPrice: string;
     }[];
+    percentageFee?: string;
+    resalePreviewResponse: {
+      totalPrice: string;
+      fees: string;
+      netValue: string;
+    };
   };
 }
 
-export const useGetResaleById = ({ id, enabled = true }: Params) => {
+export const useGetResaleById = () => {
   const axios = useAxios(W3blockAPI.COMMERCE);
   const { companyId } = useCompanyConfig();
 
-  return useQuery(
-    [PixwayAPIRoutes.GET_PRODUCT_RESALE_BY_ID, companyId, id],
-    () =>
+  return useMutation(
+    [PixwayAPIRoutes.GET_PRODUCT_RESALE_BY_ID, companyId],
+    ({ id, amount, price }: Params) =>
       axios
-        .get<Response>(
-          PixwayAPIRoutes.GET_PRODUCT_RESALE_BY_ID.replace(
-            '{companyId}',
-            companyId
-          ).replace('{productId}', id)
+        .get<ProductResaleResponse>(
+          amount && price
+            ? PixwayAPIRoutes.GET_PRODUCT_RESALE_BY_ID.replace(
+                '{companyId}',
+                companyId
+              ).replace('{productId}', id) +
+                `?previewAmount=${amount}&previewPrice=${price}`
+            : PixwayAPIRoutes.GET_PRODUCT_RESALE_BY_ID.replace(
+                '{companyId}',
+                companyId
+              ).replace('{productId}', id)
         )
-        .then((res) => res.data),
-    {
-      enabled: enabled,
-      refetchOnWindowFocus: false,
-      retry: 0,
-    }
+        .then((res) => res.data)
   );
 };

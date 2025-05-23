@@ -1041,6 +1041,6 @@
   "pages>mysales>resale>newsale": "Cadastrar nova venda",
   "pages>iframe>continue": "Ao finalizar, clique aqui para continuar.",
   "pages>iframe>click": "clique aqui",
-  "pages>mysales>fillBankDetails": "Por favor, preencha seus dados bancários antes de cadastrar uma venda"
+  "pages>mysales>fillBankDetails": "Por favor, preencha seus dados bancários antes de cadastrar uma venda",
+  "pages>resale>totalReceivable": "Total a receber"
  }
- 

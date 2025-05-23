@@ -1,10 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
+import { useDebounce } from 'react-use';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../hooks';
 import { useGetContextByUserId } from '../../hooks/useGetContextByUserId/useGetContextByUserId';
-import { useGetResaleById } from '../../hooks/useGetResaleById/useGetResaleById';
+import {
+  ProductResaleResponse,
+  useGetResaleById,
+} from '../../hooks/useGetResaleById/useGetResaleById';
 import { useGetTenantContextBySlug } from '../../hooks/useGetTenantContextBySlug/useGetTenantContextBySlug';
 import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
 import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
@@ -18,6 +23,7 @@ import { BaseButton } from '../Buttons';
 import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
 import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds/InternalPageHeaderWithFunds';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
+import { Shimmer } from '../Shimmer';
 import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
 
@@ -25,7 +31,9 @@ export const Erc20Resale = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const id = router?.query?.id as string;
-  const { data: productResale } = useGetResaleById({ id });
+  const { mutate: productResalePreview, isLoading: isLoadingPreview } =
+    useGetResaleById();
+  const [productResale, setProductResale] = useState<ProductResaleResponse>();
   const [config, setConfig] = useState<{
     price?: number;
     quantity?: number;
@@ -37,6 +45,7 @@ export const Erc20Resale = () => {
   const { data: forSaleErc20 } = useGetUserForSaleErc20(isEdit);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
   useEffect(() => {
     if (forSaleErc20?.data?.items.length && isEdit) {
       setValue(parseFloat(forSaleErc20?.data?.items?.[0]?.tokenData?.amount));
@@ -47,6 +56,34 @@ export const Erc20Resale = () => {
       });
     }
   }, [forSaleErc20?.data?.items, isEdit]);
+
+  const getResalePreview = () => {
+    productResalePreview(
+      {
+        id,
+        amount: value.toString(),
+        price: config?.price?.toString(),
+      },
+      {
+        onSuccess(data) {
+          setProductResale(data);
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    getResalePreview();
+  }, []);
+
+  useDebounce(
+    () => {
+      getResalePreview();
+    },
+    400,
+    [value, config?.price]
+  );
+
   const handleSubmit = () => {
     if (config?.price && value && config?.currency) {
       setError('');
@@ -257,34 +294,67 @@ export const Erc20Resale = () => {
                       <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
                         {translate('pages>productResale>subtotal')}
                       </p>
-                      <div className="pw-flex pw-gap-2">
-                        <CriptoValueComponent
-                          code={'BRL'}
-                          value={
-                            config?.price && value
-                              ? ((config?.price * value) as unknown as string)
-                              : '--'
-                          }
-                          fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
-                        />
-                      </div>
+                      {isLoadingPreview ? (
+                        <Shimmer />
+                      ) : (
+                        <div className="pw-flex pw-gap-2">
+                          <CriptoValueComponent
+                            code={'BRL'}
+                            value={
+                              productResale?.resaleMetadata
+                                ?.resalePreviewResponse?.totalPrice ?? '--'
+                            }
+                            fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+                          />
+                        </div>
+                      )}
                     </div>
+                    {productResale?.resaleMetadata?.resalePreviewResponse
+                      ?.fees === '0.00' ||
+                    productResale?.resaleMetadata?.resalePreviewResponse
+                      ?.fees === undefined ? null : (
+                      <>
+                        <div className="pw-flex pw-justify-between">
+                          <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
+                            {translate('pages>mysales>resale>fees')}
+                          </p>
+                          {isLoadingPreview ? (
+                            <Shimmer />
+                          ) : (
+                            <div className="pw-flex pw-gap-2 pw-justify-center pw-items-center pw-text-black">
+                              <p>-</p>
+                              <CriptoValueComponent
+                                code={'BRL'}
+                                value={
+                                  productResale?.resaleMetadata
+                                    ?.resalePreviewResponse?.fees ?? '--'
+                                }
+                                fontClass="pw-text-sm pw-font-[600] pw-text-[#35394C]"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
                     <div className="pw-w-full pw-h-[1px] pw-bg-[#777E8F] pw-my-2"></div>
                     <div className="pw-flex pw-justify-between">
                       <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">
-                        {translate('shared>components>price&gasInfo')}
+                        {translate('pages>resale>totalReceivable')}
                       </p>
-                      <div className="pw-flex pw-gap-2">
-                        <CriptoValueComponent
-                          code={'BRL'}
-                          value={
-                            config?.price && value
-                              ? ((config?.price * value) as unknown as string)
-                              : '--'
-                          }
-                          fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
-                        />
-                      </div>
+                      {isLoadingPreview ? (
+                        <Shimmer />
+                      ) : (
+                        <div className="pw-flex pw-gap-2">
+                          <CriptoValueComponent
+                            code={'BRL'}
+                            value={
+                              productResale?.resaleMetadata
+                                ?.resalePreviewResponse?.netValue ?? '--'
+                            }
+                            fontClass="pw-text-xl pw-font-[700] !pw-text-[#35394C]"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
