@@ -565,7 +565,8 @@ export const ProductPage = ({
       parseFloat(
         product?.prices.find((price: any) => price.currencyId == currencyId?.id)
           ?.amount ?? '0'
-      ) === 0
+      ) === 0 &&
+      parseFloat(orderPreview?.payments?.[0]?.totalPrice ?? '0') === 0
     )
       return 'Quero';
     else if (productKycRequirement) return 'Tenho interesse!';

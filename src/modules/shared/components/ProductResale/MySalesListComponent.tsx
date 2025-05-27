@@ -19,7 +19,7 @@ export const MySalesListComponent = () => {
   }
   if (data?.data?.items.length) {
     return (
-      <div className="pw-mt-7 sm:pw-px-4 pw-px-0">
+      <div className="sm:pw-px-4 pw-px-0">
         <div className="pw-gap-6 pw-flex pw-flex-col">
           {data?.data?.items?.map((res) => {
             return (

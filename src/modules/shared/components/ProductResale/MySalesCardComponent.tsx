@@ -1,11 +1,10 @@
 /* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 
 import { format } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
 
-import { CheckoutStatus } from '../../../checkout';
 import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
 import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
 import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react';
@@ -16,12 +15,6 @@ import useTranslation from '../../../shared/hooks/useTranslation';
 import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
 import { Currency } from '../../interface';
 import { MySalesPriceComponent } from './MySalePriceComponent';
-
-const ProductInfo = lazy(() =>
-  import('../../../shared/components/ProductInfo/ProductInfo').then((mod) => ({
-    default: mod.ProductInfo,
-  }))
-);
 
 export enum OrderStatusEnum {
   PENDING = 'pending',
@@ -129,7 +122,10 @@ export const MySalesCardComponent = ({
 
   return (
     <div className="pw-p-6 pw-bg-white pw-rounded-xl pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-w-full">
-      <div className="pw-flex pw-justify-between max-sm:pw-flex-col pw-flex-row pw-gap-3">
+      <div
+        onClick={() => setOpened(!opened)}
+        className="pw-flex pw-justify-between max-sm:pw-flex-col pw-flex-row pw-gap-3"
+      >
         <div>
           <div className="">
             <p
@@ -210,37 +206,39 @@ export const MySalesCardComponent = ({
               </p>
             </div>
           )}
-          <div
-            onClick={() => setOpened(!opened)}
-            className="pw-w-[30px] pw-h-[30px] pw-flex  pw-justify-center pw-items-center pw-bg-[#EFEFEF] pw-rounded-full pw-cursor-pointer"
-          >
+          <div className="pw-w-[30px] pw-h-[30px] pw-flex  pw-justify-center pw-items-center pw-bg-[#EFEFEF] pw-rounded-full pw-cursor-pointer">
             <ArrowIcon style={{ stroke: statusObj?.color }} />
           </div>
         </div>
       </div>
 
       {opened ? (
-        <div>
-          <div className="pw-border pw-border-slate-300 pw-rounded-lg pw-overflow-hidden pw-mt-6">
-            <ProductInfo
-              image={productsRes?.images?.[0]?.thumb ?? ''}
-              name={productsRes?.name ?? ''}
-              id={productsRes?.id ?? ''}
-              price={price ?? ''}
-              status={CheckoutStatus.MY_ORDER}
-              quantity={parseFloat(quantity ?? '')}
-              stockAmount={1}
-              anchorCurrencyAmount="0"
-              totalValue={(
-                parseFloat(receipts?.netValue ?? '0') +
-                parseFloat(receipts?.fees ?? '0')
-              ).toFixed(2)}
-            />
+        <div className="pw-max-w-[550px]">
+          <div className="pw-mt-4">
+            <p className="pw-font-[600] pw-text-sm pw-text-black">
+              {productsRes?.name ?? ''}
+            </p>
+            <div className="pw-flex pw-justify-between">
+              <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
+                {translate('pages>mysales>resale>value')}
+              </p>
+              <p className="pw-text-sm pw-font-[600] pw-text-black">
+                R$ {parseFloat(price ?? '0').toFixed(2)}
+              </p>
+            </div>
+            <div className="pw-flex pw-justify-between">
+              <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
+                {translate('pages>productResale>quantity')}
+              </p>
+              <p className="pw-text-sm pw-font-[600] pw-text-black">
+                x {quantity}
+              </p>
+            </div>
           </div>
           <MySalesPriceComponent
             receipts={receipts}
             name={receipts?.currency?.code ?? CurrencyEnum.BRL}
-            className="pw-mt-6"
+            className="pw-mt-2"
           />
         </div>
       ) : null}

@@ -276,7 +276,7 @@ export const MySales = () => {
           </Disclosure>
         </div>
       ) : null}
-      <div className="pw-text-black">
+      <div className="pw-text-black pw-mb-2">
         <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
           <Tab.List className="pw-mt-5 -pw-mb-[0.6px] pw-px-[20px] sm:pw-px-0">
             <Tab
@@ -299,7 +299,7 @@ export const MySales = () => {
             </Tab>
           </Tab.List>
           <Tab.Panels>
-            <Tab.Panel className="max-sm:!pw-px-0 pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] sm:pw-bg-white pw-bg-inherit sm:pw-shadow-md pw-shadow-none pw-rounded-b-lg pw-rounded-r-lg pw-overflow-hidden">
+            <Tab.Panel className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] sm:pw-bg-white pw-bg-inherit sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-b-lg pw-rounded-r-lg pw-overflow-hidden">
               <div>
                 {forSaleErc20?.data?.items?.length ? (
                   forSaleErc20?.data?.items?.map((res) => {
@@ -308,16 +308,16 @@ export const MySales = () => {
                         key={res?.id}
                         className="pw-flex pw-flex-col pw-gap-1 pw-max-w-[380px] pw-justify-center pw-items-center pw-border pw-border-[#c0c2c4] pw-rounded-lg pw-py-3 pw-px-4"
                       >
-                        <div className="pw-flex pw-w-full pw-gap-x-4 pw-text-black">
+                        <div className="pw-flex pw-w-full pw-gap-x-3 pw-text-black">
                           <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-                            <p className="pw-text-sm pw-opacity-80">
+                            <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
                               {translate('pages>mysales>resale>totalForSale')}
                             </p>
                             {res?.tokenData?.currency?.symbol}{' '}
                             {res?.tokenData?.amount}
                           </div>
                           <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-                            <p className="pw-text-sm pw-opacity-80">
+                            <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
                               {translate('pages>mysales>resale>value')}
                             </p>
                             {'R$'}{' '}
@@ -368,7 +368,7 @@ export const MySales = () => {
                 )}
               </div>
             </Tab.Panel>
-            <Tab.Panel className="max-sm:!pw-px-0 pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] sm:pw-bg-white pw-bg-inherit sm:pw-shadow-md pw-shadow-none pw-rounded-lg pw-overflow-hidden">
+            <Tab.Panel className="max-sm:!pw-px-0 pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] sm:pw-bg-white pw-bg-inherit sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-lg pw-overflow-hidden">
               <MySalesListComponent />
             </Tab.Panel>
           </Tab.Panels>
