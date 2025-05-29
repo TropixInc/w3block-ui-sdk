@@ -17,6 +17,15 @@ interface Address {
   [key: string]: string;
 }
 
+interface Components {
+  home?: string;
+  postal_code?: string;
+  street_address_1?: string;
+  region?: string;
+  city?: string;
+  country?: string;
+}
+
 interface CityAutocompleteProps {
   country: string;
   onChangeRegion?: (value: string | undefined) => void;
@@ -144,6 +153,26 @@ const CityAutoComplete = ({
     [placeCompliment]
   );
 
+  const transformComponents = (components: Components) => {
+    const defaultComponents = {
+      home: '',
+      postal_code: '',
+      street_address_1: '',
+      region: '',
+      city: '',
+      country: '',
+    };
+
+    const result = { ...defaultComponents };
+
+    for (const key in components) {
+      const typedKey = key as keyof Components;
+      result[typedKey] = components[typedKey] || '-';
+    }
+
+    return result;
+  };
+
   const getDetails = useCallback(() => {
     if (placeId && placesService) {
       try {
@@ -155,20 +184,22 @@ const CityAutoComplete = ({
             const components = getAddressObject(
               placeDetails.address_components
             );
-
+            const transformedComponents = transformComponents(components);
             if (type === '(cities)') {
-              setInputValue(`${components.city}, ${components.region}`);
-              onChangeRegion && onChangeRegion(components.region);
+              setInputValue(
+                `${transformedComponents.city}, ${transformedComponents.region}`
+              );
+              onChangeRegion && onChangeRegion(transformedComponents.region);
               field.onChange({
                 inputId: name,
-                value: { ...components, placeId: placeId },
+                value: { ...transformedComponents, placeId: placeId },
               });
             } else if (type === 'postal_code') {
               setInputValue(`${placeDetails.formatted_address}`);
               field.onChange({
                 inputId: name,
                 value: {
-                  ...components,
+                  ...transformedComponents,
                   home: `${placeDetails.formatted_address}`,
                   placeId: placeId,
                 },
@@ -180,7 +211,7 @@ const CityAutoComplete = ({
               field.onChange({
                 inputId: name,
                 value: {
-                  ...components,
+                  ...transformedComponents,
                   home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
                   placeId: placeId,
                 },
