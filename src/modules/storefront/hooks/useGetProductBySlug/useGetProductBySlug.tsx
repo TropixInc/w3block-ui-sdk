@@ -67,6 +67,7 @@ export interface Product {
       enabled?: boolean;
       dataFields?: DataFields[];
     };
+    disableImageDisplay?: boolean;
   };
   canPurchase?: boolean;
   chainId?: number;

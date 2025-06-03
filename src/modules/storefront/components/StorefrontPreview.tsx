@@ -310,7 +310,7 @@ export const StorefrontPreview = ({
             <>
               {productSlug && (
                 <ProductPage
-                  hasCart={mergedConfigStyleData.hasCart}
+                  hasCart={headerData.styleData.hasCart}
                   params={params}
                   data={
                     theme.productPage ?? {

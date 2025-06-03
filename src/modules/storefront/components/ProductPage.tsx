@@ -213,6 +213,7 @@ export const ProductPage = ({
         value: orderPreview?.totalPrice,
       });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log('Erro ao salvar o track: ', err);
     }
   };
@@ -649,6 +650,19 @@ export const ProductPage = ({
     }
   };
 
+  const soldOut = useMemo(() => {
+    if (isErc20 && batchSize) {
+      return (
+        product?.stockAmount === 0 ||
+        product?.canPurchaseAmount === 0 ||
+        (product?.stockAmount && product?.stockAmount < batchSize) ||
+        (product?.canPurchaseAmount && product?.canPurchaseAmount < batchSize)
+      );
+    } else {
+      return product?.stockAmount === 0 || product?.canPurchaseAmount === 0;
+    }
+  }, [isErc20, batchSize, product?.stockAmount, product?.canPurchaseAmount]);
+
   return errorProduct ? (
     <ErrorBox customError={errorProduct} />
   ) : (
@@ -777,7 +791,9 @@ export const ProductPage = ({
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
           <div className="pw-w-full pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-12">
-              {product?.images && product?.images?.length > 1 ? (
+              {product?.settings
+                ?.disableImageDisplay ? null : product?.images &&
+                product?.images?.length > 1 ? (
                 <Swiper
                   className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px]"
                   modules={[Pagination]}
@@ -862,7 +878,7 @@ export const ProductPage = ({
                       style={{ color: priceTextColor ?? 'black' }}
                       className="pw-text-2xl pw-mt-4 pw-font-[700]"
                     >
-                      {product?.stockAmount == 0 ? (
+                      {soldOut ? (
                         'Esgotado'
                       ) : product ? (
                         isLoadingValue ? (
@@ -998,7 +1014,8 @@ export const ProductPage = ({
                       ))
                     : null}
                 </div>
-                {actionButton &&
+                {!soldOut &&
+                actionButton &&
                 product?.stockAmount &&
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
@@ -1089,9 +1106,9 @@ export const ProductPage = ({
                               ) {
                                 if (isErc20 && batchSize) {
                                   if (
-                                    quantity + batchSize <
+                                    quantity + batchSize <=
                                       product?.canPurchaseAmount &&
-                                    quantity + batchSize < product?.stockAmount
+                                    quantity + batchSize <= product?.stockAmount
                                   ) {
                                     setQuantity(quantity + batchSize);
                                   }
@@ -1289,8 +1306,7 @@ export const ProductPage = ({
                       {hasCart && !productKycRequirement ? (
                         <button
                           disabled={
-                            product?.stockAmount == 0 ||
-                            product?.canPurchaseAmount == 0 ||
+                            soldOut ||
                             !termsChecked ||
                             (isSendGift && !giftData && isPossibleSend)
                           }
@@ -1299,8 +1315,7 @@ export const ProductPage = ({
                             backgroundColor: 'none',
                             borderColor:
                               product &&
-                              (product?.stockAmount == 0 ||
-                                product?.canPurchaseAmount == 0 ||
+                              (soldOut ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
@@ -1309,8 +1324,7 @@ export const ProductPage = ({
                                 : '#0050FF',
                             color:
                               product &&
-                              (product?.stockAmount == 0 ||
-                                product?.canPurchaseAmount == 0 ||
+                              (soldOut ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
@@ -1323,27 +1337,20 @@ export const ProductPage = ({
                       ) : null}
                       <button
                         disabled={
-                          product?.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0 ||
+                          soldOut ||
                           !termsChecked ||
                           (isSendGift && !giftData && isPossibleSend)
                         }
                         onClick={handleBuyClick}
                         style={{
                           backgroundColor:
-                            product &&
-                            (product.stockAmount == 0 ||
-                              product?.canPurchaseAmount == 0 ||
-                              !termsChecked)
+                            product && (soldOut || !termsChecked)
                               ? '#DCDCDC'
                               : buttonColor
                               ? buttonColor
                               : '#0050FF',
                           color:
-                            product &&
-                            (product.stockAmount == 0 ||
-                              product?.canPurchaseAmount == 0 ||
-                              !termsChecked)
+                            product && (soldOut || !termsChecked)
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}
