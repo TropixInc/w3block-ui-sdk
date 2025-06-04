@@ -1,10 +1,8 @@
 import { ReactNode, createContext, useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
+import { CurrencyResponse, ProductPrice } from '../../storefront/interfaces/Product';
 
-import {
-  CurrencyResponse,
-  ProductPrice,
-} from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+
 
 export interface Cart {
   id: string;

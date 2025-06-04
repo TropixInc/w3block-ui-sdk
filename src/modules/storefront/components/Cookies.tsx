@@ -1,10 +1,11 @@
 import { useLocalStorage } from 'react-use';
-
+import { CookiesData } from '../interfaces/Theme';
+import { useTranslation } from 'react-i18next';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
-import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { CookiesData } from '../interfaces';
+
+
 
 export const Cookies = ({ data }: { data: CookiesData }) => {
   const [translate] = useTranslation();
@@ -69,7 +70,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
                 className="pw-font-bold"
               >
                 {' '}
-                {translate('storefront>cookies>privacyPolicy')}
+                {translate('storefront>cookies>privacyPolicy') as string}
               </a>
             )}
           </p>
@@ -81,7 +82,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
             className="pw-border-none pw-text-sm pw-h-[32px] pw-w-[109px] pw-px-4 pw-py-2 pw-rounded-lg pw-whitespace-nowrap pw-leading-4"
             onClick={() => setAcceptedCookies('true')}
           >
-            {translate('storefront>cookies>iAgree')}
+            {translate('storefront>cookies>iAgree') as string}
           </button>
         </div>
       </div>

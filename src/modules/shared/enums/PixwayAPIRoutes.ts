@@ -115,6 +115,4 @@ export enum PixwayAPIRoutes {
   REDEEM_STAKING = '/{companyId}/loyalties/users/{userId}/staking/{loyaltyId}/redeem',
   TRANSFER_COIN = '/{companyId}/erc20-tokens/{id}/transfer/user',
   INCREASE_CURRENCY_ALLOWANCE = '/companies/{companyId}/currencies/{currencyId}/increase-allowance',
-  POST_PRODUCT_RESALE = '/companies/{companyId}/products-resale/{productId}',
-  GET_PRODUCT_RESALE = '/companies/{companyId}/products-resale',
 }

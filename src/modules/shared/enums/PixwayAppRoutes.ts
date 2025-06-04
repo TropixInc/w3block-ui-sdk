@@ -59,6 +59,6 @@ export enum PixwayAppRoutes {
   REQUESTS = '/requests',
   CHECKOUT_FORM = '/checkout/form',
   STAKING = '/staking',
-  MY_SALES = '/resale/mySales',
+  MY_SALES = '/resale/mysales',
   RESALE = '/resale',
 }

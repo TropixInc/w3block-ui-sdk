@@ -3,46 +3,33 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import _ from 'lodash';
-import { Autoplay, Navigation } from 'swiper';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { BaseSelect } from '../../shared';
-import { W3blockAPI } from '../../shared/enums/W3blockAPI';
-import { useAxios } from '../../shared/hooks/useAxios';
-import {
-  breakpointsEnum,
-  useBreakpoints,
-} from '../../shared/hooks/useBreakpoints/useBreakpoints';
-import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
-import useTranslation from '../../shared/hooks/useTranslation';
-import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useDynamicString } from '../hooks/useDynamicString';
-import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import {
-  AlignmentEnum,
-  CardLayoutDisposition,
-  CardTypesEnum,
-  ProductsData,
-} from '../interfaces';
-import './Products.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { AlignmentEnum, CardLayoutDisposition, CardTypesEnum, ProductsData } from '../interfaces/Theme';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { useTranslation } from 'react-i18next';
+import { Product } from '../interfaces/Product';
+import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { useAxios } from '../../shared/hooks/useAxios';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
+import { ContentCard } from './ContentCard';
+import { Card } from './Card';
+import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import { Autoplay, Navigation } from 'swiper/modules';
+import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { BaseSelect } from '../../shared/components/BaseSelect';
 
-const Card = lazy(() =>
-  import('../../shared/components/Card').then((module) => ({
-    default: module.Card,
-  }))
-);
-const ContentCard = lazy(() =>
-  import('./ContentCard').then((module) => ({
-    default: module.ContentCard,
-  }))
-);
+
+
 
 const getPreferredSymbol = (
   selectedCurrency: string,
@@ -165,13 +152,12 @@ export const Products = ({ data }: { data: ProductsData }) => {
   const { text: title } = useDynamicString(moduleTitle);
   const dynamicCardsData = useMemo(() => {
     if (dynamicCards == true && contentCards && contentCards.length > 0) {
-      const itemsToRender = _.get(
-        datasource,
-        dynamicCardsPath ?? '',
-        []
-      )?.slice(0, dynamicMaxItens ?? 10) as any[];
+      const itemsToRender = _.get(datasource, dynamicCardsPath ?? '', []).slice(
+        0,
+        dynamicMaxItens ?? 10
+      ) as any[];
       const productToFollow = contentCards[0];
-      return itemsToRender?.map((_, index) =>
+      return itemsToRender.map((_, index) =>
         changeDynamicJsonToInsertIndex(productToFollow, index)
       );
     } else {
@@ -298,7 +284,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
         {cardType == 'content' && format && format != 'product'
           ? dynamicCardsData
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
-              ?.map((card) => (
+              .map((card) => (
                 <ContentCard
                   key={card.id}
                   product={card}
@@ -309,7 +295,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
           : cardType == 'content' && (!format || format == 'product')
           ? dynamicCardsData
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
-              ?.map((p) => (
+              .map((p) => (
                 <Card
                   dynamic
                   key={p?.id}
@@ -384,7 +370,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     assetUrl: p?.images?.[0]?.original ?? '',
                   },
                   description: p?.description,
-                  category: p?.tags?.map((val) => ({
+                  category: p?.tags?.map((val: { name: any; id: any; }) => ({
                     label: val?.name ?? '',
                     value: val?.id ?? '',
                   })),
@@ -410,7 +396,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
         value: { slidesPerView: itensPerLine, spaceBetween: 16 },
       },
     ]
-      ?.slice(0, 10)
+      .slice(0, 10)
       .reduce(
         (obj, item) => Object.assign(obj, { [item.key]: item.value }),
         {}
@@ -534,7 +520,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     description: p?.description ?? '',
                     cardOverlayColor: cardProductOverlay,
                     overlay: productOverlay,
-                    category: p?.tags?.map((val) => ({
+                    category: p?.tags?.map((val: { name: any; id: any; }) => ({
                       label: val?.name ?? '',
                       value: val?.id ?? '',
                     })),

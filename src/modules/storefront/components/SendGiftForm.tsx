@@ -2,8 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
-import useTranslation from '../../shared/hooks/useTranslation';
-import { DataFields } from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import { useTranslation } from 'react-i18next';
+import { DataFields } from '../interfaces/Product';
+
+
 
 interface Params {
   dataFields: DataFields[];

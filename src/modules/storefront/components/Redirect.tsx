@@ -1,10 +1,12 @@
 import { useDebounce } from 'react-use';
 
-import { useRouterConnect } from '../../shared';
+import { useTranslation } from 'react-i18next';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { Spinner } from '../../shared/components/Spinner';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
-import useTranslation from '../../shared/hooks/useTranslation';
-import { useDynamicApi } from '../provider/DynamicApiProvider';
+
+
 
 const _Redirect = () => {
   const router = useRouterConnect();
@@ -13,7 +15,7 @@ const _Redirect = () => {
   useDebounce(() => {
     if (datasource) {
       router.push(
-        `${router.basePath}/praticante/${datasource?.athlete?.data[0]?.attributes.slug}`
+        {path: `${router.basePath}/praticante/${datasource?.athlete?.data[0]?.attributes.slug}`}
       );
     }
   }, 6000);

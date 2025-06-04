@@ -3,8 +3,8 @@ import { initReactI18next } from 'react-i18next';
 import { createInstance } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import ENDictionary from '../../../../public/locales/en/common.json';
-import PTBRDictionary from '../../../../public/locales/pt-BR/common.json';
+import ENDictionary from '../../shared/locales/en/common.json';
+import PTBRDictionary from '../../shared/locales/pt-BR/common.json';
 
 const i18n = createInstance({
   fallbackLng: 'pt-BR',

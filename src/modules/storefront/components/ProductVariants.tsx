@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useRef, useState } from 'react';
-import { useClickAway } from 'react-use';
+import { useRef, useState } from "react";
+import { useClickAway } from "react-use";
 
-import { RadioGroup } from '@headlessui/react';
+import { Label, Radio, RadioGroup } from "@headlessui/react";
 
-import ArrowDown from '../../shared/assets/icons/arrowDown.svg?react';
-import { Variants } from '../hooks/useGetProductBySlug/useGetProductBySlug';
+import ArrowDown from "../../shared/assets/icons/arrowDown.svg";
+import { Variants } from "../interfaces/Product";
+
 
 interface Props {
   variants: Variants;
@@ -23,7 +24,7 @@ export const ProductVariants = ({
   borderColor,
 }: Props) => {
   const [isOpened, setIsOpened] = useState(false);
-  const [value, setValue] = useState(variants?.values?.[0]?.name ?? '');
+  const [value, setValue] = useState(variants?.values?.[0]?.name ?? "");
   const [variantsValue, setVariantsValue] = useState(variants?.values[0]);
   const refToClickAway = useRef<HTMLDivElement>(null);
   useClickAway(refToClickAway, () => {
@@ -51,22 +52,22 @@ export const ProductVariants = ({
         }}
         className="pw-mt-4"
       >
-        <RadioGroup.Label className="pw-text-sm pw-text-black pw-mb-1">
+        <Label className="pw-text-sm pw-text-black pw-mb-1">
           {variants.name}
-        </RadioGroup.Label>
+        </Label>
         <div className="pw-flex pw-justify-start pw-items-center pw-gap-3">
           {variants.values.map((val) => {
             return (
-              <RadioGroup.Option key={val.id} value={val}>
+              <Radio key={val.id} value={val}>
                 {({ checked }) => (
                   <div
                     className="pw-p-[10px_12px] pw-border pw-border-solid pw-rounded-[10px] pw-text-sm pw-font-semibold pw-cursor-pointer pw-text-black"
-                    style={{ borderColor: checked ? borderColor : '#DCDCDC' }}
+                    style={{ borderColor: checked ? borderColor : "#DCDCDC" }}
                   >
                     <span>{val.name}</span>
                   </div>
                 )}
-              </RadioGroup.Option>
+              </Radio>
             );
           })}
         </div>
@@ -74,7 +75,7 @@ export const ProductVariants = ({
     );
   };
 
-  if (type === 'radioGroup') return radioGroupComponent();
+  if (type === "radioGroup") return radioGroupComponent();
 
   return (
     <div ref={refToClickAway} className="pw-mt-4">
@@ -82,7 +83,7 @@ export const ProductVariants = ({
       <div
         onClick={() => setIsOpened(!isOpened)}
         className={`pw-p-3 pw-flex pw-items-center pw-rounded-lg pw-justify-between pw-cursor-pointer ${
-          isOpened ? 'pw-border-none pw-bg-white' : 'pw-border pw-border-black'
+          isOpened ? "pw-border-none pw-bg-white" : "pw-border pw-border-black"
         }`}
       >
         <p className="pw-text-xs pw-font-[600] pw-text-black pw-truncate">
