@@ -1,4 +1,4 @@
-import { lazy, useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { position } from '../../shared/enums/styleConfigs';
 import { ContentTypeEnum } from '../../poll/enums/contentType';
 import { FAQContextEnum } from '../../shared/enums/FAQContext';
