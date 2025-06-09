@@ -25,11 +25,12 @@ import { Spinner } from './Spinner';
 import { useCompanyById } from '../hooks/useCompanyById';
 import { useDynamicValueByTable } from '../hooks/useDynamicValueByTable';
 import { useGetUserByWallet } from '../hooks/useGetUserByWallet';
-import useTruncate from '../../../tokens/hooks/useTruncate';
+
 import SmartGenericFilter from './SmartGenericFilter';
 import { GenerateGenericXlsReports } from './GenerateGenericXlsReports';
 import Line from './Line';
 import { Pagination } from './Pagination';
+import useTruncate from '../../tokens/hooks/useTruncate';
 
 
 interface GenericTableProps {

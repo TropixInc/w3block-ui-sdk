@@ -2,9 +2,6 @@ import { ReactNode, createContext } from 'react';
 import { LoyaltyInterface } from '../../shared/interfaces/ILoyalty';
 import { useGetCompanyLoyalties } from '../hooks/useGetCompanyLoyalties';
 
-
-
-
 interface BusinessProviderContextInterface {
   loyalties: LoyaltyInterface[];
 }
