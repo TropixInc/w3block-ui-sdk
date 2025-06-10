@@ -1,5 +1,4 @@
 
-
 import { AxiosResponse } from 'axios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useProfile, Wallet } from '../../shared/hooks/useProfile';
@@ -9,8 +8,6 @@ import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useQuery } from '@tanstack/react-query';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { WalletSimple } from '../../shared/providers/userWalletsProvider';
-
-
 
 export const useGetWallets = () => {
   const { companyId } = useCompanyConfig();

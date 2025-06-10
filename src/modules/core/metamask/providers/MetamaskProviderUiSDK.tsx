@@ -13,7 +13,7 @@ import { ContractTransactionCallable, Transaction } from '../../../shared/interf
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
 import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL';
-import { Format, formatBalance } from '../../utils/format';
+import { Format, formatBalance } from '../utils/format';
 import { claimWalletMetamask, requestWalletMetamask } from '../../../auth/api/wallet';
 
 
