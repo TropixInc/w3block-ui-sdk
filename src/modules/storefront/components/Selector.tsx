@@ -54,7 +54,7 @@ export const Selector = ({
         <div className="pw-flex pw-items-center pw-gap-3">
           <img
             alt="logo"
-            src={`https://cms.foodbusters.com.br${value?.attributes?.image?.data?.attributes?.formats?.thumbnail?.url}`}
+            src={`https://cms.zuca.ai${value?.attributes?.image?.data?.attributes?.formats?.thumbnail?.url}`}
             className="pw-h-17 pw-w-17 pw-rounded-lg"
           />
           <p

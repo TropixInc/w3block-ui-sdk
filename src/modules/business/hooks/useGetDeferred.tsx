@@ -20,13 +20,12 @@ export const useGetDeferred = (
   const queryString = new URLSearchParams(cleaned).toString();
 
   const statusQuery = () => {
-    if (status === 'all') {
-      return 'status=deferred&status=pending&status=started&status=pool';
-    } else if (status === 'success') {
-      return 'status=pool';
-    } else {
-      return 'status=deferred&status=pending&status=started';
+    if (status === 'scheduled') {
+      return 'status=deferred&status=pending&status=started&status=pool&status=success&withdrawBlockedOnly=true';
+    } else if (status === 'received') {
+      return 'status=deferred&status=pending&status=started&status=pool&status=success&withdrawBlockedOnly=false';
     }
+    return 'status=deferred&status=pending&status=started&status=pool&status=success';
   };
 
   return useQuery(

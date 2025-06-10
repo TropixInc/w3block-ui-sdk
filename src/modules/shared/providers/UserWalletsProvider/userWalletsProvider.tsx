@@ -36,6 +36,7 @@ export interface WalletSimple {
 
 export interface WalletLoyalty {
   balance: string;
+  withdrawableBalance: string;
   currency: string;
   loyaltyId: string;
   contractId: string;

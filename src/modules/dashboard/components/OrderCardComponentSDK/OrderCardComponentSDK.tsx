@@ -285,7 +285,7 @@ export const OrderCardComponentSDK = ({
                       image={
                         data?.data?.data?.length > 0 &&
                         data?.data?.data?.[0]?.attributes?.image
-                          ? 'https://cms.foodbusters.com.br' +
+                          ? 'https://cms.zuca.ai' +
                             data?.data?.data?.[0]?.attributes?.image?.data
                               ?.attributes?.formats?.thumbnail?.url
                           : prod?.productToken?.product?.images?.length

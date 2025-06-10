@@ -56,9 +56,11 @@ export const WalletFutureStatementTemplateSDK = () => {
   const [defaultDate, setDefaultDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date | string>();
   const [endDate, setEndDate] = useState<Date | string>();
-  const [selected, setSelected] = useState<string | undefined>('');
+  const [selected, setSelected] = useState<string | undefined>('createdAt');
   const [selectedWallet, setSelectedWallet] = useState<string | undefined>('');
-  const [selectedStatus, setSelectedStatus] = useState<string | undefined>('');
+  const [selectedStatus, setSelectedStatus] = useState<string | undefined>(
+    'scheduled'
+  );
   const userRoles = profile?.data.roles || [];
   const isAdmin = Boolean(
     userRoles?.includes('admin') || userRoles?.includes('superAdmin')
@@ -132,12 +134,12 @@ export const WalletFutureStatementTemplateSDK = () => {
 
   const filterOptions = [
     { label: 'Data de Compra', value: 'createdAt' },
-    { label: 'Data de Recebimento', value: 'executeAt' },
+    { label: 'Data de Recebimento', value: 'withdrawableAt' },
   ];
 
   const successOptions = [
-    { label: 'Agendados', value: 'deferred' },
-    { label: 'Recebidos', value: 'success' },
+    { label: 'Agendados', value: 'scheduled' },
+    { label: 'Recebidos', value: 'received' },
     { label: 'Todos', value: 'all' },
   ];
 
@@ -157,7 +159,7 @@ export const WalletFutureStatementTemplateSDK = () => {
 
   const totalText = () => {
     if (selectedStatus === 'all') return 'Total no periodo selecionado';
-    else if (selectedStatus === 'success')
+    else if (selectedStatus === 'received')
       return 'Total recebido no periodo selecionado';
     else return 'Total a receber no periodo selecionado';
   };
@@ -208,7 +210,7 @@ export const WalletFutureStatementTemplateSDK = () => {
         <div className="pw-mt-3 pw-flex sm:pw-flex-row pw-flex-col pw-gap-4 pw-mx-[16px] sm:pw-mx-0">
           <Selectinput
             options={successOptions ?? []}
-            selected={selectedStatus ?? ''}
+            selected={selectedStatus ?? 'scheduled'}
             onChange={setSelectedStatus}
             placeholder="Agendados"
             className="sm:pw-w-[150px] pw-w-full"
@@ -216,7 +218,7 @@ export const WalletFutureStatementTemplateSDK = () => {
           />
           <Selectinput
             options={filterOptions ?? []}
-            selected={selected ?? ''}
+            selected={selected ?? 'createdAt'}
             onChange={setSelected}
             placeholder="Data de Compra"
             className="sm:pw-w-[200px] pw-w-full"
@@ -304,9 +306,10 @@ export const WalletFutureStatementTemplateSDK = () => {
                   buyerEmail: !item?.metadata?.length
                     ? item?.metadata?.buyerEmail ?? ''
                     : item?.metadata?.[0]?.buyerEmail ?? '',
-                  executeAt: selectedStatus?.includes('true')
+                  withdrawableAt: selectedStatus?.includes('true')
                     ? ''
-                    : item?.executeAt ?? '',
+                    : item?.withdrawableAt ?? '',
+                  executeAt: item.executeAt ?? '',
                   pointsPrecision:
                     loyaltyWalletDefined?.pointsPrecision ?? 'integer',
                   id: item?.id,

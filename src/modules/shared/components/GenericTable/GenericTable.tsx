@@ -547,7 +547,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   return isError ? (
     <ErrorBox customError={error as any} />
   ) : (
-    <div className="pw-w-full pw-mt-20">
+    <div className="pw-w-full">
       <FormProvider {...methods}>
         <div className="pw-text-black">
           <div style={externalFilterClasses?.container}>
@@ -797,7 +797,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         </div>
 
         {totalItems && totalPages && totalPages > 1 ? (
-          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10 pw-mt-2">
+          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mt-5">
             <p className="pw-text-sm pw-font-semibold">
               {translate('keytokenEditionsList>totalItems', {
                 total: totalItems,

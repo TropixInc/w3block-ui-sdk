@@ -6,14 +6,13 @@ import { DocumentDto } from '@w3block/sdk-id';
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 
-import { useRouterConnect } from '../../../shared';
+import { BaseButton, useRouterConnect } from '../../../shared';
 import { Alert } from '../../../shared/components/Alert';
 import InputWithdrawCommerce from '../../../shared/components/InputWithdrawCommerce/InputWithdrawCommerce';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useLocale } from '../../../shared/hooks/useLocale';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../../shared/hooks/useUserWallet';
-import { OffpixButtonBase } from '../../../tokens/components/DisplayCards/OffpixButtonBase';
 import {
   useConcludeWithdraw,
   useEscrowWithdraw,
@@ -81,16 +80,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
             />
           </div>
           <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
-            <OffpixButtonBase
-              className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
-              variant="outlined"
-              onClick={() => setStep(1)}
-            >
+            <BaseButton variant="outlined" onClick={() => setStep(1)}>
               {translate('components>cancelMessage>cancel')}
-            </OffpixButtonBase>
-            <OffpixButtonBase
-              className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
-              variant="filled"
+            </BaseButton>
+            <BaseButton
               disabled={reason === ''}
               onClick={() => {
                 if (reason !== '') {
@@ -112,7 +105,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               }}
             >
               {translate('shared>myProfile>confirm')}
-            </OffpixButtonBase>
+            </BaseButton>
           </div>
         </div>
       );
@@ -123,16 +116,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
             <p>{translate('auth>withdrawAdminActions>holdFounds')}</p>
           </div>
           <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
-            <OffpixButtonBase
-              className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
-              variant="outlined"
-              onClick={() => setStep(1)}
-            >
+            <BaseButton variant="outlined" onClick={() => setStep(1)}>
               {translate('components>cancelMessage>cancel')}
-            </OffpixButtonBase>
-            <OffpixButtonBase
-              className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
-              variant="filled"
+            </BaseButton>
+            <BaseButton
               onClick={() => {
                 escrowWithdraw(
                   { id },
@@ -155,7 +142,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               }}
             >
               {translate('shared>myProfile>confirm')}
-            </OffpixButtonBase>
+            </BaseButton>
           </div>
         </div>
       );
@@ -173,8 +160,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
             </FormProvider>
           </div>
           <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-4">
-            <OffpixButtonBase
-              className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
+            <BaseButton
               variant="outlined"
               onClick={() => {
                 setStep(1);
@@ -182,9 +168,8 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               }}
             >
               {translate('components>cancelMessage>cancel')}
-            </OffpixButtonBase>
-            <OffpixButtonBase
-              className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
+            </BaseButton>
+            <BaseButton
               variant="filled"
               disabled={!assetId}
               onClick={() => {
@@ -207,7 +192,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               }}
             >
               {translate('shared>myProfile>confirm')}
-            </OffpixButtonBase>
+            </BaseButton>
           </div>
         </div>
       );
@@ -224,16 +209,16 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
 
   const handleText = () => {
     if (data?.data?.status === 'pending') {
-      return 'Reter fundos';
+      return translate('withdraw>actions>withholdFunds');
     }
     if (data?.data?.status === 'ready_to_transfer_funds') {
-      return 'Concluir tranferência';
+      return translate('withdraw>actions>concludeTransfer');
     }
   };
 
   if (step === Steps.ERROR) {
     return (
-      <div className="pw-px-[40px]">
+      <div>
         <button
           className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
           onClick={() => router.push('/withdraws/admin')}
@@ -247,7 +232,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
     );
   } else if (step === Steps.SUCCESS) {
     return (
-      <div className="pw-px-[40px]">
+      <div>
         <button
           className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
           onClick={() => router.push('/withdraws/admin')}
@@ -261,7 +246,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
     );
   } else
     return (
-      <div className="pw-px-[40px]">
+      <div>
         <>
           <button
             className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
@@ -342,21 +327,13 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 data?.data?.status === 'escrowing_resources' ? null : (
                   <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
                     {data?.data?.status === 'ready_to_transfer_funds' ? null : (
-                      <OffpixButtonBase
-                        className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
-                        variant="outlined"
-                        onClick={() => setStep(2)}
-                      >
+                      <BaseButton variant="outlined" onClick={() => setStep(2)}>
                         {translate('auth>withdrawAdminActions>refuse')}
-                      </OffpixButtonBase>
+                      </BaseButton>
                     )}
-                    <OffpixButtonBase
-                      className="pw-max-w-[200px] pw-w-full !pw-text-base !pw-py-2"
-                      variant="filled"
-                      onClick={handleContinue}
-                    >
+                    <BaseButton onClick={handleContinue}>
                       {handleText()}
-                    </OffpixButtonBase>
+                    </BaseButton>
                   </div>
                 )
               ) : (

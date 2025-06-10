@@ -160,7 +160,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
     {
       name:
         internalMenuData['withdrawsAdmin']?.customLabel ||
-        'Relatório de saques',
+        translate('auth>withdrawModal>withdrawReports'),
       id: 'withdrawsAdmin',
       icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
       route: PixwayAppRoutes.WITHDRAWS_ADMIN,

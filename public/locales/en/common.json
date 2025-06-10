@@ -120,11 +120,11 @@
 "auth>withdrawModal>makeWithdraw": "Request Withdraw",
 "auth>withdrawModal>methodsNotFound": "There are no registered receiving methods",
 "auth>withdrawModal>methodsNotFoundInfo": "You must have at least one registered receiving method to make a withdrawal.",
-"auth>withdrawModal>newMethod": "New Method",
+"auth>withdrawModal>newMethod": "Register receiving method",
 "auth>withdrawModal>receivingMethods": "Receiving Methods",
 "auth>withdrawModal>withdrawAll": "Withdraw All",
 "auth>withdrawModal>withdrawError": "Error making withdrawal request, please try again.",
-"auth>withdrawModal>withdrawReports": "Withdraw Report",
+"auth>withdrawModal>withdrawReports": "Withdrawals Report",
 "auth>withdrawModal>withdrawSucess": "Withdrawal request completed successfully!",
 "business>buySumarySDK>purchaseResume": "Purchase summary",
 "business>paymentCompletedModal>paymentSucess": "Payment and cashback registered successfully!",
@@ -1045,5 +1045,9 @@
 "pages>mysales>resale>saveSale": "Save sale",
 "pages>product>reachStock": "*You've reached the maximum number of {{product}} you can buy.",
 "pages>resale>maximumValue": "Maximum value:",
-"pages>resale>minimumValue": "Minimum value:"
+"pages>resale>minimumValue": "Minimum value:",
+"withdraw>actions>concludeTransfer": "Complete transfer",
+"withdraw>actions>withholdFunds": "Withhold funds",
+"shared>statementComponent>issueDate": "Issue date",
+"shared>statementComponent>receiptDate": "Receipt date"
 }
