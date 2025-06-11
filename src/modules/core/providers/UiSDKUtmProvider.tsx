@@ -1,10 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import { useCookie } from 'react-use';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-import { UtmContext } from '../../context/UtmContext';
-
-
-
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { UtmContext } from '../context/UtmContext';
 
 export const UiSDKUtmProvider = ({
   children,

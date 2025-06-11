@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import differenceInHours from 'date-fns/differenceInHours';
 import format from 'date-fns/format';
 
 import { PassDates } from '../../../pass/interfaces/PassDates';
-import ClockIcon from '../../../shared/assets/icons/clockOutlined.svg?react';
-import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
-import useTranslation from '../../../shared/hooks/useTranslation';
+import ClockIcon from '../../../shared/assets/icons/clockOutlined.svg';
+import useCountdown from '../../../shared/hooks/useCountdown';
+
 interface Props {
   date: PassDates;
   hasExpiration: boolean;

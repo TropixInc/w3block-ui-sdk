@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import addMinutes from 'date-fns/addMinutes';
@@ -10,6 +10,7 @@ import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface PasswordChangeMailSentProps {

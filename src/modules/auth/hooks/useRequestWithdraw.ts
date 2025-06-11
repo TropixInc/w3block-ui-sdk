@@ -1,11 +1,9 @@
-import { useMutation } from 'react-query';
-
-import { W3blockAPI } from '../../../shared';
-import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
-import { useAxios } from '../../../shared/hooks/useAxios';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { usePrivateQuery } from '../../../shared/hooks/usePrivateQuery';
-
+import { useMutation } from "@tanstack/react-query";
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
+import { W3blockAPI } from "../../shared/enums/W3blockAPI";
+import { useAxios } from "../../shared/hooks/useAxios";
+import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
+import { usePrivateQuery } from "../../shared/hooks/usePrivateQuery";
 interface Params {
   erc20ContractAddress?: string;
   erc20ChainId?: string;

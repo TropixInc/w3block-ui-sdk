@@ -1,17 +1,15 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import _ from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
-import { useClickAway, useDebounce } from 'react-use';
-
-import _ from 'lodash';
-
-import useTranslation from '../../../../hooks/useTranslation';
-import { BaseInput } from '../../../BaseInput';
-import LabelWithRequired from '../../../LabelWithRequired';
-import { InputError } from '../../../SmartInputsController';
-import InputStatus from '../../InputStatus';
+import { useTranslation } from 'react-i18next';
+import { useDebounce, useClickAway } from 'react-use';
+import { BaseInput } from '../BaseInput';
+import LabelWithRequired from '../LabelWithRequired';
+import { InputError } from '../SmartInputsController';
+import InputStatus from './InputStatus';
 
 interface Address {
   [key: string]: string;
@@ -253,7 +251,7 @@ const CityAutoComplete = ({
 
   const options = () => {
     if (placePredictions.length) {
-      return placePredictions.map((item) => {
+      return placePredictions.map((item: any) => {
         const option = item.terms.slice(0, -1);
         const labelOption = option.map((item: any) => item.value);
 
@@ -300,7 +298,7 @@ const CityAutoComplete = ({
         >
           {placePredictions.length ? (
             <ul>
-              {options()?.map((item) => {
+              {options()?.map((item: any) => {
                 return (
                   <li
                     key={item.label}

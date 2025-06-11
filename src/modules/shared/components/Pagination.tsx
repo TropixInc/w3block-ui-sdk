@@ -11,12 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { number, object } from 'yup';
 
 
-import { getNumbersFromString } from '../../../tokens/utils/getNumbersFromString';
-import ChevronLeft from '../../assets/icons/chevronLeftFilled.svg?react';
-import ChevronRight from '../../assets/icons/chevronRightFilled.svg?react';
+
+import ChevronLeft from '../assets/icons/chevronLeftFilled.svg';
+import ChevronRight from '../assets/icons/chevronRightFilled.svg';
 import { useTranslation } from 'react-i18next';
-import TokenizationFormItemContainer from '../../../tokens/components/TokenizationFormItemContainer';
 import { PixwayButton } from './PixwayButton';
+import TokenizationFormItemContainer from '../../tokens/components/TokenizationFormItemContainer';
+import { getNumbersFromString } from '../../tokens/utils/getNumbersFromString';
 
 interface Props {
   pagesQuantity: number;

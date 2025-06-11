@@ -1,11 +1,8 @@
-
-import { useTranslation } from 'react-i18next';
 import ErrorFilled from '../assets/icons/errorFilled.svg';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { AuthButton } from './AuthButton';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Props {
   onRetry: () => void;
 }

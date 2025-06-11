@@ -5,7 +5,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { DocumentDto } from '@w3block/sdk-id';
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
-import { useTranslation } from 'react-i18next';
 import { Alert } from '../../shared/components/Alert';
 import { Spinner } from '../../shared/components/Spinner';
 import { useLocale } from '../../shared/hooks/useLocale';
@@ -14,6 +13,7 @@ import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { useGetSpecificWithdrawAdmin, useRefuseWithdraw, useConcludeWithdraw, useEscrowWithdraw } from '../hooks/useRequestWithdraw';
 import { BaseButton } from '../../shared/components/Buttons';
 import InputWithdrawCommerce from './InputWithdrawCommerce';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 enum Steps {
   DEFAULT = 1,

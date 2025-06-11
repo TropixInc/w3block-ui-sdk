@@ -1,9 +1,8 @@
-import { PixwayAPIRoutes } from "../../modules/shared/enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../../modules/shared/enums/W3blockAPI";
-import { useAxios } from "../../modules/shared/hooks/useAxios";
-import { useCompanyConfig } from "../../modules/shared/hooks/useCompanyConfig";
-import { usePrivateQuery } from "../../modules/shared/hooks/usePrivateQuery";
-
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
+import { W3blockAPI } from "../../shared/enums/W3blockAPI";
+import { useAxios } from "../../shared/hooks/useAxios";
+import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
+import { usePrivateQuery } from "../../shared/hooks/usePrivateQuery";
 export interface GetLastTransferAPIResponse {
   sender: string;
   status: string;

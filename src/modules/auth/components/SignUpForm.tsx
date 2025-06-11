@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { useDebounce } from 'react-use';
 
 import classNames from 'classnames';
@@ -18,7 +18,7 @@ import PasswordInput from './PasswordInput';
 import { PasswordTips } from './PasswordTips';
 import { SignCheckbox } from './SignCheckbox';
 import LabelWithRequired from '../../shared/components/LabelWithRequired';
-
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Props {
   onSubmit: (data: SignUpFormData) => void;
   isLoading: boolean;

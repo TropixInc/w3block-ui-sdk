@@ -2,21 +2,20 @@ import { useEffect, useMemo, useState } from 'react';
 
 import WalletImage from '../assets/wallet.svg';
 import { useTranslation } from 'react-i18next';
-import TranslatableComponent from '../../modules/shared/components/TranslatableComponent';
-import { useHasWallet } from '../../modules/shared/hooks/useHasWallet';
-import { useProfile } from '../../modules/shared/hooks/useProfile';
-import { useUserWallet } from '../../modules/shared/hooks/useUserWallet/useUserWallet';
 import { Token } from '../interfaces/Token';
-import { useProcessingTokens } from '../../modules/shared/hooks/useProcessingTokens';
-import { TokenListTemplateSkeleton } from './TokenListTemplateSkeleton';
-import { WalletTokenCard } from './WalletTokenCard';
-import { Pagination } from '../../modules/shared/components/Pagination';
-import { usePrivateRoute } from '../../modules/shared/hooks/usePrivateRoute';
+import { ErrorBox } from '../../shared/components/ErrorBox';
+import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { useHasWallet } from '../../shared/hooks/useHasWallet';
+import { usePrivateRoute } from '../../shared/hooks/usePrivateRoute';
+import { useProcessingTokens } from '../../shared/hooks/useProcessingTokens';
+import { useProfile } from '../../shared/hooks/useProfile';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { useGetNFTSByWallet } from '../hooks/useGetNFTSByWallet';
 import { mapNFTToToken } from '../utils/mapNFTToToken';
-import { ErrorBox } from '../../modules/shared/components/ErrorBox';
-import { InternalPagesLayoutBase } from '../../modules/shared/components/InternalPagesLayoutBase';
-
+import { TokenListTemplateSkeleton } from './TokenListTemplateSkeleton';
+import { WalletTokenCard } from './WalletTokenCard';
+import { Pagination } from '../../shared/components/Pagination';
 
 interface Props {
   tokens?: Array<Token>;

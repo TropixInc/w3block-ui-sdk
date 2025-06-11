@@ -1,8 +1,7 @@
 import classNames from "classnames";
 
 import PixwayIconHorizontal from "../../shared/assets/icons/weblock_logo.svg";
-import { useTranslation } from "react-i18next";
-
+import useTranslation from "../../shared/hooks/useTranslation";
 interface Props {
   className?: string;
 }

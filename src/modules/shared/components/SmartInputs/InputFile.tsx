@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { Accept, useDropzone } from 'react-dropzone';
 import { useController } from 'react-hook-form';
 
 import {
@@ -9,16 +9,16 @@ import {
 } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import FileIcon from '../../../assets/icons/fileOutlined.svg?react';
-import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
-import useTranslation from '../../../hooks/useTranslation';
-import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
-import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
-import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { BaseInputLayout } from '../../BaseInput';
-import LabelWithRequired from '../../LabelWithRequired';
-import { Spinner } from '../../Spinner/Spinner';
-import InputStatus from '../InputStatus';
+import FileIcon from '../../assets/icons/fileOutlined.svg';
+import { useTranslation } from 'react-i18next';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import useUploadAssets from '../../hooks/useUploadAssets';
+import { useUploadFileToCloudinary } from '../../hooks/useUploadFileToCloudinary';
+import { validateIfStatusKycIsReadonly } from '../../utils/validReadOnlyKycStatus';
+import { BaseInputLayout } from '../BaseInput';
+import LabelWithRequired from '../LabelWithRequired';
+import { Spinner } from '../Spinner';
+import InputStatus from './InputStatus';
 
 interface InputFileProps {
   label: string;
@@ -89,7 +89,7 @@ const InputFile = ({
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
-    accept: acceptTypesDocs,
+    accept: acceptTypesDocs as unknown as Accept,
     disabled:
       validateIfStatusKycIsReadonly(docStatus as UserDocumentStatus) ||
       readonly,

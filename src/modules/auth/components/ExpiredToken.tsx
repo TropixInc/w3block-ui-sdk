@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 
 
 import MailError from '../assets/icons/mailError.svg';
-import { useTranslation } from 'react-i18next';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
 import { AuthFooter } from './AuthFooter';
 import { AuthLayoutBase } from './AuthLayoutBase';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   companyId?: string;

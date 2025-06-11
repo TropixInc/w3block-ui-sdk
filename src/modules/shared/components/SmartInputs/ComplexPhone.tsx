@@ -2,12 +2,11 @@ import { useEffect, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserContextStatus, UserDocumentStatus } from '@w3block/sdk-id';
-
-import useTranslation from '../../../hooks/useTranslation';
-import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { BaseInput } from '../../BaseInput';
-import { BaseButton } from '../../Buttons';
-import InputStatus from '../InputStatus';
+import { useTranslation } from 'react-i18next';
+import { validateIfStatusKycIsReadonly } from '../../utils/validReadOnlyKycStatus';
+import { BaseInput } from '../BaseInput';
+import { BaseButton } from '../Buttons';
+import InputStatus from './InputStatus';
 
 interface InputPhoneProps {
   label: string;

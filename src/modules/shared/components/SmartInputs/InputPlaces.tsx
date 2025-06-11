@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import useTranslation from '../../../hooks/useTranslation';
-import InputCompletedAddress from '../InputCompletedAddress';
-import CityAutoComplete from '../InputLocale/CityAutoComplete';
+import { useTranslation } from "react-i18next";
+import CityAutoComplete from "./CityAutoComplete";
+import InputCompletedAddress from "./InputCompletedAddress";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface PlacesProps {
   label: string;
   name: string;

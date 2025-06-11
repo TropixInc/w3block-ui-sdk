@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 
 import MailError from '../assets/icons/mailError.svg';
@@ -9,8 +9,7 @@ import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlah
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
 import { AuthFooter } from './AuthFooter';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Props {
   email: string;
   onSendEmail?: () => void;

@@ -1,5 +1,5 @@
-import { lazy, useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import classNames from 'classnames';
@@ -16,6 +16,7 @@ import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { AuthFooter } from './AuthFooter';
 import { AuthLayoutBaseClasses, AuthLayoutBase } from './AuthLayoutBase';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface PasswordChangeMailSentProps {
   email: string;

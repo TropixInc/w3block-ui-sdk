@@ -9,7 +9,6 @@ import { ContainerTextBesideProps } from '../../shared/components/ContainerTextB
 import { ExtraBy } from '../../shared/components/PoweredBy';
 import { AuthLayoutBaseClasses } from '../components/AuthLayoutBase';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { useTranslation } from 'react-i18next';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useChangePassword } from '../hooks/useChangePassword';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
@@ -20,6 +19,7 @@ import { VerifySignUpMailSentTemplateSDK } from './VerifySignUpMailSentTemplateS
 import { SignUpTemplateSDK } from './SignUpTemplateSDK';
 import { CompleteSignUpSuccessTemplateSDK } from './CompleteSignUpSuccessTemplateSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

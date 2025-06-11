@@ -3,13 +3,13 @@ import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
+import { useProfile } from '../../hooks/useProfile';
+import { validateIfStatusKycIsReadonly } from '../../utils/validReadOnlyKycStatus';
+import { BaseInput } from '../BaseInput';
+import LabelWithRequired from '../LabelWithRequired';
+import { InputError } from '../SmartInputsController';
+import InputStatus from './InputStatus';
 
-import { useProfile } from '../../../hooks';
-import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { BaseInput } from '../../BaseInput';
-import LabelWithRequired from '../../LabelWithRequired';
-import { InputError } from '../../SmartInputsController';
-import InputStatus from '../InputStatus';
 
 interface InputEmailProps {
   label: string;

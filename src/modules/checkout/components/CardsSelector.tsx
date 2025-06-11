@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useState } from 'react';
 
-import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Transition } from '@headlessui/react';
+import { Combobox, Transition } from '@headlessui/react';
 import { isBefore, isAfter } from 'date-fns';
 
 import ArrowDown from '../../shared/assets/icons/arrowDown.svg';
@@ -38,8 +38,8 @@ export const CardsSelector = ({ data, onChange, disabled }: Props) => {
         }}
       >
         <div className="pw-relative">
-          <ComboboxButton className="pw-flex pw-justify-between pw-items-center pw-p-3 pw-w-full pw-rounded-lg pw-border pw-border-slate-300 pw-shadow-md pw-text-sm pw-text-slate-700 focus:pw-outline-none">
-            <ComboboxInput
+          <Combobox.Button className="pw-flex pw-justify-between pw-items-center pw-p-3 pw-w-full pw-rounded-lg pw-border pw-border-slate-300 pw-shadow-md pw-text-sm pw-text-slate-700 focus:pw-outline-none">
+            <Combobox.Input
               className="pw-outline-none pw-cursor-pointer pw-w-full pw-truncate"
               readOnly
               displayValue={(res: {
@@ -55,7 +55,7 @@ export const CardsSelector = ({ data, onChange, disabled }: Props) => {
               }}
             />
             <ArrowDown className="pw-stroke-slate-700" />
-          </ComboboxButton>
+          </Combobox.Button>
         </div>
         <Transition
           as={Fragment}
@@ -63,9 +63,9 @@ export const CardsSelector = ({ data, onChange, disabled }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <ComboboxOptions className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-slate-300 pw-shadow-md pw-text-sm pw-text-slate-700 pw-absolute pw-w-full pw-max-w-[1032px] pw-z-[1000]">
+          <Combobox.Options className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-slate-300 pw-shadow-md pw-text-sm pw-text-slate-700 pw-absolute pw-w-full pw-max-w-[1032px] pw-z-[1000]">
             {sortedData.map((res) => (
-              <ComboboxOption
+              <Combobox.Option
                 key={res.id}
                 value={res}
                 className={({ active }) =>
@@ -77,9 +77,9 @@ export const CardsSelector = ({ data, onChange, disabled }: Props) => {
                 {res.name
                   ? `${res.name} ${res.brand} (Final ${res.lastNumbers})`
                   : `${res.brand} (Final ${res.lastNumbers})`}
-              </ComboboxOption>
+              </Combobox.Option>
             ))}
-            <ComboboxOption
+            <Combobox.Option
               value={{
                 id: 'newCard',
                 text: translate('checkout>cardSelector>payOtherCard'),
@@ -91,8 +91,8 @@ export const CardsSelector = ({ data, onChange, disabled }: Props) => {
               }
             >
               {translate('checkout>cardSelector>payOtherCard')}
-            </ComboboxOption>
-          </ComboboxOptions>
+            </Combobox.Option>
+          </Combobox.Options>
         </Transition>
       </Combobox>
     </div>

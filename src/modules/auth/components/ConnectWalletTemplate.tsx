@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import MetamaskLogo from '../../shared/assets/icons/metamask.svg';
 import { useQueryClient } from '@tanstack/react-query';
@@ -25,6 +25,7 @@ import { MailVerifiedInterceptorProvider } from '../../core/providers/MailVerifi
 import { useModalController } from '../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { useWallets } from '../../shared/hooks/useWallets';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

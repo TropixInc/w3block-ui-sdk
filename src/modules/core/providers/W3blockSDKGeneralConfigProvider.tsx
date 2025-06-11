@@ -12,8 +12,7 @@ import { W3blockApiProvider } from "./W3blockApiProvider";
 import { MetamaskProviderUiSDK } from "../metamask/providers/MetamaskProviderUiSDK";
 import { SocketProviderUiSDK } from "../metamask/providers/SocketProviderUiSDK";
 import { CartProvider } from "../../checkout/providers/cartProvider";
-import { TagManagerProvider } from "../metamask/providers/TagManagerProvider";
-
+import { TagManagerProvider } from "./TagManagerProvider";
 
 interface Props extends JSX.IntrinsicAttributes {
   children: ReactNode;

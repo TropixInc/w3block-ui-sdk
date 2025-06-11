@@ -2,7 +2,8 @@
 import { UtmContextInterface } from '../../core/context/UtmContext';
 import { GasFee } from '../../shared/interfaces/GasFee';
 import { Status } from '../../shared/interfaces/IMetamask';
-import { CurrencyResponse, Product, Variants } from '../../storefront/interfaces/Product';
+import { Product } from '../../shared/interfaces/Product';
+import { CurrencyResponse, Variants } from '../../storefront/interfaces/Product';
 
 import { OrderStatus, PaymentMethod } from '../enum';
 

@@ -1,10 +1,9 @@
-import { useMutation } from 'react-query';
+import { useMutation } from "@tanstack/react-query";
+import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
+import { useGetW3blockIdSDK } from "../../shared/hooks/useGetW3blockIdSDK";
+import { useProfile } from "../../shared/hooks/useProfile";
 
-import { useProfile } from '../../../shared';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
-
-export const useDeleMethodPayment = () => {
+export const useDeleMethodPayment = (): any => {
   const { companyId: tenantId } = useCompanyConfig();
   const { data: profile } = useProfile();
   const getSDK = useGetW3blockIdSDK();

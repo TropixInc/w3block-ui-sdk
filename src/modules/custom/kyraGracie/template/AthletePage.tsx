@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { groupBy } from 'lodash';
 
-import ChevronDown from '../../../../modules/shared/assets/icons/arrowDown.svg?react';
+import ChevronDown from '../../../shared/assets/icons/arrowDown.svg';
 import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';

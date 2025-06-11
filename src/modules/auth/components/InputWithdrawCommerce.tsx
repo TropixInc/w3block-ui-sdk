@@ -4,13 +4,13 @@ import { useController } from 'react-hook-form';
 
 import { AssetTypeEnum } from '@w3block/sdk-id';
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 import useUploadAssetsCommerce from '../../shared/hooks/useUploadAssetsCommerce';
 import { useUploadFileToCloudinary } from '../../shared/hooks/useUploadFileToCloudinary';
 import { useDropzone } from 'react-dropzone/.';
 import { FormItemContainer } from '../../shared/components/Form/FormItemContainer';
 import InputStatus from '../../shared/components/SmartInputs/InputStatus';
 import { Spinner } from '../../shared/components/Spinner';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface InputWithdrawCommerceProps {

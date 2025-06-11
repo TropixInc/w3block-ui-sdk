@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import useTranslation from '../../hooks/useTranslation';
 
 import { usePixwaySession } from '../../hooks/usePixwaySession';
 
@@ -7,6 +6,7 @@ import { NavigationTabsPixwaySDKDesktop } from './components/NavigationTabsPixwa
 import { NavigationTabsPixwaySDKMobile } from './components/NavigationTabsPixwaySDKMobile';
 import { NavigationTabsPixwaySDKProps, NavigationTabsPixwaySDKTabs } from '../../interfaces/NavigationTabsPixwaySDKTabs';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import { useTranslation } from 'react-i18next';
 
 
 

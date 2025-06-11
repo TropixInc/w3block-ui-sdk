@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-
-import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { BaseInput } from '../../BaseInput';
-import LabelWithRequired from '../../LabelWithRequired';
-import { InputError } from '../../SmartInputsController';
-import InputStatus from '../InputStatus';
-
+import { validateIfStatusKycIsReadonly } from '../../utils/validReadOnlyKycStatus';
+import { BaseInput } from '../BaseInput';
+import LabelWithRequired from '../LabelWithRequired';
+import { InputError } from '../SmartInputsController';
+import InputStatus from './InputStatus';
 interface InputText {
   label: string;
   name: string;

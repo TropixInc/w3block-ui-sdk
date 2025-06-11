@@ -4,7 +4,7 @@ import { useCopyToClipboard } from 'react-use';
 
 import CircleCheck from '../../shared/assets/icons/checkCircledOutlined.svg';
 import CopyIcon from '../../shared/assets/icons/copyIcon.svg';
-import { useTranslation } from 'react-i18next';
+
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { UploadIconSVG } from '../../shared/assets/icons/UploadIcon';
@@ -12,6 +12,7 @@ import { HelpCircleOutlinedSVG } from '../../shared/assets/icons/HelpCircleOutli
 import { Alert } from '../../shared/components/Alert';
 import { BaseButton } from '../../shared/components/Buttons';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export const AddFundsManualContainer = () => {
   const [copied, setCopied] = useState<boolean>(false);

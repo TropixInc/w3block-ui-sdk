@@ -2,7 +2,7 @@
 import { useRef, useState } from "react";
 import { useClickAway } from "react-use";
 
-import { Label, Radio, RadioGroup } from "@headlessui/react";
+import { RadioGroup } from "@headlessui/react";
 
 import ArrowDown from "../../shared/assets/icons/arrowDown.svg";
 import { Variants } from "../interfaces/Product";
@@ -52,13 +52,13 @@ export const ProductVariants = ({
         }}
         className="pw-mt-4"
       >
-        <Label className="pw-text-sm pw-text-black pw-mb-1">
+        <RadioGroup.Label className="pw-text-sm pw-text-black pw-mb-1">
           {variants.name}
-        </Label>
+        </RadioGroup.Label>
         <div className="pw-flex pw-justify-start pw-items-center pw-gap-3">
           {variants.values.map((val) => {
             return (
-              <Radio key={val.id} value={val}>
+              <RadioGroup.Option key={val.id} value={val}>
                 {({ checked }) => (
                   <div
                     className="pw-p-[10px_12px] pw-border pw-border-solid pw-rounded-[10px] pw-text-sm pw-font-semibold pw-cursor-pointer pw-text-black"
@@ -67,7 +67,7 @@ export const ProductVariants = ({
                     <span>{val.name}</span>
                   </div>
                 )}
-              </Radio>
+              </RadioGroup.Option>
             );
           })}
         </div>

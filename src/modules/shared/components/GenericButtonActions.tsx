@@ -3,7 +3,7 @@ import { Popover } from 'react-tiny-popover';
 
 import _ from 'lodash';
 
-import Dots from '../../assets/icons/dotsVerficalFilled.svg?react';
+import Dots from '../assets/icons/dotsVerficalFilled.svg';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 
 

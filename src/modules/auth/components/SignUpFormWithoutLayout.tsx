@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
@@ -25,6 +25,7 @@ import { AuthCheckbox } from './AuthCheckbox';
 import { AuthFooter } from './AuthFooter';
 import { Alert } from '../../shared/components/Alert';
 import { VerifySignUpWithCodeWithoutLayout } from './VerifySignUpWithCodeWithoutLayout';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

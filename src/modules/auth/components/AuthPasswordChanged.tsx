@@ -1,9 +1,8 @@
-
-import { useTranslation } from 'react-i18next';
 import CheckCircleOutlined from '../../shared/assets/icons/checkCircledOutlined.svg';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { AuthButton } from './AuthButton';
 import { AuthFooter } from './AuthFooter';
 import { AuthLayoutBase } from './AuthLayoutBase';

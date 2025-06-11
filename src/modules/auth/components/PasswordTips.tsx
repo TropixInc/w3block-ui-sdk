@@ -2,9 +2,8 @@ import classNames from 'classnames';
 
 import CheckCircleOutlined from '../../shared/assets/icons/checkCircledOutlined.svg';
 import ErrorCircled from '../../shared/assets/icons/errorCircled.svg';
-import { useTranslation } from 'react-i18next';
 import { usePasswordMeetsCriteria } from '../hooks/usePasswordMeetsCriteria';
-
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   className?: string;

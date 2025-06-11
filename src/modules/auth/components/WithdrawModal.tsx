@@ -4,7 +4,6 @@ import { CurrencyInput } from 'react-currency-mask';
 
 import AddMethodModal from './AddMethodModal';
 import DeleteMethodModal from './DeleteMethodModal';
-import { useTranslation } from 'react-i18next';
 import { Alert } from '../../shared/components/Alert';
 import { Spinner } from '../../shared/components/Spinner';
 import { useProfile } from '../../shared/hooks/useProfile';
@@ -12,6 +11,7 @@ import useGetWithdrawsMethods from '../hooks/useGetWithdrawsMethods';
 import { useRequestWithdraw } from '../hooks/useRequestWithdraw';
 import { BaseButton } from '../../shared/components/Buttons';
 import Trash from '../../assets/icons/trash.svg';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface ModalProps {
   onClose: () => void;

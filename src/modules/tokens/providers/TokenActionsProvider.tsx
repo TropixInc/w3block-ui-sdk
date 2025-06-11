@@ -1,13 +1,10 @@
 import { ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useModalController } from '../../modules/shared/hooks/useModalController';
 import { usePublicTokenData } from '../hooks/usePublicTokenData';
 import { ITokenActionContext, TokenActionsContext } from '../contexts/TokenActionsContext';
 import { TokenTransferController } from '../components/TokenTransferController';
-import { CertificateIssuanceController } from '../../modules/shared/components/CertificateIssuanceController';
-
-
-
+import { CertificateIssuanceController } from '../../shared/components/CertificateIssuanceController';
+import useModalController from '../hooks/useDialogController';
 interface Props {
   children?: ReactNode;
   collectionId: string;

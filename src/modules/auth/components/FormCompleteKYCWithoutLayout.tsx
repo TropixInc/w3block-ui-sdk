@@ -9,7 +9,6 @@ import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { object } from 'yup';
-import { useTranslation } from 'react-i18next';
 import { Alert } from '../../shared/components/Alert';
 import { Box } from '../../shared/components/Box';
 import { ModalBase } from '../../shared/components/ModalBase';
@@ -32,6 +31,7 @@ import { useGetUserContextId } from '../../shared/hooks/useGetUserContextId';
 import { useGetValidationsTypesForSignup } from '../../shared/utils/useGetValidationsTypesForSignup';
 import { createSchemaSignupForm } from '../../shared/utils/createSchemaSignupForm';
 import { FormTemplate } from '../../shared/components/FormTemplate';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

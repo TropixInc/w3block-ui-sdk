@@ -1,13 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { useLockBodyScroll } from 'react-use';
 
-import classNames from 'classnames';
+import classNames from 'classnames'
 
-
-import  ErrorIcon from '../../assets/icons/errorIconRed.svg?react';
-import  XIcon from '../../assets/icons/xFilled.svg?react';
-import useTranslation from '../../hooks/useTranslation';
+import  ErrorIcon from '../../assets/icons/errorIconRed.svg';
+import  XIcon from '../../assets/icons/xFilled.svg';
 import { Button } from '../Buttons';
+import { useTranslation } from 'react-i18next';
 
 
 export enum TypeError {

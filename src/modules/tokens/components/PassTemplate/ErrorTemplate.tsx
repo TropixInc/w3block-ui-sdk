@@ -1,7 +1,7 @@
-import CloseCircledIcon from '../../../shared/assets/icons/closeCircledOutlined.svg?react';
-import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg?react';
+import { useTranslation } from 'react-i18next';
+import CloseCircledIcon from '../../../shared/assets/icons/closeCircledOutlined.svg';
+import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const ErrorTemplate = ({
   title,

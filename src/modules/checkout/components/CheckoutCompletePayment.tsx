@@ -79,7 +79,7 @@ const _CheckoutCompletePayment = ({
   const getOrderPreviewFn = () => {
     setIsLoadingPreview(true);
     const productIds =
-      orderData?.products.map((val: { productToken: { product: { id: any; }; }; }) => {
+      orderData?.products.map((val) => {
         return val?.productToken?.product?.id;
       }) || [];
     getOrderPreview.mutate(
@@ -187,16 +187,16 @@ const _CheckoutCompletePayment = ({
                 val.currencyId === orderData?.totalAmount?.[0]?.currencyId
             )?.amount,
             amount: orderData?.currencyAmount?.find(
-              (val: { currencyId: any; }) =>
+              (val) =>
                 val.currencyId === orderData?.totalAmount?.[0]?.currencyId
             )?.amount,
             originalAmount: orderData?.originalCurrencyAmount?.find(
-              (val: { currencyId: any; }) =>
+              (val) =>
                 val.currencyId === orderData?.totalAmount?.[0]?.currencyId
             )?.amount,
             totalPrice: orderData?.totalAmount?.[0]?.amount,
             originalTotalPrice: orderData?.originalTotalAmount?.find(
-              (val: { currencyId: any; }) =>
+              (val) =>
                 val.currencyId === orderData?.totalAmount?.[0]?.currencyId
             )?.amount,
             clientServiceFee: (orderData?.clientServiceFee as any)?.find(
@@ -237,7 +237,7 @@ const _CheckoutCompletePayment = ({
           )?.amount ?? '',
         originalTotalPrice:
           orderData?.originalTotalAmount?.find(
-            (val: { currencyId: any; }) => val.currencyId === orderData?.totalAmount?.[0]?.currencyId
+            (val) => val.currencyId === orderData?.totalAmount?.[0]?.currencyId
           )?.amount ?? '',
         destinationUser: {
           walletAddress: datasource?.master?.data.filter(
@@ -404,20 +404,20 @@ const _CheckoutCompletePayment = ({
               }
               price={
                 orderData?.currencyAmount?.find(
-                  (val: { currencyId: any; }) =>
+                  (val) =>
                     val.currencyId === orderData?.totalAmount?.[0]?.currencyId
                 )?.amount
               }
               originalPrice={
                 orderData?.originalCurrencyAmount?.find(
-                  (val: { currencyId: any; }) =>
+                  (val) =>
                     val.currencyId === orderData?.totalAmount?.[0]?.currencyId
                 )?.amount
               }
               totalPrice={orderData?.totalAmount?.[0]?.amount}
               originalTotalPrice={
                 orderData?.originalTotalAmount?.find(
-                  (val: { currencyId: any; }) =>
+                  (val) =>
                     val.currencyId === orderData?.totalAmount?.[0]?.currencyId
                 )?.amount
               }
@@ -436,7 +436,7 @@ const _CheckoutCompletePayment = ({
               name={
                 orderData?.products && orderData?.products?.length
                   ? orderData?.products[0]?.productToken?.product?.prices.find(
-                      (price: { currency: { id: any; }; }) =>
+                      (price) =>
                         price?.currency?.id ==
                         orderData?.totalAmount?.[0]?.currencyId
                     )?.currency?.name
@@ -553,7 +553,7 @@ const _CheckoutCompletePayment = ({
                 }
                 quantity={
                   orderData?.products?.filter(
-                    (p: { productToken: { product: { id: string; prices: any[]; variants: { map: (arg0: (res: any) => any) => { (): any; new(): any; toString: { (): string | undefined; new(): any; }; }; }; }; }; }) =>
+                    (p) =>
                       p?.productToken?.product?.id == prod?.id &&
                       prod?.prices?.find(
                         (price) =>

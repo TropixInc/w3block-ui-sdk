@@ -1,8 +1,7 @@
 import { ReactI18NextChild } from 'react-i18next';
 
 import classNames from 'classnames';
-
-import { ColumnType } from '../GenericTable';
+import { ColumnType } from './GenericTable';
 
 type TableRowsProps<T, K extends keyof T> = {
   data: Array<T>;

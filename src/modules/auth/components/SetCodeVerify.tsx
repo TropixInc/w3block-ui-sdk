@@ -1,5 +1,5 @@
-import { lazy, useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
 
 import addMinutes from 'date-fns/addMinutes';
 import { Alert } from '../../shared/components/Alert';
@@ -15,6 +15,7 @@ import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../hooks/useVerifySignUp';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface SetCodeVerifyProps {

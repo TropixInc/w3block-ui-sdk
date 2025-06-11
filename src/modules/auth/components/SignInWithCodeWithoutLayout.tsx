@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-
+import { Trans } from 'react-i18next';
 import addMinutes from 'date-fns/addMinutes';
 import { Alert } from '../../shared/components/Alert';
 import { WeblockButton } from '../../shared/components/WeblockButton';
@@ -16,8 +15,7 @@ import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useRequestSignInCode } from '../hooks/useRequestSignInCode';
 import { useSignInWithCode } from '../hooks/useSignInWithCode';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export const SignInWithCodeWithoutLayout = () => {
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);

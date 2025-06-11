@@ -1,5 +1,5 @@
 import { lazy, useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import classNames from 'classnames';
 
@@ -11,6 +11,7 @@ import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlah
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { AuthFooter } from './AuthFooter';
 import { AuthLayoutBaseClasses, AuthLayoutBase } from './AuthLayoutBase';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface Props {

@@ -4,7 +4,6 @@ import { useInterval } from 'react-use';
 
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { PRACTITIONER_DATA_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { Box } from '../../shared/components/Box';
 import { SelectorRead } from '../../shared/components/SmartInputs/SelectorRead';
@@ -21,6 +20,7 @@ import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useGetOrderByKyc } from '../../shared/hooks/useGetOrderByKyc';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const ConfirmationKycWithoutLayout = () => {

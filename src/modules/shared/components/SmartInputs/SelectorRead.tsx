@@ -3,11 +3,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
-
-import { useRouterConnect } from '../../../hooks';
-import { usePaginatedGenericApiGet } from '../../../hooks/usePaginatedGenericApiGet/usePaginatedGenericApiGet';
-import { InputDataDTO } from '../../SmartInputsController';
-import { Spinner } from '../../Spinner';
+import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
+import { InputDataDTO } from '../SmartInputsController';
+import { Spinner } from '../Spinner';
 
 export interface Options {
   label: string;

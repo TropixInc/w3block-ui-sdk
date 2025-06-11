@@ -1,9 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { PixwayAPIRoutes } from "../../modules/shared/enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../../modules/shared/enums/W3blockAPI";
-import { useAxios } from "../../modules/shared/hooks/useAxios";
-import { useCompanyConfig } from "../../modules/shared/hooks/useCompanyConfig";
-
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
+import { W3blockAPI } from "../../shared/enums/W3blockAPI";
+import { useAxios } from "../../shared/hooks/useAxios";
+import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
 interface Payload {
   email: string;
   editionId: string;

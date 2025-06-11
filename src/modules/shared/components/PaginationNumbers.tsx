@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
 import { number, object } from 'yup';
 
-import ChevronLeft from '../../assets/icons/chevronLeftFilled.svg?react';
+import ChevronLeft from '../assets/icons/chevronLeftFilled.svg';
 
 interface Props {
   pagesQuantity: number;
@@ -36,7 +36,7 @@ export const PaginationNumbers = ({
       page: currentPage ? currentPage : 1,
     },
     mode: 'onChange',
-    resolver: yupResolver(schemaRef.current),
+    resolver: yupResolver(schemaRef.current as any),
   });
 
   useEffect(() => {

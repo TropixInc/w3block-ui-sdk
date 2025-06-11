@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-
-import { ColumnType } from '../GenericTable';
+import { ColumnType } from './GenericTable';
 
 type TableHeaderProps<T, K extends keyof T> = {
   columns: Array<ColumnType<T, K>>;

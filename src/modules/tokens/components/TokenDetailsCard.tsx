@@ -4,61 +4,32 @@ import { lazy, useMemo } from 'react';
 import classNames from 'classnames';
 import format from 'date-fns/format';
 
-import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
-import { PassType } from '../../../pass/enums/PassType';
-import useGetBenefitsByEditionNumber from '../../../pass/hooks/useGetBenefitsByEditionNumber';
-import useGetPassById from '../../../pass/hooks/useGetPassById';
-import { BenefitAddress } from '../../../pass/interfaces/PassBenefitDTO';
-import { transformObjectToQuery } from '../../../pass/utils/transformObjectToQuery';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useIsMobile from '../../../shared/hooks/useIsMobile/useIsMobile';
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect/useRouterConnect';
-import useTranslation from '../../../shared/hooks/useTranslation';
-import {
-  headers,
-  mobileHeaders,
-  TableRow,
-} from '../../const/GenericTableHeaders';
-import { FormConfigurationContext } from '../../contexts/FormConfigurationContext';
-import useDynamicDataFromTokenCollection from '../../hooks/useDynamicDataFromTokenCollection';
-import {
-  Dimensions2DValue,
-  Dimensions3DValue,
-} from '../../interfaces/DimensionsValue';
-import { DynamicFormConfiguration } from '../../interfaces/DynamicFormConfiguration';
-import GenericTable from '../GenericTable/GenericTable';
-import StatusTag from '../StatusTag/StatusTag';
-const Breadcrumb = lazy(() =>
-  import('../Breadcrumb').then((m) => ({ default: m.Breadcrumb }))
-);
+import { headers } from 'next/headers';
+import { useTranslation } from 'react-i18next';
+import { BenefitStatus } from '../../pass/enums/BenefitStatus';
+import { PassType } from '../../pass/enums/PassType';
+import useGetBenefitsByEditionNumber from '../../pass/hooks/useGetBenefitsByEditionNumber';
+import useGetPassById from '../../pass/hooks/useGetPassById';
+import { BenefitAddress } from '../../pass/interfaces/PassBenefitDTO';
+import { transformObjectToQuery } from '../../pass/utils/transformObjectToQuery';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { TableRow, mobileHeaders } from '../const/GenericTableHeaders';
+import { FormConfigurationContext } from '../contexts/FormConfigurationContext';
+import useDynamicDataFromTokenCollection from '../hooks/useDynamicDataFromTokenCollection';
+import { Dimensions2DValue, Dimensions3DValue } from '../interfaces/DimensionsValue';
+import { DynamicFormConfiguration } from '../interfaces/DynamicFormConfiguration';
+import { Breadcrumb } from './Breadcrumb';
+import GenericTable from './GenericTable';
+import { InternalPageTitle } from './InternalPageTitle';
+import { LineDivider } from './LineDivider';
+import { SmartDataDisplayer } from './SmartDataDisplayer';
+import StatusTag from './StatusTag';
+import { TextFieldDisplay } from './TextFieldDisplay';
+import { Button } from './Button';
 
-const Button = lazy(() =>
-  import('../Button').then((m) => ({ default: m.Button }))
-);
-const ImageSDK = lazy(() =>
-  import('../../../shared/components/ImageSDK').then((m) => ({
-    default: m.ImageSDK,
-  }))
-);
-const InternalPageTitle = lazy(() =>
-  import('../InternalPageTitle').then((m) => ({ default: m.InternalPageTitle }))
-);
-
-const LineDivider = lazy(() =>
-  import('../LineDivider').then((m) => ({ default: m.LineDivider }))
-);
-
-const SmartDataDisplayer = lazy(() =>
-  import('../SmartDataDisplayer').then((m) => ({
-    default: m.SmartDataDisplayer,
-  }))
-);
-
-const TextFieldDisplay = lazy(() =>
-  import('../SmartDisplay/TextFieldDisplay').then((m) => ({
-    default: m.TextFieldDisplay,
-  }))
-);
 interface Props {
   contract: string;
   title: string;
@@ -258,7 +229,7 @@ export const TokenDetailsCard = ({
             {formatedData && (
               <GenericTable
                 showPagination
-                columns={formattedHeaders}
+                columns={formattedHeaders as any}
                 data={formatedData}
                 limitRowsNumber={isMobile ? 3 : 5}
                 itensPerPage={isMobile ? 3 : 5}

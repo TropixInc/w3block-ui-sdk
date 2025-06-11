@@ -1,7 +1,7 @@
-import { Checkbox } from '@headlessui/react';
-import { ReactNode, lazy } from 'react';
+import { ReactNode } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { DialogBase } from './DialogBase';
+import { Checkbox } from './Checkbox';
 
 
 

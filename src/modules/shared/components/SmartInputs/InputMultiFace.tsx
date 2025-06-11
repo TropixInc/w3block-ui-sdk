@@ -10,17 +10,19 @@ import {
   UserDocumentStatus,
 } from '@w3block/sdk-id';
 
-import { ErrorMessage } from '../../../../checkout/components/ErrorMessage/ErrorMessage';
-import UserIcon from '../../../assets/icons/userOutlined.svg?react';
-import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
-import useTranslation from '../../../hooks/useTranslation';
-import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
-import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
-import LabelWithRequired from '../../LabelWithRequired';
-import { ModalBase } from '../../ModalBase';
-import { Selectinput } from '../../SelectInput/SelectInput';
-import { Spinner } from '../../Spinner';
-import { WeblockButton } from '../../WeblockButton/WeblockButton';
+import UserIcon from '../../assets/icons/userOutlined.svg';
+import { useTranslation } from 'react-i18next';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import useUploadAssets from '../../hooks/useUploadAssets';
+import { useUploadFileToCloudinary } from '../../hooks/useUploadFileToCloudinary';
+
+import LabelWithRequired from '../LabelWithRequired';
+import { ModalBase } from '../ModalBase';
+import { Spinner } from '../Spinner';
+import { WeblockButton } from '../WeblockButton';
+import { SelectInput } from '../SelectInput';
+import { ErrorMessage } from '../../../checkout/components/ErrorMessage';
+
 
 interface InputMultiFaceProps {
   label: string;
@@ -180,7 +182,7 @@ export const InputMultiFace = ({
               </WeblockButton>
             ) : (
               <>
-                <Selectinput
+                <SelectInput
                   className="pw-mt-2"
                   onChange={(e) => setDeviceId(e)}
                   selected={deviceId == '' ? devices[0]?.deviceId : deviceId}

@@ -1,11 +1,9 @@
-import { Checkbox } from '@headlessui/react';
-import { lazy, useRef } from 'react';
+import { useRef } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { ModalBase } from '../../modules/shared/components/ModalBase';
-import { PixwayButton } from '../../modules/shared/components/PixwayButton';
-
-
+import { ModalBase } from '../../shared/components/ModalBase';
+import { PixwayButton } from '../../shared/components/PixwayButton';
+import { Checkbox } from '../../shared/components/Checkbox';
 interface Tokens {
   id: string;
   number: string;

@@ -66,7 +66,7 @@ import { ProductError } from './ProductError';
 import { useQuery } from '../../shared/hooks/useQuery';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { Product } from '../../shared/interfaces/Product';
-import { SharedOrder } from '../../pass';
+import { SharedOrder } from '../../pass/components/SharedOrder';
  
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
@@ -1318,7 +1318,7 @@ const _CheckoutInfo = ({
                 name={
                   orderPreview?.products && orderPreview?.products?.length
                     ? orderPreview?.products[0]?.prices.find(
-                        (price: { currency: { id: string | undefined; }; }) => price?.currency?.id == currencyIdState
+                        (price) => price?.currency?.id == currencyIdState
                       )?.currency?.name
                     : 'BRL'
                 }
@@ -1530,7 +1530,7 @@ const _CheckoutInfo = ({
                 name={
                   orderPreview?.products && orderPreview?.products?.length
                     ? orderPreview?.products[0]?.prices.find(
-                        (price: { currency: { id: string | undefined; }; }) => price?.currency?.id == currencyIdState
+                        (price) => price?.currency?.id == currencyIdState
                       )?.currency?.name
                     : 'BRL'
                 }
@@ -1947,9 +1947,9 @@ const _CheckoutInfo = ({
     return orderPreview?.products && orderPreview?.products?.length
       ? orderPreview?.products
           .find((prod) =>
-            prod?.prices?.some((price: { anchorCurrencyId: any; }) => price?.anchorCurrencyId)
+            prod?.prices?.some((price) => price?.anchorCurrencyId)
           )
-          ?.prices.find((price: { anchorCurrencyId: any; }) => price?.anchorCurrencyId)?.anchorCurrencyId
+          ?.prices?.find((price) => price?.anchorCurrencyId)?.anchorCurrencyId
       : '';
   }, [orderPreview]);
 

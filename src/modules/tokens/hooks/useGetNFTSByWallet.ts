@@ -1,9 +1,9 @@
-import { PixwayAPIRoutes } from "../../modules/shared/enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../../modules/shared/enums/W3blockAPI";
-import { useAxios } from "../../modules/shared/hooks/useAxios";
-import { usePaginatedQuery } from "../../modules/shared/hooks/usePaginatedQuery";
-import { useProfile } from "../../modules/shared/hooks/useProfile";
-import { handleNetworkException } from "../../modules/shared/utils/handleNetworkException";
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
+import { W3blockAPI } from "../../shared/enums/W3blockAPI";
+import { useAxios } from "../../shared/hooks/useAxios";
+import { usePaginatedQuery } from "../../shared/hooks/usePaginatedQuery";
+import { useProfile } from "../../shared/hooks/useProfile";
+import { handleNetworkException } from "../../shared/utils/handleNetworkException";
 
 interface Media {
   raw: string;

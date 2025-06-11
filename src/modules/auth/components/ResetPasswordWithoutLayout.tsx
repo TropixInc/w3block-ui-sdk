@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import isAfter from 'date-fns/isAfter';
 import isValid from 'date-fns/isValid';
 import { object, string } from 'yup';
-import { useTranslation } from 'react-i18next';
+
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
@@ -18,9 +18,7 @@ import { AuthPasswordTips } from './AuthPasswordTips';
 import { AuthTextController } from './AuthTextController';
 import { ExpiredTokenWithoutLayout } from './ExpiredTokenWithoutLayout';
 import { PasswordChangeEmailSentWithoutLayout } from './PasswordChangeEmailSentWithoutLayout';
-
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Form {
   password: string;
   confirmation: string;

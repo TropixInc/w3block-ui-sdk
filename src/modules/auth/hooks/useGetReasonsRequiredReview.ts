@@ -1,11 +1,11 @@
-import { useGetW3blockIdSDK } from '../../../shared/hooks/useGetW3blockIdSDK';
-import { usePrivateQuery } from '../../../shared/hooks/usePrivateQuery';
+import { useGetW3blockIdSDK } from "../../shared/hooks/useGetW3blockIdSDK";
+import { usePrivateQuery } from "../../shared/hooks/usePrivateQuery";
 
 export const useGetReasonsRequiredReview = (
   tenantId: string,
   userId: string,
   contextId: string
-) => {
+): any => {
   const getSDK = useGetW3blockIdSDK();
   return usePrivateQuery(
     [tenantId, userId, contextId],

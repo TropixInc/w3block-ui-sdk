@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import addMinutes from 'date-fns/addMinutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
@@ -14,8 +14,7 @@ import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface VerifySignUpWithCodeWithoutLayoutProps {
   emailLocal?: string;

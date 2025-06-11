@@ -1,18 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { lazy, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import { useLocalStorage } from "react-use";
-
 import { KycStatus } from "@w3block/sdk-id";
 import classNames from "classnames";
-
 import GoogleIcon from "../../shared/assets/icons/googleIcon.svg";
 import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
 import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
 import { useGetTenantInfoByHostname } from "../../shared/hooks/useGetTenantInfoByHostname";
 import { useGetGoogleRedirectLink } from "../../shared/hooks/useGetGoogleRedirectLink";
-
 import { usePasswordValidationSchema } from "../hooks/usePasswordValidationSchema";
 import { usePixwayAuthentication } from "../hooks/usePixwayAuthentication";
 import { usePixwaySession } from "../../shared/hooks/usePixwaySession";
@@ -32,6 +29,7 @@ import { AuthTextController } from "./AuthTextController";
 import { AuthValidationTip } from "./AuthValidationTip";
 import { AuthButton } from "./AuthButton";
 import { AuthFooter } from "./AuthFooter";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 interface Form {
   email: string;

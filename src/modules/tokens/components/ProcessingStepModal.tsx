@@ -1,12 +1,10 @@
-import { ReactNode, lazy, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ModalBase } from '../../modules/shared/components/ModalBase';
-import { PixwayButton } from '../../modules/shared/components/PixwayButton';
-import { PixwayAppRoutes } from '../../modules/shared/enums/PixwayAppRoutes';
-import { useTimedBoolean } from '../../modules/shared/hooks/useTimedBoolean';
-import { PixwayLinkButton } from '../../modules/shared/components/PixwayLinkButton';
-
-
+import { ModalBase } from '../../shared/components/ModalBase';
+import { PixwayButton } from '../../shared/components/PixwayButton';
+import { PixwayLinkButton } from '../../shared/components/PixwayLinkButton';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
 
 interface Props {
   isOpen: boolean;

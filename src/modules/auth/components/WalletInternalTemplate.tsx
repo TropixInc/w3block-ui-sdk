@@ -1,10 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { lazy } from 'react';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { useHasWallet } from '../../shared/hooks/useHasWallet';
 import { WalletHeaderSDK } from '../../shared/components/WalletHeaderSDK';
-import { TokensListTemplate } from '../../../tokens/components/TokensListTemplate';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
+import { TokensListTemplate } from '../../tokens/components/TokensListTemplate';
 
 
 const _WalletInternalTemplate = () => {

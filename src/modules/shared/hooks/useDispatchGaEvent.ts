@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TagManagerContext } from '../../core/metamask/providers/TagManagerProvider';
+import { TagManagerContext } from '../../core/providers/TagManagerProvider';
 
 export const useDispatchGaEvent = (): any => {
   return useContext(TagManagerContext);

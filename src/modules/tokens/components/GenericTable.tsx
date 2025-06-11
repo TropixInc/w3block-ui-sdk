@@ -1,13 +1,7 @@
-import { lazy, useEffect, useMemo, useState } from 'react';
-
-const DataGridPagination = lazy(() =>
-  import('../DataGridPagination').then((m) => ({
-    default: m.DataGridPagination,
-  }))
-);
-
-import TableHeader from '../TableHeader/TableHeader';
-import TableRows from '../TableRow/TableRow';
+import { useEffect, useMemo, useState } from 'react';
+import { DataGridPagination } from './DataGridPagination';
+import TableHeader from './TableHeader';
+import TableRows from './TableRow';
 
 export type ColumnType<T, K extends keyof T> = {
   key: K;

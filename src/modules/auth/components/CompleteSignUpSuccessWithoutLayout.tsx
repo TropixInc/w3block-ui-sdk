@@ -1,7 +1,6 @@
-import { lazy } from 'react';
-import { useTranslation } from 'react-i18next';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { AuthButton } from './AuthButton';
 
 

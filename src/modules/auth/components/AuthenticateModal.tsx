@@ -2,10 +2,11 @@ import { Suspense } from 'react';
 import { useProfileWithKYC } from '../../shared/hooks/useProfileWithKYC';
 import { UseGetTemporaryUserCode } from '../../shared/hooks/useGetTemporaryUserCode';
 import { useIsMobile } from '../../shared/hooks/useIsMobile';
-import { useTranslation } from 'react-i18next';
+
 import { ModalBase } from '../../shared/components/ModalBase';
 import { Shimmer } from '../../shared/components/Shimmer';
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

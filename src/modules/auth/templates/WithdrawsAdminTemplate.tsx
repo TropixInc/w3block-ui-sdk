@@ -9,6 +9,10 @@ import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
 import { ConfigGenericTable, FilterTableType, FormatTypeColumn } from "../../shared/interfaces/ConfigGenericTable";
 import WithdrawAdminActions from "../components/WithdrawAdminActions";
 
+import { InternalPagesLayoutBase } from "../../shared/components/InternalPagesLayoutBase";
+import { useGuardPagesWithOptions } from "../../shared/hooks/useGuardPagesWithOptions";
+import { GenericTable } from "../../shared/components/GenericTable";
+
 
 
 const _WithdrawsAdminTemplateSDK = () => {

@@ -1,11 +1,10 @@
-import { useMutation } from 'react-query';
-
-import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
-import { useAxios } from '../../../shared/hooks/useAxios';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { removeDoubleSlashesOnUrl } from '../../../shared/utils/removeDuplicateSlahes';
+import { useMutation } from "@tanstack/react-query";
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
+import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
+import { W3blockAPI } from "../../shared/enums/W3blockAPI";
+import { useAxios } from "../../shared/hooks/useAxios";
+import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
+import { removeDoubleSlashesOnUrl } from "../../shared/utils/removeDuplicateSlahes";
 
 interface Payload {
   email: string;

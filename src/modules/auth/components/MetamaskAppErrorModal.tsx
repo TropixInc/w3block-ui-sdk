@@ -1,7 +1,6 @@
-import { lazy } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'react-use';
 import { ModalBase } from '../../shared/components/ModalBase';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface MetamaskAppErrorModalProps {

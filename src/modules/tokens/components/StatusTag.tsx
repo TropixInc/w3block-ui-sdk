@@ -1,5 +1,5 @@
-import { BenefitStatus } from '../../../pass/enums/BenefitStatus';
-import useTranslation from '../../../shared/hooks/useTranslation';
+import { useTranslation } from "react-i18next";
+import { BenefitStatus } from "../../pass/enums/BenefitStatus";
 
 interface StatusTagProps {
   status: BenefitStatus;

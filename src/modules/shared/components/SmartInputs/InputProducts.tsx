@@ -1,7 +1,6 @@
 import { UserDocumentStatus } from '@w3block/sdk-id';
-
-import useGetProductById from '../../../../storefront/hooks/useGetProductById/useGetProductById';
-import LabelWithRequired from '../../LabelWithRequired';
+import useGetProductById from '../../../storefront/hooks/useGetProductById';
+import LabelWithRequired from '../LabelWithRequired';
 
 interface InputProductsProps {
   label: string;

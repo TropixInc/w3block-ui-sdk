@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useController } from 'react-hook-form';
 import { useClickAway } from 'react-use';
 
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
+import { Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import _ from 'lodash';
 
@@ -161,7 +161,7 @@ export const MultipleSelect = ({
       >
         {() => (
           <>
-            <ListboxButton
+            <Listbox.Button
               className={classNames(
                 'pw-relative pw-w-full pw-h-10 pw-border pw-text-left pw-text-[14px] pw-leading-[18px] pw-z-10',
                 `${disabled ? '' : 'pw-px-[14px]'}`,
@@ -187,7 +187,7 @@ export const MultipleSelect = ({
                   isOpen ? 'pw-rotate-180' : ''
                 )}
               />
-            </ListboxButton>
+            </Listbox.Button>
 
             <Transition
               show={isOpen}
@@ -196,20 +196,20 @@ export const MultipleSelect = ({
               leaveTo="pw-opacity-0"
               className="pw-absolute pw-top-[100%] pw-mt-0 pw-w-full pw-rounded-[0_0_8px_8px] pw-bg-white pw-shadow-[0_4px_15px_#00000011] pw-z-30 pw-border-[0_1px_1px_1px] pw-border-[#B9D1F3] pw-p-2"
             >
-              <ListboxOptions
+              <Listbox.Options
                 static
                 className="pw-max-h-60 pw-overflow-auto before:pw-absolute before:pw-w-[calc(100%_-_28px)] before:pw-left-[50%] before:pw-top-0 before:pw-translate-x-[-50%] before:pw-h-[1px] before:pw-bg-[#B9D1F3] before:pw-content-[''] pw-scrollbar-thin pw-scrollbar-track-rounded-full pw-scrollbar-track-[#F4F4F4] pw-scrollbar-thumb-[#B9D1F3] pw-scrollbar-thumb-rounded-full hover:pw-scrollbar-thumb-[#5682C3]"
               >
                 {options.map((option, index) => {
                   const selected = isSelected(option.value);
                   return (
-                    <ListboxOption
+                    <Listbox.Option
                       key={`${index}-${option.value}`}
                       value={option.value}
                       disabled={option.disabled}
                       onClick={() => handleOptionChange(option.value)}
                     >
-                      {({ disabled }) => (
+                      {({ disabled }: any) => (
                         <div
                           className={classNames(
                             'pw-select-none pw-flex pw-gap-x-2 pw-items-center pw-h-[36px] pw-my-3 pw-mx-[6px]',
@@ -243,10 +243,10 @@ export const MultipleSelect = ({
                           </span>
                         </div>
                       )}
-                    </ListboxOption>
+                    </Listbox.Option>
                   );
                 })}
-              </ListboxOptions>
+              </Listbox.Options>
             </Transition>
             {error && (
               <span className="pw-text-[#FF0505] pw-text-xs pw-mb-2">

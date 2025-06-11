@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
-import { useTranslation } from 'react-i18next';
 import { Spinner } from '../../shared/components/Spinner';
 import { useLocale } from '../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useGetSpecificWithdraw } from '../hooks/useRequestWithdraw';
-
+import useTranslation from '../../shared/hooks/useTranslation';
 
 type Status =
   | 'pending'

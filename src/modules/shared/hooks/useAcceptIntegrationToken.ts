@@ -1,9 +1,8 @@
-import { useMutation } from 'react-query';
-
-import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
-import { W3blockAPI } from '../../enums/W3blockAPI';
-import { handleNetworkException } from '../../utils/handleNetworkException';
-import { useAxios } from '../useAxios';
+import { useMutation } from "@tanstack/react-query";
+import { PixwayAPIRoutes } from "../enums/PixwayAPIRoutes";
+import { W3blockAPI } from "../enums/W3blockAPI";
+import { handleNetworkException } from "../utils/handleNetworkException";
+import { useAxios } from "./useAxios";
 
 interface Response {
   token: string;

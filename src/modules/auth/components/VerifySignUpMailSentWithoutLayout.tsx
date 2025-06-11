@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import addMinutes from 'date-fns/addMinutes';
 import isAfter from 'date-fns/isAfter';
 
-import MailSent from '../assets/icons/mailSent.svg?react';
+import MailSent from '../assets/icons/mailSent.svg';
 import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -14,6 +14,7 @@ import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlah
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface PasswordChangeMailSentProps {

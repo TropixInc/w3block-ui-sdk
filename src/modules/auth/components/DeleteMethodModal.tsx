@@ -1,12 +1,10 @@
 /* eslint-disable i18next/no-literal-string */
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Spinner } from '../../shared/components/Spinner';
 import { useDeleMethodPayment } from '../hooks/useDeleMethodPayment';
 import { WithdrawMethodDTO } from './WithdrawModal';
 import { BaseButton } from '../../shared/components/Buttons';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 interface DeleteModalProps {
   onChangeModalType: (value: 'add' | 'withdraw' | 'delete') => void;
   itemForDelete: any;

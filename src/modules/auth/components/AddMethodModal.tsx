@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
 import { WithdrawAccountTypeEnum } from '@w3block/sdk-id';
-import { useTranslation } from 'react-i18next';
+
 import { useCreateWithdrawMethod } from '../hooks/useCreateWithdrawMethod';
 import { BaseButton } from '../../shared/components/Buttons';
-import { getNumbersFromString } from '../../../tokens/utils/getNumbersFromString';
-
+import { getNumbersFromString } from '../../tokens/utils/getNumbersFromString';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface PayloadDTO {
   type: WithdrawAccountTypeEnum;

@@ -1,6 +1,5 @@
 import { useContext } from 'react';
-
-import { SocketProviderContext } from '../../providers/SocketProviderUiSDK';
+import { SocketProviderContext } from '../providers/SocketProviderUiSDK';
 
 export const useSocket = () => {
   const { isConnected, signinRequest, emitTransactionCloncluded } = useContext(

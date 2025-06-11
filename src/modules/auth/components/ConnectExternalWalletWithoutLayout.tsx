@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useMemo } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 
-import MetamaskLogo from '../../../shared/assets/icons/metamask.svg?react';
+import MetamaskLogo from '../../shared/assets/icons/metamask.svg';
 import { Alert } from '../../shared/components/Alert';
 import { Spinner } from '../../shared/components/Spinner';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
@@ -27,6 +27,7 @@ import { useModalController } from '../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { useWallets } from '../../shared/hooks/useWallets';
 import { MailVerifiedInterceptorProvider } from '../../core/providers/MailVerifiedInterceptorProvider';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 enum Step {

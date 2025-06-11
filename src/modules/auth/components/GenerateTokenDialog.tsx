@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
 import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
 import { useHostname } from "../../shared/hooks/useHostname";
 import { DialogBase } from "../../shared/components/DialogBase";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 export const GenerateTokenDialog = ({
   isOpen,

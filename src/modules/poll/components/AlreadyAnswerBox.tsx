@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import InfoIcon from '../../../shared/assets/icons/informationCircledFilled.svg?react';
+import InfoIcon from '../../shared/assets/icons/informationCircledFilled.svg';
 import { Box } from '../../shared/components/Box';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { usePixwaySession } from '../../shared/hooks/usePixwaySession';

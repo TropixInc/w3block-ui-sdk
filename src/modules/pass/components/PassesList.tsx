@@ -97,7 +97,7 @@ const _PassesList = () => {
           setShowVerify(false);
           setOpenScan(false);
         },
-        onError: (error: { message: string; }) => {
+        onError: (error) => {
           console.error('Register Use: ', error);
           if (error instanceof Error) {
             if (error?.message === 'ERR_BAD_REQUEST') {

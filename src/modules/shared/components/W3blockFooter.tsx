@@ -194,9 +194,7 @@ const _W3blockFooter = ({
 
 export const W3blockFooter = (props: W3blockFooterProps) => (
   <TranslatableComponent>
-    <ThemeProvider>
-      <_W3blockFooter {...props} />
-    </ThemeProvider>
+    <_W3blockFooter {...props} />
   </TranslatableComponent>
 );
 

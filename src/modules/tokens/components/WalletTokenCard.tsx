@@ -2,20 +2,18 @@ import { MouseEventHandler, lazy, useRef } from 'react';
 import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
-import { Button } from '@headlessui/react';
 
 import { useTranslation } from 'react-i18next';
-import { ImageSDK } from '../../modules/shared/components/ImageSDK';
-import { PixwayAppRoutes } from '../../modules/shared/enums/PixwayAppRoutes';
-import { useModalController } from '../../modules/shared/hooks/useModalController';
-import { useRouterConnect } from '../../modules/shared/hooks/useRouterConnect';
+import { FallbackImage } from '../../shared/components/FallbackImage';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import Skeleton from '../../shared/components/Skeleton';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useModalController from '../hooks/useDialogController';
 import { TokenActionsProvider } from '../providers/TokenActionsProvider';
-import { Link } from '../../modules/shared/components/Link';
-import { FallbackImage } from '../../modules/shared/components/FallbackImage';
 import { WalletTokenCardActionsPanel } from './ActionsPanel';
-import Skeleton from '../../modules/shared/components/Skeleton';
-
-
+import { Link } from '../../shared/components/Link';
+import { Button } from './Button';
 interface Props {
   name: string;
   category: string;

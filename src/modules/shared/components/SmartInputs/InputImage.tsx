@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { Accept, useDropzone } from 'react-dropzone';
 import { useController } from 'react-hook-form';
 
 import {
@@ -8,17 +8,15 @@ import {
   UserDocumentStatus,
 } from '@w3block/sdk-id';
 import classNames from 'classnames';
-
-import { useCompanyConfig } from '../../../hooks/useCompanyConfig';
-import useTranslation from '../../../hooks/useTranslation';
-import useUploadAssets from '../../../hooks/useUploadAssets/useUploadAssets';
-import { useUploadFileToCloudinary } from '../../../hooks/useUploadFileToCloudinary';
-import { validateIfStatusKycIsReadonly } from '../../../utils/validReadOnlyKycStatus';
-import { FormItemContainer } from '../../Form/FormItemContainer';
-import LabelWithRequired from '../../LabelWithRequired';
-import { Spinner } from '../../Spinner/Spinner';
-import InputStatus from '../InputStatus';
-
+import { useTranslation } from 'react-i18next';
+import { useCompanyConfig } from '../../hooks/useCompanyConfig';
+import useUploadAssets from '../../hooks/useUploadAssets';
+import { useUploadFileToCloudinary } from '../../hooks/useUploadFileToCloudinary';
+import { validateIfStatusKycIsReadonly } from '../../utils/validReadOnlyKycStatus';
+import { FormItemContainer } from '../Form/FormItemContainer';
+import LabelWithRequired from '../LabelWithRequired';
+import { Spinner } from '../Spinner';
+import InputStatus from './InputStatus';
 interface InputImageProps {
   title: string;
   name: string;
@@ -92,7 +90,7 @@ const InputImage = ({
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,
-    accept: acceptTypes,
+    accept: acceptTypes as unknown as Accept,
     disabled: validateIfStatusKycIsReadonly(docStatus as UserDocumentStatus),
   });
 

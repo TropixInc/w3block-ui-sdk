@@ -1,8 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { useMutation } from 'react-query';
-
-import { ResetPasswordPayload } from '../../api/resetPassword';
-import { usePixwayAuthentication } from '../usePixwayAuthentication';
+import { ResetPasswordPayload } from '../interface/resetPassword';
+import { usePixwayAuthentication } from './usePixwayAuthentication';
 
 export const useChangePasswordAndSignIn = () => {
   const { changePasswordAndSignIn } = usePixwayAuthentication();

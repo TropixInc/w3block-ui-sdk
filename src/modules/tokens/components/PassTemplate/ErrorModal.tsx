@@ -1,9 +1,9 @@
 import { useLockBodyScroll } from 'react-use';
 
-import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg?react';
+import ErrorIcon from '../../../shared/assets/icons/errorIconRed.svg';
 import { CloseButton } from '../../../shared/components/CloseButton';
-import useTranslation from '../../../shared/hooks/useTranslation';
 import { Button } from '../Button';
+import { useTranslation } from 'react-i18next';
 
 interface iProps {
   hasOpen: boolean;

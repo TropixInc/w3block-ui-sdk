@@ -7,13 +7,14 @@ import classNames from 'classnames';
 
 import ChevronDown from '../../shared/assets/icons/arrowDown.svg';
 import CopyIcon from '../../shared/assets/icons/copy.svg';
-import { useTranslation } from 'react-i18next';
+
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useIsMobile } from '../../shared/hooks/useIsMobile';
 import { useProfileWithKYC } from '../../shared/hooks/useProfileWithKYC';
 import { AuthButton } from '../../auth/components/AuthButton';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import { Disclosure } from '@headlessui/react';
 import { QRCodeSVG } from 'qrcode.react';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface ReferralProps {
@@ -117,7 +118,7 @@ export const ReferralWidget = ({
       <Disclosure defaultOpen={showQrCode}>
         {({ open }) => (
           <>
-            <DisclosureButton className="pw-flex pw-items-center pw-gap-3 pw-mt-5">
+            <Disclosure.Button className="pw-flex pw-items-center pw-gap-3 pw-mt-5">
               <span>{translate('affiliates>referralWidget>QRCode')}</span>
               <ChevronDown
                 className={classNames(
@@ -125,14 +126,14 @@ export const ReferralWidget = ({
                   open ? 'pw-rotate-180' : ''
                 )}
               />
-            </DisclosureButton>
-            <DisclosurePanel>
+            </Disclosure.Button>
+            <Disclosure.Panel>
               <div className="pw-my-5">
                 <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-w-[280px] pw-mx-auto">
                   <QRCodeSVG value={link} size={280} />
                 </div>
               </div>
-            </DisclosurePanel>
+            </Disclosure.Panel>
           </>
         )}
       </Disclosure>

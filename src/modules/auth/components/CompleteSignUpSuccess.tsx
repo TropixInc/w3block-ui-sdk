@@ -1,7 +1,4 @@
-import { lazy } from 'react';
-
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
@@ -9,6 +6,7 @@ import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { AuthButton } from './AuthButton';
 import { AuthFooter } from './AuthFooter';
 import { AuthLayoutBaseClasses, AuthLayoutBase } from './AuthLayoutBase';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface Props {

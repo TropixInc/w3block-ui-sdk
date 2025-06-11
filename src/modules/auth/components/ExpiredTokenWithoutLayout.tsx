@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
-
-
 import MailError from '../assets/icons/mailError.svg';
-import { useTranslation } from 'react-i18next';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
-
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   companyId?: string;

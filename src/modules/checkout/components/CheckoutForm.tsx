@@ -629,7 +629,7 @@ const _CheckoutForm = ({
           name={
             orderPreview?.products && orderPreview?.products?.length
               ? orderPreview?.products[0]?.prices.find(
-                  (price: { currency: { id: string | undefined; }; }) => price?.currency?.id == currencyIdState
+                  (price) => price?.currency?.id == currencyIdState
                 )?.currency?.name
               : 'BRL'
           }
@@ -705,9 +705,9 @@ const _CheckoutForm = ({
     return orderPreview?.products && orderPreview?.products?.length
       ? orderPreview?.products
           .find((prod) =>
-            prod?.prices?.some((price: { anchorCurrencyId: any; }) => price?.anchorCurrencyId)
+            prod?.prices?.some((price) => price?.anchorCurrencyId)
           )
-          ?.prices.find((price: { anchorCurrencyId: any; }) => price?.anchorCurrencyId)?.anchorCurrencyId
+          ?.prices.find((price) => price?.anchorCurrencyId)?.anchorCurrencyId
       : '';
   }, [orderPreview]);
 

@@ -1,9 +1,7 @@
-import { lazy } from 'react';
-
 import CheckCircleOutlined from '../../shared/assets/icons/checkCircledOutlined.svg';
-import { useTranslation } from 'react-i18next';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { AuthButton } from './AuthButton';
 
 export const AuthPasswordChangedWithoutLayout = () => {

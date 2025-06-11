@@ -1,10 +1,10 @@
 import UploadIcon from '../../../shared/assets/icons/uploadIcon.svg';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
-import { useTranslation } from 'react-i18next';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { BalanceWalletArea } from './BalanceWalletArea';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { BaseButton } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const AddFundsChoosePaymentContainer = () => {

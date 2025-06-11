@@ -3,7 +3,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
-import { useTranslation } from 'react-i18next';
+
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
@@ -11,6 +11,7 @@ import { AuthButton } from './AuthButton';
 import { AuthTextController } from './AuthTextController';
 import { AuthValidationTip } from './AuthValidationTip';
 import { PasswordChangeEmailSentWithoutLayout } from './PasswordChangeEmailSentWithoutLayout';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

@@ -3,9 +3,6 @@ import { Fragment, useState } from "react";
 
 import {
   Combobox,
-  ComboboxButton,
-  ComboboxOption,
-  ComboboxOptions,
   Transition,
 } from "@headlessui/react";
 import classNames from "classnames";
@@ -89,9 +86,9 @@ export const Selector = ({
               }
               onChange={(event) => setQuery(event.target.value)}
             />
-            <ComboboxButton className="pw-absolute pw-inset-y-0 pw-right-0 pw-flex pw-items-center pw-pr-2">
+            <Combobox.Button className="pw-absolute pw-inset-y-0 pw-right-0 pw-flex pw-items-center pw-pr-2">
               <ArrowDown className="pw-stroke-black" />
-            </ComboboxButton>
+            </Combobox.Button>
           </div>
           <Transition
             as={Fragment}
@@ -100,13 +97,13 @@ export const Selector = ({
             leaveTo="opacity-0"
             afterLeave={() => setQuery("")}
           >
-            <ComboboxOptions className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-w-[1032px]">
+            <Combobox.Options className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-w-[1032px]">
               {filteredPeople.map(
                 (res: {
                   attributes: { name: string; slug: string };
                   id: string;
                 }) => (
-                  <ComboboxOption
+                  <Combobox.Option
                     key={res.id}
                     value={res}
                     className={({ active }) =>
@@ -116,10 +113,10 @@ export const Selector = ({
                     }
                   >
                     {res.attributes.name}
-                  </ComboboxOption>
+                  </Combobox.Option>
                 )
               )}
-            </ComboboxOptions>
+            </Combobox.Options>
           </Transition>
         </Combobox>
       )}

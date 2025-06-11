@@ -9,25 +9,23 @@ import { object, string } from 'yup';
 
 import ExternalLinkIcon from '../../shared/assets/icons/externalLink.svg';
 import { useQueryClient } from '@tanstack/react-query';
-import { Alert } from '../../modules/shared/components/Alert';
-import { TextField } from '../../modules/shared/components/Form/TextField';
-import { ImageSDK } from '../../modules/shared/components/ImageSDK';
-import { Spinner } from '../../modules/shared/components/Spinner';
-import { LocalStorageFields } from '../../modules/shared/enums/LocalStorageFields';
-import { PixwayAPIRoutes } from '../../modules/shared/enums/PixwayAPIRoutes';
-import { PixwayAppRoutes } from '../../modules/shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../modules/shared/hooks/useCompanyConfig';
-import { useTimedBoolean } from '../../modules/shared/hooks/useTimedBoolean';
+import { Alert } from '../../shared/components/Alert';
+import { TextField } from '../../shared/components/Form/TextField';
+import { GasModalHeader } from '../../shared/components/GasModalHeader';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { PoliciesAgreementStepModal } from '../../shared/components/PoliciesAgreementStepModal';
+import { Spinner } from '../../shared/components/Spinner';
+import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
+import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { useChainScanLink } from '../../shared/hooks/useChainScanLink';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
 import { GetLastTransferAPIResponse, useGetTransferToken } from '../hooks/useGetTransferToken';
-import { useChainScanLink } from '../../modules/shared/hooks/useChainScanLink';
 import useTransferToken from '../hooks/useTransferToken';
 import useTransferTokenWithEmail from '../hooks/useTransferTokenWithEmail';
-import { TokenTransferProcessModal } from './TokenTransferProcessModal';
-import { PoliciesAgreementStepModal } from '../../modules/shared/components/PoliciesAgreementStepModal';
 import { ProcessingStepModal } from './ProcessingStepModal';
-import { GasModalHeader } from '../../modules/shared/components/GasModalHeader';
-
-
+import { TokenTransferProcessModal } from './TokenTransferProcessModal';
 interface Tokens {
   id: string;
   number: string;
