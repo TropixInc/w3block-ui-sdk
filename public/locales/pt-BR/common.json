@@ -103,8 +103,8 @@
   "auth>signUpError>genericErrorMessage": "Ocorreu um erro ao realizar o cadastro.",
   "auth>signUpForm>alreadyHaveAccount": "Já possui uma conta? <1>Login</1>",
   "auth>signUpForm>formTitle": "Crie sua conta",
-  "auth>signWithoutLayout>notRegistration": "Parece que você ainda não possui uma conta, por favor cadastre-se pela plataforma.",
-  "auth>signWithoutLayout>signGoogle": "Sign in with Google",
+  "auth>signWithoutLayout>notRegistration": "Parece que você ainda não possui uma conta, por favor cadastre-se pelo aplicativo.",
+  "auth>signWithoutLayout>signGoogle": "Continuar com Google",
   "auth>smartInputsController>subtitleInputFile": "Favor incluir uma imagem selfie em boas condições de iluminação e resolução.",
   "auth>verifySignUp>mailVerifiedStepTitle": "E-mail confirmado com sucesso",
   "auth>verifySignUp>waitForRedirectionMessage": "Aguarde enquanto estamos te direcionado para o login ou se não quiser aguardar, clique no botão abaixo.",
@@ -1044,12 +1044,14 @@
   "pages>mysales>fillBankDetails": "Por favor, preencha seus dados bancários antes de cadastrar uma venda",
   "pages>resale>totalReceivable": "Total a receber",
   "pages>mysales>resale>saveSale": "Salvar venda",
-  "pages>product>reachStock": "*Você atingiu o número máximo de {{product}} que pode comprar.",
+  "pages>product>reachStock": "Você atingiu o número máximo de {{product}} que pode comprar.",
   "pages>resale>maximumValue": "Valor máximo:",
   "pages>resale>minimumValue": "Valor mínimo:",
   "withdraw>actions>concludeTransfer": "Concluir transferência",
   "withdraw>actions>withholdFunds": "Reter fundos",
   "shared>statementComponent>issueDate": "Data de compra",
   "shared>statementComponent>receiptDate": "Data de recebimento",
-  "auth>signWithoutLayout>signinApple": "Sign in with Apple"
+  "auth>signWithoutLayout>signinApple": "Continuar com Apple",
+  "pages>checkout>batchSizeSale": "Você só pode vender em quantidades multiplas de {{batchSize}}",
+  "pages>productPage>minValue": "Valor minimo para compra de {{value}}"
  }

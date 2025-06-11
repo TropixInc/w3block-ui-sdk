@@ -103,8 +103,8 @@
 "auth>signUpError>genericErrorMessage": "An error occurred while registering.",
 "auth>signUpForm>alreadyHaveAccount": "Already have an account? <1>Login</1>",
 "auth>signUpForm>formTitle": "Create your account",
-"auth>signWithoutLayout>notRegistration": "It looks like you don't have an account yet, please sign up through the platform.",
-"auth>signWithoutLayout>signGoogle": "Sign in with Google",
+"auth>signWithoutLayout>notRegistration": "It looks like you don't have an account yet, please sign up through the app.",
+"auth>signWithoutLayout>signGoogle": "Continue with Google",
 "auth>smartInputsController>subtitleInputFile": "Please include a selfie image in good lighting conditions and resolution.",
 "auth>verifySignUp>mailVerifiedStepTitle": "Email successfully confirmed",
 "auth>verifySignUp>waitForRedirectionMessage": "Please wait while we redirect you to login or if you don't want to wait, click the button below.",
@@ -1043,12 +1043,14 @@
 "pages>iframe>continue": "When you finish, click here to continue.",
 "pages>iframe>click": "click here",
 "pages>mysales>resale>saveSale": "Save sale",
-"pages>product>reachStock": "*You've reached the maximum number of {{product}} you can buy.",
+"pages>product>reachStock": "You've reached the maximum number of {{product}} you can buy.",
 "pages>resale>maximumValue": "Maximum value:",
 "pages>resale>minimumValue": "Minimum value:",
 "withdraw>actions>concludeTransfer": "Complete transfer",
 "withdraw>actions>withholdFunds": "Withhold funds",
 "shared>statementComponent>issueDate": "Issue date",
 "shared>statementComponent>receiptDate": "Receipt date",
-  "auth>signWithoutLayout>signinApple": "Sign in with Apple"
+"auth>signWithoutLayout>signinApple": "Continue with Apple",
+"pages>checkout>batchSizeSale": "You can only sell in multiple quantities of {{batchSize}}",
+"pages>productPage>minValue": "Minimum purchase value {{value}}"
 }

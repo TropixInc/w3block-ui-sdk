@@ -68,6 +68,7 @@ export interface Product {
       dataFields?: DataFields[];
     };
     disableImageDisplay?: boolean;
+    minCartItemPrice?: number;
   };
   canPurchase?: boolean;
   chainId?: number;

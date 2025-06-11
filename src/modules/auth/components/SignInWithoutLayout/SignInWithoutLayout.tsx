@@ -332,58 +332,47 @@ export const SigInWithoutLayout = ({
                     </a>
                   </Trans>
                 </p>
-                {haveGoogleSignIn ? (
-                  <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
-                    {googleError ? (
-                      <Alert variant="warning">
-                        {translate('auth>signWithoutLayout>notRegistration')}
-                      </Alert>
-                    ) : (
-                      <>
-                        <p className="pw-text-black">
-                          {translate('auth>metamaskAppErrorModal>or')}
-                        </p>
-                        <a
-                          className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
-                          href={googleLink}
-                        >
-                          <div className="pw-h-[17px] pw-w-[17px] pw-mr-[12px]">
-                            <GoogleIcon />
-                          </div>
-                          <span className="pw-mt-[1px]">
-                            {translate('auth>signWithoutLayout>signGoogle')}
-                          </span>
-                        </a>
-                      </>
-                    )}
-                  </div>
-                ) : null}
-                {haveAppleSignIn ? (
-                  <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
-                    {appleError ? (
-                      <Alert variant="warning">
-                        {translate('auth>signWithoutLayout>notRegistration')}
-                      </Alert>
-                    ) : (
-                      <>
-                        <a
-                          className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
-                          href={appleLink}
-                        >
-                          <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
-                            <AppleIcon width={20} height={17} />
-                          </div>
-                          <span className="pw-mt-[1px]">
-                            {translate('auth>signWithoutLayout>signinApple')}
-                          </span>
-                        </a>
-                      </>
-                    )}
-                  </div>
-                ) : null}
               </>
             ) : null}
+            {haveGoogleSignIn ? (
+              <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
+                <p className="pw-text-black">
+                  {translate('auth>metamaskAppErrorModal>or')}
+                </p>
+                <a
+                  className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
+                  href={googleLink}
+                >
+                  <div className="pw-h-[17px] pw-w-[17px] pw-mr-[12px]">
+                    <GoogleIcon />
+                  </div>
+                  <span className="pw-mt-[1px]">
+                    {translate('auth>signWithoutLayout>signGoogle')}
+                  </span>
+                </a>
+              </div>
+            ) : null}
+            {haveAppleSignIn ? (
+              <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
+                <a
+                  className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
+                  href={appleLink}
+                >
+                  <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
+                    <AppleIcon width={20} height={17} />
+                  </div>
+                  <span className="pw-mt-[1px]">
+                    {translate('auth>signWithoutLayout>signinApple')}
+                  </span>
+                </a>
+              </div>
+            ) : null}
           </div>
+          {appleError || googleError ? (
+            <Alert variant="warning">
+              {translate('auth>signWithoutLayout>notRegistration')}
+            </Alert>
+          ) : null}
           <AuthFooter />
         </form>
       </FormProvider>

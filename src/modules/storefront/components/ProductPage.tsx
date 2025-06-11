@@ -650,18 +650,45 @@ export const ProductPage = ({
     }
   };
 
+  const reachStock = useMemo(() => {
+    return (
+      product?.canPurchaseAmount &&
+      product?.stockAmount &&
+      quantity + (batchSize ?? 0) > product?.canPurchaseAmount &&
+      quantity + (batchSize ?? 0) > product?.stockAmount
+    );
+  }, [product?.canPurchaseAmount, product?.stockAmount, quantity, batchSize]);
+
+  const minCartItemPriceBlock = useMemo(() => {
+    return (
+      !!orderPreview?.cartPrice &&
+      !!product?.settings?.minCartItemPrice &&
+      parseFloat(orderPreview?.cartPrice ?? '') <
+        product?.settings?.minCartItemPrice
+    );
+  }, [orderPreview?.cartPrice, product?.settings?.minCartItemPrice]);
+
   const soldOut = useMemo(() => {
     if (isErc20 && batchSize) {
       return (
         product?.stockAmount === 0 ||
         product?.canPurchaseAmount === 0 ||
         (product?.stockAmount && product?.stockAmount < batchSize) ||
-        (product?.canPurchaseAmount && product?.canPurchaseAmount < batchSize)
+        (product?.canPurchaseAmount &&
+          product?.canPurchaseAmount < batchSize) ||
+        (reachStock && minCartItemPriceBlock)
       );
     } else {
       return product?.stockAmount === 0 || product?.canPurchaseAmount === 0;
     }
-  }, [isErc20, batchSize, product?.stockAmount, product?.canPurchaseAmount]);
+  }, [
+    isErc20,
+    batchSize,
+    product?.stockAmount,
+    product?.canPurchaseAmount,
+    reachStock,
+    minCartItemPriceBlock,
+  ]);
 
   return errorProduct ? (
     <ErrorBox customError={errorProduct} />
@@ -1121,13 +1148,20 @@ export const ProductPage = ({
                             +
                           </p>
                         </div>
-                        {product?.canPurchaseAmount &&
-                        quantity + (batchSize ?? 0) >
-                          product?.canPurchaseAmount &&
-                        quantity + (batchSize ?? 0) > product?.stockAmount ? (
+                        {reachStock ? (
                           <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
                             {translate('pages>product>reachStock', {
                               product: product?.name,
+                            })}
+                          </p>
+                        ) : null}
+                        {product?.settings?.minCartItemPrice ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>productPage>minValue', {
+                              value:
+                                (product?.prices?.[0]?.currency?.symbol ??
+                                  orderPreview?.currency?.symbol) +
+                                product?.settings?.minCartItemPrice.toFixed(2),
                             })}
                           </p>
                         ) : null}
@@ -1307,6 +1341,7 @@ export const ProductPage = ({
                         <button
                           disabled={
                             soldOut ||
+                            minCartItemPriceBlock ||
                             !termsChecked ||
                             (isSendGift && !giftData && isPossibleSend)
                           }
@@ -1316,6 +1351,7 @@ export const ProductPage = ({
                             borderColor:
                               product &&
                               (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
@@ -1325,6 +1361,7 @@ export const ProductPage = ({
                             color:
                               product &&
                               (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
@@ -1338,19 +1375,23 @@ export const ProductPage = ({
                       <button
                         disabled={
                           soldOut ||
+                          minCartItemPriceBlock ||
                           !termsChecked ||
-                          (isSendGift && !giftData && isPossibleSend)
+                          (isSendGift && !giftData && isPossibleSend) ||
+                          minCartItemPriceBlock
                         }
                         onClick={handleBuyClick}
                         style={{
                           backgroundColor:
-                            product && (soldOut || !termsChecked)
+                            product &&
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#DCDCDC'
                               : buttonColor
                               ? buttonColor
                               : '#0050FF',
                           color:
-                            product && (soldOut || !termsChecked)
+                            product &&
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}
