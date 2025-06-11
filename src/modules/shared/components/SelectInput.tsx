@@ -4,7 +4,8 @@ import { useClickAway } from 'react-use';
 import classNames from 'classnames';
 
 import ArrowDown from '../assets/icons/arrowDown.svg';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../hooks/useTranslation';
+
 
 interface SelectInputProps {
   options: { value: string; label: string }[];

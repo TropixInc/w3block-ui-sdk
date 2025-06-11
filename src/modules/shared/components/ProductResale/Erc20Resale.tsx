@@ -21,7 +21,8 @@ import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
 import { useGetResaleById, ProductResaleResponse } from '../../hooks/useGetResaleById';
 import { usePostProductResale } from '../../hooks/usePostProductResale';
 import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../hooks/useTranslation';
+
 
 export const Erc20Resale = () => {
   const [translate] = useTranslation();

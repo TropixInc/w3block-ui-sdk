@@ -21,7 +21,7 @@ import { NavigationMenuTabs } from "../interfaces/menu";
 import { useRouterConnect } from "../../../hooks/useRouterConnect";
 
 import { BaseButton } from "../../Buttons";
-import { useTranslation } from "react-i18next";
+
 import {
   chainIdToCode,
   useGetRightWallet,
@@ -37,6 +37,7 @@ import { useUserWallet } from "../../../hooks/useUserWallet/useUserWallet";
 import { useLoyaltiesInfo } from "../../../../business/hooks/useLoyaltiesInfo";
 import { useThemeConfig } from "../../../../storefront/hooks/useThemeConfig";
 import { PixwayAppRoutes } from "../../../enums/PixwayAppRoutes";
+import useTranslation from "../../../hooks/useTranslation";
 interface NavigationLoginLoggedButtonProps {
   logo?: string | ReactNode;
   menuTabs?: NavigationMenuTabs[];

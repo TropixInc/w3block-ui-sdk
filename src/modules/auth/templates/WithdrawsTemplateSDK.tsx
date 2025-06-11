@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+
 import TranslatableComponent from "../../shared/components/TranslatableComponent";
 import { W3blockAPI } from "../../shared/enums/W3blockAPI";
 import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
@@ -14,6 +14,7 @@ import WithdrawModal from "../components/WithdrawModal";
 import { BaseButton } from "../../shared/components/Buttons";
 import { InternalPagesLayoutBase } from "../../shared/components/InternalPagesLayoutBase";
 import { GenericTable } from "../../shared/components/GenericTable";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 
 const _WithdrawsTemplateSDK = () => {

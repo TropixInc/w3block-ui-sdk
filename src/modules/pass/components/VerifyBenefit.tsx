@@ -5,12 +5,13 @@ import { useLockBodyScroll } from 'react-use';
 
 import ErrorIcon from '../../shared/assets/icons/errorIconRed.svg';
 
-import { useTranslation } from 'react-i18next';
+
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { Spinner } from '../../shared/components/Spinner';
 import { BenefitAddress, TokenPassBenefitType } from '../interfaces/PassBenefitDTO';
 import { Button } from '../../tokens/components/Button';
 import { CloseButton } from '../../shared/components/CloseButton';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface iProps {

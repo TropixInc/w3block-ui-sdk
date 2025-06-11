@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
+
 import { ModalBase } from '../../shared/components/ModalBase';
 import { ConfigTimeComponent } from './ConfigTimeComponent';
 import { BaseButton } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

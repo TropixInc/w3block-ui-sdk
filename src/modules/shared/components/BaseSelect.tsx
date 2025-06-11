@@ -12,7 +12,8 @@ import { BaseInputLayout, BaseInputProps } from "./BaseInput";
 
 import { ImageSDK } from "./ImageSDK";
 import { IOption } from "../interfaces/IOption";
-import { useTranslation } from "react-i18next";
+import useTranslation from "../hooks/useTranslation";
+
 
 interface Props extends Partial<BaseInputProps> {
   options: Array<IOption>;

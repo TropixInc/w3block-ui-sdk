@@ -3,10 +3,11 @@ import { lazy } from 'react';
 import classNames from 'classnames';
 
 import BoxWithUpRightArrow from '../../shared/assets/icons/boxWithUpRightArrowFilled.svg';
-import { useTranslation } from 'react-i18next';
+
 import { Tooltip } from '../../shared/components/Tooltip';
 import { ChainScan } from '../../shared/enums/ChainId';
 import { useModalController } from '../../shared/hooks/useModalController';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface TokenLinkProps {
   href: string;

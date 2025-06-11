@@ -3,8 +3,9 @@ import { lazy } from 'react';
 import classNames from 'classnames';
 
 import { Source, TokenCommerceHero } from './TokenCommerceHero';
-import { useTranslation } from 'react-i18next';
+
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface TokenCommerceTemplateProps {
   tokenSrc?: Source;

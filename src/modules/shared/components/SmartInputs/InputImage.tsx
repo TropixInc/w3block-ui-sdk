@@ -8,7 +8,7 @@ import {
   UserDocumentStatus,
 } from '@w3block/sdk-id';
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
+
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useUploadAssets from '../../hooks/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../hooks/useUploadFileToCloudinary';
@@ -17,6 +17,7 @@ import { FormItemContainer } from '../Form/FormItemContainer';
 import LabelWithRequired from '../LabelWithRequired';
 import { Spinner } from '../Spinner';
 import InputStatus from './InputStatus';
+import useTranslation from '../../hooks/useTranslation';
 interface InputImageProps {
   title: string;
   name: string;

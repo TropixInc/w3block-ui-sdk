@@ -1,10 +1,11 @@
 import { ReactNode, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { ModalBase } from '../../shared/components/ModalBase';
 import { PixwayButton } from '../../shared/components/PixwayButton';
 import { PixwayLinkButton } from '../../shared/components/PixwayLinkButton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   isOpen: boolean;

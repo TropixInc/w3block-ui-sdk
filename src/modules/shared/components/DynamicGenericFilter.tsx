@@ -8,7 +8,7 @@ import {
 import { useDebounce } from 'react-use';
 
 import _ from 'lodash';
-import { useTranslation } from 'react-i18next';
+
 import { W3blockAPI } from '../enums/W3blockAPI';
 import { usePaginatedGenericApiGet } from '../hooks/usePaginatedGenericApiGet';
 import { FormatFilterType, FilterParameters } from '../interfaces/ConfigGenericTable';
@@ -16,6 +16,7 @@ import { ErrorBox } from './ErrorBox';
 import GenericSearchFilter from './GenericSearchFilter';
 import { MultipleSelect } from './MultipleSelect';
 import { SelectInput } from './SelectInput';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface DependencyTipes {

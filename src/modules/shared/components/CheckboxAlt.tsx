@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 import classNames from 'classnames';
 import { useIsMobile } from '../hooks/useIsMobile';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../hooks/useTranslation';
+
 
 
 interface Props {

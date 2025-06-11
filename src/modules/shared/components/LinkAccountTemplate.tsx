@@ -1,6 +1,6 @@
 /* eslint-disable i18next/no-literal-string */
 import { lazy, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { useGetNFTSByWallet } from '../../tokens/hooks/useGetNFTSByWallet';
 import { mapNFTToToken } from '../../tokens/utils/mapNFTToToken';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
@@ -16,6 +16,7 @@ import { Spinner } from './Spinner';
 import TranslatableComponent from './TranslatableComponent';
 import { useAcceptIntegrationToken } from '../hooks/useAcceptIntegrationToken';
 import useGetProductById from '../../storefront/hooks/useGetProductById';
+import useTranslation from '../hooks/useTranslation';
 
 
 enum Steps {

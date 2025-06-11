@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
-import { useTranslation } from 'react-i18next';
+
 import { PRACTITIONER_DATA_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
@@ -16,6 +16,7 @@ import { ContentTypeEnum } from '../../poll/enums/contentType';
 import { Box } from '../../shared/components/Box';
 import { Shimmer } from '../../shared/components/Shimmer';
 import { BaseButton } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export type Grade =
   | 'degree_1'

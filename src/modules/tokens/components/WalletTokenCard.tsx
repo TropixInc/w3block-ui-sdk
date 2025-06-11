@@ -3,7 +3,7 @@ import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 
-import { useTranslation } from 'react-i18next';
+
 import { FallbackImage } from '../../shared/components/FallbackImage';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import Skeleton from '../../shared/components/Skeleton';
@@ -14,6 +14,7 @@ import { TokenActionsProvider } from '../providers/TokenActionsProvider';
 import { WalletTokenCardActionsPanel } from './ActionsPanel';
 import { Link } from '../../shared/components/Link';
 import { Button } from './Button';
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Props {
   name: string;
   category: string;

@@ -62,7 +62,8 @@ import { useTrack } from '../hooks/useTrack';
 import { CurrencyResponse } from '../interfaces/Product';
 import { ProductPageData } from '../interfaces/Theme';
 import { useThemeConfig } from '../hooks/useThemeConfig';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../shared/hooks/useTranslation';
+
 
 
 

@@ -54,7 +54,8 @@ import {
   kidsMap,
 } from '../interfaces';
 import { Shimmer } from '../../../shared/components/Shimmer';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../../shared/hooks/useTranslation';
+
 
 export const gradeMap = {
   degree_1: '1º Degree',

@@ -15,12 +15,13 @@ import CopyIcon from '../../shared/assets/icons/copyIconOutlined.svg';
 import RejectIcon from '../../shared/assets/icons/minusCircle.svg';
 import ApprovedIcon from '../../shared/assets/icons/plusCircle.svg';
 import { useLocale } from '../../shared/hooks/useLocale';
-import { useTranslation } from 'react-i18next';
+
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { Erc20ActionStatus } from '../../shared/interfaces/Statement';
 import { gradeMap, Grade } from '../../storefront/components/WjjcStart';
 import { ReceiptQRCode } from '../components/ReceiptQRCode';
 import { StatementScreenTransaction, StatementScreenTransactionType } from '../../shared/utils/getSubtransactions';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface StatementComponentProps {
   statement: StatementScreenTransaction;

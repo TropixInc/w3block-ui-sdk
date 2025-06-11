@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
+
 import { useGetUserByTenant } from '../hooks/useGetUsersByTenant';
 import { BaseSelect } from './BaseSelect';
 import { ErrorBox } from './ErrorBox';
 import { Option } from './GenericSearchFilter';
 import { BaseButton } from './Buttons';
+import useTranslation from '../hooks/useTranslation';
 
 interface SearchItemProps {
   isOpen: boolean;

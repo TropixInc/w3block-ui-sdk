@@ -3,7 +3,8 @@ import { useCopyToClipboard } from 'react-use';
 
 import LinkIcon from '../../../shared/assets/icons/boxWithUpRightArrowFilled.svg';
 import CopyIcon from '../../../shared/assets/icons/copyIcon.svg';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../../shared/hooks/useTranslation';
+
 
 export const DetailToken = ({
   title,

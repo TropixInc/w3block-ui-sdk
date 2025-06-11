@@ -24,7 +24,7 @@ import { QRCodeSVG } from 'qrcode.react';
 
 
 import ValueChangeIcon from '../../shared/assets/icons/icon-up-down.svg';
-import { useTranslation } from 'react-i18next';
+
 import { Alert } from '../../shared/components/Alert';
 import { BaseSelect } from '../../shared/components/BaseSelect';
 import { ModalBase } from '../../shared/components/ModalBase';
@@ -67,6 +67,7 @@ import { useQuery } from '../../shared/hooks/useQuery';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { Product } from '../../shared/interfaces/Product';
 import { SharedOrder } from '../../pass/components/SharedOrder';
+import useTranslation from '../../shared/hooks/useTranslation';
  
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',

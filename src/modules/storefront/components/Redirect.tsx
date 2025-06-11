@@ -1,10 +1,11 @@
 import { useDebounce } from 'react-use';
 
-import { useTranslation } from 'react-i18next';
+
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { Spinner } from '../../shared/components/Spinner';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

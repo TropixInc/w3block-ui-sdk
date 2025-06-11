@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import { format } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+
 import { PaginationNumbers } from '../../shared/components/PaginationNumbers';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export const TableBase = ({
   data,

@@ -5,7 +5,7 @@ import ptBR from 'date-fns/esm/locale/pt-BR';
 import format from 'date-fns/format';
 
 import ExternalLinkIcon from '../../shared/assets/icons/externalLink.svg';
-import { useTranslation } from 'react-i18next';
+
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
@@ -17,6 +17,7 @@ import { SmartDataDisplayer } from '../components/SmartDataDisplayer';
 import { FormConfigurationContext } from '../contexts/FormConfigurationContext';
 import useDynamicDataFromTokenCollection from '../hooks/useDynamicDataFromTokenCollection';
 import { usePublicTokenData } from '../hooks/usePublicTokenData';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface PublicTokenTemplateSDKProps {
   chainId?: string;

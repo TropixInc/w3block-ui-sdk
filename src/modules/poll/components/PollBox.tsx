@@ -9,7 +9,7 @@ import StarFilled from '../../../shared/assets/icons/starFilled.png';
 import StarOutlined from '../../../shared/assets/icons/starOutlined.png';
 
 import { IPollInterface } from './IPollInterface';
-import { useTranslation } from 'react-i18next';
+
 import { AuthTextController } from '../../auth/components/AuthTextController';
 import { Box } from '../../shared/components/Box';
 import { FallbackImage } from '../../shared/components/FallbackImage';
@@ -24,6 +24,7 @@ import { useSendToPipeForm } from '../hooks/useSendToPipeForm';
 import { PostAnswerResponseInterface } from '../interfaces/PollResponseInterface';
 import { AchievedLimit } from './AchievedLimit';
 import { AlreadyAnswerBox } from './AlreadyAnswerBox';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface PollBoxProps {
   slug?: string;

@@ -5,7 +5,7 @@ import { useLocalStorage } from 'react-use';
 
 import _ from 'lodash';
 
-import { useTranslation } from 'react-i18next';
+
 import { PixwayButton } from '../../shared/components/PixwayButton';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { WeblockButton } from '../../shared/components/WeblockButton';
@@ -24,6 +24,7 @@ import { useTrack } from '../../storefront/hooks/useTrack';
 import { PriceAndGasInfo } from '../../shared/components/PriceAndGasInfo';
 import { ProductInfo } from '../../shared/components/ProductInfo';
 import { Product } from '../../shared/interfaces/Product';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface CheckoutCompletePaymentProps {

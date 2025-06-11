@@ -1,11 +1,12 @@
 import { Suspense } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { UseGetTemporaryUserCode } from '../hooks/useGetTemporaryUserCode';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { useProfileWithKYC } from '../hooks/useProfileWithKYC';
 import { ImageSDK } from './ImageSDK';
 import { ModalBase } from './ModalBase';
 import { Shimmer } from './Shimmer';
+import useTranslation from '../hooks/useTranslation';
 
 interface AuthenticateModalProps {
   isOpen: boolean;

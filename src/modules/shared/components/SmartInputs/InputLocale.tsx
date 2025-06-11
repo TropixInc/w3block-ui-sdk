@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 
 import CityAutoComplete from './CityAutoComplete';
-import { useTranslation } from 'react-i18next';
+
 import { BaseSelect } from '../BaseSelect';
 import LabelWithRequired from '../LabelWithRequired';
+import useTranslation from '../../hooks/useTranslation';
 
 interface LocaleProps {
   label: string;

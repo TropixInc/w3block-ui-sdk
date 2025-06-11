@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import ArrowLeftIcon from '../../shared/assets/icons/arrowLeftOutlined.svg';
-import { useTranslation } from 'react-i18next';
+
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
 import { Spinner } from '../../shared/components/Spinner';
@@ -13,6 +13,7 @@ import useGetPassBenefitById from '../hooks/useGetPassBenefitById';
 import useGetPassBenefits from '../hooks/useGetPassBenefits';
 import { TokenPassBenefitType } from '../interfaces/PassBenefitDTO';
 import BenefitUsesList from './BenefitUsesList';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface BenefitDetailsProps {
   benefitIdProp?: string;

@@ -5,10 +5,11 @@ import { format } from 'date-fns';
 
 
 
-import { useTranslation } from 'react-i18next';
+
 import { BaseButton } from './Buttons';
 import Calendar, { CalendarType } from './Calendar';
 import { SelectInput } from './SelectInput';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface DateFilterProps {

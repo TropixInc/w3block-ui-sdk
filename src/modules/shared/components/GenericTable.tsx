@@ -13,7 +13,7 @@ import MetamaskIcon from '../../assets/icons/metamask.svg';
 import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg';
 import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg';
 import { ConfigGenericTable, FormatApiData, FormatTypeColumn } from '../interfaces/ConfigGenericTable';
-import { useTranslation } from 'react-i18next';
+
 import { useDynamicApi } from '../../storefront/provider/DynamicApiProvider';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
 import { useIsMobile } from '../hooks/useIsMobile';
@@ -31,6 +31,7 @@ import { GenerateGenericXlsReports } from './GenerateGenericXlsReports';
 import Line from './Line';
 import { Pagination } from './Pagination';
 import useTruncate from '../../tokens/hooks/useTruncate';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface GenericTableProps {

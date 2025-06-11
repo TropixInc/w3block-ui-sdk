@@ -4,7 +4,6 @@ import isAfter from 'date-fns/isAfter';
 import { AuthLayoutBaseClasses } from '../components/AuthLayoutBase';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { useTranslation } from 'react-i18next';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useChangePassword } from '../hooks/useChangePassword';
@@ -14,6 +13,7 @@ import { VerifySignUpMailSent } from '../components/VerifySignUpMailSent';
 import { SignUpForm } from '../components/SignUpForm';
 import { CompleteSignUpSuccess } from '../components/CompleteSignUpSuccess';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

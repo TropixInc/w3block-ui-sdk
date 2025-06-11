@@ -9,7 +9,8 @@ import { Html5QrcodeCameraScanConfig } from 'html5-qrcode/esm/html5-qrcode';
 import LoadingIcon from '../../../shared/assets/icons/loading.svg';
 import W3block from '../../assets/images/w3blockWhite.svg';
 import { CloseButton } from '../CloseButton';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../hooks/useTranslation';
+
 
 interface iProps {
   hasOpen: boolean;

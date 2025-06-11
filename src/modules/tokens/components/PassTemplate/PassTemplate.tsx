@@ -44,9 +44,10 @@ import { DetailPass } from './DetailPass';
 import { DetailsTemplate } from './DetailsTemplate';
 import { DetailToken } from './DetailToken';
 import { QrCodeSection } from './QrCodeSection';
-import { useTranslation } from 'react-i18next';
+
 import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
 import { Button } from '../Button';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface PassTemplateProps {
   tokenIdProp?: string;

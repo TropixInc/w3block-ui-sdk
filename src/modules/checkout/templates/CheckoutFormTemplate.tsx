@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+
 import { useHasWallet } from '../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../shared/hooks/usePrivateRoute';
 import { useProfile } from '../../shared/hooks/useProfile';
@@ -6,6 +6,7 @@ import { CheckoutEmptyCart } from '../components/CheckoutEmptyCart';
 import { CheckoutForm } from '../components/CheckoutForm';
 import { useCart } from '../hooks/useCart';
 import { useQuery } from '../../shared/hooks/useQuery';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface CheckoutFormTemplateProps {

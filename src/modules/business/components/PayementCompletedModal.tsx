@@ -1,5 +1,6 @@
-import { useTranslation } from "react-i18next";
+
 import { ModalBase } from "../../shared/components/ModalBase";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 
 interface PayementCompletedModalProps {

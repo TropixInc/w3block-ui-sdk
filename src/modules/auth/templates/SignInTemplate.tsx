@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,8 +24,7 @@ import { AuthTextController } from '../components/AuthTextController';
 import { AuthValidationTip } from '../components/AuthValidationTip';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Form {
   email: string;

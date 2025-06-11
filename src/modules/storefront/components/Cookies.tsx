@@ -1,9 +1,10 @@
 import { useLocalStorage } from 'react-use';
 import { CookiesData } from '../interfaces/Theme';
-import { useTranslation } from 'react-i18next';
+
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import classNames from 'classnames';
 import add from 'date-fns/add';
@@ -7,6 +7,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Spinner } from '../../../shared/components/Spinner';
 import useCountdown from '../../../shared/hooks/useCountdown';
 import { useProfile } from '../../../shared/hooks/useProfile';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 
 interface iQrCodeSection {

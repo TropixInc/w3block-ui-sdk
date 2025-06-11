@@ -4,9 +4,10 @@ import { useClickAway, useToggle } from "react-use";
 import ArrowDownIcon from "../../shared/assets/icons/arrowDown.svg";
 import { AlignmentEnum, CategoriesData, CategoriesDataStyleData } from "../interfaces/Theme";
 import { useMobilePreferenceDataWhenMobile } from "../hooks/useMergeMobileData";
-import { useTranslation } from "react-i18next";
+
 import TranslatableComponent from "../../shared/components/TranslatableComponent";
 import { convertSpacingToCSS } from "../../shared/utils/convertSpacingToCSS";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 
 

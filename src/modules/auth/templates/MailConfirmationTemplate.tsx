@@ -2,7 +2,7 @@ import { lazy, useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
 import isAfter from 'date-fns/isAfter';
-import { useTranslation } from 'react-i18next';
+
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useVerifySignUp } from '../hooks/useVerifySignUp';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
@@ -13,6 +13,7 @@ import { AuthLayoutBase } from '../components/AuthLayoutBase';
 import { AuthButton } from '../components/AuthButton';
 import { AuthFooter } from '../components/AuthFooter';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 enum Steps {

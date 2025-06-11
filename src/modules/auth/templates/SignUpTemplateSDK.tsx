@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { ContentTypeEnum } from '../../poll/enums/contentType';
 import { Box } from '../../shared/components/Box';
 import { ContainerControllerClasses, ContainerControllerSDK } from '../../shared/components/ContainerControllerSDK';
@@ -13,6 +13,7 @@ import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
 import { ThemeContext } from '../../storefront/contexts/ThemeContext';
 import { SignUpFormWithoutLayout } from '../components/SignUpFormWithoutLayout';
 import { SignUpFormData } from '../interface/SignUpFormData';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface SignUpTemplateSDKProps {

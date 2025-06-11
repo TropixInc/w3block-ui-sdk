@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Key, ReactNode } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { useToggle } from 'react-use';
 
 import { WalletTypes } from '@w3block/sdk-id';
@@ -16,6 +16,7 @@ import { Chip } from './Chip';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export const BaseTemplate = ({
   children,

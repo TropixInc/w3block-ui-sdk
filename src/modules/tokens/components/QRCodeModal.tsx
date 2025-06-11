@@ -5,12 +5,13 @@ import  CopyIcon  from '../../shared/assets/icons/copy.svg';
 import  DownloadIcon  from '../../shared/assets/icons/download.svg';
 import  FrameTopLeftBorder  from '../../shared/assets/icons/frameTopLeftBorderFilled.svg';
 import  ScanMePlate  from '../../shared/assets/icons/scanMePlate.svg';
-import { useTranslation } from 'react-i18next';
+
 import { ModalBase } from '../../shared/components/ModalBase';
 import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
 import useTruncate from '../hooks/useTruncate';
 import { PublicPageQRCode } from './PublicPageQRCode';
 import { BaseButton } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   isOpen: boolean;

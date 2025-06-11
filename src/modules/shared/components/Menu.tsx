@@ -24,7 +24,7 @@ import ReceiptIcon from '../assets/icons/receipt.svg';
 import TicketIcon from '../assets/icons/ticketFilled.svg';
 // import  SettingsIcon  from '../assets/icons/settingsOutlined.svg';
 import UserIcon from '../assets/icons/userOutlined.svg';
-import { useTranslation } from 'react-i18next';
+
 import { usePixwayAuthentication } from '../../auth/hooks/usePixwayAuthentication';
 import { useLoyaltiesInfo } from '../../business/hooks/useLoyaltiesInfo';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
@@ -36,6 +36,7 @@ import { useUserWallet } from '../hooks/useUserWallet/useUserWallet';
 import { ImageSDK } from './ImageSDK';
 import TranslatableComponent from './TranslatableComponent';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface MenuProps {

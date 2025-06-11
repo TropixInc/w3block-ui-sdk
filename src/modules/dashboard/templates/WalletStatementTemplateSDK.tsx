@@ -8,7 +8,7 @@ import PendingIcon from '../../shared/assets/icons/clock.svg';
 import CopyIcon from '../../shared/assets/icons/copyIcon.svg';
 
 import { StatementComponent } from './StatementComponent';
-import { useTranslation } from 'react-i18next';
+
 
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
 import { ErrorBox } from '../../shared/components/ErrorBox';
@@ -21,6 +21,7 @@ import { StatementScreenTransaction, getSubtransactions } from '../../shared/uti
 import { useGetErcTokensHistory } from '../hook/useGetErcTokensHistory';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { Pagination } from '../../shared/components/Pagination';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

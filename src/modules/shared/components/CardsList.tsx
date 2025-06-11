@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { useDeleteSavedCard } from '../../checkout/hooks/useDeleteSavedCard';
 import { useGetSavedCards } from '../../checkout/hooks/useGetSavedCards';
 import { ErrorBox } from './ErrorBox';
@@ -7,6 +7,7 @@ import { ModalBase } from './ModalBase';
 import { PixwayButton } from './PixwayButton';
 import { Spinner } from './Spinner';
 import { getCardBrandIcon } from '../utils/getCardBrandIcon';
+import useTranslation from '../hooks/useTranslation';
 
 const DeleteModal = ({
   isOpen,

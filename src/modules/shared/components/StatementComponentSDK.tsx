@@ -14,12 +14,13 @@ import PendingIcon from '../assets/icons/clock.svg';
 import CopyIcon from '../assets/icons/copyIconOutlined.svg';
 import RejectIcon from '../assets/icons/minusCircle.svg';
 import ApprovedIcon from '../assets/icons/plusCircle.svg';
-import { useTranslation } from 'react-i18next';
+
 import { ReceiptQRCode } from '../../dashboard/components/ReceiptQRCode';
 import { gradeMap, Grade } from '../../storefront/components/WjjcStart';
 import { useLocale } from '../hooks/useLocale';
 import { Statement, Erc20ActionStatus } from '../interfaces/Statement';
 import { generateRandomUUID } from '../utils/generateRamdomUUID';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface StatementComponentSDKProps {

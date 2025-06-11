@@ -1,12 +1,13 @@
 
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+
 import { FallbackImage } from '../../shared/components/FallbackImage';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import Skeleton from '../../shared/components/Skeleton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { Button } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   id: string;

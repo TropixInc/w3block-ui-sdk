@@ -1,7 +1,8 @@
 /* eslint-disable i18next/no-literal-string */
-import React, { useState, lazy } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+
 import { BaseButton } from './Buttons';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface RangeProps {

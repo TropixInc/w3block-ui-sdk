@@ -10,7 +10,7 @@ import {
 import classNames from 'classnames';
 
 import FileIcon from '../../assets/icons/fileOutlined.svg';
-import { useTranslation } from 'react-i18next';
+
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useUploadAssets from '../../hooks/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../hooks/useUploadFileToCloudinary';
@@ -19,6 +19,7 @@ import { BaseInputLayout } from '../BaseInput';
 import LabelWithRequired from '../LabelWithRequired';
 import { Spinner } from '../Spinner';
 import InputStatus from './InputStatus';
+import useTranslation from '../../hooks/useTranslation';
 
 interface InputFileProps {
   label: string;

@@ -3,10 +3,11 @@ import { useState } from 'react';
 
 import classNames from 'classnames';
 import * as openpgp from 'openpgp';
-import { useTranslation } from 'react-i18next';
+
 import { Alert } from '../../shared/components/Alert';
 import { WeblockButton } from '../../shared/components/WeblockButton';
 import { DecryptModal } from './DecryptModal';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export interface TextFieldDisplayClasses {
   root?: string;

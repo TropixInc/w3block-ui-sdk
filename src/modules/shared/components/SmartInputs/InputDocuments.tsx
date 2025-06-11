@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import { useTranslation } from 'react-i18next';
+
 import { BaseInput } from '../BaseInput';
 import { BaseSelect } from '../BaseSelect';
 import LabelWithRequired from '../LabelWithRequired';
 import { InputError } from '../SmartInputsController';
 import InputStatus from './InputStatus';
+import useTranslation from '../../hooks/useTranslation';
 
 interface InputDocuments {
   label: string;

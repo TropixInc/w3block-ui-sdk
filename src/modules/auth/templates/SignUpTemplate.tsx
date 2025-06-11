@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { I18NLocaleEnum } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
-import { useTranslation } from 'react-i18next';
+
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -10,6 +10,7 @@ import { SignUpForm } from '../components/SignUpForm';
 import { VerifySignUpMailSent } from '../components/VerifySignUpMailSent';
 import { useSignUp } from '../hooks/useSignUp';
 import { SignUpFormData } from '../interface/SignUpFormData';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 enum Steps {

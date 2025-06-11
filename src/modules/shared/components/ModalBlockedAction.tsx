@@ -1,5 +1,5 @@
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useEffect, useMemo, useState } from 'react';
+import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { addMinutes, isAfter } from 'date-fns';
@@ -15,6 +15,7 @@ import { useSessionUser } from '../hooks/useSessionUser';
 import { removeDoubleSlashesOnUrl } from '../utils/removeDuplicateSlahes';
 import CloseIcon from '../assets/icons/closeCircledOutlined.svg';
 import { BaseButton } from './Buttons';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface ModalBlockedActionProps {

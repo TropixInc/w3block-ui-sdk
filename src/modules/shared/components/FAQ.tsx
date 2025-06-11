@@ -3,9 +3,10 @@ import { PropsWithChildren, useState } from 'react';
 import classNames from 'classnames';
 
 
-import { useTranslation } from 'react-i18next';
+
 import { useFAQ } from '../hooks/useFAQ';
 import { useLocale } from '../hooks/useLocale';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface Classes {

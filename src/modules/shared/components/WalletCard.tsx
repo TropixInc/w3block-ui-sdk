@@ -3,7 +3,7 @@ import { lazy } from 'react';
 import DollarIcon from '../assets/icons/dollar-sign.svg';
 import ExtractIcon from '../assets/icons/externalLink.svg';
 import MetamaskIcon from '../assets/icons/metamask.svg';
-import { useTranslation } from 'react-i18next';
+
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
 import { useRouterConnect } from '../hooks/useRouterConnect';
@@ -12,6 +12,7 @@ import { CriptoValueComponent } from './CriptoValueComponent';
 import { ImageSDK } from './ImageSDK';
 import { WeblockButton } from './WeblockButton';
 import { getExtractLinkByChainId } from '../utils/getCryptoChainId';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface WalletCardProps {

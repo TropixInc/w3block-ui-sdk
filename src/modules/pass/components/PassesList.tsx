@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { QrCodeError, TypeError } from '../../shared/components/QrCodeReader/QrCodeError';
 
-import { useTranslation } from 'react-i18next';
+
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
 import { QrCodeReader } from '../../shared/components/QrCodeReader';
@@ -19,6 +19,7 @@ import { BaseTemplate } from './BaseTemplate';
 import { PassCard } from './PassCard';
 import { VerifyBenefit } from './VerifyBenefit';
 import { Button } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 const _PassesList = () => {

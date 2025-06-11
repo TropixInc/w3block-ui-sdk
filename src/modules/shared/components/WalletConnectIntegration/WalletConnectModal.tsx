@@ -1,13 +1,14 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { WalletTypes } from '@w3block/sdk-id';
-import { useTranslation } from 'react-i18next';
+
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useRequestWalletConnect } from '../../hooks/useRequestWalletConnect';
 import { useUserWallet } from '../../hooks/useUserWallet/useUserWallet';
 import { ModalBase } from '../ModalBase';
 import { Spinner } from '../Spinner';
 import { WeblockButton } from '../WeblockButton';
+import useTranslation from '../../hooks/useTranslation';
 
 
 interface Props {

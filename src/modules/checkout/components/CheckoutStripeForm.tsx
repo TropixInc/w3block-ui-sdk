@@ -5,11 +5,12 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { useTranslation } from 'react-i18next';
+
 import { Spinner } from '../../shared/components/Spinner';
 import { WeblockButton } from '../../shared/components/WeblockButton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

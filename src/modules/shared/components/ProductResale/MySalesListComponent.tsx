@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useTranslation } from 'react-i18next';
+
 import { Alert } from '../Alert';
 import { Spinner } from '../Spinner';
 import { MySalesCardComponent, OrderStatusEnum } from './MySalesCardComponent';
 import { useGetUserResales } from '../../hooks/useGetUserResales';
+import useTranslation from '../../hooks/useTranslation';
 
 export const MySalesListComponent = () => {
   const { data, isLoading } = useGetUserResales();

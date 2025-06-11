@@ -3,7 +3,7 @@
 import { useMemo, useState, lazy, useEffect } from 'react';
 
 import fileDownload from 'js-file-download';
-import { useTranslation } from 'react-i18next';
+
 
 import { useGetDeferred } from '../../business/hooks/useGetDeferred';
 import { useGetDeferredByUserId } from '../../business/hooks/useGetDeferredByUserId';
@@ -25,6 +25,7 @@ import { SelectInput } from '../../shared/components/SelectInput';
 import { DateFilterWithOptions } from '../../shared/components/DateFilterWithOptions';
 import { StatementComponentSDK } from '../../shared/components/StatementComponentSDK';
 import { Pagination } from '../../shared/components/Pagination';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const WalletFutureStatementTemplateSDK = () => {

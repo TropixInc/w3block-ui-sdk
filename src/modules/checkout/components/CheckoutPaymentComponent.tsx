@@ -8,7 +8,7 @@ import cardValidator from 'card-validator';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
-import { useTranslation } from 'react-i18next';
+
 import { BaseButton } from '../../shared/components/Buttons';
 import { ModalBase } from '../../shared/components/ModalBase';
 import { PixwayButton } from '../../shared/components/PixwayButton';
@@ -20,6 +20,7 @@ import { CardsSelector } from './CardsSelector';
 import { CheckoutCustomizableInput } from './CheckoutCustomizableInput';
 import { CheckoutInstalments } from './CheckoutInstalments';
 import { ErrorMessage } from './ErrorMessage';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface CheckoutPaymentComponentProps {

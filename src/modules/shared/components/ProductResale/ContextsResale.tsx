@@ -1,5 +1,6 @@
-import { useTranslation } from 'react-i18next';
+
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
+import useTranslation from '../../hooks/useTranslation';
 
 import { BaseButton } from '../Buttons';
 

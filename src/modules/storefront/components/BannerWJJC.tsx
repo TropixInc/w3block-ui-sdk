@@ -20,8 +20,9 @@ import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
 import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import { BannerWJJCData, SpecificBannerInfo } from '../interfaces/Theme';
-import { useTranslation } from 'react-i18next';
+
 import { ImageSDK } from '../../shared/components/ImageSDK';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const BannerWJJC = ({ data }: { data: BannerWJJCData }) => {

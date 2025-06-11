@@ -1,11 +1,12 @@
 /* eslint-disable i18next/no-literal-string */
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
 import { Shimmer } from '../../shared/components/Shimmer';
 import { PaymentsResponse } from '../interface/interface';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

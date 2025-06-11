@@ -1,8 +1,7 @@
-import { lazy } from 'react';
-
 import InfoIcon from '../../shared/assets/icons/informationCircledFilled.svg';
-import { useTranslation } from 'react-i18next';
+
 import { Box } from '../../shared/components/Box';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export const AchievedLimit = () => {
   const [translate] = useTranslation();

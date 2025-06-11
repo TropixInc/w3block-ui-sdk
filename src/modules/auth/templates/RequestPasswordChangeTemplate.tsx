@@ -4,7 +4,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -16,6 +16,7 @@ import { AuthTextController } from '../components/AuthTextController';
 import { AuthValidationTip } from '../components/AuthValidationTip';
 import { PasswordChangeMailSent } from '../components/PasswordChangeMailSent';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface Form {

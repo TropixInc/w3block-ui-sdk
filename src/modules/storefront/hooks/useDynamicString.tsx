@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { useLocalStorage } from 'react-use';
 
 import _ from 'lodash';
@@ -11,6 +11,7 @@ import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { useThemeConfig } from './useThemeConfig';
 import { unescapeHtml } from '../utils/unescapeHtml';
 import { modifyStringPath } from '../utils/modifyStringPath';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const useDynamicString = (input: string | undefined) => {

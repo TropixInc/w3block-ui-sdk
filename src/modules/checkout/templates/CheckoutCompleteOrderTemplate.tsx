@@ -1,8 +1,9 @@
-import { useTranslation } from "react-i18next";
+
 import { useHasWallet } from "../../shared/hooks/useHasWallet";
 import { usePrivateRoute } from "../../shared/hooks/usePrivateRoute";
 import { useProfile } from "../../shared/hooks/useProfile";
 import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
+import useTranslation from "../../shared/hooks/useTranslation";
 import { CheckoutCompletePayment } from "../components/CheckoutCompletePayment";
 import { CheckoutStatus } from "../components/CheckoutInfo";
 

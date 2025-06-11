@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import { useLocalStorage } from 'react-use';
 
@@ -26,6 +26,7 @@ import useTransferToken from '../hooks/useTransferToken';
 import useTransferTokenWithEmail from '../hooks/useTransferTokenWithEmail';
 import { ProcessingStepModal } from './ProcessingStepModal';
 import { TokenTransferProcessModal } from './TokenTransferProcessModal';
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Tokens {
   id: string;
   number: string;

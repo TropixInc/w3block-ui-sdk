@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import isAfter from 'date-fns/isAfter';
 import isValid from 'date-fns/isValid';
 import { object, string } from 'yup';
-import { useTranslation } from 'react-i18next';
+
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -21,6 +21,7 @@ import { ExpiredToken } from '../components/ExpiredToken';
 import { PasswordChangeMailSent } from '../components/PasswordChangeMailSent';
 import { useChangePasswordAndSignIn } from '../hooks/useChangePasswordAndSignIn';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQueryClient } from '@tanstack/react-query';
-import { lazy, useContext, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useContext, useState } from 'react';
+import { Trans } from 'react-i18next';
 import { claimWalletVault } from '../../auth/api/wallet';
 import { AuthButton } from '../../auth/components/AuthButton';
 import { AuthFooter } from '../../auth/components/AuthFooter';
@@ -18,6 +18,7 @@ import { AttachWalletContext } from '../providers/AttachWalletProvider';
 import { Alert } from './Alert';
 import { ModalBase } from './ModalBase';
 import { Spinner } from './Spinner';
+import useTranslation from '../hooks/useTranslation';
 
 
 enum Step {

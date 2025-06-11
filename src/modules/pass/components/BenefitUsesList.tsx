@@ -1,13 +1,14 @@
 import { lazy, useMemo, useState } from 'react';
 
 import { format } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+
 import { Spinner } from '../../shared/components/Spinner';
 import { useGetBenefitUses } from '../hooks/useGetBenefitUses';
 import { ColumnType } from '../../tokens/components/GenericTable';
 import TableHeader from '../../tokens/components/TableHeader';
 import { DataGridPagination } from '../../tokens/components/DataGridPagination';
 import TableRows from '../../tokens/components/TableRow';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface DataTable {

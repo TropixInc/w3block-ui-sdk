@@ -14,8 +14,9 @@ import { useLocale } from '../../hooks/useLocale';
 import { MySalesPriceComponent } from './MySalePriceComponent';
 
 import { Currency } from '../../interfaces/Currency';
-import { useTranslation } from 'react-i18next';
+
 import { Product } from '../../../storefront/hooks/useGetProductBySlug';
+import useTranslation from '../../hooks/useTranslation';
 
 export enum OrderStatusEnum {
   PENDING = 'pending',

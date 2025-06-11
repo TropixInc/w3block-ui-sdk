@@ -7,11 +7,12 @@ import { useState } from 'react';
 import EthIcon from '../assets/icons/Eth.svg';
 import MaticIcon from '../assets/icons/maticIcon.svg';
 import TrashIcon from '../assets/icons/trash.svg';
-import { useTranslation } from 'react-i18next';
+
 import { CheckoutStatus } from '../../checkout/components/CheckoutInfo';
 import { Variants } from '../../storefront/interfaces/Product';
 import { ImageSDK } from './ImageSDK';
 import { Shimmer } from './Shimmer';
+import useTranslation from '../hooks/useTranslation';
 
 interface ProductInfoProps {
   status?: CheckoutStatus;

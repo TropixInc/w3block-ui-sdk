@@ -1,6 +1,7 @@
-import { useTranslation } from "react-i18next";
+
 import { CriptoValueComponent } from "../../shared/components/CriptoValueComponent";
 import { CurrencyEnum } from "../../shared/enums/Currency";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 
 interface BuySummarySDKProps {

@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 
 import DeleteIcon from '../../../../shared/assets/icons/x-circle.svg';
-import { useTranslation } from 'react-i18next';
+
 import LabelWithRequired from '../../../../shared/components/LabelWithRequired';
+import useTranslation from '../../../../shared/hooks/useTranslation';
 
 interface TimeItemProps {
   index: number;

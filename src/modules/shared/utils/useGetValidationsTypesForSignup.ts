@@ -8,7 +8,8 @@ import * as yup from 'yup';
 
 
 import { isValidUrl } from './validators';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../hooks/useTranslation';
+
 
 export interface ValidationsValues {
   yupKey: string;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { UserContextStatus } from '@w3block/sdk-id';
-import { useTranslation } from 'react-i18next';
+
 import { FormCompleteKYCWithoutLayout } from '../../auth/components/FormCompleteKYCWithoutLayout';
 import { UtmContextInterface } from '../../core/context/UtmContext';
 import TokenizationFormItemContainer from '../../tokens/components/TokenizationFormItemContainer';
@@ -13,6 +13,7 @@ import { useRequiredReviewDocs } from '../hooks/useRequiredReviewDocs';
 import useRejectKYC from '../hooks/useRejectKYC';
 import useApproveKYC from '../hooks/useApproveKYC';
 import { BaseButton } from './Buttons';
+import useTranslation from '../hooks/useTranslation';
 
 interface KycItemProps {
   userId: string;

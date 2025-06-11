@@ -8,7 +8,8 @@ import ArrowDown from "../assets/icons/arrowDown.svg";
 
 import { useRouterConnect } from "../hooks/useRouterConnect";
 import { ThemeContext } from "../../storefront/contexts/ThemeContext";
-import { useTranslation } from "react-i18next";
+import useTranslation from "../hooks/useTranslation";
+
 
 const baseUrl =
   "https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/";

@@ -1,6 +1,6 @@
 
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { metamaskErrors, ERROR_STATUS } from '../../core/metamask/providers/MetamaskProviderUiSDK';
 import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
 import { PixwayButton } from '../../shared/components/PixwayButton';
@@ -17,6 +17,7 @@ import { ErrorMessage } from './ErrorMessage';
 import { useSocket } from '../../core/metamask/hooks/useSocket';
 import { useMetamask } from '../../core/metamask/hooks/useMetamask';
 import { useCheckout } from '../hooks/useCheckout';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

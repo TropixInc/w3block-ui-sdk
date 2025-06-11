@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useTranslation } from "react-i18next";
+
 import TranslatableComponent from "../../shared/components/TranslatableComponent";
 import { W3blockAPI } from "../../shared/enums/W3blockAPI";
 import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
@@ -12,8 +12,7 @@ import WithdrawAdminActions from "../components/WithdrawAdminActions";
 import { InternalPagesLayoutBase } from "../../shared/components/InternalPagesLayoutBase";
 import { useGuardPagesWithOptions } from "../../shared/hooks/useGuardPagesWithOptions";
 import { GenericTable } from "../../shared/components/GenericTable";
-
-
+import useTranslation from "../../shared/hooks/useTranslation";
 
 const _WithdrawsAdminTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();

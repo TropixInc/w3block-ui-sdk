@@ -1,8 +1,9 @@
 import { lazy } from 'react';
 
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+
 import { ModalBase } from './ModalBase';
+import useTranslation from '../hooks/useTranslation';
 
 
 

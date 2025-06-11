@@ -14,10 +14,11 @@ import { number, object } from 'yup';
 
 import ChevronLeft from '../assets/icons/chevronLeftFilled.svg';
 import ChevronRight from '../assets/icons/chevronRightFilled.svg';
-import { useTranslation } from 'react-i18next';
+
 import { PixwayButton } from './PixwayButton';
 import TokenizationFormItemContainer from '../../tokens/components/TokenizationFormItemContainer';
 import { getNumbersFromString } from '../../tokens/utils/getNumbersFromString';
+import useTranslation from '../hooks/useTranslation';
 
 interface Props {
   pagesQuantity: number;

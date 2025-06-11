@@ -6,7 +6,7 @@ import { useClickAway, useCopyToClipboard } from 'react-use';
 import { NavigationMenuTabs } from '../interfaces/menu';
 import { useDefaultMenuTabs } from './NavigationLoginLoggedButton';
 
-import { useTranslation } from 'react-i18next';
+
 import { useRouterConnect } from '../../../hooks/useRouterConnect';
 
 import { usePixwaySession } from '../../../hooks/usePixwaySession';
@@ -22,6 +22,7 @@ import { useUserWallet } from '../../../hooks/useUserWallet/useUserWallet';
 import { useProfileWithKYC } from '../../../hooks/useProfileWithKYC';
 import { useThemeConfig } from '../../../../storefront/hooks/useThemeConfig';
 import { PixwayAppRoutes } from '../../../enums/PixwayAppRoutes';
+import useTranslation from '../../../hooks/useTranslation';
 
 // const PixwayButton = lazy(() =>
 //   import('../../../../PixwayButton/PixwayButton').then((mod) => ({

@@ -1,8 +1,9 @@
 /* eslint-disable i18next/no-literal-string */
 
-import { useTranslation } from 'react-i18next';
+
 import { Shimmer } from '../../../shared/components/Shimmer';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import useTranslation from '../../hooks/useTranslation';
 
 import { Currency } from '../../interfaces/Currency';
 import { CriptoValueComponent } from '../CriptoValueComponent';

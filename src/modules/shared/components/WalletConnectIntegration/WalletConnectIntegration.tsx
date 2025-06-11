@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import { WalletTypes } from '@w3block/sdk-id';
-import { useTranslation } from 'react-i18next';
+
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { useIntegrations } from '../../hooks/useIntegrations';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
@@ -18,6 +18,7 @@ import { useGetCurrentTenantInfo } from '../../hooks/useGetCurrentTenantInfo';
 import { ICompanyInfo } from '../../interfaces/ICompanyInfo';
 import { GetTenantInfoById } from '../../functions/GetTenantInfoById';
 import { useCreateIntegrationToken } from '../../hooks/useCreateIntegrationToken';
+import useTranslation from '../../hooks/useTranslation';
 
 
 const _WalletConnectIntegration = () => {

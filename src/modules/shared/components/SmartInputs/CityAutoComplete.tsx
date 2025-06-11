@@ -4,12 +4,13 @@ import _ from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+
 import { useDebounce, useClickAway } from 'react-use';
 import { BaseInput } from '../BaseInput';
 import LabelWithRequired from '../LabelWithRequired';
 import { InputError } from '../SmartInputsController';
 import InputStatus from './InputStatus';
+import useTranslation from '../../hooks/useTranslation';
 
 interface Address {
   [key: string]: string;

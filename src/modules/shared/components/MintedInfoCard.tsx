@@ -6,8 +6,9 @@ import { useRouterConnect } from '../hooks/useRouterConnect';
 import useAdressBlockchainLink from '../hooks/useAdressBlockchainLink';
 import { DisplayCardBase } from '../../tokens/components/DisplayCardBase';
 import { TokenScanLink } from '../../tokens/components/TokenScanLink';
-import { useTranslation } from 'react-i18next';
+
 import { QRCodeModal } from '../../tokens/components/QRCodeModal';
+import useTranslation from '../hooks/useTranslation';
 
 interface Props {
   chainId: number;

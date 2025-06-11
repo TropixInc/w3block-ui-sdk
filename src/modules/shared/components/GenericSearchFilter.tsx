@@ -5,7 +5,8 @@ import { useClickAway } from 'react-use';
 import classNames from 'classnames';
 
 import SearchIcon from '../assets/icons/searchOutlined.svg';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../hooks/useTranslation';
+
 
 export interface Option {
   label: string;

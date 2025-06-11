@@ -8,9 +8,6 @@ import { Shimmer } from '../../shared/components/Shimmer';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import useTranslation from '../../shared/hooks/useTranslation';
 
-
-
-
 interface AuthenticateModalProps {
   isOpen: boolean;
   onClose: () => void;

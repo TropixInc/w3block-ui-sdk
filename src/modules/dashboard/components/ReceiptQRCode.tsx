@@ -8,11 +8,12 @@ import { QRCodeSVG } from 'qrcode.react';
 
 import PendingIcon from '../../shared/assets/icons/clock.svg';
 import { useLocale } from '../../shared/hooks/useLocale';
-import { useTranslation } from 'react-i18next';
+
 import { ModalBase } from '../../shared/components/ModalBase';
 import { Spinner } from '../../shared/components/Spinner';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useGetPublicOrder } from '../../shared/hooks/useGetPublicOrder';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export const ReceiptQRCode = ({
   isOpen,

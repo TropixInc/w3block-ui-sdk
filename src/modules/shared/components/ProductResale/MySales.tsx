@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { useCopyToClipboard } from 'react-use';
 
 import { Disclosure, Tab } from '@headlessui/react';
@@ -28,6 +28,7 @@ import { useGetUserResaleSummary } from '../../hooks/useGetUserResaleSummary';
 import { useDeleteProductResale } from '../../hooks/useDeleteProductResale';
 import { useGetContextByUserId } from '../../hooks/useGetContextByUserId';
 import { useThemeConfig } from '../../../storefront/hooks/useThemeConfig';
+import useTranslation from '../../hooks/useTranslation';
 
 export const MySales = () => {
   const { loyaltyWallet, mainWallet } = useUserWallet();

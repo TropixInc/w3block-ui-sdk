@@ -2,8 +2,9 @@ import classNames from 'classnames';
 
 import ArrowIcon from '../../shared/assets/icons/arrowLeftOutlined.svg';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+
 import { BreadCrumb } from '../../shared/components/Breadcrumb';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export interface Source {
   type: 'video' | 'image';

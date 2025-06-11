@@ -27,9 +27,6 @@ import { Alert } from '../../shared/components/Alert';
 import { VerifySignUpWithCodeWithoutLayout } from './VerifySignUpWithCodeWithoutLayout';
 import useTranslation from '../../shared/hooks/useTranslation';
 
-
-
-
 interface Props {
   onSubmit?: (data: SignUpFormData) => void;
   isLoading?: boolean;

@@ -1,7 +1,8 @@
 import { CSSProperties, ReactNode } from 'react';
 
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../shared/hooks/useTranslation';
+
 interface DisplayContainerProps {
   children?: ReactNode;
   className?: string;

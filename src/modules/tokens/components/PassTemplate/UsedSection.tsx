@@ -1,5 +1,6 @@
-import { useTranslation } from 'react-i18next';
+
 import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const UsedPass = () => {
   const [translate] = useTranslation();

@@ -10,7 +10,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { AlignmentEnum, CardLayoutDisposition, CardTypesEnum, ProductsData } from '../interfaces/Theme';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
-import { useTranslation } from 'react-i18next';
+
 import { Product } from '../interfaces/Product';
 import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
@@ -27,6 +27,7 @@ import { Autoplay, Navigation } from 'swiper/modules';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { BaseSelect } from '../../shared/components/BaseSelect';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

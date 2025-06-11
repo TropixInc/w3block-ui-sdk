@@ -1,13 +1,14 @@
 /* eslint-disable i18next/no-literal-string */
 import { useRouter } from 'next/router';
 import { lazy, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { PaymentsResponse } from '../../checkout/interface/interface';
 import { CriptoValueComponent } from './CriptoValueComponent';
 import { Shimmer } from './Shimmer';
 import TranslatableComponent from './TranslatableComponent';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { GasFee } from '../interfaces/GasFee';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface PriceAndGasInfo {

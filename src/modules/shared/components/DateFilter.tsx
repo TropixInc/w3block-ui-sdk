@@ -6,9 +6,10 @@ import { format } from 'date-fns';
 
 
 import ArrowDown from '../assets/icons/arrowDown.svg';
-import { useTranslation } from 'react-i18next';
+
 import Calendar, { CalendarType } from './Calendar';
 import { BaseButton } from './Buttons';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface DateFilterProps {

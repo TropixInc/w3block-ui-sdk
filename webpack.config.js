@@ -8,12 +8,8 @@ module.exports = {
         use: [svgr(), 'url-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-          },
-        ],
+        test: /\.(png|jpe?g|svg|gif)$/,
+        use: ['file-loader'],
       },
     ],
   },

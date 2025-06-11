@@ -3,8 +3,9 @@
 
 import ETHIcon from "../assets/icons/Eth.svg"
 import MaticIcon from "../assets/icons/maticIcon.svg"
-import { useTranslation } from 'react-i18next';
+
 import { CurrencyEnum } from "../enums/Currency";
+import useTranslation from "../hooks/useTranslation";
 
 type CurrencyObjectType = {
   [key: string]: string;

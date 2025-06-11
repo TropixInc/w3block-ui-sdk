@@ -5,7 +5,7 @@ import { useBoolean } from 'react-use';
 import { compareAsc, format } from 'date-fns';
 
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+
 import { ErrorBox } from '../../shared/components/ErrorBox';
 
 import { Spinner } from '../../shared/components/Spinner';
@@ -26,6 +26,7 @@ import { Button } from '../../tokens/components/Button';
 import { QrCodeReader } from '../../shared/components/QrCodeReader';
 import { QrCodeValidated } from '../../shared/components/QrCodeReader/QrCodeValidated';
 import { QrCodeError, TypeError } from '../../shared/components/QrCodeReader/QrCodeError';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

@@ -11,7 +11,7 @@ import {
 } from '@w3block/sdk-id';
 
 import UserIcon from '../../assets/icons/userOutlined.svg';
-import { useTranslation } from 'react-i18next';
+
 import { useCompanyConfig } from '../../hooks/useCompanyConfig';
 import useUploadAssets from '../../hooks/useUploadAssets';
 import { useUploadFileToCloudinary } from '../../hooks/useUploadFileToCloudinary';
@@ -22,6 +22,7 @@ import { Spinner } from '../Spinner';
 import { WeblockButton } from '../WeblockButton';
 import { SelectInput } from '../SelectInput';
 import { ErrorMessage } from '../../../checkout/components/ErrorMessage';
+import useTranslation from '../../hooks/useTranslation';
 
 
 interface InputMultiFaceProps {

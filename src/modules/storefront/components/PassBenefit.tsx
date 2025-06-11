@@ -8,7 +8,8 @@ import { Spinner } from '../../shared/components/Spinner';
 
 import { useDynamicString } from '../hooks/useDynamicString';
 import { PassBenefitData } from '../interfaces/Theme';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../shared/hooks/useTranslation';
+
 
 interface PassBenefitProps {
   data: PassBenefitData;

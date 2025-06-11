@@ -6,7 +6,8 @@ import classNames from 'classnames'
 import  ErrorIcon from '../../assets/icons/errorIconRed.svg';
 import  XIcon from '../../assets/icons/xFilled.svg';
 import { Button } from '../Buttons';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../hooks/useTranslation';
+
 
 
 export enum TypeError {

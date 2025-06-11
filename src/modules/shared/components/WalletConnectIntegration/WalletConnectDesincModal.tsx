@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useUserWallet } from "../../hooks/useUserWallet/useUserWallet";
 import { ModalBase } from "../ModalBase";
@@ -6,6 +6,7 @@ import { Spinner } from "../Spinner";
 import { WeblockButton } from "../WeblockButton";
 import { useDisconnectWalletConnect } from "../../hooks/useDisconnectWalletConnect";
 import { useIntegrations } from "../../hooks/useIntegrations";
+import useTranslation from "../../hooks/useTranslation";
 
 interface Props {
   isOpen: boolean;

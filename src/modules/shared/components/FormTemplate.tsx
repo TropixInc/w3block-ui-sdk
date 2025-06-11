@@ -15,11 +15,12 @@ import {
   TenantInputEntityDto,
   UserContextStatus,
 } from '@w3block/sdk-id';
-import { useTranslation } from 'react-i18next';
+
 import { Alert } from './Alert';
 import { BaseButton } from './Buttons';
 import { SmartInputsController } from './SmartInputsController';
 import { Spinner } from './Spinner';
+import useTranslation from '../hooks/useTranslation';
 
 
 

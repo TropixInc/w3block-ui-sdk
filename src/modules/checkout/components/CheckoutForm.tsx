@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 
 import ValueChangeIcon from '../../shared/assets/icons/icon-up-down.svg';
-import { useTranslation } from 'react-i18next';
+
 import { FormCompleteKYCWithoutLayout } from '../../auth/components/FormCompleteKYCWithoutLayout';
 import { PixwayButton } from '../../shared/components/PixwayButton';
 import { PriceAndGasInfo } from '../../shared/components/PriceAndGasInfo';
@@ -33,6 +33,7 @@ import { ProductError } from './ProductError';
 import { useQuery } from '../../shared/hooks/useQuery';
 import { Variants } from '../../storefront/interfaces/Product';
 import { Product } from '../../shared/interfaces/Product';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface CheckoutFormProps {

@@ -8,8 +8,9 @@ import _ from 'lodash';
 
 import ArrowDownOutlined from '../assets/icons/arrowDown.svg';
 import CheckBoxIcon from '../assets/icons/checkOutlined.svg';
-import { useTranslation } from 'react-i18next';
+
 import { Option } from "./GenericSearchFilter"
+import useTranslation from '../hooks/useTranslation';
 
 interface Props {
   options: Array<Option>;

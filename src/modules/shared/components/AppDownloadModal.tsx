@@ -2,13 +2,14 @@ import { useCopyToClipboard } from 'react-use';
 
 import downloadAndroid from '../../assets/images/downloadAndroid.png';
 import downloadApple from '../../assets/images/downloadApple.png';
-import { useTranslation } from 'react-i18next';
+
 import { useUtms } from '../hooks/useUtms';
 import { ModalBase } from './ModalBase';
 import { Spinner } from './Spinner';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { getMobileOS } from '../utils/getMobileOs';
 import { useGetUserByReferral } from '../hooks/useGetUserByReferral';
+import useTranslation from '../hooks/useTranslation';
 
 export const AppDownloadModal = ({
   isOpen,

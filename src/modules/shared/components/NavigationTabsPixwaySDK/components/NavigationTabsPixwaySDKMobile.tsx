@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useTranslation } from "react-i18next";
+
 import { useLocale } from "../../../hooks/useLocale";
 
 import { useRouterConnect } from "../../../hooks/useRouterConnect";
@@ -15,6 +15,7 @@ import { PixwayAppRoutes } from "../../../enums/PixwayAppRoutes";
 import { NavigationTabsPixwaySDKProps } from "../../../interfaces/NavigationTabsPixwaySDKTabs";
 import { useThemeConfig } from "../../../../storefront/hooks/useThemeConfig";
 import { getI18nString } from "../../../../storefront/hooks/useDynamicString";
+import useTranslation from "../../../hooks/useTranslation";
 
 export const NavigationTabsPixwaySDKMobile = ({
   classNames,

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import WalletImage from '../assets/wallet.svg';
-import { useTranslation } from 'react-i18next';
+
 import { Token } from '../interfaces/Token';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
@@ -16,6 +16,7 @@ import { mapNFTToToken } from '../utils/mapNFTToToken';
 import { TokenListTemplateSkeleton } from './TokenListTemplateSkeleton';
 import { WalletTokenCard } from './WalletTokenCard';
 import { Pagination } from '../../shared/components/Pagination';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   tokens?: Array<Token>;

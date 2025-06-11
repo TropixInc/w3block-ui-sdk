@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import _ from 'lodash';
-import { useTranslation } from 'react-i18next';
+
 import { AuthButton } from '../../auth/components/AuthButton';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { Spinner } from '../../shared/components/Spinner';
@@ -13,6 +13,7 @@ import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { usePublicTokenData } from '../../tokens/hooks/usePublicTokenData';
 import { useGetTokenSharedCode } from '../hooks/useGetTokenSharedCode';
 import { QrCodeSection } from '../../tokens/components/PassTemplate/QrCodeSection';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 const _SharedOrder = ({

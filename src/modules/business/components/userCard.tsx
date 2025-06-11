@@ -1,10 +1,11 @@
 
 import { useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
-import { useTranslation } from 'react-i18next';
+
 import { Alert } from '../../shared/components/Alert';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { Shimmer } from '../../shared/components/Shimmer';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

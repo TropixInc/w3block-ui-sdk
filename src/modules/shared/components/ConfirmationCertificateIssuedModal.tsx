@@ -1,8 +1,9 @@
 import { lazy } from 'react';
 
 import CheckCircledFilled from '../assets/icons/checkCircledFilled.svg';
-import { useTranslation } from 'react-i18next';
+
 import { ModalBase } from './ModalBase';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface Props {

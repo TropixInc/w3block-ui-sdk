@@ -4,7 +4,8 @@ import { useToggle } from 'react-use';
 import classNames from 'classnames';
 
 import FilterIcon from '../../shared/assets/icons/filterOutlined.svg';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../shared/hooks/useTranslation';
+
 
 export interface ValidStatusProps {
   key: string;

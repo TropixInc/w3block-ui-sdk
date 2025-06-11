@@ -1,6 +1,7 @@
-import { useTranslation } from "react-i18next";
+
 import { ConfigPanel } from "./ConfigPanel";
 import { TabDTO, BaseTabs } from "../../shared/components/BaseTabs";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 interface ConfigComponentProps {
   activeTab: string;

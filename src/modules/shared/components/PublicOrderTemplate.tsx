@@ -4,13 +4,14 @@ import { useMemo } from 'react';
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
-import { useTranslation } from 'react-i18next';
+
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
 import { useGetPublicOrder } from '../hooks/useGetPublicOrder';
 import { useLocale } from '../hooks/useLocale';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 import { ErrorBox } from './ErrorBox';
 import { Spinner } from './Spinner';
+import useTranslation from '../hooks/useTranslation';
 
 
 

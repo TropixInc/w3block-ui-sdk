@@ -4,7 +4,7 @@ import { useController } from 'react-hook-form';
 
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
-import { useTranslation } from 'react-i18next';
+
 import { getDynamicString } from '../../../storefront/hooks/useDynamicString';
 import { usePaginatedGenericApiGet } from '../../hooks/usePaginatedGenericApiGet';
 import { useRouterConnect } from '../../hooks/useRouterConnect';
@@ -13,6 +13,7 @@ import LabelWithRequired from '../LabelWithRequired';
 import { InputDataDTO, InputError } from '../SmartInputsController';
 import { Spinner } from '../Spinner';
 import InputStatus from './InputStatus';
+import useTranslation from '../../hooks/useTranslation';
 
 export interface Options {
   label: string;

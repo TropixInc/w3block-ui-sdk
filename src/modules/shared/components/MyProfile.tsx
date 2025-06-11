@@ -1,7 +1,8 @@
 /* eslint-disable i18next/no-literal-string */
 
 import { useProfile } from '../hooks/useProfile';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../hooks/useTranslation';
+
 import { InternalpageHeaderWithFunds } from "./InternalPageHeaderWithFunds"
 
 export const MyProfile = () => {

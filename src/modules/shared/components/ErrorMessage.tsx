@@ -1,7 +1,8 @@
 import ErrorIcon from '../assets/icons/errorIconRed.svg';
-import { useTranslation } from 'react-i18next';
+
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../hooks/useRouterConnect';
+import useTranslation from '../hooks/useTranslation';
 import { PixwayButton } from './PixwayButton';
 
 interface ErrorMessageProps {

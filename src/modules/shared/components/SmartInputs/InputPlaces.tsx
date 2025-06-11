@@ -1,4 +1,5 @@
-import { useTranslation } from "react-i18next";
+
+import useTranslation from "../../hooks/useTranslation";
 import CityAutoComplete from "./CityAutoComplete";
 import InputCompletedAddress from "./InputCompletedAddress";
 

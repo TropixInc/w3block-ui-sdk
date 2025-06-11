@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
-import { useTranslation } from 'react-i18next';
+
 import { useDebounce } from 'react-use';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
@@ -19,6 +19,7 @@ import { useLoyaltiesInfo } from '../hooks/useLoyaltiesInfo';
 import { UserInfoInterface } from '../interface/userInfo';
 import { useGuardPagesWithOptions } from '../../shared/hooks/useGuardPagesWithOptions';
 import { ErrorMessage } from '../../checkout/components/ErrorMessage';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const PaymentTemplateSDK = () => {

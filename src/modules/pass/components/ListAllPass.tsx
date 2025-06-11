@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 
 
-import { useTranslation } from 'react-i18next';
+
 
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
@@ -25,8 +25,7 @@ import { InternalPageTitle } from '../../tokens/components/InternalPageTitle';
 import { LineDivider } from '../../tokens/components/LineDivider';
 import GenericTable from '../../tokens/components/GenericTable';
 import { headers, mobileHeaders } from '../../tokens/const/GenericTableHeaders';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Props {
   chainId: string;
   contractAddress: string;

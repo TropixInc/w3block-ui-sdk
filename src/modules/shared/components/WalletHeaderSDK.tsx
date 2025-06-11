@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CSSProperties, lazy, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { useCopyToClipboard } from 'react-use';
 
 import { Pagination } from 'swiper/modules';
@@ -11,6 +11,7 @@ import { useGetRightWallet } from '../utils/getRightWallet';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import CopyIcon from '../assets/icons/copyIcon.svg';
 import { WalletCard } from './WalletCard';
+import useTranslation from '../hooks/useTranslation';
 
 
 

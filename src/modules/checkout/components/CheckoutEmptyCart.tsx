@@ -1,8 +1,8 @@
-import { useTranslation } from "react-i18next";
+
 import { WeblockButton } from "../../shared/components/WeblockButton";
 import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
 import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
-
+import useTranslation from "../../shared/hooks/useTranslation";
 
 export const CheckoutEmptyCart = () => {
   const { pushConnect } = useRouterConnect();

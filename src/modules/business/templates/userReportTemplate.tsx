@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 
 import UserIcon from '../../shared/assets/icons/userOutlined.svg';
-import { useTranslation } from 'react-i18next';
+
 import { FromToInterface, Erc20TokenHistory } from '../../dashboard/interface/ercTokenHistoryInterface';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
@@ -20,6 +20,7 @@ import { useGetAllReportsByOperatorId } from '../hooks/useGetAllReportsByOperato
 import { useLoyaltiesInfo } from '../hooks/useLoyaltiesInfo';
 import { TableDefault, TableHeaderItem } from '../../shared/components/TableDefault';
 import { Pagination } from '../../shared/components/Pagination';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const UserReportTemplate = () => {

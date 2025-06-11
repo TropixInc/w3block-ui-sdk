@@ -8,7 +8,8 @@ import  CheckCircledIcon  from '../../assets/icons/checkCircledOutlined.svg';
 import { shortDays } from '../../utils/shortDays';
 import { Button } from '../Buttons';
 import { CloseButton } from '../CloseButton';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../hooks/useTranslation';
+
 
 
 interface iProps {

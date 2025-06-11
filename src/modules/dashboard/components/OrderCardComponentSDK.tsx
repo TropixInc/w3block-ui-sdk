@@ -12,7 +12,7 @@ import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg';
 import InfoIcon from '../../shared/assets/icons/informationCircled.svg';
 import XIcon from '../../shared/assets/icons/x-circle.svg';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+
 import { CheckoutStatus } from '../../checkout/components/CheckoutInfo';
 import { useGetEspecificOrder } from '../../checkout/hooks/useGetEspecificOrder';
 import { PixwayButton } from '../../shared/components/PixwayButton';
@@ -24,6 +24,7 @@ import { useGetApi } from '../hook/useGetApi';
 import { PriceComponent } from './PriceComponent';
 import { ReceiptQRCode } from './ReceiptQRCode';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 export enum OrderStatusEnum {
   PENDING = 'pending',

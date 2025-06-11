@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { countries } from '../../utils/countries';
 import { BaseSelect } from '../BaseSelect';
 import LabelWithRequired from '../LabelWithRequired';
 import CityAutoComplete from './CityAutoComplete';
+import useTranslation from '../../hooks/useTranslation';
 interface InputCompletedAddressProps {
   onChangeRegion?: (value: string | undefined) => void;
   name: string;

@@ -1,6 +1,7 @@
-import { useTranslation } from "react-i18next";
+
 import { ModalBase } from "../../shared/components/ModalBase";
 import { WeblockButton } from "../../shared/components/WeblockButton";
+import useTranslation from "../../shared/hooks/useTranslation";
 
 interface Props {
   isOpen: boolean;

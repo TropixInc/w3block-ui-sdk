@@ -13,7 +13,8 @@ import { InternalPagesLayoutBase } from './InternalPagesLayoutBase';
 import { Spinner } from './Spinner';
 import TranslatableComponent from './TranslatableComponent';
 import { useStakingSummary, useRedeemStaking, SummaryDto } from '../hooks/useStaking';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../hooks/useTranslation';
+
 
 export const StakingSummary = () => {
   const [page, setPage] = useState(1);

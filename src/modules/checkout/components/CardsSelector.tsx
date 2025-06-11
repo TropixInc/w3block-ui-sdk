@@ -5,8 +5,9 @@ import { Combobox, Transition } from '@headlessui/react';
 import { isBefore, isAfter } from 'date-fns';
 
 import ArrowDown from '../../shared/assets/icons/arrowDown.svg';
-import { useTranslation } from 'react-i18next';
+
 import { AvailableCreditCards } from '../interface/interface';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 interface Props {

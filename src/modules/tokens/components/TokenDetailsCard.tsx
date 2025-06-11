@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import format from 'date-fns/format';
 
 import { headers } from 'next/headers';
-import { useTranslation } from 'react-i18next';
+
 import { BenefitStatus } from '../../pass/enums/BenefitStatus';
 import { PassType } from '../../pass/enums/PassType';
 import useGetBenefitsByEditionNumber from '../../pass/hooks/useGetBenefitsByEditionNumber';
@@ -29,6 +29,7 @@ import { SmartDataDisplayer } from './SmartDataDisplayer';
 import StatusTag from './StatusTag';
 import { TextFieldDisplay } from './TextFieldDisplay';
 import { Button } from './Button';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   contract: string;

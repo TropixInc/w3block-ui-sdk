@@ -1,9 +1,10 @@
-import { useTranslation } from 'react-i18next';
+
 import PlusIcon from '../../../shared/assets/icons/plusCircle.svg';
 import { Alert } from '../../../shared/components/Alert';
 
 import { TimeItem } from './TimeItem';
 import { BaseButton } from '../../../shared/components/Buttons';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface ConfigPanelProps {
   activeDay: string;

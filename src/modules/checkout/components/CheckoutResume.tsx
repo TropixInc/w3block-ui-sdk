@@ -1,6 +1,7 @@
-import { useTranslation } from "react-i18next";
+
 import { PriceAndGasInfo } from "../../shared/components/PriceAndGasInfo";
 import { ProductInfo } from "../../shared/components/ProductInfo";
+import useTranslation from "../../shared/hooks/useTranslation";
 import { Product } from "../../shared/interfaces/Product";
 import { OrderPreviewCache, PaymentsResponse } from "../interface/interface";
 

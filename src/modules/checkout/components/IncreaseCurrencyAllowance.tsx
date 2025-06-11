@@ -8,7 +8,8 @@ import { Spinner } from '../../shared/components/Spinner';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { ErrorMessage } from './ErrorMessage';
 import { useIncreaseCurrencyAllowance } from '../../shared/hooks/useIncreaseCurrencyAllowance';
-import { useTranslation } from 'react-i18next';
+import useTranslation from '../../shared/hooks/useTranslation';
+
 
 
 

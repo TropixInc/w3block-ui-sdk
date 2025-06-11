@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { W3blockAPI } from '../enums/W3blockAPI';
 import { BaseButton } from './Buttons';
 import { ErrorBox } from './ErrorBox';
 import { Spinner } from './Spinner';
 import { UseGenericApiGet } from '../hooks/UseGenericApiGet';
 import { useGetGenericXlsReports } from '../hooks/useGetGenericXlsReports';
+import useTranslation from '../hooks/useTranslation';
 
 
 interface XlsReportsProps {

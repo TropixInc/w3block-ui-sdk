@@ -22,7 +22,7 @@ import { QRCodeSVG } from 'qrcode.react';
 
 import CopyIcon from '../../shared/assets/icons/copyIcon.svg';
 import Loading from '../../shared/assets/icons/loading.svg';
-import { useTranslation } from 'react-i18next';
+
 import { Alert } from '../../shared/components/Alert';
 import { Spinner } from '../../shared/components/Spinner';
 import { WeblockButton } from '../../shared/components/WeblockButton';
@@ -47,6 +47,7 @@ import { CheckoutStripeForm } from './CheckoutStripeForm';
 import { ErrorMessage } from './ErrorMessage';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useLogError } from '../../shared/hooks/useLogError';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 export const CheckoutPayment = () => {

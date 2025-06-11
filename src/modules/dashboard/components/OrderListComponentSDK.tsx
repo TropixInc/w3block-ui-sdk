@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 
 import { useGetEspecificOrder } from '../../checkout/hooks/useGetEspecificOrder';
 import { useGetOrders } from '../../checkout/hooks/useGetOrders';
@@ -9,6 +9,7 @@ import { ErrorBox } from '../../shared/components/ErrorBox';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { OrderCardComponentSDK } from './OrderCardComponentSDK';
 import { Pagination } from '../../shared/components/Pagination';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

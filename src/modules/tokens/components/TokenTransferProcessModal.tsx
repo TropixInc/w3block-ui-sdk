@@ -1,9 +1,10 @@
 import { useRef } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { ModalBase } from '../../shared/components/ModalBase';
 import { PixwayButton } from '../../shared/components/PixwayButton';
 import { Checkbox } from '../../shared/components/Checkbox';
+import useTranslation from '../../shared/hooks/useTranslation';
 interface Tokens {
   id: string;
   number: string;

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { useHasWallet } from '../../shared/hooks/useHasWallet';
 import { usePrivateRoute } from '../../shared/hooks/usePrivateRoute';
 import { useProfile } from '../../shared/hooks/useProfile';
@@ -8,6 +8,7 @@ import { CheckoutContainer } from '../components/CheckoutContainer';
 import { CheckoutEmptyCart } from '../components/CheckoutEmptyCart';
 import { CheckoutStatus } from '../components/CheckoutInfo';
 import { useCart } from '../hooks/useCart';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 
 

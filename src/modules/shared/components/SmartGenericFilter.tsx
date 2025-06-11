@@ -4,7 +4,7 @@ import { useController } from 'react-hook-form';
 import { useClickAway, useDebounce } from 'react-use';
 
 import _, { isArray } from 'lodash';
-import { useTranslation } from 'react-i18next';
+
 import { W3blockAPI } from '../enums/W3blockAPI';
 import { FilterTableType, FormatFilterType, FilterParameters } from '../interfaces/ConfigGenericTable';
 import { BaseInput } from './BaseInput';
@@ -15,6 +15,7 @@ import { GenericWalletFilter } from './GenericWalletFilter';
 import NumberRange from './NumberRange';
 import { DynamicGenericFilter } from './DynamicGenericFilter';
 import { Option } from "./GenericSearchFilter"
+import useTranslation from '../hooks/useTranslation';
 
 
 interface GenericFilterDto {

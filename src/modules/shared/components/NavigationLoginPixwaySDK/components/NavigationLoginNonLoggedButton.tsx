@@ -1,12 +1,13 @@
 /* eslint-disable i18next/no-literal-string */
 import { useState } from 'react';
 
-import { useTranslation } from 'react-i18next';
+
 import { useRouterConnect } from '../../../hooks/useRouterConnect';
 import { PixwayButton } from '../../PixwayButton';
 import UserIcon from '../../../assets/icons/user.svg'
 import ArrowDown from '../../../assets/icons/arrowDown.svg'
 import { PixwayAppRoutes } from '../../../enums/PixwayAppRoutes';
+import useTranslation from '../../../hooks/useTranslation';
 
 interface NavigationLoginNonLoggedButtonProps {
   signInRoute?: string;
