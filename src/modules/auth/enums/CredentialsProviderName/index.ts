@@ -4,4 +4,5 @@ export enum CredentialProviderName {
   SIGN_IN_WITH_CODE = 'signInWithCode',
   SIGNIN_AFTER_SIGNUP = 'signInAfterSignUp',
   SIGNIN_WITH_GOOGLE = 'signInWithGoogle',
+  SIGNIN_WITH_APPLE = 'signInWithApple',
 }

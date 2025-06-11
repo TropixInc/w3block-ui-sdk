@@ -1049,5 +1049,6 @@
 "withdraw>actions>concludeTransfer": "Complete transfer",
 "withdraw>actions>withholdFunds": "Withhold funds",
 "shared>statementComponent>issueDate": "Issue date",
-"shared>statementComponent>receiptDate": "Receipt date"
+"shared>statementComponent>receiptDate": "Receipt date",
+  "auth>signWithoutLayout>signinApple": "Sign in with Apple"
 }

@@ -41,6 +41,7 @@ interface SignInSignupTemplateSDKProps {
   defaultRedirectRoute?: string;
   hasSignUp?: boolean;
   extraBy?: ExtraBy[];
+  isAppleSignIn?: boolean;
 }
 
 export const SignInTemplateSDK = ({
@@ -56,6 +57,7 @@ export const SignInTemplateSDK = ({
   hasSignUp = true,
   defaultRedirectRoute = PixwayAppRoutes.COMPLETE_KYC,
   extraBy,
+  isAppleSignIn,
 }: SignInSignupTemplateSDKProps) => {
   const context = useContext(ThemeContext);
   const breakpoint = useBreakpoints();
@@ -95,6 +97,7 @@ export const SignInTemplateSDK = ({
               <SigInWithoutLayout
                 hasSignUp={hasSignUpTheme ?? hasSignUp}
                 defaultRedirectRoute={defaultRedirectRoute}
+                isAppleSignIn={isAppleSignIn}
               ></SigInWithoutLayout>
             </Box>
           }

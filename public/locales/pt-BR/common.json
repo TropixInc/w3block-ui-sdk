@@ -1050,5 +1050,6 @@
   "withdraw>actions>concludeTransfer": "Concluir transferência",
   "withdraw>actions>withholdFunds": "Reter fundos",
   "shared>statementComponent>issueDate": "Data de compra",
-  "shared>statementComponent>receiptDate": "Data de recebimento"
+  "shared>statementComponent>receiptDate": "Data de recebimento",
+  "auth>signWithoutLayout>signinApple": "Sign in with Apple"
  }

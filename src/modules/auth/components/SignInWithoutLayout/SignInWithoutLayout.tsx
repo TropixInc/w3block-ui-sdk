@@ -14,6 +14,7 @@ import { Spinner } from '../../../shared/components/Spinner';
 import { LocalStorageFields } from '../../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { useGetAppleRedirectLink } from '../../../shared/hooks/useGetAppleRedirectLink';
 import { useGetGoogleRedirectLink } from '../../../shared/hooks/useGetGoogleRedirectLink';
 import { useGetTenantInfoByHostname } from '../../../shared/hooks/useGetTenantInfoByHostname';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
@@ -23,6 +24,7 @@ import { useTimedBoolean } from '../../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../../shared/hooks/useTranslation';
 import { useUtms } from '../../../shared/hooks/useUtms/useUtms';
 import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
+import AppleIcon from '../../assets/icons/appleIcon.svg?react';
 import GoogleIcon from '../../assets/icons/googleIcon.svg?react';
 import { usePasswordValidationSchema } from '../../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../../hooks/usePixwayAuthentication';
@@ -52,7 +54,7 @@ interface Form {
 interface SignInWithoutLayoutProps {
   defaultRedirectRoute: string;
   routeToAttachWallet?: string;
-
+  isAppleSignIn?: boolean;
   routerToAttachKyc?: string;
   hasSignUp?: boolean;
 }
@@ -62,14 +64,18 @@ export const SigInWithoutLayout = ({
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   routerToAttachKyc = PixwayAppRoutes.COMPLETE_KYC,
   hasSignUp = true,
+  isAppleSignIn = false,
 }: SignInWithoutLayoutProps) => {
   const { companyId } = useCompanyConfig();
   const { data: companyInfo } = useGetTenantInfoByHostname();
   const googleLink = useGetGoogleRedirectLink();
+  const appleLink = useGetAppleRedirectLink();
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const haveGoogleSignIn = companyInfo?.configuration?.googleSignIn?.enabled;
+  const haveAppleSignIn = companyInfo?.configuration?.appleSignIn?.enabled;
   const [translate] = useTranslation();
-  const { signIn, signInWithGoogle } = usePixwayAuthentication();
+  const { signIn, signInWithGoogle, signInWithApple } =
+    usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
     isPasswordless,
     messageConfig: {
@@ -120,6 +126,7 @@ export const SigInWithoutLayout = ({
 
   const utms = useUtms();
   const [googleError, setGoogleError] = useState(false);
+  const [appleError, setAppleError] = useState(false);
   useEffect(() => {
     if (code && isGoogleSignIn) {
       signInWithGoogle &&
@@ -137,6 +144,24 @@ export const SigInWithoutLayout = ({
         });
     }
   }, [code, isGoogleSignIn]);
+
+  useEffect(() => {
+    if (code && isAppleSignIn) {
+      signInWithApple &&
+        signInWithApple({
+          code,
+          companyId,
+          callbackUrl: callback,
+          referrer: utms.utm_source ?? undefined,
+        }).then((res) => {
+          if (!res.ok) {
+            setAppleError(true);
+          } else {
+            router.pushConnect(callback);
+          }
+        });
+    }
+  }, [isAppleSignIn, code]);
 
   const { defaultTheme } = UseThemeConfig();
   const postSigninURL =
@@ -216,7 +241,10 @@ export const SigInWithoutLayout = ({
     }
   };
 
-  if (code && isGoogleSignIn && !googleError)
+  if (
+    code &&
+    ((isGoogleSignIn && !googleError) || (isAppleSignIn && !appleError))
+  )
     return (
       <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
         <Spinner />
@@ -319,11 +347,34 @@ export const SigInWithoutLayout = ({
                           className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
                           href={googleLink}
                         >
-                          <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
+                          <div className="pw-h-[17px] pw-w-[17px] pw-mr-[12px]">
                             <GoogleIcon />
                           </div>
-                          <span>
+                          <span className="pw-mt-[1px]">
                             {translate('auth>signWithoutLayout>signGoogle')}
+                          </span>
+                        </a>
+                      </>
+                    )}
+                  </div>
+                ) : null}
+                {haveAppleSignIn ? (
+                  <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
+                    {appleError ? (
+                      <Alert variant="warning">
+                        {translate('auth>signWithoutLayout>notRegistration')}
+                      </Alert>
+                    ) : (
+                      <>
+                        <a
+                          className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
+                          href={appleLink}
+                        >
+                          <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
+                            <AppleIcon width={20} height={17} />
+                          </div>
+                          <span className="pw-mt-[1px]">
+                            {translate('auth>signWithoutLayout>signinApple')}
                           </span>
                         </a>
                       </>

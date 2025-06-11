@@ -259,6 +259,42 @@ export const getNextAuthConfig = ({
         return user;
       },
     }),
+    CredentialsProvider({
+      id: CredentialProviderName.SIGNIN_WITH_APPLE,
+      credentials: {
+        companyId: {
+          type: 'string',
+        },
+        code: {
+          type: 'string',
+        },
+        referrer: {
+          type: 'string',
+        },
+      },
+      authorize: async (payload) => {
+        const url = removeDuplicateSlahes(
+          `${baseURL}/${PixwayAPIRoutes.SIGNIN_WITH_APPLE.replace(
+            '{companyId}',
+            payload?.companyId ?? ''
+          )}`
+        );
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify({
+            code: payload?.code ?? '',
+            referrer: payload?.referrer ?? '',
+          }),
+        });
+        const responseAsJSON = await response.json();
+        if (responseAsJSON.statusCode >= 300) {
+          throw new Error(responseAsJSON.message);
+        }
+        const user = mapSignInReponseToSessionUser(responseAsJSON);
+        return user;
+      },
+    }),
   ],
   callbacks: {
     async jwt({ token, user, account }) {

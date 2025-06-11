@@ -19,6 +19,12 @@ export interface IW3blockAuthenticationContext {
     referrer?: string;
     callbackUrl?: string | undefined;
   }) => Promise<any>;
+  signInWithApple?: (payload: {
+    companyId: string;
+    code: string;
+    referrer?: string;
+    callbackUrl?: string | undefined;
+  }) => Promise<any>;
 }
 
 export const W3blockAuthenticationContext = createContext(
