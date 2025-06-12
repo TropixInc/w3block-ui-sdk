@@ -1,5 +1,6 @@
-import { useMutation } from 'react-query';
 
+
+import { useMutation } from '@tanstack/react-query';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
 import { handleNetworkException } from '../../utils/handleNetworkException';

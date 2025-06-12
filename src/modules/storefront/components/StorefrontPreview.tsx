@@ -1,6 +1,5 @@
 import {
   ReactNode,
-  lazy,
   useContext,
   useEffect,
   useMemo,
@@ -13,74 +12,35 @@ import classNames from 'classnames';
 
 import { getPageMap } from '../../custom/utils/customMap';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import {
-  breakpointsEnum,
-  useBreakpoints,
-} from '../../shared/hooks/useBreakpoints/useBreakpoints';
+
 import { useLocale } from '../../shared/hooks/useLocale';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
-import { useUserWallet } from '../../shared/hooks/useUserWallet';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ThemeContext } from '../contexts/ThemeContext';
-import {
-  DynamicApiModuleInterface,
-  MainModuleThemeInterface,
-  ModulesType,
-  TemplateData,
-  Theme,
-} from '../interfaces';
+
 import { DynamicApiProvider } from '../provider/DynamicApiProvider';
 import { getProductSlug } from '../utils/getProductSlug';
 import { PassBenefit } from './PassBenefit';
-
-const Page404 = lazy(() =>
-  import('./404').then((m) => ({ default: m.Page404 }))
-);
-
-const Header = lazy(() =>
-  import('./Header').then((m) => ({ default: m.Header }))
-);
-const Footer = lazy(() =>
-  import('./Footer').then((m) => ({ default: m.Footer }))
-);
-const GenericTableWrapper = lazy(() =>
-  import('./GenericTableWrapper').then((m) => ({
-    default: m.GenericTableWrapper,
-  }))
-);
-const Banner = lazy(() =>
-  import('./Banner').then((m) => ({ default: m.Banner }))
-);
-const BannerVariant = lazy(() =>
-  import('./BannerVariant').then((m) => ({ default: m.Banner }))
-);
-const BannerWJJC = lazy(() =>
-  import('./BannerWJJC').then((m) => ({ default: m.BannerWJJC }))
-);
-const Cookies = lazy(() =>
-  import('./Cookies').then((m) => ({ default: m.Cookies }))
-);
-const Accordions = lazy(() =>
-  import('./Accordions').then((m) => ({ default: m.Accordions }))
-);
-const GridItemArea = lazy(() =>
-  import('./GridItemArea').then((m) => ({ default: m.GridItemArea }))
-);
-const ImagePlusText = lazy(() =>
-  import('./ImagePlusText').then((m) => ({ default: m.ImagePlusText }))
-);
-const Menu = lazy(() => import('./Menu').then((m) => ({ default: m.Menu })));
-const Midia = lazy(() => import('./Midia').then((m) => ({ default: m.Midia })));
-const Paragraph = lazy(() =>
-  import('./Paragraph').then((m) => ({ default: m.Paragraph }))
-);
-const ProductPage = lazy(() =>
-  import('./ProductPage').then((m) => ({ default: m.ProductPage }))
-);
-const Products = lazy(() =>
-  import('./Products').then((m) => ({ default: m.Products }))
-);
-
+import { DynamicApiModuleInterface, MainModuleThemeInterface, ModulesType, TemplateData, Theme } from '../interfaces/Theme';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
+import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
+import { Page404 } from './404';
+import { Accordions } from './Accordions';
+import { Banner } from './Banner';
+import { BannerWJJC } from './BannerWJJC';
+import { GenericTableWrapper } from './GenericTableWrapper';
+import { GridItemArea } from './GridItemArea';
+import { ImagePlusText } from './ImagePlusText';
+import { Midia } from './Midia';
+import { Paragraph } from './Paragraph';
+import { ProductPage } from './ProductPage';
+import { Products } from './Products';
+import { StorefrontHeader } from './StorefrontHeader';
+import { StorefrontMenu } from './StorefrontMenu';
+import { StorefrontFooter } from './StorefrontFooter';
+import { Cookies } from './Cookies';
+import { Banner as BannerVariant } from './BannerVariant';
 interface StorefrontPreviewProps {
   params?: string[];
   children?: ReactNode;
@@ -288,7 +248,7 @@ export const StorefrontPreview = ({
           }}
         >
           {hasHeaderDefault && headerData ? (
-            <Header data={headerData as MainModuleThemeInterface} />
+            <StorefrontHeader data={headerData as MainModuleThemeInterface} />
           ) : null}
 
           <Cookies
@@ -355,7 +315,7 @@ export const StorefrontPreview = ({
 
                     switch (item.type) {
                       case ModulesType.CATEGORIES:
-                        return <Menu data={{ ...theme.categories, ...item }} />;
+                        return <StorefrontMenu data={{ ...theme.categories, ...item }} />;
                       case ModulesType.BANNER:
                         return <Banner data={{ ...theme.banner, ...item }} />;
                       case ModulesType.CARDS:
@@ -412,7 +372,7 @@ export const StorefrontPreview = ({
             </>
           )}
           {hasFooterDefault && (
-            <Footer
+            <StorefrontFooter
               data={
                 theme.footer ?? {
                   id: '',

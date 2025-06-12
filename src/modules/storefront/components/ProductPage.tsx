@@ -585,7 +585,7 @@ export const ProductPage = ({
         } else if (
           product?.settings?.acceptMultipleCurrenciesPurchase &&
           product?.prices?.some(
-            (res: { currency: { crypto: any } }) => res?.currency?.crypto
+            (res) => res?.currency?.crypto
           )
         ) {
           pushConnect(
@@ -596,7 +596,7 @@ export const ProductPage = ({
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
               }&cryptoCurrencyId=${
                 product?.prices?.find(
-                  (res: { currency: { crypto: any } }) => res?.currency?.crypto
+                  (res) => res?.currency?.crypto
                 )?.currencyId
               }`
           );
@@ -812,7 +812,7 @@ export const ProductPage = ({
                   pagination={{ clickable: true }}
                 >
                   {product?.images.map(
-                    (res: { assetId: string | undefined; original: any }) => {
+                    (res) => {
                       return (
                         <SwiperSlide key={res.assetId}>
                           <ImageSDK
@@ -1412,7 +1412,7 @@ export const ProductPage = ({
                     {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
                     {
                       product.prices.find(
-                        (priceF: { currencyId: any }) =>
+                        (priceF) =>
                           priceF.currencyId ==
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
@@ -1425,11 +1425,7 @@ export const ProductPage = ({
                 <div className="pw-mt-8">
                   {product?.terms
                     ? product.terms.map(
-                        (val: {
-                          title: string;
-                          link: string | undefined;
-                          description: string | undefined;
-                        }) => (
+                        (val) => (
                           <CheckboxAlt
                             id={val.title}
                             onChange={() => onChangeCheckbox()}

@@ -98,7 +98,7 @@ export const MySales = () => {
     defaultTheme?.configurations?.contentData?.hideWalletAddress;
 
   const erc20Product = productsResale?.items?.find(
-    (res: { type: string }) => res.type === 'erc20'
+    (res) => res.type === 'erc20'
   );
 
   useGuardPagesWithOptions({
@@ -306,16 +306,7 @@ export const MySales = () => {
               <div>
                 {forSaleErc20?.data?.items?.length ? (
                   forSaleErc20?.data?.items?.map(
-                    (res: {
-                      id: string | undefined;
-                      tokenData: {
-                        currency: {
-                          symbol: string | undefined;
-                        };
-                        amount: string | undefined;
-                      };
-                      prices: { amount: string }[];
-                    }) => {
+                    (res) => {
                       return (
                         <div
                           key={res?.id}
