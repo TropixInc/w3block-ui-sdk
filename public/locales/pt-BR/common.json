@@ -1053,5 +1053,6 @@
   "shared>statementComponent>receiptDate": "Data de recebimento",
   "auth>signWithoutLayout>signinApple": "Continuar com Apple",
   "pages>checkout>batchSizeSale": "Você só pode vender em quantidades multiplas de {{batchSize}}",
-  "pages>productPage>minValue": "Valor minimo para compra de {{value}}"
+  "pages>productPage>minValue": "Valor minimo para compra de {{value}}",
+"pages>mySales>currentBalance": "Saldo atual de {{coin}}"
  }
