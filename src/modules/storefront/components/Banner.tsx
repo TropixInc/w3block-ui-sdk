@@ -1,31 +1,29 @@
 import { CSSProperties, lazy } from 'react';
 
 import _ from 'lodash';
-import { Navigation, Pagination, Autoplay } from 'swiper';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-//import { ImageSDK } from '../../shared/components/ImageSDK';
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
-import TranslatableComponent from '../../shared/components/TranslatableComponent';
-import {
-  useBreakpoints,
-  breakpointsEnum,
-} from '../../shared/hooks/useBreakpoints/useBreakpoints';
-import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
-import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { isImage, isVideo } from '../../shared/utils/validators';
-import { useDynamicString } from '../hooks/useDynamicString';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces';
+
+
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces/Theme';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { useDynamicString } from '../hooks/useDynamicString';
+import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
+import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
+import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
+import { isImage, isVideo } from '../../shared/utils/validators';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const { styleData, mobileStyleData, id } = data;
@@ -72,6 +70,7 @@ export const Banner = ({ data }: { data: BannerData }) => {
           overflow: 'hidden',
         }}
       >
+      
         <Swiper
           navigation
           pagination

@@ -5,10 +5,10 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
-import { DynamicApiModuleInterface } from '../interfaces';
-import { processLocalizations } from '../utils/processLocalizations';
+import { processLocalizations } from "../utils/processLocalizations";
+import { DynamicApiModuleInterface } from "../interfaces/Theme";
 
 export interface DynamicApiContextInterface {
   config?: DynamicApiModuleInterface;
@@ -44,7 +44,7 @@ export const DynamicApiProvider = ({
       ) => {
         const getIndex = new RegExp(/{(\w+)}*/g).exec(url)?.length
           ? new RegExp(/{(\w+)}*/g).exec(url)?.slice(1)
-          : '';
+          : "";
         let newUrlApi = url;
         if (getIndex && getIndex.length > 0) {
           getIndex.forEach((item) => {

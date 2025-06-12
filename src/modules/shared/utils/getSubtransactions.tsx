@@ -3,8 +3,10 @@ import { ReactElement } from 'react';
 import { isArray } from 'lodash';
 
 import { Erc20TokenHistory } from '../../dashboard/interface/ercTokenHistoryInterface';
-import { Theme } from '../../storefront/interfaces';
-import { Erc20ActionStatus } from '../interface/Statement/Statement';
+
+import { Erc20ActionStatus } from '../interfaces/Statement';
+import { Theme } from '../../storefront/interfaces/Theme';
+
 
 export enum StatementScreenTransactionType {
   SENDING,
@@ -298,14 +300,14 @@ export function getSubtransactions(
                 data?.type === 'minter'
                   ? StatementScreenTransactionType.RECEIVING
                   : data?.type === 'burn'
-                  ? StatementScreenTransactionType.SENDING
-                  : StatementScreenTransactionType.PENDING,
+                    ? StatementScreenTransactionType.SENDING
+                    : StatementScreenTransactionType.PENDING,
               subtype:
                 data?.type === 'minter'
                   ? StatementScreenTransactionSubType.ZUCA_CREDIT
                   : data?.type === 'burn'
-                  ? StatementScreenTransactionSubType.ZUCA_DEBIT
-                  : StatementScreenTransactionSubType.ZUCA_CREDIT,
+                    ? StatementScreenTransactionSubType.ZUCA_DEBIT
+                    : StatementScreenTransactionSubType.ZUCA_CREDIT,
               createdAt: data?.createdAt,
               value: parseFloat(loyalty?.amount).toFixed(2),
               recipient: metadata?.description,
@@ -354,8 +356,8 @@ export function getSubtransactions(
           value:
             amounts?.length === 2
               ? `${parseFloat(
-                  commerce?.payments?.[0]?.currencyFullTotalAmount ?? ''
-                ).toFixed(2)} (${amounts[0]} +${amounts[1]})`
+                commerce?.payments?.[0]?.currencyFullTotalAmount ?? ''
+              ).toFixed(2)} (${amounts[0]} +${amounts[1]})`
               : amounts[0],
 
           recipient: commerce?.destinationUserName,
@@ -367,9 +369,8 @@ export function getSubtransactions(
           createdAt: data?.createdAt,
           orderId: commerce?.orderId,
           value: data?.request?.amount,
-          payments: `${
-            payments && payments?.length > 1 ? `(${payments?.join(' + ')})` : ''
-          }`,
+          payments: `${payments && payments?.length > 1 ? `(${payments?.join(' + ')})` : ''
+            }`,
           recipient: commerce?.destinationUserName,
           description: 'paymentDefault',
         });
@@ -395,28 +396,25 @@ export function getSubtransactions(
           data?.type === 'minter'
             ? StatementScreenTransactionType.RECEIVING
             : data?.type === 'burn'
-            ? StatementScreenTransactionType.SENDING
-            : StatementScreenTransactionType.PENDING,
+              ? StatementScreenTransactionType.SENDING
+              : StatementScreenTransactionType.PENDING,
         subtype:
           data?.type === 'minter'
             ? StatementScreenTransactionSubType.ZUCA_CREDIT
             : data?.type === 'burn'
-            ? StatementScreenTransactionSubType.ZUCA_DEBIT
-            : StatementScreenTransactionSubType.ZUCA_CREDIT,
+              ? StatementScreenTransactionSubType.ZUCA_DEBIT
+              : StatementScreenTransactionSubType.ZUCA_CREDIT,
         createdAt: data?.createdAt,
         value: parseFloat(request?.amount).toFixed(2),
         recipient: request?.metadata?.description ?? metadata?.description,
         description:
           data?.type === 'minter'
-            ? `Crédito ${
-                request?.metadata?.description ?? metadata?.description
-              }`
+            ? `Crédito ${request?.metadata?.description ?? metadata?.description
+            }`
             : data?.type === 'burn'
-            ? `Débito ${
-                request?.metadata?.description ?? metadata?.description
+              ? `Débito ${request?.metadata?.description ?? metadata?.description
               }`
-            : `Transfêrencia ${
-                request?.metadata?.description ?? metadata?.description
+              : `Transfêrencia ${request?.metadata?.description ?? metadata?.description
               }`,
       });
     }

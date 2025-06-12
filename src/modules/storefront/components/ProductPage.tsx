@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -8,7 +8,6 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -25,68 +24,42 @@ import {
   AvailableInstallmentInfo,
   OrderPreviewResponse,
 } from '../../checkout/interface/interface';
-// eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
-import { formatterCurrency } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
+import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
+import {
+  formatterCurrency,
+  CriptoValueComponent,
+} from '../../shared/components/CriptoValueComponent';
 import { ErrorBox } from '../../shared/components/ErrorBox';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { ModalBase } from '../../shared/components/ModalBase';
+import { Shimmer } from '../../shared/components/Shimmer';
+import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import useRouter from '../../shared/hooks/useRouter';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms/useUtms';
+import { useUtms } from '../../shared/hooks/useUtms';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-import useGetProductBySlug, {
-  CurrencyResponse,
-} from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { UseThemeConfig } from '../hooks/useThemeConfig/useThemeConfig';
-import { useTrack } from '../hooks/useTrack/useTrack';
-import { ProductPageData } from '../interfaces';
+import useGetProductBySlug from '../hooks/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { useThemeConfig } from '../hooks/useThemeConfig';
+import { useTrack } from '../hooks/useTrack';
+import { CurrencyResponse, Variants } from '../interfaces/Product';
+import { ProductPageData } from '../interfaces/Theme';
 import { ProductVariants } from './ProductVariants';
 import { SendGiftForm } from './SendGiftForm';
 
-const CheckboxAlt = lazy(() =>
-  import('../../shared/components/CheckboxAlt/CheckboxAlt').then((mod) => ({
-    default: mod.CheckboxAlt,
-  }))
-);
-
-const CriptoValueComponent = lazy(() =>
-  import(
-    '../../shared/components/CriptoValueComponent/CriptoValueComponent'
-  ).then((mod) => ({ default: mod.CriptoValueComponent }))
-);
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((mod) => ({
-    default: mod.ImageSDK,
-  }))
-);
-const ModalBase = lazy(() =>
-  import('../../shared/components/ModalBase').then((mod) => ({
-    default: mod.ModalBase,
-  }))
-);
-
-const Shimmer = lazy(() =>
-  import('../../shared/components/Shimmer').then((mod) => ({
-    default: mod.Shimmer,
-  }))
-);
-
-const Spinner = lazy(() =>
-  import('../../shared/components/Spinner').then((mod) => ({
-    default: mod.Spinner,
-  }))
-);
+import { Pagination } from 'swiper/modules';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -141,7 +114,7 @@ export const ProductPage = ({
 
   const [translate] = useTranslation();
   const { pushConnect } = useRouterConnect();
-  const { defaultTheme } = UseThemeConfig();
+  const { defaultTheme } = useThemeConfig();
   const variantsType =
     defaultTheme?.configurations?.contentData?.productVariantsType;
   const { setCart, cart, setCartCurrencyId } = useCart();
@@ -262,7 +235,8 @@ export const ProductPage = ({
   );
 
   const userHasIntegration = userIntegrations?.data?.items?.some(
-    (val) => val.toTenantId === product?.requirements?.companyId
+    (val: { toTenantId: any }) =>
+      val.toTenantId === product?.requirements?.companyId
   );
 
   const openNewWindow = (path: string) => {
@@ -308,7 +282,7 @@ export const ProductPage = ({
       }
     } else {
       createIntegrationToken(toTenantId ?? '', {
-        onSuccess(data) {
+        onSuccess(data: { token: any }) {
           openNewWindow(
             `https://${host}/linkAccount?token=${data.token}&fromEmail=${
               user?.email
@@ -496,17 +470,24 @@ export const ProductPage = ({
   useEffect(() => {
     if (product?.id) {
       const variant = {} as any;
-      product.variants?.map((val) => {
-        variant[val.id as any] = {
-          name: val.values[0].name,
-          label: val.name,
-          id: val.values[0].id,
-          productId: product?.id,
-          variantId: val.id,
-          keyLabel: val.keyLabel,
-          keyValue: val.values[0].keyValue,
-        };
-      });
+      product.variants?.map(
+        (val: {
+          id: any;
+          values: { name?: string; id?: string; keyValue?: string }[];
+          name: any;
+          keyLabel: any;
+        }) => {
+          variant[val.id as any] = {
+            name: val.values[0].name,
+            label: val.name,
+            id: val.values[0].id,
+            productId: product?.id,
+            variantId: val.id,
+            keyLabel: val.keyLabel,
+            keyValue: val.values[0].keyValue,
+          };
+        }
+      );
       setVariants({ ...variant });
     }
   }, [product?.id]);
@@ -536,10 +517,10 @@ export const ProductPage = ({
   const onChangeCheckbox = () => {
     const termsAria = product?.terms
       ?.map(
-        (val) =>
+        (val: { title: string }) =>
           (document.getElementById(val.title) as HTMLInputElement)?.checked
       )
-      .every((val) => val);
+      .every((val: any) => val);
     setTermsChecked(termsAria ?? true);
   };
 
@@ -603,7 +584,9 @@ export const ProductPage = ({
           );
         } else if (
           product?.settings?.acceptMultipleCurrenciesPurchase &&
-          product?.prices?.some((res) => res?.currency?.crypto)
+          product?.prices?.some(
+            (res: { currency: { crypto: any } }) => res?.currency?.crypto
+          )
         ) {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
@@ -612,8 +595,9 @@ export const ProductPage = ({
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
               }&cryptoCurrencyId=${
-                product?.prices?.find((res) => res?.currency?.crypto)
-                  ?.currencyId
+                product?.prices?.find(
+                  (res: { currency: { crypto: any } }) => res?.currency?.crypto
+                )?.currencyId
               }`
           );
         } else if (batchSize) {
@@ -786,8 +770,9 @@ export const ProductPage = ({
                     handleRefresh();
                     handleTenantIntegration({
                       host:
-                        toTenant?.hosts.find((value) => value.isMain === true)
-                          ?.hostname ?? '',
+                        toTenant?.hosts.find(
+                          (value: { isMain: boolean }) => value.isMain === true
+                        )?.hostname ?? '',
                       toTenantName: toTenant?.name ?? '',
                       toTenantId: toTenant?.id ?? '',
                     });
@@ -826,18 +811,20 @@ export const ProductPage = ({
                   modules={[Pagination]}
                   pagination={{ clickable: true }}
                 >
-                  {product?.images.map((res) => {
-                    return (
-                      <SwiperSlide key={res.assetId}>
-                        <ImageSDK
-                          src={res?.original ?? ''}
-                          width={1200}
-                          quality="best"
-                          className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
-                        />
-                      </SwiperSlide>
-                    );
-                  })}
+                  {product?.images.map(
+                    (res: { assetId: string | undefined; original: any }) => {
+                      return (
+                        <SwiperSlide key={res.assetId}>
+                          <ImageSDK
+                            src={res?.original ?? ''}
+                            width={1200}
+                            quality="best"
+                            className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+                          />
+                        </SwiperSlide>
+                      );
+                    }
+                  )}
                 </Swiper>
               ) : (
                 <ImageSDK
@@ -866,7 +853,9 @@ export const ProductPage = ({
                     }}
                     className="pw-mt-4 pw-font-[700] pw-text-lg"
                   >
-                    {product?.tags?.map((tag) => tag.name).join('/')}
+                    {product?.tags
+                      ?.map((tag: { name: any }) => tag.name)
+                      .join('/')}
                   </p>
                 )}
                 {showValue && (
@@ -1024,7 +1013,7 @@ export const ProductPage = ({
                 )}
                 <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[350px] pw-w-full">
                   {product?.variants
-                    ? product?.variants.map((val) => (
+                    ? product?.variants.map((val: Variants) => (
                         <ProductVariants
                           key={val.id}
                           variants={val}
@@ -1423,7 +1412,7 @@ export const ProductPage = ({
                     {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
                     {
                       product.prices.find(
-                        (priceF) =>
+                        (priceF: { currencyId: any }) =>
                           priceF.currencyId ==
                           product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
@@ -1435,17 +1424,23 @@ export const ProductPage = ({
                 )}
                 <div className="pw-mt-8">
                   {product?.terms
-                    ? product.terms.map((val) => (
-                        <CheckboxAlt
-                          id={val.title}
-                          onChange={() => onChangeCheckbox()}
-                          key={val.title}
-                          label={val.title}
-                          link={val.link}
-                          description={val.description}
-                          className="pw-mt-3"
-                        />
-                      ))
+                    ? product.terms.map(
+                        (val: {
+                          title: string;
+                          link: string | undefined;
+                          description: string | undefined;
+                        }) => (
+                          <CheckboxAlt
+                            id={val.title}
+                            onChange={() => onChangeCheckbox()}
+                            key={val.title}
+                            label={val.title}
+                            link={val.link}
+                            description={val.description}
+                            className="pw-mt-3"
+                          />
+                        )
+                      )
                     : null}
                 </div>
               </div>

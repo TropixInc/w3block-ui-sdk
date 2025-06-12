@@ -1,37 +1,29 @@
-import classNames from 'classnames';
+import classNames from "classnames";
 
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
-import _ from 'lodash';
+import _ from "lodash";
+import { AlignmentEnum, MidiaData } from "../interfaces/Theme";
+import { useDynamicApi } from "../provider/DynamicApiProvider";
+import { useMobilePreferenceDataWhenMobile } from "../hooks/useMergeMobileData";
+import { useBreakpoints } from "../../shared/hooks/useBreakpoints";
+import { breakpointsEnum } from "../../shared/enums/breakpointsEnum";
+import { convertSpacingToCSS } from "../../shared/utils/convertSpacingToCSS";
+import { ImageSDK } from "../../shared/components/ImageSDK";
 
-import {
-  breakpointsEnum,
-  useBreakpoints,
-} from '../../shared/hooks/useBreakpoints/useBreakpoints';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { AlignmentEnum, MidiaData } from '../interfaces';
 
-import { lazy } from 'react';
-
-import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 const ratios: Record<string, string> = {
-  default: '',
-  '4:1': 'pw-aspect-[4/1]',
-  '3:1': 'pw-aspect-[3/1]',
-  '16:9': 'pw-aspect-video',
-  '20:9': 'pw-aspect-[20/9]',
+  default: "",
+  "4:1": "pw-aspect-[4/1]",
+  "3:1": "pw-aspect-[3/1]",
+  "16:9": "pw-aspect-video",
+  "20:9": "pw-aspect-[20/9]",
 };
 
 type AlignmentClassNameMap = Record<AlignmentEnum, string>;
 const rowAlignments: AlignmentClassNameMap = {
-  left: 'pw-object-left',
-  right: 'pw-object-right',
-  center: 'pw-object-center',
+  left: "pw-object-left",
+  right: "pw-object-right",
+  center: "pw-object-center",
 };
 
 export const Midia = ({ data }: { data: MidiaData }) => {
@@ -56,11 +48,11 @@ export const Midia = ({ data }: { data: MidiaData }) => {
   } = mergedStyleData;
 
   const layoutClass =
-    imageDisposition === 'fixed' ? 'pw-container' : 'pw-w-full';
+    imageDisposition === "fixed" ? "pw-container" : "pw-w-full";
 
   const rowAlignmentClass = rowAlignments[imageAlignment ?? AlignmentEnum.LEFT];
 
-  const ratio = ratios[imageRatio ?? 'default'];
+  const ratio = ratios[imageRatio ?? "default"];
 
   const breakpoint = useBreakpoints();
 
@@ -77,16 +69,16 @@ export const Midia = ({ data }: { data: MidiaData }) => {
         padding: convertSpacingToCSS(padding),
       }}
     >
-      <div className={classNames(ratio, layoutClass, 'pw-mx-auto')}>
+      <div className={classNames(ratio, layoutClass, "pw-mx-auto")}>
         <a href={_.get(datasource, mediaLink, mediaLink)}>
           <ImageSDK
             className={classNames(
               ratio,
               rowAlignmentClass,
-              '!pw-object-center pw-object-cover pw-w-full pw-h-full'
+              "!pw-object-center pw-object-cover pw-w-full pw-h-full"
             )}
             src={_.get(datasource, bgUrl?.assetUrl, bgUrl?.assetUrl)}
-            width={imageCompression === 'no-compression' ? undefined : 1920}
+            width={imageCompression === "no-compression" ? undefined : 1920}
             quality={imageCompression}
           />
         </a>

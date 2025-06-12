@@ -1,12 +1,11 @@
 import classNames from 'classnames';
 import _ from 'lodash';
-
-import { ImageSDK } from '../../shared/components/ImageSDK';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useDynamicString } from '../hooks/useDynamicString';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { AlignmentEnum, ParagraphData } from '../interfaces';
+import { AlignmentEnum, ParagraphData } from '../interfaces/Theme';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { useDynamicString } from '../hooks/useDynamicString';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+
 
 const alignmentsText: AlignmentClassNameMap = {
   left: 'pw-text-left',
@@ -52,15 +51,6 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
 
   return (
     <div className="pw-container pw-mx-auto" id={`sf-${id}`}>
-      {image?.assetUrl ? (
-        <div className="pw-grid pw-place-items-center pw-mt-1 pw-min-w-[35px]">
-          <ImageSDK
-            src={_.get(datasource, image?.assetUrl ?? '', image?.assetUrl)}
-            width={35}
-            height={35}
-          />
-        </div>
-      ) : null}
       <div
         style={{
           margin: convertSpacingToCSS(margin),

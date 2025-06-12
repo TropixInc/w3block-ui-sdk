@@ -1,33 +1,30 @@
-import { lazy } from 'react';
-
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 import _ from 'lodash';
 
 import { useGetAthleteByAddress } from '../../custom/kyraGracie/hooks/useGetAthleteByAddress';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
-import {
-  useBreakpoints,
-  breakpointsEnum,
-} from '../../shared/hooks/useBreakpoints/useBreakpoints';
+
 import { useLocale } from '../../shared/hooks/useLocale';
-import useTranslation from '../../shared/hooks/useTranslation';
+
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useDynamicString } from '../hooks/useDynamicString';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { BannerWJJCData, SpecificBannerInfo } from '../interfaces';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { SocialNetworks } from './SocialNetworks';
+import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
+import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { BannerWJJCData, SpecificBannerInfo } from '../interfaces/Theme';
 
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import useTranslation from '../../shared/hooks/useTranslation';
+
+
 export const BannerWJJC = ({ data }: { data: BannerWJJCData }) => {
   const { styleData, mobileStyleData, id } = data;
 
@@ -312,7 +309,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                           {format(
                             Date.parse(
                               datasource?.master?.data[0]?.attributes
-                                ?.birthdate + 'T12:00:00' ?? ''
+                                ?.birthdate + 'T12:00:00'
                             ),
                             'P',
                             { locale: locale === 'pt-BR' ? ptBR : enUS }
@@ -406,7 +403,7 @@ const Banner = ({ data }: { data: SpecificBannerInfo }) => {
                 format(
                   Date.parse(
                     datasource?.master?.data[0]?.attributes
-                      ?.masterCertificationDate + 'T12:00:00' ?? ''
+                      ?.masterCertificationDate + 'T12:00:00'
                   ),
                   'P',
                   { locale: locale === 'pt-BR' ? ptBR : enUS }

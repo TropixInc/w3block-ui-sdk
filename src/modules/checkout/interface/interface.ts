@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UtmContextInterface } from '../../core/context/UtmContext';
-import { Status } from '../../core/metamask/interface';
-import { Product } from '../../shared';
-import { GasFee } from '../../shared/interface/GasFee';
-import {
-  CurrencyResponse,
-  Variants,
-} from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+import { GasFee } from '../../shared/interfaces/GasFee';
+import { Status } from '../../shared/interfaces/IMetamask';
+import { Product } from '../../shared/interfaces/Product';
+import { CurrencyResponse, Variants } from '../../storefront/interfaces/Product';
+
 import { OrderStatus, PaymentMethod } from '../enum';
 
 export interface PaymentsResponse {
