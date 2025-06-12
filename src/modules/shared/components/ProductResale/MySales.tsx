@@ -51,36 +51,26 @@ export const MySales = () => {
   const { data: context } = useGetContextByUserId(
     profile?.data?.data?.id ?? ''
   );
+  const hasBankDetails = useMemo(() => {
+    return context?.data?.items?.find(
+      (res) => res.context?.slug === 'bankdetails'
+    );
+  }, [context?.data?.items]);
 
   const activeKycContexts = useMemo(() => {
-    const arr = [];
     if (context?.data?.items?.length) {
-      const contexts = context?.data?.items?.filter(
-        (res) =>
-          res?.context?.slug === 'bankdetails' ||
-          res?.context?.slug.includes('resale-user-documents-asaas')
-      );
-      if (contexts?.find((res) => res?.context?.slug === 'bankdetails')) {
-        arr.push(...contexts);
-      } else {
-        arr.push(...contexts, {
-          context: { slug: 'bankdetails' },
-          status: UserContextStatus.Draft,
-          id: '1',
-        });
-      }
-    } else {
-      arr.push({
-        context: { slug: 'bankdetails' },
-        status: UserContextStatus.Draft,
-        id: '1',
+      const contexts = context?.data?.items?.filter((res) => {
+        if (res?.context?.slug === 'bankdetails')
+          return res.status === UserContextStatus.RequiredReview;
+        else return res?.context?.slug.includes('resale-user-documents-asaas');
       });
+      return contexts.filter(
+        (res) =>
+          res?.status === UserContextStatus.Draft ||
+          res?.status === UserContextStatus.RequiredReview
+      );
     }
-    return arr.filter(
-      (res) =>
-        res?.status === UserContextStatus.Draft ||
-        res?.status === UserContextStatus.RequiredReview
-    );
+    return [];
   }, [context?.data?.items]);
 
   const bankDetailsContext = useMemo(() => {
@@ -160,22 +150,6 @@ export const MySales = () => {
                 </div>
               </div>
             ) : null}
-            {loyaltyWalletDefined ? (
-              <div className="pw-flex pw-flex-col pw-gap-2">
-                <div className="pw-mt-[14px] pw-flex">
-                  <p className="pw-text-black pw-text-lg pw-font-medium pw-leading-[23px]">
-                    {loyaltyWalletDefined.currency}
-                  </p>
-                  <CriptoValueComponent
-                    crypto={true}
-                    value={loyaltyWalletDefined.balance}
-                    pointsPrecision={loyaltyWalletDefined.pointsPrecision}
-                    code={''}
-                    fontClass="pw-text-black pw-text-lg pw-font-bold pw-leading-[23px]"
-                  />
-                </div>
-              </div>
-            ) : null}
           </div>
         </div>
         <div className="pw-flex pw-w-full pw-mt-6 pw-gap-x-4 pw-text-black">
@@ -207,6 +181,25 @@ export const MySales = () => {
         <p className="pw-text-xs pw-text-[#777E8F] pw-font-[400] pw-cursor-pointer pw-mt-2">
           {translate('pages>mysales>resale>info')}
         </p>
+        {loyaltyWalletDefined ? (
+          <div className="pw-flex pw-flex-col pw-gap-2">
+            <div className="pw-mt-[14px] pw-flex pw-flex-col">
+              <p className="pw-text-black pw-text-sm pw-font-normal pw-leading-[23px]">
+                {translate('pages>mySales>currentBalance', {
+                  coin: loyaltyWalletDefined.currency,
+                })}
+              </p>
+              <CriptoValueComponent
+                crypto={true}
+                value={loyaltyWalletDefined.balance}
+                pointsPrecision={loyaltyWalletDefined.pointsPrecision}
+                code={''}
+                fontClass="pw-text-black pw-text-lg pw-font-bold pw-leading-[23px]"
+                containerClass="!pw-gap-0"
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
       {bankDetailsContext ? (
         <div className="pw-mt-5 pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[24px] sm:pw-pb-[20px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
@@ -350,9 +343,23 @@ export const MySales = () => {
                   })
                 ) : (
                   <>
-                    {!context?.data?.items?.length ? (
-                      <Alert variant="information">
-                        {translate('pages>mysales>fillBankDetails')}
+                    {!hasBankDetails ? (
+                      <Alert
+                        className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3"
+                        variant="warning"
+                      >
+                        <p>
+                          {translate('pages>mysales>resale>fillBankDetails')}
+                        </p>
+                        <BaseButton
+                          link={{
+                            href:
+                              PixwayAppRoutes.COMPLETE_KYC +
+                              `?contextSlug=bankdetails`,
+                          }}
+                        >
+                          {translate('pages>mysales>resale>fillData')}
+                        </BaseButton>
                       </Alert>
                     ) : (
                       <BaseButton

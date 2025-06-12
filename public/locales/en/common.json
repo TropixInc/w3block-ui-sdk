@@ -1007,7 +1007,7 @@
 "pages>checkout>erc20BuyTotal": "Maximum total value*",
 "dashboard>MySalesListComponent>salesNotFound": "You haven't made any sales yet.",
 "pages>mysales>resale>totalSold": "Total sold",
-"pages>mysales>resale>totalWaiting": "Total waiting",
+"pages>mysales>resale>totalWaiting": "Total receivable",
 "pages>mysales>resale>info": "*Your payments are deposited in the informed account daily.",
 "pages>mysales>resale>sales": "Sales",
 "pages>mysales>resale>concludedSales": "Concluded sales",
@@ -1052,5 +1052,6 @@
 "shared>statementComponent>receiptDate": "Receipt date",
 "auth>signWithoutLayout>signinApple": "Continue with Apple",
 "pages>checkout>batchSizeSale": "You can only sell in multiple quantities of {{batchSize}}",
-"pages>productPage>minValue": "Minimum purchase value {{value}}"
+"pages>productPage>minValue": "Minimum purchase value {{value}}",
+"pages>mySales>currentBalance": "Current {{coin}} Balance"
 }

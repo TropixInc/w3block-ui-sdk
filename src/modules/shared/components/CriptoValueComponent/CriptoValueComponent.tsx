@@ -16,6 +16,7 @@ export const CriptoValueComponent = ({
   pointsPrecision = 'integer',
   textColor,
   symbol,
+  containerClass = '',
 }: {
   code?: string;
   value: string;
@@ -27,6 +28,7 @@ export const CriptoValueComponent = ({
   pointsPrecision?: 'decimal' | 'integer';
   textColor?: string;
   symbol?: string;
+  containerClass?: string;
 }) => {
   const [translate] = useTranslation();
   const getIcon = () => {
@@ -62,7 +64,7 @@ export const CriptoValueComponent = ({
   };
 
   return dontShow ? null : (
-    <div className="pw-flex pw-gap-1 pw-items-center">
+    <div className={`pw-flex pw-gap-1 pw-items-center ${containerClass}`}>
       {crypto && getIcon()}
       <p
         style={textColor ? { color: textColor } : {}}

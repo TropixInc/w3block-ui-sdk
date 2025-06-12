@@ -198,7 +198,7 @@ export const Erc20Resale = () => {
                   </div>
                   {batchSize ? (
                     <p className="pw-text-[12px] pw-text-gray-500">
-                      {translate('pages>checkout>batchSize', { batchSize })}
+                      {translate('pages>checkout>batchSizeSale', { batchSize })}
                     </p>
                   ) : null}
                 </div>
