@@ -1,6 +1,6 @@
 {
-  "name": "w3block-new-lib",
-  "version": "1.0.32",
+  "name": "@w3block/w3block-ui-sdk",
+  "version": "1.15.55-alpha.0",
   "description": "New SDK W3block",
   "main": "dist/index.js",
   "files": [

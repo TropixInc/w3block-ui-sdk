@@ -188,7 +188,7 @@ export const SigInWithoutLayout = ({
 
   useEffect(() => {
     if (session && profile && !isPasswordless) {
-      if (router.query.callbackPath || router.query.callbackUrl) {
+      if (router?.query?.callbackPath || router?.query?.callbackUrl) {
         router.pushConnect(getRedirectUrl());
       } else router.pushConnect(getRedirectUrl(), query);
     }
