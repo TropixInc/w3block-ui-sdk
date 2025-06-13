@@ -26,7 +26,7 @@ import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { useUtms } from '../../shared/hooks/useUtms';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import AppleIcon from '../assets/icons/appleIcon.svg';
+import AppleIcon from '../../shared/assets/icons/appleIcon.svg';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { AuthButton } from './AuthButton';
@@ -37,7 +37,7 @@ import { SignUpFormWithoutLayout } from './SignUpFormWithoutLayout';
 
 interface Form {
   email: string;
-  password: string;
+  password: string; 
   twoFactor: string;
   companyId: string;
 }

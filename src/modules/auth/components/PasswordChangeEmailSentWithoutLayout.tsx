@@ -5,7 +5,7 @@ import { useLocalStorage } from 'react-use';
 import addMinutes from 'date-fns/addMinutes';
 import isAfter from 'date-fns/isAfter';
 
-import KeyIconOutlined from '../assets/icons/keyIconOutlined.svg';
+import KeyIconOutlined from '../../shared/assets/icons/keyIconOutlined.svg';
 import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';

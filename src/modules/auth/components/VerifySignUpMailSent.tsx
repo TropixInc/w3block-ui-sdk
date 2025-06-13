@@ -7,7 +7,7 @@ import addMinutes from 'date-fns/addMinutes';
 import isAfter from 'date-fns/isAfter';
 
 
-import MailSent from '../assets/icons/mailSent.svg';
+import MailSent from '../../shared/assets/icons/mailSent.svg';
 import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';

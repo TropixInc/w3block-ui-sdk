@@ -5,7 +5,7 @@ import { useLocalStorage } from 'react-use';
 import addMinutes from 'date-fns/addMinutes';
 import isAfter from 'date-fns/isAfter';
 
-import KeyIconOutlined from '../assets/icons/keyIconOutlined.svg';
+import KeyIconOutlined from '../../assets/icons/keyIconOutlined.svg';
 import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';

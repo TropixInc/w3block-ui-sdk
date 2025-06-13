@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 
-import MailError from '../assets/icons/mailError.svg';
+import MailError from '../../shared/assets/icons/mailError.svg';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
 import { AuthFooter } from './AuthFooter';

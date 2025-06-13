@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import MailError from '../assets/icons/mailError.svg';
+import MailError from '../../shared/assets/icons/mailError.svg';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
 import useTranslation from '../../shared/hooks/useTranslation';
 

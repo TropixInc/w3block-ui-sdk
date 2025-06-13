@@ -5,13 +5,13 @@ import classNames from 'classnames';
 import _ from 'lodash';
 
 
-import ArrowDown from '../../assets/icons/arrowDown.svg';
-import ClearFilter from '../../assets/icons/clearFilterOutlined.svg';
-import CopyIcon from '../../assets/icons/copyIconOutlined.svg';
+import ArrowDown from '../assets/icons/arrowDown.svg';
+import ClearFilter from '../assets/icons/clearFilterOutlined.svg';
+import CopyIcon from '../assets/icons/copyIconOutlined.svg';
 /* import FilterIcon from '../../assets/icons/filterOutlined.svg'; */
-import MetamaskIcon from '../../assets/icons/metamask.svg';
-import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg';
-import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg';
+import MetamaskIcon from '../assets/icons/metamask.svg';
+import NoWallet from '../assets/icons/notConfirmedWalletFilled.svg';
+import W3blockIcon from '../assets/icons/pixwayIconFilled.svg';
 import { ConfigGenericTable, FormatApiData, FormatTypeColumn } from '../interfaces/ConfigGenericTable';
 
 import { useDynamicApi } from '../../storefront/provider/DynamicApiProvider';

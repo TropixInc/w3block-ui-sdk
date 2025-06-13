@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import classNames from 'classnames';
 
 
-import MailError from '../assets/icons/mailError.svg';
+import MailError from '../../shared/assets/icons/mailError.svg';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlahes';

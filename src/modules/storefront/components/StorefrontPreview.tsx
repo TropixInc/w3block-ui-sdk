@@ -40,7 +40,7 @@ import { StorefrontHeader } from './StorefrontHeader';
 import { StorefrontMenu } from './StorefrontMenu';
 import { StorefrontFooter } from './StorefrontFooter';
 import { Cookies } from './Cookies';
-import { Banner as BannerVariant } from './BannerVariant';
+import { BannerVariant } from './BannerVariant';
 interface StorefrontPreviewProps {
   params?: string[];
   children?: ReactNode;
