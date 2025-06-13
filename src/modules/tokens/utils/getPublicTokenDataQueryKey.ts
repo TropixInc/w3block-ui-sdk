@@ -1,5 +1,4 @@
-import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
-
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
 interface Config {
   tokenId?: string;
   contractAddress?: string;

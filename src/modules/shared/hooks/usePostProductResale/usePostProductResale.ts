@@ -1,7 +1,7 @@
-import { useMutation } from 'react-query';
 
-import { W3blockAPI } from '../../enums';
+import { useMutation } from '@tanstack/react-query';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
+import { W3blockAPI } from '../../enums/W3blockAPI';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 

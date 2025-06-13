@@ -6,8 +6,10 @@ import { cpf } from 'cpf-cnpj-validator';
 import { AnySchema, object, string } from 'yup';
 import * as yup from 'yup';
 
-import useTranslation from '../hooks/useTranslation';
+
 import { isValidUrl } from './validators';
+import useTranslation from '../hooks/useTranslation';
+
 
 export interface ValidationsValues {
   yupKey: string;

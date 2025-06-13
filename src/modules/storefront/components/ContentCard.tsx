@@ -1,16 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import _ from 'lodash';
-
-import { ImageSDK } from '../../shared/components/ImageSDK';
+import { CardTypesEnum, ProductsDataStyleData, SpecificContentCard } from '../interfaces/Theme';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { useDynamicString } from '../hooks/useDynamicString';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { isVideo } from '../../shared/utils/validators';
-import { useDynamicString } from '../hooks/useDynamicString';
-import {
-  CardTypesEnum,
-  ProductsDataStyleData,
-  SpecificContentCard,
-} from '../interfaces';
-import { useDynamicApi } from '../provider/DynamicApiProvider';
+
 
 interface ContentCardProps {
   config: ProductsDataStyleData;
@@ -158,7 +153,7 @@ export const ContentCard = ({
                     )
                   : product.image?.assetUrl ?? ''
               ) && (
-                <ImageSDK
+                <img
                   src={
                     isDynamic
                       ? _.get(
@@ -170,7 +165,6 @@ export const ContentCard = ({
                   }
                   className={` pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
                   width={1440}
-                  quality="best"
                 />
               )}
               {txtOver && format != 'rounded' ? (

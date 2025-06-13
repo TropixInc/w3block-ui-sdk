@@ -1,25 +1,12 @@
-import { lazy } from 'react';
 
-import { useDisconnectWalletConnect } from '../../hooks/useDisconnectWalletConnect';
-import { useIntegrations } from '../../hooks/useIntegrations';
-import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
-import useTranslation from '../../hooks/useTranslation';
-import { useUserWallet } from '../../hooks/useUserWallet';
-const ModalBase = lazy(() =>
-  import('../ModalBase').then((module) => ({
-    default: module.ModalBase,
-  }))
-);
-const Spinner = lazy(() =>
-  import('../Spinner').then((module) => ({
-    default: module.Spinner,
-  }))
-);
-const WeblockButton = lazy(() =>
-  import('../WeblockButton/WeblockButton').then((module) => ({
-    default: module.WeblockButton,
-  }))
-);
+import { useIsMobile } from "../../hooks/useIsMobile";
+import { useUserWallet } from "../../hooks/useUserWallet/useUserWallet";
+import { ModalBase } from "../ModalBase";
+import { Spinner } from "../Spinner";
+import { WeblockButton } from "../WeblockButton";
+import { useDisconnectWalletConnect } from "../../hooks/useDisconnectWalletConnect";
+import { useIntegrations } from "../../hooks/useIntegrations";
+import useTranslation from "../../hooks/useTranslation";
 
 interface Props {
   isOpen: boolean;

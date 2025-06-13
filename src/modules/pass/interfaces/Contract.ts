@@ -1,5 +1,6 @@
 import { ChainScan } from '../../shared/enums/ChainId';
 import { contractStatus } from '../../shared/enums/contractStatus';
+
 import { ContractFeature } from '../enums/ContractFeature';
 
 interface OperatorContract {

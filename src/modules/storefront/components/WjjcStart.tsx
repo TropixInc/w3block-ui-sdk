@@ -3,20 +3,37 @@ import { useLocalStorage } from 'react-use';
 
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 import { PRACTITIONER_DATA_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
-import { Grade } from '../../custom';
-import { ContentTypeEnum } from '../../poll';
-import { position, useRouterConnect } from '../../shared';
-import { Box } from '../../shared/components/Box/Box';
-import { ContainerControllerSDK } from '../../shared/components/ContainerControllerSDK/ContainerControllerSDK';
-import { Shimmer } from '../../shared/components/Shimmer';
-import { WeblockButton } from '../../shared/components/WeblockButton/WeblockButton';
-import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import useTranslation from '../../shared/hooks/useTranslation';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
-import { ThemeContext } from '../contexts';
-import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { ThemeContext } from '../contexts/ThemeContext';
+import { ContainerControllerSDK } from '../../shared/components/ContainerControllerSDK';
+import { position } from '../../shared/enums/styleConfigs';
+import { ContentTypeEnum } from '../../poll/enums/contentType';
+import { Box } from '../../shared/components/Box';
+import { Shimmer } from '../../shared/components/Shimmer';
+import { BaseButton } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
+
+export type Grade =
+  | 'degree_1'
+  | 'degree_2'
+  | 'degree_3'
+  | 'degree_4'
+  | 'degree_5';
+
+ export const gradeMap = {
+    degree_1: '1º grau',
+    degree_2: '2º grau',
+    degree_3: '3º grau',
+    degree_4: '4º grau',
+    degree_5: '5º grau',
+  };
+
+
 
 export const WjjcStart = () => {
   const { datasource } = useDynamicApi();
@@ -43,13 +60,8 @@ export const WjjcStart = () => {
     return '';
   };
 
-  const gradeMap = {
-    degree_1: '1º grau',
-    degree_2: '2º grau',
-    degree_3: '3º grau',
-    degree_4: '4º grau',
-    degree_5: '5º grau',
-  };
+
+
 
   const title = () => {
     const text = datasource?.athlete?.data[0]?.attributes?.degree
@@ -206,13 +218,13 @@ export const WjjcStart = () => {
                 <p className="pw-font-normal">{date()}</p>
               )}
             </div>
-            <WeblockButton
+            <BaseButton
               onClick={onContinue}
               className="pw-mt-5 pw-text-white"
               fullWidth={true}
             >
               {translate('components>advanceButton>continue')}
-            </WeblockButton>
+            </BaseButton>
             <p className="pw-font-poppins pw-font-normal pw-text-black pw-text-xs pw-text-center pw-mt-2">
               {translate('storefront>wjjcStart>caseIncorrectInfo')}
             </p>

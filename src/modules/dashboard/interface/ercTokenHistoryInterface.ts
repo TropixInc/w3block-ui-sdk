@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Currency } from '../../shared';
-import {
-  Erc20ActionStatus,
-  Erc20ActionType,
-} from '../../shared/interface/Statement/Statement';
+
+import { Currency } from "../../shared/interfaces/Currency";
+import { Erc20ActionType, Erc20ActionStatus } from "../../shared/interfaces/Statement";
+
 
 export interface ErcTokenHistoryInterfaceResponse {
   items: Erc20TokenHistory[];

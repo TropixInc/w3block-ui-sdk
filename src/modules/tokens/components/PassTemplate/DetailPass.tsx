@@ -2,7 +2,7 @@ import { useToggle } from 'react-use';
 
 import classNames from 'classnames';
 
-import ChevronDown from '../../../shared/assets/icons/chevronDownOutlined.svg?react';
+import ChevronDown from '../../../shared/assets/icons/chevronDownOutlined.svg';
 
 export const DetailPass = ({
   title,

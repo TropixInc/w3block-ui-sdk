@@ -1,3 +1,4 @@
+
 import {
   ReactNode,
   createContext,
@@ -8,9 +9,10 @@ import {
 import { useSessionStorage } from 'react-use';
 
 import { Socket, io } from 'socket.io-client';
-
+import { Transaction } from '../../../shared/interfaces/IMetamask';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import { Transaction } from '../interface';
+
+
 
 interface SocketProviderContextInterface {
   isConnected: boolean;

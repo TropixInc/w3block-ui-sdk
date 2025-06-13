@@ -1,7 +1,8 @@
-import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../enums/W3blockAPI';
-import { Currency } from '../../interface';
+import { Currency } from '../../interfaces/Currency';
+import { Product } from '../../interfaces/Product';
 import { handleNetworkException } from '../../utils/handleNetworkException';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';

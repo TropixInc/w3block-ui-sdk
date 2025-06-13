@@ -5,15 +5,15 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
 
-import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
-import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg?react';
-import InfoIcon from '../../../shared/assets/icons/informationCircled.svg?react';
-import XIcon from '../../../shared/assets/icons/x-circle.svg?react';
-import { CurrencyEnum } from '../../../shared/enums/Currency';
-import { useLocale } from '../../../shared/hooks/useLocale';
-import useTranslation from '../../../shared/hooks/useTranslation';
-import { Product } from '../../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
-import { Currency } from '../../interface';
+import { Product } from '../../../storefront/hooks/useGetProductBySlug';
+import ArrowIcon from '../../assets/icons/arrowDown.svg';
+import CheckIcon from '../../assets/icons/checkOutlined.svg';
+import InfoIcon from '../../assets/icons/informationCircled.svg';
+import XIcon from '../../assets/icons/x-circle.svg';
+import { CurrencyEnum } from '../../enums/Currency';
+import { useLocale } from '../../hooks/useLocale';
+import useTranslation from '../../hooks/useTranslation';
+import { Currency } from '../../interfaces/Currency';
 import { MySalesPriceComponent } from './MySalePriceComponent';
 
 export enum OrderStatusEnum {

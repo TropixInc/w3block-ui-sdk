@@ -1,11 +1,13 @@
-import { useQuery } from 'react-query';
 
+
+import { useQuery } from '@tanstack/react-query';
 import { ErcTokenHistoryInterfaceResponse } from '../../dashboard/interface/ercTokenHistoryInterface';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { useProfileWithKYC } from '../../shared/hooks/useProfileWithKYC/useProfileWithKYC';
+import { useProfileWithKYC } from '../../shared/hooks/useProfileWithKYC';
+
 import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 import { cleanObject } from '../../shared/utils/validators';
 import { useLoyaltiesInfo } from './useLoyaltiesInfo';

@@ -1,8 +1,8 @@
-import { useMutation } from 'react-query';
 
-import { W3blockAPI } from '../../enums';
+import { useMutation } from '@tanstack/react-query';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
-import { Product } from '../../interface';
+import { W3blockAPI } from '../../enums/W3blockAPI';
+import { Product } from '../../interfaces/Product';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 

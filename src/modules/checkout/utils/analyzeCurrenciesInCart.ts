@@ -1,4 +1,5 @@
-import { CurrencyResponse } from '../../storefront/hooks/useGetProductBySlug/useGetProductBySlug';
+
+import { CurrencyResponse } from '../../storefront/interfaces/Product';
 import { Cart } from '../providers/cartProvider';
 
 export function analyzeCurrenciesInCart(products: Cart[]) {

@@ -1,14 +1,14 @@
 import { AxiosError } from 'axios';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { NextAuthOptions, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { SessionUser } from '../../../shared/enums/SessionUser';
+import { SignInResponse } from '../../../shared/interfaces/ISignin';
 import { removeDuplicateSlahes } from '../../../shared/utils/removeDuplicateSlahes';
-import { SignInResponse } from '../../api/signIn';
-import { CredentialProviderName } from '../../enums/CredentialsProviderName';
+import { CredentialProviderName } from '../../enums/CredentialProviderName';
 
 const tokenMaxAgeInSeconds =
   process.env.NEXT_PUBLIC_ENVIRONMENT != 'development'

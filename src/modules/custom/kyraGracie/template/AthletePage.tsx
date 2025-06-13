@@ -1,12 +1,5 @@
 /* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const Shimmer = lazy(() =>
-  import('../../../shared/components/Shimmer').then((mod) => ({
-    default: mod.Shimmer,
-  }))
-);
-
-import { lazy } from 'react';
 
 import { Disclosure } from '@headlessui/react';
 import classNames from 'classnames';
@@ -14,11 +7,10 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { groupBy } from 'lodash';
 
-import ChevronDown from '../../../../modules/shared/assets/icons/arrowDown.svg?react';
+import ChevronDown from '../../../shared/assets/icons/arrowDown.svg';
 import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
-import useTranslation from '../../../shared/hooks/useTranslation';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
 import firstDegree from '../assets/1_degree.svg';
 import secondDegree from '../assets/2_degree.svg';
@@ -61,6 +53,9 @@ import {
   belts,
   kidsMap,
 } from '../interfaces';
+import { Shimmer } from '../../../shared/components/Shimmer';
+import useTranslation from '../../../shared/hooks/useTranslation';
+
 
 export const gradeMap = {
   degree_1: '1º Degree',

@@ -1,4 +1,5 @@
-import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
+
+import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import useTranslation from '../../../shared/hooks/useTranslation';
 
 export const UsedPass = () => {

@@ -1,11 +1,10 @@
-import { CSSProperties } from 'react';
+import { CSSProperties } from "react";
+import ArrowDownIcon from "../../shared/assets/icons/chevronDownOutlined.svg";
+import { AccordionsData, SpecificContentAccordion } from "../interfaces/Theme";
+import { useMobilePreferenceDataWhenMobile } from "../hooks/useMergeMobileData";
+import { convertSpacingToCSS } from "../../shared/utils/convertSpacingToCSS";
+import { useDynamicString } from "../hooks/useDynamicString";
 
-import ArrowDownIcon from '../../shared/assets/icons/chevronDownOutlined.svg?react';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useDynamicString } from '../hooks/useDynamicString';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { AccordionsData, SpecificContentAccordion } from '../interfaces';
-import './Accordions.css';
 
 export const Accordions = ({ data }: { data: AccordionsData }) => {
   const { styleData, contentData, mobileStyleData, mobileContentData, id } =
@@ -46,7 +45,7 @@ export const Accordions = ({ data }: { data: AccordionsData }) => {
 };
 
 interface AccordionProps {
-  styleData: AccordionsData['styleData'];
+  styleData: AccordionsData["styleData"];
   contentData: SpecificContentAccordion;
 }
 
@@ -64,7 +63,7 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
       className="pw-box-border pw-min-h-20 pw-shadow-[0_4px_11px_rgba(0,0,0,0.15)] pw-rounded-2xl pw-px-8 pw-py-[22px]"
       style={
         {
-          background: backgroundColor || 'white',
+          background: backgroundColor || "white",
         } as CSSProperties
       }
     >
@@ -72,8 +71,8 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
         className="accordions-title pw-cursor-pointer pw-font-bold pw-text-2xl pw-list-none pw-flex pw-justify-between pw-items-center"
         style={
           {
-            '--accordions-title-color': titleAndArrowColor,
-            '--accordions-title-hover-color': titleAndArrowHoverColor,
+            "--accordions-title-color": titleAndArrowColor,
+            "--accordions-title-hover-color": titleAndArrowHoverColor,
           } as CSSProperties
         }
       >
@@ -81,9 +80,9 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
         <div
           style={
             {
-              '--accordions-arrow-color': titleAndArrowColor,
-              '--accordions-arrow-hover-color': titleAndArrowHoverColor,
-              '--accordions-arrow-selected-bg-color': titleAndArrowColor,
+              "--accordions-arrow-color": titleAndArrowColor,
+              "--accordions-arrow-hover-color": titleAndArrowHoverColor,
+              "--accordions-arrow-selected-bg-color": titleAndArrowColor,
             } as CSSProperties
           }
           className="accordions-arrow pw-shadow-[0_4px_11px_rgba(0,0,0,0.15)] pw-min-w-[40px] pw-min-h-[40px] pw-grid pw-place-items-center pw-rounded-3xl"
@@ -94,8 +93,8 @@ const Accordion = ({ styleData, contentData }: AccordionProps) => {
 
       <div
         className="pw-text-[15px] pw-leading-[22.5px]"
-        style={{ color: contentColor || 'black' }}
-        dangerouslySetInnerHTML={{ __html: contentData.content ?? '' }}
+        style={{ color: contentColor || "black" }}
+        dangerouslySetInnerHTML={{ __html: contentData.content ?? "" }}
       />
     </details>
   );

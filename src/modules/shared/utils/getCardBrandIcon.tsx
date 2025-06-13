@@ -1,12 +1,12 @@
-import Amex from '../assets/cardsIcons/amex.svg?react';
-import Diners from '../assets/cardsIcons/diners.svg?react';
-import Discover from '../assets/cardsIcons/discover.svg?react';
-import Hipercard from '../assets/cardsIcons/hipercard.svg?react';
-import JCB from '../assets/cardsIcons/jcb.svg?react';
-import Mastercard from '../assets/cardsIcons/mastercard.svg?react';
-import Unionpay from '../assets/cardsIcons/unionpay.svg?react';
-import Unknown from '../assets/cardsIcons/unknown.svg?react';
-import Visa from '../assets/cardsIcons/visa.svg?react';
+import Amex from '../assets/cardsIcons/amex.svg';
+import Diners from '../assets/cardsIcons/diners.svg';
+import Discover from '../assets/cardsIcons/discover.svg';
+import Hipercard from '../assets/cardsIcons/hipercard.svg';
+import JCB from '../assets/cardsIcons/jcb.svg';
+import Mastercard from '../assets/cardsIcons/mastercard.svg';
+import Unionpay from '../assets/cardsIcons/unionpay.svg';
+import Unknown from '../assets/cardsIcons/unknown.svg';
+import Visa from '../assets/cardsIcons/visa.svg';
 
 export const getCardBrandIcon = (type: string) => {
   switch (type) {

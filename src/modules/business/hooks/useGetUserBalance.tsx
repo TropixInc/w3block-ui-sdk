@@ -1,10 +1,11 @@
-import { useMutation } from 'react-query';
+import { useMutation } from "@tanstack/react-query";
+import { useAxios } from "../../shared/hooks/useAxios";
+import { W3blockAPI } from "../../shared/enums/W3blockAPI";
+import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
+import { handleNetworkException } from "../../shared/utils/handleNetworkException";
 
-import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
-import { W3blockAPI } from '../../shared/enums/W3blockAPI';
-import { useAxios } from '../../shared/hooks/useAxios';
-import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { handleNetworkException } from '../../shared/utils/handleNetworkException';
+
 
 export const useGetUserBalance = () => {
   const axios = useAxios(W3blockAPI.KEY);

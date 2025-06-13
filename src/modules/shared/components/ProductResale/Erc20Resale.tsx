@@ -1,24 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useDebounce } from 'react-use';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../hooks';
 import {
-  ProductResaleResponse,
   useGetResaleById,
-} from '../../hooks/useGetResaleById/useGetResaleById';
-import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
-import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
+  ProductResaleResponse,
+} from '../../hooks/useGetResaleById';
+import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20';
+import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions';
+import { usePostProductResale } from '../../hooks/usePostProductResale';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { BaseInput } from '../BaseInput';
 import { BaseSelect } from '../BaseSelect';
 import { BaseButton } from '../Buttons';
-import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
-import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds/InternalPageHeaderWithFunds';
+import { CriptoValueComponent } from '../CriptoValueComponent';
+import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Shimmer } from '../Shimmer';
 import { Spinner } from '../Spinner';
@@ -62,7 +63,7 @@ export const Erc20Resale = () => {
         price: config?.price?.toString(),
       },
       {
-        onSuccess(data) {
+        onSuccess(data: ProductResaleResponse) {
           setProductResale(data);
         },
       }

@@ -1,11 +1,11 @@
-import { useQuery } from 'react-query';
+import { useQuery } from "@tanstack/react-query";
+import { useAxios } from "../../shared/hooks/useAxios";
+import { W3blockAPI } from "../../shared/enums/W3blockAPI";
+import { useProfileWithKYC } from "../../shared/hooks/useProfileWithKYC";
+import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
+import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
+import { LoyaltyInterface } from "../../shared/interfaces/ILoyalty";
 
-import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
-import { W3blockAPI } from '../../shared/enums/W3blockAPI';
-import { useAxios } from '../../shared/hooks/useAxios';
-import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { useProfileWithKYC } from '../../shared/hooks/useProfileWithKYC/useProfileWithKYC';
-import { LoyaltyInterface } from '../interface/loyalty';
 
 export const useGetCompanyLoyalties = () => {
   const axios = useAxios(W3blockAPI.KEY);
@@ -22,7 +22,7 @@ export const useGetCompanyLoyalties = () => {
             companyId
           ) + '?limit=49'
         )
-        .then((res) => res.data.items),
+        .then((res: { data: { items: any; }; }) => res.data.items),
     {
       enabled:
         profile?.id != null &&

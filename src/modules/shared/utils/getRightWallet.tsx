@@ -1,15 +1,14 @@
-import { useMemo } from 'react';
-
-import { UseThemeConfig } from '../../storefront/hooks/useThemeConfig/useThemeConfig';
-import { useUserWallet } from '../hooks/useUserWallet';
+import { useMemo } from "react";
+import { useUserWallet } from "../hooks/useUserWallet/useUserWallet";
+import { useThemeConfig } from "../../storefront/hooks/useThemeConfig";
 
 export const useGetRightWallet = () => {
   const { wallets, loyaltyWallet } = useUserWallet();
-  const { defaultTheme } = UseThemeConfig();
+  const { defaultTheme } = useThemeConfig();
   const loyaltiesAll = useMemo(() => {
     return [
       ...loyaltyWallet.map((wallet) => ({
-        type: 'loyalty',
+        type: "loyalty",
         balance: wallet.balance,
         currency: wallet.currency,
         chainId: undefined,
@@ -18,14 +17,14 @@ export const useGetRightWallet = () => {
         pointsPrecision: wallet.pointsPrecision,
       })),
       ...wallets
-        .filter((wallet) => parseFloat(wallet?.balance ?? '0') > 0)
+        .filter((wallet) => parseFloat(wallet?.balance ?? "0") > 0)
         .map((wallet) => ({
           type: wallet.type,
           balance: wallet.balance,
           currency: undefined,
           chainId: wallet.chainId,
           loyaltyId: undefined,
-          pointsPrecision: 'decimal',
+          pointsPrecision: "decimal",
           address: wallet.address,
         })),
     ];
@@ -40,11 +39,11 @@ export const useGetRightWallet = () => {
       const newArrayOfWallets: any[] = [];
       defaultTheme?.configurations?.styleData?.walletsAvaiable?.forEach(
         (wallet: any) => {
-          if (wallet == 'ETH') {
+          if (wallet == "ETH") {
             newArrayOfWallets.push(
               loyaltiesAll.find((w) => w.chainId == 1 || w.chainId == 4)
             );
-          } else if (wallet == 'MATIC') {
+          } else if (wallet == "MATIC") {
             newArrayOfWallets.push(
               loyaltiesAll.find((w) => w.chainId == 80001 || w.chainId == 137)
             );
@@ -66,9 +65,9 @@ export const useGetRightWallet = () => {
 
 export const chainIdToCode = (chainId: number, currency: string) => {
   if (chainId === 137 || chainId === 80001) {
-    return 'MATIC';
+    return "MATIC";
   } else if (chainId === 1 || chainId === 4) {
-    return 'ETH';
+    return "ETH";
   } else {
     return currency;
   }

@@ -1,22 +1,17 @@
 import { CSSProperties, lazy, useMemo } from 'react';
 
 import _ from 'lodash';
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
 
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useDynamicString } from '../hooks/useDynamicString';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { ImagePlusTextData } from '../interfaces';
-import './ImagePlusText.css';
-import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 import classNames from 'classnames';
+import { ImagePlusTextData } from '../interfaces/Theme';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { useDynamicString } from '../hooks/useDynamicString';
+import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
+import { ImageSDK } from '../../shared/components/ImageSDK';
 
-import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
 
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { datasource } = useDynamicApi();

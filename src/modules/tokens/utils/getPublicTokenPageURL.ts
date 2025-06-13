@@ -1,4 +1,4 @@
-import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
 
 interface Config {
   chainId?: number;

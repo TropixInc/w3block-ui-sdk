@@ -1,7 +1,0 @@
-:root {
-  --template-areas: 'x1 x1 x2 x2' 'x1 x1 x2 x2'
-}
-
-.grid-areas {
-  grid-template-areas: var(--template-areas);
-}

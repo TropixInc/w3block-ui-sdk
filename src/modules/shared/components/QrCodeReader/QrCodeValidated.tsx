@@ -4,11 +4,12 @@ import { useLockBodyScroll } from 'react-use';
 import { format, getDay } from 'date-fns';
 
 import { BenefitAddress, TokenPassBenefitType } from '../../../pass/interfaces/PassBenefitDTO';
-import  CheckCircledIcon  from '../../assets/icons/checkCircledOutlined.svg?react';
-import useTranslation from '../../hooks/useTranslation';
+import  CheckCircledIcon  from '../../assets/icons/checkCircledOutlined.svg';
 import { shortDays } from '../../utils/shortDays';
 import { Button } from '../Buttons';
 import { CloseButton } from '../CloseButton';
+import useTranslation from '../../hooks/useTranslation';
+
 
 
 interface iProps {

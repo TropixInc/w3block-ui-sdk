@@ -1,4 +1,4 @@
-import { lazy, ReactNode, useEffect, useMemo, useState } from 'react';
+import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useMemo, useState } from 'react';
 import { JSX } from 'react/jsx-runtime';
 
 import classNames from 'classnames';
@@ -14,80 +14,40 @@ import {
   TokenPassBenefitType,
   VerifyBenefitResponse,
 } from '../../../pass/interfaces/PassBenefitDTO';
-import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg?react';
-import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg?react';
-import InfoCircledIcon from '../../../shared/assets/icons/informationCircled.svg?react';
+import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg';
+import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg';
+import InfoCircledIcon from '../../../shared/assets/icons/informationCircled.svg';
 import { ErrorBox } from '../../../shared/components/ErrorBox';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
+
 import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
-import { useHasWallet } from '../../../shared/hooks/useHasWallet/useHasWallet';
+
 import { useLocale } from '../../../shared/hooks/useLocale';
 import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-import { useProfile } from '../../../shared/hooks/useProfile/useProfile';
+
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-import useTranslation from '../../../shared/hooks/useTranslation';
-import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
+
+
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { ErrorModal } from './ErrorModal';
 import { UsedPass } from './UsedSection';
-const Alert = lazy(() =>
-  import('../../../shared/components/Alert').then((module) => ({
-    default: module.Alert,
-  }))
-);
+import { Alert } from '../../../shared/components/Alert';
+import { ImageSDK } from '../../../shared/components/ImageSDK';
+import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
+import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
+import { Spinner } from '../../../shared/components/Spinner';
+import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink';
+import { useHasWallet } from '../../../shared/hooks/useHasWallet';
+import { useProfile } from '../../../shared/hooks/useProfile';
+import { DetailPass } from './DetailPass';
+import { DetailsTemplate } from './DetailsTemplate';
+import { DetailToken } from './DetailToken';
+import { QrCodeSection } from './QrCodeSection';
 
-const ImageSDK = lazy(() =>
-  import('../../../shared/components/ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
-const QrCodeValidated = lazy(() =>
-  import('../../../shared/components/QrCodeReader/QrCodeValidated').then(
-    (module) => ({
-      default: module.QrCodeValidated,
-    })
-  )
-);
-
-const InternalPagesLayoutBase = lazy(() =>
-  import(
-    '../../../shared/components/InternalPagesLayoutBase/InternalPagesLayoutBase'
-  ).then((module) => ({ default: module.InternalPagesLayoutBase }))
-);
-
-const Spinner = lazy(() =>
-  import('../../../shared/components/Spinner').then((module) => ({
-    default: module.Spinner,
-  }))
-);
-
-const Button = lazy(() =>
-  import('../Button/Button').then((module) => ({
-    default: module.Button,
-  }))
-);
-
-const DetailPass = lazy(() =>
-  import('./DetailPass').then((module) => ({ default: module.DetailPass }))
-);
-
-const DetailsTemplate = lazy(() =>
-  import('./DetailsTemplate').then((module) => ({
-    default: module.DetailsTemplate,
-  }))
-);
-
-const DetailToken = lazy(() =>
-  import('./DetailToken').then((module) => ({ default: module.DetailToken }))
-);
-
-const QrCodeSection = lazy(() =>
-  import('./QrCodeSection').then((module) => ({
-    default: module.QrCodeSection,
-  }))
-);
+import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
+import { Button } from '../Button';
+import useTranslation from '../../../shared/hooks/useTranslation';
 
 interface PassTemplateProps {
   tokenIdProp?: string;
@@ -878,7 +838,7 @@ const _PassTemplate = ({
                           <b>{benefit?.data.name}</b>{' '}
                           {translate('tokens>passTemplate>moreTokensBenefit2')}:{' '}
                         </p>
-                        {collectionData?.items.map((val) => {
+                        {collectionData?.items.map((val: { id: Key | null | undefined; mainImage: string | undefined; editionNumber: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | Iterable<ReactNode> | null | undefined; tokenId: any; }) => {
                           return (
                             <div
                               key={val.id}

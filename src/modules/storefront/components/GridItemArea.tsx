@@ -1,31 +1,24 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CSSProperties } from 'react';
+import { CSSProperties } from "react";
 
-import './GridItemArea.css';
-import _ from 'lodash';
+import _ from "lodash";
+import { CardTypesEnum, FitImage, GridItemAreaData, MainModuleThemeInterface, ModulesType } from "../interfaces/Theme";
+import { useDynamicApi } from "../provider/DynamicApiProvider";
+import { useMobilePreferenceDataWhenMobile } from "../hooks/useMergeMobileData";
+import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
+import { StorefrontMenu } from "./StorefrontMenu";
+import { Banner } from "./Banner";
+import { Products } from "./Products";
+import { Accordions } from "./Accordions";
+import { ImagePlusText } from "./ImagePlusText";
+import { Paragraph } from "./Paragraph";
+import { Midia } from "./Midia";
+import { ContentCard } from "./ContentCard";
+import { StorefrontButton } from "./StorefrontButton";
+import { changeDynamicJsonToInsertIndex } from "../utils/jsonTransformation";
+import { convertSpacingToCSS } from "../../shared/utils/convertSpacingToCSS";
 
-import { useRouterConnect } from '../../shared';
-import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import {
-  CardTypesEnum,
-  FitImage,
-  GridItemAreaData,
-  MainModuleThemeInterface,
-  ModulesType,
-} from '../interfaces';
-import { useDynamicApi } from '../provider/DynamicApiProvider';
-import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
-import { Accordions } from './Accordions';
-import { Banner } from './Banner';
-import { Button } from './Button';
-import { ContentCard } from './ContentCard';
-import { ImagePlusText } from './ImagePlusText';
-import { Menu } from './Menu';
-import { Midia } from './Midia';
-import { Paragraph } from './Paragraph';
-import { Products } from './Products';
 
 export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
   const { styleData, mobileStyleData, id } = data;
@@ -58,43 +51,43 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
     titlePadding,
   } = mergedStyleData;
 
-  const letters = 'abcdefghijklmnopqrst';
+  const letters = "abcdefghijklmnopqrst";
   const { pushConnect } = useRouterConnect();
   const getTemplateAreas = () => {
-    const filledArrays = Array(parseInt(gridRows ?? '2'))
-      .fill('')
-      .map(() => Array(parseInt(gridColumns ?? '4')).fill('x'));
+    const filledArrays = Array(parseInt(gridRows ?? "2"))
+      .fill("")
+      .map(() => Array(parseInt(gridColumns ?? "4")).fill("x"));
     Items?.forEach((it, index) => {
       it.quadrants?.forEach((q) => {
-        const divisor = Math.floor(q / parseInt(gridColumns ?? '4'));
+        const divisor = Math.floor(q / parseInt(gridColumns ?? "4"));
         const nextNumber =
-          divisor == 0 ? q : q - divisor * parseInt(gridColumns ?? '4');
-        if (parseInt(gridRows ?? '2') >= divisor + 1) {
+          divisor == 0 ? q : q - divisor * parseInt(gridColumns ?? "4");
+        if (parseInt(gridRows ?? "2") >= divisor + 1) {
           filledArrays[divisor][Math.ceil(nextNumber)] = `x${index}`;
         }
       });
     });
     const arrayThreat = filledArrays.map((arr, index) =>
       arr.map((ar, ind) => {
-        if (ar == 'x') {
-          return letters.at(ind + (index + 1) * parseInt(gridColumns ?? '4'));
+        if (ar == "x") {
+          return letters.at(ind + (index + 1) * parseInt(gridColumns ?? "4"));
         } else {
           return ar;
         }
       })
     );
 
-    const map = arrayThreat.map((arr) => `"${arr.join(' ')}"`);
-    return map.join(' ');
+    const map = arrayThreat.map((arr) => `"${arr.join(" ")}"`);
+    return map.join(" ");
   };
 
   const getGridColumnSize = () => {
     if (columnSizes) {
       return columnSizes
-        .split(',')
-        .map((size) => (size && size != '0' ? size + 'px' : '1fr'))
-        .filter((_, index) => index + 1 <= parseInt(gridColumns ?? '4'))
-        .join(' ');
+        .split(",")
+        .map((size) => (size && size != "0" ? size + "px" : "1fr"))
+        .filter((_, index) => index + 1 <= parseInt(gridColumns ?? "4"))
+        .join(" ");
     } else {
       return `repeat(${gridColumns ?? 4}, 1fr)`;
     }
@@ -103,10 +96,10 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
   const getGridRowSize = () => {
     if (rowSizes) {
       return rowSizes
-        .split(',')
-        .map((size) => (size && size != '0' ? size + 'px' : '1fr'))
-        .filter((_, index) => index + 1 <= parseInt(gridRows ?? '2'))
-        .join(' ');
+        .split(",")
+        .map((size) => (size && size != "0" ? size + "px" : "1fr"))
+        .filter((_, index) => index + 1 <= parseInt(gridRows ?? "2"))
+        .join(" ");
     } else {
       return `repeat(${gridRows ?? 2}, 1fr)`;
     }
@@ -114,18 +107,18 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
 
   const getImageFit = (fit: FitImage) => {
     if (fit == FitImage.CONTAIN) {
-      return 'contain';
+      return "contain";
     } else if (fit == FitImage.FILL) {
-      return 'fill';
+      return "fill";
     } else {
-      return 'cover';
+      return "cover";
     }
   };
 
   const ModuleToRenderer = (module: MainModuleThemeInterface) => {
     switch (module.type) {
       case ModulesType.CATEGORIES:
-        return <Menu data={{ ...module } as any} />;
+        return <StorefrontMenu data={{ ...module } as any} />;
       case ModulesType.BANNER:
         return <Banner data={{ ...module } as any} />;
       case ModulesType.CARDS:
@@ -149,7 +142,7 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
           />
         );
       case ModulesType.BUTTON:
-        return <Button data={{ ...module } as any} />;
+        return <StorefrontButton data={{ ...module } as any} />;
       default:
         break;
     }
@@ -181,15 +174,15 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
     >
       <div
         className={`${
-          container == 'fullWidth' ? 'pw-w-full' : 'pw-container'
+          container == "fullWidth" ? "pw-w-full" : "pw-container"
         } pw-mx-auto`}
       >
         {title && (
           <p
             style={{
-              fontSize: titleSize ?? '15px',
-              fontWeight: titleWeight ?? '600',
-              color: titleColor ?? 'black',
+              fontSize: titleSize ?? "15px",
+              fontWeight: titleWeight ?? "600",
+              color: titleColor ?? "black",
               padding: convertSpacingToCSS(titlePadding),
             }}
           >
@@ -203,9 +196,9 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
               padding: convertSpacingToCSS(padding),
               gridTemplateColumns: getGridColumnSize(),
               gridTemplateRows: getGridRowSize(),
-              '--template-areas': `${getTemplateAreas()}`,
-              rowGap: gapX ?? '0' + 'px',
-              columnGap: gapY ?? '0' + 'px',
+              "--template-areas": `${getTemplateAreas()}`,
+              rowGap: gapX ?? "0" + "px",
+              columnGap: gapY ?? "0" + "px",
             } as CSSProperties
           }
           className="pw-w-full pw-grid grid-areas"
@@ -216,11 +209,11 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
                 ite.quadrants?.some(
                   (quad) =>
                     quad + 1 >
-                    parseInt(gridRows ?? '2') * parseInt(gridColumns ?? '4')
+                    parseInt(gridRows ?? "2") * parseInt(gridColumns ?? "4")
                 ) ? null : ite.module ? (
                   <div
                     className={`${
-                      showHeight && 'pw-min-h-[calc(100vh-150px)]'
+                      showHeight && "pw-min-h-[calc(100vh-150px)]"
                     }`}
                   >
                     {ModuleToRenderer(ite.module)}
@@ -228,16 +221,16 @@ export const GridItemArea = ({ data }: { data: GridItemAreaData }) => {
                 ) : (
                   <div
                     className="pw-bg-orange"
-                    style={{ gridArea: 'x' + index, zIndex: index }}
+                    style={{ gridArea: "x" + index, zIndex: index }}
                     key={index}
                   >
                     <img
                       onClick={() =>
                         ite.link
-                          ? ite.target == '_blank'
+                          ? ite.target == "_blank"
                             ? window.open(ite.link)
                             : pushConnect(ite.link)
-                          : ''
+                          : ""
                       }
                       style={{
                         objectFit: getImageFit(ite.fit ?? FitImage.COVER),
