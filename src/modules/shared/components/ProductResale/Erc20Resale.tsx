@@ -1,28 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useDebounce } from 'react-use';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-
+import {
+  useGetResaleById,
+  ProductResaleResponse,
+} from '../../hooks/useGetResaleById';
+import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20';
+import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions';
+import { usePostProductResale } from '../../hooks/usePostProductResale';
+import { useRouterConnect } from '../../hooks/useRouterConnect';
+import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { BaseInput } from '../BaseInput';
 import { BaseSelect } from '../BaseSelect';
 import { BaseButton } from '../Buttons';
-
+import { CriptoValueComponent } from '../CriptoValueComponent';
+import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Shimmer } from '../Shimmer';
 import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
-import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions';
-import { useRouterConnect } from '../../hooks/useRouterConnect';
-import { CriptoValueComponent } from '../CriptoValueComponent';
-import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
-import { useGetResaleById, ProductResaleResponse } from '../../hooks/useGetResaleById';
-import { usePostProductResale } from '../../hooks/usePostProductResale';
-import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20';
-import useTranslation from '../../hooks/useTranslation';
-
 
 export const Erc20Resale = () => {
   const [translate] = useTranslation();
@@ -62,7 +63,7 @@ export const Erc20Resale = () => {
         price: config?.price?.toString(),
       },
       {
-        onSuccess(data) {
+        onSuccess(data: ProductResaleResponse) {
           setProductResale(data);
         },
       }
@@ -198,7 +199,7 @@ export const Erc20Resale = () => {
                   </div>
                   {batchSize ? (
                     <p className="pw-text-[12px] pw-text-gray-500">
-                      {translate('pages>checkout>batchSize', { batchSize })}
+                      {translate('pages>checkout>batchSizeSale', { batchSize })}
                     </p>
                   ) : null}
                 </div>

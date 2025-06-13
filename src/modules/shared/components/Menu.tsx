@@ -155,7 +155,7 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       {
         title:
           internalMenuData['withdrawsAdmin']?.customLabel ||
-          'Relatório de saques',
+          translate('auth>withdrawModal>withdrawReports'),
         id: 'withdrawsAdmin',
         icon: <CardIcon width={17} height={17} />,
         link: PixwayAppRoutes.WITHDRAWS_ADMIN,

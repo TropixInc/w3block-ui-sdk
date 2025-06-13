@@ -1,7 +1,8 @@
 {
   "name": "@w3block/w3block-ui-sdk",
-  "version": "1.15.55-alpha.0",
-  "description": "New SDK W3block",
+  "private": false,
+  "version": "1.15.79",
+  "type": "module",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -13,24 +14,30 @@
     },
     "./dist/style.css": "./dist/style.css",
     "./dist/style2.css": "./dist/style.css",
-    "./nextAuth": {
-      "default": "./dist/modules/auth/config/nextAuth/index.js",
-      "types": "./dist/modules/auth/config/nextAuth/index.d.ts"
+    "./auth": {
+      "default": "./dist/modules/auth/index.js",
+      "types": "./dist/modules/auth/index.d.ts"
     }
   },
   "scripts": {
     "clean": "rimraf dist",
+    "check:build": "yarn build",
     "prepare": "husky install",
     "prebuild": "yarn clean",
     "copy-assets": "copyfiles -u 4 \"src/modules/shared/assets/**/*\" dist/modules/shared/assets",
     "copy-json": "copyfiles -u 4 \"src/modules/shared/locales/**/*\" dist/modules/shared/locales",
     "build": "yarn copy-json && yarn copy-assets && tsc && tailwindcss -i ./src/style.css -o ./dist/style.css --minify",
-    "dev:watch": "tsc --watch"
+    "dev:watch": "tsc --watch",
+    "release": "standard-version",
+    "pre-release": "standard-version --prerelease alpha"
   },
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@mertasan/tailwindcss-variables": "^2.7.0",
     "@svgr/webpack": "^8.1.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.16",
     "@tanstack/eslint-plugin-query": "4",
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.15.14",
@@ -40,12 +47,14 @@
     "autoprefixer": "^10.4.7",
     "copyfiles": "^2.4.1",
     "file-loader": "^6.2.0",
-    "next": "^15.3.1",
-    "next-auth": "4.18.0",
+    "next": "15.2.2",
+    "next-auth": "^4.24.11",
     "postcss": "^8.4.14",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwindcss": "^3.1.6",
+    "tailwindcss-autofill": "^1.0.2",
+    "tailwindcss-text-fill": "^0.2.0",
     "typescript": "^5.8.3",
     "url-loader": "^4.1.1",
     "vite-plugin-svgr": "^4.3.0"

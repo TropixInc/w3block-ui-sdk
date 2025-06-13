@@ -1,16 +1,26 @@
-import svgr from 'vite-plugin-svgr';
-
 module.exports = {
   module: {
     rules: [
       {
         test: /\.svg$/,
-        use: [svgr(), 'url-loader'],
+        issuer: /\.[jt]sx?$/,
+        use: ['@svgr/webpack'],
       },
       {
-        test: /\.(png|jpe?g|svg|gif)$/,
-        use: ['file-loader'],
+        test: /\.(png|jpe?g|gif|ico)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/_next/static/images/',
+              outputPath: 'static/images/',
+            },
+          },
+        ],
       },
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.svg'],
   },
 };

@@ -122,4 +122,6 @@ export enum PixwayAPIRoutes {
   GET_USER_RESALE = '/companies/{companyId}/users/{userId}/resales',
   GET_USER_FORSALE_ERC20 = '/companies/{companyId}/users/{userId}/resales/for-sale/erc20',
   DELETE_PRODUCT_RESALE = '/companies/{companyId}/products-resale/{productId}',
+  SIGNIN_WITH_APPLE = '/auth/{companyId}/signin/apple/code',
+  GET_APPLE_REDIRECT = '/auth/{companyId}/signIn/apple',
 }
