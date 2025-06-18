@@ -11,7 +11,7 @@ interface InputCompletedAddressProps {
   onChangeRegion?: (value: string | undefined) => void;
   name: string;
   apiValue?: any;
-  type: string;
+  type: Array<string>;
   inputLabel?: string;
   inputPlaceholder?: string;
   hidenValidations?: boolean;
