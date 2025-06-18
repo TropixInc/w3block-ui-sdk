@@ -161,8 +161,6 @@ export const ProductPage = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
-  const [initialPreview, setInitialPreview] =
-    useState<OrderPreviewResponse | null>(null);
   const [quantityOpen, setQuantityOpen] = useState(false);
   const {
     data: product,
@@ -446,16 +444,20 @@ export const ProductPage = ({
   }, [batchSize]);
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
-  const { getOrderPreview, getMultipleOrderPreviews } = useCheckout();
+  const { getOrderPreview } = useCheckout();
   const [isLoadingValue, setIsLoading] = useState(false);
 
-  const maxErc20Available = useMemo(() => {
-    if (product?.stockAmount && batchSize) {
-      return Math.floor(product?.stockAmount / batchSize) * batchSize;
+  useEffect(() => {
+    if (
+      product?.minPurchaseAmount &&
+      product?.stockAmount &&
+      parseFloat(product?.minPurchaseAmount) <= product?.stockAmount
+    ) {
+      setQuantity(parseFloat(product?.minPurchaseAmount));
     }
-  }, [product?.stockAmount, batchSize]);
+  }, [product?.minPurchaseAmount, product?.stockAmount]);
 
-  const getOrderPreviewFn = (initial?: boolean) => {
+  const getOrderPreviewFn = () => {
     if (product?.id && currencyId) {
       const order = {
         productIds: [
@@ -490,50 +492,12 @@ export const ProductPage = ({
             : '',
       };
       setIsLoading(true);
-      if (initial) {
-        getMultipleOrderPreviews.mutate(
-          {
-            orders: [
-              {
-                ...order,
-                productIds: [
-                  ...Array(isErc20 ? 1 : quantity).fill({
-                    productId: product.id,
-                    quantity: maxErc20Available,
-                    selectBestPrice:
-                      product?.type === 'erc20' ? true : undefined,
-                    variantIds: variants
-                      ? Object.values(variants).map((value) => {
-                          if ((value as any).productId === product.id)
-                            return (value as any).id;
-                        })
-                      : [],
-                  }),
-                ],
-              },
-              order,
-            ],
-          },
-          {
-            onSuccess(data) {
-              setIsLoading(false);
-              setOrderPreview(data?.previews?.[1]);
-              setInitialPreview(data?.previews?.[0]);
-            },
-          }
-        );
-      } else {
-        getOrderPreview.mutate(order, {
-          onSuccess: (data: OrderPreviewResponse) => {
-            setIsLoading(false);
-            if (initial) {
-              setInitialPreview(data);
-            } else {
-              setOrderPreview(data);
-            }
-          },
-        });
-      }
+      getOrderPreview.mutate(order, {
+        onSuccess: (data: OrderPreviewResponse) => {
+          setIsLoading(false);
+          setOrderPreview(data);
+        },
+      });
     }
   };
 
@@ -557,7 +521,7 @@ export const ProductPage = ({
 
   useEffect(() => {
     if (product?.id && currencyId) {
-      getOrderPreviewFn(true);
+      getOrderPreviewFn();
     }
   }, [currencyId, product?.id, variants]);
 
@@ -704,13 +668,14 @@ export const ProductPage = ({
   }, [product?.canPurchaseAmount, product?.stockAmount, quantity, batchSize]);
 
   const notEnoughStock = useMemo(() => {
-    return (
-      !!initialPreview?.cartPrice &&
-      !!product?.settings?.minCartItemPrice &&
-      parseFloat(initialPreview?.cartPrice ?? '') <
-        product?.settings?.minCartItemPrice
-    );
-  }, [initialPreview?.cartPrice, product?.settings?.minCartItemPrice]);
+    if (
+      product?.minPurchaseAmount === null ||
+      (product?.stockAmount &&
+        parseFloat(product?.minPurchaseAmount ?? '0') > product?.stockAmount)
+    )
+      return true;
+    else return false;
+  }, [product?.minPurchaseAmount]);
 
   const minCartItemPriceBlock = useMemo(() => {
     return (
@@ -1109,16 +1074,27 @@ export const ProductPage = ({
                         <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
                           <p
                             onClick={() => {
-                              if (isErc20 && batchSize) {
-                                if (quantity > batchSize) {
-                                  setQuantity(quantity - batchSize);
+                              if (
+                                product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount)
+                              ) {
+                                // empty
+                              } else {
+                                if (isErc20 && batchSize) {
+                                  if (quantity > batchSize) {
+                                    setQuantity(quantity - batchSize);
+                                  }
+                                } else if (quantity > 1) {
+                                  setQuantity(quantity - 1);
                                 }
-                              } else if (quantity > 1) {
-                                setQuantity(quantity - 1);
                               }
                             }}
                             className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                              quantity === batchSize
+                              quantity === batchSize ||
+                              (product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount))
                                 ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
                                 : ''
                             } ${
@@ -1133,6 +1109,7 @@ export const ProductPage = ({
                             <input
                               type="number"
                               id="quantityValue"
+                              disabled
                               value={quantity}
                               onChange={() => {
                                 const inputValue = parseFloat(
