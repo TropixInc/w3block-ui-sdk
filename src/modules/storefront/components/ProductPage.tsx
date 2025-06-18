@@ -161,6 +161,8 @@ export const ProductPage = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
+  const [initialPreview, setInitialPreview] =
+    useState<OrderPreviewResponse | null>(null);
   const [quantityOpen, setQuantityOpen] = useState(false);
   const {
     data: product,
@@ -444,52 +446,94 @@ export const ProductPage = ({
   }, [batchSize]);
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
-  const { getOrderPreview } = useCheckout();
+  const { getOrderPreview, getMultipleOrderPreviews } = useCheckout();
   const [isLoadingValue, setIsLoading] = useState(false);
-  const getOrderPreviewFn = () => {
+
+  const maxErc20Available = useMemo(() => {
+    if (product?.stockAmount && batchSize) {
+      return Math.floor(product?.stockAmount / batchSize) * batchSize;
+    }
+  }, [product?.stockAmount, batchSize]);
+
+  const getOrderPreviewFn = (initial?: boolean) => {
     if (product?.id && currencyId) {
+      const order = {
+        productIds: [
+          ...Array(isErc20 ? 1 : quantity).fill({
+            productId: product.id,
+            quantity: isErc20 ? quantity ?? 1 : 1,
+            selectBestPrice: product?.type === 'erc20' ? true : undefined,
+            variantIds: variants
+              ? Object.values(variants).map((value) => {
+                  if ((value as any).productId === product.id)
+                    return (value as any).id;
+                })
+              : [],
+          }),
+        ],
+        currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
+        passShareCodeData: giftData,
+        payments: [
+          {
+            currencyId:
+              currencyId?.id ?? (currencyId as unknown as string) ?? '',
+            amountType: 'percentage',
+            amount: '100',
+          },
+        ],
+        companyId,
+        couponCode:
+          utms.utm_campaign &&
+          utms?.expires &&
+          new Date().getTime() < utms?.expires
+            ? utms.utm_campaign
+            : '',
+      };
       setIsLoading(true);
-      getOrderPreview.mutate(
-        {
-          productIds: [
-            ...Array(isErc20 ? 1 : quantity).fill({
-              productId: product.id,
-              quantity: isErc20 ? quantity ?? 1 : 1,
-              selectBestPrice: product?.type === 'erc20' ? true : undefined,
-              variantIds: variants
-                ? Object.values(variants).map((value) => {
-                    if ((value as any).productId === product.id)
-                      return (value as any).id;
-                  })
-                : [],
-            }),
-          ],
-          currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
-          passShareCodeData: giftData,
-          payments: [
-            {
-              currencyId:
-                currencyId?.id ?? (currencyId as unknown as string) ?? '',
-              amountType: 'percentage',
-              amount: '100',
+      if (initial) {
+        getMultipleOrderPreviews.mutate(
+          {
+            orders: [
+              {
+                ...order,
+                productIds: [
+                  ...Array(isErc20 ? 1 : quantity).fill({
+                    productId: product.id,
+                    quantity: maxErc20Available,
+                    selectBestPrice:
+                      product?.type === 'erc20' ? true : undefined,
+                    variantIds: variants
+                      ? Object.values(variants).map((value) => {
+                          if ((value as any).productId === product.id)
+                            return (value as any).id;
+                        })
+                      : [],
+                  }),
+                ],
+              },
+              order,
+            ],
+          },
+          {
+            onSuccess(data) {
+              setIsLoading(false);
+              setOrderPreview(data?.previews?.[1]);
+              setInitialPreview(data?.previews?.[0]);
             },
-          ],
-          companyId,
-          couponCode:
-            utms.utm_campaign &&
-            utms?.expires &&
-            new Date().getTime() < utms?.expires
-              ? utms.utm_campaign
-              : '',
-        },
-        {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          }
+        );
+      } else {
+        getOrderPreview.mutate(order, {
           onSuccess: (data: OrderPreviewResponse) => {
             setIsLoading(false);
-            setOrderPreview(data);
+            if (initial) {
+              setInitialPreview(data);
+            } else {
+              setOrderPreview(data);
+            }
           },
-        }
-      );
+        });
+      }
     }
   };
 
@@ -513,7 +557,7 @@ export const ProductPage = ({
 
   useEffect(() => {
     if (product?.id && currencyId) {
-      getOrderPreviewFn();
+      getOrderPreviewFn(true);
     }
   }, [currencyId, product?.id, variants]);
 
@@ -659,6 +703,15 @@ export const ProductPage = ({
     );
   }, [product?.canPurchaseAmount, product?.stockAmount, quantity, batchSize]);
 
+  const notEnoughStock = useMemo(() => {
+    return (
+      !!initialPreview?.cartPrice &&
+      !!product?.settings?.minCartItemPrice &&
+      parseFloat(initialPreview?.cartPrice ?? '') <
+        product?.settings?.minCartItemPrice
+    );
+  }, [initialPreview?.cartPrice, product?.settings?.minCartItemPrice]);
+
   const minCartItemPriceBlock = useMemo(() => {
     return (
       !!orderPreview?.cartPrice &&
@@ -676,7 +729,7 @@ export const ProductPage = ({
         (product?.stockAmount && product?.stockAmount < batchSize) ||
         (product?.canPurchaseAmount &&
           product?.canPurchaseAmount < batchSize) ||
-        (reachStock && minCartItemPriceBlock)
+        notEnoughStock
       );
     } else {
       return product?.stockAmount === 0 || product?.canPurchaseAmount === 0;
