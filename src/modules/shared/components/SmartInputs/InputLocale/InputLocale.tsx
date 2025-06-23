@@ -90,7 +90,7 @@ const InputLocale = ({
             name={name}
             onChangeRegion={setRegion}
             apiValue={docValue?.placeId}
-            type="(cities)"
+            type={['(cities)']}
             readonly={readonly}
             hidenValidations={readonly}
           />
