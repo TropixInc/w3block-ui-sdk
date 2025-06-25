@@ -221,6 +221,7 @@ export const SmartInputsController = ({
             required={required}
             readonly={readonly}
             hidenValidations={readonly}
+            defaultCountry={(selectData as any)?.defaultCountry}
           />
         );
       case DataTypesEnum.Email:
