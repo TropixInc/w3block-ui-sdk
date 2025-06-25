@@ -5,7 +5,7 @@ import {
   SetStateAction,
   useState,
 } from 'react';
-import ReactInputMask from 'react-input-mask';
+import { IMaskInput } from 'react-imask';
 
 import classNames from 'classnames';
 
@@ -39,7 +39,7 @@ export interface BaseInputProps
   searchIcon?: boolean;
   onBlur?: () => void;
   mask?: string | Array<string | RegExp>;
-  maskChar?: string | null | undefined;
+  radix?: string | null | undefined;
   maskPlaceholder?: string | null | undefined;
   alwaysShowMask?: boolean | undefined;
   readonly?: boolean;
@@ -174,10 +174,15 @@ export const BaseInput = ({
           <SearchIcon className="pw-stroke-black pw-w-5 pw-pb-[2px]" />
         ) : null}
         {mask ? (
-          <ReactInputMask
+          <IMaskInput
             className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             mask={mask as string}
-            {...props}
+            onAccept={(e: any) => props.onChange?.(e)}
+            {...Object.fromEntries(
+              Object.entries(props).filter(
+                ([key]) => key !== 'max' && key !== 'min'
+              )
+            )}
           />
         ) : textarea ? (
           <textarea

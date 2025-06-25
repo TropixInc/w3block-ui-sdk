@@ -120,8 +120,8 @@ const InputDocuments = ({
             value={document}
             readOnly={readonly}
             inputMode={selectDocType === 'cpf' ? 'numeric' : 'text'}
-            mask={selectDocType === 'cpf' ? '999.999.999-99' : undefined}
-            maskChar={''}
+            mask={selectDocType === 'cpf' ? '000.000.000-00' : undefined}
+            radix="."
             placeholder={selectDocType === 'cpf' ? 'Digite apenas números' : ''}
           />
         </div>

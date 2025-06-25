@@ -117,10 +117,10 @@ const ComplexPhone = ({
                 placeholder="+XX XX XXXXX XXXX"
                 mask={
                   item && item?.length <= 16
-                    ? '+99 99 9999-99999'
-                    : '+99 99 99999-9999'
+                    ? '+00 00 00000-0000'
+                    : '+00 00 00000-0000'
                 }
-                maskChar={''}
+                radix="."
               />
               {idx === 0 ? null : !hiddenButtons ? (
                 <button
