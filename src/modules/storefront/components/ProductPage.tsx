@@ -8,6 +8,7 @@ import {
   useLocalStorage,
 } from 'react-use';
 
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -58,8 +59,6 @@ import { CurrencyResponse, Variants } from '../interfaces/Product';
 import { ProductPageData } from '../interfaces/Theme';
 import { ProductVariants } from './ProductVariants';
 import { SendGiftForm } from './SendGiftForm';
-
-import { Pagination } from 'swiper/modules';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -584,9 +583,7 @@ export const ProductPage = ({
           );
         } else if (
           product?.settings?.acceptMultipleCurrenciesPurchase &&
-          product?.prices?.some(
-            (res) => res?.currency?.crypto
-          )
+          product?.prices?.some((res) => res?.currency?.crypto)
         ) {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
@@ -595,9 +592,8 @@ export const ProductPage = ({
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
               }&cryptoCurrencyId=${
-                product?.prices?.find(
-                  (res) => res?.currency?.crypto
-                )?.currencyId
+                product?.prices?.find((res) => res?.currency?.crypto)
+                  ?.currencyId
               }`
           );
         } else if (batchSize) {
@@ -811,20 +807,18 @@ export const ProductPage = ({
                   modules={[Pagination]}
                   pagination={{ clickable: true }}
                 >
-                  {product?.images.map(
-                    (res) => {
-                      return (
-                        <SwiperSlide key={res.assetId}>
-                          <ImageSDK
-                            src={res?.original ?? ''}
-                            width={1200}
-                            quality="best"
-                            className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
-                          />
-                        </SwiperSlide>
-                      );
-                    }
-                  )}
+                  {product?.images.map((res) => {
+                    return (
+                      <SwiperSlide key={res.assetId}>
+                        <ImageSDK
+                          src={res?.original ?? ''}
+                          width={1200}
+                          quality="best"
+                          className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px] pw-rounded-[14px] pw-object-cover pw-object-center"
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
               ) : (
                 <ImageSDK
@@ -1424,19 +1418,17 @@ export const ProductPage = ({
                 )}
                 <div className="pw-mt-8">
                   {product?.terms
-                    ? product.terms.map(
-                        (val) => (
-                          <CheckboxAlt
-                            id={val.title}
-                            onChange={() => onChangeCheckbox()}
-                            key={val.title}
-                            label={val.title}
-                            link={val.link}
-                            description={val.description}
-                            className="pw-mt-3"
-                          />
-                        )
-                      )
+                    ? product.terms.map((val) => (
+                        <CheckboxAlt
+                          id={val.title}
+                          onChange={() => onChangeCheckbox()}
+                          key={val.title}
+                          label={val.title}
+                          link={val.link}
+                          description={val.description}
+                          className="pw-mt-3"
+                        />
+                      ))
                     : null}
                 </div>
               </div>

@@ -12,10 +12,10 @@ import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
-import firstDegree from '../assets/1_degree.svg';
-import secondDegree from '../assets/2_degree.svg';
-import thirdDegree from '../assets/3_degree.svg';
-import fourthDegree from '../assets/4_degree.svg';
+import FirstDegree from '../assets/1_degree.svg';
+import SecondDegree from '../assets/2_degree.svg';
+import ThirdDegree from '../assets/3_degree.svg';
+import FourthDegree from '../assets/4_degree.svg';
 import blackBelt from '../assets/black_belt.png';
 import blueBelt from '../assets/blue_belt.png';
 import brownBelt from '../assets/brown_belt.png';
@@ -33,7 +33,7 @@ import placeholderAvatar from '../assets/placeholderAvatar.png';
 import purpleBelt from '../assets/purple_belt.png';
 import redBelt from '../assets/red_belt.png';
 import redWhiteBelt from '../assets/red_white_belt.png';
-import star from '../assets/star.svg';
+import Star from '../assets/star.svg';
 import whiteBelt from '../assets/white_belt.png';
 import yellowBelt from '../assets/yellow_belt.png';
 import yellowBlackBelt from '../assets/yellow_black_belt.png';
@@ -55,7 +55,6 @@ import {
 } from '../interfaces';
 import { Shimmer } from '../../../shared/components/Shimmer';
 import useTranslation from '../../../shared/hooks/useTranslation';
-
 
 export const gradeMap = {
   degree_1: '1º Degree',
@@ -157,11 +156,11 @@ export const AthletePage = () => {
   };
 
   const getDegreeImage = {
-    degree_1: firstDegree,
-    degree_2: secondDegree,
-    degree_3: thirdDegree,
-    degree_4: fourthDegree,
-    degree_5: fourthDegree,
+    degree_1: <FirstDegree width={15} height={10} />,
+    degree_2: <SecondDegree width={15} height={10} />,
+    degree_3: <ThirdDegree width={15} height={10} />,
+    degree_4: <FourthDegree width={15} height={10} />,
+    degree_5: <FourthDegree width={15} height={10} />,
   };
 
   const getPlaceholder = (): AthleteInterface => {
@@ -459,15 +458,10 @@ export const AthletePage = () => {
                                     } ${title()}`}
                                   </p>
                                   {res?.type === 'championship' && (
-                                    <img src={star} width={13} height={12} />
+                                    <Star width={13} height={12} />
                                   )}
-                                  {res?.type === 'grade' && (
-                                    <img
-                                      src={getDegreeImage[res?.degree as Grade]}
-                                      width={15}
-                                      height={10}
-                                    />
-                                  )}
+                                  {res?.type === 'grade' &&
+                                    getDegreeImage[res?.degree as Grade]}
                                   <p className="pw-font-light pw-text-xs">
                                     {' ' + subtitle()}
                                   </p>

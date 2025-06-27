@@ -3,8 +3,6 @@ import { JSX, ReactNode, lazy, useContext, useMemo } from "react";
 
 import { ErrorProvider } from "./ErrorProvider";
 import { LocaleProvider } from "./LocaleProvider";
-import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
-import React from "react";
 import { PixwayUISdkLocale } from "../context/LocaleContext";
 import { W3blockUISDKGereralConfigContext } from "../context/W3blockUISDKGeneralConfigContext";
 import { EnvironmentContext } from "../context/EnvironmentContext";
@@ -13,6 +11,7 @@ import { MetamaskProviderUiSDK } from "../metamask/providers/MetamaskProviderUiS
 import { SocketProviderUiSDK } from "../metamask/providers/SocketProviderUiSDK";
 import { CartProvider } from "../../checkout/providers/cartProvider";
 import { TagManagerProvider } from "./TagManagerProvider";
+import { SDKQueryProvider } from "../../shared/providers/QueryProvider";
 
 interface Props extends JSX.IntrinsicAttributes {
   children: ReactNode;
@@ -64,14 +63,12 @@ export const W3blockUISDKGeneralConfigProvider = ({
     [isProduction]
   );
 
-  const queryClient = new QueryClient()
-
   console.log("cliente atualizado 5")
 
 
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <SDKQueryProvider queryClient={client}>
       <W3blockUISDKGereralConfigContext.Provider value={companyValue}>
         <EnvironmentContext.Provider value={environmentValue}>
           <W3blockApiProvider
@@ -98,6 +95,6 @@ export const W3blockUISDKGeneralConfigProvider = ({
           </W3blockApiProvider>
         </EnvironmentContext.Provider>
       </W3blockUISDKGereralConfigContext.Provider>
-    </QueryClientProvider>
+    </SDKQueryProvider>
   );
 };

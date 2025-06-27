@@ -2,7 +2,10 @@ import { useContext, useMemo } from 'react';
 import { position } from '../../shared/enums/styleConfigs';
 import { ContentTypeEnum } from '../../poll/enums/contentType';
 import { FAQContextEnum } from '../../shared/enums/FAQContext';
-import { ContainerControllerClasses, ContainerControllerSDK } from '../../shared/components/ContainerControllerSDK';
+import {
+  ContainerControllerClasses,
+  ContainerControllerSDK,
+} from '../../shared/components/ContainerControllerSDK';
 import { ContainerTextBesideProps } from '../../shared/components/ContainerTextBeside';
 import { ExtraBy } from '../../shared/components/PoweredBy';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
@@ -12,8 +15,7 @@ import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { Box } from '../../shared/components/Box';
 import { SigInWithoutLayout } from '../components/SignInWithoutLayout';
-
-
+import { SDKQueryProvider } from '../../shared/providers/QueryProvider';
 
 interface SignInSignupTemplateSDKProps {
   bgColor?: string;
@@ -29,6 +31,11 @@ interface SignInSignupTemplateSDKProps {
   hasSignUp?: boolean;
   extraBy?: ExtraBy[];
   isAppleSignIn?: boolean;
+  configs?: {
+    isPasswordless?: boolean;
+    haveGoogleSignIn?: boolean;
+    haveAppleSignIn?: boolean;
+  };
 }
 
 export const SignInTemplateSDK = ({
@@ -45,6 +52,7 @@ export const SignInTemplateSDK = ({
   defaultRedirectRoute = PixwayAppRoutes.COMPLETE_KYC,
   extraBy,
   isAppleSignIn,
+  configs,
 }: SignInSignupTemplateSDKProps) => {
   const context = useContext(ThemeContext);
   const breakpoint = useBreakpoints();
@@ -65,31 +73,34 @@ export const SignInTemplateSDK = ({
   const hasSignUpTheme = context?.defaultTheme?.header?.styleData?.hasSignUp;
 
   return (
-    <TranslatableComponent>
-      <div style={{ backgroundColor: bgColor }}>
-        <ContainerControllerSDK
-          fullScreen
-          infoPosition={infoPosition}
-          bgColor={style?.onBoardingBackgroundColor ?? bgColor}
-          contentType={contentType}
-          FAQContext={FAQContext}
-          classes={classes}
-          separation={separation}
-          logoUrl={style?.onBoardingLogoSrc?.assetUrl ?? logoUrl}
-          textContainer={textContainer}
-          className={className}
-          extraBy={extraBy}
-          infoComponent={
-            <Box>
-              <SigInWithoutLayout
-                hasSignUp={hasSignUpTheme ?? hasSignUp}
-                defaultRedirectRoute={defaultRedirectRoute}
-                isAppleSignIn={isAppleSignIn}
-              ></SigInWithoutLayout>
-            </Box>
-          }
-        />
-      </div>
-    </TranslatableComponent>
+    <SDKQueryProvider>
+      <TranslatableComponent>
+        <div style={{ backgroundColor: bgColor }}>
+          <ContainerControllerSDK
+            fullScreen
+            infoPosition={infoPosition}
+            bgColor={style?.onBoardingBackgroundColor ?? bgColor}
+            contentType={contentType}
+            FAQContext={FAQContext}
+            classes={classes}
+            separation={separation}
+            logoUrl={style?.onBoardingLogoSrc?.assetUrl ?? logoUrl}
+            textContainer={textContainer}
+            className={className}
+            extraBy={extraBy}
+            infoComponent={
+              <Box>
+                <SigInWithoutLayout
+                  hasSignUp={hasSignUpTheme ?? hasSignUp}
+                  defaultRedirectRoute={defaultRedirectRoute}
+                  isAppleSignIn={isAppleSignIn}
+                  configs={configs}
+                ></SigInWithoutLayout>
+              </Box>
+            }
+          />
+        </div>
+      </TranslatableComponent>
+    </SDKQueryProvider>
   );
 };

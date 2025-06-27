@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 import { SessionContextValue } from 'next-auth/react';
-import { Session } from 'next-auth/core/types';
+import { Session } from 'next-auth';
 
 
 export interface PixwaySessionContextInterface {

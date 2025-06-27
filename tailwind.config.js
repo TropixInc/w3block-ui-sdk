@@ -1,7 +1,7 @@
 module.exports = {
   content: [
     './src/modules/**/*.{js,ts,tsx,jsx}',
-    './src/pages/**/*.{js,ts,jsx,tsx}',
+    './src/app/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     screens: {

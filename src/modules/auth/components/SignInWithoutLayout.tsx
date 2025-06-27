@@ -18,7 +18,6 @@ import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useGetAppleRedirectLink } from '../../shared/hooks/useGetAppleRedirectLink';
 import { useGetGoogleRedirectLink } from '../../shared/hooks/useGetGoogleRedirectLink';
-import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
@@ -48,6 +47,11 @@ interface SignInWithoutLayoutProps {
   isAppleSignIn?: boolean;
   routerToAttachKyc?: string;
   hasSignUp?: boolean;
+  configs?: {
+    isPasswordless?: boolean;
+    haveGoogleSignIn?: boolean;
+    haveAppleSignIn?: boolean;
+  }
 }
 
 export const SigInWithoutLayout = ({
@@ -56,14 +60,14 @@ export const SigInWithoutLayout = ({
   routerToAttachKyc = PixwayAppRoutes.COMPLETE_KYC,
   hasSignUp = true,
   isAppleSignIn = false,
+  configs,
 }: SignInWithoutLayoutProps) => {
   const { companyId } = useCompanyConfig();
-  const { data: companyInfo } = useGetTenantInfoByHostname();
   const googleLink = useGetGoogleRedirectLink();
   const appleLink = useGetAppleRedirectLink();
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
-  const haveGoogleSignIn = companyInfo?.configuration?.googleSignIn?.enabled;
-  const haveAppleSignIn = companyInfo?.configuration?.appleSignIn?.enabled;
+  const isPasswordless = configs?.isPasswordless;
+  const haveGoogleSignIn = configs?.haveGoogleSignIn;
+  const haveAppleSignIn = configs?.haveAppleSignIn;
   const [translate] = useTranslation();
   const { signIn, signInWithGoogle, signInWithApple } =
     usePixwayAuthentication();

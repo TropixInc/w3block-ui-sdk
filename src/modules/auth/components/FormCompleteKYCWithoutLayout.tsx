@@ -3,7 +3,6 @@
 import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { DataTypesEnum, DocumentDto, KycStatus } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
@@ -33,6 +32,7 @@ import { useGetValidationsTypesForSignup } from '../../shared/utils/useGetValida
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useGetReasonsRequiredReview } from '../hooks/useGetReasonsRequiredReview';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface Props {
   userId: string;

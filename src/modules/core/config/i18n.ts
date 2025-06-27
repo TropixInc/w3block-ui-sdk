@@ -6,7 +6,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import ENDictionary from '../../shared/locales/en/common.json';
 import PTBRDictionary from '../../shared/locales/pt-BR/common.json';
 
-const i18n = createInstance({
+const i18n: any = createInstance({
   fallbackLng: 'pt-BR',
   resources: {
     en: {
