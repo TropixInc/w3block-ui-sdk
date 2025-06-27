@@ -11,6 +11,7 @@ import LabelWithRequired from '../LabelWithRequired';
 import { InputError } from '../SmartInputsController';
 import InputStatus from './InputStatus';
 import useTranslation from '../../hooks/useTranslation';
+import { getEnvVar } from '../../../shared/utils/env';
 
 interface Address {
   [key: string]: string;
@@ -102,9 +103,10 @@ const CityAutoComplete = ({
   const [showOptions, setShowOptions] = useState(false);
   const [placeNumber, setPlaceNumber] = useState('');
   const [placeCompliment, setPlaceCompliment] = useState('');
+  const googleKey = getEnvVar('NEXT_PUBLIC_GOOGLE_API_KEY')
   const { placesService, placePredictions, getPlacePredictions } =
     usePlacesService({
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '',
+      apiKey: googleKey ?? '',
       options: {
         componentRestrictions: { country: country ? country : '' },
         types: [type],

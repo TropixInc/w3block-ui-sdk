@@ -17,7 +17,7 @@ const TranslatableComponent = ({ children }: TranslatableComponentProps) => {
     });
   }, []);
 
-  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
+  return <I18nextProvider i18n={i18n as any}>{children}</I18nextProvider>;
 };
 
 export default TranslatableComponent;
