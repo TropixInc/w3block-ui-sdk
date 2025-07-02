@@ -76,8 +76,8 @@ const InputCpf = ({
           profilePage ||
           readonly
         }
-        mask={'999.999.999-99'}
-        maskChar={''}
+        mask={'000.000.000-00'}
+        radix={'.'}
         name={name}
         onChange={(e) => handleChange(e.target.value)}
         value={inputValue}

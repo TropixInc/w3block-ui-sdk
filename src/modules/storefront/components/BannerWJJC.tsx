@@ -11,9 +11,9 @@ import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { useDynamicString } from '../hooks/useDynamicString';
 
-import 'swiper/css';
+/* import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import 'swiper/css/pagination'; */
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { SocialNetworks } from './SocialNetworks';
 import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';

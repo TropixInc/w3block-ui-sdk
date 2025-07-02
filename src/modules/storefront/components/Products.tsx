@@ -6,8 +6,8 @@ import _ from 'lodash';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
+/* import 'swiper/css';
+import 'swiper/css/navigation'; */
 import { AlignmentEnum, CardLayoutDisposition, CardTypesEnum, ProductsData } from '../interfaces/Theme';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 
@@ -153,12 +153,13 @@ export const Products = ({ data }: { data: ProductsData }) => {
   const { text: title } = useDynamicString(moduleTitle);
   const dynamicCardsData = useMemo(() => {
     if (dynamicCards == true && contentCards && contentCards.length > 0) {
-      const itemsToRender = _.get(datasource, dynamicCardsPath ?? '', []).slice(
-        0,
-        dynamicMaxItens ?? 10
-      ) as any[];
+      const itemsToRender = _.get(
+        datasource,
+        dynamicCardsPath ?? '',
+        []
+      )?.slice(0, dynamicMaxItens ?? 10) as any[];
       const productToFollow = contentCards[0];
-      return itemsToRender.map((_, index) =>
+      return itemsToRender?.map((_, index) =>
         changeDynamicJsonToInsertIndex(productToFollow, index)
       );
     } else {
@@ -285,7 +286,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
         {cardType == 'content' && format && format != 'product'
           ? dynamicCardsData
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
-              .map((card) => (
+              ?.map((card) => (
                 <ContentCard
                   key={card.id}
                   product={card}
@@ -296,7 +297,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
           : cardType == 'content' && (!format || format == 'product')
           ? dynamicCardsData
               ?.slice(0, (itensPerLine ?? 4) * (totalRows ?? 2))
-              .map((p) => (
+              ?.map((p) => (
                 <Card
                   dynamic
                   key={p?.id}
@@ -397,7 +398,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
         value: { slidesPerView: itensPerLine, spaceBetween: 16 },
       },
     ]
-      .slice(0, 10)
+      ?.slice(0, 10)
       .reduce(
         (obj, item) => Object.assign(obj, { [item.key]: item.value }),
         {}

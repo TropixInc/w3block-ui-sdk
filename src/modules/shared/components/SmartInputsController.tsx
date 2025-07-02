@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 
 import {
   DataTypesEnum,
@@ -7,8 +7,8 @@ import {
   UserDocumentStatus,
 } from '@w3block/sdk-id';
 import _ from 'lodash';
-import { InputSelector, Options } from './SmartInputs/InputSelector';
 
+import useTranslation from '../hooks/useTranslation';
 import ComplexPhone from './SmartInputs/ComplexPhone';
 import { IframeInput } from './SmartInputs/Iframe';
 import InputBirthdate from './SmartInputs/InputBirthdate';
@@ -23,10 +23,10 @@ import { InputMultiFace } from './SmartInputs/InputMultiFace';
 import InputPhone from './SmartInputs/InputPhone';
 import InputPlaces from './SmartInputs/InputPlaces';
 import InputProducts from './SmartInputs/InputProducts';
+import { InputSelector, Options } from './SmartInputs/InputSelector';
 import InputText from './SmartInputs/InputText';
 import InputUrl from './SmartInputs/InputUrl';
 import { Separator } from './SmartInputs/Separator';
-import useTranslation from '../hooks/useTranslation';
 
 interface SmartProps {
   type: DataTypesEnum;

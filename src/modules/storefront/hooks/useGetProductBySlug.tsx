@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../../shared/enums/W3blockAPI";
-import { useAxios } from "../../shared/hooks/useAxios";
-import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
-import { usePixwaySession } from "../../shared/hooks/usePixwaySession";
-import { handleNetworkException } from "../../shared/utils/handleNetworkException";
+import { useQuery } from '@tanstack/react-query';
 
+import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useAxios } from '../../shared/hooks/useAxios';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 
 export type ProductPrice = {
   amount: string;
@@ -68,6 +68,7 @@ export interface Product {
       dataFields?: DataFields[];
     };
     disableImageDisplay?: boolean;
+    minCartItemPrice?: number;
   };
   canPurchase?: boolean;
   chainId?: number;

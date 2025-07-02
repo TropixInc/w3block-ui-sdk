@@ -1,13 +1,13 @@
 /* eslint-disable i18next/no-literal-string */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { format } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
 
 
 import ArrowIcon from '../../shared/assets/icons/arrowDown.svg';
-import CheckIcon from '../../../shared/assets/icons/checkOutlined.svg';
+import CheckIcon from '../../shared/assets/icons/checkOutlined.svg';
 // import CopyIcon from '../../../shared/assets/icons/copy.svg';
 import InfoIcon from '../../shared/assets/icons/informationCircled.svg';
 import XIcon from '../../shared/assets/icons/x-circle.svg';
@@ -282,7 +282,7 @@ export const OrderCardComponentSDK = ({
                       image={
                         data?.data?.data?.length > 0 &&
                         data?.data?.data?.[0]?.attributes?.image
-                          ? 'https://cms.foodbusters.com.br' +
+                          ? 'https://cms.zuca.ai' +
                             data?.data?.data?.[0]?.attributes?.image?.data
                               ?.attributes?.formats?.thumbnail?.url
                           : prod?.productToken?.product?.images?.length

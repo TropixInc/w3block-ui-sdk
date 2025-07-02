@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Trans } from 'react-i18next';
-import './style.css';
+import './AuthCheckbox.css';
 
 interface Props {
   name: string;

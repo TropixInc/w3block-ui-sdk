@@ -72,10 +72,10 @@ const InputPhone = ({
         placeholder="+XX XX XXXXX XXXX"
         mask={
           inputValue && inputValue?.length <= 16
-            ? '+99 99 9999-99999'
-            : '+99 99 99999-9999'
+            ? '+00 00 0000-00000'
+            : '+00 00 00000-0000'
         }
-        maskChar={''}
+        radix={'.'}
       />
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">

@@ -1,22 +1,38 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2024",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ES2024"],
     "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "declaration": true,
+    "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
+    "declarationDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["src", "**/*.ts", "**/*.tsx", "types/*.d.ts", "src/**/*.svg", "globals.d.ts"]
+  "include": [
+    "src", "**/*.ts", "**/*.tsx", "types/*.d.ts", "src/**/*.svg", "globals.d.ts", "src/**/*.png"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
 }

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -8,11 +8,12 @@ import {
   useLocalStorage,
 } from 'react-use';
 
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
+/* import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import 'swiper/css/pagination'; */
 
 import {
   GIFT_DATA_INFO_KEY,
@@ -24,48 +25,40 @@ import {
   AvailableInstallmentInfo,
   OrderPreviewResponse,
 } from '../../checkout/interface/interface';
-// eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
-
+import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
+import {
+  formatterCurrency,
+  CriptoValueComponent,
+} from '../../shared/components/CriptoValueComponent';
 import { ErrorBox } from '../../shared/components/ErrorBox';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { ModalBase } from '../../shared/components/ModalBase';
+import { Shimmer } from '../../shared/components/Shimmer';
+import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import useRouter from '../../shared/hooks/useRouter';
-
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useUtms } from '../../shared/hooks/useUtms';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-
-import { ProductVariants } from './ProductVariants';
-import { SendGiftForm } from './SendGiftForm';
-import { Pagination } from 'swiper/modules';
-import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
-import { formatterCurrency, CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
-import { ImageSDK } from '../../shared/components/ImageSDK';
-import { ModalBase } from '../../shared/components/ModalBase';
-import { Shimmer } from '../../shared/components/Shimmer';
-import { Spinner } from '../../shared/components/Spinner';
-import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { useUtms } from '../../shared/hooks/useUtms';
 import useGetProductBySlug from '../hooks/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
-import { useTrack } from '../hooks/useTrack';
-import { CurrencyResponse } from '../interfaces/Product';
-import { ProductPageData } from '../interfaces/Theme';
 import { useThemeConfig } from '../hooks/useThemeConfig';
-import useTranslation from '../../shared/hooks/useTranslation';
-
-
-
+import { useTrack } from '../hooks/useTrack';
+import { CurrencyResponse, Variants } from '../interfaces/Product';
+import { ProductPageData } from '../interfaces/Theme';
+import { ProductVariants } from './ProductVariants';
+import { SendGiftForm } from './SendGiftForm';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -241,7 +234,8 @@ export const ProductPage = ({
   );
 
   const userHasIntegration = userIntegrations?.data?.items?.some(
-    (val) => val.toTenantId === product?.requirements?.companyId
+    (val: { toTenantId: any }) =>
+      val.toTenantId === product?.requirements?.companyId
   );
 
   const openNewWindow = (path: string) => {
@@ -287,7 +281,7 @@ export const ProductPage = ({
       }
     } else {
       createIntegrationToken(toTenantId ?? '', {
-        onSuccess(data) {
+        onSuccess(data: { token: any }) {
           openNewWindow(
             `https://${host}/linkAccount?token=${data.token}&fromEmail=${
               user?.email
@@ -475,17 +469,24 @@ export const ProductPage = ({
   useEffect(() => {
     if (product?.id) {
       const variant = {} as any;
-      product.variants?.map((val) => {
-        variant[val.id as any] = {
-          name: val.values[0].name,
-          label: val.name,
-          id: val.values[0].id,
-          productId: product?.id,
-          variantId: val.id,
-          keyLabel: val.keyLabel,
-          keyValue: val.values[0].keyValue,
-        };
-      });
+      product.variants?.map(
+        (val: {
+          id: any;
+          values: { name?: string; id?: string; keyValue?: string }[];
+          name: any;
+          keyLabel: any;
+        }) => {
+          variant[val.id as any] = {
+            name: val.values[0].name,
+            label: val.name,
+            id: val.values[0].id,
+            productId: product?.id,
+            variantId: val.id,
+            keyLabel: val.keyLabel,
+            keyValue: val.values[0].keyValue,
+          };
+        }
+      );
       setVariants({ ...variant });
     }
   }, [product?.id]);
@@ -515,10 +516,10 @@ export const ProductPage = ({
   const onChangeCheckbox = () => {
     const termsAria = product?.terms
       ?.map(
-        (val) =>
+        (val: { title: string }) =>
           (document.getElementById(val.title) as HTMLInputElement)?.checked
       )
-      .every((val) => val);
+      .every((val: any) => val);
     setTermsChecked(termsAria ?? true);
   };
 
@@ -629,18 +630,45 @@ export const ProductPage = ({
     }
   };
 
+  const reachStock = useMemo(() => {
+    return (
+      product?.canPurchaseAmount &&
+      product?.stockAmount &&
+      quantity + (batchSize ?? 0) > product?.canPurchaseAmount &&
+      quantity + (batchSize ?? 0) > product?.stockAmount
+    );
+  }, [product?.canPurchaseAmount, product?.stockAmount, quantity, batchSize]);
+
+  const minCartItemPriceBlock = useMemo(() => {
+    return (
+      !!orderPreview?.cartPrice &&
+      !!product?.settings?.minCartItemPrice &&
+      parseFloat(orderPreview?.cartPrice ?? '') <
+        product?.settings?.minCartItemPrice
+    );
+  }, [orderPreview?.cartPrice, product?.settings?.minCartItemPrice]);
+
   const soldOut = useMemo(() => {
     if (isErc20 && batchSize) {
       return (
         product?.stockAmount === 0 ||
         product?.canPurchaseAmount === 0 ||
         (product?.stockAmount && product?.stockAmount < batchSize) ||
-        (product?.canPurchaseAmount && product?.canPurchaseAmount < batchSize)
+        (product?.canPurchaseAmount &&
+          product?.canPurchaseAmount < batchSize) ||
+        (reachStock && minCartItemPriceBlock)
       );
     } else {
       return product?.stockAmount === 0 || product?.canPurchaseAmount === 0;
     }
-  }, [isErc20, batchSize, product?.stockAmount, product?.canPurchaseAmount]);
+  }, [
+    isErc20,
+    batchSize,
+    product?.stockAmount,
+    product?.canPurchaseAmount,
+    reachStock,
+    minCartItemPriceBlock,
+  ]);
 
   return errorProduct ? (
     <ErrorBox customError={errorProduct} />
@@ -738,8 +766,9 @@ export const ProductPage = ({
                     handleRefresh();
                     handleTenantIntegration({
                       host:
-                        toTenant?.hosts.find((value) => value.isMain === true)
-                          ?.hostname ?? '',
+                        toTenant?.hosts.find(
+                          (value: { isMain: boolean }) => value.isMain === true
+                        )?.hostname ?? '',
                       toTenantName: toTenant?.name ?? '',
                       toTenantId: toTenant?.id ?? '',
                     });
@@ -818,7 +847,9 @@ export const ProductPage = ({
                     }}
                     className="pw-mt-4 pw-font-[700] pw-text-lg"
                   >
-                    {product?.tags?.map((tag) => tag.name).join('/')}
+                    {product?.tags
+                      ?.map((tag: { name: any }) => tag.name)
+                      .join('/')}
                   </p>
                 )}
                 {showValue && (
@@ -976,7 +1007,7 @@ export const ProductPage = ({
                 )}
                 <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[350px] pw-w-full">
                   {product?.variants
-                    ? product?.variants.map((val) => (
+                    ? product?.variants.map((val: Variants) => (
                         <ProductVariants
                           key={val.id}
                           variants={val}
@@ -1100,13 +1131,20 @@ export const ProductPage = ({
                             +
                           </p>
                         </div>
-                        {product?.canPurchaseAmount &&
-                        quantity + (batchSize ?? 0) >
-                          product?.canPurchaseAmount &&
-                        quantity + (batchSize ?? 0) > product?.stockAmount ? (
+                        {reachStock ? (
                           <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
                             {translate('pages>product>reachStock', {
                               product: product?.name,
+                            })}
+                          </p>
+                        ) : null}
+                        {product?.settings?.minCartItemPrice ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>productPage>minValue', {
+                              value:
+                                (product?.prices?.[0]?.currency?.symbol ??
+                                  orderPreview?.currency?.symbol) +
+                                product?.settings?.minCartItemPrice.toFixed(2),
                             })}
                           </p>
                         ) : null}
@@ -1286,6 +1324,7 @@ export const ProductPage = ({
                         <button
                           disabled={
                             soldOut ||
+                            minCartItemPriceBlock ||
                             !termsChecked ||
                             (isSendGift && !giftData && isPossibleSend)
                           }
@@ -1295,6 +1334,7 @@ export const ProductPage = ({
                             borderColor:
                               product &&
                               (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
@@ -1304,6 +1344,7 @@ export const ProductPage = ({
                             color:
                               product &&
                               (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
@@ -1317,19 +1358,23 @@ export const ProductPage = ({
                       <button
                         disabled={
                           soldOut ||
+                          minCartItemPriceBlock ||
                           !termsChecked ||
-                          (isSendGift && !giftData && isPossibleSend)
+                          (isSendGift && !giftData && isPossibleSend) ||
+                          minCartItemPriceBlock
                         }
                         onClick={handleBuyClick}
                         style={{
                           backgroundColor:
-                            product && (soldOut || !termsChecked)
+                            product &&
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#DCDCDC'
                               : buttonColor
                               ? buttonColor
                               : '#0050FF',
                           color:
-                            product && (soldOut || !termsChecked)
+                            product &&
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}

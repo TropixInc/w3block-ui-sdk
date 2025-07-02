@@ -27,6 +27,7 @@ export interface Statement {
   };
   txHash?: string;
   metadata?: any;
+  withdrawableAt?: string;
 }
 
 export enum Erc20ActionType {
