@@ -21,6 +21,51 @@
       "types": "./dist/auth.d.ts",
       "import": "./dist/auth.js",
       "default": "./dist/auth.js"
+    },
+    "./addFunds": {
+      "types": "./dist/addFunds.d.ts",
+      "import": "./dist/addFunds.js",
+      "default": "./dist/addFunds.js"
+    },
+    "./affiliates": {
+      "types": "./dist/affiliates.d.ts",
+      "import": "./dist/affiliates.js",
+      "default": "./dist/affiliates.js"
+    },
+    "./business": {
+      "types": "./dist/business.d.ts",
+      "import": "./dist/business.js",
+      "default": "./dist/business.js"
+    },
+    "./shared": {
+      "types": "./dist/shared.d.ts",
+      "import": "./dist/shared.js",
+      "default": "./dist/shared.js"
+    },
+    "./pass": {
+      "types": "./dist/pass.d.ts",
+      "import": "./dist/pass.js",
+      "default": "./dist/pass.js"
+    },
+    "./custom": {
+      "types": "./dist/custom.d.ts",
+      "import": "./dist/custom.js",
+      "default": "./dist/custom.js"
+    },
+    "./storefront": {
+      "types": "./dist/storefront.d.ts",
+      "import": "./dist/storefront.js",
+      "default": "./dist/storefront.js"
+    },
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js",
+      "default": "./dist/tokens.js"
+    },
+    "./dashboard": {
+      "types": "./dist/dashboard.d.ts",
+      "import": "./dist/dashboard.js",
+      "default": "./dist/dashboard.js"
     }
   },
   "scripts": {

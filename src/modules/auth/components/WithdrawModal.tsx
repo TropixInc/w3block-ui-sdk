@@ -2,7 +2,7 @@
 import { useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 
-import Trash from '../../assets/icons/trash.svg';
+import Trash from '../../shared/assets/icons/trash.svg';
 import { Alert } from '../../shared/components/Alert';
 import { BaseButton } from '../../shared/components/Buttons';
 import { Spinner } from '../../shared/components/Spinner';

@@ -25,7 +25,7 @@
     }
   },
   "include": [
-    "src", "**/*.ts", "**/*.tsx", "types/*.d.ts", "src/**/*.svg", "globals.d.ts"
+    "src", "**/*.ts", "**/*.tsx", "types/*.d.ts", "src/**/*.svg", "globals.d.ts", "src/**/*.png"
   ],
   "exclude": [
     "dist",

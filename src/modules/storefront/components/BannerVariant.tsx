@@ -9,9 +9,9 @@ import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { useDynamicString } from '../hooks/useDynamicString';
 
-import 'swiper/css';
+/* import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import 'swiper/css/pagination'; */
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';

@@ -11,9 +11,9 @@ import {
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
+/* import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import 'swiper/css/pagination'; */
 
 import {
   GIFT_DATA_INFO_KEY,

@@ -12,32 +12,32 @@ import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { Spinner } from '../../../shared/components/Spinner';
 import { useIsProduction } from '../../../shared/hooks/useIsProduction';
 import { useDynamicApi } from '../../../storefront/provider/DynamicApiProvider';
-import FirstDegree from '../assets/1_degree.svg';
-import SecondDegree from '../assets/2_degree.svg';
-import ThirdDegree from '../assets/3_degree.svg';
-import FourthDegree from '../assets/4_degree.svg';
-import blackBelt from '../assets/black_belt.png';
-import blueBelt from '../assets/blue_belt.png';
-import brownBelt from '../assets/brown_belt.png';
-import redAndBlackBelt from '../assets/coral_belt.png';
-import grayBelt from '../assets/gray_belt.png';
-import grayBlackBelt from '../assets/gray_black_belt.png';
-import grayWhiteBelt from '../assets/gray_white_belt.png';
-import greenBelt from '../assets/green_belt.png';
-import greenBlackBelt from '../assets/green_black_belt.png';
-import greenWhiteBelt from '../assets/green_white_belt.png';
-import orangeBelt from '../assets/orange_belt.png';
-import orangeBlackBelt from '../assets/orange_black_belt.png';
-import orangeWhiteBelt from '../assets/orange_white_belt.png';
-import placeholderAvatar from '../assets/placeholderAvatar.png';
-import purpleBelt from '../assets/purple_belt.png';
-import redBelt from '../assets/red_belt.png';
-import redWhiteBelt from '../assets/red_white_belt.png';
-import Star from '../assets/star.svg';
-import whiteBelt from '../assets/white_belt.png';
-import yellowBelt from '../assets/yellow_belt.png';
-import yellowBlackBelt from '../assets/yellow_black_belt.png';
-import yellowWhiteBelt from '../assets/yellow_white_belt.png';
+import FirstDegree from '../../../shared/assets/icons/1_degree.svg';
+import SecondDegree from '../../../shared/assets/icons/2_degree.svg';
+import ThirdDegree from '../../../shared/assets/icons/3_degree.svg';
+import FourthDegree from '../../../shared/assets/icons/4_degree.svg';
+import blackBelt from '../../../shared/assets/icons/black_belt.png';
+import blueBelt from '../../../shared/assets/icons/blue_belt.png';
+import brownBelt from '../../../shared/assets/icons/brown_belt.png';
+import redAndBlackBelt from '../../../shared/assets/icons/coral_belt.png';
+import grayBelt from '../../../shared/assets/icons/gray_belt.png';
+import grayBlackBelt from '../../../shared/assets/icons/gray_black_belt.png';
+import grayWhiteBelt from '../../../shared/assets/icons/gray_white_belt.png';
+import greenBelt from '../../../shared/assets/icons/green_belt.png';
+import greenBlackBelt from '../../../shared/assets/icons/green_black_belt.png';
+import greenWhiteBelt from '../../../shared/assets/icons/green_white_belt.png';
+import orangeBelt from '../../../shared/assets/icons/orange_belt.png';
+import orangeBlackBelt from '../../../shared/assets/icons/orange_black_belt.png';
+import orangeWhiteBelt from '../../../shared/assets/icons/orange_white_belt.png';
+import placeholderAvatar from '../../../shared/assets/icons/placeholderAvatar.png';
+import purpleBelt from '../../../shared/assets/icons/purple_belt.png';
+import redBelt from '../../../shared/assets/icons/red_belt.png';
+import redWhiteBelt from '../../../shared/assets/icons/red_white_belt.png';
+import Star from '../../../shared/assets/icons/star.svg';
+import whiteBelt from '../../../shared/assets/icons/white_belt.png';
+import yellowBelt from '../../../shared/assets/icons/yellow_belt.png';
+import yellowBlackBelt from '../../../shared/assets/icons/yellow_black_belt.png';
+import yellowWhiteBelt from '../../../shared/assets/icons/yellow_white_belt.png';
 import {
   AthleteInterface,
   BeltColor,
@@ -222,8 +222,8 @@ export const AthletePage = () => {
                   datasource?.athlete?.data[0]?.attributes?.picture?.data
                     ?.attributes?.url
                     ? 'https://strapi.w3block.io' +
-                      datasource?.athlete?.data[0]?.attributes?.picture?.data
-                        ?.attributes?.url
+                    datasource?.athlete?.data[0]?.attributes?.picture?.data
+                      ?.attributes?.url
                     : placeholderAvatar
                 }
                 alt={datasource?.athlete?.data[0]?.attributes?.name ?? ''}
@@ -305,16 +305,15 @@ export const AthletePage = () => {
                           <Disclosure.Button
                             disabled={
                               respectiveBelt !== undefined ||
-                              groupByBelt[beltEnglishMap[belt as BeltEnglish]]
+                                groupByBelt[beltEnglishMap[belt as BeltEnglish]]
                                 ? false
                                 : true
                             }
-                            className={`${
-                              respectiveBelt !== undefined ||
-                              groupByBelt[beltEnglishMap[belt as BeltEnglish]]
+                            className={`${respectiveBelt !== undefined ||
+                                groupByBelt[beltEnglishMap[belt as BeltEnglish]]
                                 ? ''
                                 : 'pw-opacity-60'
-                            } pw-p-[9px_12px] !pw-bg-[#F7F7F7] pw-text-black pw-font-bold pw-text-base flex pw-w-full pw-justify-between pw-items-center`}
+                              } pw-p-[9px_12px] !pw-bg-[#F7F7F7] pw-text-black pw-font-bold pw-text-base flex pw-w-full pw-justify-between pw-items-center`}
                           >
                             <div className="pw-flex pw-gap-2">
                               <img
@@ -423,39 +422,33 @@ export const AthletePage = () => {
                                 <ErrorBox customError={error} />
                               ) : (
                                 <a
-                                  target={`${
-                                    respectiveToken &&
-                                    (res.type === 'belt' ||
-                                      res.type === 'grade')
+                                  target={`${respectiveToken &&
+                                      (res.type === 'belt' ||
+                                        res.type === 'grade')
                                       ? '_blank'
                                       : ''
-                                  }`}
+                                    }`}
                                   href={
                                     respectiveToken &&
-                                    (res.type === 'belt' ||
-                                      res.type === 'grade')
-                                      ? `https://pdf${
-                                          !isProduction ? '.stg' : ''
-                                        }.wjjc.io/certification/${
-                                          respectiveToken?.contractAddress
-                                        }/${respectiveToken?.chainId}/${
-                                          respectiveToken?.tokenId
-                                        }?preview`
+                                      (res.type === 'belt' ||
+                                        res.type === 'grade')
+                                      ? `https://pdf${!isProduction ? '.stg' : ''
+                                      }.wjjc.io/certification/${respectiveToken?.contractAddress
+                                      }/${respectiveToken?.chainId}/${respectiveToken?.tokenId
+                                      }?preview`
                                       : undefined
                                   }
                                   key={index}
-                                  className={`${
-                                    respectiveToken &&
-                                    (res.type === 'belt' ||
-                                      res.type === 'grade')
+                                  className={`${respectiveToken &&
+                                      (res.type === 'belt' ||
+                                        res.type === 'grade')
                                       ? ''
                                       : 'pw-opacity-60'
-                                  } pw-text-black pw-font-bold pw-text-base pw-flex sm:pw-flex-row pw-flex-col sm:pw-items-center pw-items-start pw-gap-2`}
+                                    } pw-text-black pw-font-bold pw-text-base pw-flex sm:pw-flex-row pw-flex-col sm:pw-items-center pw-items-start pw-gap-2`}
                                 >
                                   <p>
-                                    {`${
-                                      date() !== '' ? `(${date()})` : ''
-                                    } ${title()}`}
+                                    {`${date() !== '' ? `(${date()})` : ''
+                                      } ${title()}`}
                                   </p>
                                   {res?.type === 'championship' && (
                                     <Star width={13} height={12} />

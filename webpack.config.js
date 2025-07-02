@@ -1,6 +1,8 @@
 import path from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import webpack from 'webpack';
 import { fileURLToPath } from 'url';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -13,12 +15,40 @@ export default (env, argv) => {
     entry: {
       index: './src/index.ts',
       auth: './src/auth.ts',
+      addFunds: './src/addFunds.ts',
+      affiliates: './src/affiliates.ts',
+      business: './src/business.ts',
+      shared: './src/shared.ts',
+      pass: './src/pass.ts',
+      custom: './src/custom.ts',
+      storefront: './src/storefront.ts',
+      tokens: './src/tokens.ts',
+      dashboard: './src/dashboard.ts',
       style: './src/style.css',
     },
 
     plugins: [
       new MiniCssExtractPlugin({
         filename: 'style.css',
+      }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser.js',
+      }),
+      new webpack.EnvironmentPlugin({
+        NEXTAUTH_URL: '',
+        NEXT_PUBLIC_BASE_URL: 'http://localhost:3000',
+        NEXT_PUBLIC_ENVIRONMENT: 'developmento',
+        NEXT_PUBLIC_NEXTAUTH_SECRET: '',
+        NEXT_PUBLIC_BUILD_PATH: '/',
+        NEXT_PUBLIC_PDF_API_URL: 'https://pdf.w3block.io/',
+        GITHUB_TOKEN: '',
+        NEXT_PUBLIC_COMMERCE_API_URL: 'https://commerce.w3block.io',
+        NEXT_PUBLIC_PIXWAY_ID_API_URL: 'https://pixwayid.w3block.io/',
+        NEXT_PUBLIC_PIXWAY_KEY_API_URL: 'https://api.w3block.io/',
+        NEXT_PUBLIC_POLL_API_URL: 'https://survey.w3block.io/',
+        NEXT_PUBLIC_PASS_API_URL: 'https://pass.w3block.io/ ',
+        NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: 'tropix',
+        NEXT_PUBLIC_GOOGLE_API_KEY: '',
       }),
     ],
 
@@ -55,12 +85,17 @@ export default (env, argv) => {
     },
 
     resolve: {
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.svg'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.svg', '.png'],
       alias: {
         'swiper/css': path.resolve(
           __dirname,
           'node_modules/swiper/swiper.min.css'
         ),
+      },
+      fallback: {
+        zlib: false,
+        stream: false,
+        fs: false,
       },
     },
 
@@ -108,7 +143,7 @@ export default (env, argv) => {
             },
           ],
         },
-         {
+        {
           test: /\.css$/,
           use: [
             MiniCssExtractPlugin.loader,
@@ -117,20 +152,17 @@ export default (env, argv) => {
               options: {
                 url: false,
                 import: false,
-              }
+              },
             },
             {
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
-                  plugins: [
-                    'tailwindcss',
-                    'autoprefixer',
-                  ],
+                  plugins: ['tailwindcss', 'autoprefixer'],
                 },
               },
             },
-          ]
+          ],
         },
       ],
     },

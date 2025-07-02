@@ -1,0 +1,1 @@
+export * from "./kyraGracie/template/AthletePage"
