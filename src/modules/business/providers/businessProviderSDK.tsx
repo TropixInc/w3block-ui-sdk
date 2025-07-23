@@ -6,8 +6,26 @@ interface BusinessProviderContextInterface {
   loyalties: LoyaltyInterface[];
 }
 
-export const BusinessProviderContext =
-  createContext<BusinessProviderContextInterface>({ loyalties: [] });
+// Check if context already exists (for symlink development)
+const globalKey = '__BUSINESS_PROVIDER_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<BusinessProviderContextInterface>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<BusinessProviderContextInterface>({ loyalties: [] });
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const BusinessProviderContext = context;
 
 export const BusinessProviderSDK = ({ children }: { children: ReactNode }) => {
   const { data } = useGetCompanyLoyalties();

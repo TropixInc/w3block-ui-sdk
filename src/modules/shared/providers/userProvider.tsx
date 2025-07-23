@@ -14,7 +14,26 @@ interface UserContextProps {
   profile?: UserProfileWithKYC;
 }
 
-export const UserContext = createContext<UserContextProps>({});
+// Check if context already exists (for symlink development)
+const globalKey = '__USER_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<UserContextProps>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<UserContextProps>({});
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const UserContext = context;
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { data: profile } = useProfileWithouRedirect();

@@ -37,7 +37,26 @@ interface AlertContext {
   variant: AlertVariant;
 }
 
-const AlertContext = createContext<AlertContext>({} as AlertContext);
+// Check if context already exists (for symlink development)
+const globalKey = '__ALERT_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<AlertContext>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<AlertContext>({} as AlertContext);
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+const AlertContext = context;
 
 const iconConfigMap = new Map([
   ['error', { Element: ErrorCircledFilled, className: 'pw-fill-[#D02428]' }],

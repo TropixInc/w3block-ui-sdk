@@ -10,7 +10,26 @@ interface ContextProps {
   gtag?(event: any, params?: object): void;
 }
 
-export const TagManagerContext = createContext({} as ContextProps);
+// Check if context already exists (for symlink development)
+const globalKey = '__TAG_MANAGER_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<ContextProps>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext({} as ContextProps);
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const TagManagerContext = context;
 
 export const TagManagerProvider = ({ gtag, children }: Props) => {
   const value = useMemo(() => {

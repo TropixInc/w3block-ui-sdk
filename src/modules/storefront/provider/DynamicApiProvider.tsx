@@ -18,10 +18,29 @@ export interface DynamicApiContextInterface {
   strapiLocalization?: boolean;
 }
 
-const DynamicApiContext = createContext<DynamicApiContextInterface>({
-  datasource: {},
-  isDynamic: false,
-});
+// Check if context already exists (for symlink development)
+const globalKey = '__DYNAMIC_API_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<DynamicApiContextInterface>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<DynamicApiContextInterface>({
+    datasource: {},
+    isDynamic: false,
+  });
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+const DynamicApiContext = context;
 
 interface DynamicApiProviderProps {
   children: ReactNode;

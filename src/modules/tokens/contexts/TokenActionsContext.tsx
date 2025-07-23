@@ -9,4 +9,23 @@ interface TokenAction {
 
 export type ITokenActionContext = Array<TokenAction>;
 
-export const TokenActionsContext = createContext<ITokenActionContext>([]);
+// Check if context already exists (for symlink development)
+const globalKey = '__TOKEN_ACTIONS_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<ITokenActionContext>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<ITokenActionContext>([]);
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const TokenActionsContext = context;
