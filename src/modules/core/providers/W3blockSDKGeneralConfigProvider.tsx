@@ -63,10 +63,6 @@ export const W3blockUISDKGeneralConfigProvider = ({
     [isProduction]
   );
 
-  console.log("cliente atualizado 5")
-
-
-
   return (
     <SDKQueryProvider queryClient={client}>
       <W3blockUISDKGereralConfigContext.Provider value={companyValue}>

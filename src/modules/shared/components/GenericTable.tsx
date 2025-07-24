@@ -55,7 +55,7 @@ const paginationMapping = {
       }
     },
     outputMap: (params: any) => {
-      const newParams = { ...params, page: undefined };
+      const newParams = { ...params, page: 1 };
       newParams['pagination[pageSize]'] = 10;
       newParams['pagination[page]'] = params?.page;
 
@@ -131,6 +131,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     isPublicApi: dataSource?.isPublicApi,
     ...paginationMapping[paginationType],
   });
+
+
 
   useEffect(() => {
     if (isUpdateList) {

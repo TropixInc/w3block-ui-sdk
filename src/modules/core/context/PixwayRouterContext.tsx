@@ -1,7 +1,6 @@
 import { createContext } from 'react';
 
 import { NextRouter } from 'next/router';
-
 export interface RouterUrlConfig {
   path?: string;
   query?: string;

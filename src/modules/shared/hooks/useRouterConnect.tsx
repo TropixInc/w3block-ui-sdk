@@ -24,8 +24,9 @@ export const useRouterConnect = (): any => {
       (queryString && queryString != "" ? "?" : "") +
       queryString;
 
-    console.log(url, "url");
-    router.push(url);
+      console.log(router, "router")
+
+    router?.push(url);
   };
 
   const routerToHref = (path: string) => {
