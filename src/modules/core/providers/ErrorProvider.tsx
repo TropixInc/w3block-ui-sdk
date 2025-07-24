@@ -10,7 +10,26 @@ interface ContextProps {
   logError?(error: any, extra?: object): void;
 }
 
-export const ErrorContext = createContext({} as ContextProps);
+// Check if context already exists (for symlink development)
+const globalKey = '__ERROR_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<ContextProps>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext({} as ContextProps);
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const ErrorContext = context;
 
 export const ErrorProvider = ({ logError, children }: Props) => {
   const value = useMemo(() => {

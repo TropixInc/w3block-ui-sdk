@@ -44,15 +44,34 @@ export interface WalletLoyalty {
   pointsPrecision?: 'decimal' | 'integer';
 }
 
-export const UserWalletsContext = createContext<UserWalletsContextInterface>({
-  wallets: [],
-  hasWallet: false,
-  loyaltyWallet: [],
-});
+// Check if context already exists (for symlink development)
+const globalKey = '__USER_WALLETS_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<UserWalletsContextInterface>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<UserWalletsContextInterface>({
+    wallets: [],
+    hasWallet: false,
+    loyaltyWallet: [],
+  });
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const UserWalletsContext = context;
 
 const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();
-  const { data: session } = usePixwaySession();
+  const { data: session, status } = usePixwaySession();
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [loyaltyWallet, setLoyaltyWallet] = useState<WalletLoyalty[]>([]);
   const { profile } = useProfileWithKYC();
@@ -63,6 +82,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const [transferModal, setTransferModal] = useState<boolean>(false);
   const getWalletsbalance = useGetBalancesForWallets();
   const { data, isSuccess } = useGetWallets();
+  
   useEffect(() => {
     if (data) {
       getBalances(data);
@@ -71,11 +91,11 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (authenticatePaymentModal) {
-      router.replace({ query: { ...router.query, authorizeLoyalty: 'true' } });
-    } else if (router.query.authorizeLoyalty && !authenticatePaymentModal) {
+      router.replace({ pathname: router.pathname, query: { ...router?.query, authorizeLoyalty: 'true' } });
+    } else if (router?.query?.authorizeLoyalty && !authenticatePaymentModal) {
       {
-        delete router.query.authorizeLoyalty;
-        router.replace({ query: router.query });
+        delete router?.query.authorizeLoyalty;
+        router.replace({ pathname: router.pathname, query: router.query });
       }
     }
   }, [authenticatePaymentModal]);
@@ -85,7 +105,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
       status != 'loading' &&
       session &&
       !authenticatePaymentModal &&
-      router.query.authorizeLoyalty == 'true'
+      router?.query?.authorizeLoyalty == 'true'
     ) {
       setAuthenticatePaymentModal(true);
     }
@@ -98,7 +118,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
       getWalletsbalance(data).then((res) => {
         setWallets(res);
       });
-    }
+    } 
   };
 
   useEffect(() => {
@@ -118,18 +138,20 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const mainWallet = useMemo(() => {
+    let foundWallet;
     if (coinType != CoinsType.LOYALTY) {
-      return wallets.find(
+      foundWallet = wallets.find(
         (wallet) =>
           wallet.chainId == getChainIdBasedOnCoinType(coinType, isProduction)
       );
     } else {
-      return wallets.find(
+      foundWallet = wallets.find(
         (wallet) =>
           wallet.chainId ==
           getChainIdBasedOnCoinType(CoinsType.MATIC, isProduction)
       );
     }
+    return foundWallet;
   }, [coinType, wallets]);
 
   return (

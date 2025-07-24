@@ -24,11 +24,29 @@ interface SocketProviderContextInterface {
   ) => Promise<void>;
 }
 
-export const SocketProviderContext =
-  createContext<SocketProviderContextInterface>({
+// Check if context already exists (for symlink development)
+const globalKey = '__SOCKET_PROVIDER_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<SocketProviderContextInterface>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<SocketProviderContextInterface>({
     isConnected: false,
     signinRequest: null,
   });
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const SocketProviderContext = context;
 
 // "undefined" means the URL will be computed from the `window.location` object
 const noveEnv = getEnvVar('NODE_ENV')

@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react';
@@ -33,6 +35,7 @@ import { AuthFooter } from './AuthFooter';
 import { AuthTextController } from './AuthTextController';
 import { AuthValidationTip } from './AuthValidationTip';
 import { SignUpFormWithoutLayout } from './SignUpFormWithoutLayout';
+import { W3blockAuthenticationContext } from '../context/W3blockAuthenticationContext';
 
 interface Form {
   email: string;
@@ -86,7 +89,6 @@ export const SigInWithoutLayout = ({
     LocalStorageFields.AUTHENTICATION_CALLBACK,
     ''
   );
-
   const query =
     Object.keys(router?.query ?? {})?.length > 0 &&
     (profile?.data.kycStatus === KycStatus.Pending || !profile?.data.mainWallet)
@@ -191,13 +193,13 @@ export const SigInWithoutLayout = ({
   const checkForCallbackUrl = () => {
     if (profile && !profile.data.verified) {
       return PixwayAppRoutes.VERIfY_WITH_CODE;
-    } else if (router.query.callbackPath) {
-      return router.query.callbackPath as string;
-    } else if (router.query.callbackUrl) {
-      return router.query.callbackUrl as string;
-    } else if (profile?.data.kycStatus === KycStatus.Pending) {
+    } else if (router?.query?.callbackPath) {
+      return router?.query?.callbackPath as string;
+    } else if (router?.query?.callbackUrl) {
+      return router?.query?.callbackUrl as string;
+    } else if (profile?.data?.kycStatus === KycStatus.Pending) {
       return routerToAttachKyc;
-    } else if (!profile?.data.mainWallet && !skipWallet) {
+    } else if (!profile?.data?.mainWallet && !skipWallet) {
       return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;

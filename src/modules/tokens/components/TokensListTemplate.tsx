@@ -113,7 +113,7 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
   const { isLoading: isLoadingProfile } = useProfile();
 
   const { mainWallet: wallet } = useUserWallet();
-
+  
   const [{ data: ethNFTsResponse, isLoading: isLoadingETH, error: errorEth }] =
     useGetNFTSByWallet(wallet?.chainId);
 

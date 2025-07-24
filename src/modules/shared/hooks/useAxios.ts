@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
-
+import { validateJwtToken, getSecureApi, getPublicAPI } from '../config/api';
 import { W3blockAPI } from '../enums/W3blockAPI';
 import { usePixwayAPIURL } from './usePixwayAPIURL';
 import { useRouterConnect } from './useRouterConnect';
-import { usePixwayAuthentication } from '../../auth/hooks/usePixwayAuthentication';
-import { getPublicAPI, validateJwtToken } from '../config/api';
 import { useToken } from './useToken';
+import { usePixwayAuthentication } from '../../../modules/auth/hooks/usePixwayAuthentication';
 
 export const useAxios = (type: W3blockAPI) => {
   const apisUrl = usePixwayAPIURL();
@@ -29,7 +28,7 @@ export const useAxios = (type: W3blockAPI) => {
       const callbackUrl = `${router.basePath}/auth/signIn?${queryString}`;
       signOut({ callbackUrl });
     }
-    return getPublicAPI(baseUrl);
+    return token ? getSecureApi(token, baseUrl) : getPublicAPI(baseUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [baseUrl]);
+  }, [token, baseUrl]);
 };

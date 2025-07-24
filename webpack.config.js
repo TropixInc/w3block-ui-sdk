@@ -82,6 +82,9 @@ export default (env, argv) => {
       swiper: 'swiper',
       '@tanstack/react-query': '@tanstack/react-query',
       '@tanstack/query-core': '@tanstack/query-core',
+      next: 'next',
+      'next-auth': 'next-auth',
+      '@w3block/w3block-ui-sdk': '@w3block/w3block-ui-sdk',
     },
 
     resolve: {
@@ -91,12 +94,16 @@ export default (env, argv) => {
           __dirname,
           'node_modules/swiper/swiper.min.css'
         ),
+        // Fix React context duplication with symlinks
+        react: path.resolve(__dirname, 'node_modules/react'),
+        'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
       },
       fallback: {
         zlib: false,
         stream: false,
         fs: false,
       },
+      symlinks: false,
     },
 
     module: {

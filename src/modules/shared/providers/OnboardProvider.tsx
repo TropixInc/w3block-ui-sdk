@@ -30,12 +30,31 @@ interface OnboardProps {
   refetchDocs: () => void;
 }
 
-export const OnboardContext = createContext<OnboardProps>({
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setLoading: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  refetchDocs: () => {},
-});
+// Check if context already exists (for symlink development)
+const globalKey = '__ONBOARD_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<OnboardProps>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<OnboardProps>({
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setLoading: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    refetchDocs: () => {},
+  });
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const OnboardContext = context;
 
 export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();

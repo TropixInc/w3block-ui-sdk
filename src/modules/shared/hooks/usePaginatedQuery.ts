@@ -106,10 +106,12 @@ export const usePaginatedQuery = <QueryData>(
       };
       if (router?.query?.page) {
         router.push({
+          pathname: router.pathname,
           query: newQuery,
         });
       } else {
         router.replace({
+          pathname: router.pathname,
           query: newQuery,
         });
       }
@@ -147,6 +149,7 @@ export const usePaginatedQuery = <QueryData>(
 
             if (page && page > inputMap(data)?.totalPages && !disableUrl) {
               router.replace({
+                pathname: router.pathname,
                 query: {
                   ...router?.query,
                   page: 1,
@@ -171,6 +174,7 @@ export const usePaginatedQuery = <QueryData>(
 
             if (page && page > inputMap(data)?.totalPages && !disableUrl) {
               router.replace({
+                pathname: router.pathname,
                 query: {
                   ...router.query,
                   page: 1,

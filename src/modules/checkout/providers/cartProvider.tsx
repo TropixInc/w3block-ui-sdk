@@ -18,7 +18,26 @@ export interface CartContext {
   setCartCurrencyId?: (currencyId: CurrencyResponse | undefined) => void;
 }
 
-export const CartContext = createContext<CartContext>({ cart: [] });
+// Check if context already exists (for symlink development)
+const globalKey = '__CART_CONTEXT__';
+declare global {
+  interface Window {
+    [key: string]: any;
+  }
+}
+
+let context: React.Context<CartContext>;
+
+if (typeof window !== 'undefined' && window[globalKey]) {
+  context = window[globalKey];
+} else {
+  context = createContext<CartContext>({ cart: [] });
+  if (typeof window !== 'undefined') {
+    window[globalKey] = context;
+  }
+}
+
+export const CartContext = context;
 
 const CART_KEY_CACHE = 'cart_cache';
 const CURRENCY_ID_CACHE = 'currency_id_cache';

@@ -47,4 +47,6 @@ export * from './modules/shared/interfaces/IThemeContext';
 export * from './modules/auth/templates/SignInTemplateSDK';
 export * from './modules/core/adapters/PixwaySDKNextRouterAdapter';
 export * from './modules/auth';
+export * from './modules/auth/context/W3blockAuthenticationContext';
+export * from './modules/auth/context/W3blockAuthenticationProvider';
 export * from './style.css';
