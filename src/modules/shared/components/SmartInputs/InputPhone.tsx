@@ -68,7 +68,7 @@ const InputPhone = ({
         }
         name={name}
         value={inputValue}
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={(e) => handleChange(e?.target?.value)}
         placeholder="+XX XX XXXXX XXXX"
         mask={
           inputValue && inputValue?.length <= 16

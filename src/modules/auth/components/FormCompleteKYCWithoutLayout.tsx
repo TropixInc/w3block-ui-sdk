@@ -323,11 +323,12 @@ const _FormCompleteKYCWithoutLayout = ({
         : doc.inputId === inputId
     );
   }
+
   const formState = useMemo(() => {
     if (productForm) return 'initial';
-    else if (router.query.formState) return router.query.formState as string;
+    else if (router?.query?.formState) return router?.query?.formState as string;
     else return '';
-  }, [productForm, router.query.formState]);
+  }, [productForm, router?.query?.formState]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
@@ -363,7 +364,7 @@ const _FormCompleteKYCWithoutLayout = ({
         <FormTemplate
           isLoading={isLoading}
           buttonDisabled={
-            !dynamicMethods.formState.isValid ||
+            !dynamicMethods?.formState?.isValid ||
             isLoading ||
             Boolean(
               contextSlug === 'signup' &&
@@ -494,7 +495,7 @@ const _FormCompleteKYCWithoutLayout = ({
               </div>
             </Alert>
           )}
-          {!dynamicMethods.formState.isValid &&
+          {!dynamicMethods?.formState?.isValid &&
             !inputsFiltered?.some(
               (res: { type: DataTypesEnum }) =>
                 res.type === DataTypesEnum.Iframe
