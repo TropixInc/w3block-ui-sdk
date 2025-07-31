@@ -4,8 +4,6 @@ import { useBoolean } from 'react-use';
 
 import { compareAsc, format } from 'date-fns';
 
-import { useRouter } from 'next/router';
-
 import { ErrorBox } from '../../shared/components/ErrorBox';
 
 import { Spinner } from '../../shared/components/Spinner';
@@ -27,6 +25,7 @@ import { QrCodeReader } from '../../shared/components/QrCodeReader';
 import { QrCodeValidated } from '../../shared/components/QrCodeReader/QrCodeValidated';
 import { QrCodeError, TypeError } from '../../shared/components/QrCodeReader/QrCodeError';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useRouterConnect } from 'modules/shared/hooks/useRouterConnect';
 
 
 
@@ -45,7 +44,7 @@ interface formatAddressProps {
 
 export const PassesDetail = () => {
   const isMobile = useIsMobile();
-  const router = useRouter();
+  const router = useRouterConnect();
   const tokenPassId = String(router.query.tokenPassId) || '';
   const chainId = String(router.query.chainId) || '';
   const contractAddress = String(router.query.contractAddress) || ''
@@ -211,6 +210,8 @@ export const PassesDetail = () => {
       setOpenScan(false);
     }
   };
+
+  console.log(headers, "headers")
 
 
   return (

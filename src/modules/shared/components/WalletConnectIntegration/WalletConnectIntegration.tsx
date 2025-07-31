@@ -37,6 +37,7 @@ const _WalletConnectIntegration = () => {
   const [isDesincOpen, setIsDesincOpen] = useState(false);
 
   const hasWalletConnect = integrations ? integrations.data[0]?.active : false;
+
   const tenantsAvailable = useMemo(() => {
     const tenants = tenantIntegrations?.data.map(
       ({ toTenantId }) => toTenantId

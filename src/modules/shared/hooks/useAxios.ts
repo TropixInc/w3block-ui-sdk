@@ -20,7 +20,6 @@ export const useAxios = (type: W3blockAPI) => {
   ]);
   const baseUrl = apiBaseURLMap.get(type) ?? '';
 
-
   return useMemo(() => {
     if (token && !validateJwtToken(token)) {
       const query = window ? { callbackUrl: window?.location?.href } : '';

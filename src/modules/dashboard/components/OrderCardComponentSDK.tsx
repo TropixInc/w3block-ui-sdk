@@ -11,7 +11,6 @@ import CheckIcon from '../../shared/assets/icons/checkOutlined.svg';
 // import CopyIcon from '../../../shared/assets/icons/copy.svg';
 import InfoIcon from '../../shared/assets/icons/informationCircled.svg';
 import XIcon from '../../shared/assets/icons/x-circle.svg';
-import { useRouter } from 'next/router';
 
 import { CheckoutStatus } from '../../checkout/components/CheckoutInfo';
 import { useGetEspecificOrder } from '../../checkout/hooks/useGetEspecificOrder';
@@ -70,7 +69,7 @@ export const OrderCardComponentSDK = ({
     enabled: opened,
   });
   const { defaultTheme } = useThemeConfig();
-  const router = useRouter();
+  const router = useRouterConnect();
   const coinPaymentCurrencyId = useMemo(() => {
     return (
       router.query?.cryptoCurrencyId ??
@@ -287,8 +286,7 @@ export const OrderCardComponentSDK = ({
                               ?.attributes?.formats?.thumbnail?.url
                           : prod?.productToken?.product?.images?.length
                           ? prod?.productToken?.product?.images?.[0]?.thumb
-                          : prod?.productToken?.metadata?.media?.[0]?.cached
-                              .smallSizeUrl ?? ''
+                          : prod?.productToken?.metadata?.media?.[0]?.cached?.smallSizeUrl ?? ''
                       }
                       name={prod?.productToken?.product?.name ?? ''}
                       id={prod?.productToken?.product.id ?? ''}

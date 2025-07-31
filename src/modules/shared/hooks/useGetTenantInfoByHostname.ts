@@ -17,13 +17,11 @@ export const useGetTenantInfoByHostname = () => {
 
   const hostname =
     enviroment != 'development' && enviroment != 'production'
-      ? 'foodbusters.com.br'
+      ? 'foodbusters.stg.w3block.io'
       : location;
 
   const apiUrl =
     baseUrl + PixwayAPIRoutes.TENANT_BY_HOSTNAME + '?hostname=' + hostname;
-
-    console.log(apiUrl, "apiUrl")
 
   const queryClient = useQueryClient();
 

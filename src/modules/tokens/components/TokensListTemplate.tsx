@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import WalletImage from '../assets/wallet.svg';
+import WalletImage from '../../shared/assets/icons/wallet.svg';
 
 import { Token } from '../interfaces/Token';
 import { ErrorBox } from '../../shared/components/ErrorBox';

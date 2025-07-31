@@ -32,7 +32,7 @@ export const TableBase = ({
     <div className="pw-w-full pw-flex pw-flex-col pw-gap-[16px]">
       <div className="pw-w-full pw-overflow-x-scroll sm:pw-overflow-x-hidden pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] ">
         <div className="pw-flex pw-justify-between pw-bg-[#295BA6] pw-border pw-rounded-t-[16px]">
-          {columns.map((item, index) => (
+          {columns?.map((item, index) => (
             <div
               key={item}
               className={classNames(

@@ -2,7 +2,6 @@
 import { useMemo, useState } from 'react';
 
 import classNames from 'classnames';
-import { Menu } from '@headlessui/react';
 import { FormCompleteKYCWithoutLayout } from '../../auth/components/FormCompleteKYCWithoutLayout';
 import { useRequestConfirmationMail } from '../../auth/hooks/useRequestConfirmationMail';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
@@ -20,6 +19,7 @@ import { PixwayButton } from './PixwayButton';
 import { Spinner } from './Spinner';
 import TranslatableComponent from './TranslatableComponent';
 import useTranslation from '../hooks/useTranslation';
+import { Menu } from './Menu';
 
 const _MyProfileTemplate = () => {
   const {

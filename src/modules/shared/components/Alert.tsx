@@ -1,11 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import * as React from "react"
 
 import classNames from 'classnames';
 
@@ -26,7 +19,7 @@ export interface AlertProps {
   variant?: AlertVariant;
   scrollToOnMount?: boolean;
   className?: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 interface IconProps {
@@ -50,7 +43,7 @@ let context: React.Context<AlertContext>;
 if (typeof window !== 'undefined' && window[globalKey]) {
   context = window[globalKey];
 } else {
-  context = createContext<AlertContext>({} as AlertContext);
+  context = React.createContext<AlertContext>({} as AlertContext);
   if (typeof window !== 'undefined') {
     window[globalKey] = context;
   }
@@ -83,10 +76,10 @@ export const Alert = ({
   children,
   scrollToOnMount = false,
 }: AlertProps) => {
-  const value = useMemo(() => ({ variant }), [variant]);
-  const elementRef = useRef<HTMLDivElement>(null);
+  const value = React.useMemo(() => ({ variant }), [variant]);
+  const elementRef = React.useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (
       typeof window !== 'undefined' &&
       elementRef.current &&
@@ -119,7 +112,7 @@ export const Alert = ({
 };
 
 const Icon = ({ className = '' }: IconProps) => {
-  const { variant } = useContext(AlertContext);
+  const { variant } = React.useContext(AlertContext);
   const variantIconConfig = iconConfigMap.get(variant);
 
   return variantIconConfig ? (
