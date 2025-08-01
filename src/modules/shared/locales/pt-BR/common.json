@@ -735,7 +735,7 @@
   "shared>inputCompletedAddress>compliment": "Complemento",
   "shared>inputCompletedAddress>enterCompliment": "Digite o complemento",
   "shared>inputCompletedAddress>enterPlaceNumber": "Digite o número do endereço",
-  "shared>inputCompletedAddress>enterZipCode": "Pesquisar endereço por CEP",
+  "shared>inputCompletedAddress>enterZipCode": "Busque pelo CEP ou pela sua rua",
   "shared>inputCompletedAddress>selectCountry": "Selecione o país",
   "shared>inputCompletedAddress>zipCode": "Código postal",
   "shared>inputDocument>docNumber": "Número do Documento",
@@ -1002,7 +1002,7 @@
   "checkout>increaseCurrency>cancel": "Cancelar",
   "checkout>increaseCurrency>processing": "Estamos processando sua solicitação, por favor aguarde...",
   "pages>mysales>mysales": "Minhas vendas",
-  "pages>mysales>resale": "Colocar à venda",
+  "pages>mysales>resale": "Confirmar Oferta de Venda",
   "pages>productResale>erc20Sell": "Venda de {{name}}",
   "pages>productResale>quantity": "Quantidade",
   "pages>productResale>currency": "Moeda",
@@ -1054,5 +1054,8 @@
   "auth>signWithoutLayout>signinApple": "Continuar com Apple",
   "pages>checkout>batchSizeSale": "Você só pode vender em quantidades multiplas de {{batchSize}}",
   "pages>productPage>minValue": "Valor minimo para compra de {{value}}",
-"pages>mySales>currentBalance": "Saldo atual de {{coin}}"
+  "pages>mySales>currentBalance": "Saldo atual de {{coin}}",
+  "pages>resale>feesTip": " ",
+  "pages>resale>saleWarning": " ",
+  "shared>cityAutoComplete>addressNotFound": "Não encontramos rua ou endereço com esse CEP. Dica: Busque pela sua rua."
  }

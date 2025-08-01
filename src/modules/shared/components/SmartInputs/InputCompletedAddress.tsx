@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import useTranslation from '../../hooks/useTranslation';
 import { useEffect, useMemo, useState } from 'react';
-
-import { countries } from '../../utils/countries';
 import { BaseSelect } from '../BaseSelect';
 import LabelWithRequired from '../LabelWithRequired';
 import CityAutoComplete from './CityAutoComplete';
-import useTranslation from '../../hooks/useTranslation';
+import { countries } from '../../utils/countries';
+
+
 interface InputCompletedAddressProps {
   onChangeRegion?: (value: string | undefined) => void;
   name: string;
   apiValue?: any;
-  type: string;
+  type: Array<string>;
   inputLabel?: string;
   inputPlaceholder?: string;
   hidenValidations?: boolean;

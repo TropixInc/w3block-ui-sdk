@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
@@ -6,24 +5,24 @@ import { useDebounce } from 'react-use';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import {
-  useGetResaleById,
   ProductResaleResponse,
-} from '../../hooks/useGetResaleById';
-import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20';
-import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions';
-import { usePostProductResale } from '../../hooks/usePostProductResale';
-import { useRouterConnect } from '../../hooks/useRouterConnect';
+  useGetResaleById,
+} from '../../hooks/useGetResaleById/useGetResaleById';
+import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
+import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { BaseInput } from '../BaseInput';
 import { BaseSelect } from '../BaseSelect';
 import { BaseButton } from '../Buttons';
-import { CriptoValueComponent } from '../CriptoValueComponent';
-import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Shimmer } from '../Shimmer';
 import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions';
+import { CriptoValueComponent } from '../CriptoValueComponent';
+import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
 
 export const Erc20Resale = () => {
   const [translate] = useTranslation();
@@ -63,7 +62,7 @@ export const Erc20Resale = () => {
         price: config?.price?.toString(),
       },
       {
-        onSuccess(data: ProductResaleResponse) {
+        onSuccess(data) {
           setProductResale(data);
         },
       }
@@ -168,18 +167,21 @@ export const Erc20Resale = () => {
           </div>
         ) : (
           <>
-            <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-[34px] pw-mt-8 pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
-              <div className="pw-w-full pw-flex pw-flex-col pw-gap-3">
+            <div className="pw-flex pw-flex-col pw-gap-[34px] pw-mt-8 pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px] pw-mb-5">
+              <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px]">
                 <div>
-                  <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
-                    {translate('pages>productResale>quantity')}
-                  </label>
+                  <div
+                    className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
+                    dangerouslySetInnerHTML={{
+                      __html: translate('pages>productResale>quantity'),
+                    }}
+                  />
                   <div className="pw-flex pw-gap-3">
                     <BaseInput
                       value={value}
                       onChange={(e) => setValue(parseFloat(e.target.value))}
                       type="number"
-                      className="pw-w-full"
+                      className="pw-w-full pw-max-w-[250px]"
                     />
                     <div className="pw-flex pw-gap-2">
                       <button
@@ -205,9 +207,12 @@ export const Erc20Resale = () => {
                 </div>
                 {options.length > 1 ? (
                   <div>
-                    <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
-                      {translate('pages>productResale>currency')}
-                    </label>
+                    <div
+                      className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
+                      dangerouslySetInnerHTML={{
+                        __html: translate('pages>productResale>currency'),
+                      }}
+                    />
                     <BaseSelect
                       value={config?.currency}
                       readOnly={options.length === 1}
@@ -220,10 +225,12 @@ export const Erc20Resale = () => {
                   </div>
                 ) : null}
                 <div>
-                  <label className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2">
-                    {translate('pages>productResale>value')}
-                    {' (R$)'}
-                  </label>
+                  <div
+                    className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
+                    dangerouslySetInnerHTML={{
+                      __html: translate('pages>productResale>value'),
+                    }}
+                  />
                   <CurrencyInput
                     onChangeValue={(_, value) => {
                       if (value) {
@@ -238,7 +245,7 @@ export const Erc20Resale = () => {
                     InputElement={
                       <input
                         inputMode="numeric"
-                        className="pw-w-full pw-border-[#CED4DA] pw-border pw-border-solid pw-h-[32px] pw-text-[16px] pw-outline-none focus:pw-outline-none pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white pw-text-black"
+                        className="pw-w-full pw-max-w-[250px] pw-border-[#CED4DA] pw-border pw-border-solid pw-h-[32px] pw-text-[16px] pw-outline-none focus:pw-outline-none pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white pw-text-black"
                         placeholder="0.00"
                       />
                     }
@@ -257,15 +264,21 @@ export const Erc20Resale = () => {
                 </div>
               </div>
               <div className="pw-w-full">
-                <div className="pw-mb-8">
-                  <h1 className="pw-font-normal pw-text-base pw-mb-4 pw-text-black">
-                    {translate('pages>productResale>summary')}
-                  </h1>
+                <div>
+                  <div
+                    className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
+                    dangerouslySetInnerHTML={{
+                      __html: translate('pages>productResale>summary'),
+                    }}
+                  />
                   <div className={`pw-w-full`}>
                     <div className="pw-flex pw-justify-between">
-                      <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
-                        {translate('pages>productResale>subtotal')}
-                      </p>
+                      <div
+                        className="pw-text-sm pw-text-[#35394C] pw-font-[400]"
+                        dangerouslySetInnerHTML={{
+                          __html: translate('pages>productResale>subtotal'),
+                        }}
+                      />
                       {isLoadingPreview ? (
                         <Shimmer />
                       ) : (
@@ -287,9 +300,12 @@ export const Erc20Resale = () => {
                       ?.fees === undefined ? null : (
                       <>
                         <div className="pw-flex pw-justify-between">
-                          <p className="pw-text-sm pw-text-[#35394C] pw-font-[400]">
-                            {translate('pages>mysales>resale>fees')}
-                          </p>
+                          <div
+                            className="pw-text-sm pw-text-[#35394C] pw-font-[400]"
+                            dangerouslySetInnerHTML={{
+                              __html: translate('pages>mysales>resale>fees'),
+                            }}
+                          />
                           {isLoadingPreview ? (
                             <Shimmer />
                           ) : (
@@ -310,9 +326,12 @@ export const Erc20Resale = () => {
                     )}
                     <div className="pw-w-full pw-h-[1px] pw-bg-[#777E8F] pw-my-2"></div>
                     <div className="pw-flex pw-justify-between">
-                      <p className="pw-font-[600] pw-text-sm pw-text-[#35394C]">
-                        {translate('pages>resale>totalReceivable')}
-                      </p>
+                      <div
+                        className="pw-text-sm pw-text-[#35394C] pw-font-[600]"
+                        dangerouslySetInnerHTML={{
+                          __html: translate('pages>resale>totalReceivable'),
+                        }}
+                      />
                       {isLoadingPreview ? (
                         <Shimmer />
                       ) : (
@@ -328,23 +347,35 @@ export const Erc20Resale = () => {
                         </div>
                       )}
                     </div>
+                    <div
+                      className="pw-text-[14px] pw-text-gray-500"
+                      dangerouslySetInnerHTML={{
+                        __html: translate('pages>resale>feesTip'),
+                      }}
+                    />
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="pw-mt-5 pw-w-full pw-flex pw-justify-end">
-              <div className="pw-flex pw-flex-col pw-gap-2">
-                {error !== '' ? <Alert variant="error">{error}</Alert> : null}
+              <div>
+                <div
+                  className="pw-block pw-text-sm pw-font-medium pw-text-black"
+                  dangerouslySetInnerHTML={{
+                    __html: translate('pages>resale>saleWarning'),
+                  }}
+                />
+              </div>
+              <div className="pw-w-full pw-flex pw-justify-start">
+                <div className="pw-flex pw-flex-col pw-gap-2">
+                  {error !== '' ? <Alert variant="error">{error}</Alert> : null}
 
-                <BaseButton disabled={isLoading} onClick={handleSubmit}>
-                  {isLoading ? (
-                    <Spinner className="pw-w-5 pw-h-5" />
-                  ) : isEdit ? (
-                    translate('pages>mysales>resale>saveSale')
-                  ) : (
-                    translate('pages>mysales>resale')
-                  )}
-                </BaseButton>
+                  <BaseButton disabled={isLoading} onClick={handleSubmit}>
+                    {isLoading ? (
+                      <Spinner className="pw-w-5 pw-h-5" />
+                    ) : (
+                      translate('pages>mysales>resale')
+                    )}
+                  </BaseButton>
+                </div>
               </div>
             </div>
           </>

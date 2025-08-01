@@ -8,12 +8,12 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-import { Pagination } from 'swiper/modules';
+import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-/* import 'swiper/css';
+import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination'; */
+import 'swiper/css/pagination';
 
 import {
   GIFT_DATA_INFO_KEY,
@@ -25,57 +25,53 @@ import {
   AvailableInstallmentInfo,
   OrderPreviewResponse,
 } from '../../checkout/interface/interface';
+// eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
-import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
-import {
-  formatterCurrency,
-  CriptoValueComponent,
-} from '../../shared/components/CriptoValueComponent';
 import { ErrorBox } from '../../shared/components/ErrorBox';
-import { ImageSDK } from '../../shared/components/ImageSDK';
-import { ModalBase } from '../../shared/components/ModalBase';
-import { Shimmer } from '../../shared/components/Shimmer';
-import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
-
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useRouter from '../../shared/hooks/useRouter';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-import useGetProductBySlug from '../hooks/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
-import { useThemeConfig } from '../hooks/useThemeConfig';
-import { useTrack } from '../hooks/useTrack';
-import { CurrencyResponse, Variants } from '../interfaces/Product';
-import { ProductPageData } from '../interfaces/Theme';
 import { ProductVariants } from './ProductVariants';
 import { SendGiftForm } from './SendGiftForm';
+import { CheckboxAlt } from 'modules/shared/components/CheckboxAlt';
+import { formatterCurrency, CriptoValueComponent } from 'modules/shared/components/CriptoValueComponent';
+import { ImageSDK } from 'modules/shared/components/ImageSDK';
+import { ModalBase } from 'modules/shared/components/ModalBase';
+import { Shimmer } from 'modules/shared/components/Shimmer';
+import { Spinner } from 'modules/shared/components/Spinner';
+import useAdressBlockchainLink from 'modules/shared/hooks/useAdressBlockchainLink';
+import { useRouterConnect } from 'modules/shared/hooks/useRouterConnect';
+import { useUtms } from 'modules/shared/hooks/useUtms';
+import useGetProductBySlug from '../hooks/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { useTrack } from '../hooks/useTrack';
+import { CurrencyResponse } from '../interfaces/Product';
+import { ProductPageData } from '../interfaces/Theme';
+import { useThemeConfig } from '../hooks/useThemeConfig';
 
 interface ProductPageProps {
   data: ProductPageData;
   params?: string[];
   hasCart?: boolean;
-  productSlug?: string;
 }
 
 export const ProductPage = ({
   data,
   params,
   hasCart = true,
-  productSlug
 }: ProductPageProps) => {
   const { styleData, mobileStyleData } = data;
-  const router = useRouterConnect();
-  const requiredModalPending = router?.query?.requiredModalPending?.includes(
+  const router = useRouter();
+  const requiredModalPending = router.query.requiredModalPending?.includes(
     'true'
   )
     ? true
@@ -142,8 +138,7 @@ export const ProductPage = ({
     refetch,
     isLoading,
     error: errorProduct,
-  } = useGetProductBySlug(productSlug);
-
+  } = useGetProductBySlug(params?.[params.length - 1]);
   const isErc20 = product?.type === 'erc20';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
@@ -157,7 +152,7 @@ export const ProductPage = ({
     return product?.requirements?.requireKycContext?.slug;
   }, [product?.requirements?.requireKycContext?.slug]);
   const openModal =
-    router?.query?.openModal?.includes('true') && !product?.canPurchase
+    router.query.openModal?.includes('true') && !product?.canPurchase
       ? true
       : false;
   const [isOpenRefresh, setIsOpenRefresh] = useState(requiredModalPending);
@@ -237,8 +232,7 @@ export const ProductPage = ({
   );
 
   const userHasIntegration = userIntegrations?.data?.items?.some(
-    (val: { toTenantId: any }) =>
-      val.toTenantId === product?.requirements?.companyId
+    (val) => val.toTenantId === product?.requirements?.companyId
   );
 
   const openNewWindow = (path: string) => {
@@ -258,21 +252,25 @@ export const ProductPage = ({
   }) => {
     if (userHasIntegration) {
       openNewWindow(
-        `https://${host}/redirectPage?productId=${product?.requirements?.productId
-        }${product?.requirements?.purchaseRequiredModalContent
-          ? '&purchaseRequiredModalContent=' +
+        `https://${host}/redirectPage?productId=${
+          product?.requirements?.productId
+        }${
           product?.requirements?.purchaseRequiredModalContent
-          : ''
+            ? '&purchaseRequiredModalContent=' +
+              product?.requirements?.purchaseRequiredModalContent
+            : ''
         }`
       );
       if (!openNewWindow) {
         setTimeout(() => {
           window.open(
-            `https://${host}/redirectPage?productId=${product?.requirements?.productId
-            }${product?.requirements?.purchaseRequiredModalContent
-              ? '&purchaseRequiredModalContent=' +
+            `https://${host}/redirectPage?productId=${
+              product?.requirements?.productId
+            }${
               product?.requirements?.purchaseRequiredModalContent
-              : ''
+                ? '&purchaseRequiredModalContent=' +
+                  product?.requirements?.purchaseRequiredModalContent
+                : ''
             }`,
             '_blank'
           );
@@ -280,41 +278,53 @@ export const ProductPage = ({
       }
     } else {
       createIntegrationToken(toTenantId ?? '', {
-        onSuccess(data: { token: any }) {
+        onSuccess(data) {
           openNewWindow(
-            `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email
-            }&fromTentant=${currentTenant?.name
-            }&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId
-            }&collectionId=${product?.requirements?.keyCollectionId}${product?.requirements?.autoCloseOnSuccess
-              ? '&autoCloseOnSuccess=' +
+            `https://${host}/linkAccount?token=${data.token}&fromEmail=${
+              user?.email
+            }&fromTentant=${
+              currentTenant?.name
+            }&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${
+              product?.requirements?.productId
+            }&collectionId=${product?.requirements?.keyCollectionId}${
               product?.requirements?.autoCloseOnSuccess
-              : ''
-            }${product?.requirements?.linkMessage
-              ? '&linkMessage=' + product?.requirements?.linkMessage
-              : ''
-            }${product?.requirements?.purchaseRequiredModalContent
-              ? '&purchaseRequiredModalContent=' +
+                ? '&autoCloseOnSuccess=' +
+                  product?.requirements?.autoCloseOnSuccess
+                : ''
+            }${
+              product?.requirements?.linkMessage
+                ? '&linkMessage=' + product?.requirements?.linkMessage
+                : ''
+            }${
               product?.requirements?.purchaseRequiredModalContent
-              : ''
+                ? '&purchaseRequiredModalContent=' +
+                  product?.requirements?.purchaseRequiredModalContent
+                : ''
             }`
           );
           if (!openNewWindow) {
             setTimeout(() => {
               window.open(
-                `https://${host}/linkAccount?token=${data.token}&fromEmail=${user?.email
-                }&fromTentant=${currentTenant?.name
-                }&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${product?.requirements?.productId
-                }&collectionId=${product?.requirements?.keyCollectionId}${product?.requirements?.autoCloseOnSuccess
-                  ? '&autoCloseOnSuccess=' +
+                `https://${host}/linkAccount?token=${data.token}&fromEmail=${
+                  user?.email
+                }&fromTentant=${
+                  currentTenant?.name
+                }&toTenant=${toTenantName}&toTenantId=${toTenantId}&productId=${
+                  product?.requirements?.productId
+                }&collectionId=${product?.requirements?.keyCollectionId}${
                   product?.requirements?.autoCloseOnSuccess
-                  : ''
-                }${product?.requirements?.linkMessage
-                  ? '&linkMessage=' + product?.requirements?.linkMessage
-                  : ''
-                }${product?.requirements?.purchaseRequiredModalContent
-                  ? '&purchaseRequiredModalContent=' +
+                    ? '&autoCloseOnSuccess=' +
+                      product?.requirements?.autoCloseOnSuccess
+                    : ''
+                }${
+                  product?.requirements?.linkMessage
+                    ? '&linkMessage=' + product?.requirements?.linkMessage
+                    : ''
+                }${
                   product?.requirements?.purchaseRequiredModalContent
-                  : ''
+                    ? '&purchaseRequiredModalContent=' +
+                      product?.requirements?.purchaseRequiredModalContent
+                    : ''
                 }`,
                 '_blank'
               );
@@ -406,74 +416,75 @@ export const ProductPage = ({
   const { companyId } = useCompanyConfig();
   const { getOrderPreview } = useCheckout();
   const [isLoadingValue, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (
+      product?.minPurchaseAmount &&
+      product?.stockAmount &&
+      parseFloat(product?.minPurchaseAmount) <= product?.stockAmount
+    ) {
+      setQuantity(parseFloat(product?.minPurchaseAmount));
+    }
+  }, [product?.minPurchaseAmount, product?.stockAmount]);
+
   const getOrderPreviewFn = () => {
     if (product?.id && currencyId) {
-      setIsLoading(true);
-      getOrderPreview.mutate(
-        {
-          productIds: [
-            ...Array(isErc20 ? 1 : quantity).fill({
-              productId: product.id,
-              quantity: isErc20 ? quantity ?? 1 : 1,
-              selectBestPrice: product?.type === 'erc20' ? true : undefined,
-              variantIds: variants
-                ? Object.values(variants).map((value) => {
+      const order = {
+        productIds: [
+          ...Array(isErc20 ? 1 : quantity).fill({
+            productId: product.id,
+            quantity: isErc20 ? quantity ?? 1 : 1,
+            selectBestPrice: product?.type === 'erc20' ? true : undefined,
+            variantIds: variants
+              ? Object.values(variants).map((value) => {
                   if ((value as any).productId === product.id)
                     return (value as any).id;
                 })
-                : [],
-            }),
-          ],
-          currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
-          passShareCodeData: giftData,
-          payments: [
-            {
-              currencyId:
-                currencyId?.id ?? (currencyId as unknown as string) ?? '',
-              amountType: 'percentage',
-              amount: '100',
-            },
-          ],
-          companyId,
-          couponCode:
-            utms.utm_campaign &&
-              utms?.expires &&
-              new Date().getTime() < utms?.expires
-              ? utms.utm_campaign
-              : '',
-        },
-        {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onSuccess: (data: OrderPreviewResponse) => {
-            setIsLoading(false);
-            setOrderPreview(data);
+              : [],
+          }),
+        ],
+        currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
+        passShareCodeData: giftData,
+        payments: [
+          {
+            currencyId:
+              currencyId?.id ?? (currencyId as unknown as string) ?? '',
+            amountType: 'percentage',
+            amount: '100',
           },
-        }
-      );
+        ],
+        companyId,
+        couponCode:
+          utms.utm_campaign &&
+          utms?.expires &&
+          new Date().getTime() < utms?.expires
+            ? utms.utm_campaign
+            : '',
+      };
+      setIsLoading(true);
+      getOrderPreview.mutate(order, {
+        onSuccess: (data: OrderPreviewResponse) => {
+          setIsLoading(false);
+          setOrderPreview(data);
+        },
+      });
     }
   };
 
   useEffect(() => {
     if (product?.id) {
       const variant = {} as any;
-      product.variants?.map(
-        (val: {
-          id: any;
-          values: { name?: string; id?: string; keyValue?: string }[];
-          name: any;
-          keyLabel: any;
-        }) => {
-          variant[val.id as any] = {
-            name: val.values[0].name,
-            label: val.name,
-            id: val.values[0].id,
-            productId: product?.id,
-            variantId: val.id,
-            keyLabel: val.keyLabel,
-            keyValue: val.values[0].keyValue,
-          };
-        }
-      );
+      product.variants?.map((val) => {
+        variant[val.id as any] = {
+          name: val.values[0].name,
+          label: val.name,
+          id: val.values[0].id,
+          productId: product?.id,
+          variantId: val.id,
+          keyLabel: val.keyLabel,
+          keyValue: val.values[0].keyValue,
+        };
+      });
       setVariants({ ...variant });
     }
   }, [product?.id]);
@@ -503,10 +514,10 @@ export const ProductPage = ({
   const onChangeCheckbox = () => {
     const termsAria = product?.terms
       ?.map(
-        (val: { title: string }) =>
+        (val) =>
           (document.getElementById(val.title) as HTMLInputElement)?.checked
       )
-      .every((val: any) => val);
+      .every((val) => val);
     setTermsChecked(termsAria ?? true);
   };
 
@@ -517,10 +528,11 @@ export const ProductPage = ({
     return `${installment.amount}x de ${formatterCurrency(
       currency,
       String(installment?.installmentPrice)
-    )} ${installment.interest && installment.interest != 0
+    )} ${
+      installment.interest && installment.interest != 0
         ? `(${installment.interest}% de juros)`
         : 'sem juros'
-      }`;
+    }`;
   }
 
   const providerWithInstallments = orderPreview?.providersForSelection?.find(
@@ -530,7 +542,7 @@ export const ProductPage = ({
   const handleButtonText = () => {
     if (
       parseFloat(
-        product?.prices?.find((price: any) => price.currencyId == currencyId?.id)
+        product?.prices.find((price: any) => price.currencyId == currencyId?.id)
           ?.amount ?? '0'
       ) === 0 &&
       parseFloat(orderPreview?.payments?.[0]?.totalPrice ?? '0') === 0
@@ -547,10 +559,11 @@ export const ProductPage = ({
       if (productKycRequirement)
         pushConnect(
           PixwayAppRoutes.CHECKOUT_FORM +
-          `?productIds=${Array(isErc20 ? 1 : quantity)
-            .fill(product.id)
-            .join(',')}&currencyId=${currencyId?.id ?? (currencyId as unknown as string) ?? ''
-          }&contextSlug=${productKycRequirement}`
+            `?productIds=${Array(isErc20 ? 1 : quantity)
+              .fill(product.id)
+              .join(',')}&currencyId=${
+              currencyId?.id ?? (currencyId as unknown as string) ?? ''
+            }&contextSlug=${productKycRequirement}`
         );
       else {
         if (giftData) {
@@ -560,10 +573,11 @@ export const ProductPage = ({
           });
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-            `?productIds=${Array(isErc20 ? 1 : quantity)
-              .fill(product.id)
-              .join(',')}&currencyId=${currencyId?.id ?? (currencyId as unknown as string) ?? ''
-            }&sessionId=${id}`
+              `?productIds=${Array(isErc20 ? 1 : quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }&sessionId=${id}`
           );
         } else if (
           product?.settings?.acceptMultipleCurrenciesPurchase &&
@@ -571,38 +585,43 @@ export const ProductPage = ({
         ) {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-            `?productIds=${Array(isErc20 ? 1 : quantity)
-              .fill(product.id)
-              .join(',')}&currencyId=${currencyId?.id ?? (currencyId as unknown as string) ?? ''
-            }&cryptoCurrencyId=${product?.prices?.find((res) => res?.currency?.crypto)
-              ?.currencyId
-            }`
+              `?productIds=${Array(isErc20 ? 1 : quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }&cryptoCurrencyId=${
+                product?.prices?.find((res) => res?.currency?.crypto)
+                  ?.currencyId
+              }`
           );
         } else if (batchSize) {
           if (quantity > batchSize) {
             pushConnect(
               PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(isErc20 ? 1 : quantity)
-                .fill(product.id)
-                .join(',')}&currencyId=${currencyId?.id ?? (currencyId as unknown as string) ?? ''
-              }&batchSize=${batchSize}&quantity=${quantity}`
+                `?productIds=${Array(isErc20 ? 1 : quantity)
+                  .fill(product.id)
+                  .join(',')}&currencyId=${
+                  currencyId?.id ?? (currencyId as unknown as string) ?? ''
+                }&batchSize=${batchSize}&quantity=${quantity}`
             );
           } else {
             pushConnect(
               PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(isErc20 ? 1 : quantity)
-                .fill(product.id)
-                .join(',')}&currencyId=${currencyId?.id ?? (currencyId as unknown as string) ?? ''
-              }&batchSize=${batchSize}`
+                `?productIds=${Array(isErc20 ? 1 : quantity)
+                  .fill(product.id)
+                  .join(',')}&currencyId=${
+                  currencyId?.id ?? (currencyId as unknown as string) ?? ''
+                }&batchSize=${batchSize}`
             );
           }
         } else {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-            `?productIds=${Array(isErc20 ? 1 : quantity)
-              .fill(product.id)
-              .join(',')}&currencyId=${currencyId?.id ?? (currencyId as unknown as string) ?? ''
-            }`
+              `?productIds=${Array(isErc20 ? 1 : quantity)
+                .fill(product.id)
+                .join(',')}&currencyId=${
+                currencyId?.id ?? (currencyId as unknown as string) ?? ''
+              }`
           );
         }
       }
@@ -618,12 +637,22 @@ export const ProductPage = ({
     );
   }, [product?.canPurchaseAmount, product?.stockAmount, quantity, batchSize]);
 
+  const notEnoughStock = useMemo(() => {
+    if (
+      product?.minPurchaseAmount === null ||
+      (product?.stockAmount &&
+        parseFloat(product?.minPurchaseAmount ?? '0') > product?.stockAmount)
+    )
+      return true;
+    else return false;
+  }, [product?.minPurchaseAmount]);
+
   const minCartItemPriceBlock = useMemo(() => {
     return (
       !!orderPreview?.cartPrice &&
       !!product?.settings?.minCartItemPrice &&
       parseFloat(orderPreview?.cartPrice ?? '') <
-      product?.settings?.minCartItemPrice
+        product?.settings?.minCartItemPrice
     );
   }, [orderPreview?.cartPrice, product?.settings?.minCartItemPrice]);
 
@@ -635,7 +664,7 @@ export const ProductPage = ({
         (product?.stockAmount && product?.stockAmount < batchSize) ||
         (product?.canPurchaseAmount &&
           product?.canPurchaseAmount < batchSize) ||
-        (reachStock && minCartItemPriceBlock)
+        notEnoughStock
       );
     } else {
       return product?.stockAmount === 0 || product?.canPurchaseAmount === 0;
@@ -734,7 +763,7 @@ export const ProductPage = ({
             )}
             <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
               {product?.requirements?.productId === '' &&
-                userHasIntegration ? null : (
+              userHasIntegration ? null : (
                 <button
                   style={{
                     backgroundColor: '#0050FF',
@@ -745,9 +774,8 @@ export const ProductPage = ({
                     handleRefresh();
                     handleTenantIntegration({
                       host:
-                        toTenant?.hosts?.find(
-                          (value: { isMain: boolean }) => value.isMain === true
-                        )?.hostname ?? '',
+                        toTenant?.hosts.find((value) => value.isMain === true)
+                          ?.hostname ?? '',
                       toTenantName: toTenant?.name ?? '',
                       toTenantId: toTenant?.id ?? '',
                     });
@@ -780,7 +808,7 @@ export const ProductPage = ({
             <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-12">
               {product?.settings
                 ?.disableImageDisplay ? null : product?.images &&
-                  product?.images?.length > 1 ? (
+                product?.images?.length > 1 ? (
                 <Swiper
                   className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px]"
                   modules={[Pagination]}
@@ -826,9 +854,7 @@ export const ProductPage = ({
                     }}
                     className="pw-mt-4 pw-font-[700] pw-text-lg"
                   >
-                    {product?.tags
-                      ?.map((tag: { name: any }) => tag.name)
-                      .join('/')}
+                    {product?.tags?.map((tag) => tag.name).join('/')}
                   </p>
                 )}
                 {showValue && (
@@ -875,20 +901,20 @@ export const ProductPage = ({
                         ) : (
                           <>
                             {orderPreview &&
-                              orderPreview?.productsErrors?.length === 0 &&
-                              parseFloat(orderPreview.originalCartPrice ?? '0') >
+                            orderPreview?.productsErrors?.length === 0 &&
+                            parseFloat(orderPreview.originalCartPrice ?? '0') >
                               parseFloat(orderPreview.cartPrice ?? '0') ? (
                               <CriptoValueComponent
                                 size={12}
                                 fontClass="pw-ml-1 pw-text-sm pw-line-through pw-opacity-50"
                                 crypto={
-                                  product?.prices?.find(
+                                  product?.prices.find(
                                     (price: any) =>
                                       price.currencyId == currencyId?.id
                                   )?.currency.crypto
                                 }
                                 code={
-                                  product?.prices?.find(
+                                  product?.prices.find(
                                     (price: any) =>
                                       price.currencyId == currencyId?.id
                                   )?.currency.name
@@ -896,7 +922,7 @@ export const ProductPage = ({
                                 value={
                                   orderPreview?.products?.length > 1
                                     ? orderPreview?.products?.[0]?.prices?.[0]
-                                      ?.originalAmount ?? '0'
+                                        ?.originalAmount ?? '0'
                                     : orderPreview.originalCartPrice ?? '0'
                                 }
                               ></CriptoValueComponent>
@@ -906,55 +932,55 @@ export const ProductPage = ({
                                 isErc20
                                   ? false
                                   : parseFloat(
-                                    product?.prices?.find(
-                                      (price: any) =>
-                                        price.currencyId == currencyId?.id
-                                    )?.amount ?? '0'
-                                  ) === 0
+                                      product?.prices.find(
+                                        (price: any) =>
+                                          price.currencyId == currencyId?.id
+                                      )?.amount ?? '0'
+                                    ) === 0
                               }
                               showFree
                               size={24}
                               fontClass="pw-ml-1"
                               crypto={
-                                product?.prices?.find(
+                                product?.prices.find(
                                   (price: any) =>
                                     price.currencyId == currencyId?.id
                                 )?.currency.crypto
                               }
                               code={
-                                product?.prices?.find(
+                                product?.prices.find(
                                   (price: any) =>
                                     price.currencyId == currencyId?.id
                                 )?.currency.name
                               }
                               value={
                                 orderPreview &&
-                                  orderPreview?.productsErrors?.length === 0 &&
-                                  (parseFloat(
-                                    orderPreview.originalCartPrice ?? '0'
-                                  ) > parseFloat(orderPreview.cartPrice ?? '0') ||
-                                    parseFloat(orderPreview.cartPrice ?? '0') >
+                                orderPreview?.productsErrors?.length === 0 &&
+                                (parseFloat(
+                                  orderPreview.originalCartPrice ?? '0'
+                                ) > parseFloat(orderPreview.cartPrice ?? '0') ||
+                                  parseFloat(orderPreview.cartPrice ?? '0') >
                                     parseFloat(
-                                      product?.prices?.find(
+                                      product?.prices.find(
                                         (price: any) =>
                                           price.currencyId == currencyId?.id
                                       )?.amount ?? '0'
                                     ) ||
-                                    parseFloat(orderPreview.cartPrice ?? '0') <
+                                  parseFloat(orderPreview.cartPrice ?? '0') <
                                     parseFloat(
-                                      product?.prices?.find(
+                                      product?.prices.find(
                                         (price: any) =>
                                           price.currencyId == currencyId?.id
                                       )?.amount ?? '0'
                                     ))
                                   ? orderPreview?.products?.length > 1
                                     ? orderPreview?.products?.[0]?.prices?.[0]
-                                      ?.amount ?? '0'
+                                        ?.amount ?? '0'
                                     : orderPreview.cartPrice ?? '0'
-                                  : product?.prices?.find(
-                                    (price: any) =>
-                                      price.currencyId == currencyId?.id
-                                  )?.amount ?? '0'
+                                  : product?.prices.find(
+                                      (price: any) =>
+                                        price.currencyId == currencyId?.id
+                                    )?.amount ?? '0'
                               }
                             ></CriptoValueComponent>
                             {providerWithInstallments?.availableInstallments
@@ -963,8 +989,8 @@ export const ProductPage = ({
                                 {generateStringText(
                                   providerWithInstallments
                                     ?.availableInstallments[
-                                  providerWithInstallments
-                                    ?.availableInstallments.length - 1
+                                    providerWithInstallments
+                                      ?.availableInstallments.length - 1
                                   ] ?? {
                                     amount: 0,
                                     finalPrice: '0',
@@ -972,7 +998,7 @@ export const ProductPage = ({
                                     interest: 0,
                                   },
                                   providerWithInstallments?.currency?.code ??
-                                  'BRL'
+                                    'BRL'
                                 )}
                               </p>
                             ) : null}
@@ -986,29 +1012,29 @@ export const ProductPage = ({
                 )}
                 <div className="pw-flex pw-flex-col pw-gap-1 sm:pw-w-[350px] pw-w-full">
                   {product?.variants
-                    ? product?.variants.map((val: Variants) => (
-                      <ProductVariants
-                        key={val.id}
-                        variants={val}
-                        onClick={(e: any) => {
-                          setVariants({
-                            ...variants,
-                            [val.id]: Object.values(e)[0],
-                          });
-                        }}
-                        productId={product?.id}
-                        type={variantsType}
-                        borderColor={buttonColor ?? '#0050FF'}
-                      />
-                    ))
+                    ? product?.variants.map((val) => (
+                        <ProductVariants
+                          key={val.id}
+                          variants={val}
+                          onClick={(e: any) => {
+                            setVariants({
+                              ...variants,
+                              [val.id]: Object.values(e)[0],
+                            });
+                          }}
+                          productId={product?.id}
+                          type={variantsType}
+                          borderColor={buttonColor ?? '#0050FF'}
+                        />
+                      ))
                     : null}
                 </div>
                 {!soldOut &&
-                  actionButton &&
-                  product?.stockAmount &&
-                  product?.stockAmount > 0 &&
-                  product?.canPurchase &&
-                  !currencyId?.crypto ? (
+                actionButton &&
+                product?.stockAmount &&
+                product?.stockAmount > 0 &&
+                product?.canPurchase &&
+                !currencyId?.crypto ? (
                   <>
                     <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
                       <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
@@ -1018,21 +1044,34 @@ export const ProductPage = ({
                         <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
                           <p
                             onClick={() => {
-                              if (isErc20 && batchSize) {
-                                if (quantity > batchSize) {
-                                  setQuantity(quantity - batchSize);
+                              if (
+                                product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount)
+                              ) {
+                                // empty
+                              } else {
+                                if (isErc20 && batchSize) {
+                                  if (quantity > batchSize) {
+                                    setQuantity(quantity - batchSize);
+                                  }
+                                } else if (quantity > 1) {
+                                  setQuantity(quantity - 1);
                                 }
-                              } else if (quantity > 1) {
-                                setQuantity(quantity - 1);
                               }
                             }}
-                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${quantity === batchSize
+                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                              quantity === batchSize ||
+                              (product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount))
                                 ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
                                 : ''
-                              } ${quantity && quantity > 1
+                            } ${
+                              quantity && quantity > 1
                                 ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
                                 : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
-                              }`}
+                            }`}
                           >
                             -
                           </p>
@@ -1040,6 +1079,7 @@ export const ProductPage = ({
                             <input
                               type="number"
                               id="quantityValue"
+                              disabled
                               value={quantity}
                               onChange={() => {
                                 const inputValue = parseFloat(
@@ -1068,20 +1108,22 @@ export const ProductPage = ({
                             ></input>
                           </div>
                           <p
-                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${product?.canPurchaseAmount &&
-                                product?.stockAmount &&
-                                quantity + (batchSize ?? 0) >
+                            className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                              product?.canPurchaseAmount &&
+                              product?.stockAmount &&
+                              quantity + (batchSize ?? 0) >
                                 product?.canPurchaseAmount &&
-                                quantity + (batchSize ?? 0) > product?.stockAmount
+                              quantity + (batchSize ?? 0) > product?.stockAmount
                                 ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
                                 : ''
-                              } ${product?.canPurchaseAmount &&
-                                product?.stockAmount &&
-                                quantity < product?.canPurchaseAmount &&
-                                quantity < product?.stockAmount
+                            } ${
+                              product?.canPurchaseAmount &&
+                              product?.stockAmount &&
+                              quantity < product?.canPurchaseAmount &&
+                              quantity < product?.stockAmount
                                 ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
                                 : 'pw-border-[rgba(0,0,0,0.3)] pw-text-[rgba(0,0,0,0.3)] pw-cursor-default'
-                              }`}
+                            }`}
                             onClick={() => {
                               if (
                                 product?.canPurchaseAmount &&
@@ -1092,7 +1134,7 @@ export const ProductPage = ({
                                 if (isErc20 && batchSize) {
                                   if (
                                     quantity + batchSize <=
-                                    product?.canPurchaseAmount &&
+                                      product?.canPurchaseAmount &&
                                     quantity + batchSize <= product?.stockAmount
                                   ) {
                                     setQuantity(quantity + batchSize);
@@ -1139,13 +1181,13 @@ export const ProductPage = ({
                             size={12}
                             fontClass="pw-text-sm pw-font-[600] pw-text-[#353945] pw-opacity-50"
                             crypto={
-                              product?.prices?.find(
+                              product?.prices.find(
                                 (price: any) =>
                                   price.currencyId == currencyId?.id
                               )?.currency.crypto
                             }
                             code={
-                              product?.prices?.find(
+                              product?.prices.find(
                                 (price: any) =>
                                   price.currencyId == currencyId?.id
                               )?.currency.name
@@ -1210,7 +1252,7 @@ export const ProductPage = ({
                           user && !product?.requirements
                             ? true
                             : false ||
-                            (isSendGift && !giftData && isPossibleSend)
+                              (isSendGift && !giftData && isPossibleSend)
                         }
                         style={{
                           backgroundColor:
@@ -1236,7 +1278,7 @@ export const ProductPage = ({
                             user && !product?.requirements
                               ? true
                               : false ||
-                              (isSendGift && !giftData && isPossibleSend)
+                                (isSendGift && !giftData && isPossibleSend)
                           }
                           style={{
                             backgroundColor: 'none',
@@ -1258,37 +1300,37 @@ export const ProductPage = ({
                         onClick={handleClick}
                         disabled={
                           product?.hasWhitelistBlocker &&
-                            user &&
-                            !product?.requirements
+                          user &&
+                          !product?.requirements
                             ? true
                             : false ||
-                            (isSendGift && !giftData && isPossibleSend)
+                              (isSendGift && !giftData && isPossibleSend)
                         }
                         style={{
                           backgroundColor:
                             product?.hasWhitelistBlocker &&
-                              user &&
-                              !product?.requirements
+                            user &&
+                            !product?.requirements
                               ? '#DCDCDC'
                               : buttonColor ?? '#0050FF',
                           color:
                             product?.hasWhitelistBlocker &&
-                              user &&
-                              !product?.requirements
+                            user &&
+                            !product?.requirements
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}
                         className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)]"
                       >
                         {parseFloat(
-                          product?.prices?.find(
+                          product?.prices.find(
                             (price: any) => price.currencyId == currencyId?.id
                           )?.amount ?? '0'
                         ) === 0
                           ? 'Quero!'
                           : buttonText
-                            ? buttonText
-                            : 'Comprar agora'}
+                          ? buttonText
+                          : 'Comprar agora'}
                       </button>
                     </div>
                   )
@@ -1308,20 +1350,20 @@ export const ProductPage = ({
                             backgroundColor: 'none',
                             borderColor:
                               product &&
-                                (soldOut ||
-                                  minCartItemPriceBlock ||
-                                  !termsChecked ||
-                                  (isSendGift && !giftData && isPossibleSend))
+                              (soldOut ||
+                                minCartItemPriceBlock ||
+                                !termsChecked ||
+                                (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
                                 : buttonColor
-                                  ? buttonColor
-                                  : '#0050FF',
+                                ? buttonColor
+                                : '#0050FF',
                             color:
                               product &&
-                                (soldOut ||
-                                  minCartItemPriceBlock ||
-                                  !termsChecked ||
-                                  (isSendGift && !giftData && isPossibleSend))
+                              (soldOut ||
+                                minCartItemPriceBlock ||
+                                !termsChecked ||
+                                (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
                                 : buttonColor ?? '#0050FF',
                           }}
@@ -1342,14 +1384,14 @@ export const ProductPage = ({
                         style={{
                           backgroundColor:
                             product &&
-                              (soldOut || minCartItemPriceBlock || !termsChecked)
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#DCDCDC'
                               : buttonColor
-                                ? buttonColor
-                                : '#0050FF',
+                              ? buttonColor
+                              : '#0050FF',
                           color:
                             product &&
-                              (soldOut || minCartItemPriceBlock || !termsChecked)
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}
@@ -1368,42 +1410,42 @@ export const ProductPage = ({
                     </div>
                   )
                 )}
-                {product?.prices?.find(
+                {product?.prices.find(
                   (price: any) => price.currencyId == currencyId?.id
                 )?.anchorCurrencyId && (
-                    <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
-                      *{translate('checkout>checkoutInfo>valueOfProductOn')}{' '}
-                      {
-                        product?.prices?.find(
-                          (price: any) => price.currencyId == currencyId?.id
-                        )?.currency?.symbol
-                      }{' '}
-                      {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
-                      {
-                        product?.prices?.find(
-                          (priceF) =>
-                            priceF.currencyId ==
-                            product?.prices?.find(
-                              (price: any) => price.currencyId == currencyId?.id
-                            )?.anchorCurrencyId
-                        )?.currency?.symbol
-                      }
-                      .
-                    </p>
-                  )}
+                  <p className="pw-text-xs pw-mt-2 pw-font-medium pw-text-[#777E8F]">
+                    *{translate('checkout>checkoutInfo>valueOfProductOn')}{' '}
+                    {
+                      product?.prices.find(
+                        (price: any) => price.currencyId == currencyId?.id
+                      )?.currency?.symbol
+                    }{' '}
+                    {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
+                    {
+                      product.prices.find(
+                        (priceF) =>
+                          priceF.currencyId ==
+                          product?.prices.find(
+                            (price: any) => price.currencyId == currencyId?.id
+                          )?.anchorCurrencyId
+                      )?.currency?.symbol
+                    }
+                    .
+                  </p>
+                )}
                 <div className="pw-mt-8">
                   {product?.terms
                     ? product.terms.map((val) => (
-                      <CheckboxAlt
-                        id={val.title}
-                        onChange={() => onChangeCheckbox()}
-                        key={val.title}
-                        label={val.title}
-                        link={val.link}
-                        description={val.description}
-                        className="pw-mt-3"
-                      />
-                    ))
+                        <CheckboxAlt
+                          id={val.title}
+                          onChange={() => onChangeCheckbox()}
+                          key={val.title}
+                          label={val.title}
+                          link={val.link}
+                          description={val.description}
+                          className="pw-mt-3"
+                        />
+                      ))
                     : null}
                 </div>
               </div>
@@ -1412,8 +1454,9 @@ export const ProductPage = ({
           <div className="pw-flex sm:pw-flex-row pw-flex-col pw-gap-11 pw-w-full pw-mt-6">
             {showDescription && (
               <div
-                className={`${showBlockchainInfo ? 'pw-flex-[2]' : 'pw-w-full'
-                  } pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
+                className={`${
+                  showBlockchainInfo ? 'pw-flex-[2]' : 'pw-w-full'
+                } pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
               >
                 <p
                   style={{
@@ -1447,10 +1490,11 @@ export const ProductPage = ({
             )}
             {showBlockchainInfo && (
               <div
-                className={`${showDescription
+                className={`${
+                  showDescription
                     ? 'pw-flex-[1.5] lg:pw-flex-[1.3]'
                     : 'pw-w-full'
-                  } pw-max-h-[295px] pw-text-black pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
+                } pw-max-h-[295px] pw-text-black pw-rounded-[14px] pw-bg-white pw-p-[25px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]`}
               >
                 <p className="pw-text-[15px] pw-font-[600] pw-mb-4">
                   {translate('commerce>productPage>tokenDetails')}
@@ -1474,10 +1518,11 @@ export const ProductPage = ({
                     <p className="pw-mt-[10px]">{'Chain'}</p>
                   </div>
                   <div
-                    className={`pw-text-right ${showDescription
+                    className={`pw-text-right ${
+                      showDescription
                         ? 'sm:pw-max-w-[150px] pw-max-w-[100px]'
                         : 'pw-max-w-[100px] sm:pw-max-w-[295px]'
-                      }`}
+                    }`}
                   >
                     <p className="pw-truncate pw-underline pw-text-[#4194CD]">
                       <a

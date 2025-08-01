@@ -1,34 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'react-use';
 
 import { Disclosure, Tab } from '@headlessui/react';
 import { UserContextStatus } from '@w3block/sdk-id';
 
-import { useThemeConfig } from '../../../storefront/hooks/useThemeConfig';
-import ArrowIcon from '../../assets/icons/arrowDown.svg';
-import CopyIcon from '../../assets/icons/copyIcon.svg';
+import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
+import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useDeleteProductResale } from '../../hooks/useDeleteProductResale';
-import { useGetContextByUserId } from '../../hooks/useGetContextByUserId';
+import { useDeleteProductResale } from '../../hooks/useDeleteProductResale/useDeleteProductResale';
+import { useGetContextByUserId } from '../../hooks/useGetContextByUserId/useGetContextByUserId';
 import { useGetProductsForResale } from '../../hooks/useGetProductsForResale';
-import { useGetUserContextId } from '../../hooks/useGetUserContextId';
-import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20';
-import { useGetUserResaleSummary } from '../../hooks/useGetUserResaleSummary';
-import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions';
-import { useProfile } from '../../hooks/useProfile';
-import useTranslation from '../../hooks/useTranslation';
-import { useUserWallet } from '../../hooks/useUserWallet/useUserWallet';
+import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
+import { useGetUserResaleSummary } from '../../hooks/useGetUserResaleSummary/useGetUserResaleSummary';
 import { Alert } from '../Alert';
 import { BaseButton } from '../Buttons';
-import { CriptoValueComponent } from '../CriptoValueComponent';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Spinner } from '../Spinner';
 import { ContextsResale } from './ContextsResale';
 import { MySalesListComponent } from './MySalesListComponent';
+import { useGetUserContextId } from '../../../shared/hooks/useGetUserContextId';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions';
+import { useProfile } from '../../../shared/hooks/useProfile';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet/useUserWallet';
+import { useThemeConfig } from '../../../storefront/hooks/useThemeConfig';
 
 export const MySales = () => {
-  const { loyaltyWallet, mainWallet } = useUserWallet();
+  const { mainWallet } = useUserWallet();
   const { data: productsResale } = useGetProductsForResale({});
   const { data: summary, isLoading } = useGetUserResaleSummary();
   const { data: forSaleErc20 } = useGetUserForSaleErc20();
@@ -42,9 +41,6 @@ export const MySales = () => {
     setCopy(address || '');
     setTimeout(() => setCopied(false), 5000);
   };
-  const loyaltyWalletDefined = useMemo(() => {
-    return loyaltyWallet.length ? loyaltyWallet[0] : undefined;
-  }, [loyaltyWallet]);
 
   const profile = useProfile();
 
@@ -53,26 +49,19 @@ export const MySales = () => {
   );
   const hasBankDetails = useMemo(() => {
     return context?.data?.items?.find(
-      (res: { context: { slug: string } }) =>
-        res.context?.slug === 'bankdetails'
+      (res) => res.context?.slug === 'bankdetails'
     );
   }, [context?.data?.items]);
 
   const activeKycContexts = useMemo(() => {
     if (context?.data?.items?.length) {
-      const contexts = context?.data?.items?.filter(
-        (res: {
-          context: { slug: string | string[] };
-          status: UserContextStatus;
-        }) => {
-          if (res?.context?.slug === 'bankdetails')
-            return res.status === UserContextStatus.RequiredReview;
-          else
-            return res?.context?.slug.includes('resale-user-documents-asaas');
-        }
-      );
+      const contexts = context?.data?.items?.filter((res) => {
+        if (res?.context?.slug === 'bankdetails')
+          return res.status === UserContextStatus.RequiredReview;
+        else return res?.context?.slug.includes('resale-user-documents-asaas');
+      });
       return contexts.filter(
-        (res: { status: UserContextStatus }) =>
+        (res) =>
           res?.status === UserContextStatus.Draft ||
           res?.status === UserContextStatus.RequiredReview
       );
@@ -82,8 +71,7 @@ export const MySales = () => {
 
   const bankDetailsContext = useMemo(() => {
     return context?.data?.items?.find(
-      (res: { context: { slug: string } }) =>
-        res?.context?.slug === 'bankdetails'
+      (res) => res?.context?.slug === 'bankdetails'
     );
   }, [context?.data?.items]);
 
@@ -119,17 +107,15 @@ export const MySales = () => {
     <InternalPagesLayoutBase>
       {activeKycContexts?.length ? (
         <div className="pw-flex pw-flex-col pw-justify-between pw-gap-3 pw-mb-5 pw-items-center">
-          {activeKycContexts?.map(
-            (res: { id: string | undefined; context: { slug: any } }) => {
-              return (
-                <ContextsResale
-                  key={res.id}
-                  id={res?.id}
-                  slug={res?.context?.slug ?? ''}
-                />
-              );
-            }
-          )}
+          {activeKycContexts?.map((res) => {
+            return (
+              <ContextsResale
+                key={res.id}
+                id={res?.id}
+                slug={res?.context?.slug ?? ''}
+              />
+            );
+          })}
         </div>
       ) : null}
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
@@ -191,25 +177,6 @@ export const MySales = () => {
         <p className="pw-text-xs pw-text-[#777E8F] pw-font-[400] pw-cursor-pointer pw-mt-2">
           {translate('pages>mysales>resale>info')}
         </p>
-        {loyaltyWalletDefined ? (
-          <div className="pw-flex pw-flex-col pw-gap-2">
-            <div className="pw-mt-[14px] pw-flex pw-flex-col">
-              <p className="pw-text-black pw-text-sm pw-font-normal pw-leading-[23px]">
-                {translate('pages>mySales>currentBalance', {
-                  coin: loyaltyWalletDefined.currency,
-                })}
-              </p>
-              <CriptoValueComponent
-                crypto={true}
-                value={loyaltyWalletDefined.balance}
-                pointsPrecision={loyaltyWalletDefined.pointsPrecision}
-                code={''}
-                fontClass="pw-text-black pw-text-lg pw-font-bold pw-leading-[23px]"
-                containerClass="!pw-gap-0"
-              />
-            </div>
-          </div>
-        ) : null}
       </div>
       {bankDetailsContext ? (
         <div className="pw-mt-5 pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[24px] sm:pw-pb-[20px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
@@ -302,57 +269,82 @@ export const MySales = () => {
             </Tab>
           </Tab.List>
           <Tab.Panels>
-            <Tab.Panel className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] sm:pw-bg-white pw-bg-inherit sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-b-lg pw-rounded-r-lg pw-overflow-hidden">
+            <Tab.Panel className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-b-lg pw-rounded-r-lg pw-overflow-hidden">
               <div>
                 {forSaleErc20?.data?.items?.length ? (
-                  forSaleErc20?.data?.items?.map(
-                    (res) => {
-                      return (
-                        <div
-                          key={res?.id}
-                          className="pw-flex pw-flex-col pw-gap-1 pw-max-w-[380px] pw-justify-center pw-items-center pw-border pw-border-[#c0c2c4] pw-rounded-lg pw-py-3 pw-px-4"
-                        >
-                          <div className="pw-flex pw-w-full pw-gap-x-3 pw-text-black">
-                            <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-                              <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
-                                {translate('pages>mysales>resale>totalForSale')}
-                              </p>
-                              {res?.tokenData?.currency?.symbol}{' '}
-                              {res?.tokenData?.amount}
+                  <div className="pw-flex pw-flex-col pw-gap-3">
+                    <div>
+                      {forSaleErc20?.data?.items?.map((res) => {
+                        return (
+                          <div
+                            key={res?.id}
+                            className="pw-flex pw-flex-col pw-gap-1 pw-max-w-[380px] pw-justify-center pw-items-center pw-border pw-border-[#c0c2c4] pw-rounded-lg pw-py-3 pw-px-4"
+                          >
+                            <div className="pw-flex pw-w-full pw-gap-x-3 pw-text-black">
+                              <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
+                                <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
+                                  {translate(
+                                    'pages>mysales>resale>totalForSale'
+                                  )}
+                                </p>
+                                {res?.tokenData?.currency?.symbol}{' '}
+                                {res?.tokenData?.amount}
+                              </div>
+                              <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
+                                <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
+                                  {translate('pages>mysales>resale>value')}
+                                </p>
+                                {'R$'}{' '}
+                                {parseFloat(res?.prices?.[0]?.amount).toFixed(
+                                  2
+                                )}
+                              </div>
                             </div>
-                            <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-                              <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
-                                {translate('pages>mysales>resale>value')}
-                              </p>
-                              {'R$'}{' '}
-                              {parseFloat(res?.prices?.[0]?.amount).toFixed(2)}
-                            </div>
-                          </div>
-                          <div className="pw-w-full pw-flex pw-justify-between pw-items-start pw-mt-6 pw-gap-4 pw-text-black">
-                            <BaseButton
-                              link={{
-                                href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}&edit=true`,
-                              }}
-                            >
-                              {translate('pages>mysales>resale>editSale')}
-                            </BaseButton>
-                            {res?.tokenData?.amount !== '0' ? (
+                            <div className="pw-w-full pw-flex pw-justify-between pw-items-start pw-mt-6 pw-gap-4 pw-text-black">
                               <BaseButton
-                                onClick={() =>
-                                  deleteSale({
-                                    productId: erc20Product?.id ?? '',
-                                  })
-                                }
-                                variantType="secondary"
+                                link={{
+                                  href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}&edit=true`,
+                                }}
                               >
-                                {translate('pages>mysales>resale>removeSale')}
+                                {translate('pages>mysales>resale>editSale')}
                               </BaseButton>
-                            ) : null}
+                              {res?.tokenData?.amount !== '0' ? (
+                                <BaseButton
+                                  onClick={() =>
+                                    deleteSale({
+                                      productId: erc20Product?.id ?? '',
+                                    })
+                                  }
+                                  variantType="secondary"
+                                >
+                                  {translate('pages>mysales>resale>removeSale')}
+                                </BaseButton>
+                              ) : null}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    }
-                  )
+                        );
+                      })}
+                    </div>
+                    {!hasBankDetails ? (
+                      <Alert
+                        className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3 pw-mt-1"
+                        variant="warning"
+                      >
+                        <p>
+                          {translate('pages>mysales>resale>fillBankDetails')}
+                        </p>
+                        <BaseButton
+                          link={{
+                            href:
+                              PixwayAppRoutes.COMPLETE_KYC +
+                              `?contextSlug=bankdetails`,
+                          }}
+                        >
+                          {translate('pages>mysales>resale>fillData')}
+                        </BaseButton>
+                      </Alert>
+                    ) : null}
+                  </div>
                 ) : (
                   <>
                     {!hasBankDetails ? (
