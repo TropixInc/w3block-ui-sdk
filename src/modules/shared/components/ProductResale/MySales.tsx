@@ -49,19 +49,19 @@ export const MySales = () => {
   );
   const hasBankDetails = useMemo(() => {
     return context?.data?.items?.find(
-      (res) => res.context?.slug === 'bankdetails'
+      (res: any) => res.context?.slug === 'bankdetails'
     );
   }, [context?.data?.items]);
 
   const activeKycContexts = useMemo(() => {
     if (context?.data?.items?.length) {
-      const contexts = context?.data?.items?.filter((res) => {
+      const contexts = context?.data?.items?.filter((res: any) => {
         if (res?.context?.slug === 'bankdetails')
           return res.status === UserContextStatus.RequiredReview;
         else return res?.context?.slug.includes('resale-user-documents-asaas');
       });
       return contexts.filter(
-        (res) =>
+        (res: any) =>
           res?.status === UserContextStatus.Draft ||
           res?.status === UserContextStatus.RequiredReview
       );
@@ -71,7 +71,7 @@ export const MySales = () => {
 
   const bankDetailsContext = useMemo(() => {
     return context?.data?.items?.find(
-      (res) => res?.context?.slug === 'bankdetails'
+      (res: any) => res?.context?.slug === 'bankdetails'
     );
   }, [context?.data?.items]);
 
@@ -107,7 +107,7 @@ export const MySales = () => {
     <InternalPagesLayoutBase>
       {activeKycContexts?.length ? (
         <div className="pw-flex pw-flex-col pw-justify-between pw-gap-3 pw-mb-5 pw-items-center">
-          {activeKycContexts?.map((res) => {
+          {activeKycContexts?.map((res: any) => {
             return (
               <ContextsResale
                 key={res.id}

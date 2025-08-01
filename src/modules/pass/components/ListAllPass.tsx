@@ -22,7 +22,7 @@ import { LineDivider } from '../../tokens/components/LineDivider';
 import GenericTable from '../../tokens/components/GenericTable';
 import { headers, mobileHeaders } from '../../tokens/const/GenericTableHeaders';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useRouterConnect } from 'modules/shared/hooks/useRouterConnect';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 interface Props {
   chainId: string;
   contractAddress: string;

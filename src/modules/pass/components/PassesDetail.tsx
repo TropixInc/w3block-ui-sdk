@@ -25,7 +25,7 @@ import { QrCodeReader } from '../../shared/components/QrCodeReader';
 import { QrCodeValidated } from '../../shared/components/QrCodeReader/QrCodeValidated';
 import { QrCodeError, TypeError } from '../../shared/components/QrCodeReader/QrCodeError';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useRouterConnect } from 'modules/shared/hooks/useRouterConnect';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 
 
 

@@ -11,9 +11,9 @@ import {
 import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
 
 import {
   GIFT_DATA_INFO_KEY,
@@ -42,15 +42,15 @@ import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
 import { ProductVariants } from './ProductVariants';
 import { SendGiftForm } from './SendGiftForm';
-import { CheckboxAlt } from 'modules/shared/components/CheckboxAlt';
-import { formatterCurrency, CriptoValueComponent } from 'modules/shared/components/CriptoValueComponent';
-import { ImageSDK } from 'modules/shared/components/ImageSDK';
-import { ModalBase } from 'modules/shared/components/ModalBase';
-import { Shimmer } from 'modules/shared/components/Shimmer';
-import { Spinner } from 'modules/shared/components/Spinner';
-import useAdressBlockchainLink from 'modules/shared/hooks/useAdressBlockchainLink';
-import { useRouterConnect } from 'modules/shared/hooks/useRouterConnect';
-import { useUtms } from 'modules/shared/hooks/useUtms';
+import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
+import { formatterCurrency, CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { ModalBase } from '../../shared/components/ModalBase';
+import { Shimmer } from '../../shared/components/Shimmer';
+import { Spinner } from '../../shared/components/Spinner';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useUtms } from '../../shared/hooks/useUtms';
 import useGetProductBySlug from '../hooks/useGetProductBySlug';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import { useTrack } from '../hooks/useTrack';

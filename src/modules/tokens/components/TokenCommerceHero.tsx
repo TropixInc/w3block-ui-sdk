@@ -4,7 +4,7 @@ import ArrowIcon from '../../shared/assets/icons/arrowLeftOutlined.svg';
 
 import { BreadCrumb } from '../../shared/components/Breadcrumb';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useRouterConnect } from 'modules/shared/hooks/useRouterConnect';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 
 export interface Source {
   type: 'video' | 'image';

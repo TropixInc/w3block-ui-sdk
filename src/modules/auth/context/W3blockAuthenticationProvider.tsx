@@ -1,4 +1,4 @@
-import { IW3blockAuthenticationContext } from 'modules/shared/interfaces/IW3blockAuthenticationContext';
+import { IW3blockAuthenticationContext } from '../../shared/interfaces/IW3blockAuthenticationContext';
 import { ReactNode } from 'react';
 import { W3blockAuthenticationContext } from './W3blockAuthenticationContext';
 
