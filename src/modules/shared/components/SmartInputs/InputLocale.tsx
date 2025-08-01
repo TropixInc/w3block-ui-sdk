@@ -3,11 +3,10 @@ import { useEffect, useState } from 'react';
 
 import _ from 'lodash';
 
-import CityAutoComplete from './CityAutoComplete';
-
+import useTranslation from '../../hooks/useTranslation';
 import { BaseSelect } from '../BaseSelect';
 import LabelWithRequired from '../LabelWithRequired';
-import useTranslation from '../../hooks/useTranslation';
+import CityAutoComplete from './CityAutoComplete';
 
 interface LocaleProps {
   label: string;
@@ -91,7 +90,7 @@ const InputLocale = ({
             name={name}
             onChangeRegion={setRegion}
             apiValue={docValue?.placeId}
-            type="(cities)"
+            type={['(cities)']}
             readonly={readonly}
             hidenValidations={readonly}
           />

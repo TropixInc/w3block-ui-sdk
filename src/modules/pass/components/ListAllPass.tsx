@@ -3,10 +3,6 @@ import { useDebounce } from 'react-use';
 
 import classNames from 'classnames';
 import { format } from 'date-fns';
-import { useRouter } from 'next/router';
-
-
-
 
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
@@ -26,6 +22,7 @@ import { LineDivider } from '../../tokens/components/LineDivider';
 import GenericTable from '../../tokens/components/GenericTable';
 import { headers, mobileHeaders } from '../../tokens/const/GenericTableHeaders';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 interface Props {
   chainId: string;
   contractAddress: string;
@@ -36,7 +33,7 @@ const _ListAllPass = ({ chainId, contractAddress, tokenId }: Props) => {
   const [translate] = useTranslation();
   const isMobile = useIsMobile();
 
-  const router = useRouter();
+  const router = useRouterConnect();
 
   const payload = {
     chainId: chainId ?? (router?.query?.chainId as string),

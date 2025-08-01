@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ReactNode,
-  createContext,
   useCallback,
   useEffect,
   useState,
 } from 'react';
+import { createSymlinkSafeContext } from '../../../shared/utils/createSymlinkSafeContext';
 
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ContractTransaction, ethers } from 'ethers';
@@ -69,12 +69,15 @@ export const metamaskErrors = new Map<number, ERROR_STATUS>([
   [-32603, ERROR_STATUS.INTERNAL_ERROR],
 ]);
 
-export const MetamaskProviderContext = createContext<MetamaskContextInterface>({
-  wallet: disconnectedState,
-  error: false,
-  isConnecting: false,
-  hasProvider: false,
-});
+export const MetamaskProviderContext = createSymlinkSafeContext<MetamaskContextInterface>(
+  '__METAMASK_PROVIDER_CONTEXT__',
+  {
+    wallet: disconnectedState,
+    error: false,
+    isConnecting: false,
+    hasProvider: false,
+  }
+);
 
 export const MetamaskProviderUiSDK = ({
   children,

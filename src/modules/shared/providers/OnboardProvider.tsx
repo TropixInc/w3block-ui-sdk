@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ReactNode,
-  createContext,
   useCallback,
   useEffect,
   useMemo,
   useState,
 } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 import { KycStatus } from '@w3block/sdk-id';
 
@@ -30,12 +30,15 @@ interface OnboardProps {
   refetchDocs: () => void;
 }
 
-export const OnboardContext = createContext<OnboardProps>({
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setLoading: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  refetchDocs: () => {},
-});
+export const OnboardContext = createSymlinkSafeContext<OnboardProps>(
+  '__ONBOARD_CONTEXT__',
+  {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setLoading: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    refetchDocs: () => {},
+  }
+);
 
 export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();

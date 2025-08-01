@@ -5,8 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosResponse } from 'axios';
 import { object, string } from 'yup';
 
-import StarFilled from '../../../shared/assets/icons/starFilled.png';
-import StarOutlined from '../../../shared/assets/icons/starOutlined.png';
+import StarFilled from '../../shared/assets/icons/starFilled.png';
+import StarOutlined from '../../shared/assets/icons/starOutlined.png';
 
 import { IPollInterface } from './IPollInterface';
 

@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 interface TokenAction {
   id: string;
@@ -9,4 +9,7 @@ interface TokenAction {
 
 export type ITokenActionContext = Array<TokenAction>;
 
-export const TokenActionsContext = createContext<ITokenActionContext>([]);
+export const TokenActionsContext = createSymlinkSafeContext<ITokenActionContext>(
+  '__TOKEN_ACTIONS_CONTEXT__',
+  []
+);

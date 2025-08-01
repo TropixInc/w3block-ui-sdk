@@ -30,6 +30,7 @@ const useGetBenefitsByEditionNumber = ({
             .replace('{id}', tokenPassId)
             .replace('{editionNumber}', editionNumber.toString())
         );
+
         return response;
       } catch (error) {
         console.error(

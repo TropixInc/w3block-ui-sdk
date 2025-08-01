@@ -3,6 +3,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { AssetEntityWithProviderUploadParamsDto } from '@w3block/sdk-id';
 import axios from 'axios';
+import { getEnvVar } from '../utils/env';
 
 interface UploadFileConfig {
   onProgress?: (event: ProgressEvent) => void;
@@ -61,10 +62,12 @@ interface UploadProps {
 
 export const useUploadFileToCloudinary = () => {
   const formData = new FormData();
+  const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
 
+  console.log(cloudinaryName, "cloudinaryName")
   return useMutation(
     [
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,
     ],
     ({ file, config = {}, assets, saleOrderConfig }: UploadProps) => {
       if (saleOrderConfig && file) {
@@ -110,7 +113,7 @@ export const useUploadFileToCloudinary = () => {
       }
       return axios
         .post<CloudinaryUploadFileResponse>(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,
           formData,
           {
             signal: config.abortController?.signal,

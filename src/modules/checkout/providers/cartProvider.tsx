@@ -1,8 +1,7 @@
-import { ReactNode, createContext, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 import { CurrencyResponse, ProductPrice } from '../../storefront/interfaces/Product';
-
-
 
 export interface Cart {
   id: string;
@@ -18,7 +17,10 @@ export interface CartContext {
   setCartCurrencyId?: (currencyId: CurrencyResponse | undefined) => void;
 }
 
-export const CartContext = createContext<CartContext>({ cart: [] });
+export const CartContext = createSymlinkSafeContext<CartContext>(
+  '__CART_CONTEXT__',
+  { cart: [] }
+);
 
 const CART_KEY_CACHE = 'cart_cache';
 const CURRENCY_ID_CACHE = 'currency_id_cache';

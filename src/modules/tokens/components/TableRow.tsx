@@ -19,7 +19,7 @@ const TableRows = <T, K extends keyof T>({
   const rows = data.map((row, index) => {
     return index < limitRowsNumber ? (
       <tr key={`row-${index}`} className="pw-font-poppins">
-        {columns.map((column, index2) => {
+        {columns?.map((column, index2) => {
           return (
             <td
               className={classNames(

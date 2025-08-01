@@ -1,6 +1,7 @@
 module.exports = {
   content: [
-    './src/**/*.{js,ts,tsx,jsx}',
+    './src/modules/**/*.{js,ts,tsx,jsx}',
+    './src/app/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     screens: {
@@ -42,15 +43,20 @@ module.exports = {
       aeonik: ['Aeonik', 'sans-serif'],
     },
   },
-  prefix: 'pw-',
   variants: {
     extend: {
       text: ['odd', 'even'],
     },
   },
+  prefix: 'pw-',
   corePlugins: {
     preflight: false,
   },
   plugins: [
+    require('@mertasan/tailwindcss-variables'),
+    require('tailwindcss-text-fill'),
+    require('tailwindcss-autofill'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/line-clamp'),
   ],
 };

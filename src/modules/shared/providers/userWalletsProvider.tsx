@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, createContext, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 import { CoinsType } from '../../storefront/interfaces/Theme';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 import { usePixwaySession } from '../hooks/usePixwaySession';
@@ -36,6 +37,7 @@ export interface WalletSimple {
 
 export interface WalletLoyalty {
   balance: string;
+  withdrawableBalance: string;
   currency: string;
   loyaltyId: string;
   contractId: string;
@@ -43,15 +45,18 @@ export interface WalletLoyalty {
   pointsPrecision?: 'decimal' | 'integer';
 }
 
-export const UserWalletsContext = createContext<UserWalletsContextInterface>({
-  wallets: [],
-  hasWallet: false,
-  loyaltyWallet: [],
-});
+export const UserWalletsContext = createSymlinkSafeContext<UserWalletsContextInterface>(
+  '__USER_WALLETS_CONTEXT__',
+  {
+    wallets: [],
+    hasWallet: false,
+    loyaltyWallet: [],
+  }
+);
 
 const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();
-  const { data: session } = usePixwaySession();
+  const { data: session, status } = usePixwaySession();
   const [wallets, setWallets] = useState<WalletSimple[]>([]);
   const [loyaltyWallet, setLoyaltyWallet] = useState<WalletLoyalty[]>([]);
   const { profile } = useProfileWithKYC();
@@ -62,6 +67,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const [transferModal, setTransferModal] = useState<boolean>(false);
   const getWalletsbalance = useGetBalancesForWallets();
   const { data, isSuccess } = useGetWallets();
+  
   useEffect(() => {
     if (data) {
       getBalances(data);
@@ -70,11 +76,11 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (authenticatePaymentModal) {
-      router.replace({ query: { ...router.query, authorizeLoyalty: 'true' } });
-    } else if (router.query.authorizeLoyalty && !authenticatePaymentModal) {
+      router.replace({ pathname: router.pathname, query: { ...router?.query, authorizeLoyalty: 'true' } });
+    } else if (router?.query?.authorizeLoyalty && !authenticatePaymentModal) {
       {
-        delete router.query.authorizeLoyalty;
-        router.replace({ query: router.query });
+        delete router?.query.authorizeLoyalty;
+        router.replace({ pathname: router.pathname, query: router.query });
       }
     }
   }, [authenticatePaymentModal]);
@@ -84,7 +90,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
       status != 'loading' &&
       session &&
       !authenticatePaymentModal &&
-      router.query.authorizeLoyalty == 'true'
+      router?.query?.authorizeLoyalty == 'true'
     ) {
       setAuthenticatePaymentModal(true);
     }
@@ -97,7 +103,7 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
       getWalletsbalance(data).then((res) => {
         setWallets(res);
       });
-    }
+    } 
   };
 
   useEffect(() => {
@@ -117,18 +123,20 @@ const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const mainWallet = useMemo(() => {
+    let foundWallet;
     if (coinType != CoinsType.LOYALTY) {
-      return wallets.find(
+      foundWallet = wallets.find(
         (wallet) =>
           wallet.chainId == getChainIdBasedOnCoinType(coinType, isProduction)
       );
     } else {
-      return wallets.find(
+      foundWallet = wallets.find(
         (wallet) =>
           wallet.chainId ==
           getChainIdBasedOnCoinType(CoinsType.MATIC, isProduction)
       );
     }
+    return foundWallet;
   }, [coinType, wallets]);
 
   return (

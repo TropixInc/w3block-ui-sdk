@@ -10,9 +10,10 @@ import { TokenDetailsCard } from "./TokenDetailsCard";
 
 const _TokenDetailsTemplate = () => {
   const router = useRouterConnect();
-  const contractAddress = (router.query.contractAddress as string) ?? '';
-  const chainId = (router.query.chainId as string) ?? '';
-  const tokenId = (router.query.tokenId as string) ?? '';
+  const contractAddress = (router?.query?.contractAddress as string) ?? '';
+  const chainId = (router?.query?.chainId as string) ?? '';
+  const tokenId = (router?.query?.tokenId as string) ?? '';
+
   const { data: publicTokenResponse, error: errorPublicTokenResponse } =
     usePublicTokenData({
       contractAddress,

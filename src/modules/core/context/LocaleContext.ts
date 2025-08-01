@@ -1,5 +1,8 @@
-import { createContext } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 export type PixwayUISdkLocale = 'pt-BR' | 'en';
 
-export const LocaleContext = createContext<PixwayUISdkLocale>('pt-BR');
+export const LocaleContext = createSymlinkSafeContext<PixwayUISdkLocale>(
+  '__LOCALE_CONTEXT__',
+  'pt-BR'
+);

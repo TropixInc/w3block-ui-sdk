@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import TranslatableComponent from "../../shared/components/TranslatableComponent";
-import { W3blockAPI } from "../../shared/enums/W3blockAPI";
-import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
-import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
-import { useUserWallet } from "../../shared/hooks/useUserWallet/useUserWallet";
-import { ConfigGenericTable, FilterTableType, FormatTypeColumn } from "../../shared/interfaces/ConfigGenericTable";
-import WithdrawInternal from "../components/WithdrawInternal";
-import WithdrawModal from "../components/WithdrawModal";
-import { BaseButton } from "../../shared/components/Buttons";
-import { InternalPagesLayoutBase } from "../../shared/components/InternalPagesLayoutBase";
-import { GenericTable } from "../../shared/components/GenericTable";
-import useTranslation from "../../shared/hooks/useTranslation";
-
+import { BaseButton } from '../../shared/components/Buttons';
+import { GenericTable } from '../../shared/components/GenericTable';
+import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
+import {
+  ConfigGenericTable,
+  FilterTableType,
+  FormatTypeColumn,
+} from '../../shared/interfaces/ConfigGenericTable';
+import WithdrawInternal from '../components/WithdrawInternal';
+import WithdrawModal from '../components/WithdrawModal';
 
 const _WithdrawsTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
@@ -99,11 +102,18 @@ const _WithdrawsTemplateSDK = () => {
 
   return (
     <>
-      <div className="pw-flex pw-flex-col pw-px-4 pw-pt-5 pw-shadow-lg sm:pw-px-0 ">
+      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden pw-mb-[20px]">
+        <div className="pw-flex pw-justify-between">
+          <p className="pw-text-[23px] pw-font-[600]">
+            {translate('components>menu>withdraws')}
+          </p>
+        </div>
+      </div>
+      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
         {isOpen ? (
           <WithdrawModal
             onClose={() => setIsOpen(false)}
-            balance={loyaltyWallet?.[0]?.balance}
+            balance={loyaltyWallet?.[0]?.withdrawableBalance}
             contractId={loyaltyWallet?.[0]?.contractId}
             currency={loyaltyWallet?.[0]?.currency}
           />
@@ -111,12 +121,8 @@ const _WithdrawsTemplateSDK = () => {
           <WithdrawInternal id={id} currency={loyaltyWallet?.[0]?.currency} />
         ) : (
           <>
-            <div className="pw-flex pw-pr-5 pw-items-end pw-justify-end pw-w-full">
-              <BaseButton
-                className="sm:pw-px-3 pw-px-0 pw-w-[180px] pw-h-10 pw-flex pw-items-center pw-justify-center pw-text-lg"
-                variant="filled"
-                onClick={() => setIsOpen(true)}
-              >
+            <div className="pw-flex pw-items-end pw-justify-end pw-w-full pw-mb-4">
+              <BaseButton onClick={() => setIsOpen(true)}>
                 {translate('auth>withdrawModal>makeWithdraw')}
               </BaseButton>
             </div>

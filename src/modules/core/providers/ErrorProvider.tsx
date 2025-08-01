@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReactNode, createContext, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 interface Props {
   logError?(error: any, extra?: object): void;
@@ -10,7 +11,10 @@ interface ContextProps {
   logError?(error: any, extra?: object): void;
 }
 
-export const ErrorContext = createContext({} as ContextProps);
+export const ErrorContext = createSymlinkSafeContext<ContextProps>(
+  '__ERROR_CONTEXT__',
+  {} as ContextProps
+);
 
 export const ErrorProvider = ({ logError, children }: Props) => {
   const value = useMemo(() => {

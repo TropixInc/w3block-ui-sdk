@@ -12,7 +12,7 @@ const TableHeader = <T, K extends keyof T>({
   className = '',
   thClass = '',
 }: TableHeaderProps<T, K>): JSX.Element => {
-  const headers = columns.map((column, index) => {
+  const headers = columns?.map((column, index) => {
     return (
       <th
         key={`headCell-${index}`}

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReactNode, createContext, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 interface Props {
   gtag?(event: any, params?: object): void;
@@ -10,7 +11,10 @@ interface ContextProps {
   gtag?(event: any, params?: object): void;
 }
 
-export const TagManagerContext = createContext({} as ContextProps);
+export const TagManagerContext = createSymlinkSafeContext<ContextProps>(
+  '__TAG_MANAGER_CONTEXT__',
+  {} as ContextProps
+);
 
 export const TagManagerProvider = ({ gtag, children }: Props) => {
   const value = useMemo(() => {

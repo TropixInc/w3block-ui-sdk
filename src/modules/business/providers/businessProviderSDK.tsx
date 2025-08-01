@@ -1,4 +1,5 @@
-import { ReactNode, createContext } from 'react';
+import { ReactNode } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 import { LoyaltyInterface } from '../../shared/interfaces/ILoyalty';
 import { useGetCompanyLoyalties } from '../hooks/useGetCompanyLoyalties';
 
@@ -6,8 +7,10 @@ interface BusinessProviderContextInterface {
   loyalties: LoyaltyInterface[];
 }
 
-export const BusinessProviderContext =
-  createContext<BusinessProviderContextInterface>({ loyalties: [] });
+export const BusinessProviderContext = createSymlinkSafeContext<BusinessProviderContextInterface>(
+  '__BUSINESS_PROVIDER_CONTEXT__',
+  { loyalties: [] }
+);
 
 export const BusinessProviderSDK = ({ children }: { children: ReactNode }) => {
   const { data } = useGetCompanyLoyalties();

@@ -117,6 +117,7 @@ const _PassTemplate = ({
   const [selfUseData, setUseBenefitData] = useState<VerifyBenefitResponse>();
   const locale = useLocale();
   const router = useRouterConnect();
+
   const tokenId = tokenIdProp || (router?.query?.tokenId as string) || '';
   const benefitId = benefitIdProp || (router?.query?.benefitId as string) || '';
   const successValidation =
@@ -136,10 +137,10 @@ const _PassTemplate = ({
     isLoading: collectionLoading,
     error: errorCollectionData,
   } = useGetCollectionMetadata({
-    id: benefit?.data.tokenPassId ?? '',
+    id: benefit?.data?.tokenPassId ?? '',
     query: {
       limit: 50,
-      walletAddresses: [profile?.data.mainWallet?.address ?? ''],
+      walletAddresses: [profile?.data?.mainWallet?.address ?? ''],
     },
   });
 
@@ -151,7 +152,7 @@ const _PassTemplate = ({
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
     chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
-    tokenId: tokenId ?? collectionData?.items?.[0]?.tokenId,
+    tokenId: String(tokenId ? tokenId : (collectionData?.items?.[0]?.tokenId ?? "")),
   });
 
   const editionNumber = useMemo(() => {
@@ -395,15 +396,13 @@ const _PassTemplate = ({
                   <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
                     {locale == 'en' ? (
                       <>
-                        {`Every ${ordinal[locale][value.data.nthWeek]} ${
-                          weekDay1[locale][value.data.weekday]
-                        } of the month`}
+                        {`Every ${ordinal[locale][value.data.nthWeek]} ${weekDay1[locale][value.data.weekday]
+                          } of the month`}
                       </>
                     ) : (
                       <>
-                        {`Toda ${
-                          ordinal[locale][value.data.nthWeek]
-                        } semana do mês
+                        {`Toda ${ordinal[locale][value.data.nthWeek]
+                          } semana do mês
                         na ${weekDay1[locale][value.data.weekday]}`}
                       </>
                     )}
@@ -464,6 +463,8 @@ const _PassTemplate = ({
         },
       }
     );
+
+  console.log(tokenId, "tokenId")
 
   if (
     isLoadingBenefit ||
@@ -581,8 +582,8 @@ const _PassTemplate = ({
                           {usesLeft === 0
                             ? translate('token>pass>noMoreUses')
                             : translate('token>pass>youStillHave', {
-                                quantity: usesLeft,
-                              })}
+                              quantity: usesLeft,
+                            })}
                         </div>
                       </div>
                     )}
@@ -637,10 +638,10 @@ const _PassTemplate = ({
                         )}
                       {benefit?.data?.eventEndsAt &&
                         translate('token>pass>until') +
-                          format(
-                            new Date(benefit?.data?.eventEndsAt),
-                            'dd/MM/yyyy'
-                          )}
+                        format(
+                          new Date(benefit?.data?.eventEndsAt),
+                          'dd/MM/yyyy'
+                        )}
                     </span>
                   </div>
                   {benefit?.data?.checkIn && (
@@ -889,10 +890,10 @@ const _PassTemplate = ({
                           )}
                         {benefit?.data?.eventEndsAt &&
                           translate('token>pass>until') +
-                            format(
-                              new Date(benefit?.data?.eventEndsAt),
-                              'dd/MM/yyyy'
-                            )}
+                          format(
+                            new Date(benefit?.data?.eventEndsAt),
+                            'dd/MM/yyyy'
+                          )}
                       </span>
                     </div>
                     {benefit?.data?.checkIn && (

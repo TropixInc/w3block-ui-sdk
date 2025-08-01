@@ -2,11 +2,22 @@ import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
 import { UserDocumentStatus } from '@w3block/sdk-id';
-import { validateIfStatusKycIsReadonly } from '../../utils/validReadOnlyKycStatus';
+import { getCountryData, TCountryCode } from 'countries-list';
+import {
+  AsYouType,
+  CountryCode,
+  getCountries,
+  getCountryCallingCode,
+} from 'libphonenumber-js';
+import { validateIfStatusKycIsReadonly } from '../../../shared/utils/validReadOnlyKycStatus';
 import { BaseInput } from '../BaseInput';
+import { BaseSelect } from '../BaseSelect';
 import LabelWithRequired from '../LabelWithRequired';
 import { InputError } from '../SmartInputsController';
 import InputStatus from './InputStatus';
+import { Flag } from '../Flag';
+
+
 interface InputPhoneProps {
   label: string;
   name: string;
@@ -15,6 +26,7 @@ interface InputPhoneProps {
   docStatus?: UserDocumentStatus;
   hidenValidations?: boolean;
   required?: boolean;
+  defaultCountry?: string;
 }
 
 const InputPhone = ({
@@ -25,17 +37,43 @@ const InputPhone = ({
   hidenValidations = false,
   required,
   readonly,
+  defaultCountry,
 }: InputPhoneProps) => {
   const { field, fieldState } = useController({ name });
-  const [inputValue, setInputValue] = useState<string | undefined>();
+  const [countryCode, setCountryCode] = useState<string | undefined>();
+  const [country, setCountry] = useState<string | undefined>();
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
   const error = fieldState?.error as unknown as InputError;
+
+  const getCountryName = (country: string) => {
+    const overrides: Record<string, string> = {
+      BR: 'Brasil',
+      AC: 'Ascension Island',
+    };
+    return (
+      overrides[country] ||
+      getCountryData(country as TCountryCode)?.name ||
+      country
+    );
+  };
+  const countries = getCountries().map((country) => ({
+    icon: <Flag country={country as CountryCode} />,
+    value: country,
+    label: `${getCountryName(country)} (+${getCountryCallingCode(
+      country as CountryCode
+    )})`,
+    code: `+${getCountryCallingCode(country as CountryCode)}`,
+  }));
+  countries.sort((a, b) => a.label.localeCompare(b.label));
 
   const handleChange = (value: string) => {
     if (value) {
-      setInputValue(value);
-      field.onChange({ inputId: name, value: value });
+      const formattedText = new AsYouType(country as CountryCode).input(value);
+      setPhoneNumber(formattedText);
+      const newValue = `${countryCode} ${formattedText}`;
+      field.onChange({ inputId: name, value: newValue });
     } else {
-      setInputValue('');
+      setPhoneNumber('');
       field.onChange({
         inputId: undefined,
         value: undefined,
@@ -44,9 +82,37 @@ const InputPhone = ({
   };
 
   useEffect(() => {
+    if (defaultCountry) {
+      const countryData = countries.find(
+        (c) => c.value === defaultCountry || c.code === defaultCountry
+      );
+      if (countryData) {
+        setCountry(countryData.value);
+        setCountryCode(countryData.code);
+      } else {
+        setCountry(undefined);
+        setCountryCode(undefined);
+      }
+    }
+  }, [defaultCountry, countries]);
+
+  useEffect(() => {
     if (docValue && docStatus !== UserDocumentStatus.RequiredReview) {
-      setInputValue(docValue);
-      field.onChange({ inputId: name, value: docValue });
+      const doc = docValue.trim();
+      const regex = /^(\+\d{1,4})\s*(.+)$/;
+      const match = doc.match(regex);
+      if (match) {
+        if (match[1] === '+1') {
+          setCountry('US');
+        } else if (match[1] === '+44') {
+          setCountry('GB');
+        } else {
+          setCountry(countries.find((c) => c.code === match[1])?.value);
+        }
+        setCountryCode(match[1]);
+        setPhoneNumber(match[2]);
+        field.onChange({ inputId: name, value: docValue });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docValue]);
@@ -56,27 +122,32 @@ const InputPhone = ({
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
-      <BaseInput
-        disableClasses={readonly}
-        invalid={fieldState.invalid}
-        valid={!!field?.value && !fieldState.invalid}
-        disabled={
-          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
-        }
-        readOnly={
-          (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
-        }
-        name={name}
-        value={inputValue}
-        onChange={(e) => handleChange(e.target.value)}
-        placeholder="+XX XX XXXXX XXXX"
-        mask={
-          inputValue && inputValue?.length <= 16
-            ? '+99 99 9999-99999'
-            : '+99 99 99999-9999'
-        }
-        maskChar={''}
-      />
+      <div className="pw-flex pw-w-full pw-gap-[10px]">
+        <BaseSelect
+          options={countries}
+          value={country}
+          disabled={!!defaultCountry || readonly}
+          onChangeValue={(value) => {
+            setCountry(value);
+            setCountryCode(countries.find((c) => c.value === value)?.code);
+          }}
+        />
+        <BaseInput
+          disableClasses={readonly}
+          invalid={fieldState.invalid}
+          valid={!!field?.value && !fieldState.invalid}
+          disabled={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+          }
+          readOnly={
+            (docStatus && validateIfStatusKycIsReadonly(docStatus)) || readonly
+          }
+          name={name}
+          value={phoneNumber}
+          onChange={(e) => handleChange(e.target.value)}
+          className="pw-w-full"
+        />
+      </div>
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
           {field.value && (

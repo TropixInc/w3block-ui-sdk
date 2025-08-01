@@ -1,9 +1,12 @@
-import { createContext } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 interface IEnvironmentContext {
   isProduction: boolean;
 }
 
-export const EnvironmentContext = createContext<IEnvironmentContext>({
-  isProduction: false,
-});
+export const EnvironmentContext = createSymlinkSafeContext<IEnvironmentContext>(
+  '__ENVIRONMENT_CONTEXT__',
+  {
+    isProduction: false,
+  }
+);

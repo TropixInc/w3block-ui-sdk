@@ -1,4 +1,4 @@
-import UploadIcon from '../../../shared/assets/icons/uploadIcon.svg';
+import UploadIcon from '../../shared/assets/icons/uploadIcon.svg';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { BalanceWalletArea } from './BalanceWalletArea';

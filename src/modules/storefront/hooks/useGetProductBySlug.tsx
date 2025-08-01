@@ -68,6 +68,7 @@ export interface Product {
       dataFields?: DataFields[];
     };
     disableImageDisplay?: boolean;
+    minCartItemPrice?: number;
   };
   canPurchase?: boolean;
   chainId?: number;
@@ -75,6 +76,7 @@ export interface Product {
   companyId?: string;
   contractAddress?: string;
   createdAt?: string;
+  minPurchaseAmount?: string | null;
   description: string;
   hasLink?: boolean;
   distributionType?: string;

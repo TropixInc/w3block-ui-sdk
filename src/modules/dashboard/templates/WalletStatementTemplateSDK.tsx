@@ -23,8 +23,6 @@ import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { Pagination } from '../../shared/components/Pagination';
 import useTranslation from '../../shared/hooks/useTranslation';
 
-
-
 export const WalletStatementTemplateSDK = () => {
   const { loyaltyWallet, mainWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);

@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ModalBase } from './ModalBase';
 import useTranslation from '../hooks/useTranslation';
+import { getEnvVar } from '../utils/env';
 
 
 
@@ -25,7 +26,7 @@ export const CertificateIssuanceModal = ({
   tokenId,
 }: Props) => {
   const [translate] = useTranslation();
-
+  const pdfApiUrl = getEnvVar('NEXT_PUBLIC_PDF_API_URL')
   return (
     <ModalBase
       isOpen={isOpen}
@@ -46,7 +47,7 @@ export const CertificateIssuanceModal = ({
           Preview
         </p> */}
         <Link
-          href={`${process.env.NEXT_PUBLIC_PDF_API_URL}certification/${contractAddress}/${chainId}/${tokenId}`}
+          href={`${pdfApiUrl}certification/${contractAddress}/${chainId}/${tokenId}`}
         >
           <a
             onClick={onConfirm}

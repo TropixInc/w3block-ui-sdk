@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 
 import ArrowIcon from '../../shared/assets/icons/arrowLeftOutlined.svg';
-import { useRouter } from 'next/router';
 
 import { BreadCrumb } from '../../shared/components/Breadcrumb';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 
 export interface Source {
   type: 'video' | 'image';
@@ -28,7 +28,7 @@ export const TokenCommerceHero = ({
   tokenSrc,
   container,
 }: TokenCommerceHeroProps) => {
-  const router = useRouter();
+  const router = useRouterConnect();
   const [translate] = useTranslation();
   const crumbs = [
     {

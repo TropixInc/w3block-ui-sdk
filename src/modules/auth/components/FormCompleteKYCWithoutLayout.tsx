@@ -3,37 +3,36 @@
 import { lazy, useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { DataTypesEnum, DocumentDto, KycStatus } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { object } from 'yup';
+
 import { Alert } from '../../shared/components/Alert';
 import { Box } from '../../shared/components/Box';
+import { FormTemplate } from '../../shared/components/FormTemplate';
 import { ModalBase } from '../../shared/components/ModalBase';
 import { Spinner } from '../../shared/components/Spinner';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { useProfile } from '../../shared/hooks/useProfile';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { useUtms } from '../../shared/hooks/useUtms';
-import { OnboardContext } from '../../shared/providers/OnboardProvider';
-import { useGetReasonsRequiredReview } from '../hooks/useGetReasonsRequiredReview';
-import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useGetTenantContextBySlug } from '../../shared/hooks/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../shared/hooks/useGetTenantInputsBySlug';
-import { useGetUsersDocuments } from '../../shared/hooks/useGetUsersDocuments';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import { usePostUsersDocuments } from '../../shared/hooks/usePostUsersDocuments';
 import { useGetUserContextId } from '../../shared/hooks/useGetUserContextId';
-import { useGetValidationsTypesForSignup } from '../../shared/utils/useGetValidationsTypesForSignup';
-import { createSchemaSignupForm } from '../../shared/utils/createSchemaSignupForm';
-import { FormTemplate } from '../../shared/components/FormTemplate';
+import { useGetUsersDocuments } from '../../shared/hooks/useGetUsersDocuments';
+import { usePostUsersDocuments } from '../../shared/hooks/usePostUsersDocuments';
+import { useProfile } from '../../shared/hooks/useProfile';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
-
-
+import { useUtms } from '../../shared/hooks/useUtms';
+import { OnboardContext } from '../../shared/providers/OnboardProvider';
+import { createSchemaSignupForm } from '../../shared/utils/createSchemaSignupForm';
+import { useGetValidationsTypesForSignup } from '../../shared/utils/useGetValidationsTypesForSignup';
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
+import { useGetReasonsRequiredReview } from '../hooks/useGetReasonsRequiredReview';
+import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface Props {
   userId: string;
@@ -119,7 +118,7 @@ const _FormCompleteKYCWithoutLayout = ({
   const inputsFiltered = useMemo(
     () =>
       tenantInputs?.data?.filter(
-        (input: { type: DataTypesEnum; data: any; }) =>
+        (input: { type: DataTypesEnum; data: any }) =>
           !(
             input.type === DataTypesEnum.Checkbox &&
             (input?.data as any)?.hidden
@@ -260,7 +259,7 @@ const _FormCompleteKYCWithoutLayout = ({
           documents: value(),
         },
         {
-          onSuccess: (data: { data: any; }) => {
+          onSuccess: (data: { data: any }) => {
             if (!productForm) {
               contextOnboard.setLoading(true);
             }
@@ -324,11 +323,12 @@ const _FormCompleteKYCWithoutLayout = ({
         : doc.inputId === inputId
     );
   }
+
   const formState = useMemo(() => {
     if (productForm) return 'initial';
-    else if (router.query.formState) return router.query.formState as string;
+    else if (router?.query?.formState) return router?.query?.formState as string;
     else return '';
-  }, [productForm, router.query.formState]);
+  }, [productForm, router?.query?.formState]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   return isLoadingKyc ? (
     <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
@@ -364,7 +364,7 @@ const _FormCompleteKYCWithoutLayout = ({
         <FormTemplate
           isLoading={isLoading}
           buttonDisabled={
-            !dynamicMethods.formState.isValid ||
+            !dynamicMethods?.formState?.isValid ||
             isLoading ||
             Boolean(
               contextSlug === 'signup' &&
@@ -495,9 +495,10 @@ const _FormCompleteKYCWithoutLayout = ({
               </div>
             </Alert>
           )}
-          {!dynamicMethods.formState.isValid &&
+          {!dynamicMethods?.formState?.isValid &&
             !inputsFiltered?.some(
-              (res: { type: DataTypesEnum; }) => res.type === DataTypesEnum.Iframe
+              (res: { type: DataTypesEnum }) =>
+                res.type === DataTypesEnum.Iframe
             ) && (
               <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
                 <p className="pw-text-sm">

@@ -1,39 +1,45 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from "react";
+'use client';
 
-import { Trans } from "react-i18next";
-import { useLocalStorage } from "react-use";
-import { KycStatus } from "@w3block/sdk-id";
-import classNames from "classnames";
-import GoogleIcon from "../../shared/assets/icons/googleIcon.svg";
-import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
-import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
-import { useGetTenantInfoByHostname } from "../../shared/hooks/useGetTenantInfoByHostname";
-import { useGetGoogleRedirectLink } from "../../shared/hooks/useGetGoogleRedirectLink";
-import { usePasswordValidationSchema } from "../hooks/usePasswordValidationSchema";
-import { usePixwayAuthentication } from "../hooks/usePixwayAuthentication";
-import { usePixwaySession } from "../../shared/hooks/usePixwaySession";
-import { useTimedBoolean } from "../../shared/hooks/useTimedBoolean";
-import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
-import { useProfile } from "../../shared/hooks/useProfile";
-import { LocalStorageFields } from "../../shared/enums/LocalStorageFields";
-import { useUtms } from "../../shared/hooks/useUtms";
-import { useThemeConfig } from "../../storefront/hooks/useThemeConfig";
-import { FormProvider, useController, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { object, string } from "yup";
-import { Spinner } from "../../shared/components/Spinner";
-import { SignUpFormWithoutLayout } from "./SignUpFormWithoutLayout";
-import { Alert } from "../../shared/components/Alert";
-import { AuthTextController } from "./AuthTextController";
-import { AuthValidationTip } from "./AuthValidationTip";
-import { AuthButton } from "./AuthButton";
-import { AuthFooter } from "./AuthFooter";
-import useTranslation from "../../shared/hooks/useTranslation";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useMemo, useState } from 'react';
+import { FormProvider, useController, useForm } from 'react-hook-form';
+import { Trans } from 'react-i18next';
+import { useLocalStorage } from 'react-use';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import { KycStatus } from '@w3block/sdk-id';
+import classNames from 'classnames';
+import { object, string } from 'yup';
+
+import GoogleIcon from '../../shared/assets/icons/googleIcon.svg';
+import { Alert } from '../../shared/components/Alert';
+import { Spinner } from '../../shared/components/Spinner';
+import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { useGetAppleRedirectLink } from '../../shared/hooks/useGetAppleRedirectLink';
+import { useGetGoogleRedirectLink } from '../../shared/hooks/useGetGoogleRedirectLink';
+import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
+import { useProfile } from '../../shared/hooks/useProfile';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useUtms } from '../../shared/hooks/useUtms';
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
+import AppleIcon from '../../shared/assets/icons/appleIcon.svg';
+import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
+import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
+import { AuthButton } from './AuthButton';
+import { AuthFooter } from './AuthFooter';
+import { AuthTextController } from './AuthTextController';
+import { AuthValidationTip } from './AuthValidationTip';
+import { SignUpFormWithoutLayout } from './SignUpFormWithoutLayout';
+import { W3blockAuthenticationContext } from '../context/W3blockAuthenticationContext';
 
 interface Form {
   email: string;
-  password: string;
+  password: string; 
   twoFactor: string;
   companyId: string;
 }
@@ -41,9 +47,14 @@ interface Form {
 interface SignInWithoutLayoutProps {
   defaultRedirectRoute: string;
   routeToAttachWallet?: string;
-
+  isAppleSignIn?: boolean;
   routerToAttachKyc?: string;
   hasSignUp?: boolean;
+  configs?: {
+    isPasswordless?: boolean;
+    haveGoogleSignIn?: boolean;
+    haveAppleSignIn?: boolean;
+  }
 }
 
 export const SigInWithoutLayout = ({
@@ -51,18 +62,22 @@ export const SigInWithoutLayout = ({
   routeToAttachWallet = PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
   routerToAttachKyc = PixwayAppRoutes.COMPLETE_KYC,
   hasSignUp = true,
+  isAppleSignIn = false,
+  configs,
 }: SignInWithoutLayoutProps) => {
   const { companyId } = useCompanyConfig();
-  const { data: companyInfo } = useGetTenantInfoByHostname();
   const googleLink = useGetGoogleRedirectLink();
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
-  const haveGoogleSignIn = companyInfo?.configuration?.googleSignIn?.enabled;
+  const appleLink = useGetAppleRedirectLink();
+  const isPasswordless = configs?.isPasswordless;
+  const haveGoogleSignIn = configs?.haveGoogleSignIn;
+  const haveAppleSignIn = configs?.haveAppleSignIn;
   const [translate] = useTranslation();
-  const { signIn, signInWithGoogle } = usePixwayAuthentication();
+  const { signIn, signInWithGoogle, signInWithApple } =
+    usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
     isPasswordless,
     messageConfig: {
-      pattern: translate("companyAuth>signIn>invalidPasswordFeedback"),
+      pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
     },
   });
   const { data: session } = usePixwaySession();
@@ -72,32 +87,27 @@ export const SigInWithoutLayout = ({
   const { data: profile } = useProfile();
   const [callbackUrl, setCallbackUrl] = useLocalStorage<string>(
     LocalStorageFields.AUTHENTICATION_CALLBACK,
-    ""
+    ''
   );
-
-
   const query =
     Object.keys(router?.query ?? {})?.length > 0 &&
     (profile?.data.kycStatus === KycStatus.Pending || !profile?.data.mainWallet)
       ? router?.query
-      : "";
+      : '';
 
   const queryString = new URLSearchParams(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (router?.query as any) || {}
   ).toString();
 
-
-
   const code = useMemo(() => {
     if (router?.query) {
-      console.log("entrou nesse if")
       return router?.query?.code as string;
-    } else return "";
+    } else return '';
   }, [router]);
 
   const isGoogleSignIn = useMemo(() => {
-    return router?.query?.scope?.includes("googleapis");
+    return router?.query?.scope?.includes('googleapis');
   }, [router]);
 
   const callback = useMemo(() => {
@@ -108,14 +118,15 @@ export const SigInWithoutLayout = ({
     else if (router?.query?.contextSlug?.length)
       return (
         PixwayAppRoutes.COMPLETE_KYC +
-        (queryString && queryString != "" ? "?" : "") +
+        (queryString && queryString != '' ? '?' : '') +
         queryString
       );
-    else return "/";
+    else return '/';
   }, [router]);
 
   const utms = useUtms();
   const [googleError, setGoogleError] = useState(false);
+  const [appleError, setAppleError] = useState(false);
   useEffect(() => {
     if (code && isGoogleSignIn) {
       signInWithGoogle &&
@@ -124,7 +135,7 @@ export const SigInWithoutLayout = ({
           companyId,
           callbackUrl: callback,
           referrer: utms.utm_source ?? undefined,
-        }).then((res: { ok: any; }) => {
+        }).then((res: { ok: any }) => {
           if (!res.ok) {
             setGoogleError(true);
           } else {
@@ -134,30 +145,47 @@ export const SigInWithoutLayout = ({
     }
   }, [code, isGoogleSignIn]);
 
+  useEffect(() => {
+    if (code && isAppleSignIn) {
+      signInWithApple &&
+        signInWithApple({
+          code,
+          companyId,
+          callbackUrl: callback,
+          referrer: utms.utm_source ?? undefined,
+        }).then((res) => {
+          if (!res.ok) {
+            setAppleError(true);
+          } else {
+            router.pushConnect(callback);
+          }
+        });
+    }
+  }, [isAppleSignIn, code]);
   const { defaultTheme } = useThemeConfig();
   const postSigninURL =
     defaultTheme?.configurations?.contentData?.postSigninURL;
   const schema = object().shape({
     email: string()
-      .required(translate("components>form>requiredFieldValidation"))
-      .email(translate("shared>invalidEmail")),
+      .required(translate('components>form>requiredFieldValidation'))
+      .email(translate('shared>invalidEmail')),
     password: passwordSchema,
   });
 
   const methods = useForm<Form>({
     defaultValues: {
-      email: "",
-      password: "",
-      twoFactor: "",
+      email: '',
+      password: '',
+      twoFactor: '',
       companyId,
     },
-    mode: "onChange",
+    mode: 'onChange',
     resolver: yupResolver(schema as any),
   });
 
   const { fieldState } = useController({
     control: methods.control,
-    name: "password",
+    name: 'password',
   });
 
   const skipWallet = defaultTheme?.configurations?.contentData?.skipWallet;
@@ -165,17 +193,17 @@ export const SigInWithoutLayout = ({
   const checkForCallbackUrl = () => {
     if (profile && !profile.data.verified) {
       return PixwayAppRoutes.VERIfY_WITH_CODE;
-    } else if (router.query.callbackPath) {
-      return router.query.callbackPath as string;
-    } else if (router.query.callbackUrl) {
-      return router.query.callbackUrl as string;
-    } else if (profile?.data.kycStatus === KycStatus.Pending) {
+    } else if (router?.query?.callbackPath) {
+      return router?.query?.callbackPath as string;
+    } else if (router?.query?.callbackUrl) {
+      return router?.query?.callbackUrl as string;
+    } else if (profile?.data?.kycStatus === KycStatus.Pending) {
       return routerToAttachKyc;
-    } else if (!profile?.data.mainWallet && !skipWallet) {
+    } else if (!profile?.data?.mainWallet && !skipWallet) {
       return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;
-      setCallbackUrl("");
+      setCallbackUrl('');
       return url;
     } else if (postSigninURL) {
       return postSigninURL;
@@ -204,7 +232,7 @@ export const SigInWithoutLayout = ({
         companyId,
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (response?.error && response?.error != "") showErrorMessage();
+      if (response?.error && response?.error != '') showErrorMessage();
     } catch {
       showErrorMessage();
     } finally {
@@ -212,7 +240,10 @@ export const SigInWithoutLayout = ({
     }
   };
 
-  if (code && isGoogleSignIn && !googleError)
+  if (
+    code &&
+    ((isGoogleSignIn && !googleError) || (isAppleSignIn && !appleError))
+  )
     return (
       <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
         <Spinner />
@@ -233,29 +264,29 @@ export const SigInWithoutLayout = ({
               className="pw-mb-6 pw-mt-4 pw-flex !pw-justify-start"
             >
               <Alert.Icon className="pw-mr-2 !pw-w-[10px] !pw-h-[10px]" />
-              {translate("companyAuth>signIn>loginFailedError")}
+              {translate('companyAuth>signIn>loginFailedError')}
             </Alert>
           ) : null}
           <p className="pw-font-[700] pw-text-[24px] pw-mb-6 pw-font-poppins pw-text-[#35394C] pw-text-center">
-            {translate("auth>signIn>title")}
+            {translate('auth>signIn>title')}
           </p>
 
           <AuthTextController
             name="email"
-            label={translate("home>contactModal>email")}
+            label={translate('home>contactModal>email')}
             className="pw-mb-3"
-            placeholder={translate("companyAuth>newPassword>enterYourEmail")}
+            placeholder={translate('companyAuth>newPassword>enterYourEmail')}
             autoComplete="username"
           />
           {!isPasswordless ? (
             <AuthTextController
               name="password"
               autoComplete="current-password"
-              label={translate("companyAuth>newPassword>passwordFieldLabel")}
+              label={translate('companyAuth>newPassword>passwordFieldLabel')}
               type="password"
               className="pw-mb-6"
               placeholder={translate(
-                "companyAuth>newPassword>enterYourPassword"
+                'companyAuth>newPassword>enterYourPassword'
               )}
               renderTips={() => (
                 <div className="pw-flex pw-justify-between pw-items-center pw-gap-x-1.5 pw-mt-2">
@@ -269,7 +300,7 @@ export const SigInWithoutLayout = ({
                     )}
                     className="pw-text-[#383857] pw-text-[13px] pw-leading-[19.5px] hover:pw-underline hover:pw-text-[#5682C3] pw-underline"
                   >
-                    {translate("auth>passwordChange>requestChangeFormTitle")}
+                    {translate('auth>passwordChange>requestChangeFormTitle')}
                   </a>
                 </div>
               )}
@@ -278,21 +309,21 @@ export const SigInWithoutLayout = ({
 
           <div className="pw-mb-6">
             <AuthButton
-              className={classNames("pw-mb-1")}
+              className={classNames('pw-mb-1')}
               type="submit"
               fullWidth
               disabled={!methods.formState.isValid || isLoading}
             >
-              {translate("loginPage>formSubmitButton>signIn")}
+              {translate('loginPage>formSubmitButton>signIn')}
             </AuthButton>
             {hasSignUp ? (
               <>
                 <p className="pw-text-[13px] pw-font-normal pw-leading-5 pw-text-[#383857] pw-text-center">
-                  <Trans i18nKey={"auth>signIn>signUpCTA"}>
+                  <Trans i18nKey={'auth>signIn>signUpCTA'}>
                     Não tem conta ainda?
                     <a
                       href={router.routerToHref(
-                        PixwayAppRoutes.SIGN_UP + "?" + queryString
+                        PixwayAppRoutes.SIGN_UP + '?' + queryString
                       )}
                       className="pw-text-brand-primary pw-underline"
                     >
@@ -300,35 +331,47 @@ export const SigInWithoutLayout = ({
                     </a>
                   </Trans>
                 </p>
-                {haveGoogleSignIn ? (
-                  <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
-                    {googleError ? (
-                      <Alert variant="warning">
-                        {translate("auth>signWithoutLayout>notRegistration")}
-                      </Alert>
-                    ) : (
-                      <>
-                        <p className="pw-text-black">
-                          {translate("auth>metamaskAppErrorModal>or")}
-                        </p>
-                        <a
-                          className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
-                          href={googleLink}
-                        >
-                          <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
-                            <GoogleIcon />
-                          </div>
-                          <span>
-                            {translate("auth>signWithoutLayout>signGoogle")}
-                          </span>
-                        </a>
-                      </>
-                    )}
-                  </div>
-                ) : null}
               </>
             ) : null}
+            {haveGoogleSignIn ? (
+              <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
+                <p className="pw-text-black">
+                  {translate('auth>metamaskAppErrorModal>or')}
+                </p>
+                <a
+                  className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
+                  href={googleLink}
+                >
+                  <div className="pw-h-[17px] pw-w-[17px] pw-mr-[12px]">
+                    <GoogleIcon />
+                  </div>
+                  <span className="pw-mt-[1px]">
+                    {translate('auth>signWithoutLayout>signGoogle')}
+                  </span>
+                </a>
+              </div>
+            ) : null}
+            {haveAppleSignIn ? (
+              <div className="pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-[10px] pw-mt-[10px]">
+                <a
+                  className="pw-flex pw-flex-row pw-items-center pw-justify-center pw-bg-white hover:pw-bg-[#303030] hover:pw-bg-opacity-[8%] pw-rounded-[20px] pw-text-[#1f1f1f] pw-font-roboto pw-text-sm pw-h-[40px] pw-p-[0_12px] pw-w-[200px] pw-border pw-border-[#747775] pw-border-solid"
+                  href={appleLink}
+                >
+                  <div className="pw-h-[20px] pw-w-[20px] pw-mr-[12px]">
+                    <AppleIcon width={20} height={17} />
+                  </div>
+                  <span className="pw-mt-[1px]">
+                    {translate('auth>signWithoutLayout>signinApple')}
+                  </span>
+                </a>
+              </div>
+            ) : null}
           </div>
+          {appleError || googleError ? (
+            <Alert variant="warning">
+              {translate('auth>signWithoutLayout>notRegistration')}
+            </Alert>
+          ) : null}
           <AuthFooter />
         </form>
       </FormProvider>

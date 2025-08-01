@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 import { W3blockAPI } from '../enums/W3blockAPI';
 import { useAxios } from './useAxios';
 import { usePaginatedQuery } from './usePaginatedQuery';
@@ -36,7 +35,7 @@ export const usePaginatedGenericApiGet = ({
     async (params) => {
       try {
         const newParams = outputMap ? outputMap(params) : params;
-
+        
         if (isPublicApi) {
           if (disableParams) {
             if (searchType) {
@@ -50,7 +49,7 @@ export const usePaginatedGenericApiGet = ({
             }
           } else {
             return await axios.get(url, {
-              params: { ...newParams, search: search },
+              params: { ...newParams, search: search, page: undefined},
             });
           }
         } else {
