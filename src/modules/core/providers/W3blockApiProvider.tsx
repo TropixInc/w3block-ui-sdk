@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 interface Props {
   children?: ReactNode;
@@ -10,40 +11,26 @@ interface Props {
   w3BlockPassApiUrl: string;
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__W3BLOCK_API_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<{
+export interface W3blockAPIContextInterface {
   w3blockKeyAPIUrl: string;
   w3blockIdAPIUrl: string;
   w3blockCommerceAPIUrl: string;
   w3blockPdfAPIUrl: string;
   w3BlockPollApiUrl: string;
   w3BlockPassApiUrl: string;
-}>;
+}
 
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext({
+export const W3blockAPIContext = createSymlinkSafeContext<W3blockAPIContextInterface>(
+  '__W3BLOCK_API_CONTEXT__',
+  {
     w3blockKeyAPIUrl: '',
     w3blockIdAPIUrl: '',
     w3blockCommerceAPIUrl: '',
     w3blockPdfAPIUrl: '',
     w3BlockPollApiUrl: '',
     w3BlockPassApiUrl: '',
-  });
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
   }
-}
-
-export const W3blockAPIContext = context;
+);
 
 export const W3blockApiProvider = ({
   children,

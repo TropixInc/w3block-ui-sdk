@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 export interface IW3blockUISDKGereralConfigContext {
   companyId: string;
@@ -8,25 +8,9 @@ export interface IW3blockUISDKGereralConfigContext {
   name?: string;
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__W3BLOCK_CONFIG_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<IW3blockUISDKGereralConfigContext>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext({
+export const W3blockUISDKGereralConfigContext = createSymlinkSafeContext<IW3blockUISDKGereralConfigContext>(
+  '__W3BLOCK_CONFIG_CONTEXT__',
+  {
     connectProxyPass: '/',
-  } as IW3blockUISDKGereralConfigContext);
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
-  }
-}
-
-export const W3blockUISDKGereralConfigContext = context;
+  } as IW3blockUISDKGereralConfigContext
+);

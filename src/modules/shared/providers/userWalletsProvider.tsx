@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, createContext, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 import { CoinsType } from '../../storefront/interfaces/Theme';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 import { usePixwaySession } from '../hooks/usePixwaySession';
@@ -44,30 +45,14 @@ export interface WalletLoyalty {
   pointsPrecision?: 'decimal' | 'integer';
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__USER_WALLETS_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<UserWalletsContextInterface>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext<UserWalletsContextInterface>({
+export const UserWalletsContext = createSymlinkSafeContext<UserWalletsContextInterface>(
+  '__USER_WALLETS_CONTEXT__',
+  {
     wallets: [],
     hasWallet: false,
     loyaltyWallet: [],
-  });
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
   }
-}
-
-export const UserWalletsContext = context;
+);
 
 const _UserWalletsProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouterConnect();

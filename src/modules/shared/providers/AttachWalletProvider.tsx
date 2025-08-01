@@ -1,35 +1,19 @@
-import { createContext, lazy, ReactNode, useState } from 'react';
-
+import { lazy, ReactNode, useState } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 interface AttachWalletProviderProps {
   setAttachModal: (bol: boolean) => void;
   attachModal: boolean;
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__ATTACH_WALLET_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<AttachWalletProviderProps>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext<AttachWalletProviderProps>({
+export const AttachWalletContext = createSymlinkSafeContext<AttachWalletProviderProps>(
+  '__ATTACH_WALLET_CONTEXT__',
+  {
     attachModal: false,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     setAttachModal: () => {},
-  });
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
   }
-}
-
-export const AttachWalletContext = context;
+);
 
 export const AttachWalletProvider = ({ children }: { children: ReactNode }) => {
   const [attachModal, setAttachModal] = useState<boolean>(false);

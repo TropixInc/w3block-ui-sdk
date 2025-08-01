@@ -66,6 +66,11 @@
       "types": "./dist/dashboard.d.ts",
       "import": "./dist/dashboard.js",
       "default": "./dist/dashboard.js"
+    },
+    "./checkout": {
+      "types": "./dist/checkout.d.ts",
+      "import": "./dist/checkout.js",
+      "default": "./dist/checkout.js"
     }
   },
   "scripts": {

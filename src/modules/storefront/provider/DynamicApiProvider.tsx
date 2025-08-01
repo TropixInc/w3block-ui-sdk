@@ -1,11 +1,11 @@
 import {
   ReactNode,
-  createContext,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 import { processLocalizations } from "../utils/processLocalizations";
 import { DynamicApiModuleInterface } from "../interfaces/Theme";
@@ -18,29 +18,13 @@ export interface DynamicApiContextInterface {
   strapiLocalization?: boolean;
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__DYNAMIC_API_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<DynamicApiContextInterface>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext<DynamicApiContextInterface>({
+const DynamicApiContext = createSymlinkSafeContext<DynamicApiContextInterface>(
+  '__DYNAMIC_API_CONTEXT__',
+  {
     datasource: {},
     isDynamic: false,
-  });
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
   }
-}
-
-const DynamicApiContext = context;
+);
 
 interface DynamicApiProviderProps {
   children: ReactNode;

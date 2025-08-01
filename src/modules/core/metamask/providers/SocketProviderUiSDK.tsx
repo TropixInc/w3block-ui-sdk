@@ -1,11 +1,11 @@
 
 import {
   ReactNode,
-  createContext,
   useCallback,
   useEffect,
   useState,
 } from 'react';
+import { createSymlinkSafeContext } from '../../../shared/utils/createSymlinkSafeContext';
 import { useSessionStorage } from 'react-use';
 
 import { Socket, io } from 'socket.io-client';
@@ -24,29 +24,13 @@ interface SocketProviderContextInterface {
   ) => Promise<void>;
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__SOCKET_PROVIDER_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<SocketProviderContextInterface>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext<SocketProviderContextInterface>({
+export const SocketProviderContext = createSymlinkSafeContext<SocketProviderContextInterface>(
+  '__SOCKET_PROVIDER_CONTEXT__',
+  {
     isConnected: false,
     signinRequest: null,
-  });
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
   }
-}
-
-export const SocketProviderContext = context;
+);
 
 // "undefined" means the URL will be computed from the `window.location` object
 const noveEnv = getEnvVar('NODE_ENV')

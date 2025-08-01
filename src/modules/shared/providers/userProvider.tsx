@@ -1,10 +1,9 @@
-import { ReactNode, createContext, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 import { UserPublicResponseDto } from '@w3block/sdk-id';
 import { useProfileWithouRedirect } from '../hooks/useProfile';
 import { useGetDocuments } from '../hooks/useGetDocuments';
-
-
 
 interface UserProfileWithKYC extends UserPublicResponseDto {
   avatarSrc?: string;
@@ -14,26 +13,10 @@ interface UserContextProps {
   profile?: UserProfileWithKYC;
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__USER_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<UserContextProps>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext<UserContextProps>({});
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
-  }
-}
-
-export const UserContext = context;
+export const UserContext = createSymlinkSafeContext<UserContextProps>(
+  '__USER_CONTEXT__',
+  {}
+);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { data: profile } = useProfileWithouRedirect();

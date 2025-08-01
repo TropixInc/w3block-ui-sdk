@@ -1,4 +1,11 @@
-import * as React from "react"
+import {
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 import classNames from 'classnames';
 
@@ -19,7 +26,7 @@ export interface AlertProps {
   variant?: AlertVariant;
   scrollToOnMount?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface IconProps {
@@ -30,26 +37,10 @@ interface AlertContext {
   variant: AlertVariant;
 }
 
-// Check if context already exists (for symlink development)
-const globalKey = '__ALERT_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<AlertContext>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = React.createContext<AlertContext>({} as AlertContext);
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
-  }
-}
-
-const AlertContext = context;
+const AlertContext = createSymlinkSafeContext<AlertContext>(
+  '__ALERT_CONTEXT__',
+  {} as AlertContext
+);
 
 const iconConfigMap = new Map([
   ['error', { Element: ErrorCircledFilled, className: 'pw-fill-[#D02428]' }],
@@ -76,10 +67,10 @@ export const Alert = ({
   children,
   scrollToOnMount = false,
 }: AlertProps) => {
-  const value = React.useMemo(() => ({ variant }), [variant]);
-  const elementRef = React.useRef<HTMLDivElement>(null);
+  const value = useMemo(() => ({ variant }), [variant]);
+  const elementRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       typeof window !== 'undefined' &&
       elementRef.current &&
@@ -112,7 +103,7 @@ export const Alert = ({
 };
 
 const Icon = ({ className = '' }: IconProps) => {
-  const { variant } = React.useContext(AlertContext);
+  const { variant } = useContext(AlertContext);
   const variantIconConfig = iconConfigMap.get(variant);
 
   return variantIconConfig ? (

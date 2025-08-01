@@ -3,4 +3,14 @@ export * from './components/WalletInternalTemplate'
 export * from './templates/WithdrawsAdminTemplate'
 export * from './templates/WithdrawsTemplateSDK'
 export * from './context/W3blockAuthenticationProvider';
-export * from './templates/ResetPasswordTemplateSDK'
+export * from './templates/SignInWithCodeTemplateSDK';
+export * from './templates/ResetPasswordTemplateSDK';
+export * from './templates/RequestChangePasswordTemplateSDK';
+export * from './templates/ConfirmationKycTemplateSDK';
+export * from './templates/CompleteKYCTemplateSDK';
+export * from './templates/CompleteProfileCustomTemplate';
+export * from './templates/ConnectWalletTemplateSDK';
+export * from '../poll/templates/PollTemplateSDK';
+export * from './templates/SignUpTemplateSDK';
+export * from './templates/SetCodeToCompleteProfileTemplate';
+export * from './templates/VerifySignUpTemplateSDK';

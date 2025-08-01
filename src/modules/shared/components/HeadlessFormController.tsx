@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { ReactNode, useContext, useMemo } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 interface Props {
   children: ReactNode;
@@ -14,26 +15,10 @@ type LabelProps = {
   children?: ReactNode;
 };
 
-// Check if context already exists (for symlink development)
-const globalKey = '__FORM_CONTROLLER_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<FormControllerContext>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = createContext<FormControllerContext>({} as FormControllerContext);
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
-  }
-}
-
-const FormControllerContext = context;
+const FormControllerContext = createSymlinkSafeContext<FormControllerContext>(
+  '__FORM_CONTROLLER_CONTEXT__',
+  {} as FormControllerContext
+);
 
 export const HeadlessFormController = ({ children, name }: Props) => {
   const value = useMemo(() => {

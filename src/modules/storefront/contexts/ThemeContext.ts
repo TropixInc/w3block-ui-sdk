@@ -1,24 +1,9 @@
-import * as React from "react"
+'use client';
 
 import { IThemeContext } from "../../shared/interfaces/IThemeContext";
+import { createSymlinkSafeContext } from "../../shared/utils/createSymlinkSafeContext";
 
-// Check if context already exists (for symlink development)
-const globalKey = '__THEME_CONTEXT__';
-declare global {
-  interface Window {
-    [key: string]: any;
-  }
-}
-
-let context: React.Context<IThemeContext | null>;
-
-if (typeof window !== 'undefined' && window[globalKey]) {
-  context = window[globalKey];
-} else {
-  context = React.createContext<IThemeContext | null>(null);
-  if (typeof window !== 'undefined') {
-    window[globalKey] = context;
-  }
-}
-
-export const ThemeContext = context; 
+export const ThemeContext = createSymlinkSafeContext<IThemeContext | null>(
+  '__THEME_CONTEXT__',
+  null
+); 
