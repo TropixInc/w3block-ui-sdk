@@ -1,16 +1,19 @@
+
 import {
   ReactNode,
-  createContext,
   useCallback,
   useEffect,
   useState,
 } from 'react';
+import { createSymlinkSafeContext } from '../../../shared/utils/createSymlinkSafeContext';
 import { useSessionStorage } from 'react-use';
 
 import { Socket, io } from 'socket.io-client';
-
+import { Transaction } from '../../../shared/interfaces/IMetamask';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import { Transaction } from '../interface';
+import { getEnvVar } from '../../../shared/utils/env';
+
+
 
 interface SocketProviderContextInterface {
   isConnected: boolean;
@@ -21,15 +24,18 @@ interface SocketProviderContextInterface {
   ) => Promise<void>;
 }
 
-export const SocketProviderContext =
-  createContext<SocketProviderContextInterface>({
+export const SocketProviderContext = createSymlinkSafeContext<SocketProviderContextInterface>(
+  '__SOCKET_PROVIDER_CONTEXT__',
+  {
     isConnected: false,
     signinRequest: null,
-  });
+  }
+);
 
 // "undefined" means the URL will be computed from the `window.location` object
+const noveEnv = getEnvVar('NODE_ENV')
 const URL =
-  process.env.NODE_ENV === 'production'
+  noveEnv === 'production'
     ? 'https://pixwayid.pixway.io/blockchain-transactions'
     : 'https://pixwayid.stg.pixway.io/blockchain-transactions';
 

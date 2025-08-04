@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment, useState } from 'react';
+import { Fragment, useState } from "react";
 
-import { Combobox, Transition } from '@headlessui/react';
-import classNames from 'classnames';
+import {
+  Combobox,
+  Transition,
+} from "@headlessui/react";
+import classNames from "classnames";
 
-import ArrowDown from '../../shared/assets/icons/arrowDown.svg?react';
+import ArrowDown from "../../shared/assets/icons/arrowDown.svg";
 
 interface Props {
   onChange: (value: any) => void;
@@ -29,10 +32,10 @@ export const Selector = ({
   const [value, setValue] = useState(
     data.filter((e: { id: string }) => e.id == initialValue)[0]
   );
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const filteredPeople =
-    query === ''
+    query === ""
       ? data
       : data.filter((res: { attributes: { name: string } }) => {
           return res.attributes.name
@@ -44,7 +47,7 @@ export const Selector = ({
     <div className="pw-relative">
       <p
         className={classNames(
-          'pw-font-[600] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-1',
+          "pw-font-[600] pw-text-base pw-text-[#35394C] pw-mt-5 pw-mb-1",
           classes?.title
         )}
       >
@@ -54,13 +57,13 @@ export const Selector = ({
         <div className="pw-flex pw-items-center pw-gap-3">
           <img
             alt="logo"
-            src={`https://cms.foodbusters.com.br${value?.attributes?.image?.data?.attributes?.formats?.thumbnail?.url}`}
+            src={`https://cms.zuca.ai${value?.attributes?.image?.data?.attributes?.formats?.thumbnail?.url}`}
             className="pw-h-17 pw-w-17 pw-rounded-lg"
           />
           <p
             className={classNames(
               classes?.value,
-              'pw-font-normal pw-text-base pw-text-[#35394C]'
+              "pw-font-normal pw-text-base pw-text-[#35394C]"
             )}
           >
             {value?.attributes?.name}
@@ -92,7 +95,7 @@ export const Selector = ({
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            afterLeave={() => setQuery('')}
+            afterLeave={() => setQuery("")}
           >
             <Combobox.Options className="pw-bg-white pw-cursor-default pw-flex pw-flex-col pw-py-1 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black pw-absolute pw-w-full pw-max-w-[1032px]">
               {filteredPeople.map(
@@ -105,7 +108,7 @@ export const Selector = ({
                     value={res}
                     className={({ active }) =>
                       `pw-p-2 pw-truncate ${
-                        active ? 'pw-bg-gray-300' : 'pw-bg-white'
+                        active ? "pw-bg-gray-300" : "pw-bg-white"
                       }`
                     }
                   >

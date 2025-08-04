@@ -1,1 +1,2 @@
-export * from './templates';
+export * from './templates/AddFundsManualTemplateSDK';
+export * from './templates/AddFundsTypeChooseTemplateSDK';

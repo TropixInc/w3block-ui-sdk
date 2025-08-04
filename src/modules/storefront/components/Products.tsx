@@ -3,46 +3,34 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 
 import classNames from 'classnames';
 import _ from 'lodash';
-import { Autoplay, Navigation } from 'swiper';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { BaseSelect } from '../../shared';
-import { W3blockAPI } from '../../shared/enums/W3blockAPI';
-import { useAxios } from '../../shared/hooks/useAxios';
-import {
-  breakpointsEnum,
-  useBreakpoints,
-} from '../../shared/hooks/useBreakpoints/useBreakpoints';
+/* import 'swiper/css';
+import 'swiper/css/navigation'; */
+import { AlignmentEnum, CardLayoutDisposition, CardTypesEnum, ProductsData } from '../interfaces/Theme';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+
+import { Product } from '../interfaces/Product';
+import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
+import { useDynamicApi } from '../provider/DynamicApiProvider';
+import { useDynamicString } from '../hooks/useDynamicString';
+import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
-import useTranslation from '../../shared/hooks/useTranslation';
+import { useAxios } from '../../shared/hooks/useAxios';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
+import { ContentCard } from './ContentCard';
+import { Card } from './Card';
+import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import { Autoplay, Navigation } from 'swiper/modules';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-import { useDynamicString } from '../hooks/useDynamicString';
-import { Product } from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import {
-  AlignmentEnum,
-  CardLayoutDisposition,
-  CardTypesEnum,
-  ProductsData,
-} from '../interfaces';
-import './Products.css';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { useDynamicApi } from '../provider/DynamicApiProvider';
-import { changeDynamicJsonToInsertIndex } from '../utils/jsonTransformation';
+import { BaseSelect } from '../../shared/components/BaseSelect';
+import useTranslation from '../../shared/hooks/useTranslation';
 
-const Card = lazy(() =>
-  import('../../shared/components/Card').then((module) => ({
-    default: module.Card,
-  }))
-);
-const ContentCard = lazy(() =>
-  import('./ContentCard').then((module) => ({
-    default: module.ContentCard,
-  }))
-);
+
+
 
 const getPreferredSymbol = (
   selectedCurrency: string,
@@ -384,7 +372,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     assetUrl: p?.images?.[0]?.original ?? '',
                   },
                   description: p?.description,
-                  category: p?.tags?.map((val) => ({
+                  category: p?.tags?.map((val: { name: any; id: any; }) => ({
                     label: val?.name ?? '',
                     value: val?.id ?? '',
                   })),
@@ -534,7 +522,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
                     description: p?.description ?? '',
                     cardOverlayColor: cardProductOverlay,
                     overlay: productOverlay,
-                    category: p?.tags?.map((val) => ({
+                    category: p?.tags?.map((val: { name: any; id: any; }) => ({
                       label: val?.name ?? '',
                       value: val?.id ?? '',
                     })),

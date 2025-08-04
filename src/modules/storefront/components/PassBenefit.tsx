@@ -5,9 +5,11 @@ import useGetPassBenefitById from '../../pass/hooks/useGetPassBenefitById';
 import useGetPassById from '../../pass/hooks/useGetPassById';
 import LabelWithRequired from '../../shared/components/LabelWithRequired';
 import { Spinner } from '../../shared/components/Spinner';
-import useTranslation from '../../shared/hooks/useTranslation';
+
 import { useDynamicString } from '../hooks/useDynamicString';
-import { PassBenefitData } from '../interfaces';
+import { PassBenefitData } from '../interfaces/Theme';
+import useTranslation from '../../shared/hooks/useTranslation';
+
 
 interface PassBenefitProps {
   data: PassBenefitData;
@@ -159,7 +161,7 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
                 </span>
               </LabelWithRequired>
               <p className="pw-text-slate-700">
-                {new Date(benefit?.data?.eventStartsAt)?.toLocaleString()}
+                {new Date(benefit?.data?.eventStartsAt).toLocaleString()}
               </p>
             </div>
           ) : null}
@@ -172,7 +174,7 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
                 </span>
               </LabelWithRequired>
               <p className="pw-text-slate-700">
-                {new Date(benefit?.data?.eventEndsAt)?.toLocaleString()}
+                {new Date(benefit?.data?.eventEndsAt).toLocaleString()}
               </p>
             </div>
           ) : null}

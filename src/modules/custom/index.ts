@@ -1,1 +1,1 @@
-export * from './kyraGracie';
+export * from "./kyraGracie/template/AthletePage"

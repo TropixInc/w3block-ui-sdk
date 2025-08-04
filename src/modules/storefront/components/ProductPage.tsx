@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -8,12 +8,12 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-import { Pagination } from 'swiper';
+import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
 
 import {
   GIFT_DATA_INFO_KEY,
@@ -27,66 +27,36 @@ import {
 } from '../../checkout/interface/interface';
 // eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
-import { formatterCurrency } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import useRouter from '../../shared/hooks/useRouter';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms/useUtms';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-import useGetProductBySlug, {
-  CurrencyResponse,
-} from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { UseThemeConfig } from '../hooks/useThemeConfig/useThemeConfig';
-import { useTrack } from '../hooks/useTrack/useTrack';
-import { ProductPageData } from '../interfaces';
 import { ProductVariants } from './ProductVariants';
 import { SendGiftForm } from './SendGiftForm';
-
-const CheckboxAlt = lazy(() =>
-  import('../../shared/components/CheckboxAlt/CheckboxAlt').then((mod) => ({
-    default: mod.CheckboxAlt,
-  }))
-);
-
-const CriptoValueComponent = lazy(() =>
-  import(
-    '../../shared/components/CriptoValueComponent/CriptoValueComponent'
-  ).then((mod) => ({ default: mod.CriptoValueComponent }))
-);
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((mod) => ({
-    default: mod.ImageSDK,
-  }))
-);
-const ModalBase = lazy(() =>
-  import('../../shared/components/ModalBase').then((mod) => ({
-    default: mod.ModalBase,
-  }))
-);
-
-const Shimmer = lazy(() =>
-  import('../../shared/components/Shimmer').then((mod) => ({
-    default: mod.Shimmer,
-  }))
-);
-
-const Spinner = lazy(() =>
-  import('../../shared/components/Spinner').then((mod) => ({
-    default: mod.Spinner,
-  }))
-);
+import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
+import { formatterCurrency, CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { ModalBase } from '../../shared/components/ModalBase';
+import { Shimmer } from '../../shared/components/Shimmer';
+import { Spinner } from '../../shared/components/Spinner';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useUtms } from '../../shared/hooks/useUtms';
+import useGetProductBySlug from '../hooks/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { useTrack } from '../hooks/useTrack';
+import { CurrencyResponse } from '../interfaces/Product';
+import { ProductPageData } from '../interfaces/Theme';
+import { useThemeConfig } from '../hooks/useThemeConfig';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -141,7 +111,7 @@ export const ProductPage = ({
 
   const [translate] = useTranslation();
   const { pushConnect } = useRouterConnect();
-  const { defaultTheme } = UseThemeConfig();
+  const { defaultTheme } = useThemeConfig();
   const variantsType =
     defaultTheme?.configurations?.contentData?.productVariantsType;
   const { setCart, cart, setCartCurrencyId } = useCart();
@@ -169,6 +139,7 @@ export const ProductPage = ({
     isLoading,
     error: errorProduct,
   } = useGetProductBySlug(params?.[params.length - 1]);
+  const isErc20 = product?.type === 'erc20';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const categories: any[] = [];
   const isPossibleSend = useMemo(() => {
@@ -212,6 +183,7 @@ export const ProductPage = ({
         value: orderPreview?.totalPrice,
       });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log('Erro ao salvar o track: ', err);
     }
   };
@@ -434,55 +406,68 @@ export const ProductPage = ({
       window.removeEventListener('message', handleMessage);
     };
   }, [handleMessage]);
-  const batchSize = product?.settings?.resaleConfig?.batchSize;
+  const batchSize = useMemo(() => {
+    return product?.settings?.resaleConfig?.batchSize;
+  }, [product?.settings?.resaleConfig?.batchSize]);
+  useEffect(() => {
+    if (batchSize) setQuantity(batchSize);
+  }, [batchSize]);
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
   const { getOrderPreview } = useCheckout();
   const [isLoadingValue, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (
+      product?.minPurchaseAmount &&
+      product?.stockAmount &&
+      parseFloat(product?.minPurchaseAmount) <= product?.stockAmount
+    ) {
+      setQuantity(parseFloat(product?.minPurchaseAmount));
+    }
+  }, [product?.minPurchaseAmount, product?.stockAmount]);
+
   const getOrderPreviewFn = () => {
     if (product?.id && currencyId) {
-      setIsLoading(true);
-      getOrderPreview.mutate(
-        {
-          productIds: [
-            ...Array(quantity).fill({
-              productId: product.id,
-              quantity: batchSize ?? 1,
-              selectBestPrice: product?.type === 'erc20' ? true : undefined,
-              variantIds: variants
-                ? Object.values(variants).map((value) => {
-                    if ((value as any).productId === product.id)
-                      return (value as any).id;
-                  })
-                : [],
-            }),
-          ],
-          currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
-          passShareCodeData: giftData,
-          payments: [
-            {
-              currencyId:
-                currencyId?.id ?? (currencyId as unknown as string) ?? '',
-              amountType: 'percentage',
-              amount: '100',
-            },
-          ],
-          companyId,
-          couponCode:
-            utms.utm_campaign &&
-            utms?.expires &&
-            new Date().getTime() < utms?.expires
-              ? utms.utm_campaign
-              : '',
-        },
-        {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onSuccess: (data: OrderPreviewResponse) => {
-            setIsLoading(false);
-            setOrderPreview(data);
+      const order = {
+        productIds: [
+          ...Array(isErc20 ? 1 : quantity).fill({
+            productId: product.id,
+            quantity: isErc20 ? quantity ?? 1 : 1,
+            selectBestPrice: product?.type === 'erc20' ? true : undefined,
+            variantIds: variants
+              ? Object.values(variants).map((value) => {
+                  if ((value as any).productId === product.id)
+                    return (value as any).id;
+                })
+              : [],
+          }),
+        ],
+        currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
+        passShareCodeData: giftData,
+        payments: [
+          {
+            currencyId:
+              currencyId?.id ?? (currencyId as unknown as string) ?? '',
+            amountType: 'percentage',
+            amount: '100',
           },
-        }
-      );
+        ],
+        companyId,
+        couponCode:
+          utms.utm_campaign &&
+          utms?.expires &&
+          new Date().getTime() < utms?.expires
+            ? utms.utm_campaign
+            : '',
+      };
+      setIsLoading(true);
+      getOrderPreview.mutate(order, {
+        onSuccess: (data: OrderPreviewResponse) => {
+          setIsLoading(false);
+          setOrderPreview(data);
+        },
+      });
     }
   };
 
@@ -559,7 +544,8 @@ export const ProductPage = ({
       parseFloat(
         product?.prices.find((price: any) => price.currencyId == currencyId?.id)
           ?.amount ?? '0'
-      ) === 0
+      ) === 0 &&
+      parseFloat(orderPreview?.payments?.[0]?.totalPrice ?? '0') === 0
     )
       return 'Quero';
     else if (productKycRequirement) return 'Tenho interesse!';
@@ -573,7 +559,7 @@ export const ProductPage = ({
       if (productKycRequirement)
         pushConnect(
           PixwayAppRoutes.CHECKOUT_FORM +
-            `?productIds=${Array(quantity)
+            `?productIds=${Array(isErc20 ? 1 : quantity)
               .fill(product.id)
               .join(',')}&currencyId=${
               currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -587,7 +573,7 @@ export const ProductPage = ({
           });
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
+              `?productIds=${Array(isErc20 ? 1 : quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -599,7 +585,7 @@ export const ProductPage = ({
         ) {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
+              `?productIds=${Array(isErc20 ? 1 : quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -609,18 +595,29 @@ export const ProductPage = ({
               }`
           );
         } else if (batchSize) {
-          pushConnect(
-            PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
-                .fill(product.id)
-                .join(',')}&currencyId=${
-                currencyId?.id ?? (currencyId as unknown as string) ?? ''
-              }&batchSize=${batchSize}`
-          );
+          if (quantity > batchSize) {
+            pushConnect(
+              PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                `?productIds=${Array(isErc20 ? 1 : quantity)
+                  .fill(product.id)
+                  .join(',')}&currencyId=${
+                  currencyId?.id ?? (currencyId as unknown as string) ?? ''
+                }&batchSize=${batchSize}&quantity=${quantity}`
+            );
+          } else {
+            pushConnect(
+              PixwayAppRoutes.CHECKOUT_CONFIRMATION +
+                `?productIds=${Array(isErc20 ? 1 : quantity)
+                  .fill(product.id)
+                  .join(',')}&currencyId=${
+                  currencyId?.id ?? (currencyId as unknown as string) ?? ''
+                }&batchSize=${batchSize}`
+            );
+          }
         } else {
           pushConnect(
             PixwayAppRoutes.CHECKOUT_CONFIRMATION +
-              `?productIds=${Array(quantity)
+              `?productIds=${Array(isErc20 ? 1 : quantity)
                 .fill(product.id)
                 .join(',')}&currencyId=${
                 currencyId?.id ?? (currencyId as unknown as string) ?? ''
@@ -630,6 +627,56 @@ export const ProductPage = ({
       }
     }
   };
+
+  const reachStock = useMemo(() => {
+    return (
+      product?.canPurchaseAmount &&
+      product?.stockAmount &&
+      quantity + (batchSize ?? 0) > product?.canPurchaseAmount &&
+      quantity + (batchSize ?? 0) > product?.stockAmount
+    );
+  }, [product?.canPurchaseAmount, product?.stockAmount, quantity, batchSize]);
+
+  const notEnoughStock = useMemo(() => {
+    if (
+      product?.minPurchaseAmount === null ||
+      (product?.stockAmount &&
+        parseFloat(product?.minPurchaseAmount ?? '0') > product?.stockAmount)
+    )
+      return true;
+    else return false;
+  }, [product?.minPurchaseAmount]);
+
+  const minCartItemPriceBlock = useMemo(() => {
+    return (
+      !!orderPreview?.cartPrice &&
+      !!product?.settings?.minCartItemPrice &&
+      parseFloat(orderPreview?.cartPrice ?? '') <
+        product?.settings?.minCartItemPrice
+    );
+  }, [orderPreview?.cartPrice, product?.settings?.minCartItemPrice]);
+
+  const soldOut = useMemo(() => {
+    if (isErc20 && batchSize) {
+      return (
+        product?.stockAmount === 0 ||
+        product?.canPurchaseAmount === 0 ||
+        (product?.stockAmount && product?.stockAmount < batchSize) ||
+        (product?.canPurchaseAmount &&
+          product?.canPurchaseAmount < batchSize) ||
+        notEnoughStock
+      );
+    } else {
+      return product?.stockAmount === 0 || product?.canPurchaseAmount === 0;
+    }
+  }, [
+    isErc20,
+    batchSize,
+    product?.stockAmount,
+    product?.canPurchaseAmount,
+    reachStock,
+    minCartItemPriceBlock,
+  ]);
 
   return errorProduct ? (
     <ErrorBox customError={errorProduct} />
@@ -759,7 +806,9 @@ export const ProductPage = ({
         <div className="pw-container pw-mx-auto pw-px-4 sm:pw-px-0 pw-py-6">
           <div className="pw-w-full pw-rounded-[14px] pw-bg-white pw-p-[40px_47px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]">
             <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-12">
-              {product?.images && product?.images?.length > 1 ? (
+              {product?.settings
+                ?.disableImageDisplay ? null : product?.images &&
+                product?.images?.length > 1 ? (
                 <Swiper
                   className="xl:pw-w-[500px] sm:pw-w-[400px] pw-w-[347px] pw-max-h-[437px]"
                   modules={[Pagination]}
@@ -844,7 +893,7 @@ export const ProductPage = ({
                       style={{ color: priceTextColor ?? 'black' }}
                       className="pw-text-2xl pw-mt-4 pw-font-[700]"
                     >
-                      {product?.stockAmount == 0 ? (
+                      {soldOut ? (
                         'Esgotado'
                       ) : product ? (
                         isLoadingValue ? (
@@ -880,12 +929,14 @@ export const ProductPage = ({
                             ) : null}
                             <CriptoValueComponent
                               dontShow={
-                                parseFloat(
-                                  product?.prices.find(
-                                    (price: any) =>
-                                      price.currencyId == currencyId?.id
-                                  )?.amount ?? '0'
-                                ) === 0
+                                isErc20
+                                  ? false
+                                  : parseFloat(
+                                      product?.prices.find(
+                                        (price: any) =>
+                                          price.currencyId == currencyId?.id
+                                      )?.amount ?? '0'
+                                    ) === 0
                               }
                               showFree
                               size={24}
@@ -978,7 +1029,8 @@ export const ProductPage = ({
                       ))
                     : null}
                 </div>
-                {actionButton &&
+                {!soldOut &&
+                actionButton &&
                 product?.stockAmount &&
                 product?.stockAmount > 0 &&
                 product?.canPurchase &&
@@ -992,11 +1044,30 @@ export const ProductPage = ({
                         <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
                           <p
                             onClick={() => {
-                              if (quantity > 1) {
-                                setQuantity(quantity - 1);
+                              if (
+                                product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount)
+                              ) {
+                                // empty
+                              } else {
+                                if (isErc20 && batchSize) {
+                                  if (quantity > batchSize) {
+                                    setQuantity(quantity - batchSize);
+                                  }
+                                } else if (quantity > 1) {
+                                  setQuantity(quantity - 1);
+                                }
                               }
                             }}
                             className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
+                              quantity === batchSize ||
+                              (product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount))
+                                ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
+                                : ''
+                            } ${
                               quantity && quantity > 1
                                 ? 'pw-text-[#353945] pw-border-brand-primary pw-cursor-pointer'
                                 : 'pw-text-[rgba(0,0,0,0.3)] pw-border-[rgba(0,0,0,0.3)] pw-cursor-default'
@@ -1008,6 +1079,7 @@ export const ProductPage = ({
                             <input
                               type="number"
                               id="quantityValue"
+                              disabled
                               value={quantity}
                               onChange={() => {
                                 const inputValue = parseFloat(
@@ -1039,6 +1111,14 @@ export const ProductPage = ({
                             className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
                               product?.canPurchaseAmount &&
                               product?.stockAmount &&
+                              quantity + (batchSize ?? 0) >
+                                product?.canPurchaseAmount &&
+                              quantity + (batchSize ?? 0) > product?.stockAmount
+                                ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
+                                : ''
+                            } ${
+                              product?.canPurchaseAmount &&
+                              product?.stockAmount &&
                               quantity < product?.canPurchaseAmount &&
                               quantity < product?.stockAmount
                                 ? 'pw-border-brand-primary pw-text-[#353945] pw-cursor-pointer'
@@ -1051,13 +1131,47 @@ export const ProductPage = ({
                                 quantity < product?.canPurchaseAmount &&
                                 quantity < product?.stockAmount
                               ) {
-                                setQuantity(quantity + 1);
+                                if (isErc20 && batchSize) {
+                                  if (
+                                    quantity + batchSize <=
+                                      product?.canPurchaseAmount &&
+                                    quantity + batchSize <= product?.stockAmount
+                                  ) {
+                                    setQuantity(quantity + batchSize);
+                                  }
+                                } else {
+                                  setQuantity(quantity + 1);
+                                }
                               }
                             }}
                           >
                             +
                           </p>
                         </div>
+                        {reachStock ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>product>reachStock', {
+                              product: product?.name,
+                            })}
+                          </p>
+                        ) : null}
+                        {product?.settings?.minCartItemPrice ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>productPage>minValue', {
+                              value:
+                                (product?.prices?.[0]?.currency?.symbol ??
+                                  orderPreview?.currency?.symbol) +
+                                product?.settings?.minCartItemPrice.toFixed(2),
+                            })}
+                          </p>
+                        ) : null}
+                        {batchSize ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>checkout>batchSize', {
+                              batchSize,
+                            })}
+                          </p>
+                        ) : null}
                       </div>
                       {orderPreview && orderPreview?.products?.length > 1 ? (
                         isLoadingValue ? (
@@ -1226,8 +1340,8 @@ export const ProductPage = ({
                       {hasCart && !productKycRequirement ? (
                         <button
                           disabled={
-                            product?.stockAmount == 0 ||
-                            product?.canPurchaseAmount == 0 ||
+                            soldOut ||
+                            minCartItemPriceBlock ||
                             !termsChecked ||
                             (isSendGift && !giftData && isPossibleSend)
                           }
@@ -1236,8 +1350,8 @@ export const ProductPage = ({
                             backgroundColor: 'none',
                             borderColor:
                               product &&
-                              (product?.stockAmount == 0 ||
-                                product?.canPurchaseAmount == 0 ||
+                              (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
@@ -1246,8 +1360,8 @@ export const ProductPage = ({
                                 : '#0050FF',
                             color:
                               product &&
-                              (product?.stockAmount == 0 ||
-                                product?.canPurchaseAmount == 0 ||
+                              (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
@@ -1260,27 +1374,24 @@ export const ProductPage = ({
                       ) : null}
                       <button
                         disabled={
-                          product?.stockAmount == 0 ||
-                          product?.canPurchaseAmount == 0 ||
+                          soldOut ||
+                          minCartItemPriceBlock ||
                           !termsChecked ||
-                          (isSendGift && !giftData && isPossibleSend)
+                          (isSendGift && !giftData && isPossibleSend) ||
+                          minCartItemPriceBlock
                         }
                         onClick={handleBuyClick}
                         style={{
                           backgroundColor:
                             product &&
-                            (product.stockAmount == 0 ||
-                              product?.canPurchaseAmount == 0 ||
-                              !termsChecked)
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#DCDCDC'
                               : buttonColor
                               ? buttonColor
                               : '#0050FF',
                           color:
                             product &&
-                            (product.stockAmount == 0 ||
-                              product?.canPurchaseAmount == 0 ||
-                              !termsChecked)
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useQuery } from 'react-query';
 
+import { useQuery } from '@tanstack/react-query';
 import { ErcTokenHistoryInterfaceResponse } from '../../dashboard/interface/ercTokenHistoryInterface';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
@@ -20,13 +20,12 @@ export const useGetDeferred = (
   const queryString = new URLSearchParams(cleaned).toString();
 
   const statusQuery = () => {
-    if (status === 'all') {
-      return 'status=deferred&status=pending&status=started&status=pool';
-    } else if (status === 'success') {
-      return 'status=pool';
-    } else {
-      return 'status=deferred&status=pending&status=started';
+    if (status === 'scheduled') {
+      return 'status=deferred&status=pending&status=started&status=pool&status=success&withdrawBlockedOnly=true';
+    } else if (status === 'received') {
+      return 'status=deferred&status=pending&status=started&status=pool&status=success&withdrawBlockedOnly=false';
     }
+    return 'status=deferred&status=pending&status=started&status=pool&status=success';
   };
 
   return useQuery(
@@ -35,7 +34,7 @@ export const useGetDeferred = (
       try {
         const response = await axios.get(
           PixwayAPIRoutes.GET_DEFERRED.replace('{companyId}', companyId) +
-            `?${queryString}&${statusQuery()}`
+          `?${queryString}&${statusQuery()}`
         );
         return response?.data;
       } catch (error) {

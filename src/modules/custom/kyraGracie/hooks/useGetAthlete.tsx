@@ -1,11 +1,12 @@
-import { useQuery } from 'react-query';
 
+import { useQuery } from '@tanstack/react-query';
 import { PixwayAPIRoutes } from '../../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../../shared/enums/W3blockAPI';
 import { useAxios } from '../../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { MetadataApiInterface } from '../../../shared/interface/metadata/metadata';
+
 import { handleNetworkException } from '../../../shared/utils/handleNetworkException';
+import { MetadataApiInterface } from '../../../shared/interfaces/metadata';
 
 export enum BeltColor {
   WHITE = 'White',

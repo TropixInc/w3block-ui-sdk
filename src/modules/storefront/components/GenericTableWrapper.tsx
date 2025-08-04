@@ -1,13 +1,11 @@
-import React from 'react';
-
-import { GenericTable } from '../../shared/components/GenericTable/GenericTable';
-import { GenericTableData } from '../interfaces';
+import { GenericTable } from "../../shared/components/GenericTable";
+import { GenericTableData } from "../interfaces/Theme";
 
 export const GenericTableWrapper = ({ data }: { data: GenericTableData }) => {
   const { styleData, contentData, id } = data;
   return (
     <div
-      className="pw-container pw-mx-auto pw-pb-10 pw-px-2 sm:!pw-px-0"
+      className="pw-container pw-mx-auto pw-py-10 pw-px-2 sm:!pw-px-0"
       id={`sf-${id}`}
     >
       <GenericTable
