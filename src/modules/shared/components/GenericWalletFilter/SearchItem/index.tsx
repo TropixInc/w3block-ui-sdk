@@ -46,15 +46,16 @@ export const SearchItem = ({
       setSelectedOption(undefined);
       handleChangeWallet('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet]);
 
   const options = useMemo(() => {
     if (contacts?.data?.items) {
-      const selectOptions: Array<Option> = contacts?.data?.items.map(
+      const selectOptions: Array<Option> = contacts?.data?.items?.map(
         (item) => ({
-          label: item.email,
-          value: item.mainWallet.address,
-          subtitle: item.name,
+          label: item?.email,
+          value: item?.mainWallet?.address ?? '',
+          subtitle: item?.name,
         })
       );
 
