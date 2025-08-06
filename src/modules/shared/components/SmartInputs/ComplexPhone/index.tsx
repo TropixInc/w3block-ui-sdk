@@ -102,7 +102,7 @@ const ComplexPhone = ({
               <BaseInput
                 disableClasses={readonly}
                 invalid={fieldState.invalid}
-                valid={!!field?.value && !fieldState.invalid}
+                valid={!!field?.value && !fieldState?.invalid}
                 disabled={
                   (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
                   readonly
@@ -113,7 +113,7 @@ const ComplexPhone = ({
                 }
                 name={item}
                 value={item}
-                onChange={(e) => onChangeMorePhones(idx, e.target.value)}
+                onChange={(e) => onChangeMorePhones(idx, e?.target?.value)}
                 placeholder="+XX XX XXXXX XXXX"
                 mask={
                   item && item?.length <= 16
