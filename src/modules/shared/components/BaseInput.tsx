@@ -177,7 +177,7 @@ export const BaseInput = ({
           <IMaskInput
             className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             mask={mask as string}
-            onAccept={(e: any) => props.onChange?.(e)}
+            onAccept={(e: any) => props?.onChange?.(e)}
             {...Object.fromEntries(
               Object.entries(props).filter(
                 ([key]) => key !== 'max' && key !== 'min'
