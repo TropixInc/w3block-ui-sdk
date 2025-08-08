@@ -1057,5 +1057,6 @@
   "pages>mySales>currentBalance": "Saldo atual de {{coin}}",
   "pages>resale>feesTip": " ",
   "pages>resale>saleWarning": " ",
-  "shared>cityAutoComplete>addressNotFound": "Não encontramos rua ou endereço com esse CEP. Dica: Busque pela sua rua."
+  "shared>cityAutoComplete>addressNotFound": "Não encontramos rua ou endereço com esse CEP. Dica: Busque pela sua rua.",
+  "pass>timeItem>invalidTime": "Horário inválido"
  }
