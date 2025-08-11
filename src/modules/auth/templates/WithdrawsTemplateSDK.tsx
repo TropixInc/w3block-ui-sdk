@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { BaseButton, GenericTable, InternalPagesLayoutBase } from "../../shared/components";
-import TranslatableComponent from "../../shared/components/TranslatableComponent";
-import { W3blockAPI } from "../../shared/enums/W3blockAPI";
-import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
-import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
-import { useUserWallet } from "../../shared/hooks/useUserWallet/useUserWallet";
-import { ConfigGenericTable, FilterTableType, FormatTypeColumn } from "../../shared/interfaces/ConfigGenericTable";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import WithdrawInternal from "../components/WithdrawInternal";
-import WithdrawModal from "../components/WithdrawModal";
+import { useState } from 'react';
 
+import { BaseButton } from '../../shared/components/Buttons';
+import { GenericTable } from '../../shared/components/GenericTable';
+import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
+import {
+  ConfigGenericTable,
+  FilterTableType,
+  FormatTypeColumn,
+} from '../../shared/interfaces/ConfigGenericTable';
+import WithdrawInternal from '../components/WithdrawInternal';
+import WithdrawModal from '../components/WithdrawModal';
 
 const _WithdrawsTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
