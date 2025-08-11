@@ -17,7 +17,7 @@ export const useGetTenantInfoByHostname = () => {
 
   const hostname =
     enviroment != 'development' && enviroment != 'production'
-      ? 'foodbusters.stg.w3block.io'
+      ? 'foodbusters.com.br'
       : location;
 
   const apiUrl =

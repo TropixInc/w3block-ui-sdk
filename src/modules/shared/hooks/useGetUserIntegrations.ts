@@ -25,7 +25,6 @@ export const useGetUserIntegrations = () => {
         const response = await axios.get(
           PixwayAPIRoutes.USER_INTEGRATIONS.replace('{tenantId}', companyId)
         );
-        console.log(response, "response")
         return response;
       } catch (err) {
         console.error('Erro ao buscar integrações do usuário:', err);

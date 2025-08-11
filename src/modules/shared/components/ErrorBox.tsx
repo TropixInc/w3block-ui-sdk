@@ -85,8 +85,6 @@ export function ErrorBox({
     submitCount,
   ]);
 
-  console.log(errorMessages, 'errorMessages');
-
   return errorMessages.length ? (
     <div>
       {errorMessages.map((e, i) => (

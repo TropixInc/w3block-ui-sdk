@@ -11,3 +11,4 @@ export * from './components/InternalPagesLayoutBase';
 export * from './providers/userWalletsProvider';
 export * from './components/W3blockFooter';
 export * from './components/HeaderPixwaySDK';
+export * from './providers/OnboardProvider';

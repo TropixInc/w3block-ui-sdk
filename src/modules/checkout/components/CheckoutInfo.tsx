@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import {
-  lazy,
   useCallback,
   useContext,
   useEffect,
@@ -197,7 +197,7 @@ const _CheckoutInfo = ({
       deleteOrderKey();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.localStorage]);
+  }, [window?.localStorage]);
 
   useEffect(() => {
     if (
@@ -207,7 +207,7 @@ const _CheckoutInfo = ({
       const productIdsFromQueries = router?.query?.productIds as string;
       const currencyIdFromQueries = router?.query?.currencyId as string;
       if (productIdsFromQueries) {
-        setProductIds(productIdsFromQueries.split(','));
+        setProductIds(productIdsFromQueries?.split(','));
       }
       if (currencyIdFromQueries && !isCart) {
         setCurrencyIdState(currencyIdFromQueries);
@@ -373,7 +373,7 @@ const _CheckoutInfo = ({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess: (data: OrderPreviewResponse) => {
             onSuccess && onSuccess(data);
-            if (data && data.providersForSelection?.length && !choosedPayment) {
+            if (data && data?.providersForSelection?.length && !choosedPayment) {
               setChoosedPayment(data.providersForSelection[0]);
             }
             if (data.productsErrors && data.productsErrors?.length > 0) {
@@ -403,10 +403,10 @@ const _CheckoutInfo = ({
               setCart(
                 data.products.map((val) => {
                   return {
-                    id: val.id,
-                    variantIds: val?.variants?.map((val: { values: { id: any; }[]; }) => val.values[0].id),
-                    prices: val.prices,
-                    name: val.name,
+                    id: val?.id,
+                    variantIds: val?.variants?.map((val: { values: { id: any; }[]; }) => val?.values?.[0]?.id),
+                    prices: val?.prices,
+                    name: val?.name,
                   };
                 })
               );
@@ -416,8 +416,8 @@ const _CheckoutInfo = ({
                 return 0;
               });
             }
-            if (data.products.map((p) => p.id)?.length != productIds?.length) {
-              setProductIds(data.products.map((p) => p.id));
+            if (data?.products?.map((p) => p?.id)?.length != productIds?.length) {
+              setProductIds(data?.products?.map((p) => p?.id));
               productIds?.sort((a, b) => {
                 if (a > b) return -1;
                 if (a < b) return 1;

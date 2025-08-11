@@ -117,7 +117,7 @@ const _CheckoutForm = ({
       const productIdsFromQueries = params.get('productIds');
       const currencyIdFromQueries = params.get('currencyId');
       if (productIdsFromQueries) {
-        setProductIds(productIdsFromQueries.split(','));
+        setProductIds(productIdsFromQueries?.split(','));
       }
       if (currencyIdFromQueries) {
         setCurrencyIdState(currencyIdFromQueries);

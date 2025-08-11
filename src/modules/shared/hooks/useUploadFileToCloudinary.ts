@@ -63,8 +63,6 @@ interface UploadProps {
 export const useUploadFileToCloudinary = () => {
   const formData = new FormData();
   const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-
-  console.log(cloudinaryName, "cloudinaryName")
   return useMutation(
     [
       `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,

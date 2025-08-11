@@ -211,9 +211,6 @@ export const PassesDetail = () => {
     }
   };
 
-  console.log(headers, "headers")
-
-
   return (
     <BaseTemplate title="Token Pass">
       {errorToken ? <ErrorBox customError={errorToken} /> : (

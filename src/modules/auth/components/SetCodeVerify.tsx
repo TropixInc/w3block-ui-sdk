@@ -93,7 +93,6 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
           },
           {
             onSuccess: (data: { data: { verified: any; }; }) => {
-              console.log(data, 'data success');
               refetch();
               if (data?.data?.verified) {
                 if (query.callbackPath?.length) {

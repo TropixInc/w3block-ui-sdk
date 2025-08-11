@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -15,7 +16,6 @@ import { KycStatus } from '@w3block/sdk-id';
 import { removeDoubleSlashesOnUrl } from '../utils/removeDuplicateSlahes';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
 import { useRouterConnect } from '../hooks/useRouterConnect';
-import { useGetTheme } from '../../storefront/hooks/useGetTheme';
 import { useProfile } from '../hooks/useProfile';
 import { useGetTenantContext } from '../hooks/useGetTenantContext';
 import { useCheckWhitelistByUser } from '../hooks/useCheckWhitelistByUser';
@@ -40,18 +40,17 @@ export const OnboardContext = createSymlinkSafeContext<OnboardProps>(
   }
 );
 
-export const OnboardProvider = ({ children }: { children: ReactNode }) => {
+export const OnboardProvider = ({ children, theme }: { children: ReactNode, theme: any }) => {
   const router = useRouterConnect();
-  const { data: theme } = useGetTheme();
   const {
     data: profile,
     dataUpdatedAt: profileDataUpdatedAt,
-    isLoading: isLoadingProfile,
+    fetchStatus: isLoadingProfile,
   } = useProfile();
   const { data: contexts } = useGetTenantContext();
   const [loading, setLoading] = useState(false);
-  const query = Object.keys(router.query).length > 0 ? router.query : '';
-  const configData = theme?.data?.configurations?.contentData?.onboardConfig;
+  const query = Object.keys(router?.query)?.length > 0 ? router?.query : '';
+  const configData = theme?.configurations?.contentData?.onboardConfig;
   const whitelists = useMemo(() => {
     const whitelistsArr: string[] = [];
     if (configData) {
@@ -63,18 +62,19 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
     }
     return whitelistsArr;
   }, [configData]);
-  const skipWallet = theme?.data?.configurations?.contentData?.skipWallet;
+  const skipWallet = theme?.configurations?.contentData?.skipWallet;
   const { data: checkWhitelists } = useCheckWhitelistByUser(
     whitelists,
     !!whitelists?.length
   );
   const hasAccess = useMemo(() => {
-    return checkWhitelists?.details?.filter((res) => res.hasAccess);
+    return checkWhitelists?.details?.filter((res) => res?.hasAccess);
   }, [checkWhitelists?.details]);
   const {
     data: docs,
     refetch,
     isLoading,
+    isFetching,
     dataUpdatedAt,
   } = useGetDocuments({ limit: 50 });
 
@@ -95,7 +95,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   }, [contexts]);
 
   const signUpContextsIds = useMemo(() => {
-    return signUpsContexts?.map((res: { contextId: any; }) => res.contextId);
+    return signUpsContexts?.map((res: { contextId: any; }) => res?.contextId);
   }, [signUpsContexts]);
 
   const isFilled = useMemo(() => {
@@ -103,12 +103,12 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
     signUpContextsIds?.forEach((response: string) => {
       if (
         docs?.items?.find(
-          (res: { contextId: string }) => res.contextId === response
+          (res: { contextId: string }) => res?.contextId === response
         )
       )
         arr.push(
           docs?.items?.find(
-            (res: { contextId: string }) => res.contextId === response
+            (res: { contextId: string }) => res?.contextId === response
           )
         );
     });
@@ -124,21 +124,21 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   }, [contexts]);
 
   const path = useMemo(() => {
-    return router.asPath;
-  }, [router.asPath]);
+    return router?.asPath;
+  }, [router?.asPath]);
   const { connectProxyPass } = useCompanyConfig();
   const callback = () => {
     const url = removeDoubleSlashesOnUrl(
-      (location.hostname?.includes('localhost') ||
-      location.href?.includes('/connect/') ||
+      (location?.hostname?.includes('localhost') ||
+      location?.href?.includes('/connect/') ||
       !connectProxyPass
         ? '/'
         : connectProxyPass) + path
     );
-    if (router.query.callbackPath || router?.query?.callbackUrl) return query;
+    if (router?.query?.callbackPath || router?.query?.callbackUrl) return query;
     else if (
-      !location.href?.includes('/auth/signUp') &&
-      !location.href?.includes('/auth/signIn')
+      !location?.href?.includes('/auth/signUp') &&
+      !location?.href?.includes('/auth/signIn')
     )
       return { callbackUrl: url };
   };
@@ -146,29 +146,29 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (profile) {
       if (
-        !profile.data.verified &&
-        !window.location.pathname.includes('/auth/verify-sign-up')
+        !profile?.data?.verified &&
+        !window?.location?.pathname?.includes('/auth/verify-sign-up')
       ) {
         router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, callback());
-      } else if (signupContext && isFilled.length === 0) {
+      } else if (signupContext && isFilled?.length === 0) {
         if (
           profile?.data?.kycStatus === KycStatus.Pending &&
-          signupContext.active &&
-          !window.location.pathname.includes('/auth/complete-kyc') &&
-          !window.location.pathname.includes('/auth/verify-sign-up') &&
-          !window.location.pathname.includes('/auth/signUp') &&
-          window.location.pathname !== PixwayAppRoutes.SIGN_IN
+          signupContext?.active &&
+          !window?.location?.pathname?.includes('/auth/complete-kyc') &&
+          !window?.location?.pathname?.includes('/auth/verify-sign-up') &&
+          !window?.location?.pathname?.includes('/auth/signUp') &&
+          window?.location?.pathname !== PixwayAppRoutes.SIGN_IN
         ) {
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, callback());
         }
       } else if (!skipWallet) {
         if (
-          !profile?.data.mainWallet &&
+          !profile?.data?.mainWallet &&
           !isLoadingProfile &&
-          router.isReady &&
-          !window.location.pathname.includes('/auth/complete-kyc') &&
-          !window.location.pathname.includes('/auth/verify-sign-up') &&
-          !window.location.pathname.includes(
+          router?.isReady &&
+          !window?.location?.pathname?.includes('/auth/complete-kyc') &&
+          !window?.location?.pathname?.includes('/auth/verify-sign-up') &&
+          !window?.location?.pathname?.includes(
             '/auth/completeSignup/connectExternalWallet'
           )
         ) {
@@ -194,11 +194,11 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
         hasAccess?.length &&
         hasAccess?.length > 0 &&
         !!configData &&
-        !path.includes('/auth/complete-kyc')
+        !path?.includes('/auth/complete-kyc')
       ) {
         console.log('refetch');
         refetch();
-      } else if (!path.includes('/auth/complete-kyc')) {
+      } else if (!path?.includes('/auth/complete-kyc')) {
         console.log('setfalse');
         setLoading(false);
       }
@@ -264,7 +264,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
   // }, [checkWhite, path]);
 
   useEffect(() => {
-    if (path.includes('/auth')) {
+    if (path?.includes('/auth')) {
       setLoading(false);
     }
   }, [path]);
@@ -275,7 +275,7 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
       profile?.data?.verified &&
       (!(profile?.data?.kycStatus === KycStatus.Pending) ||
         !signupContext?.active) &&
-      !path.includes('/auth/complete-kyc')
+      !path?.includes('/auth/complete-kyc')
     ) {
       console.log('trigg checkwhitelists');
       checkWhite();
@@ -284,13 +284,13 @@ export const OnboardProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <OnboardContext.Provider value={{ setLoading, refetchDocs: refetch }}>
-      {loading || isLoading ? (
+      {loading || isFetching ? (
         <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
           <Spinner />
         </div>
       ) : (
-        children
-      )}
+          children
+       )} 
     </OnboardContext.Provider>
   );
 };

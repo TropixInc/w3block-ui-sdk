@@ -193,9 +193,6 @@ export const TokenDetailsCard = ({
   );
 
 
-
-  console.log(formattedHeaders, "formattedHeaders")
-
   return (
     <div
       className={classNames(
