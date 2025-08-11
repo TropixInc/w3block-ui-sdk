@@ -1,4 +1,4 @@
-import { TokenizationFieldTypes } from '../enums/tokenizationFieldTypes';
+import { TokenizationFieldTypes } from "../enums/tokenizationFieldTypes";
 
 export type TokenizationRequiredField = boolean | 'NEED_CONFIRMATION';
 

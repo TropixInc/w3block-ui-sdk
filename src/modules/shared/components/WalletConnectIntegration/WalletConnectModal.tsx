@@ -1,26 +1,15 @@
-import { ChangeEvent, lazy, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { WalletTypes } from '@w3block/sdk-id';
 
-import useIsMobile from '../../hooks/useIsMobile/useIsMobile';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { useRequestWalletConnect } from '../../hooks/useRequestWalletConnect';
+import { useUserWallet } from '../../hooks/useUserWallet/useUserWallet';
+import { ModalBase } from '../ModalBase';
+import { Spinner } from '../Spinner';
+import { WeblockButton } from '../WeblockButton';
 import useTranslation from '../../hooks/useTranslation';
-import { useUserWallet } from '../../hooks/useUserWallet';
-const ModalBase = lazy(() =>
-  import('../ModalBase').then((module) => ({
-    default: module.ModalBase,
-  }))
-);
-const Spinner = lazy(() =>
-  import('../Spinner').then((module) => ({
-    default: module.Spinner,
-  }))
-);
-const WeblockButton = lazy(() =>
-  import('../WeblockButton/WeblockButton').then((module) => ({
-    default: module.WeblockButton,
-  }))
-);
+
 
 interface Props {
   isOpen: boolean;

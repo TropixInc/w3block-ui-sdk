@@ -1,37 +1,30 @@
 import { CSSProperties, lazy } from 'react';
 
 import _ from 'lodash';
-import { Navigation, Pagination, Autoplay } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
-//import { ImageSDK } from '../../shared/components/ImageSDK';
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((module) => ({
-    default: module.ImageSDK,
-  }))
-);
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
-import {
-  useBreakpoints,
-  breakpointsEnum,
-} from '../../shared/hooks/useBreakpoints/useBreakpoints';
-import useIsMobile from '../../shared/hooks/useIsMobile/useIsMobile';
+
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { useDynamicString } from '../hooks/useDynamicString';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import {
-  AlignmentEnum,
-  BannerVariantData,
-  SpecificBannerInfo,
-} from '../interfaces';
-import 'swiper/css';
+
+/* import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import 'swiper/css/pagination'; */
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
-export const Banner = ({ data }: { data: BannerVariantData }) => {
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { SwiperSlide } from 'swiper/react';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
+import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
+import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { BannerVariantData, SpecificBannerInfo, AlignmentEnum } from '../interfaces/Theme';
+import { Swiper } from 'swiper/react';
+
+export const BannerVariant = ({ data }: { data: BannerVariantData }) => {
   const { styleData, mobileStyleData, id } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
@@ -82,10 +75,10 @@ export const Banner = ({ data }: { data: BannerVariantData }) => {
           autoplay={
             autoSlide
               ? {
-                  delay: 3500,
-                  pauseOnMouseEnter: true,
-                  disableOnInteraction: isMobile,
-                }
+                delay: 3500,
+                pauseOnMouseEnter: true,
+                disableOnInteraction: isMobile,
+              }
               : false
           }
           modules={[Navigation, Pagination, Autoplay]}
@@ -182,7 +175,7 @@ const Slide = ({
   const breakpoint = useBreakpoints();
   const bgUrl =
     backgroundUrlMobile &&
-    (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
+      (breakpoint == breakpointsEnum.SM || breakpoint == breakpointsEnum.XS)
       ? backgroundUrlMobile
       : backgroundUrl;
 
@@ -193,15 +186,13 @@ const Slide = ({
       quality: imageCompression ?? 'best',
     },
   });
-  const bg = `${
-    overlay && overlayColor
+  const bg = `${overlay && overlayColor
       ? `linear-gradient(${overlayColor},${overlayColor}),`
       : ''
-  } url("${
-    isDynamic
+    } url("${isDynamic
       ? _.get(datasource, bgUrl?.assetUrl ?? '', bgUrlThreath)
       : bgUrlThreath
-  }") no-repeat center`;
+    }") no-repeat center`;
 
   const getButtonPadding = (fontSize: string) => {
     if (fontSize == '12px') {
@@ -238,22 +229,22 @@ const Slide = ({
             ? _.get(datasource, bgUrl?.assetUrl ?? '', bgUrl?.assetUrl ?? '')
             : bgUrl?.assetUrl ?? ''
         ) && (
-          <ImageSDK
-            src={
-              isDynamic
-                ? _.get(
+            <ImageSDK
+              src={
+                isDynamic
+                  ? _.get(
                     datasource,
                     bgUrl?.assetUrl ?? '',
                     bgUrl?.assetUrl ?? ''
                   )
-                : bgUrl?.assetUrl ?? ''
-            }
-            className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
-            width={1440}
-            height={parseInt(height ?? '60')}
-            quality="best"
-          />
-        )}
+                  : bgUrl?.assetUrl ?? ''
+              }
+              className={`${ratioClassName} pw-w-full pw-absolute -pw-z-10 pw-object-cover`}
+              width={1440}
+              height={parseInt(height ?? '60')}
+              quality="best"
+            />
+          )}
         <div
           style={{ gap: spacing }}
           className={`pw-h-full pw-container pw-mx-auto pw-flex ${contentClass}`}
@@ -271,16 +262,16 @@ const Slide = ({
                   isDynamic
                     ? baseUrl
                       ? baseUrl +
-                        _.get(
-                          datasource,
-                          sideImageUrl?.assetUrl ?? '',
-                          sideImageUrl?.assetUrl ?? ''
-                        )
+                      _.get(
+                        datasource,
+                        sideImageUrl?.assetUrl ?? '',
+                        sideImageUrl?.assetUrl ?? ''
+                      )
                       : _.get(
-                          datasource,
-                          sideImageUrl?.assetUrl ?? '',
-                          sideImageUrl?.assetUrl ?? ''
-                        )
+                        datasource,
+                        sideImageUrl?.assetUrl ?? '',
+                        sideImageUrl?.assetUrl ?? ''
+                      )
                     : sideImageUrl?.assetUrl ?? ''
                 }
                 className={
@@ -295,9 +286,8 @@ const Slide = ({
             className={`pw-flex ${rowAlignmentClass} pw-items-center pw-z-10`}
           >
             <div
-              className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-mx-auto pw-py-8 ${
-                titleWidth ?? 'pw-w-full pw-container'
-              }`}
+              className={`pw-h-max pw-flex pw-flex-col pw-px-4 sm:pw-px-0 ${columnAlignmentClass} pw-mx-auto pw-py-8 ${titleWidth ?? 'pw-w-full pw-container'
+                }`}
             >
               <h2
                 style={{
@@ -306,7 +296,7 @@ const Slide = ({
                   fontSize:
                     titleFontSize && titleFontSize != '' && titleFontSize != '0'
                       ? titleFontSize +
-                        (titleFontSizeType == 'rem' ? 'rem' : 'px')
+                      (titleFontSizeType == 'rem' ? 'rem' : 'px')
                       : '',
                   fontWeight:
                     titleFontBold != undefined
@@ -317,20 +307,19 @@ const Slide = ({
                   fontStyle: titleFontItalic ? 'italic' : 'normal',
                   lineHeight:
                     titleFontSize &&
-                    titleFontSize != '' &&
-                    titleFontSize != '0' &&
-                    titleFontSizeType != 'rem'
+                      titleFontSize != '' &&
+                      titleFontSize != '0' &&
+                      titleFontSizeType != 'rem'
                       ? (
-                          parseInt(titleFontSize) -
-                          parseInt(titleFontSize) * 0.05
-                        ).toFixed(0) + 'px'
+                        parseInt(titleFontSize) -
+                        parseInt(titleFontSize) * 0.05
+                      ).toFixed(0) + 'px'
                       : 'auto',
                   textShadow: titleTextShadow ?? 'none',
                   maxWidth: titleMaxWidth ?? '550px',
                 }}
-                className={`${alignmentTextClass} ${
-                  titleTextAlign ?? ''
-                } pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
+                className={`${alignmentTextClass} ${titleTextAlign ?? ''
+                  } pw-font-semibold pw-text-[36px] pw-max-w-[550px]`}
               >
                 {title}
               </h2>
@@ -340,22 +329,22 @@ const Slide = ({
                   fontFamily: subtitleFontFamily ?? '',
                   fontSize:
                     subtitleFontSize &&
-                    subtitleFontSize != '' &&
-                    subtitleFontSize != '0'
+                      subtitleFontSize != '' &&
+                      subtitleFontSize != '0'
                       ? subtitleFontSize +
-                        (subtitleFontSizeType == 'rem' ? 'rem' : 'px')
+                      (subtitleFontSizeType == 'rem' ? 'rem' : 'px')
                       : '',
                   fontWeight: subtitleFontBold ? 'bold' : 'normal',
                   fontStyle: subtitleFontItalic ? 'italic' : 'normal',
                   lineHeight:
                     subtitleFontSize &&
-                    subtitleFontSize != '' &&
-                    subtitleFontSize != '0' &&
-                    subtitleFontSizeType != 'rem'
+                      subtitleFontSize != '' &&
+                      subtitleFontSize != '0' &&
+                      subtitleFontSizeType != 'rem'
                       ? (
-                          parseInt(subtitleFontSize) -
-                          parseInt(subtitleFontSize) * 0.05
-                        ).toFixed(0) + 'px'
+                        parseInt(subtitleFontSize) -
+                        parseInt(subtitleFontSize) * 0.05
+                      ).toFixed(0) + 'px'
                       : 'auto',
                 }}
                 className={` ${alignmentTextClass} pw-font-medium text-xs pw-mt-4 pw-max-w-[450px]`}
@@ -436,7 +425,7 @@ const alignmentsText: AlignmentClassNameMap = {
 };
 type AlignmentClassNameMap = Record<AlignmentEnum, string>;
 
-export const guessMediaType = (media: string) => {
+export const guessMediaTypeVariant = (media: string) => {
   if (!media) return 'no-media';
   if (isImage(media)) return 'image';
   if (isVideo(media)) return 'video';

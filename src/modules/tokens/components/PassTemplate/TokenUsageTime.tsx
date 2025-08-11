@@ -5,9 +5,10 @@ import differenceInHours from 'date-fns/differenceInHours';
 import format from 'date-fns/format';
 
 import { PassDates } from '../../../pass/interfaces/PassDates';
-import ClockIcon from '../../../shared/assets/icons/clockOutlined.svg?react';
-import useCountdown from '../../../shared/hooks/useCountdown/useCountdown';
+import ClockIcon from '../../../shared/assets/icons/clockOutlined.svg';
+import useCountdown from '../../../shared/hooks/useCountdown';
 import useTranslation from '../../../shared/hooks/useTranslation';
+
 interface Props {
   date: PassDates;
   hasExpiration: boolean;

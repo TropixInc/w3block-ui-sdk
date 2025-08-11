@@ -1,4 +1,5 @@
-import { NFTByWalletDTO } from '../hooks/useGetNFTsByWallet';
+
+import { NFTByWalletDTO } from '../hooks/useGetNFTSByWallet';
 import { Token } from '../interfaces/Token';
 
 export const mapNFTToToken = (nft: NFTByWalletDTO, chainId: number): Token => ({

@@ -1,37 +1,25 @@
-import { lazy, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { WalletTypes } from '@w3block/sdk-id';
 
-import { GetTenantInfoById } from '../../functions/GetTenantInfoById';
-import { useHasWallet } from '../../hooks';
-import { useCreateIntegrationToken } from '../../hooks/useCreateIntegrationToken';
-import { useGetAvailableIntegrations } from '../../hooks/useGetAvailableIntegrations';
-import { useGetCurrentTenantInfo } from '../../hooks/useGetCurrentTenantInfo';
-import { IcompanyInfo } from '../../hooks/useGetTenantInfoById';
-import { useGetUserIntegrations } from '../../hooks/useGetUserIntegrations';
+import { useHasWallet } from '../../hooks/useHasWallet';
 import { useIntegrations } from '../../hooks/useIntegrations';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { useProfile } from '../../hooks/useProfile';
-import useTranslation from '../../hooks/useTranslation';
-import { useUserWallet } from '../../hooks/useUserWallet';
-const InternalPagesLayoutBase = lazy(() =>
-  import('../InternalPagesLayoutBase').then((module) => ({
-    default: module.InternalPagesLayoutBase,
-  }))
-);
-const WalletConnectDesinModal = lazy(() =>
-  import('./WalletConnectDesincModal').then((module) => ({
-    default: module.WalletConnectDesinModal,
-  }))
-);
-const WalletConnectModal = lazy(() =>
-  import('./WalletConnectModal').then((module) => ({
-    default: module.WalletConnectModal,
-  }))
-);
-
+import { useUserWallet } from '../../hooks/useUserWallet/useUserWallet';
 import { ErrorBox } from '../ErrorBox';
+import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import TranslatableComponent from '../TranslatableComponent';
+import { WalletConnectDesinModal } from './WalletConnectDesincModal';
+import { WalletConnectModal } from './WalletConnectModal';
+import { useGetAvailableIntegrations } from '../../hooks/useGetAvailableIntegrations';
+import { useGetUserIntegrations } from '../../hooks/useGetUserIntegrations';
+import { useGetCurrentTenantInfo } from '../../hooks/useGetCurrentTenantInfo';
+import { ICompanyInfo } from '../../interfaces/ICompanyInfo';
+import { GetTenantInfoById } from '../../functions/GetTenantInfoById';
+import { useCreateIntegrationToken } from '../../hooks/useCreateIntegrationToken';
+import useTranslation from '../../hooks/useTranslation';
+
 
 const _WalletConnectIntegration = () => {
   const { data: profile, error: errorProfile } = useProfile();
@@ -49,6 +37,7 @@ const _WalletConnectIntegration = () => {
   const [isDesincOpen, setIsDesincOpen] = useState(false);
 
   const hasWalletConnect = integrations ? integrations.data[0]?.active : false;
+
   const tenantsAvailable = useMemo(() => {
     const tenants = tenantIntegrations?.data.map(
       ({ toTenantId }) => toTenantId
@@ -57,7 +46,7 @@ const _WalletConnectIntegration = () => {
   }, [tenantIntegrations?.data]);
 
   const tenantsData = useMemo(() => {
-    const tenantData: IcompanyInfo[] = [];
+    const tenantData: ICompanyInfo[] = [];
     tenantsAvailable?.forEach(async (value) => {
       if (!tenantData.some(({ id }) => id === value)) {
         const res = await GetTenantInfoById(value);
@@ -77,7 +66,7 @@ const _WalletConnectIntegration = () => {
   }, [userIntegrations?.data?.items]);
 
   const integrationData = useMemo(() => {
-    const tenantData: IcompanyInfo[] = [];
+    const tenantData: ICompanyInfo[] = [];
     integrationsAccepted?.forEach(async (value) => {
       if (!tenantData.some(({ id }) => id === value)) {
         const res = await GetTenantInfoById(value);

@@ -1,4 +1,5 @@
-import { isGif, isVideo } from './validators';
+import { isGif, isVideo } from "./validators";
+
 
 interface Props {
   src: string;

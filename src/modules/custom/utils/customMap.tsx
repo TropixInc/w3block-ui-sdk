@@ -1,6 +1,8 @@
-import { Redirect } from '../../storefront';
+
+import { Redirect } from '../../storefront/components/Redirect';
 import { WjjcStart } from '../../storefront/components/WjjcStart';
-import { AthletePage } from '../kyraGracie';
+import { AthletePage } from '../kyraGracie/template';
+
 
 export const getPageMap = (page: string) => {
   switch (page) {
