@@ -1,12 +1,12 @@
 import { useLocation } from 'react-use';
 
-import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
-import { usePixwayAPIURL } from './usePixwayAPIURL';
-
-import { ICompanyInfo } from '../interfaces/ICompanyInfo';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { getPublicAPI } from '../config/api';
+import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
+import { ICompanyInfo } from '../interfaces/ICompanyInfo';
 import { getEnvVar } from '../utils/env';
+import { usePixwayAPIURL } from './usePixwayAPIURL';
 
 export const useGetTenantInfoByHostname = () => {
   const { hostname: location } = useLocation();
@@ -17,7 +17,7 @@ export const useGetTenantInfoByHostname = () => {
 
   const hostname =
     enviroment != 'development' && enviroment != 'production'
-      ? 'foodbusters.stg.w3block.io'
+      ? 'foodbusters.com.br'
       : location;
 
   const apiUrl =

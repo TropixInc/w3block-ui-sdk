@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 
-
-import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useQuery } from '@tanstack/react-query';
 
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
-import { useQuery } from '@tanstack/react-query';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-
 
 export const useGetTheme = (disabled = false) => {
   const [href, setHref] = useState('');
@@ -15,9 +13,9 @@ export const useGetTheme = (disabled = false) => {
   const { query } = useRouterConnect();
   useEffect(() => {
     if (window) {
-      //setHref(window.location.href);
+      setHref(window.location.href);
       //setHref('https://hashdex.stg.w3block.io/' + '?' + Date.now());
-      setHref('https://foodbusters.stg.w3block.io/?' + Date.now());
+      // setHref('https://foodbusters.stg.w3block.io/?' + Date.now());
     }
   }, []);
 

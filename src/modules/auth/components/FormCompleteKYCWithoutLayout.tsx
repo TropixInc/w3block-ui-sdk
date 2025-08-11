@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { DataTypesEnum, DocumentDto, KycStatus } from '@w3block/sdk-id';

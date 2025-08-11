@@ -17,6 +17,7 @@ export const useGetDocuments = (query?: QueryParams) => {
     new URLSearchParams(defaultQuery as Record<string, string>).toString();
   const { data } = usePixwaySession();
   const { companyId } = useCompanyConfig();
+
   return usePrivateQuery(
     [PixwayAPIRoutes.GET_DOCUMENTS_BY_USER, companyId, data?.id, query],
     () =>
@@ -30,8 +31,8 @@ export const useGetDocuments = (query?: QueryParams) => {
         .then((res) => res.data),
     {
       enabled: companyId != null && data != null,
-      refetchOnMount: 'always',
-      refetchOnWindowFocus: true,
+      refetchOnMount: true,
+      refetchOnWindowFocus: false,
       keepPreviousData: false,
       cacheTime: 0,
       staleTime: 0,

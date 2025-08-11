@@ -1,13 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  lazy,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+'use client';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { IMaskInput } from 'react-imask';
 import {
@@ -19,12 +13,11 @@ import {
 
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
-import _ from 'lodash';
+
 import { QRCodeSVG } from 'qrcode.react';
 
-
+import { SharedOrder } from '../../pass/components/SharedOrder';
 import ValueChangeIcon from '../../shared/assets/icons/icon-up-down.svg';
-
 import { Alert } from '../../shared/components/Alert';
 import { BaseSelect } from '../../shared/components/BaseSelect';
 import { ModalBase } from '../../shared/components/ModalBase';
@@ -44,31 +37,42 @@ import { useLocale } from '../../shared/hooks/useLocale';
 import { useModalController } from '../../shared/hooks/useModalController';
 import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../shared/hooks/useProfile';
+import { useQuery } from '../../shared/hooks/useQuery';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { useUtms } from '../../shared/hooks/useUtms';
+import { Product } from '../../shared/interfaces/Product';
 import { useGetRightWallet } from '../../shared/utils/getRightWallet';
 import { Selector } from '../../storefront/components/Selector';
 import { ThemeContext } from '../../storefront/contexts/ThemeContext';
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useTrack } from '../../storefront/hooks/useTrack';
 import { Variants } from '../../storefront/interfaces/Product';
 import { useDynamicApi } from '../../storefront/provider/DynamicApiProvider';
-import { PRODUCT_CART_INFO_KEY, ORDER_COMPLETED_INFO_KEY, PRODUCT_VARIANTS_INFO_KEY, PRACTITIONER_DATA_INFO_KEY } from '../config/keys/localStorageKey';
+import {
+  PRODUCT_CART_INFO_KEY,
+  ORDER_COMPLETED_INFO_KEY,
+  PRODUCT_VARIANTS_INFO_KEY,
+  PRACTITIONER_DATA_INFO_KEY,
+} from '../config/keys/localStorageKey';
 import { useCart } from '../hooks/useCart';
 import { useCheckout } from '../hooks/useCheckout';
-import { ProductErrorInterface, OrderPreviewCache, PaymentMethodsAvaiable, CreateOrderResponse, OrderPreviewResponse } from '../interface/interface';
+import {
+  ProductErrorInterface,
+  OrderPreviewCache,
+  PaymentMethodsAvaiable,
+  CreateOrderResponse,
+  OrderPreviewResponse,
+} from '../interface/interface';
 import { analyzeCurrenciesInCart } from '../utils/analyzeCurrenciesInCart';
 import CoinPaymentResume from './CoinPaymentResume';
 import { ConfirmCryptoBuy } from './ConfirmCryptoBuy';
 import { IncreaseCurrencyAllowance } from './IncreaseCurrencyAllowance';
 import { PaymentMethodsComponent } from './PaymentMethodsComponent';
 import { ProductError } from './ProductError';
-import { useQuery } from '../../shared/hooks/useQuery';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import { Product } from '../../shared/interfaces/Product';
-import { SharedOrder } from '../../pass/components/SharedOrder';
-import useTranslation from '../../shared/hooks/useTranslation';
- 
+import _ from 'lodash';
+
 export enum CheckoutStatus {
   CONFIRMATION = 'CONFIRMATION',
   FINISHED = 'FINISHED',
@@ -197,7 +201,7 @@ const _CheckoutInfo = ({
       deleteOrderKey();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.localStorage]);
+  }, [window?.localStorage]);
 
   useEffect(() => {
     if (
@@ -207,7 +211,7 @@ const _CheckoutInfo = ({
       const productIdsFromQueries = router?.query?.productIds as string;
       const currencyIdFromQueries = router?.query?.currencyId as string;
       if (productIdsFromQueries) {
-        setProductIds(productIdsFromQueries.split(','));
+        setProductIds(productIdsFromQueries?.split(','));
       }
       if (currencyIdFromQueries && !isCart) {
         setCurrencyIdState(currencyIdFromQueries);
@@ -373,7 +377,11 @@ const _CheckoutInfo = ({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess: (data: OrderPreviewResponse) => {
             onSuccess && onSuccess(data);
-            if (data && data.providersForSelection?.length && !choosedPayment) {
+            if (
+              data &&
+              data?.providersForSelection?.length &&
+              !choosedPayment
+            ) {
               setChoosedPayment(data.providersForSelection[0]);
             }
             if (data.productsErrors && data.productsErrors?.length > 0) {
@@ -403,10 +411,12 @@ const _CheckoutInfo = ({
               setCart(
                 data.products.map((val) => {
                   return {
-                    id: val.id,
-                    variantIds: val?.variants?.map((val: { values: { id: any; }[]; }) => val.values[0].id),
-                    prices: val.prices,
-                    name: val.name,
+                    id: val?.id,
+                    variantIds: val?.variants?.map(
+                      (val: { values: { id: any }[] }) => val?.values?.[0]?.id
+                    ),
+                    prices: val?.prices,
+                    name: val?.name,
                   };
                 })
               );
@@ -416,8 +426,10 @@ const _CheckoutInfo = ({
                 return 0;
               });
             }
-            if (data.products.map((p) => p.id)?.length != productIds?.length) {
-              setProductIds(data.products.map((p) => p.id));
+            if (
+              data?.products?.map((p) => p?.id)?.length != productIds?.length
+            ) {
+              setProductIds(data?.products?.map((p) => p?.id));
               productIds?.sort((a, b) => {
                 if (a > b) return -1;
                 if (a < b) return 1;
@@ -512,7 +524,8 @@ const _CheckoutInfo = ({
                   productTokenId: tokenId,
                   expectedPrice:
                     pID.prices.find(
-                      (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+                      (price: { currencyId: string | undefined }) =>
+                        price.currencyId == currencyIdState
                     )?.amount ?? '0',
                   variantIds: productVariants
                     ? Object.values(productVariants).map((value) => {
@@ -528,7 +541,8 @@ const _CheckoutInfo = ({
                   expectedPrice: isErc20
                     ? orderPreview?.totalPrice ?? '0'
                     : pID.prices.find(
-                        (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+                        (price: { currencyId: string | undefined }) =>
+                          price.currencyId == currencyIdState
                       )?.amount ?? '0',
                   variantIds: productVariants
                     ? Object.values(productVariants).map((value) => {
@@ -588,7 +602,8 @@ const _CheckoutInfo = ({
     } else {
       if (
         orderPreview?.products[0].prices.find(
-          (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+          (price: { currencyId: string | undefined }) =>
+            price.currencyId == currencyIdState
         )?.currency.crypto
       ) {
         openModal();
@@ -682,7 +697,8 @@ const _CheckoutInfo = ({
           currencyId: isCart
             ? cartCurrencyId?.id
             : orderPreview?.products[0].prices.find(
-                (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+                (price: { currencyId: string | undefined }) =>
+                  price.currencyId == currencyIdState
               )?.currencyId,
         }
       );
@@ -761,7 +777,8 @@ const _CheckoutInfo = ({
         router.pushConnect(PixwayAppRoutes.CHECKOUT_CONFIRMATION, {
           productIds: newArray.join(','),
           currencyId: orderPreview?.products[0].prices.find(
-            (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+            (price: { currencyId: string | undefined }) =>
+              price.currencyId == currencyIdState
           )?.currencyId,
         });
         setProductIds(newArray);
@@ -803,7 +820,8 @@ const _CheckoutInfo = ({
               currencyId: isCart
                 ? cartCurrencyId?.id
                 : orderPreview?.products[0].prices.find(
-                    (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+                    (price: { currencyId: string | undefined }) =>
+                      price.currencyId == currencyIdState
                   )?.currencyId,
             });
             setProductIds(newArray);
@@ -876,7 +894,8 @@ const _CheckoutInfo = ({
         currencyId: isCart
           ? cartCurrencyId?.id
           : orderPreview?.products[0].prices.find(
-              (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+              (price: { currencyId: string | undefined }) =>
+                price.currencyId == currencyIdState
             )?.currencyId,
       }
     );
@@ -906,20 +925,23 @@ const _CheckoutInfo = ({
             (prod) =>
               p?.id == prod?.id &&
               prod?.prices?.find(
-                (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                (price: { currencyId: string | undefined }) =>
+                  price?.currencyId == currencyIdState
               )?.amount ==
-                p?.prices?.find((price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState)
-                  ?.amount &&
+                p?.prices?.find(
+                  (price: { currencyId: string | undefined }) =>
+                    price?.currencyId == currencyIdState
+                )?.amount &&
               p?.variants
-                ?.map((res: { values: any[]; }) => {
-                  return res?.values?.map((res: { id: any; }) => {
+                ?.map((res: { values: any[] }) => {
+                  return res?.values?.map((res: { id: any }) => {
                     return res?.id;
                   });
                 })
                 .toString() ==
                 prod?.variants
-                  ?.map((res: { values: any[]; }) => {
-                    return res?.values?.map((res: { id: any; }) => {
+                  ?.map((res: { values: any[] }) => {
+                    return res?.values?.map((res: { id: any }) => {
                       return res?.id;
                     });
                   })
@@ -932,15 +954,15 @@ const _CheckoutInfo = ({
       uniqueProduct.sort((a, b) => {
         if (
           (a?.variants
-            ?.map((res: { values: any[]; }) => {
-              return res.values.map((res: { id: any; }) => {
+            ?.map((res: { values: any[] }) => {
+              return res.values.map((res: { id: any }) => {
                 return res.id;
               });
             })
             .toString() ?? []) >
           (b?.variants
-            ?.map((res: { values: any[]; }) => {
-              return res.values.map((res: { id: any; }) => {
+            ?.map((res: { values: any[] }) => {
+              return res.values.map((res: { id: any }) => {
                 return res.id;
               });
             })
@@ -949,15 +971,15 @@ const _CheckoutInfo = ({
           return -1;
         if (
           (a?.variants
-            ?.map((res: { values: any[]; }) => {
-              return res.values.map((res: { id: any; }) => {
+            ?.map((res: { values: any[] }) => {
+              return res.values.map((res: { id: any }) => {
                 return res.id;
               });
             })
             .toString() ?? []) <
           (b?.variants
-            ?.map((res: { values: any[]; }) => {
-              return res.values.map((res: { id: any; }) => {
+            ?.map((res: { values: any[] }) => {
+              return res.values.map((res: { id: any }) => {
                 return res.id;
               });
             })
@@ -1252,7 +1274,7 @@ const _CheckoutInfo = ({
           mask={Number}
           scale={decimals}
           value={paymentAmount}
-          onAccept={(e) => changeValue(e)}
+          onAccept={(e: any) => changeValue(e)}
           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
           placeholder={'0.0'}
         />
@@ -1265,7 +1287,7 @@ const _CheckoutInfo = ({
           mask={/^\d+$/}
           radix="."
           value={paymentAmount}
-          onAccept={(e) => changeValue(e)}
+          onAccept={(e: any) => changeValue(e)}
           className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
           placeholder={'0'}
         />
@@ -1893,7 +1915,7 @@ const _CheckoutInfo = ({
                   name={
                     productCache?.products && productCache?.products?.length
                       ? productCache?.products[0]?.prices?.find(
-                          (price: { currencyId: string; }) =>
+                          (price: { currencyId: string }) =>
                             price?.currencyId ==
                             (router?.query?.currencyId as string)
                         )?.currency?.name
@@ -2101,7 +2123,8 @@ const _CheckoutInfo = ({
                   className="pw-border-b pw-border-[rgba(0,0,0,0.1)] "
                   currency={
                     prod?.prices?.find(
-                      (prodI: { currencyId: string | undefined; }) => prodI?.currencyId == currencyIdState
+                      (prodI: { currencyId: string | undefined }) =>
+                        prodI?.currencyId == currencyIdState
                     )?.currency?.symbol
                   }
                   quantity={
@@ -2109,21 +2132,23 @@ const _CheckoutInfo = ({
                       (p) =>
                         p?.id == prod?.id &&
                         prod?.prices?.find(
-                          (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                          (price: { currencyId: string | undefined }) =>
+                            price?.currencyId == currencyIdState
                         )?.amount ==
                           p?.prices?.find(
-                            (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                            (price: { currencyId: string | undefined }) =>
+                              price?.currencyId == currencyIdState
                           )?.amount &&
                         p?.variants
-                          ?.map((res: { values: any[]; }) => {
-                            return res?.values?.map((res: { id: any; }) => {
+                          ?.map((res: { values: any[] }) => {
+                            return res?.values?.map((res: { id: any }) => {
                               return res?.id;
                             });
                           })
                           .toString() ==
                           prod?.variants
-                            ?.map((res: { values: any[]; }) => {
-                              return res?.values?.map((res: { id: any; }) => {
+                            ?.map((res: { values: any[] }) => {
+                              return res?.values?.map((res: { id: any }) => {
                                 return res?.id;
                               });
                             })
@@ -2140,11 +2165,13 @@ const _CheckoutInfo = ({
                       track('remove_from_cart', {
                         value: parseFloat(
                           prod?.prices?.find(
-                            (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                            (price: { currencyId: string | undefined }) =>
+                              price?.currencyId == currencyIdState
                           )?.amount ?? '0'
                         ).toString(),
                         currency: prod?.prices?.find(
-                          (prodI: { currencyId: string | undefined; }) => prodI?.currencyId == currencyIdState
+                          (prodI: { currencyId: string | undefined }) =>
+                            prodI?.currencyId == currencyIdState
                         )?.currency?.code,
                         items: [{ item_id: id, item_name: prod.name }],
                       });
@@ -2155,7 +2182,8 @@ const _CheckoutInfo = ({
                     deleteProduct(
                       id,
                       prod?.prices?.find(
-                        (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                        (price: { currencyId: string | undefined }) =>
+                          price?.currencyId == currencyIdState
                       )?.amount ?? '0',
                       variants
                     );
@@ -2166,7 +2194,8 @@ const _CheckoutInfo = ({
                   name={prod?.name}
                   price={parseFloat(
                     prod?.prices?.find(
-                      (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                      (price: { currencyId: string | undefined }) =>
+                        price?.currencyId == currencyIdState
                     )?.amount ??
                       productCache?.orderProducts?.find(
                         (val) => val?.productId === prod?.id
@@ -2175,18 +2204,21 @@ const _CheckoutInfo = ({
                   ).toString()}
                   originalPrice={parseFloat(
                     prod?.prices?.find(
-                      (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                      (price: { currencyId: string | undefined }) =>
+                        price?.currencyId == currencyIdState
                     )?.originalAmount ?? '0'
                   ).toString()}
                   variants={prod?.variants}
                   anchorCurrencyAmount={parseFloat(
                     prod?.prices?.find(
-                      (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                      (price: { currencyId: string | undefined }) =>
+                        price?.currencyId == currencyIdState
                     )?.anchorCurrencyAmount ?? '0'
                   ).toString()}
                   anchorCurrencySymbol={
                     prod?.prices?.find(
-                      (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                      (price: { currencyId: string | undefined }) =>
+                        price?.currencyId == currencyIdState
                     )?.anchorCurrency?.symbol ?? ''
                   }
                   promotionDescription={
@@ -2225,11 +2257,13 @@ const _CheckoutInfo = ({
                     orderPreview?.products
                       .find((prod) =>
                         prod?.prices?.find(
-                          (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                          (price: { currencyId: string | undefined }) =>
+                            price?.currencyId == currencyIdState
                         )
                       )
                       ?.prices?.find(
-                        (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                        (price: { currencyId: string | undefined }) =>
+                          price?.currencyId == currencyIdState
                       )?.currency?.symbol
                   }{' '}
                   {translate('checkout>checkoutInfo>varyAcordingExchange')}{' '}
@@ -2237,11 +2271,13 @@ const _CheckoutInfo = ({
                     orderPreview?.products
                       .find((prod) =>
                         prod?.prices?.some(
-                          (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                          (price: { currencyId: string | undefined }) =>
+                            price?.currencyId == currencyIdState
                         )
                       )
                       ?.prices?.find(
-                        (price: { currencyId: string | undefined; }) => price?.currencyId == currencyIdState
+                        (price: { currencyId: string | undefined }) =>
+                          price?.currencyId == currencyIdState
                       )?.anchorCurrency?.symbol
                   }
                   .
@@ -2278,7 +2314,8 @@ const _CheckoutInfo = ({
             code={
               orderPreview?.products && orderPreview?.products.length
                 ? (orderPreview?.products[0].prices.find(
-                    (price: { currencyId: string | undefined; }) => price.currencyId == currencyIdState
+                    (price: { currencyId: string | undefined }) =>
+                      price.currencyId == currencyIdState
                   )?.currency?.code as CurrencyEnum)
                 : CurrencyEnum.BRL
             }

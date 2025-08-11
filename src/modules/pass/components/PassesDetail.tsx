@@ -5,11 +5,16 @@ import { useBoolean } from 'react-use';
 import { compareAsc, format } from 'date-fns';
 
 import { ErrorBox } from '../../shared/components/ErrorBox';
-
+import { QrCodeReader } from '../../shared/components/QrCodeReader';
+import { QrCodeError, TypeError } from '../../shared/components/QrCodeReader/QrCodeError';
+import { QrCodeValidated } from '../../shared/components/QrCodeReader/QrCodeValidated';
 import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { Button } from '../../tokens/components/Button';
 import GenericTable, { ColumnType } from '../../tokens/components/GenericTable';
 import StatusTag, { statusMobile } from '../../tokens/components/StatusTag';
 import { BenefitStatus } from '../enums/BenefitStatus';
@@ -20,12 +25,6 @@ import useVerifyBenefit from '../hooks/useVerifyBenefit';
 import { TokenPassBenefitType, TokenPassBenefits } from '../interfaces/PassBenefitDTO';
 import { BaseTemplate } from './BaseTemplate';
 import { VerifyBenefit } from './VerifyBenefit';
-import { Button } from '../../tokens/components/Button';
-import { QrCodeReader } from '../../shared/components/QrCodeReader';
-import { QrCodeValidated } from '../../shared/components/QrCodeReader/QrCodeValidated';
-import { QrCodeError, TypeError } from '../../shared/components/QrCodeReader/QrCodeError';
-import useTranslation from '../../shared/hooks/useTranslation';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 
 
 
@@ -72,7 +71,7 @@ export const PassesDetail = () => {
 
   const { mutate: registerUse, isLoading: registerLoading, error: errorRegisterUse } = usePostBenefitRegisterUse();
   const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
-  const filteredBenefit = benefits?.data.items.find(({ id }) => id === benefitId);
+  const filteredBenefit = benefits?.data.items.find(({ id }: any) => id === benefitId);
 
   const formatedData = useMemo(() => {
     const filteredBenefits = tokenPass?.data?.tokenPassBenefits?.filter((benefit: { tokenPassBenefitOperators: any[]; }) => {
@@ -80,7 +79,7 @@ export const PassesDetail = () => {
       return isOperatorForBenefit;
     })
 
-    const benefitStatus = benefits?.data?.items?.map((benefit) => ({
+    const benefitStatus = benefits?.data?.items?.map((benefit: { id: any; status: any; }) => ({
       id: benefit?.id,
       status: benefit?.status,
     }));
@@ -96,7 +95,7 @@ export const PassesDetail = () => {
         setOpenScan()
       }
 
-      const status = benefitStatus?.find((value) => value.id === benefit.id)?.status
+      const status = benefitStatus?.find((value: { id: any; }) => value.id === benefit.id)?.status
 
       const formatAddress = ({ type, benefit }: formatAddressProps) => {
         if (type == TokenPassBenefitType.PHYSICAL && benefit?.tokenPassBenefitAddresses) {
@@ -188,7 +187,7 @@ export const PassesDetail = () => {
             setShowVerify(false);
             setOpenScan(false);
           },
-          onError: (error) => {
+          onError: (error: { message: string; }) => {
             console.error('Register Use: ', error);
             if (error instanceof Error) {
               if (error?.message === 'ERR_BAD_REQUEST') {
@@ -210,9 +209,6 @@ export const PassesDetail = () => {
       setOpenScan(false);
     }
   };
-
-  console.log(headers, "headers")
-
 
   return (
     <BaseTemplate title="Token Pass">

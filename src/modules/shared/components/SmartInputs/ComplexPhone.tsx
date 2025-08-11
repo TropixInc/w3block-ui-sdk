@@ -66,7 +66,7 @@ const ComplexPhone = ({
   };
 
   const onRemovePhoneItem = (idx: number) => {
-    const newPhones = field.value.value.filter(
+    const newPhones = field?.value?.value.filter(
       (_item: any, index: number) => index !== idx
     );
 
@@ -74,7 +74,7 @@ const ComplexPhone = ({
   };
 
   const onChangeMorePhones = (idx: number, value: string) => {
-    const newPhones = [...field.value.value];
+    const newPhones = [...field?.value?.value];
     newPhones[idx] = value;
     field.onChange({ inputId: name, value: newPhones });
   };
@@ -101,8 +101,8 @@ const ComplexPhone = ({
             <div className="pw-w-full pw-flex pw-gap-2">
               <BaseInput
                 disableClasses={readonly}
-                invalid={fieldState.invalid}
-                valid={!!field?.value && !fieldState.invalid}
+                invalid={fieldState?.invalid}
+                valid={!!field?.value && !fieldState?.invalid}
                 disabled={
                   (docStatus && validateIfStatusKycIsReadonly(docStatus)) ||
                   readonly
@@ -113,7 +113,7 @@ const ComplexPhone = ({
                 }
                 name={item}
                 value={item}
-                onChange={(e) => onChangeMorePhones(idx, e.target.value)}
+                onChange={(e) => onChangeMorePhones(idx, e?.target?.value)}
                 placeholder="+XX XX XXXXX XXXX"
                 mask={
                   item && item?.length <= 16

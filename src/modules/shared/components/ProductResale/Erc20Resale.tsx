@@ -62,7 +62,7 @@ export const Erc20Resale = () => {
         price: config?.price?.toString(),
       },
       {
-        onSuccess(data) {
+        onSuccess(data: ProductResaleResponse | undefined) {
           setProductResale(data);
         },
       }
@@ -84,7 +84,7 @@ export const Erc20Resale = () => {
   const options = useMemo(() => {
     return (
       productResale?.product?.settings?.resaleConfig?.currencyIds?.map(
-        (res) => {
+        (res: string) => {
           return {
             value: res,
             label: res === '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ? 'R$' : '$',
