@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -8,12 +8,12 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-import { Pagination } from 'swiper';
+import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
 
 import {
   GIFT_DATA_INFO_KEY,
@@ -27,66 +27,36 @@ import {
 } from '../../checkout/interface/interface';
 // eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
-import { formatterCurrency } from '../../shared/components/CriptoValueComponent/CriptoValueComponent';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink/useAdressBlockchainLink';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import useRouter from '../../shared/hooks/useRouter';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms/useUtms';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-import useGetProductBySlug, {
-  CurrencyResponse,
-} from '../hooks/useGetProductBySlug/useGetProductBySlug';
-import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData/useMergeMobileData';
-import { UseThemeConfig } from '../hooks/useThemeConfig/useThemeConfig';
-import { useTrack } from '../hooks/useTrack/useTrack';
-import { ProductPageData } from '../interfaces';
 import { ProductVariants } from './ProductVariants';
 import { SendGiftForm } from './SendGiftForm';
-
-const CheckboxAlt = lazy(() =>
-  import('../../shared/components/CheckboxAlt/CheckboxAlt').then((mod) => ({
-    default: mod.CheckboxAlt,
-  }))
-);
-
-const CriptoValueComponent = lazy(() =>
-  import(
-    '../../shared/components/CriptoValueComponent/CriptoValueComponent'
-  ).then((mod) => ({ default: mod.CriptoValueComponent }))
-);
-const ImageSDK = lazy(() =>
-  import('../../shared/components/ImageSDK').then((mod) => ({
-    default: mod.ImageSDK,
-  }))
-);
-const ModalBase = lazy(() =>
-  import('../../shared/components/ModalBase').then((mod) => ({
-    default: mod.ModalBase,
-  }))
-);
-
-const Shimmer = lazy(() =>
-  import('../../shared/components/Shimmer').then((mod) => ({
-    default: mod.Shimmer,
-  }))
-);
-
-const Spinner = lazy(() =>
-  import('../../shared/components/Spinner').then((mod) => ({
-    default: mod.Spinner,
-  }))
-);
+import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
+import { formatterCurrency, CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
+import { ImageSDK } from '../../shared/components/ImageSDK';
+import { ModalBase } from '../../shared/components/ModalBase';
+import { Shimmer } from '../../shared/components/Shimmer';
+import { Spinner } from '../../shared/components/Spinner';
+import useAdressBlockchainLink from '../../shared/hooks/useAdressBlockchainLink';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useUtms } from '../../shared/hooks/useUtms';
+import useGetProductBySlug from '../hooks/useGetProductBySlug';
+import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
+import { useTrack } from '../hooks/useTrack';
+import { CurrencyResponse } from '../interfaces/Product';
+import { ProductPageData } from '../interfaces/Theme';
+import { useThemeConfig } from '../hooks/useThemeConfig';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -141,7 +111,7 @@ export const ProductPage = ({
 
   const [translate] = useTranslation();
   const { pushConnect } = useRouterConnect();
-  const { defaultTheme } = UseThemeConfig();
+  const { defaultTheme } = useThemeConfig();
   const variantsType =
     defaultTheme?.configurations?.contentData?.productVariantsType;
   const { setCart, cart, setCartCurrencyId } = useCart();

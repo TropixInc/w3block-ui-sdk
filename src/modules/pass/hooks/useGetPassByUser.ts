@@ -1,9 +1,9 @@
-import { useProfile } from '../../shared';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
+import { useProfile } from '../../shared/hooks/useProfile';
 import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 
 export interface PassByUser {

@@ -1,28 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from 'react';
+import { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { CurrencyInput } from 'react-currency-mask';
 import { useDebounce } from 'react-use';
 
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useRouterConnect } from '../../hooks';
 import {
   ProductResaleResponse,
   useGetResaleById,
 } from '../../hooks/useGetResaleById/useGetResaleById';
 import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
-import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
 import { usePostProductResale } from '../../hooks/usePostProductResale/usePostProductResale';
 import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { BaseInput } from '../BaseInput';
 import { BaseSelect } from '../BaseSelect';
 import { BaseButton } from '../Buttons';
-import { CriptoValueComponent } from '../CriptoValueComponent/CriptoValueComponent';
-import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds/InternalPageHeaderWithFunds';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Shimmer } from '../Shimmer';
 import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions';
+import { CriptoValueComponent } from '../CriptoValueComponent';
+import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
 
 export const Erc20Resale = () => {
   const [translate] = useTranslation();
@@ -62,7 +62,7 @@ export const Erc20Resale = () => {
         price: config?.price?.toString(),
       },
       {
-        onSuccess(data) {
+        onSuccess(data: ProductResaleResponse | undefined) {
           setProductResale(data);
         },
       }
@@ -84,7 +84,7 @@ export const Erc20Resale = () => {
   const options = useMemo(() => {
     return (
       productResale?.product?.settings?.resaleConfig?.currencyIds?.map(
-        (res) => {
+        (res: string) => {
           return {
             value: res,
             label: res === '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ? 'R$' : '$',

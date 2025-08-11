@@ -3,8 +3,27 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "target": "ES2024",
+    "lib": ["ES2024"],
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "tailwind.config.js",
+    "postcss.config.js",
+    "scripts/**/*",
+    "build/**/*",
+    "*.config.js",
+    "*.config.ts"
+  ],
+  "exclude": [
+    "src",
+    "dist",
+    "node_modules"
+  ]
 }

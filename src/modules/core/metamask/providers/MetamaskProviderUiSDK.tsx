@@ -1,24 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ReactNode,
-  createContext,
   useCallback,
   useEffect,
   useState,
 } from 'react';
+import { createSymlinkSafeContext } from '../../../shared/utils/createSymlinkSafeContext';
 
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ContractTransaction, ethers } from 'ethers';
-
-import {
-  claimWalletMetamask,
-  requestWalletMetamask,
-} from '../../../auth/api/wallet';
-import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
-import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL/usePixwayAPIURL';
+import { ContractTransactionCallable, Transaction } from '../../../shared/interfaces/IMetamask';
 import { useSessionUser } from '../../../shared/hooks/useSessionUser';
-import { ContractTransactionCallable, Transaction } from '../interface';
+import { useCompanyConfig } from '../../../shared/hooks/useCompanyConfig';
+import { usePixwayAPIURL } from '../../../shared/hooks/usePixwayAPIURL';
 import { Format, formatBalance } from '../utils/format';
+import { claimWalletMetamask, requestWalletMetamask } from '../../../auth/api/wallet';
+
+
 
 interface MetamaskContextInterface {
   wallet: WalletState;
@@ -71,12 +69,15 @@ export const metamaskErrors = new Map<number, ERROR_STATUS>([
   [-32603, ERROR_STATUS.INTERNAL_ERROR],
 ]);
 
-export const MetamaskProviderContext = createContext<MetamaskContextInterface>({
-  wallet: disconnectedState,
-  error: false,
-  isConnecting: false,
-  hasProvider: false,
-});
+export const MetamaskProviderContext = createSymlinkSafeContext<MetamaskContextInterface>(
+  '__METAMASK_PROVIDER_CONTEXT__',
+  {
+    wallet: disconnectedState,
+    error: false,
+    isConnecting: false,
+    hasProvider: false,
+  }
+);
 
 export const MetamaskProviderUiSDK = ({
   children,
@@ -97,7 +98,7 @@ export const MetamaskProviderUiSDK = ({
   const _updateWallet = useCallback(async (providedAccounts?: any) => {
     const accounts =
       providedAccounts ||
-      (await window.ethereum.request({ method: 'eth_accounts' }));
+      (await (window as any).ethereum.request({ method: 'eth_accounts' }));
     if (accounts.length === 0) {
       // If there are no accounts, then the user is disconnected
       setWallet(disconnectedState);
@@ -105,12 +106,12 @@ export const MetamaskProviderUiSDK = ({
     }
 
     const balance = formatBalance(
-      await window.ethereum.request({
+      await ((window as any) as any).ethereum.request({
         method: 'eth_getBalance',
         params: [accounts[0], 'latest'],
       })
     );
-    const chainId = await window.ethereum.request({
+    const chainId = await (window as any).ethereum.request({
       method: 'eth_chainId',
     });
 
@@ -131,13 +132,13 @@ export const MetamaskProviderUiSDK = ({
       try {
         const provider = await detectEthereumProvider({ silent: true });
         setHasProvider(Boolean(provider));
-        const provider2 = new ethers.providers.Web3Provider(window.ethereum);
+        const provider2 = new ethers.providers.Web3Provider((window as any).ethereum);
         setProvider(provider2);
 
         if (provider) {
           updateWalletAndAccounts();
-          window.ethereum.on('accountsChanged', updateWallet);
-          window.ethereum.on('chainChanged', updateWalletAndAccounts);
+          (window as any).ethereum.on('accountsChanged', updateWallet);
+          (window as any).ethereum.on('chainChanged', updateWalletAndAccounts);
         }
       } catch (e) {
         console.log(e);
@@ -147,15 +148,15 @@ export const MetamaskProviderUiSDK = ({
     getProvider();
 
     return () => {
-      window.ethereum?.removeListener('accountsChanged', updateWallet);
-      window.ethereum?.removeListener('chainChanged', updateWalletAndAccounts);
+      (window as any).ethereum?.removeListener('accountsChanged', updateWallet);
+      (window as any).ethereum?.removeListener('chainChanged', updateWalletAndAccounts);
     };
   }, [updateWallet, updateWalletAndAccounts]);
 
   const connectMetamask = async () => {
     setIsConnecting(true);
     try {
-      const accounts = await window.ethereum.request({
+      const accounts = await (window as any).ethereum.request({
         method: 'eth_requestAccounts',
       });
       clearError();
@@ -203,7 +204,7 @@ export const MetamaskProviderUiSDK = ({
   const signTransaction = async (
     param: Record<string, any>
   ): Promise<ERROR_STATUS | string> => {
-    return await window.ethereum
+    return await (window as any).ethereum
       .request({
         method: ETH_METHODS.SEND_TRANSACTION,
         params: [param],
@@ -245,7 +246,7 @@ export const MetamaskProviderUiSDK = ({
     const from = data.address;
     let signature;
     try {
-      signature = await window.ethereum.request({
+      signature = await (window as any).ethereum.request({
         method: 'eth_signTypedData_v4',
         params: [from, data?.message],
       });

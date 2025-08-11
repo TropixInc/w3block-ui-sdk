@@ -4,7 +4,7 @@ import { useCompanyConfig } from '../useCompanyConfig';
 import { useGetW3blockIdSDK } from '../useGetW3blockIdSDK';
 import { usePrivateQuery } from '../usePrivateQuery';
 
-export const useGetContextByUserId = (userId: string, contextId?: string) => {
+export const useGetContextByUserId = (userId: string, contextId?: string): any => {
   const { companyId } = useCompanyConfig();
   const getSdk = useGetW3blockIdSDK();
 

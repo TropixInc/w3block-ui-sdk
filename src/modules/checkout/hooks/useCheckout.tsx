@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo } from 'react';
-import { useMutation, useQuery } from 'react-query';
 
 import { AxiosError, AxiosResponse } from 'axios';
 
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
-import { useUtms } from '../../shared/hooks/useUtms/useUtms';
 import {
   CompleteOrderPayload,
   CompletePaymentOrder,
@@ -16,6 +14,8 @@ import {
   CreateOrderResponse,
   OrderPreviewResponse,
 } from '../interface/interface';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useUtms } from '../../shared/hooks/useUtms';
 
 interface GetOrderPreviewPayload {
   productIds: ProductToSendPayload[];

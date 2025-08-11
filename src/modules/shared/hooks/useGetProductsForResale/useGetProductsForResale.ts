@@ -1,9 +1,8 @@
-import { useQuery } from 'react-query';
-
+import { useQuery } from '@tanstack/react-query';
 import { Meta } from '../../../dashboard/interface/ercTokenHistoryInterface';
-import { W3blockAPI } from '../../enums';
 import { PixwayAPIRoutes } from '../../enums/PixwayAPIRoutes';
-import { Product } from '../../interface';
+import { W3blockAPI } from '../../enums/W3blockAPI';
+import { Product } from '../../interfaces/Product';
 import { useAxios } from '../useAxios';
 import { useCompanyConfig } from '../useCompanyConfig';
 
@@ -41,19 +40,15 @@ export const useGetProductsForResale = ({ query, enabled = true }: Params) => {
     '?' +
     new URLSearchParams(defaultQuery as Record<string, string>).toString();
 
-  return useQuery(
-    [PixwayAPIRoutes.GET_PRODUCT_RESALE, companyId, queryString],
-    () =>
+  return useQuery({
+    queryKey: [PixwayAPIRoutes.GET_PRODUCT_RESALE, companyId, queryString],
+    queryFn: () =>
       axios
         .get<Response>(
           PixwayAPIRoutes.GET_PRODUCT_RESALE.replace('{companyId}', companyId) +
             queryString
         )
         .then((res) => res.data),
-    {
-      enabled: enabled,
-      refetchOnWindowFocus: false,
-      retry: 0,
-    }
-  );
+    enabled,
+  });
 };

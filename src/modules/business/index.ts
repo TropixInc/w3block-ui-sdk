@@ -1,1 +1,2 @@
-export * from './templates';
+export * from "./templates/PaymentTemplateSDK"
+export * from "./templates/userReportTemplate"

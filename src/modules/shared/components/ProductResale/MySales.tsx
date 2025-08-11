@@ -8,23 +8,23 @@ import { UserContextStatus } from '@w3block/sdk-id';
 
 import ArrowIcon from '../../../shared/assets/icons/arrowDown.svg?react';
 import CopyIcon from '../../../shared/assets/icons/copyIcon.svg?react';
-import { UseThemeConfig } from '../../../storefront/hooks/useThemeConfig/useThemeConfig';
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
-import { useProfile } from '../../hooks';
 import { useDeleteProductResale } from '../../hooks/useDeleteProductResale/useDeleteProductResale';
 import { useGetContextByUserId } from '../../hooks/useGetContextByUserId/useGetContextByUserId';
 import { useGetProductsForResale } from '../../hooks/useGetProductsForResale';
-import { useGetUserContextId } from '../../hooks/useGetUserContextId/useGetUserContextId';
 import { useGetUserForSaleErc20 } from '../../hooks/useGetUserForSaleErc20/useGetUserForSaleErc20';
 import { useGetUserResaleSummary } from '../../hooks/useGetUserResaleSummary/useGetUserResaleSummary';
-import { useGuardPagesWithOptions } from '../../hooks/useGuardPagesWithOptions/useGuardPagesWithOptions';
-import { useUserWallet } from '../../hooks/useUserWallet';
 import { Alert } from '../Alert';
 import { BaseButton } from '../Buttons';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import { Spinner } from '../Spinner';
 import { ContextsResale } from './ContextsResale';
 import { MySalesListComponent } from './MySalesListComponent';
+import { useGetUserContextId } from '../../../shared/hooks/useGetUserContextId';
+import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions';
+import { useProfile } from '../../../shared/hooks/useProfile';
+import { useUserWallet } from '../../../shared/hooks/useUserWallet/useUserWallet';
+import { useThemeConfig } from '../../../storefront/hooks/useThemeConfig';
 
 export const MySales = () => {
   const { mainWallet } = useUserWallet();
@@ -49,19 +49,19 @@ export const MySales = () => {
   );
   const hasBankDetails = useMemo(() => {
     return context?.data?.items?.find(
-      (res) => res.context?.slug === 'bankdetails'
+      (res: any) => res.context?.slug === 'bankdetails'
     );
   }, [context?.data?.items]);
 
   const activeKycContexts = useMemo(() => {
     if (context?.data?.items?.length) {
-      const contexts = context?.data?.items?.filter((res) => {
+      const contexts = context?.data?.items?.filter((res: any) => {
         if (res?.context?.slug === 'bankdetails')
           return res.status === UserContextStatus.RequiredReview;
         else return res?.context?.slug.includes('resale-user-documents-asaas');
       });
       return contexts.filter(
-        (res) =>
+        (res: any) =>
           res?.status === UserContextStatus.Draft ||
           res?.status === UserContextStatus.RequiredReview
       );
@@ -71,7 +71,7 @@ export const MySales = () => {
 
   const bankDetailsContext = useMemo(() => {
     return context?.data?.items?.find(
-      (res) => res?.context?.slug === 'bankdetails'
+      (res: any) => res?.context?.slug === 'bankdetails'
     );
   }, [context?.data?.items]);
 
@@ -80,7 +80,7 @@ export const MySales = () => {
     userContextId: bankDetailsContext?.id ?? '',
   });
 
-  const { defaultTheme } = UseThemeConfig();
+  const { defaultTheme } = useThemeConfig();
 
   const hideWallet =
     defaultTheme?.configurations?.contentData?.hideWalletAddress;
@@ -107,7 +107,7 @@ export const MySales = () => {
     <InternalPagesLayoutBase>
       {activeKycContexts?.length ? (
         <div className="pw-flex pw-flex-col pw-justify-between pw-gap-3 pw-mb-5 pw-items-center">
-          {activeKycContexts?.map((res) => {
+          {activeKycContexts?.map((res: any) => {
             return (
               <ContextsResale
                 key={res.id}
