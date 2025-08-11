@@ -46,6 +46,7 @@ export interface BaseInputProps
   textarea?: boolean;
   fullWidth?: boolean;
   textareaHeight?: number;
+  onChangeValueInput?: (value: string) => void;
 }
 interface BaseInputLayoutProps extends Partial<BaseInputProps> {
   children?: ReactNode;
@@ -153,6 +154,7 @@ export const BaseInput = ({
   textarea,
   fullWidth,
   textareaHeight,
+  onChangeValueInput,
   ...props
 }: BaseInputProps) => {
   const [isShowingPassword, setIsShowingPassword] = useState(false);
@@ -177,7 +179,8 @@ export const BaseInput = ({
           <IMaskInput
             className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             mask={mask as string}
-            onAccept={(e: any) => props.onChange?.(e)}
+            value={props?.value?.toString()}
+            onAccept={(v) => onChangeValueInput && onChangeValueInput(v)}
             {...Object.fromEntries(
               Object.entries(props).filter(
                 ([key]) => key !== 'max' && key !== 'min'

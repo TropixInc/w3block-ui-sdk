@@ -672,15 +672,16 @@
 "pass>configPanel>timeNotFound": "There are no available times for the benefit on this day",
 "pass>configTimeModal>addConfigTimes": "Advanced time settings",
 "pass>configTimeModal>fri": "Fri",
-"pass>configTimeModal>friday": "Friday", "pass>configTimeModal>mon": "Mon",
+"pass>configTimeModal>friday": "Friday", 
+"pass>configTimeModal>mon": "Mon",
 "pass>configTimeModal>monday": "Monday",
-"pass>configTimeModal>sat": "Sab",
+"pass>configTimeModal>sat": "Sat",
 "pass>configTimeModal>saturday": "Saturday",
-"pass>configTimeModal>sun": "Dom",
+"pass>configTimeModal>sun": "Sun",
 "pass>configTimeModal>sunday": "Sunday",
 "pass>configTimeModal>thu": "Thu",
 "pass>configTimeModal>thursday": "Thursday",
-"pass>configTimeModal>tue": "Ter",
+"pass>configTimeModal>tue": "Tue",
 "pass>configTimeModal>tuesday": "Tuesday",
 "pass>configTimeModal>wed": "Wed",
 "pass>configTimeModal>wednesday": "Wednesday",
@@ -1053,5 +1054,6 @@
 "auth>signWithoutLayout>signinApple": "Continue with Apple",
 "pages>checkout>batchSizeSale": "You can only sell in multiple quantities of {{batchSize}}",
 "pages>productPage>minValue": "Minimum purchase value {{value}}",
-"pages>mySales>currentBalance": "Current {{coin}} Balance"
+"pages>mySales>currentBalance": "Current {{coin}} Balance",
+"pass>timeItem>invalidTime": "Invalid time"
 }
