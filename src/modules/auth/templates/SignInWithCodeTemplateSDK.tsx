@@ -27,7 +27,6 @@ interface SignInSignupTemplateSDKProps {
   defaultRedirectRoute?: string;
   hasSignUp?: boolean;
   extraBy?: ExtraBy[];
-  isAppleSignIn?: boolean;
 }
 
 export const SignInWithCodeTemplateSDK = ({
@@ -41,7 +40,6 @@ export const SignInWithCodeTemplateSDK = ({
   textContainer,
   className,
   extraBy,
-  isAppleSignIn,
 }: SignInSignupTemplateSDKProps) => {
   const context = useContext(ThemeContext);
   const breakpoint = useBreakpoints();
