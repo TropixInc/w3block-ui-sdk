@@ -22,6 +22,7 @@ import { useCheckWhitelistByUser } from '../hooks/useCheckWhitelistByUser';
 import { useGetDocuments } from '../hooks/useGetDocuments';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
 import { Spinner } from '../components/Spinner';
+import { usePathname } from 'next/navigation';
 
 
 
@@ -123,9 +124,11 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
     }
   }, [contexts]);
 
+  const pathname = usePathname();
+  const queryString = new URLSearchParams(router?.query).toString();
   const path = useMemo(() => {
-    return router?.asPath;
-  }, [router?.asPath]);
+    return pathname + (queryString ? `?${queryString}` : '');
+  }, [pathname, queryString]);
   const { connectProxyPass } = useCompanyConfig();
   const callback = () => {
     const url = removeDoubleSlashesOnUrl(
