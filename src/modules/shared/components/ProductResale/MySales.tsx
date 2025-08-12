@@ -29,7 +29,7 @@ import { useThemeConfig } from '../../../storefront/hooks/useThemeConfig';
 export const MySales = () => {
   const { mainWallet } = useUserWallet();
   const { data: productsResale } = useGetProductsForResale({});
-  const { data: summary, isLoading } = useGetUserResaleSummary();
+  const { data: summary, isFetching } = useGetUserResaleSummary();
   const { data: forSaleErc20 } = useGetUserForSaleErc20();
   const { mutate: deleteSale } = useDeleteProductResale();
   const [translate] = useTranslation();
@@ -94,7 +94,7 @@ export const MySales = () => {
     redirectPage: PixwayAppRoutes.SIGN_IN,
   });
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <InternalPagesLayoutBase>
         <div className="pw-w-full pw-flex pw-justify-center pw-items-center">

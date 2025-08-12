@@ -31,7 +31,7 @@ const _SignUpTemplate = ({
 }: Config) => {
   const [translate] = useTranslation();
   const [step, setStep] = useState(Steps.SIGN_UP);
-  const { mutate, isLoading, isSuccess, error } = useSignUp();
+  const { mutate, isPending, isSuccess, error } = useSignUp();
   const [email, setEmail] = useState('');
   const { connectProxyPass, companyId } = useCompanyConfig();
   const [language, _] = useState(() => {
@@ -71,7 +71,7 @@ const _SignUpTemplate = ({
 
   return step === Steps.SIGN_UP ? (
     <SignUpForm
-      isLoading={isLoading}
+      isLoading={isPending}
       onSubmit={onSubmit}
       error={getErrorMessage()}
       termsRedirect={termsRedirect}

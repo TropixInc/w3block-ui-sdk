@@ -35,7 +35,7 @@ const InputWithdrawCommerce = ({
     mutate: mutateAssets,
     data: assets,
     isError: mutateError,
-    isLoading: isLoadingAsset,
+    isPending: isLoadingAsset,
   } = useUploadAssetsCommerce();
 
   const {
@@ -43,7 +43,7 @@ const InputWithdrawCommerce = ({
     data,
     isSuccess,
     isError,
-    isLoading: isLoadingUpload,
+    isPending: isLoadingUpload,
   } = useUploadFileToCloudinary();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

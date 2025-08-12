@@ -44,7 +44,7 @@ const _CheckoutCompletePayment = ({
   const { companyId } = useCompanyConfig();
   const {
     data: orderData,
-    isLoading,
+    isFetching,
     isError,
     isSuccess,
   } = useGetOrderById({
@@ -443,7 +443,7 @@ const _CheckoutCompletePayment = ({
                     )?.currency?.name
                   : 'BRL'
               }
-              loading={isLoading || isLoadingPreview}
+              loading={isFetching || isLoadingPreview}
               className="pw-mt-4"
             />
             <PaymentMethodsComponent
@@ -584,7 +584,7 @@ const _CheckoutCompletePayment = ({
                 }
                 stockAmount={prod?.stockAmount}
                 canPurchaseAmount={prod?.canPurchaseAmount}
-                loading={isLoading}
+                loading={isFetching}
                 status={checkoutStatus}
                 id={prod?.id}
                 key={index}

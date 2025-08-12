@@ -54,12 +54,12 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
   const [step, setStep] = useState<Steps>(1);
   const [reason, setReason] = useState('');
   const [_, setUploadingImage] = useState(false);
-  const { data, isLoading, refetch } = useGetSpecificWithdrawAdmin(id);
-  const { mutate: refuseWithdraw, isLoading: isLoadingRefuse } =
+  const { data, isFetching, refetch } = useGetSpecificWithdrawAdmin(id);
+  const { mutate: refuseWithdraw, isPending: isLoadingRefuse } =
     useRefuseWithdraw();
-  const { mutate: concludeWithdraw, isLoading: isLoadingConclude } =
+  const { mutate: concludeWithdraw, isPending: isLoadingConclude } =
     useConcludeWithdraw();
-  const { mutate: escrowWithdraw, isLoading: isLoadingEscrow } =
+  const { mutate: escrowWithdraw, isPending: isLoadingEscrow } =
     useEscrowWithdraw();
   const { loyaltyWallet } = useUserWallet();
   const dynamicMethods = useForm<DocumentDto>({
@@ -255,7 +255,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
           >
             {`<`} {translate('shared>back')}
           </button>
-          {isLoading ||
+          {isFetching ||
           isLoadingConclude ||
           isLoadingEscrow ||
           isLoadingRefuse ? (

@@ -50,7 +50,7 @@ export const CompleteKYCTemplateSDK = ({
   className,
   extraBy,
 }: CompleteKYCTemplateSDKProps) => {
-  const { data: profile, isLoading: isLoadingProfile } = useProfile();
+  const { data: profile, isFetching: isLoadingProfile } = useProfile();
   const router = useRouterConnect();
   const slug = () => {
     const querySlug = router?.query?.contextSlug;

@@ -74,7 +74,6 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
   const {
     data: docs,
     refetch,
-    isLoading,
     isFetching,
     dataUpdatedAt,
   } = useGetDocuments({ limit: 50 });

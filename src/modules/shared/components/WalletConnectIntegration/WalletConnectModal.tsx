@@ -38,7 +38,7 @@ export const WalletConnectModal = ({ isOpen, onClose }: Props) => {
   const {
     mutate: connectMutate,
     isSuccess: connectSuccess,
-    isLoading: connectLoading,
+    isPending: connectLoading,
     isError: connectError,
   } = useRequestWalletConnect();
 

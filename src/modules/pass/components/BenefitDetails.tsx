@@ -26,7 +26,7 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
 
   const {
     data: benefit,
-    isLoading: isLoadingBenefit,
+    isFetching: isLoadingBenefit,
     error: errorBenefit,
   } = useGetPassBenefitById(benefitId);
 

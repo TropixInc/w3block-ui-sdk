@@ -25,7 +25,7 @@ export const SignInWithCodeWithoutLayout = () => {
   const { companyId: tenantId } = useCompanyConfig();
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isLoading, reset } = useRequestSignInCode();
+  const { mutate, isSuccess, isPending, reset } = useRequestSignInCode();
   const [error, setError] = useState('');
   useEffect(() => {
     if (!profile) setNewCountdown(addMinutes(new Date(), 1));
@@ -147,7 +147,7 @@ export const SignInWithCodeWithoutLayout = () => {
       </WeblockButton>
 
       <button
-        disabled={isLoading || isActive}
+        disabled={isPending || isActive}
         className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
         onClick={() =>
           mutate({
@@ -170,7 +170,7 @@ export const SignInWithCodeWithoutLayout = () => {
         <Trans i18nKey="auth>setCode>linkExpiresMessage">
           O código expira em 15 minutos
           <button
-            disabled={isLoading || isActive}
+            disabled={isPending || isActive}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({

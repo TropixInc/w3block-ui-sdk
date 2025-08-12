@@ -29,7 +29,7 @@ export const PasswordChangeMailSent = ({
   const { logoUrl: logo } = useCompanyConfig();
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const { mutate, isSuccess, isLoading } = useRequestPasswordChange();
+  const { mutate, isSuccess, isPending } = useRequestPasswordChange();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.PASSWORD_LINK_CONFIRMATION_COUNTDOWN_DATE
@@ -72,7 +72,7 @@ export const PasswordChangeMailSent = ({
         <div className="pw-mb-[29px]">
           <div className="pw-flex pw-justify-center">
             <button
-              disabled={isActive || isLoading}
+              disabled={isActive || isPending}
               className="pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-underline pw-text-brand-primary disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
               onClick={() => mutate({ email })}
             >

@@ -141,15 +141,12 @@ export default (env, argv) => {
         },
         {
           test: /\.(png|jpe?g|gif|ico)$/,
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                publicPath: "/_next/static/images/",
-                outputPath: "static/images/",
-              },
-            },
-          ],
+          type: 'asset',
+          parser: {
+            dataUrlCondition: {
+              maxSize: 8 * 1024 // 8kb
+            }
+          },
         },
         {
           test: /\.css$/,

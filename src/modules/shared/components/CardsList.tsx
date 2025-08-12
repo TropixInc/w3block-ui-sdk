@@ -112,7 +112,7 @@ export const CardsList = () => {
   const {
     data: cardsList,
     refetch,
-    isLoading,
+    isFetching,
     error: errorGetCards,
   } = useGetSavedCards();
 
@@ -120,7 +120,7 @@ export const CardsList = () => {
   const {
     mutate: deleteCard,
     isSuccess,
-    isLoading: isLoadingDelete,
+    isPending: isLoadingDelete,
     error: errorDeleteCard,
   } = useDeleteSavedCard();
 
@@ -129,7 +129,7 @@ export const CardsList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  if (isLoading || isLoadingDelete)
+  if (isFetching || isLoadingDelete)
     return (
       <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
         <Spinner className="pw-h-13 pw-w-13" />

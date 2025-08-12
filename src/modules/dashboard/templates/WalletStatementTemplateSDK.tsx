@@ -26,7 +26,7 @@ import useTranslation from '../../shared/hooks/useTranslation';
 export const WalletStatementTemplateSDK = () => {
   const { loyaltyWallet, mainWallet } = useUserWallet();
   const [actualPage, setActualPage] = useState(1);
-  const { data, isLoading, error } = useGetErcTokensHistory(
+  const { data, isFetching, error } = useGetErcTokensHistory(
     loyaltyWallet.length ? loyaltyWallet[0].contractId : undefined,
     { page: actualPage }
   );
@@ -121,7 +121,7 @@ export const WalletStatementTemplateSDK = () => {
         <ErrorBox customError={error} />
       ) : (
         <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
-          {isLoading ? (
+          {isFetching ? (
             <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
               <Spinner className="pw-h-10 pw-w-10" />
             </div>

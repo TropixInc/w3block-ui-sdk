@@ -43,7 +43,7 @@ const _LinkAccountTemplate = () => {
   const { data: profile, error: errorProfile } = useProfile();
   const {
     mutate: acceptIntegration,
-    isLoading,
+    isPending,
     error: errorAcceptIntegration,
   } = useAcceptIntegrationToken();
   const [step, setSteps] = useState('');
@@ -192,14 +192,14 @@ const _LinkAccountTemplate = () => {
             <ErrorBox customError={errorAcceptIntegration} />
             <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
               <button
-                disabled={isLoading}
+                disabled={isPending}
                 onClick={handleClose}
                 className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
               >
                 {translate('shared>no')}
               </button>
               <button
-                disabled={isLoading}
+                disabled={isPending}
                 onClick={handleAccept}
                 className="pw-px-[24px] pw-h-[33px] pw-bg-brand-primary pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs pw-text-white"
               >
@@ -257,7 +257,7 @@ const _LinkAccountTemplate = () => {
     <div className="pw-w-screen pw-min-h-screen pw-bg-[#EFEFEF]">
       <div className="pw-w-full pw-pt-32 pw-px-5">
         <Box className="pw-mx-auto">
-          {isLoading ? <Spinner className="pw-mx-auto" /> : renderInternal()}
+          {isPending ? <Spinner className="pw-mx-auto" /> : renderInternal()}
         </Box>
       </div>
     </div>

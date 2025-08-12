@@ -1,9 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { PixwayAPIRoutes } from "../enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../enums/W3blockAPI";
-import { useAxios } from "../hooks/useAxios";
-import { useCompanyConfig } from "../hooks/useCompanyConfig";
-
+import { useQuery } from '@tanstack/react-query';
+import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
+import { W3blockAPI } from '../enums/W3blockAPI';
+import { useAxios } from '../hooks/useAxios';
+import { useCompanyConfig } from '../hooks/useCompanyConfig';
 
 export const useGetUserByReferral = ({
   referralCode,
@@ -15,9 +14,9 @@ export const useGetUserByReferral = ({
   const axios = useAxios(W3blockAPI.ID);
   const { companyId } = useCompanyConfig();
 
-  const getUserByReferral = useQuery(
-    [PixwayAPIRoutes.GET_USER_BY_REFERRAL, referralCode],
-    () =>
+  const getUserByReferral = useQuery({
+    queryKey: [PixwayAPIRoutes.GET_USER_BY_REFERRAL, referralCode],
+    queryFn: () =>
       axios
         .get(
           PixwayAPIRoutes.GET_USER_BY_REFERRAL.replace(
@@ -26,11 +25,9 @@ export const useGetUserByReferral = ({
           ).replace('{referralCode}', referralCode ?? '')
         )
         .then((res) => res.data),
-    {
-      enabled: typeof referralCode === 'string' && !!companyId && enabled,
-      retry: 2,
-      refetchOnWindowFocus: false,
-    }
-  );
+    enabled: typeof referralCode === 'string' && !!companyId && enabled,
+    retry: 2,
+    refetchOnWindowFocus: false,
+  });
   return getUserByReferral;
 };

@@ -25,7 +25,7 @@ const _MyProfileTemplate = () => {
   const {
     mutate,
     error: erroMutate,
-    isLoading: isLoadingMutate,
+    isPending: isLoadingMutate,
   } = useRequestConfirmationMail();
   useHasWallet({});
   const [translate] = useTranslation();
@@ -37,7 +37,7 @@ const _MyProfileTemplate = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {
     data: tenantContext,
-    isLoading: isLoadingTenantContext,
+    isFetching: isLoadingTenantContext,
     error: errorTenantContext,
   } = useGetTenantContext();
 

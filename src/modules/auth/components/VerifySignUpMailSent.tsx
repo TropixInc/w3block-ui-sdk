@@ -33,7 +33,7 @@ export const VerifySignUpMailSent = ({
 }: PasswordChangeMailSentProps) => {
   const { logoUrl: logo, connectProxyPass } = useCompanyConfig();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
+  const { mutate, isSuccess, isPending, reset } = useRequestConfirmationMail();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
@@ -85,7 +85,7 @@ export const VerifySignUpMailSent = ({
         <div className="pw-mb-[23px]">
           <div className="pw-flex pw-justify-center">
             <button
-              disabled={isActive || isLoading}
+              disabled={isActive || isPending}
               className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
               onClick={() => mutate({ email, tenantId, callbackPath })}
             >
@@ -112,7 +112,7 @@ export const VerifySignUpMailSent = ({
           <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
             O link expira em 15 minutos
             <button
-              disabled={isActive || isLoading}
+              disabled={isActive || isPending}
               className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
               onClick={() =>
                 mutate({

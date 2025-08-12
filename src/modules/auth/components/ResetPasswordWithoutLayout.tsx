@@ -35,7 +35,7 @@ const _ResetPasswordWithoutLayout = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const passwordSchema = usePasswordValidationSchema({});
-  const { mutate, isLoading, isExpired } = useChangePasswordAndSignIn();
+  const { mutate, isPending, isExpired } = useChangePasswordAndSignIn();
   const { email, token, step } = router.query;
 
   const schema = object().shape({
@@ -177,7 +177,7 @@ const _ResetPasswordWithoutLayout = () => {
         <AuthButton
           fullWidth
           type="submit"
-          disabled={!methods.formState.isValid || isLoading}
+          disabled={!methods.formState.isValid || isPending}
         >
           {translate('components>genericMessages>advance')}
         </AuthButton>
