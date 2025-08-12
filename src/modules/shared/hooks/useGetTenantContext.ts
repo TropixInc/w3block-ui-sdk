@@ -27,6 +27,7 @@ export const useGetTenantContext = (): any => {
       onError: () => {
         return null;
       },
+      refetchOnWindowFocus: false,
     }
   );
 };

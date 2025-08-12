@@ -108,6 +108,7 @@ export const usePublicTokenData = ({
         tokenId != '' &&
         chainId != '' &&
         enabled,
+      refetchOnWindowFocus: false,
     }
   );
 };

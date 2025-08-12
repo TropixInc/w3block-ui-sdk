@@ -43,6 +43,7 @@ const useGetBenefitsByEditionNumber = ({
     {
       enabled:
         tokenPassId != null && editionNumber != null && tokenPassId !== '',
+      refetchOnWindowFocus: false,
     }
   );
 };
