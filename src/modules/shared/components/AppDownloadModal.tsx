@@ -1,7 +1,7 @@
 import { useCopyToClipboard } from 'react-use';
 
-import downloadAndroid from '../../assets/images/downloadAndroid.png';
-import downloadApple from '../../assets/images/downloadApple.png';
+import downloadAndroid from '../assets/images/downloadAndroid.png';
+import downloadApple from '../assets/images/downloadApple.png';
 
 import { useUtms } from '../hooks/useUtms';
 import { ModalBase } from './ModalBase';
