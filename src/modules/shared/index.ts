@@ -12,3 +12,6 @@ export * from './providers/userWalletsProvider';
 export * from './components/W3blockFooter';
 export * from './components/HeaderPixwaySDK';
 export * from './providers/OnboardProvider';
+export * from './components/BaseInput';
+export * from './components/BaseSelect';
+export * from './components/Buttons';
