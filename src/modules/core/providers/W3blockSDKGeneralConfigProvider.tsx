@@ -51,6 +51,7 @@ export const W3blockUISDKGeneralConfigProvider = ({
   gtag,
   client
 }: Props) => {
+  
   const companyValue = useMemo(
     () => ({ companyId, logoUrl, appBaseUrl, connectProxyPass, name }),
     [logoUrl, companyId, appBaseUrl, connectProxyPass, name]
