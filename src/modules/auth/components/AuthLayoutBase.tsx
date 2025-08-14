@@ -6,7 +6,7 @@ import PixwayIconHorizontal from '../../shared/assets/icons/weblock_logo.svg';
 
 interface AuthLayoutBaseProps {
   children?: ReactNode;
-  logo: string;
+  logo?: string;
   classes?: AuthLayoutBaseClasses;
   title: string;
 }

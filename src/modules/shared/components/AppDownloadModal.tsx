@@ -8,7 +8,7 @@ import { useUtms } from '../hooks/useUtms';
 import { ModalBase } from './ModalBase';
 import { Spinner } from './Spinner';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import { getMobileOS } from '../utils/getMobileOs';
+import { useGetMobileOS } from '../hooks/useGetMobileOs';
 import { useGetUserByReferral } from '../hooks/useGetUserByReferral';
 import useTranslation from '../hooks/useTranslation';
 
@@ -22,7 +22,7 @@ export const AppDownloadModal = ({
   const utm = useUtms();
   const theme = useThemeConfig();
   const [translate] = useTranslation();
-  const os = getMobileOS();
+  const os = useGetMobileOS();
   const [_, copy] = useCopyToClipboard();
   const { data: referralUser, isFetching } = useGetUserByReferral({
     referralCode: utm?.utm_source,
