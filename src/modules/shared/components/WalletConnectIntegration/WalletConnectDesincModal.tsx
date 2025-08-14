@@ -21,7 +21,7 @@ export const WalletConnectDesinModal = ({ isOpen, onClose }: Props) => {
   const {
     mutate: disconnectMutate,
     isSuccess: disconnectSuccess,
-    isLoading: disconnectLoading,
+    isPending: disconnectLoading,
     isError: disconnectError,
   } = useDisconnectWalletConnect();
 

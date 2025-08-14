@@ -52,7 +52,7 @@ const _VerifySignUpTemplateSDK = ({
   textContainer,
   className,
 }: VerifySignUpTemplateSDKProps) => {
-  const { mutate, isLoading, isSuccess, isError } = useVerifySignUp();
+  const { mutate, isPending, isSuccess, isError } = useVerifySignUp();
   const router = useRouterConnect();
   const { email, token } = router.query;
   const [step, setStep] = useState(Steps.LOADING);
@@ -107,7 +107,7 @@ const _VerifySignUpTemplateSDK = ({
         const timeStamp = Number(tokenSplitted[1]);
         if (isAfter(new Date(), new Date(timeStamp)))
           setStep(Steps.TOKEN_EXPIRED);
-        else if (!isLoading && !isError)
+        else if (!isPending && !isError)
           mutate({ email: email as string, token: token as string });
       }
     }
@@ -149,7 +149,7 @@ const _VerifySignUpTemplateSDK = ({
       />
     );
 
-  return isLoading || !step || step === Steps.LOADING ? null : (
+  return isPending || !step || step === Steps.LOADING ? null : (
     <CompleteSignUpSuccessTemplateSDK
       FAQContext={FAQContext}
       bgColor={bgColor}

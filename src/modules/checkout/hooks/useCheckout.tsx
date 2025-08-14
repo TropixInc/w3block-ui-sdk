@@ -274,7 +274,8 @@ export const useCheckout = () => {
           )
           .then((res): OrderPreviewResponse => {
             return res.data as OrderPreviewResponse;
-          })
+          }),
+      { refetchOnWindowFocus: false }    
     );
   };
 

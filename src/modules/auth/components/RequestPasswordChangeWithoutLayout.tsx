@@ -29,7 +29,7 @@ export const RequestPasswordChangeWithoutLayout = ({
 }: RequestPasswordChangeWithoutLayoutProps) => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
+  const { mutate, isPending, isError, isSuccess } = useRequestPasswordChange();
   const schema = object().shape({
     email: string()
       .required(translate('components>form>requiredFieldValidation'))
@@ -114,7 +114,7 @@ export const RequestPasswordChangeWithoutLayout = ({
           fullWidth
           className="pw-mt-6"
           type="submit"
-          disabled={!methods.formState.isValid || isLoading}
+          disabled={!methods.formState.isValid || isPending}
           placeholder={translate(
             'companyAuth>requestPasswordChange>emailFieldPlaceholder'
           )}

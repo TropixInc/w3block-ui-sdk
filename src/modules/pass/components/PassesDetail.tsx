@@ -58,7 +58,7 @@ export const PassesDetail = () => {
   const [qrCodeData, setQrCodeData] = useState('');
 
   const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
-  const { data: verifyBenefit, isLoading: verifyLoading, isError: verifyError, error: errorVerifyBenefit } = useVerifyBenefit({
+  const { data: verifyBenefit, isFetching: verifyLoading, isError: verifyError, error: errorVerifyBenefit } = useVerifyBenefit({
     benefitId: benefitIdQR,
     secret,
     userId,
@@ -69,9 +69,15 @@ export const PassesDetail = () => {
   const { data: tokenPass, error: errorToken } = useGetPassById(tokenPassId);
   const user = useSessionUser();
 
+<<<<<<< HEAD
   const { mutate: registerUse, isLoading: registerLoading, error: errorRegisterUse } = usePostBenefitRegisterUse();
   const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
   const filteredBenefit = benefits?.data.items.find(({ id }: any) => id === benefitId);
+=======
+  const { mutate: registerUse, isPending: registerLoading, error: errorRegisterUse } = usePostBenefitRegisterUse();
+  const { data: benefits, isFetching: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
+  const filteredBenefit = benefits?.data.items.find(({ id }) => id === benefitId);
+>>>>>>> aa296e7ea17392c8719d9405ce7b3374c582fc28
 
   const formatedData = useMemo(() => {
     const filteredBenefits = tokenPass?.data?.tokenPassBenefits?.filter((benefit: { tokenPassBenefitOperators: any[]; }) => {

@@ -54,6 +54,7 @@ const useGetPassByUser = () => {
     },
     {
       enabled: isAdmin,
+      refetchOnWindowFocus: false,
     }
   );
 };

@@ -45,11 +45,11 @@ const WithdrawModal = ({
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [translate] = useTranslation();
 
-  const [{ data: withdrawsMethods, isLoading }] = useGetWithdrawsMethods(
+  const [{ data: withdrawsMethods, isFetching }] = useGetWithdrawsMethods(
     data?.data?.id ?? '',
     modalType
   );
-  const { mutate, isLoading: isLoadingWithdraw } = useRequestWithdraw();
+  const { mutate, isPending: isLoadingWithdraw } = useRequestWithdraw();
   const handleWithdraw = () => {
     mutate(
       {
@@ -119,7 +119,7 @@ const WithdrawModal = ({
           <div className="pw-flex pw-justify-between pw-items-center">
             <p>{translate('auth>withdrawModal>receivingMethods')}</p>
           </div>
-          {isLoading ? (
+          {isFetching ? (
             <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
               <Spinner />
             </div>
@@ -227,7 +227,7 @@ const WithdrawModal = ({
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountValue, isLoading, withdrawAmount, withdrawsMethods?.data?.items]);
+  }, [accountValue, isFetching, withdrawAmount, withdrawsMethods?.data?.items]);
 
   const onRenderModalType = () => {
     if (modalType === 'withdraw') {

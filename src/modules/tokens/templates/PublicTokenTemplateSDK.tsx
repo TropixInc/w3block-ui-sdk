@@ -39,7 +39,7 @@ const _PublicTokenTemplateSDK = ({
   const {
     data: publicTokenResponse,
     isSuccess,
-    isLoading,
+    isFetching,
     isError,
     error: errorPublicTokenResponse,
   } = usePublicTokenData({
@@ -60,11 +60,11 @@ const _PublicTokenTemplateSDK = ({
       publicTokenResponse.data.company.id != companyId
     ) {
       router.pushConnect(PixwayAppRoutes.TOKENS);
-    } else if (!isLoading && (isError || !publicTokenResponse)) {
+    } else if (!isFetching && (isError || !publicTokenResponse)) {
       router.pushConnect(PixwayAppRoutes.TOKENS);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, isLoading]);
+  }, [isSuccess, isFetching]);
 
   const Title = ({ title }: { title: string }) => {
     return <p className="pw-font-roboto pw-font-[500]">{title}</p>;

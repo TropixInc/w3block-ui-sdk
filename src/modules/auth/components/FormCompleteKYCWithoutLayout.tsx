@@ -88,7 +88,7 @@ const _FormCompleteKYCWithoutLayout = ({
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isError, isLoading, error } =
+  const { mutate, isSuccess, isError, isPending, error } =
     usePostUsersDocuments();
   const slug = () => {
     if (contextSlug) {
@@ -111,7 +111,7 @@ const _FormCompleteKYCWithoutLayout = ({
   const [uploadProgress, setUploadProgress] = useState(false);
   const { companyId: tenantId } = useCompanyConfig();
   const step = router.query && router.query.step && router.query.step;
-  const { data: tenantInputs, isLoading: isLoadingKyc } =
+  const { data: tenantInputs, isFetching: isLoadingKyc } =
     useGetTenantInputsBySlug({
       slug: slug(),
     });
@@ -362,10 +362,10 @@ const _FormCompleteKYCWithoutLayout = ({
         )}
 
         <FormTemplate
-          isLoading={isLoading}
+          isLoading={isPending}
           buttonDisabled={
             !dynamicMethods?.formState?.isValid ||
-            isLoading ||
+            isPending ||
             Boolean(
               contextSlug === 'signup' &&
                 (userKycStatus === KycStatus.Approved ||
@@ -465,9 +465,9 @@ const _FormCompleteKYCWithoutLayout = ({
           )}
 
           <FormTemplate
-            isLoading={isLoading}
+            isLoading={isPending}
             buttonDisabled={
-              isLoading ||
+              isPending ||
               Boolean(
                 contextSlug === 'signup' &&
                   (userKycStatus === KycStatus.Approved ||

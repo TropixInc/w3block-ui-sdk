@@ -14,7 +14,7 @@ const DeleteMethodModal = ({
   onChangeModalType,
   itemForDelete,
 }: DeleteModalProps) => {
-  const { mutate, isSuccess, isLoading } = useDeleMethodPayment();
+  const { mutate, isSuccess, isPending } = useDeleMethodPayment();
   const [tranlate] = useTranslation();
 
   const onDeleteMethod = (id: string) => {
@@ -73,10 +73,10 @@ const DeleteMethodModal = ({
         </BaseButton>
         <BaseButton
           onClick={() => onDeleteMethod(itemForDelete.id)}
-          disabled={isLoading}
+          disabled={isPending}
           className="pw-h-10 pw-w-full pw-flex pw-justify-center pw-items-center pw-px-4 pw-text-base"
         >
-          {isLoading ? (
+          {isPending ? (
             <Spinner className="pw-w-4 pw-h-4 !pw-border-[2px]" />
           ) : (
             tranlate('shared>myProfile>confirm')

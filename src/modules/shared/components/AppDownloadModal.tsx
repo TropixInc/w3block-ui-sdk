@@ -1,13 +1,14 @@
+"use client";
 import { useCopyToClipboard } from 'react-use';
 
-import downloadAndroid from '../../assets/images/downloadAndroid.png';
-import downloadApple from '../../assets/images/downloadApple.png';
+import downloadApple from '../../shared/assets/images/downloadApple.png';
+import downloadAndroid from '../../shared/assets/images/downloadAndroid.png';
 
 import { useUtms } from '../hooks/useUtms';
 import { ModalBase } from './ModalBase';
 import { Spinner } from './Spinner';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import { getMobileOS } from '../utils/getMobileOs';
+import { useGetMobileOS } from '../hooks/useGetMobileOs';
 import { useGetUserByReferral } from '../hooks/useGetUserByReferral';
 import useTranslation from '../hooks/useTranslation';
 
@@ -21,11 +22,12 @@ export const AppDownloadModal = ({
   const utm = useUtms();
   const theme = useThemeConfig();
   const [translate] = useTranslation();
-  const os = getMobileOS();
+  const os = useGetMobileOS();
   const [_, copy] = useCopyToClipboard();
-  const { data: referralUser, isLoading } = useGetUserByReferral({
+  const { data: referralUser, isFetching } = useGetUserByReferral({
     referralCode: utm?.utm_source,
   });
+
   const onClickApple = () => {
     if (
       (document.getElementById('appCheckbox') as HTMLInputElement).checked &&
@@ -51,7 +53,7 @@ export const AppDownloadModal = ({
       hideCloseButton
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
-        {isLoading || (utm.utm_source && !referralUser) ? (
+        {isFetching || (utm.utm_source && !referralUser) ? (
           <div className="pw-h-[350px] pw-flex pw-justify-center pw-items-center">
             <Spinner className="pw-h-10 pw-w-10" />
           </div>

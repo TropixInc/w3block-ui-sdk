@@ -10,9 +10,9 @@ import { Spinner } from '../Spinner';
 import { MySalesCardComponent, OrderStatusEnum } from './MySalesCardComponent';
 
 export const MySalesListComponent = () => {
-  const { data, isLoading } = useGetUserResales();
+  const { data, isFetching } = useGetUserResales();
   const [translate] = useTranslation();
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className="pw-flex pw-justify-center pw-items-center pw-mt-7 sm:pw-px-4 pw-px-0">
         <div className="pw-gap-6 pw-flex pw-flex-col">

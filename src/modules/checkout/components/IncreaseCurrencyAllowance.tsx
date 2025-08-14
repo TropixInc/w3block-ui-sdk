@@ -36,7 +36,7 @@ export const IncreaseCurrencyAllowance = ({
   const [err, setErr] = useState('');
   const [errMessage, setErrMessage] = useState('');
   const [allowMeta, setAllowMeta] = useState(true);
-  const { mutate, isLoading } = useIncreaseCurrencyAllowance();
+  const { mutate, isPending } = useIncreaseCurrencyAllowance();
   const { mainWallet: wallet } = useUserWallet();
   const { signinRequest, emitTransactionCloncluded } = useSocket();
   const { sendSignedRequest } = useMetamask();
@@ -110,7 +110,7 @@ export const IncreaseCurrencyAllowance = ({
     <div>
       {currencyAllowanceState === 'required' ? (
         <div>
-          {loading || isLoading ? (
+          {loading || isPending ? (
             <Processing />
           ) : (
             <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-py-10">

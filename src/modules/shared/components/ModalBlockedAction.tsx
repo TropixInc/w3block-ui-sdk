@@ -45,8 +45,8 @@ export const ModalBlockedAction = ({
     LocalStorageFields.EMAIL_CONFIRMATION_LINK_COUNTDOWN_DATE
   );
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
-  const { mutate, isLoading } = useRequestConfirmationMail();
-  const { mutate: mutateVerify, isLoading: isLoadingVerify } =
+  const { mutate, isPending } = useRequestConfirmationMail();
+  const { mutate: mutateVerify, isPending: isLoadingVerify } =
     useVerifySignUp();
 
   useEffect(() => {
@@ -187,7 +187,7 @@ export const ModalBlockedAction = ({
               </BaseButton>
 
               <button
-                disabled={isLoading || isActive}
+                disabled={isPending || isActive}
                 className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
                 onClick={() =>
                   mutate({
@@ -210,7 +210,7 @@ export const ModalBlockedAction = ({
                 <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
                   O link expira em 15 minutos
                   <button
-                    disabled={isLoading || isActive}
+                    disabled={isPending || isActive}
                     className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
                     onClick={() =>
                       mutate({

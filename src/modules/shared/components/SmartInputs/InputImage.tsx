@@ -63,7 +63,7 @@ const InputImage = ({
     mutate: mutateAssets,
     data: assets,
     isError: mutateError,
-    isLoading: isLoadingAsset,
+    isPending: isLoadingAsset,
   } = useUploadAssets();
 
   const {
@@ -71,7 +71,7 @@ const InputImage = ({
     data,
     isSuccess,
     isError,
-    isLoading: isLoadingUpload,
+    isPending: isLoadingUpload,
   } = useUploadFileToCloudinary();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

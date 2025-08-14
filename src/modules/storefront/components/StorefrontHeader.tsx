@@ -40,7 +40,7 @@ export const StorefrontHeader = ({ data }: { data: MainModuleThemeInterface }) =
       <HeaderPixwaySDK
         logoLink={logoLink}
         hasCart={hasCart}
-        logoSrc={logoSrc?.assetUrl}
+        logoSrc={logoSrc?.assetUrl ?? null}
         bgColor={backgroundColor}
         textColor={textColor}
         brandText={brandName}

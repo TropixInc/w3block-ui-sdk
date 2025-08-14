@@ -7,6 +7,7 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { KycStatus } from '@w3block/sdk-id';
 
 import { Spinner } from '../components/Spinner';
+<<<<<<< HEAD
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
 import { useCheckWhitelistByUser } from '../hooks/useCheckWhitelistByUser';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
@@ -16,6 +17,11 @@ import { useProfile } from '../hooks/useProfile';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 import { removeDoubleSlashesOnUrl } from '../utils/removeDuplicateSlahes';
+=======
+import { usePathname } from 'next/navigation';
+
+
+>>>>>>> aa296e7ea17392c8719d9405ce7b3374c582fc28
 
 interface OnboardProps {
   setLoading: (bol: boolean) => void;
@@ -73,7 +79,6 @@ export const OnboardProvider = ({
   const {
     data: docs,
     refetch,
-    isLoading,
     isFetching,
     dataUpdatedAt,
   } = useGetDocuments({ limit: 50 });
@@ -123,9 +128,11 @@ export const OnboardProvider = ({
     }
   }, [contexts]);
 
+  const pathname = usePathname();
+  const queryString = new URLSearchParams(router?.query).toString();
   const path = useMemo(() => {
-    return router?.asPath;
-  }, [router?.asPath]);
+    return pathname + (queryString ? `?${queryString}` : '');
+  }, [pathname, queryString]);
   const { connectProxyPass } = useCompanyConfig();
   const callback = () => {
     const url = removeDoubleSlashesOnUrl(

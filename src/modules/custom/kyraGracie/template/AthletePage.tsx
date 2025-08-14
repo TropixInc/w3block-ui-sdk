@@ -76,7 +76,7 @@ export const AthletePage = () => {
   const [translate] = useTranslation();
   const {
     data: dataGetAthlet,
-    isLoading,
+    isFetching,
     error,
   } = useGetAthlete(datasource?.athlete?.data[0]?.id ?? '');
   const isProduction = useIsProduction();
@@ -193,7 +193,7 @@ export const AthletePage = () => {
     return '';
   };
 
-  if ((loading || isLoading) && (!datasource || !dataGetAthlet))
+  if ((loading || isFetching) && (!datasource || !dataGetAthlet))
     return (
       <div className="pw-w-full pw-h-[30rem]">
         <Spinner className="pw-m-auto pw-w-[40px] pw-h-[40px] pw-opacity-50 pw-mt-[20%]" />

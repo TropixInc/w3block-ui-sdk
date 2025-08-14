@@ -40,7 +40,7 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
   const {
     data: benefit,
     isSuccess: isBenefitSucceed,
-    isLoading: isLoadingBenefit,
+    isFetching: isLoadingBenefit,
   } = useGetPassBenefitById(benefitIdDynamic ?? '');
 
   const { data: tokenPass } = useGetPassById(benefit?.data?.tokenPassId ?? '');

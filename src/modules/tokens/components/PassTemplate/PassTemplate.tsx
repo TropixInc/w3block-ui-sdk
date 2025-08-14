@@ -128,13 +128,13 @@ const _PassTemplate = ({
   const {
     data: benefit,
     isSuccess: isBenefitSucceed,
-    isLoading: isLoadingBenefit,
+    isFetching: isLoadingBenefit,
     error: errorBenefit,
   } = useGetPassBenefitById(benefitId);
 
   const {
     data: collectionData,
-    isLoading: collectionLoading,
+    isFetching: collectionLoading,
     error: errorCollectionData,
   } = useGetCollectionMetadata({
     id: benefit?.data?.tokenPassId ?? '',
@@ -147,7 +147,7 @@ const _PassTemplate = ({
   const {
     data: publicTokenResponse,
     isSuccess: isTokenSucceed,
-    isLoading: isLoadingToken,
+    isFetching: isLoadingToken,
     error: errorPublicToken,
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
@@ -165,7 +165,7 @@ const _PassTemplate = ({
 
   const {
     data: benefitsResponse,
-    isLoading: isLoadingBenefitsResponse,
+    isFetching: isLoadingBenefitsResponse,
     error: errorBenefitsResponse,
   } = useGetBenefitsByEditionNumber({
     tokenPassId: publicTokenResponse?.data?.group?.collectionId ?? '',
@@ -178,7 +178,7 @@ const _PassTemplate = ({
 
   const {
     data: secret,
-    isLoading: isLoadingSecret,
+    isFetching: isLoadingSecret,
     refetch: refetchSecret,
   } = useGetQRCodeSecret({
     benefitId,
@@ -187,7 +187,7 @@ const _PassTemplate = ({
 
   const {
     mutate: selfUseBenefit,
-    isLoading: isUseLoading,
+    isPending: isUseLoading,
     isSuccess: isUseSuccess,
     isError: isUseError,
     error: errorSelfUser,

@@ -39,7 +39,7 @@ export const ConfirmationKycWithoutLayout = () => {
     if (querySlug) return querySlug as string;
     else return 'signup';
   };
-  const { data: tenantInputs, isLoading: isLoadingKyc } =
+  const { data: tenantInputs, isFetching: isLoadingKyc } =
     useGetTenantInputsBySlug({
       slug: slug(),
     });

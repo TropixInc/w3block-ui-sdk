@@ -19,12 +19,12 @@ import useTranslation from '../hooks/useTranslation';
 export const StakingSummary = () => {
   const [page, setPage] = useState(1);
   const [translate] = useTranslation();
-  const { data, isLoading, error: errorStaking } = useStakingSummary({ page });
+  const { data, isFetching, error: errorStaking } = useStakingSummary({ page });
   const { loyaltyWallet } = useUserWallet();
   const coinSymbol = loyaltyWallet?.[0]?.currency;
   const {
     mutate,
-    isLoading: isLoadingRedeem,
+    isPending: isLoadingRedeem,
     isSuccess,
     isError,
     error: errorRedeemStaking,
@@ -143,7 +143,7 @@ export const StakingSummary = () => {
           <BaseTable<SummaryDto>
             columns={columns}
             rows={data?.data?.items}
-            isLoading={isLoading}
+            isLoading={isFetching}
             pagination={{
               currentPage: data?.data?.meta?.currentPage,
               pagesQuantity: data?.data?.meta?.totalPages,

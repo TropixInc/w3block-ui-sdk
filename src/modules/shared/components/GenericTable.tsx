@@ -123,7 +123,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const tenantName = company?.data.id === companyId ? name : '';
 
   const [
-    { data, isLoading, isError, refetch, error },
+    { data, isFetching, isError, refetch, error },
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
     internalTypeAPI: dataSource?.urlContext,
@@ -743,14 +743,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               </thead>
               <div
                 className={classNames(
-                  isLoading ||
+                  isFetching ||
                     isError ||
                     !_.get(data, localeItems ?? '', [])?.length
                     ? 'pw-h-20 pw-flex pw-items-end'
                     : ''
                 )}
               >
-                {!isLoading &&
+                {!isFetching &&
                   !_.get(data, localeItems ?? '', [])?.length &&
                   !isError && (
                     <Alert
@@ -766,7 +766,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   </Alert>
                 )}
 
-                {isLoading && (
+                {isFetching && (
                   <div className="pw-w-full pw-flex pw-py-5 pw-items-center pw-justify-center pw-absolute">
                     <Spinner />
                   </div>
@@ -774,7 +774,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               </div>
 
               <tbody className="">
-                {!isLoading && _.get(data, localeItems ?? '', [])?.length
+                {!isFetching && _.get(data, localeItems ?? '', [])?.length
                   ? _.get(data, localeItems ?? '', []).map((item: any) => (
                       <Line
                         columns={columns}

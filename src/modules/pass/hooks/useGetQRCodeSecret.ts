@@ -35,6 +35,7 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
         editionNumber != undefined &&
         editionNumber != '',
       retry: false,
+      refetchOnWindowFocus: false,
     }
   );
 };

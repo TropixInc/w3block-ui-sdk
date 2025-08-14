@@ -33,6 +33,7 @@ export const useGetTokenSharedCode = (
     {
       enabled: Boolean(tenantId && code),
       retry: retry,
+      refetchOnWindowFocus: false,
     }
   );
 };
