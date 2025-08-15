@@ -76,7 +76,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "check:build": "yarn build",
-    "dev": "npm run watch:webpack",
+    "dev": "yarn watch:webpack",
     "dev:watch": "concurrently \"yarn watch:webpack\" \"yarn watch:types\" \"yarn watch:css\" \"yarn watch:assets\"",
     "dev:verbose": "webpack --mode development --watch --progress --stats=verbose",
     "watch:webpack": "webpack --mode development --watch",
