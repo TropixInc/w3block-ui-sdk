@@ -1,30 +1,27 @@
-"use client";
+'use client';
 /* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { KycStatus } from '@w3block/sdk-id';
 
-import { removeDoubleSlashesOnUrl } from '../utils/removeDuplicateSlahes';
-import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
-import { useRouterConnect } from '../hooks/useRouterConnect';
-import { useProfile } from '../hooks/useProfile';
-import { useGetTenantContext } from '../hooks/useGetTenantContext';
-import { useCheckWhitelistByUser } from '../hooks/useCheckWhitelistByUser';
-import { useGetDocuments } from '../hooks/useGetDocuments';
-import { useCompanyConfig } from '../hooks/useCompanyConfig';
 import { Spinner } from '../components/Spinner';
+<<<<<<< HEAD
+import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
+import { useCheckWhitelistByUser } from '../hooks/useCheckWhitelistByUser';
+import { useCompanyConfig } from '../hooks/useCompanyConfig';
+import { useGetDocuments } from '../hooks/useGetDocuments';
+import { useGetTenantContext } from '../hooks/useGetTenantContext';
+import { useProfile } from '../hooks/useProfile';
+import { useRouterConnect } from '../hooks/useRouterConnect';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
+import { removeDoubleSlashesOnUrl } from '../utils/removeDuplicateSlahes';
+=======
 import { usePathname } from 'next/navigation';
 
 
+>>>>>>> aa296e7ea17392c8719d9405ce7b3374c582fc28
 
 interface OnboardProps {
   setLoading: (bol: boolean) => void;
@@ -41,7 +38,13 @@ export const OnboardContext = createSymlinkSafeContext<OnboardProps>(
   }
 );
 
-export const OnboardProvider = ({ children, theme }: { children: ReactNode, theme: any }) => {
+export const OnboardProvider = ({
+  children,
+  theme,
+}: {
+  children: ReactNode;
+  theme: any;
+}) => {
   const router = useRouterConnect();
   const {
     data: profile,
@@ -69,7 +72,9 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
     !!whitelists?.length
   );
   const hasAccess = useMemo(() => {
-    return checkWhitelists?.details?.filter((res) => res?.hasAccess);
+    return checkWhitelists?.details?.filter(
+      (res: { hasAccess: any }) => res?.hasAccess
+    );
   }, [checkWhitelists?.details]);
   const {
     data: docs,
@@ -84,7 +89,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
         ({ context }: any) => context?.slug === 'signup'
       );
       const alternativesSignUp = contexts?.data?.items?.filter(
-        (res: { data: any; }) => (res.data as any)?.alternativeSignUp
+        (res: { data: any }) => (res.data as any)?.alternativeSignUp
       );
       if (mainSignUp) {
         alternativesSignUp.push(mainSignUp);
@@ -95,7 +100,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
   }, [contexts]);
 
   const signUpContextsIds = useMemo(() => {
-    return signUpsContexts?.map((res: { contextId: any; }) => res?.contextId);
+    return signUpsContexts?.map((res: { contextId: any }) => res?.contextId);
   }, [signUpsContexts]);
 
   const isFilled = useMemo(() => {
@@ -218,7 +223,9 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
     if (configData && hasAccess) {
       return configData?.filter(
         (res: { whitelistId: string }) =>
-          hasAccess?.find((r) => r.whitelistId === res.whitelistId)?.hasAccess
+          hasAccess?.find(
+            (r: { whitelistId: string }) => r.whitelistId === res.whitelistId
+          )?.hasAccess
       );
     }
   }, [configData, hasAccess]);
@@ -291,8 +298,8 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
           <Spinner />
         </div>
       ) : (
-          children
-       )} 
+        children
+      )}
     </OnboardContext.Provider>
   );
 };

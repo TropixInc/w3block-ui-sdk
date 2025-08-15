@@ -1,11 +1,15 @@
 import { useLocation } from 'react-use';
 
-import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
-import { usePixwayAPIURL } from './usePixwayAPIURL';
-
-import { ICompanyInfo } from '../interfaces/ICompanyInfo';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { getPublicAPI } from '../config/api';
+<<<<<<< HEAD
+import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
+import { ICompanyInfo } from '../interfaces/ICompanyInfo';
+import { getEnvVar } from '../utils/env';
+import { usePixwayAPIURL } from './usePixwayAPIURL';
+=======
+>>>>>>> aa296e7ea17392c8719d9405ce7b3374c582fc28
 
 export const useGetTenantInfoByHostname = () => {
   const { hostname: location } = useLocation();

@@ -1,5 +1,10 @@
+import {
+  UseQueryOptions,
+  QueryKey,
+  QueryFunction,
+  useQuery,
+} from '@tanstack/react-query';
 
-import { UseQueryOptions, QueryKey, QueryFunction, useQuery } from '@tanstack/react-query';
 import { useToken } from './useToken';
 
 export type QueryConfig<

@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { isAfter, parse } from 'date-fns';
 
+import { BaseButton } from '../../shared/components/Buttons';
 import { ModalBase } from '../../shared/components/ModalBase';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { ConfigTimeComponent } from './ConfigTimeComponent';
-import { BaseButton } from '../../shared/components/Buttons';
 
 interface TimeDTO {
   [key: string]: Array<{ start: string; end: string }>;

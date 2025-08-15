@@ -1,8 +1,7 @@
-
-
 import { useMutation } from '@tanstack/react-query';
 import { AssetEntityWithProviderUploadParamsDto } from '@w3block/sdk-id';
 import axios from 'axios';
+
 import { getEnvVar } from '../utils/env';
 
 interface UploadFileConfig {
@@ -62,11 +61,9 @@ interface UploadProps {
 
 export const useUploadFileToCloudinary = () => {
   const formData = new FormData();
-  const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+  const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   return useMutation(
-    [
-      `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,
-    ],
+    [`https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`],
     ({ file, config = {}, assets, saleOrderConfig }: UploadProps) => {
       if (saleOrderConfig && file) {
         formData.append(

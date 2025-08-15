@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
 import addMinutes from 'date-fns/addMinutes';
+
 import { Alert } from '../../shared/components/Alert';
 import { ModalBase } from '../../shared/components/ModalBase';
 import { WeblockButton } from '../../shared/components/WeblockButton';
@@ -10,13 +11,12 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../hooks/useVerifySignUp';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import useTranslation from '../../shared/hooks/useTranslation';
-
 
 interface SetCodeVerifyProps {
   isPostSignUp?: boolean;
@@ -92,7 +92,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             token: code,
           },
           {
-            onSuccess: (data: { data: { verified: any; }; }) => {
+            onSuccess: (data: { data: { verified: any } }) => {
               refetch();
               if (data?.data?.verified) {
                 if (query.callbackPath?.length) {

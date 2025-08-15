@@ -464,6 +464,8 @@ const _PassTemplate = ({
       }
     );
 
+  console.log(tokenId, "tokenId")
+
   if (
     isLoadingBenefit ||
     isLoadingBenefitsResponse ||
