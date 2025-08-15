@@ -15,10 +15,7 @@ export * from './providers/OnboardProvider';
 export * from './components/BaseInput';
 export * from './components/BaseSelect';
 export * from './components/Buttons';
-<<<<<<< HEAD
 export * from './components/BaseTable';
 export * from './components/GenericTable'
 export * from './interfaces/ConfigGenericTable'
 export * from './enums/W3blockAPI'
-=======
->>>>>>> aa296e7ea17392c8719d9405ce7b3374c582fc28
