@@ -53,7 +53,7 @@ const _CompleteSignUpTemplate = ({
   const [password, setPassword] = useState<string>();
   const { signOut, signIn } = usePixwayAuthentication();
   const { email, token, tenantId } = router.query;
-  const { mutate, isLoading, isSuccess, isError } = useChangePassword();
+  const { mutate, isPending, isSuccess, isError } = useChangePassword();
   const [step, setStep] = useState(() => {
     return token && getIsTokenExpired(token as string)
       ? Steps.TOKEN_EXPIRED
@@ -130,7 +130,7 @@ const _CompleteSignUpTemplate = ({
   return step === Steps.FORM ? (
     <SignUpForm
       email={email as string}
-      isLoading={isLoading}
+      isLoading={isPending}
       onSubmit={onSubmit}
       error={
         isError ? translate('auth>signUpError>genericErrorMessage') : undefined

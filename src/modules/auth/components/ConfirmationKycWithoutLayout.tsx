@@ -4,6 +4,7 @@ import { useInterval } from 'react-use';
 
 import { DataTypesEnum } from '@w3block/sdk-id';
 import _ from 'lodash';
+
 import { PRACTITIONER_DATA_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { Box } from '../../shared/components/Box';
 import { SelectorRead } from '../../shared/components/SmartInputs/SelectorRead';
@@ -12,16 +13,15 @@ import { InputDataDTO } from '../../shared/components/SmartInputsController';
 import { Spinner } from '../../shared/components/Spinner';
 import { WeblockButton } from '../../shared/components/WeblockButton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { useGetOrderByKyc } from '../../shared/hooks/useGetOrderByKyc';
 import { useGetStorageData } from '../../shared/hooks/useGetStorageData';
 import { useGetTenantContextBySlug } from '../../shared/hooks/useGetTenantContextBySlug';
 import { useGetTenantInputsBySlug } from '../../shared/hooks/useGetTenantInputsBySlug';
 import { useGetUsersDocuments } from '../../shared/hooks/useGetUsersDocuments';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import { useGetOrderByKyc } from '../../shared/hooks/useGetOrderByKyc';
 import useTranslation from '../../shared/hooks/useTranslation';
-
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 
 export const ConfirmationKycWithoutLayout = () => {
   const router = useRouterConnect();
@@ -39,7 +39,7 @@ export const ConfirmationKycWithoutLayout = () => {
     if (querySlug) return querySlug as string;
     else return 'signup';
   };
-  const { data: tenantInputs, isLoading: isLoadingKyc } =
+  const { data: tenantInputs, isFetching: isLoadingKyc } =
     useGetTenantInputsBySlug({
       slug: slug(),
     });
@@ -54,7 +54,9 @@ export const ConfirmationKycWithoutLayout = () => {
   const { data: context } = useGetTenantContextBySlug(slug());
 
   function getDocumentByInputId(inputId: string) {
-    return documents?.data.find((doc: { inputId: string; }) => doc.inputId === inputId);
+    return documents?.data.find(
+      (doc: { inputId: string }) => doc.inputId === inputId
+    );
   }
 
   const [awaitProduct, setAwaitProduct] = useState(false);
@@ -72,7 +74,7 @@ export const ConfirmationKycWithoutLayout = () => {
         getStatus(
           { kycUserContextId: router?.query?.userContextId as string },
           {
-            onSuccess: (data) => {
+            onSuccess: (data: { data: { id: any } }) => {
               clearInterval(interval);
               if (data?.data?.id) {
                 router.pushConnect(`/checkout/pay/${data?.data?.id}`);
@@ -89,7 +91,7 @@ export const ConfirmationKycWithoutLayout = () => {
   const inputsFiltered = useMemo(
     () =>
       tenantInputs?.data?.filter(
-        (input: { type: DataTypesEnum; data: any; }) =>
+        (input: { type: DataTypesEnum; data: any }) =>
           !(
             input.type === DataTypesEnum.Checkbox &&
             (input?.data as any)?.hidden

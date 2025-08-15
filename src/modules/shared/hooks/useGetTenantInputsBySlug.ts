@@ -22,6 +22,6 @@ export const useGetTenantInputsBySlug = ({
 
       return sdk.api.tenantInput.listBySlugContext(tenantId as string, slug);
     },
-    { enabled: Boolean(tenantId && slug) }
+    { enabled: Boolean(tenantId && slug), refetchOnWindowFocus: false }
   );
 };

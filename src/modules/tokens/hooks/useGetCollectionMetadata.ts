@@ -36,7 +36,7 @@ export const useGetCollectionMetadata = ({
     new URLSearchParams(defaultQuery as Record<string, string>).toString();
 
   return useQuery(
-    [PixwayAPIRoutes.METADATA_BY_COLLECTION_ID, companyId, id],
+    [PixwayAPIRoutes.METADATA_BY_COLLECTION_ID, companyId, id, query?.walletAddresses],
     async () => {
       try {
         const response = await axios.get<Response>(

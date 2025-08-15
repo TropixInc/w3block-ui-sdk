@@ -53,6 +53,7 @@ export const useProfile = (): any => {
           router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE);
         }
       },
+      refetchOnWindowFocus: false,
     }
   );
 };

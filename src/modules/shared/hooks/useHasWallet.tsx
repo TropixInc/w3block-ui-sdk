@@ -16,7 +16,7 @@ export const useHasWallet = ({
   onlyWithSession = false,
 }: useHasWalletProps) => {
   const { data: session } = usePixwaySession();
-  const { data: profile, isLoading, isSuccess } = useProfile();
+  const { data: profile, isFetching, isSuccess } = useProfile();
   const router = useRouterConnect();
   const theme = useThemeConfig();
   const skipWallet =
@@ -26,7 +26,7 @@ export const useHasWallet = ({
       if (onlyWithSession) {
         if (
           !profile?.data.mainWallet &&
-          !isLoading &&
+          !isFetching &&
           router.isReady &&
           isSuccess &&
           session
@@ -38,7 +38,7 @@ export const useHasWallet = ({
       } else {
         if (
           !profile?.data.mainWallet &&
-          !isLoading &&
+          !isFetching &&
           router.isReady &&
           isSuccess
         ) {
@@ -50,6 +50,6 @@ export const useHasWallet = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.isReady, redirectRoute, isLoading, isSuccess, session]);
+  }, [router.isReady, redirectRoute, isFetching, isSuccess, session]);
   return;
 };

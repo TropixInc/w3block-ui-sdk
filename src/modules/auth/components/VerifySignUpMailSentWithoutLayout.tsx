@@ -5,7 +5,7 @@ import { useLocalStorage } from 'react-use';
 import addMinutes from 'date-fns/addMinutes';
 import isAfter from 'date-fns/isAfter';
 
-import MailSent from '../assets/icons/mailSent.svg';
+import MailSent from '../../shared/assets/icons/mailSent.svg';
 import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -29,11 +29,11 @@ export const VerifySignUpMailSentWithoutLayout = ({
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
   const { connectProxyPass, appBaseUrl } = useCompanyConfig();
-  const { mutate, isSuccess, isLoading, reset } = useRequestPasswordChange();
+  const { mutate, isSuccess, isPending, reset } = useRequestPasswordChange();
   const {
     mutate: emailMutate,
     isSuccess: emailSuccess,
-    isLoading: emailLoading,
+    isPending: emailLoading,
     reset: emailReset,
   } = useRequestConfirmationMail();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
@@ -97,7 +97,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
       <div className="pw-mb-[23px]">
         <div className="pw-flex pw-justify-center">
           <button
-            disabled={isActive || isLoading || emailLoading}
+            disabled={isActive || isPending || emailLoading}
             className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
             onClick={handleClick}
           >
@@ -136,7 +136,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
         >
           O link expira em 15 minutos
           <button
-            disabled={isActive || isLoading || emailLoading}
+            disabled={isActive || isPending || emailLoading}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={handleClick}
           >

@@ -92,6 +92,8 @@ export const usePublicTokenData = ({
               .replace('{chainId}', chainId ?? '');
 
         const response = await axios.get<PublicTokenPageDTO>(endpoint);
+        console.log(endpoint, 'enpoint')
+        console.log(response, "response")
         return response;
       } catch (err) {
         console.error('Erro ao buscar dados públicos do token:', err);
@@ -108,6 +110,7 @@ export const usePublicTokenData = ({
         tokenId != '' &&
         chainId != '' &&
         enabled,
+      refetchOnWindowFocus: false,
     }
   );
 };

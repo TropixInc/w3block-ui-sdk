@@ -52,7 +52,7 @@ export const TransferModal = ({
   const [paymentAmount, setPaymentAmount] = useState('');
   const [walletToTransfer, setWalletToTransfer] = useState('');
   const [step, setStep] = useState(1);
-  const { mutate, isLoading } = useTransfer();
+  const { mutate, isPending } = useTransfer();
   const { data: theme } = useGetTheme(!isOpen);
   const transferInfo = theme?.data?.configurations?.contentData?.walletTransfer;
   const [{ data }] = usePaginatedGenericApiGet({
@@ -147,7 +147,7 @@ export const TransferModal = ({
             </div>
           ) : (
             <div className="pw-flex pw-flex-col pw-gap-6 pw-items-center pw-mt-3">
-              {isLoading ? (
+              {isPending ? (
                 <Spinner />
               ) : (
                 <>
@@ -172,7 +172,7 @@ export const TransferModal = ({
           )}
           <div className="pw-flex pw-justify-center pw-gap-5 pw-mt-8">
             <BaseButton
-              disabled={isLoading}
+              disabled={isPending}
               onClick={() => {
                 if (step === 1) onClose();
                 else setStep(1);
@@ -183,7 +183,7 @@ export const TransferModal = ({
             </BaseButton>
             <BaseButton
               disabled={
-                paymentAmount === '' || walletToTransfer === '' || isLoading
+                paymentAmount === '' || walletToTransfer === '' || isPending
               }
               onClick={() => {
                 if (step === 1) {

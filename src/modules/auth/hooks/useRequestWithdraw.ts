@@ -40,7 +40,7 @@ export const useGetSpecificWithdrawAdmin = (id: string) => {
           companyId
         ).replace('{id}', id)
       ),
-    { enabled: !!id }
+    { enabled: !!id, refetchOnWindowFocus: false }
   );
 };
 
@@ -57,7 +57,7 @@ export const useGetSpecificWithdraw = (id: string) => {
           companyId
         ).replace('{id}', id)
       ),
-    { enabled: !!id }
+    { enabled: !!id, refetchOnWindowFocus: false }
   );
 };
 

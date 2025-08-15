@@ -2,13 +2,12 @@
 import { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
+import { isAfter, parse } from 'date-fns';
 
-import { ModalBase } from '../../shared/components/ModalBase';
-import { ConfigTimeComponent } from './ConfigTimeComponent';
 import { BaseButton } from '../../shared/components/Buttons';
+import { ModalBase } from '../../shared/components/ModalBase';
 import useTranslation from '../../shared/hooks/useTranslation';
-
-
+import { ConfigTimeComponent } from './ConfigTimeComponent';
 
 interface TimeDTO {
   [key: string]: Array<{ start: string; end: string }>;
@@ -27,6 +26,12 @@ interface ConfigTimeModalProps {
   onChangeTimeAdvanced: (value: TimeDTO) => void;
 }
 
+const isEndAfterStart = (start: string, end: string): boolean => {
+  const startDate = parse(start, 'HH:mm', new Date());
+  const endDate = parse(end, 'HH:mm', new Date());
+  return isAfter(endDate, startDate);
+};
+
 export const ConfigTimeModal = ({
   isOpen,
   onClose,
@@ -36,6 +41,8 @@ export const ConfigTimeModal = ({
 }: ConfigTimeModalProps) => {
   const [translate] = useTranslation();
   const [activeTab, setActiveTab] = useState('mon');
+  const [isValidTimes, setIsValidTimes] = useState(false);
+  const [invalidDays, setInvalidDays] = useState<any>();
   const [internalTimeConfig, setInternalTimeConfig] = useState<TimeDTO>({
     mon: [{ end: '', start: '' }],
     tue: [{ end: '', start: '' }],
@@ -92,8 +99,37 @@ export const ConfigTimeModal = ({
   };
 
   useEffect(() => {
-    setInternalTimeConfig(advancedTimeConfig);
+    if (advancedTimeConfig) {
+      setInternalTimeConfig(advancedTimeConfig);
+    }
   }, [advancedTimeConfig]);
+
+  useEffect(() => {
+    const feedback: any = {};
+    let allValid = true;
+
+    Object.entries(internalTimeConfig).forEach(([day, ranges]) => {
+      const hasFilledRanges = ranges.some(({ start, end }) => start && end);
+
+      if (!hasFilledRanges) {
+        return; // Skip day without any complete time range
+      }
+
+      const hasInvalidRange = ranges.some(({ start, end }) => {
+        if (!start || !end) return false;
+        return !isEndAfterStart(start, end);
+      });
+
+      feedback[day as keyof TimeDTO] = hasInvalidRange ? 'error' : 'valid';
+
+      if (hasInvalidRange) {
+        allValid = false;
+      }
+    });
+
+    setInvalidDays(feedback);
+    setIsValidTimes(allValid);
+  }, [internalTimeConfig]);
 
   return (
     <ModalBase
@@ -115,6 +151,7 @@ export const ConfigTimeModal = ({
           onChangeActiveTab={setActiveTab}
           panelItems={internalTimeConfig?.[activeTab ?? '']}
           onChangePanelItems={handleChangePanelItems}
+          invalidDays={invalidDays}
         />
         <div className="pw-mt-8 pw-w-full pw-flex pw-gap-x-3 pw-px-4">
           <BaseButton
@@ -125,6 +162,7 @@ export const ConfigTimeModal = ({
             {translate('components>cancelButton>cancel')}
           </BaseButton>
           <BaseButton
+            disabled={!isValidTimes}
             onClick={() => onConfirm()}
             className="pw-h-10 pw-w-full pw-flex pw-items-center pw-justify-center text-sm"
           >

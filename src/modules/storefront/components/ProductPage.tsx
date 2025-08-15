@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useClickAway,
   useDebounce,
@@ -8,11 +8,12 @@ import {
   useLocalStorage,
 } from 'react-use';
 
+import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
 
 import {
   GIFT_DATA_INFO_KEY,
@@ -26,27 +27,21 @@ import {
 } from '../../checkout/interface/interface';
 // eslint-disable-next-line import-helpers/order-imports
 import { Alert } from '../../shared/components/Alert';
-
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useCreateIntegrationToken } from '../../shared/hooks/useCreateIntegrationToken';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { useGetTenantInfoById } from '../../shared/hooks/useGetTenantInfoById';
 import { useGetUserIntegrations } from '../../shared/hooks/useGetUserIntegrations';
 import useRouter from '../../shared/hooks/useRouter';
-
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
-
-
+import useTranslation from '../../shared/hooks/useTranslation';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { generateRandomUUID } from '../../shared/utils/generateRamdomUUID';
 import { useGetCollectionMetadata } from '../../tokens/hooks/useGetCollectionMetadata';
-
 import { ProductVariants } from './ProductVariants';
 import { SendGiftForm } from './SendGiftForm';
-import { Pagination } from 'swiper/modules';
 import { CheckboxAlt } from '../../shared/components/CheckboxAlt';
 import { formatterCurrency, CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
 import { ImageSDK } from '../../shared/components/ImageSDK';
@@ -62,10 +57,6 @@ import { useTrack } from '../hooks/useTrack';
 import { CurrencyResponse } from '../interfaces/Product';
 import { ProductPageData } from '../interfaces/Theme';
 import { useThemeConfig } from '../hooks/useThemeConfig';
-import useTranslation from '../../shared/hooks/useTranslation';
-
-
-
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -145,7 +136,7 @@ export const ProductPage = ({
     data: product,
     isSuccess,
     refetch,
-    isLoading,
+    isFetching,
     error: errorProduct,
   } = useGetProductBySlug(params?.[params.length - 1]);
   const isErc20 = product?.type === 'erc20';
@@ -425,50 +416,58 @@ export const ProductPage = ({
   const { companyId } = useCompanyConfig();
   const { getOrderPreview } = useCheckout();
   const [isLoadingValue, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (
+      product?.minPurchaseAmount &&
+      product?.stockAmount &&
+      parseFloat(product?.minPurchaseAmount) <= product?.stockAmount
+    ) {
+      setQuantity(parseFloat(product?.minPurchaseAmount));
+    }
+  }, [product?.minPurchaseAmount, product?.stockAmount]);
+
   const getOrderPreviewFn = () => {
     if (product?.id && currencyId) {
-      setIsLoading(true);
-      getOrderPreview.mutate(
-        {
-          productIds: [
-            ...Array(isErc20 ? 1 : quantity).fill({
-              productId: product.id,
-              quantity: isErc20 ? quantity ?? 1 : 1,
-              selectBestPrice: product?.type === 'erc20' ? true : undefined,
-              variantIds: variants
-                ? Object.values(variants).map((value) => {
-                    if ((value as any).productId === product.id)
-                      return (value as any).id;
-                  })
-                : [],
-            }),
-          ],
-          currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
-          passShareCodeData: giftData,
-          payments: [
-            {
-              currencyId:
-                currencyId?.id ?? (currencyId as unknown as string) ?? '',
-              amountType: 'percentage',
-              amount: '100',
-            },
-          ],
-          companyId,
-          couponCode:
-            utms.utm_campaign &&
-            utms?.expires &&
-            new Date().getTime() < utms?.expires
-              ? utms.utm_campaign
-              : '',
-        },
-        {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onSuccess: (data: OrderPreviewResponse) => {
-            setIsLoading(false);
-            setOrderPreview(data);
+      const order = {
+        productIds: [
+          ...Array(isErc20 ? 1 : quantity).fill({
+            productId: product.id,
+            quantity: isErc20 ? quantity ?? 1 : 1,
+            selectBestPrice: product?.type === 'erc20' ? true : undefined,
+            variantIds: variants
+              ? Object.values(variants).map((value) => {
+                  if ((value as any).productId === product.id)
+                    return (value as any).id;
+                })
+              : [],
+          }),
+        ],
+        currencyId: currencyId.id ?? (currencyId as unknown as string) ?? '',
+        passShareCodeData: giftData,
+        payments: [
+          {
+            currencyId:
+              currencyId?.id ?? (currencyId as unknown as string) ?? '',
+            amountType: 'percentage',
+            amount: '100',
           },
-        }
-      );
+        ],
+        companyId,
+        couponCode:
+          utms.utm_campaign &&
+          utms?.expires &&
+          new Date().getTime() < utms?.expires
+            ? utms.utm_campaign
+            : '',
+      };
+      setIsLoading(true);
+      getOrderPreview.mutate(order, {
+        onSuccess: (data: OrderPreviewResponse) => {
+          setIsLoading(false);
+          setOrderPreview(data);
+        },
+      });
     }
   };
 
@@ -629,18 +628,55 @@ export const ProductPage = ({
     }
   };
 
+  const reachStock = useMemo(() => {
+    return (
+      product?.canPurchaseAmount &&
+      product?.stockAmount &&
+      quantity + (batchSize ?? 0) > product?.canPurchaseAmount &&
+      quantity + (batchSize ?? 0) > product?.stockAmount
+    );
+  }, [product?.canPurchaseAmount, product?.stockAmount, quantity, batchSize]);
+
+  const notEnoughStock = useMemo(() => {
+    if (
+      product?.minPurchaseAmount === null ||
+      (product?.stockAmount &&
+        parseFloat(product?.minPurchaseAmount ?? '0') > product?.stockAmount)
+    )
+      return true;
+    else return false;
+  }, [product?.minPurchaseAmount]);
+
+  const minCartItemPriceBlock = useMemo(() => {
+    return (
+      !!orderPreview?.cartPrice &&
+      !!product?.settings?.minCartItemPrice &&
+      parseFloat(orderPreview?.cartPrice ?? '') <
+        product?.settings?.minCartItemPrice
+    );
+  }, [orderPreview?.cartPrice, product?.settings?.minCartItemPrice]);
+
   const soldOut = useMemo(() => {
     if (isErc20 && batchSize) {
       return (
         product?.stockAmount === 0 ||
         product?.canPurchaseAmount === 0 ||
         (product?.stockAmount && product?.stockAmount < batchSize) ||
-        (product?.canPurchaseAmount && product?.canPurchaseAmount < batchSize)
+        (product?.canPurchaseAmount &&
+          product?.canPurchaseAmount < batchSize) ||
+        notEnoughStock
       );
     } else {
       return product?.stockAmount === 0 || product?.canPurchaseAmount === 0;
     }
-  }, [isErc20, batchSize, product?.stockAmount, product?.canPurchaseAmount]);
+  }, [
+    isErc20,
+    batchSize,
+    product?.stockAmount,
+    product?.canPurchaseAmount,
+    reachStock,
+    minCartItemPriceBlock,
+  ]);
 
   return errorProduct ? (
     <ErrorBox customError={errorProduct} />
@@ -698,7 +734,7 @@ export const ProductPage = ({
         </div>
       </ModalBase>
       <ModalBase isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        {isLoading ? (
+        {isFetching ? (
           <Spinner />
         ) : (
           <>
@@ -1008,16 +1044,27 @@ export const ProductPage = ({
                         <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">
                           <p
                             onClick={() => {
-                              if (isErc20 && batchSize) {
-                                if (quantity > batchSize) {
-                                  setQuantity(quantity - batchSize);
+                              if (
+                                product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount)
+                              ) {
+                                // empty
+                              } else {
+                                if (isErc20 && batchSize) {
+                                  if (quantity > batchSize) {
+                                    setQuantity(quantity - batchSize);
+                                  }
+                                } else if (quantity > 1) {
+                                  setQuantity(quantity - 1);
                                 }
-                              } else if (quantity > 1) {
-                                setQuantity(quantity - 1);
                               }
                             }}
                             className={`pw-text-xs pw-flex pw-items-center pw-justify-center pw-border pw-rounded-sm pw-w-[14px] pw-h-[14px] ${
-                              quantity === batchSize
+                              quantity === batchSize ||
+                              (product?.minPurchaseAmount &&
+                                quantity ===
+                                  parseFloat(product?.minPurchaseAmount))
                                 ? 'pw-text-[rgba(0,0,0,0.3)] !pw-border-[rgba(0,0,0,0.3)] !pw-cursor-default'
                                 : ''
                             } ${
@@ -1032,6 +1079,7 @@ export const ProductPage = ({
                             <input
                               type="number"
                               id="quantityValue"
+                              disabled
                               value={quantity}
                               onChange={() => {
                                 const inputValue = parseFloat(
@@ -1100,13 +1148,20 @@ export const ProductPage = ({
                             +
                           </p>
                         </div>
-                        {product?.canPurchaseAmount &&
-                        quantity + (batchSize ?? 0) >
-                          product?.canPurchaseAmount &&
-                        quantity + (batchSize ?? 0) > product?.stockAmount ? (
+                        {reachStock ? (
                           <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
                             {translate('pages>product>reachStock', {
                               product: product?.name,
+                            })}
+                          </p>
+                        ) : null}
+                        {product?.settings?.minCartItemPrice ? (
+                          <p className="pw-text-[12px] pw-text-gray-500 pw-mt-1">
+                            {translate('pages>productPage>minValue', {
+                              value:
+                                (product?.prices?.[0]?.currency?.symbol ??
+                                  orderPreview?.currency?.symbol) +
+                                product?.settings?.minCartItemPrice.toFixed(2),
                             })}
                           </p>
                         ) : null}
@@ -1286,6 +1341,7 @@ export const ProductPage = ({
                         <button
                           disabled={
                             soldOut ||
+                            minCartItemPriceBlock ||
                             !termsChecked ||
                             (isSendGift && !giftData && isPossibleSend)
                           }
@@ -1295,6 +1351,7 @@ export const ProductPage = ({
                             borderColor:
                               product &&
                               (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#DCDCDC'
@@ -1304,6 +1361,7 @@ export const ProductPage = ({
                             color:
                               product &&
                               (soldOut ||
+                                minCartItemPriceBlock ||
                                 !termsChecked ||
                                 (isSendGift && !giftData && isPossibleSend))
                                 ? '#777E8F'
@@ -1317,19 +1375,23 @@ export const ProductPage = ({
                       <button
                         disabled={
                           soldOut ||
+                          minCartItemPriceBlock ||
                           !termsChecked ||
-                          (isSendGift && !giftData && isPossibleSend)
+                          (isSendGift && !giftData && isPossibleSend) ||
+                          minCartItemPriceBlock
                         }
                         onClick={handleBuyClick}
                         style={{
                           backgroundColor:
-                            product && (soldOut || !termsChecked)
+                            product &&
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#DCDCDC'
                               : buttonColor
                               ? buttonColor
                               : '#0050FF',
                           color:
-                            product && (soldOut || !termsChecked)
+                            product &&
+                            (soldOut || minCartItemPriceBlock || !termsChecked)
                               ? '#777E8F'
                               : buttonTextColor ?? 'white',
                         }}

@@ -1,9 +1,8 @@
-
-import useTranslation from "../../hooks/useTranslation";
-import CityAutoComplete from "./CityAutoComplete";
-import InputCompletedAddress from "./InputCompletedAddress";
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import useTranslation from '../../hooks/useTranslation';
+import CityAutoComplete from './CityAutoComplete';
+import InputCompletedAddress from './InputCompletedAddress';
+
 interface PlacesProps {
   label: string;
   name: string;
@@ -33,7 +32,7 @@ const InputPlaces = ({
         <InputCompletedAddress
           name={name}
           apiValue={docValue}
-          type={'postal_code'}
+          type={['postal_code', 'route']}
           inputLabel={label}
           inputPlaceholder={
             placeholder ?? translate('shared>inputPlaces>inputPlaceholder')
@@ -47,7 +46,7 @@ const InputPlaces = ({
           country={placeCountry ?? ''}
           name={name}
           apiValue={docValue?.placeId}
-          type={placeType ?? 'food'}
+          type={placeType ? [placeType] : ['food']}
           inputLabel={label}
           inputPlaceholder={
             placeholder ?? translate('shared>inputPlaces>inputPlaceholder')

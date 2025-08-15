@@ -399,7 +399,7 @@ export const CheckoutPayment = () => {
                 appBaseUrl +
                 PixwayAppRoutes.MY_TOKENS +
                 '?' +
-                query.split('?')[0],
+                query?.split('?')[0],
               payments: [
                 {
                   currencyId: orderInfo.currencyId,
@@ -562,7 +562,7 @@ export const CheckoutPayment = () => {
                 appBaseUrl +
                 PixwayAppRoutes.MY_TOKENS +
                 '?' +
-                query.split('?')[0],
+                query?.split('?')[0],
               couponCode: orderInfo.couponCode,
               passShareCodeData:
                 orderInfo?.products?.[0]?.settings?.passShareCodeConfig

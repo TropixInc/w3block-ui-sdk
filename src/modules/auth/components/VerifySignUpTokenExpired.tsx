@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import classNames from 'classnames';
 
 
-import MailError from '../assets/icons/mailError.svg';
+import MailError from '../../shared/assets/icons/mailError.svg';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlahes';
@@ -30,7 +30,7 @@ export const VerifySignUpTokenExpired = ({
   isPostSignUp = false,
 }: Props) => {
   const { logoUrl, connectProxyPass, appBaseUrl } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess, isError } =
+  const { mutate, isPending, isSuccess, isError } =
     useRequestConfirmationMail();
   const [translate] = useTranslation();
 
@@ -76,7 +76,7 @@ export const VerifySignUpTokenExpired = ({
           >
             <button
               onClick={() => mutate({ email, tenantId, callbackPath })}
-              disabled={isLoading}
+              disabled={isPending}
               className="pw-mb-[29px] pw-font-semibold pw-text-sm pw-leading-[17px] pw-text-brand-primary pw-underline"
             >
               Clique aqui

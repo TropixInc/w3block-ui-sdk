@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
+import {
+  useGetUserResales,
+  UserResaleResponse,
+} from '../../hooks/useGetUserResales';
+import useTranslation from '../../hooks/useTranslation';
 import { Alert } from '../Alert';
 import { Spinner } from '../Spinner';
 import { MySalesCardComponent, OrderStatusEnum } from './MySalesCardComponent';
-import { useGetUserResales } from '../../hooks/useGetUserResales';
-import useTranslation from '../../hooks/useTranslation';
 
 export const MySalesListComponent = () => {
-  const { data, isLoading } = useGetUserResales();
+  const { data, isFetching } = useGetUserResales();
   const [translate] = useTranslation();
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className="pw-flex pw-justify-center pw-items-center pw-mt-7 sm:pw-px-4 pw-px-0">
         <div className="pw-gap-6 pw-flex pw-flex-col">
@@ -23,7 +25,7 @@ export const MySalesListComponent = () => {
     return (
       <div className="sm:pw-px-4 pw-px-0">
         <div className="pw-gap-6 pw-flex pw-flex-col">
-          {data?.data?.items?.map((res) => {
+          {(data?.data as UserResaleResponse)?.items?.map((res) => {
             return (
               <MySalesCardComponent
                 key={res?.id}

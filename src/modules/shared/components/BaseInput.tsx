@@ -4,17 +4,15 @@ import {
   ReactNode,
   SetStateAction,
   useState,
-} from "react";
+} from 'react';
+import { IMaskInput } from 'react-imask';
 
-import { InputMask } from '@react-input/mask';
+import classNames from 'classnames';
 
-import classNames from "classnames";
-
-import PasswordIconShow from "../assets/icons/eyeIcon.svg";
-import PasswordIconHide from "../assets/icons/eyeIconCrossed.svg";
-import SearchIcon from "../assets/icons/searchOutlined.svg";
-import { BaseButton } from "./Buttons";
-
+import PasswordIconShow from '../assets/icons/eyeIcon.svg';
+import PasswordIconHide from '../assets/icons/eyeIconCrossed.svg';
+import SearchIcon from '../assets/icons/searchOutlined.svg';
+import { BaseButton } from './Buttons';
 
 interface BaseInputTheme {
   default?: string;
@@ -33,7 +31,7 @@ export interface BaseInputProps
   disabled?: boolean;
   theme?: BaseInputTheme;
   disableClasses?: boolean;
-  variant?: "small" | "medium" | "large";
+  variant?: 'small' | 'medium' | 'large';
   button?: {
     text: string;
     onClick(): void;
@@ -41,36 +39,37 @@ export interface BaseInputProps
   searchIcon?: boolean;
   onBlur?: () => void;
   mask?: string | Array<string | RegExp>;
-  maskChar?: string | null | undefined;
+  radix?: string | null | undefined;
   maskPlaceholder?: string | null | undefined;
   alwaysShowMask?: boolean | undefined;
   readonly?: boolean;
   textarea?: boolean;
   fullWidth?: boolean;
   textareaHeight?: number;
+  onChangeValueInput?: (value: string) => void;
 }
 interface BaseInputLayoutProps extends Partial<BaseInputProps> {
   children?: ReactNode;
 }
 
 const defaultTheme: BaseInputTheme = {
-  invalid: "!pw-outline-[#DC3545]",
-  valid: "!pw-outline-[#198754]",
-  disabled: "pw-bg-[#E9ECEF] pw-outline-[#CED4DA]",
-  default: "pw-outline-[#CED4DA]",
-  small: "pw-h-[24px] pw-text-[14px]",
-  medium: "pw-h-[32px] pw-text-[16px]",
-  large: "pw-h-[48px] pw-text-[20px]",
+  invalid: '!pw-outline-[#DC3545]',
+  valid: '!pw-outline-[#198754]',
+  disabled: 'pw-bg-[#E9ECEF] pw-outline-[#CED4DA]',
+  default: 'pw-outline-[#CED4DA]',
+  small: 'pw-h-[24px] pw-text-[14px]',
+  medium: 'pw-h-[32px] pw-text-[16px]',
+  large: 'pw-h-[48px] pw-text-[20px]',
 };
 
 export const BaseInputLayout = ({
-  className = "",
+  className = '',
   valid = false,
   invalid = false,
   disabled = false,
   theme = {},
   disableClasses,
-  variant = "medium",
+  variant = 'medium',
   children,
   readonly,
   textarea,
@@ -82,33 +81,33 @@ export const BaseInputLayout = ({
         disableClasses
           ? classNames(className)
           : classNames(
-              "pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white pw-text-black",
-              fullWidth ? "pw-w-full" : "",
-              theme.default ?? defaultTheme.default ?? "",
-              valid ? theme.valid ?? defaultTheme.valid ?? "" : "",
+              'pw-rounded-lg pw-transition-all pw-duration-200 pw-p-[7px_12px_6px_12px] pw-flex pw-items-center pw-justify-between relative pw-bg-white pw-text-black',
+              fullWidth ? 'pw-w-full' : '',
+              theme.default ?? defaultTheme.default ?? '',
+              valid ? theme.valid ?? defaultTheme.valid ?? '' : '',
               className,
               invalid
-                ? theme.invalid ?? defaultTheme.invalid ?? ""
-                : "pw-outline-[#94B8ED] pw-outline-1",
-              disabled ? theme.disabled ?? defaultTheme.disabled : "",
-              variant === "large"
+                ? theme.invalid ?? defaultTheme.invalid ?? ''
+                : 'pw-outline-[#94B8ED] pw-outline-1',
+              disabled ? theme.disabled ?? defaultTheme.disabled : '',
+              variant === 'large'
                 ? textarea
-                  ? "pw-text-[14px]"
+                  ? 'pw-text-[14px]'
                   : defaultTheme.large
-                : "",
-              variant === "medium"
+                : '',
+              variant === 'medium'
                 ? textarea
-                  ? "pw-text-[16px]"
+                  ? 'pw-text-[16px]'
                   : defaultTheme.medium
-                : "",
-              variant === "small"
+                : '',
+              variant === 'small'
                 ? textarea
-                  ? "pw-text-[20px]"
+                  ? 'pw-text-[20px]'
                   : defaultTheme.small
-                : "",
+                : '',
               readonly
-                ? "!pw-outline-none focus:!pw-outline-none"
-                : "!pw-outline focus:!pw-outline-[#9EC5FE]"
+                ? '!pw-outline-none focus:!pw-outline-none'
+                : '!pw-outline focus:!pw-outline-[#9EC5FE]'
             )
       }
     >
@@ -140,24 +139,26 @@ const RenderRevealPasswordButton = ({
 };
 
 export const BaseInput = ({
-  className = "",
+  className = '',
   valid = false,
   invalid = false,
   disabled = false,
   theme = {},
   disableClasses,
-  variant = "medium",
+  variant = 'medium',
   button,
   searchIcon,
   mask,
-  type = "text",
+  type = 'text',
   readonly = false,
   textarea,
   fullWidth,
   textareaHeight,
+  onChangeValueInput,
   ...props
 }: BaseInputProps) => {
   const [isShowingPassword, setIsShowingPassword] = useState(false);
+
   return (
     <BaseInputLayout
       className={className}
@@ -176,10 +177,16 @@ export const BaseInput = ({
           <SearchIcon className="pw-stroke-black pw-w-5 pw-pb-[2px]" />
         ) : null}
         {mask ? (
-          <InputMask
+          <IMaskInput
             className={`pw-w-full pw-h-full focus:pw-outline-none pw-flex`}
             mask={mask as string}
-            {...props}
+            value={props?.value?.toString()}
+            onAccept={(v) => onChangeValueInput && onChangeValueInput(v)}
+            {...Object.fromEntries(
+              Object.entries(props).filter(
+                ([key]) => key !== 'max' && key !== 'min'
+              )
+            )}
           />
         ) : textarea ? (
           <textarea
@@ -197,13 +204,13 @@ export const BaseInput = ({
           <input
             className="pw-w-full pw-flex pw-h-full focus:pw-outline-none pw-outline-none"
             type={
-              type === "password" ? (!isShowingPassword ? type : "text") : type
+              type === 'password' ? (!isShowingPassword ? type : 'text') : type
             }
             {...props}
           />
         )}
       </div>
-      {type === "password" ? (
+      {type === 'password' ? (
         <RenderRevealPasswordButton
           isShowingPassword={isShowingPassword}
           setIsShowingPassword={setIsShowingPassword}

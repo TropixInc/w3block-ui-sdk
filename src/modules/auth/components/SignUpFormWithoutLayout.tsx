@@ -73,7 +73,7 @@ export const SignUpFormWithoutLayout = ({
 
   const {
     mutate,
-    isLoading: signUpLoading,
+    isPending: signUpLoading,
     error: signUpError,
     isSuccess,
   } = useSignUp();

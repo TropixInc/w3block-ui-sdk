@@ -6,8 +6,9 @@ import { useRouterConnect } from './useRouterConnect';
 export const useQuery = () => {
   const router = useRouterConnect();
   const [query, setQuery] = useState('');
+  const queryString = new URLSearchParams(router?.query).toString();
   useEffect(() => {
-    setQuery(router.asPath.split('?')[1]);
+    setQuery(queryString);
   }, [router]);
   return query;
 };

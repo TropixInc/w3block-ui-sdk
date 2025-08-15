@@ -31,7 +31,7 @@ const _SharedOrder = ({
   const [isCopied, setIsCopied] = useState(false);
   const {
     data: pass,
-    isLoading,
+    isFetching,
     refetch,
     error,
   } = useGetTokenSharedCode(
@@ -53,7 +53,7 @@ const _SharedOrder = ({
     if (type === 1) {
       return (
         <div className="pw-flex pw-flex-col pw-items-center">
-          {isLoading ? (
+          {isFetching ? (
             <div className="pw-w-full pw-h-full pw-flex pw-flex-col pw-my-5 pw-gap-3 pw-justify-center pw-items-center">
               <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
                 {translate('pass>sharedOrder>waitLoadCode')}
@@ -107,7 +107,7 @@ const _SharedOrder = ({
             {translate('pass>sharedOrder>QRCodeUsage')}
           </p>
           <div className="pw-w-full pw-mt-5 pw-flex pw-flex-col pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[20px]">
-            {isLoading ? (
+            {isFetching ? (
               <div className="pw-w-full pw-h-full pw-flex pw-flex-col pw-my-5 pw-gap-3 pw-justify-center pw-items-center">
                 {!selfBuy ? (
                   <p className="pw-text-base pw-font-semibold pw-text-center pw-text-black">
@@ -134,7 +134,7 @@ const _SharedOrder = ({
                 isRenderSecretCode={false}
               />
             )}
-            {isLoading ? null : (
+            {isFetching ? null : (
               <>
                 {initialStep === 2 ? null : (
                   <div>

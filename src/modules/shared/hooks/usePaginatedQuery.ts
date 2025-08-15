@@ -80,8 +80,8 @@ export const usePaginatedQuery = <QueryData>(
         return 1;
       }
     }
-    if (router.query.page) {
-      return Number(router.query.page) > 0 ? Number(router.query.page) : 1;
+    if (router?.query?.page) {
+      return Number(router?.query?.page) > 0 ? Number(router?.query?.page) : 1;
     }
 
     return initialPage ?? 1;
@@ -101,15 +101,17 @@ export const usePaginatedQuery = <QueryData>(
   useEffect(() => {
     if (!disableUrl) {
       const newQuery = {
-        ...router.query,
+        ...router?.query,
         page,
       };
-      if (router.query.page) {
+      if (router?.query?.page) {
         router.push({
+          pathname: router.pathname,
           query: newQuery,
         });
       } else {
         router.replace({
+          pathname: router.pathname,
           query: newQuery,
         });
       }
@@ -120,11 +122,11 @@ export const usePaginatedQuery = <QueryData>(
 
   useEffect(() => {
     if (
-      router.query.page &&
-      Number(router.query.page) !== page &&
+      router?.query?.page &&
+      Number(router?.query?.page) !== page &&
       !disableUrl
     ) {
-      setPage(Number(router.query.page));
+      setPage(Number(router?.query?.page));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
@@ -147,8 +149,9 @@ export const usePaginatedQuery = <QueryData>(
 
             if (page && page > inputMap(data)?.totalPages && !disableUrl) {
               router.replace({
+                pathname: router.pathname,
                 query: {
-                  ...router.query,
+                  ...router?.query,
                   page: 1,
                 },
               });
@@ -171,6 +174,7 @@ export const usePaginatedQuery = <QueryData>(
 
             if (page && page > inputMap(data)?.totalPages && !disableUrl) {
               router.replace({
+                pathname: router.pathname,
                 query: {
                   ...router.query,
                   page: 1,

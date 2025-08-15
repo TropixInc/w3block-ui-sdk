@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../../shared/enums/W3blockAPI";
-import { useAxios } from "../../shared/hooks/useAxios";
-import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
-import { usePixwaySession } from "../../shared/hooks/usePixwaySession";
-import { handleNetworkException } from "../../shared/utils/handleNetworkException";
+import { useQuery } from '@tanstack/react-query';
 
+import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useAxios } from '../../shared/hooks/useAxios';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 
 export type ProductPrice = {
   amount: string;
@@ -68,6 +68,7 @@ export interface Product {
       dataFields?: DataFields[];
     };
     disableImageDisplay?: boolean;
+    minCartItemPrice?: number;
   };
   canPurchase?: boolean;
   chainId?: number;
@@ -75,6 +76,7 @@ export interface Product {
   companyId?: string;
   contractAddress?: string;
   createdAt?: string;
+  minPurchaseAmount?: string | null;
   description: string;
   hasLink?: boolean;
   distributionType?: string;
@@ -147,9 +149,9 @@ const useGetProductBySlug = (slug?: string) => {
   const { status } = usePixwaySession();
   const { companyId } = useCompanyConfig();
 
-  return useQuery<Product>(
-    [PixwayAPIRoutes.PRODUCT_BY_SLUG, companyId as string],
-    async () => {
+  return useQuery<Product>({
+    queryKey: [PixwayAPIRoutes.PRODUCT_BY_SLUG, companyId as string],
+    queryFn: async () => {
       try {
         const response = await axios.get(
           PixwayAPIRoutes.PRODUCT_BY_SLUG.replace(
@@ -162,11 +164,9 @@ const useGetProductBySlug = (slug?: string) => {
         throw handleNetworkException(error);
       }
     },
-    {
-      enabled:
-        Boolean(slug) && slug != '' && slug != undefined && status != 'loading',
-      refetchOnWindowFocus: false,
-    }
-  );
+    enabled:
+      Boolean(slug) && slug != '' && slug != undefined && status != 'loading',
+    refetchOnWindowFocus: false,
+  });
 };
 export default useGetProductBySlug;

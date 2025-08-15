@@ -35,7 +35,7 @@ const _WithdrawsAdminTemplateSDK = () => {
       },
     },
     dataSource: {
-      url: `/${tenantId}/withdraws/admin`,
+      url: `/${tenantId}/withdraws/admin?sortBy=createdAt`,
       urlContext: W3blockAPI.KEY,
       type: FilterTableType.DYNAMIC,
       isPublicApi: false,
@@ -102,18 +102,14 @@ const _WithdrawsAdminTemplateSDK = () => {
 
   return (
     <>
-      <div
-        className={`pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden ${
-          id ? '' : '-pw-mb-20'
-        }`}
-      >
+      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
         <div className="pw-flex pw-justify-between">
           <p className="pw-text-[23px] pw-font-[600]">
             {translate('auth>withdrawModal>withdrawReports')}
           </p>
         </div>
       </div>
-      <div className="pw-flex pw-flex-col pw-px-4 pw-py-5 pw-shadow-lg sm:pw-px-0">
+      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden pw-my-[20px]">
         {id ? (
           <WithdrawAdminActions id={id} />
         ) : (

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import WalletImage from '../assets/wallet.svg';
+import WalletImage from '../../shared/assets/icons/wallet.svg';
 
 import { Token } from '../interfaces/Token';
 import { ErrorBox } from '../../shared/components/ErrorBox';
@@ -110,11 +110,11 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 export const TokensListTemplate = ({ withLayout = true }: Props) => {
   const { isLoading, isAuthorized } = usePrivateRoute();
 
-  const { isLoading: isLoadingProfile } = useProfile();
+  const { isFetching: isLoadingProfile } = useProfile();
 
   const { mainWallet: wallet } = useUserWallet();
-
-  const [{ data: ethNFTsResponse, isLoading: isLoadingETH, error: errorEth }] =
+  
+  const [{ data: ethNFTsResponse, isFetching: isLoadingETH, error: errorEth }] =
     useGetNFTSByWallet(wallet?.chainId);
 
   const tokens = ethNFTsResponse?.data?.items

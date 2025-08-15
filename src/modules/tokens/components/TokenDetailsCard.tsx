@@ -4,8 +4,6 @@ import { lazy, useMemo } from 'react';
 import classNames from 'classnames';
 import format from 'date-fns/format';
 
-import { headers } from 'next/headers';
-
 import { BenefitStatus } from '../../pass/enums/BenefitStatus';
 import { PassType } from '../../pass/enums/PassType';
 import useGetBenefitsByEditionNumber from '../../pass/hooks/useGetBenefitsByEditionNumber';
@@ -16,20 +14,23 @@ import { ImageSDK } from '../../shared/components/ImageSDK';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useIsMobile } from '../../shared/hooks/useIsMobile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { TableRow, mobileHeaders } from '../const/GenericTableHeaders';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { TableRow, headers, mobileHeaders } from '../const/GenericTableHeaders';
 import { FormConfigurationContext } from '../contexts/FormConfigurationContext';
 import useDynamicDataFromTokenCollection from '../hooks/useDynamicDataFromTokenCollection';
-import { Dimensions2DValue, Dimensions3DValue } from '../interfaces/DimensionsValue';
+import {
+  Dimensions2DValue,
+  Dimensions3DValue,
+} from '../interfaces/DimensionsValue';
 import { DynamicFormConfiguration } from '../interfaces/DynamicFormConfiguration';
 import { Breadcrumb } from './Breadcrumb';
+import { Button } from './Button';
 import GenericTable from './GenericTable';
 import { InternalPageTitle } from './InternalPageTitle';
 import { LineDivider } from './LineDivider';
 import { SmartDataDisplayer } from './SmartDataDisplayer';
 import StatusTag from './StatusTag';
 import { TextFieldDisplay } from './TextFieldDisplay';
-import { Button } from './Button';
-import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
   contract: string;
@@ -211,10 +212,10 @@ export const TokenDetailsCard = ({
             <div
               className="pw-text-black pw-font-normal pw-text-[14px] pw-leading-[21px]"
               dangerouslySetInnerHTML={{
-                __html: passData?.data.description ?? '',
+                __html: passData?.data?.description ?? '',
               }}
             ></div>
-            {passData?.data.rules && (
+            {passData?.data?.rules && (
               <>
                 <p className="pw-font-poppins pw-font-semibold pw-text-[15px] pw-text-black">
                   {translate('tokens>tokenDetailsCard>usageRules')}:
@@ -222,7 +223,7 @@ export const TokenDetailsCard = ({
                 <div
                   className="pw-text-black pw-font-normal pw-text-[14px] pw-leading-[21px]"
                   dangerouslySetInnerHTML={{
-                    __html: passData?.data.rules,
+                    __html: passData?.data?.rules,
                   }}
                 ></div>
               </>

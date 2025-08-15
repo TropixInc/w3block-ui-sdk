@@ -213,6 +213,21 @@ export const StatementComponentSDK = ({
     return '';
   };
 
+  const executeDate = (date: string) => {
+    return (
+      <div className="sm:pw-text-right pw-text-left">
+        <p className="pw-text-black pw-text-xs ">
+          {translate('shared>statementComponent>receiptDate') + ': '}
+        </p>
+        <p className="pw-text-black pw-text-xs">
+          {format(new Date(date), 'PPpp', {
+            locale: locale === 'pt-BR' ? ptBR : enUS,
+          })}
+        </p>
+      </div>
+    );
+  };
+
   const WjjcText = ({ metadata }: { metadata: any }) =>
     useMemo(() => {
       const supportText = () => {
@@ -296,7 +311,7 @@ export const StatementComponentSDK = ({
 
   const [openReceipt, setOpenReceipt] = useState(false);
   return (
-    <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex pw-justify-between">
+    <div className="pw-p-[28px] pw-bg-white pw-rounded-[14px] pw-shadow pw-flex sm:pw-flex-row pw-flex-col-reverse pw-gap-4 pw-justify-between">
       <div className="pw-flex pw-flex-col pw-items-start">
         <div className="pw-flex pw-items-center pw-gap-2">
           {future ? (
@@ -384,16 +399,6 @@ export const StatementComponentSDK = ({
                 </p>
               </div>
             ) : null}
-            <div className="pw-flex pw-items-center pw-gap-2">
-              <p className="pw-text-black pw-text-xs pw-font-medium">
-                {statement?.executeAt
-                  ? 'Recebimento previsto para: ' +
-                    format(new Date(statement?.executeAt), 'PPP', {
-                      locale: locale === 'pt-BR' ? ptBR : enUS,
-                    })
-                  : null}
-              </p>
-            </div>
           </>
         ) : null}
         <div>
@@ -411,13 +416,22 @@ export const StatementComponentSDK = ({
           {subtext()}
         </div>
       </div>
-      <div className="pw-flex pw-flex-col pw-items-end">
-        <div className="pw-text-right pw-text-zinc-700 pw-text-xs pw-font-bold">
-          {' '}
-          {statement?.createdAt
-            ? format(new Date(statement?.createdAt ?? Date.now()), 'PPpp', {
-                locale: locale === 'pt-BR' ? ptBR : enUS,
-              })
+      <div className="pw-flex pw-flex-col sm:pw-items-end pw-items-start">
+        <div className="pw-flex pw-flex-col pw-gap-1">
+          {statement?.createdAt ? (
+            <div className="sm:pw-text-right pw-text-left pw-text-black pw-text-xs ">
+              <p>{translate('shared>statementComponent>issueDate') + ': '}</p>
+              <p className="pw-font-bold">
+                {format(new Date(statement?.createdAt ?? Date.now()), 'PPpp', {
+                  locale: locale === 'pt-BR' ? ptBR : enUS,
+                })}
+              </p>
+            </div>
+          ) : null}
+          {statement?.withdrawableAt
+            ? executeDate(statement?.withdrawableAt)
+            : statement?.executeAt
+            ? executeDate(statement?.executeAt)
             : null}
         </div>
         <div className="pw-mt-2"></div>

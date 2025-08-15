@@ -28,7 +28,7 @@ export const ReceiptQRCode = ({
 }) => {
   const locale = useLocale();
   const [translate] = useTranslation();
-  const { data: receipt, isLoading } = useGetPublicOrder(
+  const { data: receipt, isFetching } = useGetPublicOrder(
     deliverId ?? '',
     isOpen
   );
@@ -59,7 +59,7 @@ export const ReceiptQRCode = ({
       onClose={onClose}
       classes={{ classComplement: 'sm:!pw-p-8 !pw-p-4 !pw-min-w-[330px]' }}
     >
-      {isLoading ? (
+      {isFetching ? (
         <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10">
           <Spinner className="pw-h-13 pw-w-13" />
         </div>

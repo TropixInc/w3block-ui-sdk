@@ -3,10 +3,10 @@
 import UserIcon from '../assets/icons/usersOutlined.svg';
 import { useCompanyById } from '../hooks/useCompanyById';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
-import { ErrorBox } from './ErrorBox';
-import { Spinner } from './Spinner';
 import { useGetUserByWalletAddress } from '../hooks/useGetUserByWalletAddress';
 import useTranslation from '../hooks/useTranslation';
+import { ErrorBox } from './ErrorBox';
+import { Spinner } from './Spinner';
 
 interface UserByWalletInputProps {
   wallet: string;
@@ -27,7 +27,7 @@ export const UserByWalletInput = ({
   const { companyId, name } = useCompanyConfig();
   const { data: company } = useCompanyById(companyId);
 
-  const { data, isLoading, error } = useGetUserByWalletAddress(
+  const { data, isFetching, error } = useGetUserByWalletAddress(
     walletValid ? wallet : ''
   );
 
@@ -50,7 +50,7 @@ export const UserByWalletInput = ({
           <UserIcon className="pw-stroke-white" />
         </button>
       </div>
-      {isLoading ? (
+      {isFetching ? (
         <Spinner className="pw-mt-1 pw-w-5 pw-h-5 !pw-border-2" />
       ) : null}
       {wallet && walletValid && (

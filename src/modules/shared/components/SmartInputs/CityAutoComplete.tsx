@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import _ from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 import { useController } from 'react-hook-form';
+import { useClickAway, useDebounce } from 'react-use';
 
-import { useDebounce, useClickAway } from 'react-use';
+import _ from 'lodash';
 import { BaseInput } from '../BaseInput';
 import LabelWithRequired from '../LabelWithRequired';
 import { InputError } from '../SmartInputsController';
@@ -30,7 +30,7 @@ interface CityAutocompleteProps {
   onChangeRegion?: (value: string | undefined) => void;
   name: string;
   apiValue?: any;
-  type: string;
+  type: Array<string>;
   inputLabel?: string;
   inputPlaceholder?: string;
   hidenValidations?: boolean;
@@ -99,6 +99,7 @@ const CityAutoComplete = ({
   const error = fieldState?.error as unknown as InputError;
   const [translate, locale] = useTranslation();
   const [placeId, setPlaceId] = useState<string | undefined>();
+  const [addressError, setAddressError] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [placeNumber, setPlaceNumber] = useState('');
   const [placeCompliment, setPlaceCompliment] = useState('');
@@ -107,7 +108,7 @@ const CityAutoComplete = ({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '',
       options: {
         componentRestrictions: { country: country ? country : '' },
-        types: [type],
+        types: type,
       },
       language: locale.language ?? 'pt-BR',
       debounce: 400,
@@ -128,7 +129,7 @@ const CityAutoComplete = ({
 
   useDebounce(
     () => {
-      if (type === 'postal_code') {
+      if (type.includes('postal_code')) {
         field.onChange({
           ...field.value,
           value: { ...field?.value?.value, street_number: placeNumber },
@@ -141,7 +142,7 @@ const CityAutoComplete = ({
 
   useDebounce(
     () => {
-      if (type === 'postal_code') {
+      if (type.includes('postal_code')) {
         field.onChange({
           ...field.value,
           value: { ...field?.value?.value, street_address_2: placeCompliment },
@@ -166,7 +167,7 @@ const CityAutoComplete = ({
 
     for (const key in components) {
       const typedKey = key as keyof Components;
-      result[typedKey] = components[typedKey] || '-';
+      result[typedKey] = components[typedKey] || '';
     }
 
     return result;
@@ -184,37 +185,42 @@ const CityAutoComplete = ({
               placeDetails.address_components
             );
             const transformedComponents = transformComponents(components);
-            if (type === '(cities)') {
-              setInputValue(
-                `${transformedComponents.city}, ${transformedComponents.region}`
-              );
-              onChangeRegion && onChangeRegion(transformedComponents.region);
-              field.onChange({
-                inputId: name,
-                value: { ...transformedComponents, placeId: placeId },
-              });
-            } else if (type === 'postal_code') {
-              setInputValue(`${placeDetails.formatted_address}`);
-              field.onChange({
-                inputId: name,
-                value: {
-                  ...transformedComponents,
-                  home: `${placeDetails.formatted_address}`,
-                  placeId: placeId,
-                },
-              });
+            if (transformedComponents.street_address_1) {
+              if (type.includes('(cities)')) {
+                setInputValue(
+                  `${transformedComponents.city}, ${transformedComponents.region}`
+                );
+                onChangeRegion && onChangeRegion(transformedComponents.region);
+                field.onChange({
+                  inputId: name,
+                  value: { ...transformedComponents, placeId: placeId },
+                });
+              } else if (type.includes('postal_code')) {
+                setInputValue(`${placeDetails.formatted_address}`);
+                field.onChange({
+                  inputId: name,
+                  value: {
+                    ...transformedComponents,
+                    home: `${placeDetails.formatted_address}`,
+                    placeId: placeId,
+                  },
+                });
+              } else {
+                setInputValue(
+                  `${placeDetails.name} - ${placeDetails.formatted_address}`
+                );
+                field.onChange({
+                  inputId: name,
+                  value: {
+                    ...transformedComponents,
+                    home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
+                    placeId: placeId,
+                  },
+                });
+              }
+              setAddressError(false);
             } else {
-              setInputValue(
-                `${placeDetails.name} - ${placeDetails.formatted_address}`
-              );
-              field.onChange({
-                inputId: name,
-                value: {
-                  ...transformedComponents,
-                  home: `${placeDetails.name} - ${placeDetails.formatted_address}`,
-                  placeId: placeId,
-                },
-              });
+              setAddressError(true);
             }
           }
         );
@@ -239,7 +245,7 @@ const CityAutoComplete = ({
 
   useEffect(() => {
     if (apiValue) {
-      if (type === 'postal_code') {
+      if (type.includes('postal_code')) {
         setPlaceId(apiValue?.placeId);
         setPlaceNumber(apiValue?.street_number);
         setPlaceCompliment(apiValue?.street_address_2);
@@ -252,7 +258,7 @@ const CityAutoComplete = ({
 
   const options = () => {
     if (placePredictions.length) {
-      return placePredictions.map((item: any) => {
+      return placePredictions.map((item) => {
         const option = item.terms.slice(0, -1);
         const labelOption = option.map((item: any) => item.value);
 
@@ -299,7 +305,7 @@ const CityAutoComplete = ({
         >
           {placePredictions.length ? (
             <ul>
-              {options()?.map((item: any) => {
+              {options()?.map((item) => {
                 return (
                   <li
                     key={item.label}
@@ -309,7 +315,7 @@ const CityAutoComplete = ({
                       className="pw-w-full pw-h-full pw-text-left !pw-text-black"
                       onClick={(e) => {
                         setPlaceId(item.value);
-                        type !== '(cities)' && setInputValue(item.label);
+                        !type.includes('(cities)') && setInputValue(item.label);
                         setShowOptions(false);
                         e.preventDefault();
                       }}
@@ -327,16 +333,20 @@ const CityAutoComplete = ({
       ) : null}
       {!hidenValidations && (
         <p className="pw-mt-[5px] pw-h-[16px]">
-          {field.value && (
+          {(addressError || field.value) && (
             <InputStatus
-              invalid={fieldState.invalid}
-              errorMessage={error?.value?.message}
+              invalid={addressError ? addressError : fieldState.invalid}
+              errorMessage={
+                addressError
+                  ? translate('shared>cityAutoComplete>addressNotFound')
+                  : error?.value?.message
+              }
             />
           )}
         </p>
       )}
 
-      {type === 'postal_code' ? (
+      {type.includes('postal_code') ? (
         <div className="pw-flex pw-gap-x-2 pw-mt-2">
           <div className="pw-w-full sm:pw-max-w-[255px]">
             <LabelWithRequired required={required} haveColon={false}>

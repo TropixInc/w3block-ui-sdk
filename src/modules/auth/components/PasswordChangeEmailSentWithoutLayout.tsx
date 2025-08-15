@@ -5,7 +5,7 @@ import { useLocalStorage } from 'react-use';
 import addMinutes from 'date-fns/addMinutes';
 import isAfter from 'date-fns/isAfter';
 
-import KeyIconOutlined from '../assets/icons/keyIconOutlined.svg';
+import KeyIconOutlined from '../../shared/assets/icons/keyIconOutlined.svg';
 import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
@@ -22,7 +22,7 @@ export const PasswordChangeEmailSentWithoutLayout = ({
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
   // const router = useRouterConnect();
-  const { mutate, isSuccess, isLoading } = useRequestPasswordChange();
+  const { mutate, isSuccess, isPending } = useRequestPasswordChange();
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
   const [countdownDate, setCountdownDate] = useLocalStorage<Date>(
     LocalStorageFields.PASSWORD_LINK_CONFIRMATION_COUNTDOWN_DATE
@@ -54,7 +54,7 @@ export const PasswordChangeEmailSentWithoutLayout = ({
       <div className="pw-mb-[29px]">
         <div className="pw-flex pw-justify-center">
           <button
-            disabled={isActive || isLoading}
+            disabled={isActive || isPending}
             className="pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-underline pw-text-brand-primary disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
             onClick={() => mutate({ email })}
           >

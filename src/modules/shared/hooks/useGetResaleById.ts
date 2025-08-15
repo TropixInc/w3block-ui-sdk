@@ -2,9 +2,9 @@ import { useMutation } from '@tanstack/react-query';
 
 import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../enums/W3blockAPI';
+import { Product } from '../interfaces/Product';
 import { useAxios } from './useAxios';
 import { useCompanyConfig } from './useCompanyConfig';
-import { Product } from '../interfaces/Product';
 
 interface Params {
   id: string;

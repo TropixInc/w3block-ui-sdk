@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { ReactNode, useContext, useMemo } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 interface Props {
   children: ReactNode;
@@ -14,7 +15,8 @@ type LabelProps = {
   children?: ReactNode;
 };
 
-const FormControllerContext = createContext<FormControllerContext>(
+const FormControllerContext = createSymlinkSafeContext<FormControllerContext>(
+  '__FORM_CONTROLLER_CONTEXT__',
   {} as FormControllerContext
 );
 

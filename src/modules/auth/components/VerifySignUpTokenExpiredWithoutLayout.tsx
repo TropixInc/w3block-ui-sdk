@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Trans } from 'react-i18next';
 
 
-import MailError from '../assets/icons/mailError.svg';
+import MailError from '../../shared/assets/icons/mailError.svg';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlahes';
@@ -23,11 +23,11 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
   isPostSignUp = false,
 }: Props) => {
   const { connectProxyPass, appBaseUrl } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
+  const { mutate, isPending, isSuccess } = useRequestPasswordChange();
   const {
     mutate: emailMutate,
     isSuccess: emailSuccess,
-    isLoading: emailLoading,
+    isPending: emailLoading,
   } = useRequestConfirmationMail();
   const [translate] = useTranslation();
 
@@ -76,7 +76,7 @@ export const VerifySignUpTokenExpiredWithoutLayout = ({
         >
           <button
             onClick={handleClick}
-            disabled={isLoading || emailLoading}
+            disabled={isPending || emailLoading}
             className="pw-mb-[29px] pw-font-semibold pw-text-sm pw-leading-[17px] pw-text-brand-primary pw-underline"
           >
             Clique aqui

@@ -1,6 +1,6 @@
 
 import classNames from 'classnames';
-import { useRouter } from 'next/router';
+
 
 import { FallbackImage } from '../../shared/components/FallbackImage';
 import { ImageSDK } from '../../shared/components/ImageSDK';
@@ -8,6 +8,8 @@ import Skeleton from '../../shared/components/Skeleton';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { Button } from '../../shared/components/Buttons';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+
 
 interface Props {
   id: string;
@@ -36,7 +38,7 @@ export const PassCard = ({
   tokenName,
 }: Props) => {
   const [translate] = useTranslation();
-  const router = useRouter();
+  const router = useRouterConnect();
 
   const query = `?chainId=${chainId}&contractAddress=${contractAddress}`;
 

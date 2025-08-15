@@ -1,13 +1,10 @@
 /* eslint-disable i18next/no-literal-string */
 
-
 import { Shimmer } from '../../../shared/components/Shimmer';
 import TranslatableComponent from '../../../shared/components/TranslatableComponent';
 import useTranslation from '../../hooks/useTranslation';
-
 import { Currency } from '../../interfaces/Currency';
 import { CriptoValueComponent } from '../CriptoValueComponent';
-
 
 interface MySalesPriceComponent {
   className?: string;

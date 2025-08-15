@@ -8,7 +8,7 @@ import {
 } from '@w3block/sdk-id';
 import _ from 'lodash';
 import { InputSelector, Options } from './SmartInputs/InputSelector';
-
+import useTranslation from '../hooks/useTranslation';
 import ComplexPhone from './SmartInputs/ComplexPhone';
 import { IframeInput } from './SmartInputs/Iframe';
 import InputBirthdate from './SmartInputs/InputBirthdate';
@@ -26,7 +26,7 @@ import InputProducts from './SmartInputs/InputProducts';
 import InputText from './SmartInputs/InputText';
 import InputUrl from './SmartInputs/InputUrl';
 import { Separator } from './SmartInputs/Separator';
-import useTranslation from '../hooks/useTranslation';
+
 
 interface SmartProps {
   type: DataTypesEnum;
@@ -185,6 +185,7 @@ export const SmartInputsController = ({
             required={required}
             readonly={readonly}
             hidenValidations={readonly}
+            defaultCountry={(selectData as any)?.defaultCountry}
           />
         );
       case DataTypesEnum.Email:

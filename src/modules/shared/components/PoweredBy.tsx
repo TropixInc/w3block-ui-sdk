@@ -27,7 +27,7 @@ interface Props {
 
 export const PoweredBy = ({
   redirectLink = 'https://w3block.io',
-  imageSrc = W3blockLogo,
+  imageSrc = '',
   classes,
   logoColor = 'black',
   PwPosition = position.CENTER,
@@ -83,14 +83,23 @@ export const PoweredBy = ({
           powered by
         </p>
         <a href={redirectLink} target="_blank" rel="noreferrer">
-          <img
-            className={classNames(
-              classes?.image,
-              'pw-max-w-[100px] pw-w-full pw-object-contain pw-max-h-[20px]'
-            )}
-            src={(logoColor === 'black' ? imageSrc : W3blockLogoWhite) ?? ""}
-            alt="logo"
-          />
+          {logoColor === 'black' ? (
+            <img
+              className={classNames(
+                classes?.image,
+                'pw-max-w-[100px] pw-w-full pw-object-contain pw-max-h-[20px]'
+              )}
+              src={imageSrc ?? ''}
+              alt="logo"
+            />
+          ) : (
+            <W3blockLogoWhite
+              className={classNames(
+                classes?.image,
+                'pw-max-w-[100px] pw-w-full pw-object-contain pw-max-h-[20px]'
+              )}
+            />
+          )}
         </a>
       </div>
     </div>

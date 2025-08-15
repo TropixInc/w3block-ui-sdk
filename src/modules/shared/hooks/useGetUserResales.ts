@@ -1,15 +1,14 @@
+import { Product } from '../../storefront/hooks/useGetProductBySlug';
+import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
+import { W3blockAPI } from '../enums/W3blockAPI';
+import { Currency } from '../interfaces/Currency';
+import { handleNetworkException } from '../utils/handleNetworkException';
+import { useAxios } from './useAxios';
+import { useCompanyConfig } from './useCompanyConfig';
+import { usePrivateQuery } from './usePrivateQuery';
+import { useProfile } from './useProfile';
 
-import { Product } from "../../storefront/hooks/useGetProductBySlug";
-import { PixwayAPIRoutes } from "../enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../enums/W3blockAPI";
-import { Currency } from "../interfaces/Currency";
-import { handleNetworkException } from "../utils/handleNetworkException";
-import { useAxios } from "./useAxios";
-import { useCompanyConfig } from "./useCompanyConfig";
-import { usePrivateQuery } from "./usePrivateQuery";
-import { useProfile } from "./useProfile";
-
-interface Response {
+export interface UserResaleResponse {
   items: {
     companyId: string;
     createdAt: string;
@@ -57,7 +56,7 @@ export const useGetUserResales = () => {
     [PixwayAPIRoutes.GET_USER_RESALE, companyId, profile?.data?.data?.id],
     async () => {
       try {
-        const response = await axios.get<Response>(
+        const response = await axios.get<UserResaleResponse>(
           PixwayAPIRoutes.GET_USER_RESALE.replace(
             '{companyId}',
             companyId
@@ -68,6 +67,7 @@ export const useGetUserResales = () => {
         console.error('Erro ao buscar integrações do usuário:', err);
         throw handleNetworkException(err);
       }
-    }
+    },
+    { refetchOnWindowFocus: false }
   );
 };

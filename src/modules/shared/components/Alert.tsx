@@ -1,11 +1,11 @@
 import {
-  createContext,
   ReactNode,
   useContext,
   useEffect,
   useMemo,
   useRef,
 } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 import classNames from 'classnames';
 
@@ -37,7 +37,10 @@ interface AlertContext {
   variant: AlertVariant;
 }
 
-const AlertContext = createContext<AlertContext>({} as AlertContext);
+const AlertContext = createSymlinkSafeContext<AlertContext>(
+  '__ALERT_CONTEXT__',
+  {} as AlertContext
+);
 
 const iconConfigMap = new Map([
   ['error', { Element: ErrorCircledFilled, className: 'pw-fill-[#D02428]' }],

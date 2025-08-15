@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext } from "react";
-import { IW3blockAuthenticationContext } from "../../shared/interfaces/IW3blockAuthenticationContext";
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
+import { IW3blockAuthenticationContext } from '../../shared/interfaces/IW3blockAuthenticationContext';
 
-export const W3blockAuthenticationContext = createContext(
+export const W3blockAuthenticationContext = createSymlinkSafeContext<IW3blockAuthenticationContext>(
+  '__W3BLOCK_AUTH_CONTEXT__',
   {} as IW3blockAuthenticationContext
 );

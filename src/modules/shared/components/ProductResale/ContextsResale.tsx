@@ -1,7 +1,6 @@
-
 import { PixwayAppRoutes } from '../../enums/PixwayAppRoutes';
 import useTranslation from '../../hooks/useTranslation';
-
+import { Alert } from '../Alert';
 import { BaseButton } from '../Buttons';
 
 interface Params {
@@ -13,7 +12,10 @@ export const ContextsResale = ({ slug, id }: Params) => {
   const [translate] = useTranslation();
 
   return slug === 'bankdetails' ? (
-    <div className="pw-flex pw-flex-col pw-w-full pw-gap-2 pw-p-4 pw-justify-center pw-items-start pw-bg-[#FFF9E3] pw-text-[#EEA109] pw-rounded-lg">
+    <Alert
+      className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3"
+      variant="warning"
+    >
       <p>{translate('pages>mysales>resale>fillBankDetails')}</p>
       <BaseButton
         link={{
@@ -25,9 +27,12 @@ export const ContextsResale = ({ slug, id }: Params) => {
       >
         {translate('pages>mysales>resale>fillData')}
       </BaseButton>
-    </div>
+    </Alert>
   ) : (
-    <div className="pw-flex pw-flex-col pw-w-full pw-gap-2 pw-p-4 pw-justify-center pw-items-start pw-bg-[#FFF9E3] pw-text-[#EEA109] pw-rounded-lg">
+    <Alert
+      className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3"
+      variant="warning"
+    >
       <p>{translate('pages>mysales>resale>fillExtraDetails')}</p>
       <BaseButton
         link={{
@@ -40,6 +45,6 @@ export const ContextsResale = ({ slug, id }: Params) => {
       >
         {translate('pages>mysales>resale>fillData')}
       </BaseButton>
-    </div>
+    </Alert>
   );
 };

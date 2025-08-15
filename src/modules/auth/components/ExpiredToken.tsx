@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 
-import MailError from '../assets/icons/mailError.svg';
+import MailError from '../../shared/assets/icons/mailError.svg';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
 import { AuthFooter } from './AuthFooter';
@@ -17,7 +17,7 @@ interface Props {
 
 export const ExpiredToken = ({ email, onSendEmail }: Props) => {
   const { logoUrl } = useCompanyConfig();
-  const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
+  const { mutate, isPending, isSuccess } = useRequestPasswordChange();
   const [translate] = useTranslation();
 
   const onClickResendEmail = () => {
@@ -47,7 +47,7 @@ export const ExpiredToken = ({ email, onSendEmail }: Props) => {
         </p>
         <button
           onClick={onClickResendEmail}
-          disabled={isLoading}
+          disabled={isPending}
           className="pw-mb-[21px] pw-font-bold pw-text-brand-primary pw-underline"
         >
           {translate('auth>expiredLink>resendCodeButton')}

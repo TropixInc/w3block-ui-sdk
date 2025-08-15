@@ -5,13 +5,13 @@ import classNames from 'classnames';
 import _ from 'lodash';
 
 
-import ArrowDown from '../../assets/icons/arrowDown.svg';
-import ClearFilter from '../../assets/icons/clearFilterOutlined.svg';
-import CopyIcon from '../../assets/icons/copyIconOutlined.svg';
+import ArrowDown from '../assets/icons/arrowDown.svg';
+import ClearFilter from '../assets/icons/clearFilterOutlined.svg';
+import CopyIcon from '../assets/icons/copyIconOutlined.svg';
 /* import FilterIcon from '../../assets/icons/filterOutlined.svg'; */
-import MetamaskIcon from '../../assets/icons/metamask.svg';
-import NoWallet from '../../assets/icons/notConfirmedWalletFilled.svg';
-import W3blockIcon from '../../assets/icons/pixwayIconFilled.svg';
+import MetamaskIcon from '../assets/icons/metamask.svg';
+import NoWallet from '../assets/icons/notConfirmedWalletFilled.svg';
+import W3blockIcon from '../assets/icons/pixwayIconFilled.svg';
 import { ConfigGenericTable, FormatApiData, FormatTypeColumn } from '../interfaces/ConfigGenericTable';
 
 import { useDynamicApi } from '../../storefront/provider/DynamicApiProvider';
@@ -55,7 +55,7 @@ const paginationMapping = {
       }
     },
     outputMap: (params: any) => {
-      const newParams = { ...params, page: undefined };
+      const newParams = { ...params, page: 1 };
       newParams['pagination[pageSize]'] = 10;
       newParams['pagination[page]'] = params?.page;
 
@@ -123,7 +123,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   const tenantName = company?.data.id === companyId ? name : '';
 
   const [
-    { data, isLoading, isError, refetch, error },
+    { data, isFetching, isError, refetch, error },
     { changePage, page, totalItems, totalPages },
   ] = usePaginatedGenericApiGet({
     internalTypeAPI: dataSource?.urlContext,
@@ -131,6 +131,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     isPublicApi: dataSource?.isPublicApi,
     ...paginationMapping[paginationType],
   });
+
+
 
   useEffect(() => {
     if (isUpdateList) {
@@ -546,7 +548,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
   return isError ? (
     <ErrorBox customError={error as any} />
   ) : (
-    <div className="pw-w-full pw-mt-20">
+    <div className="pw-w-full">
       <FormProvider {...methods}>
         <div className="pw-text-black">
           <div style={externalFilterClasses?.container}>
@@ -741,14 +743,14 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               </thead>
               <div
                 className={classNames(
-                  isLoading ||
+                  isFetching ||
                     isError ||
                     !_.get(data, localeItems ?? '', [])?.length
                     ? 'pw-h-20 pw-flex pw-items-end'
                     : ''
                 )}
               >
-                {!isLoading &&
+                {!isFetching &&
                   !_.get(data, localeItems ?? '', [])?.length &&
                   !isError && (
                     <Alert
@@ -764,7 +766,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                   </Alert>
                 )}
 
-                {isLoading && (
+                {isFetching && (
                   <div className="pw-w-full pw-flex pw-py-5 pw-items-center pw-justify-center pw-absolute">
                     <Spinner />
                   </div>
@@ -772,7 +774,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               </div>
 
               <tbody className="">
-                {!isLoading && _.get(data, localeItems ?? '', [])?.length
+                {!isFetching && _.get(data, localeItems ?? '', [])?.length
                   ? _.get(data, localeItems ?? '', []).map((item: any) => (
                       <Line
                         columns={columns}
@@ -796,7 +798,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         </div>
 
         {totalItems && totalPages && totalPages > 1 ? (
-          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mb-10 pw-mt-2">
+          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mt-5">
             <p className="pw-text-sm pw-font-semibold">
               {translate('keytokenEditionsList>totalItems', {
                 total: totalItems,

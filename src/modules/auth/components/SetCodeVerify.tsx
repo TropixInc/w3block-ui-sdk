@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 
 import addMinutes from 'date-fns/addMinutes';
+
 import { Alert } from '../../shared/components/Alert';
 import { ModalBase } from '../../shared/components/ModalBase';
 import { WeblockButton } from '../../shared/components/WeblockButton';
@@ -10,13 +11,12 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../hooks/useVerifySignUp';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import useTranslation from '../../shared/hooks/useTranslation';
-
 
 interface SetCodeVerifyProps {
   isPostSignUp?: boolean;
@@ -32,7 +32,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const email = (query.email as string) ?? '';
   const { data: profile, refetch } = useProfile();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
+  const { mutate, isSuccess, isPending, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
   const emailToUse = profile?.data?.email ?? email;
   useEffect(() => {
@@ -92,8 +92,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             token: code,
           },
           {
-            onSuccess: (data: { data: { verified: any; }; }) => {
-              console.log(data, 'data success');
+            onSuccess: (data: { data: { verified: any } }) => {
               refetch();
               if (data?.data?.verified) {
                 if (query.callbackPath?.length) {
@@ -183,9 +182,9 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         {translate('components>advanceButton>continue')}
       </WeblockButton>
 
-      {isLoading || isActive ? null : (
+      {isPending || isActive ? null : (
         <button
-          disabled={isLoading || isActive}
+          disabled={isPending || isActive}
           className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
           onClick={() =>
             mutate({
@@ -209,7 +208,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
           O código expira em 15 minutos
           <button
-            disabled={isLoading || isActive}
+            disabled={isPending || isActive}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({

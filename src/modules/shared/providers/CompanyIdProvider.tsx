@@ -1,11 +1,15 @@
-import { createContext, ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 interface CompanyIdProviderProps {
   companyId: string;
   children: ReactNode;
 }
 
-export const CompanyIdContext = createContext<string>('');
+export const CompanyIdContext = createSymlinkSafeContext<string>(
+  '__COMPANY_ID_CONTEXT__',
+  ''
+);
 
 export const CompanyIdProvider = ({
   companyId,

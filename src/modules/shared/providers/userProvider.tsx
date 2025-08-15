@@ -1,10 +1,9 @@
-import { ReactNode, createContext, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
+import { createSymlinkSafeContext } from '../utils/createSymlinkSafeContext';
 
 import { UserPublicResponseDto } from '@w3block/sdk-id';
 import { useProfileWithouRedirect } from '../hooks/useProfile';
 import { useGetDocuments } from '../hooks/useGetDocuments';
-
-
 
 interface UserProfileWithKYC extends UserPublicResponseDto {
   avatarSrc?: string;
@@ -14,7 +13,10 @@ interface UserContextProps {
   profile?: UserProfileWithKYC;
 }
 
-export const UserContext = createContext<UserContextProps>({});
+export const UserContext = createSymlinkSafeContext<UserContextProps>(
+  '__USER_CONTEXT__',
+  {}
+);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { data: profile } = useProfileWithouRedirect();

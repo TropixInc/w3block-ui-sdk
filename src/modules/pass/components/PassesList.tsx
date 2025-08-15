@@ -23,7 +23,7 @@ import useTranslation from '../../shared/hooks/useTranslation';
 
 
 const _PassesList = () => {
-  const { data, isLoading, error: errorGetPass } = useGetPassByUser();
+  const { data, isFetching, error: errorGetPass } = useGetPassByUser();
   const [translate] = useTranslation();
   const passes = data?.data?.items || [];
   const [qrCodeData, setQrCodeData] = useState('');
@@ -36,7 +36,7 @@ const _PassesList = () => {
   const [editionNumber, userId, secret, benefitId] = qrCodeData.split(',');
   const {
     data: verifyBenefit,
-    isLoading: verifyLoading,
+    isFetching: verifyLoading,
     isError: verifyError,
     error: errorVerifyBenefit,
   } = useVerifyBenefit({
@@ -63,7 +63,7 @@ const _PassesList = () => {
 
   const {
     mutate: registerUse,
-    isLoading: registerLoading,
+    isPending: registerLoading,
     error: errorPostBenefit,
   } = usePostBenefitRegisterUse();
 
@@ -114,7 +114,7 @@ const _PassesList = () => {
     );
   };
 
-  if (isLoading) return <TokenListTemplateSkeleton />;
+  if (isFetching) return <TokenListTemplateSkeleton />;
 
   return (
     <BaseTemplate title="Token Pass">

@@ -5,15 +5,21 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { DocumentDto } from '@w3block/sdk-id';
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
+
 import { Alert } from '../../shared/components/Alert';
+import { BaseButton } from '../../shared/components/Buttons';
 import { Spinner } from '../../shared/components/Spinner';
 import { useLocale } from '../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
-import { useGetSpecificWithdrawAdmin, useRefuseWithdraw, useConcludeWithdraw, useEscrowWithdraw } from '../hooks/useRequestWithdraw';
-import { BaseButton } from '../../shared/components/Buttons';
-import InputWithdrawCommerce from './InputWithdrawCommerce';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
+import {
+  useGetSpecificWithdrawAdmin,
+  useRefuseWithdraw,
+  useConcludeWithdraw,
+  useEscrowWithdraw,
+} from '../hooks/useRequestWithdraw';
+import InputWithdrawCommerce from './InputWithdrawCommerce';
 
 enum Steps {
   DEFAULT = 1,
@@ -48,12 +54,12 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
   const [step, setStep] = useState<Steps>(1);
   const [reason, setReason] = useState('');
   const [_, setUploadingImage] = useState(false);
-  const { data, isLoading, refetch } = useGetSpecificWithdrawAdmin(id);
-  const { mutate: refuseWithdraw, isLoading: isLoadingRefuse } =
+  const { data, isFetching, refetch } = useGetSpecificWithdrawAdmin(id);
+  const { mutate: refuseWithdraw, isPending: isLoadingRefuse } =
     useRefuseWithdraw();
-  const { mutate: concludeWithdraw, isLoading: isLoadingConclude } =
+  const { mutate: concludeWithdraw, isPending: isLoadingConclude } =
     useConcludeWithdraw();
-  const { mutate: escrowWithdraw, isLoading: isLoadingEscrow } =
+  const { mutate: escrowWithdraw, isPending: isLoadingEscrow } =
     useEscrowWithdraw();
   const { loyaltyWallet } = useUserWallet();
   const dynamicMethods = useForm<DocumentDto>({
@@ -75,16 +81,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
             />
           </div>
           <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
-            <BaseButton
-              className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
-              variant="outlined"
-              onClick={() => setStep(1)}
-            >
+            <BaseButton variant="outlined" onClick={() => setStep(1)}>
               {translate('components>cancelMessage>cancel')}
             </BaseButton>
             <BaseButton
-              className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
-              variant="filled"
               disabled={reason === ''}
               onClick={() => {
                 if (reason !== '') {
@@ -117,16 +117,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
             <p>{translate('auth>withdrawAdminActions>holdFounds')}</p>
           </div>
           <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
-            <BaseButton
-              className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
-              variant="outlined"
-              onClick={() => setStep(1)}
-            >
+            <BaseButton variant="outlined" onClick={() => setStep(1)}>
               {translate('components>cancelMessage>cancel')}
             </BaseButton>
             <BaseButton
-              className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
-              variant="filled"
               onClick={() => {
                 escrowWithdraw(
                   { id },
@@ -168,7 +162,6 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
           </div>
           <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-4">
             <BaseButton
-              className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
               variant="outlined"
               onClick={() => {
                 setStep(1);
@@ -178,7 +171,6 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               {translate('components>cancelMessage>cancel')}
             </BaseButton>
             <BaseButton
-              className="pw-max-w-[160px] pw-w-full !pw-text-base !pw-py-2"
               variant="filled"
               disabled={!assetId}
               onClick={() => {
@@ -218,16 +210,16 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
 
   const handleText = () => {
     if (data?.data?.status === 'pending') {
-      return 'Reter fundos';
+      return translate('withdraw>actions>withholdFunds');
     }
     if (data?.data?.status === 'ready_to_transfer_funds') {
-      return 'Concluir tranferência';
+      return translate('withdraw>actions>concludeTransfer');
     }
   };
 
   if (step === Steps.ERROR) {
     return (
-      <div className="pw-px-[40px]">
+      <div>
         <button
           className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
           onClick={() => router.push('/withdraws/admin')}
@@ -241,7 +233,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
     );
   } else if (step === Steps.SUCCESS) {
     return (
-      <div className="pw-px-[40px]">
+      <div>
         <button
           className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
           onClick={() => router.push('/withdraws/admin')}
@@ -255,7 +247,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
     );
   } else
     return (
-      <div className="pw-px-[40px]">
+      <div>
         <>
           <button
             className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
@@ -263,7 +255,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
           >
             {`<`} {translate('shared>back')}
           </button>
-          {isLoading ||
+          {isFetching ||
           isLoadingConclude ||
           isLoadingEscrow ||
           isLoadingRefuse ? (
@@ -336,19 +328,11 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 data?.data?.status === 'escrowing_resources' ? null : (
                   <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
                     {data?.data?.status === 'ready_to_transfer_funds' ? null : (
-                      <BaseButton
-                        className="pw-max-w-[160px] pw-h-[45px] pw-w-full !pw-text-base !pw-py-2"
-                        variant="outlined"
-                        onClick={() => setStep(2)}
-                      >
+                      <BaseButton variant="outlined" onClick={() => setStep(2)}>
                         {translate('auth>withdrawAdminActions>refuse')}
                       </BaseButton>
                     )}
-                    <BaseButton
-                      className="pw-max-w-[200px] pw-w-full !pw-text-base !pw-py-2"
-                      variant="filled"
-                      onClick={handleContinue}
-                    >
+                    <BaseButton onClick={handleContinue}>
                       {handleText()}
                     </BaseButton>
                   </div>

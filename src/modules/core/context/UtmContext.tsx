@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeContext';
 
 export interface UtmContextInterface {
   utm_source?: string;
@@ -9,4 +9,7 @@ export interface UtmContextInterface {
   expires?: number;
 }
 
-export const UtmContext = createContext<UtmContextInterface>({});
+export const UtmContext = createSymlinkSafeContext<UtmContextInterface>(
+  '__UTM_CONTEXT__',
+  {}
+);
