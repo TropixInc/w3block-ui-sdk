@@ -14,3 +14,4 @@ export * from '../poll/templates/PollTemplateSDK';
 export * from './templates/SignUpTemplateSDK';
 export * from './templates/SetCodeToCompleteProfileTemplate';
 export * from './templates/VerifySignUpTemplateSDK';
+export * from './templates/CompleteSignUpTemplate';
