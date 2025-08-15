@@ -68,7 +68,7 @@ const _CompleteProfileCustomTemplate = ({
   const [translate] = useTranslation();
   const { companyId } = useCompanyConfig();
   const { email, token } = router.query;
-  const { mutate, isLoading, isError } = useChangePassword();
+  const { mutate, isPending, isError } = useChangePassword();
   const { signIn } = usePixwayAuthentication();
   const [step, setStep] = useState(() => {
     return token && getIsTokenExpired(token as string)
@@ -146,7 +146,7 @@ const _CompleteProfileCustomTemplate = ({
     <SignUpTemplateSDK
       {...signUpProps}
       email={emailToUse.replaceAll(' ', '+') ?? ''}
-      isLoading={isLoading}
+      isLoading={isPending}
       onSubmit={onSubmit}
       extraBy={extraBy}
       error={

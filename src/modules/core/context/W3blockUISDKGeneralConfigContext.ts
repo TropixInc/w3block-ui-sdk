@@ -2,7 +2,7 @@ import { createSymlinkSafeContext } from '../../shared/utils/createSymlinkSafeCo
 
 export interface IW3blockUISDKGereralConfigContext {
   companyId: string;
-  logoUrl: string;
+  logoUrl: string | undefined;
   appBaseUrl: string;
   connectProxyPass: string;
   name?: string;

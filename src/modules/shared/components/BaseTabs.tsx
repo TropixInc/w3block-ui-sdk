@@ -1,8 +1,8 @@
 import { Tab } from '@headlessui/react';
 import classNames from 'classnames';
 
-import CheckIcon from '../../assets/icons/checkOutlined.svg?react';
-import XIcon from '../../assets/icons/xFilled.svg?react';
+import CheckIcon from '../assets/icons/checkOutlined.svg';
+import XIcon from '../assets/icons/xFilled.svg';
 
 export interface TabDTO {
   name: string;

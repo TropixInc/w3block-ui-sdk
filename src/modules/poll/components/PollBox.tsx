@@ -47,7 +47,7 @@ export const PollBox = ({
   slug = slug ?? (slugQuery as string);
 
   const { data, isError } = usePollBySlug(slug);
-  const { mutate, isLoading } = usePostAnswer();
+  const { mutate, isPending } = usePostAnswer();
 
   const schema = object().shape({
     email: string().email().required(),
@@ -219,7 +219,7 @@ export const PollBox = ({
                 tailwindBgColor="pw-bg-brand-primary"
                 className="pw-text-white pw-font-[500] pw-mt-[22px] "
                 fullWidth={true}
-                disabled={isLoading}
+                disabled={isPending}
               >
                 {translate('components>advanceButton>continue')}
               </WeblockButton>

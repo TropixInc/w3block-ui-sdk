@@ -33,7 +33,7 @@ const WithdrawInternal = ({
 }) => {
   const router = useRouterConnect();
   const locale = useLocale();
-  const { data, isLoading } = useGetSpecificWithdraw(id);
+  const { data, isFetching } = useGetSpecificWithdraw(id);
   const [translate] = useTranslation();
 
   return (
@@ -45,7 +45,7 @@ const WithdrawInternal = ({
         >
           {`<`} {translate('shared>back')}
         </button>
-        {isLoading ? (
+        {isFetching ? (
           <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
             <Spinner />
           </div>

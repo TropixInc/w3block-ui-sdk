@@ -158,6 +158,7 @@ export const BaseInput = ({
   ...props
 }: BaseInputProps) => {
   const [isShowingPassword, setIsShowingPassword] = useState(false);
+
   return (
     <BaseInputLayout
       className={className}

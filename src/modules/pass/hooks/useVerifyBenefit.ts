@@ -61,6 +61,7 @@ const useVerifyBenefit = ({
         secret != undefined &&
         secret != '' &&
         enabled,
+      refetchOnWindowFocus: false,
     }
   );
 };

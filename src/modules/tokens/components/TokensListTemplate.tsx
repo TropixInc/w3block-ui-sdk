@@ -110,11 +110,11 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 export const TokensListTemplate = ({ withLayout = true }: Props) => {
   const { isLoading, isAuthorized } = usePrivateRoute();
 
-  const { isLoading: isLoadingProfile } = useProfile();
+  const { isFetching: isLoadingProfile } = useProfile();
 
   const { mainWallet: wallet } = useUserWallet();
   
-  const [{ data: ethNFTsResponse, isLoading: isLoadingETH, error: errorEth }] =
+  const [{ data: ethNFTsResponse, isFetching: isLoadingETH, error: errorEth }] =
     useGetNFTSByWallet(wallet?.chainId);
 
   const tokens = ethNFTsResponse?.data?.items

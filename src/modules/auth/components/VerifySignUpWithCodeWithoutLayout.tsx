@@ -32,12 +32,12 @@ export const VerifySignUpWithCodeWithoutLayout = ({
   const [inputs, setInputs] = useState(['', '', '', '', '', '']);
   const { query, pushConnect } = useRouterConnect();
   const { signIn } = usePixwayAuthentication();
-  const { mutate: mutateVerify, isLoading: isLoadingVerify } =
+  const { mutate: mutateVerify, isPending: isLoadingVerify } =
     useVerifySignUp();
   const { companyId } = useCompanyConfig();
   const { data: profile } = useProfile();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
+  const { mutate, isSuccess, isPending, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
   useEffect(() => {
     if (!profile) setNewCountdown(addMinutes(new Date(), 1));
@@ -187,7 +187,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
         <Trans i18nKey="auth>setCode>linkExpiresMessage">
           O código expira em 15 minutos
           <button
-            disabled={isLoading || isActive}
+            disabled={isPending || isActive}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({

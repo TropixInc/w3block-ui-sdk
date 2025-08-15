@@ -52,6 +52,7 @@ const useGetPassBenefits = ({
         chainId != undefined &&
         chainId != '' &&
         enabled,
+      refetchOnWindowFocus: false,
     }
   );
 };

@@ -32,7 +32,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const email = (query.email as string) ?? '';
   const { data: profile, refetch } = useProfile();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isLoading, reset } = useRequestConfirmationMail();
+  const { mutate, isSuccess, isPending, reset } = useRequestConfirmationMail();
   const [error, setError] = useState('');
   const emailToUse = profile?.data?.email ?? email;
   useEffect(() => {
@@ -182,9 +182,9 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         {translate('components>advanceButton>continue')}
       </WeblockButton>
 
-      {isLoading || isActive ? null : (
+      {isPending || isActive ? null : (
         <button
-          disabled={isLoading || isActive}
+          disabled={isPending || isActive}
           className="pw-font-semibold pw-text-[14px] pw-leading-[21px] pw-mt-5 pw-underline pw-text-brand-primary pw-font-poppins disabled:pw-text-[#676767] disabled:hover:pw-no-underline"
           onClick={() =>
             mutate({
@@ -208,7 +208,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         <Trans i18nKey="auth>emailConfirmation>linkExpiresMessage">
           O código expira em 15 minutos
           <button
-            disabled={isLoading || isActive}
+            disabled={isPending || isActive}
             className="pw-font-poppins pw-underline pw-font-semibold pw-leading-[19.5px] disabled:pw-text-[#676767]"
             onClick={() =>
               mutate({

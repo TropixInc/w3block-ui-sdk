@@ -67,6 +67,7 @@ export const useGetUserResales = () => {
         console.error('Erro ao buscar integrações do usuário:', err);
         throw handleNetworkException(err);
       }
-    }
+    },
+    { refetchOnWindowFocus: false }
   );
 };

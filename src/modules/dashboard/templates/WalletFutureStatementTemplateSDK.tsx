@@ -50,7 +50,7 @@ export const WalletFutureStatementTemplateSDK = () => {
   const isAdmin = Boolean(
     userRoles?.includes('admin') || userRoles?.includes('superAdmin')
   );
-  const { data, isLoading, error } = useGetDeferredByUserId(
+  const { data, isFetching, error } = useGetDeferredByUserId(
     profile?.data?.id ?? '',
     {
       page: actualPage,
@@ -67,7 +67,7 @@ export const WalletFutureStatementTemplateSDK = () => {
 
   const {
     data: adminDeferred,
-    isLoading: loadingAdminDeferred,
+    isFetching: loadingAdminDeferred,
     error: errorAdminDeferred,
   } = useGetDeferred(
     {
@@ -270,7 +270,7 @@ export const WalletFutureStatementTemplateSDK = () => {
         <p className="pw-text-xs pw-text-black">{totalText()}</p>
       </div>
       <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
-        {isLoading || loadingAdminDeferred ? (
+        {isFetching || loadingAdminDeferred ? (
           <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
             <Spinner className="pw-h-10 pw-w-10" />
           </div>

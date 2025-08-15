@@ -48,7 +48,7 @@ export const ConfirmationKycTemplateSDK = ({
   className,
   extraBy,
 }: ConfirmationKycTemplateSDKProps) => {
-  const { data: profile, isLoading: isLoadingProfile } = useProfile();
+  const { data: profile, isFetching: isLoadingProfile } = useProfile();
   const router = useRouterConnect();
   const { status } = usePixwaySession();
   const query = Object.keys(router.query).length > 0 ? router.query : '';

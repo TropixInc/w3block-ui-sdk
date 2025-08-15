@@ -47,6 +47,7 @@ export default (env, argv) => {
         NEXT_PUBLIC_PIXWAY_KEY_API_URL: "https://api.w3block.io/",
         NEXT_PUBLIC_POLL_API_URL: "https://survey.w3block.io/",
         NEXT_PUBLIC_PASS_API_URL: "https://pass.w3block.io/ ",
+        NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: "tropix",
         NEXT_PUBLIC_GOOGLE_API_KEY: "",
       }),
     ],
@@ -141,15 +142,12 @@ export default (env, argv) => {
         },
         {
           test: /\.(png|jpe?g|gif|ico)$/,
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                publicPath: "/_next/static/images/",
-                outputPath: "static/images/",
-              },
-            },
-          ],
+          type: 'asset',
+          parser: {
+            dataUrlCondition: {
+              maxSize: 8 * 1024 // 8kb
+            }
+          },
         },
         {
           test: /\.css$/,

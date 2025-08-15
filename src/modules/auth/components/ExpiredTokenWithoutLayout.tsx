@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const ExpiredTokenWithoutLayout = ({ email, onSendEmail }: Props) => {
-  const { mutate, isLoading, isSuccess } = useRequestPasswordChange();
+  const { mutate, isPending, isSuccess } = useRequestPasswordChange();
   const [translate] = useTranslation();
 
   const onClickResendEmail = () => {
@@ -30,7 +30,7 @@ export const ExpiredTokenWithoutLayout = ({ email, onSendEmail }: Props) => {
       </p>
       <button
         onClick={onClickResendEmail}
-        disabled={isLoading}
+        disabled={isPending}
         className="pw-mb-[21px] pw-font-bold pw-text-brand-primary pw-underline"
       >
         {translate('auth>expiredLink>resendCodeButton')}

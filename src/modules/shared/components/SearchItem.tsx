@@ -54,7 +54,7 @@ export const SearchItem = ({
       const selectOptions: Array<Option> = contacts?.data?.items?.map(
         (item) => ({
           label: item?.email,
-          value: item?.mainWallet?.address,
+          value: item?.mainWallet?.address ?? '',
           subtitle: item?.name,
         })
       );

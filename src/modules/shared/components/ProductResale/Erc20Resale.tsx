@@ -28,7 +28,7 @@ export const Erc20Resale = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const id = router?.query?.id as string;
-  const { mutate: productResalePreview, isLoading: isLoadingPreview } =
+  const { mutate: productResalePreview, isPending: isLoadingPreview } =
     useGetResaleById();
   const [productResale, setProductResale] = useState<ProductResaleResponse>();
   const [config, setConfig] = useState<{
@@ -37,7 +37,7 @@ export const Erc20Resale = () => {
     currency?: string;
   }>();
   const [value, setValue] = useState(0);
-  const { mutate, isLoading } = usePostProductResale();
+  const { mutate, isPending } = usePostProductResale();
   const isEdit = (router?.query?.edit as string) === 'true';
   const { data: forSaleErc20 } = useGetUserForSaleErc20(isEdit);
   const [error, setError] = useState('');
@@ -62,7 +62,7 @@ export const Erc20Resale = () => {
         price: config?.price?.toString(),
       },
       {
-        onSuccess(data) {
+        onSuccess(data: ProductResaleResponse | undefined) {
           setProductResale(data);
         },
       }
@@ -84,7 +84,7 @@ export const Erc20Resale = () => {
   const options = useMemo(() => {
     return (
       productResale?.product?.settings?.resaleConfig?.currencyIds?.map(
-        (res) => {
+        (res: string) => {
           return {
             value: res,
             label: res === '65fe1119-6ec0-4b78-8d30-cb989914bdcb' ? 'R$' : '$',
@@ -368,8 +368,8 @@ export const Erc20Resale = () => {
                 <div className="pw-flex pw-flex-col pw-gap-2">
                   {error !== '' ? <Alert variant="error">{error}</Alert> : null}
 
-                  <BaseButton disabled={isLoading} onClick={handleSubmit}>
-                    {isLoading ? (
+                  <BaseButton disabled={isPending} onClick={handleSubmit}>
+                    {isPending ? (
                       <Spinner className="pw-w-5 pw-h-5" />
                     ) : (
                       translate('pages>mysales>resale')

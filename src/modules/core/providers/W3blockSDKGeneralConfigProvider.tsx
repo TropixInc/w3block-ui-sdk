@@ -26,7 +26,7 @@ interface Props extends JSX.IntrinsicAttributes {
   };
   locale: PixwayUISdkLocale;
   companyId: string;
-  logoUrl: string;
+  logoUrl: string | undefined;
   isProduction: boolean;
   appBaseUrl: string;
   connectProxyPass?: string;

@@ -42,7 +42,7 @@ const _ResetPasswordTemplate = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const passwordSchema = usePasswordValidationSchema({});
-  const { mutate, isLoading, isSuccess, isExpired, isError } =
+  const { mutate, isPending, isSuccess, isExpired, isError } =
     useChangePasswordAndSignIn();
   const { email, token, step } = router.query;
 
@@ -198,7 +198,7 @@ const _ResetPasswordTemplate = () => {
           <AuthButton
             fullWidth
             type="submit"
-            disabled={!methods.formState.isValid || isLoading}
+            disabled={!methods.formState.isValid || isPending}
           >
             {translate('components>genericMessages>advance')}
           </AuthButton>

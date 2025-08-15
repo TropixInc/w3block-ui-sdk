@@ -24,7 +24,7 @@ interface Props {
 
 const BenefitUsesList = ({ benefitId }: Props) => {
   const [page, setPage] = useState(1);
-  const { data: benefitUses, isLoading } = useGetBenefitUses({
+  const { data: benefitUses, isFetching } = useGetBenefitUses({
     query: { benefitId, page },
   });
   const [translate] = useTranslation();
@@ -59,7 +59,7 @@ const BenefitUsesList = ({ benefitId }: Props) => {
   else
     return (
       <div className="pw-w-full pw-flex pw-flex-col pw-gap-[16px]">
-        {isLoading ? (
+        {isFetching ? (
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
           </div>

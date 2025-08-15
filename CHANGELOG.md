@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.5...v2.0.6) (2025-08-14)
+
+### [2.0.5](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.4...v2.0.5) (2025-08-12)
+
+### [2.0.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.3...v2.0.4) (2025-08-12)
+
+### [2.0.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.2...v2.0.3) (2025-08-12)
+
+### [2.0.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.1...v2.0.2) (2025-08-12)
+
+### [2.0.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.0...v2.0.1) (2025-08-11)
+
+## [2.0.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.15.89...v2.0.0) (2025-08-11)
+
+
+### Features
+
+* PR for Release ([#367](https://github.com/TropixInc/w3block-ui-sdk/issues/367)) ([d934412](https://github.com/TropixInc/w3block-ui-sdk/commit/d9344125bb06f125d47971eccc6b77e566b08982)), closes [#351](https://github.com/TropixInc/w3block-ui-sdk/issues/351) [#363](https://github.com/TropixInc/w3block-ui-sdk/issues/363) [#352](https://github.com/TropixInc/w3block-ui-sdk/issues/352) [#354](https://github.com/TropixInc/w3block-ui-sdk/issues/354) [#359](https://github.com/TropixInc/w3block-ui-sdk/issues/359)
+
 ## [2.0.0-alpha.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.15.55-alpha.0...v2.0.0-alpha.1) (2025-08-04)
 
 ## [2.0.0-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.15.79...v2.0.0-alpha.0) (2025-08-01)

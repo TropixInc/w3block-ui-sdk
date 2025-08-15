@@ -136,7 +136,7 @@ export const ProductPage = ({
     data: product,
     isSuccess,
     refetch,
-    isLoading,
+    isFetching,
     error: errorProduct,
   } = useGetProductBySlug(params?.[params.length - 1]);
   const isErc20 = product?.type === 'erc20';
@@ -734,7 +734,7 @@ export const ProductPage = ({
         </div>
       </ModalBase>
       <ModalBase isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        {isLoading ? (
+        {isFetching ? (
           <Spinner />
         ) : (
           <>

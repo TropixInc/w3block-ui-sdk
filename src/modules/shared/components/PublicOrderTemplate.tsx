@@ -18,7 +18,7 @@ import useTranslation from '../hooks/useTranslation';
 export const PublicOrderTemplate = () => {
   const router = useRouterConnect();
   const [translate] = useTranslation();
-  const { data, isLoading, isError, error } = useGetPublicOrder(
+  const { data, isFetching, isError, error } = useGetPublicOrder(
     router?.query?.id as string,
     true
   );
@@ -43,7 +43,7 @@ export const PublicOrderTemplate = () => {
     const finalValue = arr.join(' + ');
     return finalValue;
   }, [companyId, data?.data?.payments]);
-  if (isLoading)
+  if (isFetching)
     return (
       <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mt-10 pw-h-[80vh]">
         <Spinner className="pw-h-13 pw-w-13" />

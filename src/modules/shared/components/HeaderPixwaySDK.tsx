@@ -1,4 +1,4 @@
-import { lazy, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 import classNames from "classnames";
 import { NavigationTabsPixwaySDKTabs } from "../interfaces/NavigationTabsPixwaySDKTabs";
@@ -11,6 +11,7 @@ import { LanguageSelector } from "./LanguageSelector";
 import { NavigationLoginPixwaySDK } from "./NavigationLoginPixwaySDK";
 import TranslatableComponent from "./TranslatableComponent";
 import { AttachWalletProvider } from "../providers/AttachWalletProvider";
+import { AppDownloadModal } from "./AppDownloadModal";
 
 interface HeaderPixwaySDKProps {
   headerClassName?: string;

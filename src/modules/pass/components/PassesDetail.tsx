@@ -59,7 +59,7 @@ export const PassesDetail = () => {
   const [qrCodeData, setQrCodeData] = useState('');
 
   const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
-  const { data: verifyBenefit, isLoading: verifyLoading, isError: verifyError, error: errorVerifyBenefit } = useVerifyBenefit({
+  const { data: verifyBenefit, isFetching: verifyLoading, isError: verifyError, error: errorVerifyBenefit } = useVerifyBenefit({
     benefitId: benefitIdQR,
     secret,
     userId,
@@ -70,8 +70,8 @@ export const PassesDetail = () => {
   const { data: tokenPass, error: errorToken } = useGetPassById(tokenPassId);
   const user = useSessionUser();
 
-  const { mutate: registerUse, isLoading: registerLoading, error: errorRegisterUse } = usePostBenefitRegisterUse();
-  const { data: benefits, isLoading: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
+  const { mutate: registerUse, isPending: registerLoading, error: errorRegisterUse } = usePostBenefitRegisterUse();
+  const { data: benefits, isFetching: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
   const filteredBenefit = benefits?.data.items.find(({ id }) => id === benefitId);
 
   const formatedData = useMemo(() => {
