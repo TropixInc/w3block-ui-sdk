@@ -28,6 +28,7 @@ export const useGetTenantContext = (): any => {
         return null;
       },
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

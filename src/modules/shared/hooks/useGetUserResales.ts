@@ -68,6 +68,6 @@ export const useGetUserResales = () => {
         throw handleNetworkException(err);
       }
     },
-    { refetchOnWindowFocus: false }
+    { refetchOnWindowFocus: false, refetchOnMount: false }
   );
 };

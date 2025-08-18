@@ -76,6 +76,8 @@ export const useGetNFTSByWallet = (chainId: number | undefined) => {
     },
     {
       enabled: address != undefined && chainId != undefined,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     }
   );
 };

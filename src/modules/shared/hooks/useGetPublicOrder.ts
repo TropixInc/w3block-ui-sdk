@@ -30,6 +30,7 @@ export const useGetPublicOrder = (deliverId: string, enabled?: boolean) => {
       enabled: !!deliverId && enabled,
       retry: false,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

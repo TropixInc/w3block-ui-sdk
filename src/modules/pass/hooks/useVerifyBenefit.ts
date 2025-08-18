@@ -62,6 +62,7 @@ const useVerifyBenefit = ({
         secret != '' &&
         enabled,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

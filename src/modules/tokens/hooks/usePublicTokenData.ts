@@ -109,6 +109,7 @@ export const usePublicTokenData = ({
         chainId != '' &&
         enabled,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

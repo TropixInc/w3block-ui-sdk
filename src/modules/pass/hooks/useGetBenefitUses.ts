@@ -78,6 +78,7 @@ export const useGetBenefitUses = ({ query, enabled = true }: Params) => {
     {
       enabled: enabled,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
       retry: 0,
     }
   );

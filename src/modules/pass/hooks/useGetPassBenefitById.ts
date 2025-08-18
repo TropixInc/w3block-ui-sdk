@@ -35,6 +35,7 @@ const useGetPassBenefitById = (benefitId: string) => {
         benefitId != undefined &&
         benefitId != '',
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };
