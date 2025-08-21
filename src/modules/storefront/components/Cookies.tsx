@@ -1,19 +1,27 @@
-import { useLocalStorage } from 'react-use';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { CookiesData } from '../interfaces/Theme';
-
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import useTranslation from '../../shared/hooks/useTranslation';
 
-
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export const Cookies = ({ data }: { data: CookiesData }) => {
   const [translate] = useTranslation();
-  const [acceptedCookies, setAcceptedCookies] = useLocalStorage(
-    'acceptedCookies',
-    'false'
-  );
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [acceptedCookies, setAcceptedCookies] = useState(false);
+
+  useIsomorphicLayoutEffect(() => {
+    const storedValue = localStorage.getItem('acceptedCookies');
+    setAcceptedCookies(storedValue === 'true');
+    setIsHydrated(true);
+  }, []);
+
+  const handleAcceptCookies = () => {
+    setAcceptedCookies(true);
+    localStorage.setItem('acceptedCookies', 'true');
+  };
 
   const { styleData, contentData, mobileStyleData, mobileContentData } = data;
 
@@ -43,7 +51,9 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
   const sampleDisclaimer =
     'Nós utilizamos cookies e outras tecnologias semelhantes para coletar dados durante a navegação para melhorar a sua experiência em nossos serviços. Saiba mais em nossa';
 
-  if (acceptedCookies === 'true') return null;
+  if (!isHydrated) return null;
+  
+  if (acceptedCookies) return null;
 
   return (
     <TranslatableComponent>
@@ -81,7 +91,7 @@ export const Cookies = ({ data }: { data: CookiesData }) => {
               color: buttonTextColor,
             }}
             className="pw-border-none pw-text-sm pw-h-[32px] pw-w-[109px] pw-px-4 pw-py-2 pw-rounded-lg pw-whitespace-nowrap pw-leading-4"
-            onClick={() => setAcceptedCookies('true')}
+            onClick={handleAcceptCookies}
           >
             {translate('storefront>cookies>iAgree') as string}
           </button>
