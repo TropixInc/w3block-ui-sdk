@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "2.0.7",
+  "version": "2.0.8",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
