@@ -19,3 +19,4 @@ export * from './components/BaseTable';
 export * from './components/GenericTable';
 export * from './interfaces/ConfigGenericTable';
 export * from './enums/W3blockAPI';
+export * from './components/GenericWalletFilter'
