@@ -10,7 +10,7 @@ const _WalletInternalTemplate = () => {
 
   return (
     <div className="pw-flex pw-flex-col pw-px-4 sm:pw-px-0">
-      <WalletHeaderSDK />
+      <WalletHeaderSDK /> 
       <div className="pw-mt-6">
         <TokensListTemplate withLayout={false} />
       </div>

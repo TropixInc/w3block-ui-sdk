@@ -35,7 +35,7 @@ const useGetTokenPass = () => {
     {
       enabled: tenantId != undefined && tenantId != '',
       onSuccess: () => {
-        queryClient.invalidateQueries([PixwayAPIRoutes.TOKEN_EDITIONS]);
+        queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.TOKEN_EDITIONS]});
       },
       refetchOnWindowFocus: false,
       refetchInterval: false,
