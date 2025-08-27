@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "2.0.8",
+  "version": "2.0.9",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -118,6 +118,7 @@
     "next-auth": "^4.24.11",
     "postcss": "^8.4.14",
     "postcss-loader": "^8.1.1",
+    "standard-version": "^9.5.0",
     "style-loader": "^4.0.0",
     "tailwindcss": "^3.1.6",
     "tailwindcss-autofill": "^1.0.2",
