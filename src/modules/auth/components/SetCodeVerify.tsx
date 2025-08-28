@@ -102,6 +102,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
                 } else if (query.contextSlug?.length) {
                   pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                     ...query,
+                    callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
                   });
                 } else if (postSigninURL) {
                   pushConnect(postSigninURL);

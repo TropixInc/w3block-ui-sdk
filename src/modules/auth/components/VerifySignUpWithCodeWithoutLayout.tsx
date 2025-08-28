@@ -94,13 +94,17 @@ export const VerifySignUpWithCodeWithoutLayout = ({
                     } else if (query.contextSlug?.length) {
                       pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                         ...query,
+                         callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
                       });
                     } else if (postSigninURL) {
                       pushConnect(postSigninURL);
                     } else if (!skipWallet)
                       pushConnect(
                         PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-                        query
+                        {
+                          ...query,
+                          callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
+                        }
                       );
                     else pushConnect('/');
                   }

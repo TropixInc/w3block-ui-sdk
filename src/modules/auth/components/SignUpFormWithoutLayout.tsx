@@ -116,6 +116,7 @@ export const SignUpFormWithoutLayout = ({
             } else if (router.query.contextSlug?.length) {
               router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                 ...router.query,
+                 callbackUrl: router?.query?.callbackUrl ? router?.query?.callbackUrl : '/wallet'
               });
             } else if (postSigninURL) {
               router.pushConnect(postSigninURL);
