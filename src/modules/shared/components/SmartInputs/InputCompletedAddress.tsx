@@ -73,6 +73,7 @@ const InputCompletedAddress = ({
       </div>
       {country ? (
         <CityAutoComplete
+          key={country.value}
           country={country.value ?? ''}
           name={name}
           apiValue={apiValue}
