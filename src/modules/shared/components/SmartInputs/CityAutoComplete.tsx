@@ -45,7 +45,6 @@ function getAddressObject(address_components: any) {
     street_address_1: ['street_address', 'route'],
     region: [
       'administrative_area_level_1',
-      'administrative_area_level_2',
       'administrative_area_level_3',
       'administrative_area_level_4',
       'administrative_area_level_5',
@@ -57,6 +56,7 @@ function getAddressObject(address_components: any) {
       'sublocality_level_2',
       'sublocality_level_3',
       'sublocality_level_4',
+      'administrative_area_level_2',
     ],
     country: ['country'],
   };
