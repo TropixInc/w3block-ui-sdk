@@ -19,14 +19,17 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
 
   return usePrivateQuery(
     [PixwayAPIRoutes.TOKEN_PASS, benefitId, editionNumber],
-    () => {
-      return axios
-        .get<SecretResponse>(
-          PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
-            .replace('{id}', benefitId)
-            .replace('{editionNumber}', editionNumber.toString())
-        )
-        .catch((e) => e.response);
+    async () => {
+      try {
+        return await axios
+          .get<SecretResponse>(
+            PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
+              .replace('{id}', benefitId)
+              .replace('{editionNumber}', editionNumber.toString())
+          );
+      } catch (e: any) {
+        return e;
+      }
     },
     {
       enabled:
@@ -37,6 +40,8 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
       retry: false,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
+      initialData: undefined,
+      
     }
   );
 };

@@ -128,13 +128,13 @@ const _PassTemplate = ({
   const {
     data: benefit,
     isSuccess: isBenefitSucceed,
-    isFetching: isLoadingBenefit,
+    isLoading: isLoadingBenefit,
     error: errorBenefit,
   } = useGetPassBenefitById(benefitId);
 
   const {
     data: collectionData,
-    isFetching: collectionLoading,
+    isLoading: collectionLoading,
     error: errorCollectionData,
   } = useGetCollectionMetadata({
     id: benefit?.data?.tokenPassId ?? '',
@@ -147,7 +147,7 @@ const _PassTemplate = ({
   const {
     data: publicTokenResponse,
     isSuccess: isTokenSucceed,
-    isFetching: isLoadingToken,
+    isLoading: isLoadingToken,
     error: errorPublicToken,
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
@@ -165,7 +165,7 @@ const _PassTemplate = ({
 
   const {
     data: benefitsResponse,
-    isFetching: isLoadingBenefitsResponse,
+    isLoading: isLoadingBenefitsResponse,
     error: errorBenefitsResponse,
   } = useGetBenefitsByEditionNumber({
     tokenPassId: publicTokenResponse?.data?.group?.collectionId ?? '',
@@ -178,7 +178,7 @@ const _PassTemplate = ({
 
   const {
     data: secret,
-    isFetching: isLoadingSecret,
+    isLoading: isLoadingSecret,
     refetch: refetchSecret,
   } = useGetQRCodeSecret({
     benefitId,

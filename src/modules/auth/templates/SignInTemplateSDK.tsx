@@ -72,8 +72,6 @@ export const SignInTemplateSDK = ({
   }, [context]);
   const hasSignUpTheme = context?.defaultTheme?.header?.styleData?.hasSignUp;
 
-  console.log("linkou aqui ó")
-
   return (
     <SDKQueryProvider>
       <TranslatableComponent>

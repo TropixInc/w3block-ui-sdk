@@ -19,7 +19,7 @@ const useGetBenefitsByEditionNumber = ({
   const { companyId: tenantId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.PASS_BENEFITS_BY_EDITION],
+    [PixwayAPIRoutes.PASS_BENEFITS_BY_EDITION, tokenPassId, editionNumber],
     async () => {
       try {
         const response = await axios.get<BenefitsByEditionNumberDTO[]>(
@@ -45,6 +45,7 @@ const useGetBenefitsByEditionNumber = ({
         tokenPassId != null && editionNumber != null && tokenPassId !== '',
       refetchOnWindowFocus: false,
       refetchOnMount: false,
+      initialData: undefined
     }
   );
 };
