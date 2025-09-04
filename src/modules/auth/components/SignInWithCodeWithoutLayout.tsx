@@ -80,7 +80,10 @@ export const SignInWithCodeWithoutLayout = () => {
                     if (query.callbackPath?.length)
                       pushConnect(query.callbackPath as string);
                     else if (query.contextSlug?.length)
-                      pushConnect(PixwayAppRoutes.COMPLETE_KYC, query);
+                      pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
+                        ...query,
+                         callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
+                      });
                     else if (postSigninURL) pushConnect(postSigninURL);
                     else pushConnect('/');
                   }

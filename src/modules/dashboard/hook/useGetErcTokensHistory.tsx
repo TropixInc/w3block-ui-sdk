@@ -46,6 +46,7 @@ export const useGetErcTokensHistory = (
     {
       enabled: !!loyaltyId && !!companyId && !!session?.id,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

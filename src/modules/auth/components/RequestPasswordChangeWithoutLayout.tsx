@@ -13,9 +13,6 @@ import { AuthValidationTip } from './AuthValidationTip';
 import { PasswordChangeEmailSentWithoutLayout } from './PasswordChangeEmailSentWithoutLayout';
 import useTranslation from '../../shared/hooks/useTranslation';
 
-
-
-
 interface Form {
   email: string;
 }
@@ -57,16 +54,16 @@ export const RequestPasswordChangeWithoutLayout = ({
 
   useEffect(() => {
     if (isSuccess && router.query.step !== '2') {
-      router.replace({
-        query: {
-          step: 2,
-        },
+      router.pushConnect(PixwayAppRoutes.REQUEST_PASSWORD_CHANGE, {
+        step: 2,
       });
     }
   }, [isSuccess, router, methods]);
 
   const onSubmit = ({ email }: Form) => {
-    mutate({ email });
+    mutate(
+      { email }
+    );
   };
 
   const hasSentEmail = router.query.step === '2';
@@ -92,9 +89,9 @@ export const RequestPasswordChangeWithoutLayout = ({
             <div className="flex justify-between">
               <AuthValidationTip error={error} isDirty={isDirty} />
               {error?.message ===
-                translate(
-                  'companyAuth>requestPasswordChange>emailDoesntExistError'
-                ) ? (
+              translate(
+                'companyAuth>requestPasswordChange>emailDoesntExistError'
+              ) ? (
                 hasSignUp ? (
                   <a
                     href={router.routerToHref(PixwayAppRoutes.SIGN_UP)}

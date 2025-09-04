@@ -76,6 +76,7 @@ export const useGetAthlete = (id: string) => {
     {
       enabled: id != undefined && id != '',
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
       retry: 0,
     }
   );

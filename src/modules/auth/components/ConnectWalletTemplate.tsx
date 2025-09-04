@@ -156,7 +156,7 @@ const _ConnectWalletTemplate = ({
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
     setRedirect(true);
-    queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE as any);
+    queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.GET_PROFILE]});
     router.push(redirectLink, redirectLink);
   };
 

@@ -40,6 +40,6 @@ export const useGetSavedCards = () => {
         throw handleNetworkException(error);
       }
     },
-    { enabled: !!userId, refetchOnWindowFocus: false }
+    { enabled: !!userId, refetchOnWindowFocus: false, refetchOnMount: false }
   );
 };

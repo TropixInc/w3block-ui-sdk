@@ -78,6 +78,7 @@ export const useStakingSummary = (query?: QueryParams) => {
     {
       enabled: !!companyId && !!session?.id,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

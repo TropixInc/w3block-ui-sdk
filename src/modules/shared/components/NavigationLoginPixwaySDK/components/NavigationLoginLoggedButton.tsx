@@ -213,7 +213,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
         internalMenuData["mySales"]?.customLabel ||
         translate("pages>mysales>mysales"),
       id: "mySales",
-      icon: <MyOrdersIcon />,
+      icon: <MyOrdersIcon style={{ color: textColor, stroke: textColor }} />,
       route: PixwayAppRoutes.MY_SALES,
       isVisible: isHidden("mySales") === false,
     },

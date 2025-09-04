@@ -54,6 +54,7 @@ export const useGetCollectionMetadata = ({
     {
       enabled: id != undefined && id != '' && enabled,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
       retry: 0,
     }
   );

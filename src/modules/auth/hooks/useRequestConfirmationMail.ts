@@ -37,7 +37,7 @@ export const useRequestConfirmationMail = (): any => {
           callbackUrl: removeDoubleSlashesOnUrl(
             callbackPath ??
               appBaseUrl + connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP
-          ).toString(),
+          ).toString() ?? '/',
         });
       } catch (error) {
         console.error('Erro ao solicitar e-mail de confirmação:', error);

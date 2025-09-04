@@ -54,6 +54,7 @@ export const useProfile = (): any => {
         }
       },
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };
@@ -67,6 +68,8 @@ export const useProfileWithouRedirect = (): any => {
     },
     {
       retry: 1,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };
