@@ -1058,5 +1058,6 @@
   "pages>resale>feesTip": " ",
   "pages>resale>saleWarning": " ",
   "shared>cityAutoComplete>addressNotFound": "Não encontramos rua ou endereço com esse CEP. Dica: Busque pela sua rua.",
-  "pass>timeItem>invalidTime": "Horário inválido"
+  "pass>timeItem>invalidTime": "Horário inválido",
+  "notifications>notificationsTemplate>title": "Notificações"
  }
