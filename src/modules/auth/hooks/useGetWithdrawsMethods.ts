@@ -17,7 +17,7 @@ const useGetWithdrawsMethods = (userId: string, type: string) => {
           tenantId
         ).replace('{userId}', userId)
       ),
-    { refetchOnWindowFocus: false }
+    { refetchOnWindowFocus: false, refetchOnMount: false }
   );
 };
 

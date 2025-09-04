@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Redirect } from './Redirect';
 
 interface Params {
@@ -8,6 +9,8 @@ interface Params {
     textAbove?: boolean;
     marginTop?: string;
     marginBottom?: string;
+    fontSize?: string;
+    removeMargin?: boolean;
   };
   redirectConfig: {
     text?: string;
@@ -25,6 +28,12 @@ export const Separator = ({
   widgetType,
   className,
 }: Params) => {
+  const fontSize = useMemo(() => {
+    if (separatorConfig?.fontSize === 'small') return 'pw-text-sm';
+    if (separatorConfig?.fontSize === 'large') return 'pw-text-lg';
+    return 'pw-text-base';
+  }, [separatorConfig?.fontSize]);
+
   if (widgetType === 'redirect') return <Redirect {...redirectConfig} />;
   else
     return (
@@ -36,7 +45,7 @@ export const Separator = ({
         className={className}
       >
         {separatorConfig.textAbove && separatorConfig.text ? (
-          <p className="pw-flex pw-gap-x-2 pw-items-center pw-text-[18px] pw-w-auto pw-leading-[15px] pw-text-[#353945] pw-font-semibold pw-mb-5">
+          <p className={`pw-flex pw-gap-x-2 pw-items-center ${fontSize} pw-w-auto pw-leading-[15px] pw-text-[#353945] pw-font-semibold ${!separatorConfig.removeMargin ? 'pw-mb-5' : ''}`}>
             {separatorConfig.text}
           </p>
         ) : null}
@@ -44,7 +53,7 @@ export const Separator = ({
           <span className="pw-border-black pw-block pw-border pw-border-solid pw-w-full pw-mx-auto"></span>
         ) : null}
         {!separatorConfig.textAbove && separatorConfig.text ? (
-          <p className="pw-flex pw-gap-x-2 pw-items-center pw-text-[18px] pw-w-auto pw-leading-[15px] pw-text-[#353945] pw-font-semibold pw-mt-5">
+          <p className={`pw-flex pw-gap-x-2 pw-items-center ${fontSize} pw-w-auto pw-leading-[15px] pw-text-[#353945] pw-font-semibold ${!separatorConfig.removeMargin ? 'pw-mt-5' : ''}`}>
             {separatorConfig.text}
           </p>
         ) : null}

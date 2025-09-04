@@ -390,6 +390,8 @@ export const SmartInputsController = ({
               showLine: (selectData as any)?.showLine,
               text: (selectData as any)?.text,
               textAbove: (selectData as any)?.textAbove,
+              fontSize: (selectData as any)?.fontSize,
+              removeMargin: (selectData as any)?.removeMargin,
             }}
             redirectConfig={{
               bgColor: (selectData as any)?.bgColor,

@@ -68,6 +68,7 @@ export const usePaginatedGenericApiGet = ({
       disableUrl: true,
       inputMap: inputMap,
       isPublicApi,
+      refetchOnMount: false,
     }
   );
 };

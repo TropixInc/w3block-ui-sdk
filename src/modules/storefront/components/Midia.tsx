@@ -1,15 +1,11 @@
 import classNames from "classnames";
-
 import _ from "lodash";
 import { AlignmentEnum, MidiaData } from "../interfaces/Theme";
 import { useDynamicApi } from "../provider/DynamicApiProvider";
 import { useMobilePreferenceDataWhenMobile } from "../hooks/useMergeMobileData";
-import { useBreakpoints } from "../../shared/hooks/useBreakpoints";
-import { breakpointsEnum } from "../../shared/enums/breakpointsEnum";
 import { convertSpacingToCSS } from "../../shared/utils/convertSpacingToCSS";
 import { ImageSDK } from "../../shared/components/ImageSDK";
-
-
+import { useEffect, useState } from "react";
 
 const ratios: Record<string, string> = {
   default: "",
@@ -26,7 +22,12 @@ const rowAlignments: AlignmentClassNameMap = {
   center: "pw-object-center",
 };
 
-export const Midia = ({ data }: { data: MidiaData }) => {
+interface MidiaProps {
+  data: MidiaData;
+  serverDeviceType?: 'mobile' | 'desktop';
+}
+
+export const Midia = ({ data, serverDeviceType = 'desktop' }: MidiaProps) => {
   const { datasource } = useDynamicApi();
   const { styleData, mobileStyleData, id } = data;
 
@@ -54,11 +55,16 @@ export const Midia = ({ data }: { data: MidiaData }) => {
 
   const ratio = ratios[imageRatio ?? "default"];
 
-  const breakpoint = useBreakpoints();
+  const [isHydrated, setIsHydrated] = useState(false);
+  
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
-  const breakPointsMobile = [breakpointsEnum.SM, breakpointsEnum.XS];
-  const isMobile = mediaUrlMobile && breakPointsMobile.includes(breakpoint);
-  const bgUrl = isMobile ? mediaUrlMobile : mediaUrl;
+  // Use server-provided device type initially, then let client handle it after hydration
+  const bgUrl = (isHydrated ? (window.innerWidth <= 640) : (serverDeviceType === 'mobile')) && mediaUrlMobile 
+    ? mediaUrlMobile 
+    : mediaUrl;
 
   return (
     <div

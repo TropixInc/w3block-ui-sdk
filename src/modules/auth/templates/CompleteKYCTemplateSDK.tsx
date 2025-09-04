@@ -73,6 +73,13 @@ export const CompleteKYCTemplateSDK = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
+  useEffect(() => {
+    if (router?.query?.callbackUrl === '/null') {
+      console.log(router?.query, "query")
+      router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {...router?.query, callbackUrl: '/wallet'})
+    }
+  }, [router?.query])
+
   const context = useContext(ThemeContext);
   const breakpoint = useBreakpoints();
   const mobileBreakpoints = [breakpointsEnum.SM, breakpointsEnum.XS];
@@ -129,6 +136,7 @@ export const CompleteKYCTemplateSDK = ({
               formFooter={screenConfig?.form?.footer}
               formTitle={screenConfig?.form?.title}
               hideContinue={screenConfig?.form?.hideContinue}
+              renderSubtitle={screenConfig?.form?.renderSubtitle}
             />
           }
         />

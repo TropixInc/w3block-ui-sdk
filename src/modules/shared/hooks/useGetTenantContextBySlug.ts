@@ -20,6 +20,8 @@ export const useGetTenantContextBySlug = (slug: string): any => {
       onError: () => {
         return null;
       },
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

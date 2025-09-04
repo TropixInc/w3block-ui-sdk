@@ -201,7 +201,7 @@ const _ConnectExternalWalletWithoutLayout = ({
       }
     });
 
-    //queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE);
+    //queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.GET_PROFILE]});
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

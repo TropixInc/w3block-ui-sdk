@@ -28,6 +28,7 @@ export const useGetUserByReferral = ({
     enabled: typeof referralCode === 'string' && !!companyId && enabled,
     retry: 2,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   return getUserByReferral;
 };

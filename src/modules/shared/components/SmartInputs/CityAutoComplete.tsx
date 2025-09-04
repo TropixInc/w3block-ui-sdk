@@ -36,6 +36,7 @@ interface CityAutocompleteProps {
   hidenValidations?: boolean;
   required?: boolean;
   readonly?: boolean;
+  onlyZipCode?: boolean;
 }
 
 function getAddressObject(address_components: any) {
@@ -45,7 +46,6 @@ function getAddressObject(address_components: any) {
     street_address_1: ['street_address', 'route'],
     region: [
       'administrative_area_level_1',
-      'administrative_area_level_2',
       'administrative_area_level_3',
       'administrative_area_level_4',
       'administrative_area_level_5',
@@ -57,6 +57,7 @@ function getAddressObject(address_components: any) {
       'sublocality_level_2',
       'sublocality_level_3',
       'sublocality_level_4',
+      'administrative_area_level_2',
     ],
     country: ['country'],
   };
@@ -92,6 +93,7 @@ const CityAutoComplete = ({
   hidenValidations,
   required,
   readonly,
+  onlyZipCode,
 }: CityAutocompleteProps) => {
   const { field, fieldState } = useController({ name });
   const divRef = useRef<HTMLDivElement>(null);
@@ -152,7 +154,6 @@ const CityAutoComplete = ({
     500,
     [placeCompliment]
   );
-
   const transformComponents = (components: Components) => {
     const defaultComponents = {
       home: '',
@@ -185,6 +186,7 @@ const CityAutoComplete = ({
               placeDetails.address_components
             );
             const transformedComponents = transformComponents(components);
+            console.log('components', components, transformedComponents, placeDetails);
             if (transformedComponents.street_address_1) {
               if (type.includes('(cities)')) {
                 setInputValue(
@@ -196,7 +198,16 @@ const CityAutoComplete = ({
                   value: { ...transformedComponents, placeId: placeId },
                 });
               } else if (type.includes('postal_code')) {
-                setInputValue(`${placeDetails.formatted_address}`);
+                const sublocalityName = placeDetails.address_components.find(
+                  (component: any) =>
+                    component.types.includes('sublocality') &&
+                    component.types.includes('sublocality_level_1')
+                )?.long_name;
+                setInputValue(
+                  `${transformedComponents.street_address_1}${
+                    sublocalityName ? ` - ${sublocalityName}` : ''
+                  }, ${transformedComponents.city} - ${transformedComponents.region}, ${transformedComponents.postal_code}, ${transformedComponents.country}`
+                );
                 field.onChange({
                   inputId: name,
                   value: {
@@ -287,11 +298,17 @@ const CityAutoComplete = ({
         disabled={readonly || !country.length}
         className="pw-mb-2 !pw-text-black"
         type="text"
+        inputMode={onlyZipCode ? 'numeric' : undefined}
+        pattern={onlyZipCode ? '[0-9]*' : undefined}
         value={inputValue}
         placeholder={
           inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
         }
-        onChange={(e) => onChangeInputValue(e.target.value)}
+        onChange={(e) => {
+          const raw = e.target.value;
+          const next = onlyZipCode ? raw.replace(/\D/g, '') : raw;
+          onChangeInputValue(next);
+        }}
         readOnly={readonly}
         autoComplete="new-password"
         onBlur={() => {

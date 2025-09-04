@@ -28,10 +28,10 @@ const useApproveKYC = (): any => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([PixwayAPIRoutes.GET_DOCUMENTS_BY_USER]);
-        queryClient.invalidateQueries([PixwayAPIRoutes.KYC_LIST]);
+        queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.GET_DOCUMENTS_BY_USER]});
+        queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.KYC_LIST]});
 
-        queryClient.invalidateQueries(PixwayAPIRoutes.CONTEXT_BY_USER_ID as any);
+        queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.CONTEXT_BY_USER_ID]});
       },
     }
   );

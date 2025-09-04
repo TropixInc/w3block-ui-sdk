@@ -61,7 +61,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
             />
           </li>
         ))}
-        {tokensDisplaying?.map((token) => (
+       {tokensDisplaying?.map((token) => (
           <li className="w-full" key={token.id}>
             <WalletTokenCard
               collectionData={token.collectionData}

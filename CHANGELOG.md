@@ -33,6 +33,15 @@ All notable changes to this project will be documented in this file. See [standa
 ### [1.15.44-alpha.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.15.44-alpha.0...v1.15.44-alpha.1) (2025-03-14)
 
 ### [1.15.44-alpha.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v1.15.43...v1.15.44-alpha.0) (2025-03-14)
+### [2.0.11](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.10...v2.0.11) (2025-09-01)
+
+### [2.0.10](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.9...v2.0.10) (2025-08-29)
+
+### [2.0.9](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.8...v2.0.9) (2025-08-27)
+
+### [2.0.8](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.7...v2.0.8) (2025-08-21)
+
+### [2.0.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.6...v2.0.7) (2025-08-18)
 
 ### [2.0.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.5...v2.0.6) (2025-08-14)
 

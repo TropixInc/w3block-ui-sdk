@@ -93,7 +93,7 @@ export const AttachWalletModal = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCreateWalletSuccessfully = () => {
     setIsConnecting(false);
-    queryClient.invalidateQueries(PixwayAPIRoutes.GET_PROFILE as any);
+    queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.GET_PROFILE]});
     setAttachModal(false);
   };
 

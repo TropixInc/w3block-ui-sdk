@@ -31,7 +31,7 @@ export const useGetDocuments = (query?: QueryParams) => {
         .then((res) => res.data),
     {
       enabled: companyId != null && data != null,
-      refetchOnMount: true,
+      refetchOnMount: false,
       refetchOnWindowFocus: false,
       keepPreviousData: false,
       cacheTime: 0,

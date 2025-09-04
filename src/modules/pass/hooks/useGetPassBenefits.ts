@@ -53,6 +53,7 @@ const useGetPassBenefits = ({
         chainId != '' &&
         enabled,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 };

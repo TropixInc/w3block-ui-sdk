@@ -244,7 +244,7 @@ export const TokenTransferController = ({
   const client = useQueryClient();
 
   const resetState = () => {
-    client.invalidateQueries(PixwayAPIRoutes.TOKEN_EDITIONS as any);
+    client.invalidateQueries({queryKey: [PixwayAPIRoutes.TOKEN_EDITIONS]});
     setCurrentStep(null);
   };
 

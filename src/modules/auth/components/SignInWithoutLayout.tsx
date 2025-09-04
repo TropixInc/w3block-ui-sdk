@@ -133,7 +133,7 @@ export const SigInWithoutLayout = ({
         signInWithGoogle({
           code,
           companyId,
-          callbackUrl: callback,
+          callbackUrl: callback ?? '/',
           referrer: utms.utm_source ?? undefined,
         }).then((res: { ok: any }) => {
           if (!res.ok) {
@@ -151,7 +151,7 @@ export const SigInWithoutLayout = ({
         signInWithApple({
           code,
           companyId,
-          callbackUrl: callback,
+          callbackUrl: callback ?? '/',
           referrer: utms.utm_source ?? undefined,
         }).then((res) => {
           if (!res.ok) {
