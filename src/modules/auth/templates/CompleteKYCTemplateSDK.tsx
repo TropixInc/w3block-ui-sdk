@@ -136,6 +136,7 @@ export const CompleteKYCTemplateSDK = ({
               formFooter={screenConfig?.form?.footer}
               formTitle={screenConfig?.form?.title}
               hideContinue={screenConfig?.form?.hideContinue}
+              renderSubtitle={screenConfig?.form?.renderSubtitle}
             />
           }
         />

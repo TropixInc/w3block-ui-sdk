@@ -735,7 +735,7 @@
   "shared>inputCompletedAddress>compliment": "Complemento",
   "shared>inputCompletedAddress>enterCompliment": "Digite o complemento",
   "shared>inputCompletedAddress>enterPlaceNumber": "Digite o número do endereço",
-  "shared>inputCompletedAddress>enterZipCode": "Busque pelo CEP ou pela sua rua",
+  "shared>inputCompletedAddress>enterZipCode": "Busque pelo CEP",
   "shared>inputCompletedAddress>selectCountry": "Selecione o país",
   "shared>inputCompletedAddress>zipCode": "Código postal",
   "shared>inputDocument>docNumber": "Número do Documento",

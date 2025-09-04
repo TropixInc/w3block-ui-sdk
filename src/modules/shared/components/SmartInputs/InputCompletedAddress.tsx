@@ -53,7 +53,7 @@ const InputCompletedAddress = ({
       );
     else return countries;
   }, [search]);
-
+  
   return (
     <div className="pw-flex pw-flex-col pw-gap-5 pw-mb-3">
       <div>
@@ -83,6 +83,7 @@ const InputCompletedAddress = ({
           required={required}
           readonly={readonly}
           hidenValidations={hidenValidations}
+          onlyZipCode
         />
       ) : null}
     </div>
