@@ -105,6 +105,7 @@ const CityAutoComplete = ({
   const [showOptions, setShowOptions] = useState(false);
   const [placeNumber, setPlaceNumber] = useState('');
   const [placeCompliment, setPlaceCompliment] = useState('');
+  const [subLocality, setSubLocality] = useState('');
   const { placesService, placePredictions, getPlacePredictions } =
     usePlacesService({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '',
@@ -120,6 +121,7 @@ const CityAutoComplete = ({
     getPlacePredictions({ input: '' });
     setInputValue(undefined);
     setShowOptions(false);
+    setSubLocality('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [country]);
 
@@ -186,7 +188,6 @@ const CityAutoComplete = ({
               placeDetails.address_components
             );
             const transformedComponents = transformComponents(components);
-            console.log('components', components, transformedComponents, placeDetails);
             if (transformedComponents.street_address_1) {
               if (type.includes('(cities)')) {
                 setInputValue(
@@ -203,10 +204,17 @@ const CityAutoComplete = ({
                     component.types.includes('sublocality') &&
                     component.types.includes('sublocality_level_1')
                 )?.long_name;
+                setSubLocality(sublocalityName ?? '');
                 setInputValue(
-                  `${transformedComponents.street_address_1}${
-                    sublocalityName ? ` - ${sublocalityName}` : ''
-                  }, ${transformedComponents.city} - ${transformedComponents.region}, ${transformedComponents.postal_code}, ${transformedComponents.country}`
+                  onlyZipCode
+                    ? transformedComponents.postal_code
+                    : `${transformedComponents.street_address_1}${
+                        sublocalityName ? ` - ${sublocalityName}` : ''
+                      }, ${transformedComponents.city} - ${
+                        transformedComponents.region
+                      }, ${transformedComponents.postal_code}, ${
+                        transformedComponents.country
+                      }`
                 );
                 field.onChange({
                   inputId: name,
@@ -292,21 +300,20 @@ const CityAutoComplete = ({
       </LabelWithRequired>
 
       <BaseInput
-        disableClasses={readonly}
         invalid={fieldState.invalid}
         valid={!!field?.value && !fieldState.invalid}
         disabled={readonly || !country.length}
         className="pw-mb-2 !pw-text-black"
         type="text"
-        inputMode={onlyZipCode ? 'numeric' : undefined}
-        pattern={onlyZipCode ? '[0-9]*' : undefined}
+        inputMode={onlyZipCode ? 'tel' : undefined}
+        pattern={onlyZipCode ? '[0-9\\s-]*' : undefined}
         value={inputValue}
         placeholder={
           inputPlaceholder ?? translate('shared>cityAutoComplete>searchCity')
         }
         onChange={(e) => {
           const raw = e.target.value;
-          const next = onlyZipCode ? raw.replace(/\D/g, '') : raw;
+          const next = onlyZipCode ? raw.replace(/[^0-9\s-]/g, '') : raw;
           onChangeInputValue(next);
         }}
         readOnly={readonly}
@@ -332,7 +339,9 @@ const CityAutoComplete = ({
                       className="pw-w-full pw-h-full pw-text-left !pw-text-black"
                       onClick={(e) => {
                         setPlaceId(item.value);
-                        !type.includes('(cities)') && setInputValue(item.label);
+                        !type.includes('(cities)') &&
+                          !onlyZipCode &&
+                          setInputValue(item.label);
                         setShowOptions(false);
                         e.preventDefault();
                       }}
@@ -363,15 +372,89 @@ const CityAutoComplete = ({
         </p>
       )}
 
-      {type.includes('postal_code') ? (
-        <div className="pw-flex pw-gap-x-2 pw-mt-2">
+      {onlyZipCode && type.includes('postal_code') ? (
+        <div className="pw-flex pw-flex-col pw-gap-y-2 pw-mt-2">
+          <div className="pw-mb-3">
+            <LabelWithRequired haveColon={false}>
+              {translate('shared>cityAutoComplete>street')}
+            </LabelWithRequired>
+            <BaseInput
+              disabled
+              value={field?.value?.value?.street_address_1 ?? ''}
+            />
+          </div>
+          {subLocality ? (
+            <div className="pw-mb-3">
+              <LabelWithRequired haveColon={false}>
+                {translate('shared>cityAutoComplete>neighborhood')}
+              </LabelWithRequired>
+              <BaseInput disabled value={subLocality} />
+            </div>
+          ) : null}
+          <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-6 pw-gap-x-2 pw-mb-3">
+            <div className="pw-flex-1">
+              <LabelWithRequired required={required} haveColon={false}>
+                {translate('shared>inputCompletedAddress>enterPlaceNumber')}
+              </LabelWithRequired>
+
+              <BaseInput
+                invalid={fieldState.invalid}
+                valid={!!field?.value && !fieldState.invalid}
+                disabled={readonly}
+                type="text"
+                value={placeNumber}
+                className="!pw-text-black"
+                placeholder={translate(
+                  'shared>inputCompletedAddress>enterPlaceNumber'
+                )}
+                onChange={(e) => setPlaceNumber(e.target.value)}
+                readOnly={readonly}
+              />
+            </div>
+            <div className="pw-flex-1">
+              <LabelWithRequired haveColon={false}>
+                {translate('shared>inputCompletedAddress>enterCompliment')}
+              </LabelWithRequired>
+              <BaseInput
+                invalid={fieldState.invalid}
+                valid={!!field?.value && !fieldState.invalid}
+                className="!pw-text-black"
+                disabled={readonly}
+                type="text"
+                value={placeCompliment}
+                placeholder={translate(
+                  'shared>inputCompletedAddress>compliment'
+                )}
+                onChange={(e) => setPlaceCompliment(e.target.value)}
+                readOnly={readonly}
+              />
+            </div>
+          </div>
+          <div className="pw-flex pw-gap-6 pw-flex-col sm:pw-flex-row pw-gap-x-2 pw-mb-3">
+            <div className="pw-flex-1">
+              <LabelWithRequired haveColon={false}>
+                {translate('shared>cityAutoComplete>city')}
+              </LabelWithRequired>
+              <BaseInput disabled value={field?.value?.value?.city ?? ''} />
+            </div>
+            <div className="pw-flex-1">
+              <LabelWithRequired haveColon={false}>
+                {translate('shared>cityAutoComplete>region')}
+              </LabelWithRequired>
+              <BaseInput disabled value={field?.value?.value?.region ?? ''} />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {!onlyZipCode && type.includes('postal_code') ? (
+        <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-x-2 pw-mt-2">
           <div className="pw-w-full sm:pw-max-w-[255px]">
             <LabelWithRequired required={required} haveColon={false}>
               {translate('shared>inputCompletedAddress>enterPlaceNumber')}
             </LabelWithRequired>
 
             <BaseInput
-              disableClasses={readonly}
               invalid={fieldState.invalid}
               valid={!!field?.value && !fieldState.invalid}
               disabled={readonly}
@@ -390,7 +473,6 @@ const CityAutoComplete = ({
               {translate('shared>inputCompletedAddress>enterCompliment')}
             </LabelWithRequired>
             <BaseInput
-              disableClasses={readonly}
               invalid={fieldState.invalid}
               valid={!!field?.value && !fieldState.invalid}
               className="!pw-text-black"
