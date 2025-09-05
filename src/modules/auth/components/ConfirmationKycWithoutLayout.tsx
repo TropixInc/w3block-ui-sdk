@@ -268,7 +268,8 @@ export const ConfirmationKycWithoutLayout = () => {
                     } else if (simpleValue) return simpleValue;
                     else return value;
                   };
-                  if (res.type !== 'multiface_selfie')
+                  if (res.type === 'separator') return null;
+                  else if (res.type !== 'multiface_selfie') {
                     return (
                       <div
                         key={res.id}
@@ -280,6 +281,7 @@ export const ConfirmationKycWithoutLayout = () => {
                         <p className="pw-font-normal pw-break-all">{value()}</p>
                       </div>
                     );
+                  }
                 })}
               </div>
             );
