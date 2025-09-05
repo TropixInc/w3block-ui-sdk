@@ -253,26 +253,7 @@ export const ConfirmationKycWithoutLayout = () => {
                         />
                       );
                     } else if (res?.type === 'separator') {
-                      return (
-                        <Separator
-                          widgetType={(res?.data as any)?.widgetType}
-                          separatorConfig={{
-                            marginBottom: (res?.data as any)?.marginBottom,
-                            marginTop: (res?.data as any)?.marginTop,
-                            showLine: (res?.data as any)?.showLine,
-                            text: (res?.data as any)?.text,
-                            textAbove: (res?.data as any)?.textAbove,
-                          }}
-                          redirectConfig={{
-                            bgColor: (res?.data as any)?.bgColor,
-                            link: (res?.data as any)?.link,
-                            target: (res?.data as any)?.target,
-                            text: (res?.data as any)?.text,
-                            textColor: (res?.data as any)?.textColor,
-                          }}
-                          className="!pw-mb-0"
-                        />
-                      );
+                      return null;
                     } else if (res.type === 'image' || res.type === 'file') {
                       return (
                         <a
