@@ -44,9 +44,10 @@ export const MySales = () => {
 
   const profile = useProfile();
 
-  const { data: context } = useGetContextByUserId(
-    profile?.data?.data?.id ?? ''
-  );
+  const { data: context } = useGetContextByUserId({
+    userId: profile?.data?.data?.id ?? '',
+    queryOptions: { limit: 50 },
+  });
   const hasBankDetails = useMemo(() => {
     return context?.data?.items?.find(
       (res: any) => res.context?.slug === 'bankdetails'
