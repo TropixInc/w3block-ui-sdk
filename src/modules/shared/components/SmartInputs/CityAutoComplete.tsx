@@ -379,24 +379,15 @@ const CityAutoComplete = ({
               {translate('shared>cityAutoComplete>street')}
             </LabelWithRequired>
             <BaseInput
-              disabled
+              readonly
               value={field?.value?.value?.street_address_1 ?? ''}
             />
           </div>
-          {subLocality ? (
-            <div className="pw-mb-3">
-              <LabelWithRequired haveColon={false}>
-                {translate('shared>cityAutoComplete>neighborhood')}
-              </LabelWithRequired>
-              <BaseInput disabled value={subLocality} />
-            </div>
-          ) : null}
           <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-6 pw-gap-x-2 pw-mb-3">
             <div className="pw-flex-1">
               <LabelWithRequired required={required} haveColon={false}>
                 {translate('shared>inputCompletedAddress>enterPlaceNumber')}
               </LabelWithRequired>
-
               <BaseInput
                 invalid={fieldState.invalid}
                 valid={!!field?.value && !fieldState.invalid}
@@ -430,18 +421,26 @@ const CityAutoComplete = ({
               />
             </div>
           </div>
+          {subLocality ? (
+            <div className="pw-mb-3">
+              <LabelWithRequired haveColon={false}>
+                {translate('shared>cityAutoComplete>neighborhood')}
+              </LabelWithRequired>
+              <BaseInput readonly value={subLocality} />
+            </div>
+          ) : null}
           <div className="pw-flex pw-gap-6 pw-flex-col sm:pw-flex-row pw-gap-x-2 pw-mb-3">
             <div className="pw-flex-1">
               <LabelWithRequired haveColon={false}>
                 {translate('shared>cityAutoComplete>city')}
               </LabelWithRequired>
-              <BaseInput disabled value={field?.value?.value?.city ?? ''} />
+              <BaseInput readonly value={field?.value?.value?.city ?? ''} />
             </div>
             <div className="pw-flex-1">
               <LabelWithRequired haveColon={false}>
                 {translate('shared>cityAutoComplete>region')}
               </LabelWithRequired>
-              <BaseInput disabled value={field?.value?.value?.region ?? ''} />
+              <BaseInput readonly value={field?.value?.value?.region ?? ''} />
             </div>
           </div>
         </div>
