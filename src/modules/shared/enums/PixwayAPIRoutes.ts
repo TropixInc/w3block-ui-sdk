@@ -124,4 +124,5 @@ export enum PixwayAPIRoutes {
   DELETE_PRODUCT_RESALE = '/companies/{companyId}/products-resale/{productId}',
   SIGNIN_WITH_APPLE = '/auth/{companyId}/signin/apple/code',
   GET_APPLE_REDIRECT = '/auth/{companyId}/signIn/apple',
+  GET_NOTIFICATIONS = '/notifications/{tenantId}'
 }

@@ -34,16 +34,19 @@ const InputCheckbox = ({
   const error = fieldState?.error as unknown as InputError;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data = (configData as any)?.checkbox;
+
   const handleValueChange = (value: boolean) => {
     if (value) {
       setInputValue(value);
       field.onChange({ inputId: name, value: value });
     } else {
       setInputValue(false);
-      field.onChange({
-        inputId: undefined,
-        value: undefined,
-      });
+      if (docValue) {
+        field.onChange({
+          inputId: name,
+          value: "false",
+        });
+      }
     }
   };
 
@@ -56,7 +59,7 @@ const InputCheckbox = ({
   }, [docValue]);
 
   return (
-    <div className={`${label === ' ' ? '-pw-mt-2' : ''} pw-mb-2 pw-w-full`}>
+    <div className={`${label === ' ' ? '-pw-mt-2' : ''} pw-mb-2 pw-w-full pw-flex pw-gap-5 pw-items-center`}>
       <LabelWithRequired name={name} required={required}>
         {label}
       </LabelWithRequired>
