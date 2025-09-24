@@ -1059,5 +1059,8 @@
   "pages>resale>saleWarning": " ",
   "shared>cityAutoComplete>addressNotFound": "Não encontramos rua ou endereço com esse CEP. Dica: Busque pela sua rua.",
   "pass>timeItem>invalidTime": "Horário inválido",
-  "notifications>notificationsTemplate>title": "Notificações"
+  "notifications>notificationsTemplate>title": "Notificações",
+  "notifications>notificationsTemplate>explain": "Você pode desativar as notificações que não deseja receber",
+  "notifications>notificationsTemplate>disclaimer": "*Marque o checkbox para desativar",
+  "notifications>notificationsTemplate>kycNotFound": "Não foi configurado um KYC de Notificações"
  }

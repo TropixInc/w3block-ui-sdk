@@ -44,7 +44,7 @@ const _MyProfileTemplate = () => {
   const contextsActivated = useMemo(() => {
     if (!isLoadingTenantContext && tenantContext) {
       const contexts = tenantContext?.data?.items?.filter(
-        ({ active }: any) => active
+        (item: any) => item.active && item.context.slug !== "notification-settings"
       );
       return contexts;
     }
