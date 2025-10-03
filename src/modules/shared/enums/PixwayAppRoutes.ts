@@ -61,4 +61,5 @@ export enum PixwayAppRoutes {
   STAKING = '/staking',
   MY_SALES = '/resale/mysales',
   RESALE = '/resale',
+  MY_NOTIFICATIONS = '/notifications'
 }
