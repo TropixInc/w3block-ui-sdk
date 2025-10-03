@@ -1062,5 +1062,6 @@
   "notifications>notificationsTemplate>title": "Notificações",
   "notifications>notificationsTemplate>explain": "Você pode desativar as notificações que não deseja receber",
   "notifications>notificationsTemplate>disclaimer": "*Marque o checkbox para desativar",
-  "notifications>notificationsTemplate>kycNotFound": "Não foi configurado um KYC de Notificações"
+  "notifications>notificationsTemplate>kycNotFound": "Não foi configurado um KYC de Notificações",
+  "shared>formTemplate>save": "Salvar"
  }

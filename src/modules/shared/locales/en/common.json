@@ -1059,5 +1059,6 @@
 "notifications>notificationsTemplate>title": "Notifications",
 "notifications>notificationsTemplate>explain": "You can disable notifications you don't want to receive",
 "notifications>notificationsTemplate>disclaimer": "*Check the box to disable",
-"notifications>notificationsTemplate>kycNotFound": "Notification KYC has not been set up"
+"notifications>notificationsTemplate>kycNotFound": "Notification KYC has not been set up",
+"shared>formTemplate>save": "Save"
 }
