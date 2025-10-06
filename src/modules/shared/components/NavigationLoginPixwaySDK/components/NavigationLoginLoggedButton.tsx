@@ -13,6 +13,7 @@ import MyOrdersIcon from "../../../assets/icons/myOrders.svg";
 import NewsIcon from "../../../assets/icons/news.svg";
 import ReceiptIcon from "../../../assets/icons/receipt.svg";
 import UserIcon from "../../../assets/icons/user.svg";
+import NotifyIcon from "../../../assets/icons/notifyOutlined.svg";
 import FormIcon from "../../../assets/icons/form.svg";
 import IntegrationIcon from "../../../assets/icons/integrationIconOutlined.svg";
 import LogoutIcon from "../../../assets/icons/logoutIconGray.svg";
@@ -71,13 +72,13 @@ export const NavigationLoginLoggedButton = ({
         >
           <UserSimpleIcon style={{ stroke: textColor }} />
           {organizedLoyalties &&
-          organizedLoyalties.length > 0 &&
-          organizedLoyalties.some(
-            (wallet) =>
-              wallet.type == "loyalty" &&
-              wallet?.balance &&
-              parseFloat(wallet?.balance ?? "0") > 0
-          ) ? (
+            organizedLoyalties.length > 0 &&
+            organizedLoyalties.some(
+              (wallet) =>
+                wallet.type == "loyalty" &&
+                wallet?.balance &&
+                parseFloat(wallet?.balance ?? "0") > 0
+            ) ? (
             <p
               style={{ color: textColor }}
               className="pw-font-[400] pw-text-xs"
@@ -89,21 +90,21 @@ export const NavigationLoginLoggedButton = ({
                   parseFloat(wallet?.balance ?? "0") > 0
               ).pointsPrecision == "decimal"
                 ? parseFloat(
-                    organizedLoyalties.find(
-                      (wallet) =>
-                        wallet.type == "loyalty" &&
-                        wallet?.balance &&
-                        parseFloat(wallet?.balance ?? "0") > 0
-                    )?.balance ?? "0"
-                  ).toFixed(2)
+                  organizedLoyalties.find(
+                    (wallet) =>
+                      wallet.type == "loyalty" &&
+                      wallet?.balance &&
+                      parseFloat(wallet?.balance ?? "0") > 0
+                  )?.balance ?? "0"
+                ).toFixed(2)
                 : parseFloat(
-                    organizedLoyalties.find(
-                      (wallet) =>
-                        wallet.type == "loyalty" &&
-                        wallet?.balance &&
-                        parseFloat(wallet?.balance ?? "0") > 0
-                    )?.balance ?? "0"
-                  ).toFixed(0)}
+                  organizedLoyalties.find(
+                    (wallet) =>
+                      wallet.type == "loyalty" &&
+                      wallet?.balance &&
+                      parseFloat(wallet?.balance ?? "0") > 0
+                  )?.balance ?? "0"
+                ).toFixed(0)}
             </p>
           ) : null}
 
@@ -140,8 +141,8 @@ export const useDefaultMenuTabs = (textColor: string) => {
   const isHidden = useIsHiddenMenuItem(userRoles as Array<UserRoleEnum>);
   const isAdmin = Boolean(
     userRoles?.includes("admin") ||
-      userRoles?.includes("superAdmin") ||
-      userRoles?.includes("operator")
+    userRoles?.includes("superAdmin") ||
+    userRoles?.includes("operator")
   );
   const isUser = Boolean(userRoles?.includes("user"));
   const isLoayaltyOperator = Boolean(userRoles?.includes("loyaltyOperator"));
@@ -321,6 +322,15 @@ export const useDefaultMenuTabs = (textColor: string) => {
     },
     {
       name:
+        internalMenuData['notifications']?.customLabel ||
+        translate('notifications>notificationsTemplate>title'),
+      id: 'notifications',
+      icon: <NotifyIcon width={17} height={17} style={{ color: textColor, stroke: textColor }} />,
+      route: PixwayAppRoutes.MY_NOTIFICATIONS,
+      isVisible: (isUser || isAdmin) && !isHidden('notifications'),
+    },
+    {
+      name:
         internalMenuData["requests"]?.customLabel ||
         translate("components>menu>requests"),
       id: "requests",
@@ -437,9 +447,8 @@ const NavigationMenu = ({
     <div className="pw-relative">
       <div
         style={{ backgroundColor, color: textColor }}
-        className={`pw-absolute pw-mt-[1.68rem] ${
-          organizedWallets.length ? "pw-right-[-16px]" : ""
-        } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md -pw-left-[95px]`}
+        className={`pw-absolute pw-mt-[1.68rem] ${organizedWallets.length ? "pw-right-[-16px]" : ""
+          } pw-bg-white pw-w-[160px] pw-rounded-b-[20px] pw-z-30 pw-px-2 pw-py-3 pw-shadow-md -pw-left-[95px]`}
       >
         {organizedWallets.length ? <WithWallet /> : null}
 
@@ -471,8 +480,8 @@ const NavigationMenu = ({
             ) : null
           )}
           {organizedWallets.length &&
-          organizedWallets.some((w) => w.type == "loyalty") &&
-          !hideLoyaltyAuthentication ? (
+            organizedWallets.some((w) => w.type == "loyalty") &&
+            !hideLoyaltyAuthentication ? (
             <BaseButton
               onClick={() => setAuthenticatePaymentModal?.(true)}
               className="!pw-text-white !pw-py-[5px] !pw-px-[24px] pw-mt-4 pw-w-full"

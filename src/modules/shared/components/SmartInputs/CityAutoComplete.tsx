@@ -188,6 +188,7 @@ const CityAutoComplete = ({
               placeDetails.address_components
             );
             const transformedComponents = transformComponents(components);
+            console.log('components', components, transformedComponents, placeDetails);
             if (transformedComponents.street_address_1) {
               if (type.includes('(cities)')) {
                 setInputValue(

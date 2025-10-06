@@ -72,7 +72,7 @@ export const PassesDetail = () => {
 
   const { mutate: registerUse, isPending: registerLoading, error: errorRegisterUse } = usePostBenefitRegisterUse();
   const { data: benefits, isFetching: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
-  const filteredBenefit = benefits?.data.items.find(({ id }) => id === benefitId);
+  const filteredBenefit = benefits?.data?.items?.find(({ id }) => id === benefitId);
 
   const formatedData = useMemo(() => {
     const filteredBenefits = tokenPass?.data?.tokenPassBenefits?.filter((benefit: { tokenPassBenefitOperators: any[]; }) => {

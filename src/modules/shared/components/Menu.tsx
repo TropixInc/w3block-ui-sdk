@@ -24,6 +24,7 @@ import ReceiptIcon from '../assets/icons/receipt.svg';
 import TicketIcon from '../assets/icons/ticketFilled.svg';
 // import  SettingsIcon  from '../assets/icons/settingsOutlined.svg';
 import UserIcon from '../assets/icons/userOutlined.svg';
+import NotifyIcon from '../assets/icons/notifyOutlined.svg';
 
 import { usePixwayAuthentication } from '../../auth/hooks/usePixwayAuthentication';
 import { useLoyaltiesInfo } from '../../business/hooks/useLoyaltiesInfo';
@@ -234,6 +235,15 @@ const _Menu = ({ tabs, className }: MenuProps) => {
         icon: <UserIcon width={17} height={17} />,
         link: PixwayAppRoutes.PROFILE,
         isVisible: (isUser || isAdmin) && !isHidden('myProfile'),
+      },
+      {
+        title:
+          internalMenuData['notifications']?.customLabel ||
+          translate('notifications>notificationsTemplate>title'),
+        id: 'notifications',
+        icon: <NotifyIcon width={17} height={17} />,
+        link: PixwayAppRoutes.MY_NOTIFICATIONS,
+        isVisible: (isUser || isAdmin) && !isHidden('notifications'),
       },
       {
         title:

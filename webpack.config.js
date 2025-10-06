@@ -25,6 +25,7 @@ export default (env, argv) => {
       dashboard: "./src/dashboard.ts",
       style: "./src/style.css",
       checkout: "./src/checkout.ts",
+      notifications: "./src/notifications.ts"
     },
     plugins: [
       new MiniCssExtractPlugin({

@@ -330,7 +330,7 @@ const _HeaderPixwaySDK = ({
           </div>
         </div>
       </div>
-      <AppDownloadModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      {/* <AppDownloadModal isOpen={isOpen} onClose={() => setIsOpen(false)} /> */}
     </div>
   ) : null;
 };

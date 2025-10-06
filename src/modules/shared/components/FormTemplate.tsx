@@ -155,9 +155,9 @@ export const FormTemplate = ({
           {isLoading ? (
             <Spinner className="!pw-w-4 !pw-h-4 !pw-border-2" />
           ) : keyPage ? (
-            'Salvar'
+            translate('shared>formTemplate>save')
           ) : (
-            'Continuar'
+            translate('components>advanceButton>continue')
           )}
         </BaseButton>
       )}
