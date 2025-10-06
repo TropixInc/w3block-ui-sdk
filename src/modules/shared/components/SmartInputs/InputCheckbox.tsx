@@ -68,7 +68,7 @@ const InputCheckbox = ({
         <input
           type="checkbox"
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
-          onChange={(e) => handleValueChange(!e.target.checked)}
+          onChange={(e) => handleValueChange((configData as any)?.invertInputValue ? !e.target.checked : e.target.checked)}
           disabled={readonly}
           checked={(configData as any)?.invertInputValue ? !inputValue : inputValue}
         />
