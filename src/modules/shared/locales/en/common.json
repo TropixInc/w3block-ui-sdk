@@ -1057,8 +1057,8 @@
 "pages>mySales>currentBalance": "Current {{coin}} Balance",
 "pass>timeItem>invalidTime": "Invalid time",
 "notifications>notificationsTemplate>title": "Notifications",
-"notifications>notificationsTemplate>explain": "You can disable notifications you don't want to receive",
-"notifications>notificationsTemplate>disclaimer": "*Check the box to disable",
+"notifications>notificationsTemplate>explain": "You can manage which notifications you want to receive",
+"notifications>notificationsTemplate>disclaimer": "*Check the box to enable",
 "notifications>notificationsTemplate>kycNotFound": "Notification KYC has not been set up",
 "shared>formTemplate>save": "Save"
 }
