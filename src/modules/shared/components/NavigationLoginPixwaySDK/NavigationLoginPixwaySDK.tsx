@@ -41,6 +41,7 @@ export const NavigationLoginPixwaySDK = ({
 
   const validatorOpened = loginMenu ? loginMenu : userMenu;
 
+
   return (
     <div
       style={{

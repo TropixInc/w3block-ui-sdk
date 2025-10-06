@@ -34,16 +34,19 @@ const InputCheckbox = ({
   const error = fieldState?.error as unknown as InputError;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data = (configData as any)?.checkbox;
+
   const handleValueChange = (value: boolean) => {
     if (value) {
       setInputValue(value);
       field.onChange({ inputId: name, value: value });
     } else {
       setInputValue(false);
-      field.onChange({
-        inputId: undefined,
-        value: undefined,
-      });
+      if (docValue) {
+        field.onChange({
+          inputId: name,
+          value: "false",
+        });
+      }
     }
   };
 
@@ -56,10 +59,8 @@ const InputCheckbox = ({
   }, [docValue]);
 
   return (
-    <div className={`${label === ' ' ? '-pw-mt-2' : ''} pw-mb-2 pw-w-full`}>
-      <LabelWithRequired name={name} required={required}>
-        {label}
-      </LabelWithRequired>
+    <div className={`${label === ' ' ? '-pw-mt-2' : ''} pw-mb-2 pw-w-full pw-flex pw-gap-5 pw-items-center`}>
+
       <FormItemContainer
         invalid={fieldState.invalid}
         className="!pw-outline-none pw-flex pw-gap-2"
@@ -67,9 +68,9 @@ const InputCheckbox = ({
         <input
           type="checkbox"
           readOnly={docStatus && validateIfStatusKycIsReadonly(docStatus)}
-          onChange={(e) => handleValueChange(e.target.checked)}
+          onChange={(e) => handleValueChange((configData as any)?.invertInputValue ? !e.target.checked : e.target.checked)}
           disabled={readonly}
-          checked={inputValue}
+          checked={(configData as any)?.invertInputValue ? !inputValue : inputValue}
         />
         <a
           href={data?.link}
@@ -79,6 +80,9 @@ const InputCheckbox = ({
         >
           {data?.text}
         </a>
+        <LabelWithRequired haveColon={false} name={name} required={required}>
+          {label}
+        </LabelWithRequired>
       </FormItemContainer>
       {!hidenValidations && (
         <div className="pw-mt-[5px] pw-h-[16px]">

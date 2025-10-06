@@ -1060,5 +1060,10 @@
 "pages>checkout>batchSizeSale": "You can only sell in multiple quantities of {{batchSize}}",
 "pages>productPage>minValue": "Minimum purchase value {{value}}",
 "pages>mySales>currentBalance": "Current {{coin}} Balance",
-"pass>timeItem>invalidTime": "Invalid time"
+"pass>timeItem>invalidTime": "Invalid time",
+"notifications>notificationsTemplate>title": "Notifications",
+"notifications>notificationsTemplate>explain": "You can manage which notifications you want to receive",
+"notifications>notificationsTemplate>disclaimer": "*Check the box to enable",
+"notifications>notificationsTemplate>kycNotFound": "Notification KYC has not been set up",
+"shared>formTemplate>save": "Save"
 }
