@@ -9,6 +9,7 @@ interface ConfigComponentProps {
   panelItems: Array<{ start: string; end: string }>;
   onChangePanelItems?: (value: Array<{ start: string; end: string }>) => void;
   invalidDays?: any;
+  checkinItems?: any;
 }
 
 export const ConfigTimeComponent = ({
@@ -17,6 +18,8 @@ export const ConfigTimeComponent = ({
   onChangePanelItems,
   panelItems,
   invalidDays,
+  checkinItems,
+
 }: ConfigComponentProps) => {
   const [translate] = useTranslation();
 
@@ -42,6 +45,7 @@ export const ConfigTimeComponent = ({
         activeTab={activeTab}
         onChangeActiveTab={onChangeActiveTab}
         invalidDays={invalidDays}
+        checkinItems={checkinItems}
       />
       <ConfigPanel
         activeDay={activeTab}

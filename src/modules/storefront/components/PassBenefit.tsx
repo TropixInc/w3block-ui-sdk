@@ -37,6 +37,7 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
 
   const { text: benefitIdDynamic } = useDynamicString(benefitId);
 
+
   const {
     data: benefit,
     isSuccess: isBenefitSucceed,
@@ -208,6 +209,7 @@ export const PassBenefit = ({ data }: PassBenefitProps) => {
                 panelItems={benefit?.data?.checkIn[activeTab ?? '']}
                 activeTab={activeTab}
                 onChangeActiveTab={setActiveTab}
+                checkinItems={benefit?.data?.checkIn}
               />
             </div>
           ) : null}
