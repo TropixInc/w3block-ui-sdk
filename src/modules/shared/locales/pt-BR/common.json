@@ -1067,5 +1067,7 @@
   "notifications>notificationsTemplate>explain": "Você pode gerenciar as notificações que deseja receber",
   "notifications>notificationsTemplate>disclaimer": "*Marque o checkbox para ativar",
   "notifications>notificationsTemplate>kycNotFound": "Não foi configurado um KYC de Notificações",
-  "shared>formTemplate>save": "Salvar"
+  "shared>formTemplate>save": "Salvar",
+  "tokens>tokensListTemplate>showActiveBenefits": "Mostrar tokens com beneficios ativos",
+  "tokens>tokensListTemplate>showAllTokens": "Mostrar todos os tokens"
  }
