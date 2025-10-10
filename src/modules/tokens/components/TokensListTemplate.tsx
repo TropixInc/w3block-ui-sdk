@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import WalletImage from '../../shared/assets/icons/wallet.svg';
-
-import { Token } from '../interfaces/Token';
 import { ErrorBox } from '../../shared/components/ErrorBox';
+import { BaseSelect } from '../../shared/components/BaseSelect';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { useHasWallet } from '../../shared/hooks/useHasWallet';
@@ -12,10 +10,12 @@ import { useProcessingTokens } from '../../shared/hooks/useProcessingTokens';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { useGetNFTSByWallet } from '../hooks/useGetNFTSByWallet';
+import { Token } from '../interfaces/Token';
 import { mapNFTToToken } from '../utils/mapNFTToToken';
 import { TokenListTemplateSkeleton } from './TokenListTemplateSkeleton';
 import { WalletTokenCard } from './WalletTokenCard';
 import { Pagination } from '../../shared/components/Pagination';
+import WalletImage from '../../shared/assets/icons/wallet.svg';
 import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Props {
@@ -28,24 +28,64 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const [translate] = useTranslation();
   useHasWallet({});
   const { mainWallet: wallet } = useUserWallet();
+  const [selectedFilter, setSelectedFilter] = useState<'active' | 'all'>('all');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const { data } = useProcessingTokens();
+  const filterOptions = useMemo(
+    () => [
+      {
+        label: translate('tokens>tokensListTemplate>showActiveBenefits'),
+        value: 'active',
+      },
+      {
+        label: translate('tokens>tokensListTemplate>showAllTokens'),
+        value: 'all',
+      },
+    ],
+    []
+  );
+  const filteredTokens = useMemo(() => {
+    if (selectedFilter === 'active') {
+      return tokens?.filter((token) => token.collectionData?.pass) ?? [];
+    }
+
+    return tokens ?? [];
+  }, [tokens, selectedFilter]);
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 6;
     const lastIndex = page * 6;
-    return tokens?.slice(startIndex, lastIndex);
-  }, [page, tokens]);
+    return filteredTokens.slice(startIndex, lastIndex);
+  }, [page, filteredTokens]);
 
   useEffect(() => {
     if (!isLoading) {
-      setTotalPages(Math.ceil(tokens?.length ? tokens.length / 6 : 1 / 6));
+      const pages = Math.ceil(((filteredTokens.length || 1) / 6));
+      setTotalPages(pages);
+
+      if (page > pages) {
+        setPage(1);
+      }
     }
-  }, [tokens, isLoading]);
+  }, [filteredTokens, isLoading, page]);
 
   if (isLoading) return <TokenListTemplateSkeleton />;
   return tokensDisplaying?.length || data?.length ? (
     <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-between pw-px-4 sm:pw-px-0">
+      <div className="pw-flex pw-justify-end pw-mb-4">
+        <div className="pw-w-[320px]">
+          <p></p>
+          <BaseSelect
+            options={filterOptions}
+            value={selectedFilter}
+            className='pw-w-full !pw-max-w-[440px]'
+            onChangeValue={(value: 'active' | 'all') => {
+              setSelectedFilter(value);
+              setPage(1);
+            }}
+          />
+        </div>
+      </div>
       <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
         {data?.map((token: any) => (
           <li className="w-full pw-opacity-60" key={token.id.tokenId}>
@@ -61,7 +101,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
             />
           </li>
         ))}
-       {tokensDisplaying?.map((token) => (
+        {tokensDisplaying?.map((token) => (
           <li className="w-full" key={token.id}>
             <WalletTokenCard
               collectionData={token.collectionData}
@@ -122,6 +162,8 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
         mapNFTToToken(nft, wallet?.chainId || 137)
       )
     : [];
+
+    console.log(tokens, "tokens")
 
   return isLoading || !isAuthorized ? null : errorEth ? (
     <ErrorBox customError={errorEth} />
