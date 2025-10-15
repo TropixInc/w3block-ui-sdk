@@ -1,3 +1,5 @@
+import { AxiosInstance, AxiosResponse } from 'axios';
+
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
@@ -11,6 +13,41 @@ interface Props {
   editionNumber: number;
 }
 
+interface GetBenefitsByEditionNumberParams {
+  axios: AxiosInstance;
+  tenantId?: string | null;
+  tokenPassId: string;
+  editionNumber: number;
+}
+
+export const getBenefitsByEditionNumber = async ({
+  axios,
+  tenantId,
+  tokenPassId,
+  editionNumber,
+}: GetBenefitsByEditionNumberParams): Promise<
+  AxiosResponse<BenefitsByEditionNumberDTO[]>
+> => {
+  try {
+    const response = await axios.get<BenefitsByEditionNumberDTO[]>(
+      PixwayAPIRoutes.PASS_BENEFITS_BY_EDITION.replace(
+        '{tenantId}',
+        tenantId ?? ''
+      )
+        .replace('{id}', tokenPassId)
+        .replace('{editionNumber}', editionNumber.toString())
+    );
+
+    return response;
+  } catch (error) {
+    console.error(
+      'Erro ao buscar benefícios pela edição do token pass:',
+      error
+    );
+    throw handleNetworkException(error);
+  }
+};
+
 const useGetBenefitsByEditionNumber = ({
   tokenPassId,
   editionNumber,
@@ -20,26 +57,13 @@ const useGetBenefitsByEditionNumber = ({
 
   return usePrivateQuery(
     [PixwayAPIRoutes.PASS_BENEFITS_BY_EDITION, tokenPassId, editionNumber],
-    async () => {
-      try {
-        const response = await axios.get<BenefitsByEditionNumberDTO[]>(
-          PixwayAPIRoutes.PASS_BENEFITS_BY_EDITION.replace(
-            '{tenantId}',
-            tenantId ?? ''
-          )
-            .replace('{id}', tokenPassId)
-            .replace('{editionNumber}', editionNumber.toString())
-        );
-
-        return response;
-      } catch (error) {
-        console.error(
-          'Erro ao buscar benefícios pela edição do token pass:',
-          error
-        );
-        throw handleNetworkException(error);
-      }
-    },
+    () =>
+      getBenefitsByEditionNumber({
+        axios,
+        tenantId,
+        tokenPassId,
+        editionNumber,
+      }),
     {
       enabled:
         tokenPassId != null && editionNumber != null && tokenPassId !== '',

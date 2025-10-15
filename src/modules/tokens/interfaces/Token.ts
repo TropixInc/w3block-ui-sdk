@@ -11,4 +11,5 @@ export interface Token {
     pass: boolean;
   };
   editionId: string;
+  editionNumber: number
 }
