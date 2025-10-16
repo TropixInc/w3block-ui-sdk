@@ -1065,5 +1065,7 @@
 "notifications>notificationsTemplate>explain": "You can manage which notifications you want to receive",
 "notifications>notificationsTemplate>disclaimer": "*Check the box to enable",
 "notifications>notificationsTemplate>kycNotFound": "Notification KYC has not been set up",
-"shared>formTemplate>save": "Save"
+"shared>formTemplate>save": "Save",
+"tokens>tokensListTemplate>showActiveBenefits": "Show tokens with active benefits",
+"tokens>tokensListTemplate>showAllTokens": "Show all tokens"
 }

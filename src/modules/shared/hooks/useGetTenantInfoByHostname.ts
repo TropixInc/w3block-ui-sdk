@@ -14,7 +14,7 @@ export const useGetTenantInfoByHostname = () => {
   const baseUrl = apisUrl.w3blockIdAPIUrl;
 
   const hostname = location?.includes('localhost')
-    ? location?.replace('localhost', 'foodbusters.com.br')
+    ? location?.replace('localhost', 'foodbusters.stg.w3block.io')
     : location;
 
   const apiUrl =
