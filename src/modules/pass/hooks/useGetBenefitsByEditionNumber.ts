@@ -18,6 +18,8 @@ interface GetBenefitsByEditionNumberParams {
   tenantId?: string | null;
   tokenPassId: string;
   editionNumber: number;
+  page?: number;
+  limit?: number;
 }
 
 export const getBenefitsByEditionNumber = async ({
@@ -25,6 +27,8 @@ export const getBenefitsByEditionNumber = async ({
   tenantId,
   tokenPassId,
   editionNumber,
+  page,
+  limit,
 }: GetBenefitsByEditionNumberParams): Promise<
   AxiosResponse<BenefitsByEditionNumberDTO[]>
 > => {
@@ -35,7 +39,13 @@ export const getBenefitsByEditionNumber = async ({
         tenantId ?? ''
       )
         .replace('{id}', tokenPassId)
-        .replace('{editionNumber}', editionNumber.toString())
+        .replace('{editionNumber}', editionNumber.toString()),
+      {
+        params: {
+          page,
+          limit,
+        },
+      }
     );
 
     return response;
