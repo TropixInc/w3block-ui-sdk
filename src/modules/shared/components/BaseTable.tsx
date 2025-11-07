@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Spinner } from './Spinner';
 import { Pagination } from './Pagination';
+import useTranslation from '../hooks/useTranslation';
 
 
 export interface ColumnDef<TRowModel> {
@@ -47,6 +48,10 @@ export function BaseTable<TRowModel extends object & { id?: RowId | null }>({
   pagination,
   ...props
 }: DataTableProps<TRowModel>): React.JSX.Element {
+  const [translate] = useTranslation();
+  const hasRows = Boolean(rows?.length);
+  const columnsCount = Math.max(columns?.length ?? 0, 1);
+
   return (
     <>
       <table
@@ -83,40 +88,51 @@ export function BaseTable<TRowModel extends object & { id?: RowId | null }>({
         </thead>
         {isLoading ? null : (
           <tbody>
-            {rows?.map((row, index): React.JSX.Element => {
-              const rowId = row?.id ? row?.id : uniqueRowId?.(row);
-              return (
-                <tr
-                  key={rowId ?? index}
-                  {...(onClick && {
-                    onClick: (event: React.MouseEvent) => {
-                      onClick(event, row);
-                    },
-                  })}
-                  style={{ ...(onClick && { cursor: 'pointer' }) }}
+            {hasRows ? (
+              rows?.map((row, index): React.JSX.Element => {
+                const rowId = row?.id ? row?.id : uniqueRowId?.(row);
+                return (
+                  <tr
+                    key={rowId ?? index}
+                    {...(onClick && {
+                      onClick: (event: React.MouseEvent) => {
+                        onClick(event, row);
+                      },
+                    })}
+                    style={{ ...(onClick && { cursor: 'pointer' }) }}
+                  >
+                    {columns?.map(
+                      (column): React.JSX.Element => (
+                        <td
+                          key={column?.name}
+                          style={{
+                            ...(column?.align && { textAlign: column?.align }),
+                          }}
+                          className="pw-p-4 pw-border-b pw-border-[#dee2e6]"
+                        >
+                          {
+                            (column?.formatter
+                              ? column?.formatter(row, index)
+                              : column?.field
+                              ? row[column?.field]
+                              : null) as React.ReactNode
+                          }
+                        </td>
+                      )
+                    )}
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td
+                  colSpan={columnsCount}
+                  className="pw-p-4 pw-text-center pw-text-[#6c757d] pw-border-b pw-border-[#dee2e6]"
                 >
-                  {columns?.map(
-                    (column): React.JSX.Element => (
-                      <td
-                        key={column?.name}
-                        style={{
-                          ...(column?.align && { textAlign: column?.align }),
-                        }}
-                        className="pw-p-4 pw-border-b pw-border-[#dee2e6]"
-                      >
-                        {
-                          (column?.formatter
-                            ? column?.formatter(row, index)
-                            : column?.field
-                            ? row[column?.field]
-                            : null) as React.ReactNode
-                        }
-                      </td>
-                    )
-                  )}
-                </tr>
-              );
-            })}
+                  {translate('shared>baseTable>emptyMessage')}
+                </td>
+              </tr>
+            )}
           </tbody>
         )}
       </table>

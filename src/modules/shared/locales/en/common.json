@@ -708,6 +708,7 @@
 "shared>authenticateModal>presenteToEstablishmentPayment": "Present this code to the establishment to make your payment.",
 "shared>back": "Back",
 "shared>baseSelect>notFound": "No results",
+"shared>baseTable>emptyMessage": "No records found.",
 "shared>cancel": "Cancel",
 "shared>cardList>creditCardNotFound": "You do not have any credit card registered.",
 "shared>cardList>deleteCard": "Delete Card",
