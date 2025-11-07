@@ -19,7 +19,7 @@ import useTranslation from '../hooks/useTranslation';
 export const StakingSummary = () => {
   const [page, setPage] = useState(1);
   const [translate] = useTranslation();
-  const { data, isFetching, error: errorStaking } = useStakingSummary({ page });
+  const { data, isLoading, error: errorStaking } = useStakingSummary({ page });
   const { loyaltyWallet } = useUserWallet();
   const coinSymbol = loyaltyWallet?.[0]?.currency;
   const {
@@ -87,14 +87,14 @@ export const StakingSummary = () => {
         <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-text-black pw-shadow-md pw-rounded-lg pw-overflow-hidden">
           <div className="pw-mb-6">
             <p className="pw-text-[23px] pw-font-[600]">
-              {translate('&&staking>summary>title')}
+              {translate('staking>summary>title')}
             </p>
             <p className="pw-text-[#777E8F] pw-text-xs">
-              {translate('&&staking>summary>subtitle')}
+              {translate('staking>summary>subtitle')}
             </p>
           </div>
           <div className="pw-flex pw-justify-start pw-gap-20 pw-items-center">
-            <div>
+            {!isLoading ? (<div>
               <p className="pw-text-lg pw-mb-1">
                 {translate('staking>summary>valueToRedeem')}{' '}
                 {coinSymbol +
@@ -136,14 +136,15 @@ export const StakingSummary = () => {
                   {translate('staking>summary>error')}
                 </Alert>
               ) : null}
-            </div>
+            </div>) : null}
+
           </div>
         </div>
         <div className="pw-p-[20px] pw-mt-8 pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
           <BaseTable<SummaryDto>
             columns={columns}
             rows={data?.data?.items}
-            isLoading={isFetching}
+            isLoading={isLoading}
             pagination={{
               currentPage: data?.data?.meta?.currentPage,
               pagesQuantity: data?.data?.meta?.totalPages,

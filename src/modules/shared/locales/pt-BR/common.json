@@ -708,6 +708,7 @@
   "shared>authenticateModal>presenteToEstablishmentPayment": "Apresente esse código ao estabelecimento para efetuar seu pagamento.",
   "shared>back": "Voltar",
   "shared>baseSelect>notFound": "Sem resultados",
+  "shared>baseTable>emptyMessage": "Nenhum registro encontrado.",
   "shared>cancel": "Cancelar",
   "shared>cardList>creditCardNotFound": "Você não possui nenhum cartão de crédito cadastrado.",
   "shared>cardList>deleteCard": "Excluir cartão",
