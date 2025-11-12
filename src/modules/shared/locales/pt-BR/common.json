@@ -1072,5 +1072,6 @@
   "tokens>tokensListTemplate>showActiveBenefits": "Mostrar tokens com beneficios ativos",
   "tokens>tokensListTemplate>showAllTokens": "Mostrar todos os tokens",
   "tokens>tokensListTemplate>group": "Agrupar coleções de tokens",
-  "tokens>tokensListTemplate>ungroup": "Desagrupar coleções de tokens"
+  "tokens>tokensListTemplate>ungroup": "Desagrupar coleções de tokens",
+  "storefront>productPage>soldOut": "Esgotado"
  }

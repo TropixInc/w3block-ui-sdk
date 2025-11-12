@@ -142,7 +142,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
       !location?.href?.includes('/auth/signUp') &&
       !location?.href?.includes('/auth/signIn')
     )
-      return { callbackUrl: url };
+      return { callbackUrl: pathname ? url : location?.href };
   };
 
   useEffect(() => {
