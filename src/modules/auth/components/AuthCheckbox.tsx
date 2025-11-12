@@ -23,7 +23,7 @@ export const AuthCheckbox = ({
 
   return (
     <div className="pw-flex pw-items-center pw-gap-x-2  pw-text-[#353945]">
-      <label htmlFor={name} className="inputContainer" id="">
+      <label htmlFor={name} className="inputContainer pw-flex" id="">
         <input
           {...field}
           type="checkbox"
@@ -35,7 +35,7 @@ export const AuthCheckbox = ({
           id={name}
         />
         <span className="checkmark"></span>
-        <p className="pw-ml-8 pw-mt-[3px] pw-flex pw-gap-[3px]">
+        <p className="pw-ml-4 pw-mt-[3px] pw-flex pw-gap-[3px]">
           {redirectLink ? (
             <Trans i18nKey={keyTrans}>
               <span className="pw-leading-[15.85px] pw-text-[#353945]">

@@ -25,7 +25,7 @@ export const SignCheckbox = ({
 
   return (
     <div className="pw-flex pw-items-center pw-gap-x-2  pw-text-[#353945]">
-      <label htmlFor={name} className="inputContainer" id="">
+      <label htmlFor={name} className="inputContainer pw-flex" id="">
         <input
           type="checkbox"
           onClick={() => {
