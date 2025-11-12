@@ -1068,5 +1068,6 @@
 "notifications>notificationsTemplate>kycNotFound": "Notification KYC has not been set up",
 "shared>formTemplate>save": "Save",
 "tokens>tokensListTemplate>showActiveBenefits": "Show tokens with active benefits",
-"tokens>tokensListTemplate>showAllTokens": "Show all tokens"
+"tokens>tokensListTemplate>showAllTokens": "Show all tokens",
+"storefront>productPage>soldOut": "Sold Out"
 }

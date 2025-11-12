@@ -894,7 +894,7 @@ export const ProductPage = ({
                       className="pw-text-2xl pw-mt-4 pw-font-[700]"
                     >
                       {soldOut ? (
-                        'Esgotado'
+                        translate('storefront>productPage>soldOut')
                       ) : product ? (
                         isLoadingValue ? (
                           <Shimmer className="!pw-w-[100px] !pw-h-[32px]" />
