@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { useClickAway } from 'react-use';
-
 import { format } from 'date-fns';
-
 
 import ArrowDown from '../assets/icons/arrowDown.svg';
 
-import Calendar, { CalendarType } from './Calendar';
-import { BaseButton } from './Buttons';
+import { CustomDatePicker } from './CustomDatePicker';
+import { CalendarType } from './Calendar';
 import useTranslation from '../hooks/useTranslation';
-
 
 interface DateFilterProps {
   onChangeStartDate?: (date: any) => void;
@@ -41,52 +38,69 @@ export const DateFilter = ({
   minDate,
   placeholder,
 }: DateFilterProps) => {
-  const [translate] = useTranslation();
+  const [translate, i18n] = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
 
   const [openCalendarModal, setOpenCalendarModal] = useState(false);
   useClickAway(ref, () => setOpenCalendarModal(false));
 
-  const [isSelectingInterval, setIsSelectingInterval] = useState(false);
-  const [startInterval, setStartInterval] = useState<Date | undefined>(
-    undefined
-  );
-  const [endInterval, setEndInterval] = useState<Date | undefined>(undefined);
+  // Determina o tipo do CustomDatePicker baseado no CalendarType
+  const pickerType = useMemo(() => {
+    return typeOfCalendar === CalendarType.SINGLE ? 'unique' : 'range';
+  }, [typeOfCalendar]);
 
-  useEffect(() => {
-    if (!startDate) {
-      setStartInterval(undefined);
+  // Converte startDate/endDate para o formato do CustomDatePicker (tupla)
+  const selectedDateValue = useMemo(() => {
+    if (pickerType === 'range') {
+      return [startDate || null, endDate || null] as [Date | null, Date | null];
+    } else {
+      return selectedDate || null;
     }
-    if (!endDate) {
-      setEndInterval(undefined);
+  }, [pickerType, startDate, endDate, selectedDate]);
+
+  // Handler para mudanças no CustomDatePicker
+  const handleDateChange = (value: Date | [Date | null, Date | null] | null) => {
+    if (pickerType === 'range') {
+      const range = value as [Date | null, Date | null] | null;
+      if (range) {
+        const [start, end] = range;
+        if (start) onChangeStartDate?.(start);
+        else onChangeStartDate?.(null);
+        if (end) onChangeEndDate?.(end);
+        else onChangeEndDate?.(null);
+      } else {
+        onChangeStartDate?.(null);
+        onChangeEndDate?.(null);
+      }
+    } else {
+      const singleDate = value as Date | null;
+      if (singleDate && onSelectDate) {
+        onSelectDate(singleDate);
+      }
     }
-  }, [endDate, startDate]);
+  };
 
-  const formatedInitDate =
-    startInterval && format(new Date(startInterval), 'dd MMM yyyy');
-
-  const formatedEndDate =
-    endInterval && format(new Date(endInterval), 'dd MMM yyyy');
-
-  const handleSelectDate = () => {
-    onChangeStartDate && startInterval && onChangeStartDate(startInterval);
-    onChangeEndDate && endInterval && onChangeEndDate(endInterval);
+  const handleClose = () => {
     setOpenCalendarModal(false);
   };
 
-  const handleCancelSelectDate = () => {
-    setStartInterval && setStartInterval(undefined);
-    setEndInterval && setEndInterval(undefined);
+  const handleCancel = () => {
+    if (pickerType === 'range') {
+      onChangeStartDate?.(null);
+      onChangeEndDate?.(null);
+    } else {
+      // onSelectDate não é chamado no cancel, apenas limpa via onCancel
+    }
     onCancel();
     setOpenCalendarModal(false);
   };
 
   const renderPlaceholder = () => {
     if (typeOfCalendar === CalendarType.INTERVAL) {
-      if (startInterval && endInterval) {
-        return `${formatedInitDate} - ${
-          isSelectingInterval ? '' : formatedEndDate
-        }`;
+      if (startDate && endDate) {
+        const formatedInitDate = format(new Date(startDate), 'dd MMM yyyy');
+        const formatedEndDate = format(new Date(endDate), 'dd MMM yyyy');
+        return `${formatedInitDate} - ${formatedEndDate}`;
       } else {
         return placeholder
           ? placeholder
@@ -117,45 +131,16 @@ export const DateFilter = ({
       {openCalendarModal ? (
         <div
           ref={ref}
-          className="pw-absolute pw-top-9 pw-min-w-[228px] pw-w-full pw-z-50 pw-bg-white pw-px-4 pw-py-5 pw-shadow-[0px_4px_15px_#00000011] pw-border pw-border-[#B9D1F3] pw-rounded-lg"
+          className="pw-absolute pw-top-9 pw-min-w-[300px] pw-w-full pw-z-50"
         >
-          <Calendar
-            isSelectingInterval={isSelectingInterval}
-            canSelectPastDay
-            setIsSelectingInterval={setIsSelectingInterval}
-            defaultDate={defaultDate}
-            onChangeMonth={onChangeDefaultDate}
-            onSelectDate={onSelectDate}
-            selectedDate={selectedDate}
-            selectionType={typeOfCalendar}
-            intervalStart={new Date(startInterval ?? '')}
-            intervalEnd={new Date(endInterval ?? '')}
-            setIntervalStart={(data) =>
-              setStartInterval && setStartInterval(data)
-            }
-            setIntervalEnd={(data) => setEndInterval && setEndInterval(data)}
-            minCalendarDate={minDate}
+          <CustomDatePicker
+            type={pickerType}
+            selectedDate={selectedDateValue}
+            onChangeSelectedDate={handleDateChange}
+            minDate={minDate}
+            language={i18n.language || 'pt-BR'}
+            onClose={handleClose}
           />
-          <div className="pw-w-full pw-flex pw-gap-x-2 pw-justify-between pw-mt-1">
-            <BaseButton
-              variant="outlined"
-              className="pw-w-full pw-h-9 pw-flex pw-items-center pw-justify-center"
-              onClick={() => handleCancelSelectDate()}
-            >
-              <p className="pw-text-sm pw-text-[#8BAEE2] pw-font-semibold">
-                {translate('components>cancelButton>cancel')}
-              </p>
-            </BaseButton>
-            <BaseButton
-              variant="filled"
-              className="pw-w-full pw-h-9 pw-flex pw-items-center pw-justify-center"
-              onClick={() => handleSelectDate()}
-            >
-              <p className="pw-text-sm pw-font-semibold">
-                {translate('shared>myProfile>confirm')}
-              </p>
-            </BaseButton>
-          </div>
         </div>
       ) : null}
     </div>

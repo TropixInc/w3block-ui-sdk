@@ -50,3 +50,4 @@ export * from './modules/auth';
 export * from './modules/auth/context/W3blockAuthenticationContext';
 export * from './modules/auth/context/W3blockAuthenticationProvider';
 export * from './style.css';
+import 'react-datepicker/dist/react-datepicker.css';
