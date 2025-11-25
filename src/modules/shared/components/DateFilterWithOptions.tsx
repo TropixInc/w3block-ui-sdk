@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 
-import { CustomDatePicker } from './CustomDatePicker';
+import { CustomCalendar } from './CustomCalendar';
 import { CalendarType } from './Calendar';
 import { SelectInput } from './SelectInput';
 import useTranslation from '../hooks/useTranslation';
@@ -152,7 +152,7 @@ export const DateFilterWithOptions = ({
       />
       {openCalendarModal ? (
         <div className="pw-absolute pw-top-9 pw-w-full pw-z-20">
-          <CustomDatePicker
+          <CustomCalendar
             type={pickerType}
             selectedDate={selectedDateValue}
             onChangeSelectedDate={handleDateChange}

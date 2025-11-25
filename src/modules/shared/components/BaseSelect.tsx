@@ -22,6 +22,7 @@ interface Props extends Partial<BaseInputProps> {
   disabled?: boolean;
   classes?: {
     root?: string;
+    rootSize?: string;
     button?: string;
     option?: string;
   };
@@ -352,8 +353,9 @@ const SimpleSelect = ({
   return (
     <div
       className={classNames(
-        "pw-flex pw-items-start pw-justify-center pw-min-w-[200px] pw-h-[32px]",
-        classes.root ?? ""
+        "pw-flex pw-items-start pw-justify-center pw-h-[32px]",
+        classes.root ? classes.root : "",
+        classes.rootSize ? classes.rootSize : "pw-min-w-[200px]"
       )}
     >
       <Listbox
