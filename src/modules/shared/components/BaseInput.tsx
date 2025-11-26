@@ -33,10 +33,12 @@ export interface BaseInputProps
   disableClasses?: boolean;
   variant?: 'small' | 'medium' | 'large';
   button?: {
-    text: string;
+    text?: string;
+    icon?: ReactNode;
     onClick(): void;
   };
   searchIcon?: boolean;
+  customIcon?: ReactNode;
   onBlur?: () => void;
   mask?: string | Array<string | RegExp>;
   radix?: string | null | undefined;
@@ -148,6 +150,7 @@ export const BaseInput = ({
   variant = 'medium',
   button,
   searchIcon,
+  customIcon,
   mask,
   type = 'text',
   readonly = false,
@@ -174,7 +177,11 @@ export const BaseInput = ({
     >
       <div className="pw-flex pw-items-center pw-gap-2 pw-w-full pw-h-full pw-bg-white pw-text-black">
         {searchIcon ? (
-          <SearchIcon className="pw-stroke-black pw-w-5 pw-pb-[2px]" />
+          customIcon ? (
+            customIcon
+          ) : (
+            <SearchIcon className="pw-stroke-black pw-w-5 pw-pb-[2px]" />
+          )
         ) : null}
         {mask ? (
           <IMaskInput
@@ -218,7 +225,7 @@ export const BaseInput = ({
       ) : null}
       {button ? (
         <BaseButton size="small" onClick={button.onClick}>
-          {button.text}
+          {button.icon || button.text}
         </BaseButton>
       ) : null}
     </BaseInputLayout>

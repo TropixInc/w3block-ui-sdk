@@ -22,8 +22,10 @@ interface Props extends Partial<BaseInputProps> {
   disabled?: boolean;
   classes?: {
     root?: string;
+    rootSize?: string;
     button?: string;
     option?: string;
+    input?: string;
   };
   placeholder?: string;
   onChangeMultipleSelected?: (value: Array<string | undefined>) => void;
@@ -75,7 +77,7 @@ const MultipleSelect = ({
       >
         {() => (
           <>
-            <BaseInputLayout {...props} disabled={disabled}>
+            <BaseInputLayout className={classes.input ?? ""} {...props} disabled={disabled}>
               <Listbox.Button
                 className={classNames(
                   "pw-flex pw-justify-between pw-items-center pw-w-full pw-text-black focus:pw-outline-none",
@@ -207,7 +209,7 @@ const SearchSelect = ({
         }}
       >
         <div className={`pw-relative pw-w-full`}>
-          <BaseInputLayout {...props} disabled={disabled}>
+          <BaseInputLayout className={classes.input ?? ""} {...props} disabled={disabled}>
             <Combobox.Button
               className={`${classes.button} pw-flex pw-outline-none pw-justify-between pw-items-center pw-w-full`}
             >
@@ -352,8 +354,9 @@ const SimpleSelect = ({
   return (
     <div
       className={classNames(
-        "pw-flex pw-items-start pw-justify-center pw-min-w-[200px] pw-h-[32px]",
-        classes.root ?? ""
+        "pw-flex pw-items-start pw-justify-center pw-h-[32px]",
+        classes.root ? classes.root : "",
+        classes.rootSize ? classes.rootSize : "pw-min-w-[200px]"
       )}
     >
       <Listbox
@@ -367,7 +370,7 @@ const SimpleSelect = ({
       >
         {() => (
           <>
-            <BaseInputLayout {...props} readonly={readonly} disabled={disabled}>
+            <BaseInputLayout className={classes.input ?? ""} {...props} readonly={readonly} disabled={disabled}>
               <Listbox.Button
                 className={classNames(
                   "pw-flex pw-justify-between pw-items-center pw-h-full pw-w-full pw-text-black focus:pw-outline-none",

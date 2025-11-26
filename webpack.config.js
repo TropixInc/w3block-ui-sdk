@@ -101,6 +101,7 @@ export default (env, argv) => {
         "swiper/css": path.resolve(__dirname, "node_modules/swiper/swiper.min.css"),
         react: path.resolve(__dirname, "node_modules/react"),
         "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+        "date-fns": path.resolve(__dirname, "node_modules/date-fns"),
       },
       fallback: {
         zlib: false,
