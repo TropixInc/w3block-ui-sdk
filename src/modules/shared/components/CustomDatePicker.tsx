@@ -99,12 +99,6 @@ export const CustomDatePicker = ({
     }
   }, [placeholder, type, language]);
 
-  const popoverWidth = useMemo(() => {
-    if (type === 'unique' && anchorEl) {
-      return anchorEl.offsetWidth;
-    }
-    return undefined;
-  }, [type, anchorEl]);
 
   return (
     <div 
@@ -146,7 +140,7 @@ export const CustomDatePicker = ({
         slotProps={{
           paper: {
             className: 'pw-shadow-lg pw-rounded-lg pw-overflow-hidden',
-            style: popoverWidth ? { width: `${popoverWidth}px` } : undefined,
+            style: anchorEl ? { width: `${anchorEl.offsetWidth}px` } : { width: 'auto' },
           },
         }}
       >

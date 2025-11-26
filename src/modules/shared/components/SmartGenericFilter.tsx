@@ -198,6 +198,22 @@ const SmartGenericFilter = ({
         });
 
       onCloseFilters(undefined);
+    } else if (!startDate && !endDate) {
+      // Limpa o filtro quando ambas as datas são null/undefined
+      // Só remove se o filtro realmente existir
+      if (filters && filters.hasOwnProperty(itemKey || '')) {
+        const newFilters = { ...filters };
+        const removedItemFilters = _.omit(newFilters, itemKey || '');
+        onChangeFilter && onChangeFilter(removedItemFilters);
+
+        if (onChangeFilterLabels) {
+          const newFilterLabels = { ...filterLabels };
+          const removedItemFilterLabels = _.omit(newFilterLabels, itemKey || '');
+          onChangeFilterLabels(removedItemFilterLabels);
+        }
+      }
+
+      onCloseFilters(undefined);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

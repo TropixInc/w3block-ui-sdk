@@ -7,6 +7,8 @@ import { format, getMonth, getYear } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import useTranslation from '../hooks/useTranslation';
 import { BaseSelect } from './BaseSelect';
+import XIcon from '../assets/icons/xFilled.svg';
+import ChevronLeftIcon from '../assets/icons/chevronLeftFilled.svg';
 
 /* registerLocale("en", enUS);
 registerLocale("ptBR", ptBR); */
@@ -251,49 +253,58 @@ export const CustomCalendar = ({
 
     return (
       <div className="pw-flex pw-flex-col pw-gap-3 pw-mb-4">
-        <div className="pw-flex pw-items-center pw-justify-between pw-px-1">
+        <div className="pw-flex pw-justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="pw-flex pw-items-center pw-justify-center pw-rounded-full"
+            aria-label="Fechar calendário"
+          >
+            <XIcon style={{ fill: "#5682C3" }} className="pw-w-3 pw-h-3" />
+          </button>
+        </div>
+        <div className="pw-flex pw-items-center pw-justify-between pw-relative">
           <button
             type="button"
             onClick={decreaseMonth}
             disabled={prevMonthButtonDisabled}
-            className="pw-w-8 pw-h-8 pw-flex pw-items-center pw-justify-center pw-rounded-full pw-text-slate-500 hover:pw-bg-slate-100 disabled:pw-opacity-40 disabled:hover:pw-bg-transparent transition-colors"
+            className="pw-flex pw-items-center pw-justify-center"
             aria-label="Mês anterior"
           >
-            ‹
+            <ChevronLeftIcon className="pw-w-4 pw-h-4" />
           </button>
 
-          <span className="pw-text-sm pw-font-medium pw-text-slate-900 pw-select-none">
-            {format(date, 'MMMM yyyy', { locale: language === 'pt-BR' ? ptBR : enUS })}
-          </span>
+          <div className="pw-flex pw-items-center pw-justify-center pw-gap-2">
+            <div className="pw-flex-1">
+
+              <BaseSelect
+                value={getMonth(date)}
+                className="!pw-outline-none !pw-border-none"
+                onChangeValue={(e) => changeMonth(Number(e))}
+                options={months.map((month, index) => ({ value: index, label: month as string }))}
+                classes={{ root: 'pw-w-full', rootSize: '!pw-min-w-[150px]' }}
+              />
+            </div>
+            <BaseSelect
+              className="!pw-w-[80px] !pw-min-w-[80px] !pw-outline-none !pw-border-none"
+              value={getYear(date)}
+              onChangeValue={(e) => changeYear(Number(e))}
+              options={years.map((year) => ({ value: year, label: year.toString() as string }))}
+              classes={{ rootSize: '!pw-w-[80px] !pw-min-w-[80px]', input: '!pw-outline-none !pw-border-none' }}
+            />
+          </div>
 
           <button
             type="button"
             onClick={increaseMonth}
             disabled={nextMonthButtonDisabled}
-            className="pw-w-8 pw-h-8 pw-flex pw-items-center pw-justify-center pw-rounded-full pw-text-slate-500 hover:pw-bg-slate-100 disabled:pw-opacity-40 disabled:hover:pw-bg-transparent transition-colors"
+            className="pw-flex pw-items-center pw-justify-center"
             aria-label="Próximo mês"
           >
-            ›
+            <ChevronLeftIcon className="pw-w-4 pw-h-4 pw-rotate-180" />
           </button>
         </div>
-        <div className="pw-flex pw-items-center pw-justify-center pw-gap-2 pw-px-1">
-          <div className="pw-flex-1">
 
-          <BaseSelect
-            value={getMonth(date)}
-            onChangeValue={(e) => changeMonth(Number(e))}
-            options={months.map((month, index) => ({ value: index, label: month as string }))}
-            classes={{ root: 'pw-w-full', rootSize: '!pw-min-w-[150px]' }}
-          />
-          </div>
-          <BaseSelect
-            className="!pw-w-[80px] !pw-min-w-[80px]"
-            value={getYear(date)}
-            onChangeValue={(e) => changeYear(Number(e))}
-            options={years.map((year) => ({ value: year, label: year.toString() as string }))}
-            classes={{ rootSize: '!pw-w-[80px] !pw-min-w-[80px]' }}
-          />
-        </div>
       </div>
     );
   };
@@ -301,7 +312,7 @@ export const CustomCalendar = ({
   // Handlers
   const handleSingleDateChange = useCallback(
     (date: Date | null) => {
-          setTempSingleDate(date);
+      setTempSingleDate(date);
     },
     []
   );
@@ -358,7 +369,7 @@ export const CustomCalendar = ({
       const [startDate, endDate] = tempRange || [null, null];
 
       return (
-        <div className="pw-bg-white pw-rounded-lg pw-shadow-md pw-border pw-border-slate-200 pw-w-full pw-p-6 pw-z-10">
+        <div className="pw-bg-white pw-w-full pw-p-2 pw-z-10 pw-rounded-lg">
           <ReactDatePicker
             inline
             selected={startDate}
@@ -384,7 +395,7 @@ export const CustomCalendar = ({
               aria-label="Cancelar seleção"
               className="pw-flex-1 pw-border pw-border-[#0050FF] pw-text-[#0050FF] pw-bg-white pw-rounded-[8px] pw-py-2.5 pw-px-4 pw-font-medium pw-text-sm hover:pw-bg-[#F5F8FF] focus:pw-outline-none focus:pw-ring-2 focus:pw-ring-[#0050FF] focus:pw-ring-offset-2 transition-colors"
             >
-              {translate('shared>cancel')}
+              {translate('shared>customCalendar>clear')}
             </button>
             <button
               type="button"
@@ -401,7 +412,7 @@ export const CustomCalendar = ({
 
     // SINGLE
     return (
-      <div className="pw-bg-white pw-w-full pw-p-6 pw-z-10">
+      <div className="pw-bg-white pw-w-full pw-p-2 pw-z-10 pw-rounded-lg">
         <ReactDatePicker
           inline
           selected={tempSingleDate}
@@ -421,7 +432,7 @@ export const CustomCalendar = ({
             aria-label="Cancelar seleção"
             className="pw-flex-1 pw-border pw-border-[#0050FF] pw-text-[#0050FF] pw-bg-white pw-rounded-[8px] pw-py-2.5 pw-px-4 pw-font-medium pw-text-sm hover:pw-bg-[#F5F8FF] focus:pw-outline-none focus:pw-ring-2 focus:pw-ring-[#0050FF] focus:pw-ring-offset-2 transition-colors"
           >
-            Cancelar
+            {translate('shared>customCalendar>clear')}
           </button>
           <button
             type="button"
@@ -429,7 +440,7 @@ export const CustomCalendar = ({
             aria-label="Confirmar seleção"
             className="pw-flex-1 pw-bg-[#0050FF] pw-text-white pw-rounded-[8px] pw-py-2.5 pw-px-4 pw-font-medium pw-text-sm hover:pw-bg-[#0034A3] focus:pw-outline-none focus:pw-ring-2 focus:pw-ring-[#0050FF] focus:pw-ring-offset-2 transition-colors"
           >
-            Confirmar
+            {translate('shared>myProfile>confirm')}
           </button>
         </div>
       </div>

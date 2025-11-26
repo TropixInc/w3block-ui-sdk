@@ -215,6 +215,8 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, sort, dataSource?.url]);
 
+  console.log(filters, "filters")
+
   const handleCopy = (hash: string) => {
     navigator.clipboard.writeText(hash || '');
   };
