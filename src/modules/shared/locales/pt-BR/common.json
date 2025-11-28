@@ -1073,6 +1073,8 @@
   "tokens>tokensListTemplate>showAllTokens": "Mostrar todos os tokens",
   "tokens>tokensListTemplate>group": "Agrupar coleções de tokens",
   "tokens>tokensListTemplate>ungroup": "Desagrupar coleções de tokens",
+  "tokens>groupedTokensList>expandCollection": "Expandir coleção",
+  "tokens>groupedTokensList>collapseCollection": "Recolher coleção",
   "storefront>productPage>soldOut": "Esgotado",
   "shared>customCalendar>clear": "Limpar"
  }
