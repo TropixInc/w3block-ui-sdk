@@ -1069,6 +1069,8 @@
 "shared>formTemplate>save": "Save",
 "tokens>tokensListTemplate>showActiveBenefits": "Show tokens with active benefits",
 "tokens>tokensListTemplate>showAllTokens": "Show all tokens",
+"tokens>groupedTokensList>expandCollection": "Expand collection",
+"tokens>groupedTokensList>collapseCollection": "Collapse collection",
 "storefront>productPage>soldOut": "Sold Out",
 "shared>customCalendar>clear": "Clear"
 }

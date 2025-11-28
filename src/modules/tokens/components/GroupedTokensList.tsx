@@ -4,6 +4,7 @@ import { Token } from '../interfaces/Token';
 import { WalletTokenCard } from './WalletTokenCard';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { BaseButton } from '../../shared/components/Buttons';
+import useTranslation from '../../shared/hooks/useTranslation';
 import classNames from 'classnames';
 
 export interface GroupedTokensListItem {
@@ -84,7 +85,7 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
         <BaseButton
           type="button"
           size="medium"
-          className="!pw-w-min"
+          className="!pw-w-fit"
           onClick={(event) => {
             event.stopPropagation();
             onToggle();
@@ -109,7 +110,7 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
           : 'hover:pw-border-[#295BA6] pw-cursor-pointer'
       )}
     >
-      <div className="pw-relative pw-overflow-hidden pw-rounded-[20px] pw-bg-neutral-200 pw-h-[220px]">
+      <div className="pw-relative pw-overflow-hidden pw-rounded-[20px] pw-bg-neutral-200 pw-h-[300px]">
         <div className="pw-bg-white pw-absolute pw-left-[13px] pw-top-[14px] pw-rounded-full">
           <div className="pw-bg-brand-primary/30 pw-text-brand-primary pw-text-[12px] pw-leading-[18px] pw-font-bold pw-border pw-border-brand-primary pw-rounded-full pw-py-1 pw-px-2">
             {tokenCountLabel}
@@ -118,8 +119,9 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
         {coverImage ? (
           <ImageSDK
             src={coverImage}
-            className="!pw-w-full pw-h-[300px] pw-object-cover pw-rounded-[20px]"
+            className="!pw-w-full !pw-h-[300px] pw-object-cover pw-rounded-[20px]"
             width={312}
+            height={300}
             quality="eco"
           />
         ) : (
@@ -136,7 +138,7 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
           <BaseButton
             type="button"
             size="medium"
-            className="!pw-w-min"
+            className="!pw-w-fit"
             onClick={(event) => {
               event.stopPropagation();
               onToggle();
@@ -154,6 +156,7 @@ const GroupedTokensList: FC<GroupedTokensListProps> = ({
   items,
   singleTokens = [],
 }) => {
+  const [translate] = useTranslation();
   const [expandedCollectionId, setExpandedCollectionId] = useState<string | null>(
     null
   );
@@ -188,7 +191,9 @@ const GroupedTokensList: FC<GroupedTokensListProps> = ({
     const collectionLabel = collectionName ?? collectionId;
     const tokenCountLabel = `${tokens.length} ${tokens.length > 1 ? 'tokens' : 'token'
       }`;
-    const actionLabel = isExpanded ? 'Recolher coleção' : 'Expandir coleção';
+    const actionLabel = isExpanded
+      ? translate('tokens>groupedTokensList>collapseCollection')
+      : translate('tokens>groupedTokensList>expandCollection');
 
     return (
       <article
@@ -228,10 +233,10 @@ const GroupedTokensList: FC<GroupedTokensListProps> = ({
               <BaseButton
                 type="button"
                 size="medium"
-                className="!pw-w-min"
+                className="!pw-w-fit"
                 onClick={() => handleToggle(collectionId)}
               >
-                Recolher coleção
+                {translate('tokens>groupedTokensList>collapseCollection')}
               </BaseButton>
             </div>
           </div>
