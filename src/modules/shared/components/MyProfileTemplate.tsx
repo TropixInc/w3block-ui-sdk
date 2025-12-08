@@ -44,7 +44,7 @@ const _MyProfileTemplate = () => {
   const contextsActivated = useMemo(() => {
     if (!isLoadingTenantContext && tenantContext) {
       const contexts = tenantContext?.data?.items?.filter(
-        (item: any) => item.active && item.context.slug !== "notification-settings" && item.context.slug !== "admin-notification-settings"
+        (item: any) => item?.active && item?.context?.slug !== "notification-settings" && item?.context?.slug !== "admin-notification-settings"
       );
       return contexts;
     }
@@ -134,7 +134,7 @@ const _MyProfileTemplate = () => {
                     ) : (
                       profile &&
                       contextsActivated?.length &&
-                      contextsActivated.map(({ contextId, context, data }: any) =>
+                      contextsActivated?.map(({ contextId, context, data }: any) =>
                         (data as any)?.profileScreen?.hidden ? null : (
                           <div
                             key={contextId}
@@ -154,7 +154,7 @@ const _MyProfileTemplate = () => {
                               <FormCompleteKYCWithoutLayout
                                 key={contextId}
                                 renderSubtitle={false}
-                                userId={profile?.data.id}
+                                userId={profile?.data?.id}
                                 contextId={contextId}
                                 contextSlug={context?.slug}
                                 userKycStatus={profile?.data?.kycStatus}
