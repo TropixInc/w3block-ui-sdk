@@ -202,9 +202,9 @@ export const InputSelector = ({
         options={type === DataTypesEnum.SimpleSelect ? options : dynamicOptions}
         onChangeValue={(e) => {
           if (configData?.isMultiple) {
-            setMultipleSelected(e);
+            setMultipleSelected(e.value);
           } else {
-            handleTextChange(e);
+            handleTextChange(e.value);
           }
         }}
         value={selectedValue ?? multipleSelected?.join(', ') ?? docValue}

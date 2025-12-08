@@ -233,7 +233,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               options={filterOptions}
               value={selectedFilter}
               classes={{ root: '!pw-w-[340px]' }}
-              onChangeValue={handleFilterChange}
+              onChangeValue={(e) => handleFilterChange(e.value)}
             />
           </div>
         ) : null}
@@ -264,7 +264,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
                 options={filterOptions}
                 value={selectedFilter}
                 classes={{ root: '!pw-w-[340px]' }}
-                onChangeValue={handleFilterChange}
+                onChangeValue={(e) => handleFilterChange(e.value)}
               />
             </div>
           ) : null}
@@ -309,7 +309,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
               options={filterOptions}
               value={selectedFilter}
               classes={{ root: '!pw-w-[340px]' }}
-              onChangeValue={handleFilterChange}
+              onChangeValue={(e) => handleFilterChange(e.value)}
             />
           </div>
         ) : null}

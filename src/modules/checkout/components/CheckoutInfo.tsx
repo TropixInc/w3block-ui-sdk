@@ -1553,10 +1553,10 @@ const _CheckoutInfo = ({
                         })}
                         value={currVal}
                         onChangeValue={(e) => {
-                          setCurrVal(e);
-                          setCurrencyIdState(e as string);
+                          setCurrVal(e?.value);
+                          setCurrencyIdState(e.value);
                           setCartCurrencyId?.(
-                            commonCurrencies.find((res) => res.id === e)
+                            commonCurrencies.find((res) => res.id === e.value)
                           );
                         }}
                       />

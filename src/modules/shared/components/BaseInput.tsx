@@ -83,15 +83,15 @@ export const BaseInputLayout = ({
         disableClasses
           ? classNames(className)
           : classNames(
-              `pw-rounded-lg pw-transition-all pw-duration-200 ${readonly ? '' : 'pw-p-[7px_12px_6px_12px]'} pw-flex pw-items-center pw-justify-between relative pw-bg-white pw-text-black`,
+              `pw-rounded-lg pw-transition-all pw-duration-200 ${readonly ? '' : 'pw-p-[7px_12px_6px_12px]'} pw-flex pw-items-center pw-justify-between relative pw-text-black`,
               fullWidth ? 'pw-w-full' : '',
+              disabled ? (theme.disabled ?? defaultTheme.disabled) : 'pw-bg-white',
               theme.default ?? defaultTheme.default ?? '',
               valid ? theme.valid ?? defaultTheme.valid ?? '' : '',
               className,
               invalid
                 ? theme.invalid ?? defaultTheme.invalid ?? ''
                 : 'pw-outline-[#94B8ED] pw-outline-1',
-              disabled ? theme.disabled ?? defaultTheme.disabled : '',
               variant === 'large'
                 ? textarea
                   ? 'pw-text-[14px]'
