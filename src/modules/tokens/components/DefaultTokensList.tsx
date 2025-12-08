@@ -177,7 +177,7 @@ export const DefaultTokensList = ({
               options={filterOptions}
               value={selectedFilter}
               classes={{ root: '!pw-w-[340px]' }}
-              onChangeValue={handleFilterChange}
+              onChangeValue={(e) => handleFilterChange(e.value)}
             />
           </div>
         </div>

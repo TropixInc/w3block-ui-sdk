@@ -99,7 +99,7 @@ const InputDocuments = ({
           valid={!!field?.value && !fieldState.invalid}
           disabled={readonly}
           onChangeValue={(e) => {
-            setSelectDocType(e);
+            setSelectDocType(e.value);
             setDocument('');
           }}
           options={docTypeOptions}
