@@ -227,8 +227,8 @@ export const CustomCalendar = ({
   // Header custom para ficar parecido com a 2ª imagem
   const years = useMemo(() => {
     const currentYear = getYear(today);
-    const start = currentYear - 10;
-    const end = currentYear + 10;
+    const start = currentYear - 100;
+    const end = currentYear + 100;
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }, [today]);
 

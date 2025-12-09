@@ -121,7 +121,7 @@ export const CustomDatePicker = ({
             icon: <CalendarIcon className="pw-stroke-black pw-w-4 pw-h-4" />,
             onClick: () => {},
           }}
-          className={`pw-h-8 ${disabled ? '' : 'pw-cursor-pointer'}`}
+          className={`pw-h-8 pw-px-3 ${disabled ? '' : 'pw-cursor-pointer'}`}
           readOnly
         />
       </div>

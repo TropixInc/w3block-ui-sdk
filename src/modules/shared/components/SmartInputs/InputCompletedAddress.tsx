@@ -66,7 +66,7 @@ const InputCompletedAddress = ({
           search
           searchValue={search}
           setSearch={setSearch}
-          onChangeValue={(e) => setCountry(e.value)}
+          onChangeValue={(e) => setCountry(e)}
           placeholder={translate('shared>inputCompletedAddress>selectCountry')}
           classes={{ root: 'pw-mb-2' }}
         />
