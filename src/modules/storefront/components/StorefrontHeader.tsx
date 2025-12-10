@@ -8,7 +8,7 @@ import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { NavigationTabsPixwaySDKTabs } from '../../shared/interfaces/NavigationTabsPixwaySDKTabs';
 
 
-export const StorefrontHeader = ({ data }: { data: MainModuleThemeInterface }) => {
+export const StorefrontHeader = ({ data, theme }: { data: MainModuleThemeInterface, theme?: any }) => {
   const { styleData, mobileStyleData } = data;
 
   const mergedStyleData = useMobilePreferenceDataWhenMobile(
@@ -52,6 +52,7 @@ export const StorefrontHeader = ({ data }: { data: MainModuleThemeInterface }) =
         hasSignUp={hasSignUp}
         bgSelectionColor={bgSelectionColor}
         textSelectionColor={textSelectionColor}
+        themeData={theme}
       />
     </>
   );

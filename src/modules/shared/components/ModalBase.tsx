@@ -19,6 +19,7 @@ interface Props {
     classComplement?: string;
     backdrop?: string;
   };
+  backdropStyle?: React.CSSProperties;
   children?: ReactNode;
   ownClass?: string;
   hideCloseButton?: boolean;
@@ -30,6 +31,7 @@ export const ModalBase = ({
   isOpen,
   onClose,
   classes = {},
+  backdropStyle,
   children,
   ownClass,
   hideCloseButton = false,
@@ -40,7 +42,7 @@ export const ModalBase = ({
   return isOpen ? (
     <>
       {backdrop &&
-        <Backdrop onClick={clickAway ? onClose : undefined} className={classes.backdrop}/>
+        <Backdrop onClick={clickAway ? onClose : undefined} className={classes.backdrop} style={backdropStyle}/>
       }
       <div
         className={

@@ -36,7 +36,8 @@ interface HeaderPixwaySDKProps {
   standalone?: boolean;
   hasLogIn?: boolean;
   bgSelectionColor?: string;
-  textSelectionColor?: string;
+  textSelectionColor?: string;  
+  themeData?: any;
 }
 
 const _HeaderPixwaySDK = ({
@@ -63,6 +64,7 @@ const _HeaderPixwaySDK = ({
   hasLogIn = true,
   bgSelectionColor,
   textSelectionColor,
+  themeData,
 }: HeaderPixwaySDKProps) => {
   const context = useContext(ThemeContext);
   const { query } = useRouterConnect();
@@ -330,7 +332,7 @@ const _HeaderPixwaySDK = ({
           </div>
         </div>
       </div>
-      <AppDownloadModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <AppDownloadModal isOpen={isOpen} onClose={() => setIsOpen(false)} themeData={themeData} />
     </div>
   ) : null;
 };

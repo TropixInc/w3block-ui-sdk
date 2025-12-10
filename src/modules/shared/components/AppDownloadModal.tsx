@@ -15,12 +15,15 @@ import useTranslation from '../hooks/useTranslation';
 export const AppDownloadModal = ({
   isOpen,
   onClose,
+  themeData,
 }: {
   isOpen: boolean;
   onClose(): void;
+  themeData?: any;
 }) => {
   const utm = useUtms();
-  const theme = useThemeConfig();
+  const themeContext = useThemeConfig();
+  const theme = themeData || themeContext?.defaultTheme;
   const [translate] = useTranslation();
   const os = useGetMobileOS();
   const [_, copy] = useCopyToClipboard();
@@ -40,16 +43,21 @@ export const AppDownloadModal = ({
   };
 
   const androidLink =
-    theme?.defaultTheme?.configurations?.contentData?.appDownload?.androidLink +
+    theme?.configurations?.contentData?.appDownload?.androidLink +
     `&referrer=${utm?.utm_campaign}---${utm?.utm_source}`;
   const appleLink =
-    theme?.defaultTheme?.configurations?.contentData?.appDownload?.appleLink;
+    theme?.configurations?.contentData?.appDownload?.appleLink;
 
   return (
     <ModalBase
       isOpen={isOpen}
       onClose={onClose}
-      classes={{ classComplement: '!pw-z-[9999]', backdrop: '!pw-z-[999]' }}
+      clickAway={false}
+      classes={{ 
+        classComplement: '!pw-z-[9999]', 
+        backdrop: '!pw-z-[999]' 
+      }}
+      backdropStyle={{ backgroundColor: 'rgba(0, 80, 87, 0.7)' }}
       hideCloseButton
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
@@ -66,7 +74,7 @@ export const AppDownloadModal = ({
                 </p>
                 <p className="pw-font-bold pw-text-base">
                   {
-                    theme?.defaultTheme?.configurations?.contentData
+                    theme?.configurations?.contentData
                       ?.appDownload?.referrelText
                   }
                 </p>
@@ -74,7 +82,7 @@ export const AppDownloadModal = ({
             ) : null}
             <img
               src={
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
+                theme?.configurations?.contentData?.appDownload
                   ?.logo
               }
               height={75}
@@ -83,20 +91,20 @@ export const AppDownloadModal = ({
             />
             <p className="pw-font-bold pw-text-base">
               {
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
+                theme?.configurations?.contentData?.appDownload
                   ?.title
               }
             </p>
             <p className="pw-text-base">
               {
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
+                theme?.configurations?.contentData?.appDownload
                   ?.subtitle
               }
             </p>
             <div className="pw-border pw-border-[#DFDFDF] pw-my-[15px]"></div>
             <p className="pw-text-sm pw-mb-5">
               {
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
+                theme?.configurations?.contentData?.appDownload
                   ?.text
               }
             </p>
