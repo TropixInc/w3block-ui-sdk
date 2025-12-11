@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.31...v2.0.32) (2025-12-11)
+
 ### [2.0.31](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.30...v2.0.31) (2025-12-11)
 
 ### [2.0.30](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.29...v2.0.30) (2025-12-10)
