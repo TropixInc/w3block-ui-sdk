@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useCopyToClipboard } from 'react-use';
 
 import downloadApple from '../../shared/assets/images/downloadApple.png';
@@ -45,81 +45,80 @@ export const AppDownloadModal = ({
   const androidLink =
     theme?.configurations?.contentData?.appDownload?.androidLink +
     `&referrer=${utm?.utm_campaign}---${utm?.utm_source}`;
-  const appleLink =
-    theme?.configurations?.contentData?.appDownload?.appleLink;
+  const appleLink = theme?.configurations?.contentData?.appDownload?.appleLink;
 
   return (
     <ModalBase
       isOpen={isOpen}
       onClose={onClose}
       clickAway={false}
-      classes={{ 
-        classComplement: '!pw-z-[9999]', 
-        backdrop: '!pw-z-[999]' 
+      classes={{
+        classComplement: '!pw-z-[9999]',
+        backdrop: '!pw-z-[999]',
       }}
-      backdropStyle={{ backgroundColor: 'rgba(0, 80, 87, 0.7)' }}
+      backdropStyle={{ backgroundColor: 'rgba(0, 80, 87, 1)' }}
       hideCloseButton
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
-        {isFetching || (utm.utm_source && !referralUser) ? (
-          <div className="pw-h-[350px] pw-flex pw-justify-center pw-items-center">
-            <Spinner className="pw-h-10 pw-w-10" />
-          </div>
-        ) : (
-          <>
-            {referralUser ? (
-              <div className="pw-mb-5">
-                <p className="pw-font-bold pw-text-2xl">
-                  {referralUser?.firstName}
-                </p>
-                <p className="pw-font-bold pw-text-base">
-                  {
-                    theme?.configurations?.contentData
-                      ?.appDownload?.referrelText
-                  }
-                </p>
-              </div>
-            ) : null}
-            <img
-              src={
-                theme?.configurations?.contentData?.appDownload
-                  ?.logo
-              }
-              height={75}
-              alt="logo"
-              className="pw-max-h-[75px] pw-mx-auto pw-mb-5"
-            />
+        <>
+          <div className="pw-mb-5">
+            {isFetching || !utm.utm_source || (utm.utm_source && !referralUser) ? (
+              <div
+                className="pw-w-[150px] pw-h-[32px] pw-mx-auto pw-animate-pulse pw-rounded-2xl"
+                style={{ backgroundColor: '#005057' }}
+              ></div>
+            ) : (
+              <p className="pw-font-bold pw-text-2xl">
+                {referralUser?.firstName}
+              </p>
+            )}
             <p className="pw-font-bold pw-text-base">
-              {
-                theme?.configurations?.contentData?.appDownload
-                  ?.title
-              }
+              {theme?.configurations?.contentData?.appDownload?.referrelText}
             </p>
-            <p className="pw-text-base">
-              {
-                theme?.configurations?.contentData?.appDownload
-                  ?.subtitle
-              }
-            </p>
-            <div className="pw-border pw-border-[#DFDFDF] pw-my-[15px]"></div>
-            <p className="pw-text-sm pw-mb-5">
-              {
-                theme?.configurations?.contentData?.appDownload
-                  ?.text
-              }
-            </p>
-            {os === 'Android' || os === 'Other' ? (
-              <a href={androidLink} target="_blank" rel="noreferrer">
-                <img
-                  src={downloadAndroid}
-                  alt="downloadAndroid"
-                  height={60}
-                  className="pw-max-h-[60px] pw-mx-auto"
-                />
-              </a>
-            ) : null}
-            {os === 'iOS' || os === 'Other' ? (
-              <>
+          </div>
+          <img
+            src={theme?.configurations?.contentData?.appDownload?.logo}
+            height={75}
+            alt="logo"
+            className="pw-max-h-[75px] pw-mx-auto pw-mb-5"
+          />
+          <p className="pw-font-bold pw-text-base">
+            {theme?.configurations?.contentData?.appDownload?.title}
+          </p>
+          <p className="pw-text-base">
+            {theme?.configurations?.contentData?.appDownload?.subtitle}
+          </p>
+          <div className="pw-border pw-border-[#DFDFDF] pw-my-[15px]"></div>
+          <p className="pw-text-sm pw-mb-5">
+            {theme?.configurations?.contentData?.appDownload?.text}
+          </p>
+          {os === 'Android' || os === 'Other' ? (
+            <>
+              {isFetching || !utm.utm_source || (utm.utm_source && !referralUser) ? (
+                <div
+                  className="pw-w-[200px] pw-h-[60px] pw-mx-auto pw-animate-pulse pw-rounded-2xl"
+                  style={{ backgroundColor: '#005057' }}
+                ></div>
+              ) : (
+                <a href={androidLink} target="_blank" rel="noreferrer">
+                  <img
+                    src={downloadAndroid}
+                    alt="downloadAndroid"
+                    height={60}
+                    className="pw-max-h-[60px] pw-mx-auto"
+                  />
+                </a>
+              )}
+            </>
+          ) : null}
+          {os === 'iOS' || os === 'Other' ? (
+            <>
+              {isFetching || !utm.utm_source || (utm.utm_source && !referralUser) ? (
+                <div
+                  className="pw-w-[200px] pw-h-[60px] pw-mx-auto pw-animate-pulse mt-2 pw-rounded-2xl"
+                  style={{ backgroundColor: '#005057' }}
+                ></div>
+              ) : (
                 <a
                   href={appleLink}
                   target="_blank"
@@ -133,23 +132,23 @@ export const AppDownloadModal = ({
                     className="pw-max-h-[60px] pw-mx-auto pw-mb-5"
                   />
                 </a>
-                {referralUser ? (
-                  <>
-                    <div className="pw-border pw-border-[#DFDFDF] pw-my-6"></div>
-                    <div className="pw-flex pw-item-center pw-justify-center pw-gap-2">
-                      <input
-                        type="checkbox"
-                        defaultChecked={true}
-                        id="appCheckbox"
-                      />
-                      {translate('shared>appDownloadModal>copyIndicateLink')}
-                    </div>
-                  </>
-                ) : null}
-              </>
-            ) : null}
-          </>
-        )}
+              )}
+              {referralUser ? (
+                <>
+                  <div className="pw-border pw-border-[#DFDFDF] pw-my-6"></div>
+                  <div className="pw-flex pw-item-center pw-justify-center pw-gap-2">
+                    <input
+                      type="checkbox"
+                      defaultChecked={true}
+                      id="appCheckbox"
+                    />
+                    {translate('shared>appDownloadModal>copyIndicateLink')}
+                  </div>
+                </>
+              ) : null}
+            </>
+          ) : null}
+        </>
       </div>
     </ModalBase>
   );
