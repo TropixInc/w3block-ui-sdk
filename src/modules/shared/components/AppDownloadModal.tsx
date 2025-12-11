@@ -32,10 +32,7 @@ export const AppDownloadModal = ({
   });
 
   const onClickApple = () => {
-    if (
-      (document.getElementById('appCheckbox') as HTMLInputElement).checked &&
-      referralUser
-    ) {
+    if ((document.getElementById('appCheckbox') as HTMLInputElement).checked) {
       copy(
         `${window?.location?.protocol}//${window?.location?.hostname}/?utm_campaign=${utm.utm_campaign}&utm_source=${utm.utm_source}`
       );
@@ -62,7 +59,9 @@ export const AppDownloadModal = ({
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
         <>
           <div className="pw-mb-5">
-            {isFetching || !utm.utm_source || (utm.utm_source && !referralUser) ? (
+            {isFetching ||
+            !utm.utm_source ||
+            (utm.utm_source && !referralUser) ? (
               <div
                 className="pw-w-[150px] pw-h-[32px] pw-mx-auto pw-animate-pulse pw-rounded-2xl"
                 style={{ backgroundColor: '#005057' }}
@@ -94,58 +93,42 @@ export const AppDownloadModal = ({
           </p>
           {os === 'Android' || os === 'Other' ? (
             <>
-              {isFetching || !utm.utm_source || (utm.utm_source && !referralUser) ? (
-                <div
-                  className="pw-w-[200px] pw-h-[60px] pw-mx-auto pw-animate-pulse pw-rounded-2xl"
-                  style={{ backgroundColor: '#005057' }}
-                ></div>
-              ) : (
-                <a href={androidLink} target="_blank" rel="noreferrer">
-                  <img
-                    src={downloadAndroid}
-                    alt="downloadAndroid"
-                    height={60}
-                    className="pw-max-h-[60px] pw-mx-auto"
-                  />
-                </a>
-              )}
+              <a href={androidLink} target="_blank" rel="noreferrer">
+                <img
+                  src={downloadAndroid}
+                  alt="downloadAndroid"
+                  height={60}
+                  className="pw-max-h-[60px] pw-mx-auto"
+                />
+              </a>
             </>
           ) : null}
           {os === 'iOS' || os === 'Other' ? (
             <>
-              {isFetching || !utm.utm_source || (utm.utm_source && !referralUser) ? (
-                <div
-                  className="pw-w-[200px] pw-h-[60px] pw-mx-auto pw-animate-pulse mt-2 pw-rounded-2xl"
-                  style={{ backgroundColor: '#005057' }}
-                ></div>
-              ) : (
-                <a
-                  href={appleLink}
-                  target="_blank"
-                  onClick={onClickApple}
-                  rel="noreferrer"
-                >
-                  <img
-                    src={downloadApple}
-                    alt="downloadApple"
-                    height={60}
-                    className="pw-max-h-[60px] pw-mx-auto pw-mb-5"
+              <a
+                href={appleLink}
+                target="_blank"
+                onClick={onClickApple}
+                rel="noreferrer"
+              >
+                <img
+                  src={downloadApple}
+                  alt="downloadApple"
+                  height={60}
+                  className="pw-max-h-[60px] pw-mx-auto pw-mb-5"
+                />
+              </a>
+              <>
+                <div className="pw-border pw-border-[#DFDFDF] pw-my-6"></div>
+                <div className="pw-flex pw-item-center pw-justify-center pw-gap-2">
+                  <input
+                    type="checkbox"
+                    defaultChecked={true}
+                    id="appCheckbox"
                   />
-                </a>
-              )}
-              {referralUser ? (
-                <>
-                  <div className="pw-border pw-border-[#DFDFDF] pw-my-6"></div>
-                  <div className="pw-flex pw-item-center pw-justify-center pw-gap-2">
-                    <input
-                      type="checkbox"
-                      defaultChecked={true}
-                      id="appCheckbox"
-                    />
-                    {translate('shared>appDownloadModal>copyIndicateLink')}
-                  </div>
-                </>
-              ) : null}
+                  {translate('shared>appDownloadModal>copyIndicateLink')}
+                </div>
+              </>
             </>
           ) : null}
         </>
