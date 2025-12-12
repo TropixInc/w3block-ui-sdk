@@ -1076,5 +1076,6 @@
   "tokens>groupedTokensList>expandCollection": "Expandir coleção",
   "tokens>groupedTokensList>collapseCollection": "Recolher coleção",
   "storefront>productPage>soldOut": "Esgotado",
-  "shared>customCalendar>clear": "Limpar"
+  "shared>customCalendar>clear": "Limpar",
+  "shared>appDownloadModal>loadingText": "Estamos carregando o seu convite..."
  }

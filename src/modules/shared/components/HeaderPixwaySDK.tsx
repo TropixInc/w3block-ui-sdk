@@ -70,49 +70,9 @@ const _HeaderPixwaySDK = ({
   const theme = themeData || context?.defaultTheme;
   const { query } = useRouterConnect();
   const [isOpen, setIsOpen] = useState(false);
-  console.log('isOpen', isOpen);
   const [openedTabs, setOpenedTabs] = useState<boolean>(false);
   const [openedloginState, setopenedLoginState] = useState<boolean>(false);
   const { logoUrl } = useCompanyConfig();
-  useEffect(() => {
-    if (theme?.configurations?.contentData?.appDownload) {
-      if (theme?.configurations?.contentData?.developerPreview) {
-        if (
-          query?.utm_campaign === 'm2m' &&
-          query?.testPreview?.includes('true')
-        ) {
-          setIsOpen(true);
-        }
-      } else if (query?.utm_campaign === 'm2m') {
-        setIsOpen(true);
-      }
-    }
-  }, [
-    theme?.configurations?.contentData?.appDownload,
-    theme?.configurations?.contentData?.developerPreview,
-    query?.testPreview,
-    query?.utm_campaign,
-  ]);
-
-  useEffect(() => {
-    if (theme?.configurations?.contentData?.appDownload) {
-      if (theme?.configurations?.contentData?.developerPreview) {
-        if (
-          query?.testPreview?.includes('true') &&
-          query?.download?.includes('true')
-        ) {
-          setIsOpen(true);
-        }
-      } else if (query?.download?.includes('true')) {
-        setIsOpen(true);
-      }
-    }
-  }, [
-    theme?.configurations?.contentData?.appDownload,
-    theme?.configurations?.contentData?.developerPreview,
-    query?.download,
-    query?.testPreview,
-  ]);
 
   const toggleMenuMemo = () => {
     if (openedMenu || openedTabs) {
