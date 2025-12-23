@@ -57,6 +57,7 @@ import { useTrack } from '../hooks/useTrack';
 import { CurrencyResponse } from '../interfaces/Product';
 import { ProductPageData } from '../interfaces/Theme';
 import { useThemeConfig } from '../hooks/useThemeConfig';
+import { useTranslationKey } from '../../shared/providers/TranslationPreviewProvider';
 
 interface ProductPageProps {
   data: ProductPageData;
@@ -1038,7 +1039,7 @@ export const ProductPage = ({
                   <>
                     <div className="pw-mt-6 pw-flex pw-gap-3 pw-items-end">
                       <div className="pw-flex pw-flex-col pw-gap-x-4 pw-items-start pw-justify-center">
-                        <p className="pw-text-sm pw-text-black pw-mb-1">
+                        <p {...useTranslationKey('storefront>productPage>quantity')} className="pw-text-sm pw-text-black pw-mb-1">
                           {translate('storefront>productPage>quantity')}
                         </p>
                         <div className="pw-flex pw-gap-4 pw-justify-center pw-items-center">

@@ -22,3 +22,4 @@ export * from './enums/W3blockAPI';
 export * from './components/GenericWalletFilter'
 export * from './components/CustomCalendar'
 export * from './components/CustomDatePicker'
+export * from './providers/TranslationPreviewProvider';
