@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import classNames from "classnames";
 
-import ArrowDown from "../assets/icons/arrowDown.svg";
 import CheckBoxIcon from "../assets/icons/checkOutlined.svg";
 
 import { BaseInputLayout, BaseInputProps } from "./BaseInput";
@@ -89,12 +88,6 @@ const MultipleSelect = ({
     onChangeValue?.(selectedOptions);
   };
 
-  const ArrowDownIcon = () => (
-    <div className="pw-flex pw-items-center pw-pr-2" style={{ pointerEvents: "none" }}>
-      <ArrowDown className="pw-stroke-black" />
-    </div>
-  );
-
   return (
     <div
       className={classNames(
@@ -115,7 +108,6 @@ const MultipleSelect = ({
               {getDisplayValue(selected as string[])}
             </div>
           )}
-          IconComponent={ArrowDownIcon}
           className={classNames("pw-w-full", classes.button ?? "")}
           sx={{
             "& .MuiOutlinedInput-notchedOutline": {
@@ -551,13 +543,7 @@ const SimpleSelect = ({
               {displayValue}
             </div>
           )}
-          IconComponent={() =>
-            readonly ? null : (
-              <div className="pw-flex pw-items-center" style={{ pointerEvents: "none" }}>
-                <ArrowDown className="pw-stroke-black" />
-              </div>
-            )
-          }
+          
           className={classNames(
             "pw-w-full pw-p-0",
             classes.button ?? "",
@@ -576,7 +562,6 @@ const SimpleSelect = ({
             },
             "& .MuiSelect-icon": {
               right: "8px",
-              pointerEvents: "none",
             },
             padding: 0,
             cursor: disabled ? "auto" : "pointer",
