@@ -131,6 +131,7 @@ const _CheckoutInfo = ({
   const [orderPreview, setOrderPreview] = useState<OrderPreviewResponse | null>(
     null
   );
+
   const acceptMultipleCurrenciesPurchase = useMemo(() => {
     return (
       orderPreview?.products?.filter(
@@ -138,9 +139,18 @@ const _CheckoutInfo = ({
       )?.length === orderPreview?.products?.length
     );
   }, [orderPreview?.products]);
+
+  const acceptCryptoPayment = useMemo(() => {
+    return (
+      orderPreview?.products?.filter(
+        (res) => res?.prices?.some((res) => res?.currency?.crypto)
+      )?.length === orderPreview?.products?.length
+    );
+  }, [orderPreview?.products]);
+
   const isCoinPayment =
     (router.query.coinPayment?.includes('true') ? true : false) ||
-    acceptMultipleCurrenciesPurchase;
+    (acceptMultipleCurrenciesPurchase && acceptCryptoPayment);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const utms = useUtms();
   const [checkUtm, setCheckUtm] = useState(true);
@@ -1645,10 +1655,7 @@ const _CheckoutInfo = ({
                         <CurrencyInput
                           hideSymbol
                           onChangeValue={(_, value) => {
-                            if (value) {
-                              setCoinAmountPayment(value as string);
-                            }
-                          }}
+                            setCoinAmountPayment(value as string)}}
                           defaultValue={coinAmountPayment}
                           InputElement={
                             <input
@@ -1657,7 +1664,7 @@ const _CheckoutInfo = ({
                                 !acceptMultipleCurrenciesPurchase
                               }
                               className="pw-p-2 pw-rounded-lg pw-border pw-border-[#DCDCDC] pw-shadow-md pw-text-black focus:pw-outline-none pw-font-poppins"
-                              placeholder="0,0"
+                              placeholder="0.00"
                             />
                           }
                         />
