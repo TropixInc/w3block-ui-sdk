@@ -340,6 +340,11 @@ export const CheckoutPayment = () => {
     router.query?.cryptoCurrencyId,
   ]);
 
+  console.log(coinPaymentCurrencyId, "coinPaymentCurrencyId");
+  console.log(defaultTheme, "defaultTheme");
+  console.log(router.query.cryptoCurrencyId, "router.query.cryptoCurrencyId");
+  console.log(router.query, "router.query");
+
   const isFree = useMemo(() => {
     // if (orderResponse !== undefined)
     // return parseFloat(orderResponse?.totalAmount as string) === 0;
@@ -754,6 +759,7 @@ export const CheckoutPayment = () => {
               }
             },
             onError: (err: any) => {
+              console.log('err', err);
               if (err.errorCode === 'similar-order-not-accepted') {
                 setErrorCode(err.errorCode);
               } else if (
@@ -1009,6 +1015,9 @@ export const CheckoutPayment = () => {
       );
     }
   };
+
+  console.log('productCache', productCache);
+  console.log(requestError, "requestError");
 
   return (
     <div className="pw-min-h-[95vh] pw-bg-[#F7F7F7] pw-pt-6 sm:pw-pt-10 pw-pb-10">
