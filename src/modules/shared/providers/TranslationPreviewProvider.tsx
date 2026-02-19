@@ -10,6 +10,12 @@ import React, {
 import { useCopyToClipboard } from 'react-use';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 
+declare global {
+  interface Window {
+    toggleTranslationPreview?: () => void;
+  }
+}
+
 interface TranslationPreviewContextData {
   isPreviewMode: boolean;
   togglePreviewMode: () => void;
@@ -62,20 +68,62 @@ export const TranslationPreviewProvider: React.FC<
   }, []);
 
   useEffect(() => {
+    const toggleAndLog = () => {
+      setIsPreviewMode((prev) => {
+        const next = !prev;
+        console.log(
+          `%c[Translation Preview] ${next ? 'Enabled' : 'Disabled'}`,
+          'background: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;'
+        );
+        return next;
+      });
+    };
+
+    const handleKeyboardShortcut = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'e') {
+        event.preventDefault();
+        toggleAndLog();
+      }
+    };
+
+    window.toggleTranslationPreview = toggleAndLog;
+    document.addEventListener('keydown', handleKeyboardShortcut);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyboardShortcut);
+      delete window.toggleTranslationPreview;
+    };
+  }, []);
+
+  useEffect(() => {
     if (!isPreviewMode) {
       setHoveredKey(null);
       return;
     }
 
+    const applyDefaultOutline = () => {
+      const elements = document.querySelectorAll(translationSelector);
+      elements.forEach((element) => {
+        const el = element as HTMLElement;
+        el.style.outline = '2px dashed #3b82f6';
+        el.style.outlineOffset = '2px';
+        el.style.cursor = 'help';
+      });
+    };
+
+    applyDefaultOutline();
+
     const handleMouseOver = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       const elementWithKey = target.closest(translationSelector) as HTMLElement;
-      
+
       if (elementWithKey) {
-        const translationKey = elementWithKey.getAttribute('data-translation-key');
+        const translationKey = elementWithKey.getAttribute(
+          'data-translation-key'
+        );
         if (translationKey) {
           setHoveredKey(translationKey);
-          elementWithKey.style.outline = '2px dashed #3b82f6';
+          elementWithKey.style.outline = '2px solid #1d4ed8';
           elementWithKey.style.outlineOffset = '2px';
           elementWithKey.style.cursor = 'help';
         }
@@ -85,32 +133,34 @@ export const TranslationPreviewProvider: React.FC<
     const handleMouseOut = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       const elementWithKey = target.closest(translationSelector) as HTMLElement;
-      
+
       if (elementWithKey) {
         setHoveredKey(null);
-        elementWithKey.style.outline = '';
-        elementWithKey.style.outlineOffset = '';
-        elementWithKey.style.cursor = '';
+        elementWithKey.style.outline = '2px dashed #3b82f6';
+        elementWithKey.style.outlineOffset = '2px';
+        elementWithKey.style.cursor = 'help';
       }
     };
 
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       const elementWithKey = target.closest(translationSelector) as HTMLElement;
-      
+
       if (elementWithKey) {
-        const translationKey = elementWithKey.getAttribute('data-translation-key');
+        const translationKey = elementWithKey.getAttribute(
+          'data-translation-key'
+        );
         if (translationKey) {
           event.preventDefault();
           event.stopPropagation();
-          
+
           copyToClipboard(translationKey);
-        
+
           const originalBg = elementWithKey.style.backgroundColor;
           const originalColor = elementWithKey.style.color;
           elementWithKey.style.backgroundColor = '#10b981';
           elementWithKey.style.color = '#fff';
-          
+
           setTimeout(() => {
             elementWithKey.style.backgroundColor = originalBg;
             elementWithKey.style.color = originalColor;
@@ -118,7 +168,7 @@ export const TranslationPreviewProvider: React.FC<
         }
       }
     };
-    
+
     document.addEventListener('mouseover', handleMouseOver);
     document.addEventListener('mouseout', handleMouseOut);
     document.addEventListener('click', handleClick, true);
@@ -127,7 +177,7 @@ export const TranslationPreviewProvider: React.FC<
       document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mouseout', handleMouseOut);
       document.removeEventListener('click', handleClick, true);
-      
+
       const elements = document.querySelectorAll(translationSelector);
       elements.forEach((element) => {
         const el = element as HTMLElement;
