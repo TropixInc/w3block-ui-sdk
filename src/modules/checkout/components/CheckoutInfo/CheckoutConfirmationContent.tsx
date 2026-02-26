@@ -34,7 +34,7 @@ export interface CheckoutConfirmationContentProps {
   couponCodeInput: string | undefined;
   appliedCoupon: string | null | undefined;
   onSubmitCupom: () => void;
-  translate: (key: string) => string;
+  translate: (key: string, obj?: any) => string;
   isCart: boolean;
   hasCommonCurrencies: boolean;
   commonCurrencies: CurrencyResponse[];
@@ -57,7 +57,7 @@ export interface CheckoutConfirmationContentProps {
   beforeProcced: () => void;
   requestError: string;
   requestErrorCode: string;
-  datasourceMasterData?: unknown[];
+  datasourceMasterData?: any[];
   destinationUser: string | undefined;
   editableDestination: boolean | undefined;
   onDestinationChange: (destinationId: string) => void;
@@ -144,8 +144,7 @@ export function CheckoutConfirmationContent({
               title={translate('checkout>checkoutInfo>youPayFor')}
               initialValue={
                 datasourceMasterData.filter(
-                  (e: { attributes: { slug: string | null } }) =>
-                    e?.attributes?.slug === destinationUser
+                  (e: any) => e?.attributes?.slug === destinationUser
                 )[0]?.id
               }
               onChange={onDestinationChange}
