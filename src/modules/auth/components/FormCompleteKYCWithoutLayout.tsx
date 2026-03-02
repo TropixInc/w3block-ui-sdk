@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { DataTypesEnum, DocumentDto, KycStatus } from '@w3block/sdk-id';
@@ -21,16 +21,13 @@ import { useGetTenantContextBySlug } from '../../shared/hooks/useGetTenantContex
 import { useGetTenantInputsBySlug } from '../../shared/hooks/useGetTenantInputsBySlug';
 import { useGetUserContextId } from '../../shared/hooks/useGetUserContextId';
 import { useGetUsersDocuments } from '../../shared/hooks/useGetUsersDocuments';
-import { usePostUsersDocuments } from '../../shared/hooks/usePostUsersDocuments';
-import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms';
-import { OnboardContext } from '../../shared/providers/OnboardProvider';
 import { createSchemaSignupForm } from '../../shared/utils/createSchemaSignupForm';
 import { useGetValidationsTypesForSignup } from '../../shared/utils/useGetValidationsTypesForSignup';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useGetReasonsRequiredReview } from '../hooks/useGetReasonsRequiredReview';
+import { useKYCFormSubmit } from '../hooks/useKYCFormSubmit';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -88,8 +85,6 @@ const _FormCompleteKYCWithoutLayout = ({
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   const [translate] = useTranslation();
-  const { mutate, isSuccess, isError, isPending, error } =
-    usePostUsersDocuments();
   const slug = () => {
     if (contextSlug) {
       return contextSlug;
@@ -102,8 +97,6 @@ const _FormCompleteKYCWithoutLayout = ({
   };
 
   const { data: kycContext } = useGetTenantContextBySlug(slug());
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const screenConfig = (kycContext?.data as any)?.data?.screenConfig;
 
   const theme = useThemeConfig();
   const skipWallet =
@@ -127,7 +120,6 @@ const _FormCompleteKYCWithoutLayout = ({
     [tenantInputs?.data]
   );
   const groupedInputs = _.groupBy(inputsFiltered, 'step');
-  const { refetch } = useProfile();
 
   const { data: userContext } = useGetUserContextId({
     userId: userId ?? '',
@@ -145,12 +137,6 @@ const _FormCompleteKYCWithoutLayout = ({
       return userContext?.data?.documents;
     } else return documents?.data;
   }, [userContext, documents]);
-
-  const context = useContext(OnboardContext);
-  const query = Object.keys(router.query ?? {}).length > 0 ? router.query : '';
-
-  const errorPost = error as AxiosError;
-  const errorMessage = errorPost?.response?.data as ErrorProps;
 
   const { data: reasons } = useGetReasonsRequiredReview(
     tenantId,
@@ -188,132 +174,26 @@ const _FormCompleteKYCWithoutLayout = ({
     mode: 'onChange',
     resolver: yupResolver(dynamicSchema) as any,
   });
-  const utms = useUtms();
-  const contextOnboard = useContext(OnboardContext);
-  const onSubmit = () => {
-    const dynamicValues = dynamicMethods.getValues();
-    const documents = Object.values(dynamicValues);
-    const validDocs = documents.filter((item) => item);
 
-    const docsToUse = () => {
-      if (
-        tenantInputs?.data.some(
-          (val: any) => (val.type as any) === 'commerce_product'
-        ) &&
-        product
-      ) {
-        const productInput = [
-          {
-            inputId: tenantInputs?.data?.find(
-              (val: any) => (val.type as any) === 'commerce_product'
-            )?.id,
-            value: product,
-          },
-        ];
-        const newDocs = validDocs.concat(productInput);
-        return newDocs;
-      } else return validDocs;
-    };
+  const { onSubmit, isSuccess, isError, isPending, error } = useKYCFormSubmit({
+    userId,
+    slug: slug(),
+    groupedInputs,
+    tenantInputs,
+    kycContext,
+    skipWallet,
+    keyPage,
+    profilePage,
+    productForm,
+    handleProductForm,
+    handleProductFormError,
+    product,
+    userContextId,
+    dynamicMethods,
+  });
 
-    if (tenantInputs?.data?.length && userId) {
-      const { contextId } = tenantInputs.data[0];
-      const inputApprover = tenantInputs.data?.find(
-        (val: any) => (val?.data as any)?.approver
-      );
-      const approver = docsToUse()?.find(
-        (val: any) => val.inputId === inputApprover?.id
-      );
-      const value = () => {
-        if (
-          (kycContext?.data as any)?.requireSpecificApprover &&
-          inputApprover &&
-          approver
-        ) {
-          return {
-            documents: docsToUse(),
-            currentStep: parseInt(step as string),
-            approverUserId: (approver as any)?.value?.userId ?? undefined,
-            utmParams: utms ? { ...utms } : undefined,
-            userContextId:
-              userContextId ??
-              (router?.query?.userContextId as string) ??
-              undefined,
-          };
-        } else {
-          return {
-            documents: docsToUse(),
-            currentStep: parseInt(step as string),
-            utmParams: utms ? { ...utms } : undefined,
-            userContextId:
-              userContextId ??
-              (router?.query?.userContextId as string) ??
-              undefined,
-          };
-        }
-      };
-      mutate(
-        {
-          tenantId,
-          contextId,
-          userId,
-          documents: value(),
-        },
-        {
-          onSuccess: (data: { data: any }) => {
-            if (!productForm) {
-              contextOnboard.setLoading(true);
-            }
-            const steps = Object.keys(groupedInputs).length;
-            if (steps && parseInt(step as string) < steps) {
-              router.push({
-                query: {
-                  contextSlug: slug(),
-                  step: parseInt(step as string) + 1,
-                  userContextId:
-                    router?.query?.userContextId ?? (data.data as any).id,
-                },
-              });
-            } else if (productForm && handleProductForm) {
-              handleProductForm();
-            } else if (!profilePage) {
-              refetch();
-              context.refetchDocs();
-              if (keyPage) {
-                null;
-              } else if (screenConfig?.skipConfirmation) {
-                if (typeof screenConfig?.postKycUrl === 'string') {
-                  router.pushConnect(screenConfig?.postKycUrl);
-                } else if (skipWallet) {
-                  if (router.query.callbackPath?.length) {
-                    router.pushConnect(router.query.callbackPath as string);
-                  } else if (router.query.callbackUrl?.length) {
-                    router.pushConnect(router.query.callbackUrl as string);
-                  } else {
-                    router.pushConnect('/');
-                  }
-                } else {
-                  router.pushConnect(
-                    PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-                    router.query
-                  );
-                }
-              } else {
-                router.pushConnect(
-                  PixwayAppRoutes.COMPLETE_KYC_CONFIRMATION,
-                  query
-                );
-              }
-            }
-          },
-          onError() {
-            if (productForm && handleProductFormError) {
-              handleProductFormError();
-            }
-          },
-        }
-      );
-    }
-  };
+  const errorPost = error as AxiosError;
+  const errorMessage = errorPost?.response?.data as ErrorProps;
 
   function getDocumentByInputId(inputId: string) {
     return docsToUse?.find((doc: any) =>

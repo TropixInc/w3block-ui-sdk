@@ -25,9 +25,9 @@ import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import AppleIcon from '../../shared/assets/icons/appleIcon.svg';
+import { useOAuthSignIn } from '../hooks/useOAuthSignIn';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { AuthButton } from './AuthButton';
@@ -72,7 +72,7 @@ export const SigInWithoutLayout = ({
   const haveGoogleSignIn = configs?.haveGoogleSignIn;
   const haveAppleSignIn = configs?.haveAppleSignIn;
   const [translate] = useTranslation();
-  const { signIn, signInWithGoogle, signInWithApple } =
+  const { signIn } =
     usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
     isPasswordless,
@@ -124,44 +124,12 @@ export const SigInWithoutLayout = ({
     else return '/';
   }, [router]);
 
-  const utms = useUtms();
-  const [googleError, setGoogleError] = useState(false);
-  const [appleError, setAppleError] = useState(false);
-  useEffect(() => {
-    if (code && isGoogleSignIn) {
-      signInWithGoogle &&
-        signInWithGoogle({
-          code,
-          companyId,
-          callbackUrl: callback ?? '/',
-          referrer: utms.utm_source ?? undefined,
-        }).then((res: { ok: any }) => {
-          if (!res.ok) {
-            setGoogleError(true);
-          } else {
-            router.pushConnect(callback);
-          }
-        });
-    }
-  }, [code, isGoogleSignIn]);
-
-  useEffect(() => {
-    if (code && isAppleSignIn) {
-      signInWithApple &&
-        signInWithApple({
-          code,
-          companyId,
-          callbackUrl: callback ?? '/',
-          referrer: utms.utm_source ?? undefined,
-        }).then((res) => {
-          if (!res.ok) {
-            setAppleError(true);
-          } else {
-            router.pushConnect(callback);
-          }
-        });
-    }
-  }, [isAppleSignIn, code]);
+  const { googleError, appleError, isProcessing } = useOAuthSignIn({
+    code,
+    isGoogleSignIn,
+    isAppleSignIn,
+    callback,
+  });
   const { defaultTheme } = useThemeConfig();
   const postSigninURL =
     defaultTheme?.configurations?.contentData?.postSigninURL;
@@ -240,10 +208,7 @@ export const SigInWithoutLayout = ({
     }
   };
 
-  if (
-    code &&
-    ((isGoogleSignIn && !googleError) || (isAppleSignIn && !appleError))
-  )
+  if (isProcessing)
     return (
       <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
         <Spinner />

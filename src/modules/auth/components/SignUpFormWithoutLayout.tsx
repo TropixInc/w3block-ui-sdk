@@ -13,11 +13,12 @@ import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoB
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useResolveCallbackUrl } from '../../shared/hooks/useResolveCallbackUrl';
 import { useSignUp } from '../hooks/useSignUp';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
+import { useAuthRedirect } from '../hooks/useAuthRedirect';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlahes';
 import { AuthTextController } from './AuthTextController';
 import { AuthButton } from './AuthButton';
 import { AuthPasswordTips } from './AuthPasswordTips';
@@ -58,7 +59,8 @@ export const SignUpFormWithoutLayout = ({
   const { data: companyInfo } = useGetTenantInfoByHostname();
   const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
   const passwordSchema = usePasswordValidationSchema({ isPasswordless });
-  const { appBaseUrl, connectProxyPass, companyId } = useCompanyConfig();
+  const { companyId } = useCompanyConfig();
+  const { resolveCallbackUrl } = useResolveCallbackUrl();
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const [step, setStep] = useState(Steps.SIGN_UP);
@@ -95,6 +97,8 @@ export const SignUpFormWithoutLayout = ({
   const skipWallet =
     theme?.defaultTheme?.configurations?.contentData?.skipWallet;
 
+  const { redirect } = useAuthRedirect();
+
   const onSubmitLocal = ({ confirmation, email, password }: SignUpFormData) => {
     setEmail(email);
     if (isPasswordless) {
@@ -109,20 +113,7 @@ export const SignUpFormWithoutLayout = ({
               ...router.query,
             });
           } else if (e.status === 200) {
-            if (router.query.callbackPath?.length) {
-              router.pushConnect(router.query.callbackPath as string);
-            } else if (router.query.callbackUrl?.length) {
-              router.pushConnect(router.query.callbackUrl as string);
-            } else if (router.query.contextSlug?.length) {
-              router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-                ...router.query,
-                 callbackUrl: router?.query?.callbackUrl ? router?.query?.callbackUrl : '/wallet'
-              });
-            } else if (postSigninURL) {
-              router.pushConnect(postSigninURL);
-            } else {
-              router.pushConnect('/');
-            }
+            redirect();
           }
         });
     } else {
@@ -132,11 +123,7 @@ export const SignUpFormWithoutLayout = ({
         password,
         i18nLocale: language,
         callbackUrl:
-          removeDoubleSlashesOnUrl(
-            appBaseUrl +
-              connectProxyPass +
-              PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION
-          ) +
+          resolveCallbackUrl(PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION) +
           '?' +
           queryString,
         verificationType: VerificationType.Numeric,

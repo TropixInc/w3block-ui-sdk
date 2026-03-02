@@ -10,11 +10,12 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useAuthRedirect } from '../hooks/useAuthRedirect';
+import { useCodeInput } from '../hooks/useCodeInput';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../hooks/useVerifySignUp';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import useTranslation from '../../shared/hooks/useTranslation';
 
 
@@ -26,7 +27,7 @@ const HOUR_IN_MS = 3600000;
 
 export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const { signOut } = usePixwayAuthentication();
-  const [inputs, setInputs] = useState(['', '', '', '', '', '']);
+  const { inputs, changeInput, handleKeyUp, code, isComplete } = useCodeInput();
   const { query, pushConnect } = useRouterConnect();
   const { connectProxyPass } = useCompanyConfig();
   const email = (query.email as string) ?? '';
@@ -42,24 +43,6 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
   const formattedEmail = useEmailProtectedLabel(emailToUse);
 
   const { mutate: mutateVerify } = useVerifySignUp();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const changeInput = (index: number, e: any) => {
-    const inputsToChange = inputs;
-    inputsToChange[index] = e.target.value;
-    setInputs([...inputsToChange]);
-    if (e.nativeEvent.inputType !== 'deleteContentBackward') {
-      const next = document.getElementById(`input-${index + 1}`);
-      next?.focus();
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const keyUp = (e: any, index: number) => {
-    if (e.code === 'Backspace' && inputs[index] == '') {
-      const previous = document.getElementById(`input-${index - 1}`);
-      previous?.focus();
-    }
-  };
 
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
 
@@ -77,12 +60,9 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       ? PixwayAppRoutes.COMPLETE_SIGNUP
       : PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION);
 
-  const theme = useThemeConfig();
-  const postSigninURL =
-    theme?.defaultTheme?.configurations?.contentData?.postSigninURL;
+  const { redirect } = useAuthRedirect();
   const sendCode = () => {
     setError('');
-    const code = inputs.join('');
 
     if (code.length == 6) {
       if (profile) {
@@ -92,29 +72,17 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             token: code,
           },
           {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onSuccess: (data: { data: { verified: any; }; }) => {
               refetch();
               if (data?.data?.verified) {
-                if (query.callbackPath?.length) {
-                  pushConnect(query.callbackPath as string);
-                } else if (query.callbackUrl?.length) {
-                  pushConnect(query.callbackUrl as string);
-                } else if (query.contextSlug?.length) {
-                  pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-                    ...query,
-                    callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
-                  });
-                } else if (postSigninURL) {
-                  pushConnect(postSigninURL);
-                } else {
-                  pushConnect('/');
-                }
+                redirect();
               } else {
-                setError('Código inválido ou expirado');
+                setError(translate('auth>codeVerify>invalidOrExpiredCode'));
               }
             },
             onError() {
-              setError('Código inválido ou expirado');
+              setError(translate('auth>codeVerify>invalidOrExpiredCode'));
             },
           }
         );
@@ -127,7 +95,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
         );
       }
     } else {
-      setError('código inválido');
+      setError(translate('auth>codeVerify>invalidCode'));
     }
   };
   useEffect(() => {
@@ -160,7 +128,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             onChange={(e) => changeInput(index, e)}
             maxLength={1}
             id={`input-${index}`}
-            onKeyUp={(e) => keyUp(e, index)}
+            onKeyUp={(e) => handleKeyUp(e, index)}
             value={val}
             className="sm:pw-w-[50px] sm:pw-h-[50px] pw-w-[40px] pw-h-[40px] pw-rounded-lg pw-text-lg pw-px-2 pw-text-center pw-text-[#35394C] pw-font-[700] pw-border pw-border-[#295BA6]"
             key={index}
@@ -175,7 +143,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
       ) : null}
 
       <WeblockButton
-        disabled={inputs.some((i) => i == '')}
+        disabled={!isComplete}
         onClick={sendCode}
         className="pw-mt-4 pw-text-white"
         fullWidth={true}
