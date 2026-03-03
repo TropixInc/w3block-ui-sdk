@@ -8,6 +8,7 @@ export * from './modules/shared/components/FAQ';
 export * from './modules/storefront/components/GridItemArea';
 export * from './modules/storefront/components/ImagePlusText';
 export * from './modules/shared/components/LanguageSelector';
+export * from './modules/storefront/components/RedirectComponent';
 export * from './modules/shared/components/ImageSDK';
 export * from './modules/storefront/components/Midia';
 export * from './modules/shared/components/NavigationTabsPixwaySDK';
