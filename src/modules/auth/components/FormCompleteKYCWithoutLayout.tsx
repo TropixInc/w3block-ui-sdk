@@ -7,7 +7,7 @@ import { DataTypesEnum, DocumentDto, KycStatus } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import _ from 'lodash';
-import { object } from 'yup';
+import { ObjectSchema, object } from 'yup';
 
 import { Alert } from '../../shared/components/Alert';
 import { Box } from '../../shared/components/Box';
@@ -146,7 +146,10 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const reasonsToUse = useMemo(() => {
     if (userContext && userContext?.data) return userContext?.data;
-    else if (reasons?.data?.items) return reasons?.data?.items?.[0];
+    else {
+      const r = reasons as { data?: { items?: unknown[] } } | undefined;
+      if (r?.data?.items) return r.data.items[0];
+    }
   }, [userContext, reasons]);
 
   const statusContext = useMemo(() => {
@@ -172,7 +175,9 @@ const _FormCompleteKYCWithoutLayout = ({
   const dynamicMethods = useForm<DocumentDto>({
     shouldUnregister: false,
     mode: 'onChange',
-    resolver: yupResolver(dynamicSchema) as any,
+    resolver: yupResolver(
+      dynamicSchema as unknown as ObjectSchema<DocumentDto>
+    ),
   });
 
   const { onSubmit, isSuccess, isError, isPending, error } = useKYCFormSubmit({

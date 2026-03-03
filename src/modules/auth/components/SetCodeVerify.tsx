@@ -72,10 +72,10 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
             token: code,
           },
           {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onSuccess: (data: { data: { verified: any; }; }) => {
+            onSuccess: (data) => {
               refetch();
-              if (data?.data?.verified) {
+              const response = data as { data?: { verified?: boolean } };
+              if (response?.data?.verified) {
                 redirect();
               } else {
                 setError(translate('auth>codeVerify>invalidOrExpiredCode'));

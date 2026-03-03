@@ -2,7 +2,7 @@
 
 import { VerificationType } from '@w3block/sdk-id';
 
-import { useMutation } from '@tanstack/react-query';
+import { UseMutationResult, useMutation } from '@tanstack/react-query';
 import { useGetW3blockIdSDK } from '../../shared/hooks/useGetW3blockIdSDK';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
@@ -17,7 +17,11 @@ interface Payload {
   verificationType?: 'numeric' | 'invisible';
 }
 
-export const useRequestConfirmationMail = (): any => {
+export const useRequestConfirmationMail = (): UseMutationResult<
+  unknown,
+  unknown,
+  Payload
+> => {
   const getSDK = useGetW3blockIdSDK();
   const { companyId } = useCompanyConfig();
   const { resolveCallbackUrl } = useResolveCallbackUrl();

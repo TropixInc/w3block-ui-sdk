@@ -7,7 +7,7 @@ import { Trans } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
-import { boolean, object, string } from 'yup';
+import { ObjectSchema, boolean, object, string } from 'yup';
 import { AuthLayoutBaseClasses, SignUpFormData } from '../../shared/interfaces/SignUpFormData';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
@@ -169,7 +169,7 @@ export const SignUpFormWithoutLayout = ({
       acceptsTermsOfUse: false,
     },
     mode: 'onChange',
-    resolver: yupResolver(schema as any),
+    resolver: yupResolver(schema as ObjectSchema<SignUpFormData>),
   });
 
   useEffect(() => {

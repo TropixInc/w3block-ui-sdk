@@ -10,7 +10,7 @@ import { useLocalStorage } from 'react-use';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
-import { object, string } from 'yup';
+import { ObjectSchema, object, string } from 'yup';
 
 import GoogleIcon from '../../shared/assets/icons/googleIcon.svg';
 import { Alert } from '../../shared/components/Alert';
@@ -148,7 +148,7 @@ export const SigInWithoutLayout = ({
       companyId,
     },
     mode: 'onChange',
-    resolver: yupResolver(schema as any),
+    resolver: yupResolver(schema as ObjectSchema<Form>),
   });
 
   const { fieldState } = useController({

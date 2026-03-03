@@ -1,12 +1,8 @@
 import { useMemo } from 'react';
 
-
 import { string } from 'yup';
 import useTranslation from '../../shared/hooks/useTranslation';
-
-
-
-const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX } from '../utils/passwordConstants';
 
 interface ErrorMessages {
   required?: string;
@@ -31,9 +27,9 @@ export const usePasswordValidationSchema = ({
           messageConfig?.required ??
             translate('components>form>requiredFieldValidation')
         )
-        .min(8, 'Minimo 8 caracteres')
+        .min(PASSWORD_MIN_LENGTH, 'Minimo 8 caracteres')
         .matches(
-          passwordRegex,
+          PASSWORD_REGEX,
           messageConfig?.pattern ??
             translate('auth>passwordErrorFeedback>genericInvalidMessage')
         );

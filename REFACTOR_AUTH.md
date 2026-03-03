@@ -48,13 +48,13 @@ Substituída verificação `(response.error as string).includes('expired')` por 
 
 ---
 
-## Ponto 3: Corrigir duplicação + melhorar tipagem
+## Ponto 3: Corrigir duplicação + melhorar tipagem ✅
 > Commit separado ao final
 
-### 3.1 Criar `utils/passwordConstants.ts`
+### 3.1 Criar `utils/passwordConstants.ts` ✅
 Extrair constantes de validação de senha (regex, min length) compartilhadas entre `usePasswordMeetsCriteria` e `usePasswordValidationSchema`.
 
-### 3.2 Separar `useRequestWithdraw.ts` em arquivos individuais
+### 3.2 Separar `useRequestWithdraw.ts` em arquivos individuais ✅
 O arquivo contém 6 hooks em 112 linhas. Separar cada hook em seu próprio arquivo:
 - `hooks/useGetSpecificWithdrawAdmin.ts`
 - `hooks/useGetSpecificWithdraw.ts`
@@ -64,15 +64,15 @@ O arquivo contém 6 hooks em 112 linhas. Separar cada hook em seu próprio arqui
 
 Manter re-exports no `useRequestWithdraw.ts` original para não quebrar imports.
 
-### 3.3 Remover `: any` de todos os hooks
+### 3.3 Remover `: any` de todos os hooks ✅
 Hooks afetados (7): `useSignUp`, `useChangePassword`, `useVerifySignUp`, `useRequestConfirmationMail`, `useCreateWithdrawMethod`, `useDeleMethodPayment`, `useGetReasonsRequiredReview`.
-Remover `: any` e deixar TypeScript inferir `UseMutationResult<...>`.
+Substituído `: any` por tipos explícitos `UseMutationResult<unknown, unknown, PayloadType>` / `UseQueryResult<unknown>` (inferência direta não era possível por TS2742 — axios nested em @w3block/sdk-id). Consumidores atualizados para narrowing seguro.
 
-### 3.4 Corrigir `useEmailProtectedLabel` — retorno inconsistente
-Linha 6: `return emailSplitted` retorna `string[]` em vez de `string`. Corrigir para `return email`.
+### 3.4 Corrigir `useEmailProtectedLabel` — retorno inconsistente ✅
+Linha 6: `return emailSplitted` retorna `string[]` em vez de `string`. Corrigido para `return email`.
 
-### 3.5 Corrigir `yupResolver(schema as any)` onde possível
-Ocorrências em `SignInWithoutLayout`, `SignUpFormWithoutLayout`, `FormCompleteKYCWithoutLayout`.
+### 3.5 Corrigir `yupResolver(schema as any)` onde possível ✅
+Substituído `as any` por `as ObjectSchema<FormType>` em `SignInWithoutLayout`, `SignUpFormWithoutLayout`, `FormCompleteKYCWithoutLayout` (dynamic schema usa `as unknown as ObjectSchema<DocumentDto>`).
 
 ---
 

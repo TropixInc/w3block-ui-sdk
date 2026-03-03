@@ -3,7 +3,7 @@
 import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
 
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
-import { useMutation } from '@tanstack/react-query';
+import { UseMutationResult, useMutation } from '@tanstack/react-query';
 import { UtmContextInterface } from '../../core/context/UtmContext';
 import { useGetW3blockIdSDK } from '../../shared/hooks/useGetW3blockIdSDK';
 import { useUtms } from '../../shared/hooks/useUtms';
@@ -22,7 +22,7 @@ interface Payload {
   verificationType?: VerificationType;
 }
 
-export const useSignUp = (): any => {
+export const useSignUp = (): UseMutationResult<unknown, unknown, Payload> => {
   const getSDK = useGetW3blockIdSDK();
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
