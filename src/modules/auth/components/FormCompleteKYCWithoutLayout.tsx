@@ -215,248 +215,172 @@ const _FormCompleteKYCWithoutLayout = ({
     else return '';
   }, [productForm, router?.query?.formState]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  return isLoadingKyc ? (
-    <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
-      <Spinner />
-    </div>
-  ) : tenantInputs?.data?.length ? (
-    keyPage ? (
-      <FormProvider {...dynamicMethods}>
-        {!keyPage &&
-        reasonsToUse?.logs?.at(-1)?.reason &&
-        reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
-          <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
-            <p className="pw-mt-2 pw-text-[#FF0505]">
-              {reasonsToUse?.logs.at(-1)?.reason}
-            </p>
-          </div>
-        ) : null}
-        {renderSubtitle && typeof formTitle !== 'string' && (
-          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
-            {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
+
+  if (isLoadingKyc) {
+    return (
+      <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!tenantInputs?.data?.length) return null;
+
+  const formContent = (
+    <FormProvider {...dynamicMethods}>
+      {!keyPage &&
+      reasonsToUse?.logs?.at(-1)?.reason &&
+      reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
+        <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
+          <p className="pw-mt-2 pw-text-[#FF0505]">
+            {reasonsToUse?.logs.at(-1)?.reason}
           </p>
-        )}
+        </div>
+      ) : null}
+      {renderSubtitle && typeof formTitle !== 'string' && (
+        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
+          {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
+        </p>
+      )}
 
-        {formTitle && (
-          <div
-            className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5"
-            dangerouslySetInnerHTML={{
-              __html: formTitle ?? '',
-            }}
-          ></div>
-        )}
+      {formTitle && (
+        <div
+          className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5"
+          dangerouslySetInnerHTML={{
+            __html: formTitle ?? '',
+          }}
+        ></div>
+      )}
 
-        <FormTemplate
-          isLoading={isPending}
-          buttonDisabled={
-            !dynamicMethods?.formState?.isValid ||
-            isPending ||
-            Boolean(
-              contextSlug === 'signup' &&
-                (userKycStatus === KycStatus.Approved ||
-                  userKycStatus === KycStatus.Denied)
-            )
-          }
-          onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-          tenantInputs={inputsToShow}
-          setUploadProgress={setUploadProgress}
-          getDocumentByInputId={getDocumentByInputId}
-          formState={formState}
-          inputRequestable={inputRequestable}
-          inputsIdRequestReview={inputsIdRequestReview}
-          onChangeInputsIdRequestReview={onChangeInputsIdRequestReview}
-          keyPage={keyPage}
-          profilePage={profilePage}
-          statusContext={statusContext}
-          hideComplexPhone={hideComplexPhone}
-          hideContinue={hideContinue}
-          readonly={readonly}
-        ></FormTemplate>
-
-        {isSuccess && (
-          <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
-            <div className="pw-p-3 pw-w-full pw-rounded-lg">
-              <p className="pw-text-green-300">
-                {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
-              </p>
-            </div>
-          </Alert>
-        )}
-        {isError && (
-          <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
-            <p className="pw-text-sm">{errorMessage?.message}</p>
-          </Alert>
-        )}
-        {uploadProgress && (
-          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
-            {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
-          </p>
-        )}
-        {contextSlug === 'signup' &&
-        (userKycStatus === KycStatus.Approved ||
-          userKycStatus === KycStatus.Denied) ? (
-          <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
-            {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
-          </p>
-        ) : null}
-        {profilePage || keyPage || typeof formFooter === 'string' ? null : (
-          <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
-            <button
-              onClick={() => setIsOpenModal(true)}
-              className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
-            >
-              {translate('shared>exit')}
-            </button>{' '}
-            {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
-          </p>
-        )}
-        {formFooter && (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formFooter ?? '',
-            }}
-          ></div>
-        )}
-      </FormProvider>
-    ) : (
-      <Box
-        className={classNames(
-          profilePage &&
-            '!pw-bg-none !pw-w-full !pw-py-0 !pw-max-w-[1000px] !pw-shadow-none'
-        )}
-      >
-        <FormProvider {...dynamicMethods}>
-          {reasonsToUse?.logs?.at(-1)?.reason &&
-          reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
-            <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
-              <p className="pw-mt-2 pw-text-[#FF0505]">
-                {reasonsToUse?.logs.at(-1)?.reason}
-              </p>
-            </div>
-          ) : null}
-          {renderSubtitle && typeof formTitle !== 'string' && (
-            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5">
-              {translate('auth>formCompletKYCWithoutLayout>pageLabel')}
-            </p>
-          )}
-
-          {formTitle && (
-            <div
-              className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5"
-              dangerouslySetInnerHTML={{
-                __html: formTitle ?? '',
-              }}
-            ></div>
-          )}
-
-          <FormTemplate
-            isLoading={isPending}
-            buttonDisabled={
-              isPending ||
-              Boolean(
-                contextSlug === 'signup' &&
-                  (userKycStatus === KycStatus.Approved ||
-                    userKycStatus === KycStatus.Denied)
-              )
+      <FormTemplate
+        isLoading={isPending}
+        buttonDisabled={
+          (keyPage ? !dynamicMethods?.formState?.isValid : false) ||
+          isPending ||
+          Boolean(
+            contextSlug === 'signup' &&
+              (userKycStatus === KycStatus.Approved ||
+                userKycStatus === KycStatus.Denied)
+          )
+        }
+        onSubmit={dynamicMethods.handleSubmit(onSubmit)}
+        tenantInputs={inputsToShow}
+        setUploadProgress={setUploadProgress}
+        getDocumentByInputId={getDocumentByInputId}
+        formState={formState}
+        {...(keyPage
+          ? {
+              inputRequestable,
+              inputsIdRequestReview,
+              onChangeInputsIdRequestReview,
+              keyPage,
             }
-            onSubmit={dynamicMethods.handleSubmit(onSubmit)}
-            tenantInputs={inputsToShow}
-            setUploadProgress={setUploadProgress}
-            getDocumentByInputId={getDocumentByInputId}
-            formState={formState}
-            profilePage={profilePage}
-            statusContext={statusContext}
-            hideComplexPhone={hideComplexPhone}
-            hideContinue={hideContinue}
-            readonly={readonly}
-          ></FormTemplate>
+          : {})}
+        profilePage={profilePage}
+        statusContext={statusContext}
+        hideComplexPhone={hideComplexPhone}
+        hideContinue={hideContinue}
+        readonly={readonly}
+      ></FormTemplate>
 
-          {isSuccess && (
-            <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
-              <div className="pw-p-3 pw-w-full pw-rounded-lg">
-                <p className="pw-text-green-300">
-                  {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
-                </p>
-              </div>
-            </Alert>
-          )}
-          {!dynamicMethods?.formState?.isValid &&
-            !inputsFiltered?.some(
-              (res: { type: DataTypesEnum }) =>
-                res.type === DataTypesEnum.Iframe
-            ) && (
-              <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
-                <p className="pw-text-sm">
-                  {translate('auth>formCompleteKYCWithoutLayout>verifyFieds')}
-                </p>
-              </Alert>
-            )}
-          {isError && (
-            <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
-              <p className="pw-text-sm">{errorMessage?.message}</p>
-            </Alert>
-          )}
-          {uploadProgress && (
-            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
-              {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
+      {isSuccess && (
+        <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
+          <div className="pw-p-3 pw-w-full pw-rounded-lg">
+            <p className="pw-text-green-300">
+              {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
             </p>
-          )}
-          {contextSlug === 'signup' &&
-          (userKycStatus === KycStatus.Approved ||
-            userKycStatus === KycStatus.Denied) ? (
-            <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
-              {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
-            </p>
-          ) : null}
-          {profilePage || keyPage || typeof formFooter === 'string' ? null : (
-            <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
-              <button
-                onClick={() => setIsOpenModal(true)}
-                className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
-              >
-                {translate('shared>exit')}
-              </button>{' '}
-              {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
-            </p>
-          )}
-          {formFooter && (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: formFooter ?? '',
-              }}
-            ></div>
-          )}
-        </FormProvider>
-        <ModalBase isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
-          <div>
-            <p>
-              {translate(
-                'auth>formCompleteKYCWithoutLayout>confirmCancelRegistration'
-              )}
-            </p>
-            <div>
-              <button
-                onClick={() => setIsOpenModal(false)}
-                className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full pw-border-[#0050FF] pw-text-black"
-              >
-                {translate('components>cancelMessage>cancel')}
-              </button>
-              <button
-                onClick={() =>
-                  signOut().then(() => {
-                    router.pushConnect(PixwayAppRoutes.HOME);
-                  })
-                }
-                className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-bg-[#0050FF] pw-text-white"
-              >
-                {translate('components>advanceButton>continue')}
-              </button>
-            </div>
           </div>
-        </ModalBase>
-      </Box>
-    )
-  ) : null;
+        </Alert>
+      )}
+      {!keyPage &&
+        !dynamicMethods?.formState?.isValid &&
+        !inputsFiltered?.some(
+          (res: { type: DataTypesEnum }) =>
+            res.type === DataTypesEnum.Iframe
+        ) && (
+          <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+            <p className="pw-text-sm">
+              {translate('auth>formCompleteKYCWithoutLayout>verifyFieds')}
+            </p>
+          </Alert>
+        )}
+      {isError && (
+        <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
+          <p className="pw-text-sm">{errorMessage?.message}</p>
+        </Alert>
+      )}
+      {uploadProgress && (
+        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+          {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
+        </p>
+      )}
+      {contextSlug === 'signup' &&
+      (userKycStatus === KycStatus.Approved ||
+        userKycStatus === KycStatus.Denied) ? (
+        <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">
+          {translate('auth>formCompletKYCWithoutLayout>notEditInfos')}
+        </p>
+      ) : null}
+      {profilePage || keyPage || typeof formFooter === 'string' ? null : (
+        <p className="pw-text-sm pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mt-5 pw-text-end">
+          <button
+            onClick={() => setIsOpenModal(true)}
+            className="pw-text-[15px] pw-leading-[18px] pw-text-[#ff5a5a] pw-font-semibold pw-mt-5 pw-underline hover:pw-text-[#993d3d]"
+          >
+            {translate('shared>exit')}
+          </button>{' '}
+          {translate('auth>formCompleteKYCWithoutLayout>continueLater')}
+        </p>
+      )}
+      {formFooter && (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: formFooter ?? '',
+          }}
+        ></div>
+      )}
+    </FormProvider>
+  );
+
+  if (keyPage) return formContent;
+
+  return (
+    <Box
+      className={classNames(
+        profilePage &&
+          '!pw-bg-none !pw-w-full !pw-py-0 !pw-max-w-[1000px] !pw-shadow-none'
+      )}
+    >
+      {formContent}
+      <ModalBase isOpen={isOpenModal} onClose={() => setIsOpenModal(false)}>
+        <div>
+          <p>
+            {translate(
+              'auth>formCompleteKYCWithoutLayout>confirmCancelRegistration'
+            )}
+          </p>
+          <div>
+            <button
+              onClick={() => setIsOpenModal(false)}
+              className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-border sm:pw-w-[260px] pw-w-full pw-text-xs pw-mt-6 pw-rounded-full pw-border-[#0050FF] pw-text-black"
+            >
+              {translate('components>cancelMessage>cancel')}
+            </button>
+            <button
+              onClick={() =>
+                signOut().then(() => {
+                  router.pushConnect(PixwayAppRoutes.HOME);
+                })
+              }
+              className="pw-py-[10px] pw-px-[60px] pw-font-[700] pw-font pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[260px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-bg-[#0050FF] pw-text-white"
+            >
+              {translate('components>advanceButton>continue')}
+            </button>
+          </div>
+        </div>
+      </ModalBase>
+    </Box>
+  );
 };
 
 export const FormCompleteKYCWithoutLayout = ({

@@ -69,6 +69,19 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
   const assetId = (dynamicMethods.getValues() as any)?.imageInput?.assetId;
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const createMutationCallbacks = (successMsg: string, errorMsg: string) => ({
+    onSuccess() {
+      setStep(6);
+      setSuccess(successMsg);
+      refetch();
+    },
+    onError() {
+      setStep(5);
+      setError(errorMsg);
+    },
+  });
+
   const concludeAction = () => {
     if (step === Steps.REFUSE)
       return (
@@ -90,17 +103,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 if (reason !== '') {
                   refuseWithdraw(
                     { id, reason },
-                    {
-                      onSuccess() {
-                        setStep(6);
-                        setSuccess('Pedido de saque recusado com sucesso.');
-                        refetch();
-                      },
-                      onError() {
-                        setStep(5);
-                        setError('Erro ao recusar o pedido de saque.');
-                      },
-                    }
+                    createMutationCallbacks(
+                      'Pedido de saque recusado com sucesso.',
+                      'Erro ao recusar o pedido de saque.'
+                    )
                   );
                 }
               }}
@@ -124,21 +130,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               onClick={() => {
                 escrowWithdraw(
                   { id },
-                  {
-                    onSuccess() {
-                      setStep(6);
-                      setSuccess(
-                        'Recursos retidos com sucesso, aguarde para realizar a transferência.'
-                      );
-                      refetch();
-                    },
-                    onError() {
-                      setStep(5);
-                      setError(
-                        'Erro ao reter recursos para o pedido de saque.'
-                      );
-                    },
-                  }
+                  createMutationCallbacks(
+                    'Recursos retidos com sucesso, aguarde para realizar a transferência.',
+                    'Erro ao reter recursos para o pedido de saque.'
+                  )
                 );
               }}
             >
@@ -177,17 +172,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 if (assetId) {
                   concludeWithdraw(
                     { id, receiptAssetId: assetId },
-                    {
-                      onSuccess() {
-                        setStep(6);
-                        setSuccess('Pedido de saque concluído com sucesso!');
-                        refetch();
-                      },
-                      onError() {
-                        setStep(5);
-                        setError('Erro ao concluir o pedido de saque.');
-                      },
-                    }
+                    createMutationCallbacks(
+                      'Pedido de saque concluído com sucesso!',
+                      'Erro ao concluir o pedido de saque.'
+                    )
                   );
                 }
               }}

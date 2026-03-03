@@ -76,23 +76,23 @@ Substituído `as any` por `as ObjectSchema<FormType>` em `SignInWithoutLayout`, 
 
 ---
 
-## Ponto 4: Componentização
+## Ponto 4: Componentização ✅
 > Commit separado ao final
 
-### 4.1 Unificar `PasswordTips` e `AuthPasswordTips`
-90% idênticos. Extrair componente interno `PasswordValidationList` que recebe `password: string` e `isDirty: boolean`. Ambos delegam para ele mantendo interfaces públicas.
+### 4.1 Unificar `PasswordTips` e `AuthPasswordTips` ✅
+90% idênticos. Extraído componente interno `PasswordValidationList` que recebe `password: string` e `isDirty: boolean`. Ambos delegam para ele mantendo interfaces públicas.
 
-### 4.2 Extrair `CodeInputGrid` component
-O JSX de renderização dos 6 inputs de código é idêntico nos 3 componentes que agora usam `useCodeInput`. Extrair para `components/CodeInputGrid.tsx`.
+### 4.2 Extrair `CodeInputGrid` component ✅
+O JSX de renderização dos 6 inputs de código era idêntico nos 3 componentes que usam `useCodeInput`. Extraído para `components/CodeInputGrid.tsx`. Componentes atualizados: `SetCodeVerify`, `VerifySignUpWithCodeWithoutLayout`, `SignInWithCodeWithoutLayout`.
 
-### 4.3 Unificar branches duplicados em `FormCompleteKYCWithoutLayout`
-keyPage=true e keyPage=false renderizam ~230 linhas quase idênticas. Unificar passando `keyPage` como prop que controla as pequenas diferenças.
+### 4.3 Unificar branches duplicados em `FormCompleteKYCWithoutLayout` ✅
+keyPage=true e keyPage=false renderizavam ~230 linhas quase idênticas. Unificado em `formContent` único com condicionais controladas por `keyPage`: wrapper `<Box>` (só sem keyPage), reasons block, buttonDisabled, verify fields alert, e ModalBase.
 
-### 4.4 Config-driven fields em `AddMethodModal`
-Em vez de renderizar cada campo PIX/Banco inline (95% idênticos), definir arrays de configuração e iterar.
+### 4.4 Config-driven fields em `AddMethodModal` ✅
+Campos PIX/Banco refatorados de inline para arrays de configuração (`pixFields`, `bankFields`) com tipos `FieldConfig`. Helper `updateField` centraliza a lógica de atualização do payload. Função `renderField` itera sobre as configs e renderiza inputs, selects, e rows compostas.
 
-### 4.5 Factory para mutation callbacks em `WithdrawAdminActions`
-Os 3 callbacks de refuse/escrow/conclude são estruturalmente idênticos.
+### 4.5 Factory para mutation callbacks em `WithdrawAdminActions` ✅
+Os 3 callbacks de refuse/escrow/conclude eram estruturalmente idênticos. Criada factory `createMutationCallbacks(successMsg, errorMsg)` que retorna `{ onSuccess, onError }` com padrão `setStep(6)/setSuccess/refetch` e `setStep(5)/setError`.
 
 ---
 

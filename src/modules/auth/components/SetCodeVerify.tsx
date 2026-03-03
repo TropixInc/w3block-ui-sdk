@@ -13,6 +13,7 @@ import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useAuthRedirect } from '../hooks/useAuthRedirect';
 import { useCodeInput } from '../hooks/useCodeInput';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
+import { CodeInputGrid } from './CodeInputGrid';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useVerifySignUp } from '../hooks/useVerifySignUp';
@@ -121,21 +122,7 @@ export const SetCodeVerify = ({ isPostSignUp }: SetCodeVerifyProps) => {
           <span className="pw-block">email</span>
         </Trans>
       </p>
-      <div className="pw-flex pw-gap-x-2">
-        {inputs.map((val: string, index: number) => (
-          <input
-            autoFocus={index == 0}
-            onChange={(e) => changeInput(index, e)}
-            maxLength={1}
-            id={`input-${index}`}
-            onKeyUp={(e) => handleKeyUp(e, index)}
-            value={val}
-            className="sm:pw-w-[50px] sm:pw-h-[50px] pw-w-[40px] pw-h-[40px] pw-rounded-lg pw-text-lg pw-px-2 pw-text-center pw-text-[#35394C] pw-font-[700] pw-border pw-border-[#295BA6]"
-            key={index}
-            type="tel"
-          />
-        ))}
-      </div>
+      <CodeInputGrid inputs={inputs} changeInput={changeInput} handleKeyUp={handleKeyUp} />
       {error !== '' ? (
         <Alert variant="error" className="pw-mt-2">
           {error}
