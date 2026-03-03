@@ -96,22 +96,24 @@ Os 3 callbacks de refuse/escrow/conclude eram estruturalmente idênticos. Criada
 
 ---
 
-## Ponto 5: Strings hardcoded
+## Ponto 5: Strings hardcoded ✅
 > Commit separado ao final
 
-### 5.1 Substituir strings hardcoded por translation keys
+### 5.1 Substituir strings hardcoded por translation keys ✅
 Arquivos afetados:
-- `hooks/usePasswordValidationSchema.ts`: `'Minimo 8 caracteres'`
-- `components/SetCodeVerify.tsx`: erros em português
-- `components/VerifySignUpWithCodeWithoutLayout.tsx`: erros em português
-- `components/SignInWithCodeWithoutLayout.tsx`: erros em português
-- `components/AddMethodModal.tsx`: labels de campos, `"Digite apenas numeros"`
-- `components/WithdrawAdminActions.tsx`: status mapping e mensagens
+- `hooks/usePasswordValidationSchema.ts`: `'Minimo 8 caracteres'` → `translate('auth>passwordValidation>minCharacters')`
+- `components/SignInWithCodeWithoutLayout.tsx`: removido `{'TESTE'}` (debug text)
+- `components/AddMethodModal.tsx`: `mappedKeys` e `mapMessage` agora usam `translate()`, placeholders `'Digite apenas números'` → `translate('auth>addMethodModal>onlyNumbers')`
+- `components/WithdrawAdminActions.tsx`: `statusMapping` movido para dentro do componente com 6 translation keys; 6 mensagens de mutation callbacks substituídas por keys; `textTitle="Enviar comprovante"` → `translate('auth>withdrawAdminActions>sendReceipt')`
 
-### 5.2 Adicionar novas keys de tradução
-Adicionar nos arquivos:
+Nota: `SetCodeVerify.tsx` e `VerifySignUpWithCodeWithoutLayout.tsx` já usavam `translate()` para todas as mensagens de erro.
+
+### 5.2 Adicionar novas keys de tradução ✅
+18 novas keys adicionadas em ambos os arquivos:
 - `shared/locales/en/common.json`
 - `shared/locales/pt-BR/common.json`
+
+Keys adicionadas: `auth>addMethodModal>accountTypeLabel`, `auth>addMethodModal>invalidField`, `auth>addMethodModal>onlyNumbers`, `auth>passwordValidation>minCharacters`, `auth>withdrawAdminActions>refuseError/Success`, `auth>withdrawAdminActions>escrowError/Success`, `auth>withdrawAdminActions>concludeError/Success`, `auth>withdrawAdminActions>sendReceipt`, `auth>withdrawAdminActions>status{Pending,Escrowing,ReadyToTransfer,Concluded,Failed,Refused}`
 
 ---
 

@@ -38,19 +38,19 @@ type Status =
   | 'failed'
   | 'refused';
 
-const statusMapping = {
-  pending: 'Pendente',
-  escrowing_resources: 'Retendo fundos',
-  ready_to_transfer_funds: 'Pronto para transferir',
-  concluded: 'Concluído',
-  failed: 'Falha',
-  refused: 'Recusado',
-};
-
 const WithdrawAdminActions = ({ id }: { id: string }) => {
   const router = useRouterConnect();
   const locale = useLocale();
   const [translate] = useTranslation();
+
+  const statusMapping: Record<Status, string> = {
+    pending: translate('auth>withdrawAdminActions>statusPending'),
+    escrowing_resources: translate('auth>withdrawAdminActions>statusEscrowing'),
+    ready_to_transfer_funds: translate('auth>withdrawAdminActions>statusReadyToTransfer'),
+    concluded: translate('auth>withdrawAdminActions>statusConcluded'),
+    failed: translate('auth>withdrawAdminActions>statusFailed'),
+    refused: translate('auth>withdrawAdminActions>statusRefused'),
+  };
   const [step, setStep] = useState<Steps>(1);
   const [reason, setReason] = useState('');
   const [_, setUploadingImage] = useState(false);
@@ -104,8 +104,8 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                   refuseWithdraw(
                     { id, reason },
                     createMutationCallbacks(
-                      'Pedido de saque recusado com sucesso.',
-                      'Erro ao recusar o pedido de saque.'
+                      translate('auth>withdrawAdminActions>refuseSuccess'),
+                      translate('auth>withdrawAdminActions>refuseError')
                     )
                   );
                 }
@@ -131,8 +131,8 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 escrowWithdraw(
                   { id },
                   createMutationCallbacks(
-                    'Recursos retidos com sucesso, aguarde para realizar a transferência.',
-                    'Erro ao reter recursos para o pedido de saque.'
+                    translate('auth>withdrawAdminActions>escrowSuccess'),
+                    translate('auth>withdrawAdminActions>escrowError')
                   )
                 );
               }}
@@ -151,7 +151,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               <InputWithdrawCommerce
                 name="imageInput"
                 onChangeUploadProgess={setUploadingImage}
-                textTitle="Enviar comprovante"
+                textTitle={translate('auth>withdrawAdminActions>sendReceipt')}
               />
             </FormProvider>
           </div>
@@ -173,8 +173,8 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                   concludeWithdraw(
                     { id, receiptAssetId: assetId },
                     createMutationCallbacks(
-                      'Pedido de saque concluído com sucesso!',
-                      'Erro ao concluir o pedido de saque.'
+                      translate('auth>withdrawAdminActions>concludeSuccess'),
+                      translate('auth>withdrawAdminActions>concludeError')
                     )
                   );
                 }

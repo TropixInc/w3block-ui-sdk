@@ -27,7 +27,7 @@ export const usePasswordValidationSchema = ({
           messageConfig?.required ??
             translate('components>form>requiredFieldValidation')
         )
-        .min(PASSWORD_MIN_LENGTH, 'Minimo 8 caracteres')
+        .min(PASSWORD_MIN_LENGTH, translate('auth>passwordValidation>minCharacters'))
         .matches(
           PASSWORD_REGEX,
           messageConfig?.pattern ??

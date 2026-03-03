@@ -14,28 +14,26 @@ interface PayloadDTO {
   accountInfo: any;
 }
 
-interface MappedDTO {
-  [key: string]: string;
-}
+type TranslateFn = (key: string, params?: Record<string, string>) => string;
 
-const mappedKeys: MappedDTO = {
-  'accountInfo.key': 'Chave PIX',
-  'accountInfo.ownerSsn': 'CPF ou CNPJ',
-  'accountInfo.type': 'Tipo de conta',
-  'accountInfo.bank': 'Banco',
-  'accountInfo.agency': 'Agência',
-  'accountInfo.accountNumber': 'Número da conta',
-  'accountInfo.verificationNumber': 'Dígito',
-};
+const getMappedKeys = (translate: TranslateFn): Record<string, string> => ({
+  'accountInfo.key': translate('auth>addMethodModal>pixCode'),
+  'accountInfo.ownerSsn': translate('auth>addMethodModal>cpf'),
+  'accountInfo.type': translate('auth>addMethodModal>accountTypeLabel'),
+  'accountInfo.bank': translate('auth>addMethodModal>bank'),
+  'accountInfo.agency': translate('auth>addMethodModal>agency'),
+  'accountInfo.accountNumber': translate('auth>addMethodModal>accountNumber'),
+  'accountInfo.verificationNumber': translate('auth>addMethodModal>digit'),
+});
 
-const mapMessage = (message: string) => {
-  // Encontrar a chave correspondente no objeto mappedKeys
+const mapMessage = (message: string, translate: TranslateFn) => {
+  const mappedKeys = getMappedKeys(translate);
   const key = Object.keys(mappedKeys).find((k) => message.includes(k));
 
   if (key) {
     const value = mappedKeys[key];
     if (message.includes('is not a valid')) {
-      return `${value} - campo invalido`;
+      return translate('auth>addMethodModal>invalidField', { field: value });
     } else {
       return message.replace(key, value);
     }
@@ -126,7 +124,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
       key: 'ownerSsn',
       label: 'auth>addMethodModal>cpf',
       numberOnly: true,
-      placeholder: 'Digite apenas números',
+      placeholder: translate('auth>addMethodModal>onlyNumbers'),
     },
     {
       key: 'key',
@@ -141,7 +139,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
       key: 'ownerSsn',
       label: 'auth>addMethodModal>cpf',
       numberOnly: true,
-      placeholder: 'Digite apenas números',
+      placeholder: translate('auth>addMethodModal>onlyNumbers'),
     },
     {
       key: 'type',
@@ -160,7 +158,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
       key: 'agency',
       label: 'auth>addMethodModal>agency',
       numberOnly: true,
-      placeholder: 'Digite apenas números',
+      placeholder: translate('auth>addMethodModal>onlyNumbers'),
     },
     {
       key: '_accountRow',
@@ -171,7 +169,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
           label: 'auth>addMethodModal>accountNumber',
           numberOnly: true,
           maxLength: 10,
-          placeholder: 'Digite apenas números',
+          placeholder: translate('auth>addMethodModal>onlyNumbers'),
           inputClassName: inputClassName,
         },
         {
@@ -296,7 +294,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
               className="pw-text-sm pw-font-semibold pw-text-red-600"
               key={msg + idx}
             >
-              {mapMessage(msg)}
+              {mapMessage(msg, translate)}
             </p>
           )
         )}
