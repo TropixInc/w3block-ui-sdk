@@ -174,7 +174,7 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const dynamicMethods = useForm<DocumentDto>({
     shouldUnregister: false,
-    mode: 'onChange',
+    mode: 'onTouched',
     resolver: yupResolver(
       dynamicSchema as unknown as ObjectSchema<DocumentDto>
     ),
@@ -294,6 +294,7 @@ const _FormCompleteKYCWithoutLayout = ({
       )}
       {!keyPage &&
         !dynamicMethods?.formState?.isValid &&
+        dynamicMethods?.formState?.isSubmitted &&
         !inputsFiltered?.some(
           (res: { type: DataTypesEnum }) =>
             res.type === DataTypesEnum.Iframe

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -17,6 +17,7 @@ import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
+import { Spinner } from '../../shared/components/Spinner';
 import { AuthButton } from '../components/AuthButton';
 import { AuthFooter } from '../components/AuthFooter';
 import { AuthLayoutBaseClasses, AuthLayoutBase } from '../components/AuthLayoutBase';
@@ -93,8 +94,31 @@ const _SignInTemplate = ({
       ? router.query
       : '';
 
+  const isRedirecting = useRef(false);
+
+  const checkForCallbackUrl = () => {
+    if (profile && !profile?.data.verified) {
+      return appBaseUrl + PixwayAppRoutes.VERIfY_WITH_CODE;
+    } else if (profile?.data?.kycStatus === KycStatus.Pending) {
+      return appBaseUrl + routeToAttachKYC;
+    } else if (router.query.callbackPath) {
+      return router.query.callbackPath as string;
+    } else if (callbackUrl) {
+      const url = callbackUrl;
+      setCallbackUrl('');
+      return url;
+    } else if (!profile?.data?.mainWallet) {
+      return routeToAttachWallet;
+    }
+  };
+
+  const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
+
   useEffect(() => {
-    if (session) router.pushConnect(getRedirectUrl(), query);
+    if (session && !isRedirecting.current) {
+      isRedirecting.current = true;
+      router.pushConnect(getRedirectUrl(), query);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
 
@@ -102,24 +126,6 @@ const _SignInTemplate = ({
     control: methods.control,
     name: 'password',
   });
-
-  const checkForCallbackUrl = () => {
-    if (profile && !profile?.data.verified) {
-      return appBaseUrl + PixwayAppRoutes.VERIfY_WITH_CODE;
-    } else if (profile?.data?.kycStatus === KycStatus.Pending) {
-      return appBaseUrl + routeToAttachKYC;
-    } else if (!profile?.data?.mainWallet) {
-      return routeToAttachWallet;
-    } else if (router.query.callbackPath) {
-      return router.query.callbackPath as string;
-    } else if (callbackUrl) {
-      const url = callbackUrl;
-      setCallbackUrl('');
-      return url;
-    }
-  };
-
-  const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
   const onSubmit = async ({ email, password }: Form) => {
     try {
@@ -137,6 +143,14 @@ const _SignInTemplate = ({
       setIsLoading(false);
     }
   };
+
+  if (session) {
+    return (
+      <div className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <AuthLayoutBase

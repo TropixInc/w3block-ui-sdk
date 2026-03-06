@@ -37,7 +37,7 @@ const noveEnv = getEnvVar('NODE_ENV')
 const URL =
   noveEnv === 'production'
     ? 'https://pixwayid.pixway.io/blockchain-transactions'
-    : 'https://pixwayid.stg.pixway.io/blockchain-transactions';
+    : 'https://pixwayid.pixway.io/blockchain-transactions';
 
 const socket = io(URL, {
   secure: true,

@@ -75,7 +75,6 @@ export const CompleteKYCTemplateSDK = ({
 
   useEffect(() => {
     if (router?.query?.callbackUrl === '/null') {
-      console.log(router?.query, "query")
       router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {...router?.query, callbackUrl: '/wallet'})
     }
   }, [router?.query])
@@ -97,7 +96,7 @@ export const CompleteKYCTemplateSDK = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
 
-  return isLoadingProfile ? (
+  return isLoadingProfile || status !== 'authenticated' ? (
     <div
       style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
       className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center"

@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -147,7 +147,7 @@ export const SigInWithoutLayout = ({
       twoFactor: '',
       companyId,
     },
-    mode: 'onChange',
+    mode: 'onTouched',
     resolver: yupResolver(schema as ObjectSchema<Form>),
   });
 
@@ -182,14 +182,27 @@ export const SigInWithoutLayout = ({
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
+  const isRedirecting = useRef(false);
+  const [redirectTimedOut, setRedirectTimedOut] = useState(false);
+
   useEffect(() => {
-    if (session && profile && !isPasswordless) {
+    if (session && profile && !isPasswordless && !isRedirecting.current) {
+      isRedirecting.current = true;
+      setRedirectTimedOut(false);
       if (router?.query?.callbackPath || router?.query?.callbackUrl) {
         router.pushConnect(getRedirectUrl());
       } else router.pushConnect(getRedirectUrl(), query);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router, profile]);
+
+  useEffect(() => {
+    if (isProcessing || (session && profile && !isPasswordless)) {
+      const timer = setTimeout(() => setRedirectTimedOut(true), 15000);
+      return () => clearTimeout(timer);
+    }
+    setRedirectTimedOut(false);
+  }, [isProcessing, session, profile, isPasswordless]);
 
   const onSubmit = async ({ email, password }: Form) => {
     try {
@@ -208,10 +221,24 @@ export const SigInWithoutLayout = ({
     }
   };
 
-  if (isProcessing)
+  if (isProcessing || (session && profile && !isPasswordless))
     return (
-      <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
+      <div className="pw-w-full pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-4">
         <Spinner />
+        {redirectTimedOut && (
+          <div className="pw-flex pw-flex-col pw-items-center pw-gap-2">
+            <p className="pw-text-sm pw-text-[#353945]">
+              {translate('auth>signIn>loadingTimeout')}
+            </p>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="pw-text-sm pw-text-brand-primary pw-underline pw-font-semibold"
+            >
+              {translate('shared>tryAgain')}
+            </button>
+          </div>
+        )}
       </div>
     );
   else if (isPasswordless)

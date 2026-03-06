@@ -22,9 +22,6 @@ import { useCheckWhitelistByUser } from '../hooks/useCheckWhitelistByUser';
 import { useGetDocuments } from '../hooks/useGetDocuments';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
 import { Spinner } from '../components/Spinner';
-import { usePathname } from 'next/navigation';
-
-
 
 interface OnboardProps {
   setLoading: (bol: boolean) => void;
@@ -123,11 +120,13 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
     }
   }, [contexts]);
 
-  const pathname = usePathname();
-  const queryString = new URLSearchParams(router?.query).toString();
+  const pathname = location?.pathname;
+
   const path = useMemo(() => {
-    return pathname + (queryString ? `?${queryString}` : '');
-  }, [pathname, queryString]);
+    return location?.href;
+  }, [location?.href]);
+
+
   const { connectProxyPass } = useCompanyConfig();
   const callback = () => {
     const url = removeDoubleSlashesOnUrl(
@@ -145,22 +144,28 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
       return { callbackUrl: pathname ? url : location?.href };
   };
 
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const isInIframe =
+    typeof window !== 'undefined' && window.self !== window.top;
+
   useEffect(() => {
-    if (profile) {
+    if (profile && !isRedirecting && !isInIframe) {
       if (
         !profile?.data?.verified &&
-        !window?.location?.pathname?.includes('/auth/verify-sign-up')
+        !pathname?.includes(PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION)
       ) {
+        setIsRedirecting(true);
         router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, callback());
       } else if (signupContext && isFilled?.length === 0) {
         if (
           profile?.data?.kycStatus === KycStatus.Pending &&
           signupContext?.active &&
-          !window?.location?.pathname?.includes('/auth/complete-kyc') &&
-          !window?.location?.pathname?.includes('/auth/verify-sign-up') &&
-          !window?.location?.pathname?.includes('/auth/signUp') &&
-          window?.location?.pathname !== PixwayAppRoutes.SIGN_IN
+          !pathname?.includes(PixwayAppRoutes.COMPLETE_KYC) &&
+          !pathname?.includes(PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION) &&
+          !pathname?.includes(PixwayAppRoutes.SIGN_UP) &&
+          pathname !== PixwayAppRoutes.SIGN_IN
         ) {
+          setIsRedirecting(true);
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, callback());
         }
       } else if (!skipWallet) {
@@ -168,12 +173,11 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
           !profile?.data?.mainWallet &&
           !isLoadingProfile &&
           router?.isReady &&
-          !window?.location?.pathname?.includes('/auth/complete-kyc') &&
-          !window?.location?.pathname?.includes('/auth/verify-sign-up') &&
-          !window?.location?.pathname?.includes(
-            '/auth/completeSignup/connectExternalWallet'
-          )
+          !pathname?.includes(PixwayAppRoutes.COMPLETE_KYC) &&
+          !pathname?.includes(PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION) &&
+          !pathname?.includes(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
         ) {
+          setIsRedirecting(true);
           router.pushConnect(
             PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
             callback()
@@ -181,7 +185,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
         }
       }
     }
-  }, [profile, signupContext, profileDataUpdatedAt]);
+  }, [profile, signupContext, profileDataUpdatedAt, isInIframe]);
 
   const { pushConnect } = router;
 
@@ -198,10 +202,8 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
         !!configData &&
         !path?.includes('/auth/complete-kyc')
       ) {
-        console.log('refetch');
         refetch();
       } else if (!path?.includes('/auth/complete-kyc')) {
-        console.log('setfalse');
         setLoading(false);
       }
     }
@@ -234,7 +236,6 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
             );
 
             if (docsFilled?.length === 0) {
-              console.log('redirect');
               pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                 contextSlug: res?.slug,
               });
@@ -246,15 +247,12 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
           }
         );
         if (i === hasAccess?.length) {
-          console.log('concluded');
           setLoading(false);
         }
       } else {
-        console.log('check else');
         setLoading(false);
       }
     } catch {
-      console.log('error');
       setLoading(false);
     }
   }, [filteredWhitelists, docs?.items, hasAccess, dataUpdatedAt]);
@@ -266,10 +264,14 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
   // }, [checkWhite, path]);
 
   useEffect(() => {
-    if (path?.includes('/auth')) {
+    if (location?.pathname?.includes('/auth')) {
       setLoading(false);
+      setIsRedirecting(false);
+    } else if (isInIframe && isRedirecting) {
+      // Em iframe, pushConnect não navega - evita spinner infinito
+      setIsRedirecting(false);
     }
-  }, [path]);
+  }, [location?.pathname, isInIframe, isRedirecting]);
 
   useEffect(() => {
     if (
@@ -279,20 +281,19 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
         !signupContext?.active) &&
       !path?.includes('/auth/complete-kyc')
     ) {
-      console.log('trigg checkwhitelists');
       checkWhite();
     }
   }, [checkWhite]);
 
   return (
     <OnboardContext.Provider value={{ setLoading, refetchDocs: refetch }}>
-      {loading || isFetching ? (
+      {loading || isFetching || isRedirecting ? (
         <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
           <Spinner />
         </div>
       ) : (
           children
-       )} 
+       )}
     </OnboardContext.Provider>
   );
 };
