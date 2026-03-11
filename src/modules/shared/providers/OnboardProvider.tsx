@@ -22,6 +22,7 @@ import { useCheckWhitelistByUser } from '../hooks/useCheckWhitelistByUser';
 import { useGetDocuments } from '../hooks/useGetDocuments';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
 import { Spinner } from '../components/Spinner';
+import { useWindowLocation } from '../hooks/useWindowLocation';
 
 interface OnboardProps {
   setLoading: (bol: boolean) => void;
@@ -120,10 +121,12 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
     }
   }, [contexts]);
 
-  const pathname = location?.pathname;
+  const location = useWindowLocation();
+
+  const pathname = typeof window !== 'undefined' ? location?.pathname : '';
 
   const path = useMemo(() => {
-    return location?.href;
+    return typeof window !== 'undefined' ? location?.href : '';
   }, [location?.href]);
 
 
@@ -287,13 +290,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
 
   return (
     <OnboardContext.Provider value={{ setLoading, refetchDocs: refetch }}>
-      {loading || isFetching || isRedirecting ? (
-        <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
-          <Spinner />
-        </div>
-      ) : (
-          children
-       )}
+      {children}
     </OnboardContext.Provider>
   );
 };

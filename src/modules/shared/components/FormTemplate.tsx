@@ -86,8 +86,6 @@ export const FormTemplate = ({
     return hasIframe && !completed;
   }, [completed, tenantInputs]);
 
-  console.log('tenantInputs ta nessa pagina', tenantInputs);
-
   return (
     <form onSubmit={onSubmit}>
       <div className="pw-flex pw-flex-col pw-gap-4">

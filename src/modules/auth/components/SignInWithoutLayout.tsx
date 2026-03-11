@@ -80,7 +80,7 @@ export const SigInWithoutLayout = ({
       pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
     },
   });
-  const { data: session } = usePixwaySession();
+  const { data: session, status: sessionStatus } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
   const router = useRouterConnect();
@@ -196,13 +196,15 @@ export const SigInWithoutLayout = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router, profile]);
 
+  const isSessionLoading = sessionStatus === 'loading';
+
   useEffect(() => {
-    if (isProcessing || (session && profile && !isPasswordless)) {
+    if (isProcessing || isSessionLoading || (session && profile && !isPasswordless)) {
       const timer = setTimeout(() => setRedirectTimedOut(true), 15000);
       return () => clearTimeout(timer);
     }
     setRedirectTimedOut(false);
-  }, [isProcessing, session, profile, isPasswordless]);
+  }, [isProcessing, isSessionLoading, session, profile, isPasswordless]);
 
   const onSubmit = async ({ email, password }: Form) => {
     try {
@@ -221,7 +223,7 @@ export const SigInWithoutLayout = ({
     }
   };
 
-  if (isProcessing || (session && profile && !isPasswordless))
+  if (isProcessing || isSessionLoading || (session && profile && !isPasswordless))
     return (
       <div className="pw-w-full pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-4">
         <Spinner />
@@ -301,12 +303,12 @@ export const SigInWithoutLayout = ({
 
           <div className="pw-mb-6">
             <AuthButton
-              className={classNames('pw-mb-1')}
+              className={classNames('pw-mb-1 pw-flex pw-items-center pw-justify-center')}
               type="submit"
               fullWidth
-              disabled={!methods.formState.isValid || isLoading}
+              disabled={!methods.formState.isValid || isLoading || Boolean(session)}
             >
-              {translate('loginPage>formSubmitButton>signIn')}
+              {isLoading ? <Spinner className="pw-w-4 pw-h-4 border-[1px]" /> : translate('loginPage>formSubmitButton>signIn')}
             </AuthButton>
             {hasSignUp ? (
               <>

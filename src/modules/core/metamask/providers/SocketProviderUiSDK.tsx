@@ -11,7 +11,6 @@ import { useSessionStorage } from 'react-use';
 import { Socket, io } from 'socket.io-client';
 import { Transaction } from '../../../shared/interfaces/IMetamask';
 import { usePixwaySession } from '../../../shared/hooks/usePixwaySession';
-import { getEnvVar } from '../../../shared/utils/env';
 
 
 
@@ -33,11 +32,10 @@ export const SocketProviderContext = createSymlinkSafeContext<SocketProviderCont
 );
 
 // "undefined" means the URL will be computed from the `window.location` object
-const noveEnv = getEnvVar('NODE_ENV')
 const URL =
-  noveEnv === 'production'
+  process.env.NODE_ENV === 'production'
     ? 'https://pixwayid.pixway.io/blockchain-transactions'
-    : 'https://pixwayid.pixway.io/blockchain-transactions';
+    : 'https://pixwayid.stg.pixway.io/blockchain-transactions';
 
 const socket = io(URL, {
   secure: true,

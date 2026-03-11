@@ -216,14 +216,6 @@ const _FormCompleteKYCWithoutLayout = ({
   }, [productForm, router?.query?.formState]);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  if (isLoadingKyc) {
-    return (
-      <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
   if (!tenantInputs?.data?.length) return null;
 
   const formContent = (
@@ -284,10 +276,11 @@ const _FormCompleteKYCWithoutLayout = ({
       ></FormTemplate>
 
       {isSuccess && (
-        <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5">
+        <Alert variant="success" className="pw-flex pw-gap-x-3 pw-mb-5 ">
           <div className="pw-p-3 pw-w-full pw-rounded-lg">
             <p className="pw-text-green-300">
               {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
+              <p>{!keyPage ? "Você esta sendo redirecionado" : ""}</p>
             </p>
           </div>
         </Alert>
