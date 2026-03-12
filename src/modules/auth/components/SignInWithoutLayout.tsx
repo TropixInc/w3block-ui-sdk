@@ -29,6 +29,7 @@ import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import AppleIcon from '../../shared/assets/icons/appleIcon.svg';
 import { useOAuthSignIn } from '../hooks/useOAuthSignIn';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
+import { authFlowLog } from '../utils/authFlowTimer';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { AuthButton } from './AuthButton';
 import { AuthFooter } from './AuthFooter';
@@ -159,23 +160,32 @@ export const SigInWithoutLayout = ({
   const skipWallet = defaultTheme?.configurations?.contentData?.skipWallet;
 
   const checkForCallbackUrl = () => {
+    const timer = authFlowLog("SignInWithoutLayout.checkForCallbackUrl");
     if (profile && !profile.data.verified) {
+      timer.end(" -> VERIFY_WITH_CODE");
       return PixwayAppRoutes.VERIfY_WITH_CODE;
     } else if (router?.query?.callbackPath) {
+      timer.end(" -> callbackPath");
       return router?.query?.callbackPath as string;
     } else if (router?.query?.callbackUrl) {
+      timer.end(" -> callbackUrl");
       return router?.query?.callbackUrl as string;
     } else if (profile?.data?.kycStatus === KycStatus.Pending) {
+      timer.end(" -> routerToAttachKyc");
       return routerToAttachKyc;
     } else if (!profile?.data?.mainWallet && !skipWallet) {
+      timer.end(" -> routeToAttachWallet");
       return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');
+      timer.end(" -> callbackUrl (storage)");
       return url;
     } else if (postSigninURL) {
+      timer.end(" -> postSigninURL");
       return postSigninURL;
     } else {
+      timer.end(" -> TOKENS");
       return PixwayAppRoutes.TOKENS;
     }
   };
@@ -186,13 +196,26 @@ export const SigInWithoutLayout = ({
   const [redirectTimedOut, setRedirectTimedOut] = useState(false);
 
   useEffect(() => {
+    const timer = authFlowLog("SignInWithoutLayout.useEffect.redirect", {
+      hasSession: !!session,
+      hasProfile: !!profile,
+      isPasswordless,
+      isRedirecting: isRedirecting.current,
+    });
     if (session && profile && !isPasswordless && !isRedirecting.current) {
       isRedirecting.current = true;
       setRedirectTimedOut(false);
+      const redirectUrl = getRedirectUrl();
+      timer.log("iniciando redirect", { redirectUrl });
       if (router?.query?.callbackPath || router?.query?.callbackUrl) {
-        router.pushConnect(getRedirectUrl());
-      } else router.pushConnect(getRedirectUrl(), query);
+        router.pushConnect(redirectUrl);
+      } else {
+        router.pushConnect(redirectUrl, query);
+      }
+    } else {
+      timer.log("sem redirect (condições não atendidas)");
     }
+    timer.end();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router, profile]);
 
@@ -207,8 +230,10 @@ export const SigInWithoutLayout = ({
   }, [isProcessing, isSessionLoading, session, profile, isPasswordless]);
 
   const onSubmit = async ({ email, password }: Form) => {
+    const timer = authFlowLog("SignInWithoutLayout.onSubmit");
     try {
       setIsLoading(true);
+      timer.log("chamando signIn");
       const response = await signIn({
         email,
         password,
@@ -216,10 +241,13 @@ export const SigInWithoutLayout = ({
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (response?.error && response?.error != '') showErrorMessage();
+      timer.log("signIn retornou", { hasError: !!response?.error });
     } catch {
       showErrorMessage();
+      timer.log("signIn erro");
     } finally {
       setIsLoading(false);
+      timer.end();
     }
   };
 

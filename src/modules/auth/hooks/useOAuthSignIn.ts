@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { authFlowLog } from '../utils/authFlowTimer';
 import { useUtms } from '../../shared/hooks/useUtms';
 import { usePixwayAuthentication } from './usePixwayAuthentication';
 
@@ -31,6 +32,7 @@ export const useOAuthSignIn = ({
 
   useEffect(() => {
     if (code && isGoogleSignIn) {
+      const timer = authFlowLog("useOAuthSignIn.google", { callback });
       signInWithGoogle &&
         signInWithGoogle({
           code,
@@ -40,16 +42,20 @@ export const useOAuthSignIn = ({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }).then((res: { ok: any }) => {
           if (!res.ok) {
+            timer.log("signInWithGoogle falhou");
             setGoogleError(true);
           } else {
+            timer.log("signInWithGoogle ok, redirect");
             router.pushConnect(callback);
           }
+          timer.end();
         });
     }
   }, [code, isGoogleSignIn]);
 
   useEffect(() => {
     if (code && isAppleSignIn) {
+      const timer = authFlowLog("useOAuthSignIn.apple", { callback });
       signInWithApple &&
         signInWithApple({
           code,
@@ -58,10 +64,13 @@ export const useOAuthSignIn = ({
           referrer: utms.utm_source ?? undefined,
         }).then((res) => {
           if (!res.ok) {
+            timer.log("signInWithApple falhou");
             setAppleError(true);
           } else {
+            timer.log("signInWithApple ok, redirect");
             router.pushConnect(callback);
           }
+          timer.end();
         });
     }
   }, [isAppleSignIn, code]);

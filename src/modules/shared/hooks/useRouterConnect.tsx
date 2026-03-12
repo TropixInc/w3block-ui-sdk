@@ -2,6 +2,7 @@ import useRouter from "./useRouter";
 import { useCompanyConfig } from "./useCompanyConfig";
 import { useWindowLocation } from "./useWindowLocation";
 import { removeDoubleSlashesOnUrl } from "../utils/removeDuplicateSlahes";
+import { authFlowLog } from "../../auth/utils/authFlowTimer";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const buildUrlFromRouterArgs = (args: any): string => {
@@ -52,7 +53,11 @@ export const useRouterConnect = (): any => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pushConnect = (path: string, queryParam?: any) => {
-    if (window.self !== window.top) return;
+    const timer = authFlowLog("pushConnect", { path, queryParam });
+    if (window.self !== window.top) {
+      timer.log("ignorado (iframe)");
+      return;
+    }
     const queryString = new URLSearchParams(queryParam).toString();
     const url =
       removeDoubleSlashesOnUrl(
@@ -65,7 +70,9 @@ export const useRouterConnect = (): any => {
       (queryString && queryString != "" ? "?" : "") +
       queryString;
 
+    timer.log("chamando router.push", { url });
     originalPush?.(url);
+    timer.end();
   };
 
   const routerToHref = (path: string) => {

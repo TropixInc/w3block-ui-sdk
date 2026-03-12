@@ -15,6 +15,7 @@ import { KycStatus } from '@w3block/sdk-id';
 
 import { removeDoubleSlashesOnUrl } from '../utils/removeDuplicateSlahes';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
+import { authFlowLog } from '../../auth/utils/authFlowTimer';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 import { useProfile } from '../hooks/useProfile';
 import { useGetTenantContext } from '../hooks/useGetTenantContext';
@@ -132,6 +133,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
 
   const { connectProxyPass } = useCompanyConfig();
   const callback = () => {
+    const timer = authFlowLog("OnboardProvider.callback");
     const url = removeDoubleSlashesOnUrl(
       (location?.hostname?.includes('localhost') ||
       location?.href?.includes('/connect/') ||
@@ -139,12 +141,19 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
         ? '/'
         : connectProxyPass) + path
     );
-    if (router?.query?.callbackPath || router?.query?.callbackUrl) return query;
-    else if (
+    if (router?.query?.callbackPath || router?.query?.callbackUrl) {
+      timer.end(" (retornou query)");
+      return query;
+    }
+    if (
       !location?.href?.includes('/auth/signUp') &&
       !location?.href?.includes('/auth/signIn')
-    )
+    ) {
+      timer.end(" (retornou callbackUrl)");
       return { callbackUrl: pathname ? url : location?.href };
+    }
+    timer.end(" (retornou undefined)");
+    return undefined;
   };
 
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -152,11 +161,18 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
     typeof window !== 'undefined' && window.self !== window.top;
 
   useEffect(() => {
+    const timer = authFlowLog("OnboardProvider.useEffect.redirect", {
+      hasProfile: !!profile,
+      isRedirecting,
+      isInIframe,
+      pathname,
+    });
     if (profile && !isRedirecting && !isInIframe) {
       if (
         !profile?.data?.verified &&
         !pathname?.includes(PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION)
       ) {
+        timer.log("redirect VERIFY_WITH_CODE");
         setIsRedirecting(true);
         router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE, callback());
       } else if (signupContext && isFilled?.length === 0) {
@@ -168,6 +184,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
           !pathname?.includes(PixwayAppRoutes.SIGN_UP) &&
           pathname !== PixwayAppRoutes.SIGN_IN
         ) {
+          timer.log("redirect COMPLETE_KYC");
           setIsRedirecting(true);
           router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, callback());
         }
@@ -180,6 +197,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
           !pathname?.includes(PixwayAppRoutes.SIGN_UP_MAIL_CONFIRMATION) &&
           !pathname?.includes(PixwayAppRoutes.CONNECT_EXTERNAL_WALLET)
         ) {
+          timer.log("redirect CONNECT_EXTERNAL_WALLET");
           setIsRedirecting(true);
           router.pushConnect(
             PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
@@ -187,7 +205,10 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
           );
         }
       }
+    } else {
+      timer.log("sem redirect (condições não atendidas)");
     }
+    timer.end();
   }, [profile, signupContext, profileDataUpdatedAt, isInIframe]);
 
   const { pushConnect } = router;
@@ -229,6 +250,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
   }, [configData, hasAccess]);
 
   const checkWhite = useCallback(() => {
+    const timer = authFlowLog("OnboardProvider.checkWhite");
     try {
       if (filteredWhitelists && docs?.items && hasAccess) {
         let i = 0;
@@ -239,6 +261,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
             );
 
             if (docsFilled?.length === 0) {
+              timer.log("redirect COMPLETE_KYC (whitelist)", { slug: res?.slug });
               pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
                 contextSlug: res?.slug,
               });
@@ -258,6 +281,7 @@ export const OnboardProvider = ({ children, theme }: { children: ReactNode, them
     } catch {
       setLoading(false);
     }
+    timer.end();
   }, [filteredWhitelists, docs?.items, hasAccess, dataUpdatedAt]);
 
   // useEffect(() => {

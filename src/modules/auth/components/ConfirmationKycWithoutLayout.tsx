@@ -100,7 +100,7 @@ export const ConfirmationKycWithoutLayout = () => {
       router.pushConnect(
         (context?.data as any)?.data?.screenConfig?.postKycUrl
       );
-    } else if (skipWallet) {
+    } else if (skipWallet || profile?.data?.mainWallet) {
       if (router.query.callbackPath?.length) {
         router.pushConnect(router.query.callbackPath as string);
       } else if (router.query.callbackUrl?.length) {
