@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -17,6 +17,7 @@ import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
+import { Spinner } from '../../shared/components/Spinner';
 import { AuthButton } from '../components/AuthButton';
 import { AuthFooter } from '../components/AuthFooter';
 import { AuthLayoutBaseClasses, AuthLayoutBase } from '../components/AuthLayoutBase';
@@ -24,6 +25,7 @@ import { AuthTextController } from '../components/AuthTextController';
 import { AuthValidationTip } from '../components/AuthValidationTip';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
+import { authFlowLog } from '../utils/authFlowTimer';
 import useTranslation from '../../shared/hooks/useTranslation';
 
 interface Form {
@@ -93,8 +95,48 @@ const _SignInTemplate = ({
       ? router.query
       : '';
 
+  const isRedirecting = useRef(false);
+
+  const checkForCallbackUrl = () => {
+    const timer = authFlowLog("SignInTemplate.checkForCallbackUrl");
+    if (profile && !profile?.data?.verified) {
+      timer.end(" -> VERIFY_WITH_CODE");
+      return appBaseUrl + PixwayAppRoutes.VERIfY_WITH_CODE;
+    } else if (profile?.data?.kycStatus === KycStatus.Pending) {
+      timer.end(" -> routeToAttachKYC");
+      return appBaseUrl + routeToAttachKYC;
+    } else if (router.query.callbackPath) {
+      timer.end(" -> callbackPath");
+      return router.query.callbackPath as string;
+    } else if (callbackUrl) {
+      const url = callbackUrl;
+      setCallbackUrl('');
+      timer.end(" -> callbackUrl");
+      return url;
+    } else if (!profile?.data?.mainWallet) {
+      timer.end(" -> routeToAttachWallet");
+      return routeToAttachWallet;
+    }
+    timer.end(" -> undefined");
+    return undefined;
+  };
+
+  const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
+
   useEffect(() => {
-    if (session) router.pushConnect(getRedirectUrl(), query);
+    const timer = authFlowLog("SignInTemplate.useEffect.redirect", {
+      hasSession: !!session,
+      isRedirecting: isRedirecting.current,
+    });
+    if (session && !isRedirecting.current) {
+      isRedirecting.current = true;
+      const redirectUrl = getRedirectUrl();
+      timer.log("iniciando redirect", { redirectUrl });
+      router.pushConnect(redirectUrl, query);
+    } else {
+      timer.log("sem redirect (condições não atendidas)");
+    }
+    timer.end();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router]);
 
@@ -103,27 +145,11 @@ const _SignInTemplate = ({
     name: 'password',
   });
 
-  const checkForCallbackUrl = () => {
-    if (profile && !profile?.data.verified) {
-      return appBaseUrl + PixwayAppRoutes.VERIfY_WITH_CODE;
-    } else if (profile?.data?.kycStatus === KycStatus.Pending) {
-      return appBaseUrl + routeToAttachKYC;
-    } else if (!profile?.data?.mainWallet) {
-      return routeToAttachWallet;
-    } else if (router.query.callbackPath) {
-      return router.query.callbackPath as string;
-    } else if (callbackUrl) {
-      const url = callbackUrl;
-      setCallbackUrl('');
-      return url;
-    }
-  };
-
-  const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
-
   const onSubmit = async ({ email, password }: Form) => {
+    const timer = authFlowLog("SignInTemplate.onSubmit");
     try {
       setIsLoading(true);
+      timer.log("chamando signIn");
       const response = await signIn({
         email,
         password,
@@ -131,12 +157,23 @@ const _SignInTemplate = ({
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (response?.error && response?.error != '') showErrorMessage();
+      timer.log("signIn retornou", { hasError: !!response?.error });
     } catch {
       showErrorMessage();
+      timer.log("signIn erro");
     } finally {
       setIsLoading(false);
+      timer.end();
     }
   };
+
+  if (session) {
+    return (
+      <div className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <AuthLayoutBase

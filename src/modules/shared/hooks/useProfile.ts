@@ -7,7 +7,7 @@ import { W3blockAPI } from '../enums/W3blockAPI';
 
 import { useMutation } from '@tanstack/react-query';
 import { useGetW3blockIdSDK } from './useGetW3blockIdSDK';
-import { useGetTenantInfoByHostname } from './useGetTenantInfoByHostname';
+
 import { useRouterConnect } from './useRouterConnect';
 import { usePrivateQuery } from './usePrivateQuery';
 import { handleNetworkException } from '../utils/handleNetworkException';
@@ -27,9 +27,6 @@ export interface Wallet {
 
 export const useProfile = (): any => {
   const getW3blockIdSDK = useGetW3blockIdSDK();
-  const { data: companyInfo } = useGetTenantInfoByHostname();
-  const isPasswordless = companyInfo?.configuration?.passwordless?.enabled;
-
   const router = useRouterConnect();
 
   return usePrivateQuery(
@@ -47,11 +44,6 @@ export const useProfile = (): any => {
       retry: 1,
       onError() {
         router.pushConnect(PixwayAppRoutes.SIGN_IN);
-      },
-      onSuccess(data) {
-        if (data.data && !data.data.verified && !isPasswordless) {
-          router.pushConnect(PixwayAppRoutes.VERIfY_WITH_CODE);
-        }
       },
       refetchOnWindowFocus: false,
       refetchOnMount: false,
