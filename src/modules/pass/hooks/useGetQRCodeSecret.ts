@@ -21,12 +21,11 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
     [PixwayAPIRoutes.TOKEN_PASS, benefitId, editionNumber],
     async () => {
       try {
-        return await axios
-          .get<SecretResponse>(
-            PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
-              .replace('{id}', benefitId)
-              .replace('{editionNumber}', editionNumber.toString())
-          );
+        return await axios.get<SecretResponse>(
+          PixwayAPIRoutes.PASS_SECRET.replace('{tenantId}', tenantId ?? '')
+            .replace('{id}', benefitId)
+            .replace('{editionNumber}', editionNumber.toString())
+        );
       } catch (e: any) {
         return e;
       }
@@ -40,8 +39,7 @@ const useGetQRCodeSecret = ({ benefitId, editionNumber }: SecretProps) => {
       retry: false,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
-      initialData: undefined,
-      
+      initialData: null,
     }
   );
 };

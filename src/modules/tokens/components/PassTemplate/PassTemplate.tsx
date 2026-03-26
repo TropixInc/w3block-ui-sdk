@@ -178,12 +178,14 @@ const _PassTemplate = ({
 
   const {
     data: secret,
-    isFetching: isLoadingSecret,
+    isFetching: isFetchingSecret,
     refetch: refetchSecret,
   } = useGetQRCodeSecret({
     benefitId,
     editionNumber: editionNumber as string,
   });
+
+  const isLoadingSecret = isFetchingSecret && !secret?.data?.secret;
 
   const {
     mutate: selfUseBenefit,
