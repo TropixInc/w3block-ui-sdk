@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans } from 'react-i18next';
 
 import MetamaskLogo from '../../shared/assets/icons/metamask.svg';
@@ -26,6 +26,7 @@ import { useModalController } from '../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../shared/hooks/useNeedsMailConfirmationInterceptor';
 import { useWallets } from '../../shared/hooks/useWallets';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { authFlowLog } from '../utils/authFlowTimer';
 
 
 
@@ -78,24 +79,53 @@ const _ConnectWalletTemplate = ({
   const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
 
+  const fallbackUrl = useMemo(() => {
+    const callbackUrl = router?.query?.callbackUrl as string | undefined;
+    const callbackPath = router?.query?.callbackPath as string | undefined;
+    return callbackUrl || callbackPath || redirectLink;
+  }, [router?.query?.callbackUrl, router?.query?.callbackPath, redirectLink]);
+
   useEffect(() => {
+    const timer = authFlowLog('ConnectWalletTemplate.useEffect.init', {
+      hasProfile: !!profile?.data,
+      sessionStatus: sessionUser.status,
+      companyId: !!companyId,
+      fallbackUrl,
+    });
     const { data } = profile;
 
-    if (sessionUser.status === 'unauthenticated')
+    if (sessionUser.status === 'unauthenticated') {
+      timer.log('redirect SIGN_IN (unauthenticated)');
       router.pushConnect(PixwayAppRoutes.SIGN_IN);
+    }
 
     if (data) {
       const { data: user } = data;
-      const { wallets } = user;
+      const { wallets, mainWallet } = user;
 
-      if (wallets?.length) {
-        router.push(redirect ? redirectLink : PixwayAppRoutes.HOME);
+      if (wallets?.length || mainWallet) {
+        timer.log('redirect (user already has wallet)', { hasWallets: !!wallets?.length, hasMainWallet: !!mainWallet });
+        router.push(redirect ? fallbackUrl : PixwayAppRoutes.HOME);
       } else {
+        timer.log('no wallet found, showing UI');
         setIsLoading(false);
       }
     }
+    timer.end();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile, router, sessionUser]);
+
+  // Timeout fallback: if profile never loads, redirect to avoid infinite spinner
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        console.warn('[AuthFlow] ConnectWalletTemplate timeout (10s) - redirecting to fallback:', fallbackUrl);
+        router.push(fallbackUrl);
+      }
+    }, 10000);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, fallbackUrl]);
 
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
   const queryClient = useQueryClient();
@@ -157,7 +187,7 @@ const _ConnectWalletTemplate = ({
     setIsConnecting(false);
     setRedirect(true);
     queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.GET_PROFILE]});
-    router.push(redirectLink, redirectLink);
+    router.push(fallbackUrl, fallbackUrl);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

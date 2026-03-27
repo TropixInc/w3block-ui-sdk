@@ -1,5 +1,3 @@
-import { useLocation } from 'react-use';
-
 import { PixwayAPIRoutes } from '../enums/PixwayAPIRoutes';
 import { usePixwayAPIURL } from './usePixwayAPIURL';
 
@@ -7,14 +5,16 @@ import { ICompanyInfo } from '../interfaces/ICompanyInfo';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPublicAPI } from '../config/api';
 
+import { useWindowLocation } from './useWindowLocation';
+
 export const useGetTenantInfoByHostname = () => {
-  const { hostname: location } = useLocation();
+  const { hostname: location } = useWindowLocation();
 
   const apisUrl = usePixwayAPIURL();
   const baseUrl = apisUrl.w3blockIdAPIUrl;
 
   const hostname = location?.includes('localhost')
-    ? location?.replace('localhost', 'foodbusters.stg.w3block.io')
+    ? location?.replace('localhost', 'foodbusters.com.br')
     : location;
 
   const apiUrl =

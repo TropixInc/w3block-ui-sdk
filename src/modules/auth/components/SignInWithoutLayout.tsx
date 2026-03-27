@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useController, useForm } from 'react-hook-form';
 import { Trans } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -10,7 +10,7 @@ import { useLocalStorage } from 'react-use';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { KycStatus } from '@w3block/sdk-id';
 import classNames from 'classnames';
-import { object, string } from 'yup';
+import { ObjectSchema, object, string } from 'yup';
 
 import GoogleIcon from '../../shared/assets/icons/googleIcon.svg';
 import { Alert } from '../../shared/components/Alert';
@@ -25,10 +25,11 @@ import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useTimedBoolean } from '../../shared/hooks/useTimedBoolean';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUtms } from '../../shared/hooks/useUtms';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import AppleIcon from '../../shared/assets/icons/appleIcon.svg';
+import { useOAuthSignIn } from '../hooks/useOAuthSignIn';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
+import { authFlowLog } from '../utils/authFlowTimer';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { AuthButton } from './AuthButton';
 import { AuthFooter } from './AuthFooter';
@@ -72,7 +73,7 @@ export const SigInWithoutLayout = ({
   const haveGoogleSignIn = configs?.haveGoogleSignIn;
   const haveAppleSignIn = configs?.haveAppleSignIn;
   const [translate] = useTranslation();
-  const { signIn, signInWithGoogle, signInWithApple } =
+  const { signIn } =
     usePixwayAuthentication();
   const passwordSchema = usePasswordValidationSchema({
     isPasswordless,
@@ -80,7 +81,7 @@ export const SigInWithoutLayout = ({
       pattern: translate('companyAuth>signIn>invalidPasswordFeedback'),
     },
   });
-  const { data: session } = usePixwaySession();
+  const { data: session, status: sessionStatus } = usePixwaySession();
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingErrorMessage, showErrorMessage] = useTimedBoolean(6000);
   const router = useRouterConnect();
@@ -124,44 +125,12 @@ export const SigInWithoutLayout = ({
     else return '/';
   }, [router]);
 
-  const utms = useUtms();
-  const [googleError, setGoogleError] = useState(false);
-  const [appleError, setAppleError] = useState(false);
-  useEffect(() => {
-    if (code && isGoogleSignIn) {
-      signInWithGoogle &&
-        signInWithGoogle({
-          code,
-          companyId,
-          callbackUrl: callback ?? '/',
-          referrer: utms.utm_source ?? undefined,
-        }).then((res: { ok: any }) => {
-          if (!res.ok) {
-            setGoogleError(true);
-          } else {
-            router.pushConnect(callback);
-          }
-        });
-    }
-  }, [code, isGoogleSignIn]);
-
-  useEffect(() => {
-    if (code && isAppleSignIn) {
-      signInWithApple &&
-        signInWithApple({
-          code,
-          companyId,
-          callbackUrl: callback ?? '/',
-          referrer: utms.utm_source ?? undefined,
-        }).then((res) => {
-          if (!res.ok) {
-            setAppleError(true);
-          } else {
-            router.pushConnect(callback);
-          }
-        });
-    }
-  }, [isAppleSignIn, code]);
+  const { googleError, appleError, isProcessing } = useOAuthSignIn({
+    code,
+    isGoogleSignIn,
+    isAppleSignIn,
+    callback,
+  });
   const { defaultTheme } = useThemeConfig();
   const postSigninURL =
     defaultTheme?.configurations?.contentData?.postSigninURL;
@@ -179,8 +148,8 @@ export const SigInWithoutLayout = ({
       twoFactor: '',
       companyId,
     },
-    mode: 'onChange',
-    resolver: yupResolver(schema as any),
+    mode: 'onTouched',
+    resolver: yupResolver(schema as ObjectSchema<Form>),
   });
 
   const { fieldState } = useController({
@@ -191,41 +160,80 @@ export const SigInWithoutLayout = ({
   const skipWallet = defaultTheme?.configurations?.contentData?.skipWallet;
 
   const checkForCallbackUrl = () => {
+    const timer = authFlowLog("SignInWithoutLayout.checkForCallbackUrl");
     if (profile && !profile.data.verified) {
+      timer.end(" -> VERIFY_WITH_CODE");
       return PixwayAppRoutes.VERIfY_WITH_CODE;
     } else if (router?.query?.callbackPath) {
+      timer.end(" -> callbackPath");
       return router?.query?.callbackPath as string;
     } else if (router?.query?.callbackUrl) {
+      timer.end(" -> callbackUrl");
       return router?.query?.callbackUrl as string;
     } else if (profile?.data?.kycStatus === KycStatus.Pending) {
+      timer.end(" -> routerToAttachKyc");
       return routerToAttachKyc;
     } else if (!profile?.data?.mainWallet && !skipWallet) {
+      timer.end(" -> routeToAttachWallet");
       return routeToAttachWallet;
     } else if (callbackUrl) {
       const url = callbackUrl;
       setCallbackUrl('');
+      timer.end(" -> callbackUrl (storage)");
       return url;
     } else if (postSigninURL) {
+      timer.end(" -> postSigninURL");
       return postSigninURL;
     } else {
+      timer.end(" -> TOKENS");
       return PixwayAppRoutes.TOKENS;
     }
   };
 
   const getRedirectUrl = () => checkForCallbackUrl() ?? defaultRedirectRoute;
 
+  const isRedirecting = useRef(false);
+  const [redirectTimedOut, setRedirectTimedOut] = useState(false);
+
   useEffect(() => {
-    if (session && profile && !isPasswordless) {
+    const timer = authFlowLog("SignInWithoutLayout.useEffect.redirect", {
+      hasSession: !!session,
+      hasProfile: !!profile,
+      isPasswordless,
+      isRedirecting: isRedirecting.current,
+    });
+    if (session && profile && !isPasswordless && !isRedirecting.current) {
+      isRedirecting.current = true;
+      setRedirectTimedOut(false);
+      const redirectUrl = getRedirectUrl();
+      timer.log("iniciando redirect", { redirectUrl });
       if (router?.query?.callbackPath || router?.query?.callbackUrl) {
-        router.pushConnect(getRedirectUrl());
-      } else router.pushConnect(getRedirectUrl(), query);
+        router.pushConnect(redirectUrl);
+      } else {
+        router.pushConnect(redirectUrl, query);
+      }
+    } else {
+      timer.log("sem redirect (condições não atendidas)");
     }
+    timer.end();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, router, profile]);
 
+  const isSessionLoading = sessionStatus === 'loading';
+
+  useEffect(() => {
+    if (isProcessing || isSessionLoading || (session && profile && !isPasswordless)) {
+      const timer = setTimeout(() => setRedirectTimedOut(true), 15000);
+      return () => clearTimeout(timer);
+    }
+    setRedirectTimedOut(false);
+  }, [isProcessing, isSessionLoading, session, profile, isPasswordless]);
+
   const onSubmit = async ({ email, password }: Form) => {
+    const timer = authFlowLog("SignInWithoutLayout.onSubmit");
     try {
       setIsLoading(true);
+      timer.log("chamando signIn");
       const response = await signIn({
         email,
         password,
@@ -233,20 +241,34 @@ export const SigInWithoutLayout = ({
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (response?.error && response?.error != '') showErrorMessage();
+      timer.log("signIn retornou", { hasError: !!response?.error });
     } catch {
       showErrorMessage();
+      timer.log("signIn erro");
     } finally {
       setIsLoading(false);
+      timer.end();
     }
   };
 
-  if (
-    code &&
-    ((isGoogleSignIn && !googleError) || (isAppleSignIn && !appleError))
-  )
+  if (isProcessing || isSessionLoading || (session && profile && !isPasswordless))
     return (
-      <div className="pw-w-full pw-flex pw-items-center pw-justify-center">
+      <div className="pw-w-full pw-flex pw-flex-col pw-items-center pw-justify-center pw-gap-4">
         <Spinner />
+        {redirectTimedOut && (
+          <div className="pw-flex pw-flex-col pw-items-center pw-gap-2">
+            <p className="pw-text-sm pw-text-[#353945]">
+              {translate('auth>signIn>loadingTimeout')}
+            </p>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="pw-text-sm pw-text-brand-primary pw-underline pw-font-semibold"
+            >
+              {translate('shared>tryAgain')}
+            </button>
+          </div>
+        )}
       </div>
     );
   else if (isPasswordless)
@@ -309,12 +331,12 @@ export const SigInWithoutLayout = ({
 
           <div className="pw-mb-6">
             <AuthButton
-              className={classNames('pw-mb-1')}
+              className={classNames('pw-mb-1 pw-flex pw-items-center pw-justify-center')}
               type="submit"
               fullWidth
-              disabled={!methods.formState.isValid || isLoading}
+              disabled={!methods.formState.isValid || isLoading || Boolean(session)}
             >
-              {translate('loginPage>formSubmitButton>signIn')}
+              {isLoading ? <Spinner className="pw-w-4 pw-h-4 border-[1px]" /> : translate('loginPage>formSubmitButton>signIn')}
             </AuthButton>
             {hasSignUp ? (
               <>
