@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -51,6 +50,7 @@ export const useOAuthSignIn = ({
           timer.end();
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, isGoogleSignIn]);
 
   useEffect(() => {
@@ -73,7 +73,8 @@ export const useOAuthSignIn = ({
           timer.end();
         });
     }
-  }, [isAppleSignIn, code]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code, isAppleSignIn]);
 
   return { googleError, appleError, isProcessing };
 };
