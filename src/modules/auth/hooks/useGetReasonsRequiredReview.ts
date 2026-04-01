@@ -1,3 +1,4 @@
+import { UseQueryResult } from "@tanstack/react-query";
 import { useGetW3blockIdSDK } from "../../shared/hooks/useGetW3blockIdSDK";
 import { usePrivateQuery } from "../../shared/hooks/usePrivateQuery";
 
@@ -5,7 +6,7 @@ export const useGetReasonsRequiredReview = (
   tenantId: string,
   userId: string,
   contextId: string
-): any => {
+): UseQueryResult<unknown> => {
   const getSDK = useGetW3blockIdSDK();
   return usePrivateQuery(
     [tenantId, userId, contextId],

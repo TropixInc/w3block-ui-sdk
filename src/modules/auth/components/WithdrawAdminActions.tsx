@@ -38,19 +38,19 @@ type Status =
   | 'failed'
   | 'refused';
 
-const statusMapping = {
-  pending: 'Pendente',
-  escrowing_resources: 'Retendo fundos',
-  ready_to_transfer_funds: 'Pronto para transferir',
-  concluded: 'Concluído',
-  failed: 'Falha',
-  refused: 'Recusado',
-};
-
 const WithdrawAdminActions = ({ id }: { id: string }) => {
   const router = useRouterConnect();
   const locale = useLocale();
   const [translate] = useTranslation();
+
+  const statusMapping: Record<Status, string> = {
+    pending: translate('auth>withdrawAdminActions>statusPending'),
+    escrowing_resources: translate('auth>withdrawAdminActions>statusEscrowing'),
+    ready_to_transfer_funds: translate('auth>withdrawAdminActions>statusReadyToTransfer'),
+    concluded: translate('auth>withdrawAdminActions>statusConcluded'),
+    failed: translate('auth>withdrawAdminActions>statusFailed'),
+    refused: translate('auth>withdrawAdminActions>statusRefused'),
+  };
   const [step, setStep] = useState<Steps>(1);
   const [reason, setReason] = useState('');
   const [_, setUploadingImage] = useState(false);
@@ -69,6 +69,19 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
   const assetId = (dynamicMethods.getValues() as any)?.imageInput?.assetId;
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const createMutationCallbacks = (successMsg: string, errorMsg: string) => ({
+    onSuccess() {
+      setStep(6);
+      setSuccess(successMsg);
+      refetch();
+    },
+    onError() {
+      setStep(5);
+      setError(errorMsg);
+    },
+  });
+
   const concludeAction = () => {
     if (step === Steps.REFUSE)
       return (
@@ -90,17 +103,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 if (reason !== '') {
                   refuseWithdraw(
                     { id, reason },
-                    {
-                      onSuccess() {
-                        setStep(6);
-                        setSuccess('Pedido de saque recusado com sucesso.');
-                        refetch();
-                      },
-                      onError() {
-                        setStep(5);
-                        setError('Erro ao recusar o pedido de saque.');
-                      },
-                    }
+                    createMutationCallbacks(
+                      translate('auth>withdrawAdminActions>refuseSuccess'),
+                      translate('auth>withdrawAdminActions>refuseError')
+                    )
                   );
                 }
               }}
@@ -124,21 +130,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               onClick={() => {
                 escrowWithdraw(
                   { id },
-                  {
-                    onSuccess() {
-                      setStep(6);
-                      setSuccess(
-                        'Recursos retidos com sucesso, aguarde para realizar a transferência.'
-                      );
-                      refetch();
-                    },
-                    onError() {
-                      setStep(5);
-                      setError(
-                        'Erro ao reter recursos para o pedido de saque.'
-                      );
-                    },
-                  }
+                  createMutationCallbacks(
+                    translate('auth>withdrawAdminActions>escrowSuccess'),
+                    translate('auth>withdrawAdminActions>escrowError')
+                  )
                 );
               }}
             >
@@ -156,7 +151,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               <InputWithdrawCommerce
                 name="imageInput"
                 onChangeUploadProgess={setUploadingImage}
-                textTitle="Enviar comprovante"
+                textTitle={translate('auth>withdrawAdminActions>sendReceipt')}
               />
             </FormProvider>
           </div>
@@ -177,17 +172,10 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 if (assetId) {
                   concludeWithdraw(
                     { id, receiptAssetId: assetId },
-                    {
-                      onSuccess() {
-                        setStep(6);
-                        setSuccess('Pedido de saque concluído com sucesso!');
-                        refetch();
-                      },
-                      onError() {
-                        setStep(5);
-                        setError('Erro ao concluir o pedido de saque.');
-                      },
-                    }
+                    createMutationCallbacks(
+                      translate('auth>withdrawAdminActions>concludeSuccess'),
+                      translate('auth>withdrawAdminActions>concludeError')
+                    )
                   );
                 }
               }}

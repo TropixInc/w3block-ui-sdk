@@ -132,8 +132,11 @@ export const MetamaskProviderUiSDK = ({
       try {
         const provider = await detectEthereumProvider({ silent: true });
         setHasProvider(Boolean(provider));
-        const provider2 = new ethers.providers.Web3Provider((window as any).ethereum);
-        setProvider(provider2);
+
+        if ((window as any).ethereum) {
+          const provider2 = new ethers.providers.Web3Provider((window as any).ethereum);
+          setProvider(provider2);
+        }
 
         if (provider) {
           updateWalletAndAccounts();

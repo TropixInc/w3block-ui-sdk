@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 
 import { UserRoleEnum } from '@w3block/sdk-id';
+import { authFlowLog } from '../../auth/utils/authFlowTimer';
 import { PrivateRouteStrategy } from '../enums/PrivateRouteStrategy';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
 import { usePixwaySession } from './usePixwaySession';
@@ -27,9 +28,18 @@ export const usePrivateRoute = (
   const isLoading = status !== 'authenticated';
 
   useEffect(() => {
+    const timer = authFlowLog("usePrivateRoute.useEffect", {
+      status,
+      redirectRoute,
+      hasRouter: !!router,
+    });
     if (router && status === 'unauthenticated') {
+      timer.log("redirect para sign-in (unauthenticated)");
       router?.pushConnect(redirectRoute, { callbackPath: window.location.href });
+    } else {
+      timer.log("sem redirect", { status });
     }
+    timer.end();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status === 'loading', redirectRoute]);
 

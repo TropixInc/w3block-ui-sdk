@@ -50,7 +50,7 @@ export const CompleteKYCTemplateSDK = ({
   className,
   extraBy,
 }: CompleteKYCTemplateSDKProps) => {
-  const { data: profile, isFetching: isLoadingProfile } = useProfile();
+  const { data: profile, isLoading: isLoadingProfile, isFetching: isFetchingProfile } = useProfile();
   const router = useRouterConnect();
   const slug = () => {
     const querySlug = router?.query?.contextSlug;
@@ -75,7 +75,6 @@ export const CompleteKYCTemplateSDK = ({
 
   useEffect(() => {
     if (router?.query?.callbackUrl === '/null') {
-      console.log(router?.query, "query")
       router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {...router?.query, callbackUrl: '/wallet'})
     }
   }, [router?.query])
@@ -97,14 +96,8 @@ export const CompleteKYCTemplateSDK = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
 
-  return isLoadingProfile ? (
-    <div
-      style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
-      className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center"
-    >
-      <Spinner />
-    </div>
-  ) : profile &&
+
+  return profile &&
     (profile?.data?.kycStatus !== KycStatus.NoRequired ||
       router.query.contextSlug) ? (
     <TranslatableComponent>
