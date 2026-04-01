@@ -50,8 +50,7 @@ export const useOAuthSignIn = ({
           timer.end();
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code, isGoogleSignIn]);
+  }, [code, isGoogleSignIn, signInWithGoogle, callback, companyId, utms, router]);
 
   useEffect(() => {
     if (code && isAppleSignIn) {
@@ -73,8 +72,7 @@ export const useOAuthSignIn = ({
           timer.end();
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code, isAppleSignIn]);
+  }, [code, isAppleSignIn, signInWithApple, callback, companyId, utms, router]);
 
   return { googleError, appleError, isProcessing };
 };
