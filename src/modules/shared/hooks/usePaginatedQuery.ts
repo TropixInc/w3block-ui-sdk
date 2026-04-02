@@ -72,6 +72,18 @@ export const usePaginatedQuery = <QueryData>(
   const router = useRouterConnect();
   const [totalPages, setTotalPages] = useState(1);
 
+  const getUrlPageParam = () => {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get('page');
+  };
+
+  const buildUrlWithPage = (pageValue: number) => {
+    if (typeof window === 'undefined') return '/';
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', String(pageValue));
+    return `${window.location.pathname}?${params.toString()}`;
+  };
+
   const defineInitialPage = () => {
     if (disableUrl) {
       if (initialPage === 0) {
@@ -80,8 +92,9 @@ export const usePaginatedQuery = <QueryData>(
         return 1;
       }
     }
-    if (router?.query?.page) {
-      return Number(router?.query?.page) > 0 ? Number(router?.query?.page) : 1;
+    const urlPage = getUrlPageParam();
+    if (urlPage) {
+      return Number(urlPage) > 0 ? Number(urlPage) : 1;
     }
 
     return initialPage ?? 1;
@@ -99,21 +112,13 @@ export const usePaginatedQuery = <QueryData>(
   ];
 
   useEffect(() => {
-    if (!disableUrl) {
-      const newQuery = {
-        ...router?.query,
-        page,
-      };
-      if (router?.query?.page) {
-        router.push({
-          pathname: router.pathname,
-          query: newQuery,
-        });
+    if (!disableUrl && page !== undefined) {
+      const url = buildUrlWithPage(page);
+      const urlPage = getUrlPageParam();
+      if (urlPage) {
+        router.push(url);
       } else {
-        router.replace({
-          pathname: router.pathname,
-          query: newQuery,
-        });
+        router.replace(url);
       }
     }
 
@@ -121,12 +126,13 @@ export const usePaginatedQuery = <QueryData>(
   }, [page]);
 
   useEffect(() => {
+    const urlPage = getUrlPageParam();
     if (
-      router?.query?.page &&
-      Number(router?.query?.page) !== page &&
+      urlPage &&
+      Number(urlPage) !== page &&
       !disableUrl
     ) {
-      setPage(Number(router?.query?.page));
+      setPage(Number(urlPage));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
@@ -148,13 +154,7 @@ export const usePaginatedQuery = <QueryData>(
             } else setTotalPages(1);
 
             if (page && page > inputMap(data)?.totalPages && !disableUrl) {
-              router.replace({
-                pathname: router.pathname,
-                query: {
-                  ...router?.query,
-                  page: 1,
-                },
-              });
+              router.replace(buildUrlWithPage(1));
             }
           },
         }
@@ -173,13 +173,7 @@ export const usePaginatedQuery = <QueryData>(
             }
 
             if (page && page > inputMap(data)?.totalPages && !disableUrl) {
-              router.replace({
-                pathname: router.pathname,
-                query: {
-                  ...router.query,
-                  page: 1,
-                },
-              });
+              router.replace(buildUrlWithPage(1));
             }
           },
         }

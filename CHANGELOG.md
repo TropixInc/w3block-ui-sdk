@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.49](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.48...v2.0.49) (2026-04-01)
+
+
+### Bug Fixes
+
+* add all missing deps to useOAuthSignIn effects, remove eslint-disable comments ([5261f5c](https://github.com/TropixInc/w3block-ui-sdk/commit/5261f5cd60ce27b817719e0699125f7f8c05247a))
+* remove file-level exhaustive-deps disable in useOAuthSignIn ([1696e9b](https://github.com/TropixInc/w3block-ui-sdk/commit/1696e9b9100c3d9ef9eaa3bb2bdbcf21f444e157))
+
 ### [2.0.48](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.47...v2.0.48) (2026-03-26)
 
 ### [2.0.47](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.46...v2.0.47) (2026-03-26)

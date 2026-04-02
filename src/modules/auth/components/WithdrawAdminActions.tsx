@@ -78,6 +78,15 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
   const router = useRouterConnect();
   const locale = useLocale();
   const [translate] = useTranslation();
+
+  const statusMapping: Record<Status, string> = {
+    pending: translate('auth>withdrawAdminActions>statusPending'),
+    escrowing_resources: translate('auth>withdrawAdminActions>statusEscrowing'),
+    ready_to_transfer_funds: translate('auth>withdrawAdminActions>statusReadyToTransfer'),
+    concluded: translate('auth>withdrawAdminActions>statusConcluded'),
+    failed: translate('auth>withdrawAdminActions>statusFailed'),
+    refused: translate('auth>withdrawAdminActions>statusRefused'),
+  };
   const [step, setStep] = useState<Steps>(1);
   const [reason, setReason] = useState('');
   const [_, setUploadingImage] = useState(false);
