@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.50](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.49...v2.0.50) (2026-04-02)
+
+
+### Bug Fixes
+
+* **withdraws:** fix auth race condition, pagination loss and improve admin UI ([4316848](https://github.com/TropixInc/w3block-ui-sdk/commit/43168489092d0f918ba882f807fb2bd8991a140c))
+
 ### [2.0.49](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.48...v2.0.49) (2026-04-01)
 
 
