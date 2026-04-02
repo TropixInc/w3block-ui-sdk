@@ -147,7 +147,7 @@ const InputWithdrawCommerce = ({
               invalid={isError || mutateError || Boolean(fileRejections.length)}
               errorMessage={
                 isError || mutateError || Boolean(fileRejections.length)
-                  ? 'Erro ao subir o arquivo'
+                  ? translate('auth>inputFile>uploadError')
                   : ''
               }
             />

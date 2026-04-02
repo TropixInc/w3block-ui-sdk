@@ -32,7 +32,7 @@ export const useGetSpecificWithdrawAdmin = (id: string) => {
   const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN],
+    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN, id],
     () =>
       axios.get(
         PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN.replace(
@@ -49,7 +49,7 @@ export const useGetSpecificWithdraw = (id: string) => {
   const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW],
+    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW, id],
     () =>
       axios.get(
         PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW.replace(

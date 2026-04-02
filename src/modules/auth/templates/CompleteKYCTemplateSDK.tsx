@@ -75,7 +75,6 @@ export const CompleteKYCTemplateSDK = ({
 
   useEffect(() => {
     if (router?.query?.callbackUrl === '/null') {
-      console.log(router?.query, "query")
       router.pushConnect(PixwayAppRoutes.COMPLETE_KYC, {...router?.query, callbackUrl: '/wallet'})
     }
   }, [router?.query])
