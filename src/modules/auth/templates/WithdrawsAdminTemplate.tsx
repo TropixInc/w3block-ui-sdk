@@ -19,6 +19,7 @@ const _WithdrawsAdminTemplateSDK = () => {
   const [translate] = useTranslation();
   const { query } = useRouterConnect();
   const id = query.id as string;
+
   const configTable: ConfigGenericTable = {
     localeItems: 'data.items',
     isLineExplansible: false,
@@ -49,8 +50,6 @@ const _WithdrawsAdminTemplateSDK = () => {
     },
     tableStyles: {
       root: { width: '100%' },
-      header: '!pw-grid-cols-[18%_20%]',
-      line: '!pw-grid-cols-[18%_20%]',
     },
     columns: [
       {
@@ -58,7 +57,7 @@ const _WithdrawsAdminTemplateSDK = () => {
         key: 'user.name',
         sortable: false,
         header: {
-          label: 'Usuário',
+          label: translate('token>pass>user'),
         },
       },
       {
@@ -66,7 +65,7 @@ const _WithdrawsAdminTemplateSDK = () => {
         key: 'createdAt',
         sortable: false,
         header: {
-          label: 'Data',
+          label: translate('auth>withdrawAdminActions>requestMade'),
         },
       },
       {
@@ -76,25 +75,25 @@ const _WithdrawsAdminTemplateSDK = () => {
         key: 'amount',
         sortable: false,
         header: {
-          label: 'Valor',
+          label: translate('pass>sharedOrder>value'),
         },
       },
       {
         format: {
           type: FormatTypeColumn.MAPPING,
           mapping: {
-            pending: 'Pendente',
-            escrowing_resources: 'Retendo recursos',
-            ready_to_transfer_funds: 'Pronto para transferir',
-            concluded: 'Concluído',
-            failed: 'Falha',
-            refused: 'Recusado',
+            pending: translate('auth>withdrawStatus>pending'),
+            escrowing_resources: translate('auth>withdrawStatus>escrowingResources'),
+            ready_to_transfer_funds: translate('auth>withdrawStatus>readyToTransfer'),
+            concluded: translate('auth>withdrawStatus>concluded'),
+            failed: translate('auth>withdrawStatus>failed'),
+            refused: translate('auth>withdrawStatus>refused'),
           },
         },
         key: 'status',
         sortable: false,
         header: {
-          label: 'Status',
+          label: translate('token>pass>status'),
         },
       },
     ],
@@ -103,7 +102,7 @@ const _WithdrawsAdminTemplateSDK = () => {
   return (
     <>
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
-        <div className="pw-flex pw-justify-between">
+        <div className="pw-flex pw-justify-between pw-items-center">
           <p className="pw-text-[23px] pw-font-[600]">
             {translate('auth>withdrawModal>withdrawReports')}
           </p>

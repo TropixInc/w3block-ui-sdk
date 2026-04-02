@@ -25,5 +25,5 @@ export const usePrivateQuery = <
     ? options?.enabled && Boolean(token)
     : Boolean(token);
 
-  return useQuery({ queryKey, queryFn, enabled, ...options });
+  return useQuery({ queryKey, queryFn, ...options, enabled });
 };

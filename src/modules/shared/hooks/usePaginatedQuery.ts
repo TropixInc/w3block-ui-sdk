@@ -180,13 +180,14 @@ export const usePaginatedQuery = <QueryData>(
       );
 
   return useMemo<usePaginatedQueryReturnValue<QueryData>>(() => {
+    const derivedTotalPages = inputMap(queryResult?.data?.data)?.totalPages ?? totalPages;
     return [
       queryResult,
       {
         page,
         changePage: setPage,
         totalItems: inputMap(queryResult?.data?.data)?.totalItems,
-        totalPages,
+        totalPages: derivedTotalPages,
       },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps

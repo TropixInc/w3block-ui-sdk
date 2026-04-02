@@ -6,13 +6,13 @@ import { DocumentDto } from '@w3block/sdk-id';
 import { format } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
 
+import ChevronLeft from '../../shared/assets/icons/chevronLeftFilled.svg';
 import { Alert } from '../../shared/components/Alert';
 import { BaseButton } from '../../shared/components/Buttons';
 import { Spinner } from '../../shared/components/Spinner';
 import { useLocale } from '../../shared/hooks/useLocale';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
-import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import {
   useGetSpecificWithdrawAdmin,
   useRefuseWithdraw,
@@ -38,6 +38,42 @@ type Status =
   | 'failed'
   | 'refused';
 
+const statusStyleMap: Record<Status, { label: string; bg: string; text: string }> = {
+  pending: { label: 'Pendente', bg: 'pw-bg-yellow-100', text: 'pw-text-yellow-800' },
+  escrowing_resources: { label: 'Retendo fundos', bg: 'pw-bg-blue-100', text: 'pw-text-blue-800' },
+  ready_to_transfer_funds: { label: 'Pronto para transferir', bg: 'pw-bg-indigo-100', text: 'pw-text-indigo-800' },
+  concluded: { label: 'Concluído', bg: 'pw-bg-green-100', text: 'pw-text-green-800' },
+  failed: { label: 'Falha', bg: 'pw-bg-red-100', text: 'pw-text-red-800' },
+  refused: { label: 'Recusado', bg: 'pw-bg-red-100', text: 'pw-text-red-800' },
+};
+
+const StatusBadge = ({ status }: { status: Status }) => {
+  const style = statusStyleMap[status] ?? statusStyleMap.pending;
+  return (
+    <span className={`pw-inline-flex pw-items-center pw-px-3 pw-py-1 pw-rounded-full pw-text-xs pw-font-medium ${style.bg} ${style.text}`}>
+      {style.label}
+    </span>
+  );
+};
+
+const BackButton = ({ onClick, label }: { onClick: () => void; label: string }) => (
+  <button
+    className="pw-flex pw-items-center pw-gap-1 pw-text-sm pw-text-[#555] hover:pw-text-black pw-mb-4 pw-transition-colors"
+    onClick={onClick}
+  >
+    <ChevronLeft className="pw-w-4 pw-h-4 pw-fill-current" /> {label}
+  </button>
+);
+
+const DetailField = ({ label, children }: { label: string; children: React.ReactNode }) => (
+  <div className="pw-flex pw-flex-col pw-gap-1">
+    <p className="pw-text-xs pw-font-semibold pw-text-[#777] pw-uppercase pw-tracking-wide">
+      {label}
+    </p>
+    <div className="pw-text-sm pw-text-black">{children}</div>
+  </div>
+);
+
 const WithdrawAdminActions = ({ id }: { id: string }) => {
   const router = useRouterConnect();
   const locale = useLocale();
@@ -61,7 +97,6 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
     useConcludeWithdraw();
   const { mutate: escrowWithdraw, isPending: isLoadingEscrow } =
     useEscrowWithdraw();
-  const { loyaltyWallet } = useUserWallet();
   const dynamicMethods = useForm<DocumentDto>({
     shouldUnregister: false,
     mode: 'onChange',
@@ -70,30 +105,21 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const createMutationCallbacks = (successMsg: string, errorMsg: string) => ({
-    onSuccess() {
-      setStep(6);
-      setSuccess(successMsg);
-      refetch();
-    },
-    onError() {
-      setStep(5);
-      setError(errorMsg);
-    },
-  });
+  const goBack = () => router.push('/withdraws/admin');
 
   const concludeAction = () => {
     if (step === Steps.REFUSE)
       return (
-        <div>
-          <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-mt-4">
-            <p>{translate('auth>withdrawAdminActions>infoRefuse')}</p>
+        <div className="pw-mt-6 pw-border-t pw-border-[#eee] pw-pt-6">
+          <div className="pw-text-black pw-flex pw-flex-col pw-gap-3">
+            <p className="pw-text-sm pw-font-medium">{translate('auth>withdrawAdminActions>infoRefuse')}</p>
             <textarea
               onChange={(evt) => setReason(evt.target.value)}
-              className="pw-p-[12px_20px] pw-h-[150px] pw-border-[2px] pw-border-[#ccc] pw-border-solid pw-rounded-md pw-bg-[#f8f8f8] pw-text-base pw-resize-none pw-w-full"
+              className="pw-p-3 pw-h-[120px] pw-border pw-border-[#ddd] pw-rounded-lg pw-bg-[#fafafa] pw-text-sm pw-resize-none pw-w-full focus:pw-border-[#0050FF] focus:pw-outline-none pw-transition-colors"
+              placeholder={translate('auth>withdrawAdminActions>infoRefuse')}
             />
           </div>
-          <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
+          <div className="pw-flex pw-justify-end pw-gap-3 pw-mt-6">
             <BaseButton variant="outlined" onClick={() => setStep(1)}>
               {translate('components>cancelMessage>cancel')}
             </BaseButton>
@@ -103,10 +129,17 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 if (reason !== '') {
                   refuseWithdraw(
                     { id, reason },
-                    createMutationCallbacks(
-                      translate('auth>withdrawAdminActions>refuseSuccess'),
-                      translate('auth>withdrawAdminActions>refuseError')
-                    )
+                    {
+                      onSuccess() {
+                        setStep(6);
+                        setSuccess(translate('auth>withdrawAdminActions>refuseSuccess'));
+                        refetch();
+                      },
+                      onError() {
+                        setStep(5);
+                        setError(translate('auth>withdrawAdminActions>refuseError'));
+                      },
+                    }
                   );
                 }
               }}
@@ -118,11 +151,11 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
       );
     else if (step === Steps.ESCROW)
       return (
-        <div>
-          <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-mt-4">
-            <p>{translate('auth>withdrawAdminActions>holdFounds')}</p>
+        <div className="pw-mt-6 pw-border-t pw-border-[#eee] pw-pt-6">
+          <div className="pw-text-black">
+            <p className="pw-text-sm pw-font-medium">{translate('auth>withdrawAdminActions>holdFounds')}</p>
           </div>
-          <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
+          <div className="pw-flex pw-justify-end pw-gap-3 pw-mt-6">
             <BaseButton variant="outlined" onClick={() => setStep(1)}>
               {translate('components>cancelMessage>cancel')}
             </BaseButton>
@@ -130,10 +163,17 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               onClick={() => {
                 escrowWithdraw(
                   { id },
-                  createMutationCallbacks(
-                    translate('auth>withdrawAdminActions>escrowSuccess'),
-                    translate('auth>withdrawAdminActions>escrowError')
-                  )
+                  {
+                    onSuccess() {
+                      setStep(6);
+                      setSuccess(translate('auth>withdrawAdminActions>escrowSuccess'));
+                      refetch();
+                    },
+                    onError() {
+                      setStep(5);
+                      setError(translate('auth>withdrawAdminActions>escrowError'));
+                    },
+                  }
                 );
               }}
             >
@@ -144,9 +184,9 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
       );
     else if (step === Steps.CONCLUDE)
       return (
-        <div>
-          <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-mt-4">
-            <p>{translate('auth>withdrawAdminActions>proofTransfer')}</p>
+        <div className="pw-mt-6 pw-border-t pw-border-[#eee] pw-pt-6">
+          <div className="pw-text-black pw-flex pw-flex-col pw-gap-3">
+            <p className="pw-text-sm pw-font-medium">{translate('auth>withdrawAdminActions>proofTransfer')}</p>
             <FormProvider {...dynamicMethods}>
               <InputWithdrawCommerce
                 name="imageInput"
@@ -155,7 +195,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
               />
             </FormProvider>
           </div>
-          <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-4">
+          <div className="pw-flex pw-justify-end pw-gap-3 pw-mt-4">
             <BaseButton
               variant="outlined"
               onClick={() => {
@@ -172,10 +212,17 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
                 if (assetId) {
                   concludeWithdraw(
                     { id, receiptAssetId: assetId },
-                    createMutationCallbacks(
-                      translate('auth>withdrawAdminActions>concludeSuccess'),
-                      translate('auth>withdrawAdminActions>concludeError')
-                    )
+                    {
+                      onSuccess() {
+                        setStep(6);
+                        setSuccess(translate('auth>withdrawAdminActions>concludeSuccess'));
+                        refetch();
+                      },
+                      onError() {
+                        setStep(5);
+                        setError(translate('auth>withdrawAdminActions>concludeError'));
+                      },
+                    }
                   );
                 }
               }}
@@ -185,6 +232,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
           </div>
         </div>
       );
+    return null;
   };
 
   const handleContinue = () => {
@@ -205,141 +253,120 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
     }
   };
 
+  const isTerminalStatus =
+    data?.data?.status === 'failed' ||
+    data?.data?.status === 'refused' ||
+    data?.data?.status === 'concluded' ||
+    data?.data?.status === 'escrowing_resources';
+
   if (step === Steps.ERROR) {
     return (
       <div>
-        <button
-          className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
-          onClick={() => router.push('/withdraws/admin')}
-        >
-          {`<`} {translate('shared>back')}
-        </button>
-        <Alert variant="error" className="pw-text-base">
+        <BackButton onClick={goBack} label={translate('shared>back')} />
+        <Alert variant="error" className="pw-text-sm">
           {error}
         </Alert>
       </div>
     );
-  } else if (step === Steps.SUCCESS) {
+  }
+
+  if (step === Steps.SUCCESS) {
     return (
       <div>
-        <button
-          className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
-          onClick={() => router.push('/withdraws/admin')}
-        >
-          {`<`} {translate('shared>back')}
-        </button>
-        <Alert variant="success" className="pw-text-base">
+        <BackButton onClick={goBack} label={translate('shared>back')} />
+        <Alert variant="success" className="pw-text-sm">
           {success}
         </Alert>
       </div>
     );
-  } else
-    return (
-      <div>
+  }
+
+  return (
+    <div>
+      <BackButton onClick={goBack} label={translate('shared>back')} />
+      {isFetching ||
+      isLoadingConclude ||
+      isLoadingEscrow ||
+      isLoadingRefuse ? (
+        <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
+          <Spinner />
+        </div>
+      ) : (
         <>
-          <button
-            className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
-            onClick={() => router.push('/withdraws/admin')}
-          >
-            {`<`} {translate('shared>back')}
-          </button>
-          {isFetching ||
-          isLoadingConclude ||
-          isLoadingEscrow ||
-          isLoadingRefuse ? (
-            <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
-              <Spinner />
-            </div>
-          ) : (
-            <>
-              <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-gap-4 pw-mt-4">
-                <div>
-                  <p className="pw-font-semibold">
-                    {translate('token>pass>user')}
-                  </p>
-                  <p>{data?.data?.user?.name ?? data?.data?.user?.email}</p>
-                </div>
-                <div>
-                  <p className="pw-font-semibold">
-                    {translate('auth>withdrawAdminActions>requestMade')}
-                  </p>
-                  <p>
-                    {format(
-                      new Date(data?.data?.createdAt ?? Date.now()),
-                      'PPpp',
-                      {
-                        locale: locale === 'pt-BR' ? ptBR : enUS,
-                      }
-                    )}
-                  </p>
-                </div>
-                <div>
-                  <p className="pw-font-semibold">
-                    {translate('pass>sharedOrder>value')}
-                  </p>
-                  <p>
-                    {parseFloat(data?.data?.amount).toFixed(2)}{' '}
-                    {loyaltyWallet?.[0]?.currency}
-                  </p>
-                </div>
-                <div>
-                  <p className="pw-font-semibold">
-                    {translate('token>pass>status')}
-                  </p>
-                  <p>{statusMapping[data?.data?.status as Status]}</p>
-                </div>
-                {data?.data?.status === 'refused' ? (
-                  <div>
-                    <p className="pw-font-semibold">
-                      {translate('key>kycActionsModal>resons')}:
-                    </p>
-                    <p>{data?.data?.reason}</p>
-                  </div>
-                ) : null}
-                {data?.data?.receiptAsset?.directLink ? (
-                  <div>
-                    <a
-                      href={data?.data?.receiptAsset?.directLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="pw-font-semibold pw-underline"
-                    >
-                      {translate('auth>withdrawAdminActions>proof')}
-                    </a>
-                  </div>
-                ) : null}
-              </div>
-              {step === Steps.DEFAULT ? (
-                data?.data?.status === 'failed' ||
-                data?.data?.status === 'refused' ||
-                data?.data?.status === 'concluded' ||
-                data?.data?.status === 'escrowing_resources' ? null : (
-                  <div className="pw-flex pw-justify-center pw-gap-20 pw-mt-8">
-                    {data?.data?.status === 'ready_to_transfer_funds' ? null : (
-                      <BaseButton variant="outlined" onClick={() => setStep(2)}>
-                        {translate('auth>withdrawAdminActions>refuse')}
-                      </BaseButton>
-                    )}
-                    <BaseButton onClick={handleContinue}>
-                      {handleText()}
-                    </BaseButton>
-                  </div>
-                )
-              ) : (
-                concludeAction()
-              )}
-              {data?.data?.status === 'escrowing_resources' ? (
-                <div className="pw-flex pw-justify-center pw-items-center pw-text-black pw-mt-5">
-                  <p className="pw-font-semibold">
-                    {translate('auth>withdrawAdminActions>pleaseWaitHoldFunds')}
-                  </p>
-                </div>
+          <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-5 pw-mt-2">
+            <DetailField label={translate('token>pass>user')}>
+              <p>{data?.data?.user?.name ?? data?.data?.user?.email}</p>
+              {data?.data?.user?.name && data?.data?.user?.email ? (
+                <p className="pw-text-xs pw-text-[#999]">{data?.data?.user?.email}</p>
               ) : null}
-            </>
+            </DetailField>
+            <DetailField label={translate('auth>withdrawAdminActions>requestMade')}>
+              <p>
+                {format(
+                  new Date(data?.data?.createdAt ?? Date.now()),
+                  'PPpp',
+                  { locale: locale === 'pt-BR' ? ptBR : enUS }
+                )}
+              </p>
+            </DetailField>
+            <DetailField label={translate('pass>sharedOrder>value')}>
+              <p className="pw-text-base pw-font-semibold">
+                {parseFloat(data?.data?.amount).toFixed(2)}{' '}
+                {data?.data?.currency ?? ''}
+              </p>
+            </DetailField>
+            <DetailField label={translate('token>pass>status')}>
+              <StatusBadge status={data?.data?.status as Status} />
+            </DetailField>
+            {data?.data?.status === 'refused' && data?.data?.reason ? (
+              <div className="sm:pw-col-span-2">
+                <DetailField label={translate('key>kycActionsModal>resons')}>
+                  <p className="pw-text-red-600">{data?.data?.reason}</p>
+                </DetailField>
+              </div>
+            ) : null}
+            {data?.data?.receiptAsset?.directLink ? (
+              <div className="sm:pw-col-span-2">
+                <DetailField label={translate('auth>withdrawAdminActions>proof')}>
+                  <a
+                    href={data?.data?.receiptAsset?.directLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pw-text-[#0050FF] pw-underline hover:pw-text-[#0034A3] pw-transition-colors"
+                  >
+                    {translate('auth>withdrawAdminActions>viewReceipt')}
+                  </a>
+                </DetailField>
+              </div>
+            ) : null}
+          </div>
+
+          {step === Steps.DEFAULT ? (
+            isTerminalStatus ? null : (
+              <div className="pw-flex pw-justify-end pw-gap-3 pw-mt-8 pw-border-t pw-border-[#eee] pw-pt-6">
+                <BaseButton variant="outlined" onClick={() => setStep(2)}>
+                  {translate('auth>withdrawAdminActions>refuse')}
+                </BaseButton>
+                <BaseButton onClick={handleContinue}>
+                  {handleText()}
+                </BaseButton>
+              </div>
+            )
+          ) : (
+            concludeAction()
           )}
+
+          {data?.data?.status === 'escrowing_resources' ? (
+            <div className="pw-flex pw-justify-center pw-items-center pw-text-black pw-mt-6 pw-p-4 pw-bg-blue-50 pw-rounded-lg">
+              <p className="pw-text-sm pw-font-medium pw-text-blue-700">
+                {translate('auth>withdrawAdminActions>pleaseWaitHoldFunds')}
+              </p>
+            </div>
+          ) : null}
         </>
-      </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default WithdrawAdminActions;
