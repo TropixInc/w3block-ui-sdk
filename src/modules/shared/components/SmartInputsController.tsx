@@ -10,6 +10,7 @@ import _ from 'lodash';
 import { InputSelector, Options } from './SmartInputs/InputSelector';
 import useTranslation from '../hooks/useTranslation';
 import ComplexPhone from './SmartInputs/ComplexPhone';
+import FieldStatusChip from './SmartInputs/FieldStatusChip';
 import { IframeInput } from './SmartInputs/Iframe';
 import InputBirthdate from './SmartInputs/InputBirthdate';
 import InputCheckbox from './SmartInputs/InputCheckbox';
@@ -420,7 +421,14 @@ export const SmartInputsController = ({
           onChange={() => onChangeChecked()}
         />
       ) : null}
-      <div className="pw-flex-1">{renderInput()}</div>
+      <div className="pw-flex-1">
+        {isKeyPage && docStatus ? (
+          <div className="pw-flex pw-justify-end pw-mb-1">
+            <FieldStatusChip status={docStatus} />
+          </div>
+        ) : null}
+        {renderInput()}
+      </div>
     </div>
   );
 };

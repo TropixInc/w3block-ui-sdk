@@ -748,6 +748,8 @@
   "shared>invalidEmail": "E-mail inválido",
   "shared>KYCStatys>approved": "Aprovado",
   "shared>KYCStatys>denied": "Reprovado",
+  "shared>KYCStatys>requiredReview": "Em revisão",
+  "shared>KYCStatys>created": "Pendente",
   "shared>linkAccountTemplate>doneAccountVinculate": "Pronto, agora sua conta está vinculada! Você já possui o token necessário para realizar a compra em <b>{{fromTenantName}}</b>, já pode retornar a janela anterior e continuar com a sua compra!",
   "shared>linkAccountTemplate>doneAccountVinculateWithTokens": "Pronto, agora sua conta está vinculada! Agora tokens adquiridos na sua conta",
   "shared>linkAccountTemplate>doneAccountVinculateWithTokens2": "lhe darão acesso a ofertas exclusivas na sua conta",
