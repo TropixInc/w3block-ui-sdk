@@ -800,6 +800,8 @@
 "shared>invalidEmail": "Invalid Email",
 "shared>KYCStatys>approved": "Approved",
 "shared>KYCStatys>denied": "Denied",
+"shared>KYCStatys>requiredReview": "Under review",
+"shared>KYCStatys>created": "Pending",
 "shared>linkAccountTemplate>doneAccountVinculate": "That's it, your account is now linked! You already have the token needed to make the purchase at <b>{{fromTenantName}}</b>, you can now return to the previous window and continue your purchase!",
 "shared>linkAccountTemplate>doneAccountVinculateWithTokens": "That's it, your account is now linked! Now tokens purchased in your account",
 "shared>linkAccountTemplate>doneAccountVinculateWithTokens2": "will give you access to exclusive offers in your account",
