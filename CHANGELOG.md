@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.51](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.50...v2.0.51) (2026-07-08)
+
+
+### Features
+
+* **kyc:** per-field moderation status chip + redesigned review rows ([adc7b94](https://github.com/TropixInc/w3block-ui-sdk/commit/adc7b9415381b131ae64479a1a2d566985844b51)), closes [TropixInc/weblock-workspace#19](https://github.com/TropixInc/weblock-workspace/issues/19) [#411](https://github.com/TropixInc/w3block-ui-sdk/issues/411) [TropixInc/weblock-workspace#19](https://github.com/TropixInc/weblock-workspace/issues/19)
+* **shared:** v2 surface/variant flags for filters and GenericTable ([f8fbffe](https://github.com/TropixInc/w3block-ui-sdk/commit/f8fbffe6dcb56e3b2b473156d53dcef9552fde2e)), closes [#8b93a3](https://github.com/TropixInc/w3block-ui-sdk/issues/8b93a3)
+
 ### [2.0.50](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.49...v2.0.50) (2026-04-02)
 
 
