@@ -7,6 +7,7 @@ import {
   UserDocumentStatus,
 } from '@w3block/sdk-id';
 import _ from 'lodash';
+import FieldStatusChip from './SmartInputs/FieldStatusChip';
 import { InputSelector, Options } from './SmartInputs/InputSelector';
 import useTranslation from '../hooks/useTranslation';
 import ComplexPhone from './SmartInputs/ComplexPhone';
@@ -409,7 +410,7 @@ export const SmartInputsController = ({
     }
   };
   return (
-    <div className="pw-flex pw-gap-x-2 pw-items-start">
+    <div className="pw-flex pw-gap-x-3 pw-items-start">
       {inputRequestable ? (
         <input
           type="checkbox"
@@ -420,7 +421,12 @@ export const SmartInputsController = ({
           onChange={() => onChangeChecked()}
         />
       ) : null}
-      <div className="pw-flex-1">{renderInput()}</div>
+      <div className="pw-flex-1 pw-min-w-0">{renderInput()}</div>
+      {isKeyPage && docStatus ? (
+        <div className="pw-shrink-0 pw-pt-[2px]">
+          <FieldStatusChip status={docStatus} />
+        </div>
+      ) : null}
     </div>
   );
 };
