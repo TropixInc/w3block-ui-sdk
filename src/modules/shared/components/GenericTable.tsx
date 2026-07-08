@@ -36,6 +36,11 @@ import useTranslation from '../hooks/useTranslation';
 
 interface GenericTableProps {
   config: ConfigGenericTable;
+  /**
+   * Variante visual; tem precedência sobre `config.variant`. Permite ligar o
+   * layout v2 direto no JSX: `<GenericTable variant="redesign" />`.
+   */
+  variant?: 'default' | 'redesign';
   classes?: {
     root?: string;
     grid?: string;
@@ -64,7 +69,11 @@ const paginationMapping = {
   },
 };
 
-export const GenericTable = ({ classes, config }: GenericTableProps) => {
+export const GenericTable = ({
+  classes,
+  config,
+  variant: variantProp,
+}: GenericTableProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
     columns,
@@ -81,7 +90,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
     filtersSubtitle,
     tableTitle,
     expansibleComponent,
+    variant: configVariant = 'default',
   } = config;
+  const variant = variantProp ?? configVariant;
+  const isV2 = variant === 'redesign';
   const { config: configDynamic } = useDynamicApi();
   const router = useRouterConnect();
   const isMobile = useIsMobile();
@@ -242,8 +254,24 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
         });
       }
       case FormatTypeColumn.LOCALDATEHOURTIME: {
-        const date = _.get(item, itemKey, '--');
-        return new Date(date).toLocaleString(locale.language);
+        const rawDate = _.get(item, itemKey, '--');
+        const parsedDate = new Date(rawDate);
+        if (isV2) {
+          return (
+            <div className="pw-leading-tight">
+              <span className="pw-block pw-text-[#0f1729]">
+                {parsedDate.toLocaleDateString(locale.language)}
+              </span>
+              <span className="pw-text-[12px] pw-text-[#8b93a3]">
+                {parsedDate.toLocaleTimeString(locale.language, {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </span>
+            </div>
+          );
+        }
+        return parsedDate.toLocaleString(locale.language);
       }
       case FormatTypeColumn.MONEY: {
         const symbol = _.get(item, format.currencySymbolKey ?? '', '-');
@@ -618,6 +646,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                           }
                           isTranslatable={isTranslatable}
                           translatePrefix={translatePrefix}
+                          surface={isV2 ? 'filled' : 'default'}
                         />
                       </div>
                     );
@@ -655,17 +684,26 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
               {tableTitle}
             </p>
           ) : null}
-          <div className="pw-rounded-t-2xl">
+          <div
+            className={classNames(
+              isV2
+                ? 'pw-rounded-[14px] pw-border pw-border-[#e6e8ec] pw-overflow-hidden pw-shadow-[0_1px_3px_rgba(15,23,41,0.07)]'
+                : 'pw-rounded-t-2xl'
+            )}
+          >
             <table
               className={classNames(
                 tableStyles?.table ?? '',
-                'pw-w-full pw-border-collapse pw-border pw-rounded-t-2xl pw-relative'
+                'pw-w-full pw-border-collapse pw-relative',
+                isV2 ? '' : 'pw-border pw-rounded-t-2xl'
               )}
             >
               <thead className="pw-rounded-2xl">
                 <tr
                   className={classNames(
-                    'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-1 !pw-border-b-0 pw-rounded-2xl pw-text-sm pw-items-center pw-w-full',
+                    isV2
+                      ? 'pw-h-12 pw-bg-[#fafbfc] pw-border-b pw-border-[#e6e8ec] pw-text-sm pw-items-center pw-w-full'
+                      : 'pw-h-[72px] pw-bg-[#DDE6F3] pw-px-1 !pw-border-b-0 pw-rounded-2xl pw-text-sm pw-items-center pw-w-full',
                     tableStyles?.header ?? ''
                   )}
                 >
@@ -689,7 +727,10 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                           <div
                             className={classNames(
                               columnStyles,
-                              'pw-flex pw-gap-2 pw-items-center'
+                              'pw-flex pw-gap-2 pw-items-center',
+                              isV2
+                                ? 'pw-text-[11px] pw-font-bold pw-uppercase pw-tracking-[0.03em] pw-text-[#8b93a3]'
+                                : ''
                             )}
                           >
                             {header.label}
@@ -698,12 +739,17 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                                 <div className="pw-relative pw-z-20">
                                   <button
                                     className={classNames(
-                                      'pw-w-6 pw-h-6 pw-flex pw-items-center pw-justify-center pw-rounded-[4px] pw-stroke-2',
-                                      sort.includes(
-                                        key.replace('attributes.', '')
-                                      )
-                                        ? 'pw-bg-blue-200'
-                                        : 'pw-opacity-80'
+                                      'pw-flex pw-items-center pw-justify-center',
+                                      isV2
+                                        ? 'pw-w-4 pw-h-4 pw-stroke-1'
+                                        : classNames(
+                                            'pw-w-6 pw-h-6 pw-rounded-[4px] pw-stroke-2',
+                                            sort.includes(
+                                              key.replace('attributes.', '')
+                                            )
+                                              ? 'pw-bg-blue-200'
+                                              : 'pw-opacity-80'
+                                          )
                                     )}
                                     onClick={() =>
                                       onHandleSort(sortableTamplate ?? '')
@@ -711,9 +757,16 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                                   >
                                     <ArrowDown
                                       className={classNames(
-                                        sort.includes(
-                                          key.replace('attributes.', '')
-                                        )
+                                        isV2 ? 'pw-w-3.5 pw-h-3.5' : '',
+                                        isV2
+                                          ? sort.includes(
+                                              key.replace('attributes.', '')
+                                            )
+                                            ? 'pw-stroke-[#2563eb]'
+                                            : 'pw-stroke-[#8b93a3]'
+                                          : sort.includes(
+                                              key.replace('attributes.', '')
+                                            )
                                           ? 'pw-stroke-white'
                                           : 'pw-stroke-blue-700',
                                         sort.includes(
@@ -789,6 +842,7 @@ export const GenericTable = ({ classes, config }: GenericTableProps) => {
                         lineActions={lineActions}
                         expansibleComponent={expansibleComponent}
                         setIsUpdateList={setIsUpdateList}
+                        variant={variant}
                       />
                     ))
                   : null}

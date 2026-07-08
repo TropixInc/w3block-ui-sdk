@@ -31,6 +31,8 @@ export interface CustomDatePickerProps {
   variant?: 'small' | 'medium' | 'large';
   fullWidth?: boolean;
   readonly?: boolean;
+  /** Superfície do campo — repassada ao BaseInput (ver BaseInputProps). */
+  surface?: 'default' | 'filled';
 }
 
 export const CustomDatePicker = ({
@@ -49,6 +51,7 @@ export const CustomDatePicker = ({
   variant = 'medium',
   fullWidth = false,
   readonly = false,
+  surface = 'default',
 }: CustomDatePickerProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
@@ -113,14 +116,26 @@ export const CustomDatePicker = ({
           invalid={invalid}
           valid={valid}
           variant={variant}
+          surface={surface}
           fullWidth={fullWidth}
           readonly={readonly}
           searchIcon
           customIcon={<></>}
-          button={{
-            icon: <CalendarIcon className="pw-stroke-black pw-w-4 pw-h-4" />,
-            onClick: () => {},
-          }}
+          button={
+            surface === 'filled'
+              ? undefined
+              : {
+                  icon: (
+                    <CalendarIcon className="pw-stroke-black pw-w-4 pw-h-4" />
+                  ),
+                  onClick: () => {},
+                }
+          }
+          customTrailingIcon={
+            surface === 'filled' ? (
+              <CalendarIcon className="pw-stroke-[#8B93A3] pw-w-4 pw-h-4 pw-shrink-0" />
+            ) : undefined
+          }
           className={`pw-h-8 pw-px-3 ${disabled ? '' : 'pw-cursor-pointer'}`}
           readOnly
         />
@@ -140,7 +155,17 @@ export const CustomDatePicker = ({
         slotProps={{
           paper: {
             className: 'pw-shadow-lg pw-rounded-lg pw-overflow-hidden',
-            style: anchorEl ? { width: `${anchorEl.offsetWidth}px` } : { width: 'auto' },
+            // No modo filled o input é compacto; garante uma largura mínima do
+            // painel para o calendário caber (sem alterar o input). No default,
+            // mantém o comportamento antigo (painel = largura do input).
+            style: anchorEl
+              ? {
+                  width:
+                    surface === 'filled'
+                      ? `${Math.max(anchorEl.offsetWidth, 288)}px`
+                      : `${anchorEl.offsetWidth}px`,
+                }
+              : { width: 'auto' },
           },
         }}
       >

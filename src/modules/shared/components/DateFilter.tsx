@@ -18,6 +18,7 @@ interface DateFilterProps {
   onSelectDate?: (date: Date) => void;
   minDate?: Date;
   placeholder?: string;
+  surface?: 'default' | 'filled';
 }
 
 export const DateFilter = ({
@@ -33,6 +34,7 @@ export const DateFilter = ({
   selectedDate,
   minDate,
   placeholder,
+  surface = 'default',
 }: DateFilterProps) => {
   const [translate, i18n] = useTranslation();
 
@@ -78,6 +80,7 @@ export const DateFilter = ({
       language={i18n.language || 'pt-BR'}
       placeholder={placeholder || translate('contractDetails>RoyaltiesArea>date')}
       className="sm:pw-max-w-[350px]"
+      surface={surface}
       fullWidth
     />
   );

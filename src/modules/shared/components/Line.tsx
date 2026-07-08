@@ -33,6 +33,7 @@ interface LineProps {
   ) => any;
 
   setIsUpdateList?: (value: boolean) => void;
+  variant?: 'default' | 'redesign';
 }
 
 const Line = ({
@@ -47,8 +48,10 @@ const Line = ({
   handleCalcColumnSpan,
   customizerValues,
   setIsUpdateList,
+  variant = 'default',
 }: LineProps) => {
   const [openExpansible, setOpenExpansible] = useState(false);
+  const isV2 = variant === 'redesign';
 
   return (
     <>
@@ -57,7 +60,10 @@ const Line = ({
         key={(item as any).id}
         className={classNames(
           tableStyles?.line ?? '',
-          'pw-px-3 pw-items-center pw-gap-x-1 pw-h-[72px] pw-border-t sm:pw-w-full ',
+          'pw-px-3 pw-items-center pw-gap-x-1 pw-border-t sm:pw-w-full',
+          isV2
+            ? 'pw-border-[#e6e8ec] pw-text-[#4a5567] hover:pw-bg-[#fbfcfd]'
+            : 'pw-h-[72px]',
           lineActions ? 'pw-cursor-pointer' : 'pw-cursor-default'
         )}
       >
@@ -79,7 +85,10 @@ const Line = ({
             }) => (
               <td
                 key={key}
-                className="pw-text-sm pw-text-left pw-px-3"
+                className={classNames(
+                  'pw-text-sm pw-text-left pw-px-3',
+                  isV2 ? 'pw-py-3' : ''
+                )}
                 onClick={(e) => handleAction(e, lineActions?.action, item)}
               >
                 <div className={classNames(columnStyles, '')}>
