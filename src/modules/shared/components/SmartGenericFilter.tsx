@@ -48,6 +48,7 @@ interface GenericFilterDto {
   };
   isTranslatable?: boolean;
   translatePrefix?: string;
+  surface?: 'default' | 'filled';
 }
 
 const SmartGenericFilter = ({
@@ -71,6 +72,7 @@ const SmartGenericFilter = ({
   filterDependencies,
   isTranslatable,
   translatePrefix,
+  surface = 'default',
 }: GenericFilterDto) => {
   const [defaultDate, setDefaultDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date>();
@@ -381,6 +383,7 @@ const SmartGenericFilter = ({
             startDate={startDate}
             endDate={endDate}
             placeholder={filterPlaceholder}
+            surface={surface}
           />
         );
       }
@@ -422,6 +425,8 @@ const SmartGenericFilter = ({
             type="text"
             placeholder={filterPlaceholder ?? 'Buscar'}
             value={searchStaticValue}
+            surface={surface}
+            searchIcon={surface === 'filled'}
             onChange={(e) => setSearchStaticValue(e.target.value)}
           />
         );

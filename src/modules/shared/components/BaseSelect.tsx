@@ -96,7 +96,7 @@ const MultipleSelect = ({
         classes.rootSize ? classes.rootSize : "pw-min-w-[200px]",
       )}
     >
-      <BaseInputLayout fullWidth={true} className={classes.input ?? ""} {...props} disabled={disabled}>
+      <BaseInputLayout fullWidth={true} className={classes.input ?? ""} {...props} surfaceActive={selectedValues.length > 0} disabled={disabled}>
         <Select
           multiple
           value={selectedValues}
@@ -104,7 +104,11 @@ const MultipleSelect = ({
           disabled={disabled}
           displayEmpty
           renderValue={(selected) => (
-            <div className="pw-text-base pw-leading-4 pw-flex pw-items-center pw-pr-2 pw-truncate pw-w-full" style={{ pointerEvents: "none" }}>
+            <div className={classNames(
+              "pw-flex pw-items-center pw-pr-2 pw-truncate pw-w-full pw-leading-4",
+              props.surface === 'filled' ? "pw-text-[14px]" : "pw-text-base",
+              props.surface === 'filled' && (selected as string[]).length === 0 ? "pw-text-[#8b93a3]" : ""
+            )} style={{ pointerEvents: "none" }}>
               {getDisplayValue(selected as string[])}
             </div>
           )}
@@ -383,7 +387,7 @@ const SearchSelect = ({
         classes.rootSize ? classes.rootSize : "pw-min-w-[200px]"
       )}
     >
-      <BaseInputLayout className={classes.input ?? ""} {...props} disabled={disabled} fullWidth={true}>
+      <BaseInputLayout className={classes.input ?? ""} {...props} surfaceActive={Array.isArray(normalizedValue) ? normalizedValue.length > 0 : !!normalizedValue} disabled={disabled} fullWidth={true}>
         <Autocomplete
           multiple={multiple}
           options={options}
@@ -392,6 +396,11 @@ const SearchSelect = ({
           onInputChange={handleInputChange}
           inputValue={inputValue}
           disabled={disabled}
+          slotProps={
+            props.surface === 'filled'
+              ? { popper: { style: { minWidth: '280px' } } }
+              : undefined
+          }
           getOptionLabel={getOptionLabel}
           renderOption={renderOption}
           isOptionEqualToValue={(option: IOption, val: IOption | string) => {
@@ -423,9 +432,17 @@ const SearchSelect = ({
                 },
                 "& .MuiInputBase-input": {
                   padding: 0,
-                  fontSize: "16px",
+                  fontSize: props.surface === 'filled' ? "14px" : "16px",
                   lineHeight: "16px",
                 },
+                ...(props.surface === 'filled'
+                  ? {
+                      "& .MuiInputBase-input::placeholder": {
+                        color: "#8b93a3",
+                        opacity: 1,
+                      },
+                    }
+                  : {}),
               }}
             />
           )}
@@ -529,6 +546,7 @@ const SimpleSelect = ({
       <BaseInputLayout
         className={classes.input ?? ""}
         {...props}
+        surfaceActive={!!selectedValue}
         readonly={readonly}
         disabled={disabled}
         fullWidth={true}
@@ -539,7 +557,11 @@ const SimpleSelect = ({
           disabled={disabled || readonly}
           displayEmpty
           renderValue={() => (
-            <div className="pw-text-base pw-leading-4 pw-flex pw-items-center pw-truncate pw-w-full" style={{ pointerEvents: "none" }}>
+            <div className={classNames(
+              "pw-flex pw-items-center pw-truncate pw-w-full pw-leading-4",
+              props.surface === 'filled' ? "pw-text-[14px]" : "pw-text-base",
+              props.surface === 'filled' && !selectedValue ? "pw-text-[#8b93a3]" : ""
+            )} style={{ pointerEvents: "none" }}>
               {displayValue}
             </div>
           )}
