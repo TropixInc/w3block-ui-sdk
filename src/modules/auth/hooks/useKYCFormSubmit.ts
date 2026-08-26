@@ -62,7 +62,16 @@ export const useKYCFormSubmit = ({
   const onSubmit = () => {
     const dynamicValues = dynamicMethods.getValues();
     const documents = Object.values(dynamicValues);
-    const validDocs = documents.filter((item: any) => item);
+    // ComplexPhone keeps cleared phones as [''] in the form state; send null
+    // so the API receives an explicit "no phone" instead of an empty entry
+    const validDocs = documents
+      .filter((item: any) => item)
+      .map((item: any) =>
+        Array.isArray(item?.value) &&
+        item.value.every((v: any) => typeof v === 'string' && v.trim() === '')
+          ? { ...item, value: null }
+          : item
+      );
 
     const docsToUse = () => {
       if (
