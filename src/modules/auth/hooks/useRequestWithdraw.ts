@@ -68,13 +68,25 @@ export const useConcludeWithdraw = () => {
 
   return useMutation(
     [PixwayAPIRoutes.CONCLUDE_WITHDRAW],
-    (params: { receiptAssetId: string; id: string }) =>
+    // PR #697: além do comprovante, aceita confirmProviderTransfer (marca o
+    // último Pix do provedor como pagamento) e agreeAutomaticTransfer
+    // ("Pagar via Pix": paga pelo provedor do tenant, sem comprovante).
+    (params: {
+      id: string;
+      receiptAssetId?: string;
+      confirmProviderTransfer?: boolean;
+      agreeAutomaticTransfer?: boolean;
+    }) =>
       axios.patch(
         PixwayAPIRoutes.CONCLUDE_WITHDRAW.replace(
           '{companyId}',
           companyId
         ).replace('{id}', params.id),
-        { receiptAssetId: params.receiptAssetId }
+        {
+          receiptAssetId: params.receiptAssetId,
+          confirmProviderTransfer: params.confirmProviderTransfer,
+          agreeAutomaticTransfer: params.agreeAutomaticTransfer,
+        }
       )
   );
 };

@@ -86,6 +86,7 @@ const _WithdrawsTemplateSDK = () => {
             pending: translate('auth>withdrawStatus>pending'),
             escrowing_resources: translate('auth>withdrawStatus>pending'),
             ready_to_transfer_funds: translate('auth>withdrawStatus>pending'),
+            transferring_funds: translate('auth>withdrawStatus>pending'),
             concluded: translate('auth>withdrawStatus>concluded'),
             failed: translate('auth>withdrawStatus>failed'),
             refused: translate('auth>withdrawStatus>refused'),
