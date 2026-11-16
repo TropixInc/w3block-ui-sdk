@@ -35,10 +35,15 @@ const metadataOf = (item: any) =>
     : item?.metadata ?? {};
 
 /** Normaliza um item de GET /loyalties/users/deferred para a linha da tabela. */
-export const toFutureStatementRow = (item: any): FutureStatementRow => {
+export const toFutureStatementRow = (
+  item: any,
+  options: { lockedOnly?: boolean } = {}
+): FutureStatementRow => {
   const metadata = metadataOf(item);
   const releaseAt = item?.withdrawableAt ?? item?.executeAt ?? null;
-  const released = isReleased(releaseAt);
+  // Na aba "Agendados" a API já garante que nada liberou; não deixamos o
+  // fallback para executeAt contradizer o filtro.
+  const released = options.lockedOnly ? false : isReleased(releaseAt);
   return {
     id: item?.id,
     deliverId: metadata?.commerce?.deliverId ?? metadata?.deliverId,
@@ -58,9 +63,18 @@ export const toFutureStatementRow = (item: any): FutureStatementRow => {
   };
 };
 
+/** A nota "* repasse simulado" só faz sentido se alguma pill é simulada. */
+export const hasMockSettlementRows = (
+  items: any[],
+  options: { lockedOnly?: boolean } = {}
+) =>
+  items.some((item) => toFutureStatementRow(item, options).settlement?.isMock);
+
 interface Props {
   items: any[];
   currency: string;
+  /** Lista filtrada em "Agendados": trata tudo como ainda não liberado. */
+  lockedOnly?: boolean;
   pointsPrecision?: 'integer' | 'decimal';
   /** Mostra a coluna Estabelecimento (visão admin). */
   showEstablishment?: boolean;
@@ -79,6 +93,7 @@ export const FutureStatementTable = ({
   currency,
   pointsPrecision = 'decimal',
   showEstablishment,
+  lockedOnly,
   onOpenReceipt,
   withdrawHref,
 }: Props) => {
@@ -87,7 +102,10 @@ export const FutureStatementTable = ({
   const dateFnsLocale = useDateFnsLocale();
   const isMobile = useIsMobile();
 
-  const rows = useMemo(() => items.map(toFutureStatementRow), [items]);
+  const rows = useMemo(
+    () => items.map((item) => toFutureStatementRow(item, { lockedOnly })),
+    [items, lockedOnly]
+  );
 
   const dateTime = (value?: string | null) =>
     value

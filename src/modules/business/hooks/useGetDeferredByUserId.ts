@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
 import { useQuery } from '@tanstack/react-query';
 import { ErcTokenHistoryInterfaceResponse } from '../../dashboard/interface/ercTokenHistoryInterface';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
@@ -49,7 +48,6 @@ export const useGetDeferredByUserId = (
       enabled: !!userId && !!companyId && enabled,
       retry: false,
       refetchOnWindowFocus: false,
-      refetchOnMount: false,
     }
   );
 };

@@ -28,6 +28,7 @@ import {
 import {
   StatementDayList,
   StatementTypeFilter,
+  resolveStatementItem,
 } from '../components/statement/StatementDayList';
 import { useGetErcTokensHistory } from '../hook/useGetErcTokensHistory';
 
@@ -81,7 +82,7 @@ export const WalletStatementTemplateSDK = () => {
   const hasMockSettlement =
     STATEMENT_MOCK_FALLBACK &&
     subTransactions.some(
-      (item) => item.releasedAt && !item.settlement?.settlement
+      (item, index) => resolveStatementItem(item, index).settlement?.isMock
     );
 
   useGuardPagesWithOptions({

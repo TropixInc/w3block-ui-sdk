@@ -235,6 +235,25 @@ const CopyHash = ({ hash }: { hash: string }) => {
 };
 
 /** Linhas do Extrato agrupadas por dia. */
+/** Mesma regra para a pill da linha e para a nota de rodapé do template. */
+export const resolveStatementItem = (item: any, index: number) => {
+  const receiving = item.type === StatementScreenTransactionType.RECEIVING;
+  const pending =
+    item.pending ||
+    (item.status !== Erc20ActionStatus.SUCCESS &&
+      item.status !== Erc20ActionStatus.EXTERNAL);
+  const settlement =
+    receiving && item.releasedAt && !pending
+      ? resolveSettlement({
+          id: item.actionId ?? `${item.parentItemId}-${index}`,
+          item: item.settlement,
+          released: isReleased(item.releasedAt),
+          releasedAt: item.releasedAt,
+        })
+      : null;
+  return { receiving, pending, settlement };
+};
+
 export const StatementDayList = ({
   items,
   currency,
@@ -303,22 +322,10 @@ export const StatementDayList = ({
             {dayLabel(day)}
           </div>
           {dayItems.map((item, index) => {
-            const receiving =
-              item.type === StatementScreenTransactionType.RECEIVING;
-            const pending =
-              item.pending ||
-              (item.status !== Erc20ActionStatus.SUCCESS &&
-                item.status !== Erc20ActionStatus.EXTERNAL);
-            const released = isReleased(item.releasedAt);
-            const settlement =
-              receiving && item.releasedAt && !pending
-                ? resolveSettlement({
-                    id: item.actionId ?? `${item.parentItemId}-${index}`,
-                    item: item.settlement,
-                    released,
-                    releasedAt: item.releasedAt,
-                  })
-                : null;
+            const { receiving, pending, settlement } = resolveStatementItem(
+              item,
+              index
+            );
             const time = item.createdAt
               ? format(new Date(item.createdAt), 'HH:mm', {
                   locale: dateFnsLocale,

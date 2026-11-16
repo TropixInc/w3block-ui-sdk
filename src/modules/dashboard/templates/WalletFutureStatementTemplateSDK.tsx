@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from 'react';
 
+import classNames from 'classnames';
 import fileDownload from 'js-file-download';
 
 import { useGetDeferred } from '../../business/hooks/useGetDeferred';
@@ -22,7 +23,10 @@ import { useProfile } from '../../shared/hooks/useProfile';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { ReceiptQRCode } from '../components/ReceiptQRCode';
-import { FutureStatementTable } from '../components/statement/FutureStatementTable';
+import {
+  FutureStatementTable,
+  hasMockSettlementRows,
+} from '../components/statement/FutureStatementTable';
 import { SegmentedControl } from '../components/statement/SegmentedControl';
 import {
   STATEMENT_MOCK_FALLBACK,
@@ -230,8 +234,9 @@ export const WalletFutureStatementTemplateSDK = () => {
     return { value: '—', currency, hint: undefined };
   };
 
+  const lockedOnly = status === 'scheduled';
   const hasMockSettlement =
-    STATEMENT_MOCK_FALLBACK && items.some((item) => !item?.settlement);
+    STATEMENT_MOCK_FALLBACK && hasMockSettlementRows(items, { lockedOnly });
 
   if (list.error) {
     return (
@@ -284,7 +289,12 @@ export const WalletFutureStatementTemplateSDK = () => {
           </button>
         </div>
 
-        <div className="pw-grid pw-grid-cols-2 sm:pw-grid-cols-3 pw-gap-3 sm:pw-gap-4">
+        <div
+          className={classNames(
+            'pw-grid pw-grid-cols-2 pw-gap-3 sm:pw-gap-4',
+            !isAdmin && 'sm:pw-grid-cols-3'
+          )}
+        >
           <StatementKpiCard
             label={translate('statement>future>kpiScheduled')}
             {...kpiFor(scheduled)}
@@ -296,18 +306,20 @@ export const WalletFutureStatementTemplateSDK = () => {
             loading={received.isFetching && !received.data}
             tone="positive"
           />
-          <StatementKpiCard
-            label={translate('statement>future>kpiWithdrawable')}
-            value={formatPoints(
-              loyaltyWalletDefined?.withdrawableBalance,
-              pointsPrecision,
-              locale
-            )}
-            currency={currency}
-            hint={translate('statement>future>kpiWithdrawableHint')}
-            tone="accent"
-            className="pw-col-span-2 sm:pw-col-span-1"
-          />
+          {isAdmin ? null : (
+            <StatementKpiCard
+              label={translate('statement>future>kpiWithdrawable')}
+              value={formatPoints(
+                loyaltyWalletDefined?.withdrawableBalance,
+                pointsPrecision,
+                locale
+              )}
+              currency={currency}
+              hint={translate('statement>future>kpiWithdrawableHint')}
+              tone="accent"
+              className="pw-col-span-2 sm:pw-col-span-1"
+            />
+          )}
         </div>
 
         <div
@@ -393,7 +405,7 @@ export const WalletFutureStatementTemplateSDK = () => {
           </button>
         </div>
 
-        {list.isFetching && !list.data ? (
+        {!list.data && (list.isFetching || adminEnabled || userEnabled) ? (
           <div className="pw-flex pw-justify-center pw-py-10">
             <Spinner className="pw-h-10 pw-w-10" />
           </div>
@@ -404,6 +416,7 @@ export const WalletFutureStatementTemplateSDK = () => {
               currency={currency}
               pointsPrecision={pointsPrecision}
               showEstablishment={isAdmin}
+              lockedOnly={lockedOnly}
               onOpenReceipt={setReceiptDeliverId}
             />
             <div className="pw-flex pw-flex-wrap pw-items-center pw-justify-between pw-gap-3 pw-text-[13px] pw-text-[#4a5567]">
