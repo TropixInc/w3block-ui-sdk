@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactElement } from 'react';
 
 import { isArray } from 'lodash';
@@ -40,6 +41,14 @@ export interface StatementScreenTransaction {
   operatorName?: string;
   orderId?: string;
   payments?: string;
+  /** Data em que o cashback libera para saque (withdrawableAt/executeAt do lançamento). */
+  releasedAt?: string;
+  /** Repasse do lançamento, quando a Key API enviar (ver dashboard/components/statement/settlement). */
+  settlement?: {
+    settlement?: 'pending' | 'in_withdraw' | 'paid' | 'refused' | null;
+    withdrawId?: string | null;
+    withdrawPaidAt?: string | null;
+  };
 }
 
 export interface Metadata {
@@ -247,6 +256,12 @@ export function getSubtransactions(
             status: data?.status,
             createdAt: data?.createdAt,
             scheduledAt: metadata?.createdAt,
+            releasedAt: (loyalty as any)?.withdrawableAt ?? loyalty?.executeAt,
+            settlement: {
+              settlement: (loyalty as any)?.settlement ?? null,
+              withdrawId: (loyalty as any)?.withdrawId ?? null,
+              withdrawPaidAt: (loyalty as any)?.withdrawPaidAt ?? null,
+            },
           };
           if (metadata.action === 'split_payees') {
             subTransactions.push({

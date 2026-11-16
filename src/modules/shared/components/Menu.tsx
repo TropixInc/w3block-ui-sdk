@@ -189,7 +189,8 @@ const _Menu = ({ tabs, className }: MenuProps) => {
       },
       {
         title:
-          internalMenuData['futureStatement']?.customLabel || 'Recebimentos',
+          internalMenuData['futureStatement']?.customLabel ||
+          translate('statement>future>menu'),
         id: 'futureStatement',
         icon: (
           <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
