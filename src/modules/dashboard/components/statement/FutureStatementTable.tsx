@@ -141,7 +141,7 @@ export const FutureStatementTable = ({
         {rows.map((row) => (
           <div
             key={row.id}
-            className="pw-flex pw-flex-col pw-gap-2.5 pw-rounded-[10px] pw-bg-white pw-p-4 pw-shadow-[0_2px_8px_rgba(0,0,0,.06)]"
+            className="pw-flex pw-flex-col pw-gap-2.5 pw-rounded-[10px] pw-bg-white pw-p-4 pw-text-[#0f1729] pw-shadow-[0_2px_8px_rgba(0,0,0,.06)]"
           >
             <div className="pw-flex pw-items-center pw-justify-between pw-gap-2">
               <span className="pw-font-semibold pw-text-[#0f1729]">

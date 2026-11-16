@@ -440,9 +440,11 @@ export const StatementDayList = ({
                       />
                     </span>
                   ) : pending ? (
-                    <StatementPill color="amber">
-                      {translate('statement>extract>processing')}
-                    </StatementPill>
+                    <span className="pw-hidden sm:pw-inline-flex">
+                      <StatementPill color="amber">
+                        {translate('statement>extract>processing')}
+                      </StatementPill>
+                    </span>
                   ) : (
                     <span className="pw-text-[12px] pw-text-[#6b7280]">
                       {time}

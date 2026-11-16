@@ -235,12 +235,12 @@ export const WalletStatementTemplateSDK = () => {
                       total: data.meta.totalPages,
                     })
                   : ''}
-                {hasMockSettlement ? (
-                  <span className="pw-block sm:pw-inline sm:pw-ml-2 pw-text-[#9a6508]">
-                    {translate('statement>settlement>mockFootnote')}
-                  </span>
-                ) : null}
               </span>
+              {hasMockSettlement ? (
+                <span className="pw-order-last pw-basis-full pw-text-[#9a6508] sm:pw-order-none sm:pw-mr-auto sm:pw-basis-auto">
+                  {translate('statement>settlement>mockFootnote')}
+                </span>
+              ) : null}
               {data?.meta && data.meta.totalPages > 1 ? (
                 <Pagination
                   pagesQuantity={data.meta.totalPages}
