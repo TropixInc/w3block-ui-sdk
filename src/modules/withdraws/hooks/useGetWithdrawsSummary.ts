@@ -31,6 +31,29 @@ interface Params {
 }
 
 const DAY = 24 * 60 * 60 * 1000;
+const CONCLUDED_PAGE_LIMIT = 100;
+const CONCLUDED_MAX_PAGES = 5;
+
+const startOfDay = (ms: number) => {
+  const d = new Date(ms);
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+const endOfDay = (ms: number) => {
+  const d = new Date(ms);
+  d.setHours(23, 59, 59, 999);
+  return d;
+};
+
+/** A rota de summary colide com `GET /admin/:id` ("summary" vira id inválido). */
+const isSummaryIdCollision = (err: any) => {
+  if (err?.response?.status !== 400) return false;
+  const message = err?.response?.data?.message;
+  const text = Array.isArray(message)
+    ? message.join(' ')
+    : String(message ?? '');
+  return /uuid|\bid\b/i.test(text);
+};
 
 /**
  * Cards da lista (api-faltante §4). A rota `GET /withdraws/admin/summary` não
@@ -44,8 +67,11 @@ export const useGetWithdrawsSummary = (
 ) => {
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();
-  const periodFrom = from ?? new Date(Date.now() - 7 * DAY).toISOString();
-  const periodTo = to ?? new Date().toISOString();
+  // Arredondado ao dia para a chave do cache e a requisição baterem.
+  const periodFrom = from ?? startOfDay(Date.now() - 7 * DAY).toISOString();
+  const periodTo = to ?? endOfDay(Date.now()).toISOString();
+  const fromMs = Date.parse(periodFrom);
+  const toMs = Date.parse(periodTo);
 
   const listCount = async (params: Record<string, unknown>) => {
     const query = serializeWithdrawParams({ ...params, page: 1, limit: 1 });
@@ -59,12 +85,7 @@ export const useGetWithdrawsSummary = (
   };
 
   return usePrivateQuery<WithdrawsSummary, any, WithdrawsSummary>(
-    [
-      PixwayAPIRoutes.WITHDRAWS_ADMIN_SUMMARY,
-      companyId,
-      periodFrom.slice(0, 10),
-      periodTo.slice(0, 10),
-    ],
+    [PixwayAPIRoutes.WITHDRAWS_ADMIN_SUMMARY, companyId, periodFrom, periodTo],
     async () => {
       try {
         const response = await axios.get<WithdrawsSummary>(
@@ -76,11 +97,9 @@ export const useGetWithdrawsSummary = (
         );
         return response.data;
       } catch (err) {
-        // A rota colide com `GET /admin/:id` (summary vira id inválido): aceita 400 também.
-        const status = (err as any)?.response?.status;
         if (
           !WITHDRAWS_MOCK_FALLBACK ||
-          !(isMissingEndpoint(err) || status === 400)
+          !(isMissingEndpoint(err) || isSummaryIdCollision(err))
         )
           throw err;
       }
@@ -90,7 +109,43 @@ export const useGetWithdrawsSummary = (
         WithdrawStatus.ESCROWING_RESOURCES,
         WithdrawStatus.READY_TO_TRANSFER_FUNDS,
       ];
-      const [failed, declined, manualReady, processingTotal, concludedPage] =
+      // Concluídos: a lista não filtra por concludedAt, então pagina do mais
+      // recente até sair do período (ou até o teto de páginas).
+      const concludedInPeriod = async () => {
+        const found: Withdraw[] = [];
+        for (let page = 1; page <= CONCLUDED_MAX_PAGES; page++) {
+          const response = await axios.get<WithdrawsAdminResponse>(
+            `${PixwayAPIRoutes.WITHDRAWS_ADMIN.replace(
+              '{companyId}',
+              companyId
+            )}?${serializeWithdrawParams({
+              status: [WithdrawStatus.CONCLUDED],
+              page,
+              limit: CONCLUDED_PAGE_LIMIT,
+              sortBy: 'createdAt',
+              orderBy: 'DESC',
+            })}`
+          );
+          const items: Withdraw[] = response.data?.items ?? [];
+          let olderThanPeriod = false;
+          for (const item of items) {
+            const at = Date.parse(
+              item.concludedAt ?? item.updatedAt ?? item.createdAt ?? ''
+            );
+            if (!Number.isNaN(at) && at >= fromMs && at <= toMs) {
+              found.push(item);
+            }
+            if (Date.parse(item.createdAt ?? '') < fromMs) {
+              olderThanPeriod = true;
+            }
+          }
+          const totalPages = response.data?.meta?.totalPages ?? 1;
+          if (olderThanPeriod || page >= totalPages) break;
+        }
+        return found;
+      };
+
+      const [failed, declined, manualReady, processingTotal, concluded] =
         await Promise.all([
           listCount({ status: [WithdrawStatus.FAILED] }),
           listCount({
@@ -102,26 +157,10 @@ export const useGetWithdrawsSummary = (
             origin: [WithdrawOrigin.USER, WithdrawOrigin.ON_BEHALF],
           }),
           listCount({ status: WITHDRAW_PROCESSING_STATUSES }),
-          axios.get<WithdrawsAdminResponse>(
-            `${PixwayAPIRoutes.WITHDRAWS_ADMIN.replace(
-              '{companyId}',
-              companyId
-            )}?${serializeWithdrawParams({
-              status: [WithdrawStatus.CONCLUDED],
-              page: 1,
-              limit: 100,
-              sortBy: 'createdAt',
-              orderBy: 'DESC',
-            })}`
-          ),
+          concludedInPeriod(),
         ]);
 
-      const paid = (concludedPage.data?.items ?? [])
-        .map((item: Withdraw) => withWithdrawExtras(item))
-        .filter((item) => {
-          const at = item.concludedAt ?? item.updatedAt ?? item.createdAt ?? '';
-          return at >= periodFrom && at <= periodTo;
-        });
+      const paid = concluded.map((item) => withWithdrawExtras(item));
       const awaitingAction = failed + declined + manualReady;
 
       return mockSummary({

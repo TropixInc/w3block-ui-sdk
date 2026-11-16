@@ -22,10 +22,43 @@ import {
 
 export const WITHDRAWS_MOCK_FALLBACK = true;
 
-/** 404/405/501 = rota ainda não existe no backend. */
+const ROUTE_NOT_FOUND = /^Cannot (GET|POST|PUT|PATCH|DELETE) /;
+
+const missingByBody = (status: number | undefined, body: any) => {
+  if (status === 405 || status === 501) return true;
+  if (status !== 404) return false;
+  // Nest responde "Cannot GET /x" quando a rota não existe; um 404 de
+  // entidade ("Withdraw not found") é erro real e não pode virar mock.
+  const message = Array.isArray(body?.message)
+    ? body.message.join(' ')
+    : body?.message;
+  if (typeof message !== 'string') return true;
+  return ROUTE_NOT_FOUND.test(message);
+};
+
+/** 405/501, ou 404 de rota inexistente ("Cannot GET ..."); nunca 404 de entidade. */
 export const isMissingEndpoint = (err: any) => {
   const status = err?.response?.status ?? err?.status;
-  return status === 404 || status === 405 || status === 501;
+  const body = err?.response?.data;
+  if (typeof Blob !== 'undefined' && body instanceof Blob) {
+    // corpo binário (responseType: 'blob'): use isMissingEndpointAsync
+    return status === 405 || status === 501;
+  }
+  return missingByBody(status, body);
+};
+
+/** Versão para requisições com `responseType: 'blob'` (lê o JSON do erro). */
+export const isMissingEndpointAsync = async (err: any) => {
+  const status = err?.response?.status ?? err?.status;
+  let body = err?.response?.data;
+  if (typeof Blob !== 'undefined' && body instanceof Blob) {
+    try {
+      body = JSON.parse(await body.text());
+    } catch {
+      body = undefined;
+    }
+  }
+  return missingByBody(status, body);
 };
 
 const hash = (input: string) => {

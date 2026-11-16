@@ -9,10 +9,11 @@ import useTranslation from '../../shared/hooks/useTranslation';
 import { Withdraw } from '../interfaces';
 import { downloadBlob, withdrawFileName } from '../utils/download';
 import {
-  isMissingEndpoint,
+  isMissingEndpointAsync,
   mockWithdrawXlsxBlob,
   WITHDRAWS_MOCK_FALLBACK,
 } from '../utils/mock';
+import { formatWithdrawPeriod } from '../utils/format';
 import { getLastProviderTransfer } from '../utils/presentation';
 
 interface Params {
@@ -46,7 +47,8 @@ export const useGetWithdrawXlsx = () => {
         );
         blob = response.data as Blob;
       } catch (err) {
-        if (!WITHDRAWS_MOCK_FALLBACK || !isMissingEndpoint(err)) throw err;
+        if (!WITHDRAWS_MOCK_FALLBACK || !(await isMissingEndpointAsync(err)))
+          throw err;
         isMock = true;
         const transfer = getLastProviderTransfer(withdraw);
         blob = mockWithdrawXlsxBlob(
@@ -57,10 +59,7 @@ export const useGetWithdrawXlsx = () => {
               withdraw.user?.name ?? withdraw.user?.email ?? withdraw.userId,
             [translate('withdraws>xlsx>email')]: withdraw.user?.email ?? '',
             [translate('withdraws>xlsx>period')]: withdraw.period
-              ? `${withdraw.period.from.slice(
-                  0,
-                  10
-                )} - ${withdraw.period.to.slice(0, 10)}`
+              ? formatWithdrawPeriod(withdraw.period)
               : '',
             [translate('withdraws>xlsx>amount')]: withdraw.amount,
             [translate('withdraws>xlsx>status')]: withdraw.status,

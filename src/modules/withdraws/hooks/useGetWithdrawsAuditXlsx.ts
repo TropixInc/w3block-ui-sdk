@@ -8,8 +8,9 @@ import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { WithdrawsAdminFilters, WithdrawsAdminResponse } from '../interfaces';
 import { downloadBlob } from '../utils/download';
+import { formatWithdrawPeriod } from '../utils/format';
 import {
-  isMissingEndpoint,
+  isMissingEndpointAsync,
   mockAuditXlsxBlob,
   withWithdrawExtras,
   WITHDRAWS_MOCK_FALLBACK,
@@ -55,7 +56,8 @@ export const useGetWithdrawsAuditXlsx = () => {
         );
         blob = response.data as Blob;
       } catch (err) {
-        if (!WITHDRAWS_MOCK_FALLBACK || !isMissingEndpoint(err)) throw err;
+        if (!WITHDRAWS_MOCK_FALLBACK || !(await isMissingEndpointAsync(err)))
+          throw err;
         isMock = true;
         const list = await axios.get<WithdrawsAdminResponse>(
           `${PixwayAPIRoutes.WITHDRAWS_ADMIN.replace(
@@ -89,13 +91,11 @@ export const useGetWithdrawsAuditXlsx = () => {
               withdraw.user?.name ?? '',
               withdraw.user?.email ?? '',
               withdraw.createdAt ?? '',
-              withdraw.period
-                ? `${withdraw.period.from.slice(
-                    0,
-                    10
-                  )} - ${withdraw.period.to.slice(0, 10)}`
+              // Período e nº de compras simulados não entram num relatório.
+              withdraw.period && !withdraw.extrasAreMock
+                ? formatWithdrawPeriod(withdraw.period)
                 : '',
-              withdraw.ordersCount ?? '',
+              withdraw.extrasAreMock ? '' : withdraw.ordersCount ?? '',
               withdraw.amount,
               getWithdrawOriginLabel(withdraw.origin, translate),
               payment

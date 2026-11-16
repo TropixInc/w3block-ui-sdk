@@ -1,12 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
 import { W3blockAPI } from '../../shared/enums/W3blockAPI';
 import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { invalidateWithdrawQueries } from '../../withdraws/utils/invalidateWithdrawQueries';
 
 export const useRefuseWithdraw = () => {
   const axios = useAxios(W3blockAPI.KEY);
   const { companyId } = useCompanyConfig();
+  const queryClient = useQueryClient();
 
   return useMutation(
     [PixwayAPIRoutes.REFUSE_WITHDRAW],
@@ -17,6 +19,7 @@ export const useRefuseWithdraw = () => {
           companyId
         ).replace('{id}', params.id),
         { reason: params.reason }
-      )
+      ),
+    { onSuccess: () => invalidateWithdrawQueries(queryClient) }
   );
 };
