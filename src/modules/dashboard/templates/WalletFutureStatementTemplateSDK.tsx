@@ -199,18 +199,36 @@ export const WalletFutureStatementTemplateSDK = () => {
 
   const items: any[] = list.data?.items ?? [];
   const meta = list.data?.meta;
-  const summaryAmount = (query: {
-    data?: { summary?: { balance?: number } };
-  }) =>
-    query.data?.summary?.balance !== undefined
-      ? formatPoints(query.data.summary.balance, pointsPrecision, locale)
-      : '—';
-  const summaryCount = (query: { data?: { meta?: { totalItems?: number } } }) =>
-    query.data?.meta?.totalItems !== undefined
-      ? translate('statement>future>purchases', {
-          count: query.data.meta.totalItems,
-        })
-      : undefined;
+  // A Key só calcula summary.balance quando o filtro tem usuário/endereço
+  // (getDeferredPaginated: canMakeSummary). Na visão admin sem usuário
+  // selecionado o card mostra a contagem como valor principal.
+  const kpiFor = (query: {
+    data?: {
+      summary?: { balance?: number };
+      meta?: { totalItems?: number };
+    };
+  }) => {
+    const balance = query.data?.summary?.balance;
+    const total = query.data?.meta?.totalItems;
+    if (balance !== undefined) {
+      return {
+        value: formatPoints(balance, pointsPrecision, locale),
+        currency,
+        hint:
+          total !== undefined
+            ? translate('statement>future>purchases', { count: total })
+            : undefined,
+      };
+    }
+    if (total !== undefined) {
+      return {
+        value: new Intl.NumberFormat(locale).format(total),
+        currency: translate('statement>future>purchasesUnit'),
+        hint: translate('statement>future>kpiNoTotalHint', { currency }),
+      };
+    }
+    return { value: '—', currency, hint: undefined };
+  };
 
   const hasMockSettlement =
     STATEMENT_MOCK_FALLBACK && items.some((item) => !item?.settlement);
@@ -269,16 +287,12 @@ export const WalletFutureStatementTemplateSDK = () => {
         <div className="pw-grid pw-grid-cols-2 sm:pw-grid-cols-3 pw-gap-3 sm:pw-gap-4">
           <StatementKpiCard
             label={translate('statement>future>kpiScheduled')}
-            value={summaryAmount(scheduled)}
-            currency={currency}
-            hint={summaryCount(scheduled)}
+            {...kpiFor(scheduled)}
             loading={scheduled.isFetching && !scheduled.data}
           />
           <StatementKpiCard
             label={translate('statement>future>kpiReceived')}
-            value={summaryAmount(received)}
-            currency={currency}
-            hint={summaryCount(received)}
+            {...kpiFor(received)}
             loading={received.isFetching && !received.data}
             tone="positive"
           />

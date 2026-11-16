@@ -1135,6 +1135,8 @@
   "statement>future>kpiReceived": "Recebido no período",
   "statement>future>kpiWithdrawable": "Disponível para saque",
   "statement>future>kpiWithdrawableHint": "liberado e ainda não sacado",
+  "statement>future>purchasesUnit": "compras",
+  "statement>future>kpiNoTotalHint": "total em {{currency}} ao filtrar por usuário",
   "statement>future>purchases": "{{count}} compras",
   "statement>future>filterScheduled": "Agendados",
   "statement>future>filterReceived": "Recebidos",

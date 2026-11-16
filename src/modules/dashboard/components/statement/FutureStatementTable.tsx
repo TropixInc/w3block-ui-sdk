@@ -213,7 +213,7 @@ export const FutureStatementTable = ({
               <td className={classNames(TD, 'pw-font-semibold')}>
                 {row.deliverId ? `#${row.deliverId}` : '—'}
                 {row.paidAmount ? (
-                  <span className="pw-block pw-text-[12px] pw-font-normal pw-text-[#6b7280]">
+                  <span className="pw-block pw-whitespace-nowrap pw-text-[12px] pw-font-normal pw-text-[#6b7280]">
                     {translate('statement>future>paidAmount', {
                       amount: `R$ ${formatPoints(
                         row.paidAmount,

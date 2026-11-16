@@ -272,7 +272,7 @@ export const useDefaultMenuTabs = (textColor: string) => {
         !isHidden("extract"),
     },
     {
-      name: internalMenuData["futureStatement"]?.customLabel || "Recebimentos",
+      name: internalMenuData["futureStatement"]?.customLabel || translate("statement>future>menu"),
       id: "futureStatement",
       icon: (
         <ReceiptIcon
