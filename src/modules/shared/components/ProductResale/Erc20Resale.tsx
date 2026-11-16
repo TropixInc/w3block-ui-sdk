@@ -218,7 +218,7 @@ export const Erc20Resale = () => {
                       readOnly={options.length === 1}
                       options={options}
                       onChangeValue={(e) =>
-                        setConfig({ ...config, currency: e })
+                        setConfig({ ...config, currency: e.value })
                       }
                       className="pw-w-full"
                     />

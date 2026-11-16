@@ -84,7 +84,7 @@ export const ConfirmationKycTemplateSDK = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
 
-  return isLoadingProfile ? (
+  return isLoadingProfile || status !== 'authenticated' ? (
     <div
       style={{ backgroundColor: style?.onBoardingBackgroundColor ?? bgColor }}
       className="pw-w-full pw-h-screen pw-flex pw-justify-center pw-items-center"

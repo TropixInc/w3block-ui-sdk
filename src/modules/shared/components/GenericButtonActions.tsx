@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Popover } from 'react-tiny-popover';
+import { useMemo, useState, useRef } from 'react';
+import { Popover } from '@mui/material';
 
 import _ from 'lodash';
 
@@ -13,7 +13,7 @@ interface ButtonProps {
 }
 
 export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const router = useRouterConnect();
   const renderOptions = useMemo(() => {
     return actions.filter((item) =>
@@ -28,6 +28,7 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
     } else if (action && action.type == 'navigate') {
       getHref(action, dataItem);
     }
+    handleClose();
   };
 
   const getHref = (action: any, row: any) => {
@@ -46,33 +47,60 @@ export const GenericButtonActions = ({ dataItem, actions }: ButtonProps) => {
     }
   };
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
   return renderOptions.length ? (
-    <Popover
-      isOpen={isMenuOpen}
-      positions={['right', 'left']}
-      padding={10}
-      reposition
-      onClickOutside={() => setIsMenuOpen(false)}
-      content={() => (
-        <div className="pw-border pw-border-[#9cc2f7] pw-w-[200px] pw-bg-white pw-rounded-lg pw-overflow-hidden">
+    <>
+      <button
+        className="pw-border pw-border-[#9cc2f7] pw-w-8 pw-h-8 pw-flex pw-items-center pw-justify-center pw-rounded-md hover:pw-bg-blue1 hover:pw-fill-[#9cc2f7]"
+        onClick={handleClick}
+      >
+        <Dots className="pw-w-4 pw-h-3" />
+      </button>
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: '8px',
+              border: '1px solid #9cc2f7',
+              width: '200px',
+              overflow: 'hidden',
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+            },
+          },
+        }}
+      >
+        <div className="pw-bg-white">
           {renderOptions.map((item, index) => (
             <a
               key={item.label + index}
               onClick={(e) => handleAction(e, item.action)}
-              className="pw-w-full pw-block pw-text-sm pw-text-left pw-p-3 hover:pw-bg-[#9cc2f7]"
+              className="pw-w-full pw-block pw-text-sm pw-text-left pw-p-3 hover:pw-bg-[#9cc2f7] pw-cursor-pointer"
             >
               {item.label}
             </a>
           ))}
         </div>
-      )}
-    >
-      <button
-        className="pw-border pw-border-[#9cc2f7] pw-w-8 pw-h-8 pw-flex pw-items-center pw-justify-center pw-rounded-md hover:pw-bg-blue1 hover:pw-fill-[#9cc2f7]"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-      >
-        <Dots className="pw-w-4 pw-h-3" />
-      </button>
-    </Popover>
+      </Popover>
+    </>
   ) : null;
 };

@@ -8,9 +8,8 @@ import isAfter from 'date-fns/isAfter';
 import MailSent from '../../shared/assets/icons/mailSent.svg';
 import { LocalStorageFields } from '../../shared/enums/LocalStorageFields';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../shared/hooks/useCountdown';
-import { removeDoubleSlashesOnUrl } from '../../shared/utils/removeDuplicateSlahes';
+import { useResolveCallbackUrl } from '../../shared/hooks/useResolveCallbackUrl';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import { useRequestPasswordChange } from '../hooks/useRequestPasswordChange';
@@ -28,7 +27,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
   isPostSignUp = false,
 }: PasswordChangeMailSentProps) => {
   const [translate] = useTranslation();
-  const { connectProxyPass, appBaseUrl } = useCompanyConfig();
+  const { resolveCallbackUrl } = useResolveCallbackUrl();
   const { mutate, isSuccess, isPending, reset } = useRequestPasswordChange();
   const {
     mutate: emailMutate,
@@ -63,9 +62,7 @@ export const VerifySignUpMailSentWithoutLayout = ({
     }
   }, [emailSuccess, setCountdownDate, emailReset]);
 
-  const callbackPath = removeDoubleSlashesOnUrl(
-    appBaseUrl + connectProxyPass + PixwayAppRoutes.COMPLETE_SIGNUP
-  );
+  const callbackPath = resolveCallbackUrl(PixwayAppRoutes.COMPLETE_SIGNUP);
 
   const handleClick = () => {
     if (isPostSignUp) {

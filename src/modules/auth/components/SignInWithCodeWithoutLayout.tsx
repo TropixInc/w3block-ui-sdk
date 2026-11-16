@@ -5,21 +5,22 @@ import { Trans } from 'react-i18next';
 import addMinutes from 'date-fns/addMinutes';
 import { Alert } from '../../shared/components/Alert';
 import { WeblockButton } from '../../shared/components/WeblockButton';
-import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import useCountdown from '../../shared/hooks/useCountdown';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { useAuthRedirect } from '../hooks/useAuthRedirect';
+import { useCodeInput } from '../hooks/useCodeInput';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
+import { CodeInputGrid } from './CodeInputGrid';
 import { usePixwayAuthentication } from '../hooks/usePixwayAuthentication';
 import { useRequestSignInCode } from '../hooks/useRequestSignInCode';
 import { useSignInWithCode } from '../hooks/useSignInWithCode';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import useTranslation from '../../shared/hooks/useTranslation';
 
 export const SignInWithCodeWithoutLayout = () => {
-  const [inputs, setInputs] = useState(['', '', '', '', '', '']);
-  const { query, pushConnect } = useRouterConnect();
+  const { inputs, changeInput, handleKeyUp, code, isComplete } = useCodeInput();
+  const { query } = useRouterConnect();
   const { mutate: mutateVerify } = useSignInWithCode();
   const { signInWithCode } = usePixwayAuthentication();
   const { companyId: tenantId } = useCompanyConfig();
@@ -34,27 +35,8 @@ export const SignInWithCodeWithoutLayout = () => {
 
   const formattedEmail = useEmailProtectedLabel(emailToUse ?? '');
 
-  const changeInput = (index: number, e: any) => {
-    const inputsToChange = inputs;
-    inputsToChange[index] = e.target.value;
-    setInputs([...inputsToChange]);
-    if (e.nativeEvent.inputType !== 'deleteContentBackward') {
-      const next = document.getElementById(`input-${index + 1}`);
-      next?.focus();
-    }
-  };
-
-  const keyUp = (e: any, index: number) => {
-    if (e.code === 'Backspace' && inputs[index] == '') {
-      const previous = document.getElementById(`input-${index - 1}`);
-      previous?.focus();
-    }
-  };
-
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
-  const theme = useThemeConfig();
-  const postSigninURL =
-    theme?.defaultTheme?.configurations?.contentData?.postSigninURL;
+  const { redirect } = useAuthRedirect();
   useEffect(() => {
     if (isSuccess && !profile) {
       setNewCountdown(addMinutes(new Date(), 1));
@@ -63,7 +45,6 @@ export const SignInWithCodeWithoutLayout = () => {
   }, [isSuccess, reset, profile]);
   const [remainLoading, setRemainLoading] = useState(false);
   const sendCode = () => {
-    const code = inputs.join('');
     if (code.length == 6 && emailToUse) {
       setRemainLoading(true);
       setError('');
@@ -75,30 +56,20 @@ export const SignInWithCodeWithoutLayout = () => {
               signInWithCode({ email: emailToUse, code, tenantId }).then(
                 (data) => {
                   if (data.error == null) {
-                    if (query.callbackUrl?.length)
-                      pushConnect(query.callbackUrl as string);
-                    if (query.callbackPath?.length)
-                      pushConnect(query.callbackPath as string);
-                    else if (query.contextSlug?.length)
-                      pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-                        ...query,
-                         callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
-                      });
-                    else if (postSigninURL) pushConnect(postSigninURL);
-                    else pushConnect('/');
+                    redirect();
                   }
                 }
               );
           },
           onError() {
             setRemainLoading(false);
-            setError('Código inválido ou expirado');
+            setError(translate('auth>codeVerify>invalidOrExpiredCode'));
           },
         }
       );
     } else {
       setRemainLoading(false);
-      setError('código inválido');
+      setError(translate('auth>codeVerify>invalidCode'));
     }
   };
 
@@ -111,7 +82,6 @@ export const SignInWithCodeWithoutLayout = () => {
 
   return (
     <div className="pw-flex pw-flex-col pw-items-center">
-      {'TESTE'}
       <p className="pw-font-poppins pw-text-[24px] pw-text-[#35394C] pw-font-[700] pw-text-center">
         {translate('auth>signInWithCodeWithoutLayout>youBeenBefore')}
       </p>
@@ -119,21 +89,7 @@ export const SignInWithCodeWithoutLayout = () => {
         {translate('auth>signInWithCodeWithoutLayout>codeForConfirmIdentity')}
         <span className="pw-block">{formattedEmail}</span>
       </p>
-      <div className="pw-flex pw-gap-x-2">
-        {inputs.map((val: string, index: number) => (
-          <input
-            autoFocus={index == 0}
-            onChange={(e) => changeInput(index, e)}
-            maxLength={1}
-            id={`input-${index}`}
-            onKeyUp={(e) => keyUp(e, index)}
-            value={val}
-            className="sm:pw-w-[50px] sm:pw-h-[50px] pw-w-[40px] pw-h-[40px] pw-rounded-lg pw-text-lg pw-px-2 pw-text-center pw-text-[#35394C] pw-font-[700] pw-border pw-border-[#295BA6]"
-            key={index}
-            type="tel"
-          />
-        ))}
-      </div>
+      <CodeInputGrid inputs={inputs} changeInput={changeInput} handleKeyUp={handleKeyUp} />
       {error !== '' && (
         <Alert variant="error">
           <p className="pw-text-xs pw-text-red-500 pw-font-poppins">{error}</p>
@@ -141,7 +97,7 @@ export const SignInWithCodeWithoutLayout = () => {
       )}
 
       <WeblockButton
-        disabled={inputs.some((i) => i == '') || remainLoading}
+        disabled={!isComplete || remainLoading}
         onClick={sendCode}
         className="pw-mt-4 pw-text-white"
         fullWidth={true}

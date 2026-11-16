@@ -129,6 +129,13 @@ export interface ColumnsTable {
 }
 
 export interface ConfigGenericTable {
+  /**
+   * Variante visual da tabela. `'default'` mantém o layout histórico
+   * (cabeçalho azul #DDE6F3) — compatibilidade total. `'redesign'` aplica o
+   * layout v2 (card, cabeçalho neutro, bordas #e6e8ec, linhas com hover).
+   * Basta trocar a flag para obter o layout novo.
+   */
+  variant?: 'default' | 'redesign';
   filtersTitle?: string;
   tableTitle?: string;
   filtersSubtitle?: string;

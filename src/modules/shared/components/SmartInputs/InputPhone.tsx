@@ -127,9 +127,9 @@ const InputPhone = ({
           options={countries}
           value={country}
           disabled={!!defaultCountry || readonly}
-          onChangeValue={(value) => {
-            setCountry(value);
-            setCountryCode(countries.find((c) => c.value === value)?.code);
+          onChangeValue={(item) => {
+            setCountry(item.value);
+            setCountryCode(countries.find((c) => c.value === item.value)?.code);
           }}
         />
         <BaseInput

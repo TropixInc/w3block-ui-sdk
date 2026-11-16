@@ -15,13 +15,13 @@ type Status =
   | 'failed'
   | 'refused';
 
-const statusMapping = {
-  pending: 'Pendente',
-  escrowing_resources: 'Pendente',
-  ready_to_transfer_funds: 'Pendente',
-  concluded: 'Concluído',
-  failed: 'Falha',
-  refused: 'Recusado',
+const statusStyleMap: Record<Status, { label: string; bg: string; text: string }> = {
+  pending: { label: 'Pendente', bg: 'pw-bg-yellow-100', text: 'pw-text-yellow-800' },
+  escrowing_resources: { label: 'Pendente', bg: 'pw-bg-yellow-100', text: 'pw-text-yellow-800' },
+  ready_to_transfer_funds: { label: 'Pendente', bg: 'pw-bg-yellow-100', text: 'pw-text-yellow-800' },
+  concluded: { label: 'Concluído', bg: 'pw-bg-green-100', text: 'pw-text-green-800' },
+  failed: { label: 'Falha', bg: 'pw-bg-red-100', text: 'pw-text-red-800' },
+  refused: { label: 'Recusado', bg: 'pw-bg-red-100', text: 'pw-text-red-800' },
 };
 
 const WithdrawInternal = ({
@@ -36,82 +36,88 @@ const WithdrawInternal = ({
   const { data, isFetching } = useGetSpecificWithdraw(id);
   const [translate] = useTranslation();
 
+  const status = data?.data?.status as Status;
+  const statusStyle = statusStyleMap[status] ?? statusStyleMap.pending;
+
   return (
-    <div className="pw-p-[40px]">
-      <>
-        <button
-          className="pw-max-w-[120px] pw-h-[30px] pw-w-full !pw-text-base !pw-py-0 pw-text-black pw-text-start"
-          onClick={() => router.push('/withdraws')}
-        >
-          {`<`} {translate('shared>back')}
-        </button>
-        {isFetching ? (
-          <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
-            <Spinner />
-          </div>
-        ) : (
-          <>
-            <div className="pw-text-black pw-flex pw-flex-col pw-justify-between pw-gap-4 pw-mt-4">
-              <div>
-                <p className="pw-font-semibold">
-                  {translate('auth>withdrawAdminActions>requestMade')}
-                </p>
-                <p>
-                  {format(
-                    new Date(data?.data?.createdAt ?? Date.now()),
-                    'PPpp',
-                    {
-                      locale: locale === 'pt-BR' ? ptBR : enUS,
-                    }
-                  )}
-                </p>
-              </div>
-              <div>
-                <p className="pw-font-semibold">
-                  {translate('pass>sharedOrder>value')}
-                </p>
-                <p>
-                  {parseFloat(data?.data?.amount).toFixed(2)} {currency}
-                </p>
-              </div>
-              <div>
-                <p className="pw-font-semibold">
-                  {translate('token>pass>status')}
-                </p>
-                <p>{statusMapping[data?.data?.status as Status]}</p>
-              </div>
-              {data?.data?.status === 'refused' ? (
-                <div>
-                  <p className="pw-font-semibold">
-                    {translate('key>kycActionsModal>resons')}:
-                  </p>
-                  <p>{data?.data?.reason}</p>
-                </div>
-              ) : null}
-              {data?.data?.receiptAsset?.directLink ? (
-                <div>
-                  <a
-                    href={data?.data?.receiptAsset?.directLink}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="pw-font-semibold pw-underline"
-                  >
-                    {translate('auth>withdrawAdminActions>proof')}
-                  </a>
-                </div>
-              ) : null}
+    <div className="pw-p-6">
+      <button
+        className="pw-flex pw-items-center pw-gap-1 pw-text-sm pw-text-[#555] hover:pw-text-black pw-mb-4 pw-transition-colors"
+        onClick={() => router.push('/withdraws')}
+      >
+        <span className="pw-text-lg">&#8592;</span> {translate('shared>back')}
+      </button>
+      {isFetching ? (
+        <div className="pw-mt-20 pw-w-full pw-flex pw-items-center pw-justify-center">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-5 pw-mt-2">
+            <div className="pw-flex pw-flex-col pw-gap-1">
+              <p className="pw-text-xs pw-font-semibold pw-text-[#777] pw-uppercase pw-tracking-wide">
+                {translate('auth>withdrawAdminActions>requestMade')}
+              </p>
+              <p className="pw-text-sm pw-text-black">
+                {format(
+                  new Date(data?.data?.createdAt ?? Date.now()),
+                  'PPpp',
+                  { locale: locale === 'pt-BR' ? ptBR : enUS }
+                )}
+              </p>
             </div>
-            {data?.data?.status === 'escrowing_resources' ||
-              data?.data?.status === 'ready_to_transfer_funds' ? (
-              <div className="pw-flex pw-justify-center pw-items-center pw-text-black pw-mt-5">
-                <p className="pw-font-semibold">
-                  {translate('auth>withdrawAdminActions>pleaseWaitHoldFunds')}
+            <div className="pw-flex pw-flex-col pw-gap-1">
+              <p className="pw-text-xs pw-font-semibold pw-text-[#777] pw-uppercase pw-tracking-wide">
+                {translate('pass>sharedOrder>value')}
+              </p>
+              <p className="pw-text-base pw-font-semibold pw-text-black">
+                {parseFloat(data?.data?.amount).toFixed(2)} {currency}
+              </p>
+            </div>
+            <div className="pw-flex pw-flex-col pw-gap-1">
+              <p className="pw-text-xs pw-font-semibold pw-text-[#777] pw-uppercase pw-tracking-wide">
+                {translate('token>pass>status')}
+              </p>
+              <div>
+                <span className={`pw-inline-flex pw-items-center pw-px-3 pw-py-1 pw-rounded-full pw-text-xs pw-font-medium ${statusStyle.bg} ${statusStyle.text}`}>
+                  {statusStyle.label}
+                </span>
+              </div>
+            </div>
+            {data?.data?.status === 'refused' && data?.data?.reason ? (
+              <div className="sm:pw-col-span-2 pw-flex pw-flex-col pw-gap-1">
+                <p className="pw-text-xs pw-font-semibold pw-text-[#777] pw-uppercase pw-tracking-wide">
+                  {translate('key>kycActionsModal>resons')}
                 </p>
+                <p className="pw-text-sm pw-text-red-600">{data?.data?.reason}</p>
               </div>
             ) : null}
-          </>
-        )}
-      </>
+            {data?.data?.receiptAsset?.directLink ? (
+              <div className="sm:pw-col-span-2 pw-flex pw-flex-col pw-gap-1">
+                <p className="pw-text-xs pw-font-semibold pw-text-[#777] pw-uppercase pw-tracking-wide">
+                  {translate('auth>withdrawAdminActions>proof')}
+                </p>
+                <a
+                  href={data?.data?.receiptAsset?.directLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="pw-text-sm pw-text-[#0050FF] pw-underline hover:pw-text-[#0034A3] pw-transition-colors"
+                >
+                  {translate('auth>withdrawAdminActions>viewReceipt')}
+                </a>
+              </div>
+            ) : null}
+          </div>
+          {status === 'escrowing_resources' ||
+            status === 'ready_to_transfer_funds' ? (
+            <div className="pw-flex pw-justify-center pw-items-center pw-mt-6 pw-p-4 pw-bg-yellow-50 pw-rounded-lg">
+              <p className="pw-text-sm pw-font-medium pw-text-yellow-700">
+                {translate('auth>withdrawAdminActions>pleaseWaitHoldFunds')}
+              </p>
+            </div>
+          ) : null}
+        </>
+      )}
     </div>
   );
 };

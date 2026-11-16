@@ -1,4 +1,5 @@
-"use client";
+'use client';
+import { useState, useEffect } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import downloadApple from '../../shared/assets/images/downloadApple.png';
@@ -15,117 +16,131 @@ import useTranslation from '../hooks/useTranslation';
 export const AppDownloadModal = ({
   isOpen,
   onClose,
+  themeData,
 }: {
   isOpen: boolean;
   onClose(): void;
+  themeData?: any;
 }) => {
   const utm = useUtms();
-  const theme = useThemeConfig();
+  const themeContext = useThemeConfig();
+  const theme = themeData || themeContext?.defaultTheme;
   const [translate] = useTranslation();
   const os = useGetMobileOS();
   const [_, copy] = useCopyToClipboard();
+  const [mounted, setMounted] = useState(false);
   const { data: referralUser, isFetching } = useGetUserByReferral({
     referralCode: utm?.utm_source,
   });
 
-  const onClickApple = () => {
-    if (
-      (document.getElementById('appCheckbox') as HTMLInputElement).checked &&
-      referralUser
-    ) {
-      copy(
-        `${window?.location?.protocol}//${window?.location?.hostname}/?utm_campaign=${utm.utm_campaign}&utm_source=${utm.utm_source}`
-      );
-    }
-  };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const androidLink =
-    theme?.defaultTheme?.configurations?.contentData?.appDownload?.androidLink +
+    theme?.configurations?.contentData?.appDownload?.androidLink +
     `&referrer=${utm?.utm_campaign}---${utm?.utm_source}`;
-  const appleLink =
-    theme?.defaultTheme?.configurations?.contentData?.appDownload?.appleLink;
+  const appleLink = theme?.configurations?.contentData?.appDownload?.appleLink;
 
   return (
     <ModalBase
       isOpen={isOpen}
       onClose={onClose}
-      classes={{ classComplement: '!pw-z-[9999]', backdrop: '!pw-z-[999]' }}
+      clickAway={false}
+      classes={{
+        classComplement: '!pw-z-[999]',
+        backdrop: '!pw-z-[99]',
+      }}
+      backdropStyle={{ backgroundColor: 'rgba(0, 80, 87, 1)' }}
       hideCloseButton
     >
       <div className="pw-text-center pw-font-poppins pw-mt-5 pw-p-[15px]">
-        {isFetching || (utm.utm_source && !referralUser) ? (
-          <div className="pw-h-[350px] pw-flex pw-justify-center pw-items-center">
-            <Spinner className="pw-h-10 pw-w-10" />
-          </div>
-        ) : (
-          <>
-            {referralUser ? (
+        <>
+          {mounted ? (
+            <>
               <div className="pw-mb-5">
-                <p className="pw-font-bold pw-text-2xl">
-                  {referralUser?.firstName}
-                </p>
+                {isFetching ||
+                !utm.utm_source ||
+                (utm.utm_source && !referralUser) ? (
+                  <div
+                    className="pw-w-[150px] pw-h-[32px] pw-mx-auto pw-animate-pulse pw-rounded-2xl"
+                    style={{ backgroundColor: '#005057' }}
+                  ></div>
+                ) : (
+                  <p className="pw-font-bold pw-text-2xl">
+                    {referralUser?.firstName}
+                  </p>
+                )}
                 <p className="pw-font-bold pw-text-base">
                   {
-                    theme?.defaultTheme?.configurations?.contentData
-                      ?.appDownload?.referrelText
+                    theme?.configurations?.contentData?.appDownload
+                      ?.referrelText
                   }
                 </p>
               </div>
-            ) : null}
-            <img
-              src={
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
-                  ?.logo
-              }
-              height={75}
-              alt="logo"
-              className="pw-max-h-[75px] pw-mx-auto pw-mb-5"
-            />
-            <p className="pw-font-bold pw-text-base">
-              {
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
-                  ?.title
-              }
+              <img
+                src={theme?.configurations?.contentData?.appDownload?.logo}
+                height={75}
+                alt="logo"
+                className="pw-max-h-[75px] pw-mx-auto pw-mb-5"
+              />
+              <p className="pw-font-bold pw-text-base">
+                {theme?.configurations?.contentData?.appDownload?.title}
+              </p>
+              <p className="pw-text-base">
+                {theme?.configurations?.contentData?.appDownload?.subtitle}
+              </p>
+              <div className="pw-border pw-border-[#DFDFDF] pw-my-[15px]"></div>
+            </>
+          ) : null}
+          {!mounted ? (
+            <p className="pw-text-base pw-font-bold pw-mb-5">
+              {translate('shared>appDownloadModal>loadingText')}
             </p>
-            <p className="pw-text-base">
-              {
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
-                  ?.subtitle
-              }
-            </p>
-            <div className="pw-border pw-border-[#DFDFDF] pw-my-[15px]"></div>
-            <p className="pw-text-sm pw-mb-5">
-              {
-                theme?.defaultTheme?.configurations?.contentData?.appDownload
-                  ?.text
-              }
-            </p>
-            {os === 'Android' || os === 'Other' ? (
-              <a href={androidLink} target="_blank" rel="noreferrer">
-                <img
-                  src={downloadAndroid}
-                  alt="downloadAndroid"
-                  height={60}
-                  className="pw-max-h-[60px] pw-mx-auto"
-                />
-              </a>
-            ) : null}
-            {os === 'iOS' || os === 'Other' ? (
-              <>
-                <a
-                  href={appleLink}
-                  target="_blank"
-                  onClick={onClickApple}
-                  rel="noreferrer"
-                >
-                  <img
-                    src={downloadApple}
-                    alt="downloadApple"
-                    height={60}
-                    className="pw-max-h-[60px] pw-mx-auto pw-mb-5"
-                  />
-                </a>
-                {referralUser ? (
+          ) : null}
+          <p className={`${mounted ? '' : 'pw-opacity-0'} pw-text-sm pw-mb-5`}>
+            {theme?.configurations?.contentData?.appDownload?.text}
+          </p>
+          {!mounted ? (
+            <div className="pw-flex pw-justify-center pw-items-center pw-h-[60px] -pw-mt-6 pw-mb-5">
+              <Spinner />
+            </div>
+          ) : (
+            <>
+              {os === 'Android' || os === 'Other' ? (
+                <>
+                  <a href={androidLink} target="_blank" rel="noreferrer">
+                    <img
+                      src={downloadAndroid}
+                      alt="downloadAndroid"
+                      height={60}
+                      className="pw-max-h-[60px] pw-mx-auto"
+                    />
+                  </a>
+                </>
+              ) : null}
+              {os === 'iOS' || os === 'Other' ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const checkbox = document.getElementById(
+                        'appCheckbox'
+                      ) as HTMLInputElement;
+                      if (checkbox?.checked) {
+                        copy(`${window?.location?.href}`);
+                      }
+                      window.open(appleLink, '_blank');
+                    }}
+                    className="pw-cursor-pointer pw-border-none pw-bg-transparent pw-p-0 pw-z-[9999]"
+                  >
+                    <img
+                      src={downloadApple}
+                      alt="downloadApple"
+                      height={60}
+                      className="pw-max-h-[60px] pw-mx-auto"
+                    />
+                  </button>
                   <>
                     <div className="pw-border pw-border-[#DFDFDF] pw-my-6"></div>
                     <div className="pw-flex pw-item-center pw-justify-center pw-gap-2">
@@ -137,11 +152,11 @@ export const AppDownloadModal = ({
                       {translate('shared>appDownloadModal>copyIndicateLink')}
                     </div>
                   </>
-                ) : null}
-              </>
-            ) : null}
-          </>
-        )}
+                </>
+              ) : null}
+            </>
+          )}
+        </>
       </div>
     </ModalBase>
   );

@@ -108,8 +108,9 @@ export const ModalBlockedAction = ({
       mutateVerify(
         { email: email, token: code },
         {
-          onSuccess(data: { data: { verified: any; }; }) {
-            if (data?.data?.verified) {
+          onSuccess(data) {
+            const response = data as { data?: { verified?: boolean } };
+            if (response?.data?.verified) {
               refetch();
               toggleOpen(false);
             } else {

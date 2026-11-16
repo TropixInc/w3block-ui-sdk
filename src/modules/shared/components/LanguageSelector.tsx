@@ -14,6 +14,12 @@ import useTranslation from "../hooks/useTranslation";
 const baseUrl =
   "https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/";
 
+const setCookie = (name: string, value: string, days = 365) => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+};
+
 export const CountryFlag = ({
   code,
   width = 24,
@@ -127,6 +133,7 @@ export const LanguageSelector = ({
       i18n.options.lng = lang;
     });
     setUserLocale(lang);
+    setCookie("userLocale", lang);
     router.reload();
   };
 

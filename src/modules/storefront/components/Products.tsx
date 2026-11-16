@@ -609,7 +609,7 @@ export const Products = ({ data }: { data: ProductsData }) => {
               <BaseSelect
                 options={optionsSorting}
                 value={sort}
-                onChangeValue={(e) => setSort(e)}
+                onChangeValue={(e) => setSort(e?.value)}
                 placeholder={translate('storefront>products>sorting')}
               />
             ) : null}

@@ -70,7 +70,7 @@ const InputLocale = ({
             value={
               optionsLocale.find((res) => res.value === selectCountry)?.label
             }
-            onChangeValue={(e) => setSelectCountry(e)}
+            onChangeValue={(e) => setSelectCountry(e.value)}
           />
         </div>
         {region && !hideRegion ? (

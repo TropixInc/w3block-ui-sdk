@@ -3,11 +3,12 @@
 import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
 
 import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
-import { useMutation } from '@tanstack/react-query';
+import { UseMutationResult, useMutation } from '@tanstack/react-query';
 import { UtmContextInterface } from '../../core/context/UtmContext';
 import { useGetW3blockIdSDK } from '../../shared/hooks/useGetW3blockIdSDK';
 import { useUtms } from '../../shared/hooks/useUtms';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { handleNetworkException } from '../../shared/utils/handleNetworkException';
 
 interface Payload {
   password: string;
@@ -21,23 +22,28 @@ interface Payload {
   verificationType?: VerificationType;
 }
 
-export const useSignUp = (): any => {
+export const useSignUp = (): UseMutationResult<unknown, unknown, Payload> => {
   const getSDK = useGetW3blockIdSDK();
   const utms = useUtms();
   const { companyId } = useCompanyConfig();
   return useMutation([PixwayAPIRoutes.USERS], async (payload: Payload) => {
-    const signUpPayload = payload;
-    const ut = utms;
-    if (ut) {
-      console.log('utm found in signup:', ut);
-    } else {
-      console.log('utm not found');
+    try {
+      const signUpPayload = payload;
+      const ut = utms;
+      if (ut) {
+        console.log('utm found in signup:', ut);
+      } else {
+        console.log('utm not found');
+      }
+      const sdk = await getSDK();
+      return await sdk.api.auth.signUp({
+        ...signUpPayload,
+        utmParams: ut,
+        tenantId: companyId,
+      });
+    } catch (error) {
+      console.error('Erro ao realizar signup:', error);
+      throw handleNetworkException(error);
     }
-    const sdk = await getSDK();
-    return sdk.api.auth.signUp({
-      ...signUpPayload,
-      utmParams: ut,
-      tenantId: companyId,
-    });
   });
 };

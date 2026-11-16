@@ -14,28 +14,26 @@ interface PayloadDTO {
   accountInfo: any;
 }
 
-interface MappedDTO {
-  [key: string]: string;
-}
+type TranslateFn = (key: string, params?: Record<string, string>) => string;
 
-const mappedKeys: MappedDTO = {
-  'accountInfo.key': 'Chave PIX',
-  'accountInfo.ownerSsn': 'CPF ou CNPJ',
-  'accountInfo.type': 'Tipo de conta',
-  'accountInfo.bank': 'Banco',
-  'accountInfo.agency': 'Agência',
-  'accountInfo.accountNumber': 'Número da conta',
-  'accountInfo.verificationNumber': 'Dígito',
-};
+const getMappedKeys = (translate: TranslateFn): Record<string, string> => ({
+  'accountInfo.key': translate('auth>addMethodModal>pixCode'),
+  'accountInfo.ownerSsn': translate('auth>addMethodModal>cpf'),
+  'accountInfo.type': translate('auth>addMethodModal>accountTypeLabel'),
+  'accountInfo.bank': translate('auth>addMethodModal>bank'),
+  'accountInfo.agency': translate('auth>addMethodModal>agency'),
+  'accountInfo.accountNumber': translate('auth>addMethodModal>accountNumber'),
+  'accountInfo.verificationNumber': translate('auth>addMethodModal>digit'),
+});
 
-const mapMessage = (message: string) => {
-  // Encontrar a chave correspondente no objeto mappedKeys
+const mapMessage = (message: string, translate: TranslateFn) => {
+  const mappedKeys = getMappedKeys(translate);
   const key = Object.keys(mappedKeys).find((k) => message.includes(k));
 
   if (key) {
     const value = mappedKeys[key];
     if (message.includes('is not a valid')) {
-      return `${value} - campo invalido`;
+      return translate('auth>addMethodModal>invalidField', { field: value });
     } else {
       return message.replace(key, value);
     }
@@ -47,6 +45,21 @@ const mapMessage = (message: string) => {
 interface AddModalProps {
   onChangeModalType: (value: 'add' | 'withdraw' | 'delete') => void;
 }
+
+interface FieldConfig {
+  key: string;
+  label: string;
+  subtitle?: string;
+  placeholder?: string;
+  numberOnly?: boolean;
+  maxLength?: number;
+  inputClassName?: string;
+  select?: { options: Array<{ value: string; label: string }> };
+  row?: FieldConfig[];
+}
+
+const inputClassName =
+  'pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3';
 
 const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
   const [typeMethod, setTypeMethod] = useState<WithdrawAccountTypeEnum>();
@@ -94,224 +107,160 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const renderContentModal = () => {
-    if (typeMethod === 'pix') {
+  const updateField = (key: string, value: string, numberOnly?: boolean) => {
+    setPayload((prev) => ({
+      ...prev,
+      type: typeMethod as WithdrawAccountTypeEnum,
+      accountInfo: {
+        ...prev.accountInfo,
+        [key]: numberOnly ? getNumbersFromString(value, false) : value,
+      },
+    }));
+  };
+
+  const pixFields: FieldConfig[] = [
+    { key: 'ownerName', label: 'shared>myProfile>name' },
+    {
+      key: 'ownerSsn',
+      label: 'auth>addMethodModal>cpf',
+      numberOnly: true,
+      placeholder: translate('auth>addMethodModal>onlyNumbers'),
+    },
+    {
+      key: 'key',
+      label: 'auth>addMethodModal>pixCode',
+      subtitle: 'auth>addMethodModal>keyCPForCNPJ',
+    },
+  ];
+
+  const bankFields: FieldConfig[] = [
+    { key: 'ownerName', label: 'shared>myProfile>name' },
+    {
+      key: 'ownerSsn',
+      label: 'auth>addMethodModal>cpf',
+      numberOnly: true,
+      placeholder: translate('auth>addMethodModal>onlyNumbers'),
+    },
+    {
+      key: 'type',
+      label: 'auth>addMethodModal>type',
+      select: {
+        options: [
+          { value: '', label: 'auth>addMethodModal>select' },
+          { value: 'checking', label: 'auth>addMethodModal>checkingAccount' },
+          { value: 'saving', label: 'auth>addMethodModal>savingsAccount' },
+          { value: 'payment', label: 'auth>addMethodModal>paymentAccount' },
+        ],
+      },
+    },
+    { key: 'bank', label: 'auth>addMethodModal>bank' },
+    {
+      key: 'agency',
+      label: 'auth>addMethodModal>agency',
+      numberOnly: true,
+      placeholder: translate('auth>addMethodModal>onlyNumbers'),
+    },
+    {
+      key: '_accountRow',
+      label: '',
+      row: [
+        {
+          key: 'accountNumber',
+          label: 'auth>addMethodModal>accountNumber',
+          numberOnly: true,
+          maxLength: 10,
+          placeholder: translate('auth>addMethodModal>onlyNumbers'),
+          inputClassName: inputClassName,
+        },
+        {
+          key: 'verificationNumber',
+          label: 'auth>addMethodModal>digit',
+          maxLength: 2,
+          inputClassName:
+            'pw-w-[64px] pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3',
+        },
+      ],
+    },
+  ];
+
+  const renderField = (field: FieldConfig) => {
+    if (field.row) {
       return (
-        <div>
-          <div className="pw-mt-3">
-            <p>{translate('shared>myProfile>name')}</p>
-            <input
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="text"
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Pix,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    ownerName: e.target.value,
-                  },
-                })
-              }
-            />
-          </div>
-          <div className="pw-mt-3">
-            <p>{translate('auth>addMethodModal>cpf')}</p>
-            <input
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="text"
-              placeholder="Digite apenas números"
-              value={payload.accountInfo.ownerSsn}
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Pix,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    ownerSsn: getNumbersFromString(e.target.value, false),
-                  },
-                })
-              }
-            />
-          </div>
-          <div className="pw-mt-3">
-            <p>{translate('auth>addMethodModal>pixCode')}</p>
-            <p className="pw-text-sm pw-text-slate-400">
-              {translate('auth>addMethodModal>keyCPForCNPJ')}
-            </p>
-            <input
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="text"
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Pix,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    key: e.target.value,
-                  },
-                })
-              }
-            />
-          </div>
-        </div>
-      );
-    } else if (typeMethod === 'bank') {
-      return (
-        <div>
-          <div className="pw-mt-3">
-            <p>{translate('shared>myProfile>name')}</p>
-            <input
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="text"
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Bank,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    ownerName: e.target.value,
-                  },
-                })
-              }
-            />
-          </div>
-          <div className="pw-mt-3">
-            <p>{translate('auth>addMethodModal>cpf')}</p>
-            <input
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="text"
-              placeholder="Digite apenas números"
-              value={payload.accountInfo.ownerSsn}
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Bank,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    ownerSsn: getNumbersFromString(e.target.value, false),
-                  },
-                })
-              }
-            />
-          </div>
-          <div className="pw-mt-3">
-            <p>{translate('auth>addMethodModal>type')}</p>
-            <select
-              name="accountType"
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Bank,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    type: e.target.value,
-                  },
-                })
-              }
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-            >
-              <option value="">
-                {translate('auth>addMethodModal>select')}...
-              </option>
-              <option value="checking">
-                {translate('auth>addMethodModal>checkingAccount')}
-              </option>
-              <option value="saving">
-                {translate('auth>addMethodModal>savingsAccount')}
-              </option>
-              <option value="payment">
-                {translate('auth>addMethodModal>paymentAccount')}
-              </option>
-            </select>
-          </div>
-          <div className="pw-mt-3">
-            <p>{translate('auth>addMethodModal>bank')}</p>
-            <input
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              type="text"
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Bank,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    bank: e.target.value,
-                  },
-                })
-              }
-            />
-          </div>
-          <div className="pw-mt-3">
-            <p>{translate('auth>addMethodModal>agency')}</p>
-            <input
-              className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-              placeholder="Digite apenas números"
-              value={payload.accountInfo.agency}
-              onChange={(e) =>
-                setPayload({
-                  ...payload,
-                  type: WithdrawAccountTypeEnum.Bank,
-                  accountInfo: {
-                    ...payload.accountInfo,
-                    agency: getNumbersFromString(e.target.value, false),
-                  },
-                })
-              }
-            />
-          </div>
-          <div className="pw-flex pw-w-full pw-gap-x-3">
-            <div className="pw-mt-3 pw-w-full">
-              <p>{translate('auth>addMethodModal>accountNumber')}</p>
+        <div key={field.key} className="pw-flex pw-w-full pw-gap-x-3">
+          {field.row.map((col) => (
+            <div key={col.key} className="pw-mt-3 pw-w-full">
+              <p>{translate(col.label)}</p>
               <input
-                className="pw-w-full pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
+                className={col.inputClassName ?? inputClassName}
                 type="text"
-                maxLength={10}
-                placeholder="Digite apenas números"
-                value={payload.accountInfo.accountNumber}
+                maxLength={col.maxLength}
+                placeholder={col.placeholder}
+                value={payload.accountInfo[col.key] ?? ''}
                 onChange={(e) =>
-                  setPayload({
-                    ...payload,
-                    type: WithdrawAccountTypeEnum.Bank,
-                    accountInfo: {
-                      ...payload.accountInfo,
-                      accountNumber: getNumbersFromString(
-                        e.target.value,
-                        false
-                      ),
-                    },
-                  })
+                  updateField(col.key, e.target.value, col.numberOnly)
                 }
               />
             </div>
-            <div className="pw-mt-3">
-              <p>{translate('auth>addMethodModal>digit')}</p>
-              <input
-                className="pw-w-[64px] pw-h-10 pw-outline-none pw-border pw-border-blue-200 pw-rounded-md pw-bg-white pw-px-3"
-                type="text"
-                maxLength={2}
-                value={payload.accountInfo.verificationNumber}
-                onChange={(e) =>
-                  setPayload({
-                    ...payload,
-                    type: WithdrawAccountTypeEnum.Bank,
-                    accountInfo: {
-                      ...payload.accountInfo,
-                      verificationNumber: getNumbersFromString(
-                        e.target.value,
-                        false
-                      ),
-                    },
-                  })
-                }
-              />
-            </div>
-          </div>
+          ))}
         </div>
       );
-    } else {
-      return <></>;
     }
+
+    if (field.select) {
+      return (
+        <div key={field.key} className="pw-mt-3">
+          <p>{translate(field.label)}</p>
+          <select
+            name={field.key}
+            onChange={(e) => updateField(field.key, e.target.value)}
+            className={inputClassName}
+          >
+            {field.select.options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {translate(opt.label)}
+                {opt.value === '' ? '...' : ''}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+
+    return (
+      <div key={field.key} className="pw-mt-3">
+        <p>{translate(field.label)}</p>
+        {field.subtitle && (
+          <p className="pw-text-sm pw-text-slate-400">
+            {translate(field.subtitle)}
+          </p>
+        )}
+        <input
+          className={inputClassName}
+          type="text"
+          maxLength={field.maxLength}
+          placeholder={field.placeholder}
+          value={
+            field.numberOnly
+              ? (payload.accountInfo[field.key] ?? '')
+              : undefined
+          }
+          onChange={(e) =>
+            updateField(field.key, e.target.value, field.numberOnly)
+          }
+        />
+      </div>
+    );
+  };
+
+  const fieldsByType: Record<string, FieldConfig[]> = {
+    pix: pixFields,
+    bank: bankFields,
+  };
+
+  const renderContentModal = () => {
+    const fields = typeMethod ? fieldsByType[typeMethod] : null;
+    if (!fields) return <></>;
+    return <div>{fields.map(renderField)}</div>;
   };
 
   return (
@@ -345,7 +294,7 @@ const AddMethodModal = ({ onChangeModalType }: AddModalProps) => {
               className="pw-text-sm pw-font-semibold pw-text-red-600"
               key={msg + idx}
             >
-              {mapMessage(msg)}
+              {mapMessage(msg, translate)}
             </p>
           )
         )}

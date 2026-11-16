@@ -12,7 +12,10 @@ import { Alert } from '../../shared/components/Alert';
 import { BaseButton } from '../../shared/components/Buttons';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import useCountdown from '../../shared/hooks/useCountdown';
+import { useAuthRedirect } from '../hooks/useAuthRedirect';
+import { useCodeInput } from '../hooks/useCodeInput';
 import { useEmailProtectedLabel } from '../hooks/useEmailProtectedLabel';
+import { CodeInputGrid } from './CodeInputGrid';
 import { useRequestConfirmationMail } from '../hooks/useRequestConfirmationMail';
 import useTranslation from '../../shared/hooks/useTranslation';
 
@@ -29,7 +32,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
   skipWallet,
   postSigninURL,
 }: VerifySignUpWithCodeWithoutLayoutProps) => {
-  const [inputs, setInputs] = useState(['', '', '', '', '', '']);
+  const { inputs, changeInput, handleKeyUp, code, isComplete } = useCodeInput();
   const { query, pushConnect } = useRouterConnect();
   const { signIn } = usePixwayAuthentication();
   const { mutate: mutateVerify, isPending: isLoadingVerify } =
@@ -46,23 +49,6 @@ export const VerifySignUpWithCodeWithoutLayout = ({
   const emailToUse = profile?.data?.email ?? emailLocal;
   const formattedEmail = useEmailProtectedLabel(emailToUse ?? '');
 
-  const changeInput = (index: number, e: any) => {
-    const inputsToChange = inputs;
-    inputsToChange[index] = e.target.value;
-    setInputs([...inputsToChange]);
-    if (e.nativeEvent.inputType !== 'deleteContentBackward') {
-      const next = document.getElementById(`input-${index + 1}`);
-      next?.focus();
-    }
-  };
-
-  const keyUp = (e: any, index: number) => {
-    if (e.code === 'Backspace' && inputs[index] == '') {
-      const previous = document.getElementById(`input-${index - 1}`);
-      previous?.focus();
-    }
-  };
-
   const { minutes, seconds, setNewCountdown, isActive } = useCountdown();
 
   useEffect(() => {
@@ -73,9 +59,9 @@ export const VerifySignUpWithCodeWithoutLayout = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, reset, profile]);
 
+  const { redirect } = useAuthRedirect({ postSigninURL, skipWallet });
   const [remainLoading, setRemainLoading] = useState(false);
   const sendCode = () => {
-    const code = inputs.join('');
     if (code.length == 6 && emailToUse) {
       setError('');
       setRemainLoading(true);
@@ -87,39 +73,20 @@ export const VerifySignUpWithCodeWithoutLayout = ({
               signIn({ email: emailToUse, password, companyId }).then(
                 (data: { error: null; }) => {
                   if (data.error === null) {
-                    if (query.callbackPath?.length) {
-                      pushConnect(query.callbackPath as string);
-                    } else if (query.callbackUrl?.length) {
-                      pushConnect(query.callbackUrl as string);
-                    } else if (query.contextSlug?.length) {
-                      pushConnect(PixwayAppRoutes.COMPLETE_KYC, {
-                        ...query,
-                         callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
-                      });
-                    } else if (postSigninURL) {
-                      pushConnect(postSigninURL);
-                    } else if (!skipWallet)
-                      pushConnect(
-                        PixwayAppRoutes.CONNECT_EXTERNAL_WALLET,
-                        {
-                          ...query,
-                          callbackUrl: query?.callbackUrl ? query?.callbackUrl : '/wallet'
-                        }
-                      );
-                    else pushConnect('/');
+                    redirect({ skipWallet });
                   }
                 }
               );
             } else {
               setRemainLoading(false);
-              setError('Código inválido ou expirado');
+              setError(translate('auth>codeVerify>invalidOrExpiredCode'));
             }
           },
         }
       );
     } else {
       setRemainLoading(false);
-      setError('código inválido');
+      setError(translate('auth>codeVerify>invalidCode'));
     }
   };
 
@@ -137,21 +104,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
           <span className="pw-block">email</span>
         </Trans>
       </p>
-      <div className="pw-flex pw-gap-x-2">
-        {inputs.map((val: string, index: number) => (
-          <input
-            autoFocus={index == 0}
-            onChange={(e) => changeInput(index, e)}
-            maxLength={1}
-            id={`input-${index}`}
-            onKeyUp={(e) => keyUp(e, index)}
-            value={val}
-            className="sm:pw-w-[50px] sm:pw-h-[50px] pw-w-[40px] pw-h-[40px] pw-rounded-lg pw-text-lg pw-px-2 pw-text-center pw-text-[#35394C] pw-font-[700] pw-border pw-border-[#295BA6]"
-            key={index}
-            type="tel"
-          />
-        ))}
-      </div>
+      <CodeInputGrid inputs={inputs} changeInput={changeInput} handleKeyUp={handleKeyUp} />
       {error !== '' ? (
         <Alert variant="error" className="pw-mt-2">
           {error}
@@ -159,7 +112,7 @@ export const VerifySignUpWithCodeWithoutLayout = ({
       ) : null}
 
       <BaseButton
-        disabled={inputs.some((i) => i == '') || isLoadingVerify}
+        disabled={!isComplete || isLoadingVerify}
         onClick={sendCode}
         className="pw-mt-4 pw-text-white"
         fullWidth={true}

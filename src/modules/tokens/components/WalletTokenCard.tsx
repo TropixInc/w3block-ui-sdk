@@ -1,5 +1,4 @@
 import { MouseEventHandler, lazy, useRef } from 'react';
-import { useClickAway } from 'react-use';
 
 import classNames from 'classnames';
 
@@ -52,10 +51,7 @@ export const WalletTokenCard = ({
 }: Props) => {
   const { isOpen, closeModal, openModal } = useModalController();
   const router = useRouterConnect();
-  const actionsContainerRef = useRef<HTMLDivElement>(null);
-  useClickAway(actionsContainerRef, () => {
-    if (isOpen) closeModal();
-  });
+  const actionsButtonRef = useRef<HTMLButtonElement>(null);
   const [translate] = useTranslation();
   const isInternalToken = collectionData !== undefined;
 
@@ -136,12 +132,14 @@ export const WalletTokenCard = ({
           </div>
         </Link>
         {isInternalToken ? (
-          <div
-            className="pw-relative pw-flex pw-justify-between pw-items-center"
-            ref={actionsContainerRef}
-          >
-            <WalletTokenCardActionsPanel isOpen={isOpen} onClose={closeModal} />
+          <div className="pw-relative pw-flex pw-justify-between pw-items-center">
+            <WalletTokenCardActionsPanel
+              isOpen={isOpen}
+              onClose={closeModal}
+              anchorEl={actionsButtonRef.current}
+            />
             <button
+              ref={actionsButtonRef}
               disabled={proccessing}
               onClick={onClickOptionsButton}
               type="button"

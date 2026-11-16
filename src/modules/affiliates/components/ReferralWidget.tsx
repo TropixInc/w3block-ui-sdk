@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable i18next/no-literal-string */
 import { useMemo, useState } from 'react';
-import { useCopyToClipboard, useLocation } from 'react-use';
+import { useCopyToClipboard } from 'react-use';
+
+import { useWindowLocation } from '../../shared/hooks/useWindowLocation';
 
 import classNames from 'classnames';
 
@@ -32,7 +34,7 @@ export const ReferralWidget = ({
     theme?.defaultTheme?.configurations?.contentData?.showAffiliateQrCode;
   const isMobile = useIsMobile();
   const { profile } = useProfileWithKYC();
-  const { host } = useLocation();
+  const { host } = useWindowLocation();
   const [isCopied, setIsCopied] = useState(false);
   const [state, copyToClipboard] = useCopyToClipboard();
   const link = useMemo(() => {

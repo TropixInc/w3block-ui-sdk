@@ -6,7 +6,10 @@ interface FieldStatusChipProps {
   status?: UserDocumentStatus;
 }
 
-const STATUS_STYLES: Record<UserDocumentStatus, { label: string; className: string }> = {
+const STATUS_STYLES: Record<
+  UserDocumentStatus,
+  { label: string; className: string }
+> = {
   [UserDocumentStatus.Approved]: {
     label: 'shared>KYCStatys>approved',
     className: 'pw-text-[#0e9f6e] pw-bg-[#e7f7f0]',
@@ -41,7 +44,7 @@ const FieldStatusChip = ({ status }: FieldStatusChipProps) => {
 
   return (
     <span
-      className={`pw-inline-flex pw-items-center pw-rounded-md pw-px-2 pw-py-[2px] pw-text-[10px] pw-font-semibold ${style.className}`}
+      className={`pw-inline-flex pw-items-center pw-rounded-md pw-px-2 pw-py-[2px] pw-text-[10px] pw-font-semibold pw-whitespace-nowrap ${style.className}`}
     >
       {translate(style.label)}
     </span>

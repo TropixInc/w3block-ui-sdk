@@ -66,7 +66,7 @@ const _WithdrawsTemplateSDK = () => {
         key: 'createdAt',
         sortable: false,
         header: {
-          label: 'Data',
+          label: translate('auth>withdrawAdminActions>requestMade'),
         },
       },
       {
@@ -76,25 +76,25 @@ const _WithdrawsTemplateSDK = () => {
         key: 'amount',
         sortable: false,
         header: {
-          label: 'Valor',
+          label: translate('pass>sharedOrder>value'),
         },
       },
       {
         format: {
           type: FormatTypeColumn.MAPPING,
           mapping: {
-            pending: 'Pendente',
-            escrowing_resources: 'Pendente',
-            ready_to_transfer_funds: 'Pendente',
-            concluded: 'Concluído',
-            failed: 'Falha',
-            refused: 'Recusado',
+            pending: translate('auth>withdrawStatus>pending'),
+            escrowing_resources: translate('auth>withdrawStatus>pending'),
+            ready_to_transfer_funds: translate('auth>withdrawStatus>pending'),
+            concluded: translate('auth>withdrawStatus>concluded'),
+            failed: translate('auth>withdrawStatus>failed'),
+            refused: translate('auth>withdrawStatus>refused'),
           },
         },
         key: 'status',
         sortable: false,
         header: {
-          label: 'Status',
+          label: translate('token>pass>status'),
         },
       },
     ],

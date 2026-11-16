@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,7 +26,10 @@ export const RequestPasswordChangeWithoutLayout = ({
 }: RequestPasswordChangeWithoutLayoutProps) => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
-  const { mutate, isPending, isError, isSuccess } = useRequestPasswordChange();
+  const { mutate, isLoading, isError, isSuccess } = useRequestPasswordChange();
+  const translateRef = useRef(translate);
+  translateRef.current = translate;
+
   const schema = object().shape({
     email: string()
       .required(translate('components>form>requiredFieldValidation'))
@@ -45,12 +48,13 @@ export const RequestPasswordChangeWithoutLayout = ({
   useEffect(() => {
     if (isError) {
       methods.setError('email', {
-        message: translate(
+        message: translateRef.current(
           'companyAuth>requestPasswordChange>emailDoesntExistError'
         ),
       });
     }
-  }, [isError, methods, translate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError]);
 
   useEffect(() => {
     if (isSuccess && router.query.step !== '2') {
@@ -58,12 +62,11 @@ export const RequestPasswordChangeWithoutLayout = ({
         step: 2,
       });
     }
-  }, [isSuccess, router, methods]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   const onSubmit = ({ email }: Form) => {
-    mutate(
-      { email }
-    );
+    mutate({ email });
   };
 
   const hasSentEmail = router.query.step === '2';
@@ -111,7 +114,7 @@ export const RequestPasswordChangeWithoutLayout = ({
           fullWidth
           className="pw-mt-6"
           type="submit"
-          disabled={!methods.formState.isValid || isPending}
+          disabled={!methods.formState.isValid || isLoading}
           placeholder={translate(
             'companyAuth>requestPasswordChange>emailFieldPlaceholder'
           )}

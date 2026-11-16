@@ -2,6 +2,134 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.53](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.52...v2.0.53) (2026-08-28)
+
+
+### Bug Fixes
+
+* **kyc:** enviar null quando todos os telefones do formulario forem apagados ([eddc94a](https://github.com/TropixInc/w3block-ui-sdk/commit/eddc94adc12ec751ad36696ca3442b573c96b68c))
+
+### [2.0.52](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.51...v2.0.52) (2026-07-08)
+
+### [2.0.51](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.50...v2.0.51) (2026-07-08)
+
+
+### Features
+
+* **kyc:** per-field moderation status chip + redesigned review rows ([adc7b94](https://github.com/TropixInc/w3block-ui-sdk/commit/adc7b9415381b131ae64479a1a2d566985844b51)), closes [TropixInc/weblock-workspace#19](https://github.com/TropixInc/weblock-workspace/issues/19) [#411](https://github.com/TropixInc/w3block-ui-sdk/issues/411) [TropixInc/weblock-workspace#19](https://github.com/TropixInc/weblock-workspace/issues/19)
+* **shared:** v2 surface/variant flags for filters and GenericTable ([f8fbffe](https://github.com/TropixInc/w3block-ui-sdk/commit/f8fbffe6dcb56e3b2b473156d53dcef9552fde2e)), closes [#8b93a3](https://github.com/TropixInc/w3block-ui-sdk/issues/8b93a3)
+
+### [2.0.50](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.49...v2.0.50) (2026-04-02)
+
+
+### Bug Fixes
+
+* **withdraws:** fix auth race condition, pagination loss and improve admin UI ([4316848](https://github.com/TropixInc/w3block-ui-sdk/commit/43168489092d0f918ba882f807fb2bd8991a140c))
+
+### [2.0.49](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.48...v2.0.49) (2026-04-01)
+
+
+### Bug Fixes
+
+* add all missing deps to useOAuthSignIn effects, remove eslint-disable comments ([5261f5c](https://github.com/TropixInc/w3block-ui-sdk/commit/5261f5cd60ce27b817719e0699125f7f8c05247a))
+* remove file-level exhaustive-deps disable in useOAuthSignIn ([1696e9b](https://github.com/TropixInc/w3block-ui-sdk/commit/1696e9b9100c3d9ef9eaa3bb2bdbcf21f444e157))
+
+### [2.0.48](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.47...v2.0.48) (2026-03-26)
+
+### [2.0.47](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.46...v2.0.47) (2026-03-26)
+
+### [2.0.46](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.45...v2.0.46) (2026-03-26)
+
+### [2.0.45](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.44...v2.0.45) (2026-03-03)
+
+### [2.0.44](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.43...v2.0.44) (2026-02-26)
+
+### [2.0.43](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.42...v2.0.43) (2026-02-26)
+
+### [2.0.42](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.41...v2.0.42) (2026-01-14)
+
+### [2.0.41](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.40...v2.0.41) (2026-01-13)
+
+### [2.0.40](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.39...v2.0.40) (2025-12-12)
+
+### [2.0.39](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.38...v2.0.39) (2025-12-11)
+
+### [2.0.38](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.37...v2.0.38) (2025-12-11)
+
+### [2.0.37](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.36...v2.0.37) (2025-12-11)
+
+### [2.0.36](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.35...v2.0.36) (2025-12-11)
+
+### [2.0.35](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.33...v2.0.35) (2025-12-11)
+
+### [2.0.34](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.33...v2.0.34) (2025-12-11)
+
+### [2.0.33](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.32...v2.0.33) (2025-12-11)
+
+### [2.0.32](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.31...v2.0.32) (2025-12-11)
+
+### [2.0.31](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.30...v2.0.31) (2025-12-11)
+
+### [2.0.30](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.29...v2.0.30) (2025-12-10)
+
+### [2.0.29](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.28...v2.0.29) (2025-12-09)
+
+### [2.0.28](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.27...v2.0.28) (2025-12-03)
+
+### [2.0.27](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.26...v2.0.27) (2025-11-28)
+
+### [2.0.26](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.25...v2.0.26) (2025-11-26)
+
+### [2.0.25](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.24...v2.0.25) (2025-11-25)
+
+### [2.0.24](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.23...v2.0.24) (2025-11-12)
+
+### [2.0.23](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.22...v2.0.23) (2025-11-12)
+
+### [2.0.22](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.21...v2.0.22) (2025-11-07)
+
+### [2.0.21](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.20...v2.0.21) (2025-10-23)
+
+### [2.0.20](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.19...v2.0.20) (2025-10-16)
+
+### [2.0.19](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.18...v2.0.19) (2025-10-09)
+
+### [2.0.18](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.7-alpha.4...v2.0.18) (2025-10-06)
+
+### [2.0.17](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.16...v2.0.17) (2025-09-08)
+
+### [2.0.16](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.15...v2.0.16) (2025-09-08)
+
+### [2.0.15](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.14...v2.0.15) (2025-09-05)
+
+### [2.0.14](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.13...v2.0.14) (2025-09-05)
+
+### [2.0.13](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.12...v2.0.13) (2025-09-05)
+
+### [2.0.12](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.11...v2.0.12) (2025-09-04)
+
+### [2.0.11](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.10...v2.0.11) (2025-09-01)
+
+### [2.0.10](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.9...v2.0.10) (2025-08-29)
+
+### [2.0.9](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.7-alpha.2...v2.0.9) (2025-08-27)
+
+### [2.0.8](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.7...v2.0.8) (2025-08-21)
+
+### [2.0.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.7-alpha.0...v2.0.7) (2025-08-18)
+
+### [2.0.17](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.16...v2.0.17) (2025-09-08)
+
+### [2.0.16](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.15...v2.0.16) (2025-09-08)
+
+### [2.0.15](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.14...v2.0.15) (2025-09-05)
+
+### [2.0.14](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.13...v2.0.14) (2025-09-05)
+
+### [2.0.13](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.12...v2.0.13) (2025-09-05)
+
+### [2.0.12](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.11...v2.0.12) (2025-09-04)
+
 ### [2.0.7-alpha.4](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.7-alpha.3...v2.0.7-alpha.4) (2025-10-06)
 
 ### [2.0.7-alpha.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.7-alpha.2...v2.0.7-alpha.3) (2025-10-03)

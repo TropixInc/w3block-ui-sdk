@@ -8,7 +8,6 @@ import _ from 'lodash';
 import { PRACTITIONER_DATA_INFO_KEY } from '../../checkout/config/keys/localStorageKey';
 import { Box } from '../../shared/components/Box';
 import { SelectorRead } from '../../shared/components/SmartInputs/SelectorRead';
-import { Separator } from '../../shared/components/SmartInputs/Separator';
 import { InputDataDTO } from '../../shared/components/SmartInputsController';
 import { Spinner } from '../../shared/components/Spinner';
 import { WeblockButton } from '../../shared/components/WeblockButton';
@@ -61,33 +60,24 @@ export const ConfirmationKycWithoutLayout = () => {
 
   const [awaitProduct, setAwaitProduct] = useState(false);
   const [poolStatus, setPoolStatus] = useState(false);
-  useInterval(() => {
-    if (poolStatus) {
-      validateOrderStatus();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, 3000);
   const { mutate: getStatus } = useGetOrderByKyc();
-  const validateOrderStatus = () => {
-    if (poolStatus) {
-      const interval = setInterval(() => {
-        getStatus(
-          { kycUserContextId: router?.query?.userContextId as string },
-          {
-            onSuccess: (data: { data: { id: any } }) => {
-              clearInterval(interval);
-              if (data?.data?.id) {
-                router.pushConnect(`/checkout/pay/${data?.data?.id}`);
-              }
-            },
-            onError: () => {
-              clearInterval(interval);
-            },
-          }
-        );
-      }, 3000);
-    }
-  };
+
+  useInterval(
+    () => {
+      getStatus(
+        { kycUserContextId: router?.query?.userContextId as string },
+        {
+          onSuccess: (data: { data: { id: string } }) => {
+            if (data?.data?.id) {
+              setPoolStatus(false);
+              router.pushConnect(`/checkout/pay/${data?.data?.id}`);
+            }
+          },
+        }
+      );
+    },
+    poolStatus ? 3000 : null
+  );
   const inputsFiltered = useMemo(
     () =>
       tenantInputs?.data?.filter(
@@ -110,7 +100,7 @@ export const ConfirmationKycWithoutLayout = () => {
       router.pushConnect(
         (context?.data as any)?.data?.screenConfig?.postKycUrl
       );
-    } else if (skipWallet) {
+    } else if (skipWallet || profile?.data?.mainWallet) {
       if (router.query.callbackPath?.length) {
         router.pushConnect(router.query.callbackPath as string);
       } else if (router.query.callbackUrl?.length) {
@@ -253,26 +243,7 @@ export const ConfirmationKycWithoutLayout = () => {
                         />
                       );
                     } else if (res?.type === 'separator') {
-                      return (
-                        <Separator
-                          widgetType={(res?.data as any)?.widgetType}
-                          separatorConfig={{
-                            marginBottom: (res?.data as any)?.marginBottom,
-                            marginTop: (res?.data as any)?.marginTop,
-                            showLine: (res?.data as any)?.showLine,
-                            text: (res?.data as any)?.text,
-                            textAbove: (res?.data as any)?.textAbove,
-                          }}
-                          redirectConfig={{
-                            bgColor: (res?.data as any)?.bgColor,
-                            link: (res?.data as any)?.link,
-                            target: (res?.data as any)?.target,
-                            text: (res?.data as any)?.text,
-                            textColor: (res?.data as any)?.textColor,
-                          }}
-                          className="!pw-mb-0"
-                        />
-                      );
+                      return null;
                     } else if (res.type === 'image' || res.type === 'file') {
                       return (
                         <a
@@ -287,7 +258,8 @@ export const ConfirmationKycWithoutLayout = () => {
                     } else if (simpleValue) return simpleValue;
                     else return value;
                   };
-                  if (res.type !== 'multiface_selfie')
+                  if (res.type === 'separator') return null;
+                  else if (res.type !== 'multiface_selfie') {
                     return (
                       <div
                         key={res.id}
@@ -299,6 +271,7 @@ export const ConfirmationKycWithoutLayout = () => {
                         <p className="pw-font-normal pw-break-all">{value()}</p>
                       </div>
                     );
+                  }
                 })}
               </div>
             );

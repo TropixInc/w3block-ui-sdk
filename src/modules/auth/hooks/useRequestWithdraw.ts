@@ -1,9 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
-import { PixwayAPIRoutes } from "../../shared/enums/PixwayAPIRoutes";
-import { W3blockAPI } from "../../shared/enums/W3blockAPI";
-import { useAxios } from "../../shared/hooks/useAxios";
-import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
-import { usePrivateQuery } from "../../shared/hooks/usePrivateQuery";
+import { useMutation } from '@tanstack/react-query';
+import { PixwayAPIRoutes } from '../../shared/enums/PixwayAPIRoutes';
+import { W3blockAPI } from '../../shared/enums/W3blockAPI';
+import { useAxios } from '../../shared/hooks/useAxios';
+import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
+import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
+
 interface Params {
   erc20ContractAddress?: string;
   erc20ChainId?: string;
@@ -32,7 +33,7 @@ export const useGetSpecificWithdrawAdmin = (id: string) => {
   const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN],
+    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN, id],
     () =>
       axios.get(
         PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW_ADMIN.replace(
@@ -49,7 +50,7 @@ export const useGetSpecificWithdraw = (id: string) => {
   const { companyId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW],
+    [PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW, id],
     () =>
       axios.get(
         PixwayAPIRoutes.GET_SPECIFIC_WITHDRAW.replace(

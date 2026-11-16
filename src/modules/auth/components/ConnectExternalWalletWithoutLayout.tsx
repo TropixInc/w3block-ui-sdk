@@ -9,24 +9,21 @@ import { Spinner } from '../../shared/components/Spinner';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
-import { usePixwayAPIURL } from '../../shared/hooks/usePixwayAPIURL';
 import { usePixwaySession } from '../../shared/hooks/usePixwaySession';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import { useToken } from '../../shared/hooks/useToken';
 import { WalletsOptions } from '../../storefront/interfaces/Theme';
-import { claimWalletVault } from '../api/wallet';
 import { AuthButton } from './AuthButton';
 import { AuthFooter } from './AuthFooter';
 import { ConnectToMetamaskButton } from './ConnectWalletTemplate';
 import { GenerateTokenDialog } from './GenerateTokenDialog';
 import { MetamaskAppErrorModal } from './MetamaskAppErrorModal';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import { useModalController } from '../../shared/hooks/useModalController';
 import { useNeedsMailConfirmationInterceptor } from '../../shared/hooks/useNeedsMailConfirmationInterceptor';
-import { useWallets } from '../../shared/hooks/useWallets';
 import { MailVerifiedInterceptorProvider } from '../../core/providers/MailVerifiedInterceptorProvider';
+import { useAuthRedirect } from '../hooks/useAuthRedirect';
+import { useWalletConnection } from '../hooks/useWalletConnection';
 import useTranslation from '../../shared/hooks/useTranslation';
 
 
@@ -48,15 +45,8 @@ const _ConnectExternalWalletWithoutLayout = ({
   redirectLink,
   forceVault = false,
 }: ConnectExternalWalletWithoutLayoutProps) => {
-  const { closeModal, isOpen, openModal } = useModalController();
-  const {
-    isOpen: isOpenAppError,
-    closeModal: closeModalAppError,
-    openModal: openModalAppError,
-  } = useModalController();
   const [translate] = useTranslation();
   const [step, setStep] = useState<Step>(Step.CONFIRMATION);
-  const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -65,13 +55,54 @@ const _ConnectExternalWalletWithoutLayout = ({
   const router = useRouterConnect();
   const { data: profile, refetch } = useProfile();
   const { status } = usePixwaySession();
-  const user = useSessionUser();
   const mailInterceptor = useNeedsMailConfirmationInterceptor();
   const { defaultTheme } = useThemeConfig();
-  const postSigninURL =
-    defaultTheme?.configurations?.contentData?.postSigninURL;
   const walletOption =
     defaultTheme?.configurations?.styleData?.onBoardingWalletsOptions;
+  const { redirect } = useAuthRedirect({ redirectRoute, redirectLink });
+
+  const onCreateWalletSuccessfully = () => {
+    refetch().then(() => {
+      redirect();
+    });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onErrorHandler = (errorMessage: any) => {
+    console.error(errorMessage);
+    setErrorMsg(errorMessage);
+    setIsError(true);
+  };
+
+  const {
+    isConnecting,
+    isConnected,
+    connectToMetamaskExtension: walletConnectExtension,
+    connectMetamaskWallet: walletClaimMetamask,
+    createVaultWallet,
+    generateTokenModal,
+    appErrorModal,
+  } = useWalletConnection({
+    onSuccess: onCreateWalletSuccessfully,
+    onError: onErrorHandler,
+  });
+
+  const conn = !companyId && !token;
+
+  const onClickConnectToMetamaskExtension = () => {
+    setStep(Step.CONNECT_TO_METAMASK);
+    walletConnectExtension();
+  };
+
+  const onClickConnectMetamaskWallet = () => {
+    setStep(Step.CONNECT_TO_METAMASK);
+    walletClaimMetamask();
+  };
+
+  const onClickContinue = () => {
+    createVaultWallet();
+  };
+
   useEffect(() => {
     if (status === 'unauthenticated')
       router.pushConnect(PixwayAppRoutes.SIGN_IN);
@@ -81,17 +112,7 @@ const _ConnectExternalWalletWithoutLayout = ({
       const { mainWalletId } = user;
 
       if (mainWalletId) {
-        if (router?.query?.callbackPath) {
-          router.pushConnect(router.query.callbackPath as string);
-        } else if (router?.query?.callbackUrl) {
-          router.pushConnect(router.query.callbackUrl as string);
-        } else if (postSigninURL) {
-          router.pushConnect(postSigninURL);
-        } else if (redirectLink) {
-          router.pushConnect(redirectLink);
-        } else {
-          router.pushConnect(redirectRoute);
-        }
+        redirect();
       } else {
         if (
           forceVault ||
@@ -104,113 +125,6 @@ const _ConnectExternalWalletWithoutLayout = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile, status]);
-
-  const { w3blockIdAPIUrl } = usePixwayAPIURL();
-  // const queryClient = useQueryClient();
-
-  const conn = !companyId && !token;
-
-  const { connectMetamask, claim, isConnected } = useWallets();
-
-  const onClickConnectToMetamaskExtension = async () => {
-    const agent = window.navigator.userAgent ?? '';
-    if (
-      !(globalThis.window as any)?.ethereum &&
-      !agent.includes('MetaMaskMobile')
-    ) {
-      openModal();
-      return;
-    } else if (
-      !(globalThis.window as any)?.ethereum &&
-      agent.includes('MetaMaskMobile')
-    ) {
-      openModalAppError();
-      return;
-    }
-    setStep(Step.CONNECT_TO_METAMASK);
-    setIsConnecting(true);
-
-    try {
-      await connectMetamask?.();
-      setIsConnecting(false);
-    } catch (error: any) {
-      console.error(error);
-      onError(error.message);
-    }
-  };
-
-  const onClickConnectMetamaskWallet = async () => {
-    setStep(Step.CONNECT_TO_METAMASK);
-    setIsConnecting(true);
-
-    try {
-      await claim?.();
-      onCreateWalletSuccessfully();
-    } catch (error: any) {
-      if (!error?.message || error.message == '') {
-        if (router?.query?.callbackPath) {
-          router.pushConnect(router.query.callbackPath as string);
-        } else if (router?.query?.callbackUrl) {
-          router.pushConnect(router.query.callbackUrl as string);
-        } else if (postSigninURL) {
-          router.pushConnect(postSigninURL);
-        } else if (redirectLink) {
-          router.pushConnect(redirectLink);
-        } else {
-          router.pushConnect(redirectRoute);
-        }
-        return;
-      }
-      console.error(error);
-
-      onError(error.message);
-    }
-  };
-
-  const onClickContinue = async () => {
-    setIsConnecting(true);
-
-    try {
-      await claimWalletVault(
-        token,
-        companyId,
-        w3blockIdAPIUrl,
-        user?.refreshToken ?? ''
-      );
-      onCreateWalletSuccessfully();
-    } catch (error: any) {
-      console.error(error);
-      onError(error.message);
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onCreateWalletSuccessfully = () => {
-    refetch().then(() => {
-      setIsConnecting(false);
-      if (router?.query?.callbackPath) {
-        router.pushConnect(router.query.callbackPath as string);
-      } else if (router?.query?.callbackUrl) {
-        router.pushConnect(router.query.callbackUrl as string);
-      } else if (postSigninURL) {
-        router.pushConnect(postSigninURL);
-      } else if (redirectLink) {
-        router.pushConnect(redirectLink);
-      } else {
-        router.pushConnect(redirectRoute);
-      }
-    });
-
-    //queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.GET_PROFILE]});
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onError = (errorMessage: any) => {
-    console.error(errorMessage);
-    setErrorMsg(errorMessage);
-    setIsConnecting(false);
-    setIsError(true);
-  };
 
   const errorThreat = useMemo(() => {
     if (errorMsg != '') {
@@ -341,10 +255,10 @@ const _ConnectExternalWalletWithoutLayout = ({
               {translate('companyAuth>signUp>connectToMetamask')}
             </AuthButton>
           </div>
-          <GenerateTokenDialog isOpen={isOpen} onClose={closeModal} />
+          <GenerateTokenDialog isOpen={generateTokenModal.isOpen} onClose={generateTokenModal.close} />
           <MetamaskAppErrorModal
-            isOpen={isOpenAppError}
-            closeModal={closeModalAppError}
+            isOpen={appErrorModal.isOpen}
+            closeModal={appErrorModal.close}
           />
         </div>
       )}

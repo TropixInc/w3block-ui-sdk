@@ -4,7 +4,7 @@ import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
 import { W3blockAPI } from "../../shared/enums/W3blockAPI";
 import { useAxios } from "../../shared/hooks/useAxios";
 import { useCompanyConfig } from "../../shared/hooks/useCompanyConfig";
-import { removeDoubleSlashesOnUrl } from "../../shared/utils/removeDuplicateSlahes";
+import { useResolveCallbackUrl } from "../../shared/hooks/useResolveCallbackUrl";
 
 interface Payload {
   email: string;
@@ -13,8 +13,10 @@ interface Payload {
 }
 
 export const useRequestPasswordChange = () => {
-  const { companyId, appBaseUrl, connectProxyPass } = useCompanyConfig();
+  const { companyId } = useCompanyConfig();
   const axios = useAxios(W3blockAPI.ID);
+  const { resolveCallbackUrl } = useResolveCallbackUrl();
+
   return useMutation(
     [PixwayAPIRoutes.REQUEST_PASSWORD_CHANGE],
     async ({
@@ -26,11 +28,7 @@ export const useRequestPasswordChange = () => {
         email,
         tenantId: companyId,
         verificationType: verificationType ?? '',
-        callbackUrl:
-          callbackPath ??
-          removeDoubleSlashesOnUrl(
-            appBaseUrl + connectProxyPass + PixwayAppRoutes.RESET_PASSWORD
-          ),
+        callbackUrl: resolveCallbackUrl(PixwayAppRoutes.RESET_PASSWORD, callbackPath),
       });
     }
   );

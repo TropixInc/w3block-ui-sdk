@@ -48,6 +48,7 @@ interface GenericFilterDto {
   };
   isTranslatable?: boolean;
   translatePrefix?: string;
+  surface?: 'default' | 'filled';
 }
 
 const SmartGenericFilter = ({
@@ -71,6 +72,7 @@ const SmartGenericFilter = ({
   filterDependencies,
   isTranslatable,
   translatePrefix,
+  surface = 'default',
 }: GenericFilterDto) => {
   const [defaultDate, setDefaultDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date>();
@@ -196,6 +198,22 @@ const SmartGenericFilter = ({
             endDate.toLocaleDateString(),
           ],
         });
+
+      onCloseFilters(undefined);
+    } else if (!startDate && !endDate) {
+      // Limpa o filtro quando ambas as datas são null/undefined
+      // Só remove se o filtro realmente existir
+      if (filters && filters.hasOwnProperty(itemKey || '')) {
+        const newFilters = { ...filters };
+        const removedItemFilters = _.omit(newFilters, itemKey || '');
+        onChangeFilter && onChangeFilter(removedItemFilters);
+
+        if (onChangeFilterLabels) {
+          const newFilterLabels = { ...filterLabels };
+          const removedItemFilterLabels = _.omit(newFilterLabels, itemKey || '');
+          onChangeFilterLabels(removedItemFilterLabels);
+        }
+      }
 
       onCloseFilters(undefined);
     }
@@ -365,6 +383,7 @@ const SmartGenericFilter = ({
             startDate={startDate}
             endDate={endDate}
             placeholder={filterPlaceholder}
+            surface={surface}
           />
         );
       }
@@ -406,6 +425,8 @@ const SmartGenericFilter = ({
             type="text"
             placeholder={filterPlaceholder ?? 'Buscar'}
             value={searchStaticValue}
+            surface={surface}
+            searchIcon={surface === 'filled'}
             onChange={(e) => setSearchStaticValue(e.target.value)}
           />
         );

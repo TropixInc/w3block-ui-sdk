@@ -62,14 +62,18 @@ export const ConfigPanel = ({
     }
   };
 
+
   return (
     <div className="pw-w-full pw-flex pw-flex-col pw-items-center pw-px-6 pw-mt-6">
       <p className="pw-text-lg pw-font-medium pw-text-black">
         {weekday[activeDay]}
       </p>
-      <p className="pw-text-sm pw-opacity-80 pw-mb-2 pw-text-black">
-        {translate('pass>configPanel>configTimeForDay')}
-      </p>
+      {onChangePanelItems ? (
+        <p className="pw-text-sm pw-opacity-80 pw-mb-2 pw-text-black">
+          {translate('pass>configPanel>configTimeForDay')}
+        </p>
+      ) : null}
+
       {!onChangePanelItems && !panelItems?.length ? (
         <Alert>{translate('pass>configPanel>timeNotFound')}</Alert>
       ) : null}
