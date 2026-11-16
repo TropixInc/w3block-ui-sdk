@@ -214,7 +214,7 @@ const CopyHash = ({ hash }: { hash: string }) => {
     hash && hash.length > 12 ? `${hash.slice(0, 6)}…${hash.slice(-4)}` : hash;
   return (
     <span className="pw-inline-flex pw-items-center pw-gap-1">
-      <span className="pw-font-mono pw-text-[12px] pw-text-[#6b7280]">
+      <span className="pw-font-[ui-monospace,Menlo,monospace] pw-text-[12px] pw-text-[#6b7280]">
         tx {short}
       </span>
       <button

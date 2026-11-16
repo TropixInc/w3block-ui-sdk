@@ -113,7 +113,10 @@ export const WalletStatementTemplateSDK = () => {
             {!hideWallet ? (
               <span className="pw-flex pw-items-center pw-gap-1 pw-text-[12px] pw-text-[#6b7280]">
                 {translate('statement>extract>wallet')}{' '}
-                <span className="pw-font-mono" title={address}>
+                <span
+                  className="pw-font-[ui-monospace,Menlo,monospace]"
+                  title={address}
+                >
                   {shortAddress}
                 </span>
                 <button
