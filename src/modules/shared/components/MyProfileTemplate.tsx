@@ -19,7 +19,7 @@ import { PixwayButton } from './PixwayButton';
 import { Spinner } from './Spinner';
 import TranslatableComponent from './TranslatableComponent';
 import useTranslation from '../hooks/useTranslation';
-import { Menu } from './Menu';
+import { InternalPagesLayoutBase } from './InternalPagesLayoutBase';
 
 const _MyProfileTemplate = () => {
   const {
@@ -44,7 +44,10 @@ const _MyProfileTemplate = () => {
   const contextsActivated = useMemo(() => {
     if (!isLoadingTenantContext && tenantContext) {
       const contexts = tenantContext?.data?.items?.filter(
-        (item: any) => item?.active && item?.context?.slug !== "notification-settings" && item?.context?.slug !== "admin-notification-settings"
+        (item: any) =>
+          item?.active &&
+          item?.context?.slug !== 'notification-settings' &&
+          item?.context?.slug !== 'admin-notification-settings'
       );
       return contexts;
     }
@@ -104,75 +107,62 @@ const _MyProfileTemplate = () => {
   };
 
   return (
-    <>
-      <div className="pw-flex pw-flex-col pw-w-screen pw-font-poppins pw-container pw-mx-auto">
-        <div
-          className={classNames(
-            'pw-flex pw-flex-col pw-w-full pw-flex-1 pw-py-[59px]'
-          )}
-        >
-          {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
-          <div className="pw-flex pw-w-full pw-gap-x-6 pw-my-[25px]">
-            <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
-              <Menu />
-            </div>
-            {errorProfile ? (
-              <ErrorBox customError={errorProfile} />
-            ) : (
-              <div className="pw-w-full">
-                <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-                  <MyProfile />
-                </div>
-                {errorTenantContext ? (
-                  <ErrorBox customError={errorTenantContext} />
-                ) : (
-                  <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-                    {isLoadingTenantContext ? (
-                      <div className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-center pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
-                        <Spinner />
-                      </div>
-                    ) : (
-                      profile &&
-                      contextsActivated?.length &&
-                      contextsActivated?.map(({ contextId, context, data }: any) =>
-                        (data as any)?.profileScreen?.hidden ? null : (
-                          <div
-                            key={contextId}
-                            className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]"
-                          >
-                            <div className="pw-w-full pw-flex pw-justify-between">
-                              <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
-                                {translate('auth>myProfileTemplate>moreInfos')}{' '}
-                                - {context?.description}
-                              </p>
-                              {context?.slug === 'signup' && (
-                                <KYCStatus status={profile?.data?.kycStatus} />
-                              )}
-                            </div>
-
-                            <div className="pw-w-full">
-                              <FormCompleteKYCWithoutLayout
-                                key={contextId}
-                                renderSubtitle={false}
-                                userId={profile?.data?.id}
-                                contextId={contextId}
-                                contextSlug={context?.slug}
-                                userKycStatus={profile?.data?.kycStatus}
-                                profilePage
-                              />
-                            </div>
-                          </div>
-                        )
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+    <InternalPagesLayoutBase>
+      {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
+      {errorProfile ? (
+        <ErrorBox customError={errorProfile} />
+      ) : (
+        <div className="pw-w-full">
+          <div className="pw-px-4 sm:pw-px-0 pw-w-full">
+            <MyProfile />
           </div>
+          {errorTenantContext ? (
+            <ErrorBox customError={errorTenantContext} />
+          ) : (
+            <div className="pw-px-4 sm:pw-px-0 pw-w-full">
+              {isLoadingTenantContext ? (
+                <div className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-center pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
+                  <Spinner />
+                </div>
+              ) : (
+                profile &&
+                contextsActivated?.length &&
+                contextsActivated?.map(({ contextId, context, data }: any) =>
+                  (data as any)?.profileScreen?.hidden ? null : (
+                    <div
+                      key={contextId}
+                      className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]"
+                    >
+                      <div className="pw-w-full pw-flex pw-justify-between">
+                        <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
+                          {translate('auth>myProfileTemplate>moreInfos')} -{' '}
+                          {context?.description}
+                        </p>
+                        {context?.slug === 'signup' && (
+                          <KYCStatus status={profile?.data?.kycStatus} />
+                        )}
+                      </div>
+
+                      <div className="pw-w-full">
+                        <FormCompleteKYCWithoutLayout
+                          key={contextId}
+                          renderSubtitle={false}
+                          userId={profile?.data?.id}
+                          contextId={contextId}
+                          contextSlug={context?.slug}
+                          userKycStatus={profile?.data?.kycStatus}
+                          profilePage
+                        />
+                      </div>
+                    </div>
+                  )
+                )
+              )}
+            </div>
+          )}
         </div>
-      </div>
-    </>
+      )}
+    </InternalPagesLayoutBase>
   );
 };
 
