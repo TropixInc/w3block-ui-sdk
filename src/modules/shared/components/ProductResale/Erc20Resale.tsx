@@ -167,7 +167,7 @@ export const Erc20Resale = () => {
           </div>
         ) : (
           <>
-            <div className="pw-flex pw-flex-col pw-gap-[34px] pw-mt-8 pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px] pw-mb-5">
+            <div className="pw-flex pw-flex-col pw-gap-[34px] pw-mt-8 pw-items-start pw-bg-white pw-rounded-[10px] pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-p-5 sm:pw-p-6 pw-mb-5">
               <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px]">
                 <div>
                   <div

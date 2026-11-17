@@ -1,23 +1,27 @@
 /* eslint-disable i18next/no-literal-string */
-import { lazy, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
 
+import classNames from 'classnames';
+
+import useGetProductById from '../../storefront/hooks/useGetProductById';
 import { useGetNFTSByWallet } from '../../tokens/hooks/useGetNFTSByWallet';
 import { mapNFTToToken } from '../../tokens/utils/mapNFTToToken';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
+import { useAcceptIntegrationToken } from '../hooks/useAcceptIntegrationToken';
 import { useHasWallet } from '../hooks/useHasWallet';
 import { usePrivateRoute } from '../hooks/usePrivateRoute';
 import { useProfile } from '../hooks/useProfile';
 import { useRouterConnect } from '../hooks/useRouterConnect';
+import useTranslation from '../hooks/useTranslation';
 import { useUserWallet } from '../hooks/useUserWallet/useUserWallet';
 import { Alert } from './Alert';
-import { Box } from './Box';
+import { BaseButton } from './Buttons';
 import { ErrorBox } from './ErrorBox';
 import { Spinner } from './Spinner';
 import TranslatableComponent from './TranslatableComponent';
-import { useAcceptIntegrationToken } from '../hooks/useAcceptIntegrationToken';
-import useGetProductById from '../../storefront/hooks/useGetProductById';
-import useTranslation from '../hooks/useTranslation';
-
+import { EmptyState } from './ui/EmptyState';
+import { UI } from './ui/tokens';
 
 enum Steps {
   DEFAULT = 'default',
@@ -25,6 +29,11 @@ enum Steps {
   SUCCESS = 'success',
 }
 
+/**
+ * Cross-tenant account link. Opened in a popup by the other tenant with the
+ * link data in the query string; without that data there is nothing to
+ * confirm, so the page says so instead of asking a question with blanks.
+ */
 const _LinkAccountTemplate = () => {
   const router = useRouterConnect();
   const fromTenantName = (router.query.fromTentant as string) ?? '';
@@ -53,7 +62,6 @@ const _LinkAccountTemplate = () => {
     wallet?.chainId
   );
   const tokens =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ethNFTsResponse?.data.items.map((nft: any) =>
       mapNFTToToken(nft, wallet?.chainId || 137)
     ) || [];
@@ -67,148 +75,10 @@ const _LinkAccountTemplate = () => {
   });
 
   const { data: product } = useGetProductById(productId);
+  const hasLinkData = Boolean(token && toTenantId);
 
   const handleClose = () => {
     window.close();
-  };
-
-  const renderInternal = () => {
-    switch (step) {
-      case Steps.ERROR:
-        return (
-          <>
-            <Alert variant="error">
-              <Alert.Icon />
-              {translate('shared>linkAccountTemplate>errorInIntegration')}
-            </Alert>
-            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
-              <button
-                onClick={handleClose}
-                className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#779bcf] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-              >
-                {translate('components>walletIntegration>close')}
-              </button>
-            </div>
-          </>
-        );
-      case Steps.SUCCESS:
-        return errorEthNFT ? (
-          <ErrorBox customError={errorEthNFT} />
-        ) : (
-          <>
-            {productId !== '' ? (
-              userHasProduct ? (
-                <p className="pw-text-black pw-font-medium pw-text-xl">
-                  {translate(
-                    'shared>linkAccountTemplate>doneAccountVinculate',
-                    { fromTenantName: fromTenantName }
-                  )}
-                </p>
-              ) : purchaseRequiredModalContent !== '' ? (
-                <div
-                  className="pw-text-black pw-font-medium pw-text-xl"
-                  dangerouslySetInnerHTML={{
-                    __html: purchaseRequiredModalContent,
-                  }}
-                ></div>
-              ) : (
-                <Spinner className="pw-mx-auto" />
-              )
-            ) : userHasProduct ? (
-              <p className="pw-text-black pw-font-medium pw-text-xl">
-                {translate('shared>linkAccountTemplate>doneAccountVinculate', {
-                  fromTenantName: fromTenantName,
-                })}
-              </p>
-            ) : purchaseRequiredModalContent !== '' ? (
-              <div
-                className="pw-text-black pw-font-medium pw-text-xl"
-                dangerouslySetInnerHTML={{
-                  __html: purchaseRequiredModalContent,
-                }}
-              ></div>
-            ) : (
-              <p className="pw-text-black pw-font-medium pw-text-xl">
-                {translate(
-                  'shared>linkAccountTemplate>doneAccountVinculateWithTokens'
-                )}{' '}
-                <b>{toTenantName}</b>{' '}
-                {translate(
-                  'shared>linkAccountTemplate>doneAccountVinculateWithTokens2'
-                )}{' '}
-                <b>{fromTenantName}</b>.
-              </p>
-            )}
-            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-around pw-items-center">
-              <button
-                onClick={handleClose}
-                className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-              >
-                {translate('components>walletIntegration>close')}
-              </button>
-              {purchaseRequiredModalContent !== '' &&
-              productId !== '' &&
-              !userHasProduct ? (
-                <button
-                  onClick={() =>
-                    router.pushConnect(
-                      PixwayAppRoutes.PRODUCT_PAGE.replace(
-                        '{slug}',
-                        product?.slug ?? ''
-                      )
-                    )
-                  }
-                  className="pw-px-[24px] pw-h-[33px] pw-bg-[#0050FF] pw-text-white pw-border-[#0050FF] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-                >
-                  {translate('components>advanceButton>continue')}
-                </button>
-              ) : null}
-            </div>
-          </>
-        );
-      default:
-        return (
-          <>
-            {linkMessage !== '' ? (
-              <div
-                className="pw-text-black pw-font-medium pw-text-xl pw-break-words"
-                dangerouslySetInnerHTML={{
-                  __html: linkMessage
-                    .replace('{{:toTenant}}', toTenantName)
-                    .replace('{{:toEmail}}', profile?.data?.email ?? '')
-                    .replace('{{:fromTenant}}', fromTenantName)
-                    .replace('{{:fromEmail}}', fromEmail),
-                }}
-              ></div>
-            ) : (
-              <p className="pw-text-black pw-font-medium pw-text-xl pw-text-center pw-break-words">
-                {translate('shared>linkAccountTemplate>vinculateAccount')}{' '}
-                <b>{fromTenantName}</b> (email: {fromEmail}){' '}
-                {translate('shared>linkAccountTemplate>vinculateAccount2')}{' '}
-                <b>{toTenantName}</b> (email: {profile?.data?.email}
-                )?
-              </p>
-            )}
-            <ErrorBox customError={errorAcceptIntegration} />
-            <div className="pw-mt-4 pw-flex pw-flex-row pw-gap-3 pw-justify-center pw-items-center">
-              <button
-                disabled={isPending}
-                onClick={handleClose}
-                className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-              >
-                {translate('shared>no')}
-              </button>
-              <button
-                disabled={isPending}
-                onClick={handleAccept}
-                className="pw-px-[24px] pw-h-[33px] pw-bg-brand-primary pw-border-[#295BA6] pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs pw-text-white"
-              >
-                {translate('shared>yes')}
-              </button>
-            </div>
-          </>
-        );
-    }
   };
 
   const sendMessage = () => {
@@ -226,8 +96,6 @@ const _LinkAccountTemplate = () => {
           setSteps(Steps.ERROR);
         },
         onSuccess() {
-          // eslint-disable-next-line no-console
-          console.log(autoCloseOnSuccess, userHasProduct);
           sendMessage();
           if (autoCloseOnSuccess && userHasProduct) {
             window.close();
@@ -249,16 +117,198 @@ const _LinkAccountTemplate = () => {
       }
     );
   };
+
+  const closeButton = (label: string) => (
+    <button
+      type="button"
+      onClick={handleClose}
+      disabled={isPending}
+      className={UI.buttonSecondary}
+    >
+      {label}
+    </button>
+  );
+  const message = (html: string) => (
+    <div
+      className={classNames(
+        'pw-text-[15px] pw-leading-snug pw-break-words [&_p]:pw-m-0',
+        UI.text
+      )}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+
+  const renderInternal = () => {
+    if (!hasLinkData) {
+      return (
+        <EmptyState
+          bare
+          title={translate('shared>linkAccountTemplate>missingDataTitle')}
+          description={translate(
+            'shared>linkAccountTemplate>missingDataDescription'
+          )}
+          action={closeButton(translate('components>walletIntegration>close'))}
+          className="pw-py-4"
+        />
+      );
+    }
+    switch (step) {
+      case Steps.ERROR:
+        return (
+          <>
+            <Alert variant="error">
+              <Alert.Icon />
+              {translate('shared>linkAccountTemplate>errorInIntegration')}
+            </Alert>
+            <div className="pw-mt-4 pw-flex pw-justify-center">
+              {closeButton(translate('components>walletIntegration>close'))}
+            </div>
+          </>
+        );
+      case Steps.SUCCESS:
+        return errorEthNFT ? (
+          <ErrorBox customError={errorEthNFT} />
+        ) : (
+          <>
+            {userHasProduct ? (
+              <p
+                className={classNames(
+                  'pw-text-[15px] pw-font-medium pw-m-0',
+                  UI.text
+                )}
+              >
+                {translate('shared>linkAccountTemplate>doneAccountVinculate', {
+                  fromTenantName,
+                })}
+              </p>
+            ) : purchaseRequiredModalContent !== '' ? (
+              message(purchaseRequiredModalContent)
+            ) : productId !== '' ? (
+              <Spinner className="pw-mx-auto" />
+            ) : (
+              <p
+                className={classNames(
+                  'pw-text-[15px] pw-font-medium pw-m-0',
+                  UI.text
+                )}
+              >
+                {translate(
+                  'shared>linkAccountTemplate>doneAccountVinculateWithTokens'
+                )}{' '}
+                <b>{toTenantName}</b>{' '}
+                {translate(
+                  'shared>linkAccountTemplate>doneAccountVinculateWithTokens2'
+                )}{' '}
+                <b>{fromTenantName}</b>.
+              </p>
+            )}
+            <div className="pw-mt-4 pw-flex pw-flex-wrap pw-gap-2 pw-justify-center">
+              {closeButton(translate('components>walletIntegration>close'))}
+              {purchaseRequiredModalContent !== '' &&
+              productId !== '' &&
+              !userHasProduct ? (
+                <BaseButton
+                  onClick={() =>
+                    router.pushConnect(
+                      PixwayAppRoutes.PRODUCT_PAGE.replace(
+                        '{slug}',
+                        product?.slug ?? ''
+                      )
+                    )
+                  }
+                >
+                  {translate('components>advanceButton>continue')}
+                </BaseButton>
+              ) : null}
+            </div>
+          </>
+        );
+      default:
+        return (
+          <>
+            {linkMessage !== '' ? (
+              message(
+                linkMessage
+                  .replace('{{:toTenant}}', toTenantName)
+                  .replace('{{:toEmail}}', profile?.data?.email ?? '')
+                  .replace('{{:fromTenant}}', fromTenantName)
+                  .replace('{{:fromEmail}}', fromEmail)
+              )
+            ) : (
+              <div className="pw-flex pw-flex-col pw-gap-3">
+                <p
+                  className={classNames(
+                    'pw-text-[15px] pw-font-medium pw-m-0',
+                    UI.text
+                  )}
+                >
+                  {translate('shared>linkAccountTemplate>vinculateAccount')}{' '}
+                  {translate('shared>linkAccountTemplate>vinculateAccount2')}
+                </p>
+                <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-2">
+                  {[
+                    { name: fromTenantName, email: fromEmail },
+                    { name: toTenantName, email: profile?.data?.email ?? '' },
+                  ].map((account, index) => (
+                    <div
+                      key={index}
+                      className="pw-rounded-[10px] pw-border pw-border-[#E6E8EC] pw-px-3 pw-py-2.5 pw-min-w-0"
+                    >
+                      <p
+                        className={classNames(
+                          'pw-text-[13px] pw-font-semibold pw-truncate pw-m-0',
+                          UI.text
+                        )}
+                      >
+                        {account.name || '—'}
+                      </p>
+                      <p
+                        className={classNames(
+                          'pw-text-[12px] pw-truncate pw-m-0',
+                          UI.textMuted
+                        )}
+                        title={account.email}
+                      >
+                        {account.email || '—'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            <ErrorBox customError={errorAcceptIntegration} />
+            <div className="pw-mt-4 pw-flex pw-flex-wrap pw-gap-2 pw-justify-center">
+              {closeButton(translate('shared>no'))}
+              <BaseButton disabled={isPending} onClick={handleAccept}>
+                {translate('shared>yes')}
+              </BaseButton>
+            </div>
+          </>
+        );
+    }
+  };
+
   return errorProfile ? (
-    <>
-      <ErrorBox customError={errorProfile} />
-    </>
+    <ErrorBox customError={errorProfile} />
   ) : (
-    <div className="pw-w-screen pw-min-h-screen pw-bg-[#EFEFEF]">
-      <div className="pw-w-full pw-pt-32 pw-px-5">
-        <Box className="pw-mx-auto">
+    <div className="pw-w-screen pw-min-h-screen pw-bg-[#F3F5F8] pw-font-poppins">
+      <div className="pw-w-full pw-pt-16 sm:pw-pt-28 pw-px-4">
+        <div
+          className={classNames(
+            UI.card,
+            'pw-mx-auto pw-w-full pw-max-w-[520px] pw-p-6'
+          )}
+        >
+          <p
+            className={classNames(
+              'pw-text-[11px] pw-font-semibold pw-uppercase pw-tracking-[0.04em] pw-m-0 pw-mb-3',
+              UI.textMuted
+            )}
+          >
+            {translate('shared>linkAccountTemplate>title')}
+          </p>
           {isPending ? <Spinner className="pw-mx-auto" /> : renderInternal()}
-        </Box>
+        </div>
       </div>
     </div>
   );
