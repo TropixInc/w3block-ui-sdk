@@ -317,6 +317,7 @@
   "shared>myProfile>changePassword": "Alterar senha",
   "shared>myProfile>wallet": "Carteira",
   "shared>contextStatus>approved": "Aprovado",
+  "shared>contextStatus>readonlyHint": "Dados aprovados ficam em modo de leitura.",
   "shared>contextStatus>denied": "Recusado",
   "shared>contextStatus>requiredReview": "Em revisão",
   "shared>contextStatus>created": "Enviado",

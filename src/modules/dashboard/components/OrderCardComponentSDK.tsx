@@ -66,6 +66,7 @@ const PAYMENT_LABEL_KEYS: Record<string, string> = {
   debit_card: 'dashboardOrderCardComponentSDK>payment>card',
   card: 'dashboardOrderCardComponentSDK>payment>card',
   crypto: 'dashboardOrderCardComponentSDK>payment>balance',
+  loyalty: 'dashboardOrderCardComponentSDK>payment>balance',
   transfer: 'dashboardOrderCardComponentSDK>payment>transfer',
   boleto: 'dashboardOrderCardComponentSDK>payment>boleto',
 };

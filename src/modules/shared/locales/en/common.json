@@ -317,6 +317,7 @@
 "shared>myProfile>changePassword": "Change password",
 "shared>myProfile>wallet": "Wallet",
 "shared>contextStatus>approved": "Approved",
+"shared>contextStatus>readonlyHint": "Approved data is shown read-only.",
 "shared>contextStatus>denied": "Denied",
 "shared>contextStatus>requiredReview": "Under review",
 "shared>contextStatus>created": "Submitted",

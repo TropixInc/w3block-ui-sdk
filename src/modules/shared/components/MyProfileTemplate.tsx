@@ -12,7 +12,6 @@ import { usePixwaySession } from '../hooks/usePixwaySession';
 import { usePrivateRoute } from '../hooks/usePrivateRoute';
 import { useProfile } from '../hooks/useProfile';
 import { ErrorBox } from './ErrorBox';
-import KYCStatus from './KYCStatus';
 import { ModalBase } from './ModalBase';
 import { MyProfile } from './MyProfile';
 import { PixwayButton } from './PixwayButton';
@@ -140,11 +139,6 @@ const _MyProfileTemplate = () => {
                       title={`${translate(
                         'auth>myProfileTemplate>moreInfos'
                       )} · ${context?.description ?? ''}`}
-                      actions={
-                        context?.slug === 'signup' ? (
-                          <KYCStatus status={profile?.data?.kycStatus} />
-                        ) : undefined
-                      }
                     >
                       <FormCompleteKYCWithoutLayout
                         key={contextId}

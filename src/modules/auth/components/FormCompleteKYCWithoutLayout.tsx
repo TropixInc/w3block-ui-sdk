@@ -242,7 +242,7 @@ const _FormCompleteKYCWithoutLayout = ({
           </StatusPill>
           {isProfileReadonly ? (
             <span className="pw-text-[12px] pw-text-[#6B7280]">
-              {translate('shared>formTemplate>formApprovedNotEdit')}
+              {translate('shared>contextStatus>readonlyHint')}
             </span>
           ) : null}
         </div>
