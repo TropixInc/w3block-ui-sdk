@@ -96,6 +96,7 @@
     "build:webpack": "webpack",
     "build:types": "tsc --emitDeclarationOnly",
     "release": "standard-version",
+    "test": "tsc -p tsconfig.test.json && node -e \"require('fs').writeFileSync('.test-out/package.json','{\\\"type\\\":\\\"commonjs\\\"}')\" && node --test .test-out",
     "pre-release": "standard-version --prerelease alpha",
     "setup-dev": "powershell -ExecutionPolicy Bypass -File scripts/link-dependencies.ps1"
   },

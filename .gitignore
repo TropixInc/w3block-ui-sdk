@@ -113,3 +113,5 @@ dist
 */publish.yml
 
 dist
+
+.test-out

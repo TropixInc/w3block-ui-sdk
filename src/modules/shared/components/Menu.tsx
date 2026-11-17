@@ -1,51 +1,32 @@
 /* eslint-disable i18next/no-literal-string */
-/* eslint-disable react/jsx-key */
-import { ReactNode, lazy, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
-import { UserRoleEnum } from '@w3block/sdk-id';
 import classNames from 'classnames';
 import { format } from 'date-fns/esm';
 
-
 import CopyIcon from '../assets/icons/copyIconOutlined.svg';
-import CardIcon from '../assets/icons/creditCardOutlined.svg';
-import DashboardIcon from '../assets/icons/dashboard.svg';
-// import  HelpIcon  from '../assets/icons/helpCircleOutlined.svg';
-import DashIcon from '../assets/icons/dashOutlined.svg';
-//import  ImageIcon  from '../assets/icons/imageOutlined.svg';
-import FormIcon from '../assets/icons/form.svg';
-import IntegrationIcon from '../assets/icons/integrationIconOutlined.svg';
-// import  HelpIcon  from '../assets/icons/helpCircleOutlined.svg';
 import LogoutIcon from '../assets/icons/logoutOutlined.svg';
-import MyOrdersIcon from '../assets/icons/myOrders.svg';
-import NewsIcon from '../assets/icons/news.svg';
-import ReceiptIcon from '../assets/icons/receipt.svg';
-import TicketIcon from '../assets/icons/ticketFilled.svg';
-// import  SettingsIcon  from '../assets/icons/settingsOutlined.svg';
-import UserIcon from '../assets/icons/userOutlined.svg';
-import NotifyIcon from '../assets/icons/notifyOutlined.svg';
-
 import { usePixwayAuthentication } from '../../auth/hooks/usePixwayAuthentication';
-import { useLoyaltiesInfo } from '../../business/hooks/useLoyaltiesInfo';
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { PixwayAppRoutes } from '../enums/PixwayAppRoutes';
-import { useIsHiddenMenuItem } from '../hooks/useIsHiddenMenuItem';
+import { useInternalMenuTabs } from '../hooks/useInternalMenuTabs';
 import { useProfile } from '../hooks/useProfile';
 import { useProfileWithKYC } from '../hooks/useProfileWithKYC';
 import { useRouterConnect } from '../hooks/useRouterConnect';
-import { useUserWallet } from '../hooks/useUserWallet/useUserWallet';
-import { ImageSDK } from './ImageSDK';
-import TranslatableComponent from './TranslatableComponent';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import useTranslation from '../hooks/useTranslation';
-
+import { ImageSDK } from './ImageSDK';
+import Skeleton from './Skeleton';
+import TranslatableComponent from './TranslatableComponent';
 
 interface MenuProps {
   tabs?: TabsConfig[];
   className?: string;
+  /** Called after a navigation link is clicked (used by the mobile drawer). */
+  onNavigate?: () => void;
 }
 
-interface TabsConfig {
+export interface TabsConfig {
   title: string;
   id: string;
   icon: ReactNode;
@@ -54,241 +35,42 @@ interface TabsConfig {
   isVisible: boolean;
 }
 
-const _Menu = ({ tabs, className }: MenuProps) => {
+export const getInitials = (name?: string | null) => {
+  const parts = (name ?? '').trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return '';
+  const first = parts[0][0] ?? '';
+  const last = parts.length > 1 ? parts[parts.length - 1][0] ?? '' : '';
+  return (first + last).toUpperCase();
+};
+
+export const shortAddress = (address?: string | null) =>
+  address ? `${address.substring(0, 6)}…${address.substring(address.length - 4)}` : '';
+
+const _Menu = ({ tabs, className, onNavigate }: MenuProps) => {
   const { data: profile } = useProfile();
   const router = useRouterConnect();
   const [translate] = useTranslation();
   const [state, copyToClipboard] = useCopyToClipboard();
   const { profile: profileWithKYC } = useProfileWithKYC();
   const [isCopied, setIsCopied] = useState(false);
-  const createdAt = new Date((profile?.data.createdAt as string) || 0);
   const { signOut } = usePixwayAuthentication();
-  const formatedDate = format(createdAt, 'dd/MM/yyyy');
-  const [tabsToShow, setTabsToShow] = useState(tabs);
-  const { loyaltyWallet } = useUserWallet();
-
-  const userRoles = useMemo(() => {
-    return profile?.data?.roles || [];
-  }, [profile?.data?.roles]);
-  const isAdmin = Boolean(
-    userRoles.find(
-      (e: string) => e === 'admin' || e === 'superAdmin' || e === 'operator'
-    )
-  );
-
-  const isCommerceReceiver = Boolean(
-    userRoles.find((e: string) => e === 'commerce.orderReceiver')
-  );
-
-  const isHidden = useIsHiddenMenuItem(userRoles as Array<UserRoleEnum>);
-
   const { defaultTheme } = useThemeConfig();
+  const defaultTabs = useInternalMenuTabs();
+  const tabsToShow = tabs ?? defaultTabs;
 
-  const isShowAffiliates =
-    (defaultTheme &&
-      defaultTheme.configurations &&
-      defaultTheme?.configurations?.styleData &&
-      defaultTheme?.configurations?.styleData?.memberGetMember) ||
-    false;
-
-  const isUser = Boolean(userRoles.find((e: string) => e === 'user'));
-
-  const isLoyaltyOperator = Boolean(
-    userRoles.find((e: string) => e === 'loyaltyOperator')
-  );
-
-  const internalMenuData = useMemo(() => {
-    return defaultTheme?.configurations.styleData.internalMenu || {};
-  }, [defaultTheme?.configurations.styleData.internalMenu]);
-
-  const hasLoyalty = !!useLoyaltiesInfo()?.loyalties?.length;
-
-  useEffect(() => {
-    const tabsDefault: TabsConfig[] = [
-      {
-        title: internalMenuData['payment']?.customLabel || 'Pagamento',
-        id: 'payment',
-        icon: <CardIcon width={17} height={17} />,
-        link: PixwayAppRoutes.LOYALTY_PAYMENT,
-        isVisible:
-          (isLoyaltyOperator || isAdmin) && !isHidden('payment') && hasLoyalty,
-      },
-      {
-        title:
-          internalMenuData['pass']?.customLabel ||
-          translate('components>menu>tokenPass'),
-        id: 'pass',
-        icon: <TicketIcon width={17} height={17} />,
-
-        link: PixwayAppRoutes.TOKENPASS,
-        isVisible: isAdmin && !isHidden('pass'),
-      },
-      {
-        title:
-          internalMenuData['dash']?.customLabel ||
-          translate('components>menu>dashboard'),
-        id: 'dash',
-        icon: <DashboardIcon width={17} height={17} />,
-        link: hasLoyalty
-          ? PixwayAppRoutes.LOYALTY_REPORT
-          : PixwayAppRoutes.DASHBOARD,
-        isVisible:
-          (isLoyaltyOperator || isAdmin) && !isHidden('dash') && hasLoyalty,
-      },
-      {
-        title:
-          internalMenuData['wallet']?.customLabel ||
-          translate('components>menu>wallet'),
-        id: 'wallet',
-        icon: <CardIcon width={17} height={17} />,
-        link: PixwayAppRoutes.WALLET,
-        isVisible: (isUser || isAdmin) && !isHidden('wallet'),
-      },
-      {
-        title:
-          internalMenuData['withdraws']?.customLabel ||
-          translate('components>menu>withdraws'),
-        id: 'withdraws',
-        icon: <CardIcon width={17} height={17} />,
-        link: PixwayAppRoutes.WITHDRAWS,
-        isVisible: isHidden('withdraws') === false,
-      },
-      {
-        title:
-          internalMenuData['withdrawsAdmin']?.customLabel ||
-          translate('auth>withdrawModal>withdrawReports'),
-        id: 'withdrawsAdmin',
-        icon: <CardIcon width={17} height={17} />,
-        link: PixwayAppRoutes.WITHDRAWS_ADMIN,
-        isVisible: isAdmin && !isHidden('withdrawsAdmin'),
-      },
-      {
-        title:
-          internalMenuData['affiliates']?.customLabel ||
-          translate('shared>menu>affiliates'),
-        id: 'affiliates',
-        icon: <NewsIcon width={17} height={17} />,
-        link: PixwayAppRoutes.AFFILIATES,
-        isVisible:
-          (isUser || isAdmin) && !isHidden('affiliates') && isShowAffiliates,
-      },
-      {
-        title:
-          internalMenuData['extract']?.customLabel ||
-          translate('wallet>page>extract'),
-        id: 'extract',
-        icon: (
-          <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
-        ),
-        link: PixwayAppRoutes.WALLET_RECEIPT,
-        isVisible:
-          (isUser || isAdmin) &&
-          loyaltyWallet &&
-          loyaltyWallet.length > 0 &&
-          !isHidden('extract'),
-      },
-      {
-        title:
-          internalMenuData['futureStatement']?.customLabel || 'Recebimentos',
-        id: 'futureStatement',
-        icon: (
-          <ReceiptIcon className="pw-fill-slate-700" width={15} height={15} />
-        ),
-        link: PixwayAppRoutes.WALLET_FUTURE,
-        isVisible:
-          (isCommerceReceiver || isAdmin) &&
-          loyaltyWallet &&
-          loyaltyWallet.length > 0 &&
-          !isHidden('futureStatement'),
-      },
-      {
-        title: internalMenuData['staking']?.customLabel || 'Recompensas',
-        id: 'staking',
-        icon: <CardIcon width={17} height={17} />,
-        link: PixwayAppRoutes.STAKING,
-        isVisible:
-          !isHidden('staking') && loyaltyWallet && loyaltyWallet.length > 0,
-      },
-      {
-        title:
-          internalMenuData['myOrders']?.customLabel ||
-          translate('header>components>defaultTab>myOrders'),
-        id: 'myOrders',
-        link: PixwayAppRoutes.MY_ORDERS,
-        icon: <MyOrdersIcon />,
-        isVisible: (isUser || isAdmin) && !isHidden('myOrders'),
-      },
-      {
-        title:
-          internalMenuData['mySales']?.customLabel ||
-          translate('pages>mysales>mysales'),
-        id: 'mySales',
-        icon: <MyOrdersIcon />,
-        link: PixwayAppRoutes.MY_SALES,
-        isVisible: isHidden('mySales') === false,
-      },
-      {
-        title:
-          internalMenuData['myProfile']?.customLabel ||
-          translate('components>menu>myProfile'),
-        id: 'myProfile',
-        icon: <UserIcon width={17} height={17} />,
-        link: PixwayAppRoutes.PROFILE,
-        isVisible: (isUser || isAdmin) && !isHidden('myProfile'),
-      },
-      {
-        title:
-          internalMenuData['notifications']?.customLabel ||
-          translate('notifications>notificationsTemplate>title'),
-        id: 'notifications',
-        icon: <NotifyIcon width={17} height={17} />,
-        link: PixwayAppRoutes.MY_NOTIFICATIONS,
-        isVisible: (isUser || isAdmin) && !isHidden('notifications'),
-      },
-      {
-        title:
-          internalMenuData['requests']?.customLabel ||
-          translate('components>menu>requests'),
-        id: 'requests',
-        icon: <FormIcon width={17} height={17} />,
-        link: PixwayAppRoutes.REQUESTS,
-        isVisible: isHidden('requests') === false,
-      },
-      {
-        title: internalMenuData['cards']?.customLabel || 'Meus cartões',
-        id: 'cards',
-        icon: <CardIcon width={17} height={17} />,
-        link: PixwayAppRoutes.CARDS,
-        isVisible: (isUser || isAdmin) && !isHidden('cards'),
-      },
-      {
-        title:
-          internalMenuData['integration']?.customLabel ||
-          translate('components>menu>integration'),
-        icon: <IntegrationIcon width={17} height={17} />,
-        id: 'integration',
-        link: PixwayAppRoutes.CONNECTION,
-        isVisible: (isUser || isAdmin) && !isHidden('integration'),
-      },
-      {
-        title:
-          internalMenuData['clients']?.customLabel ||
-          translate('components>menu>clients'),
-        id: 'clients',
-        icon: <DashIcon width={17} height={17} />,
-        link: PixwayAppRoutes.TOKENS_CLIENTS,
-        isVisible: false && !isHidden('clients'),
-        sub: true,
-      },
-    ];
-
-    if (!tabs) setTabsToShow(tabsDefault);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, loyaltyWallet, isAdmin, isLoyaltyOperator, defaultTheme]);
+  const createdAt = profile?.data.createdAt
+    ? format(new Date(profile.data.createdAt as string), 'dd/MM/yyyy')
+    : null;
+  const name = profile?.data.name ?? '';
+  const email = profile?.data.email ?? '';
+  const address = profile?.data?.mainWallet?.address;
+  const hideWallet =
+    defaultTheme?.configurations?.contentData?.hideWalletAddress;
+  const avatarSrc = profileWithKYC?.avatarSrc;
+  const isLoading = !profile;
 
   const handleCopy = () => {
-    copyToClipboard(profile?.data.mainWallet?.address as string);
+    copyToClipboard(address as string);
     if (!state.error) setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
   };
@@ -299,111 +81,144 @@ const _Menu = ({ tabs, className }: MenuProps) => {
     });
   };
 
-  const hideWallet =
-    defaultTheme?.configurations?.contentData?.hideWalletAddress;
-
   const RenderTab = (tab: TabsConfig) => {
     const isActive: boolean = router.pathname === tab.link;
-
     return (
-      <a href={router.routerToHref(tab.link)} key={tab.title}>
-        <li
-          key={tab.title}
+      <li key={tab.id || tab.title}>
+        <a
+          href={router.routerToHref(tab.link)}
+          onClick={onNavigate}
+          aria-current={isActive ? 'page' : undefined}
           className={classNames(
-            'group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 hover:pw-stroke-brand-primary',
-            tab.sub ? 'pw-pl-6' : '',
+            'pw-flex pw-items-center pw-gap-2 pw-min-h-[38px] pw-px-2 pw-rounded-[7px] pw-border-l-[3px] pw-text-[13px] pw-leading-tight pw-no-underline pw-transition-colors',
+            tab.sub ? 'pw-ml-4' : '',
             isActive
-              ? 'pw-bg-brand-primary pw-bg-opacity-[0.4] pw-stroke-brand-primary'
-              : 'pw-stroke-[#383857]'
+              ? 'pw-border-brand-primary pw-bg-[#EAF1FC] pw-text-[#0F1729] pw-font-semibold'
+              : 'pw-border-transparent pw-text-[#4A5567] pw-font-medium hover:pw-bg-[#F1F3F6] hover:pw-text-[#0F1729]'
           )}
         >
           <span
             className={classNames(
-              isActive ? 'pw-opacity-40' : 'group-hover:pw-opacity-40'
+              'pw-flex pw-shrink-0 pw-items-center pw-justify-center pw-w-4 pw-h-4 pw-stroke-current [&_svg]:pw-w-4 [&_svg]:pw-h-4',
+              isActive ? 'pw-opacity-100' : 'pw-opacity-80'
             )}
+            aria-hidden
           >
             {tab.icon}
           </span>
-
-          <p className="pw-font-poppins pw-text-lg pw-font-medium pw-ml-5">
-            {tab.title}
-          </p>
-        </li>
-      </a>
+          <span className="pw-truncate">{tab.title}</span>
+        </a>
+      </li>
     );
   };
 
   return (
-    <div
+    <nav
       className={classNames(
-        'pw-flex pw-flex-col pw-justify-between pw-bg-white pw-py-7 pw-px-[23px] pw-w-[295px] pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014]',
+        'pw-flex pw-flex-col pw-bg-white pw-rounded-[10px] pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-py-[14px] pw-px-[10px] pw-w-full pw-font-poppins',
         className
       )}
+      aria-label={translate('components>menu>openMenu')}
     >
-      <div className="pw-w-full">
-        <div className="pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-10">
+      <div className="pw-flex pw-items-center pw-gap-[10px] pw-px-2 pw-pb-3 pw-mb-2 pw-border-b pw-border-[#E6E8EC]">
+        {isLoading ? (
+          <Skeleton className="pw-w-9 pw-h-9 pw-rounded-full pw-shrink-0" />
+        ) : avatarSrc ? (
           <ImageSDK
-            className="pw-rounded-full pw-w-[180px] pw-h-[180px] pw-mb-[20px] pw-object-cover"
-            height={180}
-            width={180}
+            className="pw-rounded-full pw-w-9 pw-h-9 pw-object-cover pw-shrink-0"
+            height={36}
+            width={36}
             fit="fill"
-            src={profileWithKYC?.avatarSrc ?? ''}
+            src={avatarSrc}
           />
-          <p className="pw-text-center pw-font-poppins pw-text-2xl pw-font-semibold pw-text-[#35394C] pw-mx-auto pw-mb-2 pw-truncate pw-w-full">
-            {profile?.data.name}
-          </p>
-
-          <div className="pw-flex pw-items-center pw-justify-center ">
-            {profile?.data?.mainWallet?.address && !hideWallet ? (
-              <>
-                <p className="pw-font-poppins pw-text-sm pw-font-semibold pw-text-[#777E8F] pw-mr-2 pw-mt-[1px]">
-                  {profile?.data?.mainWallet?.address?.substring(0, 8)}
-                  {'...'}
-                  {profile?.data?.mainWallet?.address?.substring(
-                    profile?.data?.mainWallet?.address?.length - 6,
-                    profile?.data?.mainWallet?.address?.length
-                  )}
-                </p>
-                <button onClick={handleCopy}>
-                  <CopyIcon
-                    width={17}
-                    height={17}
-                    className="pw-stroke-[#777E8F]"
-                  />
-                </button>
-                {isCopied && (
-                  <span className="pw-absolute pw-right-3 pw-top-5 pw-bg-[#E6E8EC] pw-py-1 pw-px-2 pw-rounded-md">
-                    {translate('components>menu>copied')}
-                  </span>
-                )}
-              </>
-            ) : (
-              '-'
-            )}
-          </div>
-        </div>
-
-        <ul className="pw-mx-auto pw-w-[248px]">
-          {tabsToShow?.map((e) => e.isVisible && RenderTab(e))}
-          <button
-            onClick={handleSignOut}
-            className="group pw-flex pw-items-center pw-justify-start pw-h-[47px] pw-w-full pw-rounded-[4px] hover:pw-bg-brand-primary hover:pw-bg-opacity-[0.4] pw-text-[#35394C] pw-pl-3 pw-stroke-[#383857] hover:pw-stroke-brand-primary"
+        ) : (
+          <span
+            className="pw-grid pw-place-items-center pw-w-9 pw-h-9 pw-rounded-full pw-bg-brand-primary pw-text-white pw-text-[13px] pw-font-bold pw-shrink-0"
+            aria-hidden
           >
-            <LogoutIcon
-              width={17}
-              height={17}
-              className="group-hover:pw-opacity-40"
-            />
-            <p className="pw-font-poppins pw-text-lg pw-font-medium pw-ml-5">
-              Logout
-            </p>
-          </button>
-        </ul>
+            {getInitials(name)}
+          </span>
+        )}
+        <div className="pw-min-w-0 pw-flex-1">
+          {isLoading ? (
+            <>
+              <Skeleton className="pw-h-3 pw-w-24 pw-rounded pw-mb-1.5" />
+              <Skeleton className="pw-h-2.5 pw-w-32 pw-rounded" />
+            </>
+          ) : (
+            <>
+              <p
+                className="pw-text-[13px] pw-font-semibold pw-text-[#0F1729] pw-truncate pw-m-0"
+                title={name}
+              >
+                {name}
+              </p>
+              {email ? (
+                <p
+                  className="pw-text-[11px] pw-text-[#6B7280] pw-truncate pw-m-0"
+                  title={email}
+                >
+                  {email}
+                </p>
+              ) : null}
+              {address && !hideWallet ? (
+                <div className="pw-relative pw-flex pw-items-center pw-gap-1 pw-mt-0.5">
+                  <span className="pw-text-[11px] pw-text-[#777E8F] pw-font-medium pw-tabular-nums">
+                    {shortAddress(address)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="pw-p-0.5 pw-rounded hover:pw-bg-[#F1F3F6]"
+                    aria-label={translate('components>menu>copyAddress')}
+                  >
+                    <CopyIcon
+                      width={13}
+                      height={13}
+                      className="pw-stroke-[#777E8F]"
+                    />
+                  </button>
+                  {isCopied && (
+                    <span className="pw-absolute pw-left-0 pw-top-5 pw-bg-[#0F1729] pw-text-white pw-text-[11px] pw-py-0.5 pw-px-2 pw-rounded-md pw-z-10">
+                      {translate('components>menu>copied')}
+                    </span>
+                  )}
+                </div>
+              ) : null}
+            </>
+          )}
+        </div>
       </div>
-      <p className="pw-font-nunito pw-text-sm pw-font-normal pw-text-[#35394C] pw-opacity-[0.5] pw-mt-15 pw-mx-auto">
-        {translate('components>menu>memberSince')} {formatedDate}
+
+      <ul className="pw-flex pw-flex-col pw-gap-0.5 pw-m-0 pw-p-0 pw-list-none">
+        {tabsToShow.map((tab) => (tab.isVisible ? RenderTab(tab) : null))}
+        <li>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="pw-flex pw-w-full pw-items-center pw-gap-2 pw-min-h-[38px] pw-px-2 pw-rounded-[7px] pw-border-l-[3px] pw-border-transparent pw-text-[13px] pw-font-medium pw-text-[#4A5567] hover:pw-bg-[#F1F3F6] hover:pw-text-[#0F1729] pw-transition-colors"
+          >
+            <span
+              className="pw-flex pw-shrink-0 pw-items-center pw-justify-center pw-w-4 pw-h-4 pw-stroke-current pw-opacity-80"
+              aria-hidden
+            >
+              <LogoutIcon width={16} height={16} />
+            </span>
+            <span>{translate('components>menu>logout')}</span>
+          </button>
+        </li>
+      </ul>
+
+      <p className="pw-mt-3 pw-pt-3 pw-px-2 pw-border-t pw-border-[#E6E8EC] pw-text-[11px] pw-text-[#8B93A3] pw-m-0">
+        {createdAt ? (
+          <>
+            {translate('components>menu>memberSince')} {createdAt}
+          </>
+        ) : (
+          <Skeleton className="pw-h-2.5 pw-w-28 pw-rounded" />
+        )}
       </p>
-    </div>
+    </nav>
   );
 };
 
