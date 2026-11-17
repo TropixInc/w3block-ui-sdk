@@ -128,6 +128,20 @@ const _LinkAccountTemplate = () => {
       {label}
     </button>
   );
+  // Values interpolated into the tenant-provided message are escaped so a
+  // crafted name or e-mail cannot inject markup into it.
+  const escapeHtml = (value: string) =>
+    value.replace(
+      /[&<>"']/g,
+      (c) =>
+        ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+        }[c] as string)
+    );
   const message = (html: string) => (
     <div
       className={classNames(
@@ -229,10 +243,13 @@ const _LinkAccountTemplate = () => {
             {linkMessage !== '' ? (
               message(
                 linkMessage
-                  .replace('{{:toTenant}}', toTenantName)
-                  .replace('{{:toEmail}}', profile?.data?.email ?? '')
-                  .replace('{{:fromTenant}}', fromTenantName)
-                  .replace('{{:fromEmail}}', fromEmail)
+                  .replace('{{:toTenant}}', escapeHtml(toTenantName))
+                  .replace(
+                    '{{:toEmail}}',
+                    escapeHtml(profile?.data?.email ?? '')
+                  )
+                  .replace('{{:fromTenant}}', escapeHtml(fromTenantName))
+                  .replace('{{:fromEmail}}', escapeHtml(fromEmail))
               )
             ) : (
               <div className="pw-flex pw-flex-col pw-gap-3">
