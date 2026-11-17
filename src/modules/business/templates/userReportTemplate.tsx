@@ -23,6 +23,7 @@ import { Pagination } from '../../shared/components/Pagination';
 import useTranslation from '../../shared/hooks/useTranslation';
 
 
+import { PageHeader } from '../../shared/components/ui/PageHeader';
 export const UserReportTemplate = () => {
   const { pushConnect } = useRouterConnect();
   const locale = useLocale();
@@ -201,10 +202,11 @@ export const UserReportTemplate = () => {
     </>
   ) : (
     <InternalPagesLayoutBase>
+      <PageHeader
+        title={translate('business>userReportTemplate>fidelity')}
+        className="pw-mb-[20px]"
+      />
       <div className=" pw-p-6 pw-bg-white pw-rounded-[20px] pw-shadow pw-flex-col pw-justify-start pw-items-start">
-        <div className=" pw-text-black pw-text-[23px] pw-font-semibold pw-leading-loose">
-          {translate('business>userReportTemplate>fidelity')}
-        </div>
         <ActionBusinessCardSDK
           title="Pagamento"
           icon={<UserIcon />}

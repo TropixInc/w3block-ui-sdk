@@ -16,6 +16,7 @@ import { useStakingSummary, useRedeemStaking, SummaryDto } from '../hooks/useSta
 import useTranslation from '../hooks/useTranslation';
 
 
+import { PageHeader } from './ui/PageHeader';
 export const StakingSummary = () => {
   const [page, setPage] = useState(1);
   const [translate] = useTranslation();
@@ -84,15 +85,12 @@ export const StakingSummary = () => {
   ) : (
     <TranslatableComponent>
       <InternalPagesLayoutBase>
+        <PageHeader
+          title={translate('staking>summary>title')}
+          subtitle={translate('staking>summary>subtitle')}
+          className="pw-mb-[20px] pw-mx-[16px] sm:pw-mx-0 !pw-w-auto"
+        />
         <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-text-black pw-shadow-md pw-rounded-lg pw-overflow-hidden">
-          <div className="pw-mb-6">
-            <p className="pw-text-[23px] pw-font-[600]">
-              {translate('staking>summary>title')}
-            </p>
-            <p className="pw-text-[#777E8F] pw-text-xs">
-              {translate('staking>summary>subtitle')}
-            </p>
-          </div>
           <div className="pw-flex pw-justify-start pw-gap-20 pw-items-center">
             {!isLoading ? (<div>
               <p className="pw-text-lg pw-mb-1">

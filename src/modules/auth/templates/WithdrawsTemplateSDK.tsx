@@ -20,6 +20,7 @@ import {
 import WithdrawInternal from '../components/WithdrawInternal';
 import WithdrawModal from '../components/WithdrawModal';
 
+import { PageHeader } from '../../shared/components/ui/PageHeader';
 const _WithdrawsTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
   const [isOpen, setIsOpen] = useState(false);
@@ -102,13 +103,17 @@ const _WithdrawsTemplateSDK = () => {
 
   return (
     <>
-      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden pw-mb-[20px]">
-        <div className="pw-flex pw-justify-between">
-          <p className="pw-text-[23px] pw-font-[600]">
-            {translate('components>menu>withdraws')}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title={translate('components>menu>withdraws')}
+        className="pw-mb-[20px] pw-mx-[16px] sm:pw-mx-0 !pw-w-auto"
+        actions={
+          !isOpen && !id ? (
+            <BaseButton onClick={() => setIsOpen(true)}>
+              {translate('auth>withdrawModal>makeWithdraw')}
+            </BaseButton>
+          ) : undefined
+        }
+      />
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
         {isOpen ? (
           <WithdrawModal
@@ -121,11 +126,6 @@ const _WithdrawsTemplateSDK = () => {
           <WithdrawInternal id={id} currency={loyaltyWallet?.[0]?.currency} />
         ) : (
           <>
-            <div className="pw-flex pw-items-end pw-justify-end pw-w-full pw-mb-4">
-              <BaseButton onClick={() => setIsOpen(true)}>
-                {translate('auth>withdrawModal>makeWithdraw')}
-              </BaseButton>
-            </div>
             <GenericTable
               config={configTable}
               classes={{

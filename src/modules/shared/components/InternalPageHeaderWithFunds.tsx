@@ -1,27 +1,31 @@
 import { ReactNode } from 'react';
+
 import { useHasWallet } from '../hooks/useHasWallet';
+import { PageHeader } from './ui/PageHeader';
 
 interface InternalPageHeaderWithFundsProps {
   title?: string;
+  subtitle?: ReactNode;
+  actions?: ReactNode;
   children?: ReactNode;
 }
 
+/**
+ * Page header used by the internal templates (orders, cards, profile,
+ * requests, resale). Keeps the previous API and adds `subtitle`/`actions`;
+ * `children` still render inside the same card, below the title.
+ */
 export const InternalpageHeaderWithFunds = ({
   title = 'Carteira',
+  subtitle,
+  actions,
   children,
 }: InternalPageHeaderWithFundsProps) => {
   useHasWallet({});
 
   return (
-    <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
-      <div className="pw-w-full pw-items-center  sm:pw-flex">
-        <div>
-          <span className="pw-font-semibold pw-text-lg pw-flex pw-items-baseline sm:pw-text-[23px] pw-leading-[32px]">
-            {title}
-          </span>
-        </div>
-      </div>
+    <PageHeader title={title} subtitle={subtitle} actions={actions}>
       {children}
-    </div>
+    </PageHeader>
   );
 };

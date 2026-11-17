@@ -22,6 +22,7 @@ import { ErrorMessage } from '../../checkout/components/ErrorMessage';
 import useTranslation from '../../shared/hooks/useTranslation';
 
 
+import { PageHeader } from '../../shared/components/ui/PageHeader';
 export const PaymentTemplateSDK = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [valueToPay, setValueToPay] = useState(0);
@@ -175,10 +176,11 @@ export const PaymentTemplateSDK = () => {
 
   return (
     <InternalPagesLayoutBase>
+      <PageHeader
+        title={translate('checkout>components>checkoutInfo>payment')}
+        className="pw-mb-[20px]"
+      />
       <div className="pw-p-6 pw-bg-white pw-rounded-[20px] pw-shadow ">
-        <p className="pw-text-black pw-text-[23px] pw-font-semibold pw-leading-loose">
-          {translate('checkout>components>checkoutInfo>payment')}
-        </p>
         <div className="pw-p-4 pw-rounded-2xl pw-border-zinc-100 pw-shadow pw-border">
           <p className="pw-text-sm pw-text-zinc-700 pw-font-semibold">
             {translate('business>paymentTemplateSDK>valuePayment')}
