@@ -24,6 +24,7 @@ import useTranslation from '../../shared/hooks/useTranslation';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 import { formatAmount } from '../../shared/utils/formatAmount';
 import {
+  isWithdrawInProgress,
   sumAmounts,
   WITHDRAW_IN_PROGRESS_STATUSES,
   withdrawStatusLabelKey,
@@ -70,11 +71,21 @@ const _WithdrawsTemplateSDK = () => {
     limit: 50,
     status: WITHDRAW_IN_PROGRESS_STATUSES,
   });
-  const inProgressTotal = sumAmounts(inProgress?.items ?? []);
-  const inProgressCount =
-    inProgress?.meta?.totalItems ?? inProgress?.items?.length ?? 0;
+  // Filter again on the client: if the API ignores `status[]` the KPI must
+  // still only count what is really in progress.
+  const inProgressItems = (inProgress?.items ?? []).filter((item) =>
+    isWithdrawInProgress(item.status)
+  );
+  const inProgressTotal = sumAmounts(inProgressItems);
+  const inProgressCount = inProgressItems.length;
 
-  const rows = data?.items ?? [];
+  const rows = (data?.items ?? []).filter((row) =>
+    filter === 'all'
+      ? true
+      : filter === 'in_progress'
+      ? isWithdrawInProgress(row.status)
+      : row.status === 'concluded'
+  );
   const total = data?.meta?.totalItems ?? 0;
   const totalPages = data?.meta?.totalPages ?? 0;
   const from = total ? (page - 1) * PAGE_SIZE + 1 : 0;

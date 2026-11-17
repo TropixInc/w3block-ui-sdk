@@ -412,6 +412,7 @@
 "connect>tokenInternalPage>titleMobile": "Token internal",
 "connectTokens>connectSideNavMenu>poweredBy": "Powered by",
 "connectTokens>tokensList>pageTitle": "My Tokens",
+"connectTokens>tokensList>emptyDescription": "When you receive a token or a pass it shows up here.",
 "connectTokens>tokensList>tokenPass": "Token Pass",
 "connectTokens>tokensList>tokensAlreadyProcessing": "If you have made any purchases, rest assured - your tokens are already being processed on the blockchain network and will soon be available here. Processing time usually takes a few minutes, but can take up to 4 hours depending on blockchain network traffic.",
 "connectTokens>tokensList>tokensAlreadyProcessing2": "Processing time usually takes a few minutes, but can take up to 4 hours depending on blockchain network traffic.",

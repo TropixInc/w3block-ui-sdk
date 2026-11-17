@@ -209,9 +209,7 @@ const _TokensListTemplate = ({ tokens, isLoading, embedded }: Props) => {
       <EmptyState
         bare={embedded}
         title={translate('connectTokens>tokensList>welcomeToWallet2')}
-        description={translate(
-          'connectTokens>tokensList>tokensAlreadyProcessing'
-        )}
+        description={translate('connectTokens>tokensList>emptyDescription')}
         className={embedded ? 'pw-py-6' : 'pw-mx-4 sm:pw-mx-0'}
       />
     );

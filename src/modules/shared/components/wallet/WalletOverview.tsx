@@ -171,7 +171,12 @@ export const WalletOverview = ({ title }: { title?: string }) => {
   const latest = useMemo<StatementScreenTransaction[]>(() => {
     const items = history?.items ?? [];
     return items
-      .flatMap((item: any) => getSubtransactions(item, defaultTheme))
+      .flatMap((item: any) =>
+        getSubtransactions(item, defaultTheme).map((statement) => ({
+          ...statement,
+          createdAt: statement.createdAt ?? item?.createdAt,
+        }))
+      )
       .slice(0, 5);
   }, [history, defaultTheme]);
 
