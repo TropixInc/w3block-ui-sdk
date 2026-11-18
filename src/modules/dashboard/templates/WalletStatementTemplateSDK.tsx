@@ -1,60 +1,75 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMemo, useState, lazy } from 'react';
+import { useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import { isAfter, isBefore } from 'date-fns';
 
-import PendingIcon from '../../shared/assets/icons/clock.svg';
-import CopyIcon from '../../shared/assets/icons/copyIcon.svg';
-
-import { StatementComponent } from './StatementComponent';
-
-
-import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
+import CopyIcon from '../../shared/assets/icons/copyIconOutlined.svg';
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
+import { Pagination } from '../../shared/components/Pagination';
 import { Spinner } from '../../shared/components/Spinner';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useGuardPagesWithOptions } from '../../shared/hooks/useGuardPagesWithOptions';
-import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
-import { StatementScreenTransaction, getSubtransactions } from '../../shared/utils/getSubtransactions';
-import { useGetErcTokensHistory } from '../hook/useGetErcTokensHistory';
-import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
-import { Pagination } from '../../shared/components/Pagination';
+import { useLocale } from '../../shared/hooks/useLocale';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
+import {
+  StatementScreenTransaction,
+  getSubtransactions,
+} from '../../shared/utils/getSubtransactions';
+import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
+import { ReceiptQRCode } from '../components/ReceiptQRCode';
+import { SegmentedControl } from '../components/statement/SegmentedControl';
+import {
+  STATEMENT_MOCK_FALLBACK,
+  formatPoints,
+} from '../components/statement/settlement';
+import {
+  StatementDayList,
+  StatementTypeFilter,
+  resolveStatementItem,
+} from '../components/statement/StatementDayList';
+import { useGetErcTokensHistory } from '../hook/useGetErcTokensHistory';
+
+const CARD =
+  'pw-rounded-[10px] pw-bg-white pw-shadow-[0_2px_8px_rgba(0,0,0,.06)]';
 
 export const WalletStatementTemplateSDK = () => {
-  const { loyaltyWallet, mainWallet } = useUserWallet();
-  const [actualPage, setActualPage] = useState(1);
-  const { data, isFetching, error } = useGetErcTokensHistory(
-    loyaltyWallet.length ? loyaltyWallet[0].contractId : undefined,
-    { page: actualPage }
-  );
   const [translate] = useTranslation();
-  const [copied, setCopied] = useState<boolean>(false);
-  const [_, setCopy] = useCopyToClipboard();
-  const copyAddress = (address: string) => {
-    setCopied(true);
-    setCopy(address || '');
-    setTimeout(() => setCopied(false), 5000);
-  };
-  const loyaltyWalletDefined = useMemo(() => {
-    return loyaltyWallet.length ? loyaltyWallet[0] : undefined;
-  }, [loyaltyWallet]);
-
+  const locale = useLocale();
+  const { loyaltyWallet, mainWallet } = useUserWallet();
   const { defaultTheme } = useThemeConfig();
+  const [actualPage, setActualPage] = useState(1);
+  const [typeFilter, setTypeFilter] = useState<StatementTypeFilter>('all');
+  const [receiptDeliverId, setReceiptDeliverId] = useState<
+    string | undefined
+  >();
+  const [copied, setCopied] = useState(false);
+  const [, copy] = useCopyToClipboard();
+
+  const loyaltyWalletDefined = useMemo(
+    () => (loyaltyWallet.length ? loyaltyWallet[0] : undefined),
+    [loyaltyWallet]
+  );
+  const currency = loyaltyWalletDefined?.currency ?? '';
+  const pointsPrecision = loyaltyWalletDefined?.pointsPrecision ?? 'decimal';
   const hideWallet =
     defaultTheme?.configurations?.contentData?.hideWalletAddress;
 
+  const { data, isFetching, error } = useGetErcTokensHistory(
+    loyaltyWalletDefined?.contractId,
+    {
+      page: actualPage,
+    }
+  );
+
   const subTransactions = useMemo(() => {
     const arr: StatementScreenTransaction[] = [];
-    data?.items?.forEach((i) => {
-      const subs = getSubtransactions(i, defaultTheme);
-      subs.forEach((t) => {
-        arr.push(t);
-      });
+    data?.items?.forEach((item) => {
+      getSubtransactions(item, defaultTheme).forEach((t) => arr.push(t));
     });
-    arr.sort(function (a: any, b: any) {
+    arr.sort((a: any, b: any) => {
       const dateA = Date.parse(a?.createdAt);
       const dateB = Date.parse(b?.createdAt);
       if (isBefore(dateA, dateB)) return 1;
@@ -62,97 +77,187 @@ export const WalletStatementTemplateSDK = () => {
       return 0;
     });
     return arr;
-  }, [data?.items]);
+  }, [data?.items, defaultTheme]);
+
+  const hasMockSettlement =
+    STATEMENT_MOCK_FALLBACK &&
+    subTransactions.some(
+      (item, index) => resolveStatementItem(item, index).settlement?.isMock
+    );
 
   useGuardPagesWithOptions({
     needUser: true,
     redirectPage: PixwayAppRoutes.SIGN_IN,
   });
+
+  const copyAddress = () => {
+    copy(mainWallet?.address || '');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
+  const address = mainWallet?.address || '';
+  const shortAddress =
+    address.length > 12
+      ? `${address.slice(0, 6)}…${address.slice(-4)}`
+      : address || '-';
+
   return (
     <InternalPagesLayoutBase>
-      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
-        <div className="pw-flex pw-justify-between">
-          <div>
-            <p className="pw-text-[23px] pw-font-[600]">
+      <div className="pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-4">
+        <div
+          className={`${CARD} pw-flex pw-flex-wrap pw-items-start pw-justify-between pw-gap-4 pw-p-5 sm:pw-px-6`}
+        >
+          <div className="pw-flex pw-flex-col pw-gap-1.5">
+            <h1 className="pw-m-0 pw-text-[20px] sm:pw-text-[23px] pw-font-semibold pw-text-[#0f1729]">
               {translate('wallet>page>extract')}
-            </p>
+            </h1>
             {!hideWallet ? (
-              <div
-                onClick={() => copyAddress(mainWallet?.address || '')}
-                className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
-              >
-                <p className="pw-text-xs pw-text-[#777E8F] pw-font-[400] pw-cursor-pointer">
-                  {mainWallet?.address || '-'}
-                </p>
-                <CopyIcon />
+              <span className="pw-flex pw-items-center pw-gap-1 pw-text-[12px] pw-text-[#6b7280]">
+                {translate('statement>extract>wallet')}{' '}
+                <span
+                  className="pw-font-[ui-monospace,Menlo,monospace]"
+                  title={address}
+                >
+                  {shortAddress}
+                </span>
+                <button
+                  type="button"
+                  onClick={copyAddress}
+                  aria-label={translate('statement>extract>copy')}
+                  className="pw-inline-flex pw-h-6 pw-w-6 pw-items-center pw-justify-center pw-text-[#6b7280] hover:pw-text-[#0f1729]"
+                >
+                  <CopyIcon className="pw-h-[13px] pw-w-[13px] pw-stroke-current" />
+                </button>
                 {copied ? (
-                  <div className="pw-relative">
-                    <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2 pw-absolute pw-bg-slate-300 pw-shadow-md pw-rounded-md pw-right-0 pw-top-3 pw-p-1">
-                      <p className="pw-text-sm pw-text-[#353945]">
-                        {translate('components>menu>copied')}
-                      </p>
-                    </div>
-                  </div>
+                  <span className="pw-rounded-md pw-bg-[#E6E8EC] pw-px-2 pw-py-0.5 pw-text-[11px] pw-text-[#353945]">
+                    {translate('components>menu>copied')}
+                  </span>
                 ) : null}
-              </div>
+              </span>
             ) : null}
-            {loyaltyWalletDefined ? (
-              <div className="pw-mt-[14px]">
-                <p className="pw-text-black pw-text-lg pw-font-medium pw-leading-[23px]">
-                  {loyaltyWalletDefined.currency}
-                </p>
-                <CriptoValueComponent
-                  crypto={true}
-                  value={loyaltyWalletDefined.balance}
-                  pointsPrecision={loyaltyWalletDefined.pointsPrecision}
-                  code={''}
-                  fontClass="pw-text-black pw-text-lg pw-font-bold pw-leading-[23px]"
-                />
-              </div>
-            ) : null}
-            <p className="pw-text-[#777E8F] pw-text-xs pw-flex pw-gap-1 pw-mt-2 pw-items-center">
-              <PendingIcon className="pw-stroke-[#777E8F] pw-w-[12px] pw-h-[12px]" />
+            <span className="pw-flex pw-items-center pw-gap-1.5 pw-text-[12px] pw-text-[#6b7280]">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+              </svg>
               {translate('dashboard>receiptQRCode>creditsTakeTwoHors')}
-            </p>
+            </span>
           </div>
-        </div>
-      </div>
-      {error ? (
-        <ErrorBox customError={error} />
-      ) : (
-        <div className="pw-mt-[20px] pw-mx-4 sm:pw-mx-0 pw-flex pw-flex-col pw-gap-[20px]">
-          {isFetching ? (
-            <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
-              <Spinner className="pw-h-10 pw-w-10" />
-            </div>
-          ) : subTransactions?.length ? (
-            subTransactions.map((item, index) => (
-              <StatementComponent
-                key={item?.actionId ? item?.actionId + index : index}
-                statement={item}
-                currency={
-                  loyaltyWallet?.length ? loyaltyWallet[0]?.currency : ''
-                }
-              />
-            ))
-          ) : (
-            <div className="pw-flex pw-gap-3 pw-justify-center pw-items-center">
-              {translate(
-                'dashboard>walletStatementTemplateSDK>releasesNotFound'
-              )}
-            </div>
-          )}
-          {data?.meta && data?.meta?.totalPages > 1 ? (
-            <div className="pw-mt-4">
-              <Pagination
-                pagesQuantity={data?.meta.totalPages ?? 0}
-                currentPage={actualPage}
-                onChangePage={setActualPage}
-              />
+          {loyaltyWalletDefined ? (
+            <div className="pw-flex pw-flex-col pw-items-start sm:pw-items-end pw-gap-0.5">
+              <span className="pw-text-[11px] pw-font-semibold pw-uppercase pw-tracking-[.04em] pw-text-[#6b7280]">
+                {translate('statement>extract>balance')}
+              </span>
+              <span className="pw-text-[26px] sm:pw-text-[28px] pw-font-bold pw-leading-tight pw-text-[#0f1729]">
+                {formatPoints(
+                  loyaltyWalletDefined.balance,
+                  pointsPrecision,
+                  locale
+                )}
+                <span className="pw-ml-1 pw-text-[14px] pw-font-normal pw-text-[#6b7280]">
+                  {currency}
+                </span>
+              </span>
+              {loyaltyWalletDefined.withdrawableBalance !== undefined ? (
+                <span className="pw-text-[12px] pw-text-[#6b7280]">
+                  {translate('statement>extract>withdrawable', {
+                    amount: formatPoints(
+                      loyaltyWalletDefined.withdrawableBalance,
+                      pointsPrecision,
+                      locale
+                    ),
+                    currency,
+                  })}
+                </span>
+              ) : null}
             </div>
           ) : null}
         </div>
-      )}
+
+        {error ? (
+          <ErrorBox customError={error} />
+        ) : (
+          <div
+            className={`${CARD} pw-flex pw-flex-col pw-px-4 sm:pw-px-5 pw-pt-4 pw-pb-3`}
+          >
+            <div className="pw-flex pw-flex-wrap pw-items-center pw-justify-between pw-gap-3 pw-pb-2">
+              <h2 className="pw-m-0 pw-text-[16px] pw-font-semibold pw-text-[#0f1729]">
+                {translate('statement>extract>movements')}
+              </h2>
+              <SegmentedControl<StatementTypeFilter>
+                ariaLabel={translate('statement>extract>filterTypeLabel')}
+                value={typeFilter}
+                onChange={setTypeFilter}
+                options={[
+                  {
+                    value: 'all',
+                    label: translate('statement>extract>filterAll'),
+                  },
+                  {
+                    value: 'in',
+                    label: translate('statement>extract>filterIn'),
+                  },
+                  {
+                    value: 'out',
+                    label: translate('statement>extract>filterOut'),
+                  },
+                ]}
+              />
+            </div>
+            {isFetching && !data ? (
+              <div className="pw-flex pw-justify-center pw-py-10">
+                <Spinner className="pw-h-10 pw-w-10" />
+              </div>
+            ) : (
+              <StatementDayList
+                items={subTransactions}
+                currency={currency}
+                pointsPrecision={pointsPrecision}
+                typeFilter={typeFilter}
+                onOpenReceipt={setReceiptDeliverId}
+                emptyText={translate(
+                  'dashboard>walletStatementTemplateSDK>releasesNotFound'
+                )}
+              />
+            )}
+            <div className="pw-flex pw-flex-wrap pw-items-center pw-justify-between pw-gap-3 pw-border-t pw-border-[#e6e8ec] pw-pt-3 pw-text-[13px] pw-text-[#4a5567]">
+              <span>
+                {data?.meta
+                  ? translate('statement>extract>page', {
+                      page: data.meta.currentPage,
+                      total: data.meta.totalPages,
+                    })
+                  : ''}
+              </span>
+              {hasMockSettlement ? (
+                <span className="pw-order-last pw-basis-full pw-text-[#9a6508] sm:pw-order-none sm:pw-mr-auto sm:pw-basis-auto">
+                  {translate('statement>settlement>mockFootnote')}
+                </span>
+              ) : null}
+              {data?.meta && data.meta.totalPages > 1 ? (
+                <Pagination
+                  pagesQuantity={data.meta.totalPages}
+                  currentPage={actualPage}
+                  onChangePage={setActualPage}
+                />
+              ) : null}
+            </div>
+          </div>
+        )}
+      </div>
+      <ReceiptQRCode
+        deliverId={receiptDeliverId}
+        isOpen={!!receiptDeliverId}
+        onClose={() => setReceiptDeliverId(undefined)}
+      />
     </InternalPagesLayoutBase>
   );
 };

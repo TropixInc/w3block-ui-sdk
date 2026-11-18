@@ -162,7 +162,7 @@ export const useInternalMenuTabs = ({ iconProps }: Options = {}) => {
       },
       {
         id: 'futureStatement',
-        title: label('futureStatement', 'Recebimentos'),
+        title: label('futureStatement', translate('statement>future>menu')),
         icon: icon(ReceiptIcon, 'pw-fill-current'),
         link: PixwayAppRoutes.WALLET_FUTURE,
         isVisible:
