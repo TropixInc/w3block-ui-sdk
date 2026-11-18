@@ -14,6 +14,7 @@ import { useGuardPagesWithOptions } from "../../shared/hooks/useGuardPagesWithOp
 import { GenericTable } from "../../shared/components/GenericTable";
 import useTranslation from "../../shared/hooks/useTranslation";
 
+import { PageHeader } from '../../shared/components/ui/PageHeader';
 const _WithdrawsAdminTemplateSDK = () => {
   const { companyId: tenantId } = useCompanyConfig();
   const [translate] = useTranslation();
@@ -85,6 +86,7 @@ const _WithdrawsAdminTemplateSDK = () => {
             pending: translate('auth>withdrawStatus>pending'),
             escrowing_resources: translate('auth>withdrawStatus>escrowingResources'),
             ready_to_transfer_funds: translate('auth>withdrawStatus>readyToTransfer'),
+            transferring_funds: translate('auth>withdrawStatus>transferringFunds'),
             concluded: translate('auth>withdrawStatus>concluded'),
             failed: translate('auth>withdrawStatus>failed'),
             refused: translate('auth>withdrawStatus>refused'),
@@ -101,13 +103,10 @@ const _WithdrawsAdminTemplateSDK = () => {
 
   return (
     <>
-      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
-        <div className="pw-flex pw-justify-between pw-items-center">
-          <p className="pw-text-[23px] pw-font-[600]">
-            {translate('auth>withdrawModal>withdrawReports')}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title={translate('auth>withdrawModal>withdrawReports')}
+        className="pw-mx-[16px] sm:pw-mx-0 !pw-w-auto"
+      />
       <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden pw-my-[20px]">
         {id ? (
           <WithdrawAdminActions id={id} />

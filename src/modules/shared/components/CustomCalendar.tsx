@@ -279,18 +279,18 @@ export const CustomCalendar = ({
 
               <BaseSelect
                 value={getMonth(date)}
-                className="!pw-outline-none !pw-border-none"
+                className="!pw-px-2 !pw-outline-none !pw-border-none"
                 onChangeValue={(e) => changeMonth(Number(e.value))}
                 options={months.map((month, index) => ({ value: index, label: month as string }))}
-                classes={{ root: 'pw-w-full', rootSize: '!pw-min-w-[150px]' }}
+                classes={{ root: 'pw-w-full', rootSize: '!pw-min-w-[138px]' }}
               />
             </div>
             <BaseSelect
-              className="!pw-w-[80px] !pw-min-w-[80px] !pw-outline-none !pw-border-none"
+              className="!pw-w-[92px] !pw-min-w-[92px] !pw-px-2 !pw-outline-none !pw-border-none"
               value={getYear(date)}
               onChangeValue={(e) => changeYear(Number(e.value))}
               options={years.map((year) => ({ value: year, label: year.toString() as string }))}
-              classes={{ rootSize: '!pw-w-[80px] !pw-min-w-[80px]', input: '!pw-outline-none !pw-border-none' }}
+              classes={{ rootSize: '!pw-w-[92px] !pw-min-w-[92px]' }}
             />
           </div>
 

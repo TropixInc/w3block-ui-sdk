@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { W3blockAPI } from "../enums/W3blockAPI";
-import { useCompanyConfig } from "../hooks/useCompanyConfig";
-import { ConfigGenericTable, FilterTableType, FormatTypeColumn, FormatFilterType } from "../interfaces/ConfigGenericTable";
-import { GenericTable } from "./GenericTable";
-import RequestItemWrapper from "./RequestItemWrapper";
-
+import { W3blockAPI } from '../enums/W3blockAPI';
+import { useCompanyConfig } from '../hooks/useCompanyConfig';
+import {
+  ConfigGenericTable,
+  FilterTableType,
+  FormatTypeColumn,
+  FormatFilterType,
+} from '../interfaces/ConfigGenericTable';
+import { GenericTable } from './GenericTable';
+import RequestItemWrapper from './RequestItemWrapper';
 
 const RequestsList = () => {
   const { companyId: tenantId } = useCompanyConfig();
@@ -57,7 +61,6 @@ const RequestsList = () => {
   const configTable: ConfigGenericTable = {
     localeItems: 'data.items',
     isLineExplansible: true,
-    filtersTitle: 'Filtre o resultado',
     expansibleComponent: (
       data: any,
       setOpenExpansible: (value: boolean) => void,
@@ -90,8 +93,6 @@ const RequestsList = () => {
     },
     tableStyles: {
       root: { width: '100%' },
-      header: '!pw-grid-cols-[18%_20%] !pw-text-black',
-      line: '!pw-grid-cols-[18%_20%] !pw-text-black',
     },
 
     columns: [
@@ -197,6 +198,7 @@ const RequestsList = () => {
     <div>
       <GenericTable
         config={configTable}
+        variant="redesign"
         classes={{
           grid: {
             display: 'grid',

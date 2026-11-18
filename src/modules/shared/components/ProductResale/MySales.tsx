@@ -17,6 +17,9 @@ import { useGetUserResaleSummary } from '../../hooks/useGetUserResaleSummary/use
 import { Alert } from '../Alert';
 import { BaseButton } from '../Buttons';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
+import { PageHeader } from '../ui/PageHeader';
+import { KpiCard, KpiRow } from '../ui/KpiCard';
+import { formatAmount } from '../../utils/formatAmount';
 import { Spinner } from '../Spinner';
 import { ContextsResale } from './ContextsResale';
 import { MySalesListComponent } from './MySalesListComponent';
@@ -119,68 +122,58 @@ export const MySales = () => {
           })}
         </div>
       ) : null}
-      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
-        <div className="pw-flex pw-justify-between">
-          <div>
-            <p className="pw-text-[23px] pw-font-[600]">
-              {translate('pages>mysales>mysales')}
-            </p>
-            {!hideWallet ? (
-              <div className="pw-flex pw-flex-col pw-gap-2">
-                <div
-                  onClick={() => copyAddress(mainWallet?.address || '')}
-                  className="pw-flex pw-gap-x-1 pw-mt-1 pw-cursor-pointer"
-                >
-                  <p className="pw-text-xs pw-text-[#777E8F] pw-font-[400] pw-cursor-pointer">
-                    {mainWallet?.address || '-'}
-                  </p>
-                  <CopyIcon />
-                  {copied ? (
-                    <div className="pw-relative">
-                      <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2 pw-absolute pw-bg-slate-300 pw-shadow-md pw-rounded-md pw-right-0 pw-top-3 pw-p-1">
-                        <p className="pw-text-sm pw-text-[#353945]">
-                          {translate('components>menu>copied')}
-                        </p>
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </div>
-        <div className="pw-flex pw-w-full pw-mt-6 pw-gap-x-4 pw-text-black">
-          <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-            <p className="pw-text-sm pw-opacity-80">
-              {translate('pages>mysales>resale>totalSold')}
-            </p>
-            {'R$'}
-            {parseFloat(
+      <div className="pw-flex pw-flex-col pw-gap-4 pw-px-4 sm:pw-px-0">
+        <PageHeader
+          title={translate('pages>mysales>mysales')}
+          subtitle={
+            !hideWallet && mainWallet?.address ? (
+              <button
+                type="button"
+                onClick={() => copyAddress(mainWallet?.address || '')}
+                className="pw-inline-flex pw-items-center pw-gap-1 pw-text-[12px] pw-text-[#6B7280]"
+                title={mainWallet?.address}
+              >
+                <span className="pw-tabular-nums">
+                  {mainWallet.address.substring(0, 6)}…
+                  {mainWallet.address.substring(mainWallet.address.length - 4)}
+                </span>
+                <CopyIcon />
+                {copied ? (
+                  <span className="pw-text-[11px] pw-font-semibold">
+                    {translate('components>menu>copied')}
+                  </span>
+                ) : null}
+              </button>
+            ) : undefined
+          }
+        />
+        <KpiRow>
+          <KpiCard
+            variant="accent"
+            label={translate('pages>mysales>resale>totalSold')}
+            value={formatAmount(
               summary?.data?.saleSummaryByCurrency?.[0]?.netValue ?? '0'
-            ).toFixed(2)}
-          </div>
-          <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-            <p className="pw-text-sm pw-opacity-80">
-              {translate('pages>mysales>resale>totalWaiting')}
-            </p>
-            {'R$'}
-            {(
+            )}
+            unit="R$"
+          />
+          <KpiCard
+            label={translate('pages>mysales>resale>totalWaiting')}
+            value={formatAmount(
               parseFloat(
                 summary?.data?.saleSummaryByCurrency?.[0]?.waitingWithdraw ??
                   '0'
               ) +
-              parseFloat(
-                summary?.data?.saleSummaryByCurrency?.[0]?.pendingSplit ?? '0'
-              )
-            ).toFixed(2)}
-          </div>
-        </div>
-        <p className="pw-text-xs pw-text-[#777E8F] pw-font-[400] pw-cursor-pointer pw-mt-2">
-          {translate('pages>mysales>resale>info')}
-        </p>
+                parseFloat(
+                  summary?.data?.saleSummaryByCurrency?.[0]?.pendingSplit ?? '0'
+                )
+            )}
+            unit="R$"
+            hint={translate('pages>mysales>resale>info')}
+          />
+        </KpiRow>
       </div>
       {bankDetailsContext ? (
-        <div className="pw-mt-5 pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[24px] sm:pw-pb-[20px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden">
+        <div className="pw-mt-5 pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[24px] sm:pw-pb-[20px] pw-bg-white pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-rounded-[10px] pw-overflow-hidden">
           <Disclosure>
             <Disclosure.Button className="pw-flex pw-w-full pw-items-center pw-justify-between">
               <div className="pw-flex max-sm:pw-flex-col pw-flex-row pw-text-left pw-gap-1">

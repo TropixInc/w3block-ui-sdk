@@ -55,8 +55,15 @@ jobs:
           node-version: ^18.20.7
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
+      # Pre-release tags (v2.0.54-staging.0) go to the "staging" dist-tag so
+      # `latest` keeps pointing at the last stable version.
       - name: Publish to npm
-        run: npm publish --access public
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == *-* ]]; then
+            npm publish --access public --tag staging
+          else
+            npm publish --access public
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           scope: '@w3block'

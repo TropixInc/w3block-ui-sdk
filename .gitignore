@@ -113,3 +113,6 @@ dist
 */publish.yml
 
 dist
+
+# node --test output (yarn test)
+.test-out

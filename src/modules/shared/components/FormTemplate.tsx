@@ -22,8 +22,6 @@ import { SmartInputsController } from './SmartInputsController';
 import { Spinner } from './Spinner';
 import useTranslation from '../hooks/useTranslation';
 
-
-
 interface Props {
   isLoading: boolean;
   buttonDisabled: boolean;
@@ -42,6 +40,8 @@ interface Props {
   hideComplexPhone?: boolean;
   hideContinue?: boolean;
   readonly?: boolean;
+  /** The caller already shows the status (profile page). */
+  hideStatusAlert?: boolean;
 }
 
 export const FormTemplate = ({
@@ -62,6 +62,7 @@ export const FormTemplate = ({
   hideComplexPhone,
   hideContinue,
   readonly,
+  hideStatusAlert,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
   const [translate] = useTranslation();
@@ -135,8 +136,9 @@ export const FormTemplate = ({
       </div>
 
       {children}
-      {statusContext === UserContextStatus.Approved ||
-      statusContext === UserContextStatus.Denied ? (
+      {!hideStatusAlert &&
+      (statusContext === UserContextStatus.Approved ||
+        statusContext === UserContextStatus.Denied) ? (
         <div>
           <Alert>{translate('shared>formTemplate>formApprovedNotEdit')}</Alert>
         </div>

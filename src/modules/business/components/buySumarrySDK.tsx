@@ -1,8 +1,9 @@
+import classNames from 'classnames';
 
-import { CriptoValueComponent } from "../../shared/components/CriptoValueComponent";
-import { CurrencyEnum } from "../../shared/enums/Currency";
-import useTranslation from "../../shared/hooks/useTranslation";
-
+import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
+import { UI } from '../../shared/components/ui/tokens';
+import { CurrencyEnum } from '../../shared/enums/Currency';
+import useTranslation from '../../shared/hooks/useTranslation';
 
 interface BuySummarySDKProps {
   totalValue?: string;
@@ -23,36 +24,44 @@ export const BuySummarySDK = ({
   className = '',
 }: BuySummarySDKProps) => {
   const [translate] = useTranslation();
+  const hasDiscount = parseFloat(discountValue ?? '0') > 0;
   return (
     <div
-      className={`pw-p-5 pw-rounded-2xl pw-shadow pw-border pw-border-zinc-100 ${className}`}
+      className={classNames(
+        UI.card,
+        'pw-p-4 pw-border pw-border-[#EEF0F3]',
+        className
+      )}
     >
-      <p className="pw-text-lg pw-text-zinc-700 pw-font-medium pw-leading-6">
+      <p
+        className={classNames(
+          'pw-text-[14px] pw-font-semibold pw-m-0 pw-mb-3',
+          UI.text
+        )}
+      >
         {translate('business>buySumarySDK>purchaseResume')}
       </p>
       <BuySumarryEntries
-        className="pw-mt-[24px]"
-        text="Subtotal"
+        text={translate('business>buySumarySDK>subtotal')}
         currency={currencyToPay ?? CurrencyEnum.BRL}
         val={totalValue ?? '0'}
-        fontClass={'pw-text-gray-700 pw-text-sm pw-font-semibold'}
       />
-      {parseFloat(discountValue ?? '0') > 0 && (
+      {hasDiscount ? (
         <BuySumarryEntries
-          fontClass={'pw-text-gray-700 pw-text-sm pw-font-semibold'}
-          className="pw-mt-[6px]"
-          text={`Desconto em ${currencyToUse}`}
+          text={translate('business>buySumarySDK>discountIn', {
+            currency: currencyToUse,
+          })}
           currency={currencyToPay ?? CurrencyEnum.BRL}
           val={discountValue ?? '0'}
+          isNegative
         />
-      )}
-      <div className="pw-w-full pw-h-px pw-bg-zinc-200 pw-my-2"></div>
+      ) : null}
+      <div className="pw-w-full pw-h-px pw-bg-[#E6E8EC] pw-my-2" />
       <BuySumarryEntries
-        textClass="pw-font-semibold"
-        className="pw-mt-3"
-        text="Valor total a ser pago"
+        text={translate('business>buySumarySDK>total')}
         currency={currencyToPay ?? CurrencyEnum.BRL}
         val={valueToPay ?? '0'}
+        strong
       />
     </div>
   );
@@ -62,31 +71,40 @@ const BuySumarryEntries = ({
   text,
   val,
   currency,
-  className = '',
   isNegative = false,
-  fontClass = '',
-  textClass = '',
+  strong = false,
 }: {
   text: string;
   val: string;
   currency: CurrencyEnum;
-  className?: string;
   isNegative?: boolean;
-  fontClass?: string;
-  textClass?: string;
-}) => {
-  return (
-    <div className={`pw-flex pw-justify-between ${className}`}>
-      <p className={`pw-text-gray-700 pw-text-sm ${textClass}`}>{text}</p>
-      <div className="pw-flex pw-items-center pw-gap-2">
-        {isNegative && <p className="">-</p>}
-        <CriptoValueComponent
-          fontClass={fontClass}
-          value={val}
-          code={currency}
-          crypto={false}
-        />
-      </div>
-    </div>
-  );
-};
+  strong?: boolean;
+}) => (
+  <div className="pw-flex pw-items-center pw-justify-between pw-gap-3 pw-py-1 pw-text-[13px]">
+    <span
+      className={
+        strong ? classNames('pw-font-semibold', UI.text) : UI.textSecondary
+      }
+    >
+      {text}
+    </span>
+    <span
+      className={classNames(
+        'pw-inline-flex pw-items-center pw-gap-1 pw-tabular-nums',
+        strong ? 'pw-font-semibold' : '',
+        isNegative ? 'pw-text-[#0B7A55]' : UI.text
+      )}
+    >
+      {isNegative ? '−' : ''}
+      <CriptoValueComponent
+        fontClass={classNames(
+          'pw-text-[13px]',
+          strong ? 'pw-font-semibold' : 'pw-font-medium'
+        )}
+        code={currency}
+        value={val}
+        crypto={false}
+      />
+    </span>
+  </div>
+);

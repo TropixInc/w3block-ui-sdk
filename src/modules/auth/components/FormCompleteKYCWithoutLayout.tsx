@@ -3,7 +3,17 @@
 import { useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { DataTypesEnum, DocumentDto, KycStatus } from '@w3block/sdk-id';
+import {
+  DataTypesEnum,
+  DocumentDto,
+  KycStatus,
+  UserContextStatus,
+} from '@w3block/sdk-id';
+import { StatusPill } from '../../shared/components/ui/StatusPill';
+import {
+  contextStatusLabelKey,
+  contextStatusTone,
+} from '../../shared/utils/contextStatus';
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -211,20 +221,38 @@ const _FormCompleteKYCWithoutLayout = ({
 
   const formState = useMemo(() => {
     if (productForm) return 'initial';
-    else if (router?.query?.formState) return router?.query?.formState as string;
+    else if (router?.query?.formState)
+      return router?.query?.formState as string;
     else return '';
   }, [productForm, router?.query?.formState]);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  // On the profile page an approved context is shown read-only.
+  const isProfileReadonly = Boolean(
+    profilePage && statusContext === UserContextStatus.Approved
+  );
 
   if (!tenantInputs?.data?.length) return null;
 
   const formContent = (
     <FormProvider {...dynamicMethods}>
+      {profilePage && statusContext ? (
+        <div className="pw-flex pw-flex-wrap pw-items-center pw-gap-2 pw-mb-4">
+          <StatusPill tone={contextStatusTone(statusContext)}>
+            {translate(contextStatusLabelKey(statusContext))}
+          </StatusPill>
+          {isProfileReadonly ? (
+            <span className="pw-text-[12px] pw-text-[#6B7280]">
+              {translate('shared>contextStatus>readonlyHint')}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
       {!keyPage &&
       reasonsToUse?.logs?.at(-1)?.reason &&
-      reasonsToUse?.logs?.at(-1)?.inputIds.length ? (
-        <div className="pw-mb-4 pw-p-3 pw-bg-red-100 pw-w-full pw-rounded-lg">
-          <p className="pw-mt-2 pw-text-[#FF0505]">
+      (reasonsToUse?.logs?.at(-1)?.inputIds.length ||
+        statusContext === UserContextStatus.Denied) ? (
+        <div className="pw-mb-4 pw-px-3 pw-py-2.5 pw-bg-[#FDECEC] pw-w-full pw-rounded-lg">
+          <p className="pw-m-0 pw-text-[12.5px] pw-text-[#C92A2D]">
             {reasonsToUse?.logs.at(-1)?.reason}
           </p>
         </div>
@@ -272,7 +300,8 @@ const _FormCompleteKYCWithoutLayout = ({
         statusContext={statusContext}
         hideComplexPhone={hideComplexPhone}
         hideContinue={hideContinue}
-        readonly={readonly}
+        readonly={readonly || isProfileReadonly}
+        hideStatusAlert={Boolean(profilePage)}
       ></FormTemplate>
 
       {isSuccess && (
@@ -280,7 +309,7 @@ const _FormCompleteKYCWithoutLayout = ({
           <div className="pw-p-3 pw-w-full pw-rounded-lg">
             <p className="pw-text-green-300">
               {translate('auth>ormCompletKYCWithoutLayout>saveInfosSucess')}
-              <p>{!keyPage ? "Você esta sendo redirecionado" : ""}</p>
+              <p>{!keyPage ? 'Você esta sendo redirecionado' : ''}</p>
             </p>
           </div>
         </Alert>
@@ -289,8 +318,7 @@ const _FormCompleteKYCWithoutLayout = ({
         !dynamicMethods?.formState?.isValid &&
         dynamicMethods?.formState?.isSubmitted &&
         !inputsFiltered?.some(
-          (res: { type: DataTypesEnum }) =>
-            res.type === DataTypesEnum.Iframe
+          (res: { type: DataTypesEnum }) => res.type === DataTypesEnum.Iframe
         ) && (
           <Alert variant="error" className="pw-flex pw-gap-x-3 pw-my-5">
             <p className="pw-text-sm">
