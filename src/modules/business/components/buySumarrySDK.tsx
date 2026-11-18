@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-import { CriptoValueComponent } from '../../shared/components/CriptoValueComponent';
+import { formatterCurrency } from '../../shared/components/CriptoValueComponent';
 import { UI } from '../../shared/components/ui/tokens';
 import { CurrencyEnum } from '../../shared/enums/Currency';
 import useTranslation from '../../shared/hooks/useTranslation';
@@ -96,15 +96,14 @@ const BuySumarryEntries = ({
       )}
     >
       {isNegative ? '−' : ''}
-      <CriptoValueComponent
-        fontClass={classNames(
+      <span
+        className={classNames(
           'pw-text-[13px]',
           strong ? 'pw-font-semibold' : 'pw-font-medium'
         )}
-        code={currency}
-        value={val}
-        crypto={false}
-      />
+      >
+        {formatterCurrency(currency, Number.isNaN(parseFloat(val)) ? '0' : val)}
+      </span>
     </span>
   </div>
 );

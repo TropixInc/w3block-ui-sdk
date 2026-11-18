@@ -104,13 +104,13 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
       onClick={onToggle}
       onKeyDown={handleKeyDown}
       className={classNames(
-        'pw-bg-white pw-p-[18px] pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-flex pw-flex-col pw-gap-[16px] pw-overflow-hidden pw-transition-all pw-duration-300 pw-h-full',
+        'pw-bg-white pw-p-3 sm:pw-p-[18px] pw-rounded-[16px] sm:pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-flex pw-flex-col pw-gap-[16px] pw-overflow-hidden pw-transition-all pw-duration-300 pw-h-full',
         isExpanded
           ? 'pw-shadow-lg pw-scale-[1.02]'
           : 'hover:pw-border-[#295BA6] pw-cursor-pointer'
       )}
     >
-      <div className="pw-relative pw-overflow-hidden pw-rounded-[20px] pw-bg-neutral-200 pw-h-[300px]">
+      <div className="pw-relative pw-overflow-hidden pw-rounded-[12px] sm:pw-rounded-[20px] pw-bg-neutral-200 pw-aspect-square sm:pw-aspect-auto sm:pw-h-[300px]">
         <div className="pw-bg-white pw-absolute pw-left-[13px] pw-top-[14px] pw-rounded-full">
           <div className="pw-bg-brand-primary/30 pw-text-brand-primary pw-text-[12px] pw-leading-[18px] pw-font-bold pw-border pw-border-brand-primary pw-rounded-full pw-py-1 pw-px-2">
             {tokenCountLabel}
@@ -119,7 +119,7 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
         {coverImage ? (
           <ImageSDK
             src={coverImage}
-            className="!pw-w-full !pw-h-[300px] pw-object-cover pw-rounded-[20px]"
+            className="!pw-w-full !pw-h-full pw-object-cover pw-rounded-[12px] sm:pw-rounded-[20px]"
             width={312}
             height={300}
             quality="eco"
@@ -131,10 +131,10 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
         )}
       </div>
       <div className={`${collectionDescriptionClassName} pw-flex-1`}>
-        <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate">
+        <p className="pw-text-black pw-font-semibold pw-text-[13px] sm:pw-text-[15px] pw-leading-[20px] sm:pw-leading-[22px] pw-truncate">
           {collectionLabel}
         </p>
-        <div className="pw-mt-auto pw-pt-[22px] pw-flex pw-items-center pw-justify-end">
+        <div className="pw-mt-auto pw-pt-3 sm:pw-pt-[22px] pw-flex pw-items-center pw-justify-end">
           <BaseButton
             type="button"
             size="medium"
@@ -214,7 +214,7 @@ const GroupedTokensList: FC<GroupedTokensListProps> = ({
         />
         {isExpanded ? (
           <div className="pw-mt-4 pw-border pw-border-[#E6E8EC] pw-rounded-[20px] pw-bg-white pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-p-5">
-            <ul className="pw-grid pw-grid-cols-1 md:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-6">
+            <ul className="pw-grid pw-grid-cols-2 md:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-3 sm:pw-gap-6">
               {tokens.map((token) => (
                 <li key={token.id}>
                   <WalletTokenCard
@@ -250,7 +250,7 @@ const GroupedTokensList: FC<GroupedTokensListProps> = ({
     <div className="pw-flex pw-flex-col pw-gap-6 pw-max-w-full xl:pw-max-w-[1100px]">
       {expandedCollection ? renderCollection(expandedCollection, true) : null}
       {collapsedCollections.length ? (
-        <div className="pw-grid pw-grid-cols-1 md:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-6">
+        <div className="pw-grid pw-grid-cols-2 md:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-3 sm:pw-gap-6">
           {collapsedCollections.map((collection) =>
             renderCollection(collection, false)
           )}

@@ -986,7 +986,7 @@
   "staking>summary>deliverying": "Amount being delivered:",
   "staking>summary>error": "Error redeeming, please try again.",
   "staking>summary>redeem": "Redeem",
-  "staking>summary>subtitle": "These are the rewards available in your account. You can redeem these rewards, transforming them into points that can be exchanged for products and services available in our catalog. If the releases are not redeemed, they may expire. Pay attention to the expiration date of each one.",
+  "staking>summary>subtitle": "Rewards you can redeem and exchange for points in the catalogue. Mind the expiry date.",
   "staking>summary>success": "Amount successfully redeemed!",
   "staking>summary>title": "Rewards",
   "staking>summary>valueToRedeem": "Available for redemption:",
@@ -1432,5 +1432,12 @@
   "auth>withdrawsAdmin>showingOnPage": "{{count}} of {{pageCount}} on this page",
   "auth>withdrawsAdmin>nextStepHold": "Next step: hold the funds. Then conclude the transfer by attaching the receipt.",
   "auth>withdrawsAdmin>nextStepConclude": "Funds held. Conclude the transfer by attaching the receipt.",
-  "auth>withdrawsAdmin>failedHint": "The transfer failed. Nothing was debited; the merchant can request a new withdraw."
+  "auth>withdrawsAdmin>failedHint": "The transfer failed. Nothing was debited; the merchant can request a new withdraw.",
+  "shared>table>pageOf": "Page {{page}} of {{pages}} · {{total}} items",
+  "shared>formTemplate>viewFile": "View file",
+  "shared>formTemplate>nothingFilled": "Nothing filled in.",
+  "pass>baseTemplate>tapToShow": "Tap to show",
+  "pass>baseTemplate>tapToHide": "Tap to hide",
+  "pages>productResale>erc20SellFallback": "Token sale",
+  "auth>withdrawsAdmin>sampleHint": "Among the {{count}} most recent withdraws"
 }

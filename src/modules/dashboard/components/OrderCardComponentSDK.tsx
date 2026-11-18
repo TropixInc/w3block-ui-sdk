@@ -110,6 +110,12 @@ export const OrderCardComponentSDK = ({
   const [openReceipt, setOpenReceipt] = useState(false);
   const showCoinPaymentReceiptButton =
     defaultTheme?.configurations?.contentData?.showCoinPaymentReceiptButton;
+  // A receipt only makes sense for an order that was (or is being) paid.
+  const receiptAvailable =
+    Boolean(deliverId && showCoinPaymentReceiptButton) &&
+    status !== OrderStatusEnum.EXPIRED &&
+    status !== OrderStatusEnum.FAILED &&
+    status !== OrderStatusEnum.CANCELLED;
 
   const statusInfo = (s: OrderStatusEnum): { label: string; tone: Tone } => {
     switch (s) {
@@ -292,15 +298,14 @@ export const OrderCardComponentSDK = ({
         </div>
       </div>
 
-      {status === OrderStatusEnum.CONFIRMING_PAYMENT ||
-      (deliverId && showCoinPaymentReceiptButton) ? (
+      {status === OrderStatusEnum.CONFIRMING_PAYMENT || receiptAvailable ? (
         <div className="pw-flex pw-flex-wrap pw-gap-2 pw-mt-3">
           {status === OrderStatusEnum.CONFIRMING_PAYMENT ? (
             <BaseButton onClick={() => pushConnect(`/checkout/pay/${id}`)}>
               {translate('dashboardOrderCardComponentSDK>pay')}
             </BaseButton>
           ) : null}
-          {deliverId && showCoinPaymentReceiptButton ? (
+          {receiptAvailable ? (
             <button
               type="button"
               onClick={() => setOpenReceipt(true)}

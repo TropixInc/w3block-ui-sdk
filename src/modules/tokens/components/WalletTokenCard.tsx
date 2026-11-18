@@ -31,7 +31,7 @@ interface Props {
 }
 
 const cardClassName =
-  'pw-bg-white pw-p-[18px] pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] hover:pw-border-[#295BA6] hover:pw-cursor-pointer';
+  'pw-bg-white pw-p-3 sm:pw-p-[18px] pw-rounded-[16px] sm:pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] hover:pw-border-[#295BA6] hover:pw-cursor-pointer';
 
 const descriptionContainerClassName =
   'pw-w-full pw-flex pw-flex-col pw-gap-y-2.5 pw-mt-2.5';
@@ -105,12 +105,12 @@ export const WalletTokenCard = ({
               {image ? (
                 <ImageSDK
                   src={image}
-                  className="pw-w-full pw-h-[300px] pw-object-cover pw-rounded-[20px]"
+                  className="pw-w-full pw-aspect-square sm:pw-aspect-auto sm:pw-h-[300px] pw-object-cover pw-rounded-[12px] sm:pw-rounded-[20px]"
                   width={500}
                   quality="eco"
                 />
               ) : (
-                <FallbackImage className="pw-h-full pw-max-h-[300px] pw-w-full pw-min-h-[300px] pw-rounded-[20px]" />
+                <FallbackImage className="pw-w-full pw-aspect-square sm:pw-aspect-auto sm:pw-h-[300px] pw-rounded-[12px] sm:pw-rounded-[20px]" />
               )}
             </div>
 
@@ -118,7 +118,7 @@ export const WalletTokenCard = ({
               <p
                 className={`${
                   name !== '' ? 'pw-text-black' : 'pw-text-gray-500'
-                } pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate`}
+                } pw-font-semibold pw-text-[13px] sm:pw-text-[15px] pw-leading-[20px] sm:pw-leading-[22px] pw-truncate`}
               >
                 {name !== '' ? name : 'Token sem nome'}
               </p>

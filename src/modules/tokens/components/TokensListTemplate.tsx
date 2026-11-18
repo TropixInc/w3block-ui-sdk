@@ -204,6 +204,10 @@ const _TokensListTemplate = ({ tokens, isLoading, embedded }: Props) => {
       </div>
     ) : null;
 
+  if (shouldShowSkeleton) {
+    return <TokenListTemplateSkeleton />;
+  }
+
   if (!tokens?.length) {
     return (
       <EmptyState
@@ -245,7 +249,7 @@ const _TokensListTemplate = ({ tokens, isLoading, embedded }: Props) => {
         {controls}
 
         {processingTokens?.length ? (
-          <ul className="pw-grid pw-grid-cols-1 md:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-6 pw-mb-6 pw-max-w-full xl:pw-max-w-[1100px]">
+          <ul className="pw-grid pw-grid-cols-2 md:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-3 sm:pw-gap-6 pw-mb-3 sm:pw-mb-6 pw-max-w-full xl:pw-max-w-[1100px]">
             {processingTokens.map((token: any) => (
               <li className="pw-w-full pw-opacity-60" key={token.id.tokenId}>
                 <WalletTokenCard

@@ -23,6 +23,23 @@ import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions';
 import { CriptoValueComponent } from '../CriptoValueComponent';
 import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
+import { TONE_CLASSES, UI } from '../ui/tokens';
+
+/** Numbered step label; the text itself comes from the tenant's i18n. */
+const StepLabel = ({ step, html }: { step: number; html: string }) => (
+  <div className="pw-flex pw-items-center pw-gap-2 pw-mb-2">
+    <span
+      className="pw-grid pw-place-items-center pw-w-6 pw-h-6 pw-rounded-full pw-bg-brand-primary pw-text-white pw-text-[12px] pw-font-semibold pw-shrink-0"
+      aria-hidden
+    >
+      {step}
+    </span>
+    <div
+      className="pw-text-sm pw-font-semibold pw-text-[#0F1729] [&_*]:pw-m-0"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  </div>
+);
 
 export const Erc20Resale = () => {
   const [translate] = useTranslation();
@@ -152,9 +169,13 @@ export const Erc20Resale = () => {
     <TranslatableComponent>
       <InternalPagesLayoutBase>
         <InternalpageHeaderWithFunds
-          title={translate('pages>productResale>erc20Sell', {
-            name: productResale?.product?.name,
-          })}
+          title={
+            productResale?.product?.name
+              ? translate('pages>productResale>erc20Sell', {
+                  name: productResale?.product?.name,
+                })
+              : translate('pages>productResale>erc20SellFallback')
+          }
         ></InternalpageHeaderWithFunds>
         {success ? (
           <div className="pw-flex pw-flex-col pw-mt-5 pw-px-4 pw-gap-2 pw-justify-center pw-items-center">
@@ -170,11 +191,9 @@ export const Erc20Resale = () => {
             <div className="pw-flex pw-flex-col pw-gap-[34px] pw-mt-8 pw-items-start pw-bg-white pw-rounded-[10px] pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-p-5 sm:pw-p-6 pw-mb-5">
               <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px]">
                 <div>
-                  <div
-                    className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
-                    dangerouslySetInnerHTML={{
-                      __html: translate('pages>productResale>quantity'),
-                    }}
+                  <StepLabel
+                    step={1}
+                    html={translate('pages>productResale>quantity')}
                   />
                   <div className="pw-flex pw-gap-3">
                     <BaseInput
@@ -225,11 +244,9 @@ export const Erc20Resale = () => {
                   </div>
                 ) : null}
                 <div>
-                  <div
-                    className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
-                    dangerouslySetInnerHTML={{
-                      __html: translate('pages>productResale>value'),
-                    }}
+                  <StepLabel
+                    step={2}
+                    html={translate('pages>productResale>value')}
                   />
                   <CurrencyInput
                     onChangeValue={(_, value) => {
@@ -265,13 +282,13 @@ export const Erc20Resale = () => {
               </div>
               <div className="pw-w-full">
                 <div>
-                  <div
-                    className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
-                    dangerouslySetInnerHTML={{
-                      __html: translate('pages>productResale>summary'),
-                    }}
+                  <StepLabel
+                    step={3}
+                    html={translate('pages>productResale>summary')}
                   />
-                  <div className={`pw-w-full`}>
+                  <div
+                    className={`pw-w-full pw-rounded-[10px] pw-border ${UI.line} pw-bg-[#F7F8FA] pw-p-4`}
+                  >
                     <div className="pw-flex pw-justify-between">
                       <div
                         className="pw-text-sm pw-text-[#35394C] pw-font-[400]"
@@ -356,14 +373,14 @@ export const Erc20Resale = () => {
                   </div>
                 </div>
               </div>
-              <div>
+              {translate('pages>resale>saleWarning').trim() ? (
                 <div
-                  className="pw-block pw-text-sm pw-font-medium pw-text-black"
+                  className={`pw-w-full pw-rounded-lg pw-px-3 pw-py-2.5 pw-text-[13px] ${TONE_CLASSES.warn} [&_*]:pw-m-0`}
                   dangerouslySetInnerHTML={{
                     __html: translate('pages>resale>saleWarning'),
                   }}
                 />
-              </div>
+              ) : null}
               <div className="pw-w-full pw-flex pw-justify-start">
                 <div className="pw-flex pw-flex-col pw-gap-2">
                   {error !== '' ? <Alert variant="error">{error}</Alert> : null}
