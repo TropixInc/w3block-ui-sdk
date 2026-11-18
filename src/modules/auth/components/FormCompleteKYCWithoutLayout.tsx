@@ -302,6 +302,7 @@ const _FormCompleteKYCWithoutLayout = ({
         hideContinue={hideContinue}
         readonly={readonly || isProfileReadonly}
         hideStatusAlert={Boolean(profilePage)}
+        readView={isProfileReadonly}
       ></FormTemplate>
 
       {isSuccess && (
@@ -336,7 +337,8 @@ const _FormCompleteKYCWithoutLayout = ({
           {translate('auth>formCompletKYCWithoutLayout>sendInforms')}
         </p>
       )}
-      {contextSlug === 'signup' &&
+      {!profilePage &&
+      contextSlug === 'signup' &&
       (userKycStatus === KycStatus.Approved ||
         userKycStatus === KycStatus.Denied) ? (
         <p className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-2">

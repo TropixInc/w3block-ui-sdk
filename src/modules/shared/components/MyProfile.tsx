@@ -9,6 +9,7 @@ import { useRouterConnect } from '../hooks/useRouterConnect';
 import useTranslation from '../hooks/useTranslation';
 import { ImageSDK } from './ImageSDK';
 import { getInitials, shortAddress } from './Menu';
+import Skeleton from './Skeleton';
 import { DefinitionList } from './ui/DefinitionList';
 import { PageHeader } from './ui/PageHeader';
 import { UI } from './ui/tokens';
@@ -28,8 +29,12 @@ export const MyProfile = () => {
   const hideWallet =
     defaultTheme?.configurations?.contentData?.hideWalletAddress;
 
+  const loading = !profile;
   const name = profile?.data?.name ?? '';
-  const email = profile?.data?.email ?? '-';
+  const email = profile?.data?.email ?? '';
+  const pending = (width: string) => (
+    <Skeleton className={`pw-h-4 ${width} pw-rounded`} />
+  );
   const createdAt = profile?.data?.createdAt
     ? format(new Date(profile.data.createdAt as string), 'dd/MM/yyyy')
     : null;
@@ -60,7 +65,11 @@ export const MyProfile = () => {
             </span>
           )}
           <span className="pw-min-w-0 pw-truncate">
-            {name || translate('components>menu>myProfile')}
+            {loading ? (
+              <Skeleton className="pw-h-6 pw-w-40 pw-rounded" />
+            ) : (
+              name || translate('components>menu>myProfile')
+            )}
           </span>
         </span>
       }
@@ -84,8 +93,16 @@ export const MyProfile = () => {
     >
       <DefinitionList
         items={[
-          { term: translate('shared>myProfile>name'), value: name || '-' },
-          { term: 'E-mail', value: email },
+          {
+            term: translate('shared>myProfile>name'),
+            value: loading ? pending('pw-w-32') : name || '—',
+            muted: !loading && !name,
+          },
+          {
+            term: 'E-mail',
+            value: loading ? pending('pw-w-44') : email || '—',
+            muted: !loading && !email,
+          },
           ...(createdAt
             ? [
                 {
