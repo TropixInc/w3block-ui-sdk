@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.54-staging.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.53...v2.0.54-staging.0) (2026-11-18)
+
+
+### Features
+
+* **account:** profile, orders, cards, affiliates and notifications on the facelift primitives ([17aa09b](https://github.com/TropixInc/w3block-ui-sdk/commit/17aa09b139c6ccd3eea07589bb5aa9775fc661e6))
+* **kyc:** per-field moderation status chip on admin review ([614c79f](https://github.com/TropixInc/w3block-ui-sdk/commit/614c79f395608290eaf1d87d9062e7b7918de155)), closes [TropixInc/weblock-workspace#19](https://github.com/TropixInc/weblock-workspace/issues/19)
+* **operation:** requests, usage report, operator payment and pass tool on the facelift primitives ([3df8491](https://github.com/TropixInc/w3block-ui-sdk/commit/3df8491c7acfc6e33bbd2a81d8592a9d5feb860b))
+* **secondary:** rewards, add funds, connections, link account, resale and pass-use screens on the facelift tokens ([11c0ae9](https://github.com/TropixInc/w3block-ui-sdk/commit/11c0ae9642e34ff17a016744642253ebec1cf17b))
+* **shell:** single ordered internal menu, user card and mobile drawer ([c4d112e](https://github.com/TropixInc/w3block-ui-sdk/commit/c4d112e6cf6af3faa1be65279751cf0a1840124e))
+* **statement:** facelift de Lançamentos futuros e Extrato com marcação de repasse ([0c86341](https://github.com/TropixInc/w3block-ui-sdk/commit/0c8634193b874abf467a98bc692561a3bce297b6))
+* **ui:** shared facelift primitives ([18baef0](https://github.com/TropixInc/w3block-ui-sdk/commit/18baef09d36d2de5912008790df56a4aa6b87e63))
+* **wallet:** wallet overview and withdraws on the facelift primitives ([58ef40c](https://github.com/TropixInc/w3block-ui-sdk/commit/58ef40c26d5e41c3dfaecb92fceef391b417d0ea))
+* **withdraws:** módulo de saques automáticos para a Zuca ([0c0deb1](https://github.com/TropixInc/w3block-ui-sdk/commit/0c0deb1505cc13257aa01fcc23ccbe20ed0ff6f2)), closes [#697](https://github.com/TropixInc/w3block-ui-sdk/issues/697)
+
+
+### Bug Fixes
+
+* **account:** single status on profile contexts, loyalty payment label ([953d56b](https://github.com/TropixInc/w3block-ui-sdk/commit/953d56b837bbda97a0c796590e88005421a7bdd5))
+* **calendar:** evitar sobreposição da seta no select de ano ([999c5bd](https://github.com/TropixInc/w3block-ui-sdk/commit/999c5bdad2be83100842a1ca478e3a95177f647f))
+* **link-account:** escape values interpolated into the tenant message ([0bcad20](https://github.com/TropixInc/w3block-ui-sdk/commit/0bcad20ef4b3bd566355fa397fb08862fde9a9e1))
+* **statement:** cards de resumo sem summary na visão admin e rótulo do menu ([c420937](https://github.com/TropixInc/w3block-ui-sdk/commit/c4209378957b682d9e8086967b67f4570bf159d7))
+* **statement:** fonte mono via valor arbitrário (font-mono não existe no tema) ([19e0cc9](https://github.com/TropixInc/w3block-ui-sdk/commit/19e0cc9b1bee60e2156b42db29bad5f07af624bd))
+* **statement:** mobile polish for future statement and extract ([75bc8cc](https://github.com/TropixInc/w3block-ui-sdk/commit/75bc8cc4beca1364c7d3be16f961e81e7d0109eb))
+* **statement:** review follow-ups and settlement unit tests ([20f8067](https://github.com/TropixInc/w3block-ui-sdk/commit/20f80678ada9af5272dbaf80d9959035f35a0bba))
+* **wallet:** date fallback, client-side in-progress filter, plain empty text ([5bf57fa](https://github.com/TropixInc/w3block-ui-sdk/commit/5bf57faa3841f4075151e47dc12141f78089b0e3))
+* **withdraws:** review follow-ups on mock fallback, cache and exports ([863fbcb](https://github.com/TropixInc/w3block-ui-sdk/commit/863fbcb300fe3278e3d4cb6f8162e2f1b40332c3))
+
 ### [2.0.53](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.52...v2.0.53) (2026-08-28)
 
 
