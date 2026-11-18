@@ -6,7 +6,11 @@ import { useClickAway, useDebounce } from 'react-use';
 import _, { isArray } from 'lodash';
 
 import { W3blockAPI } from '../enums/W3blockAPI';
-import { FilterTableType, FormatFilterType, FilterParameters } from '../interfaces/ConfigGenericTable';
+import {
+  FilterTableType,
+  FormatFilterType,
+  FilterParameters,
+} from '../interfaces/ConfigGenericTable';
 import { BaseInput } from './BaseInput';
 import { DateFilter } from './DateFilter';
 import { SelectInput } from './SelectInput';
@@ -14,9 +18,8 @@ import { MultipleSelect } from './MultipleSelect';
 import { GenericWalletFilter } from './GenericWalletFilter';
 import NumberRange from './NumberRange';
 import { DynamicGenericFilter } from './DynamicGenericFilter';
-import { Option } from "./GenericSearchFilter"
+import { Option } from './GenericSearchFilter';
 import useTranslation from '../hooks/useTranslation';
-
 
 interface GenericFilterDto {
   filterType: FilterTableType | undefined;
@@ -210,7 +213,10 @@ const SmartGenericFilter = ({
 
         if (onChangeFilterLabels) {
           const newFilterLabels = { ...filterLabels };
-          const removedItemFilterLabels = _.omit(newFilterLabels, itemKey || '');
+          const removedItemFilterLabels = _.omit(
+            newFilterLabels,
+            itemKey || ''
+          );
           onChangeFilterLabels(removedItemFilterLabels);
         }
       }
@@ -403,10 +409,18 @@ const SmartGenericFilter = ({
       case FormatFilterType.MULTISELECT: {
         return (
           <MultipleSelect
-            classes={{
-              root: 'pw-w-full !pw-h-11 pw-relative pw-z-1 sm:pw-max-w-[270px]',
-              button: 'pw-h-11 pw-z-1',
-            }}
+            classes={
+              surface === 'filled'
+                ? {
+                    root: 'pw-w-full !pw-h-10 pw-relative pw-z-1 [&>div]:!pw-outline-none',
+                    button:
+                      '!pw-h-10 pw-z-1 !pw-border-[#E6E8EC] !pw-text-[13px] !pw-text-[#4A5567] [&_svg]:!pw-stroke-[#8B93A3] [&_svg]:!pw-stroke-2 [&_svg]:!pw-w-[14px]',
+                  }
+                : {
+                    root: 'pw-w-full !pw-h-11 pw-relative pw-z-1 sm:pw-max-w-[270px]',
+                    button: 'pw-h-11 pw-z-1',
+                  }
+            }
             name="status"
             placeholder={getPlaceholderForMultipleSelect(
               field.value,
