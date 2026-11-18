@@ -12,7 +12,7 @@ import {
   DataTableColumn,
 } from '../../shared/components/ui/DataTable';
 import { EmptyState } from '../../shared/components/ui/EmptyState';
-import { FilterBar } from '../../shared/components/ui/FilterBar';
+import { FilterBar, FilterChips } from '../../shared/components/ui/FilterBar';
 import { KpiCard, KpiRow } from '../../shared/components/ui/KpiCard';
 import { PageHeader } from '../../shared/components/ui/PageHeader';
 import { SectionCard } from '../../shared/components/ui/SectionCard';
@@ -42,7 +42,7 @@ import {
 
 type Filter = 'all' | 'awaiting' | 'in_progress' | 'concluded' | 'failed';
 const PAGE_SIZE = 10;
-const KPI_SAMPLE = 100;
+const KPI_SAMPLE = 50; // Key API caps `limit` at 50
 
 const FILTER_STATUSES: Record<
   Filter,
@@ -120,6 +120,15 @@ const _WithdrawsAdminTemplateSDK = () => {
   const pageRows = (data?.items ?? []).filter((row) =>
     matchesFilter(row, filter)
   );
+  // Without server-side status filtering a count only covers the sample.
+  const sampleHint = (
+    source: { filteredByServer?: boolean } | undefined,
+    hint: string
+  ) =>
+    source?.filteredByServer === false
+      ? translate('auth>withdrawsAdmin>sampleHint', { count: KPI_SAMPLE })
+      : hint;
+  const clientFiltered = filter !== 'all' && data?.filteredByServer === false;
   const rows = pageRows.filter((row) => matchesSearch(row, search.trim()));
   const total = data?.meta?.totalItems ?? 0;
   const totalPages = data?.meta?.totalPages ?? 0;
@@ -201,6 +210,26 @@ const _WithdrawsAdminTemplateSDK = () => {
     [translate, locale, precision, currency]
   );
 
+  const filterOptions: Array<{ value: Filter; label: string }> = [
+    { value: 'all', label: translate('auth>withdraws>filterAll') },
+    {
+      value: 'awaiting',
+      label: translate('auth>withdrawsAdmin>filterAwaiting'),
+    },
+    {
+      value: 'in_progress',
+      label: translate('auth>withdraws>filterInProgress'),
+    },
+    {
+      value: 'concluded',
+      label: translate('auth>withdraws>filterConcluded'),
+    },
+    {
+      value: 'failed',
+      label: translate('auth>withdrawsAdmin>filterFailed'),
+    },
+  ];
+
   const changeFilter = (next: Filter) => {
     setFilter(next);
     setPage(1);
@@ -225,20 +254,29 @@ const _WithdrawsAdminTemplateSDK = () => {
               label={translate('auth>withdrawStatus>awaitingAction')}
               value={awaitingCount}
               tone={awaitingCount > 0 ? 'warn' : undefined}
-              hint={translate('auth>withdrawsAdmin>awaitingHint')}
+              hint={sampleHint(
+                awaitingData,
+                translate('auth>withdrawsAdmin>awaitingHint')
+              )}
               loading={!awaitingData}
             />
             <KpiCard
               label={translate('auth>withdraws>inProgress')}
               value={inProgressCount}
-              hint={translate('auth>withdrawsAdmin>inProgressHint')}
+              hint={sampleHint(
+                inProgressData,
+                translate('auth>withdrawsAdmin>inProgressHint')
+              )}
               loading={!inProgressData}
             />
             <KpiCard
               label={translate('auth>withdrawStatus>concluded')}
               value={concludedCount}
               tone={concludedCount > 0 ? 'ok' : undefined}
-              hint={translate('auth>withdrawsAdmin>concludedHint')}
+              hint={sampleHint(
+                concludedData,
+                translate('auth>withdrawsAdmin>concludedHint')
+              )}
               loading={!concludedData}
             />
           </KpiRow>
@@ -268,25 +306,15 @@ const _WithdrawsAdminTemplateSDK = () => {
               ariaLabel={translate('token>pass>status')}
               value={filter}
               onChange={changeFilter}
-              options={[
-                { value: 'all', label: translate('auth>withdraws>filterAll') },
-                {
-                  value: 'awaiting',
-                  label: translate('auth>withdrawsAdmin>filterAwaiting'),
-                },
-                {
-                  value: 'in_progress',
-                  label: translate('auth>withdraws>filterInProgress'),
-                },
-                {
-                  value: 'concluded',
-                  label: translate('auth>withdraws>filterConcluded'),
-                },
-                {
-                  value: 'failed',
-                  label: translate('auth>withdrawsAdmin>filterFailed'),
-                },
-              ]}
+              options={filterOptions}
+              className="pw-hidden sm:pw-inline-flex"
+            />
+            <FilterChips<Filter>
+              ariaLabel={translate('token>pass>status')}
+              value={filter}
+              onToggle={changeFilter}
+              options={filterOptions}
+              className="sm:pw-hidden"
             />
           </FilterBar>
 
@@ -318,10 +346,10 @@ const _WithdrawsAdminTemplateSDK = () => {
               total > 0 ? (
                 <>
                   <span>
-                    {search.trim()
+                    {search.trim() || clientFiltered
                       ? translate('auth>withdrawsAdmin>showingOnPage', {
                           count: rows.length,
-                          pageCount: pageRows.length,
+                          pageCount: data?.items?.length ?? 0,
                         })
                       : translate('auth>withdrawsAdmin>showing', {
                           from,

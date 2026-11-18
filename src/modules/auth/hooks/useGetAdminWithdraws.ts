@@ -4,7 +4,11 @@ import { useAxios } from '../../shared/hooks/useAxios';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { usePrivateQuery } from '../../shared/hooks/usePrivateQuery';
 import { WithdrawStatus } from '../../shared/utils/withdrawStatus';
-import { UserWithdrawsResponse, UserWithdraw } from './useGetUserWithdraws';
+import {
+  fetchWithdrawList,
+  UserWithdrawsResponse,
+  UserWithdraw,
+} from './useGetUserWithdraws';
 
 export interface AdminWithdraw extends UserWithdraw {
   currency?: string;
@@ -46,20 +50,12 @@ export const useGetAdminWithdraws = ({
       status ? status.join(',') : '',
     ],
     () =>
-      axios
-        .get<AdminWithdrawsResponse>(
-          PixwayAPIRoutes.WITHDRAWS_ADMIN.replace('{companyId}', companyId),
-          {
-            params: {
-              page,
-              limit,
-              sortBy: 'createdAt',
-              orderBy: 'DESC',
-              status: status ? [...status] : undefined,
-            },
-          }
-        )
-        .then((response) => response.data),
+      fetchWithdrawList<AdminWithdrawsResponse>(
+        axios,
+        PixwayAPIRoutes.WITHDRAWS_ADMIN.replace('{companyId}', companyId),
+        { page, limit, sortBy: 'createdAt', orderBy: 'DESC' },
+        status
+      ),
     {
       enabled: Boolean(companyId) && enabled,
       refetchOnWindowFocus: false,
@@ -80,7 +76,8 @@ export const countMatching = (
   const items = data?.items ?? [];
   if (!items.length) return 0;
   const matching = items.filter(predicate);
-  const serverApplied = matching.length === items.length;
+  const serverApplied =
+    data?.filteredByServer !== false && matching.length === items.length;
   return serverApplied
     ? data?.meta?.totalItems ?? matching.length
     : matching.length;
