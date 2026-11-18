@@ -1443,5 +1443,6 @@
   "pass>baseTemplate>tapToShow": "Toque para mostrar",
   "pass>baseTemplate>tapToHide": "Toque para ocultar",
   "pages>productResale>erc20SellFallback": "Venda de tokens",
-  "auth>withdrawsAdmin>sampleHint": "Entre os {{count}} saques mais recentes"
+  "auth>withdrawsAdmin>sampleHint": "Entre os {{count}} saques mais recentes",
+  "dashboardOrderCardComponentSDK>totalPaid": "Total pago"
 }

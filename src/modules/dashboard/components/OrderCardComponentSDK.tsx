@@ -205,6 +205,13 @@ export const OrderCardComponentSDK = ({
         : pr?.productToken?.product?.id === prod?.productToken?.product?.id
     ).length;
 
+  // The detail breakdown is only worth showing when it carries amounts.
+  const hasPaymentBreakdown = Boolean(
+    order?.payments?.some((payment: any) =>
+      Number.isFinite(parseFloat(payment?.amount))
+    )
+  );
+
   const cmsName = data?.data?.data?.[0]?.attributes?.name;
   const cmsImage =
     data?.data?.data?.[0]?.attributes?.image?.data?.attributes?.formats
@@ -327,9 +334,12 @@ export const OrderCardComponentSDK = ({
                     ? order?.payments?.find(
                         (res: { currencyId: string }) =>
                           res.currencyId !== coinPaymentCurrencyId
-                      )?.currency?.symbol ?? CurrencyEnum.BRL
+                      )?.currency?.symbol ??
+                      currencySymbol ??
+                      'R$'
                     : order?.data?.payments?.[0]?.currency?.symbol ??
-                      CurrencyEnum.BRL
+                      currencySymbol ??
+                      'R$'
                 }
                 image={
                   cmsImage
@@ -372,19 +382,34 @@ export const OrderCardComponentSDK = ({
               </span>
             </div>
           ) : null}
-          <PriceComponent
-            payments={order?.payments}
-            name={order?.currency?.code ?? CurrencyEnum.BRL}
-            className={cmsName ? '' : 'pw-mt-4'}
-          />
-          <p
-            className={classNames(
-              'pw-text-[11px] pw-m-0 pw-mt-3 pw-break-all',
-              UI.textFaint
-            )}
-          >
-            ID {id}
-          </p>
+          {hasPaymentBreakdown ? (
+            <PriceComponent
+              payments={order?.payments}
+              name={order?.currency?.code ?? CurrencyEnum.BRL}
+              className={cmsName ? '' : 'pw-mt-4'}
+            />
+          ) : total ? (
+            // Without the payment breakdown only the known total is shown;
+            // no empty subtotal / gas / total lines.
+            <div
+              className={classNames(
+                'pw-flex pw-justify-between pw-items-center pw-pt-3 pw-border-t pw-border-[#E6E8EC] pw-text-[13px]',
+                cmsName ? 'pw-mt-2' : 'pw-mt-4'
+              )}
+            >
+              <span className={classNames('pw-font-semibold', UI.text)}>
+                {translate('dashboardOrderCardComponentSDK>totalPaid')}
+              </span>
+              <span
+                className={classNames(
+                  'pw-font-semibold pw-tabular-nums',
+                  UI.text
+                )}
+              >
+                {total}
+              </span>
+            </div>
+          ) : null}
         </div>
       ) : null}
       <ReceiptQRCode
