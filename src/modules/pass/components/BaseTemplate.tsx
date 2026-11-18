@@ -6,19 +6,17 @@ import { useToggle } from 'react-use';
 import { WalletTypes } from '@w3block/sdk-id';
 import classNames from 'classnames';
 
-import EyeIcon from '../../shared/assets/icons/eyeIcon.svg';
-import EyeCrossedIcon from '../../shared/assets/icons/eyeIconCrossed.svg';
-import MetamaskIcon from '../../shared/assets/icons/metamask.svg';
-import WalletIcon from '../../shared/assets/icons/walletOutlined.svg';
 import { ErrorBox } from '../../shared/components/ErrorBox';
+import { KpiCard, KpiRow } from '../../shared/components/ui/KpiCard';
 import { PageHeader } from '../../shared/components/ui/PageHeader';
 import { UI } from '../../shared/components/ui/tokens';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useLocale } from '../../shared/hooks/useLocale';
 import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
-import { Chip } from './Chip';
+import { formatAmount } from '../../shared/utils/formatAmount';
 
 /**
  * Header of the pass pages (operator tool): title, subtitle, the balance
@@ -45,9 +43,15 @@ export const BaseTemplate = ({
   const router = useRouterConnect();
   const [showValue, toggleShowValue] = useToggle(false);
   const { data: profile, error: errorProfile } = useProfile();
-  const { mainWallet: wallet } = useUserWallet();
+  const { mainWallet: wallet, loyaltyWallet } = useUserWallet();
+  const loyalty = loyaltyWallet?.[0];
+  const locale = useLocale();
   const walletBalance = wallet?.balance ?? '0';
   const isLoading = wallet == undefined;
+  const wallets = (profile?.data.wallets ?? []) as Array<{
+    type: WalletTypes;
+    id: Key | null | undefined;
+  }>;
 
   if (errorProfile) return <ErrorBox customError={errorProfile as any} />;
 
@@ -65,58 +69,57 @@ export const BaseTemplate = ({
         actions={
           <>
             {actions}
-            <div className="pw-flex pw-items-center pw-gap-2 pw-flex-wrap">
-              <button
-                type="button"
-                onClick={() => toggleShowValue()}
-                aria-pressed={showValue}
-                className="pw-grid pw-place-items-center pw-w-9 pw-h-9 pw-rounded-full pw-border pw-border-[#E6E8EC] pw-bg-white hover:pw-bg-[#F7F8FA]"
-                aria-label={translate('wallet>page>balance')}
-              >
-                {showValue ? (
-                  <EyeIcon className="pw-stroke-brand-primary" />
-                ) : (
-                  <EyeCrossedIcon className="pw-stroke-brand-primary" />
-                )}
-              </button>
-              {isLoading ? (
-                <Chip.Skeleton />
-              ) : (
-                profile?.data.wallets?.map(
-                  (w: { type: WalletTypes; id: Key | null | undefined }) =>
-                    w.type === WalletTypes.Vault ? (
-                      <Chip
-                        key={w.id}
-                        showValue={showValue}
-                        value={walletBalance}
-                        Icon={() => (
-                          <WalletIcon className="pw-stroke-brand-primary" />
-                        )}
-                        title={translate('wallet>page>balance')}
-                      />
-                    ) : (
-                      <Chip
-                        key={w.id}
-                        showValue={showValue}
-                        value={walletBalance}
-                        Icon={() => (
-                          <MetamaskIcon className="pw-stroke-brand-primary" />
-                        )}
-                        title={translate('wallet>page>metamask')}
-                      />
-                    )
-                )
-              )}
-              <a
-                href={router.routerToHref(PixwayAppRoutes.ADD_FUNDS_TYPE)}
-                className={UI.buttonSecondary}
-              >
-                {translate('wallet>page>addFunds')}
-              </a>
-            </div>
+            <a
+              href={router.routerToHref(PixwayAppRoutes.ADD_FUNDS_TYPE)}
+              className={UI.buttonSecondary}
+            >
+              {translate('wallet>page>addFunds')}
+            </a>
           </>
         }
       />
+      <KpiRow>
+        {(isLoading
+          ? [{ type: WalletTypes.Vault, id: 'loading' }]
+          : wallets
+        ).map((w) => (
+          <button
+            key={String(w.id)}
+            type="button"
+            onClick={() => toggleShowValue()}
+            aria-pressed={showValue}
+            className={classNames(
+              'pw-text-left pw-rounded-[10px]',
+              UI.focusRing
+            )}
+          >
+            <KpiCard
+              variant="accent"
+              label={
+                w.type === WalletTypes.Vault
+                  ? translate('wallet>page>balance')
+                  : translate('wallet>page>metamask')
+              }
+              value={
+                showValue
+                  ? formatAmount(
+                      walletBalance,
+                      locale,
+                      loyalty?.pointsPrecision
+                    )
+                  : '•••••'
+              }
+              unit={showValue ? loyalty?.currency : undefined}
+              hint={
+                showValue
+                  ? translate('pass>baseTemplate>tapToHide')
+                  : translate('pass>baseTemplate>tapToShow')
+              }
+              loading={isLoading}
+            />
+          </button>
+        ))}
+      </KpiRow>
       {children}
     </div>
   );
