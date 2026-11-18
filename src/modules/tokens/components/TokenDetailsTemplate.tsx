@@ -1,12 +1,14 @@
-import { ErrorBox } from "../../shared/components/ErrorBox";
-import { InternalPagesLayoutBase } from "../../shared/components/InternalPagesLayoutBase";
-import { MintedInfoCard } from "../../shared/components/MintedInfoCard";
-import TranslatableComponent from "../../shared/components/TranslatableComponent";
-import { PixwayAppRoutes } from "../../shared/enums/PixwayAppRoutes";
-import { useRouterConnect } from "../../shared/hooks/useRouterConnect";
-import { usePublicTokenData } from "../hooks/usePublicTokenData";
-import { Dimensions2DValue, Dimensions3DValue } from "../interfaces/DimensionsValue";
-import { TokenDetailsCard } from "./TokenDetailsCard";
+import { ErrorBox } from '../../shared/components/ErrorBox';
+import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
+import { MintedInfoCard } from '../../shared/components/MintedInfoCard';
+import TranslatableComponent from '../../shared/components/TranslatableComponent';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
+import { usePublicTokenData } from '../hooks/usePublicTokenData';
+import {
+  Dimensions2DValue,
+  Dimensions3DValue,
+} from '../interfaces/DimensionsValue';
+import { TokenDetailsCard } from './TokenDetailsCard';
 
 const _TokenDetailsTemplate = () => {
   const router = useRouterConnect();
@@ -24,17 +26,7 @@ const _TokenDetailsTemplate = () => {
   return errorPublicTokenResponse ? (
     <ErrorBox customError={errorPublicTokenResponse} />
   ) : (
-    <div className="pw-w-full sm:pw-max-w-[968px] pw-font-roboto">
-      <div className="sm:pw-hidden pw-mb-4">
-        <div className="pw-flex pw-items-center pw-gap-x-4 pw-mb-[16.5px]">
-          <button
-            onClick={() => router.pushConnect(PixwayAppRoutes.TOKENS)}
-            className="pw-flex pw-items-center pw-justify-center pw-rounded-full pw-border pw-border-[#777E8F] pw-bg-[#F7F7F7] pw-w-4 pw-h-4 pw-ml-[22px]"
-          ></button>
-        </div>
-
-        <div className="pw-w-full pw-h-[1px] pw-bg-[#EFEFEF]" />
-      </div>
+    <div className="pw-w-full sm:pw-max-w-[968px] pw-flex pw-flex-col pw-gap-4 pw-px-4 sm:pw-px-0 pw-font-roboto">
       {publicTokenResponse ? (
         <>
           <TokenDetailsCard
@@ -53,9 +45,9 @@ const _TokenDetailsTemplate = () => {
             description={publicTokenResponse?.data?.information?.description}
             title={publicTokenResponse?.data?.information?.title}
             mainImage={publicTokenResponse?.data?.information?.mainImage ?? ''}
-            className="pw-mb-6"
             tokenId={tokenId}
             collectionId={publicTokenResponse?.data?.group?.collectionId}
+            isPass={publicTokenResponse?.data?.group?.collectionPass}
             editionNumber={publicTokenResponse.data?.edition?.currentNumber}
           />
 
@@ -72,7 +64,7 @@ const _TokenDetailsTemplate = () => {
             mintedHash={publicTokenResponse?.data?.edition.mintedHash ?? ''}
             totalEditions={publicTokenResponse?.data?.edition.total}
             editionId=""
-            className="pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-bg-[#FFFFFF] pw-rounded-[10px] pw-p-6 pw-px-[34.5px] sm:pw-px-6"
+            className="!pw-mx-0 pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-bg-[#FFFFFF] pw-rounded-[10px] pw-p-4 sm:pw-p-5 [&_a]:!pw-w-auto [&_a]:pw-max-w-full [&_a]:pw-whitespace-normal [&_a]:pw-text-center sm:[&_a]:pw-text-left"
           />
         </>
       ) : null}

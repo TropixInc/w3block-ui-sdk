@@ -1440,5 +1440,18 @@
   "pass>baseTemplate>tapToHide": "Tap to hide",
   "pages>productResale>erc20SellFallback": "Token sale",
   "auth>withdrawsAdmin>sampleHint": "Among the {{count}} most recent withdraws",
-  "dashboardOrderCardComponentSDK>totalPaid": "Total paid"
+  "dashboardOrderCardComponentSDK>totalPaid": "Total paid",
+  "tokens>tokenDetailsCard>type": "Type",
+  "tokens>tokenDetailsCard>passBenefits": "Pass benefits",
+  "tokens>tokenDetailsCard>noBenefits": "No benefit available for this token",
+  "tokens>tokenDetailsCard>aboutToken": "About the token",
+  "tokens>passTemplate>usagePeriod": "Usage period",
+  "tokens>passTemplate>checkIn": "Check-in available",
+  "tokens>passTemplate>tokenDetails": "Token details",
+  "tokens>passTemplate>chooseToken": "Choose the token",
+  "tokens>passTemplate>viewOnBlockchain": "View on blockchain",
+  "tokens>passTemplate>copy": "Copy",
+  "tokens>passTemplate>copied": "Copied",
+  "tokens>passTemplate>usesLeft": "{{quantity}} uses left",
+  "tokens>passTemplate>oneUseLeft": "1 use left"
 }
