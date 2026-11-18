@@ -3,19 +3,8 @@ import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useClickAway } from "react-use";
 
 import { WalletTypes } from "@w3block/sdk-id";
-import { UserRoleEnum } from "@w3block/sdk-id/dist/types/enums";
 import UserSimpleIcon from "../../../assets/icons/user.svg";
 import ArrowDown from "../../../assets/icons/arrowDown.svg";
-import WalletIcon from "../../../assets/icons/walletIconGray.svg";
-import TicketIcon from "../../../assets/icons/ticketFilled.svg";
-import DashboardIcon from "../../../assets/icons/dashboard.svg";
-import MyOrdersIcon from "../../../assets/icons/myOrders.svg";
-import NewsIcon from "../../../assets/icons/news.svg";
-import ReceiptIcon from "../../../assets/icons/receipt.svg";
-import UserIcon from "../../../assets/icons/user.svg";
-import NotifyIcon from "../../../assets/icons/notifyOutlined.svg";
-import FormIcon from "../../../assets/icons/form.svg";
-import IntegrationIcon from "../../../assets/icons/integrationIconOutlined.svg";
 import LogoutIcon from "../../../assets/icons/logoutIconGray.svg";
 
 import { NavigationMenuTabs } from "../interfaces/menu";
@@ -27,15 +16,13 @@ import {
   chainIdToCode,
   useGetRightWallet,
 } from "../../../utils/getRightWallet";
-import { useIsProduction } from "../../../hooks/useIsProduction";
 
 import { useProfile } from "../../../hooks/useProfile";
-import { useIsHiddenMenuItem } from "../../../hooks/useIsHiddenMenuItem";
+import { useInternalMenuTabs } from "../../../hooks/useInternalMenuTabs";
 
 import { CriptoValueComponent } from "../../CriptoValueComponent";
 import { usePixwayAuthentication } from "../../../../auth/hooks/usePixwayAuthentication";
 import { useUserWallet } from "../../../hooks/useUserWallet/useUserWallet";
-import { useLoyaltiesInfo } from "../../../../business/hooks/useLoyaltiesInfo";
 import { useThemeConfig } from "../../../../storefront/hooks/useThemeConfig";
 import { PixwayAppRoutes } from "../../../enums/PixwayAppRoutes";
 import useTranslation from "../../../hooks/useTranslation";
@@ -130,266 +117,37 @@ export const NavigationLoginLoggedButton = ({
   );
 };
 export const useDefaultMenuTabs = (textColor: string) => {
-  const isProduction = useIsProduction();
-  const [translate] = useTranslation();
   const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
-  const [tabsToShow, setTabsToShow] = useState<NavigationMenuTabs[]>([]);
-  const { loyaltyWallet } = useUserWallet();
-  const { data: profile } = useProfile();
-  const userRoles = profile?.data.roles || [];
-  const isHidden = useIsHiddenMenuItem(userRoles as Array<UserRoleEnum>);
-  const isAdmin = Boolean(
-    userRoles?.includes("admin") ||
-    userRoles?.includes("superAdmin") ||
-    userRoles?.includes("operator")
+  const iconProps = useMemo(
+    () => ({ style: { color: textColor, stroke: textColor } }),
+    [textColor]
   );
-  const isUser = Boolean(userRoles?.includes("user"));
-  const isLoayaltyOperator = Boolean(userRoles?.includes("loyaltyOperator"));
-  const hasLoyalty = !!useLoyaltiesInfo()?.loyalties?.length;
-  const { defaultTheme } = useThemeConfig();
-  const isCommerceReceiver = Boolean(
-    userRoles.find((e: string) => e === "commerce.orderReceiver")
-  );
-  const internalMenuData = useMemo(() => {
-    return defaultTheme?.configurations.styleData.internalMenu || {};
-  }, [defaultTheme?.configurations.styleData.internalMenu]);
+  const sharedTabs = useInternalMenuTabs({ iconProps });
 
-  const isShowAffiliates =
-    (defaultTheme &&
-      defaultTheme.configurations &&
-      defaultTheme?.configurations?.styleData &&
-      defaultTheme?.configurations?.styleData?.memberGetMember) ||
-    false;
-
-  const items: NavigationMenuTabs[] = [
-    {
-      name: internalMenuData["payment"]?.customLabel || "Pagamento",
-      id: "payment",
-      route: PixwayAppRoutes.LOYALTY_PAYMENT,
-      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
-      isVisible:
-        (isLoayaltyOperator || isAdmin) && !isHidden("payment") && hasLoyalty,
-    },
-    {
-      name:
-        internalMenuData["pass"]?.customLabel ||
-        translate("components>menu>tokenPass"),
-      id: "pass",
-      route: PixwayAppRoutes.TOKENPASS,
-      icon: (
-        <TicketIcon
-          style={{ color: textColor, stroke: textColor }}
-          width={17}
-          height={17}
-        />
-      ),
-      isVisible: isAdmin && !isHidden("pass"),
-    },
-    {
-      name:
-        internalMenuData["dash"]?.customLabel ||
-        translate("components>menu>dashboard"),
-      id: "dash",
-      route: PixwayAppRoutes.LOYALTY_REPORT,
-      icon: (
-        <DashboardIcon
-          style={{ color: textColor, stroke: textColor, fill: textColor }}
-        />
-      ),
-      isVisible:
-        (isLoayaltyOperator || isAdmin) && !isHidden("dash") && hasLoyalty,
-    },
-    {
-      name:
-        internalMenuData["wallet"]?.customLabel ||
-        translate("components>menu>wallet"),
-      id: "wallet",
-      route: PixwayAppRoutes.WALLET,
-      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
-      isVisible: (isUser || isAdmin) && !isHidden("wallet"),
-    },
-    {
-      name:
-        internalMenuData["mySales"]?.customLabel ||
-        translate("pages>mysales>mysales"),
-      id: "mySales",
-      icon: <MyOrdersIcon style={{ color: textColor, stroke: textColor }} />,
-      route: PixwayAppRoutes.MY_SALES,
-      isVisible: isHidden("mySales") === false,
-    },
-    {
-      name:
-        internalMenuData["withdraws"]?.customLabel ||
-        translate("components>menu>withdraws"),
-      id: "withdraws",
-      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
-      route: PixwayAppRoutes.WITHDRAWS,
-      isVisible: isHidden("withdraws") === false,
-    },
-    {
-      name:
-        internalMenuData["withdrawsAdmin"]?.customLabel ||
-        "Relatório de saques",
-      id: "withdrawsAdmin",
-      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
-      route: PixwayAppRoutes.WITHDRAWS_ADMIN,
-      isVisible: isAdmin && !isHidden("withdrawsAdmin"),
-    },
-    {
-      name:
-        internalMenuData["affiliates"]?.customLabel ||
-        translate("shared>menu>affiliates"),
-      id: "affiliates",
-      route: PixwayAppRoutes.AFFILIATES,
-      icon: (
-        <NewsIcon
-          width={17}
-          height={17}
-          style={{ color: textColor, stroke: textColor }}
-        />
-      ),
-      isVisible:
-        (isUser || isAdmin) && !isHidden("affiliates") && isShowAffiliates,
-    },
-    {
-      name:
-        internalMenuData["extract"]?.customLabel ||
-        translate("wallet>page>extract"),
-      id: "extract",
-      icon: (
-        <ReceiptIcon
-          style={{ color: textColor, stroke: textColor, fill: textColor }}
-          width={15}
-          height={15}
-        />
-      ),
-      route: PixwayAppRoutes.WALLET_RECEIPT,
-      isVisible:
-        (isUser || isAdmin) &&
-        loyaltyWallet &&
-        loyaltyWallet.length > 0 &&
-        !isHidden("extract"),
-    },
-    {
-      name: internalMenuData["futureStatement"]?.customLabel || "Recebimentos",
-      id: "futureStatement",
-      icon: (
-        <ReceiptIcon
-          style={{ color: textColor, stroke: textColor, fill: textColor }}
-          width={15}
-          height={15}
-        />
-      ),
-      route: PixwayAppRoutes.WALLET_FUTURE,
-      isVisible:
-        (isCommerceReceiver || isAdmin) &&
-        loyaltyWallet &&
-        loyaltyWallet.length > 0 &&
-        !isHidden("futureStatement"),
-    },
-    {
-      name: internalMenuData["staking"]?.customLabel || "Recompensas",
-      id: "staking",
-      icon: (
-        <WalletIcon
-          width={17}
-          height={17}
-          style={{ color: textColor, stroke: textColor }}
-        />
-      ),
-      route: PixwayAppRoutes.STAKING,
-      isVisible:
-        !isHidden("staking") && loyaltyWallet && loyaltyWallet.length > 0,
-    },
-    {
-      name:
-        internalMenuData["myOrders"]?.customLabel ||
-        translate("header>components>defaultTab>myOrders"),
-      id: "myOrders",
-      route: PixwayAppRoutes.MY_ORDERS,
-      icon: <MyOrdersIcon style={{ color: textColor, stroke: textColor }} />,
-      isVisible: (isUser || isAdmin) && !isHidden("myOrders"),
-    },
-    {
-      name:
-        internalMenuData["myProfile"]?.customLabel ||
-        translate("components>menu>myProfile"),
-      id: "myProfile",
-      route: PixwayAppRoutes.MY_PROFILE,
-      icon: <UserIcon style={{ color: textColor, stroke: textColor }} />,
-      isVisible: (isUser || isAdmin) && !isHidden("myProfile"),
-    },
-    {
-      name:
-        internalMenuData['notifications']?.customLabel ||
-        translate('notifications>notificationsTemplate>title'),
-      id: 'notifications',
-      icon: <NotifyIcon width={17} height={17} style={{ color: textColor, stroke: textColor }} />,
-      route: PixwayAppRoutes.MY_NOTIFICATIONS,
-      isVisible: (isUser || isAdmin) && !isHidden('notifications'),
-    },
-    {
-      name:
-        internalMenuData["requests"]?.customLabel ||
-        translate("components>menu>requests"),
-      id: "requests",
-      icon: (
-        <FormIcon
-          style={{ color: textColor, fill: textColor, stroke: textColor }}
-          width={17}
-          height={17}
-        />
-      ),
-      route: PixwayAppRoutes.REQUESTS,
-      isVisible: isHidden("requests") === false,
-    },
-    {
-      name: internalMenuData["cards"]?.customLabel || "Meus cartões",
-      id: "cards",
-      icon: <WalletIcon style={{ color: textColor, stroke: textColor }} />,
-      route: PixwayAppRoutes.CARDS,
-      isVisible: (isUser || isAdmin) && !isHidden("cards"),
-    },
-    {
-      name:
-        internalMenuData["integration"]?.customLabel ||
-        translate("components>menu>integration"),
-      id: "integration",
-      route: PixwayAppRoutes.CONNECTION,
-      icon: <IntegrationIcon style={{ color: textColor, stroke: textColor }} />,
-      isVisible: (isUser || isAdmin) && !isHidden("integration"),
-    },
-    // {
-    //   name: internalMenuData['integration']?.customLabel || translate('header>components>defaultTab>settings'),
-    //   id: 'integration',
-    //   route: PixwayAppRoutes.SETTINGS,
-    //   icon: <SettingsIcon />,
-    // },
-    // {
-    //   name: internalMenuData['help']?.customLabel || translate('header>components>defaultTab>helpCenter'),
-    //   id: 'help',
-    //   route: PixwayAppRoutes.HELP,
-    //   icon: <HelpIcon />,
-    // },
-    {
-      name: "Logout",
-      icon: <LogoutIcon style={{ color: textColor, stroke: textColor }} />,
-      action: () => {
-        signOut().then(() => {
-          router.push(PixwayAppRoutes.SIGN_IN);
-        });
+  return useMemo<NavigationMenuTabs[]>(
+    () => [
+      ...sharedTabs.map((tab) => ({
+        name: tab.title,
+        id: tab.id,
+        route: tab.link,
+        icon: tab.icon,
+        isVisible: tab.isVisible,
+      })),
+      {
+        name: "Logout",
+        icon: <LogoutIcon style={{ color: textColor, stroke: textColor }} />,
+        action: () => {
+          signOut().then(() => {
+            router.push(PixwayAppRoutes.SIGN_IN);
+          });
+        },
+        isVisible: true,
       },
-      isVisible: true,
-    },
-  ];
-
-  useEffect(() => {
-    setTabsToShow(items);
+    ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProduction, profile, loyaltyWallet]);
-
-  return tabsToShow;
+    [sharedTabs, textColor]
+  );
 };
 
 const NavigationMenu = ({

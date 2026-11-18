@@ -94,7 +94,7 @@ export const InfoPass = ({
         <InfoCircledIcon className="pw-w-[17px] pw-h-[17px]" />
       </div>
       <div className="pw-flex pw-flex-col ">
-        <div className="pw-text-[#295BA6] pw-font-semibold pw-text-[15px] pw-leading-[22.5px]">
+        <div className="pw-text-[#0F1729] pw-font-semibold pw-text-[15px] pw-leading-[22.5px]">
           {title}
         </div>
         <div className="pw-text-[#333333] pw-font-normal pw-text-[14px] pw-leading-[21px]">
@@ -486,7 +486,7 @@ const _PassTemplate = ({
       </>
     ) : (
       <div className="pw-mx-[22px] sm:pw-mx-0 ">
-        <div className="pw-bg-white pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
+        <div className="pw-bg-white pw-flex pw-flex-col pw-w-full sm:pw-rounded-[10px] sm:pw-p-5 sm:pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-gap-[30px] pw-mb-10">
           <div
             className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
             onClick={() => router.back()}
@@ -530,7 +530,7 @@ const _PassTemplate = ({
           </div>
 
           <div className="pw-flex pw-flex-col">
-            <div className="pw-flex pw-flex-col pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
+            <div className="pw-flex pw-flex-col pw-rounded-[10px] pw-border pw-border-[#E6E8EC] pw-py-[16px]">
               {successValidation == 'true' ? (
                 <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-[16px] pw-pb-[16px] pw-px-[24px] pw-border-b pw-border-[#EFEFEF]">
                   <div className="pw-w-[20px] pw-h-[20px]">
@@ -548,7 +548,7 @@ const _PassTemplate = ({
                 {eventDate !== undefined && (
                   <>
                     <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
-                      <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
+                      <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#0F1729] pw-text-center">
                         {shortDay[locale][getDay(eventDate)]}
                       </div>
                       <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
@@ -563,7 +563,7 @@ const _PassTemplate = ({
                 )}
                 <div className="pw-flex sm:pw-flex-row pw-flex-col pw-w-full sm:pw-justify-between pw-justify-center">
                   <div className="pw-flex pw-flex-col pw-justify-center">
-                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#0F1729]">
                       {publicTokenResponse?.data?.information?.title} -{' '}
                       {benefitData && benefitData?.name}
                     </div>
@@ -714,7 +714,7 @@ const _PassTemplate = ({
                     className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
                   >
                     <div className="pw-flex pw-flex-col pw-gap-1">
-                      <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                      <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#0F1729]">
                         {address?.name}
                       </div>
                       <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
@@ -787,7 +787,7 @@ const _PassTemplate = ({
           </div>
         ) : (
           <>
-            <div className="pw-bg-white pw-flex pw-flex-col pw-w-full sm:pw-rounded-[20px] sm:pw-p-[24px] sm:pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-gap-[30px] pw-mb-10">
+            <div className="pw-bg-white pw-flex pw-flex-col pw-w-full sm:pw-rounded-[10px] sm:pw-p-5 sm:pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-gap-[30px] pw-mb-10">
               <div
                 className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
                 onClick={() => router.back()}
@@ -805,12 +805,12 @@ const _PassTemplate = ({
                 {translate('token>pass>title')}
               </div>
               <div className="pw-flex pw-flex-col">
-                <div className="pw-flex pw-flex-col pw-rounded-[16px] pw-border pw-border-[#EFEFEF] pw-py-[16px]">
+                <div className="pw-flex pw-flex-col pw-rounded-[10px] pw-border pw-border-[#E6E8EC] pw-py-[16px]">
                   <div className="pw-flex pw-gap-[16px] pw-px-[16px]">
                     {eventDate !== undefined && (
                       <>
                         <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
-                          <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
+                          <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#0F1729] pw-text-center">
                             {shortDay[locale][getDay(eventDate)]}
                           </div>
                           <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
@@ -823,7 +823,7 @@ const _PassTemplate = ({
                         <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
                       </>
                     )}
-                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#0F1729]">
                       {benefit?.data.tokenPass.tokenName} - {benefit?.data.name}
                     </div>
                   </div>

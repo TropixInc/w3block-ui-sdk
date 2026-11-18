@@ -1,7 +1,8 @@
-import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
 import { ErrorBox } from '../../shared/components/ErrorBox';
-import { BaseSelect } from '../../shared/components/BaseSelect';
+import { SegmentedControl } from '../../shared/components/ui/SegmentedControl';
+import { EmptyState } from '../../shared/components/ui/EmptyState';
 import { InternalPagesLayoutBase } from '../../shared/components/InternalPagesLayoutBase';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { useHasWallet } from '../../shared/hooks/useHasWallet';
@@ -16,10 +17,7 @@ import { mapNFTToToken } from '../utils/mapNFTToToken';
 import { TokenListTemplateSkeleton } from './TokenListTemplateSkeleton';
 import { WalletTokenCard } from './WalletTokenCard';
 import useTranslation from '../../shared/hooks/useTranslation';
-import WalletImage from '../../shared/assets/icons/wallet.svg';
-import GroupedTokensList, {
-  GroupedTokensListItem,
-} from './GroupedTokensList';
+import GroupedTokensList, { GroupedTokensListItem } from './GroupedTokensList';
 import { DefaultTokensList } from './DefaultTokensList';
 import { ThemeContext } from '../../storefront/contexts/ThemeContext';
 import { useGetBenefitsByEditionNumberBulk } from '../hooks/useGetBenefitsByEditionNumberBulk';
@@ -28,6 +26,8 @@ interface Props {
   tokens?: Array<Token>;
   isLoading?: boolean;
   withLayout?: boolean;
+  /** Rendered inside another card (wallet page): no own gutter or card chrome. */
+  embedded?: boolean;
 }
 
 type GroupedTokensResult = {
@@ -82,7 +82,7 @@ export const groupTokensByCollection = (
   };
 };
 
-const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
+const _TokensListTemplate = ({ tokens, isLoading, embedded }: Props) => {
   const [translate] = useTranslation();
   useHasWallet({});
   const themeContext = useContext(ThemeContext);
@@ -93,44 +93,26 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 
   const defaultFilterValue =
     configContext?.styleData?.defaultValueActiveBenefitFilter ?? 'all';
-  const [selectedFilter, setSelectedFilter] =
-    useState<'active' | 'all'>(defaultFilterValue);
+  const [selectedFilter, setSelectedFilter] = useState<'active' | 'all'>(
+    defaultFilterValue
+  );
 
   useEffect(() => {
     setSelectedFilter(defaultFilterValue);
   }, [defaultFilterValue]);
 
-  const filterOptions = useMemo(
-    () => [
-      {
-        label: translate('tokens>tokensListTemplate>showActiveBenefits'),
-        value: 'active',
-      },
-      {
-        label: translate('tokens>tokensListTemplate>showAllTokens'),
-        value: 'all',
-      },
-    ],
-    [translate]
-  );
-
   const tokensWithPass = useMemo(
-    () =>
-      tokens?.filter(
-        (token) => token.collectionData?.pass
-      ) ?? [],
+    () => tokens?.filter((token) => token.collectionData?.pass) ?? [],
     [tokens]
   );
 
   const shouldFetchActiveBenefits =
     selectedFilter === 'active' && tokensWithPass.length > 0;
 
-  const {
-    data: activeTokensData,
-    isLoading: isLoadingActiveTokens,
-  } = useGetBenefitsByEditionNumberBulk(
-    shouldFetchActiveBenefits ? tokensWithPass : []
-  );
+  const { data: activeTokensData, isLoading: isLoadingActiveTokens } =
+    useGetBenefitsByEditionNumberBulk(
+      shouldFetchActiveBenefits ? tokensWithPass : []
+    );
 
   const activeKeys = useMemo(() => {
     if (!activeTokensData.length) {
@@ -164,8 +146,6 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
     tokensWithPass,
   ]);
 
-
-
   const { groupedByCollection, singleTokens } = useMemo(
     () => groupTokensByCollection(filteredTokens),
     [filteredTokens]
@@ -176,69 +156,69 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
   const shouldShowSkeleton =
     isLoading || (shouldFetchActiveBenefits && isLoadingActiveTokens);
 
-  const handleGroupedViewChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setShowGroupedView(event.target.checked);
-  };
-
   const handleFilterChange = (value: 'active' | 'all') => {
     setSelectedFilter(value);
   };
 
   const groupedViewToggle = hasGroupedCollections ? (
-    <label className="pw-flex pw-items-center pw-gap-2 pw-mb-4">
-      <input
-        type="checkbox"
-        className="pw-w-5 pw-h-5 pw-form-checkbox"
-        checked={showGroupedView}
-        onChange={handleGroupedViewChange}
-      />
-      <span className="pw-text-sm pw-text-neutral-700">
-        {translate(showGroupedView ? 'tokens>tokensListTemplate>ungroup' : 'tokens>tokensListTemplate>group')}
-      </span>
-    </label>
+    <SegmentedControl<'grouped' | 'list'>
+      ariaLabel={translate('tokens>tokensListTemplate>group')}
+      value={showGroupedView ? 'grouped' : 'list'}
+      onChange={(value) => setShowGroupedView(value === 'grouped')}
+      options={[
+        {
+          value: 'grouped',
+          label: translate('tokens>tokensListTemplate>byCollection'),
+        },
+        {
+          value: 'list',
+          label: translate('tokens>tokensListTemplate>allList'),
+        },
+      ]}
+    />
   ) : null;
+
+  const benefitFilter = !configContext?.styleData?.haveActiveBenefitFilter ? (
+    <SegmentedControl<'active' | 'all'>
+      ariaLabel={translate('tokens>tokensListTemplate>showActiveBenefits')}
+      value={selectedFilter}
+      onChange={handleFilterChange}
+      options={[
+        {
+          value: 'active',
+          label: translate('tokens>tokensListTemplate>activeBenefits'),
+        },
+        {
+          value: 'all',
+          label: translate('tokens>tokensListTemplate>allTokens'),
+        },
+      ]}
+    />
+  ) : null;
+
+  const controls =
+    groupedViewToggle || benefitFilter ? (
+      <div className="pw-flex pw-flex-wrap pw-items-center pw-justify-between pw-gap-2 pw-mb-4">
+        {groupedViewToggle ?? <span />}
+        {benefitFilter}
+      </div>
+    ) : null;
 
   if (!tokens?.length) {
     return (
-      <div className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white pw-shadow-md pw-rounded-lg pw-overflow-hidden pw-flex pw-flex-1 pw-px-10 pw-flex-col pw-relative pw-font-poppins pw-items-center pw-justify-start sm:pw-justify-center pw-mb-13">
-        <h1 className="pw-font-semibold pw-ctext-[15px] pw-leading-[22px]  pw-hidden pw-mb-[61px]">
-          {translate('connectTokens>tokensList>pageTitle')}
-        </h1>
-
-        <div className="pw-mb-[29px] pw-block">
-          <WalletImage className="pw-fill-brand-primary pw-max-w-[82px] sm:pw-max-w-[113px]  pw-max-h-[76px] sm:pw-max-h-[106px]" />
-        </div>
-
-        <h1 className="pw-font-bold sm:pw-font-semibold pw-text-lg sm:pw-text-4xl pw-leading-[23px] sm:pw-leading-[64px] pw-mb-[31px] sm:pw-mb-6 pw-text-black pw-text-center">
-          {translate('connectTokens>tokensList>welcomeToWallet')}
-        </h1>
-        <h2 className="pw-font-normal sm:pw-font-medium pw-text-sm sm:pw-text-lg pw-leading-[21px] sm:pw-leading-[23px] pw-text-center pw-max-w-[595px] pw-mb-6">
-          {translate('connectTokens>tokensList>welcomeToWallet2')}
-        </h2>
-        <p className="pw-font-normal sm:pw-font-medium pw-text-sm sm:pw-text-lg pw-leading-[21px] sm:pw-leading-[23px] pw-text-center pw-max-w-[595px] pw-mb-6">
-          {translate('connectTokens>tokensList>tokensAlreadyProcessing')}
-        </p>
-      </div>
+      <EmptyState
+        bare={embedded}
+        title={translate('connectTokens>tokensList>welcomeToWallet2')}
+        description={translate('connectTokens>tokensList>emptyDescription')}
+        className={embedded ? 'pw-py-6' : 'pw-mx-4 sm:pw-mx-0'}
+      />
     );
   }
 
   if (!hasGroupedCollections) {
     return (
       <div className="pw-flex-1 pw-flex pw-flex-col">
-        <div className='pw-flex pw-items-center pw-justify-between'>
-        {groupedViewToggle}
-        {!configContext?.styleData?.haveActiveBenefitFilter ? (
-          <div className="pw-flex pw-justify-end pw-mb-4">
-            <BaseSelect
-              options={filterOptions}
-              value={selectedFilter}
-              classes={{ root: '!pw-w-[340px]' }}
-              onChangeValue={(e) => handleFilterChange(e.value)}
-            />
-          </div>
-        ) : null}
-
-      </div>
+        {controls}
         <DefaultTokensList
           tokens={tokens}
           isLoading={isLoading}
@@ -255,22 +235,14 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
     }
 
     return (
-      <div className="pw-flex-1 pw-flex pw-flex-col pw-justify-start pw-px-4 sm:pw-px-0">
-        <div className='pw-flex pw-items-center pw-justify-between'>
-          {groupedViewToggle}
-          {!configContext?.styleData?.haveActiveBenefitFilter ? (
-            <div className="pw-flex pw-justify-end pw-mb-4">
-              <BaseSelect
-                options={filterOptions}
-                value={selectedFilter}
-                classes={{ root: '!pw-w-[340px]' }}
-                onChangeValue={(e) => handleFilterChange(e.value)}
-              />
-            </div>
-          ) : null}
-
-        </div>
-
+      <div
+        className={
+          embedded
+            ? 'pw-flex-1 pw-flex pw-flex-col pw-justify-start'
+            : 'pw-flex-1 pw-flex pw-flex-col pw-justify-start pw-px-4 sm:pw-px-0'
+        }
+      >
+        {controls}
 
         {processingTokens?.length ? (
           <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px] pw-mb-6">
@@ -301,20 +273,7 @@ const _TokensListTemplate = ({ tokens, isLoading }: Props) => {
 
   return (
     <div className="pw-flex-1 pw-flex pw-flex-col">
-      <div className='pw-flex pw-items-center pw-justify-between'>
-        {groupedViewToggle}
-        {!configContext?.styleData?.haveActiveBenefitFilter ? (
-          <div className="pw-flex pw-justify-end pw-mb-4">
-            <BaseSelect
-              options={filterOptions}
-              value={selectedFilter}
-              classes={{ root: '!pw-w-[340px]' }}
-              onChangeValue={(e) => handleFilterChange(e.value)}
-            />
-          </div>
-        ) : null}
-
-      </div>
+      {controls}
       <DefaultTokensList
         tokens={tokens}
         isLoading={isLoading}
@@ -337,8 +296,8 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
 
   const tokens = ethNFTsResponse?.data?.items
     ? ethNFTsResponse?.data.items.map((nft: any) =>
-      mapNFTToToken(nft, wallet?.chainId || 137)
-    )
+        mapNFTToToken(nft, wallet?.chainId || 137)
+      )
     : [];
 
   return isLoading || !isAuthorized ? null : errorEth ? (
@@ -356,6 +315,7 @@ export const TokensListTemplate = ({ withLayout = true }: Props) => {
         <_TokensListTemplate
           tokens={tokens}
           isLoading={isLoadingETH || isLoadingProfile}
+          embedded
         />
       )}
     </TranslatableComponent>

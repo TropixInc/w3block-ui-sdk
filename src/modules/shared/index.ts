@@ -8,6 +8,7 @@ export * from './components/RequestsTemplate';
 export * from './components/ProductResale';
 export * from './components/StakingSummary';
 export * from './components/InternalPagesLayoutBase';
+export * from './components/ui';
 export * from './providers/userWalletsProvider';
 export * from './components/W3blockFooter';
 export * from './components/HeaderPixwaySDK';

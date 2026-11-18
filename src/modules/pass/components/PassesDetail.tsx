@@ -1,53 +1,77 @@
-/* eslint-disable prettier/prettier */
-import { ReactNode, useMemo, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useMemo, useState } from 'react';
 import { useBoolean } from 'react-use';
 
+import classNames from 'classnames';
 import { compareAsc, format } from 'date-fns';
 
+import { BaseButton } from '../../shared/components/Buttons';
 import { ErrorBox } from '../../shared/components/ErrorBox';
-
-import { Spinner } from '../../shared/components/Spinner';
+import { Pagination } from '../../shared/components/Pagination';
+import { QrCodeReader } from '../../shared/components/QrCodeReader';
+import {
+  QrCodeError,
+  TypeError,
+} from '../../shared/components/QrCodeReader/QrCodeError';
+import { QrCodeValidated } from '../../shared/components/QrCodeReader/QrCodeValidated';
+import {
+  DataTable,
+  DataTableColumn,
+} from '../../shared/components/ui/DataTable';
+import { EmptyState } from '../../shared/components/ui/EmptyState';
+import { SectionCard } from '../../shared/components/ui/SectionCard';
+import { StatusPill } from '../../shared/components/ui/StatusPill';
+import { Tone, UI } from '../../shared/components/ui/tokens';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
-import { useIsMobile } from '../../shared/hooks/useIsMobile';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
-import GenericTable, { ColumnType } from '../../tokens/components/GenericTable';
-import StatusTag, { statusMobile } from '../../tokens/components/StatusTag';
+import useTranslation from '../../shared/hooks/useTranslation';
 import { BenefitStatus } from '../enums/BenefitStatus';
 import useGetPassBenefits from '../hooks/useGetPassBenefits';
 import useGetPassById from '../hooks/useGetPassById';
 import usePostBenefitRegisterUse from '../hooks/usePostBenefitRegisterUse';
 import useVerifyBenefit from '../hooks/useVerifyBenefit';
-import { TokenPassBenefitType, TokenPassBenefits } from '../interfaces/PassBenefitDTO';
+import {
+  TokenPassBenefitType,
+  TokenPassBenefits,
+} from '../interfaces/PassBenefitDTO';
 import { BaseTemplate } from './BaseTemplate';
 import { VerifyBenefit } from './VerifyBenefit';
-import { Button } from '../../tokens/components/Button';
-import { QrCodeReader } from '../../shared/components/QrCodeReader';
-import { QrCodeValidated } from '../../shared/components/QrCodeReader/QrCodeValidated';
-import { QrCodeError, TypeError } from '../../shared/components/QrCodeReader/QrCodeError';
-import useTranslation from '../../shared/hooks/useTranslation';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 
-
-
-interface TableRow {
-  name: ReactNode;
+interface BenefitRow {
+  id: string;
+  name: string;
   local: string;
-  period?: string;
-  status?: ReactNode;
-  action: ReactNode;
+  period: string;
+  status: BenefitStatus;
+  canValidate: boolean;
 }
 
-interface formatAddressProps {
-  type: TokenPassBenefitType;
-  benefit: TokenPassBenefits;
-}
+const PAGE_SIZE = 5;
 
+const statusTone = (status: BenefitStatus): Tone =>
+  status === BenefitStatus.active
+    ? 'ok'
+    : status === BenefitStatus.inactive
+    ? 'bad'
+    : 'grey';
+const statusKey = (status: BenefitStatus) =>
+  status === BenefitStatus.active
+    ? 'tokens>StatusTag>active'
+    : status === BenefitStatus.inactive
+    ? 'tokens>StatusTag>inactive'
+    : 'tokens>StatusTag>unavailable';
+
+/**
+ * One pass as the operator sees it: header card and the benefits this
+ * operator is allowed to validate (same filter as before), with "Validar"
+ * while the event is still running.
+ */
 export const PassesDetail = () => {
-  const isMobile = useIsMobile();
   const router = useRouterConnect();
   const tokenPassId = String(router.query.tokenPassId) || '';
   const chainId = String(router.query.chainId) || '';
-  const contractAddress = String(router.query.contractAddress) || ''
+  const contractAddress = String(router.query.contractAddress) || '';
   const [translate] = useTranslation();
   const [showScan, setOpenScan] = useBoolean(false);
   const [showSuccess, setShowSuccess] = useBoolean(false);
@@ -57,113 +81,163 @@ export const PassesDetail = () => {
   const [errorType, setErrorType] = useState<TypeError>(TypeError.read);
   const [benefitId, setBenefitId] = useState('');
   const [qrCodeData, setQrCodeData] = useState('');
+  const [page, setPage] = useState(1);
 
   const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
-  const { data: verifyBenefit, isFetching: verifyLoading, isError: verifyError, error: errorVerifyBenefit } = useVerifyBenefit({
+  const {
+    data: verifyBenefit,
+    isFetching: verifyLoading,
+    isError: verifyError,
+    error: errorVerifyBenefit,
+  } = useVerifyBenefit({
     benefitId: benefitIdQR,
     secret,
     userId,
     editionNumber,
     enabled: secret !== '',
-  })
+  });
 
   const { data: tokenPass, error: errorToken } = useGetPassById(tokenPassId);
   const user = useSessionUser();
 
-  const { mutate: registerUse, isPending: registerLoading, error: errorRegisterUse } = usePostBenefitRegisterUse();
-  const { data: benefits, isFetching: isLoadingBenefits } = useGetPassBenefits({ tokenPassId, chainId, contractAddress });
-  const filteredBenefit = benefits?.data?.items?.find(({ id }) => id === benefitId);
+  const {
+    mutate: registerUse,
+    isPending: registerLoading,
+    error: errorRegisterUse,
+  } = usePostBenefitRegisterUse();
+  const { data: benefits, isFetching: isLoadingBenefits } = useGetPassBenefits({
+    tokenPassId,
+    chainId,
+    contractAddress,
+  });
+  const filteredBenefit = benefits?.data?.items?.find(
+    ({ id }) => id === benefitId
+  );
 
-  const formatedData = useMemo(() => {
-    const filteredBenefits = tokenPass?.data?.tokenPassBenefits?.filter((benefit: { tokenPassBenefitOperators: any[]; }) => {
-      const isOperatorForBenefit = benefit.tokenPassBenefitOperators?.some(operator => operator.userId === user?.id);
-      return isOperatorForBenefit;
-    })
+  const formatAddress = (
+    type: TokenPassBenefitType,
+    benefit: TokenPassBenefits
+  ) => {
+    if (
+      type == TokenPassBenefitType.PHYSICAL &&
+      benefit?.tokenPassBenefitAddresses?.length
+    ) {
+      const address = benefit.tokenPassBenefitAddresses[0];
+      return [address?.street, address?.city].filter(Boolean).join(' · ');
+    }
+    return translate('token>pass>online');
+  };
 
-    const benefitStatus = benefits?.data?.items?.map((benefit) => ({
-      id: benefit?.id,
-      status: benefit?.status,
-    }));
-
-
-    const data = filteredBenefits?.map((benefit: any) => {
-      const period = Date.parse(benefit?.eventEndsAt) ?
-        format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy') + ' - ' +
-        format(new Date(benefit.eventEndsAt), 'dd.MM.yyyy') : format(new Date(benefit.eventStartsAt), 'dd.MM.yyyy');
-
-      const handleAction = () => {
-        setBenefitId(benefit?.id);
-        setOpenScan()
-      }
-
-      const status = benefitStatus?.find((value) => value.id === benefit.id)?.status
-
-      const formatAddress = ({ type, benefit }: formatAddressProps) => {
-        if (type == TokenPassBenefitType.PHYSICAL && benefit?.tokenPassBenefitAddresses) {
-          return `${benefit?.tokenPassBenefitAddresses[0]?.street}-${benefit?.tokenPassBenefitAddresses[0]?.city}`
-        } else {
-          return 'Online'
-        }
-      }
-
-      const action = compareAsc(new Date(benefit.eventEndsAt), new Date()) ?
-        <Button variant='primary' onClick={() => handleAction()}>{translate('pass>PassesDetail>valid')}</Button>
-        : null
-
-      const BenefitName = () => {
-        return <a href={PixwayAppRoutes.BENEFIT_DETAILS.replace('{benefitId}', benefit.id)}>
-          {benefit.name}
-        </a>
-      }
-
-      const formatted: TableRow = {
-        name: <BenefitName />,
-        local: formatAddress({ type: benefit?.type, benefit: benefit }),
-        period,
-        status: <StatusTag status={status ?? BenefitStatus.unavailable} />,
-        action,
+  const rows = useMemo<BenefitRow[]>(() => {
+    const operated = tokenPass?.data?.tokenPassBenefits?.filter(
+      (benefit: { tokenPassBenefitOperators: any[] }) =>
+        benefit.tokenPassBenefitOperators?.some(
+          (operator) => operator.userId === user?.id
+        )
+    );
+    const statusById = new Map(
+      (benefits?.data?.items ?? []).map((benefit) => [
+        benefit?.id,
+        benefit?.status,
+      ])
+    );
+    return (operated ?? []).map((benefit: any) => {
+      const start = benefit?.eventStartsAt
+        ? format(new Date(benefit.eventStartsAt), 'dd/MM/yyyy')
+        : '';
+      const end = Date.parse(benefit?.eventEndsAt)
+        ? format(new Date(benefit.eventEndsAt), 'dd/MM/yyyy')
+        : '';
+      return {
+        id: benefit.id,
+        name: benefit.name,
+        local: formatAddress(benefit?.type, benefit),
+        period: end ? `${start} – ${end}` : start,
+        status:
+          (statusById.get(benefit.id) as BenefitStatus) ??
+          BenefitStatus.unavailable,
+        canValidate: compareAsc(new Date(benefit.eventEndsAt), new Date()) > 0,
       };
-
-      const formmatedMobile: TableRow = {
-        name: <BenefitName />,
-        local: formatAddress({ type: benefit?.type, benefit: benefit }),
-        status: statusMobile({ status: status ?? BenefitStatus.unavailable }),
-        action,
-      }
-
-      return isMobile ? formmatedMobile : formatted;
     });
-
-    return data || [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [benefits, tokenPass, isMobile]);
+  }, [benefits, tokenPass, user?.id]);
 
-  const headers: ColumnType<TableRow, keyof TableRow>[] = useMemo(() => isMobile ? [
-    { key: 'name', header: 'Benefício' },
-    { key: 'local', header: 'Local' },
-    { key: 'status', header: '' },
-    { key: 'action', header: '' },
-  ] : [
-    { key: 'name', header: 'Benefício' },
-    { key: 'local', header: 'Local' },
-    { key: 'period', header: 'Período' },
-    { key: 'status', header: 'Status' },
-    { key: 'action', header: '' },
-  ], [isMobile])
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const pageRows = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const startValidation = (id: string) => {
+    setBenefitId(id);
+    setOpenScan(true);
+  };
+
+  const columns = useMemo<DataTableColumn<BenefitRow>[]>(
+    () => [
+      {
+        key: 'name',
+        header: translate('token>pass>benefict'),
+        card: 'title',
+        render: (row) => (
+          <a
+            href={router.routerToHref(
+              PixwayAppRoutes.BENEFIT_DETAILS.replace('{benefitId}', row.id)
+            )}
+            className={classNames(
+              'pw-font-semibold pw-no-underline hover:pw-underline',
+              UI.text
+            )}
+          >
+            {row.name}
+          </a>
+        ),
+      },
+      {
+        key: 'local',
+        header: translate('pass>PassesDetail>local'),
+        render: (row) => row.local,
+      },
+      {
+        key: 'period',
+        header: translate('pass>PassesDetail>period'),
+        render: (row) => row.period || '—',
+      },
+      {
+        key: 'status',
+        header: translate('token>pass>status'),
+        card: 'badge',
+        render: (row) => (
+          <StatusPill tone={statusTone(row.status)} size="sm">
+            {translate(statusKey(row.status))}
+          </StatusPill>
+        ),
+      },
+      {
+        key: 'action',
+        header: '',
+        align: 'right',
+        card: 'action',
+        render: (row) =>
+          row.canValidate ? (
+            <BaseButton onClick={() => startValidation(row.id)}>
+              {translate('pass>PassesDetail>valid')}
+            </BaseButton>
+          ) : null,
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [translate]
+  );
 
   const verifyBenefitUse = (qrCodeData: string) => {
     const [editionNumber, userId, secret, benefitIdQR] = qrCodeData.split(',');
     setOpenScan(false);
 
     if (!editionNumber || !userId || !secret || !benefitIdQR || verifyError) {
-      setError(
-        translate('token>pass>invalidFormat')
-      );
+      setError(translate('token>pass>invalidFormat'));
       setErrorType(TypeError.read);
       setShowError(true);
     } else if (benefitId !== benefitIdQR) {
       setError('');
-      setErrorType(TypeError.invalid)
+      setErrorType(TypeError.invalid);
       setShowError(true);
     } else if (benefitId === benefitIdQR) {
       setQrCodeData(qrCodeData);
@@ -176,12 +250,7 @@ export const PassesDetail = () => {
 
     if (benefitId === benefitIdQR) {
       registerUse(
-        {
-          benefitId: benefitIdQR,
-          secret,
-          userId,
-          editionNumber,
-        },
+        { benefitId: benefitIdQR, secret, userId, editionNumber },
         {
           onSuccess: () => {
             setShowSuccess(true);
@@ -204,64 +273,96 @@ export const PassesDetail = () => {
       );
     } else {
       setError('');
-      setErrorType(TypeError.invalid)
+      setErrorType(TypeError.invalid);
       setShowError(true);
       setShowVerify(false);
       setOpenScan(false);
     }
   };
 
+  const pass = tokenPass?.data;
+
   return (
-    <BaseTemplate title="Token Pass">
-      {errorToken ? <ErrorBox customError={errorToken} /> : (
-        <div className="pw-flex pw-flex-col pw-gap-8">
-        <div className="pw-bg-white pw-flex pw-items-center pw-justify-start pw-p-4 pw-gap-4 pw-border pw-border-[#E6E8EC] pw-rounded-2xl">
-          <img
-            className="pw-w-[216px] pw-h-[175px] pw-rounded-[20px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)]"
-            src={tokenPass?.data.imageUrl}
-          />
+    <BaseTemplate title={translate('components>menu>tokenPass')}>
+      {errorToken ? (
+        <ErrorBox customError={errorToken} />
+      ) : (
+        <>
+          <SectionCard>
+            <a
+              href={router.routerToHref(PixwayAppRoutes.TOKENPASS)}
+              className="pw-inline-flex pw-items-center pw-gap-1 pw-text-[12px] pw-font-medium pw-text-[#4A5567] hover:pw-text-[#0F1729] pw-no-underline pw-mb-3"
+            >
+              <span aria-hidden>‹</span>{' '}
+              {translate('components>menu>tokenPass')}
+            </a>
+            <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4 pw-items-start">
+              {pass?.imageUrl ? (
+                <img
+                  className="pw-w-full sm:pw-w-[180px] pw-h-[140px] pw-object-cover pw-rounded-[10px] pw-shrink-0"
+                  src={pass.imageUrl}
+                  alt={pass?.name}
+                />
+              ) : null}
+              <div className="pw-min-w-0 pw-flex-1">
+                <h2
+                  className={classNames(
+                    'pw-text-[18px] pw-font-semibold pw-m-0',
+                    UI.text
+                  )}
+                >
+                  {pass?.name}
+                </h2>
+                <div
+                  className={classNames(
+                    'pw-text-[13px] pw-mt-1 [&_p]:pw-m-0',
+                    UI.textSecondary
+                  )}
+                  dangerouslySetInnerHTML={{ __html: pass?.description ?? '' }}
+                />
+              </div>
+            </div>
+          </SectionCard>
 
-          <div className="pw-w-[1px] pw-h-[175px] pw-bg-[#DCDCDC]" />
-
-          <div className="pw-flex pw-flex-col pw-items-start pw-justify-center pw-gap-3">
-            <h3 className="w-w-full pw-font-bold pw-text-lg pw-leading-[23px] pw-text-[#295BA6]">
-              {tokenPass?.data.name}
-            </h3>
-            <p className="pw-w-full pw-font-normal pw-text-[15px] pw-leading-[22.5px] pw-text-[#353945]">
-              <span className="pw-font-bold">{translate('components>tokenCertificate>collectionDescriptionLabel')}:</span>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: tokenPass?.data.description ?? '',
-                }}
-              ></div>
-            </p>
-          </div>
-        </div>
-        {isLoadingBenefits ?
-          <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
-            <Spinner />
-          </div> :
-          <GenericTable
-            columns={headers}
-            data={formatedData}
-            showPagination={true}
-            limitRowsNumber={isMobile ? 3 : 5}
-            itensPerPage={isMobile ? 3 : 5}
-          />
-        }
-      </div>
-
+          <SectionCard title={translate('token>pass>benefitsOperated')} flush>
+            <DataTable<BenefitRow>
+              bare
+              columns={columns}
+              rows={pageRows}
+              rowKey={(row) => row.id}
+              loading={isLoadingBenefits && !benefits}
+              emptyState={
+                <EmptyState
+                  bare
+                  title={translate('token>pass>noBenefits')}
+                  className="pw-py-6"
+                />
+              }
+              className="pw-px-2 pw-pb-2"
+              footer={
+                totalPages > 1 ? (
+                  <>
+                    <span />
+                    <Pagination
+                      pagesQuantity={totalPages}
+                      currentPage={page}
+                      onChangePage={setPage}
+                    />
+                  </>
+                ) : undefined
+              }
+            />
+          </SectionCard>
+        </>
       )}
-      
 
-
-      <>
-        <QrCodeReader
-          hasOpen={showScan}
-          returnValue={(e) => verifyBenefitUse(e)}
-          onClose={() => setOpenScan(false)}
-        />
-        {errorVerifyBenefit ? null : <QrCodeValidated
+      <QrCodeReader
+        hasOpen={showScan}
+        returnValue={(e) => verifyBenefitUse(e)}
+        onClose={() => setOpenScan(false)}
+      />
+      {errorVerifyBenefit ? null : (
+        <QrCodeValidated
           hasOpen={showSuccess}
           onClose={() => setShowSuccess(false)}
           validateAgain={() => setOpenScan()}
@@ -270,29 +371,28 @@ export const PassesDetail = () => {
           tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
           userEmail={verifyBenefit?.data?.user?.email}
           userName={verifyBenefit?.data?.user?.name}
-        />}
-
-        <QrCodeError
-          hasOpen={showError}
-          onClose={() => setShowError(false)}
-          validateAgain={() => setOpenScan()}
-          type={errorType}
-          error={error}
         />
-        {errorVerifyBenefit ? null : (
-          <VerifyBenefit
-            hasOpen={showVerify}
-            error={verifyError}
-            isLoading={registerLoading}
-            isLoadingInfo={verifyLoading}
-            onClose={() => setShowVerify(false)}
-            useBenefit={() => validateBenefitUse(qrCodeData)}
-            data={verifyBenefit?.data}
-            tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
-            errorUseBenefit={errorRegisterUse}
-          />
-        )}
-      </>
+      )}
+      <QrCodeError
+        hasOpen={showError}
+        onClose={() => setShowError(false)}
+        validateAgain={() => setOpenScan()}
+        type={errorType}
+        error={error}
+      />
+      {errorVerifyBenefit ? null : (
+        <VerifyBenefit
+          hasOpen={showVerify}
+          error={verifyError}
+          isLoading={registerLoading}
+          isLoadingInfo={verifyLoading}
+          onClose={() => setShowVerify(false)}
+          useBenefit={() => validateBenefitUse(qrCodeData)}
+          data={verifyBenefit?.data}
+          tokenPassBenefitAddresses={filteredBenefit?.tokenPassBenefitAddresses}
+          errorUseBenefit={errorRegisterUse}
+        />
+      )}
     </BaseTemplate>
   );
 };

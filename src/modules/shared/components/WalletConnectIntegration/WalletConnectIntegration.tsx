@@ -1,26 +1,34 @@
 import { useMemo, useState } from 'react';
 
 import { WalletTypes } from '@w3block/sdk-id';
+import classNames from 'classnames';
 
+import { GetTenantInfoById } from '../../functions/GetTenantInfoById';
+import { useCreateIntegrationToken } from '../../hooks/useCreateIntegrationToken';
+import { useGetAvailableIntegrations } from '../../hooks/useGetAvailableIntegrations';
+import { useGetCurrentTenantInfo } from '../../hooks/useGetCurrentTenantInfo';
+import { useGetUserIntegrations } from '../../hooks/useGetUserIntegrations';
 import { useHasWallet } from '../../hooks/useHasWallet';
 import { useIntegrations } from '../../hooks/useIntegrations';
 import { usePrivateRoute } from '../../hooks/usePrivateRoute';
 import { useProfile } from '../../hooks/useProfile';
+import useTranslation from '../../hooks/useTranslation';
 import { useUserWallet } from '../../hooks/useUserWallet/useUserWallet';
+import { ICompanyInfo } from '../../interfaces/ICompanyInfo';
 import { ErrorBox } from '../ErrorBox';
 import { InternalPagesLayoutBase } from '../InternalPagesLayoutBase';
 import TranslatableComponent from '../TranslatableComponent';
+import { PageHeader } from '../ui/PageHeader';
+import { SectionCard } from '../ui/SectionCard';
+import { StatusPill } from '../ui/StatusPill';
+import { UI } from '../ui/tokens';
 import { WalletConnectDesinModal } from './WalletConnectDesincModal';
 import { WalletConnectModal } from './WalletConnectModal';
-import { useGetAvailableIntegrations } from '../../hooks/useGetAvailableIntegrations';
-import { useGetUserIntegrations } from '../../hooks/useGetUserIntegrations';
-import { useGetCurrentTenantInfo } from '../../hooks/useGetCurrentTenantInfo';
-import { ICompanyInfo } from '../../interfaces/ICompanyInfo';
-import { GetTenantInfoById } from '../../functions/GetTenantInfoById';
-import { useCreateIntegrationToken } from '../../hooks/useCreateIntegrationToken';
-import useTranslation from '../../hooks/useTranslation';
 
-
+/**
+ * Conexões: WalletConnect (Discord) sync and the cross-tenant account
+ * integrations. Same hooks and flows as before, only the chrome changed.
+ */
 const _WalletConnectIntegration = () => {
   const { data: profile, error: errorProfile } = useProfile();
   const { data: integrations, error: errorIntegrations } = useIntegrations();
@@ -39,10 +47,7 @@ const _WalletConnectIntegration = () => {
   const hasWalletConnect = integrations ? integrations.data[0]?.active : false;
 
   const tenantsAvailable = useMemo(() => {
-    const tenants = tenantIntegrations?.data.map(
-      ({ toTenantId }) => toTenantId
-    );
-    return tenants;
+    return tenantIntegrations?.data.map(({ toTenantId }) => toTenantId);
   }, [tenantIntegrations?.data]);
 
   const tenantsData = useMemo(() => {
@@ -59,10 +64,7 @@ const _WalletConnectIntegration = () => {
   }, [tenantsAvailable]);
 
   const integrationsAccepted = useMemo(() => {
-    const integrations = userIntegrations?.data?.items.map(
-      ({ toTenantId }) => toTenantId
-    );
-    return integrations;
+    return userIntegrations?.data?.items.map(({ toTenantId }) => toTenantId);
   }, [userIntegrations?.data?.items]);
 
   const integrationData = useMemo(() => {
@@ -110,16 +112,11 @@ const _WalletConnectIntegration = () => {
   }) => {
     createIntegrationToken(toTenantId ?? '', {
       onSuccess(data) {
-        openNewWindow(
-          `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`
-        );
+        const url = `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`;
+        openNewWindow(url);
         if (!openNewWindow) {
           setTimeout(() => {
-            window.open(
-              `https://${host}/linkAccount?token=${data.token}&fromEmail=${profile?.data?.email}&fromTentant=${currentTenant?.name}&toTenant=${toTenantName}&toTenantId=${toTenantId}`,
-              '_blank',
-              'noreferrer'
-            );
+            window.open(url, '_blank', 'noreferrer');
           });
         }
       },
@@ -130,61 +127,80 @@ const _WalletConnectIntegration = () => {
     (value) => !integrationData.some((res) => res.id === value.id)
   );
 
-  return errorProfile ||
+  if (
+    errorProfile ||
     errorIntegrations ||
     errorTenantIntegrations ||
     errorUserIntegrations ||
-    errorCurrentTenant ? (
-    <>
-      <ErrorBox customError={errorProfile} />
-      <ErrorBox customError={errorIntegrations} />
-      <ErrorBox customError={errorTenantIntegrations} />
-      <ErrorBox customError={errorUserIntegrations} />
-      <ErrorBox customError={errorCurrentTenant} />
-    </>
-  ) : (
-    <>
-      <div className="pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
-        <div className="pw-flex  pw-justify-center pw-items-center pw-w-full">
-          <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
-            {translate('components>menu>integration')}
-          </p>
-        </div>
-        <div className="pw-flex pw-flex-row sm:pw-justify-between pw-justify-center pw-items-center pw-w-full">
-          <div className="pw-flex pw-flex-col">
-            {hasWalletConnect ? (
-              <>
-                <p className="pw-text-base pw-font-poppins pw-font-medium">
-                  {translate('components>walletIntegration>walletConnected')}
-                </p>
-                <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
-                  {translate('components>walletIntegration>syncDate', {
-                    date: sincDate.toLocaleDateString(),
-                  })}
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="pw-text-base pw-font-poppins pw-font-medium">
-                  {translate('components>walletIntegration>connectDiscord')}
-                </p>
-                <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
-                  {translate('components>walletIntegration>connectWallet')}
-                </p>
-                {wallet?.type === WalletTypes.Metamask && (
-                  <p className="pw-text-sm pw-font-poppins pw-font-normal pw-text-[#777E8F]">
-                    {translate('components>walletIntegration>connectText')}
-                  </p>
+    errorCurrentTenant
+  ) {
+    return (
+      <>
+        <ErrorBox customError={errorProfile} />
+        <ErrorBox customError={errorIntegrations} />
+        <ErrorBox customError={errorTenantIntegrations} />
+        <ErrorBox customError={errorUserIntegrations} />
+        <ErrorBox customError={errorCurrentTenant} />
+      </>
+    );
+  }
+
+  return (
+    <div className="pw-flex pw-flex-col pw-gap-4 pw-px-4 sm:pw-px-0">
+      <PageHeader
+        title={translate('components>menu>integration')}
+        subtitle={translate('shared>walletConnectIntegration>subtitle')}
+      />
+      <SectionCard>
+        <div className="pw-flex pw-flex-col sm:pw-flex-row sm:pw-items-center pw-justify-between pw-gap-3">
+          <div className="pw-min-w-0">
+            <div className="pw-flex pw-items-center pw-gap-2 pw-flex-wrap">
+              <p
+                className={classNames(
+                  'pw-text-[14px] pw-font-semibold pw-m-0',
+                  UI.text
                 )}
-              </>
-            )}
+              >
+                {hasWalletConnect
+                  ? translate('components>walletIntegration>walletConnected')
+                  : translate('components>walletIntegration>connectDiscord')}
+              </p>
+              <StatusPill tone={hasWalletConnect ? 'ok' : 'grey'} size="sm">
+                {hasWalletConnect
+                  ? translate('shared>walletConnectIntegration>connected')
+                  : translate('shared>walletConnectIntegration>notConnected')}
+              </StatusPill>
+            </div>
+            <p
+              className={classNames(
+                'pw-text-[12.5px] pw-m-0 pw-mt-0.5',
+                UI.textMuted
+              )}
+            >
+              {hasWalletConnect
+                ? translate('components>walletIntegration>syncDate', {
+                    date: sincDate.toLocaleDateString(),
+                  })
+                : translate('components>walletIntegration>connectWallet')}
+            </p>
+            {!hasWalletConnect && wallet?.type === WalletTypes.Metamask ? (
+              <p
+                className={classNames(
+                  'pw-text-[12.5px] pw-m-0 pw-mt-0.5',
+                  UI.textMuted
+                )}
+              >
+                {translate('components>walletIntegration>connectText')}
+              </p>
+            ) : null}
           </div>
           <button
+            type="button"
             onClick={handleClick}
-            className="pw-px-[24px] pw-h-[33px] pw-bg-[#EFEFEF] pw-border-[#295BA6] pw-text-black pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
+            className={classNames(UI.buttonSecondary, 'pw-shrink-0')}
           >
             {hasWalletConnect
-              ? 'Dessincronizar'
+              ? translate('components>walletIntegration>disconnect')
               : wallet?.type === WalletTypes.Metamask
               ? translate(
                   'components>walletIntegration>connectTextlearnConnect'
@@ -192,59 +208,57 @@ const _WalletConnectIntegration = () => {
               : translate('components>walletIntegration>connect')}
           </button>
         </div>
-        {tenantsDataFiltered.length > 0 && (
-          <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full">
-            <p className="pw-text-base pw-font-poppins pw-font-medium">
-              {translate(
-                'shared>walletConnectIntegration>avaliableIntegration'
-              )}
-            </p>
-            <div className="pw-flex pw-gap-3">
-              {tenantsDataFiltered.map(({ name, hosts, id }) => (
-                <button
-                  key={name}
-                  onClick={() =>
-                    handleTenantIntegration({
-                      host:
-                        hosts.find((value) => value.isMain === true)
-                          ?.hostname ?? '',
-                      toTenantName: name,
-                      toTenantId: id,
-                    })
-                  }
-                  className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#295BA6] pw-border-[#295BA6] pw-text-black pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
+      </SectionCard>
+
+      {tenantsDataFiltered.length > 0 ? (
+        <SectionCard
+          title={translate(
+            'shared>walletConnectIntegration>avaliableIntegration'
+          )}
+        >
+          <div className="pw-flex pw-flex-wrap pw-gap-2">
+            {tenantsDataFiltered.map(({ name, hosts, id }) => (
+              <button
+                key={name}
+                type="button"
+                onClick={() =>
+                  handleTenantIntegration({
+                    host:
+                      hosts.find((value) => value.isMain === true)?.hostname ??
+                      '',
+                    toTenantName: name,
+                    toTenantId: id,
+                  })
+                }
+                className={UI.buttonSecondary}
+              >
+                {name}
+              </button>
+            ))}
           </div>
-        )}
-        {integrationData.length > 0 && (
-          <div className="pw-flex pw-flex-col pw-justify-center pw-items-start pw-gap-3 pw-w-full">
-            <p className="pw-text-base pw-font-poppins pw-font-medium">
-              {translate('shared>walletConnectIntegration>activeIntegration')}
-            </p>
-            <div className="pw-flex pw-gap-3">
-              {integrationData.map(({ name }) => (
-                <button
-                  key={name}
-                  disabled
-                  className="pw-px-[24px] pw-h-[33px] pw-bg-white pw-shadow-[0_2px_4px_#00000042] pw-border-[#295BA6] disabled:pw-border-gray-500 disabled:pw-text-gray-700 pw-rounded-[48px] pw-border pw-font-poppins pw-font-medium pw-text-xs"
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
+        </SectionCard>
+      ) : null}
+
+      {integrationData.length > 0 ? (
+        <SectionCard
+          title={translate('shared>walletConnectIntegration>activeIntegration')}
+        >
+          <div className="pw-flex pw-flex-wrap pw-gap-2">
+            {integrationData.map(({ name }) => (
+              <StatusPill key={name} tone="ok">
+                {name}
+              </StatusPill>
+            ))}
           </div>
-        )}
-      </div>
+        </SectionCard>
+      ) : null}
+
       <WalletConnectModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <WalletConnectDesinModal
         isOpen={isDesincOpen}
         onClose={() => setIsDesincOpen(false)}
       />
-    </>
+    </div>
   );
 };
 

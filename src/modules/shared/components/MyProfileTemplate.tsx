@@ -12,14 +12,14 @@ import { usePixwaySession } from '../hooks/usePixwaySession';
 import { usePrivateRoute } from '../hooks/usePrivateRoute';
 import { useProfile } from '../hooks/useProfile';
 import { ErrorBox } from './ErrorBox';
-import KYCStatus from './KYCStatus';
 import { ModalBase } from './ModalBase';
 import { MyProfile } from './MyProfile';
 import { PixwayButton } from './PixwayButton';
-import { Spinner } from './Spinner';
+import Skeleton from './Skeleton';
+import { SectionCard } from './ui/SectionCard';
 import TranslatableComponent from './TranslatableComponent';
 import useTranslation from '../hooks/useTranslation';
-import { Menu } from './Menu';
+import { InternalPagesLayoutBase } from './InternalPagesLayoutBase';
 
 const _MyProfileTemplate = () => {
   const {
@@ -44,7 +44,10 @@ const _MyProfileTemplate = () => {
   const contextsActivated = useMemo(() => {
     if (!isLoadingTenantContext && tenantContext) {
       const contexts = tenantContext?.data?.items?.filter(
-        (item: any) => item?.active && item?.context?.slug !== "notification-settings" && item?.context?.slug !== "admin-notification-settings"
+        (item: any) =>
+          item?.active &&
+          item?.context?.slug !== 'notification-settings' &&
+          item?.context?.slug !== 'admin-notification-settings'
       );
       return contexts;
     }
@@ -76,13 +79,13 @@ const _MyProfileTemplate = () => {
             <p>{formattedEmail}</p>
           </p>
         </ModalBase>
-        <div className="pw-p-[16px_16px_24px] pw-h-[75px] pw-bg-[#FBEEF2] pw-rounded-[8px] pw-flex pw-justify-between pw-items-center pw-w-full pw-mt-[25px]">
+        <div className="pw-px-4 pw-py-3 pw-bg-[#FDECEC] pw-rounded-[10px] pw-flex pw-flex-wrap pw-gap-3 pw-justify-between pw-items-center pw-w-full pw-mb-4 pw-mx-4 sm:pw-mx-0 pw-max-w-full">
           <div>
             <div>
-              <p className="pw-font-montserrat pw-text-sm pw-font-semibold pw-text-[#ED4971]">
+              <p className="pw-text-[13px] pw-font-semibold pw-text-[#C92A2D] pw-m-0">
                 {translate('auth>emailConfirmation>mailResentStepTitle')}
               </p>
-              <p className="pw-font-montserrat pw-text-sm pw-font-normal pw-hidden sm:pw-block ">
+              <p className="pw-text-[12.5px] pw-text-[#4A5567] pw-m-0">
                 {translate('shared>myProfile>confirmText')}
               </p>
             </div>
@@ -104,75 +107,57 @@ const _MyProfileTemplate = () => {
   };
 
   return (
-    <>
-      <div className="pw-flex pw-flex-col pw-w-screen pw-font-poppins pw-container pw-mx-auto">
-        <div
-          className={classNames(
-            'pw-flex pw-flex-col pw-w-full pw-flex-1 pw-py-[59px]'
-          )}
-        >
-          {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
-          <div className="pw-flex pw-w-full pw-gap-x-6 pw-my-[25px]">
-            <div className="pw-w-[295px] pw-shrink-0 pw-hidden sm:pw-block">
-              <Menu />
-            </div>
-            {errorProfile ? (
-              <ErrorBox customError={errorProfile} />
-            ) : (
-              <div className="pw-w-full">
-                <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-                  <MyProfile />
-                </div>
-                {errorTenantContext ? (
-                  <ErrorBox customError={errorTenantContext} />
-                ) : (
-                  <div className="pw-px-4 sm:pw-px-0 sm:pw-pl-8 pw-w-full">
-                    {isLoadingTenantContext ? (
-                      <div className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-center pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]">
-                        <Spinner />
-                      </div>
-                    ) : (
-                      profile &&
-                      contextsActivated?.length &&
-                      contextsActivated?.map(({ contextId, context, data }: any) =>
-                        (data as any)?.profileScreen?.hidden ? null : (
-                          <div
-                            key={contextId}
-                            className="pw-mt-6 pw-w-full pw-flex pw-flex-col pw-gap-[34px] pw-items-start pw-bg-white pw-rounded-[20px] pw-shadow-[2px_2px_10px] pw-shadow-[#00000014] pw-p-[34px]"
-                          >
-                            <div className="pw-w-full pw-flex pw-justify-between">
-                              <p className="pw-text-2xl pw-font-semibold pw-font-poppins">
-                                {translate('auth>myProfileTemplate>moreInfos')}{' '}
-                                - {context?.description}
-                              </p>
-                              {context?.slug === 'signup' && (
-                                <KYCStatus status={profile?.data?.kycStatus} />
-                              )}
-                            </div>
-
-                            <div className="pw-w-full">
-                              <FormCompleteKYCWithoutLayout
-                                key={contextId}
-                                renderSubtitle={false}
-                                userId={profile?.data?.id}
-                                contextId={contextId}
-                                contextSlug={context?.slug}
-                                userKycStatus={profile?.data?.kycStatus}
-                                profilePage
-                              />
-                            </div>
-                          </div>
-                        )
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+    <InternalPagesLayoutBase>
+      {status === 'unauthenticated' ? <UnsignedUserAlert /> : null}
+      {errorProfile ? (
+        <ErrorBox customError={errorProfile} />
+      ) : (
+        <div className="pw-w-full">
+          <div className="pw-px-4 sm:pw-px-0 pw-w-full">
+            <MyProfile />
           </div>
+          {errorTenantContext ? (
+            <ErrorBox customError={errorTenantContext} />
+          ) : (
+            <div className="pw-px-4 sm:pw-px-0 pw-w-full">
+              {isLoadingTenantContext ? (
+                <SectionCard className="pw-mt-4">
+                  <div className="pw-grid pw-gap-3">
+                    <Skeleton className="pw-h-4 pw-w-1/3 pw-rounded" />
+                    <Skeleton className="pw-h-9 pw-w-full pw-rounded" />
+                    <Skeleton className="pw-h-9 pw-w-full pw-rounded" />
+                  </div>
+                </SectionCard>
+              ) : (
+                profile &&
+                contextsActivated?.length &&
+                contextsActivated?.map(({ contextId, context, data }: any) =>
+                  (data as any)?.profileScreen?.hidden ? null : (
+                    <SectionCard
+                      key={contextId}
+                      className="pw-mt-4"
+                      title={`${translate(
+                        'auth>myProfileTemplate>moreInfos'
+                      )} · ${context?.description ?? ''}`}
+                    >
+                      <FormCompleteKYCWithoutLayout
+                        key={contextId}
+                        renderSubtitle={false}
+                        userId={profile?.data?.id}
+                        contextId={contextId}
+                        contextSlug={context?.slug}
+                        userKycStatus={profile?.data?.kycStatus}
+                        profilePage
+                      />
+                    </SectionCard>
+                  )
+                )
+              )}
+            </div>
+          )}
         </div>
-      </div>
-    </>
+      )}
+    </InternalPagesLayoutBase>
   );
 };
 

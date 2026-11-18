@@ -72,7 +72,7 @@ const _TokenDetailsTemplate = () => {
             mintedHash={publicTokenResponse?.data?.edition.mintedHash ?? ''}
             totalEditions={publicTokenResponse?.data?.edition.total}
             editionId=""
-            className="pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-bg-[#FFFFFF] pw-rounded-[20px] pw-p-6 pw-px-[34.5px] sm:pw-px-6"
+            className="pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-bg-[#FFFFFF] pw-rounded-[10px] pw-p-6 pw-px-[34.5px] sm:pw-px-6"
           />
         </>
       ) : null}
