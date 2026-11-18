@@ -20,13 +20,19 @@ const useGetPassBenefits = ({
   tokenPassId,
   chainId,
   contractAddress,
-  enabled,
+  enabled = true,
 }: Props) => {
   const axios = useAxios(W3blockAPI.PASS);
   const { companyId: tenantId } = useCompanyConfig();
 
   return usePrivateQuery(
-    [PixwayAPIRoutes.PASS_BENEFIT],
+    [
+      PixwayAPIRoutes.PASS_BENEFIT,
+      tenantId,
+      tokenPassId ?? '',
+      chainId ?? '',
+      contractAddress ?? '',
+    ],
     async () => {
       try {
         const response = await axios.get<Response>(
@@ -47,6 +53,7 @@ const useGetPassBenefits = ({
     },
     {
       enabled:
+        Boolean(tenantId) &&
         contractAddress != undefined &&
         contractAddress != '' &&
         chainId != undefined &&
