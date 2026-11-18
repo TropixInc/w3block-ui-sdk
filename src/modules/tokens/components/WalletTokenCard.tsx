@@ -2,7 +2,6 @@ import { MouseEventHandler, lazy, useRef } from 'react';
 
 import classNames from 'classnames';
 
-
 import { FallbackImage } from '../../shared/components/FallbackImage';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import Skeleton from '../../shared/components/Skeleton';
@@ -80,7 +79,7 @@ export const WalletTokenCard = ({
       <div
         className={classNames(
           cardClassName,
-          'pw-flex pw-flex-col pw-gap-[24px] pw-relative pw-overflow-hidden',
+          'pw-flex pw-flex-col pw-gap-[24px] pw-relative pw-overflow-hidden pw-h-full',
           !isInternalToken &&
             'hover:!pw-border-[#E6E8EC] hover:!pw-cursor-default'
         )}
@@ -123,16 +122,15 @@ export const WalletTokenCard = ({
               >
                 {name !== '' ? name : 'Token sem nome'}
               </p>
-              {category ? (
-                <p className="pw-text-[#C63535] pw-text-sm pw-leading-[21px] pw-font-semibold pw-lowercase">
-                  {category}
-                </p>
-              ) : null}
+              {/* Always rendered so every card reserves the same height. */}
+              <p className="pw-text-[#C63535] pw-text-sm pw-leading-[21px] pw-min-h-[21px] pw-font-semibold pw-lowercase pw-truncate">
+                {category || ' '}
+              </p>
             </div>
           </div>
         </Link>
         {isInternalToken ? (
-          <div className="pw-relative pw-flex pw-justify-between pw-items-center">
+          <div className="pw-relative pw-mt-auto pw-min-h-[36px] pw-flex pw-justify-between pw-items-center">
             <WalletTokenCardActionsPanel
               isOpen={isOpen}
               onClose={closeModal}
@@ -171,7 +169,7 @@ export const WalletTokenCard = ({
             )}
           </div>
         ) : (
-          <div className="pw-h-[24px]"></div>
+          <div className="pw-mt-auto pw-min-h-[36px]"></div>
         )}
       </div>
     </TokenActionsProvider>

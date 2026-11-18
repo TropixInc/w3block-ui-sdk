@@ -104,7 +104,7 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
       onClick={onToggle}
       onKeyDown={handleKeyDown}
       className={classNames(
-        'pw-bg-white pw-p-[18px] pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-flex pw-flex-col pw-gap-[16px] pw-overflow-hidden pw-transition-all pw-duration-300',
+        'pw-bg-white pw-p-[18px] pw-rounded-[20px] pw-border pw-border-[#E6E8EC] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-flex pw-flex-col pw-gap-[16px] pw-overflow-hidden pw-transition-all pw-duration-300 pw-h-full',
         isExpanded
           ? 'pw-shadow-lg pw-scale-[1.02]'
           : 'hover:pw-border-[#295BA6] pw-cursor-pointer'
@@ -130,11 +130,11 @@ const CollectionSummaryCard: FC<CollectionSummaryCardProps> = ({
           </div>
         )}
       </div>
-      <div className={collectionDescriptionClassName}>
+      <div className={`${collectionDescriptionClassName} pw-flex-1`}>
         <p className="pw-text-black pw-font-semibold pw-text-[15px] pw-leading-[22px] pw-truncate">
           {collectionLabel}
         </p>
-        <div className="pw-mt-[22px] pw-flex pw-items-center pw-justify-end">
+        <div className="pw-mt-auto pw-pt-[22px] pw-flex pw-items-center pw-justify-end">
           <BaseButton
             type="button"
             size="medium"
@@ -157,9 +157,9 @@ const GroupedTokensList: FC<GroupedTokensListProps> = ({
   singleTokens = [],
 }) => {
   const [translate] = useTranslation();
-  const [expandedCollectionId, setExpandedCollectionId] = useState<string | null>(
-    null
-  );
+  const [expandedCollectionId, setExpandedCollectionId] = useState<
+    string | null
+  >(null);
 
   if (!items.length && !singleTokens.length) {
     return null;
@@ -189,8 +189,9 @@ const GroupedTokensList: FC<GroupedTokensListProps> = ({
     const coverImage =
       tokens.find((token) => Boolean(token.image))?.image ?? null;
     const collectionLabel = collectionName ?? collectionId;
-    const tokenCountLabel = `${tokens.length} ${tokens.length > 1 ? 'tokens' : 'token'
-      }`;
+    const tokenCountLabel = `${tokens.length} ${
+      tokens.length > 1 ? 'tokens' : 'token'
+    }`;
     const actionLabel = isExpanded
       ? translate('tokens>groupedTokensList>collapseCollection')
       : translate('tokens>groupedTokensList>expandCollection');
