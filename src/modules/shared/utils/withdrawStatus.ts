@@ -4,6 +4,7 @@ export type WithdrawStatus =
   | 'pending'
   | 'escrowing_resources'
   | 'ready_to_transfer_funds'
+  | 'transferring_funds'
   | 'concluded'
   | 'failed'
   | 'refused';
@@ -13,6 +14,7 @@ export const WITHDRAW_IN_PROGRESS_STATUSES: readonly WithdrawStatus[] = [
   'pending',
   'escrowing_resources',
   'ready_to_transfer_funds',
+  'transferring_funds',
 ];
 
 export const isWithdrawInProgress = (status?: string) =>
@@ -28,6 +30,7 @@ export const withdrawStatusTone = (status?: string): Tone => {
     case 'pending':
     case 'escrowing_resources':
     case 'ready_to_transfer_funds':
+    case 'transferring_funds':
       return 'warn';
     default:
       return 'grey';

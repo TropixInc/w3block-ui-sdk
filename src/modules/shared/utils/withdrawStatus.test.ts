@@ -20,7 +20,7 @@ describe('withdrawStatus', () => {
   });
 
   it('keeps the three in-progress states under the same "pending" label', () => {
-    for (const s of ['pending', 'escrowing_resources', 'ready_to_transfer_funds']) {
+    for (const s of ['pending', 'escrowing_resources', 'ready_to_transfer_funds', 'transferring_funds']) {
       assert.equal(withdrawStatusLabelKey(s), 'auth>withdrawStatus>pending');
       assert.ok(isWithdrawInProgress(s));
     }

@@ -34,6 +34,7 @@ type Status =
   | 'pending'
   | 'escrowing_resources'
   | 'ready_to_transfer_funds'
+  | 'transferring_funds'
   | 'concluded'
   | 'failed'
   | 'refused';
@@ -42,6 +43,7 @@ const statusStyleMap: Record<Status, { label: string; bg: string; text: string }
   pending: { label: 'Pendente', bg: 'pw-bg-yellow-100', text: 'pw-text-yellow-800' },
   escrowing_resources: { label: 'Retendo fundos', bg: 'pw-bg-blue-100', text: 'pw-text-blue-800' },
   ready_to_transfer_funds: { label: 'Pronto para transferir', bg: 'pw-bg-indigo-100', text: 'pw-text-indigo-800' },
+  transferring_funds: { label: 'Transferindo', bg: 'pw-bg-indigo-100', text: 'pw-text-indigo-800' },
   concluded: { label: 'Concluído', bg: 'pw-bg-green-100', text: 'pw-text-green-800' },
   failed: { label: 'Falha', bg: 'pw-bg-red-100', text: 'pw-text-red-800' },
   refused: { label: 'Recusado', bg: 'pw-bg-red-100', text: 'pw-text-red-800' },
@@ -83,6 +85,7 @@ const WithdrawAdminActions = ({ id }: { id: string }) => {
     pending: translate('auth>withdrawAdminActions>statusPending'),
     escrowing_resources: translate('auth>withdrawAdminActions>statusEscrowing'),
     ready_to_transfer_funds: translate('auth>withdrawAdminActions>statusReadyToTransfer'),
+    transferring_funds: translate('auth>withdrawStatus>transferringFunds'),
     concluded: translate('auth>withdrawAdminActions>statusConcluded'),
     failed: translate('auth>withdrawAdminActions>statusFailed'),
     refused: translate('auth>withdrawAdminActions>statusRefused'),
