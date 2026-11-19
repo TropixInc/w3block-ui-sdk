@@ -139,11 +139,15 @@ export const ReferralWidget = ({
         >
           WhatsApp
         </a>
-        <BaseButton onClick={handleShared} className="pw-flex-1">
+        <button
+          type="button"
+          onClick={handleShared}
+          className={classNames(UI.buttonSecondary, 'pw-flex-1')}
+        >
           {copied === 'message'
             ? translate('components>menu>copied')
             : translate('affiliates>referrakWidget>shared')}
-        </BaseButton>
+        </button>
       </div>
       <Disclosure defaultOpen={showQrCode}>
         {({ open }) => (

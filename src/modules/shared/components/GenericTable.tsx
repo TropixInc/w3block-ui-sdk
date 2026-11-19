@@ -4,7 +4,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import classNames from 'classnames';
 import _ from 'lodash';
 
-
 import ArrowDown from '../assets/icons/arrowDown.svg';
 import ClearFilter from '../assets/icons/clearFilterOutlined.svg';
 import CopyIcon from '../assets/icons/copyIconOutlined.svg';
@@ -12,7 +11,11 @@ import CopyIcon from '../assets/icons/copyIconOutlined.svg';
 import MetamaskIcon from '../assets/icons/metamask.svg';
 import NoWallet from '../assets/icons/notConfirmedWalletFilled.svg';
 import W3blockIcon from '../assets/icons/pixwayIconFilled.svg';
-import { ConfigGenericTable, FormatApiData, FormatTypeColumn } from '../interfaces/ConfigGenericTable';
+import {
+  ConfigGenericTable,
+  FormatApiData,
+  FormatTypeColumn,
+} from '../interfaces/ConfigGenericTable';
 
 import { useDynamicApi } from '../../storefront/provider/DynamicApiProvider';
 import { useCompanyConfig } from '../hooks/useCompanyConfig';
@@ -30,9 +33,9 @@ import SmartGenericFilter from './SmartGenericFilter';
 import { GenerateGenericXlsReports } from './GenerateGenericXlsReports';
 import Line from './Line';
 import { Pagination } from './Pagination';
+import { StatusPill } from './ui/StatusPill';
 import useTruncate from '../../tokens/hooks/useTruncate';
 import useTranslation from '../hooks/useTranslation';
-
 
 interface GenericTableProps {
   config: ConfigGenericTable;
@@ -143,8 +146,6 @@ export const GenericTable = ({
     isPublicApi: dataSource?.isPublicApi,
     ...paginationMapping[paginationType],
   });
-
-
 
   useEffect(() => {
     if (isUpdateList) {
@@ -289,8 +290,16 @@ export const GenericTable = ({
             format.mapping.default
           );
           const dynamicValue = getValue(formatedValue, item);
+          const label = dynamicValue ? dynamicValue : formatedValue || value;
 
-          return dynamicValue ? dynamicValue : formatedValue || value;
+          if (isV2 && format.tones) {
+            return (
+              <StatusPill tone={format.tones[value] ?? 'grey'}>
+                {label}
+              </StatusPill>
+            );
+          }
+          return label;
         }
       }
       case FormatTypeColumn.HASH: {
@@ -355,6 +364,34 @@ export const GenericTable = ({
       }
 
       case FormatTypeColumn.USER: {
+        if (isV2) {
+          const email = _.get(item, itemKey, '');
+          const name = moreInfos?.name ? _.get(item, moreInfos.name, '') : '';
+          const extra = [
+            moreInfos?.cpf ? _.get(item, moreInfos.cpf, '') : '',
+            moreInfos?.phone ? _.get(item, moreInfos.phone, '') : '',
+          ].filter(Boolean);
+          return (
+            <div className="pw-grid pw-min-w-0 pw-leading-tight">
+              <span className="pw-font-semibold pw-text-[#0f1729] pw-truncate">
+                {name || email || '--'}
+              </span>
+              {name && email ? (
+                <span className="pw-text-[12px] pw-text-[#8b93a3] pw-truncate">
+                  {email}
+                </span>
+              ) : null}
+              {extra.map((line) => (
+                <span
+                  key={line}
+                  className="pw-text-[12px] pw-text-[#8b93a3] pw-truncate"
+                >
+                  {line}
+                </span>
+              ))}
+            </div>
+          );
+        }
         return (
           <div className="pw-w-full">
             <div className="pw-w-full pw-flex pw-gap-x-1 pw-flex-col">
@@ -852,11 +889,24 @@ export const GenericTable = ({
         </div>
 
         {totalItems && totalPages && totalPages > 1 ? (
-          <div className="pw-flex pw-justify-end pw-gap-x-4 pw-items-center pw-mt-5">
-            <p className="pw-text-sm pw-font-semibold">
-              {translate('keytokenEditionsList>totalItems', {
-                total: totalItems,
-              })}
+          <div
+            className={classNames(
+              'pw-flex pw-items-center pw-mt-5',
+              isV2
+                ? 'pw-flex-wrap pw-justify-between pw-gap-3 pw-text-[13px] pw-text-[#4a5567]'
+                : 'pw-justify-end pw-gap-x-4'
+            )}
+          >
+            <p className={isV2 ? 'pw-m-0' : 'pw-text-sm pw-font-semibold'}>
+              {isV2
+                ? translate('shared>table>pageOf', {
+                    page: page ?? 1,
+                    pages: totalPages,
+                    total: totalItems,
+                  })
+                : translate('keytokenEditionsList>totalItems', {
+                    total: totalItems,
+                  })}
             </p>
 
             <Pagination

@@ -1,15 +1,15 @@
-import useTranslation from "../../shared/hooks/useTranslation";
-import { useProcessingTokens } from "../../shared/hooks/useProcessingTokens";
-import { useHasWallet } from "../../shared/hooks/useHasWallet";
-import { useContext, useEffect, useMemo, useState } from "react";
-import { ThemeContext } from "../../storefront/contexts/ThemeContext";
-import { useUserWallet } from "../../shared/hooks/useUserWallet/useUserWallet";
-import { useGetBenefitsByEditionNumberBulk } from "../hooks/useGetBenefitsByEditionNumberBulk";
+import useTranslation from '../../shared/hooks/useTranslation';
+import { useProcessingTokens } from '../../shared/hooks/useProcessingTokens';
+import { useHasWallet } from '../../shared/hooks/useHasWallet';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { ThemeContext } from '../../storefront/contexts/ThemeContext';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
+import { useGetBenefitsByEditionNumberBulk } from '../hooks/useGetBenefitsByEditionNumberBulk';
 import { BaseSelect } from '../../shared/components/BaseSelect';
-import { WalletTokenCard } from "./WalletTokenCard";
-import { Pagination } from "../../shared/components/Pagination";
-import { Token } from "../interfaces/Token";
-import { TokenListTemplateSkeleton } from "./TokenListTemplateSkeleton";
+import { WalletTokenCard } from './WalletTokenCard';
+import { Pagination } from '../../shared/components/Pagination';
+import { Token } from '../interfaces/Token';
+import { TokenListTemplateSkeleton } from './TokenListTemplateSkeleton';
 import WalletImage from '../../shared/assets/icons/wallet.svg';
 
 interface Props {
@@ -82,16 +82,13 @@ export const DefaultTokensList = ({
 
   const tokensWithPass = useMemo(
     () =>
-      slicedTokensToActiveView?.filter(
-        (token) => token.collectionData?.pass
-      ) ?? [],
+      slicedTokensToActiveView?.filter((token) => token.collectionData?.pass) ??
+      [],
     [slicedTokensToActiveView]
   );
 
-  const {
-    data: activeTokensData,
-    isLoading: isLoadingActiveTokens,
-  } = useGetBenefitsByEditionNumberBulk(tokensWithPass);
+  const { data: activeTokensData, isLoading: isLoadingActiveTokens } =
+    useGetBenefitsByEditionNumberBulk(tokensWithPass);
 
   const activeKeys = useMemo(() => {
     if (!activeTokensData.length) {
@@ -113,13 +110,7 @@ export const DefaultTokensList = ({
     }
 
     return tokens ?? [];
-  }, [
-    activeKeys,
-    selectedFilter,
-    tokens,
-    tokensWithPass,
-  ]);
-
+  }, [activeKeys, selectedFilter, tokens, tokensWithPass]);
 
   const tokensDisplaying = useMemo(() => {
     const startIndex = (page - 1) * 12;
@@ -132,7 +123,7 @@ export const DefaultTokensList = ({
 
   useEffect(() => {
     if (!shouldShowSkeleton) {
-      const pages = Math.ceil(((preparedTokens.length || 1) / 6));
+      const pages = Math.ceil((preparedTokens.length || 1) / 6);
       setTotalPages(pages);
 
       if (page > pages) {
@@ -140,7 +131,6 @@ export const DefaultTokensList = ({
       }
     }
   }, [preparedTokens, shouldShowSkeleton, page]);
-
 
   if (shouldShowSkeleton) return <TokenListTemplateSkeleton />;
 
@@ -183,7 +173,7 @@ export const DefaultTokensList = ({
         </div>
       ) : null}
 
-      <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px]">
+      <ul className="pw-grid pw-grid-cols-2 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-3 sm:pw-gap-x-[41px] sm:pw-gap-y-[30px]">
         {data?.map((token: any) => (
           <li className="w-full pw-opacity-60" key={token.id.tokenId}>
             <WalletTokenCard
@@ -222,4 +212,4 @@ export const DefaultTokensList = ({
       </div>
     </div>
   );
-}
+};

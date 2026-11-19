@@ -24,7 +24,45 @@ export interface UserWithdrawsResponse {
     itemsPerPage: number;
     itemCount: number;
   };
+  /**
+   * `false` when the API rejected `status[]` and the list came back
+   * unfiltered; callers then filter the page on the client.
+   */
+  filteredByServer?: boolean;
 }
+
+/**
+ * GETs a withdraw list. Older Key API versions answer 400 to `status[]`;
+ * in that case the same page is fetched without the filter and flagged.
+ */
+export const fetchWithdrawList = async <T extends UserWithdrawsResponse>(
+  axios: {
+    get: (
+      url: string,
+      config: { params: Record<string, unknown> }
+    ) => Promise<{ data: T }>;
+  },
+  url: string,
+  params: Record<string, unknown>,
+  status?: ReadonlyArray<WithdrawStatus>
+): Promise<T> => {
+  if (!status?.length) {
+    const { data } = await axios.get(url, { params });
+    return { ...data, filteredByServer: true };
+  }
+  try {
+    const { data } = await axios.get(url, {
+      params: { ...params, status: [...status] },
+    });
+    return { ...data, filteredByServer: true };
+  } catch (error) {
+    const code = (error as { response?: { status?: number } })?.response
+      ?.status;
+    if (code !== 400) throw error;
+    const { data } = await axios.get(url, { params });
+    return { ...data, filteredByServer: false };
+  }
+};
 
 interface Params {
   page?: number;
@@ -53,12 +91,12 @@ export const useGetUserWithdraws = ({
       status ? status.join(',') : '',
     ],
     () =>
-      axios
-        .get<UserWithdrawsResponse>(
-          PixwayAPIRoutes.REQUEST_WITHDRAW.replace('{companyId}', companyId),
-          { params: { page, limit, status: status ? [...status] : undefined } }
-        )
-        .then((response) => response.data),
+      fetchWithdrawList<UserWithdrawsResponse>(
+        axios,
+        PixwayAPIRoutes.REQUEST_WITHDRAW.replace('{companyId}', companyId),
+        { page, limit },
+        status
+      ),
     {
       enabled: Boolean(companyId) && enabled,
       refetchOnWindowFocus: false,

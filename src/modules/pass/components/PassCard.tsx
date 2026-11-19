@@ -70,14 +70,16 @@ export const PassCard = ({
         >
           {tokenName}
         </p>
-        <p
-          className={classNames(
-            'pw-text-[12.5px] pw-truncate pw-m-0',
-            UI.textMuted
-          )}
-        >
-          {name}
-        </p>
+        {name && name.trim() !== (tokenName ?? '').trim() ? (
+          <p
+            className={classNames(
+              'pw-text-[12.5px] pw-truncate pw-m-0',
+              UI.textMuted
+            )}
+          >
+            {name}
+          </p>
+        ) : null}
         <a
           href={proccessing ? undefined : href}
           aria-disabled={proccessing}

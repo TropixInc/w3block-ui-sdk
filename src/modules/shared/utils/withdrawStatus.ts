@@ -20,6 +20,15 @@ export const WITHDRAW_IN_PROGRESS_STATUSES: readonly WithdrawStatus[] = [
 export const isWithdrawInProgress = (status?: string) =>
   WITHDRAW_IN_PROGRESS_STATUSES.includes(status as WithdrawStatus);
 
+/** Statuses waiting for an admin action (hold funds / conclude the transfer). */
+export const WITHDRAW_NEEDS_ACTION_STATUSES: readonly WithdrawStatus[] = [
+  'pending',
+  'ready_to_transfer_funds',
+];
+
+export const isWithdrawAwaitingAction = (status?: string) =>
+  WITHDRAW_NEEDS_ACTION_STATUSES.includes(status as WithdrawStatus);
+
 export const withdrawStatusTone = (status?: string): Tone => {
   switch (status) {
     case 'concluded':
@@ -37,8 +46,15 @@ export const withdrawStatusTone = (status?: string): Tone => {
   }
 };
 
-/** i18n key of the user-facing label (the three in-progress states read "Pendente"). */
-export const withdrawStatusLabelKey = (status?: string) => {
+/**
+ * i18n key of the status label. For the user every in-progress state reads
+ * "Em processamento"; the admin sees each step, with `pending` as
+ * "Aguardando ação" because it is waiting for them.
+ */
+export const withdrawStatusLabelKey = (
+  status?: string,
+  audience: 'user' | 'admin' = 'user'
+) => {
   switch (status) {
     case 'concluded':
       return 'auth>withdrawStatus>concluded';
@@ -46,8 +62,24 @@ export const withdrawStatusLabelKey = (status?: string) => {
       return 'auth>withdrawStatus>failed';
     case 'refused':
       return 'auth>withdrawStatus>refused';
+    case 'pending':
+      return audience === 'admin'
+        ? 'auth>withdrawStatus>awaitingAction'
+        : 'auth>withdrawStatus>inProgress';
+    case 'escrowing_resources':
+      return audience === 'admin'
+        ? 'auth>withdrawStatus>escrowingResources'
+        : 'auth>withdrawStatus>inProgress';
+    case 'ready_to_transfer_funds':
+      return audience === 'admin'
+        ? 'auth>withdrawStatus>awaitingAction'
+        : 'auth>withdrawStatus>inProgress';
+    case 'transferring_funds':
+      return audience === 'admin'
+        ? 'auth>withdrawStatus>transferringFunds'
+        : 'auth>withdrawStatus>inProgress';
     default:
-      return 'auth>withdrawStatus>pending';
+      return 'auth>withdrawStatus>inProgress';
   }
 };
 

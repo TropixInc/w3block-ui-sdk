@@ -168,20 +168,32 @@ const StatementTitle = ({
           {item.metadata?.commerce?.destinationUserName}
         </>
       );
-    case 'payment':
+    case 'payment': {
+      const purchaseAmount = item.metadata?.commerce?.erc20PurchaseAmount;
+      const destination = item.metadata?.commerce?.destinationUserName;
       return (
         <>
           {translate('checkout>components>checkoutInfo>payment')}{' '}
           <ReceiptLink
             deliverId={item.metadata?.commerce?.deliverId}
             onOpen={onOpenReceipt}
-          />{' '}
-          {translate('dashboard>statementComponent>inTotalValue')}{' '}
-          {item.metadata?.commerce?.erc20PurchaseAmount} ZUCA{' '}
-          {translate('dashboard>statementComponent>for')}{' '}
-          {item.metadata?.commerce?.destinationUserName}
+          />
+          {purchaseAmount ? (
+            <>
+              {' '}
+              {translate('dashboard>statementComponent>inTotalValue')}{' '}
+              {purchaseAmount} ZUCA
+            </>
+          ) : null}
+          {destination ? (
+            <>
+              {' '}
+              {translate('dashboard>statementComponent>for')} {destination}
+            </>
+          ) : null}
         </>
       );
+    }
     case 'paymentDefault':
       return (
         <a
@@ -288,7 +300,7 @@ export const StatementDayList = ({
   }, [items, typeFilter]);
 
   const dayLabel = (key: string) => {
-    if (key === 'unknown') return '—';
+    if (key === 'unknown') return translate('shared>processing');
     const date = new Date(`${key}T12:00:00`);
     const short = format(date, 'dd/MM/yyyy', { locale: dateFnsLocale });
     if (isToday(date))

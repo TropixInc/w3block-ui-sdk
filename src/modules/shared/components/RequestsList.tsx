@@ -174,6 +174,13 @@ const RequestsList = () => {
             draft: 'Rascunho',
             denied: 'Recusado',
           },
+          tones: {
+            approved: 'ok',
+            requiredReview: 'warn',
+            created: 'info',
+            draft: 'grey',
+            denied: 'bad',
+          },
         },
         key: 'status',
         initialSortParameter: 'created',

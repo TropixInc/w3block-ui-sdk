@@ -66,11 +66,12 @@ const _WithdrawsTemplateSDK = () => {
     status: statusFilter,
     enabled: !id,
   });
-  const { data: inProgress } = useGetUserWithdraws({
-    page: 1,
-    limit: 50,
-    status: WITHDRAW_IN_PROGRESS_STATUSES,
-  });
+  const { data: inProgress, isLoading: isLoadingInProgress } =
+    useGetUserWithdraws({
+      page: 1,
+      limit: 50,
+      status: WITHDRAW_IN_PROGRESS_STATUSES,
+    });
   // Filter again on the client: if the API ignores `status[]` the KPI must
   // still only count what is really in progress.
   const inProgressItems = (inProgress?.items ?? []).filter((item) =>
@@ -199,6 +200,7 @@ const _WithdrawsTemplateSDK = () => {
               value={formatAmount(inProgressTotal, locale, precision)}
               unit={currency}
               tone={inProgressTotal > 0 ? 'warn' : undefined}
+              loading={isLoadingInProgress && !inProgress}
               hint={
                 inProgressCount > 0
                   ? translate('auth>withdraws>inProgressCount', {

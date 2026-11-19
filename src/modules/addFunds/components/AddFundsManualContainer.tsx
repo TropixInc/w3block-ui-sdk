@@ -1,93 +1,89 @@
-/* eslint-disable i18next/no-literal-string */
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
-import CircleCheck from '../../shared/assets/icons/checkCircledOutlined.svg';
-import CopyIcon from '../../shared/assets/icons/copyIcon.svg';
+import classNames from 'classnames';
 
-import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
-import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
-import { UploadIconSVG } from '../../shared/assets/icons/UploadIcon';
-import { HelpCircleOutlinedSVG } from '../../shared/assets/icons/HelpCircleOutlined';
 import { Alert } from '../../shared/components/Alert';
-import { BaseButton } from '../../shared/components/Buttons';
-import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import Skeleton from '../../shared/components/Skeleton';
+import { SectionCard } from '../../shared/components/ui/SectionCard';
+import { UI } from '../../shared/components/ui/tokens';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useUserWallet } from '../../shared/hooks/useUserWallet/useUserWallet';
 
+/**
+ * Manual top-up: the custodial wallet address to send funds to, with a copy
+ * action and the "only ETH or MATIC" warning.
+ */
 export const AddFundsManualContainer = () => {
-  const [copied, setCopied] = useState<boolean>(false);
+  const [copied, setCopied] = useState(false);
   const [translate] = useTranslation();
   const { mainWallet: wallet } = useUserWallet();
-  const router = useRouterConnect();
-  const [_, setCopy] = useCopyToClipboard();
+  const [, copyToClipboard] = useCopyToClipboard();
 
   const copyAddress = () => {
+    copyToClipboard(wallet?.address || '');
     setCopied(true);
-    setCopy(wallet?.address || '');
-    setTimeout(() => setCopied(false), 5000);
+    setTimeout(() => setCopied(false), 3000);
   };
 
   return (
-    <div className="lg:pw-flex lg:pw-justify-center">
-      <div className="lg:pw-max-w-[550px]">
-        <p className="pw-font-montserrat pw-font-[700] pw-text-[18px]">
-          {translate('wallet>page>addFunds')}
-        </p>
-        <div className="pw-flex pw-items-center pw-gap-x-2 pw-mt-4">
-          <UploadIconSVG color="#383857" />
-          <p className="pw-font-[700] pw-font-montserrat pw-text-[18px] pw-text-[#35394C]">
-            {translate('checkout>components>checkoutInfo>payment')}
+    <div className="pw-flex pw-flex-col pw-gap-4">
+      <SectionCard title={translate('addFunds>type>manual>walletAddress')}>
+        <div className="pw-grid pw-gap-3">
+          <p
+            className={classNames(
+              'pw-m-0 pw-text-[13.5px] pw-leading-relaxed',
+              UI.textSecondary
+            )}
+          >
+            {translate('addFunds>type>manual>instruction')}
           </p>
+          <div
+            className={classNames(
+              'pw-flex pw-flex-col sm:pw-flex-row sm:pw-items-center pw-gap-3 pw-rounded-[10px] pw-border pw-px-3.5 pw-py-3',
+              UI.line,
+              UI.surfaceGrey
+            )}
+          >
+            {wallet ? (
+              <code
+                className={classNames(
+                  'pw-flex-1 pw-min-w-0 pw-break-all pw-text-[13px] pw-font-medium pw-tabular-nums',
+                  UI.text
+                )}
+              >
+                {wallet?.address || '—'}
+              </code>
+            ) : (
+              <Skeleton className="pw-flex-1 pw-h-4 pw-rounded" />
+            )}
+            <button
+              type="button"
+              onClick={copyAddress}
+              disabled={!wallet?.address}
+              className={classNames(UI.buttonSecondary, 'pw-shrink-0')}
+            >
+              {copied
+                ? translate('addFunds>type>manual>successCopy')
+                : translate('tokens>passTemplate>copy')}
+            </button>
+          </div>
         </div>
-        <p className="pw-font-[700] pw-text-[24px] pw-font-montserrat">
-          {translate('addFunds>type>manualType')}
-        </p>
-        <p className="pw-text-[#353945] pw-text-[15px] pw-mt-4 pw-font-montserrat pw-font-[600]">
-          {translate('addFunds>type>manual>instruction')}
-        </p>
-        <div className="pw-flex pw-items-center pw-mt-4">
-          <p className="pw-text-[#353945] pw-text-sm pw-font-montserrat pw-font-[600]">
-            {translate('addFunds>type>manual>walletAddress')}
-          </p>
-          <HelpCircleOutlinedSVG />
-        </div>
-        <div className="pw-border pw-border-brand-primary pw-flex pw-items-center pw-justify-between pw-rounded-xl pw-px-3 pw-py-4 pw-mt-2">
-          <p className="pw-font-montserrat pw-text-[13px] pw-text-[#353945] pw-overflow-hidden">
-            {wallet?.address || ''}
-          </p>
-          <CopyIcon className="cursor-pointer" onClick={copyAddress} />
-        </div>
-        {copied ? (
-          <div className="pw-flex pw-items-center pw-mt-2 pw-gap-x-2">
-            <CircleCheck className="pw-stroke-brand-primary pw-w-[14px] pw-h-[14px]" />
-            <p className="pw-font-montserrat pw-text-sm pw-text-[#353945]">
-              {translate('addFunds>type>manual>successCopy')}
+      </SectionCard>
+
+      <Alert variant="atention" className="pw-rounded-[10px]">
+        <div className="pw-flex pw-gap-x-3 pw-w-full">
+          <Alert.Icon />
+          <div className="pw-flex-1 pw-grid pw-gap-0.5 pw-text-[13px]">
+            <p className="pw-m-0 pw-font-semibold">
+              {translate('addFunds>type>manual>onlyETHOrMatic')}
+            </p>
+            <p className="pw-m-0">
+              {translate('addFunds>type>manual>loseFunds')}
             </p>
           </div>
-        ) : null}
-        <Alert className="pw-mt-4" variant="atention">
-          <div className="pw-flex pw-gap-x-3 w-full">
-            <Alert.Icon></Alert.Icon>
-            <div className="pw-flex-1">
-              <p>{translate('addFunds>type>manual>atention')}!</p>
-              <p>{translate('addFunds>type>manual>onlyETHOrMatic')}</p>
-              <p className="pw-font-montserrat pw-font-[400] pw-text-sm pw-text-[#353945]">
-                {translate('addFunds>type>manual>loseFunds')}
-              </p>
-            </div>
-
-            <div className="pw-rounded-full pw-flex pw-justify-center pw-items-center pw-w-[18px] pw-h-[18px] pw-text-xs pw-text-[#ED4971] pw-border pw-border-[#ED4971]">
-              x
-            </div>
-          </div>
-        </Alert>
-        <BaseButton
-          onClick={() => router.pushConnect(PixwayAppRoutes.ADD_FUNDS_TYPE)}
-          className="pw-text-white pw-mt-4"
-        >
-          {translate('shared>back')}
-        </BaseButton>
-      </div>
+        </div>
+      </Alert>
     </div>
   );
 };

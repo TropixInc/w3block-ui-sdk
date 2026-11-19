@@ -1,4 +1,4 @@
-import { W3blockAPI } from "../enums/W3blockAPI";
+import { W3blockAPI } from '../enums/W3blockAPI';
 
 export enum FilterTableType {
   STATIC = 'static',
@@ -53,6 +53,11 @@ export interface FormatApiData {
   type: FormatTypeColumn;
   currencySymbolKey?: string;
   mapping?: any;
+  /**
+   * MAPPING only, redesign variant: renders the mapped label as a status
+   * pill with this tone per raw value (`ok`, `warn`, `bad`, `info`, `grey`).
+   */
+  tones?: Record<string, 'ok' | 'warn' | 'bad' | 'info' | 'grey'>;
 }
 
 export interface FilterParameters {

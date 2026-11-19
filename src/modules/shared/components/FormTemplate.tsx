@@ -15,11 +15,14 @@ import {
   TenantInputEntityDto,
   UserContextStatus,
 } from '@w3block/sdk-id';
+import classNames from 'classnames';
 
 import { Alert } from './Alert';
 import { BaseButton } from './Buttons';
 import { SmartInputsController } from './SmartInputsController';
 import { Spinner } from './Spinner';
+import { DefinitionList } from './ui/DefinitionList';
+import { UI } from './ui/tokens';
 import useTranslation from '../hooks/useTranslation';
 
 interface Props {
@@ -42,7 +45,134 @@ interface Props {
   readonly?: boolean;
   /** The caller already shows the status (profile page). */
   hideStatusAlert?: boolean;
+  /**
+   * Render the answers as a label/value list instead of disabled inputs
+   * (approved context on the profile page). Empty answers are left out.
+   */
+  readView?: boolean;
 }
+
+const stripLabel = (label?: string | null) =>
+  String(label ?? '')
+    .replace(/[\s:*]+$/, '')
+    .trim();
+
+const optionLabel = (item: TenantInputEntityDto, raw: string) => {
+  const options = ((item as any)?.options ?? []) as Array<any>;
+  const found = options.find((option) =>
+    typeof option === 'string' ? option === raw : option?.value === raw
+  );
+  if (!found) return raw;
+  return typeof found === 'string' ? found : found.label ?? raw;
+};
+
+const formatDate = (raw: string) => {
+  const date = new Date(raw);
+  return Number.isNaN(date.getTime())
+    ? raw
+    : date.toLocaleDateString(undefined, { timeZone: 'UTC' });
+};
+
+/** Human-readable answer of one input, or `null` when nothing was filled. */
+const readAnswer = (
+  item: TenantInputEntityDto,
+  doc: DocumentEntityDto | undefined,
+  yes: string,
+  no: string,
+  fileLabel: string
+): ReactNode => {
+  if (!doc) return null;
+  if (
+    item.type === DataTypesEnum.Separator ||
+    item.type === DataTypesEnum.Iframe
+  )
+    return null;
+  const link = (doc as any)?.asset?.directLink as string | undefined;
+  if (link) {
+    return (
+      <a href={link} target="_blank" rel="noreferrer" className={UI.link}>
+        {fileLabel}
+      </a>
+    );
+  }
+  const simple = (doc as any)?.simpleValue;
+  if (simple !== undefined && simple !== null && String(simple).trim() !== '') {
+    const raw = String(simple).trim();
+    switch (item.type) {
+      case DataTypesEnum.Checkbox:
+        return raw === 'true' ? yes : raw === 'false' ? no : raw;
+      case DataTypesEnum.SimpleSelect:
+      case DataTypesEnum.DynamicSelect:
+        return optionLabel(item, raw);
+      case DataTypesEnum.Birthdate:
+      case DataTypesEnum.Date:
+        return formatDate(raw);
+      default:
+        return raw;
+    }
+  }
+  const complex = (doc as any)?.complexValue;
+  if (complex && typeof complex === 'object') {
+    return describeComplex(complex);
+  }
+  return null;
+};
+
+/** Keys that carry the human-readable part of a complex answer (places, addresses, products). */
+const DESCRIPTIVE_KEYS = [
+  'name',
+  'description',
+  'formattedAddress',
+  'formatted_address',
+  'label',
+  'address',
+  'street',
+  'number',
+  'complement',
+  'district',
+  'city',
+  'state',
+  'country',
+  'zipCode',
+  'postalCode',
+  'countryCode',
+  'areaCode',
+  'phone',
+];
+
+/** Opaque ids (placeId, hashes) read like noise: long, no spaces. */
+const looksLikeId = (value: string) =>
+  value.length > 20 &&
+  !/\s/.test(value) &&
+  /[A-Za-z]/.test(value) &&
+  /\d|_|-/.test(value);
+
+const describeComplex = (complex: Record<string, unknown>): string | null => {
+  // Places inputs store "Name - formatted address" in `home`.
+  if (typeof complex.home === 'string' && complex.home.trim()) {
+    return complex.home.trim();
+  }
+  const direct = DESCRIPTIVE_KEYS.map((key) => complex[key])
+    .filter(
+      (part): part is string | number =>
+        (typeof part === 'string' && part.trim() !== '') ||
+        typeof part === 'number'
+    )
+    .map((part) => String(part).trim());
+  if (direct.length) {
+    // `name` + `description` cover places; address-like objects list their parts.
+    return Array.from(new Set(direct)).join(', ');
+  }
+  const parts = Object.values(complex)
+    .map((part) =>
+      typeof part === 'object' && part ? Object.values(part as object) : part
+    )
+    .flat()
+    .filter((part) => typeof part === 'string' || typeof part === 'number')
+    .map((part) => String(part).trim())
+    .filter((part) => part && !looksLikeId(part));
+  return parts.length ? Array.from(new Set(parts)).join(', ') : null;
+};
 
 export const FormTemplate = ({
   isLoading,
@@ -63,9 +193,29 @@ export const FormTemplate = ({
   hideContinue,
   readonly,
   hideStatusAlert,
+  readView,
 }: Props) => {
   const isInitial = typeof formState === 'string' && formState === 'initial';
   const [translate] = useTranslation();
+
+  const readItems = useMemo(() => {
+    if (!readView) return [];
+    const yes = translate('shared>yes');
+    const no = translate('shared>no');
+    const fileLabel = translate('shared>formTemplate>viewFile');
+    return (tenantInputs ?? [])
+      .map((item) => ({
+        term: stripLabel(item.label),
+        value: readAnswer(
+          item,
+          getDocumentByInputId(item?.id),
+          yes,
+          no,
+          fileLabel
+        ),
+      }))
+      .filter((entry) => entry.value !== null && entry.value !== '');
+  }, [readView, tenantInputs, getDocumentByInputId, translate]);
   const [completed, setCompleted] = useState(false);
   const handleMessage = useCallback((e: MessageEvent<any>) => {
     if (e.data === 'form-completed') {
@@ -86,6 +236,16 @@ export const FormTemplate = ({
     );
     return hasIframe && !completed;
   }, [completed, tenantInputs]);
+
+  if (readView) {
+    return readItems.length ? (
+      <DefinitionList items={readItems} />
+    ) : (
+      <p className={classNames('pw-m-0 pw-text-[13px]', UI.textMuted)}>
+        {translate('shared>formTemplate>nothingFilled')}
+      </p>
+    );
+  }
 
   return (
     <form onSubmit={onSubmit}>

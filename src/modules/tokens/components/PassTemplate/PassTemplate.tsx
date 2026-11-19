@@ -1,4 +1,6 @@
-import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useMemo, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useCopyToClipboard } from 'react-use';
 import { JSX } from 'react/jsx-runtime';
 
 import classNames from 'classnames';
@@ -14,40 +16,39 @@ import {
   TokenPassBenefitType,
   VerifyBenefitResponse,
 } from '../../../pass/interfaces/PassBenefitDTO';
-import ArrowLeftIcon from '../../../shared/assets/icons/arrowLeftOutlined.svg';
 import CheckedIcon from '../../../shared/assets/icons/checkCircledOutlined.svg';
 import InfoCircledIcon from '../../../shared/assets/icons/informationCircled.svg';
-import { ErrorBox } from '../../../shared/components/ErrorBox';
-import TranslatableComponent from '../../../shared/components/TranslatableComponent';
-import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
-
-import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
-
-import { useLocale } from '../../../shared/hooks/useLocale';
-import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
-
-import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
-
-
-import { usePublicTokenData } from '../../hooks/usePublicTokenData';
-import { ErrorModal } from './ErrorModal';
-import { UsedPass } from './UsedSection';
 import { Alert } from '../../../shared/components/Alert';
+import { BaseButton } from '../../../shared/components/Buttons';
+import { ErrorBox } from '../../../shared/components/ErrorBox';
 import { ImageSDK } from '../../../shared/components/ImageSDK';
 import { InternalPagesLayoutBase } from '../../../shared/components/InternalPagesLayoutBase';
 import { QrCodeValidated } from '../../../shared/components/QrCodeReader/QrCodeValidated';
 import { Spinner } from '../../../shared/components/Spinner';
+import TranslatableComponent from '../../../shared/components/TranslatableComponent';
+import {
+  DefinitionItem,
+  DefinitionList,
+} from '../../../shared/components/ui/DefinitionList';
+import { EmptyState } from '../../../shared/components/ui/EmptyState';
+import { PageHeader } from '../../../shared/components/ui/PageHeader';
+import { SectionCard } from '../../../shared/components/ui/SectionCard';
+import { StatusPill } from '../../../shared/components/ui/StatusPill';
+import { TONE_CLASSES, Tone, UI } from '../../../shared/components/ui/tokens';
+import { PixwayAppRoutes } from '../../../shared/enums/PixwayAppRoutes';
 import useAdressBlockchainLink from '../../../shared/hooks/useAdressBlockchainLink';
+import { useChainScanLink } from '../../../shared/hooks/useChainScanLink';
 import { useHasWallet } from '../../../shared/hooks/useHasWallet';
+import { useLocale } from '../../../shared/hooks/useLocale';
+import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useProfile } from '../../../shared/hooks/useProfile';
-import { DetailPass } from './DetailPass';
-import { DetailsTemplate } from './DetailsTemplate';
-import { DetailToken } from './DetailToken';
-import { QrCodeSection } from './QrCodeSection';
-
-import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
-import { Button } from '../Button';
+import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
+import { usePublicTokenData } from '../../hooks/usePublicTokenData';
+import { ErrorModal } from './ErrorModal';
+import { QrCodeSection } from './QrCodeSection';
+import { UsedPass } from './UsedSection';
 
 interface PassTemplateProps {
   tokenIdProp?: string;
@@ -59,49 +60,72 @@ interface formatAddressProps {
   type: TokenPassBenefitType;
 }
 
-const PassButton = ({
-  children,
-  onClick,
-  model = 'primary',
-}: {
-  model?: 'primary' | 'secondary';
-  children: ReactNode;
-  onClick?: () => void;
-}) => (
-  <button
-    className={classNames(
-      'pw-w-full pw-rounded-[48px] pw-py-[5px] pw-flex pw-justify-center pw-font-medium pw-text-[12px] pw-leading-[18px] pw-border',
-      model === 'primary'
-        ? 'pw-bg-[#295BA6] hover:pw-bg-[#4194CD] pw-text-white pw-border-[#FFFFFF] pw-shadow-[0px_2px_4px_rgba(0,0,0,0.26)] '
-        : 'pw-bg-[#EFEFEF] pw-text-[#383857]  pw-border-[#295BA6]  hover:pw-shadow-[0px_2px_4px_rgba(0,0,0,0.25)] '
-    )}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-);
-
+/** Tone box used for "benefit inactive / unavailable" notices. */
 export const InfoPass = ({
   title,
   description,
+  tone = 'warn',
 }: {
   title: string;
   description: string;
+  tone?: Tone;
 }) => {
   return (
-    <div className="pw-bg-[#E5EDF9] pw-rounded-[8px] pw-w-full pw-p-[16px_16px_24px] pw-flex pw-gap-[8px]">
-      <div className="pw-w-[17px] pw-h-[17px]">
-        <InfoCircledIcon className="pw-w-[17px] pw-h-[17px]" />
-      </div>
-      <div className="pw-flex pw-flex-col ">
-        <div className="pw-text-[#0F1729] pw-font-semibold pw-text-[15px] pw-leading-[22.5px]">
-          {title}
-        </div>
-        <div className="pw-text-[#333333] pw-font-normal pw-text-[14px] pw-leading-[21px]">
-          {description}
-        </div>
+    <div
+      className={classNames(
+        'pw-rounded-[10px] pw-w-full pw-p-3.5 pw-flex pw-gap-2.5 pw-text-[13px]',
+        TONE_CLASSES[tone]
+      )}
+    >
+      <InfoCircledIcon className="pw-w-4 pw-h-4 pw-shrink-0 pw-mt-0.5" />
+      <div className="pw-grid pw-gap-0.5">
+        <div className="pw-font-semibold">{title}</div>
+        <div>{description}</div>
       </div>
     </div>
+  );
+};
+
+const statusTone = (status?: BenefitStatus): Tone =>
+  status === BenefitStatus.active
+    ? 'ok'
+    : status === BenefitStatus.inactive
+    ? 'bad'
+    : 'grey';
+const statusKey = (status?: BenefitStatus) =>
+  status === BenefitStatus.active
+    ? 'tokens>StatusTag>active'
+    : status === BenefitStatus.inactive
+    ? 'tokens>StatusTag>inactive'
+    : 'tokens>StatusTag>unavailable';
+
+/** Locale strings of the old layout end with ":"; the definition list has its own labels. */
+const noColon = (value: string) => value.replace(/:\s*$/, '');
+
+const shortHash = (value?: string) =>
+  value && value.length > 18
+    ? `${value.slice(0, 10)}…${value.slice(-6)}`
+    : value ?? '';
+
+/** Small "Copiar" text button for hashes. */
+const CopyButton = ({ value }: { value: string }) => {
+  const [, copyToClipboard] = useCopyToClipboard();
+  const [copied, setCopied] = useState(false);
+  const [translate] = useTranslation();
+  return (
+    <button
+      type="button"
+      className={classNames(UI.link, 'pw-bg-transparent pw-border-0 pw-p-0')}
+      onClick={() => {
+        copyToClipboard(value);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }}
+    >
+      {copied
+        ? translate('tokens>passTemplate>copied')
+        : translate('tokens>passTemplate>copy')}
+    </button>
   );
 };
 
@@ -152,7 +176,9 @@ const _PassTemplate = ({
   } = usePublicTokenData({
     contractAddress: benefit?.data?.tokenPass?.contractAddress ?? '',
     chainId: String(benefit?.data?.tokenPass?.chainId) ?? '',
-    tokenId: String(tokenId ? tokenId : (collectionData?.items?.[0]?.tokenId ?? "")),
+    tokenId: String(
+      tokenId ? tokenId : collectionData?.items?.[0]?.tokenId ?? ''
+    ),
   });
 
   const editionNumber = useMemo(() => {
@@ -241,7 +267,12 @@ const _PassTemplate = ({
       benefitData &&
       benefitData?.tokenPassBenefitAddresses
     ) {
-      return `${benefitData?.tokenPassBenefitAddresses[0]?.street}-${benefitData?.tokenPassBenefitAddresses[0]?.city}`;
+      return [
+        benefitData?.tokenPassBenefitAddresses[0]?.street,
+        benefitData?.tokenPassBenefitAddresses[0]?.city,
+      ]
+        .filter(Boolean)
+        .join(' · ');
     } else {
       return 'Online';
     }
@@ -254,33 +285,6 @@ const _PassTemplate = ({
     benefit && +benefit?.data?.tokenPass?.chainId,
     benefit?.data?.tokenPass?.contractAddress
   );
-
-  const detailsToken = [
-    {
-      title: 'token>pass>tokenName',
-      description: publicTokenResponse?.data?.information?.title,
-      copyDescription: false,
-      titleLink: '',
-    },
-    {
-      title: 'token>pass>linkBlockchain',
-      description: '',
-      copyDescription: false,
-      titleLink: addresBlockchainLink,
-    },
-    {
-      title: 'token>pass>mintedBy',
-      description: publicTokenResponse?.data?.edition?.mintedHash,
-      copyDescription: true,
-      titleLink: chainScanLink,
-    },
-    {
-      title: 'token>pass>network',
-      description: 'MATIC Polygon',
-      copyDescription: false,
-      titleLink: '',
-    },
-  ];
 
   const isSingleDate =
     benefit &&
@@ -359,13 +363,16 @@ const _PassTemplate = ({
       en: ['first', 'second', 'third', 'fourth'],
     };
 
+    const dayClass = classNames('pw-font-semibold pw-text-[13.5px]', UI.text);
+    const timeClass = classNames('pw-text-[13.5px]', UI.textSecondary);
+
     type Week = 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'all';
     const response: JSX.Element[] = [];
     Object.keys(benefit?.data?.checkIn ?? {}).forEach((val) => {
       response.push(
         val !== 'special' ? (
-          <div key={val} className="pw-flex sm:pw-flex-row pw-flex-col">
-            <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+          <div key={val} className="pw-flex pw-flex-wrap pw-gap-x-1">
+            <p className={classNames(dayClass, 'pw-m-0')}>
               {weekDay[locale][val as Week]}
             </p>
             <div className="pw-flex">
@@ -375,7 +382,7 @@ const _PassTemplate = ({
                     return (
                       <p
                         key={val.start}
-                        className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]"
+                        className={classNames(timeClass, 'pw-m-0')}
                       >
                         {index > 0 ? ', ' : ': '}
                         {val.start}
@@ -394,23 +401,25 @@ const _PassTemplate = ({
               data: { nthWeek: number; weekday: number };
             }) => {
               return (
-                <div key={val} className="pw-flex sm:pw-flex-row pw-flex-col">
-                  <p className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
+                <div key={val} className="pw-flex pw-flex-wrap pw-gap-x-1">
+                  <p className={classNames(dayClass, 'pw-m-0')}>
                     {locale == 'en' ? (
                       <>
-                        {`Every ${ordinal[locale][value.data.nthWeek]} ${weekDay1[locale][value.data.weekday]
-                          } of the month`}
+                        {`Every ${ordinal[locale][value.data.nthWeek]} ${
+                          weekDay1[locale][value.data.weekday]
+                        } of the month`}
                       </>
                     ) : (
                       <>
-                        {`Toda ${ordinal[locale][value.data.nthWeek]
-                          } semana do mês
+                        {`Toda ${
+                          ordinal[locale][value.data.nthWeek]
+                        } semana do mês
                         na ${weekDay1[locale][value.data.weekday]}`}
                       </>
                     )}
                   </p>
                   <div>
-                    <p className="pw-text-[#777E8F] pw-font-semibold pw-text-[18px] pw-leading-[23px]">
+                    <p className={classNames(timeClass, 'pw-m-0')}>
                       {value?.start && ': ' + value.start}
                       {value?.end && ' - ' + value.end}
                     </p>
@@ -466,6 +475,131 @@ const _PassTemplate = ({
       }
     );
 
+  // ---------------------------------------------------------------- pieces
+  const formatDate = (value?: string) =>
+    value && Date.parse(value) ? format(new Date(value), 'dd/MM/yyyy') : '';
+
+  const usagePeriod = benefit?.data?.eventEndsAt
+    ? `${formatDate(benefit?.data?.eventStartsAt)}${translate(
+        'token>pass>until'
+      )}${formatDate(benefit?.data?.eventEndsAt)}`
+    : benefit?.data?.eventStartsAt
+    ? `${translate('token>pass>useThisTokenFrom')} ${formatDate(
+        benefit?.data?.eventStartsAt
+      )}`
+    : '';
+
+  const periodItems: DefinitionItem[] = [
+    ...(usagePeriod
+      ? [
+          {
+            term: translate('tokens>passTemplate>usagePeriod'),
+            value: usagePeriod,
+          },
+        ]
+      : []),
+    ...(benefit?.data?.checkIn
+      ? [
+          {
+            term: translate('tokens>passTemplate>checkIn'),
+            value: (
+              <div className="pw-grid pw-gap-0.5">{renderCheckInTime()}</div>
+            ),
+            wide: true,
+          },
+        ]
+      : []),
+  ];
+
+  const eventDateBlock =
+    eventDate !== undefined ? (
+      <div
+        className={classNames(
+          'pw-flex pw-flex-col pw-items-center pw-justify-center pw-rounded-[10px] pw-px-4 pw-py-3 pw-min-w-[96px]',
+          UI.surfaceGrey
+        )}
+      >
+        <span className={classNames('pw-text-[18px] pw-font-bold', UI.text)}>
+          {shortDay[locale][getDay(eventDate)]}
+        </span>
+        <span className={classNames('pw-text-[12px]', UI.textMuted)}>
+          {format(eventDate, 'dd MMM yyyy')}
+        </span>
+        <span
+          className={classNames('pw-text-[13px] pw-font-semibold', UI.text)}
+        >
+          {format(eventDate, "HH'h'mm")}
+        </span>
+      </div>
+    ) : null;
+
+  const descriptionCard = (
+    <SectionCard title={translate('token>pass>detailsPass')}>
+      <DefinitionList
+        items={[
+          {
+            term: translate('token>pass>description'),
+            value: (
+              <div
+                className="pw-font-normal [&_p]:pw-m-0"
+                dangerouslySetInnerHTML={{
+                  __html: benefit?.data?.description ?? '',
+                }}
+              />
+            ),
+            wide: true,
+          },
+          ...(benefit?.data?.rules
+            ? [
+                {
+                  term: translate('token>pass>rules'),
+                  value: (
+                    <div
+                      className="pw-font-normal [&_p]:pw-m-0"
+                      dangerouslySetInnerHTML={{
+                        __html: benefit?.data?.rules ?? '',
+                      }}
+                    />
+                  ),
+                  wide: true,
+                },
+              ]
+            : []),
+        ]}
+      />
+    </SectionCard>
+  );
+
+  const notices: ReactNode = (
+    <>
+      {successValidation == 'true' && (
+        <SectionCard>
+          <UsedPass />
+        </SectionCard>
+      )}
+      {(isInactive || waitCheckin) && (
+        <InfoPass
+          title={translate('token>pass>inactivePass')}
+          description={translate('token>pass>inactivePassMessage')}
+        />
+      )}
+      {(hasExpired || reachedUsageLimit) && isUnavaible && (
+        <InfoPass
+          tone="grey"
+          title={translate('token>pass>passUnavailable')}
+          description={translate('token>pass>passUnavailableMessage')}
+        />
+      )}
+      {isSecretError &&
+        !hasExpired &&
+        !waitCheckin &&
+        !reachedUsageLimit &&
+        !waitingToStart && (
+          <Alert variant="error">{secret?.data?.message}</Alert>
+        )}
+    </>
+  );
+
   if (
     isLoadingBenefit ||
     isLoadingBenefitsResponse ||
@@ -473,455 +607,392 @@ const _PassTemplate = ({
     isLoadingSecret
   ) {
     return (
-      <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+      <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center pw-py-16">
         <Spinner />
       </div>
     );
   }
+
   if (tokenId) {
+    const canSelfUse =
+      benefit?.data?.allowSelfUse &&
+      !isSecretError &&
+      !isInactive &&
+      !isUnavaible &&
+      isBenefitSucceed &&
+      isTokenSucceed;
+    const showQr =
+      !isSecretError &&
+      !isInactive &&
+      !isUnavaible &&
+      isBenefitSucceed &&
+      isTokenSucceed &&
+      !errorPublicToken;
+    const addresses = benefitData?.tokenPassBenefitAddresses ?? [];
+
     return errorBenefit || errorBenefitsResponse ? (
-      <>
+      <div className="pw-flex pw-flex-col pw-gap-4 pw-px-4 sm:pw-px-0">
         <ErrorBox customError={errorBenefit} />
         <ErrorBox customError={errorBenefitsResponse} />
-      </>
+      </div>
     ) : (
-      <div className="pw-mx-[22px] sm:pw-mx-0 ">
-        <div className="pw-bg-white pw-flex pw-flex-col pw-w-full sm:pw-rounded-[10px] sm:pw-p-5 sm:pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-gap-[30px] pw-mb-10">
-          <div
-            className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
-            onClick={() => router.back()}
-          >
-            <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
+      <div className="pw-flex pw-flex-col pw-gap-4 pw-px-4 sm:pw-px-0 pw-mb-10">
+        <PageHeader
+          back={{
+            label: translate('token>pass>back'),
+            onClick: () => router.back(),
+          }}
+          title={
+            benefitData?.name ??
+            benefit?.data?.name ??
+            translate('token>pass>title')
+          }
+          subtitle={[
+            publicTokenResponse?.data?.information?.title,
+            isBenefitSucceed
+              ? formatAddress({ type: benefit?.data?.type })
+              : '',
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+          actions={
+            canSelfUse ? (
+              <BaseButton onClick={() => setShowVerify(true)}>
+                {translate('token>pass>selfUse')}
+              </BaseButton>
+            ) : undefined
+          }
+        />
 
-            <p className="sm:pw-hidden pw-block">
-              {translate('token>pass>title')}
-            </p>
-            <p className="pw-hidden sm:pw-block">
-              {translate('token>pass>back')}
-            </p>
-          </div>
+        {notices}
 
-          {successValidation == 'true' && <UsedPass />}
-
-          {(isInactive || waitCheckin) && (
-            <InfoPass
-              title={translate('token>pass>inactivePass')}
-              description={translate('token>pass>inactivePassMessage')}
-            />
-          )}
-
-          {(hasExpired || reachedUsageLimit) && isUnavaible && (
-            <InfoPass
-              title={translate('token>pass>passUnavailable')}
-              description={translate('token>pass>passUnavailableMessage')}
-            />
-          )}
-
-          {isSecretError &&
-            !hasExpired &&
-            !waitCheckin &&
-            !reachedUsageLimit &&
-            !waitingToStart && (
-              <Alert variant="error">{secret?.data?.message}</Alert>
-            )}
-
-          <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
-            {translate('token>pass>title')}
-          </div>
-
-          <div className="pw-flex pw-flex-col">
-            <div className="pw-flex pw-flex-col pw-rounded-[10px] pw-border pw-border-[#E6E8EC] pw-py-[16px]">
-              {successValidation == 'true' ? (
-                <div className="pw-w-full pw-flex pw-flex-col pw-justify-center pw-items-center pw-mb-[16px] pw-pb-[16px] pw-px-[24px] pw-border-b pw-border-[#EFEFEF]">
-                  <div className="pw-w-[20px] pw-h-[20px]">
-                    <CheckedIcon className="pw-stroke-[#295BA6] pw-w-[20px] pw-h-[20px]" />
-                  </div>
-                  <div className="pw-text-[#353945] pw-font-bold pw-text-[14px] pw-leading-[21px] pw-text-center">
-                    {translate('token>pass>checkedTime', {
-                      time: format(new Date(), 'HH:mm'),
-                    })}
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="pw-flex pw-gap-[16px] pw-px-[24px]">
-                {eventDate !== undefined && (
-                  <>
-                    <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
-                      <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#0F1729] pw-text-center">
-                        {shortDay[locale][getDay(eventDate)]}
-                      </div>
-                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
-                        {format(eventDate, 'dd MMM yyyy')}
-                      </div>
-                      <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945] pw-text-center">
-                        {format(eventDate, "HH'h'mm")}
-                      </div>
-                    </div>
-                    <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
-                  </>
-                )}
-                <div className="pw-flex sm:pw-flex-row pw-flex-col pw-w-full sm:pw-justify-between pw-justify-center">
-                  <div className="pw-flex pw-flex-col pw-justify-center">
-                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#0F1729]">
-                      {publicTokenResponse?.data?.information?.title} -{' '}
-                      {benefitData && benefitData?.name}
-                    </div>
-                    <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                      {isBenefitSucceed &&
-                        formatAddress({
-                          type: benefit?.data?.type,
-                        })}
-                    </div>
-                    {!hasExpired && (
-                      <div className="pw-flex pw-items-center pw-gap-2">
-                        <span className="pw-text-[14px] pw-leading-[21px] pw-font-semibold pw-text-[#353945]">
-                          {translate('token>pass>use')}
-                        </span>
-                        <div className="pw-text-[13px] pw-leading-[19.5px] pw-font-normal pw-text-[#777E8F]">
-                          {usesLeft === 0
-                            ? translate('token>pass>noMoreUses')
-                            : translate('token>pass>youStillHave', {
-                              quantity: usesLeft,
-                            })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {benefit?.data?.allowSelfUse &&
-                    !isSecretError &&
-                    !isInactive &&
-                    !isUnavaible &&
-                    isBenefitSucceed &&
-                    isTokenSucceed && (
-                      <Button
-                        onClick={() => setShowVerify(true)}
-                        className="!pw-h-[40px] !pw-mb-auto !pw-mt-[20px] sm:!pw-mt-auto"
-                      >
-                        {translate('token>pass>selfUse')}
-                      </Button>
-                    )}
-                </div>
-              </div>
-              <ErrorBox customError={errorPublicToken} />
-              {!isSecretError &&
-                !isInactive &&
-                !isUnavaible &&
-                isBenefitSucceed &&
-                isTokenSucceed &&
-                !errorPublicToken && (
-                  <QrCodeSection
-                    hasExpired={hasExpired}
-                    editionNumber={
-                      publicTokenResponse?.data?.edition
-                        ?.currentNumber as string
-                    }
-                    benefitId={benefitId}
-                    secret={secret?.data?.secret}
-                    isDynamic={isDynamic ?? false}
-                    refetchSecret={refetchSecret}
-                  />
-                )}
-              {errorBenefit ? (
-                <ErrorBox customError={errorBenefit} />
-              ) : (
-                <div className="pw-w-full pw-flex pw-flex-col pw-pt-[16px] pw-px-[16px]">
-                  <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px]">
-                    {benefit?.data?.eventEndsAt
-                      ? translate('token>pass>useThisTokenUntil')
-                      : translate('token>pass>useThisTokenFrom')}
-                    <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                      {benefit?.data?.eventStartsAt &&
-                        format(
-                          new Date(benefit?.data?.eventStartsAt),
-                          'dd/MM/yyyy'
-                        )}
-                      {benefit?.data?.eventEndsAt &&
-                        translate('token>pass>until') +
-                        format(
-                          new Date(benefit?.data?.eventEndsAt),
-                          'dd/MM/yyyy'
-                        )}
-                    </span>
-                  </div>
-                  {benefit?.data?.checkIn && (
-                    <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
-                      {translate('token>pass>checkinAvaibleAt')}
-                      {renderCheckInTime()}
-                    </div>
-                  )}
-                </div>
+        <SectionCard>
+          {successValidation == 'true' ? (
+            <div
+              className={classNames(
+                'pw-flex pw-items-center pw-justify-center pw-gap-2 pw-pb-3 pw-mb-3 pw-border-b pw-text-[13px] pw-font-semibold',
+                UI.line,
+                UI.text
               )}
-            </div>
-          </div>
-
-          {benefit?.data?.allowSelfUse && (
-            <>
-              <ErrorModal
-                hasOpen={showError}
-                onClose={() => setShowError(false)}
-              />
-              <QrCodeValidated
-                hasOpen={showSuccess}
-                onClose={handleClose}
-                name={selfUseData?.tokenPassBenefit?.name}
-                type={selfUseData?.tokenPassBenefit?.type}
-                tokenPassBenefitAddresses={
-                  benefitData?.tokenPassBenefitAddresses
-                }
-                userEmail={selfUseData?.user?.email}
-                userName={selfUseData?.user?.name}
-              />
-              <VerifyBenefit
-                hasOpen={showVerify}
-                isLoading={isUseLoading}
-                onClose={() => setShowVerify(false)}
-                useBenefit={handleUseBenefit}
-                data={benefitData}
-                user={{ email: profile?.data.email, name: profile?.data.name }}
-                tokenPassBenefitAddresses={
-                  benefitData?.tokenPassBenefitAddresses
-                }
-                errorUseBenefit={errorSelfUser}
-              />
-            </>
-          )}
-
-          <>
-            <DetailsTemplate
-              title={translate('token>pass>detailsPass')}
-              autoExpand={true}
             >
-              <DetailPass
-                title={translate('token>pass>description')}
-                description={benefit?.data?.description ?? ''}
-              />
-
-              <DetailPass
-                title={translate('token>pass>rules')}
-                description={benefit?.data?.rules ?? ''}
-              />
-            </DetailsTemplate>
-
-            {benefit?.data?.type == TokenPassBenefitType.PHYSICAL ? (
-              <DetailsTemplate
-                title={translate('token>pass>useLocale')}
-                autoExpand={true}
-              >
-                {benefitData?.tokenPassBenefitAddresses?.map((address) => (
-                  <div
-                    key={address?.name}
-                    className="pw-w-full pw-h-[200px]pw-rounded-[16px] pw-p-[24px] pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2"
-                  >
-                    <div className="pw-flex pw-flex-col pw-gap-1">
-                      <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#0F1729]">
-                        {address?.name}
-                      </div>
-                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                        {address?.street}
-                        {', '}
-                        {address?.number}
-                        {', '}
-                        {address?.city}
-                        {' - '}
-                        {address?.state}
-                      </div>
-                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                        {translate('tokens>passTemplate>postalCode')}:{' '}
-                        {address?.postalCode}
-                      </div>
-                    </div>
-                    <div className="pw-flex pw-flex-col pw-gap-1">
-                      <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-                        {translate('token>pass>rules')}
-                      </div>
-                      <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                        {address?.rules}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </DetailsTemplate>
-            ) : null}
-
-            <DetailsTemplate title={translate('token>pass>detailsToken')}>
-              <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 xl:pw-grid-cols-4 pw-gap-[30px]">
-                {detailsToken.map((item) => (
-                  <DetailToken
-                    key={item?.title}
-                    title={translate(item?.title)}
-                    description={item?.description ?? ''}
-                    copyDescription={item?.copyDescription}
-                    titleLink={item?.titleLink}
-                  />
-                ))}
-              </div>
-            </DetailsTemplate>
-          </>
-
-          {successValidation ? (
-            <div className=" pw-flex pw-flex-col pw-justify-center pw-items-center pw-gap-[12px] sm:pw-hidden">
-              <PassButton model="primary">
-                {translate('token>pass>tokenPage')}
-              </PassButton>
-              <PassButton model="secondary" onClick={() => router.back()}>
-                {translate('token>pass>back')}
-              </PassButton>
+              <CheckedIcon className="pw-stroke-brand-primary pw-w-5 pw-h-5" />
+              {translate('token>pass>checkedTime', {
+                time: format(new Date(), 'HH:mm'),
+              })}
             </div>
           ) : null}
-        </div>
+
+          <div className="pw-flex pw-flex-col sm:pw-flex-row sm:pw-items-center pw-gap-4">
+            {eventDateBlock}
+            <div className="pw-flex pw-flex-wrap pw-items-center pw-gap-x-3 pw-gap-y-2 pw-min-w-0">
+              <StatusPill tone={statusTone(benefitData?.status)}>
+                {translate(statusKey(benefitData?.status))}
+              </StatusPill>
+              {!hasExpired && benefitData ? (
+                <span
+                  className={classNames('pw-text-[13px]', UI.textSecondary)}
+                >
+                  {usesLeft === 0
+                    ? translate('token>pass>noMoreUses')
+                    : usesLeft === 1
+                    ? translate('tokens>passTemplate>oneUseLeft')
+                    : translate('tokens>passTemplate>usesLeft', {
+                        quantity: usesLeft,
+                      })}
+                </span>
+              ) : null}
+            </div>
+          </div>
+
+          <ErrorBox customError={errorPublicToken} />
+
+          {showQr ? (
+            <QrCodeSection
+              hasExpired={hasExpired}
+              editionNumber={
+                publicTokenResponse?.data?.edition?.currentNumber as string
+              }
+              benefitId={benefitId}
+              secret={secret?.data?.secret}
+              isDynamic={isDynamic ?? false}
+              refetchSecret={refetchSecret}
+              rootClassnames="pw-mt-4 pw-border-b-0 pw-pb-0"
+            />
+          ) : null}
+
+          {periodItems.length ? (
+            <DefinitionList
+              items={periodItems}
+              className={classNames('pw-pt-4 pw-mt-2 pw-border-t', UI.line)}
+            />
+          ) : null}
+        </SectionCard>
+
+        {benefit?.data?.allowSelfUse && (
+          <>
+            <ErrorModal
+              hasOpen={showError}
+              onClose={() => setShowError(false)}
+            />
+            <QrCodeValidated
+              hasOpen={showSuccess}
+              onClose={handleClose}
+              name={selfUseData?.tokenPassBenefit?.name}
+              type={selfUseData?.tokenPassBenefit?.type}
+              tokenPassBenefitAddresses={benefitData?.tokenPassBenefitAddresses}
+              userEmail={selfUseData?.user?.email}
+              userName={selfUseData?.user?.name}
+            />
+            <VerifyBenefit
+              hasOpen={showVerify}
+              isLoading={isUseLoading}
+              onClose={() => setShowVerify(false)}
+              useBenefit={handleUseBenefit}
+              data={benefitData}
+              user={{ email: profile?.data.email, name: profile?.data.name }}
+              tokenPassBenefitAddresses={benefitData?.tokenPassBenefitAddresses}
+              errorUseBenefit={errorSelfUser}
+            />
+          </>
+        )}
+
+        {descriptionCard}
+
+        {benefit?.data?.type == TokenPassBenefitType.PHYSICAL &&
+        addresses.length ? (
+          <SectionCard title={translate('token>pass>useLocale')}>
+            <div className="pw-grid pw-grid-cols-1 sm:pw-grid-cols-2 pw-gap-3">
+              {addresses.map((address) => (
+                <div
+                  key={`${address?.name}-${address?.street}`}
+                  className={classNames(
+                    'pw-rounded-[10px] pw-border pw-p-3.5 pw-grid pw-gap-1 pw-text-[13px]',
+                    UI.line,
+                    UI.textSecondary
+                  )}
+                >
+                  <span
+                    className={classNames(
+                      'pw-text-[14px] pw-font-semibold',
+                      UI.text
+                    )}
+                  >
+                    {address?.name}
+                  </span>
+                  <span>
+                    {[address?.street, address?.number]
+                      .filter(Boolean)
+                      .join(', ')}
+                    {address?.city ? `, ${address.city}` : ''}
+                    {address?.state ? ` - ${address.state}` : ''}
+                  </span>
+                  {address?.postalCode ? (
+                    <span>
+                      {translate('tokens>passTemplate>postalCode')}:{' '}
+                      {address.postalCode}
+                    </span>
+                  ) : null}
+                  {address?.rules ? (
+                    <div className="pw-mt-1">
+                      <span className={UI.label}>
+                        {translate('token>pass>rules')}
+                      </span>
+                      <div>{address.rules}</div>
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </SectionCard>
+        ) : null}
+
+        <SectionCard title={translate('tokens>passTemplate>tokenDetails')}>
+          <DefinitionList
+            items={[
+              {
+                term: noColon(translate('token>pass>tokenName')),
+                value: publicTokenResponse?.data?.information?.title ?? '—',
+              },
+              {
+                term: noColon(translate('token>pass>network')),
+                value: 'MATIC Polygon',
+              },
+              {
+                term: translate('token>pass>linkBlockchain'),
+                value: addresBlockchainLink ? (
+                  <a
+                    href={addresBlockchainLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={UI.link}
+                  >
+                    {translate('tokens>passTemplate>viewOnBlockchain')}
+                  </a>
+                ) : (
+                  '—'
+                ),
+              },
+              {
+                term: noColon(translate('token>pass>mintedBy')),
+                value: publicTokenResponse?.data?.edition?.mintedHash ? (
+                  <span className="pw-inline-flex pw-items-center pw-gap-2 pw-min-w-0">
+                    {chainScanLink ? (
+                      <a
+                        href={chainScanLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={classNames(
+                          UI.link,
+                          'pw-font-mono pw-text-[12.5px]'
+                        )}
+                      >
+                        {shortHash(publicTokenResponse.data.edition.mintedHash)}
+                      </a>
+                    ) : (
+                      <span className="pw-font-mono pw-text-[12.5px]">
+                        {shortHash(publicTokenResponse.data.edition.mintedHash)}
+                      </span>
+                    )}
+                    <CopyButton
+                      value={publicTokenResponse.data.edition.mintedHash}
+                    />
+                  </span>
+                ) : (
+                  '—'
+                ),
+              },
+            ]}
+          />
+        </SectionCard>
+
+        {successValidation ? (
+          <div className="pw-flex pw-flex-col pw-gap-2 sm:pw-hidden">
+            <BaseButton
+              className="pw-w-full"
+              onClick={() => router.push(PixwayAppRoutes.WALLET)}
+            >
+              {translate('token>pass>tokenPage')}
+            </BaseButton>
+            <button
+              type="button"
+              className={classNames(UI.buttonSecondary, 'pw-w-full')}
+              onClick={() => router.back()}
+            >
+              {translate('token>pass>back')}
+            </button>
+          </div>
+        ) : null}
       </div>
     );
   } else {
     return errorBenefit || errorCollectionData || errorBenefitsResponse ? (
-      <>
+      <div className="pw-flex pw-flex-col pw-gap-4 pw-px-4 sm:pw-px-0">
         <ErrorBox customError={errorBenefit} />
         <ErrorBox customError={errorCollectionData} />
         <ErrorBox customError={errorBenefitsResponse} />
-      </>
+      </div>
     ) : (
-      <div className="pw-px-4 sm:pw-px-0">
+      <div className="pw-flex pw-flex-col pw-gap-4 pw-px-4 sm:pw-px-0 pw-mb-10">
         {collectionLoading || collectionData?.items.length === 1 ? (
-          <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
+          <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center pw-py-16">
             <Spinner />
           </div>
         ) : (
           <>
-            <div className="pw-bg-white pw-flex pw-flex-col pw-w-full sm:pw-rounded-[10px] sm:pw-p-5 sm:pw-shadow-[0_2px_8px_rgba(0,0,0,0.06)] pw-gap-[30px] pw-mb-10">
-              <div
-                className="pw-relative pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-cursor-pointer pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#353945]"
-                onClick={() => router.back()}
-              >
-                <ArrowLeftIcon className="pw-absolute pw-left-0 sm:pw-relative pw-stroke-[#295BA6]" />
+            <PageHeader
+              back={{
+                label: translate('token>pass>back'),
+                onClick: () => router.back(),
+              }}
+              title={benefit?.data?.name ?? translate('token>pass>title')}
+              subtitle={benefit?.data?.tokenPass?.tokenName}
+            />
 
-                <p className="sm:pw-hidden pw-block">
-                  {translate('token>pass>title')}
-                </p>
-                <p className="pw-hidden sm:pw-block">
-                  {translate('token>pass>back')}
-                </p>
-              </div>
-              <div className="pw-hidden sm:pw-flex pw-justify-center sm:pw-justify-start pw-items-center pw-gap-1 pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#353945]">
-                {translate('token>pass>title')}
-              </div>
-              <div className="pw-flex pw-flex-col">
-                <div className="pw-flex pw-flex-col pw-rounded-[10px] pw-border pw-border-[#E6E8EC] pw-py-[16px]">
-                  <div className="pw-flex pw-gap-[16px] pw-px-[16px]">
-                    {eventDate !== undefined && (
-                      <>
-                        <div className="pw-flex pw-flex-col pw-w-[120px] pw-justify-center pw-items-center">
-                          <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#0F1729] pw-text-center">
-                            {shortDay[locale][getDay(eventDate)]}
-                          </div>
-                          <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
-                            {format(eventDate, 'dd MMM yyyy')}
-                          </div>
-                          <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945] pw-text-center">
-                            {format(eventDate, "HH'h'mm")}
-                          </div>
-                        </div>
-                        <div className="pw-h-auto pw-bg-[#DCDCDC] pw-w-px" />
-                      </>
-                    )}
-                    <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#0F1729]">
-                      {benefit?.data.tokenPass.tokenName} - {benefit?.data.name}
-                    </div>
-                  </div>
-                  <div className="pw-p-4">
-                    {collectionData?.items.length === 0 ? (
-                      <p className="pw-text-black pw-text-base pw-font-semibold">
-                        {translate('tokens>passTemplate>notTokenBenefit')}
+            <SectionCard title={translate('tokens>passTemplate>chooseToken')}>
+              <div className="pw-flex pw-flex-col sm:pw-flex-row pw-gap-4">
+                {eventDateBlock}
+                <div className="pw-flex-1 pw-min-w-0">
+                  {collectionData?.items.length === 0 ? (
+                    <EmptyState
+                      bare
+                      title={translate('tokens>passTemplate>notTokenBenefit')}
+                      className="pw-py-4"
+                    />
+                  ) : (
+                    <>
+                      <p
+                        className={classNames(
+                          'pw-m-0 pw-mb-3 pw-text-[13px]',
+                          UI.textSecondary
+                        )}
+                      >
+                        {translate('tokens>passTemplate>moreTokensBenefit1')}{' '}
+                        <b className={UI.text}>{benefit?.data.name}</b>{' '}
+                        {translate('tokens>passTemplate>moreTokensBenefit2')}:
                       </p>
-                    ) : (
-                      <>
-                        <p className="pw-text-black pw-text-base pw-font-medium">
-                          {translate('tokens>passTemplate>moreTokensBenefit1')}{' '}
-                          <b>{benefit?.data.name}</b>{' '}
-                          {translate('tokens>passTemplate>moreTokensBenefit2')}:{' '}
-                        </p>
-                        {collectionData?.items.map((val: { id: Key | null | undefined; mainImage: string | undefined; editionNumber: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | Iterable<ReactNode> | null | undefined; tokenId: any; }) => {
-                          return (
-                            <div
-                              key={val.id}
-                              className="pw-flex pw-flex-row pw-items-center pw-gap-5 pw-border-b pw-border-[#EFEFEF] pw-p-3"
-                            >
-                              <ImageSDK
-                                src={val.mainImage}
-                                className="pw-h-[120px]"
-                              />
-                              <div className="pw-flex pw-flex-col">
-                                <p className="pw-text-black pw-text-base pw-mb-2">
-                                  {translate(
-                                    'tokens>tokenTransferController>edition'
-                                  )}
-                                  : {'#'}
-                                  {val.editionNumber}
-                                </p>
-                                <Button
-                                  className="pw-w-full"
-                                  onClick={() =>
-                                    router.pushConnect(
-                                      PixwayAppRoutes.USE_BENEFIT.replace(
-                                        '{benefitId}',
-                                        benefitId
-                                      ).concat(`?tokenId=${val.tokenId}`)
-                                    )
-                                  }
-                                >
-                                  {translate('token>pass>benefits>useBenefit')}
-                                </Button>
-                              </div>
+                      <div className="pw-grid pw-gap-2">
+                        {collectionData?.items.map((val: any) => (
+                          <div
+                            key={val.id}
+                            className={classNames(
+                              'pw-flex pw-items-center pw-gap-3 pw-rounded-[10px] pw-border pw-p-3',
+                              UI.line
+                            )}
+                          >
+                            <ImageSDK
+                              src={val.mainImage}
+                              className="pw-w-14 pw-h-14 pw-rounded-[8px] pw-object-cover pw-shrink-0"
+                            />
+                            <div className="pw-flex-1 pw-min-w-0">
+                              <p
+                                className={classNames(
+                                  'pw-m-0 pw-text-[13.5px] pw-font-semibold pw-truncate',
+                                  UI.text
+                                )}
+                              >
+                                {val.name ||
+                                  benefit?.data?.tokenPass?.tokenName}
+                              </p>
+                              <p
+                                className={classNames(
+                                  'pw-m-0 pw-text-[12.5px]',
+                                  UI.textMuted
+                                )}
+                              >
+                                {translate(
+                                  'tokens>tokenTransferController>edition'
+                                )}{' '}
+                                #{val.editionNumber}
+                              </p>
                             </div>
-                          );
-                        })}
-                      </>
-                    )}
-                  </div>
-                  <div className="pw-w-full pw-flex pw-flex-col pw-px-[16px]">
-                    <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px]">
-                      {benefit?.data?.eventEndsAt
-                        ? translate('token>pass>useThisTokenUntil')
-                        : translate('token>pass>useThisTokenFrom')}
-                      <span className="pw-text-[#777E8F] pw-font-bold pw-text-[18px] pw-leading-[23px]">
-                        {benefit?.data?.eventStartsAt &&
-                          format(
-                            new Date(benefit?.data?.eventStartsAt),
-                            'dd/MM/yyyy'
-                          )}
-                        {benefit?.data?.eventEndsAt &&
-                          translate('token>pass>until') +
-                          format(
-                            new Date(benefit?.data?.eventEndsAt),
-                            'dd/MM/yyyy'
-                          )}
-                      </span>
-                    </div>
-                    {benefit?.data?.checkIn && (
-                      <div className="pw-flex pw-flex-col pw-text-[#353945] pw-font-normal pw-text-[14px] pw-leading-[21px] pw-mt-5">
-                        {translate('token>pass>checkinAvaibleAt')}
-                        {renderCheckInTime()}
+                            <BaseButton
+                              onClick={() =>
+                                router.pushConnect(
+                                  PixwayAppRoutes.USE_BENEFIT.replace(
+                                    '{benefitId}',
+                                    benefitId
+                                  ).concat(`?tokenId=${val.tokenId}`)
+                                )
+                              }
+                            >
+                              {translate('token>pass>benefits>useBenefit')}
+                            </BaseButton>
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </div>
+                    </>
+                  )}
                 </div>
               </div>
-              <>
-                <DetailsTemplate
-                  title={translate('token>pass>detailsPass')}
-                  autoExpand={true}
-                >
-                  <DetailPass
-                    title={translate('token>pass>description')}
-                    description={benefit?.data?.description ?? ''}
-                  />
+              {periodItems.length ? (
+                <DefinitionList
+                  items={periodItems}
+                  className={classNames('pw-pt-4 pw-mt-4 pw-border-t', UI.line)}
+                />
+              ) : null}
+            </SectionCard>
 
-                  <DetailPass
-                    title={translate('token>pass>rules')}
-                    description={benefit?.data?.rules ?? ''}
-                  />
-                </DetailsTemplate>
-              </>
-            </div>
+            {descriptionCard}
           </>
         )}
       </div>

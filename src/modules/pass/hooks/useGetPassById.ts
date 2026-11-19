@@ -11,7 +11,7 @@ const useGetPassById = (passId: string) => {
   const { companyId: tenantId } = useCompanyConfig();
 
   return useQuery(
-    [PixwayAPIRoutes.PASS_BY_ID, passId],
+    [PixwayAPIRoutes.PASS_BY_ID, tenantId, passId],
     async () => {
       try {
         const response = await axios.get<TokenPassEntity>(
@@ -26,7 +26,7 @@ const useGetPassById = (passId: string) => {
       }
     },
     {
-      enabled: passId != undefined && passId != '',
+      enabled: Boolean(tenantId) && passId != undefined && passId != '',
     }
   );
 };
