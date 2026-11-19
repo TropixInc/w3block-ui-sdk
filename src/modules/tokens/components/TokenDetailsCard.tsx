@@ -25,6 +25,7 @@ import { Tone, UI } from '../../shared/components/ui/tokens';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 import { FormConfigurationContext } from '../contexts/FormConfigurationContext';
 import useDynamicDataFromTokenCollection from '../hooks/useDynamicDataFromTokenCollection';
 import {
@@ -257,14 +258,22 @@ export const TokenDetailsCard = ({
               )}
             >
               {pass?.description ? (
-                <div dangerouslySetInnerHTML={{ __html: pass.description }} />
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHtml(pass.description),
+                  }}
+                />
               ) : null}
               {pass?.rules ? (
                 <div>
                   <span className={UI.label}>
                     {translate('tokens>tokenDetailsCard>usageRules')}
                   </span>
-                  <div dangerouslySetInnerHTML={{ __html: pass.rules }} />
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(pass.rules),
+                    }}
+                  />
                 </div>
               ) : null}
             </div>

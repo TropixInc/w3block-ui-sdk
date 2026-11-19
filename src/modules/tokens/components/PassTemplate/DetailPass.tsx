@@ -3,6 +3,7 @@ import { useToggle } from 'react-use';
 import classNames from 'classnames';
 
 import ChevronDown from '../../../shared/assets/icons/chevronDownOutlined.svg';
+import { sanitizeHtml } from '../../../shared/utils/sanitizeHtml';
 
 export const DetailPass = ({
   title,
@@ -23,7 +24,7 @@ export const DetailPass = ({
           'pw-p-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'
         )}
         dangerouslySetInnerHTML={{
-          __html: description,
+          __html: sanitizeHtml(description),
         }}
       ></div>
       <div className={'pw-cursor-pointer sm:pw-hidden'} onClick={toggleOpen}>

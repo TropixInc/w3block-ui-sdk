@@ -9,9 +9,7 @@ import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { useDynamicString } from '../hooks/useDynamicString';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
-
-
-
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 
 export const Card = ({
   product,
@@ -148,7 +146,7 @@ export const Card = ({
                 : 'auto',
           }}
           dangerouslySetInnerHTML={{
-            __html: description ?? '',
+            __html: sanitizeHtml(description ?? ''),
           }}
           className={`pw-text-[#7E7E7E] ${
             /<[a-z][\s\S]*?>|<\/[a-z][\s\S]*?>/i.test(description)

@@ -18,6 +18,7 @@ import LabelWithRequired from '../LabelWithRequired';
 import { Spinner } from '../Spinner';
 import InputStatus from './InputStatus';
 import useTranslation from '../../hooks/useTranslation';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 interface InputImageProps {
   title: string;
   name: string;
@@ -167,7 +168,7 @@ const InputImage = ({
         </p>
         <div
           className="pw-mt-5 pw-text-[#353945] pw-mb-2"
-          dangerouslySetInnerHTML={{ __html: instructions || '' }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(instructions || '') }}
         ></div>
         <FormItemContainer
           disableClasses={readonly}

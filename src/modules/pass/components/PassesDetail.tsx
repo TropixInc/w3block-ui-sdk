@@ -26,6 +26,7 @@ import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { useSessionUser } from '../../shared/hooks/useSessionUser';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 import { BenefitStatus } from '../enums/BenefitStatus';
 import useGetPassBenefits from '../hooks/useGetPassBenefits';
 import useGetPassById from '../hooks/useGetPassById';
@@ -318,7 +319,9 @@ export const PassesDetail = () => {
                     'pw-text-[13px] pw-mt-1 [&_p]:pw-m-0',
                     UI.textSecondary
                   )}
-                  dangerouslySetInnerHTML={{ __html: pass?.description ?? '' }}
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHtml(pass?.description ?? ''),
+                  }}
                 />
               </div>
             </div>

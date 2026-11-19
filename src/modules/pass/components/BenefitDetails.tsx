@@ -18,6 +18,7 @@ import { Tone, UI } from '../../shared/components/ui/tokens';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 import { BenefitStatus } from '../enums/BenefitStatus';
 import useGetPassBenefitById from '../hooks/useGetPassBenefitById';
 import useGetPassBenefits from '../hooks/useGetPassBenefits';
@@ -211,7 +212,11 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
                 <span className={UI.label}>
                   {translate('token>pass>description')}
                 </span>
-                <div dangerouslySetInnerHTML={{ __html: data.description }} />
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHtml(data.description),
+                  }}
+                />
               </div>
             ) : null}
             {data?.rules ? (
@@ -219,7 +224,9 @@ const _BenefitDetails = ({ benefitIdProp }: BenefitDetailsProps) => {
                 <span className={UI.label}>
                   {translate('token>pass>rules')}
                 </span>
-                <div dangerouslySetInnerHTML={{ __html: data.rules }} />
+                <div
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.rules) }}
+                />
               </div>
             ) : null}
           </div>

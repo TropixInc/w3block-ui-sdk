@@ -8,6 +8,7 @@ import { Alert } from '../../shared/components/Alert';
 import { WeblockButton } from '../../shared/components/WeblockButton';
 import { DecryptModal } from './DecryptModal';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 
 export interface TextFieldDisplayClasses {
   root?: string;
@@ -88,7 +89,7 @@ export const TextFieldEncrypted = ({
               inline ? 'pw-inline' : ''
             )}
             dangerouslySetInnerHTML={{
-              __html: decryptedText.replace('\n', '<br />'),
+              __html: sanitizeHtml(decryptedText.replace('\n', '<br />')),
             }}
           ></div>
         </div>

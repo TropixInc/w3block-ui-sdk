@@ -44,6 +44,7 @@ import { usePrivateRoute } from '../../../shared/hooks/usePrivateRoute';
 import { useProfile } from '../../../shared/hooks/useProfile';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { sanitizeHtml } from '../../../shared/utils/sanitizeHtml';
 import { useGetCollectionMetadata } from '../../hooks/useGetCollectionMetadata';
 import { usePublicTokenData } from '../../hooks/usePublicTokenData';
 import { ErrorModal } from './ErrorModal';
@@ -543,7 +544,7 @@ const _PassTemplate = ({
               <div
                 className="pw-font-normal [&_p]:pw-m-0"
                 dangerouslySetInnerHTML={{
-                  __html: benefit?.data?.description ?? '',
+                  __html: sanitizeHtml(benefit?.data?.description ?? ''),
                 }}
               />
             ),
@@ -557,7 +558,7 @@ const _PassTemplate = ({
                     <div
                       className="pw-font-normal [&_p]:pw-m-0"
                       dangerouslySetInnerHTML={{
-                        __html: benefit?.data?.rules ?? '',
+                        __html: sanitizeHtml(benefit?.data?.rules ?? ''),
                       }}
                     />
                   ),
