@@ -9,8 +9,7 @@ import { Alert } from '../../../shared/components/Alert';
 import { PixwayButton } from '../../../shared/components/PixwayButton';
 import { PriceAndGasInfo } from '../../../shared/components/PriceAndGasInfo';
 import { Spinner } from '../../../shared/components/Spinner';
-import { CreateOrderResponse } from '../../interface/interface';
-import { OrderPreviewCache } from '../../interface/interface';
+import { CreateOrderResponse, OrderPreviewCache } from '../../interface/interface';
 
 export interface CheckoutFinishedContentProps {
   /** Fluxo de gift card (pass share): conteúdo já renderizado pelo parent */

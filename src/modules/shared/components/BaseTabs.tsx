@@ -23,7 +23,7 @@ export const BaseTabs = ({
   activeTab,
   onChangeActiveTab,
   invalidDays,
-  checkinItems
+  checkinItems,
 }: BaseTabsProps) => {
 
   return (

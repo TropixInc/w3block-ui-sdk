@@ -74,7 +74,7 @@ const ComplexPhone = ({
   };
 
   const onChangeMorePhones = (idx: number, value: string) => {
-    const newPhones = [...field?.value?.value];
+    const newPhones = [...(field?.value?.value ?? [])];
     newPhones[idx] = value;
     field.onChange({ inputId: name, value: newPhones });
   };

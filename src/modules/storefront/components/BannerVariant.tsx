@@ -15,14 +15,13 @@ import 'swiper/css/pagination'; */
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { SwiperSlide } from 'swiper/react';
+import { SwiperSlide, Swiper } from 'swiper/react';
 import { ImageSDK } from '../../shared/components/ImageSDK';
 import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
 import { useBreakpoints } from '../../shared/hooks/useBreakpoints';
 import { useIsMobile } from '../../shared/hooks/useIsMobile';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import { BannerVariantData, SpecificBannerInfo, AlignmentEnum } from '../interfaces/Theme';
-import { Swiper } from 'swiper/react';
 
 export const BannerVariant = ({ data }: { data: BannerVariantData }) => {
   const { styleData, mobileStyleData, id } = data;

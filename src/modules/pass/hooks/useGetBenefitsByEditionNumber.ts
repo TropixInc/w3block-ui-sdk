@@ -79,7 +79,7 @@ const useGetBenefitsByEditionNumber = ({
         tokenPassId != null && editionNumber != null && tokenPassId !== '',
       refetchOnWindowFocus: false,
       refetchOnMount: false,
-      initialData: undefined
+      initialData: undefined,
     }
   );
 };

@@ -32,7 +32,7 @@ export const usePostUsersDocuments = (): any => {
         queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.TENANT_INPUTS_BY_SLUG]});
         queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.GET_DOCUMENTS_BY_USER]});
          queryClient.invalidateQueries({queryKey: [PixwayAPIRoutes.DOCUMENTS_BY_USER_BY_CONTEXT]});
-      }
+      },
     }
   );
 };
