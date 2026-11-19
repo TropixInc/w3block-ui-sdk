@@ -100,6 +100,13 @@ export interface ColumnsTable {
   isTranslatable?: boolean;
   translatePrefix?: string;
   columnStyles?: string;
+  /**
+   * Redesign variant only: role of this column when the table collapses into
+   * cards on mobile. Defaults: a USER column (or the first column) is the
+   * `title`, a MAPPING column with `tones` is the `badge`, MONEY is the
+   * `value`, everything else is a `meta` line. `hidden` drops it from cards.
+   */
+  card?: 'title' | 'badge' | 'value' | 'meta' | 'hidden';
   isDynamicValue?: boolean;
 
   moreInfos?: {

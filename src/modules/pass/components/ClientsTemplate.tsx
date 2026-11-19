@@ -1,168 +1,192 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { Trans } from 'react-i18next';
-import { useDebounce } from 'react-use';
+import classNames from 'classnames';
+import { format } from 'date-fns';
 
-import { format, getDay } from 'date-fns';
-
-
-import { dataMoked } from './dataMoked';
-import { useIsMobile } from '../../shared/hooks/useIsMobile';
-import { useIsProduction } from '../../shared/hooks/useIsProduction';
-import { BaseTemplate } from './BaseTemplate';
-import { TableBase } from './TableBase';
-import { Filters, ValidStatusProps } from '../../tokens/components/Filters';
+import { ErrorBox } from '../../shared/components/ErrorBox';
+import { Pagination } from '../../shared/components/Pagination';
+import {
+  DataTable,
+  DataTableColumn,
+} from '../../shared/components/ui/DataTable';
+import { EmptyState } from '../../shared/components/ui/EmptyState';
+import { SectionCard } from '../../shared/components/ui/SectionCard';
+import { UI } from '../../shared/components/ui/tokens';
+import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useGetBenefitUses } from '../hooks/useGetBenefitUses';
+import { BaseTemplate } from './BaseTemplate';
 
+interface UseRow {
+  id: string;
+  client: string;
+  email: string;
+  cpf: string;
+  benefit: string;
+  benefitId: string;
+  pass: string;
+  edition: string;
+  date: string;
+}
+
+const formatDateTime = (value?: string) =>
+  value && Date.parse(value)
+    ? format(new Date(value), 'dd/MM/yyyy HH:mm')
+    : '—';
+
+/**
+ * Operator view of everyone who used a benefit of the tenant's passes:
+ * who, which benefit / pass, which token edition and when. Backed by the
+ * tenant-wide usages endpoint (admins see everything; operators get the
+ * API's own error when they lack access).
+ */
 export const ClientTemplate = () => {
-  const Lorem = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`;
-  const shortDay = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-  const token = {
-    name: 'RIO World Skate Street World Championships',
-    type: 'unique',
-    id: '00000000000000000',
-    image:
-      'https://res.cloudinary.com/tropix-dev/image/upload/v1661523975/offpix-backend/927657fe-ea7d-40b6-a957-ff5f38f27daf/bd5a829c-9a56-44a8-b394-4fd6b4ba07fb.jpg',
-    detail: {
-      name: '0Lorem Ipsum is simply dummy text of the printing.',
-    },
-    address: {
-      name: 'Nome do endereço',
-      street: 'Praça da Tijuca Rio de Janeiro',
-      city: 'RJ',
-      country: 'Brazil',
-      rules: Lorem,
-      cabin: 'Camarote Bossa Nova',
-    },
-  };
-  const event = {
-    date: '10/20/2022 14:30',
-  };
-
-  const eventDate = new Date(event.date);
-  const isMobile = useIsMobile();
-
-  const title = isMobile
-    ? ['Nome', 'ID', 'Local', '']
-    : ['Nome', 'Documento', 'Token ID', 'Carteira', 'Data', 'Local', 'Status'];
-
-  const status = validStatus.map(({ key }) => key);
-
   const [translate] = useTranslation();
-  const isProduction = useIsProduction();
-  const isDevelopment = !isProduction;
-  const [filteredData, setFilteredData] = useState(dataMoked);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState(status);
+  const router = useRouterConnect();
+  const [page, setPage] = useState(1);
+  const { data, isFetching, error } = useGetBenefitUses({ query: { page } });
 
-  useDebounce(
-    () => {
-      const filter = searchTerm?.toLowerCase();
-      const filteredData = dataMoked.filter(
-        (item) =>
-          (item?.name?.toLowerCase()?.includes(filter) ||
-            item?.id?.toLowerCase()?.includes(filter)) &&
-          Boolean(
-            statusFilter.find(
-              (e) => e?.toLowerCase() === item?.status?.toLowerCase()
-            )
-          )
-      );
-
-      setFilteredData(filteredData);
-    },
-    500,
-    [searchTerm, statusFilter]
+  const rows = useMemo<UseRow[]>(
+    () =>
+      (data?.items ?? []).map((use) => ({
+        id: use.id,
+        client: use?.user?.name || use?.user?.email || '—',
+        email: use?.user?.name && use?.user?.email ? use.user.email : '',
+        cpf: use?.user?.cpf || '—',
+        benefit: use?.tokenPassBenefit?.name || '—',
+        benefitId: use?.tokenPassBenefitId,
+        pass: use?.tokenPassBenefit?.tokenPass?.name || '',
+        edition:
+          use?.editionNumber != undefined ? `#${use.editionNumber}` : '—',
+        date: formatDateTime(use?.usedAt || use?.createdAt),
+      })),
+    [data]
   );
 
-  const handleStatusFilter = (filter: string) => {
-    const filterLowerCase = filter.toLocaleLowerCase();
-    const hasFilter = statusFilter.find(
-      (e) => e.toLocaleLowerCase() === filterLowerCase
-    );
-
-    if (hasFilter) {
-      const filtered = statusFilter.filter(
-        (e) => e.toLocaleLowerCase() !== filterLowerCase
-      );
-      setStatusFilter(filtered);
-    } else {
-      setStatusFilter((e) => [...e, filter]);
-    }
-  };
-
-  return isDevelopment ? (
-    <BaseTemplate title={translate('components>menu>tokenPass>clients')}>
-      <div className="pw-flex pw-flex-col sm:pw-flex-row pw-p-[16px] pw-gap-[24px] sm:pw-gap-[16px] pw-items-center pw-border pw-border-[#E6E8EC] pw-rounded-[16px]">
-        <img
-          src={token.image}
-          alt={token.name}
-          className="pw-w-[319px] sm:pw-w-[216px] pw-h-[265px] sm:pw-h-[175px] pw-shadow-[2px_2px_10px_rgba(0,0,0,0.08)] pw-rounded-[20px]"
-        />
-
-        <div className="pw-flex pw-gap-4 pw-w-full">
-          <div className="pw-flex pw-flex-col sm:pw-w-[120px] pw-justify-center pw-items-center">
-            <div className="pw-text-[24px] pw-leading-[36px] pw-font-bold pw-text-[#295BA6] pw-text-center">
-              {shortDay[getDay(eventDate)]}
-            </div>
-            <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F] pw-text-center pw-w-[50px]">
-              {format(eventDate, 'dd MMM yyyy')}
-            </div>
-            <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945] pw-text-center">
-              {format(eventDate, "HH'h'mm")}
-            </div>
-          </div>
-          <div className="pw-h-[152px] sm:pw-h-[101px] pw-bg-[#DCDCDC] pw-w-[1px]" />
-          <div className="pw-flex pw-flex-col pw-justify-center">
-            <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-              {token.name}
-            </div>
-            <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-              {token.address.street}
-              {', '}
-              {token.address.city}
-              {' - '}
-              {token.address.country}
-            </div>
-            <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-              {token.address.cabin}
-            </div>
-            <div className="pw-text-[15px] pw-leading-[22px] pw-font-normal pw-text-[#353945] pw-mt-3">
-              <Trans
-                i18nKey={'token>pass>totalValidedTokens'}
-                tOptions={{ total: 100 }}
+  const columns = useMemo<DataTableColumn<UseRow>[]>(
+    () => [
+      {
+        key: 'client',
+        header: translate('pass>clients>client'),
+        card: 'title',
+        render: (row) => (
+          <div className="pw-grid pw-min-w-0 pw-leading-tight">
+            <span className="pw-font-semibold pw-truncate">{row.client}</span>
+            {row.email ? (
+              <span
+                className={classNames(
+                  'pw-text-[12px] pw-truncate pw-font-normal',
+                  UI.textFaint
+                )}
               >
-                Total tokens validados:{' '}
-                <span className="pw-font-semibold">100</span>
-              </Trans>
-            </div>
+                {row.email}
+              </span>
+            ) : null}
           </div>
-        </div>
-      </div>
+        ),
+      },
+      {
+        key: 'cpf',
+        header: translate('pass>benefitUsesList>cpf'),
+        render: (row) => row.cpf,
+      },
+      {
+        key: 'benefit',
+        header: translate('pass>clients>benefit'),
+        render: (row) => (
+          <div className="pw-grid pw-min-w-0 pw-leading-tight">
+            {row.benefitId ? (
+              <a
+                href={router.routerToHref(
+                  PixwayAppRoutes.BENEFIT_DETAILS.replace(
+                    '{benefitId}',
+                    row.benefitId
+                  )
+                )}
+                className={classNames(UI.link, 'pw-truncate')}
+              >
+                {row.benefit}
+              </a>
+            ) : (
+              <span className="pw-truncate">{row.benefit}</span>
+            )}
+            {row.pass ? (
+              <span
+                className={classNames(
+                  'pw-text-[12px] pw-truncate',
+                  UI.textFaint
+                )}
+              >
+                {row.pass}
+              </span>
+            ) : null}
+          </div>
+        ),
+      },
+      {
+        key: 'edition',
+        header: translate('pass>benefitUsesList>edition'),
+        render: (row) => row.edition,
+      },
+      {
+        key: 'date',
+        header: translate('pass>benefitUsesList>time'),
+        render: (row) => row.date,
+      },
+    ],
+    [router, translate]
+  );
 
-      <div className="pw-flex pw-flex-col pw-gap-[16px]">
-        <Filters
-          setSearchTerm={setSearchTerm}
-          setStatus={handleStatusFilter}
-          status={statusFilter}
-          totalItens={filteredData.length}
-          validStatus={validStatus}
-        />
-        <TableBase columns={title} data={filteredData} />
-      </div>
+  const totalPages = data?.meta?.totalPages ?? 1;
+  const totalItems = data?.meta?.totalItems ?? 0;
+
+  return (
+    <BaseTemplate
+      title={translate('components>menu>clients')}
+      subtitle={translate('pass>clients>subtitle')}
+    >
+      {error ? (
+        <ErrorBox customError={error} />
+      ) : (
+        <SectionCard title={translate('pass>clients>uses')} flush>
+          <DataTable<UseRow>
+            bare
+            columns={columns}
+            rows={rows}
+            rowKey={(row) => row.id}
+            loading={isFetching && !data}
+            emptyState={
+              <EmptyState
+                bare
+                title={translate('token>pass>notResult')}
+                className="pw-py-6"
+              />
+            }
+            className="pw-px-2 pw-pb-2"
+            footer={
+              totalItems > 0 ? (
+                <>
+                  <span>
+                    {translate('shared>table>pageOf', {
+                      page,
+                      pages: totalPages,
+                      total: totalItems,
+                    })}
+                  </span>
+                  {totalPages > 1 ? (
+                    <Pagination
+                      pagesQuantity={totalPages}
+                      currentPage={page}
+                      onChangePage={setPage}
+                    />
+                  ) : null}
+                </>
+              ) : undefined
+            }
+          />
+        </SectionCard>
+      )}
     </BaseTemplate>
-  ) : (
-    <></>
   );
 };
-
-const validStatus: ValidStatusProps[] = [
-  {
-    key: 'Validado',
-    statusColor: '#009A6C',
-  },
-  {
-    key: 'Erro',
-    statusColor: '#ED4971',
-  },
-];

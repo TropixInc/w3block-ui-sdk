@@ -76,7 +76,7 @@ export const useGetBenefitUses = ({ query, enabled = true }: Params) => {
         )
         .then((res) => res.data),
     {
-      enabled: enabled,
+      enabled: enabled && Boolean(companyId),
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       retry: 0,
