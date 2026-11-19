@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable i18next/no-literal-string */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import _ from 'lodash';
@@ -11,10 +11,12 @@ import { Spinner } from '../../shared/components/Spinner';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import { usePublicTokenData } from '../../tokens/hooks/usePublicTokenData';
-import { useGetTokenSharedCode } from '../hooks/useGetTokenSharedCode';
+import {
+  isShareCodeNotFound,
+  useGetTokenSharedCode,
+} from '../hooks/useGetTokenSharedCode';
 import { QrCodeSection } from '../../tokens/components/PassTemplate/QrCodeSection';
 import useTranslation from '../../shared/hooks/useTranslation';
-
 
 const _SharedOrder = ({
   initialStep = 1,
@@ -29,15 +31,26 @@ const _SharedOrder = ({
   const [translate] = useTranslation();
   const [typeComponent, setTypeComponent] = useState(initialStep);
   const [isCopied, setIsCopied] = useState(false);
+  // embedded in the checkout right after the purchase: the token may still
+  // be minting, so keep polling (capped) instead of the plain retries
+  const waitsForMint = initialStep === 2 && !selfBuy;
   const {
     data: pass,
     isFetching,
     refetch,
     error,
-  } = useGetTokenSharedCode(
-    code as string,
-    initialStep === 2 && !selfBuy ? true : 5
-  );
+  } = useGetTokenSharedCode(code as string, waitsForMint ? true : 5);
+  const displayError = useMemo(() => {
+    if (!error) return error;
+    if (isShareCodeNotFound(error)) {
+      return { ...error, message: translate('pass>sharedOrder>codeNotFound') };
+    }
+    if (waitsForMint) {
+      return { ...error, message: translate('pass>sharedOrder>codeTimeout') };
+    }
+    return error;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, waitsForMint]);
   const { data: publicTokenResponse, error: errorPublicToken } =
     usePublicTokenData({
       contractAddress: pass?.tokenPass?.contractAddress,
@@ -214,8 +227,8 @@ const _SharedOrder = ({
     }
   };
 
-  return error ? (
-    <ErrorBox customError={error} />
+  return displayError ? (
+    <ErrorBox customError={displayError} />
   ) : (
     <div className="pw-mt-10 pw-w-full pw-mb-8 pw-flex pw-justify-center pw-text-black">
       <div className="pw-mx-auto pw-w-[580px] pw-shadow-lg pw-border pw-border-[#dddddd71] pw-flex pw-justify-center pw-items-center pw-rounded-[20px] pw-p-8">

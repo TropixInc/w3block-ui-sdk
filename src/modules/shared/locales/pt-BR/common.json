@@ -868,6 +868,8 @@
   "pass>configTimeModal>wednesday": "Quarta-feira",
   "pass>PassesDetail>valid": "Validar",
   "pass>sharedOrder>codeAvaliableInFewMinutes": "Seu QR Code estará disponível em alguns minutos.",
+  "pass>sharedOrder>codeNotFound": "Este código não existe ou já expirou. Peça um novo link para quem enviou o presente.",
+  "pass>sharedOrder>codeTimeout": "O QR Code ainda não ficou disponível. Abra este link novamente em alguns minutos.",
   "pass>sharedOrder>codeInFuture": "para poder acessar seu QR Code a qualquer momento no futuro.",
   "pass>sharedOrder>copyLink": "Copie este link",
   "pass>sharedOrder>loadingCode": "Seu QR Code está carregando.",
