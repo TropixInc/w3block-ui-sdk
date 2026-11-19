@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.54-staging.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.54-staging.0...v2.0.54-staging.1) (2026-11-19)
+
 ### [2.0.54-staging.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.53...v2.0.54-staging.0) (2026-11-18)
 
 
