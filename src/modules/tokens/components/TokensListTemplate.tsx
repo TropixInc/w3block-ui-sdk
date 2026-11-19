@@ -245,7 +245,7 @@ const _TokensListTemplate = ({ tokens, isLoading, embedded }: Props) => {
         {controls}
 
         {processingTokens?.length ? (
-          <ul className="pw-grid pw-grid-cols-1 lg:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-x-[41px] pw-gap-y-[30px] pw-mb-6">
+          <ul className="pw-grid pw-grid-cols-1 md:pw-grid-cols-2 xl:pw-grid-cols-3 pw-gap-6 pw-mb-6 pw-max-w-full xl:pw-max-w-[1100px]">
             {processingTokens.map((token: any) => (
               <li className="pw-w-full pw-opacity-60" key={token.id.tokenId}>
                 <WalletTokenCard
