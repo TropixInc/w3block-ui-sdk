@@ -21,6 +21,7 @@ import { Spinner } from '../Spinner';
 import TranslatableComponent from '../TranslatableComponent';
 import { useRouterConnect } from '../../../shared/hooks/useRouterConnect';
 import { useGuardPagesWithOptions } from '../../../shared/hooks/useGuardPagesWithOptions';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { CriptoValueComponent } from '../CriptoValueComponent';
 import { InternalpageHeaderWithFunds } from '../InternalPageHeaderWithFunds';
 import { TONE_CLASSES, UI } from '../ui/tokens';
@@ -36,7 +37,7 @@ const StepLabel = ({ step, html }: { step: number; html: string }) => (
     </span>
     <div
       className="pw-text-sm pw-font-semibold pw-text-[#0F1729] [&_*]:pw-m-0"
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
     />
   </div>
 );
@@ -229,7 +230,9 @@ export const Erc20Resale = () => {
                     <div
                       className="pw-block pw-text-sm pw-font-medium pw-text-black pw-mb-2"
                       dangerouslySetInnerHTML={{
-                        __html: translate('pages>productResale>currency'),
+                        __html: sanitizeHtml(
+                          translate('pages>productResale>currency')
+                        ),
                       }}
                     />
                     <BaseSelect
@@ -293,7 +296,9 @@ export const Erc20Resale = () => {
                       <div
                         className="pw-text-sm pw-text-[#35394C] pw-font-[400]"
                         dangerouslySetInnerHTML={{
-                          __html: translate('pages>productResale>subtotal'),
+                          __html: sanitizeHtml(
+                            translate('pages>productResale>subtotal')
+                          ),
                         }}
                       />
                       {isLoadingPreview ? (
@@ -320,7 +325,9 @@ export const Erc20Resale = () => {
                           <div
                             className="pw-text-sm pw-text-[#35394C] pw-font-[400]"
                             dangerouslySetInnerHTML={{
-                              __html: translate('pages>mysales>resale>fees'),
+                              __html: sanitizeHtml(
+                                translate('pages>mysales>resale>fees')
+                              ),
                             }}
                           />
                           {isLoadingPreview ? (
@@ -346,7 +353,9 @@ export const Erc20Resale = () => {
                       <div
                         className="pw-text-sm pw-text-[#35394C] pw-font-[600]"
                         dangerouslySetInnerHTML={{
-                          __html: translate('pages>resale>totalReceivable'),
+                          __html: sanitizeHtml(
+                            translate('pages>resale>totalReceivable')
+                          ),
                         }}
                       />
                       {isLoadingPreview ? (
@@ -367,7 +376,7 @@ export const Erc20Resale = () => {
                     <div
                       className="pw-text-[14px] pw-text-gray-500"
                       dangerouslySetInnerHTML={{
-                        __html: translate('pages>resale>feesTip'),
+                        __html: sanitizeHtml(translate('pages>resale>feesTip')),
                       }}
                     />
                   </div>
@@ -377,7 +386,7 @@ export const Erc20Resale = () => {
                 <div
                   className={`pw-w-full pw-rounded-lg pw-px-3 pw-py-2.5 pw-text-[13px] ${TONE_CLASSES.warn} [&_*]:pw-m-0`}
                   dangerouslySetInnerHTML={{
-                    __html: translate('pages>resale>saleWarning'),
+                    __html: sanitizeHtml(translate('pages>resale>saleWarning')),
                   }}
                 />
               ) : null}

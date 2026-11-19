@@ -8,7 +8,7 @@ import { ErrorBox } from './ErrorBox';
 import { Spinner } from './Spinner';
 import TranslatableComponent from './TranslatableComponent';
 import useTranslation from '../hooks/useTranslation';
-
+import { sanitizeHtml } from '../utils/sanitizeHtml';
 
 const _RedirectTemplate = () => {
   const router = useRouterConnect();
@@ -36,7 +36,7 @@ const _RedirectTemplate = () => {
             <div
               className="pw-text-black pw-font-medium pw-text-xl"
               dangerouslySetInnerHTML={{
-                __html: purchaseRequiredModalContent,
+                __html: sanitizeHtml(purchaseRequiredModalContent),
               }}
             ></div>
             {errorProduct ? (

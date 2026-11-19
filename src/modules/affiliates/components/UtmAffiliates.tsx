@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { ReferralWidget } from './ReferralWidget';
-
 
 export const UtmAffiliates = () => {
   const { defaultTheme } = useThemeConfig();
@@ -28,7 +28,7 @@ export const UtmAffiliates = () => {
         <div
           className="pw-w-full"
           dangerouslySetInnerHTML={{
-            __html: htmlContent[0],
+            __html: sanitizeHtml(htmlContent[0]),
           }}
         ></div>
       )}
@@ -49,7 +49,7 @@ export const UtmAffiliates = () => {
         <div
           className="pw-w-full"
           dangerouslySetInnerHTML={{
-            __html: htmlContent[1],
+            __html: sanitizeHtml(htmlContent[1]),
           }}
         ></div>
       )}

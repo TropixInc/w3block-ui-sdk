@@ -2,7 +2,6 @@ import { CSSProperties, lazy, useMemo } from 'react';
 
 import _ from 'lodash';
 
-
 import classNames from 'classnames';
 import { ImagePlusTextData } from '../interfaces/Theme';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
@@ -11,7 +10,7 @@ import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import { useDynamicString } from '../hooks/useDynamicString';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
 import { ImageSDK } from '../../shared/components/ImageSDK';
-
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 
 export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
   const { datasource } = useDynamicApi();
@@ -129,7 +128,7 @@ export const ImagePlusText = ({ data }: { data: ImagePlusTextData }) => {
               style={{ color: contentColor }}
               className="pw-prose-sm dangerouslyHTML"
               dangerouslySetInnerHTML={{
-                __html: content ?? '',
+                __html: sanitizeHtml(content ?? ''),
               }}
             />
           </div>

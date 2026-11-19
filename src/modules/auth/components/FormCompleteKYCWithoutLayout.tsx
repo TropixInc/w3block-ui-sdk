@@ -34,6 +34,7 @@ import { useGetUsersDocuments } from '../../shared/hooks/useGetUsersDocuments';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { createSchemaSignupForm } from '../../shared/utils/createSchemaSignupForm';
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 import { useGetValidationsTypesForSignup } from '../../shared/utils/useGetValidationsTypesForSignup';
 import { useThemeConfig } from '../../storefront/hooks/useThemeConfig';
 import { useGetReasonsRequiredReview } from '../hooks/useGetReasonsRequiredReview';
@@ -267,7 +268,7 @@ const _FormCompleteKYCWithoutLayout = ({
         <div
           className="pw-text-[15px] pw-leading-[18px] pw-text-[#353945] pw-font-semibold pw-mb-5"
           dangerouslySetInnerHTML={{
-            __html: formTitle ?? '',
+            __html: sanitizeHtml(formTitle ?? ''),
           }}
         ></div>
       )}
@@ -359,7 +360,7 @@ const _FormCompleteKYCWithoutLayout = ({
       {formFooter && (
         <div
           dangerouslySetInnerHTML={{
-            __html: formFooter ?? '',
+            __html: sanitizeHtml(formFooter ?? ''),
           }}
         ></div>
       )}

@@ -3,8 +3,7 @@ import { useState } from 'react';
 import classNames from 'classnames';
 import { useIsMobile } from '../hooks/useIsMobile';
 import useTranslation from '../hooks/useTranslation';
-
-
+import { sanitizeHtml } from '../utils/sanitizeHtml';
 
 interface Props {
   label: string;
@@ -61,7 +60,7 @@ export const CheckboxAlt = ({
               <div
                 className="pw-text-[13px] pw-text-gray-500"
                 dangerouslySetInnerHTML={{
-                  __html: description,
+                  __html: sanitizeHtml(description),
                 }}
               ></div>
               <div
@@ -78,9 +77,11 @@ export const CheckboxAlt = ({
               <div
                 className="pw-text-[13px] pw-text-gray-500"
                 dangerouslySetInnerHTML={{
-                  __html: isMobile
-                    ? description.slice(0, 120) + '...'
-                    : description.slice(0, 360) + '...',
+                  __html: sanitizeHtml(
+                    isMobile
+                      ? description.slice(0, 120) + '...'
+                      : description.slice(0, 360) + '...'
+                  ),
                 }}
               ></div>
               <div
@@ -101,7 +102,7 @@ export const CheckboxAlt = ({
           <div
             className="pw-text-[13px] pw-pb-8 pw-mt-6 pw-text-black"
             dangerouslySetInnerHTML={{
-              __html: description,
+              __html: sanitizeHtml(description),
             }}
           ></div>
         )

@@ -1,4 +1,5 @@
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { sanitizeHtml } from '../../../shared/utils/sanitizeHtml';
 
 interface ProductDescriptionProps {
   htmlContent?: string;
@@ -27,10 +28,13 @@ export const ProductDescription = ({
         <div
           style={{ color: textColor }}
           className="pw-text-[13px] pw-pb-8 pw-mt-6"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(htmlContent) }}
         />
       ) : (
-        <p style={{ color: textColor }} className="pw-text-[13px] pw-pb-8 pw-mt-6">
+        <p
+          style={{ color: textColor }}
+          className="pw-text-[13px] pw-pb-8 pw-mt-6"
+        >
           {description}
         </p>
       )}

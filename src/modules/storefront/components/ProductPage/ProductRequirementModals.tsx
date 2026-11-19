@@ -2,6 +2,7 @@ import { Alert } from '../../../shared/components/Alert';
 import { ModalBase } from '../../../shared/components/ModalBase';
 import { Spinner } from '../../../shared/components/Spinner';
 import useTranslation from '../../../shared/hooks/useTranslation';
+import { sanitizeHtml } from '../../../shared/utils/sanitizeHtml';
 
 interface ProductRequirementModalsProps {
   cartOpen: boolean;
@@ -10,14 +11,16 @@ interface ProductRequirementModalsProps {
   isOpen: boolean;
   onClose: () => void;
   isFetching: boolean;
-  product: {
-    requirements?: {
-      requirementModalPendingContent?: string;
-      requirementModalContent?: string;
-      requirementModalNoPurchaseAvailable?: string;
-      productId?: string;
-    };
-  } | undefined;
+  product:
+    | {
+        requirements?: {
+          requirementModalPendingContent?: string;
+          requirementModalContent?: string;
+          requirementModalNoPurchaseAvailable?: string;
+          productId?: string;
+        };
+      }
+    | undefined;
   userHasIntegration: boolean;
   descriptionTextColor?: string;
   onRefreshAndIntegrate: () => void;
@@ -53,9 +56,10 @@ export const ProductRequirementModals = ({
             style={{ color: textColor }}
             className="pw-text-[13px] pw-mt-6"
             dangerouslySetInnerHTML={{
-              __html:
+              __html: sanitizeHtml(
                 product?.requirements?.requirementModalPendingContent ??
-                'Estamos aguardando a confirmação do vinculo. <br/><br/> Esse processo pode levar até 5 minutos após a compra do título.',
+                  'Estamos aguardando a confirmação do vinculo. <br/><br/> Esse processo pode levar até 5 minutos após a compra do título.'
+              ),
             }}
           />
         </div>
@@ -69,15 +73,18 @@ export const ProductRequirementModals = ({
               style={{ color: textColor }}
               className="pw-text-[13px] pw-pb-8 pw-mt-10"
               dangerouslySetInnerHTML={{
-                __html:
+                __html: sanitizeHtml(
                   product?.requirements?.productId === '' && userHasIntegration
-                    ? (product?.requirements
-                        ?.requirementModalNoPurchaseAvailable ?? '')
-                    : (product?.requirements?.requirementModalContent ?? ''),
+                    ? product?.requirements
+                        ?.requirementModalNoPurchaseAvailable ?? ''
+                    : product?.requirements?.requirementModalContent ?? ''
+                ),
               }}
             />
             <div className="pw-flex sm:pw-flex-row pw-flex-col pw-justify-around">
-              {!(product?.requirements?.productId === '' && userHasIntegration) && (
+              {!(
+                product?.requirements?.productId === '' && userHasIntegration
+              ) && (
                 <button
                   style={{ backgroundColor: '#0050FF', color: 'white' }}
                   className="pw-py-[10px] pw-px-[60px] pw-font-[500] pw-text-xs pw-mt-3 pw-rounded-full sm:pw-w-[160px] pw-w-full pw-shadow-[0_2px_4px_rgba(0,0,0,0.26)] pw-mr-4"

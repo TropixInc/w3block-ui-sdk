@@ -8,6 +8,7 @@ import { CardTypesEnum, ProductsData } from '../../storefront/interfaces/Theme';
 import { useDynamicString } from '../../storefront/hooks/useDynamicString';
 import { useDynamicApi } from '../../storefront/provider/DynamicApiProvider';
 import { composeUrlCloudinary } from '../utils/composeUrlCloudinary';
+import { sanitizeHtml } from '../utils/sanitizeHtml';
 import { ImageSDK } from './ImageSDK';
 
 export const Card = ({
@@ -145,7 +146,7 @@ export const Card = ({
                 : 'auto',
           }}
           dangerouslySetInnerHTML={{
-            __html: description ?? '',
+            __html: sanitizeHtml(description ?? ''),
           }}
           className={`pw-text-[#7E7E7E] ${
             /<[a-z][\s\S]*?>|<\/[a-z][\s\S]*?>/i.test(description)

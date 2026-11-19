@@ -5,7 +5,7 @@ import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import { useDynamicApi } from '../provider/DynamicApiProvider';
 import { useDynamicString } from '../hooks/useDynamicString';
 import { convertSpacingToCSS } from '../../shared/utils/convertSpacingToCSS';
-
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 
 const alignmentsText: AlignmentClassNameMap = {
   left: 'pw-text-left',
@@ -75,7 +75,9 @@ export const Paragraph = ({ data }: { data: ParagraphData }) => {
           }}
           className={classNames(alignmentTextClass, 'pw-text-sm pw-mt-4')}
           dangerouslySetInnerHTML={{
-            __html: content !== 'null' ? content ?? '' : 'Não disponível',
+            __html: sanitizeHtml(
+              content !== 'null' ? content ?? '' : 'Não disponível'
+            ),
           }}
         />
       </div>

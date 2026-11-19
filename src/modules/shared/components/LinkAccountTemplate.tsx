@@ -15,6 +15,7 @@ import { useProfile } from '../hooks/useProfile';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 import useTranslation from '../hooks/useTranslation';
 import { useUserWallet } from '../hooks/useUserWallet/useUserWallet';
+import { sanitizeHtml } from '../utils/sanitizeHtml';
 import { Alert } from './Alert';
 import { BaseButton } from './Buttons';
 import { ErrorBox } from './ErrorBox';
@@ -148,7 +149,7 @@ const _LinkAccountTemplate = () => {
         'pw-text-[15px] pw-leading-snug pw-break-words [&_p]:pw-m-0',
         UI.text
       )}
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
     />
   );
 

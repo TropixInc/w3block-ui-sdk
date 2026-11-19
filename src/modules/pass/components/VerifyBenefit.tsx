@@ -5,14 +5,16 @@ import { useLockBodyScroll } from 'react-use';
 
 import ErrorIcon from '../../shared/assets/icons/errorIconRed.svg';
 
-
 import { ErrorBox } from '../../shared/components/ErrorBox';
 import { Spinner } from '../../shared/components/Spinner';
-import { BenefitAddress, TokenPassBenefitType } from '../interfaces/PassBenefitDTO';
+import {
+  BenefitAddress,
+  TokenPassBenefitType,
+} from '../interfaces/PassBenefitDTO';
 import { Button } from '../../tokens/components/Button';
 import { CloseButton } from '../../shared/components/CloseButton';
 import useTranslation from '../../shared/hooks/useTranslation';
-
+import { sanitizeHtml } from '../../shared/utils/sanitizeHtml';
 
 interface iProps {
   hasOpen: boolean;
@@ -25,9 +27,9 @@ interface iProps {
   error?: boolean;
   errorUseBenefit?: any;
   user?: {
-    name?: string,
-    email?: string,
-  }
+    name?: string;
+    email?: string;
+  };
 }
 
 export const VerifyBenefit = ({
@@ -48,14 +50,18 @@ export const VerifyBenefit = ({
   if (hasOpen) {
     return (
       <div className="pw-flex pw-flex-col pw-gap-6 pw-fixed pw-top-0 pw-left-0 pw-w-full pw-h-screen pw-z-50 pw-bg-white pw-px-4 pw-py-8 pw-overflow-scroll">
-        {(isLoading || isLoadingInfo) ?
+        {isLoading || isLoadingInfo ? (
           <div className="pw-w-full pw-h-full pw-flex pw-justify-center pw-items-center">
             <Spinner />
-          </div> :
-          <div className='pw-max-w-[400px] pw-mx-auto pw-relative '>
-            <CloseButton onClose={onClose} className='!-pw-top-[17px] !pw-right-0' />
+          </div>
+        ) : (
+          <div className="pw-max-w-[400px] pw-mx-auto pw-relative ">
+            <CloseButton
+              onClose={onClose}
+              className="!-pw-top-[17px] !pw-right-0"
+            />
             <div className="pw-w-full pw-rounded-[16px] pw-p-[24px] pw-mt-8 pw-shadow-[0px_4px_15px_rgba(0,0,0,0.07)] pw-flex pw-flex-col pw-gap-2">
-              {error ?
+              {error ? (
                 <>
                   <div className="pw-flex pw-flex-col pw-gap-6 pw-justify-center pw-items-center">
                     <ErrorIcon className="pw-w-[60px] pw-h-[60px]" />
@@ -63,103 +69,116 @@ export const VerifyBenefit = ({
                       {translate('token>pass>invalidQrCode')}
                     </p>
                   </div>
-                  <Button
-                    variant="secondary"
-                    onClick={onClose}
-                  >
+                  <Button variant="secondary" onClick={onClose}>
                     {translate('token>pass>validatedToken>back')}
                   </Button>
                 </>
-                :
+              ) : (
                 <>
                   <div className="pw-px-[16px] pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                    {data?.tokenPassBenefit?.tokenPass?.name ?? data?.tokenPass?.name}
+                    {data?.tokenPassBenefit?.tokenPass?.name ??
+                      data?.tokenPass?.name}
                     <p className="pw-text-[18px] pw-leading-[23px] pw-font-bold">
                       {translate('token>pass>benefit')}{' '}
                       {data?.tokenPassBenefit?.name ?? data?.name}
                     </p>
                   </div>
                   <ErrorBox customError={errorUseBenefit} />
-                  <div className='pw-flex pw-flex-col'>
+                  <div className="pw-flex pw-flex-col">
                     <Button
                       disabled={isLoading}
-                      className='pw-mt-5'
+                      className="pw-mt-5"
                       onClick={useBenefit}
                     >
                       {translate('pass>verifyBenefit>confirmUsage')}
                     </Button>
                     <Button
                       disabled={isLoading}
-                      className='pw-mt-5'
-                      variant='secondary'
+                      className="pw-mt-5"
+                      variant="secondary"
                       onClick={onClose}
                     >
                       {translate('token>pass>cancel')}
                     </Button>
                   </div>
-                  {(data?.tokenPassBenefit?.description ?? data?.description) &&
+                  {(data?.tokenPassBenefit?.description ??
+                    data?.description) && (
                     <>
                       <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                         {translate('token>pass>description')}
                       </div>
-                      <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]' dangerouslySetInnerHTML={{ __html: data?.tokenPassBenefit?.description ?? data?.description }}>
-                      </div>
+                      <div
+                        className="pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]"
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(
+                            data?.tokenPassBenefit?.description ??
+                              data?.description
+                          ),
+                        }}
+                      ></div>
                     </>
-                  }
-                  {(data?.tokenPassBenefit?.rules ?? data?.rules) &&
+                  )}
+                  {(data?.tokenPassBenefit?.rules ?? data?.rules) && (
                     <>
                       <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                         {translate('token>pass>rules')}
                       </div>
-                      <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]' dangerouslySetInnerHTML={{ __html: data?.tokenPassBenefit?.rules ?? data?.rules }}>
-                      </div>
+                      <div
+                        className="pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]"
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(
+                            data?.tokenPassBenefit?.rules ?? data?.rules
+                          ),
+                        }}
+                      ></div>
                     </>
-                  }
+                  )}
                   <>
                     <div className="pw-text-[#353945] pw-font-bold pw-text-[18px] pw-leading-[22.5px] pw-flex pw-gap-[10px] pw-px-[16px] pw-mt-[20px] pw-w-full pw-justify-start">
                       {translate('token>pass>user')}
                     </div>
-                    <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+                    <div className="pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]">
                       Username: {data?.user?.name ?? user?.name}
                     </div>
-                    <div className='pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]'>
+                    <div className="pw-flex pw-px-[16px] pw-text-[#777E8F] pw-font-normal pw-text-[14px] pw-leading-[21px]">
                       E-mail: {data?.user?.email ?? user?.email}
                     </div>
                   </>
-                  {(data?.tokenPassBenefit?.type ?? data?.type) == TokenPassBenefitType.PHYSICAL ? (
-                    tokenPassBenefitAddresses?.length &&
-                    tokenPassBenefitAddresses.map((address: any) => (
-                      <>
-                        <div className="pw-flex pw-flex-col pw-gap-1 pw-px-[16px] pw-mt-[20px]">
-                          <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
-                            {address?.name}
-                          </div>
-                          <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                            {address?.street && address?.street + ', '}
-                            {address?.city && address?.city + ' - '}
-                            {address?.state}
-                          </div>
-                        </div>
-                        {address?.rules && (
-                          <div className="pw-flex pw-flex-col pw-gap-1 pw-px-[16px]">
-                            <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
-                              {translate('token>pass>rules')}
+                  {(data?.tokenPassBenefit?.type ?? data?.type) ==
+                  TokenPassBenefitType.PHYSICAL
+                    ? tokenPassBenefitAddresses?.length &&
+                      tokenPassBenefitAddresses.map((address: any) => (
+                        <>
+                          <div className="pw-flex pw-flex-col pw-gap-1 pw-px-[16px] pw-mt-[20px]">
+                            <div className="pw-text-[18px] pw-leading-[23px] pw-font-bold pw-text-[#295BA6]">
+                              {address?.name}
                             </div>
                             <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
-                              {address?.rules}
+                              {address?.street && address?.street + ', '}
+                              {address?.city && address?.city + ' - '}
+                              {address?.state}
                             </div>
                           </div>
-                        )}
-                      </>
-                    ))
-                  ) : null}
+                          {address?.rules && (
+                            <div className="pw-flex pw-flex-col pw-gap-1 pw-px-[16px]">
+                              <div className="pw-text-[15px] pw-leading-[23px] pw-font-semibold pw-text-[#353945]">
+                                {translate('token>pass>rules')}
+                              </div>
+                              <div className="pw-text-[14px] pw-leading-[21px] pw-font-normal pw-text-[#777E8F]">
+                                {address?.rules}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      ))
+                    : null}
                 </>
-              }
+              )}
             </div>
           </div>
-        }
-      </div >
-    )
+        )}
+      </div>
+    );
   }
-  return null
+  return null;
 };
