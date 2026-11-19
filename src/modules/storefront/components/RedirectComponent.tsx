@@ -4,7 +4,7 @@ import { RedirectData } from "../interfaces/Theme";
 
 const _RedirectComponent = ({ data }: { data: RedirectData }) => {
   const {
-    redirectUrl
+    redirectUrl,
   } = data.styleData;
 
   useEffect(() => {

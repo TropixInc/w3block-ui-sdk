@@ -8,8 +8,7 @@ import { Popover } from '@mui/material';
 
 import CalendarIcon from '../assets/icons/calendarIcon.svg';
 import { BaseInput } from './BaseInput';
-import { CustomCalendar } from './CustomCalendar';
-import { PickerType } from './CustomCalendar';
+import { CustomCalendar, PickerType } from './CustomCalendar';
 
 export interface CustomDatePickerProps {
   type?: PickerType; // default = "unique"
