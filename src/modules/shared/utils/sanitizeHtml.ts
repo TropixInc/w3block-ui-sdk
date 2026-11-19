@@ -49,6 +49,7 @@ const decodeUrlValue = (value: string): string =>
     )
     .replace(/&#(\d+);?/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)))
     .replace(/&tab;|&newline;/gi, '')
+    // eslint-disable-next-line no-control-regex -- strips control chars/whitespace that hide `javascript:`
     .replace(/[\u0000- ]/g, '')
     .toLowerCase();
 
