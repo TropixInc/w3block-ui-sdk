@@ -100,6 +100,7 @@ const RequestsList = () => {
         format: { type: FormatTypeColumn.TEXT },
         key: 'context.description',
         sortable: false,
+        card: 'meta',
         header: {
           label: 'Tipo',
           filter: {
@@ -128,6 +129,7 @@ const RequestsList = () => {
         },
         key: 'user.email',
         sortable: false,
+        card: 'title',
         header: {
           label: 'Usuário',
           filter: {
@@ -160,6 +162,7 @@ const RequestsList = () => {
         },
         key: 'createdAt',
         sortable: true,
+        card: 'meta',
         header: {
           label: 'Data de criação',
         },
@@ -185,6 +188,7 @@ const RequestsList = () => {
         key: 'status',
         initialSortParameter: 'created',
         sortable: false,
+        card: 'badge',
         header: {
           label: 'Situação',
           filter: {

@@ -12,6 +12,7 @@ import MetamaskIcon from '../assets/icons/metamask.svg';
 import NoWallet from '../assets/icons/notConfirmedWalletFilled.svg';
 import W3blockIcon from '../assets/icons/pixwayIconFilled.svg';
 import {
+  ColumnsTable,
   ConfigGenericTable,
   FormatApiData,
   FormatTypeColumn,
@@ -31,6 +32,7 @@ import { useGetUserByWallet } from '../hooks/useGetUserByWallet';
 
 import SmartGenericFilter from './SmartGenericFilter';
 import { GenerateGenericXlsReports } from './GenerateGenericXlsReports';
+import { GenericTableCards } from './GenericTableCards';
 import Line from './Line';
 import { Pagination } from './Pagination';
 import { StatusPill } from './ui/StatusPill';
@@ -610,6 +612,23 @@ export const GenericTable = ({
     } else return null;
   };
 
+  const items: any[] = _.get(data, localeItems ?? '', []) ?? [];
+
+  const renderCell = (item: any, column: ColumnsTable) =>
+    customizerValues(
+      item,
+      column.key,
+      column.format,
+      column.header.baseUrl,
+      column.keyInCollection,
+      column.moreInfos,
+      column.hrefLink,
+      column.linkLabel,
+      column.isTranslatable,
+      column.translatePrefix,
+      column.isDynamicValue
+    );
+
   return isError ? (
     <ErrorBox customError={error as any} />
   ) : (
@@ -721,10 +740,26 @@ export const GenericTable = ({
               {tableTitle}
             </p>
           ) : null}
+          {isV2 ? (
+            <div className="sm:pw-hidden">
+              <GenericTableCards
+                items={items}
+                columns={columns}
+                renderCell={renderCell}
+                isFetching={isFetching}
+                actions={actions}
+                lineActions={lineActions}
+                isLineExplansible={isLineExplansible}
+                expansibleComponent={expansibleComponent}
+                handleAction={handleAction}
+                setIsUpdateList={setIsUpdateList}
+              />
+            </div>
+          ) : null}
           <div
             className={classNames(
               isV2
-                ? 'pw-rounded-[14px] pw-border pw-border-[#e6e8ec] pw-overflow-hidden pw-shadow-[0_1px_3px_rgba(15,23,41,0.07)]'
+                ? 'pw-hidden sm:pw-block pw-rounded-[14px] pw-border pw-border-[#e6e8ec] pw-overflow-hidden pw-shadow-[0_1px_3px_rgba(15,23,41,0.07)]'
                 : 'pw-rounded-t-2xl'
             )}
           >
