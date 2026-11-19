@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -36,12 +36,13 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup .npmrc file to install package to GitHub Packages
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      # Build on Node 18 (what the SDK is built with today). The GitHub Packages
+      # token is only for installing private dependencies.
+      - name: Setup Node for install (GitHub Packages)
+        uses: actions/setup-node@v4
         with:
-          node-version: ^18.20.7
-          cache: 'npm'
+          node-version: 18
           registry-url: 'https://npm.pkg.github.com'
       - name: Install modules
         run: npm install --force
@@ -49,21 +50,20 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_GITHUB_TOKEN }}
       - name: Build
         run: npm run build
-      - name: Setup .npmrc file to publish to npm
-        uses: actions/setup-node@v1
+      # Publish with Node 24 / npm 11: trusted publishing (OIDC) needs npm >= 11.5.1.
+      # No npm token here: the registry authenticates the workflow itself.
+      - name: Setup Node for publish (npmjs)
+        uses: actions/setup-node@v4
         with:
-          node-version: ^18.20.7
-          cache: 'npm'
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
       # Pre-release tags (v2.0.54-staging.0) go to the "staging" dist-tag so
       # `latest` keeps pointing at the last stable version.
-      - name: Publish to npm
+      - name: Publish to npm (OIDC)
         run: |
+          npm --version
           if [[ "${GITHUB_REF_NAME}" == *-* ]]; then
             npm publish --access public --tag staging
           else
             npm publish --access public
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          scope: '@w3block'
