@@ -13,6 +13,7 @@ import { EmptyState } from '../../shared/components/ui/EmptyState';
 import { SectionCard } from '../../shared/components/ui/SectionCard';
 import { UI } from '../../shared/components/ui/tokens';
 import { PixwayAppRoutes } from '../../shared/enums/PixwayAppRoutes';
+import { usePrivateRoute } from '../../shared/hooks/usePrivateRoute';
 import { useRouterConnect } from '../../shared/hooks/useRouterConnect';
 import useTranslation from '../../shared/hooks/useTranslation';
 import { useGetBenefitUses } from '../hooks/useGetBenefitUses';
@@ -45,7 +46,11 @@ export const ClientTemplate = () => {
   const [translate] = useTranslation();
   const router = useRouterConnect();
   const [page, setPage] = useState(1);
-  const { data, isFetching, error } = useGetBenefitUses({ query: { page } });
+  const { isLoading: isCheckingAuth, isAuthorized } = usePrivateRoute();
+  const { data, isFetching, error } = useGetBenefitUses({
+    query: { page },
+    enabled: isAuthorized,
+  });
 
   const rows = useMemo<UseRow[]>(
     () =>
@@ -140,6 +145,8 @@ export const ClientTemplate = () => {
 
   const totalPages = data?.meta?.totalPages ?? 1;
   const totalItems = data?.meta?.totalItems ?? 0;
+
+  if (isCheckingAuth || !isAuthorized) return null;
 
   return (
     <BaseTemplate
