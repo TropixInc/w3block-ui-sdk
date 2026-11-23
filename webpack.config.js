@@ -9,8 +9,25 @@ const __dirname = path.dirname(__filename)
 export default (env, argv) => {
   const isProduction = argv.mode === "production"
 
+  // Packages the host app must provide. Matched by exact name or by sub-path
+  // (next/link, swiper/modules, react-dom/client, ...), so none of them is bundled.
+  const externalPackages = [
+    "react",
+    "react-dom",
+    "swiper",
+    "@tanstack/react-query",
+    "@tanstack/query-core",
+    "next",
+    "next-auth",
+    "@w3block/w3block-ui-sdk",
+  ]
+  const isExternal = (request) =>
+    externalPackages.some((pkg) => request === pkg || request.startsWith(pkg + "/"))
+
   return {
     mode: argv.mode || "development",
+    // eval-based devtools inflate the output ~4x; production ships no source maps.
+    devtool: isProduction ? false : "eval",
     entry: {
       index: "./src/index.ts",
       auth: "./src/auth.ts",
@@ -70,7 +87,8 @@ export default (env, argv) => {
       library: {
         type: "module",
       },
-      clean: isProduction,
+      // `prebuild` already cleans dist; webpack must not wipe the assets copied before it runs.
+      clean: false,
       assetModuleFilename: "assets/[hash][ext][query]",
     },
     watchOptions: {
@@ -82,19 +100,13 @@ export default (env, argv) => {
     experiments: {
       outputModule: true,
     },
-    externals: {
-      react: "react",
-      "react-dom": "react-dom",
-      "react/jsx-runtime": "react/jsx-runtime",
-      "react/jsx-dev-runtime": "react/jsx-dev-runtime",
-      "swiper/react": "swiper/react",
-      swiper: "swiper",
-      "@tanstack/react-query": "@tanstack/react-query",
-      "@tanstack/query-core": "@tanstack/query-core",
-      next: "next",
-      "next-auth": "next-auth",
-      "@w3block/w3block-ui-sdk": "@w3block/w3block-ui-sdk",
-    },
+    externalsType: "module",
+    externals: [
+      ({ request }, callback) => {
+        if (request && isExternal(request)) return callback(null, request)
+        callback()
+      },
+    ],
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx", ".svg", ".png"],
       alias: {
