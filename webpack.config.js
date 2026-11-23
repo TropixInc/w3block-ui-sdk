@@ -70,7 +70,12 @@ export default (env, argv) => {
       }),
     ],
     optimization: {
+      // One runtime (module cache) for every entry, so `index`, `auth`, `checkout`...
+      // share a single instance of MUI, emotion, ethers, date-fns... instead of
+      // each entry bundling its own copy.
+      runtimeChunk: "single",
       splitChunks: {
+        chunks: "all",
         cacheGroups: {
           styles: {
             name: "styles",
@@ -83,7 +88,9 @@ export default (env, argv) => {
     },
     output: {
       path: path.resolve(__dirname, "dist"),
-      filename: "[name].js",
+      // Entries keep their public names; the shared chunks they import go to dist/chunks.
+      filename: ({ chunk }) => (chunk.name ? "[name].js" : "chunks/[id].js"),
+      chunkFilename: "chunks/[id].js",
       library: {
         type: "module",
       },
