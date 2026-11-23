@@ -7,10 +7,10 @@ declare module 'next-auth' {
    */
   interface Session {
     accessToken: string | undefined;
-    refreshToken: string | undefined;
+    refreshToken?: string;
     user: {
       accessToken: string | undefined;
-      refreshToken: string | undefined;
+      refreshToken?: string;
     } & DefaultSession['user'];
     id: string | undefined;
     sub: string | undefined;
@@ -22,7 +22,7 @@ declare module 'next-auth' {
     email?: string;
     name?: string;
     accessToken: string | undefined;
-    refreshToken: string | undefined;
+    refreshToken?: string;
   }
 }
 
@@ -31,7 +31,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     /** OpenID ID Token */
     accessToken: string | undefined;
-    refreshToken: string | undefined;
+    refreshToken?: string;
     error: string | undefined;
     sub: string | undefined;
     picture: string | undefined;

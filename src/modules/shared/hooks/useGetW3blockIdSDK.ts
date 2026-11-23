@@ -5,6 +5,7 @@ import { useToken } from './useToken';
 import { useCompanyConfig } from './useCompanyConfig';
 import { useSessionUser } from './useSessionUser';
 import { usePixwayAPIURL } from './usePixwayAPIURL';
+import { createSessionIdSdk } from '../utils/authenticateIdSdk';
 
 
 export const useGetW3blockIdSDK = () => {
@@ -14,17 +15,11 @@ export const useGetW3blockIdSDK = () => {
   const { w3blockIdAPIUrl } = usePixwayAPIURL();
 
   return useCallback(async () => {
-    const sdk = new W3blockIdSDK({
-      autoRefresh: false,
+    return createSessionIdSdk({
       baseURL: w3blockIdAPIUrl,
+      authToken: user ? token : undefined,
+      refreshToken: user?.refreshToken,
+      tenantId,
     });
-    if (user && token) {
-      await sdk.authenticate({
-        refreshToken: user.refreshToken ?? '',
-        authToken: token,
-        tenantId,
-      });
-    }
-    return sdk;
   }, [tenantId, token, user, w3blockIdAPIUrl]);
 };
