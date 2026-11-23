@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0-staging.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.54-staging.1...v2.1.0-staging.0) (2026-11-23)
+
+
+### Features
+
+* **facelift:** clients page on real data and card mode for GenericTable ([19e1178](https://github.com/TropixInc/w3block-ui-sdk/commit/19e1178c8bcb7b8e5c5570e9b7f52065cdd4d908))
+* **facelift:** loading states, mobile token grid and small copy fixes ([9d0af9d](https://github.com/TropixInc/w3block-ui-sdk/commit/9d0af9dfdd6c9dd5c801427246a3f335d1cee2f4))
+* **notifications:** switches and compact save button ([17703b1](https://github.com/TropixInc/w3block-ui-sdk/commit/17703b1e3f9e47ae8063d2c78b8de6a374330cec))
+* **pass,addFunds:** facelift of the operator benefit detail and the manual add-funds page ([de20ab2](https://github.com/TropixInc/w3block-ui-sdk/commit/de20ab2cfd9c29ac1bf680b537006907f5843cf1))
+* **pass:** balance as a KPI card and no repeated description ([f718905](https://github.com/TropixInc/w3block-ui-sdk/commit/f7189057f944472540bb8cb834682b8bd88c45e2))
+* **profile:** read view for approved contexts and loading skeleton ([5830686](https://github.com/TropixInc/w3block-ui-sdk/commit/583068636f709275449af32115fa2c57e91e9e45))
+* **requests:** status pills, name-first user cell and unified filters ([6c96563](https://github.com/TropixInc/w3block-ui-sdk/commit/6c9656363aaf4bdd31c809d7c742511942f7135c))
+* **tokens:** facelift of the holder token detail and use-benefit pages ([1dd3159](https://github.com/TropixInc/w3block-ui-sdk/commit/1dd3159bc8ccac5455179aeff8e465d9f062f011))
+* **withdraws:** redesign the admin withdraw report ([6190792](https://github.com/TropixInc/w3block-ui-sdk/commit/6190792ffbb807437099f490047181c62b856c9c))
+
+
+### Bug Fixes
+
+* **lint:** allow the intentional control-char regex in sanitizeHtml ([3b5f33d](https://github.com/TropixInc/w3block-ui-sdk/commit/3b5f33da3a56bcb3c36213a6c30206fa1930d84d)), closes [#421](https://github.com/TropixInc/w3block-ui-sdk/issues/421) [#423](https://github.com/TropixInc/w3block-ui-sdk/issues/423)
+* **orders:** expanded order shows only known totals ([5aee384](https://github.com/TropixInc/w3block-ui-sdk/commit/5aee3841cbfd8f93231dc30e162f61b1dc5bb879))
+* **pass:** stop retrying an unknown or expired share code and translate the error ([4378f75](https://github.com/TropixInc/w3block-ui-sdk/commit/4378f75aff59e2cd6caacfe176c163b24a6d4546))
+* **pass:** wait for the tenant before fetching a pass and its benefits ([605f0b4](https://github.com/TropixInc/w3block-ui-sdk/commit/605f0b4e6f7a71081653debd3306291b0b71a5c3))
+* **security:** sanitize rich-text HTML before rendering ([60fb601](https://github.com/TropixInc/w3block-ui-sdk/commit/60fb60167ae30589dd7161b311b09ef9263fd837))
+* **wallet:** equalize token card heights ([3674743](https://github.com/TropixInc/w3block-ui-sdk/commit/3674743c15e3c1bf3e205a242b94ece24d5d1c59))
+* **withdraws:** tolerate APIs that reject status[] and cap samples at 50 ([b2e58cf](https://github.com/TropixInc/w3block-ui-sdk/commit/b2e58cf011cdce1ea07ca81f35e43ad3568898c4))
+
 ### [2.0.54-staging.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.54-staging.0...v2.0.54-staging.1) (2026-11-19)
 
 ### [2.0.54-staging.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.53...v2.0.54-staging.0) (2026-11-18)
