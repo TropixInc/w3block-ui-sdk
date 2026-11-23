@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0-staging.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.0...v2.1.0-staging.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **pass:** guard the Clients page with usePrivateRoute ([#425](https://github.com/TropixInc/w3block-ui-sdk/issues/425)) ([3ac9245](https://github.com/TropixInc/w3block-ui-sdk/commit/3ac924564b42f0127e00b83a4cb5a66e38af8940))
+
 ## [2.1.0-staging.0](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.0.54-staging.1...v2.1.0-staging.0) (2026-11-23)
 
 
