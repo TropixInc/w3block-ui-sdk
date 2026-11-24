@@ -16,7 +16,7 @@ const _Redirect = () => {
   useDebounce(() => {
     if (datasource) {
       router.push(
-        {path: `${router.basePath}/praticante/${datasource?.athlete?.data[0]?.attributes.slug}`}
+        `/praticante/${datasource?.athlete?.data[0]?.attributes.slug}`
       );
     }
   }, 6000);

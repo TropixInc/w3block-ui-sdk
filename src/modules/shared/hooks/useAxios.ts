@@ -1,15 +1,14 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { validateJwtToken, getSecureApi, getPublicAPI } from '../config/api';
 import { W3blockAPI } from '../enums/W3blockAPI';
 import { usePixwayAPIURL } from './usePixwayAPIURL';
-import { useRouterConnect } from './useRouterConnect';
 import { useToken } from './useToken';
 import { usePixwayAuthentication } from '../../../modules/auth/hooks/usePixwayAuthentication';
+import { signOutExpiredSession } from '../utils/expiredSessionSignOut';
 
 export const useAxios = (type: W3blockAPI) => {
   const apisUrl = usePixwayAPIURL();
   const token = useToken();
-  const router = useRouterConnect();
   const { signOut } = usePixwayAuthentication();
   const apiBaseURLMap = new Map([
     [W3blockAPI.ID, apisUrl.w3blockIdAPIUrl],
@@ -20,14 +19,18 @@ export const useAxios = (type: W3blockAPI) => {
   ]);
   const baseUrl = apiBaseURLMap.get(type) ?? '';
 
-  return useMemo(() => {
-    if (token && !validateJwtToken(token)) {
-      const query = window ? { callbackUrl: window?.location?.href } : '';
-      const queryString = new URLSearchParams(query).toString();
-      const callbackUrl = `${router.basePath}/auth/signIn?${queryString}`;
-      signOut({ callbackUrl });
-    }
-    return token ? getSecureApi(token, baseUrl) : getPublicAPI(baseUrl);
+  const tokenExpired = Boolean(token) && !validateJwtToken(token);
+
+  // An expired token that the host app could not refresh means the session is
+  // dead: clear it once (deduplicated across every useAxios on the page) and
+  // send the user to sign in with a same-origin callback.
+  useEffect(() => {
+    if (tokenExpired) signOutExpiredSession(signOut);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, baseUrl]);
+  }, [tokenExpired]);
+
+  return useMemo(
+    () => (token ? getSecureApi(token, baseUrl) : getPublicAPI(baseUrl)),
+    [token, baseUrl]
+  );
 };
