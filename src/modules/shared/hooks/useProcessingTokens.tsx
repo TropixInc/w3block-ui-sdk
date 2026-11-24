@@ -40,6 +40,10 @@ export const useProcessingTokens = () => {
     {
       retry: 1,
       enabled: wallet != undefined,
+      // Tokens being minted must not look stuck: ignore the SDK-wide
+      // staleTime/focus defaults and refetch on every mount and focus.
+      staleTime: 0,
+      refetchOnWindowFocus: true,
     }
   );
 };
