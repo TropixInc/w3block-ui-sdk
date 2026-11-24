@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0-staging.3](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.2...v2.1.0-staging.3) (2026-11-24)
+
+
+### Bug Fixes
+
+* **auth:** sign out once on an expired token, with a same-origin callback ([#430](https://github.com/TropixInc/w3block-ui-sdk/issues/430)) ([0738528](https://github.com/TropixInc/w3block-ui-sdk/commit/07385287fc9c2c33e60ccf424049781c5d4014db))
+* **auth:** treat a session that cannot be renewed as signed out ([#432](https://github.com/TropixInc/w3block-ui-sdk/issues/432)) ([3e02295](https://github.com/TropixInc/w3block-ui-sdk/commit/3e02295777d64fdbd5b8fe3720a71304798f57d8))
+* **auth:** work without a refresh token in the client session ([#431](https://github.com/TropixInc/w3block-ui-sdk/issues/431)) ([346bda6](https://github.com/TropixInc/w3block-ui-sdk/commit/346bda60d9b952eec3bdc64647f5cccc36162923))
+* **storefront:** only redirect to http(s) or same-origin targets ([#429](https://github.com/TropixInc/w3block-ui-sdk/issues/429)) ([7458073](https://github.com/TropixInc/w3block-ui-sdk/commit/7458073698993d9fb191b1cd744040ef63fa7db4))
+
 ## [2.1.0-staging.2](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.1...v2.1.0-staging.2) (2026-11-23)
 
 ## [2.1.0-staging.1](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.0...v2.1.0-staging.1) (2026-11-23)

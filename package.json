@@ -1,7 +1,7 @@
 {
   "name": "@w3block/w3block-ui-sdk",
   "private": false,
-  "version": "2.1.0-staging.2",
+  "version": "2.1.0-staging.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TropixInc/w3block-ui-sdk.git"
