@@ -31,6 +31,7 @@ export default (env, argv) => {
     entry: {
       index: "./src/index.ts",
       auth: "./src/auth.ts",
+      core: "./src/core.ts",
       addFunds: "./src/addFunds.ts",
       affiliates: "./src/affiliates.ts",
       business: "./src/business.ts",
