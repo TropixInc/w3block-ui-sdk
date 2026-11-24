@@ -1,6 +1,8 @@
 import { W3blockIdSDK } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 
+import { createSessionIdSdk } from '../../shared/utils/authenticateIdSdk';
+
 export interface RequestWalletBody {
   address: string;
   chainId: number;
@@ -18,18 +20,12 @@ const withAuthenticatedSDK = async <T>(
   action: (sdk: W3blockIdSDK, companyId: string) => Promise<T>
 ) => {
   try {
-    const sdk = new W3blockIdSDK({
-      autoRefresh: false,
+    const sdk = await createSessionIdSdk({
       baseURL,
+      authToken: token,
+      refreshToken,
+      tenantId: companyId,
     });
-
-    if (refreshToken && token) {
-      await sdk.authenticate({
-        refreshToken: refreshToken,
-        authToken: token,
-        tenantId: companyId,
-      });
-    }
 
     return await action(sdk, companyId);
   } catch (error: any) {

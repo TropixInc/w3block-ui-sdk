@@ -3,7 +3,8 @@ import { User } from 'next-auth';
 
 export interface SessionUser extends User {
   accessToken: string;
-  refreshToken: string;
+  /** Only present on hosts that still expose it; the Connect keeps it server-side. */
+  refreshToken?: string;
   roles: Array<UserRoleEnum>;
   companyId?: string;
   email?: string;
