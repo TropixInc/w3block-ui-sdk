@@ -3,7 +3,7 @@ import { KeyboardEvent, MouseEvent, ReactNode } from 'react';
 interface Props {
   /** Where the whole slide leads; undefined makes it a plain container. */
   href?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 /**
