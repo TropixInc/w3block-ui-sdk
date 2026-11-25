@@ -26,6 +26,7 @@ import { useRouterConnect } from '../hooks/useRouterConnect';
 import { Alert } from './Alert';
 import { ErrorBox } from './ErrorBox';
 import { Spinner } from './Spinner';
+import { TableStatusRow } from './TableStatusRow';
 import { useCompanyById } from '../hooks/useCompanyById';
 import { useDynamicValueByTable } from '../hooks/useDynamicValueByTable';
 import { useGetUserByWallet } from '../hooks/useGetUserByWallet';
@@ -495,7 +496,9 @@ export const GenericTable = ({
         const dynamicValue = getValue(itemKey, item);
         return (
           <div className="pw-w-full">
-            <p className="pw-text-ellipsis pw-overflow-hidden">
+            {/* A div, not a <p>: the dynamic branch renders its own <p> and a
+                <p> inside a <p> is invalid HTML (hydration failure). */}
+            <div className="pw-text-ellipsis pw-overflow-hidden">
               {isTranslatable && value ? (
                 translate(`${translatePrefix || ''}${value ?? '---'}`)
               ) : (
@@ -503,7 +506,7 @@ export const GenericTable = ({
                   {isDynamic && dynamicValue ? dynamicValue : value || '--'}
                 </p>
               )}
-            </p>
+            </div>
           </div>
         );
       }
@@ -866,7 +869,8 @@ export const GenericTable = ({
                   ) : null}
                 </tr>
               </thead>
-              <div
+              <TableStatusRow
+                colSpan={columns.length + 1}
                 className={classNames(
                   isFetching ||
                     isError ||
@@ -896,7 +900,7 @@ export const GenericTable = ({
                     <Spinner />
                   </div>
                 )}
-              </div>
+              </TableStatusRow>
 
               <tbody className="">
                 {!isFetching && _.get(data, localeItems ?? '', [])?.length
