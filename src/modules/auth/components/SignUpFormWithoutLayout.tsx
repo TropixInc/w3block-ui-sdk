@@ -8,7 +8,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { I18NLocaleEnum, VerificationType } from '@w3block/sdk-id';
 import { AxiosError } from 'axios';
 import { ObjectSchema, boolean, object, string } from 'yup';
-import { AuthLayoutBaseClasses, SignUpFormData } from '../../shared/interfaces/SignUpFormData';
+import {
+  AuthLayoutBaseClasses,
+  SignUpFormData,
+} from '../../shared/interfaces/SignUpFormData';
 import { useGetTenantInfoByHostname } from '../../shared/hooks/useGetTenantInfoByHostname';
 import { usePasswordValidationSchema } from '../hooks/usePasswordValidationSchema';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
@@ -27,6 +30,7 @@ import { AuthFooter } from './AuthFooter';
 import { Alert } from '../../shared/components/Alert';
 import { VerifySignUpWithCodeWithoutLayout } from './VerifySignUpWithCodeWithoutLayout';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { detectBrowserLocale } from '../../shared/utils/browserLocale';
 
 interface Props {
   onSubmit?: (data: SignUpFormData) => void;
@@ -65,13 +69,7 @@ export const SignUpFormWithoutLayout = ({
   const router = useRouterConnect();
   const [step, setStep] = useState(Steps.SIGN_UP);
   const [emailLocal, setEmail] = useState('');
-  const [language, _] = useState(() => {
-    if (window) {
-      return window?.navigator?.language === 'pt-BR'
-        ? I18NLocaleEnum.PtBr
-        : I18NLocaleEnum.En;
-    }
-  });
+  const [language, _] = useState(() => detectBrowserLocale());
 
   const {
     mutate,
@@ -103,19 +101,21 @@ export const SignUpFormWithoutLayout = ({
     setEmail(email);
     if (isPasswordless) {
       signInAfterSignUp &&
-        signInAfterSignUp({ email, tenantId: companyId }).then((e: { error: string; status: number; }) => {
-          if (
-            e.error === EMAIL_ALREADY_IN_USE_API_MESSAGE &&
-            e.status === 401
-          ) {
-            router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
-              email,
-              ...router.query,
-            });
-          } else if (e.status === 200) {
-            redirect();
+        signInAfterSignUp({ email, tenantId: companyId }).then(
+          (e: { error: string; status: number }) => {
+            if (
+              e.error === EMAIL_ALREADY_IN_USE_API_MESSAGE &&
+              e.status === 401
+            ) {
+              router.pushConnect(PixwayAppRoutes.SIGNIN_WITH_CODE, {
+                email,
+                ...router.query,
+              });
+            } else if (e.status === 200) {
+              redirect();
+            }
           }
-        });
+        );
     } else {
       mutate({
         confirmation,

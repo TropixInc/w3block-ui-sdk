@@ -14,6 +14,7 @@ import { Spinner } from '../../shared/components/Spinner';
 import { useCompanyConfig } from '../../shared/hooks/useCompanyConfig';
 import { useGetPublicOrder } from '../../shared/hooks/useGetPublicOrder';
 import useTranslation from '../../shared/hooks/useTranslation';
+import { useWindowLocation } from '../../shared/hooks/useWindowLocation';
 
 export const ReceiptQRCode = ({
   isOpen,
@@ -34,6 +35,11 @@ export const ReceiptQRCode = ({
   );
 
   const { companyId } = useCompanyConfig();
+  // SSR-safe: empty on the server and on the first client render, filled
+  // after mount. The modal content is evaluated even while closed, and a
+  // bare `window` reference threw on the server for the whole statement page.
+  const { href } = useWindowLocation();
+  const origin = href ? new URL(href).origin : '';
   const value = useMemo(() => {
     const payments = receipt?.data?.payments;
     if (companyId === 'ef41dc3f-d9e4-4ca4-8270-673d68f4f490') {
@@ -115,18 +121,18 @@ export const ReceiptQRCode = ({
             </div>
             {profile ? (
               <div className="pw-mt-3">
-                <p className="pw-text-[#777E8F] pw-text-xs pw-flex pw-gap-1 pw-mt-2 pw-items-center pw-justify-center">
+                <div className="pw-text-[#777E8F] pw-text-xs pw-flex pw-gap-1 pw-mt-2 pw-items-center pw-justify-center">
                   <PendingIcon className="pw-stroke-[#777E8F] pw-w-[15px] pw-h-[15px]" />
                   <p className="pw-max-w-[250px]">
                     {translate('dashboard>receiptQRCode>creditsTakeTwoHors')}
                   </p>
-                </p>
+                </div>
               </div>
             ) : null}
             <div className="pw-mt-5">
               <div className="pw-flex pw-flex-col pw-justify-center pw-items-center">
                 <QRCodeSVG
-                  value={`${window?.location?.origin}/order/${receipt?.data?.deliverId}`}
+                  value={`${origin}/order/${receipt?.data?.deliverId}`}
                   size={84}
                 />
                 <p className="pw-text-[20px] pw-font-semibold">

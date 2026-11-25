@@ -11,7 +11,7 @@ import { VerifySignUpMailSent } from '../components/VerifySignUpMailSent';
 import { useSignUp } from '../hooks/useSignUp';
 import { SignUpFormData } from '../interface/SignUpFormData';
 import useTranslation from '../../shared/hooks/useTranslation';
-
+import { detectBrowserLocale } from '../../shared/utils/browserLocale';
 
 enum Steps {
   SIGN_UP = 1,
@@ -34,13 +34,7 @@ const _SignUpTemplate = ({
   const { mutate, isPending, isSuccess, error } = useSignUp();
   const [email, setEmail] = useState('');
   const { connectProxyPass, companyId } = useCompanyConfig();
-  const [language, _] = useState(() => {
-    if (window) {
-      return window?.navigator?.language === 'pt-BR'
-        ? I18NLocaleEnum.PtBr
-        : I18NLocaleEnum.En;
-    }
-  });
+  const [language, _] = useState(() => detectBrowserLocale());
 
   useEffect(() => {
     if (isSuccess) {
