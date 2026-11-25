@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0-staging.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.5...v2.1.0-staging.6) (2026-11-25)
+
+
+### Bug Fixes
+
+* **menu:** render the member-since footer as a div, not a <p> ([#435](https://github.com/TropixInc/w3block-ui-sdk/issues/435)) ([02a3f06](https://github.com/TropixInc/w3block-ui-sdk/commit/02a3f06bbf9c0afab5733d578c9e1ac541722829))
+* **storefront:** stop nesting the banner CTA anchors inside the slide anchor ([#436](https://github.com/TropixInc/w3block-ui-sdk/issues/436)) ([328101b](https://github.com/TropixInc/w3block-ui-sdk/commit/328101b0316ab40027e9dbb7380af51abe2d09db))
+
 ## [2.1.0-staging.5](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.4...v2.1.0-staging.5) (2026-11-24)
 
 
