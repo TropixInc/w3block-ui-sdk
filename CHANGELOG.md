@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0-staging.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.6...v2.1.0-staging.7) (2026-11-25)
+
+
+### Bug Fixes
+
+* **resale:** mount the sales tabs on the client so hydration matches the server ([#439](https://github.com/TropixInc/w3block-ui-sdk/issues/439)) ([445309a](https://github.com/TropixInc/w3block-ui-sdk/commit/445309afe70446fbd25080cdf2eed65ef7e054b7))
+* **ssr:** stop referencing window during render in sign-up and receipt modal ([#437](https://github.com/TropixInc/w3block-ui-sdk/issues/437)) ([7e06217](https://github.com/TropixInc/w3block-ui-sdk/commit/7e06217c410b784aded4fd30acb89af7e8529651))
+* **table:** keep the status area inside the table structure, no <p> in <p> ([#438](https://github.com/TropixInc/w3block-ui-sdk/issues/438)) ([8d9ecff](https://github.com/TropixInc/w3block-ui-sdk/commit/8d9ecffd5598de0ab9d5d70f684d2a1748e98000))
+
 ## [2.1.0-staging.6](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.5...v2.1.0-staging.6) (2026-11-25)
 
 
