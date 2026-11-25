@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'react-use';
 
@@ -38,6 +38,10 @@ export const MySales = () => {
   const [translate] = useTranslation();
   const [copied, setCopied] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
   const [_, setCopy] = useCopyToClipboard();
   const copyAddress = (address: string) => {
     setCopied(true);
@@ -241,143 +245,154 @@ export const MySales = () => {
         </div>
       ) : null}
       <div className="pw-text-black pw-mb-2">
-        <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-          <Tab.List className="pw-mt-5 -pw-mb-[0.6px] pw-px-[20px] sm:pw-px-0">
-            <Tab
-              className={({ selected }) =>
-                selected
-                  ? 'pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-p-2 pw-bg-white pw-rounded-t-lg pw-z-20 pw-border-b-0 pw-outline-none'
-                  : 'pw-p-2 pw-outline-none pw-z-20 pw-opacity-50'
-              }
-            >
-              {translate('pages>mysales>resale>sales')}
-            </Tab>
-            <Tab
-              className={({ selected }) =>
-                selected
-                  ? 'pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-p-2 pw-bg-white pw-rounded-t-lg pw-z-20 pw-border-b-0 pw-outline-none'
-                  : 'pw-p-2 pw-outline-none pw-z-20 pw-opacity-50'
-              }
-            >
-              {translate('pages>mysales>resale>concludedSales')}
-            </Tab>
-          </Tab.List>
-          <Tab.Panels>
-            <Tab.Panel className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-b-lg pw-rounded-r-lg pw-overflow-hidden">
-              <div>
-                {forSaleErc20?.data?.items?.length ? (
-                  <div className="pw-flex pw-flex-col pw-gap-3">
-                    <div>
-                      {forSaleErc20?.data?.items?.map((res) => {
-                        return (
-                          <div
-                            key={res?.id}
-                            className="pw-flex pw-flex-col pw-gap-1 pw-max-w-[380px] pw-justify-center pw-items-center pw-border pw-border-[#c0c2c4] pw-rounded-lg pw-py-3 pw-px-4"
-                          >
-                            <div className="pw-flex pw-w-full pw-gap-x-3 pw-text-black">
-                              <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-                                <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
-                                  {translate(
-                                    'pages>mysales>resale>totalForSale'
+        {/* Mounted only on the client. Headless UI 1.7 tabs pick the selected
+            tab differently on the server (first tab) and on the first client
+            render (none, because other Headless UI components hydrated
+            earlier already flipped its global server-handoff flag), so the
+            server HTML never matches, hydration fails and the page is
+            regenerated from the root Suspense fallback. Rendering the group
+            after mount keeps server and first client render identical. */}
+        {hasMounted ? (
+          <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
+            <Tab.List className="pw-mt-5 -pw-mb-[0.6px] pw-px-[20px] sm:pw-px-0">
+              <Tab
+                className={({ selected }) =>
+                  selected
+                    ? 'pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-p-2 pw-bg-white pw-rounded-t-lg pw-z-20 pw-border-b-0 pw-outline-none'
+                    : 'pw-p-2 pw-outline-none pw-z-20 pw-opacity-50'
+                }
+              >
+                {translate('pages>mysales>resale>sales')}
+              </Tab>
+              <Tab
+                className={({ selected }) =>
+                  selected
+                    ? 'pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-p-2 pw-bg-white pw-rounded-t-lg pw-z-20 pw-border-b-0 pw-outline-none'
+                    : 'pw-p-2 pw-outline-none pw-z-20 pw-opacity-50'
+                }
+              >
+                {translate('pages>mysales>resale>concludedSales')}
+              </Tab>
+            </Tab.List>
+            <Tab.Panels>
+              <Tab.Panel className="pw-p-[20px] pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] pw-bg-white sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-b-lg pw-rounded-r-lg pw-overflow-hidden">
+                <div>
+                  {forSaleErc20?.data?.items?.length ? (
+                    <div className="pw-flex pw-flex-col pw-gap-3">
+                      <div>
+                        {forSaleErc20?.data?.items?.map((res) => {
+                          return (
+                            <div
+                              key={res?.id}
+                              className="pw-flex pw-flex-col pw-gap-1 pw-max-w-[380px] pw-justify-center pw-items-center pw-border pw-border-[#c0c2c4] pw-rounded-lg pw-py-3 pw-px-4"
+                            >
+                              <div className="pw-flex pw-w-full pw-gap-x-3 pw-text-black">
+                                <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
+                                  <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
+                                    {translate(
+                                      'pages>mysales>resale>totalForSale'
+                                    )}
+                                  </p>
+                                  {res?.tokenData?.currency?.symbol}{' '}
+                                  {res?.tokenData?.amount}
+                                </div>
+                                <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
+                                  <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
+                                    {translate('pages>mysales>resale>value')}
+                                  </p>
+                                  {'R$'}{' '}
+                                  {parseFloat(res?.prices?.[0]?.amount).toFixed(
+                                    2
                                   )}
-                                </p>
-                                {res?.tokenData?.currency?.symbol}{' '}
-                                {res?.tokenData?.amount}
+                                </div>
                               </div>
-                              <div className="pw-flex pw-flex-col pw-gap-1 pw-justify-center pw-w-[220px] pw-h-[76px] pw-border pw-border-[#B9D1F3] pw-rounded-lg pw-py-3 pw-px-4">
-                                <p className="pw-text-sm pw-opacity-80 pw-whitespace-nowrap">
-                                  {translate('pages>mysales>resale>value')}
-                                </p>
-                                {'R$'}{' '}
-                                {parseFloat(res?.prices?.[0]?.amount).toFixed(
-                                  2
-                                )}
-                              </div>
-                            </div>
-                            <div className="pw-w-full pw-flex pw-justify-between pw-items-start pw-mt-6 pw-gap-4 pw-text-black">
-                              <BaseButton
-                                link={{
-                                  href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}&edit=true`,
-                                }}
-                              >
-                                {translate('pages>mysales>resale>editSale')}
-                              </BaseButton>
-                              {res?.tokenData?.amount !== '0' ? (
+                              <div className="pw-w-full pw-flex pw-justify-between pw-items-start pw-mt-6 pw-gap-4 pw-text-black">
                                 <BaseButton
-                                  onClick={() =>
-                                    deleteSale({
-                                      productId: erc20Product?.id ?? '',
-                                    })
-                                  }
-                                  variantType="secondary"
+                                  link={{
+                                    href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}&edit=true`,
+                                  }}
                                 >
-                                  {translate('pages>mysales>resale>removeSale')}
+                                  {translate('pages>mysales>resale>editSale')}
                                 </BaseButton>
-                              ) : null}
+                                {res?.tokenData?.amount !== '0' ? (
+                                  <BaseButton
+                                    onClick={() =>
+                                      deleteSale({
+                                        productId: erc20Product?.id ?? '',
+                                      })
+                                    }
+                                    variantType="secondary"
+                                  >
+                                    {translate(
+                                      'pages>mysales>resale>removeSale'
+                                    )}
+                                  </BaseButton>
+                                ) : null}
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
+                      {!hasBankDetails ? (
+                        <Alert
+                          className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3 pw-mt-1"
+                          variant="warning"
+                        >
+                          <p>
+                            {translate('pages>mysales>resale>fillBankDetails')}
+                          </p>
+                          <BaseButton
+                            link={{
+                              href:
+                                PixwayAppRoutes.COMPLETE_KYC +
+                                `?contextSlug=bankdetails`,
+                            }}
+                          >
+                            {translate('pages>mysales>resale>fillData')}
+                          </BaseButton>
+                        </Alert>
+                      ) : null}
                     </div>
-                    {!hasBankDetails ? (
-                      <Alert
-                        className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3 pw-mt-1"
-                        variant="warning"
-                      >
-                        <p>
-                          {translate('pages>mysales>resale>fillBankDetails')}
-                        </p>
+                  ) : (
+                    <>
+                      {!hasBankDetails ? (
+                        <Alert
+                          className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3"
+                          variant="warning"
+                        >
+                          <p>
+                            {translate('pages>mysales>resale>fillBankDetails')}
+                          </p>
+                          <BaseButton
+                            link={{
+                              href:
+                                PixwayAppRoutes.COMPLETE_KYC +
+                                `?contextSlug=bankdetails`,
+                            }}
+                          >
+                            {translate('pages>mysales>resale>fillData')}
+                          </BaseButton>
+                        </Alert>
+                      ) : (
                         <BaseButton
                           link={{
-                            href:
-                              PixwayAppRoutes.COMPLETE_KYC +
-                              `?contextSlug=bankdetails`,
+                            href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}`,
                           }}
+                          className="pw-w-max"
                         >
-                          {translate('pages>mysales>resale>fillData')}
+                          {translate('pages>mysales>resale>newsale')}
                         </BaseButton>
-                      </Alert>
-                    ) : null}
-                  </div>
-                ) : (
-                  <>
-                    {!hasBankDetails ? (
-                      <Alert
-                        className="pw-flex-col !pw-p-5 !pw-justify-start !pw-items-start pw-gap-3"
-                        variant="warning"
-                      >
-                        <p>
-                          {translate('pages>mysales>resale>fillBankDetails')}
-                        </p>
-                        <BaseButton
-                          link={{
-                            href:
-                              PixwayAppRoutes.COMPLETE_KYC +
-                              `?contextSlug=bankdetails`,
-                          }}
-                        >
-                          {translate('pages>mysales>resale>fillData')}
-                        </BaseButton>
-                      </Alert>
-                    ) : (
-                      <BaseButton
-                        link={{
-                          href: `${PixwayAppRoutes.RESALE}?id=${erc20Product?.id}`,
-                        }}
-                        className="pw-w-max"
-                      >
-                        {translate('pages>mysales>resale>newsale')}
-                      </BaseButton>
-                    )}
-                  </>
-                )}
-              </div>
-            </Tab.Panel>
-            <Tab.Panel className="max-sm:!pw-px-0 pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] sm:pw-bg-white pw-bg-inherit sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-lg pw-overflow-hidden">
-              <MySalesListComponent />
-            </Tab.Panel>
-          </Tab.Panels>
-        </Tab.Group>
+                      )}
+                    </>
+                  )}
+                </div>
+              </Tab.Panel>
+              <Tab.Panel className="max-sm:!pw-px-0 pw-mx-[16px] pw-max-width-full sm:pw-mx-0 sm:pw-p-[24px] pw-pb-[32px] sm:pw-pb-[24px] sm:pw-bg-white pw-bg-inherit sm:pw-shadow-md pw-shadow-[0_-4px_6px_-2px_rgb(0_0_0_/_.1)] pw-rounded-lg pw-overflow-hidden">
+                <MySalesListComponent />
+              </Tab.Panel>
+            </Tab.Panels>
+          </Tab.Group>
+        ) : null}
       </div>
     </InternalPagesLayoutBase>
   );
