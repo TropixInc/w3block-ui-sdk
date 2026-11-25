@@ -4,13 +4,14 @@ import _ from 'lodash';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-
-
-
 /* import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination'; */
-import { AlignmentEnum, BannerData, SpecificBannerInfo } from '../interfaces/Theme';
+import {
+  AlignmentEnum,
+  BannerData,
+  SpecificBannerInfo,
+} from '../interfaces/Theme';
 import { useMobilePreferenceDataWhenMobile } from '../hooks/useMergeMobileData';
 import { useIsMobile } from '../../shared/hooks/useIsMobile';
 import TranslatableComponent from '../../shared/components/TranslatableComponent';
@@ -23,7 +24,7 @@ import { breakpointsEnum } from '../../shared/enums/breakpointsEnum';
 import { composeUrlCloudinary } from '../../shared/utils/composeUrlCloudinary';
 import { isImage, isVideo } from '../../shared/utils/validators';
 import { ImageSDK } from '../../shared/components/ImageSDK';
-
+import { BannerLinkArea } from './BannerLinkArea';
 
 export const Banner = ({ data }: { data: BannerData }) => {
   const { styleData, mobileStyleData, id } = data;
@@ -70,7 +71,6 @@ export const Banner = ({ data }: { data: BannerData }) => {
           overflow: 'hidden',
         }}
       >
-      
         <Swiper
           navigation
           pagination
@@ -217,7 +217,7 @@ const Slide = ({
   };
 
   return (
-    <a
+    <BannerLinkArea
       href={
         actionButton && buttonLink && buttonLink != '' ? primaryLink : undefined
       }
@@ -455,7 +455,7 @@ const Slide = ({
           </div>
         </div>
       </div>
-    </a>
+    </BannerLinkArea>
   );
 };
 
