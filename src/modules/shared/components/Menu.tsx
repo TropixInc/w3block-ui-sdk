@@ -16,6 +16,7 @@ import { useProfileWithKYC } from '../hooks/useProfileWithKYC';
 import { useRouterConnect } from '../hooks/useRouterConnect';
 import useTranslation from '../hooks/useTranslation';
 import { ImageSDK } from './ImageSDK';
+import { MenuFooter } from './MenuFooter';
 import Skeleton from './Skeleton';
 import TranslatableComponent from './TranslatableComponent';
 
@@ -44,7 +45,9 @@ export const getInitials = (name?: string | null) => {
 };
 
 export const shortAddress = (address?: string | null) =>
-  address ? `${address.substring(0, 6)}…${address.substring(address.length - 4)}` : '';
+  address
+    ? `${address.substring(0, 6)}…${address.substring(address.length - 4)}`
+    : '';
 
 const _Menu = ({ tabs, className, onNavigate }: MenuProps) => {
   const { data: profile } = useProfile();
@@ -209,15 +212,10 @@ const _Menu = ({ tabs, className, onNavigate }: MenuProps) => {
         </li>
       </ul>
 
-      <p className="pw-mt-3 pw-pt-3 pw-px-2 pw-border-t pw-border-[#E6E8EC] pw-text-[11px] pw-text-[#8B93A3] pw-m-0">
-        {createdAt ? (
-          <>
-            {translate('components>menu>memberSince')} {createdAt}
-          </>
-        ) : (
-          <Skeleton className="pw-h-2.5 pw-w-28 pw-rounded" />
-        )}
-      </p>
+      <MenuFooter
+        memberSince={createdAt}
+        label={translate('components>menu>memberSince')}
+      />
     </nav>
   );
 };
