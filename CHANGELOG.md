@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0-staging.8](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.7...v2.1.0-staging.8) (2026-11-27)
+
+
+### Bug Fixes
+
+* **shared:** encode the static search filter value before building the query string ([#440](https://github.com/TropixInc/w3block-ui-sdk/issues/440)) ([cf0b5a4](https://github.com/TropixInc/w3block-ui-sdk/commit/cf0b5a4f28a2bbd286651a91b276ecc149a30dc0))
+
 ## [2.1.0-staging.7](https://github.com/TropixInc/w3block-ui-sdk/compare/v2.1.0-staging.6...v2.1.0-staging.7) (2026-11-25)
 
 
