@@ -132,9 +132,11 @@ const SmartGenericFilter = ({
         if (searchStaticValue) {
           onChangeFilter({
             ...filters,
+            // The value is typed by the user and lands in a query string: a raw "+"
+            // would reach the API as a space.
             [itemKey ?? '']: filterTemplate?.replace(
               `{${itemKey}}`,
-              searchStaticValue ?? ''
+              encodeURIComponent(searchStaticValue ?? '')
             ),
           });
 
